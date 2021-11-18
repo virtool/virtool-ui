@@ -166,7 +166,7 @@ export const CreateSample = props => {
                                             as={Input}
                                             name="pairedness"
                                             aria-label="Pairedness"
-                                            readOnly={true}
+                                            readOnly
                                             value={values.readFiles.length === 2 ? "Paired" : "Unpaired"}
                                         />
                                     </InputGroup>
