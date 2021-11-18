@@ -1,8 +1,9 @@
+import React from "react";
 import { CreateAPIKeyInfo, mapStateToProps } from "../CreateInfo";
 
 describe("<CreateAPIKeyInfo />", () => {
     it("should render when administrator", () => {
-        const wrapper = shallow(<CreateAPIKeyInfo administrator={true} />);
+        const wrapper = shallow(<CreateAPIKeyInfo administrator />);
         expect(wrapper).toMatchSnapshot();
     });
 

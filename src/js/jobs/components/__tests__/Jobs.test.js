@@ -1,8 +1,9 @@
+import React from "react";
 import { Jobs } from "../Jobs";
 
 describe("<Jobs />", () => {
     it("should render placeholder when loading", () => {
-        const wrapper = shallow(<Jobs loading={true} />);
+        const wrapper = shallow(<Jobs loading />);
         expect(wrapper).toMatchSnapshot();
     });
 
