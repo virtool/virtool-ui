@@ -37,7 +37,7 @@ jobs:
           npx webpack --config webpack.production.config.babel.js
   release:
     runs-on: ubuntu-20.04
-    needs: client
+    needs: [test]
     if: github.event_name == 'push'
     steps:
       - name: Checkout
