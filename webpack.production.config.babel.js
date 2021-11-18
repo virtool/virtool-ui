@@ -30,17 +30,17 @@ module.exports = {
     ],
   },
 
-  node: {
-    fs: "empty",
+  resolve: {
+    fallback: {
+    	fs: false,
+    },
   },
 
   mode: "production",
 
   optimization: {
     minimizer: [
-      new TerserWebpackPlugin({
-        sourceMap: true,
-      }),
+      new TerserWebpackPlugin(),
     ],
     splitChunks: {
       chunks: "all",
@@ -51,7 +51,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "app.[hash:8].js",
+    filename: "app.[contenthash:8].js",
     sourceMapFilename: "[name].js.map",
     publicPath: "/static/",
   },

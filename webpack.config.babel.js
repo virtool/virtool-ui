@@ -30,8 +30,10 @@ module.exports = {
 
   devtool: "source-map",
 
-  node: {
-    fs: "empty",
+  resolve: {
+    fallback: {
+    	fs: false,
+    },
   },
 
   optimization: {
@@ -42,7 +44,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "app.[hash:8].js",
+    filename: "app.[contenthash:8].js",
   },
 
   mode: "development",
@@ -59,12 +61,11 @@ module.exports = {
     }),
   ],
   devServer: {
+  client: {
+      webSocketURL: 'ws://localhost:9950/ws',
+    },
     proxy: {
       '/api': 'http://localhost:9950',
-      '/ws': {
-       target: 'ws://localhost:9950',
-       ws: true
-    },
     },
     headers: {
      "Access-Control-Allow-Origin": "http://localhost:8080",
@@ -74,5 +75,4 @@ module.exports = {
     historyApiFallback: true,
     port: 3000,
   },
-  watch: true,
 };
