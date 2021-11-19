@@ -11,7 +11,7 @@ const StyledMemberItem = styled(BoxGroupSection)`
 const MemberItemIcon = ({ id }) => {
     return (
         <FlexItem grow={0} shrink={0} style={{ paddingRight: "8px" }}>
-            <InitialIcon handle={id} size="md" />
+            <InitialIcon handle={id} size="lg" />
         </FlexItem>
     );
 };

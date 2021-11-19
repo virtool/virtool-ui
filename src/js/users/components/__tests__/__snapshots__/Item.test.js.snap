@@ -6,7 +6,7 @@ exports[`<UserItem /> should render when administrator=false] 1`] = `
 >
   <InitialIcon
     handle="bob"
-    size="md"
+    size="lg"
   />
   <strong>
     bob
@@ -20,7 +20,7 @@ exports[`<UserItem /> should render when administrator=true] 1`] = `
 >
   <InitialIcon
     handle="bob"
-    size="md"
+    size="lg"
   />
   <strong>
     bob

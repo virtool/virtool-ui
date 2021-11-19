@@ -23,7 +23,7 @@ const StyledUserItem = styled(LinkBox)`
 
 export const UserItem = ({ id, handle, administrator }) => (
     <StyledUserItem to={`/administration/users/${id}`}>
-        <InitialIcon size="md" handle={handle} />
+        <InitialIcon size="lg" handle={handle} />
         <strong>{handle}</strong>
         {administrator && (
             <Label color="purple">

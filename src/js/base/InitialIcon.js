@@ -1,17 +1,27 @@
-import { reduce } from "lodash-es";
 import React, { useMemo } from "react";
+import { getColor, getFontWeight, theme } from "../app/theme";
+import { reduce } from "lodash-es";
 import styled from "styled-components";
-import { getColor, getFontSize, getFontWeight, theme } from "../app/theme";
 
 const iconSize = {
-    xs: "20px",
-    sm: "24px",
-    md: "28px",
-    lg: "32px",
-    xl: "48px",
-    xxl: "64px"
+    xs: "12px",
+    sm: "16px",
+    md: "20px",
+    lg: "28px",
+    xl: "44px",
+    xxl: "60px"
 };
+const fontSize = {
+    xs: "6px",
+    sm: "8px",
+    md: "10px",
+    lg: "14px",
+    xl: "22px",
+    xxl: "30px"
+};
+
 const getIconSize = size => iconSize[size];
+const getFontSize = size => fontSize[size];
 
 export const StyledInitialIcon = styled.span`
     border-radius: 50%;
@@ -22,7 +32,7 @@ export const StyledInitialIcon = styled.span`
     height: ${props => getIconSize(props.size)};
     width: ${props => getIconSize(props.size)};
     font-size: ${props => getFontSize(props.size)};
-    font-weight: ${getFontWeight("thick")};
+    font-weight: ${getFontWeight("bold")};
     color: ${getColor({ color: "white", theme })};
     background: ${props => `hsl(${props.hash}, 83%, 21%);`};
 `;
