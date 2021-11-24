@@ -30,6 +30,7 @@
     "identity-obj-proxy": "^3.0.0",
     "lodash-es": "^4.17.15",
     "marked": "^3.0.7",
+    "minimist": "^1.2.5",
     "normalize.css": "^8.0.1",
     "numbro": "^2.3.1",
     "prop-types": "^15.7.2",
@@ -94,12 +95,14 @@
     "terser-webpack-plugin": "^5.2.5",
     "webpack": "^5.64.1",
     "webpack-cli": "^4.9.1",
+    "webpack-dev-middleware": "^5.2.2",
     "webpack-dev-server": "^4.5.0"
   },
   "scripts": {
-    "build": "webpack --mode production",
-    "start": "webpack --mode development",
-    "pretest": "eslint --ignore-path ../.gitignore .",
+    "prestart": "webpack --config=webpack.config.babel.js --mode=production",
+    "start": "node runServer",
+    "startDev": "webpack-dev-server",
+    "pretest": "eslint --ignore-path .gitignore .",
     "test": "jest"
   },
   "jest": {

@@ -16,7 +16,8 @@
         window.__webpack_nonce__ = "{{ nonce }}";
 
         window.virtool = {
-            version: "{{ version }}"
+            version: "{{ version }}",
+            backendURL: "<%= backendURL %>",
         };
     </script>
     <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon %>?v=2" type="images/x-icon"/>
