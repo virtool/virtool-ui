@@ -32,7 +32,7 @@ module.exports = {
 
   resolve: {
     fallback: {
-    	fs: false,
+      fs: false,
     },
   },
 
@@ -58,19 +58,14 @@ module.exports = {
       favicon: path.resolve(__dirname, "./src/images/favicon.ico"),
       template: path.resolve(__dirname, "./src/index.html"),
       inject: "body",
+      templateParameters: {
+        backendURL: "http://localhost:9950",
+      },
     }),
   ],
   devServer: {
-  client: {
-      webSocketURL: 'ws://localhost:9950/ws',
-    },
     proxy: {
-      '/api': 'http://localhost:9950',
-    },
-    headers: {
-     "Access-Control-Allow-Origin": "http://localhost:8080",
-     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-     "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+      "/api": "http://localhost:9950",
     },
     historyApiFallback: true,
     port: 3000,

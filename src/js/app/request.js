@@ -1,6 +1,8 @@
 import Superagent from "superagent";
 
-const createRequest = method => url => Superagent[method](url).set("Accept", "application/json");
+const createRequest = method => url => {
+    return Superagent[method](url).set("Accept", "application/json").withCredentials();
+};
 
 export const Request = {
     get: createRequest("get"),

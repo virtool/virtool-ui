@@ -32,16 +32,14 @@ module.exports = {
 
   resolve: {
     fallback: {
-    	fs: false,
+      fs: false,
     },
   },
 
   mode: "production",
 
   optimization: {
-    minimizer: [
-      new TerserWebpackPlugin(),
-    ],
+    minimizer: [new TerserWebpackPlugin()],
     splitChunks: {
       chunks: "all",
     },
@@ -67,6 +65,9 @@ module.exports = {
       favicon: "./src/images/favicon.ico",
       template: "./src/index.html",
       inject: "body",
+      templateParameters: {
+        backendURL: "{{ backendURL }}",
+      },
     }),
 
     new CleanWebpackPlugin(),
