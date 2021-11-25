@@ -51,7 +51,6 @@ module.exports = {
     path: path.resolve(__dirname, "./dist"),
     filename: "app.[contenthash:8].js",
     sourceMapFilename: "[name].js.map",
-    publicPath: "/static/",
   },
 
   plugins: [

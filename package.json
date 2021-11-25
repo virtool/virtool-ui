@@ -97,8 +97,8 @@
     "webpack-dev-server": "^4.5.0"
   },
   "scripts": {
-    "prestart": "webpack --config=webpack.config.babel.js --mode=production",
-    "start": "node runServer",
+    "start": "webpack --config=webpack.config.babel.js --mode=production",
+    "poststart": "node runServer",
     "startDev": "webpack-dev-server",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "jest"

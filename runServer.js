@@ -11,7 +11,7 @@ const backendURL = argv["backend-url"] || process.env.VTUI_BACKEND_URL;
 
 app.use([backendProxy(backendURL), applyCSPHeader]);
 app.get(/\.(?:js|map|ico)$/, staticPath);
-app.get("*", DefaultPath(backendURL));
+app.get("*", DefaultPath);
 
 app.listen(port, () => {
   console.log(`virtool-ui listening at http://localhost:${port}`);
