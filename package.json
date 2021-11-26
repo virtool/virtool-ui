@@ -10,7 +10,6 @@
     "@sentry/browser": "^6.13.3",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
-    "cors": "^2.8.5",
     "d3-array": "^2.8.0",
     "d3-axis": "^2.0.0",
     "d3-dispatch": "^2.0.0",
@@ -95,7 +94,6 @@
     "terser-webpack-plugin": "^5.2.5",
     "webpack": "^5.64.1",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-middleware": "^5.2.2",
     "webpack-dev-server": "^4.5.0"
   },
   "scripts": {

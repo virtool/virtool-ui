@@ -9,6 +9,10 @@ import { createAppStore } from "./app/reducer";
 import { Request } from "./app/request";
 import { setInitialState } from "./app/actions";
 
+module.hot.accept(err => {
+    throw err;
+});
+
 const sentryInit = res => {
     const dev = res.body.dev;
     if (!dev) {

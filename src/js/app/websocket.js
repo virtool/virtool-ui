@@ -105,10 +105,12 @@ export default function WSConnection({ getState, dispatch }) {
     this.interval = 500;
 
     this.establishConnection = () => {
-        const backendURL = new URL(window.virtool.backendURL);
-        const protocol = backendURL.protocol === "https:" ? "wss" : "ws";
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+        const websocketTarget = module.hot
+            ? `${protocol}://${window.location.host}/websocket`
+            : `${protocol}://${window.location.host}/ws`;
 
-        this.connection = new window.WebSocket(`${protocol}://${backendURL.host}/ws`);
+        this.connection = new window.WebSocket(websocketTarget);
 
         this.connection.onopen = () => {
             this.interval = 500;
