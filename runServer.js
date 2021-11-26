@@ -9,7 +9,7 @@ const app = express();
 const port = argv.port || process.env.VTUI_PORT;
 const backendURL = argv["backend-url"] || process.env.VTUI_BACKEND_URL;
 
-app.use([backendProxy(backendURL), applyCSPHeader(backendURL)]);
+app.use([backendProxy(backendURL), applyCSPHeader]);
 app.get(/\.(?:js|map|ico)$/, staticPath);
 app.get("*", DefaultPath(backendURL));
 

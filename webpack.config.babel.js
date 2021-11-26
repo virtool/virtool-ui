@@ -63,9 +63,18 @@ module.exports = {
       },
     }),
   ],
+  ignoreWarnings: [{ message: /Unexpected console statement/ }],
   devServer: {
+    hot: true,
     proxy: {
       "/api": "http://localhost:9950",
+      "/websocket": {
+        target: "ws://localhost:9950",
+        ws: true,
+        pathRewrite: {
+          "^/websocket": "/ws",
+        },
+      },
     },
     historyApiFallback: true,
     port: 3000,

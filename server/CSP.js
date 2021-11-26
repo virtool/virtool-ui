@@ -4,7 +4,7 @@ const URLFontAwesome = "https://use.fontawesome.com";
 const CSPDefaultSRC = "default-src 'self'";
 const CSPImgSRC = "img-src 'self' data:";
 const CSPFontSrc = `font-src 'self' https://fonts.gstatic.com ${URLFontAwesome}`;
-
+const CSPConnectSRC = "connect-src 'self' sentry.io";
 /**
  * Applies CSP header to res object
  *
@@ -14,12 +14,9 @@ const CSPFontSrc = `font-src 'self' https://fonts.gstatic.com ${URLFontAwesome}`
  * @param next {function} passes control to next middleware
  * @returns {N/A}
  */
-exports.applyCSPHeader = (backendURL) => (req, res, next) => {
+exports.applyCSPHeader = (req, res, next) => {
   const nonce = crypto.randomBytes(32).toString("base64");
   res.locals.nonce = nonce;
-
-  const websocketURL = `ws://${new URL(backendURL).host}`;
-  const CSPConnectSRC = `connect-src 'self' sentry.io ${websocketURL} ${backendURL}`;
 
   const csp = [
     CSPConnectSRC,

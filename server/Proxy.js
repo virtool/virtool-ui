@@ -7,6 +7,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
  * @returns {function}
  */
 exports.backendProxy = (backendURL) =>
-  createProxyMiddleware("/api", {
+  createProxyMiddleware(["/api", "/ws"], {
     target: backendURL,
+    ws: true,
   });
