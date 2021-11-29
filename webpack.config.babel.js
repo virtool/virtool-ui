@@ -58,9 +58,6 @@ module.exports = {
       favicon: path.resolve(__dirname, "./src/images/favicon.ico"),
       template: path.resolve(__dirname, "./src/index.html"),
       inject: "body",
-      templateParameters: {
-        backendURL: "http://localhost:9950",
-      },
     }),
   ],
   ignoreWarnings: [{ message: /Unexpected console statement/ }],
