@@ -32,22 +32,25 @@ services:
     logging:
       driver: none
 
-  pgadmin4:
-    image: dpage/pgadmin4:4.29
-    environment:
-      PGADMIN_DEFAULT_EMAIL: dev@virtool.ca
-      PGADMIN_DEFAULT_PASSWORD: virtool
-      PGADMIN_LISTEN_ADDRESS: "0.0.0.0"
-      PGADMIN_LISTEN_PORT: 5050
+  backend:
+    image: virtool/virtool:5.11.5
+    expose:
+      - "9950"
     ports:
-      - "5050:5050"
+      - "9950:9950"
     volumes:
-      - vt_pgadmin4_data:/var/lib/pgadmin4/data
-    depends_on: [ postgres ]
+      - vt_backend_data:/data
+    environment:
+      VT_DEV: "true"
+      VT_SERVER_HOST: "0.0.0.0"
+      VT_REDIS_CONNECTION_STRING: "redis://redis:6379"
+      VT_POSTGRES_CONNECTION_STRING: "postgresql+asyncpg://virtool:virtool@postgres/virtool"
+      VT_DB_CONNECTION_STRING: "mongodb://mongo:27017"
 
-    
+
 volumes:
   vt_mongo_data:
   vt_redis_data:
   vt_postgres_data:
   vt_pgadmin4_data:
+  vt_backend_data:
