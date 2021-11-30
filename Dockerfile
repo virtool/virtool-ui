@@ -12,4 +12,3 @@ COPY runServer.js /ui/
 COPY ./server /ui/server
 EXPOSE 3000
 ENTRYPOINT ["node", "runServer"]
-
