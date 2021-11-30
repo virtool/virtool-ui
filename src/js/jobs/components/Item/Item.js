@@ -68,7 +68,7 @@ export const JobItem = ({
                         <span>{getWorkflowDisplayName(workflow)}</span>
                         <JobStatus state={state} pad={canCancel || canRemove} />
                     </JobItemHeader>
-                    <Attribution time={created_at} user={user.id} />
+                    <Attribution time={created_at} user={user.handle} />
                 </JobItemBody>
             </JobItemLinkBox>
             <JobAction

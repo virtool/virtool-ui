@@ -14,7 +14,7 @@ describe("<File />", () => {
             name: "foo.fa",
             size: 10,
             uploadedAt: "2018-02-14T17:12:00.000000Z",
-            user: { id: "bill" },
+            user: { id: "bill", handle: "bill" },
             ready: true,
             onRemove: jest.fn()
         };

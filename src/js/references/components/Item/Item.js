@@ -38,7 +38,7 @@ export const ReferenceItem = ({
     otuCount,
     progress,
     remotesFrom,
-    userId
+    userHandle
 }) => {
     return (
         <StyledReferenceItem>
@@ -49,7 +49,7 @@ export const ReferenceItem = ({
                 name={name}
                 organism={organism}
                 otuCount={otuCount}
-                userId={userId}
+                userHandle={userHandle}
             />
             <ReferenceItemBody>
                 <ReferenceItemOrigin clonedFrom={clonedFrom} importedFrom={importedFrom} remotesFrom={remotesFrom} />
@@ -89,7 +89,7 @@ export const mapStateToProps = (state, ownProps) => {
         latestBuild: latest_build,
         otuCount: otu_count,
         remotesFrom: remotes_from,
-        userId: user.id
+        userHandle: user.handle
     };
 };
 

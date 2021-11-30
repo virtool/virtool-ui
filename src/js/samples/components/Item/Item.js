@@ -122,7 +122,7 @@ class SampleItem extends React.Component {
                     <SampleItemMain>
                         <SampleItemTitle>
                             <Link to={`/samples/${this.props.id}`}>{this.props.name}</Link>
-                            <Attribution time={this.props.created_at} user={this.props.user.id} />
+                            <Attribution time={this.props.created_at} user={this.props.user.handle} />
                         </SampleItemTitle>
                     </SampleItemMain>
                     <SampleItemLabels>

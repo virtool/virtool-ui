@@ -39,7 +39,7 @@ const StyledReferenceItemHeader = styled.div`
     }
 `;
 
-export const ReferenceItemHeader = ({ createdAt, dataType, id, name, organism, otuCount, userId }) => (
+export const ReferenceItemHeader = ({ createdAt, dataType, id, name, organism, otuCount, userHandle }) => (
     <StyledReferenceItemHeader>
         <h2>
             <Link to={`/refs/${id}`}>{name}</Link>
@@ -58,7 +58,7 @@ export const ReferenceItemHeader = ({ createdAt, dataType, id, name, organism, o
                 </ReferenceItemDataDescriptor>
                 <span> organized into {otuCount} OTUs</span>
             </span>
-            <Attribution time={createdAt} user={userId} />
+            <Attribution time={createdAt} user={userHandle} />
         </p>
     </StyledReferenceItemHeader>
 );
@@ -70,5 +70,5 @@ ReferenceItemHeader.propTypes = {
     name: PropTypes.string.isRequired,
     organism: PropTypes.string,
     otuCount: PropTypes.number,
-    userId: PropTypes.string.isRequired
+    userHandle: PropTypes.string.isRequired
 };

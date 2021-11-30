@@ -21,7 +21,7 @@ export const SubtractionFileItem = ({ active, onClick, name, uploaded_at, user, 
     return (
         <StyledSubtractionFileItem active={active} onClick={handleClick} error={error}>
             <strong>{name}</strong>
-            <Attribution user={user.id} time={uploaded_at} />
+            <Attribution user={user.handle} time={uploaded_at} />
         </StyledSubtractionFileItem>
     );
 };

@@ -47,7 +47,7 @@ export class IndexDetail extends React.Component {
                     <SubviewHeaderTitle>Index {version}</SubviewHeaderTitle>
                     <IndexDetailSubtitle>
                         <SubviewHeaderAttribution>
-                            {user.id} built <RelativeTime time={created_at} />
+                            {user.handle} built <RelativeTime time={created_at} />
                         </SubviewHeaderAttribution>
                         {has_json && <DownloadLink id={id} />}
                     </IndexDetailSubtitle>

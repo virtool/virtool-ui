@@ -7,7 +7,7 @@ exports[`<ReferenceItem /> should render when [organism='virus'] and [progress=3
     id="foo"
     name="Foo"
     organism="virus"
-    userId="bob"
+    userHandle="bob"
   />
   <Item__ReferenceItemBody>
     <ReferenceItemOrigin
@@ -50,7 +50,7 @@ exports[`<ReferenceItem /> should render when [organism=null] 1`] = `
     id="foo"
     name="Foo"
     organism={null}
-    userId="bob"
+    userHandle="bob"
   />
   <Item__ReferenceItemBody>
     <ReferenceItemOrigin
@@ -93,7 +93,7 @@ exports[`<ReferenceItem /> should render when [progress=100] 1`] = `
     id="foo"
     name="Foo"
     organism="virus"
-    userId="bob"
+    userHandle="bob"
   />
   <Item__ReferenceItemBody>
     <ReferenceItemOrigin

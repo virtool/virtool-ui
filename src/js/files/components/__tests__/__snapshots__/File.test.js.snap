@@ -29,7 +29,7 @@ exports[`<File /> should render 1`] = `
       time="2018-02-14T17:12:00.000000Z"
     />
      by 
-    <Component />
+    bill
   </File__FileAttribution>
 </Box__SpacedBox>
 `;
@@ -50,7 +50,7 @@ exports[`<File /> should render when [canRemove=false] 1`] = `
       time="2018-02-14T17:12:00.000000Z"
     />
      by 
-    <Component />
+    bill
   </File__FileAttribution>
 </Box__SpacedBox>
 `;
@@ -73,7 +73,7 @@ exports[`<File /> should render when [ready=false] 1`] = `
       time="2018-02-14T17:12:00.000000Z"
     />
      by 
-    <Component />
+    bill
   </File__FileAttribution>
 </Box__SpacedBox>
 `;

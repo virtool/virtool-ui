@@ -39,7 +39,7 @@ export const File = ({ canRemove, id, name, ready, size, uploadedAt, user, onRem
     } else {
         attribution = (
             <FileAttribution>
-                Uploaded <RelativeTime time={uploadedAt} /> by {user}
+                Uploaded <RelativeTime time={uploadedAt} /> by {user.handle}
             </FileAttribution>
         );
     }

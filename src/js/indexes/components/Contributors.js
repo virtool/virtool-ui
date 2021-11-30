@@ -15,10 +15,10 @@ const StyledContributor = styled(BoxGroupSection)`
     }
 `;
 
-export const Contributor = ({ id, count }) => (
+export const Contributor = ({ id, count, handle }) => (
     <StyledContributor key={id}>
-        <InitialIcon handle={id} size="md" />
-        {id}
+        <InitialIcon handle={handle} size="md" />
+        {handle}
         <Badge>
             {count} change{count === 1 ? "" : "s"}
         </Badge>

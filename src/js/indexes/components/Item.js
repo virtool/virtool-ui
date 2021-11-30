@@ -73,7 +73,7 @@ export const IndexItem = ({ activeId, document, refId }) => (
             <IndexItemDescription changeCount={document.change_count} modifiedCount={document.modified_otu_count} />
             <IndexItemIcon activeId={activeId} id={document.id} ready={document.ready} />
         </IndexItemTop>
-        <Attribution time={document.created_at} user={document.user.id} />
+        <Attribution time={document.created_at} user={document.user.handle} />
     </LinkBox>
 );
 

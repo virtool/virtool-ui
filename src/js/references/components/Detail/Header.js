@@ -17,7 +17,7 @@ export const ReferenceDetailHeaderIcon = ({ canModify, isRemote, onEdit }) => {
     return null;
 };
 
-export const ReferenceDetailHeader = ({ canModify, createdAt, isRemote, name, showIcons, userId, onEdit }) => {
+export const ReferenceDetailHeader = ({ canModify, createdAt, isRemote, name, showIcons, userHandle, onEdit }) => {
     let icons;
 
     if (showIcons) {
@@ -34,7 +34,7 @@ export const ReferenceDetailHeader = ({ canModify, createdAt, isRemote, name, sh
                 {name}
                 {icons}
             </ViewHeaderTitle>
-            <ViewHeaderAttribution time={createdAt} user={userId} />
+            <ViewHeaderAttribution time={createdAt} user={userHandle} />
         </ViewHeader>
     );
 };
@@ -47,7 +47,7 @@ export const mapStateToProps = state => {
         createdAt: created_at,
         isRemote: !!remotes_from,
         showIcons: endsWith(state.router.location.pathname, "/manage"),
-        userId: user.id
+        userHandle: user.handle
     };
 };
 
