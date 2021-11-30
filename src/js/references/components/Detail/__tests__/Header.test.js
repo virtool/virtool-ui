@@ -53,6 +53,7 @@ describe("<ReferenceDetailHeader/>", () => {
             name: "baz",
             showIcons: true,
             userId: 1,
+            userHandle: 1,
             onEdit: jest.fn()
         };
     });
@@ -79,7 +80,8 @@ describe("mapStateToProps()", () => {
                     remotes_from: "baz",
                     created_at: "Foo",
                     user: {
-                        id: "Bar"
+                        id: "Bar",
+                        handle: "Bar"
                     }
                 }
             },
@@ -100,7 +102,7 @@ describe("mapStateToProps()", () => {
             createdAt: "Foo",
             isRemote: true,
             showIcons: true,
-            userId: "Bar"
+            userHandle: "Bar"
         });
     });
 });

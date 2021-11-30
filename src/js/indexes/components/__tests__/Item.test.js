@@ -17,7 +17,8 @@ describe("<IndexItem />", () => {
                 change_count: 3,
                 modified_otu_count: 5,
                 user: {
-                    id: "bob"
+                    id: "bob",
+                    handle: "bob"
                 }
             }
         };

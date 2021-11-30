@@ -6,6 +6,7 @@ describe("<Contributor />", () => {
     beforeEach(() => {
         props = {
             id: "bob",
+            handle: "bob",
             count: 1
         };
     });

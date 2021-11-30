@@ -10,7 +10,8 @@ describe("<JobItem />", () => {
             workflow: "build_index",
             created_at: "Foo",
             user: {
-                id: "bob"
+                id: "bob",
+                handle: "bob"
             },
             canCancel: true,
             canRemove: true,

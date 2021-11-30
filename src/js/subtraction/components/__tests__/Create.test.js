@@ -16,7 +16,7 @@ describe("<SubtractionFileItem />", () => {
             active,
             name: "test",
             uploaded_at: "2018-02-14T17:12:00.000000Z",
-            user: { id: "test-user" }
+            user: { id: "test-user", handle: "test-user" }
         };
         const wrapper = shallow(<SubtractionFileItem {...props} />);
         expect(wrapper).toMatchSnapshot();

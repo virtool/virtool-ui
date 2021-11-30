@@ -25,7 +25,7 @@ describe("<ReferenceItem />", () => {
             remotesFrom: {
                 id: "remotesFrom"
             },
-            userId: "bob"
+            userHandle: "bob"
         };
     });
 
@@ -78,7 +78,8 @@ describe("mapStateToProps()", () => {
                             id: "remotesFrom"
                         },
                         user: {
-                            id: "bob"
+                            id: "bob",
+                            handle: "bob"
                         }
                     }
                 ]
@@ -104,7 +105,7 @@ describe("mapStateToProps()", () => {
             remotesFrom: {
                 id: "remotesFrom"
             },
-            userId: "bob"
+            userHandle: "bob"
         });
         expect(getReferenceItemProgress).toHaveBeenCalledWith(state, 1);
     });

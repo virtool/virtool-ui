@@ -27,7 +27,7 @@ import General from "./General";
 import RemoveSample from "./Remove";
 import Rights from "./Rights";
 
-const SampleDetail = ({
+function SampleDetail({
     canModify,
     detail,
     error,
@@ -38,7 +38,7 @@ const SampleDetail = ({
     onListLabels,
     onShortlistSubtractions,
     subtractionOptions
-}) => {
+}) {
     const sampleId = match.params.sampleId;
 
     useEffect(() => {
@@ -83,9 +83,7 @@ const SampleDetail = ({
     }
 
     const { created_at, user } = detail;
-
     const prefix = `/samples/${sampleId}`;
-
     return (
         <React.Fragment>
             <ViewHeader title={detail.name}>
@@ -97,7 +95,7 @@ const SampleDetail = ({
                         {removeIcon}
                     </ViewHeaderIcons>
                 </ViewHeaderTitle>
-                <ViewHeaderAttribution time={created_at} user={user.id} />
+                <ViewHeaderAttribution time={created_at} user={user.handle} />
             </ViewHeader>
 
             <Tabs bsStyle="tabs">
@@ -121,7 +119,7 @@ const SampleDetail = ({
             <RemoveSample />
         </React.Fragment>
     );
-};
+}
 
 export const mapStateToProps = state => ({
     canModify: getCanModify(state),
