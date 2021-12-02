@@ -24,11 +24,11 @@ The default CSP configuration expects API requests to be made to the same domain
 | `-p`, `--port`      | `VT_UI_PORT`     | The port the UI server should listen on  |
 | `-H`, `--host`      | `VT_UI_HOST`     | The host the UI server should listen on  |
 | `-a`, `--api-url`   | `VT_UI_API_URL`  | The URL API requests should be made to   |
-| `-P`, `--use-proxy` | `VT_UI_USE_PROXY | Proxy API requests through the UI server |
+| `-P`, `--use-proxy` | `VT_UI_USE_PROXY` | Proxy API requests through the UI server |
 
 ### API Proxy
 
-Use the API proxy during development to avoid CSP issues due to server the UI and API servers at two different addresses.
+Use the API proxy during development to avoid CORS and CSP issues due to server the UI and API servers at two different addresses.
 
 The proxy works by proxying requests from the client to `/api` routes to the provided `--api-url`. This satisfies the CSP because all requests are sent to the UI server address (usually `http://localhost:3000`)
 
