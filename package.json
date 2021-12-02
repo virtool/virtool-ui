@@ -9,6 +9,7 @@
     "@reduxjs/toolkit": "^1.6.0",
     "@sentry/browser": "^6.13.3",
     "classnames": "^2.2.6",
+    "commander": "^8.3.0",
     "connected-react-router": "^6.8.0",
     "d3-array": "^2.8.0",
     "d3-axis": "^2.0.0",

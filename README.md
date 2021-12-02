@@ -1,53 +1,97 @@
 # virtool-ui
+
 The browser frontend for Virtool
 
-**Installation guide for development of virtool-ui:**
+## What's Included
 
-Dependencies:
-- Docker (required)
-- Node.js (required)
-- git (suggested)
+- Frontend code based in React
+- A Express server that serves frontend resources, CSP headers, and nonces.
+- Dockerfile
 
-Installation: 
+## Using in Production
+
+The default CSP configuration expects API requests to be made to the same domain as the client is served from.
+
+| Path | Description                | Example                        |
+| ---- | -------------------------- | ------------------------------ |
+| /api | Should route to API server | https://app.virtool.ca/api     |
+| /    | Should route to UI server  | https://app.virtool.ca/samples |
+
+## Configuration
+
+| Option              | Env              | Description                              |
+| ------------------- | ---------------- | ---------------------------------------- |
+| `-p`, `--port`      | `VT_UI_PORT`     | The port the UI server should listen on  |
+| `-H`, `--host`      | `VT_UI_HOST`     | The host the UI server should listen on  |
+| `-a`, `--api-url`   | `VT_UI_API_URL`  | The URL API requests should be made to   |
+| `-P`, `--use-proxy` | `VT_UI_USE_PROXY | Proxy API requests through the UI server |
+
+### API Proxy
+
+Use the API proxy during development to avoid CSP issues due to server the UI and API servers at two different addresses.
+
+The proxy works by proxying requests from the client to `/api` routes to the provided `--api-url`. This satisfies the CSP because all requests are sent to the UI server address (usually `http://localhost:3000`)
+
+**In production, use a reverse proxy like NGINX or similar solution to route requests to the appropriate service** The API proxy is not suitable for production.
+
+## Development
+
+### Dependencies
+
+- Docker
+- Node.js
+- `git`
+
+### Working on `virtool-ui`
+
+Use this guide when you are contributing to `virtool/ui`.
 
 1. Clone the repository onto your local machine
-    - Ex: `git clone https://github.com/virtool/virtool-ui.git .`
-3. Change directories to the root directory of virtool-ui repository.
-2. Install frontend dependencies listed in package.lock with npm
-    - Ex: `npm install`
 
-Startup:
-1.  Start the backend by running: `docker-compose -f ./docker-compose.dev.yml up`
-    - **_NB:_** Docker compose file is configured for development **only**
-    - _Optional_: add `-d` tag to run the backend in the background
-    - _Note:_ may require user permission configuration
-2. Start either the development server or the production server:
-    - Development server: (with HMR) run `npm run startDev`
-      - _Note:_ development server runs on `localhost:3000` and assumes the backend is listening at `localhost:9950` 
-      - _Note:_ use when hot reloading is more important than simulating production CSP and networking
-    - Production server: run `npm run start`
-      - _NB:_ for running the production server `port` and `backend-url` must be specified, this can be done by command line or by setting environmental variables.
-      - _Config:_ to set `port` and `backend-url` by environmental variables set `VTUI_PORT` and `VTUI_BACKEND_URL` respectively.
-        - _Ex:_ `export VTUI_PORT=3000 VTUI_BACKEND_URL=http://localhost:9950`
-        - Alternatively the server can be run without setting environmental varaibles by starting the server by passing values for `port` and `backend-url`   
-          - _Ex:_ `npm run start -- --port=3000 --backend-url=http://localhost:9950` 
+   ```
+   git clone https://github.com/virtool/virtool-ui.git
+   ```
 
-**Installation via docker compose:** (Static image of virtool-ui, not for virtool-ui development )
-  - Insert the following code into your docker compose file:
-<pre><code>a simple
-  ui:  
-    image: virtool/ui
-    environment:  
-      VTUI_PORT: 3000  #Sets the port that the development server will bind to, change as needed.
-      VTUI_BACKEND_URL: http://host.docker.internal:9950  #Sets the URL the frontend server will proxy API and websocket requests to, change as needed
-    ports:  
-      - "3000:3000"  #sets the ports that docker will expose, change as needed, should match the value for VTUI_PORT
-    extra_hosts:  
-      - "host.docker.internal:host-gateway" 
-</code></pre>
+2. Install packages
 
+   ```
+   npm i
+   ```
 
+3. Start backend services:
 
-  - Run `docker-compose -f ./path/to/your/docker-compose/file up`
-    
- 
+   ```
+   docker-compose up -d
+   ```
+
+4. Start either the development server:
+   ```
+   npm run startDev
+   ```
+
+### Working with `virtool/ui` image
+
+Use this guide when you are contributing to another Virtool service and need to stand up the UI server.
+
+In this example, we are working on `virtool/virtool` on `localhost` and want to deploy `ui` in Docker Compose. We want `ui` to proxy
+API requests to `virtool/virtool`.
+
+Use `docker-compose` to configure a `ui` service and any other services you need (eg. workflows, databases):
+
+```yaml
+ui:
+  image: virtool/ui:latest
+   ports:
+     - "9950:9950"
+   environment:
+     VT_UI_HOST: "0.0.0.0"
+     VT_UI_PORT: 3000 # Default port
+     VT_UI_API_URL: http://host.docker.internal:9950
+     VT_UI_USE_PROXY: true
+   ports:
+     - "3000:3000"
+   extra_hosts:
+     - "host.docker.internal:host-gateway"
+```
+
+**The service (eg. Virtool API server) running on localhost must listen on `0.0.0.0` for this to work**.
