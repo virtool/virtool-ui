@@ -3,7 +3,6 @@
  *
  * @module account/actions
  */
-import { simpleActionCreator } from "../utils/utils";
 import {
     GET_ACCOUNT,
     UPDATE_ACCOUNT,
@@ -18,6 +17,7 @@ import {
     CLEAR_API_KEY,
     RESET_PASSWORD
 } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns action that can trigger an API call for getting the current account data.
@@ -25,7 +25,7 @@ import {
  * @func
  * @returns {object}
  */
-export const getAccount = simpleActionCreator(GET_ACCOUNT.REQUESTED);
+export const getAccount = createAction(GET_ACCOUNT.REQUESTED);
 
 /**
  * Returns an action that can trigger an API call for updating the current account.
@@ -34,10 +34,9 @@ export const getAccount = simpleActionCreator(GET_ACCOUNT.REQUESTED);
  * @param update {object} the update to apply to the account
  * @returns {object}
  */
-export const updateAccount = update => ({
-    type: UPDATE_ACCOUNT.REQUESTED,
-    update
-});
+export const updateAccount = createAction(UPDATE_ACCOUNT.REQUESTED, update => ({
+    payload: { update }
+}));
 
 /**
  * Returns an action that can trigger an API call for updating the settings for the current account.
@@ -46,10 +45,9 @@ export const updateAccount = update => ({
  * @param update {object} the update to apply to the account
  * @returns {object}
  */
-export const updateAccountSettings = update => ({
-    type: UPDATE_ACCOUNT_SETTINGS.REQUESTED,
-    update
-});
+export const updateAccountSettings = createAction(UPDATE_ACCOUNT_SETTINGS.REQUESTED, update => ({
+    payload: { update }
+}));
 
 /**
  * Returns an action that can trigger an API call for changing the password for the current account.
@@ -59,11 +57,9 @@ export const updateAccountSettings = update => ({
  * @param newPassword {string} the new account password
  * @returns {object}
  */
-export const changePassword = (oldPassword, newPassword) => ({
-    type: CHANGE_ACCOUNT_PASSWORD.REQUESTED,
-    oldPassword,
-    newPassword
-});
+export const changePassword = createAction(CHANGE_ACCOUNT_PASSWORD.REQUESTED, (oldPassword, newPassword) => ({
+    payload: { old_password: oldPassword, password: newPassword }
+}));
 
 /**
  * Returns action that can trigger an API call for getting the API keys owned by the current account.
@@ -71,7 +67,7 @@ export const changePassword = (oldPassword, newPassword) => ({
  * @func
  * @returns {object}
  */
-export const getAPIKeys = simpleActionCreator(GET_API_KEYS.REQUESTED);
+export const getAPIKeys = createAction(GET_API_KEYS.REQUESTED);
 
 /**
  * Returns action that can trigger an API call for creating a new API key for the current account.
@@ -81,11 +77,9 @@ export const getAPIKeys = simpleActionCreator(GET_API_KEYS.REQUESTED);
  * @param permissions {object} permissions configuration object for the new API key
  * @returns {object}
  */
-export const createAPIKey = (name, permissions) => ({
-    type: CREATE_API_KEY.REQUESTED,
-    name,
-    permissions
-});
+export const createAPIKey = createAction(CREATE_API_KEY.REQUESTED, (name, permissions) => ({
+    payload: { name, permissions }
+}));
 
 /**
  * Clears temporarily stored new API keys.
@@ -93,7 +87,7 @@ export const createAPIKey = (name, permissions) => ({
  * @func
  * @returns {object}
  */
-export const clearAPIKey = simpleActionCreator(CLEAR_API_KEY);
+export const clearAPIKey = createAction(CLEAR_API_KEY);
 
 /**
  * Returns action that can trigger an API call for updating the permissions for an API key owned by the current account.
@@ -103,11 +97,9 @@ export const clearAPIKey = simpleActionCreator(CLEAR_API_KEY);
  * @param permissions {object} permissions configuration object for the new API key
  * @returns {object}
  */
-export const updateAPIKey = (keyId, permissions) => ({
-    type: UPDATE_API_KEY.REQUESTED,
-    keyId,
-    permissions
-});
+export const updateAPIKey = createAction(UPDATE_API_KEY.REQUESTED, (keyId, permissions) => ({
+    payload: { keyId, permissions }
+}));
 
 /**
  * Returns action that can trigger an API call for removing an API key owned by the current account.
@@ -116,10 +108,9 @@ export const updateAPIKey = (keyId, permissions) => ({
  * @param keyId {string} the unique id for the API key
  * @returns {object}
  */
-export const removeAPIKey = keyId => ({
-    type: REMOVE_API_KEY.REQUESTED,
-    keyId
-});
+export const removeAPIKey = createAction(REMOVE_API_KEY.REQUESTED, keyId => ({
+    payload: { keyId }
+}));
 
 /**
  * Returns action that can trigger an API call that will login into a new session.
@@ -127,12 +118,9 @@ export const removeAPIKey = keyId => ({
  * @func
  * @returns {object}
  */
-export const login = (username, password, remember) => ({
-    type: LOGIN.REQUESTED,
-    username,
-    password,
-    remember
-});
+export const login = createAction(LOGIN.REQUESTED, (username, password, remember) => ({
+    payload: { username, password, remember }
+}));
 
 /**
  * Returns action that can trigger an API call that will logout the current session.
@@ -140,7 +128,7 @@ export const login = (username, password, remember) => ({
  * @func
  * @returns {object}
  */
-export const logout = simpleActionCreator(LOGOUT.REQUESTED);
+export const logout = createAction(LOGOUT.REQUESTED);
 
 /**
  * Returns action that can trigger an API call that will reset the password for the user associated with the  current
@@ -149,8 +137,6 @@ export const logout = simpleActionCreator(LOGOUT.REQUESTED);
  * @func
  * @returns {object}
  */
-export const resetPassword = (password, resetCode) => ({
-    type: RESET_PASSWORD.REQUESTED,
-    password,
-    resetCode
-});
+export const resetPassword = createAction(RESET_PASSWORD.REQUESTED, (password, resetCode) => ({
+    payload: { password, resetCode }
+}));

@@ -157,7 +157,7 @@ describe("mapDispatchToProps", () => {
         result.onRemove(keyId);
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_API_KEY.REQUESTED,
-            keyId
+            payload: { keyId }
         });
     });
 
@@ -166,8 +166,7 @@ describe("mapDispatchToProps", () => {
         result.onUpdate("foo", permissions);
         expect(dispatch).toHaveBeenCalledWith({
             type: UPDATE_API_KEY.REQUESTED,
-            keyId: "foo",
-            permissions
+            payload: { keyId: "foo", permissions }
         });
     });
 });

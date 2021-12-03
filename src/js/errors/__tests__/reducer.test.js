@@ -7,7 +7,7 @@ jest.mock("../../utils/utils");
 describe("reducer()", () => {
     it("should return the initial state (null)", () => {
         const result = reducer(undefined, {});
-        expect(result).toBe(null);
+        expect(result).toStrictEqual({});
     });
 
     it("should return the given state on other action types", () => {

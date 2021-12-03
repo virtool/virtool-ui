@@ -4,7 +4,7 @@
  * @module errors/reducer
  */
 import { createReducer } from "@reduxjs/toolkit";
-import { endsWith, replace } from "lodash-es";
+import { endsWith, isEmpty, replace } from "lodash-es";
 import {
     ADD_ISOLATE,
     ADD_SEQUENCE,
@@ -80,7 +80,7 @@ export const resetErrorName = action => {
  * @param action {object}
  * @returns {object}
  */
-export const errorsReducer = createReducer(null, builder => {
+export const errorsReducer = createReducer({}, builder => {
     builder
         .addCase(CLEAR_ERROR, (state, action) => {
             // Clear specific error explicitly
@@ -138,8 +138,8 @@ export const errorsReducer = createReducer(null, builder => {
         )
         .addDefaultCase((state, action) => {
             // Ignore requests until an error has occurred
-            const errorName = state ? resetErrorName(action) : null;
 
+            const errorName = isEmpty(state) ? null : resetErrorName(action);
             // Only clear errors on request that had been set previously
             if (errorName && state[errorName]) {
                 state[errorName] = null;
