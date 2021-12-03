@@ -1,4 +1,5 @@
-import { find, map } from "lodash-es";
+import { createReducer } from "@reduxjs/toolkit";
+import { find, hasIn, map } from "lodash-es";
 import {
     ADD_ISOLATE,
     ADD_SEQUENCE,
@@ -91,115 +92,106 @@ export const receiveOTU = (state, action) => {
     return getActiveIsolate({ ...state, detail });
 };
 
-export default function OTUsReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_UPDATE_STATUS:
+export const OTUsReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_UPDATE_STATUS, (state, action) => {
             if (action.data.id === "OTU_import") {
-                return {
-                    ...state,
-                    importData: {
-                        ...state.importData,
-                        ...action.data,
-                        inProgress: true
-                    }
-                };
+                state.importData = { ...action.data, inProgress: true };
             }
-
-            return state;
-
-        case WS_INSERT_OTU:
+        })
+        .addCase(WS_INSERT_OTU, (state, action) => {
             if (action.data.reference.id === state.refId) {
                 return insert(state, action, "name");
             }
-
             return state;
-
-        case WS_UPDATE_OTU:
+        })
+        .addCase(WS_UPDATE_OTU, (state, action) => {
             if (action.data.reference.id === state.refId) {
                 return update(state, action, "name");
             }
-
             return state;
-
-        case WS_REMOVE_OTU:
+        })
+        .addCase(WS_REMOVE_OTU, (state, action) => {
             return remove(state, action);
-
-        case FIND_OTUS.REQUESTED:
-            return {
-                ...state,
-                term: action.term,
-                verified: action.verified,
-                refId: action.refId
-            };
-
-        case FIND_OTUS.SUCCEEDED:
-        case REFRESH_OTUS.SUCCEEDED:
+        })
+        .addCase(FIND_OTUS.REQUESTED, (state, action) => {
+            state.term = action.term;
+            state.verified = action.verified;
+            state.refId = action.refId;
+        })
+        .addCase(FIND_OTUS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "name");
-
-        case GET_OTU.REQUESTED:
-        case REMOVE_OTU.SUCCEEDED:
+        })
+        .addCase(REFRESH_OTUS.SUCCEEDED, (state, action) => {
+            return updateDocuments(state, action, "name");
+        })
+        .addCase(GET_OTU.REQUESTED, state => {
             return hideOTUModal({ ...state, detail: null, activeIsolateId: null });
-
-        case GET_OTU.SUCCEEDED:
-        case EDIT_OTU.SUCCEEDED:
-        case EDIT_ISOLATE.SUCCEEDED:
-        case ADD_SEQUENCE.SUCCEEDED:
-        case EDIT_SEQUENCE.SUCCEEDED:
-        case REMOVE_SEQUENCE.SUCCEEDED:
-        case SET_ISOLATE_AS_DEFAULT.SUCCEEDED:
-        case ADD_ISOLATE.SUCCEEDED:
-        case REMOVE_ISOLATE.SUCCEEDED:
-            return hideOTUModal(receiveOTU(state, action));
-
-        case GET_OTU_HISTORY.REQUESTED:
-            return { ...state, detailHistory: null };
-
-        case GET_OTU_HISTORY.SUCCEEDED:
-            return { ...state, detailHistory: action.data };
-
-        case REVERT.SUCCEEDED:
+        })
+        .addCase(REMOVE_OTU.SUCCEEDED, state => {
+            return hideOTUModal({ ...state, detail: null, activeIsolateId: null });
+        })
+        .addCase(GET_OTU_HISTORY.REQUESTED, state => {
+            state.detailHistory = null;
+        })
+        .addCase(GET_OTU_HISTORY.SUCCEEDED, (state, action) => {
+            state.detailHistory = action.data;
+        })
+        .addCase(REVERT.SUCCEEDED, (state, action) => {
             return { ...receiveOTU(state, action), detailHistory: action.history };
+        })
+        .addCase(UPLOAD_IMPORT.SUCCEEDED, (state, action) => {
+            state.importData = { ...action.data, inProgress: false };
+        })
+        .addCase(SELECT_ISOLATE, (state, action) => {
+            state.activeIsolate = find(state.detail.isolates, { id: action.isolateId });
+            state.activeIsolateId = action.isolateId;
+        })
+        .addCase(SHOW_EDIT_OTU, state => {
+            state.edit = true;
+        })
+        .addCase(SHOW_REMOVE_OTU, state => {
+            state.remove = true;
+        })
+        .addCase(SHOW_ADD_ISOLATE, state => {
+            state.addIsolate = true;
+        })
+        .addCase(SHOW_EDIT_ISOLATE, state => {
+            state.editIsolate = true;
+        })
+        .addCase(SHOW_REMOVE_ISOLATE, state => {
+            state.removeIsolate = true;
+        })
+        .addCase(SHOW_REMOVE_SEQUENCE, (state, action) => {
+            state.removeSequence = action.sequenceId;
+        })
+        .addCase(HIDE_OTU_MODAL, state => {
+            state.edit = false;
+            state.remove = false;
+            state.addIsolate = false;
+            state.editIsolate = false;
+            state.removeIsolate = false;
+            state.removeSequence = false;
+        })
+        .addMatcher(
+            action => {
+                const matches = {
+                    [GET_OTU.SUCCEEDED]: true,
+                    [EDIT_OTU.SUCCEEDED]: true,
+                    [EDIT_ISOLATE.SUCCEEDED]: true,
+                    [ADD_SEQUENCE.SUCCEEDED]: true,
+                    [EDIT_SEQUENCE.SUCCEEDED]: true,
+                    [REMOVE_SEQUENCE.SUCCEEDED]: true,
+                    [SET_ISOLATE_AS_DEFAULT.SUCCEEDED]: true,
+                    [ADD_ISOLATE.SUCCEEDED]: true,
+                    [REMOVE_ISOLATE.SUCCEEDED]: true
+                };
+                return hasIn(matches, action.type);
+            },
+            (state, action) => {
+                return hideOTUModal(receiveOTU(state, action));
+            }
+        );
+});
 
-        case UPLOAD_IMPORT.SUCCEEDED:
-            return { ...state, importData: { ...action.data, inProgress: false } };
-
-        case SELECT_ISOLATE:
-            return {
-                ...state,
-                activeIsolate: find(state.detail.isolates, { id: action.isolateId }),
-                activeIsolateId: action.isolateId
-            };
-
-        case SHOW_EDIT_OTU:
-            return { ...state, edit: true };
-
-        case SHOW_REMOVE_OTU:
-            return { ...state, remove: true };
-
-        case SHOW_ADD_ISOLATE:
-            return { ...state, addIsolate: true };
-
-        case SHOW_EDIT_ISOLATE:
-            return { ...state, editIsolate: true };
-
-        case SHOW_REMOVE_ISOLATE:
-            return { ...state, removeIsolate: true };
-
-        case SHOW_REMOVE_SEQUENCE:
-            return { ...state, removeSequence: action.sequenceId };
-
-        case HIDE_OTU_MODAL:
-            return {
-                ...state,
-                edit: false,
-                remove: false,
-                addIsolate: false,
-                editIsolate: false,
-                removeIsolate: false,
-                removeSequence: false
-            };
-
-        default:
-            return state;
-    }
-}
+export default OTUsReducer;

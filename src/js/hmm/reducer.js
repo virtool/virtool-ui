@@ -1,4 +1,6 @@
-import { WS_UPDATE_STATUS, FIND_HMMS, GET_HMM } from "../app/actionTypes";
+import { createReducer } from "@reduxjs/toolkit";
+import { set } from "lodash-es";
+import { FIND_HMMS, GET_HMM, WS_UPDATE_STATUS } from "../app/actionTypes";
 import { updateDocuments } from "../utils/reducers";
 
 export const initialState = {
@@ -9,38 +11,27 @@ export const initialState = {
     detail: null
 };
 
-export default function hmmsReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_UPDATE_STATUS:
+export const hmmsReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_UPDATE_STATUS, (state, action) => {
             if (action.data.id === "hmm") {
-                return {
-                    ...state,
-                    status: {
-                        ...state.status,
-                        installed: action.data.installed,
-                        task: action.data.task,
-                        release: action.data.release
-                    }
-                };
+                set(state, "status.installed", action.data.installed);
+                set(state, "status.task", action.data.task);
+                set(state, "status.release", action.data.release);
             }
-            return state;
-
-        case FIND_HMMS.REQUESTED:
-            return {
-                ...state,
-                term: action.term
-            };
-
-        case FIND_HMMS.SUCCEEDED:
+        })
+        .addCase(FIND_HMMS.REQUESTED, (state, action) => {
+            state.term = action.term;
+        })
+        .addCase(FIND_HMMS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "cluster");
+        })
+        .addCase(GET_HMM.REQUESTED, state => {
+            state.detail = null;
+        })
+        .addCase(GET_HMM.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        });
+});
 
-        case GET_HMM.REQUESTED:
-            return { ...state, detail: null };
-
-        case GET_HMM.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        default:
-            return state;
-    }
-}
+export default hmmsReducer;

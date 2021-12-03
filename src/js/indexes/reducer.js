@@ -1,13 +1,14 @@
+import { createReducer } from "@reduxjs/toolkit";
 import {
-    WS_INSERT_INDEX,
-    WS_UPDATE_INDEX,
     FIND_INDEXES,
     GET_INDEX,
-    GET_UNBUILT,
     GET_INDEX_HISTORY,
-    WS_INSERT_HISTORY
+    GET_UNBUILT,
+    WS_INSERT_HISTORY,
+    WS_INSERT_INDEX,
+    WS_UPDATE_INDEX
 } from "../app/actionTypes";
-import { updateDocuments, insert, update } from "../utils/reducers";
+import { insert, update, updateDocuments } from "../utils/reducers";
 
 export const initialState = {
     documents: null,
@@ -20,57 +21,51 @@ export const initialState = {
     showRebuild: false
 };
 
-export default function indexesReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_INSERT_HISTORY:
+export const indexesReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_INSERT_HISTORY, (state, action) => {
             if (action.data.reference.id === state.refId) {
-                return { ...state, modified_otu_count: state.modified_otu_count + 1 };
+                state.modified_otu_count++;
             }
             return state;
-
-        case WS_INSERT_INDEX:
+        })
+        .addCase(WS_INSERT_INDEX, (state, action) => {
             if (action.data.reference.id === state.refId) {
                 return insert(state, action, "version", true);
             }
-
             return state;
-
-        case WS_UPDATE_INDEX:
+        })
+        .addCase(WS_UPDATE_INDEX, (state, action) => {
             if (action.data.reference.id === state.refId) {
                 return update(state, action, "version", true);
             }
-
             return state;
-
-        case FIND_INDEXES.REQUESTED: {
-            return {
-                ...state,
-                term: action.term,
-                refId: action.refId
-            };
-        }
-
-        case FIND_INDEXES.SUCCEEDED:
+        })
+        .addCase(FIND_INDEXES.REQUESTED, (state, action) => {
+            state.term = action.term;
+            state.refId = action.refId;
+        })
+        .addCase(FIND_INDEXES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "version", true);
-
-        case GET_INDEX.REQUESTED:
-            return { ...state, refId: action.refId, detail: null };
-
-        case GET_INDEX.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        case GET_UNBUILT.SUCCEEDED:
-            return { ...state, unbuilt: action.data };
-
-        case GET_INDEX_HISTORY.SUCCEEDED:
+        })
+        .addCase(GET_INDEX.REQUESTED, (state, action) => {
+            state.refId = action.refId;
+            state.detail = null;
+        })
+        .addCase(GET_INDEX.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        })
+        .addCase(GET_UNBUILT.SUCCEEDED, (state, action) => {
+            state.unbuilt = action.data;
+        })
+        .addCase(GET_INDEX_HISTORY.SUCCEEDED, (state, action) => {
             return {
                 ...state,
                 history: {
                     ...updateDocuments(state.history, action, "otu.name")
                 }
             };
+        });
+});
 
-        default:
-            return state;
-    }
-}
+export default indexesReducer;

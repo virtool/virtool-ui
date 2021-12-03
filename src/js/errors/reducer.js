@@ -3,19 +3,20 @@
  *
  * @module errors/reducer
  */
+import { createReducer } from "@reduxjs/toolkit";
 import { endsWith, replace } from "lodash-es";
 import {
     ADD_ISOLATE,
     ADD_SEQUENCE,
     CHANGE_ACCOUNT_PASSWORD,
     CLEAR_ERROR,
+    CREATE_FIRST_USER,
     CREATE_GROUP,
     CREATE_INDEX,
     CREATE_OTU,
     CREATE_SAMPLE,
     CREATE_SUBTRACTION,
     CREATE_USER,
-    CREATE_FIRST_USER,
     EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
@@ -79,67 +80,71 @@ export const resetErrorName = action => {
  * @param action {object}
  * @returns {object}
  */
-export default function errorsReducer(state = null, action) {
-    if (action.type === CLEAR_ERROR) {
-        // Clear specific error explicitly
-        return { ...state, [action.error]: null };
-    }
+export const errorsReducer = createReducer(null, builder => {
+    builder
+        .addCase(CLEAR_ERROR, (state, action) => {
+            // Clear specific error explicitly
+            state[action.error] = null;
+        })
+        .addMatcher(
+            action => checkActionFailed(action),
+            (state, action) => {
+                const errorName = getErrorName(action);
 
-    const failedAction = checkActionFailed(action);
+                const errorPayload = {
+                    status: action.status,
+                    message: action.message
+                };
 
-    if (failedAction) {
-        const errorName = getErrorName(action);
+                switch (action.type) {
+                    case CREATE_SAMPLE.FAILED:
+                    case UPDATE_SAMPLE.FAILED:
+                    case CREATE_OTU.FAILED:
+                    case EDIT_OTU.FAILED:
+                    case ADD_ISOLATE.FAILED:
+                    case EDIT_ISOLATE.FAILED:
+                    case ADD_SEQUENCE.FAILED:
+                    case EDIT_SEQUENCE.FAILED:
+                    case CREATE_INDEX.FAILED:
+                    case CREATE_SUBTRACTION.FAILED:
+                    case UPDATE_ACCOUNT.FAILED:
+                    case CHANGE_ACCOUNT_PASSWORD.FAILED:
+                    case CREATE_USER.FAILED:
+                    case EDIT_USER.FAILED:
+                    case CREATE_GROUP.FAILED:
+                    case GET_JOB.FAILED:
+                    case GET_SAMPLE.FAILED:
+                    case GET_ANALYSIS.FAILED:
+                    case GET_REFERENCE.FAILED:
+                    case GET_OTU.FAILED:
+                    case GET_HMM.FAILED:
+                    case GET_INDEX.FAILED:
+                    case GET_SUBTRACTION.FAILED:
+                    case UPDATE_SETTINGS.FAILED:
+                    case FIND_USERS.FAILED:
+                    case GET_USER.FAILED:
+                    case LOGIN.FAILED:
+                        state[errorName] = errorPayload;
+                        break;
+                    case CREATE_FIRST_USER.FAILED:
+                        state[errorName] = action.error.response.body;
+                        break;
 
-        const errorPayload = {
-            status: failedAction.status,
-            message: failedAction.message
-        };
+                    default:
+                        // Report uncaught errors to Sentry
+                        reportAPIError(action);
+                }
+            }
+        )
+        .addDefaultCase((state, action) => {
+            // Ignore requests until an error has occurred
+            const errorName = state ? resetErrorName(action) : null;
 
-        switch (failedAction.type) {
-            case CREATE_SAMPLE.FAILED:
-            case UPDATE_SAMPLE.FAILED:
-            case CREATE_OTU.FAILED:
-            case EDIT_OTU.FAILED:
-            case ADD_ISOLATE.FAILED:
-            case EDIT_ISOLATE.FAILED:
-            case ADD_SEQUENCE.FAILED:
-            case EDIT_SEQUENCE.FAILED:
-            case CREATE_INDEX.FAILED:
-            case CREATE_SUBTRACTION.FAILED:
-            case UPDATE_ACCOUNT.FAILED:
-            case CHANGE_ACCOUNT_PASSWORD.FAILED:
-            case CREATE_USER.FAILED:
-            case EDIT_USER.FAILED:
-            case CREATE_GROUP.FAILED:
-            case GET_JOB.FAILED:
-            case GET_SAMPLE.FAILED:
-            case GET_ANALYSIS.FAILED:
-            case GET_REFERENCE.FAILED:
-            case GET_OTU.FAILED:
-            case GET_HMM.FAILED:
-            case GET_INDEX.FAILED:
-            case GET_SUBTRACTION.FAILED:
-            case UPDATE_SETTINGS.FAILED:
-            case FIND_USERS.FAILED:
-            case GET_USER.FAILED:
-            case LOGIN.FAILED:
-                return { ...state, [errorName]: errorPayload };
-            case CREATE_FIRST_USER.FAILED:
-                return { ...state, [errorName]: action.error.response.body };
+            // Only clear errors on request that had been set previously
+            if (errorName && state[errorName]) {
+                state[errorName] = null;
+            }
+        });
+});
 
-            default:
-                // Report uncaught errors to Sentry
-                reportAPIError(failedAction);
-                return state;
-        }
-    }
-
-    // Ignore requests until an error has occurred
-    const errorName = state ? resetErrorName(action) : null;
-
-    // Only clear errors on request that had been set previously
-    if (errorName && state[errorName]) {
-        return { ...state, [errorName]: null };
-    }
-    return state;
-}
+export default errorsReducer;

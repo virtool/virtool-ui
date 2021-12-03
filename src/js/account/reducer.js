@@ -3,6 +3,7 @@
  *
  * @module account/reducer
  */
+import { createReducer } from "@reduxjs/toolkit";
 import {
     CLEAR_API_KEY,
     CREATE_API_KEY,
@@ -32,32 +33,32 @@ export const initialState = {
  * @param action {object}
  * @returns {object}
  */
-export default function accountReducer(state = initialState, action) {
-    switch (action.type) {
-        case GET_ACCOUNT.SUCCEEDED:
+export const accountReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(GET_ACCOUNT.SUCCEEDED, (state, action) => {
             return { ...state, ...action.data, ready: true };
-        case UPDATE_ACCOUNT.SUCCEEDED:
+        })
+        .addCase(UPDATE_ACCOUNT.SUCCEEDED, (state, action) => {
             return { ...state, ...action.data };
-
-        case GET_API_KEYS.SUCCEEDED:
-            return { ...state, apiKeys: action.data };
-
-        case CREATE_API_KEY.REQUESTED:
-            return { ...state, key: null };
-
-        case CREATE_API_KEY.SUCCEEDED:
-            return { ...state, newKey: action.data.key };
-
-        case CLEAR_API_KEY:
-            return { ...state, newKey: null };
-
-        case UPDATE_ACCOUNT_SETTINGS.SUCCEEDED:
-            return { ...state, settings: action.data };
-
-        case LOGOUT.SUCCEEDED:
+        })
+        .addCase(GET_API_KEYS.SUCCEEDED, (state, action) => {
+            state.apiKeys = action.data;
+        })
+        .addCase(CREATE_API_KEY.REQUESTED, state => {
+            state.key = null;
+        })
+        .addCase(CREATE_API_KEY.SUCCEEDED, (state, action) => {
+            state.newKey = action.data.key;
+        })
+        .addCase(CLEAR_API_KEY, state => {
+            state.newKey = null;
+        })
+        .addCase(UPDATE_ACCOUNT_SETTINGS.SUCCEEDED, (state, action) => {
+            state.settings = action.data;
+        })
+        .addCase(LOGOUT.SUCCEEDED, () => {
             return { ...initialState };
+        });
+});
 
-        default:
-            return state;
-    }
-}
+export default accountReducer;

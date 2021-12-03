@@ -1,13 +1,14 @@
+import { createReducer } from "@reduxjs/toolkit";
 import {
-    WS_INSERT_USER,
-    WS_UPDATE_USER,
-    WS_REMOVE_USER,
+    CREATE_USER,
+    EDIT_USER,
     FIND_USERS,
     GET_USER,
-    CREATE_USER,
-    EDIT_USER
+    WS_INSERT_USER,
+    WS_REMOVE_USER,
+    WS_UPDATE_USER
 } from "../app/actionTypes";
-import { updateDocuments, insert, update, remove } from "../utils/reducers";
+import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
 export const initialState = {
     documents: null,
@@ -18,52 +19,47 @@ export const initialState = {
     passwordPending: false
 };
 
-const reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case WS_INSERT_USER:
+const reducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_INSERT_USER, (state, action) => {
             return insert(state, action, "id");
-
-        case WS_UPDATE_USER:
+        })
+        .addCase(WS_UPDATE_USER, (state, action) => {
             return update(state, action, "id");
-
-        case WS_REMOVE_USER:
+        })
+        .addCase(WS_REMOVE_USER, (state, action) => {
             return remove(state, action);
-
-        case FIND_USERS.REQUESTED:
-            return {
-                ...state,
-                term: action.term
-            };
-
-        case FIND_USERS.SUCCEEDED:
+        })
+        .addCase(FIND_USERS.REQUESTED, (state, action) => {
+            state.term = action.term;
+        })
+        .addCase(FIND_USERS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "id");
-
-        case GET_USER.REQUESTED:
-            return { ...state, detail: null };
-
-        case GET_USER.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        case CREATE_USER.REQUESTED:
-            return { ...state, createPending: true };
-
-        case CREATE_USER.SUCCEEDED:
-        case CREATE_USER.FAILED:
-            return { ...state, createPending: false };
-
-        case EDIT_USER.REQUESTED: {
+        })
+        .addCase(GET_USER.REQUESTED, state => {
+            state.detail = null;
+        })
+        .addCase(GET_USER.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        })
+        .addCase(CREATE_USER.REQUESTED, state => {
+            state.createPending = true;
+        })
+        .addCase(CREATE_USER.SUCCEEDED, state => {
+            state.createPending = false;
+        })
+        .addCase(CREATE_USER.FAILED, state => {
+            state.createPending = false;
+        })
+        .addCase(EDIT_USER.REQUESTED, (state, action) => {
             if (action.update.password) {
                 return { ...state, passwordPending: true };
             }
             return state;
-        }
-
-        case EDIT_USER.SUCCEEDED:
+        })
+        .addCase(EDIT_USER.SUCCEEDED, (state, action) => {
             return { ...state, detail: action.data };
-
-        default:
-            return state;
-    }
-};
+        });
+});
 
 export default reducer;
