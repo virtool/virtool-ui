@@ -1,3 +1,5 @@
+import { createReducer } from "@reduxjs/toolkit";
+import { assign } from "lodash-es";
 import { FIND_JOBS, GET_JOB, GET_LINKED_JOB, WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB } from "../app/actionTypes";
 import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
@@ -12,36 +14,32 @@ export const initialState = {
     linkedJobs: {}
 };
 
-export default function jobsReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_INSERT_JOB:
+export const jobsReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_INSERT_JOB, (state, action) => {
             return insert(state, action, "created_at");
-
-        case WS_UPDATE_JOB:
+        })
+        .addCase(WS_UPDATE_JOB, (state, action) => {
             return update(state, action, "created_at");
-
-        case WS_REMOVE_JOB:
+        })
+        .addCase(WS_REMOVE_JOB, (state, action) => {
             return remove(state, action);
-
-        case GET_LINKED_JOB.SUCCEEDED:
-            return { ...state, linkedJobs: { ...state.linkedJobs, [action.data.id]: action.data } };
-
-        case FIND_JOBS.REQUESTED:
-            return {
-                ...state,
-                term: action.term
-            };
-
-        case FIND_JOBS.SUCCEEDED:
+        })
+        .addCase(GET_LINKED_JOB.SUCCEEDED, (state, action) => {
+            assign(state.linkedJobs, { [action.data.id]: action.data });
+        })
+        .addCase(FIND_JOBS.REQUESTED, (state, action) => {
+            state.term = action.term;
+        })
+        .addCase(FIND_JOBS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "created_at");
+        })
+        .addCase(GET_JOB.REQUESTED, state => {
+            state.detail = null;
+        })
+        .addCase(GET_JOB.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        });
+});
 
-        case GET_JOB.REQUESTED:
-            return { ...state, detail: null };
-
-        case GET_JOB.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        default:
-            return state;
-    }
-}
+export default jobsReducer;

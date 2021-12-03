@@ -3,17 +3,18 @@
  *
  * @module files/reducer
  */
+import { createReducer } from "@reduxjs/toolkit";
 import { map, reject } from "lodash-es";
-import { updateDocuments, insert, update, remove } from "../utils/reducers";
 import {
-    WS_INSERT_FILE,
-    WS_UPDATE_FILE,
-    WS_REMOVE_FILE,
     FIND_FILES,
     UPLOAD,
     UPLOAD_PROGRESS,
-    UPLOAD_SAMPLE_FILE
+    UPLOAD_SAMPLE_FILE,
+    WS_INSERT_FILE,
+    WS_REMOVE_FILE,
+    WS_UPDATE_FILE
 } from "../app/actionTypes";
+import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
 /**
  * The initial state to give the reducer.
@@ -77,42 +78,40 @@ export const updateProgress = (state, action) => {
  * @param action {object}
  * @returns {object}
  */
-export default function fileReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_INSERT_FILE:
+export const filesReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_INSERT_FILE, (state, action) => {
             if (action.data.type === state.fileType) {
                 return insert(state, action, "uploaded_at", true);
             }
-
             return state;
-
-        case WS_UPDATE_FILE:
+        })
+        .addCase(WS_UPDATE_FILE, (state, action) => {
             return update(state, action, "uploaded_at", true);
-
-        case WS_REMOVE_FILE:
+        })
+        .addCase(WS_REMOVE_FILE, (state, action) => {
             return remove(state, action);
-
-        case FIND_FILES.REQUESTED:
-            return {
-                ...state,
-                term: action.term,
-                documents: state.fileType === action.fileType ? state.documents : null,
-                fileType: ""
-            };
-
-        case FIND_FILES.SUCCEEDED:
+        })
+        .addCase(FIND_FILES.REQUESTED, (state, action) => {
+            state.term = action.term;
+            state.documents = state.fileType === action.fileType ? state.documents : null;
+            state.fileType = "";
+        })
+        .addCase(FIND_FILES.SUCCEEDED, (state, action) => {
             return {
                 ...updateDocuments(state, action, "uploaded_at", true),
                 fileType: action.context.fileType
             };
-
-        case UPLOAD.REQUESTED:
-        case UPLOAD_SAMPLE_FILE.REQUESTED:
+        })
+        .addCase(UPLOAD.REQUESTED, (state, action) => {
             return cleanUploads(appendUpload(state, action));
-
-        case UPLOAD_PROGRESS:
+        })
+        .addCase(UPLOAD_SAMPLE_FILE.REQUESTED, (state, action) => {
+            return cleanUploads(appendUpload(state, action));
+        })
+        .addCase(UPLOAD_PROGRESS, (state, action) => {
             return cleanUploads(updateProgress(state, action));
-    }
+        });
+});
 
-    return state;
-}
+export default filesReducer;

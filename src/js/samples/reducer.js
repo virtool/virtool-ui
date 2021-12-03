@@ -1,4 +1,5 @@
-import { xor } from "lodash-es";
+import { createReducer } from "@reduxjs/toolkit";
+import { set, xor } from "lodash-es";
 import {
     CLEAR_SAMPLE_SELECTION,
     DESELECT_SAMPLES,
@@ -26,67 +27,53 @@ export const initialState = {
     nuvsCondition: [true, false, "ip"]
 };
 
-export default function samplesReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_INSERT_SAMPLE:
+export const samplesReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_INSERT_SAMPLE, (state, action) => {
             return insert(state, action, "created_at", true);
-
-        case WS_UPDATE_SAMPLE:
+        })
+        .addCase(WS_UPDATE_SAMPLE, (state, action) => {
             return update(state, action, "created_at", true);
-
-        case WS_REMOVE_SAMPLE:
+        })
+        .addCase(WS_REMOVE_SAMPLE, (state, action) => {
             return remove(state, action);
-
-        case FIND_SAMPLES.REQUESTED: {
+        })
+        .addCase(FIND_SAMPLES.REQUESTED, (state, action) => {
             const { term, pathoscope, nuvs } = action;
-            return {
-                ...state,
-                term,
-                pathoscopeCondition: pathoscope,
-                nuvsCondition: nuvs
-            };
-        }
-
-        case FIND_SAMPLES.SUCCEEDED:
+            state.term = term;
+            state.pathoscopeCondition = pathoscope;
+            state.nuvsCondition = nuvs;
+        })
+        .addCase(FIND_SAMPLES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "created_at", true);
+        })
+        .addCase(FIND_READ_FILES.SUCCEEDED, (state, action) => {
+            state.readFiles = action.data.documents;
+        })
+        .addCase(GET_SAMPLE.REQUESTED, state => {
+            state.detail = null;
+        })
+        .addCase(GET_SAMPLE.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        })
+        .addCase(UPDATE_SAMPLE.SUCCEEDED, (state, action) => {
+            set(state, "detail", action.data);
+        })
+        .addCase(UPDATE_SAMPLE_RIGHTS.SUCCEEDED, (state, action) => {
+            set(state, "detail", action.data);
+        })
+        .addCase(REMOVE_SAMPLE.SUCCEEDED, state => {
+            state.detail = null;
+        })
+        .addCase(SELECT_SAMPLE, (state, action) => {
+            state.selected = xor(state.selected, [action.sampleId]);
+        })
+        .addCase(DESELECT_SAMPLES, (state, action) => {
+            state.selected = xor(state.selected, action.sampleIds);
+        })
+        .addCase(CLEAR_SAMPLE_SELECTION, state => {
+            state.selected = [];
+        });
+});
 
-        case FIND_READ_FILES.SUCCEEDED:
-            return { ...state, readFiles: action.data.documents };
-
-        case GET_SAMPLE.REQUESTED:
-            return { ...state, detail: null };
-
-        case GET_SAMPLE.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        case UPDATE_SAMPLE.SUCCEEDED:
-            return { ...state, detail: { ...state.detail, ...action.data } };
-
-        case UPDATE_SAMPLE_RIGHTS.SUCCEEDED:
-            return { ...state, detail: { ...state.detail, ...action.data } };
-
-        case REMOVE_SAMPLE.SUCCEEDED:
-            return { ...state, detail: null };
-
-        case SELECT_SAMPLE:
-            return {
-                ...state,
-                selected: xor(state.selected, [action.sampleId])
-            };
-
-        case DESELECT_SAMPLES:
-            return {
-                ...state,
-                selected: xor(state.selected, action.sampleIds)
-            };
-
-        case CLEAR_SAMPLE_SELECTION:
-            return {
-                ...state,
-                selected: []
-            };
-
-        default:
-            return state;
-    }
-}
+export default samplesReducer;

@@ -81,9 +81,11 @@ export const Main = ({ ready, onLoad }) => {
     return <LoadingPlaceholder />;
 };
 
-export const mapStateToProps = state => ({
-    ready: state.account.ready && Boolean(state.settings.data)
-});
+export const mapStateToProps = state => {
+    return {
+        ready: state.account.ready && Boolean(state.settings.data)
+    };
+};
 
 export const mapDispatchToProps = dispatch => ({
     onLoad: () => {

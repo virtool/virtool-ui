@@ -1,8 +1,9 @@
+import { createReducer } from "@reduxjs/toolkit";
 import {
+    EDIT_SUBTRACTION,
     FIND_SUBTRACTIONS,
     GET_SUBTRACTION,
     SHORTLIST_SUBTRACTIONS,
-    EDIT_SUBTRACTION,
     WS_INSERT_SUBTRACTION,
     WS_REMOVE_SUBTRACTION,
     WS_UPDATE_SUBTRACTION
@@ -17,37 +18,35 @@ export const initialState = {
     total_count: 0
 };
 
-export default function subtractionsReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_INSERT_SUBTRACTION:
+export const subtractionsReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_INSERT_SUBTRACTION, (state, action) => {
             return insert(state, action, "id");
-
-        case WS_UPDATE_SUBTRACTION:
+        })
+        .addCase(WS_UPDATE_SUBTRACTION, (state, action) => {
             return update(state, action, "id");
-
-        case WS_REMOVE_SUBTRACTION:
+        })
+        .addCase(WS_REMOVE_SUBTRACTION, (state, action) => {
             return remove(state, action);
-
-        case FIND_SUBTRACTIONS.REQUESTED: {
-            return { ...state, term: action.term };
-        }
-
-        case FIND_SUBTRACTIONS.SUCCEEDED:
+        })
+        .addCase(FIND_SUBTRACTIONS.REQUESTED, (state, action) => {
+            state.term = action.term;
+        })
+        .addCase(FIND_SUBTRACTIONS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "id");
+        })
+        .addCase(SHORTLIST_SUBTRACTIONS.SUCCEEDED, (state, action) => {
+            state.shortlist = action.data;
+        })
+        .addCase(GET_SUBTRACTION.REQUESTED, state => {
+            state.detail = null;
+        })
+        .addCase(GET_SUBTRACTION.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        })
+        .addCase(EDIT_SUBTRACTION.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        });
+});
 
-        case SHORTLIST_SUBTRACTIONS.SUCCEEDED:
-            return { ...state, shortlist: action.data };
-
-        case GET_SUBTRACTION.REQUESTED:
-            return { ...state, detail: null };
-
-        case GET_SUBTRACTION.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        case EDIT_SUBTRACTION.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        default:
-            return state;
-    }
-}
+export default subtractionsReducer;

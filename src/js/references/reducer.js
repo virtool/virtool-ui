@@ -1,4 +1,5 @@
-import { concat, reject, union, without } from "lodash-es";
+import { createReducer } from "@reduxjs/toolkit";
+import { assign, concat, reject, set, union, without } from "lodash-es";
 import {
     ADD_REFERENCE_GROUP,
     ADD_REFERENCE_USER,
@@ -35,207 +36,120 @@ export const initialState = {
     pendingRemoveUsers: []
 };
 
-export default function referenceReducer(state = initialState, action) {
-    switch (action.type) {
-        case WS_INSERT_REFERENCE: {
+export const referenceReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(WS_INSERT_REFERENCE, (state, action) => {
             const updated = insert(state, action, "name");
             return {
                 ...updated
             };
-        }
-
-        case WS_UPDATE_REFERENCE: {
+        })
+        .addCase(WS_UPDATE_REFERENCE, (state, action) => {
             const updated = update(state, action, "name");
 
             if (state.detail && state.detail.id === action.data.id) {
-                return {
-                    ...state,
-                    detail: { ...state.detail, ...action.data }
-                };
+                state.detail = { ...state.detail, ...action.data };
+            } else {
+                assign(state, updated);
             }
-
-            return updated;
-        }
-
-        case WS_REMOVE_REFERENCE: {
+        })
+        .addCase(WS_REMOVE_REFERENCE, (state, action) => {
             return remove(state, action);
-        }
-
-        case FIND_REFERENCES.REQUESTED:
-            return {
-                ...state,
-                term: action.term
-            };
-
-        case FIND_REFERENCES.SUCCEEDED:
+        })
+        .addCase(FIND_REFERENCES.REQUESTED, (state, action) => {
+            state.term = action.term;
+        })
+        .addCase(FIND_REFERENCES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "name");
-
-        case GET_REFERENCE.REQUESTED:
-            return { ...state, detail: null };
-
-        case GET_REFERENCE.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        case EDIT_REFERENCE.SUCCEEDED:
-            return { ...state, detail: action.data };
-
-        case UPLOAD.REQUESTED:
+        })
+        .addCase(GET_REFERENCE.REQUESTED, state => {
+            state.detail = null;
+        })
+        .addCase(GET_REFERENCE.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        })
+        .addCase(EDIT_REFERENCE.SUCCEEDED, (state, action) => {
+            state.detail = action.data;
+        })
+        .addCase(UPLOAD.REQUESTED, (state, action) => {
             if (action.fileType === "reference") {
-                return {
-                    ...state,
-                    importFile: null,
-                    importUploadId: action.localId,
-                    importUploadName: action.name,
-                    importUploadProgress: 0
-                };
+                state.importFile = null;
+                state.importUploadId = action.localId;
+                state.importUploadName = action.name;
+                state.importUploadProgress = 0;
             }
 
             return state;
-
-        case UPLOAD.SUCCEEDED:
+        })
+        .addCase(UPLOAD.SUCCEEDED, (state, action) => {
             if (state.importUploadId === action.data.localId) {
-                return {
-                    ...state,
-                    importFile: action.data,
-                    importUploadId: null,
-                    importUploadName: null,
-                    importUploadProgress: 0
-                };
+                state.importFile = action.data;
+                state.importUploadId = null;
+                state.importUploadName = null;
+                state.importUploadProgress = 0;
             }
-            return state;
-
-        case UPLOAD.FAILED:
+        })
+        .addCase(UPLOAD.FAILED, (state, action) => {
             if (action.fileType === "reference") {
-                return {
-                    ...state,
-                    importFile: null,
-                    importUploadId: null,
-                    importUploadProgress: 0
-                };
+                state.importFile = null;
+                state.importUploadId = null;
+                state.importUploadProgress = 0;
             }
-
-            return state;
-
-        case UPLOAD_PROGRESS:
+        })
+        .addCase(UPLOAD_PROGRESS, (state, action) => {
             if (state.importUploadId === action.localId) {
-                return {
-                    ...state,
-                    importUploadProgress: action.progress
-                };
+                state.importUploadProgress = action.progress;
             }
-
-            return state;
-
-        case CHECK_REMOTE_UPDATES.REQUESTED:
-            return { ...state, checking: true };
-
-        case CHECK_REMOTE_UPDATES.FAILED:
-            return { ...state, checking: false };
-
-        case CHECK_REMOTE_UPDATES.SUCCEEDED:
-            return {
-                ...state,
-                checking: false,
-                detail: { ...state.detail, release: action.data }
-            };
-
-        case UPDATE_REMOTE_REFERENCE.SUCCEEDED:
-            return {
-                ...state,
-                detail: { ...state.detail, release: action.data }
-            };
-
-        case ADD_REFERENCE_USER.SUCCEEDED:
-            return {
-                ...state,
-                detail: {
-                    ...state.detail,
-                    users: concat(state.detail.users, [action.data])
-                }
-            };
-
-        case EDIT_REFERENCE_USER.SUCCEEDED:
-            return {
-                ...state,
-                detail: {
-                    ...state.detail,
-                    users: updateMember(state.detail.users, action)
-                }
-            };
-
-        case REMOVE_REFERENCE_USER.REQUESTED:
+        })
+        .addCase(CHECK_REMOTE_UPDATES.REQUESTED, state => {
+            state.checking = true;
+        })
+        .addCase(CHECK_REMOTE_UPDATES.FAILED, state => {
+            state.checking = false;
+        })
+        .addCase(CHECK_REMOTE_UPDATES.SUCCEEDED, (state, action) => {
+            state.checking = false;
+            set(state, "detail.release", action.data);
+        })
+        .addCase(UPDATE_REMOTE_REFERENCE.SUCCEEDED, (state, action) => {
+            set(state, "detail.release", action.data);
+        })
+        .addCase(ADD_REFERENCE_USER.SUCCEEDED, (state, action) => {
+            state.detail.users = concat(state.detail.users, [action.data]);
+        })
+        .addCase(EDIT_REFERENCE_USER.SUCCEEDED, (state, action) => {
+            state.detail.users = updateMember(state.detail.users, action);
+        })
+        .addCase(REMOVE_REFERENCE_USER.REQUESTED, (state, action) => {
             if (action.refId === state.detail.id) {
-                return {
-                    ...state,
-                    pendingRemoveUsers: union(state.pendingRemoveUsers, [action.userId])
-                };
+                state.pendingRemoveUsers = union(state.pendingRemoveUsers, [action.userId]);
             }
-
-            return state;
-
-        case REMOVE_REFERENCE_USER.SUCCEEDED:
+        })
+        .addCase(REMOVE_REFERENCE_USER.SUCCEEDED, (state, action) => {
             if (action.context.refId === state.detail.id) {
                 const userId = action.context.userId;
-
-                return {
-                    ...state,
-                    pendingRemoveUsers: without(state.pendingRemoveUsers, userId),
-                    detail: {
-                        ...state.detail,
-                        users: reject(state.detail.users, { id: userId })
-                    }
-                };
+                state.pendingRemoveUsers = without(state.pendingRemoveUsers, userId);
+                state.detail.users = reject(state.detail.users, { id: userId });
             }
-
-            return state;
-
-        case ADD_REFERENCE_GROUP.SUCCEEDED:
-            return {
-                ...state,
-                detail: {
-                    ...state.detail,
-                    groups: concat(state.detail.groups, [action.data])
-                }
-            };
-
-        case EDIT_REFERENCE_GROUP.SUCCEEDED:
-            return {
-                ...state,
-                detail: {
-                    ...state.detail,
-                    groups: updateMember(state.detail.groups, action)
-                }
-            };
-
-        case REMOVE_REFERENCE_GROUP.REQUESTED:
+        })
+        .addCase(ADD_REFERENCE_GROUP.SUCCEEDED, (state, action) => {
+            state.detail.groups = concat(state.detail.groups, [action.data]);
+        })
+        .addCase(EDIT_REFERENCE_GROUP.SUCCEEDED, (state, action) => {
+            state.detail.groups = updateMember(state.detail.groups, action);
+        })
+        .addCase(REMOVE_REFERENCE_GROUP.REQUESTED, (state, action) => {
             if (action.refId === state.detail.id) {
-                return {
-                    ...state,
-                    pendingRemoveGroups: union(state.pendingRemoveGroups, [action.groupId])
-                };
+                state.pendingRemoveGroups = union(state.pendingRemoveGroups, [action.groupId]);
             }
-
-            return state;
-
-        case REMOVE_REFERENCE_GROUP.SUCCEEDED:
+        })
+        .addCase(REMOVE_REFERENCE_GROUP.SUCCEEDED, (state, action) => {
             if (action.context.refId === state.detail.id) {
                 const groupId = action.context.groupId;
-
-                return {
-                    ...state,
-                    pendingRemoveGroups: without(state.pendingRemoveGroups, groupId),
-                    detail: {
-                        ...state.detail,
-                        groups: reject(state.detail.groups, {
-                            id: groupId
-                        })
-                    }
-                };
+                state.pendingRemoveGroups = without(state.pendingRemoveGroups, groupId);
+                state.detail.groups = reject(state.detail.groups, { id: groupId });
             }
+        });
+});
 
-            return state;
-
-        default:
-            return state;
-    }
-}
+export default referenceReducer;

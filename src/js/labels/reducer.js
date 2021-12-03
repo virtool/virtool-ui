@@ -1,3 +1,4 @@
+import { createReducer } from "@reduxjs/toolkit";
 import { CREATE_LABEL, LIST_LABELS, REMOVE_LABEL, UPDATE_LABEL } from "../app/actionTypes";
 import { insert, remove, update } from "../utils/reducers";
 
@@ -5,21 +6,20 @@ export const initialState = {
     documents: null
 };
 
-export default function labelsReducer(state = initialState, action) {
-    switch (action.type) {
-        case LIST_LABELS.SUCCEEDED:
+export const labelsReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(LIST_LABELS.SUCCEEDED, (state, action) => {
             return { ...state, documents: action.data };
-
-        case CREATE_LABEL.SUCCEEDED:
+        })
+        .addCase(CREATE_LABEL.SUCCEEDED, (state, action) => {
             return insert(state, action);
-
-        case UPDATE_LABEL.SUCCEEDED:
+        })
+        .addCase(UPDATE_LABEL.SUCCEEDED, (state, action) => {
             return update(state, action);
-
-        case REMOVE_LABEL.SUCCEEDED:
+        })
+        .addCase(REMOVE_LABEL.SUCCEEDED, (state, action) => {
             return remove(state, action);
+        });
+});
 
-        default:
-            return state;
-    }
-}
+export default labelsReducer;

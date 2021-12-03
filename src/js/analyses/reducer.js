@@ -1,3 +1,4 @@
+import { createReducer } from "@reduxjs/toolkit";
 import { get, map } from "lodash-es";
 import {
     BLAST_NUVS,
@@ -106,98 +107,84 @@ export const updateIdLists = (state, action) => {
     };
 };
 
-export default function analysesReducer(state = initialState, action) {
-    switch (action.type) {
-        case SET_AODP_FILTER:
-            return { ...state, filterAODP: action.filterMin };
-
-        case WS_INSERT_ANALYSIS:
+export const analysesReducer = createReducer(initialState, builder => {
+    builder
+        .addCase(SET_AODP_FILTER, (state, action) => {
+            state.filterAODP = action.filterMin;
+        })
+        .addCase(WS_INSERT_ANALYSIS, (state, action) => {
             return insert(state, action, state.sortKey, state.sortDescending);
-
-        case WS_UPDATE_ANALYSIS:
+        })
+        .addCase(WS_UPDATE_ANALYSIS, (state, action) => {
             return update(state, action);
-
-        case WS_REMOVE_ANALYSIS:
+        })
+        .addCase(WS_REMOVE_ANALYSIS, (state, action) => {
             return remove(state, action);
-
-        case SET_ANALYSIS_ACTIVE_ID:
-            return { ...state, activeId: action.id };
-
-        case SET_SEARCH_IDS:
-            return { ...state, searchIds: action.ids };
-
-        case TOGGLE_FILTER_OTUS:
-            return { ...state, filterOTUs: !state.filterOTUs };
-
-        case TOGGLE_FILTER_ISOLATES:
-            return { ...state, filterIsolates: !state.filterIsolates };
-
-        case TOGGLE_FILTER_ORFS:
-            return { ...state, filterORFs: !state.filterORFs };
-
-        case TOGGLE_FILTER_SEQUENCES: {
-            return { ...state, filterSequences: !state.filterSequences };
-        }
-
-        case TOGGLE_SHOW_PATHOSCOPE_READS:
-            return { ...state, showPathoscopeReads: !state.showPathoscopeReads };
-
-        case SET_ANALYSIS_SORT_KEY:
-            return { ...state, sortKey: action.sortKey };
-
-        case TOGGLE_ANALYSIS_SORT_DESCENDING:
-            return { ...state, sortDescending: !state.sortDescending };
-
-        case LIST_READY_INDEXES.SUCCEEDED:
-            return { ...state, readyIndexes: action.data };
-
-        case FIND_ANALYSES.REQUESTED:
-            return { ...state, term: action.term };
-
-        case FIND_ANALYSES.SUCCEEDED:
+        })
+        .addCase(SET_ANALYSIS_ACTIVE_ID, (state, action) => {
+            state.activeId = action.id;
+        })
+        .addCase(SET_SEARCH_IDS, (state, action) => {
+            state.searchIds = action.ids;
+        })
+        .addCase(TOGGLE_FILTER_OTUS, state => {
+            state.filterOTUs = !state.filterOTUs;
+        })
+        .addCase(TOGGLE_FILTER_ISOLATES, state => {
+            state.filterIsolates = !state.filterIsolates;
+        })
+        .addCase(TOGGLE_FILTER_ORFS, state => {
+            state.filterORFs = !state.filterORFs;
+        })
+        .addCase(TOGGLE_FILTER_SEQUENCES, state => {
+            state.filterSequences = !state.filterSequences;
+        })
+        .addCase(TOGGLE_SHOW_PATHOSCOPE_READS, state => {
+            state.showPathoscopeReads = !state.showPathoscopeReads;
+        })
+        .addCase(SET_ANALYSIS_SORT_KEY, (state, action) => {
+            state.sortKey = action.sortKey;
+        })
+        .addCase(TOGGLE_ANALYSIS_SORT_DESCENDING, state => {
+            state.sortDescending = !state.sortDescending;
+        })
+        .addCase(LIST_READY_INDEXES.SUCCEEDED, (state, action) => {
+            state.readyIndexes = action.data;
+        })
+        .addCase(FIND_ANALYSES.REQUESTED, (state, action) => {
+            state.term = action.term;
+        })
+        .addCase(FIND_ANALYSES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action, "created_at", true);
-
-        case GET_ANALYSIS.REQUESTED:
+        })
+        .addCase(GET_ANALYSIS.REQUESTED, (state, action) => {
             if (get(state, "detail.id", null) !== action.analysisId) {
-                return {
-                    ...state,
-                    activeId: null,
-                    detail: null,
-                    filterIds: null,
-                    searchIds: null,
-                    sortKey: "length"
-                };
+                state.activeId = null;
+                state.detail = null;
+                state.filterIds = null;
+                state.searchIds = null;
+                state.sortKey = "length";
             }
-
-            return state;
-
-        case GET_ANALYSIS.SUCCEEDED: {
+        })
+        .addCase(GET_ANALYSIS.SUCCEEDED, (state, action) => {
             return updateIdLists(state, action);
-        }
-
-        case CLEAR_ANALYSES:
-            return {
-                ...state,
-                documents: null
-            };
-
-        case CLEAR_ANALYSIS:
-            return {
-                ...state,
-                detail: null,
-                searchIds: null
-            };
-
-        case BLAST_NUVS.REQUESTED:
+        })
+        .addCase(CLEAR_ANALYSES, state => {
+            state.documents = null;
+        })
+        .addCase(CLEAR_ANALYSIS, state => {
+            state.detail = null;
+            state.searchIds = null;
+        })
+        .addCase(BLAST_NUVS.REQUESTED, (state, action) => {
             return setNuvsBLAST(state, action.analysisId, action.sequenceIndex, {
                 ready: false
             });
-
-        case BLAST_NUVS.SUCCEEDED:
+        })
+        .addCase(BLAST_NUVS.SUCCEEDED, (state, action) => {
             const { analysisId, sequenceIndex } = action.context;
             return setNuvsBLAST(state, analysisId, sequenceIndex, action.data);
+        });
+});
 
-        default:
-            return state;
-    }
-}
+export default analysesReducer;
