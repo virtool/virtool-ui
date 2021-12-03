@@ -3,12 +3,13 @@ const { program } = require("commander");
 const { staticPath, defaultPath } = require("./server/routes");
 const { applyCSPHeader } = require("./server/csp");
 const { createProxyMiddleware } = require("http-proxy-middleware");
+const { logging } = require("./server/logging");
 
 program
   .option(
     "-p, --port <port>",
     "Port to listen on",
-    process.env.VT_UI_PORT || 3000
+    process.env.VT_UI_PORT || 9900
   )
   .option(
     "-H, --host <host>",
@@ -45,7 +46,7 @@ if (options.useProxy) {
   console.log(`Proxying API requests to ${options.apiUrl}`);
 }
 
-app.use(applyCSPHeader);
+app.use([applyCSPHeader, logging]);
 
 app.get(/\.(?:js|map|ico)$/, staticPath);
 app.get("*", defaultPath);
