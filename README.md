@@ -30,7 +30,7 @@ The default CSP configuration expects API requests to be made to the same domain
 
 Use the API proxy during development to avoid CORS and CSP issues due to server the UI and API servers at two different addresses.
 
-The proxy works by proxying requests from the client to `/api` routes to the provided `--api-url`. This satisfies the CSP because all requests are sent to the UI server address (usually `http://localhost:3000`)
+The proxy works by proxying requests from the client to `/api` routes to the provided `--api-url`. This satisfies the CSP because all requests are sent to the UI server address (usually `http://localhost:9900`)
 
 **In production, use a reverse proxy like NGINX or similar solution to route requests to the appropriate service** The API proxy is not suitable for production.
 
@@ -82,14 +82,12 @@ Use `docker-compose` to configure a `ui` service and any other services you need
 ui:
   image: virtool/ui:latest
    ports:
-     - "9950:9950"
+     - "9900:9900"
    environment:
      VT_UI_HOST: "0.0.0.0"
-     VT_UI_PORT: 3000 # Default port
+     VT_UI_PORT: 9900 # Default port
      VT_UI_API_URL: http://host.docker.internal:9950
      VT_UI_USE_PROXY: true
-   ports:
-     - "3000:3000"
    extra_hosts:
      - "host.docker.internal:host-gateway"
 ```
