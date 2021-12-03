@@ -38,7 +38,7 @@ describe("Account Action Creators:", () => {
         const result = updateAccount(update);
         const expected = {
             type: UPDATE_ACCOUNT.REQUESTED,
-            update
+            payload: { update }
         };
 
         expect(result).toEqual(expected);
@@ -51,7 +51,7 @@ describe("Account Action Creators:", () => {
         const result = updateAccountSettings(update);
         const expected = {
             type: UPDATE_ACCOUNT_SETTINGS.REQUESTED,
-            update
+            payload: { update }
         };
 
         expect(result).toEqual(expected);
@@ -63,8 +63,7 @@ describe("Account Action Creators:", () => {
         const result = changePassword(oldPassword, newPassword);
         const expected = {
             type: CHANGE_ACCOUNT_PASSWORD.REQUESTED,
-            oldPassword,
-            newPassword
+            payload: { old_password: oldPassword, password: newPassword }
         };
 
         expect(result).toEqual(expected);
@@ -85,8 +84,7 @@ describe("Account Action Creators:", () => {
         const result = createAPIKey(name, permissions);
         const expected = {
             type: CREATE_API_KEY.REQUESTED,
-            name,
-            permissions
+            payload: { name, permissions }
         };
 
         expect(result).toEqual(expected);
@@ -107,8 +105,7 @@ describe("Account Action Creators:", () => {
         const result = updateAPIKey(keyId, permissions);
         const expected = {
             type: UPDATE_API_KEY.REQUESTED,
-            keyId,
-            permissions
+            payload: { keyId, permissions }
         };
 
         expect(result).toEqual(expected);
@@ -119,7 +116,7 @@ describe("Account Action Creators:", () => {
         const result = removeAPIKey(keyId);
         const expected = {
             type: REMOVE_API_KEY.REQUESTED,
-            keyId
+            payload: { keyId }
         };
 
         expect(result).toEqual(expected);

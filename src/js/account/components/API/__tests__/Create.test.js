@@ -172,8 +172,7 @@ describe("mapDispatchToProps()", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: CREATE_API_KEY.REQUESTED,
-            name,
-            permissions
+            payload: { name, permissions }
         });
     });
 

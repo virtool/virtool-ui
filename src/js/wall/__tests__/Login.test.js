@@ -81,9 +81,7 @@ describe("mapDispatchToProps()", () => {
         props.onLogin("bob", "foobar", false, "baz");
         expect(dispatch).toHaveBeenCalledWith({
             type: LOGIN.REQUESTED,
-            username: "bob",
-            password: "foobar",
-            remember: false
+            payload: { username: "bob", password: "foobar", remember: false }
         });
     });
 });

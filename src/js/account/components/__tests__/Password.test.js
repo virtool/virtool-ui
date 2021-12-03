@@ -160,8 +160,7 @@ describe("mapDispatchToProps()", () => {
         props.onChangePassword(oldPassword, newPassword);
         expect(dispatch).toHaveBeenCalledWith({
             type: CHANGE_ACCOUNT_PASSWORD.REQUESTED,
-            oldPassword,
-            newPassword
+            payload: { old_password: oldPassword, password: newPassword }
         });
     });
 

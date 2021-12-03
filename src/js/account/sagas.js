@@ -40,15 +40,15 @@ export function* getAccountSettings() {
 }
 
 export function* updateAccount(action) {
-    yield apiCall(accountAPI.update, action, UPDATE_ACCOUNT);
+    yield apiCall(accountAPI.update, action.payload, UPDATE_ACCOUNT);
 }
 
 export function* updateAccountSettings(action) {
-    yield apiCall(accountAPI.updateSettings, action, UPDATE_ACCOUNT_SETTINGS);
+    yield apiCall(accountAPI.updateSettings, action.payload, UPDATE_ACCOUNT_SETTINGS);
 }
 
 export function* changeAccountPassword(action) {
-    yield apiCall(accountAPI.changePassword, action, CHANGE_ACCOUNT_PASSWORD);
+    yield apiCall(accountAPI.changePassword, action.payload, CHANGE_ACCOUNT_PASSWORD);
     yield put({ type: GET_ACCOUNT.REQUESTED });
 }
 
@@ -57,22 +57,22 @@ export function* getAPIKeys() {
 }
 
 export function* createAPIKey(action) {
-    yield apiCall(accountAPI.createAPIKey, action, CREATE_API_KEY);
+    yield apiCall(accountAPI.createAPIKey, action.payload, CREATE_API_KEY);
     yield getAPIKeys();
 }
 
 export function* updateAPIKey(action) {
-    yield apiCall(accountAPI.updateAPIKey, action, UPDATE_API_KEY);
+    yield apiCall(accountAPI.updateAPIKey, action.payload, UPDATE_API_KEY);
     yield put({ type: GET_API_KEYS.REQUESTED });
 }
 
 export function* removeAPIKey(action) {
-    yield apiCall(accountAPI.removeAPIKey, action, REMOVE_API_KEY);
+    yield apiCall(accountAPI.removeAPIKey, action.payload, REMOVE_API_KEY);
     yield put({ type: GET_API_KEYS.REQUESTED });
 }
 
 export function* login(action) {
-    yield apiCall(accountAPI.login, action, LOGIN);
+    yield apiCall(accountAPI.login, action.payload, LOGIN);
 }
 
 export function* logout() {
@@ -80,5 +80,5 @@ export function* logout() {
 }
 
 export function* resetPassword(action) {
-    yield apiCall(accountAPI.resetPassword, action, RESET_PASSWORD);
+    yield apiCall(accountAPI.resetPassword, action.payload, RESET_PASSWORD);
 }

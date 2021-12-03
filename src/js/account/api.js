@@ -48,10 +48,10 @@ export const updateSettings = ({ update }) => Request.patch("/api/account/settin
  * @param newPassword {string} the new password
  * @returns {promise}
  */
-export const changePassword = ({ oldPassword, newPassword }) =>
+export const changePassword = ({ old_password, password }) =>
     Request.patch("/api/account").send({
-        old_password: oldPassword,
-        password: newPassword
+        old_password,
+        password
     });
 
 /**
