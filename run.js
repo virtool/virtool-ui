@@ -1,9 +1,10 @@
 const express = require("express");
 const { program } = require("commander");
-const { staticPath, defaultPath } = require("./server/routes");
+const { defaultPath } = require("./server/routes");
 const { applyCSPHeader } = require("./server/csp");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { logging } = require("./server/logging");
+const path = require("path");
 
 program
   .option(
@@ -47,8 +48,11 @@ if (options.useProxy) {
 }
 
 app.use([applyCSPHeader, logging]);
+app.engine("html", require("ejs").renderFile);
+app.set("views", path.join(__dirname, "dist"));
+app.locals.delimiter = "#";
 
-app.get(/\.(?:js|map|ico)$/, staticPath);
+app.get(/\.(?:js|map|ico)$/, express.static(path.join(__dirname, "dist")));
 app.get("*", defaultPath);
 
 app.listen(options.port, options.host, () => {
