@@ -64,9 +64,6 @@ module.exports = {
       favicon: "./src/images/favicon.ico",
       template: "./src/index.html",
       inject: "body",
-      templateParameters: {
-        backendURL: "{{ backendURL }}",
-      },
     }),
 
     new CleanWebpackPlugin(),
