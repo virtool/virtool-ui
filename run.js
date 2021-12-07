@@ -40,7 +40,7 @@ if (options.useProxy) {
     createProxyMiddleware(["/api", "/ws"], {
       target: options.apiUrl,
       ws: true,
-      pathRewrite: { "/api/": "/" },
+      pathRewrite: { "/api": "" },
     })
   );
 
