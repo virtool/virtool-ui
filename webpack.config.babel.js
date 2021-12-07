@@ -67,7 +67,7 @@ module.exports = {
       "/api": {
         target: "http://localhost:9950",
         pathRewrite: {
-          "/api/": "/",
+          "/api": "",
         },
       },
       "/websocket": {

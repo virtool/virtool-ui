@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const fontAwesomeURL = "https://use.fontawesome.com";
 const defaultSrc = "default-src 'self'";
 const imgSrc = "img-src 'self' data:";
-const fontSrc = `font-src 'self' https://fonts.gstatic.com ${fontAwesomeURL}`;
+const fontSrc = `font-src 'self' ${fontAwesomeURL}`;
 const connectSrc = "connect-src 'self' sentry.io";
 
 const generateCSPScriptSrc = (nonce) => {
