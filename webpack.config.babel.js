@@ -64,7 +64,12 @@ module.exports = {
   devServer: {
     hot: true,
     proxy: {
-      "/api": "http://localhost:9950",
+      "/api": {
+        target: "http://localhost:9950",
+        pathRewrite: {
+          "/api/": "/",
+        },
+      },
       "/websocket": {
         target: "ws://localhost:9950",
         ws: true,

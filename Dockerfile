@@ -1,4 +1,4 @@
-FROM library/node:14-buster as build
+FROM library/node:16-buster as build
 WORKDIR /build
 COPY src /build/src
 COPY .eslintrc /build/
@@ -10,7 +10,7 @@ COPY webpack.production.config.babel.js /build/
 RUN npm i
 RUN npx webpack --config webpack.production.config.babel.js
 
-FROM library/node:14-buster
+FROM library/node:16-buster
 WORKDIR /ui
 COPY --from=build /build/dist dist
 RUN npm install commander express http-proxy-middleware

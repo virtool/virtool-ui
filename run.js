@@ -22,7 +22,7 @@ program
     process.env.VT_UI_API_URL || "http://localhost:9950"
   )
   .option(
-    "-P, --use-proxy",
+    "-P, --use-proxy [bool]",
     "Use proxy to make API requests",
     process.env.VT_UI_USE_PROXY || false
   );
@@ -34,12 +34,12 @@ const options = program.opts();
 const app = express();
 
 app.disable("x-powered-by");
-
 if (options.useProxy) {
   app.use(
     createProxyMiddleware(["/api", "/ws"], {
       target: options.apiUrl,
       ws: true,
+      pathRewrite: { "/api/": "/" },
     })
   );
 
