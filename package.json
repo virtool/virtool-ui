@@ -99,7 +99,7 @@
   },
   "scripts": {
     "start": "webpack --config=webpack.config.babel.js --mode=production",
-    "poststart": "node runServer",
+    "poststart": "node run",
     "startDev": "webpack-dev-server",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "jest"
