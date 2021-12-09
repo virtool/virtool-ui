@@ -13,7 +13,7 @@ RUN npx webpack --config webpack.production.config.babel.js
 FROM library/node:16-buster
 WORKDIR /ui
 COPY --from=build /build/dist dist
-RUN npm install commander express http-proxy-middleware
+RUN npm install commander express http-proxy-middleware ejs
 COPY run.js /ui/
 COPY ./server /ui/server
 EXPOSE 9900
