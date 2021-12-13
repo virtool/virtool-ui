@@ -11,19 +11,19 @@ describe("Reducer utility functions", () => {
         ];
     });
 
-    describe("updateDocuments: updates documents with action data", () => {
+    describe("updateDocuments: updates documents with action payload", () => {
         it("should insert all if [documents=null]", () => {
             const state = {
                 documents: null
             };
             const action = {
                 type: "UPDATE_DOCUMENTS",
-                data: {
+                payload: {
                     documents,
                     page: 1
                 }
             };
-            const result = updateDocuments(state, action);
+            const result = updateDocuments(state, action.payload);
             expect(result).toEqual({
                 documents,
                 page: 1
@@ -36,12 +36,12 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "UPDATE_DOCUMENTS",
-                data: {
+                payload: {
                     documents,
                     page: 1
                 }
             };
-            const result = updateDocuments(state, action);
+            const result = updateDocuments(state, action.payload);
             expect(result).toEqual({
                 documents,
                 page: 1
@@ -58,12 +58,12 @@ describe("Reducer utility functions", () => {
             ];
             const action = {
                 type: "UPDATE_DOCUMENTS",
-                data: {
+                payload: {
                     documents: updated,
                     page: 2
                 }
             };
-            const result = updateDocuments(state, action);
+            const result = updateDocuments(state, action.payload);
             expect(result).toEqual({
                 documents: [updated[0], { id: "test", meta: "chi" }, documents[1], documents[2]],
                 page: 2
@@ -80,12 +80,12 @@ describe("Reducer utility functions", () => {
             ];
             const action = {
                 type: "UPDATE_DOCUMENTS",
-                data: {
+                payload: {
                     documents: updated,
                     page: 2
                 }
             };
-            const result = updateDocuments(state, action, "meta");
+            const result = updateDocuments(state, action.payload, "meta");
             expect(result).toEqual({
                 documents: [documents[2], { id: "test", meta: "chi" }, documents[1], updated[0]],
                 page: 2
@@ -102,12 +102,12 @@ describe("Reducer utility functions", () => {
             ];
             const action = {
                 type: "UPDATE_DOCUMENTS",
-                data: {
+                payload: {
                     documents: updated,
                     page: 2
                 }
             };
-            const result = updateDocuments(state, action, "meta", true);
+            const result = updateDocuments(state, action.payload, "meta", true);
             expect(result).toEqual({
                 documents: [updated[0], documents[1], { id: "test", meta: "chi" }, documents[2]],
                 page: 2
@@ -122,10 +122,10 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_INSERT_ENTRY",
-                data: { id: "test", meta: "chi" }
+                payload: { id: "test", meta: "chi" }
             };
-            const result = insert(state, action);
-            expect(result).toEqual({ documents: [...documents, action.data] });
+            const result = insert(state, action.payload);
+            expect(result).toEqual({ documents: [...documents, action.payload] });
         });
 
         it("inserts and sorts by key", () => {
@@ -134,10 +134,10 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_INSERT_ENTRY",
-                data: { id: "test", meta: "theta" }
+                payload: { id: "test", meta: "theta" }
             };
-            const result = insert(state, action, "meta");
-            expect(result).toEqual({ documents: [documents[0], documents[2], documents[1], action.data] });
+            const result = insert(state, action.payload, "meta");
+            expect(result).toEqual({ documents: [documents[0], documents[2], documents[1], action.payload] });
         });
 
         it("inserts and sorts by key in reverse", () => {
@@ -146,10 +146,10 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_INSERT_ENTRY",
-                data: { id: "test", meta: "theta" }
+                payload: { id: "test", meta: "theta" }
             };
-            const result = insert(state, action, "meta", true);
-            expect(result).toEqual({ documents: [action.data, documents[1], documents[2], documents[0]] });
+            const result = insert(state, action.payload, "meta", true);
+            expect(result).toEqual({ documents: [action.payload, documents[1], documents[2], documents[0]] });
         });
 
         it("handles [documents=[]]", () => {
@@ -158,9 +158,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_INSERT",
-                data: { id: "test" }
+                payload: { id: "test" }
             };
-            const result = insert(state, action);
+            const result = insert(state, action.payload);
             expect(result).toEqual({ documents: [{ id: "test" }] });
         });
 
@@ -170,9 +170,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_INSERT_ENTRY",
-                data: { id: "test" }
+                payload: { id: "test" }
             };
-            const result = insert(state, action);
+            const result = insert(state, action.payload);
             expect(result).toEqual({ documents: [{ id: "test" }] });
         });
     });
@@ -183,9 +183,9 @@ describe("Reducer utility functions", () => {
             const state = { documents };
             const action = {
                 type: "WS_UPDATE",
-                data: { id: "foo", meta: "chi" }
+                payload: { id: "foo", meta: "chi" }
             };
-            const result = update(state, action);
+            const result = update(state, action.payload);
             expect(result).toEqual({
                 documents: [documents[0], documents[1], { ...documents[2], meta: "chi" }]
             });
@@ -196,7 +196,7 @@ describe("Reducer utility functions", () => {
             const state = { documents };
             const action = {
                 type: "WS_UPDATE",
-                data: { id: "test", meta: "chi" }
+                payload: { id: "test", meta: "chi" }
             };
             const result = update(state, action);
             expect(result).toEqual(state);
@@ -208,9 +208,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_UPDATE",
-                data: { id: "bar", meta: "chi" }
+                payload: { id: "bar", meta: "chi" }
             };
-            const result = update(state, action, "meta");
+            const result = update(state, action.payload, "meta");
             expect(result).toEqual({ documents: [documents[2], { ...documents[0], meta: "chi" }, documents[1]] });
         });
 
@@ -220,9 +220,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_UPDATE",
-                data: { id: "bar", meta: "chi" }
+                payload: { id: "bar", meta: "chi" }
             };
-            const result = update(state, action, "meta", true);
+            const result = update(state, action.payload, "meta", true);
             expect(result).toEqual({ documents: [documents[1], { ...documents[0], meta: "chi" }, documents[2]] });
         });
 
@@ -232,9 +232,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_UPDATE",
-                data: { id: "test", meta: "chi" }
+                payload: { id: "test", meta: "chi" }
             };
-            const result = update(state, action);
+            const result = update(state, action.payload);
             expect(result).toEqual(state);
         });
 
@@ -244,9 +244,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_UPDATE",
-                data: { id: "test", meta: "chi" }
+                payload: { id: "test", meta: "chi" }
             };
-            const result = update(state, action);
+            const result = update(state, action.payload);
             expect(result).toEqual(state);
         });
     });
@@ -257,9 +257,9 @@ describe("Reducer utility functions", () => {
             const state = { documents };
             const action = {
                 type: "WS_REMOVE",
-                data: ["foo"]
+                payload: ["foo"]
             };
-            const result = remove(state, action);
+            const result = remove(state, action.payload);
             expect(result).toEqual({ documents: [documents[0], documents[1]] });
         });
 
@@ -269,9 +269,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_REMOVE",
-                data: ["foo", "bar"]
+                payload: ["foo", "bar"]
             };
-            const result = remove(state, action);
+            const result = remove(state, action.payload);
             expect(result).toEqual({
                 documents: [documents[1]]
             });
@@ -282,9 +282,9 @@ describe("Reducer utility functions", () => {
             const state = { documents };
             const action = {
                 type: "WS_REMOVE",
-                data: ["test"]
+                payload: ["test"]
             };
-            const result = remove(state, action);
+            const result = remove(state, action.payload);
             expect(result).toEqual(state);
         });
 
@@ -294,9 +294,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_REMOVE",
-                data: ["foo"]
+                payload: ["foo"]
             };
-            const result = remove(state, action);
+            const result = remove(state, action.payload);
             expect(result).toEqual(state);
         });
 
@@ -306,9 +306,9 @@ describe("Reducer utility functions", () => {
             };
             const action = {
                 type: "WS_REMOVE",
-                data: ["foo", "bar"]
+                payload: ["foo", "bar"]
             };
-            const result = remove(state, action);
+            const result = remove(state, action.payload);
             expect(result).toEqual(state);
         });
     });

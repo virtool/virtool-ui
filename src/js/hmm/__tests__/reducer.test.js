@@ -20,7 +20,7 @@ describe("HMM Reducer", () => {
             const state = {};
             const action = {
                 type: WS_UPDATE_STATUS,
-                data: {
+                payload: {
                     id: "hmm",
                     installed: {},
                     task: {},
@@ -41,7 +41,7 @@ describe("HMM Reducer", () => {
             const state = {};
             const action = {
                 type: WS_UPDATE_STATUS,
-                data: { id: "not_hmm" }
+                payload: { id: "not_hmm" }
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -50,7 +50,7 @@ describe("HMM Reducer", () => {
 
     it("should handle FIND_HMMS_REQUESTED", () => {
         const term = "foo";
-        const action = { type: FIND_HMMS.REQUESTED, term, page: 5 };
+        const action = { type: FIND_HMMS.REQUESTED, payload: { term, page: 5 } };
         const result = reducer({}, action);
         expect(result).toEqual({
             term
@@ -61,7 +61,7 @@ describe("HMM Reducer", () => {
         const state = { documents: null, page: 0 };
         const action = {
             type: FIND_HMMS.SUCCEEDED,
-            data: { documents: [{ id: "foo" }], page: 1 }
+            payload: { documents: [{ id: "foo" }], page: 1 }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -84,11 +84,11 @@ describe("HMM Reducer", () => {
     it("should handle GET_HMM_SUCCEEDED", () => {
         const action = {
             type: GET_HMM.SUCCEEDED,
-            data: {}
+            payload: {}
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            detail: action.data
+            detail: action.payload
         });
     });
 });

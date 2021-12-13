@@ -54,7 +54,7 @@ describe("mapDispatchToProps", () => {
         const props = mapDispatchToProps(dispatch);
         props.onInstall(releaseId);
         expect(dispatch).toHaveBeenCalledWith({
-            release_id: "foo",
+            payload: { release_id: "foo" },
             type: "INSTALL_HMMS_REQUESTED"
         });
     });

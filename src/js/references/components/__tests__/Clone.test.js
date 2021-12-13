@@ -164,16 +164,12 @@ describe("mapDispatchToProps()", () => {
     it("should return onSubmit in props", () => {
         props.onSubmit("foo", "bar", "fee", "baz", "boo");
         expect(dispatch).toHaveBeenCalledWith({
-            name: "foo",
-            description: "bar",
-            dataType: "fee",
-            organism: "baz",
-            refId: "boo",
+            payload: { name: "foo", description: "bar", dataType: "fee", organism: "baz", refId: "boo" },
             type: "CLONE_REFERENCE_REQUESTED"
         });
     });
     it("should return onClearError in props", () => {
         props.onClearError(true);
-        expect(dispatch).toHaveBeenCalledWith({ error: true, type: "CLEAR_ERROR" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { error: true }, type: "CLEAR_ERROR" });
     });
 });

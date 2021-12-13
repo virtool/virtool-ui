@@ -175,8 +175,7 @@ describe("mapDispatchToProps()", () => {
         const props = mapDispatchToProps(dispatch);
         props.onSubmit("foo", "bar");
         expect(dispatch).toHaveBeenCalledWith({
-            refId: "foo",
-            update: "bar",
+            payload: { refId: "foo", update: "bar" },
             type: "EDIT_REFERENCE_REQUESTED"
         });
     });

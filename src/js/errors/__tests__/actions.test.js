@@ -7,7 +7,7 @@ describe("Errors Action Creators:", () => {
         const result = clearError(error);
         const expected = {
             type: CLEAR_ERROR,
-            error
+            payload: { error }
         };
 
         expect(result).toEqual(expected);

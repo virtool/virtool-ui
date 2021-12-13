@@ -30,7 +30,7 @@ describe("Account Reducer", () => {
     it("should handle GET_ACCOUNT_SUCCEEDED", () => {
         const action = {
             type: GET_ACCOUNT.SUCCEEDED,
-            data: {
+            payload: {
                 foo: "bar"
             }
         };
@@ -47,7 +47,7 @@ describe("Account Reducer", () => {
         };
         const action = {
             type: UPDATE_ACCOUNT.SUCCEEDED,
-            data: {
+            payload: {
                 foo: "bar"
             }
         };
@@ -59,7 +59,7 @@ describe("Account Reducer", () => {
         const keys = [{ id: "foo" }, { id: "bar" }];
         const action = {
             type: GET_API_KEYS.SUCCEEDED,
-            data: keys
+            payload: keys
         };
         const result = reducer({}, action);
         expect(result).toEqual({ apiKeys: keys });
@@ -81,7 +81,7 @@ describe("Account Reducer", () => {
     it("should handle CREATE_API_KEY_SUCCEEDED", () => {
         const action = {
             type: CREATE_API_KEY.SUCCEEDED,
-            data: {
+            payload: {
                 key: {
                     id: "foo"
                 }
@@ -106,13 +106,13 @@ describe("Account Reducer", () => {
     it("should handle UPDATE_ACCOUNT_SETTINGS_SUCCEEDED", () => {
         const action = {
             type: UPDATE_ACCOUNT_SETTINGS.SUCCEEDED,
-            data: {
+            payload: {
                 foo: "bar"
             }
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            settings: action.data
+            settings: action.payload
         });
     });
 });

@@ -13,11 +13,11 @@ import {
     UPLOAD,
     UPLOAD_PROGRESS
 } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
-export const wsInsertFile = data => ({
-    type: WS_INSERT_FILE,
-    data
-});
+export const wsInsertFile = createAction(WS_INSERT_FILE, data => ({
+    payload: { ...data }
+}));
 
 /**
  * Returns an action that should be dispatched when a file document is updated via websocket.
@@ -26,10 +26,9 @@ export const wsInsertFile = data => ({
  * @param data {object} the data passed in the websocket message
  * @returns {object}
  */
-export const wsUpdateFile = data => ({
-    type: WS_UPDATE_FILE,
-    data
-});
+export const wsUpdateFile = createAction(WS_UPDATE_FILE, data => ({
+    payload: { ...data }
+}));
 
 /**
  * Returns an action that should be dispatched when a file document is removed via websocket.
@@ -38,10 +37,9 @@ export const wsUpdateFile = data => ({
  * @param data {object} the data passed in the websocket message
  * @returns {object}
  */
-export const wsRemoveFile = data => ({
-    type: WS_REMOVE_FILE,
-    data
-});
+export const wsRemoveFile = createAction(WS_REMOVE_FILE, data => ({
+    payload: { ...data }
+}));
 
 /**
  * Returns an action that can trigger an API call that finds file documents.
@@ -51,12 +49,13 @@ export const wsRemoveFile = data => ({
  * @param page {number} which page of results to return
  * @returns {object}
  */
-export const findFiles = (fileType, term, page) => ({
-    type: FIND_FILES.REQUESTED,
-    fileType,
-    term,
-    page
-});
+export const findFiles = createAction(FIND_FILES.REQUESTED, (fileType, term, page) => ({
+    payload: {
+        fileType,
+        term,
+        page
+    }
+}));
 
 /**
  * Returns an action that can trigger the upload of a file to the server.
@@ -68,13 +67,14 @@ export const findFiles = (fileType, term, page) => ({
  * @param context {object} extra information to attach to the upload object
  * @returns {object}
  */
-export const upload = (localId, file, fileType, context = {}) => ({
-    type: UPLOAD.REQUESTED,
-    localId,
-    file,
-    fileType,
-    context
-});
+export const upload = createAction(UPLOAD.REQUESTED, (localId, file, fileType, context = {}) => ({
+    payload: {
+        localId,
+        file,
+        fileType,
+        context
+    }
+}));
 
 /**
  * Returns an action that can trigger an API call that removes a file by its fileId.
@@ -83,10 +83,9 @@ export const upload = (localId, file, fileType, context = {}) => ({
  * @param fileId {string} the unique id for the file
  * @returns {object}
  */
-export const removeFile = fileId => ({
-    type: REMOVE_FILE.REQUESTED,
-    fileId
-});
+export const removeFile = createAction(REMOVE_FILE.REQUESTED, fileId => ({
+    payload: { fileId }
+}));
 
 /**
  * Returns and action that updates the progress of an ongoing upload.
@@ -96,8 +95,6 @@ export const removeFile = fileId => ({
  * @param progress {number} the new progress value
  * @returns {object}
  */
-export const uploadProgress = (localId, progress) => ({
-    type: UPLOAD_PROGRESS,
-    localId,
-    progress
-});
+export const uploadProgress = createAction(UPLOAD_PROGRESS, (localId, progress) => ({
+    payload: { localId, progress }
+}));

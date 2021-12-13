@@ -41,29 +41,29 @@ import {
 
 describe("References Action Creators:", () => {
     it("wsInsertReference", () => {
-        const data = { id: "test" };
-        const result = wsInsertReference(data);
+        const payload = { id: "test" };
+        const result = wsInsertReference(payload);
         expect(result).toEqual({
             type: WS_INSERT_REFERENCE,
-            data
+            payload
         });
     });
 
     it("wsUpdateReference", () => {
-        const data = { id: "test" };
-        const result = wsUpdateReference(data);
+        const payload = { id: "test" };
+        const result = wsUpdateReference(payload);
         expect(result).toEqual({
             type: WS_UPDATE_REFERENCE,
-            data
+            payload
         });
     });
 
     it("wsRemoveReference", () => {
-        const data = { id: "test" };
-        const result = wsRemoveReference(data);
+        const payload = { id: "test" };
+        const result = wsRemoveReference(payload);
         expect(result).toEqual({
             type: WS_REMOVE_REFERENCE,
-            data
+            payload
         });
     });
 
@@ -73,8 +73,7 @@ describe("References Action Creators:", () => {
         const result = findReferences(term, page);
         expect(result).toEqual({
             type: FIND_REFERENCES.REQUESTED,
-            term,
-            page
+            payload: { term, page }
         });
     });
 
@@ -86,10 +85,7 @@ describe("References Action Creators:", () => {
         const result = emptyReference(name, description, dataType, organism);
         expect(result).toEqual({
             type: EMPTY_REFERENCE.REQUESTED,
-            name,
-            description,
-            dataType,
-            organism
+            payload: { name, description, dataType, organism }
         });
     });
 
@@ -99,8 +95,7 @@ describe("References Action Creators:", () => {
         const result = editReference(refId, update);
         expect(result).toEqual({
             type: EDIT_REFERENCE.REQUESTED,
-            refId,
-            update
+            payload: { refId, update }
         });
     });
 
@@ -113,11 +108,7 @@ describe("References Action Creators:", () => {
         const result = importReference(name, description, dataType, organism, fileId);
         expect(result).toEqual({
             type: IMPORT_REFERENCE.REQUESTED,
-            name,
-            description,
-            dataType,
-            organism,
-            fileId
+            payload: { name, description, dataType, organism, fileId }
         });
     });
 
@@ -130,11 +121,7 @@ describe("References Action Creators:", () => {
         const result = cloneReference(name, description, dataType, organism, refId);
         expect(result).toEqual({
             type: CLONE_REFERENCE.REQUESTED,
-            name,
-            description,
-            dataType,
-            organism,
-            refId
+            payload: { name, description, dataType, organism, refId }
         });
     });
 
@@ -147,7 +134,7 @@ describe("References Action Creators:", () => {
         const result = removeReference(refId);
         expect(result).toEqual({
             type: REMOVE_REFERENCE.REQUESTED,
-            refId
+            payload: { refId }
         });
     });
 
@@ -157,8 +144,7 @@ describe("References Action Creators:", () => {
         const result = addReferenceUser(refId, user);
         expect(result).toEqual({
             type: ADD_REFERENCE_USER.REQUESTED,
-            refId,
-            user
+            payload: { refId, user }
         });
     });
 
@@ -169,9 +155,7 @@ describe("References Action Creators:", () => {
         const result = editReferenceUser(refId, userId, update);
         expect(result).toEqual({
             type: EDIT_REFERENCE_USER.REQUESTED,
-            refId,
-            userId,
-            update
+            payload: { refId, userId, update }
         });
     });
 
@@ -181,8 +165,7 @@ describe("References Action Creators:", () => {
         const result = removeReferenceUser(refId, userId);
         expect(result).toEqual({
             type: REMOVE_REFERENCE_USER.REQUESTED,
-            refId,
-            userId
+            payload: { refId, userId }
         });
     });
 
@@ -192,8 +175,7 @@ describe("References Action Creators:", () => {
         const result = addReferenceGroup(refId, group);
         expect(result).toEqual({
             type: ADD_REFERENCE_GROUP.REQUESTED,
-            refId,
-            group
+            payload: { refId, group }
         });
     });
 
@@ -204,9 +186,7 @@ describe("References Action Creators:", () => {
         const result = editReferenceGroup(refId, groupId, update);
         expect(result).toEqual({
             type: EDIT_REFERENCE_GROUP.REQUESTED,
-            refId,
-            groupId,
-            update
+            payload: { refId, groupId, update }
         });
     });
 
@@ -216,8 +196,7 @@ describe("References Action Creators:", () => {
         const result = removeReferenceGroup(refId, groupId);
         expect(result).toEqual({
             type: REMOVE_REFERENCE_GROUP.REQUESTED,
-            refId,
-            groupId
+            payload: { refId, groupId }
         });
     });
 
@@ -226,7 +205,7 @@ describe("References Action Creators:", () => {
         const result = checkUpdates(refId);
         expect(result).toEqual({
             type: CHECK_REMOTE_UPDATES.REQUESTED,
-            refId
+            payload: { refId }
         });
     });
 
@@ -235,7 +214,7 @@ describe("References Action Creators:", () => {
         const result = updateRemoteReference(refId);
         expect(result).toEqual({
             type: UPDATE_REMOTE_REFERENCE.REQUESTED,
-            refId
+            payload: { refId }
         });
     });
 });

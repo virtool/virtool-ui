@@ -3,7 +3,7 @@ import { pushState } from "../app/actions";
 import { CREATE_LABEL, LIST_LABELS, REMOVE_LABEL, UPDATE_LABEL } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
 import * as labelsAPI from "./api";
-import { listLabels as listLabelsAction } from "./actions";
+import { listLabels as listLabelsAction, listLabelsSuccess } from "./actions";
 
 export function* watchLabels() {
     yield takeLatest(LIST_LABELS.REQUESTED, listLabels);
@@ -14,11 +14,11 @@ export function* watchLabels() {
 
 export function* listLabels(action) {
     const response = yield labelsAPI.listLabels(action);
-    yield put({ type: LIST_LABELS.SUCCEEDED, data: response.body });
+    yield put(listLabelsSuccess(response.body));
 }
 
 export function* createLabel(action) {
-    const { ok } = yield apiCall(labelsAPI.create, action, CREATE_LABEL);
+    const { ok } = yield apiCall(labelsAPI.create, action.payload, CREATE_LABEL);
 
     if (ok) {
         yield put(pushState({ createLabel: false }));
@@ -26,7 +26,7 @@ export function* createLabel(action) {
 }
 
 export function* removeLabel(action) {
-    const { ok } = yield apiCall(labelsAPI.remove, action, REMOVE_LABEL);
+    const { ok } = yield apiCall(labelsAPI.remove, action.payload, REMOVE_LABEL);
 
     if (ok) {
         yield put(pushState({ removeLabel: false }));
@@ -35,7 +35,7 @@ export function* removeLabel(action) {
 }
 
 export function* updateLabel(action) {
-    const { ok } = yield apiCall(labelsAPI.update, action, UPDATE_LABEL);
+    const { ok } = yield apiCall(labelsAPI.update, action.payload, UPDATE_LABEL);
 
     if (ok) {
         yield put(pushState({ updateLabel: false }));

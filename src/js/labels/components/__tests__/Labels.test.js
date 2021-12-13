@@ -16,6 +16,6 @@ describe("mapDispatchToProps()", () => {
 
     it("should return onHide() in props", () => {
         props.onHide();
-        expect(dispatch).toHaveBeenCalledWith({ type: "PUSH_STATE", state: { removeLabel: false } });
+        expect(dispatch).toHaveBeenCalledWith({ type: "PUSH_STATE", payload: { state: { removeLabel: false } } });
     });
 });

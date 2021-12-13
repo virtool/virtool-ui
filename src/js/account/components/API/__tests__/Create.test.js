@@ -180,8 +180,10 @@ describe("mapDispatchToProps()", () => {
         props.onHide();
         expect(dispatch).toHaveBeenCalledWith({
             type: PUSH_STATE,
-            state: {
-                createAPIKey: false
+            payload: {
+                state: {
+                    createAPIKey: false
+                }
             }
         });
         expect(dispatch).toHaveBeenCalledWith({

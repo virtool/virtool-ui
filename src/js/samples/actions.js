@@ -16,12 +16,17 @@ import {
     WS_REMOVE_SAMPLE,
     WS_UPDATE_SAMPLE
 } from "../app/actionTypes";
-import { simpleActionCreator } from "../utils/utils";
+import { createAction } from "@reduxjs/toolkit";
 
-export const wsInsertSample = data => ({
-    type: WS_INSERT_SAMPLE,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a sample document is inserted via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+
+export const wsInsertSample = createAction(WS_INSERT_SAMPLE);
 
 /**
  * Returns an action that should be dispatched when a sample document is updated via websocket.
@@ -30,10 +35,7 @@ export const wsInsertSample = data => ({
  * @param data {object} update data passed in the websocket message
  * @returns {object} an action object
  */
-export const wsUpdateSample = data => ({
-    type: WS_UPDATE_SAMPLE,
-    data
-});
+export const wsUpdateSample = createAction(WS_UPDATE_SAMPLE);
 
 /**
  * Returns an action that should be dispatched when a sample document is removed via websocket.
@@ -42,25 +44,20 @@ export const wsUpdateSample = data => ({
  * @param data {string} the id for the specific sample
  * @returns {object}
  */
-export const wsRemoveSample = data => ({
-    type: WS_REMOVE_SAMPLE,
-    data
-});
+export const wsRemoveSample = createAction(WS_REMOVE_SAMPLE);
 
-export const updateSearch = parameters => ({
-    type: UPDATE_SEARCH,
-    parameters
-});
+export const updateSearch = createAction(UPDATE_SEARCH, parameters => ({ payload: { parameters } }));
 
-export const findSamples = ({ labels, page, term, workflows }) => ({
-    type: FIND_SAMPLES.REQUESTED,
-    labels,
-    term,
-    page,
-    workflows
-});
+export const findSamples = createAction(FIND_SAMPLES.REQUESTED, ({ labels, page, term, workflows }) => ({
+    payload: {
+        labels,
+        term,
+        page,
+        workflows
+    }
+}));
 
-export const findReadFiles = simpleActionCreator(FIND_READ_FILES.REQUESTED);
+export const findReadFiles = createAction(FIND_READ_FILES.REQUESTED);
 
 /**
  * Returns action that can trigger an API call for getting a specific sample.
@@ -69,10 +66,26 @@ export const findReadFiles = simpleActionCreator(FIND_READ_FILES.REQUESTED);
  * @param sampleId {string} the id for the specific sample
  * @returns {object}
  */
-export const getSample = sampleId => ({
-    type: GET_SAMPLE.REQUESTED,
-    sampleId
-});
+export const getSample = createAction(GET_SAMPLE.REQUESTED, sampleId => ({
+    payload: {
+        sampleId
+    }
+}));
+
+/**
+ * Returns action that updates state with returned sample object
+ *
+ * @func
+ * @param sample {onject} object containing sample details
+ * @param canModify {boolean} boolean indicating if the user can modify the sample
+ * @returns {object}
+ */
+export const getSampleSucceeded = createAction(GET_SAMPLE.SUCCEEDED, (sample, canModify) => ({
+    payload: {
+        ...sample,
+        canModify
+    }
+}));
 
 /**
  * Returns action that can trigger an API call for creating a new sample.
@@ -90,18 +103,22 @@ export const getSample = sampleId => ({
  * @param label {Array} Array of ids(int) of the labels selected
  * @returns {object}
  */
-export const createSample = (name, isolate, host, locale, libraryType, subtractions, files, labels, group) => ({
-    type: CREATE_SAMPLE.REQUESTED,
-    name,
-    isolate,
-    host,
-    locale,
-    libraryType,
-    subtractions,
-    files,
-    labels,
-    group
-});
+export const createSample = createAction(
+    CREATE_SAMPLE.REQUESTED,
+    (name, isolate, host, locale, libraryType, subtractions, files, labels, group) => ({
+        payload: {
+            name,
+            isolate,
+            host,
+            locale,
+            libraryType,
+            subtractions,
+            files,
+            labels,
+            group
+        }
+    })
+);
 
 /**
  * Returns action that can trigger an API call for modifying a sample.
@@ -111,11 +128,9 @@ export const createSample = (name, isolate, host, locale, libraryType, subtracti
  * @param update {object} update data
  * @returns {object}
  */
-export const editSample = (sampleId, update) => ({
-    type: UPDATE_SAMPLE.REQUESTED,
-    sampleId,
-    update
-});
+export const editSample = createAction(UPDATE_SAMPLE.REQUESTED, (sampleId, update) => ({
+    payload: { sampleId, update }
+}));
 
 /**
  * Returns action that can trigger an API call for modifying sample rights.
@@ -125,11 +140,9 @@ export const editSample = (sampleId, update) => ({
  * @param update {object} update data
  * @returns {object}
  */
-export const updateSampleRights = (sampleId, update) => ({
-    type: UPDATE_SAMPLE_RIGHTS.REQUESTED,
-    sampleId,
-    update
-});
+export const updateSampleRights = createAction(UPDATE_SAMPLE_RIGHTS.REQUESTED, (sampleId, update) => ({
+    payload: { sampleId, update }
+}));
 
 /**
  * Returns action that can trigger an API call for removing a sample.
@@ -138,10 +151,7 @@ export const updateSampleRights = (sampleId, update) => ({
  * @param sampleId {string} unique sample id
  * @returns {object}
  */
-export const removeSample = sampleId => ({
-    type: REMOVE_SAMPLE.REQUESTED,
-    sampleId
-});
+export const removeSample = createAction(REMOVE_SAMPLE.REQUESTED, sampleId => ({ payload: { sampleId } }));
 
 /**
  * Returns action for displaying the remove sample modal.
@@ -149,7 +159,7 @@ export const removeSample = sampleId => ({
  * @func
  * @returns {object}
  */
-export const showRemoveSample = simpleActionCreator(SHOW_REMOVE_SAMPLE);
+export const showRemoveSample = createAction(SHOW_REMOVE_SAMPLE);
 
 /**
  * Returns action for hiding the sample modal.
@@ -157,16 +167,10 @@ export const showRemoveSample = simpleActionCreator(SHOW_REMOVE_SAMPLE);
  * @func
  * @returns {object}
  */
-export const hideSampleModal = simpleActionCreator(HIDE_SAMPLE_MODAL);
+export const hideSampleModal = createAction(HIDE_SAMPLE_MODAL);
 
-export const selectSample = sampleId => ({
-    type: SELECT_SAMPLE,
-    sampleId
-});
+export const selectSample = createAction(SELECT_SAMPLE, sampleId => ({ payload: { sampleId } }));
 
-export const deselectSamples = sampleIds => ({
-    type: DESELECT_SAMPLES,
-    sampleIds
-});
+export const deselectSamples = createAction(DESELECT_SAMPLES, sampleIds => ({ payload: { sampleIds } }));
 
-export const clearSampleSelection = simpleActionCreator(CLEAR_SAMPLE_SELECTION);
+export const clearSampleSelection = createAction(CLEAR_SAMPLE_SELECTION);

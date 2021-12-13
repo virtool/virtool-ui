@@ -131,23 +131,11 @@ export const formatIsolateName = isolate => {
  */
 export const getWorkflowDisplayName = workflow => get(workflowDisplayNames, workflow, startCase(workflow));
 
-export const reportAPIError = action => window.captureException(action.error);
+export const reportAPIError = action => window.captureException(action.payload.error);
 
 export const routerLocationHasState = (state, key, value) =>
     !!state.router.location.state &&
     (value ? state.router.location.state[key] === value : !!state.router.location.state[key]);
-
-/**
- * Returns an action creator that returns an action with ``type`` as the only property.
- *
- * @func
- * @param type {string} the value to use for the type property
- * @returns {function}
- */
-export const simpleActionCreator = type =>
-    function actionCreator() {
-        return { type };
-    };
 
 export const getTargetChange = target => ({
     name: target.name,

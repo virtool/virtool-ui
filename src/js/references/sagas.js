@@ -35,16 +35,16 @@ export function* afterReferenceCreation() {
 }
 
 export function* findReferences(action) {
-    yield apiCall(referenceAPI.find, action, FIND_REFERENCES);
-    yield pushFindTerm(action.term);
+    yield apiCall(referenceAPI.find, action.payload, FIND_REFERENCES);
+    yield pushFindTerm(action.payload.term);
 }
 
 export function* getReference(action) {
-    yield apiCall(referenceAPI.get, action, GET_REFERENCE);
+    yield apiCall(referenceAPI.get, action.payload, GET_REFERENCE);
 }
 
 export function* emptyReference(action) {
-    const resp = yield apiCall(referenceAPI.create, action, EMPTY_REFERENCE);
+    const resp = yield apiCall(referenceAPI.create, action.payload, EMPTY_REFERENCE);
 
     if (resp.ok) {
         yield afterReferenceCreation();
@@ -52,11 +52,11 @@ export function* emptyReference(action) {
 }
 
 export function* editReference(action) {
-    yield apiCall(referenceAPI.edit, action, EDIT_REFERENCE);
+    yield apiCall(referenceAPI.edit, action.payload, EDIT_REFERENCE);
 }
 
 export function* removeReference(action) {
-    const resp = yield apiCall(referenceAPI.remove, action, REMOVE_REFERENCE);
+    const resp = yield apiCall(referenceAPI.remove, action.payload, REMOVE_REFERENCE);
 
     if (resp.ok) {
         yield put(push("/refs"));
@@ -64,7 +64,7 @@ export function* removeReference(action) {
 }
 
 export function* importReference(action) {
-    const resp = yield apiCall(referenceAPI.importReference, action, IMPORT_REFERENCE);
+    const resp = yield apiCall(referenceAPI.importReference, action.payload, IMPORT_REFERENCE);
 
     if (resp.ok) {
         yield afterReferenceCreation();
@@ -72,7 +72,7 @@ export function* importReference(action) {
 }
 
 export function* cloneReference(action) {
-    const resp = yield apiCall(referenceAPI.cloneReference, action, CLONE_REFERENCE);
+    const resp = yield apiCall(referenceAPI.cloneReference, action.payload, CLONE_REFERENCE);
 
     if (resp.ok) {
         yield afterReferenceCreation();
@@ -92,17 +92,17 @@ export function* remoteReference() {
 }
 
 export function* addRefUser(action) {
-    yield apiCall(referenceAPI.addUser, action, ADD_REFERENCE_USER);
+    yield apiCall(referenceAPI.addUser, action.payload, ADD_REFERENCE_USER);
 }
 
 export function* editRefUser(action) {
-    yield apiCall(referenceAPI.editUser, action, EDIT_REFERENCE_USER);
+    yield apiCall(referenceAPI.editUser, action.payload, EDIT_REFERENCE_USER);
 }
 
 export function* removeRefUser(action) {
-    yield apiCall(referenceAPI.removeUser, action, REMOVE_REFERENCE_USER, {
-        userId: action.userId,
-        refId: action.refId
+    yield apiCall(referenceAPI.removeUser, action.payload, REMOVE_REFERENCE_USER, {
+        userId: action.payload.userId,
+        refId: action.payload.refId
     });
 }
 
@@ -116,17 +116,17 @@ export function* editRefGroup(action) {
 
 export function* removeRefGroup(action) {
     yield apiCall(referenceAPI.removeGroup, action, REMOVE_REFERENCE_GROUP, {
-        groupId: action.groupId,
-        refId: action.refId
+        groupId: action.payload.groupId,
+        refId: action.payload.refId
     });
 }
 
 export function* checkRemoteUpdates(action) {
-    yield apiCall(referenceAPI.checkUpdates, action, CHECK_REMOTE_UPDATES);
+    yield apiCall(referenceAPI.checkUpdates, action.payload, CHECK_REMOTE_UPDATES);
 }
 
 export function* updateRemoteReference(action) {
-    yield apiCall(referenceAPI.updateRemote, action, UPDATE_REMOTE_REFERENCE);
+    yield apiCall(referenceAPI.updateRemote, action.payload, UPDATE_REMOTE_REFERENCE);
 }
 
 export function* watchReferences() {

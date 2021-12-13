@@ -9,7 +9,7 @@ export const initialState = {
 export const settingsReducer = createReducer(initialState, builder => {
     builder
         .addCase(GET_SETTINGS.SUCCEEDED, (state, action) => {
-            state.data = action.data;
+            state.data = action.payload;
         })
         .addCase(UPDATE_SETTINGS.SUCCEEDED, (state, action) => {
             assign(state.data, action.context.update);

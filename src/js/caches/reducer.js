@@ -11,7 +11,7 @@ export const cacheReducer = createReducer(initialState, builder => {
             state.detail = null;
         })
         .addCase(GET_CACHE.SUCCEEDED, (state, action) => {
-            state.detail = action.data;
+            state.detail = action.payload;
         });
 });
 export default cacheReducer;

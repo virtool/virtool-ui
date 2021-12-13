@@ -13,7 +13,7 @@ describe("updateSetting()", () => {
         const result = updateSetting("foo", "bar");
         expect(result).toEqual({
             type: UPDATE_SETTINGS.REQUESTED,
-            update: { foo: "bar" }
+            payload: { update: { foo: "bar" } }
         });
     });
 });
@@ -24,7 +24,7 @@ describe("updateSettings()", () => {
         const result = updateSettings(update);
         expect(result).toEqual({
             type: UPDATE_SETTINGS.REQUESTED,
-            update
+            payload: { update }
         });
     });
 });

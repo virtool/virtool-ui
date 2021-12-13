@@ -71,6 +71,6 @@ describe("mapDispatchToProps", () => {
         const dispatch = jest.fn();
         const props = mapDispatchToProps(dispatch);
         props.onInstall("foo");
-        expect(dispatch).toHaveBeenCalledWith({ release_id: "foo", type: "INSTALL_HMMS_REQUESTED" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { release_id: "foo" }, type: "INSTALL_HMMS_REQUESTED" });
     });
 });

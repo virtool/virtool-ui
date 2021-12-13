@@ -39,8 +39,7 @@ describe("reducer()", () => {
         const state = {};
         const action = {
             type: `${actionTypePrefix}_FAILED`,
-            status: 409,
-            message: "There was an error"
+            payload: { status: 409, message: "There was an error" }
         };
         const result = reducer(state, action);
 
@@ -58,8 +57,7 @@ describe("reducer()", () => {
         const state = {};
         const action = {
             type: "TEST_FAILED",
-            status: 400,
-            message: "test action failed"
+            payload: { status: 400, message: "test action failed" }
         };
         const result = reducer(state, action);
 
@@ -76,8 +74,7 @@ describe("reducer()", () => {
         };
         const action = {
             type: "CREATE_SAMPLE_REQUESTED",
-            status: 200,
-            message: "requesting same action again"
+            payload: { status: 200, message: "requesting same action again" }
         };
         const result = reducer(state, action);
 
@@ -96,7 +93,7 @@ describe("reducer()", () => {
         };
         const action = {
             type: "CLEAR_ERROR",
-            error: "CREATE_SAMPLE_ERROR"
+            payload: { error: "CREATE_SAMPLE_ERROR" }
         };
         const result = reducer(state, action);
         const expected = {

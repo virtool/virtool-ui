@@ -83,8 +83,7 @@ describe("mapDispatchToProps()", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: FIND_USERS.REQUESTED,
-            term,
-            page
+            payload: { term, page }
         });
     });
 });

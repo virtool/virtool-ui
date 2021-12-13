@@ -23,29 +23,29 @@ describe("Users Action Creators", () => {
     const userId = "bill";
 
     it("wsInsertUser", () => {
-        const data = {};
-        const result = wsInsertUser(data);
+        const payload = {};
+        const result = wsInsertUser(payload);
         expect(result).toEqual({
             type: WS_INSERT_USER,
-            data
+            payload
         });
     });
 
     it("wsUpdateUser", () => {
-        const data = {};
-        const result = wsUpdateUser(data);
+        const payload = {};
+        const result = wsUpdateUser(payload);
         expect(result).toEqual({
             type: WS_UPDATE_USER,
-            data
+            payload
         });
     });
 
     it("wsRemoveUser", () => {
-        const data = [];
-        const result = wsRemoveUser(data);
+        const payload = {};
+        const result = wsRemoveUser(payload);
         expect(result).toEqual({
             type: WS_REMOVE_USER,
-            data
+            payload
         });
     });
 
@@ -55,8 +55,7 @@ describe("Users Action Creators", () => {
         const result = findUsers(term, page);
         expect(result).toEqual({
             type: FIND_USERS.REQUESTED,
-            term,
-            page
+            payload: { term, page }
         });
     });
 
@@ -64,15 +63,16 @@ describe("Users Action Creators", () => {
         const result = getUser(userId);
         expect(result).toEqual({
             type: GET_USER.REQUESTED,
-            userId
+            payload: { userId }
         });
     });
 
     it("createUser", () => {
-        const data = {};
-        const result = createUser(data);
+        const payload = {};
+        const result = createUser(payload);
         expect(result).toEqual({
-            type: CREATE_USER.REQUESTED
+            type: CREATE_USER.REQUESTED,
+            payload
         });
     });
 
@@ -81,8 +81,7 @@ describe("Users Action Creators", () => {
         const result = editUser(userId, update);
         expect(result).toEqual({
             type: EDIT_USER.REQUESTED,
-            userId,
-            update
+            payload: { userId, update }
         });
     });
 
@@ -90,7 +89,7 @@ describe("Users Action Creators", () => {
         const result = removeUser(userId);
         expect(result).toEqual({
             type: REMOVE_USER.REQUESTED,
-            userId
+            payload: { userId }
         });
     });
 });

@@ -84,7 +84,7 @@ export const errorsReducer = createReducer({}, builder => {
     builder
         .addCase(CLEAR_ERROR, (state, action) => {
             // Clear specific error explicitly
-            state[action.error] = null;
+            state[action.payload.error] = null;
         })
         .addMatcher(
             action => checkActionFailed(action),
@@ -92,10 +92,9 @@ export const errorsReducer = createReducer({}, builder => {
                 const errorName = getErrorName(action);
 
                 const errorPayload = {
-                    status: action.status,
-                    message: action.message
+                    status: action.payload.status,
+                    message: action.payload.message
                 };
-
                 switch (action.type) {
                     case CREATE_SAMPLE.FAILED:
                     case UPDATE_SAMPLE.FAILED:
@@ -127,7 +126,7 @@ export const errorsReducer = createReducer({}, builder => {
                         state[errorName] = errorPayload;
                         break;
                     case CREATE_FIRST_USER.FAILED:
-                        state[errorName] = action.error.response.body;
+                        state[errorName] = action.payload.error.response.body;
                         break;
 
                     default:

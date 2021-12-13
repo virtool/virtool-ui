@@ -9,16 +9,16 @@ export const initialState = {
 export const labelsReducer = createReducer(initialState, builder => {
     builder
         .addCase(LIST_LABELS.SUCCEEDED, (state, action) => {
-            return { ...state, documents: action.data };
+            return { ...state, documents: action.payload };
         })
         .addCase(CREATE_LABEL.SUCCEEDED, (state, action) => {
-            return insert(state, action);
+            return insert(state, action.payload);
         })
         .addCase(UPDATE_LABEL.SUCCEEDED, (state, action) => {
-            return update(state, action);
+            return update(state, action.payload);
         })
         .addCase(REMOVE_LABEL.SUCCEEDED, (state, action) => {
-            return remove(state, action);
+            return remove(state, action.payload);
         });
 });
 

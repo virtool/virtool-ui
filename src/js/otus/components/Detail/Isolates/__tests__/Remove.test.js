@@ -100,9 +100,7 @@ describe("mapDispatchToProps", () => {
         props.onConfirm("foo", "bar", "baz");
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_ISOLATE.REQUESTED,
-            otuId: "foo",
-            isolateId: "bar",
-            nextIsolateId: "baz"
+            payload: { otuId: "foo", isolateId: "bar", nextIsolateId: "baz" }
         });
     });
 });

@@ -81,8 +81,7 @@ describe("mapDispatchToProps()", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: FIND_SUBTRACTIONS.REQUESTED,
-            term: value === "Foo" ? "Foo" : null,
-            page: 1
+            payload: { term: value === "Foo" ? "Foo" : null, page: 1 }
         });
     });
 });

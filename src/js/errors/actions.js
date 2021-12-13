@@ -4,6 +4,7 @@
  * @module error/actions
  */
 import { CLEAR_ERROR } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns action that clears specific error in the store.
@@ -11,7 +12,6 @@ import { CLEAR_ERROR } from "../app/actionTypes";
  * @func
  * @returns {object}
  */
-export const clearError = error => ({
-    type: CLEAR_ERROR,
-    error
-});
+export const clearError = createAction(CLEAR_ERROR, error => ({
+    payload: { error }
+}));

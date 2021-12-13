@@ -23,7 +23,7 @@ export function* watchJobs() {
 }
 
 export function* wsUpdateJob(action) {
-    const jobId = action.data.id;
+    const jobId = action.payload.id;
     const jobDetailId = yield select(getJobDetailId);
 
     if (jobId === jobDetailId) {
@@ -43,21 +43,21 @@ export function* findJobs(action) {
 }
 
 export function* getJob(action) {
-    yield apiCall(jobsAPI.get, action, GET_JOB);
+    yield apiCall(jobsAPI.get, action.payload, GET_JOB);
 }
 
 export function* getLinkedJob(action) {
-    yield apiCall(jobsAPI.get, action, GET_LINKED_JOB);
+    yield apiCall(jobsAPI.get, action.payload, GET_LINKED_JOB);
 }
 
 export function* cancelJob(action) {
-    yield apiCall(jobsAPI.cancel, action, CANCEL_JOB);
+    yield apiCall(jobsAPI.cancel, action.payload, CANCEL_JOB);
 }
 
 export function* removeJob(action) {
-    yield apiCall(jobsAPI.remove, action, REMOVE_JOB);
+    yield apiCall(jobsAPI.remove, action.payload, REMOVE_JOB);
 }
 
 export function* clearJobs(action) {
-    yield apiCall(jobsAPI.clear, action, REMOVE_JOB);
+    yield apiCall(jobsAPI.clear, action.payload, REMOVE_JOB);
 }

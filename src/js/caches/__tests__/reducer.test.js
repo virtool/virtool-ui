@@ -22,7 +22,7 @@ describe("<cacheReducer />", () => {
     it("should return detail action.data", () => {
         const action = {
             type: GET_CACHE.SUCCEEDED,
-            data: "foo"
+            payload: "foo"
         };
         const result = cacheReducer(state, action);
         expect(result).toEqual({ ...state, detail: "foo" });

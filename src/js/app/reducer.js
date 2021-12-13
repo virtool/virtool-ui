@@ -30,9 +30,9 @@ export const appReducer = createReducer(initialState, builder => {
     builder
         .addCase(LOGIN.SUCCEEDED, (state, action) => {
             state.login = false;
-            if (action.data.reset) {
+            if (action.payload.reset) {
                 state.reset = true;
-                state.resetCode = action.data.reset_code;
+                state.resetCode = action.payload.reset_code;
             } else {
                 state.reset = false;
             }
@@ -52,16 +52,16 @@ export const appReducer = createReducer(initialState, builder => {
         .addCase(RESET_PASSWORD.FAILED, (state, action) => {
             state.login = false;
             state.reset = true;
-            state.resetCode = action.data.reset_code;
-            state.resetError = action.data.error;
+            state.resetCode = action.payload.reset_code;
+            state.resetError = action.payload.error;
         })
         .addCase(CREATE_FIRST_USER.SUCCEEDED, state => {
             state.login = false;
             state.first = false;
         })
         .addCase(SET_INITIAL_STATE, (state, action) => {
-            state.dev = action.dev;
-            state.first = action.first;
+            state.dev = action.payload.dev;
+            state.first = action.payload.first;
         });
 });
 

@@ -75,9 +75,7 @@ describe("mapDispatchToProps()", () => {
         props.onSubmit(name, description, color);
         expect(dispatch).toHaveBeenCalledWith({
             type: "CREATE_LABEL_REQUESTED",
-            name,
-            description,
-            color
+            payload: { name, description, color }
         });
     });
 
@@ -85,8 +83,10 @@ describe("mapDispatchToProps()", () => {
         props.onHide();
         expect(dispatch).toHaveBeenCalledWith({
             type: PUSH_STATE,
-            state: {
-                createLabel: false
+            payload: {
+                state: {
+                    createLabel: false
+                }
             }
         });
     });

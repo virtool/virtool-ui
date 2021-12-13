@@ -1,4 +1,3 @@
-import { simpleActionCreator } from "../utils/utils";
 import {
     WS_INSERT_GROUP,
     WS_UPDATE_GROUP,
@@ -9,33 +8,22 @@ import {
     REMOVE_GROUP,
     CHANGE_ACTIVE_GROUP
 } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
-export const wsInsertGroup = data => ({
-    type: WS_INSERT_GROUP,
-    data
-});
+export const wsInsertGroup = createAction(WS_INSERT_GROUP);
 
-export const wsUpdateGroup = data => ({
-    type: WS_UPDATE_GROUP,
-    data
-});
+export const wsUpdateGroup = createAction(WS_UPDATE_GROUP);
 
-export const wsRemoveGroup = data => ({
-    type: WS_REMOVE_GROUP,
-    data
-});
+export const wsRemoveGroup = createAction(WS_REMOVE_GROUP);
 
-export const changeActiveGroup = id => ({
-    type: CHANGE_ACTIVE_GROUP,
-    id
-});
+export const changeActiveGroup = createAction(CHANGE_ACTIVE_GROUP, id => ({ payload: { id } }));
 
 /**
  * Returns an action that triggers a request for all groups from the API.
  *
  * @func
  */
-export const listGroups = simpleActionCreator(LIST_GROUPS.REQUESTED);
+export const listGroups = createAction(LIST_GROUPS.REQUESTED);
 
 /**
  * Returns an action that triggers a API request to create a group with the given `groupId`.
@@ -44,10 +32,7 @@ export const listGroups = simpleActionCreator(LIST_GROUPS.REQUESTED);
  * @param groupId {string} the id for the new group
  * @returns {object}
  */
-export const createGroup = groupId => ({
-    type: CREATE_GROUP.REQUESTED,
-    groupId
-});
+export const createGroup = createAction(CREATE_GROUP.REQUESTED, groupId => ({ payload: { groupId } }));
 
 /**
  * Returns action that can trigger an API request for modifying group permissions.
@@ -57,12 +42,9 @@ export const createGroup = groupId => ({
  * @param value {boolean} is checked or not
  * @returns {object}
  */
-export const setGroupPermission = (groupId, permission, value) => ({
-    type: SET_GROUP_PERMISSION.REQUESTED,
-    groupId,
-    permission,
-    value
-});
+export const setGroupPermission = createAction(SET_GROUP_PERMISSION.REQUESTED, (groupId, permission, value) => ({
+    payload: { groupId, permission, value }
+}));
 
 /**
  * Returns an action that triggers a API request to remove a group with the given `groupId`.
@@ -71,7 +53,4 @@ export const setGroupPermission = (groupId, permission, value) => ({
  * @param groupId {string} the id for the new group
  * @returns {object}
  */
-export const removeGroup = groupId => ({
-    type: REMOVE_GROUP.REQUESTED,
-    groupId
-});
+export const removeGroup = createAction(REMOVE_GROUP.REQUESTED, groupId => ({ payload: { groupId } }));

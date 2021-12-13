@@ -100,7 +100,7 @@ describe("mapDispatchToProps", () => {
         result.onGetUser(userId);
         expect(dispatch).toHaveBeenCalledWith({
             type: "GET_USER_REQUESTED",
-            userId
+            payload: { userId }
         });
     });
 
@@ -116,7 +116,7 @@ describe("mapDispatchToProps", () => {
         result.onRemoveUser(userId);
         expect(dispatch).toHaveBeenCalledWith({
             type: "REMOVE_USER_REQUESTED",
-            userId
+            payload: { userId }
         });
     });
 });

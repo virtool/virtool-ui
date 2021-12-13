@@ -17,28 +17,28 @@ export const initialState = {
 export const jobsReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_JOB, (state, action) => {
-            return insert(state, action, "created_at");
+            return insert(state, action.payload, "created_at");
         })
         .addCase(WS_UPDATE_JOB, (state, action) => {
-            return update(state, action, "created_at");
+            return update(state, action.payload, "created_at");
         })
         .addCase(WS_REMOVE_JOB, (state, action) => {
-            return remove(state, action);
+            return remove(state, action.payload);
         })
         .addCase(GET_LINKED_JOB.SUCCEEDED, (state, action) => {
-            assign(state.linkedJobs, { [action.data.id]: action.data });
+            assign(state.linkedJobs, { [action.payload.id]: action.payload });
         })
         .addCase(FIND_JOBS.REQUESTED, (state, action) => {
-            state.term = action.term;
+            state.term = action.payload.term;
         })
         .addCase(FIND_JOBS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action, "created_at");
+            return updateDocuments(state, action.payload, "created_at");
         })
         .addCase(GET_JOB.REQUESTED, state => {
             state.detail = null;
         })
         .addCase(GET_JOB.SUCCEEDED, (state, action) => {
-            state.detail = action.data;
+            state.detail = action.payload;
         });
 });
 

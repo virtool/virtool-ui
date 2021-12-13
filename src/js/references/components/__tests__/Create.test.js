@@ -86,17 +86,14 @@ describe("mapDispatchToProps()", () => {
     it("should return onSubmit in props", () => {
         props.onSubmit("foo", "bar", "fee", "baz");
         expect(dispatch).toHaveBeenCalledWith({
-            name: "foo",
-            description: "bar",
-            dataType: "fee",
-            organism: "baz",
+            payload: { name: "foo", description: "bar", dataType: "fee", organism: "baz" },
             type: "EMPTY_REFERENCE_REQUESTED"
         });
     });
     it("should return onClearError in props", () => {
         props.onClearError("foo");
         expect(dispatch).toHaveBeenCalledWith({
-            error: "foo",
+            payload: { error: "foo" },
             type: "CLEAR_ERROR"
         });
     });

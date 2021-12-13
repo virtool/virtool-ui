@@ -82,8 +82,8 @@ export const getActiveIsolate = state => {
 
 export const receiveOTU = (state, action) => {
     const detail = {
-        ...action.data,
-        isolates: map(action.data.isolates, isolate => ({
+        ...action,
+        isolates: map(action.isolates, isolate => ({
             ...isolate,
             name: formatIsolateName(isolate)
         }))
@@ -95,35 +95,36 @@ export const receiveOTU = (state, action) => {
 export const OTUsReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_UPDATE_STATUS, (state, action) => {
-            if (action.data.id === "OTU_import") {
-                state.importData = { ...action.data, inProgress: true };
+            if (action.payload.id === "OTU_import") {
+                state.importData = { ...action.payload, inProgress: true };
             }
         })
         .addCase(WS_INSERT_OTU, (state, action) => {
-            if (action.data.reference.id === state.refId) {
-                return insert(state, action, "name");
+            if (action.payload.reference.id === state.refId) {
+                return insert(state, action.payload, "name");
             }
+
             return state;
         })
         .addCase(WS_UPDATE_OTU, (state, action) => {
-            if (action.data.reference.id === state.refId) {
-                return update(state, action, "name");
+            if (action.payload.reference.id === state.refId) {
+                return update(state, action.payload, "name");
             }
             return state;
         })
         .addCase(WS_REMOVE_OTU, (state, action) => {
-            return remove(state, action);
+            return remove(state, action.payload);
         })
         .addCase(FIND_OTUS.REQUESTED, (state, action) => {
-            state.term = action.term;
-            state.verified = action.verified;
-            state.refId = action.refId;
+            state.term = action.payload.term;
+            state.verified = action.payload.verified;
+            state.refId = action.payload.refId;
         })
         .addCase(FIND_OTUS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action, "name");
+            return updateDocuments(state, action.payload, "name");
         })
         .addCase(REFRESH_OTUS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action, "name");
+            return updateDocuments(state, action.payload, "name");
         })
         .addCase(GET_OTU.REQUESTED, state => {
             return hideOTUModal({ ...state, detail: null, activeIsolateId: null });
@@ -135,17 +136,17 @@ export const OTUsReducer = createReducer(initialState, builder => {
             state.detailHistory = null;
         })
         .addCase(GET_OTU_HISTORY.SUCCEEDED, (state, action) => {
-            state.detailHistory = action.data;
+            state.detailHistory = action.payload;
         })
         .addCase(REVERT.SUCCEEDED, (state, action) => {
-            return { ...receiveOTU(state, action), detailHistory: action.history };
+            return { ...receiveOTU(state, action.payload.otu), detailHistory: action.payload.history };
         })
         .addCase(UPLOAD_IMPORT.SUCCEEDED, (state, action) => {
-            state.importData = { ...action.data, inProgress: false };
+            state.importData = { ...action.payload, inProgress: false };
         })
         .addCase(SELECT_ISOLATE, (state, action) => {
-            state.activeIsolate = find(state.detail.isolates, { id: action.isolateId });
-            state.activeIsolateId = action.isolateId;
+            state.activeIsolate = find(state.detail.isolates, { id: action.payload.isolateId });
+            state.activeIsolateId = action.payload.isolateId;
         })
         .addCase(SHOW_EDIT_OTU, state => {
             state.edit = true;
@@ -163,7 +164,7 @@ export const OTUsReducer = createReducer(initialState, builder => {
             state.removeIsolate = true;
         })
         .addCase(SHOW_REMOVE_SEQUENCE, (state, action) => {
-            state.removeSequence = action.sequenceId;
+            state.removeSequence = action.payload.sequenceId;
         })
         .addCase(HIDE_OTU_MODAL, state => {
             state.edit = false;
@@ -189,7 +190,7 @@ export const OTUsReducer = createReducer(initialState, builder => {
                 return hasIn(matches, action.type);
             },
             (state, action) => {
-                return hideOTUModal(receiveOTU(state, action));
+                return hideOTUModal(receiveOTU(state, action.payload));
             }
         );
 });

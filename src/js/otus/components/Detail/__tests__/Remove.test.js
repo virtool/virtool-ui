@@ -84,9 +84,7 @@ describe("mapDispatchToProps()", () => {
         props.onConfirm(refId, otuId, history);
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_OTU.REQUESTED,
-            history,
-            otuId,
-            refId
+            payload: { history, otuId, refId }
         });
     });
 

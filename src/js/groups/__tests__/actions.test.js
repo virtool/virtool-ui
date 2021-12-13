@@ -23,7 +23,7 @@ describe("Groups Action Creators:", () => {
         const result = wsInsertGroup(data);
         expect(result).toEqual({
             type: WS_INSERT_GROUP,
-            data
+            payload: { ...data }
         });
     });
 
@@ -32,7 +32,7 @@ describe("Groups Action Creators:", () => {
         const result = wsUpdateGroup(data);
         expect(result).toEqual({
             type: WS_UPDATE_GROUP,
-            data
+            payload: { ...data }
         });
     });
 
@@ -41,7 +41,7 @@ describe("Groups Action Creators:", () => {
         const result = wsRemoveGroup(data);
         expect(result).toEqual({
             type: WS_REMOVE_GROUP,
-            data
+            payload: data
         });
     });
 
@@ -57,7 +57,7 @@ describe("Groups Action Creators:", () => {
         const result = createGroup(groupId);
         expect(result).toEqual({
             type: CREATE_GROUP.REQUESTED,
-            groupId
+            payload: { groupId }
         });
     });
 
@@ -68,9 +68,7 @@ describe("Groups Action Creators:", () => {
         const result = setGroupPermission(groupId, permission, value);
         expect(result).toEqual({
             type: SET_GROUP_PERMISSION.REQUESTED,
-            groupId,
-            permission,
-            value
+            payload: { groupId, permission, value }
         });
     });
 
@@ -79,7 +77,7 @@ describe("Groups Action Creators:", () => {
         const result = removeGroup(groupId);
         expect(result).toEqual({
             type: REMOVE_GROUP.REQUESTED,
-            groupId
+            payload: { groupId }
         });
     });
 });

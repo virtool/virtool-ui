@@ -9,7 +9,7 @@ export function* watchDev() {
 }
 
 export function* postDevCommand(action) {
-    yield apiCall(devApi.post, action, POST_DEV_COMMAND);
+    yield apiCall(devApi.post, action.payload, POST_DEV_COMMAND);
 
     if (action.command === "clear_users") {
         yield put(pushState({}));

@@ -28,7 +28,7 @@ describe("Samples Reducer", () => {
     it.each([null, []])("should handle WS_INSERT_SAMPLE and when when [documents=%p]", existing => {
         const action = {
             type: WS_INSERT_SAMPLE,
-            data: {
+            payload: {
                 id: "foo",
                 name: "Foo"
             }
@@ -36,7 +36,7 @@ describe("Samples Reducer", () => {
         const state = { documents: existing };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: [action.data]
+            documents: [action.payload]
         });
     });
 
@@ -47,7 +47,7 @@ describe("Samples Reducer", () => {
         };
         const action = {
             type: WS_UPDATE_SAMPLE,
-            data: {
+            payload: {
                 id: "foo",
                 name: "New"
             }
@@ -66,7 +66,7 @@ describe("Samples Reducer", () => {
         };
         const action = {
             type: WS_REMOVE_SAMPLE,
-            data: ["foo"]
+            payload: ["foo"]
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -79,8 +79,7 @@ describe("Samples Reducer", () => {
         const term = "foo";
         const action = {
             type: FIND_SAMPLES.REQUESTED,
-            term,
-            page: 5
+            payload: { term, page: 5 }
         };
         const result = reducer({}, action);
         expect(result).toEqual({
@@ -91,7 +90,7 @@ describe("Samples Reducer", () => {
     it("should handle FIND_SAMPLES_SUCCEEDED", () => {
         const action = {
             type: FIND_SAMPLES.SUCCEEDED,
-            data: { documents: [], page: 5 }
+            payload: { documents: [], page: 5 }
         };
         const result = reducer({}, action);
         expect(result).toEqual({
@@ -103,7 +102,7 @@ describe("Samples Reducer", () => {
     it("should handle FIND_READ_FILES_SUCCEEDED", () => {
         const action = {
             type: FIND_READ_FILES.SUCCEEDED,
-            data: {
+            payload: {
                 documents: [],
                 found_count: 0,
                 page: 1,
@@ -115,7 +114,7 @@ describe("Samples Reducer", () => {
         const result = reducer(initialState, action);
         expect(result).toEqual({
             ...initialState,
-            readFiles: action.data.documents
+            readFiles: action.payload.documents
         });
     });
 
@@ -134,7 +133,7 @@ describe("Samples Reducer", () => {
     it("should handle GET_SAMPLE_SUCCEEDED", () => {
         const action = {
             type: GET_SAMPLE.SUCCEEDED,
-            data: {
+            payload: {
                 id: "123abc",
                 name: "test"
             }
@@ -142,14 +141,14 @@ describe("Samples Reducer", () => {
         const result = reducer(initialState, action);
         expect(result).toEqual({
             ...initialState,
-            detail: action.data
+            detail: action.payload
         });
     });
 
     it("should handle UPDATE_SAMPLE_SUCCEEDED", () => {
         const action = {
             type: UPDATE_SAMPLE.SUCCEEDED,
-            data: {
+            payload: {
                 id: "123abc",
                 name: "test"
             }
@@ -157,7 +156,7 @@ describe("Samples Reducer", () => {
         const result = reducer(initialState, action);
         expect(result).toEqual({
             ...initialState,
-            detail: action.data
+            detail: action.payload
         });
     });
 
@@ -165,12 +164,12 @@ describe("Samples Reducer", () => {
         const state = {};
         const action = {
             type: UPDATE_SAMPLE_RIGHTS.SUCCEEDED,
-            data: { foo: "bar" }
+            payload: { foo: "bar" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            detail: action.data
+            detail: action.payload
         });
     });
 
@@ -185,7 +184,7 @@ describe("Samples Reducer", () => {
     });
 
     it("should handle SELECT_SAMPLE", () => {
-        const action = { type: SELECT_SAMPLE, sampleId: "foo" };
+        const action = { type: SELECT_SAMPLE, payload: { sampleId: "foo" } };
         const state = { selected: ["bar", "baz"] };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -194,7 +193,7 @@ describe("Samples Reducer", () => {
     });
 
     it("should handle SELECT_SAMPLE when sample already selected", () => {
-        const action = { type: SELECT_SAMPLE, sampleId: "foo" };
+        const action = { type: SELECT_SAMPLE, payload: { sampleId: "foo" } };
         const state = { selected: ["bar", "foo", "baz"] };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -203,7 +202,7 @@ describe("Samples Reducer", () => {
     });
 
     it("should handle DESELECT_SAMPLES", () => {
-        const action = { type: DESELECT_SAMPLES, sampleIds: ["foo", "bad"] };
+        const action = { type: DESELECT_SAMPLES, payload: { sampleIds: ["foo", "bad"] } };
         const state = { selected: ["foo", "bar", "bad", "baz"] };
         const result = reducer(state, action);
         expect(result).toEqual({

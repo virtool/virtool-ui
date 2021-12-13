@@ -52,7 +52,7 @@ export const initialState = {
 };
 
 export const getInitialSortKey = action => {
-    switch (action.data.workflow) {
+    switch (action.payload.workflow) {
         case "nuvs":
             return "length";
 
@@ -88,9 +88,9 @@ export const setNuvsBLAST = (state, analysisId, sequenceIndex, data = "ip") => {
 
 export const updateIdLists = (state, action) => {
     const analysisDetailId = get(state, "detail.id", null);
-    const detail = formatData(action.data);
+    const detail = formatData(action.payload);
 
-    if (analysisDetailId === action.data.id) {
+    if (analysisDetailId === action.payload.id) {
         return {
             ...state,
             detail
@@ -110,22 +110,22 @@ export const updateIdLists = (state, action) => {
 export const analysesReducer = createReducer(initialState, builder => {
     builder
         .addCase(SET_AODP_FILTER, (state, action) => {
-            state.filterAODP = action.filterMin;
+            state.filterAODP = action.payload.filterMin;
         })
         .addCase(WS_INSERT_ANALYSIS, (state, action) => {
-            return insert(state, action, state.sortKey, state.sortDescending);
+            return insert(state, action.payload, state.sortKey, state.sortDescending);
         })
         .addCase(WS_UPDATE_ANALYSIS, (state, action) => {
-            return update(state, action);
+            return update(state, action.payload);
         })
         .addCase(WS_REMOVE_ANALYSIS, (state, action) => {
-            return remove(state, action);
+            return remove(state, action.payload);
         })
         .addCase(SET_ANALYSIS_ACTIVE_ID, (state, action) => {
-            state.activeId = action.id;
+            state.activeId = action.payload.id;
         })
         .addCase(SET_SEARCH_IDS, (state, action) => {
-            state.searchIds = action.ids;
+            state.searchIds = action.payload.ids;
         })
         .addCase(TOGGLE_FILTER_OTUS, state => {
             state.filterOTUs = !state.filterOTUs;
@@ -143,22 +143,22 @@ export const analysesReducer = createReducer(initialState, builder => {
             state.showPathoscopeReads = !state.showPathoscopeReads;
         })
         .addCase(SET_ANALYSIS_SORT_KEY, (state, action) => {
-            state.sortKey = action.sortKey;
+            state.sortKey = action.payload.sortKey;
         })
         .addCase(TOGGLE_ANALYSIS_SORT_DESCENDING, state => {
             state.sortDescending = !state.sortDescending;
         })
         .addCase(LIST_READY_INDEXES.SUCCEEDED, (state, action) => {
-            state.readyIndexes = action.data;
+            state.readyIndexes = action.payload;
         })
         .addCase(FIND_ANALYSES.REQUESTED, (state, action) => {
-            state.term = action.term;
+            state.term = action.payload.term;
         })
         .addCase(FIND_ANALYSES.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action, "created_at", true);
+            return updateDocuments(state, action.payload, "created_at", true);
         })
         .addCase(GET_ANALYSIS.REQUESTED, (state, action) => {
-            if (get(state, "detail.id", null) !== action.analysisId) {
+            if (get(state, "detail.id", null) !== action.payload.analysisId) {
                 state.activeId = null;
                 state.detail = null;
                 state.filterIds = null;
@@ -177,13 +177,13 @@ export const analysesReducer = createReducer(initialState, builder => {
             state.searchIds = null;
         })
         .addCase(BLAST_NUVS.REQUESTED, (state, action) => {
-            return setNuvsBLAST(state, action.analysisId, action.sequenceIndex, {
+            return setNuvsBLAST(state, action.payload.analysisId, action.payload.sequenceIndex, {
                 ready: false
             });
         })
         .addCase(BLAST_NUVS.SUCCEEDED, (state, action) => {
             const { analysisId, sequenceIndex } = action.context;
-            return setNuvsBLAST(state, analysisId, sequenceIndex, action.data);
+            return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload);
         });
 });
 

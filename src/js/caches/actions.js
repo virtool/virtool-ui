@@ -1,6 +1,5 @@
 import { GET_CACHE } from "../app/actionTypes";
-
-export const getCache = cacheId => ({
-    type: GET_CACHE.REQUESTED,
-    cacheId
-});
+import { createAction } from "@reduxjs/toolkit";
+export const getCache = createAction(GET_CACHE.REQUESTED, cacheId => ({
+    payload: { cacheId }
+}));

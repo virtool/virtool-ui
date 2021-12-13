@@ -24,7 +24,7 @@ describe("App Reducer", () => {
 
     it.each([
         [
-            { type: LOGIN.SUCCEEDED, data: { reset: true, reset_code: false } },
+            { type: LOGIN.SUCCEEDED, payload: { reset: true, reset_code: false } },
             { dev: "foo", first: "bar", login: false, reset: true, resetCode: false }
         ],
         [{ type: LOGIN.FAILED }, { dev: "foo", first: "bar", reset: false, resetCode: true, login: true }]
@@ -73,7 +73,7 @@ describe("App Reducer", () => {
             type,
             resetCode: false,
             resetError: false,
-            data: { reset_code: true, error: true }
+            payload: { reset_code: true, error: true }
         };
         const result = appReducer(state, action);
 

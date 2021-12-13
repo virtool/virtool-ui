@@ -65,13 +65,17 @@ describe("mapDispatchToProps()", () => {
     it("should return checkUpdates() in props", () => {
         const props = mapDispatchToProps(dispatch);
         props.onCheckUpdates("foo");
-        expect(dispatch).toHaveBeenCalledWith({ refId: "foo", type: "CHECK_REMOTE_UPDATES_REQUESTED" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { refId: "foo" }, type: "CHECK_REMOTE_UPDATES_REQUESTED" });
     });
 
     it("should return updateRemoteReference() in props", () => {
         const props = mapDispatchToProps(dispatch);
         props.onUpdate("bar");
-        expect(dispatch).toHaveBeenCalledWith((1, { refId: "foo", type: "CHECK_REMOTE_UPDATES_REQUESTED" }));
-        expect(dispatch).toHaveBeenCalledWith((2, { refId: "bar", type: "UPDATE_REMOTE_REFERENCE_REQUESTED" }));
+        expect(dispatch).toHaveBeenCalledWith(
+            (1, { payload: { refId: "foo" }, type: "CHECK_REMOTE_UPDATES_REQUESTED" })
+        );
+        expect(dispatch).toHaveBeenCalledWith(
+            (2, { payload: { refId: "bar" }, type: "UPDATE_REMOTE_REFERENCE_REQUESTED" })
+        );
     });
 });

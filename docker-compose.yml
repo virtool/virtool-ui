@@ -33,7 +33,7 @@ services:
       driver: none
 
   backend:
-    image: virtool/virtool:6.2.1
+    image: virtool/virtool:6.3.0
     expose:
       - "9950"
     ports:

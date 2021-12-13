@@ -35,7 +35,7 @@ describe("Subtraction Action Creators:", () => {
         const result = wsInsertSubtraction(data);
         expect(result).toEqual({
             type: WS_INSERT_SUBTRACTION,
-            data
+            payload: { ...data }
         });
     });
 
@@ -52,7 +52,7 @@ describe("Subtraction Action Creators:", () => {
         const result = wsUpdateSubtraction(data);
         expect(result).toEqual({
             type: WS_UPDATE_SUBTRACTION,
-            data
+            payload: { ...data }
         });
     });
 
@@ -61,7 +61,7 @@ describe("Subtraction Action Creators:", () => {
         const result = wsRemoveSubtraction(data);
         expect(result).toEqual({
             type: WS_REMOVE_SUBTRACTION,
-            data
+            payload: data
         });
     });
 
@@ -71,8 +71,7 @@ describe("Subtraction Action Creators:", () => {
         const result = findSubtractions(term, page);
         expect(result).toEqual({
             type: FIND_SUBTRACTIONS.REQUESTED,
-            term,
-            page
+            payload: { term, page }
         });
     });
 
@@ -80,7 +79,7 @@ describe("Subtraction Action Creators:", () => {
         const result = getSubtraction(subtractionId);
         expect(result).toEqual({
             type: GET_SUBTRACTION.REQUESTED,
-            subtractionId
+            payload: { subtractionId }
         });
     });
 
@@ -92,9 +91,7 @@ describe("Subtraction Action Creators:", () => {
 
         expect(result).toEqual({
             type: CREATE_SUBTRACTION.REQUESTED,
-            uploadId,
-            name,
-            nickname
+            payload: { uploadId, name, nickname }
         });
     });
 
@@ -104,9 +101,7 @@ describe("Subtraction Action Creators:", () => {
         const result = editSubtraction(subtractionId, name, nickname);
         expect(result).toEqual({
             type: EDIT_SUBTRACTION.REQUESTED,
-            subtractionId,
-            name,
-            nickname
+            payload: { subtractionId, name, nickname }
         });
     });
 
@@ -114,7 +109,7 @@ describe("Subtraction Action Creators:", () => {
         const result = removeSubtraction(subtractionId);
         expect(result).toEqual({
             type: REMOVE_SUBTRACTION.REQUESTED,
-            subtractionId
+            payload: { subtractionId }
         });
     });
 });

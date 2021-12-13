@@ -19,118 +19,105 @@ import {
     CHECK_REMOTE_UPDATES,
     UPDATE_REMOTE_REFERENCE
 } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
+/**
+ * Returns an action that should be dispatched when a reference is inserted via websocket.
+ *
+ * @func
+ * @param data {object} the data passed in the websocket message
+ * @returns {object}
+ */
+export const wsInsertReference = createAction(WS_INSERT_REFERENCE);
+/**
+ * Returns an action that should be dispatched when a reference is updated via websocket.
+ *
+ * @func
+ * @param data {object} the data passed in the websocket message
+ * @returns {object}
+ */
+export const wsUpdateReference = createAction(WS_UPDATE_REFERENCE);
+/**
+ * Returns an action that should be dispatched when a reference is removed via websocket.
+ *
+ * @func
+ * @param data {object} the data passed in the websocket message
+ * @returns {object}
+ */
+export const wsRemoveReference = createAction(WS_REMOVE_REFERENCE);
 
-export const wsInsertReference = data => ({
-    type: WS_INSERT_REFERENCE,
-    data
-});
+export const findReferences = createAction(FIND_REFERENCES.REQUESTED, (term, page = 1) => ({
+    payload: { term, page }
+}));
 
-export const wsUpdateReference = data => ({
-    type: WS_UPDATE_REFERENCE,
-    data
-});
+export const getReference = createAction(GET_REFERENCE.REQUESTED, refId => ({ payload: { refId } }));
 
-export const wsRemoveReference = data => ({
-    type: WS_REMOVE_REFERENCE,
-    data
-});
+export const emptyReference = createAction(EMPTY_REFERENCE.REQUESTED, (name, description, dataType, organism) => ({
+    payload: {
+        name,
+        description,
+        dataType,
+        organism
+    }
+}));
 
-export const findReferences = (term, page = 1) => ({
-    type: FIND_REFERENCES.REQUESTED,
-    term,
-    page
-});
+export const editReference = createAction(EDIT_REFERENCE.REQUESTED, (refId, update) => ({
+    payload: { refId, update }
+}));
 
-export const getReference = refId => ({
-    type: GET_REFERENCE.REQUESTED,
-    refId
-});
+export const importReference = createAction(
+    IMPORT_REFERENCE.REQUESTED,
+    (name, description, dataType, organism, fileId) => ({
+        payload: {
+            name,
+            description,
+            dataType,
+            organism,
+            fileId
+        }
+    })
+);
 
-export const emptyReference = (name, description, dataType, organism) => ({
-    type: EMPTY_REFERENCE.REQUESTED,
-    name,
-    description,
-    dataType,
-    organism
-});
+export const cloneReference = createAction(
+    CLONE_REFERENCE.REQUESTED,
+    (name, description, dataType, organism, refId) => ({
+        payload: {
+            name,
+            description,
+            dataType,
+            organism,
+            refId
+        }
+    })
+);
 
-export const editReference = (refId, update) => ({
-    type: EDIT_REFERENCE.REQUESTED,
-    refId,
-    update
-});
+export const remoteReference = createAction(REMOTE_REFERENCE.REQUESTED);
 
-export const importReference = (name, description, dataType, organism, fileId) => ({
-    type: IMPORT_REFERENCE.REQUESTED,
-    name,
-    description,
-    dataType,
-    organism,
-    fileId
-});
+export const removeReference = createAction(REMOVE_REFERENCE.REQUESTED, refId => ({ payload: { refId } }));
 
-export const cloneReference = (name, description, dataType, organism, refId) => ({
-    type: CLONE_REFERENCE.REQUESTED,
-    name,
-    description,
-    dataType,
-    organism,
-    refId
-});
+export const addReferenceUser = createAction(ADD_REFERENCE_USER.REQUESTED, (refId, user) => ({
+    payload: { refId, user }
+}));
 
-export const remoteReference = () => ({
-    type: REMOTE_REFERENCE.REQUESTED
-});
+export const editReferenceUser = createAction(EDIT_REFERENCE_USER.REQUESTED, (refId, userId, update) => ({
+    payload: { refId, userId, update }
+}));
 
-export const removeReference = refId => ({
-    type: REMOVE_REFERENCE.REQUESTED,
-    refId
-});
+export const removeReferenceUser = createAction(REMOVE_REFERENCE_USER.REQUESTED, (refId, userId) => ({
+    payload: { refId, userId }
+}));
 
-export const addReferenceUser = (refId, user) => ({
-    type: ADD_REFERENCE_USER.REQUESTED,
-    refId,
-    user
-});
+export const addReferenceGroup = createAction(ADD_REFERENCE_GROUP.REQUESTED, (refId, group) => ({
+    payload: { refId, group }
+}));
 
-export const editReferenceUser = (refId, userId, update) => ({
-    type: EDIT_REFERENCE_USER.REQUESTED,
-    refId,
-    userId,
-    update
-});
+export const editReferenceGroup = createAction(EDIT_REFERENCE_GROUP.REQUESTED, (refId, groupId, update) => ({
+    payload: { refId, groupId, update }
+}));
 
-export const removeReferenceUser = (refId, userId) => ({
-    type: REMOVE_REFERENCE_USER.REQUESTED,
-    refId,
-    userId
-});
+export const removeReferenceGroup = createAction(REMOVE_REFERENCE_GROUP.REQUESTED, (refId, groupId) => ({
+    payload: { refId, groupId }
+}));
 
-export const addReferenceGroup = (refId, group) => ({
-    type: ADD_REFERENCE_GROUP.REQUESTED,
-    refId,
-    group
-});
+export const checkUpdates = createAction(CHECK_REMOTE_UPDATES.REQUESTED, refId => ({ payload: { refId } }));
 
-export const editReferenceGroup = (refId, groupId, update) => ({
-    type: EDIT_REFERENCE_GROUP.REQUESTED,
-    refId,
-    groupId,
-    update
-});
-
-export const removeReferenceGroup = (refId, groupId) => ({
-    type: REMOVE_REFERENCE_GROUP.REQUESTED,
-    refId,
-    groupId
-});
-
-export const checkUpdates = refId => ({
-    type: CHECK_REMOTE_UPDATES.REQUESTED,
-    refId
-});
-
-export const updateRemoteReference = refId => ({
-    type: UPDATE_REMOTE_REFERENCE.REQUESTED,
-    refId
-});
+export const updateRemoteReference = createAction(UPDATE_REMOTE_REFERENCE.REQUESTED, refId => ({ payload: { refId } }));

@@ -13,7 +13,7 @@ function* getSettings(action) {
 }
 
 function* updateSettings(action) {
-    yield apiCall(settingsAPI.update, action, UPDATE_SETTINGS, {
-        update: action.update
+    yield apiCall(settingsAPI.update, action.payload, UPDATE_SETTINGS, {
+        update: action.payload.update
     });
 }

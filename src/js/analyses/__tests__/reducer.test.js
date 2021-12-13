@@ -64,7 +64,7 @@ describe("Analyses Reducer", () => {
         };
         const action = {
             type: WS_INSERT_ANALYSIS,
-            data: {
+            payload: {
                 id: "foo",
                 created_at: "2018-01-01T00:00:00.000000Z",
                 sample: {
@@ -74,7 +74,7 @@ describe("Analyses Reducer", () => {
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: [action.data]
+            documents: [action.payload]
         });
     });
 
@@ -85,7 +85,7 @@ describe("Analyses Reducer", () => {
 
         const action = {
             type: WS_UPDATE_ANALYSIS,
-            data: {
+            payload: {
                 id: "foo",
                 created_at: "2018-01-01T00:00:00.000000Z",
                 sample: {
@@ -95,7 +95,7 @@ describe("Analyses Reducer", () => {
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: [action.data]
+            documents: [action.payload]
         });
     });
 
@@ -105,7 +105,7 @@ describe("Analyses Reducer", () => {
         };
         const action = {
             type: WS_REMOVE_ANALYSIS,
-            data: ["foo"]
+            payload: ["foo"]
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -167,21 +167,21 @@ describe("Analyses Reducer", () => {
 
     it("should handle SET_ANALYSIS_SORT_KEY", () => {
         const state = { sortKey: "e-value" };
-        const action = { type: SET_ANALYSIS_SORT_KEY, sortKey: "coverage" };
+        const action = { type: SET_ANALYSIS_SORT_KEY, payload: { sortKey: "coverage" } };
         const result = reducer(state, action);
         expect(result).toEqual({ sortKey: "coverage" });
     });
 
     it("should handle LIST_READY_INDEXES_SUCCEEDED", () => {
         const state = { foo: "bar" };
-        const action = { type: LIST_READY_INDEXES.SUCCEEDED, data: ["foo"] };
+        const action = { type: LIST_READY_INDEXES.SUCCEEDED, payload: ["foo"] };
         const result = reducer(state, action);
         expect(result).toEqual({ foo: "bar", readyIndexes: ["foo"] });
     });
 
     it("should handle FIND_ANALYSES_REQUESTED", () => {
         const state = { term: "" };
-        const action = { type: FIND_ANALYSES.REQUESTED, term: "foo" };
+        const action = { type: FIND_ANALYSES.REQUESTED, payload: { term: "foo" } };
         const result = reducer(state, action);
         expect(result).toEqual({ ...state, term: "foo" });
     });
@@ -190,7 +190,7 @@ describe("Analyses Reducer", () => {
         const initialState = { documents: null };
         const action = {
             type: FIND_ANALYSES.SUCCEEDED,
-            data: { documents: ["foo"] }
+            payload: { documents: ["foo"] }
         };
         const result = reducer(initialState, action);
         expect(result).toEqual({ ...initialState, documents: ["foo"] });
@@ -198,7 +198,8 @@ describe("Analyses Reducer", () => {
 
     it("should handle GET_ANALYSIS_REQUESTED", () => {
         const action = {
-            type: GET_ANALYSIS.REQUESTED
+            type: GET_ANALYSIS.REQUESTED,
+            payload: {}
         };
         const result = reducer({}, action);
         expect(result).toEqual({
@@ -221,7 +222,7 @@ describe("Analyses Reducer", () => {
         };
         const action = {
             type: "GET_ANALYSIS_SUCCEEDED",
-            data: {
+            payload: {
                 workflow,
                 ready,
                 results: []
@@ -247,7 +248,7 @@ describe("Analyses Reducer", () => {
         const state = {};
         const action = {
             type: "GET_ANALYSIS_SUCCEEDED",
-            data: {
+            payload: {
                 workflow,
                 ready,
                 results: []
@@ -284,8 +285,7 @@ describe("Analyses Reducer", () => {
         };
         const action = {
             type: BLAST_NUVS.REQUESTED,
-            analysisId: "testid",
-            sequenceIndex: 3
+            payload: { analysisId: "testid", sequenceIndex: 3 }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -307,11 +307,12 @@ describe("Analyses Reducer", () => {
         };
         const action = {
             type: BLAST_NUVS.SUCCEEDED,
+
             context: {
                 analysisId: "testid",
                 sequenceIndex: 3
             },
-            data: {}
+            payload: {}
         };
         const result = reducer(state, action);
         expect(result).toEqual({

@@ -133,8 +133,7 @@ describe("mapDispatchToProps()", () => {
         props.onChangeGroup("foo", "bar");
         expect(dispatch).toHaveBeenNthCalledWith(1, { type: "LIST_GROUPS_REQUESTED" });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
-            sampleId: "foo",
-            update: { group: "bar" },
+            payload: { sampleId: "foo", update: { group: "bar" } },
             type: "UPDATE_SAMPLE_RIGHTS_REQUESTED"
         });
     });
@@ -144,16 +143,17 @@ describe("mapDispatchToProps()", () => {
         props.onChangeRights("foo", "group", "read");
         expect(dispatch).toHaveBeenNthCalledWith(1, { type: "LIST_GROUPS_REQUESTED" });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
-            sampleId: "foo",
-            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
-            update: { group: "bar" }
+            payload: { sampleId: "foo", update: { group: "bar" } },
+            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED"
         });
         expect(dispatch).toHaveBeenNthCalledWith(3, {
-            sampleId: "foo",
             type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
-            update: {
-                group_read: true,
-                group_write: false
+            payload: {
+                sampleId: "foo",
+                update: {
+                    group_read: true,
+                    group_write: false
+                }
             }
         });
     });

@@ -10,30 +10,38 @@ import {
     SHORTLIST_SUBTRACTIONS
 } from "../app/actionTypes";
 
-import { simpleActionCreator } from "../utils/utils";
+import { createAction } from "@reduxjs/toolkit";
+/**
+ * Returns an action that should be dispatched when a subtraction document is inserted via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsInsertSubtraction = createAction(WS_INSERT_SUBTRACTION);
+/**
+ * Returns an action that should be dispatched when a subtraction document is updated via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsUpdateSubtraction = createAction(WS_UPDATE_SUBTRACTION);
 
-export const wsInsertSubtraction = data => ({
-    type: WS_INSERT_SUBTRACTION,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a subtraction document is removed via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsRemoveSubtraction = createAction(WS_REMOVE_SUBTRACTION);
 
-export const wsUpdateSubtraction = data => ({
-    type: WS_UPDATE_SUBTRACTION,
-    data
-});
+export const findSubtractions = createAction(FIND_SUBTRACTIONS.REQUESTED, (term, page) => ({
+    payload: { term, page }
+}));
 
-export const wsRemoveSubtraction = data => ({
-    type: WS_REMOVE_SUBTRACTION,
-    data
-});
-
-export const findSubtractions = (term, page) => ({
-    type: FIND_SUBTRACTIONS.REQUESTED,
-    term,
-    page
-});
-
-export const shortlistSubtractions = simpleActionCreator(SHORTLIST_SUBTRACTIONS.REQUESTED);
+export const shortlistSubtractions = createAction(SHORTLIST_SUBTRACTIONS.REQUESTED);
 
 /**
  * Returns action that can trigger an API call to retrieve a subtraction.
@@ -42,10 +50,9 @@ export const shortlistSubtractions = simpleActionCreator(SHORTLIST_SUBTRACTIONS.
  * @param subtractionId {string} unique subtraction id
  * @returns {object}
  */
-export const getSubtraction = subtractionId => ({
-    type: GET_SUBTRACTION.REQUESTED,
-    subtractionId
-});
+export const getSubtraction = createAction(GET_SUBTRACTION.REQUESTED, subtractionId => ({
+    payload: { subtractionId }
+}));
 
 /**
  * Returns action that can trigger an API call to create a new subtraction.
@@ -56,12 +63,9 @@ export const getSubtraction = subtractionId => ({
  * @param nickname {string} common or nickname for the subtraction host
  * @returns {object}
  */
-export const createSubtraction = (uploadId, name, nickname) => ({
-    type: CREATE_SUBTRACTION.REQUESTED,
-    name,
-    nickname,
-    uploadId
-});
+export const createSubtraction = createAction(CREATE_SUBTRACTION.REQUESTED, (uploadId, name, nickname) => ({
+    payload: { name, nickname, uploadId }
+}));
 
 /**
  * Returns action that can trigger an API call to modify a subtraction.
@@ -72,12 +76,9 @@ export const createSubtraction = (uploadId, name, nickname) => ({
  * @param nickname {string} common or nickname for the subtraction host
  * @returns {object}
  */
-export const editSubtraction = (subtractionId, name, nickname) => ({
-    type: EDIT_SUBTRACTION.REQUESTED,
-    subtractionId,
-    name,
-    nickname
-});
+export const editSubtraction = createAction(EDIT_SUBTRACTION.REQUESTED, (subtractionId, name, nickname) => ({
+    payload: { subtractionId, name, nickname }
+}));
 
 /**
  * Returns action that can trigger an API call to remove a subtraction.
@@ -86,7 +87,6 @@ export const editSubtraction = (subtractionId, name, nickname) => ({
  * @param subtractionId {string} unique subtraction id
  * @returns {object}
  */
-export const removeSubtraction = subtractionId => ({
-    type: REMOVE_SUBTRACTION.REQUESTED,
-    subtractionId
-});
+export const removeSubtraction = createAction(REMOVE_SUBTRACTION.REQUESTED, subtractionId => ({
+    payload: { subtractionId }
+}));

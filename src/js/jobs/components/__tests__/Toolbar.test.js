@@ -62,8 +62,7 @@ describe("mapDispatchToProps", () => {
         props.onFind(e, "foo", "bar");
         expect(dispatch).toHaveBeenCalledWith({
             type: FIND_JOBS.REQUESTED,
-            term: "Foo",
-            page: 1
+            payload: { term: "Foo", page: 1 }
         });
     });
 
@@ -74,7 +73,7 @@ describe("mapDispatchToProps", () => {
         props.onClear("Foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: CLEAR_JOBS.REQUESTED,
-            scope: "Foo"
+            payload: { scope: "Foo" }
         });
     });
 });

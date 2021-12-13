@@ -9,16 +9,25 @@ import {
     LIST_READY_INDEXES,
     WS_INSERT_HISTORY
 } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
-export const wsInsertHistory = data => ({
-    type: WS_INSERT_HISTORY,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a history document is inserted via websocket.
+ *
+ * @func
+ * @param data {object} the data passed in the websocket message
+ * @returns {object}
+ */
+export const wsInsertHistory = createAction(WS_INSERT_HISTORY);
 
-export const wsInsertIndex = data => ({
-    type: WS_INSERT_INDEX,
-    data
-});
+/**
+ * Returns an action that should be dispatched when an index document is inserted via websocket.
+ *
+ * @func
+ * @param data {object} the data passed in the websocket message
+ * @returns {object}
+ */
+export const wsInsertIndex = createAction(WS_INSERT_INDEX);
 
 /**
  * Returns an action that should be dispatched when an index document is updated via websocket.
@@ -27,10 +36,7 @@ export const wsInsertIndex = data => ({
  * @param data {object} the data passed in the websocket message
  * @returns {object}
  */
-export const wsUpdateIndex = data => ({
-    type: WS_UPDATE_INDEX,
-    data
-});
+export const wsUpdateIndex = createAction(WS_UPDATE_INDEX);
 
 /**
  * Returns action that can trigger an API call for getting available OTU indexes.
@@ -38,12 +44,9 @@ export const wsUpdateIndex = data => ({
  * @func
  * @returns {object}
  */
-export const findIndexes = (refId, term, page) => ({
-    type: FIND_INDEXES.REQUESTED,
-    refId,
-    term,
-    page
-});
+export const findIndexes = createAction(FIND_INDEXES.REQUESTED, (refId, term, page) => ({
+    payload: { refId, term, page }
+}));
 
 /**
  * Returns action that can trigger an API call for getting all ready OTU indexes.
@@ -51,9 +54,7 @@ export const findIndexes = (refId, term, page) => ({
  * @func
  * @returns {object}
  */
-export const listReadyIndexes = () => ({
-    type: LIST_READY_INDEXES.REQUESTED
-});
+export const listReadyIndexes = createAction(LIST_READY_INDEXES.REQUESTED);
 
 /**
  * Returns action that can trigger an API call for getting specific OTU index.
@@ -62,10 +63,7 @@ export const listReadyIndexes = () => ({
  * @param indexId {string} the unique index id.
  * @returns {object}
  */
-export const getIndex = indexId => ({
-    type: GET_INDEX.REQUESTED,
-    indexId
-});
+export const getIndex = createAction(GET_INDEX.REQUESTED, indexId => ({ payload: { indexId } }));
 
 /**
  * Returns action that can trigger an API call for getting unbuilt data.
@@ -73,10 +71,7 @@ export const getIndex = indexId => ({
  * @func
  * @returns {object}
  */
-export const getUnbuilt = refId => ({
-    type: GET_UNBUILT.REQUESTED,
-    refId
-});
+export const getUnbuilt = createAction(GET_UNBUILT.REQUESTED, refId => ({ payload: { refId } }));
 
 /**
  * Returns action that can trigger an API call for creating a new OTU index.
@@ -84,10 +79,7 @@ export const getUnbuilt = refId => ({
  * @func
  * @returns {object}
  */
-export const createIndex = refId => ({
-    type: CREATE_INDEX.REQUESTED,
-    refId
-});
+export const createIndex = createAction(CREATE_INDEX.REQUESTED, refId => ({ payload: { refId } }));
 
 /**
  * Returns action that can trigger an API call for getting a specific page in the index version history.
@@ -97,8 +89,6 @@ export const createIndex = refId => ({
  * @param page {number} the page to retrieve from the list of changes.
  * @returns {object}
  */
-export const getIndexHistory = (indexId, page) => ({
-    type: GET_INDEX_HISTORY.REQUESTED,
-    indexId,
-    page
-});
+export const getIndexHistory = createAction(GET_INDEX_HISTORY.REQUESTED, (indexId, page) => ({
+    payload: { indexId, page }
+}));

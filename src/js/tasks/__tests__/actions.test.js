@@ -5,7 +5,7 @@ describe("wsInsertTask()", () => {
     it("should return action to insert new task", () => {
         const data = { id: "123abc" };
         const result = wsInsertTask(data);
-        expect(result).toEqual({ type: WS_INSERT_TASK, data });
+        expect(result).toEqual({ type: WS_INSERT_TASK, payload: { ...data } });
     });
 });
 
@@ -13,7 +13,7 @@ describe("wsUpdateTask()", () => {
     it("should return action to update existing task", () => {
         const data = { id: "123abc", foo: "bar" };
         const result = wsUpdateTask(data);
-        expect(result).toEqual({ type: WS_UPDATE_TASK, data });
+        expect(result).toEqual({ type: WS_UPDATE_TASK, payload: { ...data } });
     });
 });
 
@@ -27,6 +27,6 @@ describe("getTask()", () => {
     it("should return action to retrieve specific task", () => {
         const taskId = "123abc";
         const result = getTask(taskId);
-        expect(result).toEqual({ type: GET_TASK, taskId });
+        expect(result).toEqual({ type: GET_TASK, payload: { taskId } });
     });
 });

@@ -12,7 +12,7 @@ export function* watchHmms() {
 }
 
 export function* findHmms(action) {
-    yield apiCall(hmmsAPI.find, action, FIND_HMMS);
+    yield apiCall(hmmsAPI.find, action.payload, FIND_HMMS);
 
     const routerLocation = yield select(getLocation);
 
@@ -26,7 +26,7 @@ export function* installHmms(action) {
 }
 
 export function* getHmm(action) {
-    yield apiCall(hmmsAPI.get, action, GET_HMM);
+    yield apiCall(hmmsAPI.get, action.payload, GET_HMM);
 }
 
 export function* purgeHmms(action) {

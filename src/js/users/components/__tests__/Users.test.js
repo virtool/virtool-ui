@@ -78,8 +78,7 @@ describe("mapDispatchToProps", () => {
         };
         result.onFind(e);
         expect(dispatch).toHaveBeenCalledWith({
-            page: 1,
-            term: "foo",
+            payload: { page: 1, term: "foo" },
             type: "FIND_USERS_REQUESTED"
         });
     });
@@ -88,7 +87,7 @@ describe("mapDispatchToProps", () => {
         const error = "foo";
         result.onClearError(error);
         expect(dispatch).toHaveBeenCalledWith({
-            error: "foo",
+            payload: { error: "foo" },
             type: "CLEAR_ERROR"
         });
     });

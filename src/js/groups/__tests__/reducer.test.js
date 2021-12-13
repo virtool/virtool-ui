@@ -26,7 +26,7 @@ describe("Groups Reducer", () => {
     describe("should handle WS_INSERT_GROUP", () => {
         it("if documents are not yet fetched, return state", () => {
             const state = { documents: null };
-            const action = { type: WS_INSERT_GROUP, data: { id: "foo" } };
+            const action = { type: WS_INSERT_GROUP, payload: { id: "foo" } };
             const result = reducer(state, action);
             expect(result).toEqual({
                 documents: [{ id: "foo" }]
@@ -37,7 +37,7 @@ describe("Groups Reducer", () => {
             const state = { documents: [] };
             const action = {
                 type: WS_INSERT_GROUP,
-                data: { id: "test" }
+                payload: { id: "test" }
             };
             const result = reducer(state, action);
             expect(result).toEqual({ documents: [{ id: "test" }] });
@@ -48,7 +48,7 @@ describe("Groups Reducer", () => {
         const state = { documents: [{ id: "test", foo: "bar" }] };
         const action = {
             type: WS_UPDATE_GROUP,
-            data: { id: "test", foo: "baz" }
+            payload: { id: "test", foo: "baz" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({ ...state, documents: [{ id: "test", foo: "baz" }] });
@@ -56,22 +56,22 @@ describe("Groups Reducer", () => {
 
     it("should handle WS_REMOVE_GROUP", () => {
         const state = { documents: [{ id: "foo" }, { id: "bar" }], activeId: "bar" };
-        const action = { type: WS_REMOVE_GROUP, data: ["bar"] };
+        const action = { type: WS_REMOVE_GROUP, payload: ["bar"] };
         const result = reducer(state, action);
         expect(result).toEqual({ ...state, documents: [{ id: "foo" }], activeId: "foo" });
     });
 
     it("should handle LIST_GROUPS_SUCCEEDED", () => {
         const state = { documents: null };
-        const data = [{ id: "foo" }, { id: "bar" }];
+        const payload = [{ id: "foo" }, { id: "bar" }];
         const action = {
             type: LIST_GROUPS.SUCCEEDED,
-            data
+            payload
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            documents: data,
+            documents: payload,
             activeId: "foo"
         });
     });
@@ -103,7 +103,7 @@ describe("Groups Reducer", () => {
 
     it("should handle CREATE_GROUP_SUCCEEDED", () => {
         const id = "foo";
-        const action = { type: CREATE_GROUP.SUCCEEDED, data: { id } };
+        const action = { type: CREATE_GROUP.SUCCEEDED, payload: { id } };
         const result = reducer({}, action);
         expect(result).toEqual({ pending: false, activeId: id });
     });

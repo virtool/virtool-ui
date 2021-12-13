@@ -47,10 +47,12 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: "EDIT_USER_REQUESTED",
-            update: {
-                primary_group: "bar"
-            },
-            userId: "foo"
+            payload: {
+                update: {
+                    primary_group: "bar"
+                },
+                userId: "foo"
+            }
         });
     });
 });

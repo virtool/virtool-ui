@@ -40,23 +40,23 @@ export const insertGroup = (documents, entry) => sortBy(concat(documents, [entry
 export const groupsReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_GROUP, (state, action) => {
-            return insert(state, action, "id");
+            return insert(state, action.payload, "id");
         })
         .addCase(WS_UPDATE_GROUP, (state, action) => {
-            return update(state, action);
+            return update(state, action.payload);
         })
         .addCase(WS_REMOVE_GROUP, (state, action) => {
-            return updateActiveId(remove(state, action));
+            return updateActiveId(remove(state, action.payload));
         })
         .addCase(CHANGE_ACTIVE_GROUP, (state, action) => {
-            state.activeId = action.id;
+            state.activeId = action.payload.id;
         })
         .addCase(LIST_GROUPS.SUCCEEDED, (state, action) => {
-            return updateActiveId({ ...state, documents: action.data });
+            return updateActiveId({ ...state, documents: action.payload });
         })
         .addCase(CREATE_GROUP.SUCCEEDED, (state, action) => {
             state.pending = false;
-            state.activeId = action.data.id;
+            state.activeId = action.payload.id;
         })
         .addCase(REMOVE_GROUP.SUCCEEDED, state => {
             return updateActiveId({ ...state, pending: false });
