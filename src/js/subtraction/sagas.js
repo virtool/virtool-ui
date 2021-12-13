@@ -13,16 +13,16 @@ import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as subtractionAPI from "./api";
 
 export function* findSubtractions(action) {
-    yield apiCall(subtractionAPI.find, action, FIND_SUBTRACTIONS);
-    yield pushFindTerm(action.term);
+    yield apiCall(subtractionAPI.find, action.payload, FIND_SUBTRACTIONS);
+    yield pushFindTerm(action.payload.term);
 }
 
 export function* getSubtraction(action) {
-    yield apiCall(subtractionAPI.get, action, GET_SUBTRACTION);
+    yield apiCall(subtractionAPI.get, action.payload, GET_SUBTRACTION);
 }
 
 export function* createSubtraction(action) {
-    const resp = yield apiCall(subtractionAPI.create, action, CREATE_SUBTRACTION);
+    const resp = yield apiCall(subtractionAPI.create, action.payload, CREATE_SUBTRACTION);
 
     if (resp.ok) {
         yield put(push("/subtraction"));
@@ -30,11 +30,11 @@ export function* createSubtraction(action) {
 }
 
 export function* shortlistSubtractions(action) {
-    yield apiCall(subtractionAPI.shortlist, action, SHORTLIST_SUBTRACTIONS);
+    yield apiCall(subtractionAPI.shortlist, action.payload, SHORTLIST_SUBTRACTIONS);
 }
 
 export function* editSubtraction(action) {
-    const resp = yield apiCall(subtractionAPI.edit, action, EDIT_SUBTRACTION);
+    const resp = yield apiCall(subtractionAPI.edit, action.payload, EDIT_SUBTRACTION);
 
     if (resp.ok) {
         yield put(pushState({ editSubtraction: false }));
@@ -42,7 +42,7 @@ export function* editSubtraction(action) {
 }
 
 export function* removeSubtraction(action) {
-    const resp = yield apiCall(subtractionAPI.remove, action, REMOVE_SUBTRACTION);
+    const resp = yield apiCall(subtractionAPI.remove, action.payload, REMOVE_SUBTRACTION);
 
     if (resp.ok) {
         yield put(push("/subtraction"));

@@ -50,8 +50,10 @@ describe("mapDispatchToProps", () => {
         const props = mapDispatchToProps(dispatch);
         props.onToggle(value);
         expect(dispatch).toHaveBeenCalledWith({
-            update: {
-                enable_api: "foo"
+            payload: {
+                update: {
+                    enable_api: "foo"
+                }
             },
             type: UPDATE_SETTINGS.REQUESTED
         });

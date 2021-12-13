@@ -8,8 +8,7 @@ describe("HMM Action Creators:", () => {
         const result = findHmms(term, page);
         expect(result).toEqual({
             type: FIND_HMMS.REQUESTED,
-            term,
-            page
+            payload: { term, page }
         });
     });
 
@@ -18,7 +17,7 @@ describe("HMM Action Creators:", () => {
         const result = getHmm(hmmId);
         expect(result).toEqual({
             type: GET_HMM.REQUESTED,
-            hmmId
+            payload: { hmmId }
         });
     });
 
@@ -27,7 +26,7 @@ describe("HMM Action Creators:", () => {
         const result = installHMMs(releaseId);
         expect(result).toEqual({
             type: INSTALL_HMMS.REQUESTED,
-            release_id: releaseId
+            payload: { release_id: releaseId }
         });
     });
 

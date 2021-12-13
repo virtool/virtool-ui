@@ -64,7 +64,7 @@ describe("mapDispatchToProps", () => {
         props.onHide();
         expect(dispatch).toHaveBeenCalledWith({
             type: PUSH_STATE,
-            state: { removeSubtraction: false }
+            payload: { state: { removeSubtraction: false } }
         });
     });
 
@@ -72,7 +72,7 @@ describe("mapDispatchToProps", () => {
         props.onConfirm("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_SUBTRACTION.REQUESTED,
-            subtractionId: "foo"
+            payload: { subtractionId: "foo" }
         });
     });
 });

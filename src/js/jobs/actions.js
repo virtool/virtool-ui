@@ -9,11 +9,15 @@ import {
     WS_REMOVE_JOB,
     WS_UPDATE_JOB
 } from "../app/actionTypes";
-
-export const wsInsertJob = data => ({
-    type: WS_INSERT_JOB,
-    data
-});
+import { createAction } from "@reduxjs/toolkit";
+/**
+ * Returns an action that should be dispatched when a job document is inserted via websocket.
+ *
+ * @func
+ * @param data {object} the data passed in the websocket message
+ * @returns {object}
+ */
+export const wsInsertJob = createAction(WS_INSERT_JOB);
 
 /**
  * Returns an action that should be dispatched when a job document is updated via websocket.
@@ -22,10 +26,7 @@ export const wsInsertJob = data => ({
  * @param data {object} the data passed in the websocket message
  * @returns {object}
  */
-export const wsUpdateJob = data => ({
-    type: WS_UPDATE_JOB,
-    data
-});
+export const wsUpdateJob = createAction(WS_UPDATE_JOB);
 
 /**
  * Returns an action that should be dispatched when a job document is removed via websocket.
@@ -34,10 +35,7 @@ export const wsUpdateJob = data => ({
  * @param jobId {string} the id for the specific job
  * @returns {object}
  */
-export const wsRemoveJob = data => ({
-    type: WS_REMOVE_JOB,
-    data
-});
+export const wsRemoveJob = createAction(WS_REMOVE_JOB);
 
 /**
  * Returns action that can trigger an API call for getting all available jobs.
@@ -46,11 +44,9 @@ export const wsRemoveJob = data => ({
  * @returns {object}
  */
 
-export const findJobs = (term, page) => ({
-    type: FIND_JOBS.REQUESTED,
-    term,
-    page
-});
+export const findJobs = createAction(FIND_JOBS.REQUESTED, (term, page) => ({
+    payload: { term, page }
+}));
 
 /**
  * Returns action that can trigger an API call for getting a specific job document.
@@ -59,15 +55,9 @@ export const findJobs = (term, page) => ({
  * @param jobId {string} the id for the specific job
  * @returns {object}
  */
-export const getJob = jobId => ({
-    type: GET_JOB.REQUESTED,
-    jobId
-});
+export const getJob = createAction(GET_JOB.REQUESTED, jobId => ({ payload: { jobId } }));
 
-export const getLinkedJob = jobId => ({
-    type: GET_LINKED_JOB.REQUESTED,
-    jobId
-});
+export const getLinkedJob = createAction(GET_LINKED_JOB.REQUESTED, jobId => ({ payload: { jobId } }));
 
 /**
  * Returns action that can trigger an API call for cancelling a currently running job.
@@ -76,10 +66,7 @@ export const getLinkedJob = jobId => ({
  * @param jobId {string} the id for the specific job
  * @returns {object}
  */
-export const cancelJob = jobId => ({
-    type: CANCEL_JOB.REQUESTED,
-    jobId
-});
+export const cancelJob = createAction(CANCEL_JOB.REQUESTED, jobId => ({ payload: { jobId } }));
 
 /**
  * Returns action that can trigger an API call for removing a specific job.
@@ -88,10 +75,7 @@ export const cancelJob = jobId => ({
  * @param jobId {string} the id for the specific job
  * @returns {object}
  */
-export const removeJob = jobId => ({
-    type: REMOVE_JOB.REQUESTED,
-    jobId
-});
+export const removeJob = createAction(REMOVE_JOB.REQUESTED, jobId => ({ payload: { jobId } }));
 
 /**
  * Returns action that can trigger an API call for clearing a subset of listed jobs.
@@ -100,7 +84,4 @@ export const removeJob = jobId => ({
  * @param scope {string} keyword for a category of jobs
  * @returns {object}
  */
-export const clearJobs = scope => ({
-    type: CLEAR_JOBS.REQUESTED,
-    scope
-});
+export const clearJobs = createAction(CLEAR_JOBS.REQUESTED, scope => ({ payload: { scope } }));

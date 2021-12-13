@@ -66,6 +66,6 @@ describe("mapDispatchToProps()", () => {
     it("should return onGet() in props", () => {
         const props = mapDispatchToProps(dispatch);
         props.onGet("foo");
-        expect(dispatch).toHaveBeenCalledWith({ hmmId: "foo", type: "GET_HMM_REQUESTED" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { hmmId: "foo" }, type: "GET_HMM_REQUESTED" });
     });
 });

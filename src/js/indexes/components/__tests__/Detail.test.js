@@ -112,7 +112,7 @@ describe("mapDispatchToProps()", () => {
         result.onGetIndex(indexId);
         expect(dispatch).toHaveBeenCalledWith({
             type: GET_INDEX.REQUESTED,
-            indexId
+            payload: { indexId }
         });
     });
 
@@ -122,8 +122,7 @@ describe("mapDispatchToProps()", () => {
         result.onGetChanges(indexId, 3);
         expect(dispatch).toHaveBeenCalledWith({
             type: GET_INDEX_HISTORY.REQUESTED,
-            indexId,
-            page: 3
+            payload: { indexId, page: 3 }
         });
     });
 });

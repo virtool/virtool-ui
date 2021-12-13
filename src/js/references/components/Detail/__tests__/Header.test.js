@@ -111,6 +111,6 @@ describe("mapDispatchToProps", () => {
         const dispatch = jest.fn();
         const result = mapDispatchToProps(dispatch);
         result.onEdit();
-        expect(dispatch).toHaveBeenCalledWith({ state: { editReference: true }, type: "PUSH_STATE" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { state: { editReference: true } }, type: "PUSH_STATE" });
     });
 });

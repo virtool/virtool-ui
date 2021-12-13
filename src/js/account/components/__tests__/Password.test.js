@@ -168,7 +168,7 @@ describe("mapDispatchToProps()", () => {
         props.onClearError();
         expect(dispatch).toHaveBeenCalledWith({
             type: CLEAR_ERROR,
-            error: "CHANGE_ACCOUNT_PASSWORD_ERROR"
+            payload: { error: "CHANGE_ACCOUNT_PASSWORD_ERROR" }
         });
     });
 });

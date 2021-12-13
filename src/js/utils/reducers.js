@@ -1,23 +1,9 @@
 import { reject, map, includes, sortBy, unionBy } from "lodash-es";
 
-export const updateDocuments = (state, action, sortKey, sortReverse) => {
-    const existing = action.data.page === 1 ? [] : state.documents || [];
+export const updateDocuments = (state, payload, sortKey, sortReverse) => {
+    const existing = payload.page === 1 ? [] : state.documents || [];
 
-    const documents = sortBy(unionBy(action.data.documents, existing, "id"), sortKey);
-
-    if (sortReverse) {
-        documents.reverse();
-    }
-
-    return {
-        ...state,
-        ...action.data,
-        documents
-    };
-};
-
-export const insert = (state, action, sortKey, sortReverse = false) => {
-    const documents = sortBy(unionBy(state.documents || [], [action.data], "id"), sortKey);
+    const documents = sortBy(unionBy(payload.documents, existing, "id"), sortKey);
 
     if (sortReverse) {
         documents.reverse();
@@ -25,16 +11,29 @@ export const insert = (state, action, sortKey, sortReverse = false) => {
 
     return {
         ...state,
+        ...payload,
         documents
     };
 };
 
-export const update = (state, action, sortKey, sortReverse = false) => {
+export const insert = (state, payload, sortKey, sortReverse = false) => {
+    const documents = sortBy(unionBy(state.documents || [], [payload], "id"), sortKey);
+    if (sortReverse) {
+        documents.reverse();
+    }
+
+    return {
+        ...state,
+        documents
+    };
+};
+
+export const update = (state, payload, sortKey, sortReverse = false) => {
     if (!state.documents) {
         return state;
     }
 
-    const documents = sortBy(updateMember(state.documents, action), sortKey);
+    const documents = sortBy(updateMember(state.documents, payload), sortKey);
 
     if (sortReverse) {
         documents.reverse();
@@ -46,24 +45,24 @@ export const update = (state, action, sortKey, sortReverse = false) => {
     };
 };
 
-export const remove = (state, action) => {
+export const remove = (state, payload) => {
     if (!state.documents) {
         return state;
     }
 
     return {
         ...state,
-        documents: reject(state.documents, ({ id }) => includes(action.data, id))
+        documents: reject(state.documents, ({ id }) => includes(payload, id))
     };
 };
 
-export const updateMember = (list, action) => {
+export const updateMember = (list, payload) => {
     if (!list) {
         return list;
     }
     return map(list, item => {
-        if (item.id === action.data.id) {
-            return action.data;
+        if (item.id === payload.id) {
+            return payload;
         }
         return item;
     });

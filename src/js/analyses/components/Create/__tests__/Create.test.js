@@ -145,19 +145,20 @@ describe("mapDispatchToProps()", () => {
 
         props.onAnalyze(sampleId, references, subtractionIds, userId, workflows);
         expect(dispatch).toHaveBeenCalledWith({
-            type: "ANALYZE.REQUESTED",
-            refId: references[0],
-            sampleId,
-            subtractionIds,
             type: "ANALYZE_REQUESTED",
-            userId,
-            workflow: workflows[0]
+            payload: {
+                refId: references[0],
+                sampleId,
+                subtractionIds,
+                userId,
+                workflow: workflows[0]
+            }
         });
     });
 
     it("should return onHide() in props", () => {
         props.onHide();
-        expect(dispatch).toHaveBeenCalledWith({ state: {}, type: "PUSH_STATE" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { state: {} }, type: "PUSH_STATE" });
     });
 
     it("should return onShortlistSubtractions() in props", () => {

@@ -8,5 +8,5 @@ export function* watchCaches() {
 }
 
 export function* getCache(action) {
-    yield apiCall(cachesAPI.get, action, GET_CACHE);
+    yield apiCall(cachesAPI.get, action.payload, GET_CACHE);
 }

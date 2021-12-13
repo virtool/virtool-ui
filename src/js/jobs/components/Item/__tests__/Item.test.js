@@ -51,7 +51,7 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: "CANCEL_JOB_REQUESTED",
-            jobId: "foo"
+            payload: { jobId: "foo" }
         });
     });
     it("should return onRemove() in props", () => {
@@ -61,7 +61,7 @@ describe("mapDispatchToProps", () => {
         props.onRemove("foo");
 
         expect(dispatch).toHaveBeenCalledWith({
-            jobId: "foo",
+            payload: { jobId: "foo" },
             type: "REMOVE_JOB_REQUESTED"
         });
     });

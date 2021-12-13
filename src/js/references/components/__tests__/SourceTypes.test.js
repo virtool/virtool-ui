@@ -135,8 +135,10 @@ describe("mapDispatchToProps", () => {
         props.onUpdate(["genotype"], true, "foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: UPDATE_SETTINGS.REQUESTED,
-            update: {
-                default_source_types: ["genotype"]
+            payload: {
+                update: {
+                    default_source_types: ["genotype"]
+                }
             }
         });
     });
@@ -145,9 +147,11 @@ describe("mapDispatchToProps", () => {
         props.onUpdate(["genotype"], false, "foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: EDIT_REFERENCE.REQUESTED,
-            refId: "foo",
-            update: {
-                source_types: ["genotype"]
+            payload: {
+                refId: "foo",
+                update: {
+                    source_types: ["genotype"]
+                }
             }
         });
     });
@@ -156,9 +160,11 @@ describe("mapDispatchToProps", () => {
         props.onToggle("foo", false);
         expect(dispatch).toHaveBeenCalledWith({
             type: EDIT_REFERENCE.REQUESTED,
-            refId: "foo",
-            update: {
-                restrict_source_types: false
+            payload: {
+                refId: "foo",
+                update: {
+                    restrict_source_types: false
+                }
             }
         });
     });
@@ -167,9 +173,11 @@ describe("mapDispatchToProps", () => {
         props.onToggle("foo", true);
         expect(dispatch).toHaveBeenCalledWith({
             type: EDIT_REFERENCE.REQUESTED,
-            refId: "foo",
-            update: {
-                restrict_source_types: true
+            payload: {
+                refId: "foo",
+                update: {
+                    restrict_source_types: true
+                }
             }
         });
     });

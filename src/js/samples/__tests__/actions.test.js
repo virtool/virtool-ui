@@ -38,7 +38,7 @@ describe("Sample Action Creators:", () => {
         const result = wsInsertSample(data);
         expect(result).toEqual({
             type: WS_INSERT_SAMPLE,
-            data
+            payload: { ...data }
         });
     });
 
@@ -50,7 +50,7 @@ describe("Sample Action Creators:", () => {
         const result = wsUpdateSample(data);
         expect(result).toEqual({
             type: WS_UPDATE_SAMPLE,
-            data
+            payload: { ...data }
         });
     });
 
@@ -59,7 +59,7 @@ describe("Sample Action Creators:", () => {
         const result = wsRemoveSample(data);
         expect(result).toEqual({
             type: WS_REMOVE_SAMPLE,
-            data
+            payload: data
         });
     });
 
@@ -73,10 +73,7 @@ describe("Sample Action Creators:", () => {
 
         expect(result).toEqual({
             type: FIND_SAMPLES.REQUESTED,
-            labels,
-            term,
-            page,
-            workflows
+            payload: { labels, term, page, workflows }
         });
     });
 
@@ -90,7 +87,7 @@ describe("Sample Action Creators:", () => {
         const result = getSample(sampleId);
         expect(result).toEqual({
             type: GET_SAMPLE.REQUESTED,
-            sampleId
+            payload: { sampleId }
         });
     });
 
@@ -105,13 +102,7 @@ describe("Sample Action Creators:", () => {
         const result = createSample(name, isolate, host, locale, libraryType, subtractions, files);
         expect(result).toEqual({
             type: CREATE_SAMPLE.REQUESTED,
-            name,
-            isolate,
-            host,
-            locale,
-            libraryType,
-            subtractions,
-            files
+            payload: { name, isolate, host, locale, libraryType, subtractions, files }
         });
     });
 
@@ -120,8 +111,7 @@ describe("Sample Action Creators:", () => {
         const result = editSample(sampleId, update);
         expect(result).toEqual({
             type: UPDATE_SAMPLE.REQUESTED,
-            sampleId,
-            update
+            payload: { sampleId, update }
         });
     });
 
@@ -130,8 +120,7 @@ describe("Sample Action Creators:", () => {
         const result = updateSampleRights(sampleId, update);
         expect(result).toEqual({
             type: UPDATE_SAMPLE_RIGHTS.REQUESTED,
-            sampleId,
-            update
+            payload: { sampleId, update }
         });
     });
 
@@ -139,7 +128,7 @@ describe("Sample Action Creators:", () => {
         const result = removeSample(sampleId);
         expect(result).toEqual({
             type: REMOVE_SAMPLE.REQUESTED,
-            sampleId
+            payload: { sampleId }
         });
     });
 

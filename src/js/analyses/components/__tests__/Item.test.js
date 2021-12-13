@@ -85,7 +85,7 @@ describe("mapDispatchToProps", () => {
         props.onRemove();
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_ANALYSIS.REQUESTED,
-            analysisId: id
+            payload: { analysisId: id }
         });
     });
 });

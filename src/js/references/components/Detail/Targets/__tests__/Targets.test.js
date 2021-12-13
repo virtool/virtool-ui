@@ -120,6 +120,9 @@ describe("mapDispatchToProps()", () => {
         const dispatch = jest.fn();
         const props = mapDispatchToProps(dispatch);
         props.onRemove("foo", "bar");
-        expect(dispatch).toHaveBeenCalledWith({ refId: "foo", update: "bar", type: "EDIT_REFERENCE_REQUESTED" });
+        expect(dispatch).toHaveBeenCalledWith({
+            payload: { refId: "foo", update: "bar" },
+            type: "EDIT_REFERENCE_REQUESTED"
+        });
     });
 });

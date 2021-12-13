@@ -104,6 +104,6 @@ describe("mapDispatchToProps", () => {
         const props = mapDispatchToProps(dispatch);
 
         props.onLoadNextPage("foo", "bar");
-        expect(dispatch).toHaveBeenCalledWith({ term: "foo", page: "bar", type: "FIND_JOBS_REQUESTED" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { term: "foo", page: "bar" }, type: "FIND_JOBS_REQUESTED" });
     });
 });

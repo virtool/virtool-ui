@@ -18,7 +18,7 @@ describe("Job Reducer", () => {
     describe("should handle WS_INSERT_JOB", () => {
         it("when documents are not yet fetched, returns state", () => {
             const document = { id: "foo" };
-            const action = { type: WS_INSERT_JOB, data: document };
+            const action = { type: WS_INSERT_JOB, payload: document };
             const result = reducer({}, action);
             expect(result).toEqual({
                 documents: [document]
@@ -30,7 +30,7 @@ describe("Job Reducer", () => {
                 documents: null,
                 page: 1
             };
-            const action = { type: WS_INSERT_JOB, data: { id: "test" } };
+            const action = { type: WS_INSERT_JOB, payload: { id: "test" } };
             const result = reducer(state, action);
             expect(result).toEqual({
                 ...state,
@@ -54,7 +54,7 @@ describe("Job Reducer", () => {
         };
         const action = {
             type: WS_UPDATE_JOB,
-            data: {
+            payload: {
                 id: "bar",
                 workflow: "finish_job"
             }
@@ -81,7 +81,7 @@ describe("Job Reducer", () => {
         };
         const action = {
             type: WS_REMOVE_JOB,
-            data: ["test2"]
+            payload: ["test2"]
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -91,7 +91,7 @@ describe("Job Reducer", () => {
     });
 
     it("should handle FIND_JOBS_REQUESTED", () => {
-        const action = { type: FIND_JOBS.REQUESTED, term: "foo" };
+        const action = { type: FIND_JOBS.REQUESTED, payload: { term: "foo" } };
         const result = reducer({}, action);
         expect(result).toEqual({ term: "foo" });
     });
@@ -101,7 +101,7 @@ describe("Job Reducer", () => {
         const documents = [{ id: "foo" }];
         const action = {
             type: FIND_JOBS.SUCCEEDED,
-            data: { documents, page: 2 }
+            payload: { documents, page: 2 }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -123,12 +123,12 @@ describe("Job Reducer", () => {
         const state = {};
         const action = {
             type: GET_JOB.SUCCEEDED,
-            data: { id: "foo" }
+            payload: { id: "foo" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            detail: action.data
+            detail: action.payload
         });
     });
 });

@@ -156,7 +156,7 @@ describe("mapDispatchToProps()", () => {
         props.onSetSortKey("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: SET_ANALYSIS_SORT_KEY,
-            sortKey: "foo"
+            payload: { sortKey: "foo" }
         });
     });
 

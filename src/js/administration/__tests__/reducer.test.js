@@ -19,7 +19,7 @@ describe("Settings Reducer", () => {
     it("should handle GET_SETTINGS_SUCCEEDED", () => {
         const action = {
             type: GET_SETTINGS.SUCCEEDED,
-            data: { foo: "bar" }
+            payload: { foo: "bar" }
         };
         const result = reducer({}, action);
         expect(result).toEqual({

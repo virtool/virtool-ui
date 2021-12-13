@@ -16,7 +16,7 @@ describe("Jobs Action Creators:", () => {
         const result = wsInsertJob(data);
         expect(result).toEqual({
             type: WS_INSERT_JOB,
-            data
+            payload: { ...data }
         });
     });
 
@@ -25,7 +25,7 @@ describe("Jobs Action Creators:", () => {
         const result = wsUpdateJob(data);
         expect(result).toEqual({
             type: WS_UPDATE_JOB,
-            data
+            payload: { ...data }
         });
     });
 
@@ -34,7 +34,7 @@ describe("Jobs Action Creators:", () => {
         const result = wsRemoveJob(data);
         expect(result).toEqual({
             type: WS_REMOVE_JOB,
-            data
+            payload: data
         });
     });
 
@@ -44,8 +44,7 @@ describe("Jobs Action Creators:", () => {
         const result = findJobs(term, page);
         expect(result).toEqual({
             type: FIND_JOBS.REQUESTED,
-            term,
-            page
+            payload: { term, page }
         });
     });
 
@@ -54,7 +53,7 @@ describe("Jobs Action Creators:", () => {
         const result = getJob(jobId);
         expect(result).toEqual({
             type: GET_JOB.REQUESTED,
-            jobId
+            payload: { jobId }
         });
     });
 
@@ -63,7 +62,7 @@ describe("Jobs Action Creators:", () => {
         const result = cancelJob(jobId);
         expect(result).toEqual({
             type: CANCEL_JOB.REQUESTED,
-            jobId
+            payload: { jobId }
         });
     });
 
@@ -72,7 +71,7 @@ describe("Jobs Action Creators:", () => {
         const result = removeJob(jobId);
         expect(result).toEqual({
             type: REMOVE_JOB.REQUESTED,
-            jobId
+            payload: { jobId }
         });
     });
 
@@ -81,7 +80,7 @@ describe("Jobs Action Creators:", () => {
         const result = clearJobs(scope);
         expect(result).toEqual({
             type: CLEAR_JOBS.REQUESTED,
-            scope
+            payload: { scope }
         });
     });
 });

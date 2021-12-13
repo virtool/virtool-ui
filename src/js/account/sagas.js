@@ -1,4 +1,4 @@
-import { put, takeEvery, takeLatest } from "redux-saga/effects";
+import { takeEvery, takeLatest } from "redux-saga/effects";
 import {
     CHANGE_ACCOUNT_PASSWORD,
     CREATE_API_KEY,
@@ -49,7 +49,7 @@ export function* updateAccountSettings(action) {
 
 export function* changeAccountPassword(action) {
     yield apiCall(accountAPI.changePassword, action.payload, CHANGE_ACCOUNT_PASSWORD);
-    yield put({ type: GET_ACCOUNT.REQUESTED });
+    yield getAccount();
 }
 
 export function* getAPIKeys() {
@@ -63,12 +63,12 @@ export function* createAPIKey(action) {
 
 export function* updateAPIKey(action) {
     yield apiCall(accountAPI.updateAPIKey, action.payload, UPDATE_API_KEY);
-    yield put({ type: GET_API_KEYS.REQUESTED });
+    yield getAPIKeys();
 }
 
 export function* removeAPIKey(action) {
     yield apiCall(accountAPI.removeAPIKey, action.payload, REMOVE_API_KEY);
-    yield put({ type: GET_API_KEYS.REQUESTED });
+    yield getAPIKeys();
 }
 
 export function* login(action) {

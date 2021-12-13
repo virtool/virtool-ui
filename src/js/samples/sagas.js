@@ -18,6 +18,7 @@ import { apiCall, putGenericError } from "../utils/sagas";
 import * as samplesAPI from "./api";
 import { getLabelsFromURL, getSampleDetailId, getTermFromURL, getWorkflowsFromURL } from "./selectors";
 import { createFindURL } from "./utils";
+import { getSampleSucceeded } from "./actions";
 
 export function* watchSamples() {
     yield takeLatest(UPDATE_SEARCH, updateSearch);
@@ -33,13 +34,13 @@ export function* watchSamples() {
 
 export function* wsUpdateSample(action) {
     const sampleDetailId = yield select(getSampleDetailId);
-    if (action.data.id === sampleDetailId) {
+    if (action.payload.id === sampleDetailId) {
         yield apiCall(samplesAPI.get, { sampleId: sampleDetailId }, GET_SAMPLE);
     }
 }
 
 export function* updateSearch(action) {
-    let { labels, term } = action.parameters;
+    let { labels, term } = action.payload.parameters;
 
     if (labels === undefined) {
         labels = yield select(getLabelsFromURL);
@@ -53,7 +54,7 @@ export function* updateSearch(action) {
 
     const workflows = {
         ...workflowsFromURL,
-        ...action.parameters.workflows
+        ...action.payload.parameters.workflows
     };
 
     const { pathname, search } = createFindURL(term, labels, workflows);
@@ -63,7 +64,6 @@ export function* updateSearch(action) {
 
 export function* findSamples() {
     const routerLocation = yield select(getLocation);
-
     if (routerLocation.pathname === "/samples") {
         const term = yield select(getTermFromURL);
         const labels = yield select(getLabelsFromURL);
@@ -88,7 +88,7 @@ export function* findReadFiles() {
 
 export function* getSample(action) {
     try {
-        const response = yield samplesAPI.get(action);
+        const response = yield samplesAPI.get(action.payload);
 
         const account = yield select(state => state.account);
 
@@ -96,18 +96,14 @@ export function* getSample(action) {
 
         const canModify =
             data.user.id === account.id || data.all_write || (data.group_write && includes(account.groups, data.group));
-
-        yield put({
-            type: GET_SAMPLE.SUCCEEDED,
-            data: { ...response.body, canModify }
-        });
+        yield put(getSampleSucceeded(data, canModify));
     } catch (error) {
         yield putGenericError(GET_SAMPLE, error);
     }
 }
 
 export function* createSample(action) {
-    const resp = yield apiCall(samplesAPI.create, action, CREATE_SAMPLE);
+    const resp = yield apiCall(samplesAPI.create, action.payload, CREATE_SAMPLE);
 
     if (resp.ok) {
         yield put(push("/samples"));
@@ -115,7 +111,7 @@ export function* createSample(action) {
 }
 
 export function* updateSample(action) {
-    const resp = yield apiCall(samplesAPI.update, action, UPDATE_SAMPLE);
+    const resp = yield apiCall(samplesAPI.update, action.payload, UPDATE_SAMPLE);
 
     if (resp.ok) {
         yield put(pushState({ editSample: false }));
@@ -123,11 +119,11 @@ export function* updateSample(action) {
 }
 
 export function* updateSampleRights(action) {
-    yield apiCall(samplesAPI.updateRights, action, UPDATE_SAMPLE_RIGHTS);
+    yield apiCall(samplesAPI.updateRights, action.payload, UPDATE_SAMPLE_RIGHTS);
 }
 
 export function* removeSample(action) {
-    const resp = yield apiCall(samplesAPI.remove, action, REMOVE_SAMPLE);
+    const resp = yield apiCall(samplesAPI.remove, action.payload, REMOVE_SAMPLE);
 
     if (resp.ok) {
         yield put(push("/samples"));

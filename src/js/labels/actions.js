@@ -1,4 +1,5 @@
 import { LIST_LABELS, CREATE_LABEL, REMOVE_LABEL, UPDATE_LABEL } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns action that can trigger an API call to get sample labels.
@@ -6,9 +7,16 @@ import { LIST_LABELS, CREATE_LABEL, REMOVE_LABEL, UPDATE_LABEL } from "../app/ac
  * @func
  * @returns {object}
  */
-export const listLabels = () => ({
-    type: LIST_LABELS.REQUESTED
-});
+export const listLabels = createAction(LIST_LABELS.REQUESTED);
+
+/**
+ * Returns action that can trigger an API call to get sample labels.
+ *
+ * @func
+ * @param payload {onject} label list object response from the server
+ * @returns {object}
+ */
+export const listLabelsSuccess = createAction(LIST_LABELS.SUCCEEDED);
 
 /**
  * Returns action that can trigger an API call for removing a label.
@@ -17,10 +25,7 @@ export const listLabels = () => ({
  * @param labelId {string} unique label id
  * @returns {object}
  */
-export const removeLabel = labelId => ({
-    type: REMOVE_LABEL.REQUESTED,
-    labelId
-});
+export const removeLabel = createAction(REMOVE_LABEL.REQUESTED, labelId => ({ payload: { labelId } }));
 
 /**
  * Returns action that can trigger an API call for creating a new label.
@@ -31,12 +36,9 @@ export const removeLabel = labelId => ({
  * @param color  {string} color name or hex value of label
  * @return {object}
  */
-export const createLabel = (name, description, color) => ({
-    type: CREATE_LABEL.REQUESTED,
-    name,
-    description,
-    color
-});
+export const createLabel = createAction(CREATE_LABEL.REQUESTED, (name, description, color) => ({
+    payload: { name, description, color }
+}));
 
 /**
  * Returns action that can trigger an API call for updating a label
@@ -48,10 +50,11 @@ export const createLabel = (name, description, color) => ({
  * @param color
  * @return {object}
  */
-export const updateLabel = (labelId, name, description, color) => ({
-    type: UPDATE_LABEL.REQUESTED,
-    labelId,
-    name,
-    description,
-    color
-});
+export const updateLabel = createAction(UPDATE_LABEL.REQUESTED, (labelId, name, description, color) => ({
+    payload: {
+        labelId,
+        name,
+        description,
+        color
+    }
+}));

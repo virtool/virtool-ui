@@ -68,8 +68,10 @@ describe("mapDispatchToProps()", () => {
         props.onHide();
         expect(dispatch).toHaveBeenCalledWith({
             type: PUSH_STATE,
-            state: {
-                createOTU: false
+            payload: {
+                state: {
+                    createOTU: false
+                }
             }
         });
     });
@@ -77,10 +79,7 @@ describe("mapDispatchToProps()", () => {
     it("should return onLoadNextPage() in props", () => {
         props.onLoadNextPage("foo", "bar", true, 1);
         expect(dispatch).toHaveBeenCalledWith({
-            refId: "foo",
-            term: "bar",
-            verified: true,
-            page: 1,
+            payload: { refId: "foo", term: "bar", verified: true, page: 1 },
             type: "FIND_OTUS_REQUESTED"
         });
     });

@@ -34,7 +34,7 @@ describe("References Reducer", () => {
     describe("should handle WS_INSERT_REFERENCE", () => {
         it("returns state if documents not yet fetched", () => {
             const state = { documents: null };
-            const action = { type: WS_INSERT_REFERENCE, data: { id: "foo" } };
+            const action = { type: WS_INSERT_REFERENCE, payload: { id: "foo" } };
             const result = reducer(state, action);
             expect(result).toEqual({ documents: [{ id: "foo" }] });
         });
@@ -48,12 +48,12 @@ describe("References Reducer", () => {
             };
             const action = {
                 type: WS_INSERT_REFERENCE,
-                data: { id: "123abc", name: "testReference" }
+                payload: { id: "123abc", name: "testReference" }
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 ...state,
-                documents: [{ ...action.data }]
+                documents: [{ ...action.payload }]
             });
         });
     });
@@ -62,7 +62,7 @@ describe("References Reducer", () => {
         const state = { documents: [{ id: "123abc", name: "testReference" }] };
         const action = {
             type: WS_UPDATE_REFERENCE,
-            data: { id: "123abc", name: "testReference-edited" }
+            payload: { id: "123abc", name: "testReference-edited" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -77,7 +77,7 @@ describe("References Reducer", () => {
         };
         const action = {
             type: WS_REMOVE_REFERENCE,
-            data: ["123abc"]
+            payload: { "123abc": "123abc" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -89,7 +89,7 @@ describe("References Reducer", () => {
         const term = "foo";
         const action = {
             type: FIND_REFERENCES.REQUESTED,
-            term: "foo"
+            payload: { term: "foo" }
         };
         const result = reducer({}, action);
         expect(result).toEqual({ term });
@@ -99,11 +99,11 @@ describe("References Reducer", () => {
         const state = { documents: null };
         const action = {
             type: FIND_REFERENCES.SUCCEEDED,
-            data: { documents: [], page: 3, page_count: 5 }
+            payload: { documents: [], page: 3, page_count: 5 }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            ...action.data
+            ...action.payload
         });
     });
 
@@ -114,7 +114,7 @@ describe("References Reducer", () => {
     });
 
     it("should handle GET_REFERENCE_SUCCEEDED", () => {
-        const action = { type: GET_REFERENCE.SUCCEEDED, data: { foo: "bar" } };
+        const action = { type: GET_REFERENCE.SUCCEEDED, payload: { foo: "bar" } };
         const result = reducer({}, action);
         expect(result).toEqual({ detail: { foo: "bar" } });
     });
@@ -123,14 +123,14 @@ describe("References Reducer", () => {
         const state = { detail: { foo: "bar" } };
         const action = {
             type: EDIT_REFERENCE.SUCCEEDED,
-            data: { foo: "baz" }
+            payload: { foo: "baz" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({ detail: { foo: "baz" } });
     });
 
     it("should handle UPLOAD_SUCCEEDED", () => {
-        const action = { type: UPLOAD.SUCCEEDED, data: { foo: "bar" } };
+        const action = { type: UPLOAD.SUCCEEDED, payload: { foo: "bar" } };
         const result = reducer({}, action);
         expect(result).toEqual({
             importFile: {
@@ -158,7 +158,7 @@ describe("References Reducer", () => {
         const state = { checking: true };
         const action = {
             type: CHECK_REMOTE_UPDATES.SUCCEEDED,
-            data: { foo: "bar" }
+            payload: { foo: "bar" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -173,7 +173,7 @@ describe("References Reducer", () => {
         const state = { detail: {} };
         const action = {
             type: UPDATE_REMOTE_REFERENCE.SUCCEEDED,
-            data: { foo: "bar" }
+            payload: { foo: "bar" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({ detail: { release: { foo: "bar" } } });
@@ -183,7 +183,7 @@ describe("References Reducer", () => {
         const state = { detail: { users: [] } };
         const action = {
             type: ADD_REFERENCE_USER.SUCCEEDED,
-            data: { id: "test-user" }
+            payload: { id: "test-user" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({ detail: { users: [{ id: "test-user" }] } });
@@ -193,7 +193,7 @@ describe("References Reducer", () => {
         const state = { detail: { users: [{ id: "test-user", foo: "bar" }] } };
         const action = {
             type: EDIT_REFERENCE_USER.SUCCEEDED,
-            data: { id: "test-user", foo: "baz" }
+            payload: { id: "test-user", foo: "baz" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -206,8 +206,7 @@ describe("References Reducer", () => {
             const state = { detail: { id: "foo" }, pendingRemoveUsers: ["fred"] };
             const action = {
                 type: REMOVE_REFERENCE_USER.REQUESTED,
-                refId: "foo",
-                userId: "bob"
+                payload: { refId: "foo", userId: "bob" }
             };
             const result = reducer(state, action);
             expect(result).toEqual({
@@ -220,8 +219,7 @@ describe("References Reducer", () => {
             const state = { detail: { id: "foo" }, pendingRemoveUsers: ["fred"] };
             const action = {
                 type: REMOVE_REFERENCE_USER.REQUESTED,
-                refId: "bar",
-                userId: "bob"
+                payload: { refId: "bar", userId: "bob" }
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -235,9 +233,11 @@ describe("References Reducer", () => {
         beforeEach(() => {
             action = {
                 type: REMOVE_REFERENCE_USER.SUCCEEDED,
-                context: {
-                    refId: "foo",
-                    userId: "bar"
+                payload: {
+                    context: {
+                        refId: "foo",
+                        userId: "bar"
+                    }
                 }
             };
             state = {
@@ -258,7 +258,7 @@ describe("References Reducer", () => {
         });
 
         it("when store and action ref ids don't match", () => {
-            action.context.refId = "boo";
+            action.payload.context.refId = "boo";
             const result = reducer(state, action);
             expect(result).toEqual(state);
         });
@@ -268,7 +268,7 @@ describe("References Reducer", () => {
         const state = { detail: { groups: [] } };
         const action = {
             type: ADD_REFERENCE_GROUP.SUCCEEDED,
-            data: { id: "test-group" }
+            payload: { id: "test-group" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -284,7 +284,7 @@ describe("References Reducer", () => {
         };
         const action = {
             type: EDIT_REFERENCE_GROUP.SUCCEEDED,
-            data: { id: "foo", foo: "baz" }
+            payload: { id: "foo", foo: "baz" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -301,8 +301,7 @@ describe("References Reducer", () => {
         beforeEach(() => {
             action = {
                 type: REMOVE_REFERENCE_GROUP.REQUESTED,
-                refId: "foo",
-                groupId: "baz"
+                payload: { refId: "foo", groupId: "baz" }
             };
             state = {
                 detail: { id: "foo" },
@@ -319,7 +318,7 @@ describe("References Reducer", () => {
         });
 
         it("when store and action ref ids don't match", () => {
-            action.refId = "bar";
+            action.payload.refId = "bar";
             const result = reducer(state, action);
             expect(result).toEqual(state);
         });
@@ -332,9 +331,11 @@ describe("References Reducer", () => {
         beforeEach(() => {
             action = {
                 type: REMOVE_REFERENCE_GROUP.SUCCEEDED,
-                context: {
-                    refId: "foobar",
-                    groupId: "bar"
+                payload: {
+                    context: {
+                        refId: "foobar",
+                        groupId: "bar"
+                    }
                 }
             };
 
@@ -359,7 +360,7 @@ describe("References Reducer", () => {
         });
 
         it("when store and action ref ids don't match", () => {
-            action.context.refId = "bid";
+            action.payload.context.refId = "bid";
             const result = reducer(state, action);
             expect(result).toEqual(state);
         });

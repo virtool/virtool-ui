@@ -35,7 +35,7 @@ describe("mapDispatchToProps()", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: UPDATE_SETTINGS.REQUESTED,
-            update: { sample_unique_names: enabled }
+            payload: { update: { sample_unique_names: enabled } }
         });
     });
 });

@@ -1,3 +1,4 @@
 import { POST_DEV_COMMAND } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
-export const postDevCommand = command => ({ type: POST_DEV_COMMAND.REQUESTED, command });
+export const postDevCommand = createAction(POST_DEV_COMMAND.REQUESTED, command => ({ payload: { command } }));

@@ -270,20 +270,22 @@ describe("mapDispatchToProps()", () => {
     it("should return createSample() in props", () => {
         props.onCreate("name", "isolate", "host", "locale", "libraryType", ["subtractions"], "files");
         expect(dispatch).toHaveBeenCalledWith({
-            name: "name",
-            isolate: "isolate",
-            host: "host",
-            locale: "locale",
-            libraryType: "libraryType",
-            subtractions: ["subtractions"],
-            files: "files",
-            type: "CREATE_SAMPLE_REQUESTED"
+            type: "CREATE_SAMPLE_REQUESTED",
+            payload: {
+                name: "name",
+                isolate: "isolate",
+                host: "host",
+                locale: "locale",
+                libraryType: "libraryType",
+                subtractions: ["subtractions"],
+                files: "files"
+            }
         });
     });
 
     it("should return onClearError() in props", () => {
         props.onClearError();
-        expect(dispatch).toHaveBeenCalledWith({ error: "CREATE_SAMPLE_ERROR", type: "CLEAR_ERROR" });
+        expect(dispatch).toHaveBeenCalledWith({ payload: { error: "CREATE_SAMPLE_ERROR" }, type: "CLEAR_ERROR" });
     });
 
     it("should return onListLabels() in props", () => {

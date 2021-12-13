@@ -66,7 +66,7 @@ describe("mapDispatchToProps", () => {
         props.onGet("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: GET_CACHE.REQUESTED,
-            cacheId: "foo"
+            payload: { cacheId: "foo" }
         });
     });
 });

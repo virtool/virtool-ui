@@ -19,7 +19,7 @@ describe("Files Action Creators", () => {
 
         expect(result).toEqual({
             type: WS_INSERT_FILE,
-            data
+            payload: { ...data }
         });
     });
 
@@ -32,7 +32,7 @@ describe("Files Action Creators", () => {
 
         expect(result).toEqual({
             type: WS_UPDATE_FILE,
-            data
+            payload: { ...data }
         });
     });
 
@@ -42,7 +42,7 @@ describe("Files Action Creators", () => {
 
         expect(result).toEqual({
             type: WS_REMOVE_FILE,
-            data
+            payload: { ...data }
         });
     });
 
@@ -53,9 +53,7 @@ describe("Files Action Creators", () => {
         const result = findFiles(fileType, "foo", page);
         expect(result).toEqual({
             type: FIND_FILES.REQUESTED,
-            fileType,
-            term,
-            page
+            payload: { fileType, term, page }
         });
     });
 
@@ -68,10 +66,7 @@ describe("Files Action Creators", () => {
         const result = upload(localId, file, fileType);
         expect(result).toEqual({
             type: UPLOAD.REQUESTED,
-            context: {},
-            localId,
-            file,
-            fileType
+            payload: { context: {}, localId, file, fileType }
         });
     });
 
@@ -80,7 +75,7 @@ describe("Files Action Creators", () => {
         const result = removeFile(fileId);
         expect(result).toEqual({
             type: REMOVE_FILE.REQUESTED,
-            fileId
+            payload: { fileId }
         });
     });
 
@@ -90,8 +85,7 @@ describe("Files Action Creators", () => {
         const result = uploadProgress(localId, progress);
         expect(result).toEqual({
             type: UPLOAD_PROGRESS,
-            localId,
-            progress
+            payload: { localId, progress }
         });
     });
 });

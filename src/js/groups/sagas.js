@@ -15,13 +15,13 @@ function* listGroups(action) {
 }
 
 function* createGroup(action) {
-    yield apiCall(groupsAPI.create, action, CREATE_GROUP);
+    yield apiCall(groupsAPI.create, action.payload, CREATE_GROUP);
 }
 
 function* setGroupPermission(action) {
-    yield apiCall(groupsAPI.setPermission, action, SET_GROUP_PERMISSION);
+    yield apiCall(groupsAPI.setPermission, action.payload, SET_GROUP_PERMISSION);
 }
 
 function* removeGroup(action) {
-    yield apiCall(groupsAPI.remove, action, REMOVE_GROUP);
+    yield apiCall(groupsAPI.remove, action.payload, REMOVE_GROUP);
 }

@@ -13,18 +13,18 @@ export function* watchFiles() {
 }
 
 export function* findFiles(action) {
-    yield apiCall(filesAPI.list, action, FIND_FILES, {
-        fileType: action.fileType
+    yield apiCall(filesAPI.list, action.payload, FIND_FILES, {
+        fileType: action.payload.fileType
     });
 }
 
 export function* removeFile(action) {
-    yield apiCall(filesAPI.remove, action, REMOVE_FILE);
+    yield apiCall(filesAPI.remove, action.payload, REMOVE_FILE);
 }
 
 export function* upload(action) {
-    const { localId } = action;
-    const channel = yield call(createUploadChannel, action, filesAPI.upload);
+    const { localId } = action.payload;
+    const channel = yield call(createUploadChannel, action.payload, filesAPI.upload);
     yield watchUploadChannel(channel, UPLOAD, localId);
 }
 
@@ -63,11 +63,10 @@ export function* watchUploadChannel(channel, actionType, localId) {
         if (err) {
             return yield putGenericError(actionType, err);
         }
-
         if (response) {
             return yield put({
                 type: actionType.SUCCEEDED,
-                data: {
+                payload: {
                     ...response.body,
                     localId
                 }

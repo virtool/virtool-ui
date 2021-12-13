@@ -6,32 +6,31 @@ import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as usersAPI from "./api";
 
 function* findUsers(action) {
-    yield apiCall(usersAPI.find, action, FIND_USERS);
-    yield pushFindTerm(action.term);
+    yield apiCall(usersAPI.find, action.payload, FIND_USERS);
+    yield pushFindTerm(action.payload.term);
 }
 
 function* getUser(action) {
-    yield apiCall(usersAPI.get, action, GET_USER);
+    yield apiCall(usersAPI.get, action.payload, GET_USER);
 }
 
 function* createUser(action) {
-    const resp = yield apiCall(usersAPI.create, action, CREATE_USER);
-
+    const resp = yield apiCall(usersAPI.create, action.payload, CREATE_USER);
     if (resp.ok) {
         yield put(pushState({ createUser: false }));
     }
 }
 
 function* createFirstUser(action) {
-    yield apiCall(usersAPI.createFirst, action, CREATE_FIRST_USER);
+    yield apiCall(usersAPI.createFirst, action.payload, CREATE_FIRST_USER);
 }
 
 function* editUser(action) {
-    yield apiCall(usersAPI.edit, action, EDIT_USER);
+    yield apiCall(usersAPI.edit, action.payload, EDIT_USER);
 }
 
 function* removeUser(action) {
-    const resp = yield apiCall(usersAPI.remove, action, REMOVE_USER);
+    const resp = yield apiCall(usersAPI.remove, action.payload, REMOVE_USER);
 
     if (resp.ok) {
         yield put(push("/administration/users"));

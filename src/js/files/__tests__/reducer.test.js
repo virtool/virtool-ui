@@ -19,7 +19,7 @@ describe("filesReducer()", () => {
             const state = { fileType: "reads" };
             const action = {
                 type: WS_INSERT_FILE,
-                data: { type: "subtraction" }
+                payload: { type: "subtraction" }
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -36,10 +36,10 @@ describe("filesReducer()", () => {
             };
             const action = {
                 type: WS_INSERT_FILE,
-                data: { type: "reads", id: "test" }
+                payload: { type: "reads", id: "test" }
             };
             const result = reducer(state, action);
-            expect(result).toEqual({ ...state, documents: [action.data], total_count: 0 });
+            expect(result).toEqual({ ...state, documents: [action.payload], total_count: 0 });
         });
     });
 
@@ -49,10 +49,10 @@ describe("filesReducer()", () => {
         };
         const action = {
             type: WS_UPDATE_FILE,
-            data: { id: "test", foo: "not-bar" }
+            payload: { id: "test", foo: "not-bar" }
         };
         const result = reducer(state, action);
-        expect(result).toEqual({ ...state, documents: [action.data] });
+        expect(result).toEqual({ ...state, documents: [action.payload] });
     });
 
     it("should handle WS_REMOVE_FILE", () => {
@@ -62,7 +62,7 @@ describe("filesReducer()", () => {
         };
         const action = {
             type: WS_REMOVE_FILE,
-            data: ["test"]
+            payload: ["test"]
         };
         const result = reducer(state, action);
         expect(result).toEqual({ documents: [], total_count: 1 });
@@ -72,8 +72,7 @@ describe("filesReducer()", () => {
         const state = {};
         const action = {
             type: FIND_FILES.REQUESTED,
-            term: "foo",
-            page: 5
+            payload: { term: "foo", page: 5 }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -86,13 +85,13 @@ describe("filesReducer()", () => {
         const state = { documents: [], page: 1 };
         const action = {
             type: FIND_FILES.SUCCEEDED,
-            data: { documents: [] },
+            payload: { documents: [] },
             context: { fileType: "test" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            ...action.data,
+            ...action.payload,
             fileType: "test"
         });
     });
@@ -112,12 +111,14 @@ describe("filesReducer()", () => {
 
         const action = {
             type: UPLOAD.REQUESTED,
-            localId,
-            context,
-            fileType: type,
-            file: {
-                name,
-                size
+            payload: {
+                localId,
+                context,
+                fileType: type,
+                file: {
+                    name,
+                    size
+                }
             }
         };
 
@@ -145,8 +146,7 @@ describe("filesReducer()", () => {
             state.uploads = [];
             const action = {
                 type: UPLOAD_PROGRESS,
-                localId: "foo",
-                progress: 5
+                payload: { localId: "foo", progress: 5 }
             };
             expect(reducer(state, action)).toEqual({
                 uploads: []
@@ -156,8 +156,7 @@ describe("filesReducer()", () => {
         it("when a zero-progress upload is updated", () => {
             const action = {
                 type: UPLOAD_PROGRESS,
-                localId: "bar",
-                progress: 22
+                payload: { localId: "bar", progress: 22 }
             };
             const result = reducer(state, action);
             expect(result).toEqual({
@@ -171,8 +170,7 @@ describe("filesReducer()", () => {
         it("when a partial upload is updated", () => {
             const action = {
                 type: UPLOAD_PROGRESS,
-                localId: "foo",
-                progress: 65
+                payload: { localId: "foo", progress: 65 }
             };
             const result = reducer(state, action);
             expect(result).toEqual({
@@ -186,8 +184,7 @@ describe("filesReducer()", () => {
         it("when an update that brings a progress value to 100", () => {
             const action = {
                 type: UPLOAD_PROGRESS,
-                localId: "foo",
-                progress: 100
+                payload: { localId: "foo", progress: 100 }
             };
             const result = reducer(state, action);
             expect(result).toEqual({

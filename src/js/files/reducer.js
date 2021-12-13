@@ -81,36 +81,36 @@ export const updateProgress = (state, action) => {
 export const filesReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_FILE, (state, action) => {
-            if (action.data.type === state.fileType) {
-                return insert(state, action, "uploaded_at", true);
+            if (action.payload.type === state.fileType) {
+                return insert(state, action.payload, "uploaded_at", true);
             }
             return state;
         })
         .addCase(WS_UPDATE_FILE, (state, action) => {
-            return update(state, action, "uploaded_at", true);
+            return update(state, action.payload, "uploaded_at", true);
         })
         .addCase(WS_REMOVE_FILE, (state, action) => {
-            return remove(state, action);
+            return remove(state, action.payload);
         })
         .addCase(FIND_FILES.REQUESTED, (state, action) => {
-            state.term = action.term;
-            state.documents = state.fileType === action.fileType ? state.documents : null;
+            state.term = action.payload.term;
+            state.documents = state.fileType === action.payload.fileType ? state.documents : null;
             state.fileType = "";
         })
         .addCase(FIND_FILES.SUCCEEDED, (state, action) => {
             return {
-                ...updateDocuments(state, action, "uploaded_at", true),
+                ...updateDocuments(state, action.payload, "uploaded_at", true),
                 fileType: action.context.fileType
             };
         })
         .addCase(UPLOAD.REQUESTED, (state, action) => {
-            return cleanUploads(appendUpload(state, action));
+            return cleanUploads(appendUpload(state, action.payload));
         })
         .addCase(UPLOAD_SAMPLE_FILE.REQUESTED, (state, action) => {
-            return cleanUploads(appendUpload(state, action));
+            return cleanUploads(appendUpload(state, action.payload));
         })
         .addCase(UPLOAD_PROGRESS, (state, action) => {
-            return cleanUploads(updateProgress(state, action));
+            return cleanUploads(updateProgress(state, action.payload));
         });
 });
 

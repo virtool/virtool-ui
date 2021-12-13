@@ -103,8 +103,10 @@ describe("mapDispatchToProps", () => {
         props.onShowCreate("foobar");
         expect(dispatch).toHaveBeenCalledWith({
             type: PUSH_STATE,
-            state: {
-                createAnalysis: "foobar"
+            payload: {
+                state: {
+                    createAnalysis: "foobar"
+                }
             }
         });
     });
@@ -118,9 +120,7 @@ describe("mapDispatchToProps", () => {
         props.onFind(sampleId, term, page);
         expect(dispatch).toHaveBeenCalledWith({
             type: FIND_ANALYSES.REQUESTED,
-            sampleId,
-            term,
-            page
+            payload: { sampleId, term, page }
         });
     });
 });

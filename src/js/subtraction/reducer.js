@@ -21,31 +21,31 @@ export const initialState = {
 export const subtractionsReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_SUBTRACTION, (state, action) => {
-            return insert(state, action, "id");
+            return insert(state, action.payload, "id");
         })
         .addCase(WS_UPDATE_SUBTRACTION, (state, action) => {
-            return update(state, action, "id");
+            return update(state, action.payload, "id");
         })
         .addCase(WS_REMOVE_SUBTRACTION, (state, action) => {
-            return remove(state, action);
+            return remove(state, action.payload);
         })
         .addCase(FIND_SUBTRACTIONS.REQUESTED, (state, action) => {
-            state.term = action.term;
+            state.term = action.payload.term;
         })
         .addCase(FIND_SUBTRACTIONS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action, "id");
+            return updateDocuments(state, action.payload, "id");
         })
         .addCase(SHORTLIST_SUBTRACTIONS.SUCCEEDED, (state, action) => {
-            state.shortlist = action.data;
+            state.shortlist = action.payload;
         })
         .addCase(GET_SUBTRACTION.REQUESTED, state => {
             state.detail = null;
         })
         .addCase(GET_SUBTRACTION.SUCCEEDED, (state, action) => {
-            state.detail = action.data;
+            state.detail = action.payload;
         })
         .addCase(EDIT_SUBTRACTION.SUCCEEDED, (state, action) => {
-            state.detail = action.data;
+            state.detail = action.payload;
         });
 });
 

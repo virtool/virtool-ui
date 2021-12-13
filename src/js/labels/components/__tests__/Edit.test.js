@@ -94,10 +94,7 @@ describe("mapDispatchToProps()", () => {
         props.onSubmit(labelId, name, description, color);
         expect(dispatch).toHaveBeenCalledWith({
             type: "UPDATE_LABEL_REQUESTED",
-            labelId,
-            name,
-            description,
-            color
+            payload: { labelId, name, description, color }
         });
     });
 
@@ -105,8 +102,10 @@ describe("mapDispatchToProps()", () => {
         props.onHide();
         expect(dispatch).toHaveBeenCalledWith({
             type: PUSH_STATE,
-            state: {
-                editLabel: false
+            payload: {
+                state: {
+                    editLabel: false
+                }
             }
         });
     });

@@ -23,31 +23,31 @@ export function* watchAnalyses() {
 export function* wsUpdateAnalysis(action) {
     const analysisId = yield select(getAnalysisDetailId);
 
-    if (analysisId === action.data.id) {
+    if (analysisId === action.payload.data.id) {
         yield apiCall(analysesAPI.get, { analysisId }, GET_ANALYSIS);
     }
 }
 
 export function* findAnalyses(action) {
-    yield apiCall(analysesAPI.find, action, FIND_ANALYSES);
-    yield pushFindTerm(action.term);
+    yield apiCall(analysesAPI.find, action.payload, FIND_ANALYSES);
+    yield pushFindTerm(action.payload.term);
 }
 
 export function* getAnalysis(action) {
-    yield apiCall(analysesAPI.get, action, GET_ANALYSIS);
+    yield apiCall(analysesAPI.get, action.payload, GET_ANALYSIS);
 }
 
 export function* analyze(action) {
-    yield apiCall(analysesAPI.analyze, action, ANALYZE);
+    yield apiCall(analysesAPI.analyze, action.payload, ANALYZE);
 }
 
 export function* blastNuvs(action) {
-    yield apiCall(analysesAPI.blastNuvs, action, BLAST_NUVS, {
-        analysisId: action.analysisId,
-        sequenceIndex: action.sequenceIndex
+    yield apiCall(analysesAPI.blastNuvs, action.payload, BLAST_NUVS, {
+        analysisId: action.payload.analysisId,
+        sequenceIndex: action.payload.sequenceIndex
     });
 }
 
 export function* removeAnalysis(action) {
-    yield apiCall(analysesAPI.remove, action, REMOVE_ANALYSIS);
+    yield apiCall(analysesAPI.remove, action.payload, REMOVE_ANALYSIS);
 }

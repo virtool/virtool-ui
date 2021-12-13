@@ -1,5 +1,5 @@
 import { push } from "connected-react-router";
-import { put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
+import { all, put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
 import { pushState } from "../app/actions";
 import {
     ADD_ISOLATE,
@@ -19,40 +19,42 @@ import {
 } from "../app/actionTypes";
 import { apiCall, pushFindTerm, putGenericError } from "../utils/sagas";
 import * as otusAPI from "./api";
-
+import { createAction } from "@reduxjs/toolkit";
 const getCurrentOTUsPath = state => `/refs/${state.references.detail.id}/otus`;
+import { revertFailed, revertSucceeded } from "./actions";
 
 export function* updateAndGetOTU(apiMethod, action, actionType) {
     let response;
 
     try {
-        response = yield apiMethod(action);
+        response = yield apiMethod(action.payload);
     } catch (err) {
         yield putGenericError(actionType, err);
         response = err.response;
     }
 
-    const getResponse = yield otusAPI.get(action);
-    yield put({ type: actionType.SUCCEEDED, data: getResponse.body });
+    const getResponse = yield otusAPI.get(action.payload);
+    const curAction = createAction(actionType.SUCCEEDED);
+    yield put(curAction(getResponse.body));
 
     return response;
 }
 
 export function* findOTUs(action) {
-    yield apiCall(otusAPI.find, action, FIND_OTUS);
-    yield pushFindTerm(action.term);
+    yield apiCall(otusAPI.find, action.payload, FIND_OTUS);
+    yield pushFindTerm(action.payload.term);
 }
 
 export function* getOTU(action) {
-    yield apiCall(otusAPI.get, action, GET_OTU);
+    yield apiCall(otusAPI.get, action.payload, GET_OTU);
 }
 
 export function* getOTUHistory(action) {
-    yield apiCall(otusAPI.getHistory, action, GET_OTU_HISTORY);
+    yield apiCall(otusAPI.getHistory, action.payload, GET_OTU_HISTORY);
 }
 
 export function* createOTU(action) {
-    const resp = yield apiCall(otusAPI.create, action, CREATE_OTU);
+    const resp = yield apiCall(otusAPI.create, action.payload, CREATE_OTU);
 
     if (resp.ok) {
         yield put(push({ state: { createOTU: false } }));
@@ -60,7 +62,7 @@ export function* createOTU(action) {
 }
 
 export function* editOTU(action) {
-    yield apiCall(otusAPI.edit, action, EDIT_OTU);
+    yield apiCall(otusAPI.edit, action.payload, EDIT_OTU);
 }
 
 export function* setIsolateAsDefault(action) {
@@ -68,10 +70,10 @@ export function* setIsolateAsDefault(action) {
 }
 
 export function* removeOTU(action) {
-    const resp = yield apiCall(otusAPI.remove, action, REMOVE_OTU);
+    const resp = yield apiCall(otusAPI.remove, action.payload, REMOVE_OTU);
 
     if (resp.ok) {
-        yield put(push(`/refs/${action.refId}/otus`));
+        yield put(push(`/refs/${action.payload.refId}/otus`));
     }
 }
 
@@ -109,22 +111,20 @@ export function* removeSequence(action) {
 
 export function* revert(action) {
     try {
-        yield otusAPI.revert(action);
+        yield otusAPI.revert(action.payload);
 
-        if (action.otuVersion === 0) {
+        if (action.payload.otuVersion === 0) {
             const path = yield select(getCurrentOTUsPath);
             yield put(push(path));
         } else {
-            const otuResponse = yield otusAPI.get(action);
-            const historyResponse = yield otusAPI.getHistory(action);
-            yield put({
-                type: REVERT.SUCCEEDED,
-                data: otuResponse.body,
-                history: historyResponse.body
-            });
+            const [otuResponse, historyResponse] = yield all([
+                otusAPI.get(action.payload),
+                otusAPI.getHistory(action.payload)
+            ]);
+            yield put(revertSucceeded(otuResponse.body, historyResponse.body));
         }
     } catch (error) {
-        yield put({ type: REVERT.FAILED, error });
+        yield put(revertFailed(error));
     }
 }
 

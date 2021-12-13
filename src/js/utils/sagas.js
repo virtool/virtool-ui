@@ -25,7 +25,7 @@ import { createFindURL } from "./utils";
 export function* apiCall(apiMethod, action, actionType, context = {}) {
     try {
         const response = yield apiMethod(action);
-        yield put({ type: actionType.SUCCEEDED, data: response.body, context });
+        yield put({ type: actionType.SUCCEEDED, payload: response.body, context });
         return response;
     } catch (error) {
         const statusCode = get(error, "response.statusCode");
@@ -67,8 +67,6 @@ export function* putGenericError(actionType, error) {
 
     yield put({
         type: actionType.FAILED,
-        message: body.message,
-        error,
-        status
+        payload: { message: body.message, error, status }
     });
 }

@@ -22,25 +22,25 @@ export const initialState = {
 const reducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_USER, (state, action) => {
-            return insert(state, action, "id");
+            return insert(state, action.payload, "id");
         })
         .addCase(WS_UPDATE_USER, (state, action) => {
-            return update(state, action, "id");
+            return update(state, action.payload, "id");
         })
         .addCase(WS_REMOVE_USER, (state, action) => {
-            return remove(state, action);
+            return remove(state, action.payload);
         })
         .addCase(FIND_USERS.REQUESTED, (state, action) => {
-            state.term = action.term;
+            state.term = action.payload.term;
         })
         .addCase(FIND_USERS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action, "id");
+            return updateDocuments(state, action.payload, "id");
         })
         .addCase(GET_USER.REQUESTED, state => {
             state.detail = null;
         })
         .addCase(GET_USER.SUCCEEDED, (state, action) => {
-            state.detail = action.data;
+            state.detail = action.payload;
         })
         .addCase(CREATE_USER.REQUESTED, state => {
             state.createPending = true;
@@ -52,13 +52,13 @@ const reducer = createReducer(initialState, builder => {
             state.createPending = false;
         })
         .addCase(EDIT_USER.REQUESTED, (state, action) => {
-            if (action.update.password) {
+            if (action.payload.update.password) {
                 return { ...state, passwordPending: true };
             }
             return state;
         })
         .addCase(EDIT_USER.SUCCEEDED, (state, action) => {
-            return { ...state, detail: action.data };
+            return { ...state, detail: action.payload };
         });
 });
 

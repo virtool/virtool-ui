@@ -24,45 +24,45 @@ export const initialState = {
 export const indexesReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_HISTORY, (state, action) => {
-            if (action.data.reference.id === state.refId) {
+            if (action.payload.reference.id === state.refId) {
                 state.modified_otu_count++;
             }
             return state;
         })
         .addCase(WS_INSERT_INDEX, (state, action) => {
-            if (action.data.reference.id === state.refId) {
-                return insert(state, action, "version", true);
+            if (action.payload.reference.id === state.refId) {
+                return insert(state, action.payload, "version", true);
             }
             return state;
         })
         .addCase(WS_UPDATE_INDEX, (state, action) => {
-            if (action.data.reference.id === state.refId) {
-                return update(state, action, "version", true);
+            if (action.payload.reference.id === state.refId) {
+                return update(state, action.payload, "version", true);
             }
             return state;
         })
         .addCase(FIND_INDEXES.REQUESTED, (state, action) => {
-            state.term = action.term;
-            state.refId = action.refId;
+            state.term = action.payload.term;
+            state.refId = action.payload.refId;
         })
         .addCase(FIND_INDEXES.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action, "version", true);
+            return updateDocuments(state, action.payload, "version", true);
         })
         .addCase(GET_INDEX.REQUESTED, (state, action) => {
-            state.refId = action.refId;
+            state.refId = action.payload.refId;
             state.detail = null;
         })
         .addCase(GET_INDEX.SUCCEEDED, (state, action) => {
-            state.detail = action.data;
+            state.detail = action.payload;
         })
         .addCase(GET_UNBUILT.SUCCEEDED, (state, action) => {
-            state.unbuilt = action.data;
+            state.unbuilt = action.payload;
         })
         .addCase(GET_INDEX_HISTORY.SUCCEEDED, (state, action) => {
             return {
                 ...state,
                 history: {
-                    ...updateDocuments(state.history, action, "otu.name")
+                    ...updateDocuments(state.history, action.payload, "otu.name")
                 }
             };
         });

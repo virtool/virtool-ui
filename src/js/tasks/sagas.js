@@ -8,7 +8,7 @@ export function* listTasks(action) {
 }
 
 export function* getTask(action) {
-    yield apiCall(tasksAPI.get, action, GET_TASK);
+    yield apiCall(tasksAPI.get, action.payload, GET_TASK);
 }
 
 export function* watchTasks() {

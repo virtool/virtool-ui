@@ -27,7 +27,7 @@ describe("Index Action Creators", () => {
         const result = wsInsertHistory(data);
         expect(result).toEqual({
             type: WS_INSERT_HISTORY,
-            data
+            payload: { ...data }
         });
     });
 
@@ -36,7 +36,7 @@ describe("Index Action Creators", () => {
         const result = wsInsertIndex(data);
         expect(result).toEqual({
             type: WS_INSERT_INDEX,
-            data
+            payload: { ...data }
         });
     });
 
@@ -45,7 +45,7 @@ describe("Index Action Creators", () => {
         const result = wsUpdateIndex(data);
         expect(result).toEqual({
             type: WS_UPDATE_INDEX,
-            data
+            payload: { ...data }
         });
     });
 
@@ -56,9 +56,7 @@ describe("Index Action Creators", () => {
         const result = findIndexes(refId, term, page);
         expect(result).toEqual({
             type: FIND_INDEXES.REQUESTED,
-            refId,
-            term,
-            page
+            payload: { refId, term, page }
         });
     });
 
@@ -72,7 +70,7 @@ describe("Index Action Creators", () => {
         const result = getIndex(indexId);
         expect(result).toEqual({
             type: GET_INDEX.REQUESTED,
-            indexId
+            payload: { indexId }
         });
     });
 
@@ -81,7 +79,7 @@ describe("Index Action Creators", () => {
         const result = getUnbuilt(refId);
         expect(result).toEqual({
             type: GET_UNBUILT.REQUESTED,
-            refId
+            payload: { refId }
         });
     });
 
@@ -90,7 +88,7 @@ describe("Index Action Creators", () => {
         const result = createIndex(refId);
         expect(result).toEqual({
             type: CREATE_INDEX.REQUESTED,
-            refId
+            payload: { refId }
         });
     });
 
@@ -100,8 +98,7 @@ describe("Index Action Creators", () => {
         const result = getIndexHistory(indexId, page);
         expect(result).toEqual({
             type: GET_INDEX_HISTORY.REQUESTED,
-            indexId,
-            page
+            payload: { indexId, page }
         });
     });
 });

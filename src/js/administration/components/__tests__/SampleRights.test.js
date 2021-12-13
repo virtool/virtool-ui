@@ -107,7 +107,7 @@ describe("mapDispatchToProps()", () => {
         props.onChangeSampleGroup("force_choice");
         expect(dispatch).toHaveBeenCalledWith({
             type: UPDATE_SETTINGS.REQUESTED,
-            update: { sample_group: "force_choice" }
+            payload: { update: { sample_group: "force_choice" } }
         });
     });
 
@@ -124,9 +124,11 @@ describe("mapDispatchToProps()", () => {
         props.onChangeRights(scope, str);
         expect(dispatch).toHaveBeenCalledWith({
             type: UPDATE_SETTINGS.REQUESTED,
-            update: {
-                [`sample_${scope}_read`]: read,
-                [`sample_${scope}_write`]: write
+            payload: {
+                update: {
+                    [`sample_${scope}_read`]: read,
+                    [`sample_${scope}_write`]: write
+                }
             }
         });
     });

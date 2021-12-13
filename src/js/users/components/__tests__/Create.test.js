@@ -142,21 +142,19 @@ describe("mapDispatchToProps", () => {
 
         result.onCreate(data);
         expect(dispatch).toHaveBeenCalledWith({
-            0: "f",
-            1: "o",
-            2: "o",
+            payload: "foo",
             type: "CREATE_USER_REQUESTED"
         });
     });
     it("should return onHide() in props", () => {
         result.onHide();
-        expect(dispatch).toHaveBeenCalledWith({ type: PUSH_STATE, state: { createUser: false } });
+        expect(dispatch).toHaveBeenCalledWith({ type: PUSH_STATE, payload: { state: { createUser: false } } });
     });
 
     it("should return onClearError() in props", () => {
         result.onClearError();
         expect(dispatch).toHaveBeenCalledWith({
-            error: "CREATE_USER_ERROR",
+            payload: { error: "CREATE_USER_ERROR" },
             type: "CLEAR_ERROR"
         });
     });

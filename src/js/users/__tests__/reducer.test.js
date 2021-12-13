@@ -29,13 +29,13 @@ describe("Users Reducer", () => {
         };
         const action = {
             type: WS_INSERT_USER,
-            data: {
+            payload: {
                 id: "bill"
             }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: [action.data]
+            documents: [action.payload]
         });
     });
     it("should handle WS_UPDATE_USER", () => {
@@ -47,7 +47,7 @@ describe("Users Reducer", () => {
         };
         const action = {
             type: WS_UPDATE_USER,
-            data: {
+            payload: {
                 id: "fred",
                 administrator: true
             }
@@ -67,7 +67,7 @@ describe("Users Reducer", () => {
         };
         const action = {
             type: WS_REMOVE_USER,
-            data: ["bob"]
+            payload: ["bob"]
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -79,8 +79,7 @@ describe("Users Reducer", () => {
         const term = "foo";
         const action = {
             type: FIND_USERS.REQUESTED,
-            term,
-            page: 3
+            payload: { term, page: 3 }
         };
         const result = reducer({}, action);
         expect(result).toEqual({
@@ -91,12 +90,12 @@ describe("Users Reducer", () => {
     it("should handle FIND_USERS_SUCCEEDED", () => {
         const action = {
             type: FIND_USERS.SUCCEEDED,
-            data: {
+            payload: {
                 documents: [{ id: "foo" }]
             }
         };
         const result = reducer({}, action);
-        expect(result).toEqual(action.data);
+        expect(result).toEqual(action.payload);
     });
 
     it("should handle GET_USER_REQUESTED", () => {
@@ -107,7 +106,7 @@ describe("Users Reducer", () => {
         };
         const action = {
             type: GET_USER.REQUESTED,
-            userId: "bob"
+            payload: { userId: "bob" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -118,7 +117,7 @@ describe("Users Reducer", () => {
     it("should handle GET_USER_SUCCEEDED", () => {
         const action = {
             type: GET_USER.SUCCEEDED,
-            data: {
+            payload: {
                 administrator: true,
                 force_reset: false,
                 groups: [],
@@ -130,7 +129,7 @@ describe("Users Reducer", () => {
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            detail: action.data
+            detail: action.payload
         });
     });
 
@@ -170,9 +169,11 @@ describe("Users Reducer", () => {
         it("when handling password update, return [passwordPending=true]", () => {
             const action = {
                 type: EDIT_USER.REQUESTED,
-                userId: "bob",
-                update: {
-                    password: "new_password"
+                payload: {
+                    userId: "bob",
+                    update: {
+                        password: "new_password"
+                    }
                 }
             };
             const result = reducer({}, action);
@@ -184,8 +185,10 @@ describe("Users Reducer", () => {
         it("otherwise return state", () => {
             const action = {
                 type: EDIT_USER.REQUESTED,
-                update: {
-                    other: "not_password"
+                payload: {
+                    update: {
+                        other: "not_password"
+                    }
                 }
             };
             const result = reducer(initialState, action);
@@ -203,7 +206,7 @@ describe("Users Reducer", () => {
         };
         const action = {
             type: EDIT_USER.SUCCEEDED,
-            data: {
+            payload: {
                 id: "user",
                 permissions: { testing: true }
             }
@@ -211,7 +214,7 @@ describe("Users Reducer", () => {
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            detail: action.data
+            detail: action.payload
         });
     });
 });

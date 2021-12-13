@@ -45,8 +45,10 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: UPDATE_SETTINGS.REQUESTED,
-            update: {
-                enable_sentry: enabled
+            payload: {
+                update: {
+                    enable_sentry: enabled
+                }
             }
         });
     });

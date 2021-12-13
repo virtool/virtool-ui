@@ -1,5 +1,5 @@
-import { simpleActionCreator } from "../utils/utils";
 import { GET_SETTINGS, UPDATE_SETTINGS } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns action that can trigger an API call for retrieving settings.
@@ -7,7 +7,7 @@ import { GET_SETTINGS, UPDATE_SETTINGS } from "../app/actionTypes";
  * @func
  * @returns {object}
  */
-export const getSettings = simpleActionCreator(GET_SETTINGS.REQUESTED);
+export const getSettings = createAction(GET_SETTINGS.REQUESTED);
 
 /**
  * Returns action that can trigger an API call to update a specific setting.
@@ -30,7 +30,6 @@ export const updateSetting = (key, value) => {
  * @param update {object} update data of key-value pairs
  * @returns {object}
  */
-export const updateSettings = update => ({
-    type: UPDATE_SETTINGS.REQUESTED,
-    update
-});
+export const updateSettings = createAction(UPDATE_SETTINGS.REQUESTED, update => ({
+    payload: { update }
+}));

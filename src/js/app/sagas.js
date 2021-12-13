@@ -21,7 +21,7 @@ import { PUSH_STATE } from "./actionTypes";
 
 function* pushState(action) {
     const routerLocation = yield select(getLocation);
-    yield put(push({ ...routerLocation, state: action.state }));
+    yield put(push({ ...routerLocation, state: action.payload.state }));
 }
 
 export function* watchRouter() {

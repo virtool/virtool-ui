@@ -64,7 +64,7 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_REFERENCE.REQUESTED,
-            refId: "foo"
+            payload: { refId: "foo" }
         });
     });
 });

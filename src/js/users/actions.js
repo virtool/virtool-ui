@@ -15,21 +15,34 @@ import {
     REMOVE_USER,
     CREATE_FIRST_USER
 } from "../app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
-export const wsInsertUser = data => ({
-    type: WS_INSERT_USER,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a user document is inserted via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsInsertUser = createAction(WS_INSERT_USER);
 
-export const wsUpdateUser = data => ({
-    type: WS_UPDATE_USER,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a user document is updated via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsUpdateUser = createAction(WS_UPDATE_USER);
 
-export const wsRemoveUser = data => ({
-    type: WS_REMOVE_USER,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a user document is removed via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsRemoveUser = createAction(WS_REMOVE_USER);
 
 /**
  * Returns an action that can trigger an API call for finding users.
@@ -37,16 +50,11 @@ export const wsRemoveUser = data => ({
  * @func
  * @returns {object}
  */
-export const findUsers = (term, page) => ({
-    type: FIND_USERS.REQUESTED,
-    term,
-    page
-});
+export const findUsers = createAction(FIND_USERS.REQUESTED, (term, page) => ({
+    payload: { term, page }
+}));
 
-export const getUser = userId => ({
-    type: GET_USER.REQUESTED,
-    userId
-});
+export const getUser = createAction(GET_USER.REQUESTED, userId => ({ payload: { userId } }));
 
 /**
  * Returns action that can trigger an API call for creating a new user.
@@ -55,16 +63,11 @@ export const getUser = userId => ({
  * @param data {object} data used to create a new user
  * @returns {object}
  */
-export const createUser = data => ({
-    type: CREATE_USER.REQUESTED,
-    ...data
-});
+export const createUser = createAction(CREATE_USER.REQUESTED);
 
-export const createFirstUser = (handle, password) => ({
-    type: CREATE_FIRST_USER.REQUESTED,
-    handle,
-    password
-});
+export const createFirstUser = createAction(CREATE_FIRST_USER.REQUESTED, (handle, password) => ({
+    payload: { handle, password }
+}));
 
 /**
  * Returns action that can trigger an API call for modifying an existing user.
@@ -74,13 +77,8 @@ export const createFirstUser = (handle, password) => ({
  * @param update {object} key-value pairs of new user properties
  * @returns {object}
  */
-export const editUser = (userId, update) => ({
-    type: EDIT_USER.REQUESTED,
-    userId,
-    update
-});
+export const editUser = createAction(EDIT_USER.REQUESTED, (userId, update) => ({
+    payload: { userId, update }
+}));
 
-export const removeUser = userId => ({
-    type: REMOVE_USER.REQUESTED,
-    userId
-});
+export const removeUser = createAction(REMOVE_USER.REQUESTED, userId => ({ payload: { userId } }));

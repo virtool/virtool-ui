@@ -25,7 +25,7 @@ describe("Subtraction Reducer", () => {
     describe("should handle WS_INSERT_SUBTRACTION", () => {
         const action = {
             type: WS_INSERT_SUBTRACTION,
-            data: {
+            payload: {
                 id: "foo"
             }
         };
@@ -60,13 +60,13 @@ describe("Subtraction Reducer", () => {
         };
         const action = {
             type: WS_UPDATE_SUBTRACTION,
-            data: {
+            payload: {
                 id: "foo",
                 ready: true
             }
         };
         const result = reducer(state, action);
-        expect(result).toEqual({ documents: [{ ...action.data }] });
+        expect(result).toEqual({ documents: [{ ...action.payload }] });
     });
 
     it("should handle WS_REMOVE_SUBTRACTION", () => {
@@ -79,7 +79,7 @@ describe("Subtraction Reducer", () => {
         };
         const action = {
             type: WS_REMOVE_SUBTRACTION,
-            data: ["foo"]
+            payload: ["foo"]
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -90,19 +90,18 @@ describe("Subtraction Reducer", () => {
     it("should handle FIND_SUBTRACTIONS_REQUESTED", () => {
         const action = {
             type: FIND_SUBTRACTIONS.REQUESTED,
-            term: "foo",
-            page: 5
+            payload: { term: "foo", page: 5 }
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            term: action.term
+            term: action.payload.term
         });
     });
 
     it("should handle FIND_SUBTRACTIONS_SUCCEEDED", () => {
         const action = {
             type: FIND_SUBTRACTIONS.SUCCEEDED,
-            data: {
+            payload: {
                 documents: [],
                 page: 1,
                 page_count: 1
@@ -119,7 +118,7 @@ describe("Subtraction Reducer", () => {
     it("should handle GET_SUBTRACTION_REQUESTED", () => {
         const action = {
             type: GET_SUBTRACTION.REQUESTED,
-            subtractionId: "foo"
+            payload: { subtractionId: "foo" }
         };
         const result = reducer({}, action);
         expect(result).toEqual({
@@ -130,7 +129,7 @@ describe("Subtraction Reducer", () => {
     it("should handle GET_SUBTRACTION_SUCCEEDED", () => {
         const action = {
             type: GET_SUBTRACTION.SUCCEEDED,
-            data: {
+            payload: {
                 id: "foo"
             }
         };
@@ -145,9 +144,9 @@ describe("Subtraction Reducer", () => {
     it("should handle UPDATE_SUBTRACTION_SUCCEEDED", () => {
         const action = {
             type: EDIT_SUBTRACTION.SUCCEEDED,
-            data: { foo: "bar" }
+            payload: { foo: "bar" }
         };
         const result = reducer({}, action);
-        expect(result).toEqual({ detail: action.data });
+        expect(result).toEqual({ detail: action.payload });
     });
 });

@@ -60,7 +60,7 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: CHANGE_ACTIVE_GROUP,
-            id: "foo"
+            payload: { id: "foo" }
         });
     });
 });

@@ -1,19 +1,24 @@
 import { GET_TASK, LIST_TASKS, WS_INSERT_TASK, WS_UPDATE_TASK } from "../app/actionTypes";
-import { simpleActionCreator } from "../utils/utils";
+import { createAction } from "@reduxjs/toolkit";
 
-export const wsInsertTask = data => ({
-    type: WS_INSERT_TASK,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a task document is inserted via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsInsertTask = createAction(WS_INSERT_TASK);
 
-export const wsUpdateTask = data => ({
-    type: WS_UPDATE_TASK,
-    data
-});
+/**
+ * Returns an action that should be dispatched when a task document is updated via websocket.
+ *
+ * @func
+ * @param data {object} update data passed in the websocket message
+ * @returns {object} an action object
+ */
+export const wsUpdateTask = createAction(WS_UPDATE_TASK);
 
-export const listTasks = simpleActionCreator(LIST_TASKS.REQUESTED);
+export const listTasks = createAction(LIST_TASKS.REQUESTED);
 
-export const getTask = taskId => ({
-    type: GET_TASK,
-    taskId
-});
+export const getTask = createAction(GET_TASK, taskId => ({ payload: { taskId } }));

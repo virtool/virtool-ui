@@ -69,9 +69,7 @@ describe("mapDispatchToProps()", () => {
         const props = mapDispatchToProps(dispatch);
         props.onUpdate("foo", "Foo", "Bar");
         expect(dispatch).toHaveBeenCalledWith({
-            subtractionId: "foo",
-            name: "Foo",
-            nickname: "Bar",
+            payload: { subtractionId: "foo", name: "Foo", nickname: "Bar" },
             type: "UPDATE_SUBTRACTION_REQUESTED"
         });
     });

@@ -107,7 +107,7 @@ describe("mapDispatchToProps", () => {
         props.onRemove("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_FILE.REQUESTED,
-            fileId: "foo"
+            payload: { fileId: "foo" }
         });
     });
 });
