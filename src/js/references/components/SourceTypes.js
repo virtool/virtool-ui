@@ -1,4 +1,4 @@
-import { get, includes, map, toLower, without } from "lodash-es";
+import { get, includes, map, sortBy, toLower, without } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -123,7 +123,7 @@ export class SourceTypes extends React.Component {
             );
         }
 
-        const listComponents = map(this.props.sourceTypes.sort(), sourceType => (
+        const listComponents = map(sortBy(this.props.sourceTypes), sourceType => (
             <SourceTypeItem key={sourceType} onRemove={this.handleRemove} sourceType={sourceType} disabled={disabled} />
         ));
 
