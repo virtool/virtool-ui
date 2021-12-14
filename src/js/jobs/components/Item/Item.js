@@ -32,18 +32,18 @@ const JobItemLinkBox = styled(LinkBox)`
     z-index: 10;
 `;
 
-export const JobItem = ({
-    id,
-    workflow,
-    state,
-    progress,
-    created_at,
-    user,
-    canCancel,
-    canRemove,
-    onCancel,
-    onRemove
-}) => {
+const JobActionOverlay = styled.div`
+    background-color: transparent;
+    font-size: 17px;
+    padding: 15px 15px 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+`;
+
+export function JobItem({ id, workflow, state, progress, created_at, user, canCancel, canRemove, onCancel, onRemove }) {
     const handleCancel = useCallback(() => onCancel(id), [id, onCancel]);
     const handleRemove = useCallback(() => onRemove(id), [id, onRemove]);
 
@@ -71,17 +71,19 @@ export const JobItem = ({
                     <Attribution time={created_at} user={user.handle} />
                 </JobItemBody>
             </JobItemLinkBox>
-            <JobAction
-                key={state}
-                state={state}
-                canCancel={canCancel}
-                canRemove={canRemove}
-                onCancel={handleCancel}
-                onRemove={handleRemove}
-            />
+            <JobActionOverlay>
+                <JobAction
+                    key={state}
+                    state={state}
+                    canCancel={canCancel}
+                    canRemove={canRemove}
+                    onCancel={handleCancel}
+                    onRemove={handleRemove}
+                />
+            </JobActionOverlay>
         </JobItemContainer>
     );
-};
+}
 
 export const mapDispatchToProps = dispatch => ({
     onCancel: jobId => {

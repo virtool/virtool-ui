@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import {
     Badge,
-    Icon,
     LoadingPlaceholder,
     NotFound,
     ViewHeader,
@@ -13,12 +12,12 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle
 } from "../../base";
-import { getWorkflowDisplayName } from "../../utils/utils";
-import { getJob, removeJob } from "../actions";
+import { checkAdminOrPermission, getWorkflowDisplayName } from "../../utils/utils";
+import { cancelJob, getJob, removeJob } from "../actions";
 import JobError from "./Error";
 import JobSteps from "./Steps";
 import { JobArgs } from "./JobArgs";
-
+import { JobAction } from "./Item/Action";
 const JobDetailBadge = styled(Badge)`
     text-transform: capitalize;
 `;
@@ -40,7 +39,6 @@ class JobDetail extends React.Component {
         if (this.props.detail === null) {
             return <LoadingPlaceholder />;
         }
-
         const detail = this.props.detail;
 
         const latest = detail.status[detail.status.length - 1];
@@ -63,7 +61,14 @@ class JobDetail extends React.Component {
                     <ViewHeaderTitle>
                         {workflow} <JobDetailBadge color={color}>{latest.state}</JobDetailBadge>
                         <ViewHeaderIcons>
-                            <Icon color="red" name="trash" style={{ fontSize: "18px" }} onClick={this.handleClick} />
+                            <JobAction
+                                state={detail.state}
+                                onCancel={() => this.props.onCancel(this.props.detail.id)}
+                                onRemove={() => this.props.onRemove(this.props.detail.id)}
+                                canCancel={this.props.canCancel}
+                                canRemove={this.props.canRemove}
+                            />
+                            {/*<Icon color="red" name="trash" style={{ fontSize: "18px" }} onClick={this.handleClick} />*/}
                         </ViewHeaderIcons>
                     </ViewHeaderTitle>
                     <ViewHeaderAttribution time={detail.status[0].timestamp} user={detail.user.handle} />
@@ -81,14 +86,18 @@ class JobDetail extends React.Component {
 
 const mapStateToProps = state => ({
     error: get(state, "errors.GET_JOB_ERROR", null),
-    detail: state.jobs.detail
+    detail: state.jobs.detail,
+    canCancel: checkAdminOrPermission(state, "cancel_job"),
+    canRemove: checkAdminOrPermission(state, "remove_job")
 });
 
 const mapDispatchToProps = dispatch => ({
     getDetail: jobId => {
         dispatch(getJob(jobId));
     },
-
+    onCancel: jobId => {
+        dispatch(cancelJob(jobId));
+    },
     onRemove: jobId => {
         dispatch(removeJob(jobId));
         dispatch(push("/jobs"));
