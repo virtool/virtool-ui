@@ -3,7 +3,7 @@
 exports[`<MemberItem /> should render 1`] = `
 <MemberItem__StyledMemberItem>
   <MemberItemIcon
-    id="bob"
+    handle="bob"
   />
   bob
 </MemberItem__StyledMemberItem>
@@ -12,7 +12,7 @@ exports[`<MemberItem /> should render 1`] = `
 exports[`<MemberItem /> should render with [canModify=true] 1`] = `
 <MemberItem__StyledMemberItem>
   <MemberItemIcon
-    id="bob"
+    handle="bob"
   />
   bob
   <MemberItem__MemberItemIcons>

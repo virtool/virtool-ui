@@ -83,7 +83,6 @@ class ReferenceMembers extends React.Component {
         const plural = `${noun}s`;
 
         let memberComponents;
-
         if (members.length) {
             memberComponents = map(members, member => (
                 <MemberItem

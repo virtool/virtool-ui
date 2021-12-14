@@ -8,10 +8,10 @@ const StyledMemberItem = styled(BoxGroupSection)`
     display: flex;
 `;
 
-const MemberItemIcon = ({ id }) => {
+const MemberItemIcon = ({ handle }) => {
     return (
         <FlexItem grow={0} shrink={0} style={{ paddingRight: "8px" }}>
-            <InitialIcon handle={id} size="lg" />
+            <InitialIcon handle={handle} size="lg" />
         </FlexItem>
     );
 };
@@ -26,7 +26,8 @@ const MemberItemIcons = styled.span`
     }
 `;
 
-const MemberItem = ({ canModify, id, onEdit, onRemove }) => {
+const MemberItem = ({ canModify, id, handle, onEdit, onRemove }) => {
+    const displayName = handle || id;
     const handleEdit = useCallback(() => onEdit(id), [id]);
     const handleRemove = useCallback(() => onRemove(id), [id]);
 
@@ -43,8 +44,8 @@ const MemberItem = ({ canModify, id, onEdit, onRemove }) => {
 
     return (
         <StyledMemberItem>
-            <MemberItemIcon id={id} />
-            {id}
+            <MemberItemIcon handle={displayName} />
+            {displayName}
             {icons}
         </StyledMemberItem>
     );
@@ -53,6 +54,7 @@ const MemberItem = ({ canModify, id, onEdit, onRemove }) => {
 MemberItem.propTypes = {
     canModify: PropTypes.bool.isRequired,
     id: PropTypes.string.isRequired,
+    handle: PropTypes.string,
     onEdit: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired
 };
