@@ -24,12 +24,14 @@ exports[`<JobItem /> should render when [canCancel=false] and [canRemove=false] 
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={false}
-    canRemove={false}
-    onCancel={[Function]}
-    onRemove={[Function]}
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={false}
+      canRemove={false}
+      onCancel={[Function]}
+      onRemove={[Function]}
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -57,12 +59,14 @@ exports[`<JobItem /> should render when [canCancel=false] and [canRemove=true] 1
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={false}
-    canRemove={true}
-    onCancel={[Function]}
-    onRemove={[Function]}
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={false}
+      canRemove={true}
+      onCancel={[Function]}
+      onRemove={[Function]}
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -90,12 +94,14 @@ exports[`<JobItem /> should render when [canCancel=true] and [canRemove=false] 1
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={true}
-    canRemove={false}
-    onCancel={[Function]}
-    onRemove={[Function]}
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={true}
+      canRemove={false}
+      onCancel={[Function]}
+      onRemove={[Function]}
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -123,12 +129,14 @@ exports[`<JobItem /> should render when [canCancel=true] and [canRemove=true] 1`
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={true}
-    canRemove={true}
-    onCancel={[Function]}
-    onRemove={[Function]}
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={true}
+      canRemove={true}
+      onCancel={[Function]}
+      onRemove={[Function]}
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -157,14 +165,16 @@ exports[`<JobItem /> should render when [state="cancelled"] 1`] = `
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={true}
-    canRemove={true}
-    key="cancelled"
-    onCancel={[Function]}
-    onRemove={[Function]}
-    state="cancelled"
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={true}
+      canRemove={true}
+      key="cancelled"
+      onCancel={[Function]}
+      onRemove={[Function]}
+      state="cancelled"
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -193,14 +203,16 @@ exports[`<JobItem /> should render when [state="complete"] 1`] = `
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={true}
-    canRemove={true}
-    key="complete"
-    onCancel={[Function]}
-    onRemove={[Function]}
-    state="complete"
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={true}
+      canRemove={true}
+      key="complete"
+      onCancel={[Function]}
+      onRemove={[Function]}
+      state="complete"
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -229,14 +241,16 @@ exports[`<JobItem /> should render when [state="error"] 1`] = `
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={true}
-    canRemove={true}
-    key="error"
-    onCancel={[Function]}
-    onRemove={[Function]}
-    state="error"
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={true}
+      canRemove={true}
+      key="error"
+      onCancel={[Function]}
+      onRemove={[Function]}
+      state="error"
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -265,14 +279,16 @@ exports[`<JobItem /> should render when [state="running"] 1`] = `
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={true}
-    canRemove={true}
-    key="running"
-    onCancel={[Function]}
-    onRemove={[Function]}
-    state="running"
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={true}
+      canRemove={true}
+      key="running"
+      onCancel={[Function]}
+      onRemove={[Function]}
+      state="running"
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
@@ -301,13 +317,15 @@ exports[`<JobItem /> should render when [state="waiting"] 1`] = `
       />
     </Item__JobItemBody>
   </Item__JobItemLinkBox>
-  <JobAction
-    canCancel={true}
-    canRemove={true}
-    key="waiting"
-    onCancel={[Function]}
-    onRemove={[Function]}
-    state="waiting"
-  />
+  <Item__JobActionOverlay>
+    <JobAction
+      canCancel={true}
+      canRemove={true}
+      key="waiting"
+      onCancel={[Function]}
+      onRemove={[Function]}
+      state="waiting"
+    />
+  </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
