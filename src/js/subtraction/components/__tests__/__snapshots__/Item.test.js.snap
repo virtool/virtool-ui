@@ -14,7 +14,7 @@ exports[`<SubtractionItem /> should render when [ready=false] 1`] = `
     />
      
     <span>
-      Importing
+      Creating
     </span>
   </span>
 </Item__StyledSubtractionItem>

@@ -27,7 +27,7 @@ export const SubtractionItem = ({ id, name, ready }) => (
     <StyledSubtractionItem key={id} to={`/subtraction/${id}`}>
         <span>{name}</span>
         <span>
-            <SubtractionItemIcon ready={ready} /> <span>{ready ? "Ready" : "Importing"}</span>
+            <SubtractionItemIcon ready={ready} /> <span>{ready ? "Ready" : "Creating"}</span>
         </span>
     </StyledSubtractionItem>
 );
