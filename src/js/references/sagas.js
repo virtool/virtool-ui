@@ -107,15 +107,15 @@ export function* removeRefUser(action) {
 }
 
 export function* addRefGroup(action) {
-    yield apiCall(referenceAPI.addGroup, action, ADD_REFERENCE_GROUP);
+    yield apiCall(referenceAPI.addGroup, action.payload, ADD_REFERENCE_GROUP);
 }
 
 export function* editRefGroup(action) {
-    yield apiCall(referenceAPI.editGroup, action, EDIT_REFERENCE_GROUP);
+    yield apiCall(referenceAPI.editGroup, action.payload, EDIT_REFERENCE_GROUP);
 }
 
 export function* removeRefGroup(action) {
-    yield apiCall(referenceAPI.removeGroup, action, REMOVE_REFERENCE_GROUP, {
+    yield apiCall(referenceAPI.removeGroup, action.payload, REMOVE_REFERENCE_GROUP, {
         groupId: action.payload.groupId,
         refId: action.payload.refId
     });

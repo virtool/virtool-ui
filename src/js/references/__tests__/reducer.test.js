@@ -331,11 +331,9 @@ describe("References Reducer", () => {
         beforeEach(() => {
             action = {
                 type: REMOVE_REFERENCE_GROUP.SUCCEEDED,
-                payload: {
-                    context: {
-                        refId: "foobar",
-                        groupId: "bar"
-                    }
+                context: {
+                    refId: "foobar",
+                    groupId: "bar"
                 }
             };
 
@@ -360,7 +358,7 @@ describe("References Reducer", () => {
         });
 
         it("when store and action ref ids don't match", () => {
-            action.payload.context.refId = "bid";
+            action.context.refId = "bid";
             const result = reducer(state, action);
             expect(result).toEqual(state);
         });

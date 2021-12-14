@@ -144,8 +144,8 @@ export const referenceReducer = createReducer(initialState, builder => {
             }
         })
         .addCase(REMOVE_REFERENCE_GROUP.SUCCEEDED, (state, action) => {
-            if (action.payload.context.refId === state.detail.id) {
-                const groupId = action.payload.context.groupId;
+            if (action.context.refId === state.detail.id) {
+                const groupId = action.context.groupId;
                 state.pendingRemoveGroups = without(state.pendingRemoveGroups, groupId);
                 state.detail.groups = reject(state.detail.groups, { id: groupId });
             }
