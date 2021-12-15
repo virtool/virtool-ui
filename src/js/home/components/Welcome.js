@@ -26,7 +26,7 @@ export const Welcome = () => (
     <Container>
         <StyledWelcome>
             <Box>
-                <h1>Virtool {window.virtool.version}</h1>
+                <h1>Virtool</h1>
                 <p>Viral infection diagnostics using next-generation sequencing</p>
 
                 <strong>
