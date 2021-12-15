@@ -9,6 +9,7 @@ import { getSubtraction } from "../../actions";
 import EditSubtraction from "../Edit";
 import RemoveSubtraction from "../Remove";
 import SubtractionFiles from "./Files";
+import { SubtractionAttribution } from "../Attribution";
 
 const calculateGC = nucleotides => numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
 
@@ -43,7 +44,6 @@ export class SubtractionDetail extends React.Component {
         if (!detail.ready) {
             return <LoadingPlaceholder message="Subtraction is still being imported" />;
         }
-
         return (
             <React.Fragment>
                 <ViewHeader title={detail.name}>
@@ -60,6 +60,9 @@ export class SubtractionDetail extends React.Component {
                             </ViewHeaderIcons>
                         )}
                     </ViewHeaderTitle>
+                    {detail.user ? (
+                        <SubtractionAttribution handle={detail.user.handle} time={detail.created_at} />
+                    ) : null}
                 </ViewHeader>
                 <Table>
                     <tbody>

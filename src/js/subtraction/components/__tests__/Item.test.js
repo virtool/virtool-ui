@@ -14,6 +14,7 @@ describe("<SubtractionItem />", () => {
         props = {
             id: "foo",
             name: "Foo",
+            user: { handle: "bar" },
             ready: true
         };
     });
