@@ -46,6 +46,7 @@ services:
       - redis
       - postgres
     environment:
+      VT_DEV: "true"
       VT_DATA_PATH: /data
       VT_DB_CONNECTION_STRING: mongodb://mongo:27017
       VT_POSTGRES_CONNECTION_STRING: postgresql+asyncpg://virtool:virtool@postgres/virtool

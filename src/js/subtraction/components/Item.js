@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Icon, LinkBox, Loader } from "../../base";
+import { SubtractionAttribution } from "./Attribution";
 
 export const SubtractionItemIcon = ({ ready }) => {
     if (ready) {
@@ -12,7 +13,7 @@ export const SubtractionItemIcon = ({ ready }) => {
     return <Loader size="14px" color="primary" />;
 };
 
-const StyledSubtractionItem = styled(LinkBox)`
+const StyledSubtractionItemHeader = styled.div`
     align-items: center;
     display: flex;
     font-size: ${getFontSize("lg")};
@@ -23,19 +24,26 @@ const StyledSubtractionItem = styled(LinkBox)`
     }
 `;
 
-export const SubtractionItem = ({ id, name, ready }) => (
-    <StyledSubtractionItem key={id} to={`/subtraction/${id}`}>
-        <span>{name}</span>
-        <span>
-            <SubtractionItemIcon ready={ready} /> <span>{ready ? "Ready" : "Creating"}</span>
-        </span>
-    </StyledSubtractionItem>
-);
+export const SubtractionItem = ({ id, user, name, ready, created_at }) => {
+    return (
+        <LinkBox key={id} to={`/subtraction/${id}`}>
+            <StyledSubtractionItemHeader>
+                <span>{name}</span>
+                <span>
+                    <SubtractionItemIcon ready={ready} /> {ready ? "Ready" : "Creating"}
+                </span>
+            </StyledSubtractionItemHeader>
+            <SubtractionAttribution handle={user.handle} time={created_at} />
+        </LinkBox>
+    );
+};
 
 export const mapStateToProps = (state, props) => {
-    const { id, name, ready } = state.subtraction.documents[props.index];
+    const { id, user, name, ready, created_at } = state.subtraction.documents[props.index];
     return {
         id,
+        user,
+        created_at,
         name,
         ready
     };
