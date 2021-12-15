@@ -5,8 +5,7 @@ exports[`<Welcome /> should render 1`] = `
   <Welcome__StyledWelcome>
     <Box>
       <h1>
-        Virtool 
-        v1.2.3
+        Virtool
       </h1>
       <p>
         Viral infection diagnostics using next-generation sequencing

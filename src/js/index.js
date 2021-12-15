@@ -17,8 +17,7 @@ const sentryInit = res => {
     const dev = res.body.dev;
     if (!dev) {
         Sentry.init({
-            dsn: "https://d9ea493cb0f34ad4a141da5506e6b03b@sentry.io/220541",
-            version: window.virtool.version
+            dsn: "https://d9ea493cb0f34ad4a141da5506e6b03b@sentry.io/220541"
         });
 
         window.Sentry = Sentry;
