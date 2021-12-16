@@ -23,7 +23,6 @@ export const WallDialog = styled.div`
     box-shadow: ${props => props.theme.boxShadow.lg};
     display: flex;
     flex-direction: column;
-    margin-bottom: 260px;
     overflow: hidden;
     width: ${props => (props.size === "lg" ? "620px" : "340px")};
 `;
