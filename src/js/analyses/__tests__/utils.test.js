@@ -55,7 +55,9 @@ describe("formatPathoscopeData()", () => {
     it("should return plain detail when [results.length=0]", () => {
         const detail = {
             foo: "bar",
-            results: []
+            results: {
+                hits: []
+            }
         };
         const result = formatPathoscopeData(detail);
         expect(result).toEqual(detail);

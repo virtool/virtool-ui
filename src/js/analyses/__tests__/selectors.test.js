@@ -63,32 +63,34 @@ describe("getSortIds()", () => {
             analyses: {
                 sortKey: "length",
                 detail: {
-                    results: [
-                        {
-                            id: 0,
-                            e: 0.01,
-                            annotatedOrfCount: 3,
-                            sequence: "ATAATAGGGACACATAA"
-                        },
-                        {
-                            id: 1,
-                            e: 3e-22,
-                            annotatedOrfCount: 1,
-                            sequence: "ATAGATAGGGACACATAGGACACATA"
-                        },
-                        {
-                            id: 2,
-                            e: 5e-112,
-                            annotatedOrfCount: 2,
-                            sequence: "ATAGGATAGGGACACATAATAGGGACACATAGACACATA"
-                        },
-                        {
-                            id: 3,
-                            e: 4e-12,
-                            annotatedOrfCount: 5,
-                            sequence: "ATAGGGACACATA"
-                        }
-                    ]
+                    results: {
+                        hits: [
+                            {
+                                id: 0,
+                                e: 0.01,
+                                annotatedOrfCount: 3,
+                                sequence: "ATAATAGGGACACATAA"
+                            },
+                            {
+                                id: 1,
+                                e: 3e-22,
+                                annotatedOrfCount: 1,
+                                sequence: "ATAGATAGGGACACATAGGACACATA"
+                            },
+                            {
+                                id: 2,
+                                e: 5e-112,
+                                annotatedOrfCount: 2,
+                                sequence: "ATAGGATAGGGACACATAATAGGGACACATAGACACATA"
+                            },
+                            {
+                                id: 3,
+                                e: 4e-12,
+                                annotatedOrfCount: 5,
+                                sequence: "ATAGGGACACATA"
+                            }
+                        ]
+                    }
                 }
             }
         };

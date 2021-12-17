@@ -5,53 +5,54 @@ import { getMaxReadLength, getSampleLibraryType, getSelectedSamples } from "../s
 import { createFuse } from "../utils/utils";
 import { fuseSearchKeys } from "./utils";
 
-export const getReadCount = state => state.analyses.detail.read_count;
 export const getActiveId = state => state.analyses.activeId;
-export const getWorkflow = state => state.analyses.detail.workflow;
 export const getAnalysisDetailId = state => get(state, "analyses.detail.id", null);
-export const getResults = state => state.analyses.detail.results;
+export const getFilterOTUs = state => state.analyses.filterOTUs;
+export const getFilterSequences = state => state.analyses.filterSequences;
+export const getFilterAODP = state => state.analyses.filterAODP;
+export const getHits = state => state.analyses.detail.results.hits;
 export const getMaxSequenceLength = state => state.analyses.detail.maxSequenceLength;
+export const getReadCount = state => state.analyses.detail.results.readCount;
+export const getResults = state => state.analyses.detail.results;
+export const getSubtractedCount = state => state.analyses.detail.results.subtractedCount;
+export const getWorkflow = state => state.analyses.detail.workflow;
 
 /**
  * Return a Fuse object for searching through results given an workflow name. The workflow will determine which keys the
  * search runs over.
  *
  */
-export const getFuse = createSelector([getWorkflow, getResults], (workflow, results) =>
-    createFuse(results, fuseSearchKeys[workflow], "id")
+export const getFuse = createSelector([getWorkflow, getHits], (workflow, hits) =>
+    createFuse(hits, fuseSearchKeys[workflow], "id")
 );
 
-export const getFilterOTUs = state => state.analyses.filterOTUs;
-export const getFilterSequences = state => state.analyses.filterSequences;
-export const getFilterAODP = state => state.analyses.filterAODP;
-
 export const getFilterIds = createSelector(
-    [getFilterAODP, getWorkflow, getResults, getFilterOTUs, getFilterSequences, getMaxReadLength, getReadCount],
-    (aodpFilter, workflow, results, filterOTUs, filterSequences, maxReadLength, readCount) => {
+    [getFilterAODP, getWorkflow, getHits, getFilterOTUs, getFilterSequences, getMaxReadLength, getReadCount],
+    (aodpFilter, workflow, hits, filterOTUs, filterSequences, maxReadLength, readCount) => {
         if (workflow === "nuvs") {
-            const filteredResults = filterSequences ? reject(results, { e: undefined }) : results;
-            return map(filteredResults, "id");
+            const filteredHits = filterSequences ? reject(hits, { e: undefined }) : hits;
+            return map(filteredHits, "id");
         }
 
         if (workflow === "pathoscope_bowtie" && filterOTUs) {
-            const filteredResults = reject(results, hit => {
+            const filteredHits = reject(hits, hit => {
                 return hit.pi * readCount < (hit.length * 0.8) / maxReadLength;
             });
 
-            return map(filteredResults, "id");
+            return map(filteredHits, "id");
         }
 
         if (workflow === "aodp" && aodpFilter) {
-            const filteredResults = filter(results, result => {
-                if (result.identity > aodpFilter * 100) {
-                    return result.id;
+            const filteredHits = filter(hits, hit => {
+                if (hit.identity > aodpFilter * 100) {
+                    return hit.id;
                 }
             });
 
-            return map(filteredResults, fi => fi.id);
+            return map(filteredHits, fi => fi.id);
         }
 
-        return map(results, "id");
+        return map(hits, "id");
     }
 );
 
@@ -118,37 +119,37 @@ export const getSearchIds = state => state.analyses.searchIds;
 
 export const getSortKey = state => state.analyses.sortKey;
 
-export const getSortIds = createSelector([getWorkflow, getResults, getSortKey], (workflow, results, sortKey) => {
+export const getSortIds = createSelector([getWorkflow, getHits, getSortKey], (workflow, hits, sortKey) => {
     switch (sortKey) {
         case "e":
-            return map(sortBy(results, "e"), "id");
+            return map(sortBy(hits, "e"), "id");
 
         case "orfs":
-            return map(sortBy(results, "annotatedOrfCount").reverse(), "id");
+            return map(sortBy(hits, "annotatedOrfCount").reverse(), "id");
 
         case "length":
-            return map(sortBy(results, "sequence.length").reverse(), "id");
+            return map(sortBy(hits, "sequence.length").reverse(), "id");
 
         case "depth":
-            return map(sortBy(results, "depth").reverse(), "id");
+            return map(sortBy(hits, "depth").reverse(), "id");
 
         case "coverage":
-            return map(sortBy(results, "coverage").reverse(), "id");
+            return map(sortBy(hits, "coverage").reverse(), "id");
 
         case "weight":
-            return map(sortBy(results, "pi").reverse(), "id");
+            return map(sortBy(hits, "pi").reverse(), "id");
 
         case "identity":
-            return map(sortBy(results, "identity").reverse(), "id");
+            return map(sortBy(hits, "identity").reverse(), "id");
 
         default:
-            return map(results, "id");
+            return map(hits, "id");
     }
 });
 
 export const getMatches = createSelector(
-    [getWorkflow, getResults, getFilterIds, getSearchIds, getSortIds],
-    (workflow, results, filterIds, searchIds, sortIds) => {
+    [getWorkflow, getHits, getFilterIds, getSearchIds, getSortIds],
+    (workflow, hits, filterIds, searchIds, sortIds) => {
         let matchIds;
 
         if (searchIds) {
@@ -157,7 +158,7 @@ export const getMatches = createSelector(
             matchIds = intersection(sortIds, filterIds);
         }
 
-        const keyed = keyBy(results, "id");
+        const keyed = keyBy(hits, "id");
 
         return map(matchIds, id => keyed[id]);
     }

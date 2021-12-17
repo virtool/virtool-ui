@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Label } from "../../../base";
 import { toThousand } from "../../../utils/utils";
+import { getReadCount, getSubtractedCount } from "../../selectors";
 import { Bars } from "../Viewer/Bars";
 
 const StyledAnalysisMappingReferenceTitle = styled.div`
@@ -74,14 +75,14 @@ export const AnalysisMapping = ({ index, reference, subtraction, toReference, to
 };
 
 export const mapStateToProps = state => {
-    const { index, read_count, reference, subtractedCount, subtractions } = state.analyses.detail;
+    const { index, reference, subtractions } = state.analyses.detail;
 
     return {
         index,
         reference,
         subtraction: subtractions[0],
-        toReference: read_count,
-        toSubtraction: subtractedCount,
+        toReference: getReadCount(state),
+        toSubtraction: getSubtractedCount(state),
         total: state.samples.detail.quality.count
     };
 };
