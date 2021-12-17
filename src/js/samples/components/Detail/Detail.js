@@ -51,7 +51,7 @@ function SampleDetail({
         return <NotFound />;
     }
 
-    if (detail === null || !labels || !subtractionOptions) {
+    if (detail === null || labels === null || subtractionOptions === null) {
         return <LoadingPlaceholder />;
     }
 
@@ -84,6 +84,7 @@ function SampleDetail({
 
     const { created_at, user } = detail;
     const prefix = `/samples/${sampleId}`;
+
     return (
         <React.Fragment>
             <ViewHeader title={detail.name}>
@@ -125,7 +126,7 @@ export const mapStateToProps = state => ({
     canModify: getCanModify(state),
     detail: state.samples.detail,
     error: getError("GET_SAMPLE_ERROR"),
-    labels: get(state, "samples.detail.labels", ""),
+    labels: get(state, "labels.documents"),
     subtractionOptions: get(state, "subtraction.shortlist", "")
 });
 
