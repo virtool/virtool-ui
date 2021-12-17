@@ -13,24 +13,27 @@ if (module.hot) {
         throw err;
     });
 }
-const sentryInit = res => {
-    const dev = res.body.dev;
-    if (!dev) {
-        Sentry.init({
-            dsn: "https://d9ea493cb0f34ad4a141da5506e6b03b@sentry.io/220541"
-        });
 
-        window.Sentry = Sentry;
+Sentry.init({
+    dsn: "https://d9ea493cb0f34ad4a141da5506e6b03b@sentry.io/220541"
+});
+
+const sentryCheck = res => {
+    if (res.body.dev) {
+        Sentry.close();
     }
     return res;
 };
 
-window.captureException = error => (window.virtool.dev ? console.error(error) : window.Sentry.captureException(error));
+window.captureException = error => (window.dev ? console.error(error) : window.Sentry.captureException(error));
 const history = createBrowserHistory();
 window.store = createAppStore(history);
 
 Request.get("/api")
-    .then(sentryInit)
-    .then(({ body }) => window.store.dispatch(setInitialState(body)));
+    .then(sentryCheck)
+    .then(({ body }) => {
+        window.dev = body.dev;
+        window.store.dispatch(setInitialState(body));
+    });
 
 ReactDOM.render(<App store={window.store} history={history} />, document.getElementById("app-container"));
