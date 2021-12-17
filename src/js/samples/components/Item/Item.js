@@ -29,6 +29,7 @@ const SampleIconContainer = styled.div`
 `;
 
 const SampleItemCheckboxContainer = styled.div`
+    grid-column-start: 1;
     cursor: pointer;
     display: flex;
     padding-right: 15px;
@@ -43,6 +44,7 @@ const SampleItemLabels = styled.div`
 `;
 
 const SampleItemData = styled.div`
+    grid-column-start: 2;
     display: flex;
     flex: 3;
     flex-direction: column;
@@ -55,8 +57,15 @@ const SampleItemMain = styled.div`
 `;
 
 const SampleItemWorkflows = styled.div`
+    grid-column-start: 3;
     display: flex;
     flex: 2;
+`;
+
+const SampleItemIcon = styled.div`
+    grid-column-start: 4;
+    display: flex;
+    margin-left: auto;
 `;
 
 const SampleItemTitle = styled.div`
@@ -73,7 +82,8 @@ const SampleItemTitle = styled.div`
 
 const StyledSampleItem = styled(Box)`
     align-items: stretch;
-    display: flex;
+    display: grid;
+    grid-template-columns: 3% 57% 33% 7%;
 `;
 
 class SampleItem extends React.Component {
@@ -139,7 +149,7 @@ class SampleItem extends React.Component {
                         pathoscope={this.props.pathoscope}
                     />
                 </SampleItemWorkflows>
-                {endIcon}
+                <SampleItemIcon>{endIcon}</SampleItemIcon>
             </StyledSampleItem>
         );
     }
