@@ -2,9 +2,9 @@ import { get } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import {
+    Box,
     LoadingPlaceholder,
     NotFound,
-    Box,
     RelativeTime,
     SubviewHeader,
     SubviewHeaderAttribution,
@@ -61,7 +61,7 @@ export const AnalysisDetail = props => {
                     <AnalysisCache />
                 </SubviewHeaderTitle>
                 <SubviewHeaderAttribution>
-                    {detail.user.id} started <RelativeTime time={detail.created_at} />
+                    {detail.user.handle} started <RelativeTime time={detail.created_at} />
                 </SubviewHeaderAttribution>
             </SubviewHeader>
 

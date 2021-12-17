@@ -11,6 +11,7 @@ import {
     minBy,
     reject,
     sortBy,
+    startsWith,
     sumBy,
     toNumber,
     uniq
@@ -76,7 +77,7 @@ export const fillAlign = ({ align, length }) => {
 };
 
 export const formatData = detail => {
-    if (detail.workflow === "pathoscope_bowtie") {
+    if (startsWith(detail.workflow, "pathoscope")) {
         return formatPathoscopeData(detail);
     }
 
@@ -156,25 +157,15 @@ export const formatSequence = (sequence, readCount) => ({
 });
 
 export const formatPathoscopeData = detail => {
-    if (detail.results.length === 0) {
+    if (detail.results.hits.length === 0) {
         return detail;
     }
 
-    const {
-        cache,
-        created_at,
-        results,
-        id,
-        index,
-        read_count,
-        ready,
-        reference,
-        subtractions,
-        user,
-        workflow
-    } = detail;
+    const { cache, created_at, results, id, index, ready, reference, subtractions, user, workflow } = detail;
 
-    const formatted = map(results, otu => {
+    const readCount = results.read_count;
+
+    const hits = map(results.hits, otu => {
         const isolateNames = [];
 
         // Go through each isolate associated with the OTU, adding properties for weight, read count,
@@ -186,7 +177,7 @@ export const formatPathoscopeData = detail => {
             isolateNames.push(name);
 
             const sequences = sortBy(
-                map(isolate.sequences, sequence => formatSequence(sequence, read_count)),
+                map(isolate.sequences, sequence => formatSequence(sequence, readCount)),
                 "length"
             );
 
@@ -220,7 +211,7 @@ export const formatPathoscopeData = detail => {
             isolateNames: reject(uniq(isolateNames), "Unnamed Isolate"),
             maxGenomeLength: maxBy(isolates, "filled.length").length,
             maxDepth: maxBy(isolates, "maxDepth").maxDepth,
-            reads: pi * read_count
+            reads: pi * readCount
         };
     });
 
@@ -230,11 +221,13 @@ export const formatPathoscopeData = detail => {
         id,
         index,
         reference,
-        results: formatted,
-        read_count,
         ready,
+        results: {
+            hits,
+            readCount,
+            subtractedCount: detail.results.subtracted_count
+        },
         subtractions,
-        subtractedCount: detail.subtracted_count,
         user,
         workflow
     };

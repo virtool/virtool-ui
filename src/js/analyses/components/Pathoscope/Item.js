@@ -5,7 +5,7 @@ import { getActiveShadow, getColor } from "../../../app/theme";
 import { SpacedBox } from "../../../base";
 import { toScientificNotation } from "../../../utils/utils";
 import { setActiveHitId } from "../../actions";
-import { getActiveHit, getMatches } from "../../selectors";
+import { getActiveHit, getMatches, getReadCount } from "../../selectors";
 import Detail from "./Detail";
 import { OTUCoverage } from "./OTUCoverage";
 
@@ -120,7 +120,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         hit,
         active: activeId === hit.id,
-        mappedCount: state.analyses.detail.read_count,
+        mappedCount: getReadCount(state),
         showPathoscopeReads: state.analyses.showPathoscopeReads
     };
 };

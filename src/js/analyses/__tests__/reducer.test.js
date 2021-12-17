@@ -280,19 +280,24 @@ describe("Analyses Reducer", () => {
             detail: {
                 id: "testid",
                 workflow: "nuvs",
-                results: [{ index: 3 }, { index: 5 }]
+                results: { hits: [{ index: 3 }, { index: 5 }] }
             }
         };
+
         const action = {
             type: BLAST_NUVS.REQUESTED,
             payload: { analysisId: "testid", sequenceIndex: 3 }
         };
+
         const result = reducer(state, action);
+
         expect(result).toEqual({
             ...state,
             detail: {
                 ...state.detail,
-                results: [{ index: 3, blast: { ready: false } }, { index: 5 }]
+                results: {
+                    hits: [{ index: 3, blast: { ready: false } }, { index: 5 }]
+                }
             }
         });
     });
@@ -302,24 +307,27 @@ describe("Analyses Reducer", () => {
             detail: {
                 id: "testid",
                 workflow: "nuvs",
-                results: [{ index: 3 }, { index: 5 }]
+                results: { hits: [{ index: 3 }, { index: 5 }] }
             }
         };
+
         const action = {
             type: BLAST_NUVS.SUCCEEDED,
-
-            context: {
-                analysisId: "testid",
-                sequenceIndex: 3
-            },
-            payload: {}
+            payload: {
+                context: {
+                    analysisId: "testid",
+                    sequenceIndex: 3
+                },
+                payload: {}
+            }
         };
+
         const result = reducer(state, action);
+
         expect(result).toEqual({
-            ...state,
             detail: {
                 ...state.detail,
-                results: [{ index: 3, blast: {} }, { index: 5 }]
+                results: { hits: [{ index: 3, blast: {} }, { index: 5 }] }
             }
         });
     });
@@ -330,18 +338,23 @@ describe("Analyses Reducer", () => {
                 detail: {
                     id: "foo",
                     workflow: "nuvs",
-                    results: [{ index: 3 }, { index: 5 }]
+                    results: {
+                        hits: [{ index: 3 }, { index: 5 }]
+                    }
                 }
             };
+
             const analysisId = "foo";
             const sequenceIndex = 3;
             const data = { payload: "data_to_be_added" };
             const result = setNuvsBLAST(state, analysisId, sequenceIndex, data);
+
             expect(result).toEqual({
-                ...state,
                 detail: {
                     ...state.detail,
-                    results: [{ index: 3, blast: { payload: "data_to_be_added" } }, { index: 5 }]
+                    results: {
+                        hits: [{ index: 3, blast: { payload: "data_to_be_added" } }, { index: 5 }]
+                    }
                 }
             });
         });

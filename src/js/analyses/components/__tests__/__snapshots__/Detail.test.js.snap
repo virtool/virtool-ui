@@ -10,7 +10,6 @@ exports[`<AnalysisDetail /> should render 1`] = `
       <Connect(AnalysisCacheLink) />
     </ViewHeader__SubviewHeaderTitle>
     <ViewHeader__SubviewHeaderAttribution>
-      bob
        started 
       <RelativeTime
         time="2019-05-28T19:04:25.201000Z"
@@ -37,7 +36,6 @@ exports[`<AnalysisDetail /> should render expected view when workflow is NuVs] 1
       <Connect(AnalysisCacheLink) />
     </ViewHeader__SubviewHeaderTitle>
     <ViewHeader__SubviewHeaderAttribution>
-      bob
        started 
       <RelativeTime
         time="2019-05-28T19:04:25.201000Z"

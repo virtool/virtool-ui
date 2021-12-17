@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { get, map } from "lodash-es";
+import { get } from "lodash-es";
 import {
     BLAST_NUVS,
     CLEAR_ANALYSES,
@@ -72,13 +72,16 @@ export const setNuvsBLAST = (state, analysisId, sequenceIndex, data = "ip") => {
             ...state,
             detail: {
                 ...detail,
-                results: map(detail.results, sequence => {
-                    if (sequence.index === sequenceIndex) {
-                        return { ...sequence, blast: data };
-                    }
+                results: {
+                    ...detail.results,
+                    hits: detail.results.hits.map(sequence => {
+                        if (sequence.index === sequenceIndex) {
+                            return { ...sequence, blast: data };
+                        }
 
-                    return sequence;
-                })
+                        return sequence;
+                    })
+                }
             }
         };
     }
@@ -182,8 +185,8 @@ export const analysesReducer = createReducer(initialState, builder => {
             });
         })
         .addCase(BLAST_NUVS.SUCCEEDED, (state, action) => {
-            const { analysisId, sequenceIndex } = action.context;
-            return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload);
+            const { analysisId, sequenceIndex } = action.payload.context;
+            return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload.payload);
         });
 });
 
