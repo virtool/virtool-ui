@@ -1,5 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<SubtractionItem /> should render when [create_at=0] 1`] = `
+<Box__LinkBox
+  key="foo"
+  to="/subtraction/foo"
+>
+  <Item__StyledSubtractionItemHeader>
+    <span>
+      Foo
+    </span>
+    <span>
+      <SubtractionItemIcon
+        ready={true}
+      />
+       
+      Ready
+    </span>
+  </Item__StyledSubtractionItemHeader>
+  <SubtractionAttribution
+    handle="bar"
+    time={0}
+  />
+</Box__LinkBox>
+`;
+
+exports[`<SubtractionItem /> should render when [create_at=null] 1`] = `
+<Box__LinkBox
+  key="foo"
+  to="/subtraction/foo"
+>
+  <Item__StyledSubtractionItemHeader>
+    <span>
+      Foo
+    </span>
+    <span>
+      <SubtractionItemIcon
+        ready={true}
+      />
+       
+      Ready
+    </span>
+  </Item__StyledSubtractionItemHeader>
+  <SubtractionAttribution
+    handle="bar"
+    time={null}
+  />
+</Box__LinkBox>
+`;
+
 exports[`<SubtractionItem /> should render when [ready=false] 1`] = `
 <Box__LinkBox
   key="foo"
