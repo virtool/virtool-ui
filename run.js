@@ -26,6 +26,12 @@ program
     "-P, --use-proxy [bool]",
     "Use proxy to make API requests",
     process.env.VT_UI_USE_PROXY || false
+  )
+  .option(
+    "--sentry-dsn <DSN>",
+    "DSN for sentry logging",
+    process.env.VT_UI_SENTRY_DSN ||
+      "https://d9ea493cb0f34ad4a141da5506e6b03b@sentry.io/220541"
   );
 
 program.parse(process.argv);
@@ -53,7 +59,7 @@ app.set("views", path.join(__dirname, "dist"));
 app.locals.delimiter = "#";
 
 app.get(/\.(?:js|map|ico)$/, express.static(path.join(__dirname, "dist")));
-app.get("*", defaultPath);
+app.get("*", defaultPath(options.sentryDsn));
 
 app.listen(options.port, options.host, () => {
   console.log(`Listening at http://${options.host}:${options.port}`);
