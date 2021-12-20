@@ -55,7 +55,7 @@ describe("<CreateSample>", () => {
     const submitForm = () => userEvent.click(screen.getByRole("button", { name: /Save/i }));
 
     const inputFormRequirements = (sampleName = "Name") => {
-        userEvent.type(screen.getByLabelText("Sample Name"), sampleName);
+        userEvent.type(screen.getByLabelText("Name"), sampleName);
         userEvent.click(screen.getByText(props.readyReads[0].name));
         userEvent.click(screen.getByText(props.readyReads[1].name));
     };
@@ -173,7 +173,7 @@ describe("<CreateSample>", () => {
 
     it("should update the sample name when the magic icon is pressed", async () => {
         renderWithProviders(<CreateSample {...props} />, createAppStore(state));
-        const nameInput = screen.getByRole("textbox", { name: /Sample Name/i });
+        const nameInput = screen.getByRole("textbox", { name: /Name/i });
         expect(nameInput.value).toBe("");
 
         userEvent.click(screen.getByText(props.readyReads[0].name));

@@ -125,13 +125,13 @@ export const CreateSample = props => {
                             <NarrowContainer>
                                 <CreateSampleFields>
                                     <InputGroup>
-                                        <InputLabel>Sample Name</InputLabel>
+                                        <InputLabel>Name</InputLabel>
                                         <InputContainer align="right">
                                             <Field
                                                 as={Input}
                                                 type="text"
                                                 name="name"
-                                                aria-label="Sample Name"
+                                                aria-label="Name"
                                                 autocomplete={false}
                                                 error={touched.name ? errors.name : null}
                                             />
