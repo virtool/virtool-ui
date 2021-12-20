@@ -24,6 +24,12 @@ describe("<SubtractionItem />", () => {
         const wrapper = shallow(<SubtractionItem {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    it.each([null, 0])("should render when [create_at=%p]", created_at => {
+        props.created_at = created_at;
+        const wrapper = shallow(<SubtractionItem {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
 });
 
 describe("mapStateToProps()", () => {
