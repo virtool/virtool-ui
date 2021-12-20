@@ -14,6 +14,9 @@
     <base href="/" />
     <script nonce="<#= nonce #>">
         window.__webpack_nonce__ = "<#= nonce #>";
+        window.virtool = {
+            sentryDSN: "<#= sentryDSN #>",
+        }
     </script>
     <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon %>?v=2" type="images/x-icon"/>
 </head>
