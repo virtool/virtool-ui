@@ -19,12 +19,13 @@ The default CSP configuration expects API requests to be made to the same domain
 
 ## Configuration
 
-| Option              | Env              | Description                              |
-| ------------------- | ---------------- | ---------------------------------------- |
-| `-p`, `--port`      | `VT_UI_PORT`     | The port the UI server should listen on  |
-| `-H`, `--host`      | `VT_UI_HOST`     | The host the UI server should listen on  |
-| `-a`, `--api-url`   | `VT_UI_API_URL`  | The URL API requests should be made to   |
-| `-P`, `--use-proxy` | `VT_UI_USE_PROXY` | Proxy API requests through the UI server |
+| Option              | Env                | Description                                    |
+|---------------------|--------------------|------------------------------------------------|
+| `-p`, `--port`      | `VT_UI_PORT`       | The port the UI server should listen on        |
+| `-H`, `--host`      | `VT_UI_HOST`       | The host the UI server should listen on        |
+| `-a`, `--api-url`   | `VT_UI_API_URL`    | The URL API requests should be made to         |
+| `-P`, `--use-proxy` | `VT_UI_USE_PROXY`  | Proxy API requests through the UI server       |
+ | `--sentry-dsn`      | `VT_UI_SENTRY_DSN` | The DSN that sentry will send logged errors to |
 
 ### API Proxy
 
