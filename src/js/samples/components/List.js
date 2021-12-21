@@ -18,6 +18,7 @@ const SamplesListHeader = styled.div`
 
 const SamplesListContent = styled.div`
     grid-row: 2;
+    min-width: 550px;
 `;
 
 const StyledSamplesList = styled.div`

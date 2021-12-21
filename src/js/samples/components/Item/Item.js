@@ -17,14 +17,9 @@ const SampleIconContainer = styled.div`
     bottom: 0;
     display: flex;
     justify-content: center;
-
-    > div {
-        align-items: center;
-        display: flex;
-
-        strong {
-            margin-left: 5px;
-        }
+    margin-left: auto;
+    strong {
+        margin-left: 5px;
     }
 `;
 
@@ -33,11 +28,11 @@ const SampleItemCheckboxContainer = styled.div`
     cursor: pointer;
     display: flex;
     padding-right: 15px;
+    max-width: 30px;
 `;
 
 const SampleItemLabels = styled.div`
     margin-top: 10px;
-
     & > *:not(:last-child) {
         margin-right: 5px;
     }
@@ -48,6 +43,7 @@ const SampleItemData = styled.div`
     display: flex;
     flex: 3;
     flex-direction: column;
+    min-width: 250px;
 `;
 
 const SampleItemMain = styled.div`
@@ -60,30 +56,33 @@ const SampleItemWorkflows = styled.div`
     grid-column-start: 3;
     display: flex;
     flex: 2;
+    white-space: nowrap;
 `;
 
 const SampleItemIcon = styled.div`
-    grid-column-start: 4;
     display: flex;
-    margin-left: auto;
+    min-width: 80px;
 `;
 
 const SampleItemTitle = styled.div`
     display: flex;
     flex-direction: column;
     flex: 3;
+    overflow: hidden;
 
     a {
         font-size: ${getFontSize("lg")};
         font-weight: ${getFontWeight("thick")};
         margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 `;
 
 const StyledSampleItem = styled(Box)`
     align-items: stretch;
-    display: grid;
-    grid-template-columns: 3% 57% 33% 7%;
+    display: flex;
+    flex-basis: 0px;
 `;
 
 class SampleItem extends React.Component {
@@ -114,10 +113,8 @@ class SampleItem extends React.Component {
         } else {
             endIcon = (
                 <SampleIconContainer>
-                    <React.Fragment>
-                        <Loader size="14px" color="primary" />
-                        <strong>Creating</strong>
-                    </React.Fragment>
+                    <Loader size="14px" color="primary" />
+                    <strong>Creating</strong>
                 </SampleIconContainer>
             );
         }
