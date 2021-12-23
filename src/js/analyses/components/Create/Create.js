@@ -8,6 +8,7 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../bas
 import { getDefaultSubtractions, getSampleDetailId, getSampleLibraryType } from "../../../samples/selectors";
 import { getDataTypeFromLibraryType } from "../../../samples/utils";
 import { shortlistSubtractions } from "../../../subtraction/actions";
+import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 import { routerLocationHasState } from "../../../utils/utils";
 import { analyze } from "../../actions";
 import { getCompatibleIndexesWithLibraryType } from "../../selectors";
@@ -120,7 +121,7 @@ export const mapStateToProps = state => ({
     hasHmm: !!state.hmms.total_count,
     sampleId: getSampleDetailId(state),
     show: routerLocationHasState(state, "createAnalysis"),
-    subtractionOptions: state.subtraction.shortlist
+    subtractionOptions: getReadySubtractionShortlist(state)
 });
 
 export const mapDispatchToProps = dispatch => ({

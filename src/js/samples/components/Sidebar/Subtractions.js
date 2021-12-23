@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { SidebarHeader, SideBarSection } from "../../../base";
-import { getSubtractionOptions } from "../../selectors";
+import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 import { SampleSidebarList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
 
@@ -26,7 +26,7 @@ export const DefaultSubtractions = ({ defaultSubtractions, subtractionOptions, o
 );
 
 export const mapStateToProps = state => ({
-    subtractionOptions: getSubtractionOptions(state)
+    subtractionOptions: getReadySubtractionShortlist(state)
 });
 
 export default connect(mapStateToProps)(DefaultSubtractions);

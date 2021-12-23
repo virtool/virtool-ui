@@ -8,13 +8,13 @@ import {
     Badge,
     Button,
     Icon,
+    InputError,
     Modal,
     ModalBody,
     ModalFooter,
     ModalHeader,
     ModalTabs,
-    TabLink,
-    InputError
+    TabLink
 } from "../../../base";
 import { deselectSamples } from "../../../samples/actions";
 import { getSelectedSamples } from "../../../samples/selectors";
@@ -32,8 +32,9 @@ import { SelectedSamples } from "./SelectedSamples";
 import { SubtractionSelector } from "./SubtractionSelector";
 import { CreateAnalysisSummary } from "./Summary";
 import { WorkflowSelector } from "./WorkflowSelector";
-import { Formik, Form, Field } from "formik";
+import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 
 const QuickAnalyzeFooter = styled(ModalFooter)`
     align-items: center;
@@ -174,7 +175,7 @@ export const mapStateToProps = state => ({
     hasHmm: !!state.hmms.total_count,
     mode: getQuickAnalysisMode(state),
     samples: getSelectedSamples(state),
-    subtractionOptions: state.subtraction.shortlist
+    subtractionOptions: getReadySubtractionShortlist(state)
 });
 
 export const mapDispatchToProps = dispatch => ({
