@@ -57,6 +57,7 @@ export const SampleItemWorkflowTag = ({ label, pending }) => (
 
 const SampleItemWorkflowTagLink = styled(StyledSampleItemWorkflowTag)`
     background-color: ${props => props.theme.color.purple};
+    border: 1px solid ${props => props.theme.color.purple};
     border-left: none;
 `;
 
