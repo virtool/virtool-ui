@@ -5,12 +5,12 @@ describe("<Analyses />", () => {
 
     beforeEach(() => {
         props = {
-            sampleId: "foo",
             loading: false,
             onFindAnalyses: jest.fn(),
             onClearAnalyses: jest.fn(),
             onFindHmms: jest.fn(),
-            onListReadyIndexes: jest.fn()
+            onListReadyIndexes: jest.fn(),
+            match: { params: { sampleId: "foo" } }
         };
     });
 

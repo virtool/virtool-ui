@@ -11,7 +11,7 @@ import AnalysisDetail from "./Detail";
 
 export class Analyses extends React.Component {
     componentDidMount() {
-        this.props.onFindAnalyses(this.props.sampleId);
+        this.props.onFindAnalyses(this.props.match.params.sampleId);
         this.props.onFindHmms();
         this.props.onListReadyIndexes();
     }
@@ -35,7 +35,6 @@ export class Analyses extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    sampleId: state.samples.detail.id,
     loading: state.analyses.documents === null || state.hmms.documents === null || state.analyses.readyIndexes === null
 });
 
