@@ -45,8 +45,8 @@ describe("<CreateSample>", () => {
             },
             subtraction: {
                 shortlist: [
-                    { name: "Foo Subtraction", id: "foo_subtraction" },
-                    { name: "Bar Subtraction", id: "bar_subtraction" }
+                    { name: "Foo Subtraction", id: "foo_subtraction", ready: true },
+                    { name: "Bar Subtraction", id: "bar_subtraction", ready: true }
                 ]
             }
         };

@@ -119,7 +119,7 @@ describe("mapStateToProps()", () => {
             hasHmm: false,
             sampleId: "foo",
             show: false,
-            subtractionOptions: null
+            subtractionOptions: []
         });
     });
 });

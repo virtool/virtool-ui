@@ -13,7 +13,7 @@ if (module.hot) {
     module.hot.accept(err => {
         throw err;
     });
-    window.virtool.sentryDSN = "https://d9ea493cb0f34ad4a141da5506e6b03b@sentry.io/220541";
+    window.virtool.sentryDSN = null;
 }
 
 Sentry.init({
