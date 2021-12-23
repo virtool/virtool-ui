@@ -70,14 +70,13 @@ export const AnalysisItem = props => {
             <Link to={`/subtraction/${subtraction.id}`}>{subtraction.name}</Link>
         </AnalysisItemTag>
     ));
-
     return (
         <StyledAnalysisItem>
             <AnalysisItemTop>
                 <Link to={`/samples/${sampleId}/analyses/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
                 <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} ready={ready} />
             </AnalysisItemTop>
-            <Attribution user={user.id} time={created_at} />
+            <Attribution user={user.handle} time={created_at} />
             <AnalysisItemTags>
                 <AnalysisItemTag key="reference">
                     <Icon name="equals" />

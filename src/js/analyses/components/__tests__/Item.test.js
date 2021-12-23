@@ -34,7 +34,9 @@ describe("<AnalysisItem />", () => {
                 }
             ],
             user: {
-                id: "bob"
+                id: "fred",
+                handle: "bob",
+                admin: "false"
             },
             workflow: "nuvs",
             onRemove: jest.fn()
