@@ -63,7 +63,7 @@ export const Main = ({ ready, onLoad }) => {
                             <Route path="/samples" component={Samples} />
                             <Route path="/refs" component={References} />
                             <Route path="/hmm" component={HMM} />
-                            <Route path="/subtraction" component={Subtraction} />
+                            <Route path="/subtractions" component={Subtraction} />
                             <Route path="/administration" component={Administration} />
                             <Route path="/account" component={Account} />
                         </Switch>

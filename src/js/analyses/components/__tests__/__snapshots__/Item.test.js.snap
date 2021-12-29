@@ -54,7 +54,7 @@ exports[`<AnalysisItem /> should render 1`] = `
         name="not-equal"
       />
       <Link
-        to="/subtraction/pru"
+        to="/subtractions/pru"
       >
         Prunus persica
       </Link>
@@ -68,7 +68,7 @@ exports[`<AnalysisItem /> should render 1`] = `
         name="not-equal"
       />
       <Link
-        to="/subtraction/ara"
+        to="/subtractions/ara"
       >
         Arabidopsis thaliana
       </Link>
@@ -131,7 +131,7 @@ exports[`<AnalysisItem /> should render when [placeholder=true] 1`] = `
         name="not-equal"
       />
       <Link
-        to="/subtraction/pru"
+        to="/subtractions/pru"
       >
         Prunus persica
       </Link>
@@ -145,7 +145,7 @@ exports[`<AnalysisItem /> should render when [placeholder=true] 1`] = `
         name="not-equal"
       />
       <Link
-        to="/subtraction/ara"
+        to="/subtractions/ara"
       >
         Arabidopsis thaliana
       </Link>
@@ -208,7 +208,7 @@ exports[`<AnalysisItem /> should render when [ready=false] 1`] = `
         name="not-equal"
       />
       <Link
-        to="/subtraction/pru"
+        to="/subtractions/pru"
       >
         Prunus persica
       </Link>
@@ -222,7 +222,7 @@ exports[`<AnalysisItem /> should render when [ready=false] 1`] = `
         name="not-equal"
       />
       <Link
-        to="/subtraction/ara"
+        to="/subtractions/ara"
       >
         Arabidopsis thaliana
       </Link>

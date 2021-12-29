@@ -26,7 +26,7 @@ const StyledSubtractionItemHeader = styled.div`
 
 export const SubtractionItem = ({ id, user, name, ready, created_at }) => {
     return (
-        <LinkBox key={id} to={`/subtraction/${id}`}>
+        <LinkBox key={id} to={`/subtractions/${id}`}>
             <StyledSubtractionItemHeader>
                 <span>{name}</span>
                 <span>

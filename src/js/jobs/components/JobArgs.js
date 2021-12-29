@@ -42,7 +42,7 @@ export const CreateSampleRows = ({ sample_id }) => (
 
 export const CreateSubtractionRows = ({ subtraction_id }) => (
     <JobArgsRow title="Subtraction">
-        <Link to={`/subtraction/${subtraction_id}`}>{subtraction_id}</Link>
+        <Link to={`/subtractions/${subtraction_id}`}>{subtraction_id}</Link>
     </JobArgsRow>
 );
 
