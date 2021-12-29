@@ -8,7 +8,7 @@ export const SubtractionToolbar = ({ term, onFind, canModify }) => {
     let createButton;
 
     if (canModify) {
-        createButton = <LinkButton color="blue" to="subtraction/create" icon="plus-square" tip="Create" />;
+        createButton = <LinkButton color="blue" to="subtractions/create" icon="plus-square" tip="Create" />;
     }
 
     return (

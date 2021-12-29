@@ -48,10 +48,10 @@ export const Sidebar = ({ administrator }) => (
                 {administrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
             </StyledSidebar>
         </Route>
-        <Route path="/subtraction">
+        <Route path="/subtractions">
             <StyledSidebar>
-                <SidebarItem exclude={["/subtraction/files"]} title="Browse" link="/subtraction" icon="th-list" />
-                <SidebarItem title="Files" link="/subtraction/files" icon="folder-open" />
+                <SidebarItem exclude={["/subtractions/files"]} title="Browse" link="/subtractions" icon="th-list" />
+                <SidebarItem title="Files" link="/subtractions/files" icon="folder-open" />
             </StyledSidebar>
         </Route>
         <Route path="/hmm">

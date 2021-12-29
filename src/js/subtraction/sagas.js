@@ -25,7 +25,7 @@ export function* createSubtraction(action) {
     const resp = yield apiCall(subtractionAPI.create, action.payload, CREATE_SUBTRACTION);
 
     if (resp.ok) {
-        yield put(push("/subtraction"));
+        yield put(push("/subtractions"));
     }
 }
 
@@ -45,7 +45,7 @@ export function* removeSubtraction(action) {
     const resp = yield apiCall(subtractionAPI.remove, action.payload, REMOVE_SUBTRACTION);
 
     if (resp.ok) {
-        yield put(push("/subtraction"));
+        yield put(push("/subtractions"));
     }
 }
 

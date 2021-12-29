@@ -67,7 +67,7 @@ export const AnalysisItem = props => {
     const subtractionComponents = subtractions.map(subtraction => (
         <AnalysisItemTag key={subtraction.id}>
             <Icon name="not-equal" />
-            <Link to={`/subtraction/${subtraction.id}`}>{subtraction.name}</Link>
+            <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
         </AnalysisItemTag>
     ));
     return (

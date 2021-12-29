@@ -3,7 +3,7 @@
 exports[`<SubtractionItem /> should render when [create_at=0] 1`] = `
 <Box__LinkBox
   key="foo"
-  to="/subtraction/foo"
+  to="/subtractions/foo"
 >
   <Item__StyledSubtractionItemHeader>
     <span>
@@ -27,7 +27,7 @@ exports[`<SubtractionItem /> should render when [create_at=0] 1`] = `
 exports[`<SubtractionItem /> should render when [create_at=null] 1`] = `
 <Box__LinkBox
   key="foo"
-  to="/subtraction/foo"
+  to="/subtractions/foo"
 >
   <Item__StyledSubtractionItemHeader>
     <span>
@@ -51,7 +51,7 @@ exports[`<SubtractionItem /> should render when [create_at=null] 1`] = `
 exports[`<SubtractionItem /> should render when [ready=false] 1`] = `
 <Box__LinkBox
   key="foo"
-  to="/subtraction/foo"
+  to="/subtractions/foo"
 >
   <Item__StyledSubtractionItemHeader>
     <span>
@@ -74,7 +74,7 @@ exports[`<SubtractionItem /> should render when [ready=false] 1`] = `
 exports[`<SubtractionItem /> should render when [ready=true] 1`] = `
 <Box__LinkBox
   key="foo"
-  to="/subtraction/foo"
+  to="/subtractions/foo"
 >
   <Item__StyledSubtractionItemHeader>
     <span>

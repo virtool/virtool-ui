@@ -15,11 +15,11 @@ exports[`<Subtraction /> should render 1`] = `
           }
         }
         exact={true}
-        path="/subtraction"
+        path="/subtractions"
       />
       <Route
         component={[Function]}
-        path="/subtraction/files"
+        path="/subtractions/files"
       />
       <Route
         component={
@@ -31,7 +31,7 @@ exports[`<Subtraction /> should render 1`] = `
             "type": [Function],
           }
         }
-        path="/subtraction/create"
+        path="/subtractions/create"
       />
       <Route
         component={
@@ -43,7 +43,7 @@ exports[`<Subtraction /> should render 1`] = `
             "type": [Function],
           }
         }
-        path="/subtraction/:subtractionId"
+        path="/subtractions/:subtractionId"
       />
     </Switch>
   </Container__NarrowContainer>

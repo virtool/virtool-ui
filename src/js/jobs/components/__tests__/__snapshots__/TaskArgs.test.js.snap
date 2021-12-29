@@ -65,7 +65,7 @@ exports[`<CreateSubtractionRows /> renders correctly 1`] = `
   title="Subtraction"
 >
   <Link
-    to="/subtraction/foo"
+    to="/subtractions/foo"
   >
     foo
   </Link>

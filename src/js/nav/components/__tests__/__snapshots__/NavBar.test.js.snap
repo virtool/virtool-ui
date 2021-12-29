@@ -30,9 +30,9 @@ exports[`<Bar /> should render 1`] = `
       HMM
     </NavBarItem>
     <NavBarItem
-      to="/subtraction"
+      to="/subtractions"
     >
-      Subtraction
+      Subtractions
     </NavBarItem>
   </NavBar__NavBarLeft>
   <NavBar__NavBarRight>

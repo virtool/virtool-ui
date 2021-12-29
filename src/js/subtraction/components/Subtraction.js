@@ -13,10 +13,10 @@ const Subtraction = () => (
     <Container>
         <NarrowContainer>
             <Switch>
-                <Route path="/subtraction" component={SubtractionList} exact />
-                <Route path="/subtraction/files" component={SubtractionFileManager} />
-                <Route path="/subtraction/create" component={SubtractionCreate} />
-                <Route path="/subtraction/:subtractionId" component={SubtractionDetail} />
+                <Route path="/subtractions" component={SubtractionList} exact />
+                <Route path="/subtractions/files" component={SubtractionFileManager} />
+                <Route path="/subtractions/create" component={SubtractionCreate} />
+                <Route path="/subtractions/:subtractionId" component={SubtractionDetail} />
             </Switch>
         </NarrowContainer>
     </Container>

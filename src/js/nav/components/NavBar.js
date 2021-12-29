@@ -62,7 +62,7 @@ export const Bar = ({ administrator, dev, userId, onLogout }) => (
             <NavBarItem to="/samples">Samples</NavBarItem>
             <NavBarItem to="/refs">References</NavBarItem>
             <NavBarItem to="/hmm">HMM</NavBarItem>
-            <NavBarItem to="/subtraction">Subtraction</NavBarItem>
+            <NavBarItem to="/subtractions">Subtractions</NavBarItem>
         </NavBarLeft>
 
         <NavBarRight>

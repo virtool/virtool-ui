@@ -41,7 +41,7 @@ export const SubtractionFileSelector = ({ files, value, onClick, error }) => {
     if (!fileComponents.length) {
         return (
             <NoneFoundBox noun="files">
-                <Link to="/subtraction/files">Upload some</Link>
+                <Link to="/subtractions/files">Upload some</Link>
             </NoneFoundBox>
         );
     }

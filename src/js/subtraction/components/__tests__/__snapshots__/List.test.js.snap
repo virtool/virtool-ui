@@ -3,10 +3,10 @@
 exports[`<SubtractionList /> renders correctly 1`] = `
 <Fragment>
   <ViewHeader
-    title="Subtraction"
+    title="Subtractions"
   >
     <ViewHeader__ViewHeaderTitle>
-      Subtraction 
+      Subtractions 
       <Badge>
         1
       </Badge>
