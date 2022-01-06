@@ -27,7 +27,17 @@ const StyledSamplesList = styled.div`
     grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
 `;
 
-export const SamplesList = ({ documents, loading, match, page, pageCount, totalCount, onFindSamples, onFindOther }) => {
+export const SamplesList = ({
+    documents,
+    loading,
+    match,
+    page,
+    pageCount,
+    totalCount,
+    onFindSamples,
+    onFindOther,
+    selected
+}) => {
     useEffect(onFindOther, [null]);
 
     useEffect(() => {
@@ -67,7 +77,7 @@ export const SamplesList = ({ documents, loading, match, page, pageCount, totalC
                         />
                     )}
                 </SamplesListContent>
-                <SampleFilters />
+                {!selected.length && <SampleFilters />}
             </StyledSamplesList>
         </React.Fragment>
     );
