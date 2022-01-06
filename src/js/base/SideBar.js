@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Box } from "./Box";
 import { borderRadius, boxShadow, fontWeight, getFontSize } from "../app/theme";
+import { Box } from "./Box";
 
 export const SideBarSection = styled(Box)`
     background-color: #f8fafc;
