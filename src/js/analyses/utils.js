@@ -3,6 +3,7 @@ import {
     fill,
     flatMap,
     fromPairs,
+    has,
     keys,
     map,
     max,
@@ -68,7 +69,7 @@ export const fillAlign = ({ align, length }) => {
     let prev = 0;
 
     return map(filled, (depth, i) => {
-        if (coords.hasOwnProperty(i)) {
+        if (has(coords, i)) {
             prev = coords[i];
         }
 

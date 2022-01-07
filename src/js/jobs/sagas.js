@@ -1,3 +1,4 @@
+import { has } from "lodash-es";
 import { select, takeEvery, takeLatest } from "redux-saga/effects";
 import {
     CANCEL_JOB,
@@ -32,7 +33,7 @@ export function* wsUpdateJob(action) {
 
     const linkedJobs = yield select(getLinkedJobs);
 
-    if (linkedJobs.hasOwnProperty(jobId)) {
+    if (has(linkedJobs, jobId)) {
         yield apiCall(jobsAPI.get, { jobId }, GET_LINKED_JOB);
     }
 }
