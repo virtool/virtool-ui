@@ -2,7 +2,7 @@ import { map, sortBy } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { BoxGroup, BoxGroupHeader, NoneFound } from "../../../base";
-import { SubtractionFile } from "./File";
+import { File as SubtractionFile } from "./File";
 
 export const SubtractionFiles = ({ files }) => {
     let fileComponents = map(sortBy(files, "name"), file => <SubtractionFile file={file} key={file.id} />);
