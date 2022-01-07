@@ -40,7 +40,7 @@ services:
       - backend
 
   api:
-    image: virtool/virtool:6.6.3
+    image: virtool/virtool:6.6.5
     depends_on:
       - mongo
       - redis
@@ -60,7 +60,7 @@ services:
       - vt_data:/data
 
   jobs-api:
-    image: virtool/virtool:6.5.0
+    image: virtool/virtool:6.6.5
     depends_on:
       - mongo
       - redis
@@ -77,7 +77,7 @@ services:
       - vt_data:/data
 
   pathoscope:
-    image: virtool/pathoscope:2.0.6
+    image: virtool/pathoscope:2.0.8
     entrypoint: workflow
     restart: always
     command: >
@@ -89,7 +89,7 @@ services:
       jobs_pathoscope_bowtie
 
   create-sample:
-    image: virtool/create-sample:2.0.4
+    image: virtool/create-sample:2.0.5
     entrypoint: workflow
     restart: always
     command: >
@@ -101,7 +101,7 @@ services:
       jobs_create_sample
 
   create-subtraction:
-    image: virtool/create-subtraction:2.0.8
+    image: virtool/create-subtraction:2.0.9
     restart: always
     entrypoint: workflow
     command: >
@@ -112,7 +112,7 @@ services:
       jobs_create_subtraction
 
   build-index:
-    image: virtool/build-index:2.0.3
+    image: virtool/build-index:2.0.4
     restart: always
     entrypoint: workflow
     command: >
