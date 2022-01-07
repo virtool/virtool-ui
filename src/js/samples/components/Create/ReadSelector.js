@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontWeight } from "../../../app/theme";
 import { Box, BoxGroup, Button, InputError, NoneFoundSection, SearchInput, Toolbar } from "../../../base";
-
 import ReadSelectorItem from "./ReadSelectorItem";
 
 const ReadSelectorBox = styled(Box)`
@@ -24,6 +23,10 @@ const ReadSelectorHeader = styled.label`
     align-items: center;
     display: flex;
     font-weight: ${getFontWeight("thick")};
+
+    label {
+        margin: 0;
+    }
 
     span {
         color: grey;
@@ -116,11 +119,22 @@ export default class ReadSelector extends React.PureComponent {
             );
         }
 
+        let pairedness;
+
+        if (this.props.selected.length == 1) {
+            pairedness = <span>Unpaired | </span>;
+        }
+
+        if (this.props.selected.length == 2) {
+            pairedness = <span>Paired | </span>;
+        }
+
         return (
             <div>
                 <ReadSelectorHeader>
-                    <strong>Read Files</strong>
+                    <label>Read Files</label>
                     <span>
+                        {pairedness}
                         {this.props.selected.length} of {fileComponents.length || 0} selected
                     </span>
                 </ReadSelectorHeader>

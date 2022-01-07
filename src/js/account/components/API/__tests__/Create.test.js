@@ -130,10 +130,10 @@ describe("<CreateAPIKey />", () => {
 });
 
 describe("mapStateToProps", () => {
-    it.each([true, false])("should return props when routerLocationHasState() returns %p", show => {
-        const spy = jest.spyOn(utils, "routerLocationHasState");
+    let spy;
 
-        spy.mockImplementation(() => show);
+    it.each([true, false])("should return props when routerLocationHasState() returns %p", show => {
+        spy = jest.spyOn(utils, "routerLocationHasState").mockImplementation(() => show);
 
         const newKey = "123abc";
         const permissions = { foo: true };
@@ -152,6 +152,12 @@ describe("mapStateToProps", () => {
         });
 
         expect(utils.routerLocationHasState).toHaveBeenCalledWith(state, "createAPIKey");
+
+        spy.mockReset();
+    });
+
+    afterAll(() => {
+        spy.mockRestore();
     });
 });
 

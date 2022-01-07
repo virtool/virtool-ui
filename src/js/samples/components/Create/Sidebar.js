@@ -10,11 +10,10 @@ const StyledSidebar = styled(SideContainer)`
     display: flex;
     width: 320px;
     z-index: 0;
-    padding-left: 15px;
 `;
 
-export const Sidebar = ({ sampleLabels, defaultSubtractions, onUpdate }) => (
-    <StyledSidebar>
+export const Sidebar = ({ className, sampleLabels, defaultSubtractions, onUpdate }) => (
+    <StyledSidebar className={className}>
         <SampleLabels onUpdate={selection => onUpdate("labels", selection)} sampleLabels={sampleLabels} />
         <DefaultSubtractions
             onUpdate={selection => onUpdate("subtractionIds", selection)}
