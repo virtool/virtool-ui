@@ -5,15 +5,14 @@ import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "../../../base";
 import SampleCacheItem from "./CacheItem";
 
 export const SampleFilesCache = ({ caches }) => {
-    let fileComponents;
-
-    if (caches && caches.length) {
-        fileComponents = map(caches, ({ created_at, files, hash, id, missing }) => (
-            <SampleCacheItem key={id} createdAt={created_at} files={files} hash={hash} id={id} missing={missing} />
-        ));
-    } else {
-        fileComponents = <NoneFoundSection key="none" noun="cached trims" />;
-    }
+    const fileComponents =
+        caches && caches.length ? (
+            map(caches, ({ created_at, files, hash, id, missing }) => (
+                <SampleCacheItem key={id} createdAt={created_at} files={files} hash={hash} id={id} missing={missing} />
+            ))
+        ) : (
+            <NoneFoundSection key="none" noun="cached trims" />
+        );
 
     return (
         <BoxGroup>

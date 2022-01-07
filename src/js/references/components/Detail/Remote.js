@@ -143,21 +143,17 @@ const Remote = ({ detail, onCheckUpdates, onUpdate, checking, progress }) => {
         );
     }
 
-    let statusComponent;
-
-    if (updating) {
-        statusComponent = <Upgrade progress={progress} />;
-    } else {
-        statusComponent = (
-            <Release
-                release={release}
-                checking={checking}
-                updating={updating}
-                onCheckUpdates={() => onCheckUpdates(id)}
-                onUpdate={() => onUpdate(id)}
-            />
-        );
-    }
+    const statusComponent = updating ? (
+        <Upgrade progress={progress} />
+    ) : (
+        <Release
+            release={release}
+            checking={checking}
+            updating={updating}
+            onCheckUpdates={() => onCheckUpdates(id)}
+            onUpdate={() => onUpdate(id)}
+        />
+    );
 
     return (
         <BoxGroup>

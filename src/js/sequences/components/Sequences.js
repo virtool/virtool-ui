@@ -29,13 +29,11 @@ const IsolateSequencesHeader = styled.label`
 export const IsolateSequences = ({ dataType, isolateName, sequences }) => {
     const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
 
-    let sequenceComponents;
-
-    if (sequences.length) {
-        sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
-    } else {
-        sequenceComponents = <NoneFoundSection noun="sequences" />;
-    }
+    const sequenceComponents = sequences.length ? (
+        map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />)
+    ) : (
+        <NoneFoundSection noun="sequences" />
+    );
 
     return (
         <React.Fragment>

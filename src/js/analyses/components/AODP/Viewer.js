@@ -29,23 +29,17 @@ const AODPNoneFound = styled(Box)`
 `;
 
 export const AODPViewer = ({ show }) => {
-    let panes;
-
-    if (show) {
-        panes = (
-            <AODPPanes>
-                <AODPList />
-                <AODPDetail />
-            </AODPPanes>
-        );
-    } else {
-        panes = (
-            <AODPNoneFound>
-                <Icon name="filter" />
-                <span>No results match filters</span>
-            </AODPNoneFound>
-        );
-    }
+    const panes = show ? (
+        <AODPPanes>
+            <AODPList />
+            <AODPDetail />
+        </AODPPanes>
+    ) : (
+        <AODPNoneFound>
+            <Icon name="filter" />
+            <span>No results match filters</span>
+        </AODPNoneFound>
+    );
 
     return (
         <div>

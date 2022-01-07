@@ -45,17 +45,16 @@ export const GroupDetail = ({ group, pending, users, onRemove, onSetPermission }
         members = filter(users, user => includes(user.groups, group.id));
     }
 
-    let memberComponents;
-
-    if (members && members.length) {
-        memberComponents = map(members, member => (
-            <BoxGroupSection key={member.id} spaced>
-                {member.id}
-            </BoxGroupSection>
-        ));
-    } else {
-        memberComponents = <NoneFoundSection noun="members" />;
-    }
+    const memberComponents =
+        members && members.length ? (
+            map(members, member => (
+                <BoxGroupSection key={member.id} spaced>
+                    {member.id}
+                </BoxGroupSection>
+            ))
+        ) : (
+            <NoneFoundSection noun="members" />
+        );
 
     const permissionComponents = transform(
         group.permissions,

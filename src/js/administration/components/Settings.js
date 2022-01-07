@@ -16,36 +16,30 @@ import Users from "../../users/components/Users";
 import { mapSettingsStateToProps } from "../mappers";
 import { ServerSettings } from "./Server";
 
-export const Settings = ({ loading }) => {
-    let content;
+export const Settings = ({ loading }) => (
+    <WideContainer>
+        <ViewHeader title="Administration">
+            <ViewHeaderTitle>Administration</ViewHeaderTitle>
+        </ViewHeader>
 
-    if (loading) {
-        content = <LoadingPlaceholder />;
-    } else {
-        content = (
-            <Switch>
-                <Redirect from="/administration" to="/administration/settings" exact />
-                <Route path="/administration/settings" component={ServerSettings} />
-                <Route path="/administration/users" component={Users} exact />
-                <Route path="/administration/users/:userId" component={UserDetail} />
-            </Switch>
-        );
-    }
+        <Tabs bsStyle="tabs">
+            <TabLink to="/administration/settings">Settings</TabLink>
+            <TabLink to="/administration/users">Users</TabLink>
+        </Tabs>
 
-    return (
-        <WideContainer>
-            <ViewHeader title="Administration">
-                <ViewHeaderTitle>Administration</ViewHeaderTitle>
-            </ViewHeader>
-
-            <Tabs bsStyle="tabs">
-                <TabLink to="/administration/settings">Settings</TabLink>
-                <TabLink to="/administration/users">Users</TabLink>
-            </Tabs>
-
-            <NarrowContainer>{content}</NarrowContainer>
-        </WideContainer>
-    );
-};
+        <NarrowContainer>
+            {loading ? (
+                <LoadingPlaceholder />
+            ) : (
+                <Switch>
+                    <Redirect from="/administration" to="/administration/settings" exact />
+                    <Route path="/administration/settings" component={ServerSettings} />
+                    <Route path="/administration/users" component={Users} exact />
+                    <Route path="/administration/users/:userId" component={UserDetail} />
+                </Switch>
+            )}
+        </NarrowContainer>
+    </WideContainer>
+);
 
 export default connect(mapSettingsStateToProps)(Settings);

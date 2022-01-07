@@ -28,45 +28,29 @@ const FileHeaderIcon = styled.div`
 export const File = ({ canRemove, id, name, ready, size, uploadedAt, user, onRemove }) => {
     const handleRemove = useCallback(() => onRemove(id), [id]);
 
-    let attribution;
-
-    if (user === null) {
-        attribution = (
+    const attribution =
+        user === null ? (
             <FileAttribution>
                 Retrieved <RelativeTime time={uploadedAt} />
             </FileAttribution>
-        );
-    } else {
-        attribution = (
+        ) : (
             <FileAttribution>
                 Uploaded <RelativeTime time={uploadedAt} /> by {user.handle}
             </FileAttribution>
         );
-    }
 
-    let right;
-
-    if (ready) {
-        right = (
-            <FileHeaderIcon>
-                <span>{byteSize(size)}</span>
-                {canRemove && (
-                    <Icon
-                        name="trash"
-                        color="red"
-                        style={{ fontSize: "17px", marginLeft: "9px" }}
-                        onClick={handleRemove}
-                    />
-                )}
-            </FileHeaderIcon>
-        );
-    } else {
-        right = (
-            <FileHeaderIcon>
-                <Loader size="14px" />
-            </FileHeaderIcon>
-        );
-    }
+    const right = ready ? (
+        <FileHeaderIcon>
+            <span>{byteSize(size)}</span>
+            {canRemove && (
+                <Icon name="trash" color="red" style={{ fontSize: "17px", marginLeft: "9px" }} onClick={handleRemove} />
+            )}
+        </FileHeaderIcon>
+    ) : (
+        <FileHeaderIcon>
+            <Loader size="14px" />
+        </FileHeaderIcon>
+    );
 
     return (
         <SpacedBox>

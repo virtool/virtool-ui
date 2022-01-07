@@ -150,13 +150,9 @@ export const getSortIds = createSelector([getWorkflow, getHits, getSortKey], (wo
 export const getMatches = createSelector(
     [getWorkflow, getHits, getFilterIds, getSearchIds, getSortIds],
     (workflow, hits, filterIds, searchIds, sortIds) => {
-        let matchIds;
-
-        if (searchIds) {
-            matchIds = intersection(sortIds, filterIds, map(searchIds, workflow === "nuvs" ? toNumber : toString));
-        } else {
-            matchIds = intersection(sortIds, filterIds);
-        }
+        const matchIds = searchIds
+            ? intersection(sortIds, filterIds, map(searchIds, workflow === "nuvs" ? toNumber : toString))
+            : intersection(sortIds, filterIds);
 
         const keyed = keyBy(hits, "id");
 
