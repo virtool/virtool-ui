@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import * as Yup from "yup";
 import {
+    Box,
+    Icon,
     Input,
     InputContainer,
     InputError,
@@ -12,7 +14,6 @@ import {
     InputIcon,
     InputLabel,
     LoadingPlaceholder,
-    NarrowContainer,
     SaveButton,
     ViewHeader,
     ViewHeaderTitle
@@ -26,22 +27,6 @@ import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import { Sidebar } from "./Sidebar";
 import { SampleUserGroup } from "./UserGroup";
-
-const CreateSampleFields = styled.div`
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-column-gap: ${props => props.theme.gap.column};
-`;
-
-const StyledInputError = styled(InputError)`
-    text-align: left;
-`;
-
-const StyledFormContainer = styled.div`
-    display: flex;
-    align-items: stretch;
-    flex: 1 1 auto;
-`;
 
 const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
 
@@ -62,6 +47,53 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),
     readFiles: Yup.array().min(1, "At least one read file must be attached to the sample")
 });
+
+const CreateSampleButtonArea = styled(Box)`
+    align-items: center;
+    background-color: #bfdbfe;
+    border: none;
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 25px;
+    padding: 15px;
+
+    p {
+        color: #1e40af;
+        font-weight: ${props => props.theme.fontWeight.thick};
+        margin: 0 0 0 auto;
+        padding-left: 15px;
+    }
+`;
+
+const CreateSampleFields = styled.div`
+    grid-row: 2;
+`;
+
+const CreateSampleInputError = styled(InputError)`
+    text-align: left;
+`;
+
+const CreateSampleInputs = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 15px;
+`;
+
+const CreateSampleForm = styled(Form)`
+    display: grid;
+    grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
+    grid-column-gap: ${props => props.theme.gap.column};
+`;
+
+const CreateSampleName = styled(InputGroup)`
+    grid-column: 1;
+`;
+
+const CreateSampleSidebar = styled(Field)`
+    grid-row: 2;
+    grid-column: 2;
+`;
 
 export const CreateSample = props => {
     useEffect(() => {
@@ -116,98 +148,88 @@ export const CreateSample = props => {
         <React.Fragment>
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
-                <StyledInputError>{props.error}</StyledInputError>
+                <CreateSampleInputError>{props.error}</CreateSampleInputError>
             </ViewHeader>
             <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
                 {({ errors, setFieldValue, touched, values }) => (
-                    <Form>
-                        <StyledFormContainer>
-                            <NarrowContainer>
-                                <CreateSampleFields>
-                                    <InputGroup>
-                                        <InputLabel>Name</InputLabel>
-                                        <InputContainer align="right">
-                                            <Field
-                                                as={Input}
-                                                type="text"
-                                                name="name"
-                                                aria-label="Name"
-                                                autocomplete={false}
-                                                error={touched.name ? errors.name : null}
-                                            />
-                                            <InputIcon
-                                                name="magic"
-                                                data-testid="Auto Fill"
-                                                onClick={e => autofill(values.readFiles, setFieldValue, e)}
-                                                disabled={!values.readFiles.length}
-                                            />
-                                        </InputContainer>
-                                        {touched.name && <InputError>{errors.name}</InputError>}
-                                    </InputGroup>
-
-                                    <InputGroup>
-                                        <InputLabel>Locale</InputLabel>
-                                        <Field as={Input} name="locale" aria-label="Locale" />
-                                    </InputGroup>
-
-                                    <InputGroup>
-                                        <InputLabel>Isolate</InputLabel>
-                                        <Field as={Input} name="isolate" aria-label="Isolate" />
-                                    </InputGroup>
-
-                                    <InputGroup>
-                                        <InputLabel>Host</InputLabel>
-                                        <Field as={Input} name="host" aria-label="Host" />
-                                    </InputGroup>
-
-                                    <InputGroup>
-                                        <InputLabel>Pairedness</InputLabel>
-                                        <Field
-                                            as={Input}
-                                            name="pairedness"
-                                            aria-label="Pairedness"
-                                            readOnly
-                                            value={values.readFiles.length === 2 ? "Paired" : "Unpaired"}
-                                        />
-                                    </InputGroup>
-                                </CreateSampleFields>
-
+                    <CreateSampleForm>
+                        <CreateSampleName>
+                            <InputLabel>Name</InputLabel>
+                            <InputContainer align="right">
                                 <Field
-                                    name="libraryType"
-                                    as={LibraryTypeSelector}
-                                    onSelect={library => setFieldValue("libraryType", library)}
-                                    libraryType={values.libraryType}
+                                    as={Input}
+                                    type="text"
+                                    name="name"
+                                    aria-label="Name"
+                                    autocomplete={false}
+                                    error={touched.name ? errors.name : null}
                                 />
-
-                                {props.forceGroupChoice && (
-                                    <Field
-                                        as={SampleUserGroup}
-                                        aria-label="User Group"
-                                        name="group"
-                                        group={values.group}
-                                        groups={props.groups}
-                                        onChange={e => setFieldValue("group", e.target.value)}
-                                    />
-                                )}
-
+                                <InputIcon
+                                    name="magic"
+                                    data-testid="Auto Fill"
+                                    onClick={e => autofill(values.readFiles, setFieldValue, e)}
+                                    disabled={!values.readFiles.length}
+                                />
+                            </InputContainer>
+                            {touched.name && <InputError>{errors.name}</InputError>}
+                        </CreateSampleName>
+                        <CreateSampleFields>
+                            <CreateSampleInputs>
                                 <Field
-                                    name="readFiles"
-                                    as={ReadSelector}
-                                    files={props.readyReads}
-                                    selected={values.readFiles}
-                                    onSelect={selection => setFieldValue("readFiles", selection)}
-                                    error={touched.readFiles ? errors.readFiles : null}
+                                    as={SampleUserGroup}
+                                    aria-label="User Group"
+                                    name="group"
+                                    group={values.group}
+                                    groups={props.groups}
+                                    onChange={e => setFieldValue("group", e.target.value)}
                                 />
-                                <SaveButton />
-                            </NarrowContainer>
+                                <InputGroup>
+                                    <InputLabel>Locale</InputLabel>
+                                    <Field as={Input} name="locale" aria-label="Locale" />
+                                </InputGroup>
+
+                                <InputGroup>
+                                    <InputLabel>Isolate</InputLabel>
+                                    <Field as={Input} name="isolate" aria-label="Isolate" />
+                                </InputGroup>
+
+                                <InputGroup>
+                                    <InputLabel>Host</InputLabel>
+                                    <Field as={Input} name="host" aria-label="Host" />
+                                </InputGroup>
+                            </CreateSampleInputs>
+
                             <Field
-                                as={Sidebar}
-                                onUpdate={(type, value) => setFieldValue(`sidebar.${type}`, value)}
-                                sampleLabels={values.sidebar.labels}
-                                defaultSubtractions={values.sidebar.subtractionIds}
+                                name="libraryType"
+                                as={LibraryTypeSelector}
+                                onSelect={library => setFieldValue("libraryType", library)}
+                                libraryType={values.libraryType}
                             />
-                        </StyledFormContainer>
-                    </Form>
+
+                            <Field
+                                name="readFiles"
+                                as={ReadSelector}
+                                files={props.readyReads}
+                                selected={values.readFiles}
+                                onSelect={selection => setFieldValue("readFiles", selection)}
+                                error={touched.readFiles ? errors.readFiles : null}
+                            />
+                        </CreateSampleFields>
+
+                        <CreateSampleButtonArea>
+                            <SaveButton altText="Create" />
+                            <p>
+                                <Icon name="clock" /> This will take some time.
+                            </p>
+                        </CreateSampleButtonArea>
+
+                        <CreateSampleSidebar
+                            as={Sidebar}
+                            onUpdate={(type, value) => setFieldValue(`sidebar.${type}`, value)}
+                            sampleLabels={values.sidebar.labels}
+                            defaultSubtractions={values.sidebar.subtractionIds}
+                        />
+                    </CreateSampleForm>
                 )}
             </Formik>
         </React.Fragment>

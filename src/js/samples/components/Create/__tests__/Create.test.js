@@ -52,7 +52,7 @@ describe("<CreateSample>", () => {
         };
     });
 
-    const submitForm = () => userEvent.click(screen.getByRole("button", { name: /Save/i }));
+    const submitForm = () => userEvent.click(screen.getByRole("button", { name: /Create/i }));
 
     const inputFormRequirements = (sampleName = "Name") => {
         userEvent.type(screen.getByLabelText("Name"), sampleName);
@@ -158,17 +158,6 @@ describe("<CreateSample>", () => {
                 [state.labels.documents[0].id]
             )
         );
-    });
-
-    it("should render userGroup when [props.forcedGroup=true]", () => {
-        renderWithProviders(<CreateSample {...props} />, createAppStore(state));
-        expect(screen.queryByText("User Group")).not.toBeInTheDocument();
-    });
-
-    it("should render userGroup when [props.forcedGroup=false]", () => {
-        props.forceGroupChoice = true;
-        renderWithProviders(<CreateSample {...props} />, createAppStore(state));
-        expect(screen.getByText("User Group")).toBeInTheDocument();
     });
 
     it("should update the sample name when the magic icon is pressed", async () => {

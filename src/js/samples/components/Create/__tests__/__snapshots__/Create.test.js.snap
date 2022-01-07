@@ -8,7 +8,7 @@ exports[`<CreateSample> should render 1`] = `
     <ViewHeader__ViewHeaderTitle>
       Create Sample
     </ViewHeader__ViewHeaderTitle>
-    <Create__StyledInputError />
+    <Create__CreateSampleInputError />
   </ViewHeader>
   <Formik
     initialValues={

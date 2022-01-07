@@ -3,10 +3,13 @@
 exports[`<ReadSelector /> should render 1`] = `
 <div>
   <ReadSelector__ReadSelectorHeader>
-    <strong>
+    <label>
       Read Files
-    </strong>
+    </label>
     <span>
+      <span>
+        Paired | 
+      </span>
       2
        of 
       1
