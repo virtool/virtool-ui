@@ -1,4 +1,4 @@
-import { filter, find, includes, map, transform } from "lodash-es";
+import { filter, find, get, includes, map, transform } from "lodash-es";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -29,6 +29,8 @@ const StyledGroupDetail = styled.div`
 `;
 
 export const GroupDetail = ({ group, pending, users, onRemove, onSetPermission }) => {
+    const handleRemove = useCallback(() => onRemove(group.id), [get(group, "id")]);
+
     let members;
 
     if (!group) {
@@ -71,8 +73,6 @@ export const GroupDetail = ({ group, pending, users, onRemove, onSetPermission }
         },
         []
     );
-
-    const handleRemove = useCallback(() => onRemove(group.id), [group.id]);
 
     return (
         <StyledGroupDetail>
