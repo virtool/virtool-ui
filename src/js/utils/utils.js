@@ -134,8 +134,8 @@ export const getWorkflowDisplayName = workflow => get(workflowDisplayNames, work
 export const reportAPIError = action => window.captureException(action.payload.error);
 
 export const routerLocationHasState = (state, key, value) =>
-    !!state.router.location.state &&
-    (value ? state.router.location.state[key] === value : !!state.router.location.state[key]);
+    Boolean(state.router.location.state) &&
+    (value ? state.router.location.state[key] === value : Boolean(state.router.location.state[key]));
 
 export const getTargetChange = target => ({
     name: target.name,

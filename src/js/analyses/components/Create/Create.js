@@ -118,7 +118,7 @@ export const mapStateToProps = state => ({
     compatibleIndexes: getCompatibleIndexesWithLibraryType(state),
     dataType: getDataTypeFromLibraryType(getSampleLibraryType(state)),
     defaultSubtractions: getDefaultSubtractions(state).map(subtraction => subtraction.id),
-    hasHmm: !!state.hmms.total_count,
+    hasHmm: Boolean(state.hmms.total_count),
     sampleId: getSampleDetailId(state),
     show: routerLocationHasState(state, "createAnalysis"),
     subtractionOptions: getReadySubtractionShortlist(state)

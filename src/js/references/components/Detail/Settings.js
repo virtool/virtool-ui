@@ -14,7 +14,7 @@ export const ReferenceSettings = ({ isRemote }) => (
 );
 
 export const mapStateToProps = state => ({
-    isRemote: !!state.references.detail.remotes_from
+    isRemote: Boolean(state.references.detail.remotes_from)
 });
 
 export default connect(mapStateToProps)(ReferenceSettings);

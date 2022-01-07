@@ -18,7 +18,7 @@ export const mapStateToProps = state => {
     return {
         id,
         name,
-        show: !!id
+        show: Boolean(id)
     };
 };
 

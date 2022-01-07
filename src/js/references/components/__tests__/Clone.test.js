@@ -118,7 +118,7 @@ describe("<CloneReference />", () => {
             errorDataType: "Required Field"
         });
     });
-    it("handleSubmit() should return errorName when [!!this.state.reference]", () => {
+    it("handleSubmit() should return errorName when [!this.state.reference]", () => {
         const wrapper = shallow(<CloneReference {...props} />);
         wrapper.setState({
             ...state,

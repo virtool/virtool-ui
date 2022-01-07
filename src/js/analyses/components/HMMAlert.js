@@ -23,7 +23,7 @@ export const AnalysisHMMAlert = ({ installed }) => {
 };
 
 export const mapStateToProps = state => ({
-    installed: !!get(state, "hmms.status.installed")
+    installed: Boolean(get(state, "hmms.status.installed"))
 });
 
 export default connect(mapStateToProps)(AnalysisHMMAlert);

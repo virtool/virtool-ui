@@ -137,7 +137,7 @@ export class ChangePassword extends React.Component {
 export const mapStateToProps = state => ({
     lastPasswordChange: state.account.last_password_change,
     minimumLength: get(state, "settings.data.minimum_password_length"),
-    ready: !!state.settings.data,
+    ready: Boolean(state.settings.data),
     error: get(state, "errors.CHANGE_ACCOUNT_PASSWORD_ERROR", "")
 });
 

@@ -63,7 +63,7 @@ export const AODPViewer = ({ show }) => {
 };
 
 export const mapStateToProps = state => ({
-    show: !!getMatches(state).length
+    show: Boolean(getMatches(state).length)
 });
 
 export default connect(mapStateToProps)(AODPViewer);
