@@ -72,7 +72,7 @@ export const HMMInstaller = ({ installed, task }) => {
 
 export const mapStateToProps = state => ({
     releaseId: get(state.hmms.status, "release.id"),
-    installed: !!state.hmms.status.installed,
+    installed: Boolean(state.hmms.status.installed),
     canInstall: checkAdminOrPermission(state, "modify_hmm"),
     task: getTask(state)
 });

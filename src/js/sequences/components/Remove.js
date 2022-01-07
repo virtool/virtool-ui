@@ -25,7 +25,7 @@ export class RemoveSequence extends React.Component {
                 noun="Sequence"
                 onConfirm={this.handleConfirm}
                 onHide={this.props.onHide}
-                show={!!this.props.sequenceId}
+                show={Boolean(this.props.sequenceId)}
                 message={removeMessage}
             />
         );

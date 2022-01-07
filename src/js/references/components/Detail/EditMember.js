@@ -56,7 +56,12 @@ export class EditReferenceMember extends React.Component {
         const title = `Modify Rights for ${this.props.id}`;
 
         return (
-            <Modal label={title} show={!!this.props.show} onHide={this.props.onHide} onExited={this.handleExited}>
+            <Modal
+                label={title}
+                show={Boolean(this.props.show)}
+                onHide={this.props.onHide}
+                onExited={this.handleExited}
+            >
                 <ModalHeader>{title}</ModalHeader>
                 <ModalBody>{rightComponents}</ModalBody>
             </Modal>

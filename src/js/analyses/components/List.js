@@ -43,7 +43,7 @@ export class AnalysesList extends React.Component {
                     show={this.state.show}
                     onHide={() => this.setState({ show: false })}
                     onSubmit={this.props.onAnalyze}
-                    hasHmm={!!this.props.hmmsInstalled}
+                    hasHmm={Boolean(this.props.hmmsInstalled)}
                     refIndexes={this.props.indexes}
                     userId={this.props.userId}
                 />
@@ -59,7 +59,7 @@ const mapStateToProps = state => ({
     analyses: state.analyses.documents,
     term: state.analyses.term,
     indexes: state.analyses.readyIndexes,
-    hmmsInstalled: !!get(state, "hmms.status.installed"),
+    hmmsInstalled: Boolean(get(state, "hmms.status.installed")),
     canModify: getCanModify(state)
 });
 

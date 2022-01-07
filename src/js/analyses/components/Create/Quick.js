@@ -78,7 +78,7 @@ export const QuickAnalyze = ({
     onShortlistSubtractions,
     onUnselect
 }) => {
-    const show = !!mode;
+    const show = Boolean(mode);
 
     useEffect(() => {
         onShortlistSubtractions();
@@ -172,7 +172,7 @@ export const mapStateToProps = state => ({
     accountId: getAccountId(state),
     compatibleIndexes: getCompatibleIndexesWithDataType(state),
     compatibleSamples: getCompatibleSamples(state),
-    hasHmm: !!state.hmms.total_count,
+    hasHmm: Boolean(state.hmms.total_count),
     mode: getQuickAnalysisMode(state),
     samples: getSelectedSamples(state),
     subtractionOptions: getReadySubtractionShortlist(state)

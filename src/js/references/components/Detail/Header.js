@@ -45,7 +45,7 @@ export const mapStateToProps = state => {
         name,
         canModify: checkReferenceRight(state, "modify"),
         createdAt: created_at,
-        isRemote: !!remotes_from,
+        isRemote: Boolean(remotes_from),
         showIcons: endsWith(state.router.location.pathname, "/manage"),
         userHandle: user.handle
     };

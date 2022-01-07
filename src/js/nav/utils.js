@@ -6,6 +6,6 @@ export const excludePaths = (paths = []) => {
             return false;
         }
 
-        return !!match;
+        return Boolean(match);
     };
 };
