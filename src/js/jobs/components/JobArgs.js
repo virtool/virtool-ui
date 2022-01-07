@@ -33,11 +33,9 @@ export const BuildIndexRows = ({ index_id, ref_id }) => (
 );
 
 export const CreateSampleRows = ({ sample_id }) => (
-    <React.Fragment>
-        <JobArgsRow title="Sample">
-            <Link to={`/samples/${sample_id}`}>{sample_id}</Link>
-        </JobArgsRow>
-    </React.Fragment>
+    <JobArgsRow title="Sample">
+        <Link to={`/samples/${sample_id}`}>{sample_id}</Link>
+    </JobArgsRow>
 );
 
 export const CreateSubtractionRows = ({ subtraction_id }) => (

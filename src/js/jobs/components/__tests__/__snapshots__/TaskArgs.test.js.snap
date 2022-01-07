@@ -47,17 +47,15 @@ exports[`<BuildIndexRows /> renders correctly 1`] = `
 `;
 
 exports[`<CreateSampleRows /> renders correctly 1`] = `
-<Fragment>
-  <JobArgsRow
-    title="Sample"
+<JobArgsRow
+  title="Sample"
+>
+  <Link
+    to="/samples/foo"
   >
-    <Link
-      to="/samples/foo"
-    >
-      foo
-    </Link>
-  </JobArgsRow>
-</Fragment>
+    foo
+  </Link>
+</JobArgsRow>
 `;
 
 exports[`<CreateSubtractionRows /> renders correctly 1`] = `

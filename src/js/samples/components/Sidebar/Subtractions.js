@@ -5,7 +5,7 @@ import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 import { SampleSidebarList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
 
-const SubtractionInner = ({ name }) => <React.Fragment>{name}</React.Fragment>;
+const SubtractionInner = ({ name }) => name;
 
 export const DefaultSubtractions = ({ defaultSubtractions, subtractionOptions, onUpdate }) => (
     <SideBarSection>
