@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import { SubtractionFile } from "../File";
+import { File } from "../File";
 import { byteSize } from "../../../../utils/utils";
 
 describe("<SubtractionFile />", () => {
@@ -20,7 +20,7 @@ describe("<SubtractionFile />", () => {
     });
 
     it("should render", () => {
-        const { getByText } = renderWithProviders(<SubtractionFile {...props} />);
+        const { getByText } = renderWithProviders(<File {...props} />);
 
         expect(getByText(props.file.name)).toBeInTheDocument();
         expect(getByText(byteSize(props.file.size))).toBeInTheDocument();

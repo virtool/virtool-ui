@@ -1,8 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<IndexGeneral /> should render 1`] = `
-<div>
+<Fragment>
   <Connect(Contributors) />
+  <Connect(Files) />
   <Connect(IndexOTUs) />
-</div>
+</Fragment>
 `;
