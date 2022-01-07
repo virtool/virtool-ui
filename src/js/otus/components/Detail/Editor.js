@@ -50,8 +50,6 @@ const IsolateEditorList = styled(BoxGroup)`
 `;
 
 const IsolateEditor = props => {
-    let body;
-
     const isolateComponents = map(props.isolates, (isolate, index) => (
         <IsolateItem
             key={index}
@@ -67,18 +65,16 @@ const IsolateEditor = props => {
         </a>
     ) : null;
 
-    if (isolateComponents.length === 0) {
-        body = <NoneFoundBox noun="isolates" />;
-    } else {
-        body = (
-            <IsolateEditorContainer>
-                <IsolateEditorListContainer>
-                    <IsolateEditorList>{isolateComponents}</IsolateEditorList>
-                </IsolateEditorListContainer>
-                <IsolateDetail canModify={props.canModify} />
-            </IsolateEditorContainer>
-        );
-    }
+    const body = isolateComponents.length ? (
+        <IsolateEditorContainer>
+            <IsolateEditorListContainer>
+                <IsolateEditorList>{isolateComponents}</IsolateEditorList>
+            </IsolateEditorListContainer>
+            <IsolateDetail canModify={props.canModify} />
+        </IsolateEditorContainer>
+    ) : (
+        <NoneFoundBox noun="isolates" />
+    );
 
     return (
         <React.Fragment>
