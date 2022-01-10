@@ -63,6 +63,7 @@ const ColorSquare = styled(UnstyledColorSquare)`
     cursor: pointer;
     flex: 1 0 auto;
     width: auto;
+    transform: translateY(0);
 
     &:first-child {
         border-bottom-left-radius: ${borderRadius.sm};
