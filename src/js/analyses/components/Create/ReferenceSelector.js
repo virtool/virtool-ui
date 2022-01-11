@@ -33,14 +33,17 @@ export const ReferenceSelector = ({ hasError, indexes, selected, onChange }) => 
 
     if (!referenceComponents.length) {
         return (
-            <NoneFoundBox noun="references">
-                <Link to="/refs">Import one</Link>.
-            </NoneFoundBox>
+            <>
+                <label htmlFor="references">References</label>
+                <NoneFoundBox noun="references" id="references">
+                    <Link to="/refs">Create one</Link>.
+                </NoneFoundBox>
+            </>
         );
     }
 
     return (
-        <React.Fragment>
+        <>
             <label>References</label>
             <MultiSelector
                 error={hasError && "Reference(s) must be selected"}
@@ -50,7 +53,7 @@ export const ReferenceSelector = ({ hasError, indexes, selected, onChange }) => 
             >
                 {referenceComponents}
             </MultiSelector>
-        </React.Fragment>
+        </>
     );
 };
 
