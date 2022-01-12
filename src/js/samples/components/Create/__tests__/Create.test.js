@@ -4,6 +4,16 @@ import React from "react";
 import { createStore } from "redux";
 import { LIST_LABELS } from "../../../../app/actionTypes";
 import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
+import { BrowserRouter } from "react-router-dom";
+
+const routerRenderWithProviders = (ui, store) => {
+    const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
+    return renderWithProviders(routerUi, store);
+};
+
+const createAppStore = state => {
+    return () => createStore(state => state, state);
+};
 
 describe("<CreateSample>", () => {
     const readFileName = "large";
@@ -78,7 +88,7 @@ describe("<CreateSample>", () => {
     });
 
     it("should fail to submit and show errors on empty submission", async () => {
-        renderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         // Ensure errors aren't shown prematurely
         expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
         expect(screen.queryByText("At least one read file must be attached to the sample")).not.toBeInTheDocument();
@@ -94,7 +104,7 @@ describe("<CreateSample>", () => {
 
     it("should submit when required fields are completed", async () => {
         const { name } = values;
-        renderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         inputFormRequirements(name);
         submitForm();
 
@@ -102,7 +112,7 @@ describe("<CreateSample>", () => {
     });
 
     it("should submit expected results when form is fully completed", async () => {
-        renderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
         inputFormRequirements(name);
 
@@ -131,7 +141,7 @@ describe("<CreateSample>", () => {
     });
 
     it("should include labels when submitting a completed form", async () => {
-        renderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
         inputFormRequirements(name);
 
@@ -161,7 +171,7 @@ describe("<CreateSample>", () => {
     });
 
     it("should update the sample name when the magic icon is pressed", async () => {
-        renderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const nameInput = screen.getByRole("textbox", { name: /Name/i });
         expect(nameInput.value).toBe("");
 
@@ -170,10 +180,6 @@ describe("<CreateSample>", () => {
         expect(nameInput.value).toBe(readFileName);
     });
 });
-
-const createAppStore = state => {
-    return () => createStore(state => state, state);
-};
 
 describe("mapStateToProps()", () => {
     it("should return props", () => {

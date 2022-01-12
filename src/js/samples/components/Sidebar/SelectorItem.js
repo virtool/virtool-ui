@@ -15,12 +15,17 @@ const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`
 `;
 
 const SampleSidebarSelectorItemCheck = styled.div`
-    align-items: start;
+    align-items: center;
     color: ${props => props.theme.color.greyDark};
     display: flex;
     justify-content: center;
     margin-right: 5px;
     width: 32px;
+`;
+
+const SampleSidebarSelectorItemContents = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 export const SampleSidebarSelectorItem = ({ checked, children, id, onClick }) => {
@@ -29,7 +34,7 @@ export const SampleSidebarSelectorItem = ({ checked, children, id, onClick }) =>
     return (
         <StyledSampleSidebarSelectorItem as="button" type={"button"} onClick={handleSelect}>
             <SampleSidebarSelectorItemCheck>{checked && <Icon name="check" />}</SampleSidebarSelectorItemCheck>
-            <div>{children}</div>
+            <SampleSidebarSelectorItemContents>{children}</SampleSidebarSelectorItemContents>
         </StyledSampleSidebarSelectorItem>
     );
 };
