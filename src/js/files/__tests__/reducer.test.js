@@ -6,7 +6,7 @@ import {
     UPLOAD_PROGRESS,
     FIND_FILES
 } from "../../app/actionTypes";
-import reducer, { initialState, cleanUploads } from "../reducer";
+import reducer, { initialState } from "../reducer";
 
 describe("filesReducer()", () => {
     it("should return the initial state on first pass", () => {
@@ -162,7 +162,8 @@ describe("filesReducer()", () => {
             expect(result).toEqual({
                 uploads: [
                     { localId: "foo", progress: 50 },
-                    { localId: "bar", progress: 22 }
+                    { localId: "bar", progress: 22 },
+                    { localId: "baz", progress: 100 }
                 ]
             });
         });
@@ -176,7 +177,8 @@ describe("filesReducer()", () => {
             expect(result).toEqual({
                 uploads: [
                     { localId: "foo", progress: 65 },
-                    { localId: "bar", progress: 0 }
+                    { localId: "bar", progress: 0 },
+                    { localId: "baz", progress: 100 }
                 ]
             });
         });
@@ -188,24 +190,33 @@ describe("filesReducer()", () => {
             };
             const result = reducer(state, action);
             expect(result).toEqual({
-                uploads: [{ localId: "bar", progress: 0 }]
+                uploads: [
+                    { localId: "foo", progress: 100 },
+                    { localId: "bar", progress: 0 },
+                    { localId: "baz", progress: 100 }
+                ]
             });
         });
     });
 
-    describe("cleanUploads()", () => {
-        it("should remove all and only finished uploads", () => {
-            const state = {
-                uploads: [
-                    { localId: "foo", progress: 32 },
-                    { localId: "bar", progress: 100 },
-                    { localId: "baz", progress: 0 }
-                ]
-            };
-
-            expect(cleanUploads(state)).toEqual({
-                uploads: [state.uploads[0], state.uploads[2]]
-            });
+    it("should remove upload when it successfully finishes", () => {
+        const state = {
+            uploads: [
+                { localId: "foo", progress: 50 },
+                { localId: "bar", progress: 0 },
+                { localId: "baz", progress: 100 }
+            ]
+        };
+        const action = {
+            type: UPLOAD.SUCCEEDED,
+            payload: { localId: "foo", progress: 100 }
+        };
+        const result = reducer(state, action);
+        expect(result).toEqual({
+            uploads: [
+                { localId: "bar", progress: 0 },
+                { localId: "baz", progress: 100 }
+            ]
         });
     });
 });

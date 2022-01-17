@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getBorder } from "../../app/theme";
-import { AffixedProgressBar, Icon } from "../../base";
+import { AffixedProgressBar, Icon, Loader } from "../../base";
 import { byteSize } from "../../utils/utils";
 
 const StyledUploadItem = styled.div`
@@ -21,7 +21,9 @@ const UploadItemTitle = styled.div`
     i.fas {
         margin-right: 5px;
     }
-
+    div:first-child {
+        margin-right: 5px;
+    }
     span:last-child {
         margin-left: auto;
     }
@@ -31,7 +33,7 @@ export const UploadItem = ({ name, progress, size }) => (
     <StyledUploadItem>
         <AffixedProgressBar now={progress} />
         <UploadItemTitle>
-            <Icon name="upload" />
+            {progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />}
             <span>{name}</span>
             <span>{byteSize(size)}</span>
         </UploadItemTitle>

@@ -42,18 +42,6 @@ export const appendUpload = (state, action) => {
 };
 
 /**
- * Remove finished uploads.
- *
- * @func
- * @param state {object}
- * @returns {object}
- */
-export const cleanUploads = state => ({
-    ...state,
-    uploads: reject(state.uploads, { progress: 100 })
-});
-
-/**
  * Update the progress for an upload.
  *
  * @param state
@@ -104,13 +92,16 @@ export const filesReducer = createReducer(initialState, builder => {
             };
         })
         .addCase(UPLOAD.REQUESTED, (state, action) => {
-            return cleanUploads(appendUpload(state, action.payload));
+            return appendUpload(state, action.payload);
+        })
+        .addCase(UPLOAD.SUCCEEDED, (state, action) => {
+            state.uploads = reject(state.uploads, { localId: action.payload.localId });
         })
         .addCase(UPLOAD_SAMPLE_FILE.REQUESTED, (state, action) => {
-            return cleanUploads(appendUpload(state, action.payload));
+            return appendUpload(state, action.payload);
         })
         .addCase(UPLOAD_PROGRESS, (state, action) => {
-            return cleanUploads(updateProgress(state, action.payload));
+            return updateProgress(state, action.payload);
         });
 });
 
