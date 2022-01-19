@@ -126,16 +126,16 @@ const getIdentities = data => flatMap(data, item => item.identities);
 const getSequenceIdentities = sequence => flatMap(sequence.hits, hit => hit.identity);
 
 export const formatNuVsData = detail => {
-    const results = map(detail.results, result => ({
-        ...result,
-        id: toNumber(result.index),
-        annotatedOrfCount: calculateAnnotatedOrfCount(result.orfs),
-        e: calculateSequenceMinimumE(result.orfs),
-        families: extractFamilies(result.orfs),
-        names: extractNames(result.orfs)
+    const hits = map(detail.results.hits, hit => ({
+        ...hit,
+        id: toNumber(hit.index),
+        annotatedOrfCount: calculateAnnotatedOrfCount(hit.orfs),
+        e: calculateSequenceMinimumE(hit.orfs),
+        families: extractFamilies(hit.orfs),
+        names: extractNames(hit.orfs)
     }));
 
-    const longestSequence = maxBy(results, result => result.sequence.length);
+    const longestSequence = maxBy(hits, hit => hit.sequence.length);
 
     const { cache, created_at, id, ready, user, workflow } = detail;
 
@@ -144,7 +144,10 @@ export const formatNuVsData = detail => {
         created_at,
         id,
         ready,
-        results,
+        results: {
+            ...detail.results,
+            hits
+        },
         user,
         workflow,
         maxSequenceLength: longestSequence.sequence.length
