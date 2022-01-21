@@ -1,5 +1,4 @@
-import { xor } from "lodash-es";
-import React, { useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
 import { BoxGroupSection, Icon, Input, SidebarHeaderButton } from "../../../base";
 import { useFuse } from "../../../base/hooks";
@@ -27,6 +26,7 @@ export const SampleSidebarSelector = ({
     render,
     sampleItems,
     selectedItems,
+    partiallySelectedItems = [],
     sampleId,
     onUpdate,
     selectionType,
@@ -34,18 +34,13 @@ export const SampleSidebarSelector = ({
 }) => {
     const [results, term, setTerm] = useFuse(sampleItems, ["name"], [sampleId]);
     const [attributes, show, styles, setPopperElement, setReferenceElement, setShow] = usePopover();
-    const handleToggle = useCallback(
-        itemId => {
-            onUpdate(xor(selectedItems, [itemId]));
-        },
-        [sampleId, selectedItems, onUpdate]
-    );
     const sampleItemComponents = results.map(item => (
         <SampleSidebarSelectorItem
             key={item.id}
-            checked={selectedItems.includes(item.id)}
+            selected={selectedItems.includes(item.id)}
+            partiallySelected={partiallySelectedItems.includes(item.id)}
             {...item}
-            onClick={handleToggle}
+            onClick={onUpdate}
         >
             {render(item)}
         </SampleSidebarSelectorItem>

@@ -7,6 +7,7 @@ import { SampleSidebarSelector } from "./Selector";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
+import { xor } from "lodash-es";
 
 const SubtractionInner = ({ name }) => name;
 
@@ -28,9 +29,11 @@ export const DefaultSubtractions = ({ defaultSubtractions, subtractionOptions, o
                 render={({ name }) => <SubtractionInner name={name} />}
                 sampleItems={subtractionOptions}
                 selectedItems={defaultSubtractions}
-                onUpdate={onUpdate}
+                onUpdate={subtractionId => {
+                    onUpdate(xor(defaultSubtractions, [subtractionId]));
+                }}
                 selectionType="default subtractions"
-                manageLink={"/lol"}
+                manageLink={"/subtractions"}
             />
         </SidebarHeader>
         <SampleSidebarList

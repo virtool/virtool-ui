@@ -1,4 +1,4 @@
-import { every, filter, get, includes, some, toNumber } from "lodash-es";
+import { every, get, includes, some, toNumber, intersectionWith, reduce, mapValues, filter, forEach } from "lodash-es";
 import createCachedSelector from "re-reselect";
 import { createSelector } from "reselect";
 import { getAccountAdministrator, getAccountId } from "../account/selectors";
@@ -100,7 +100,34 @@ export const getIsSelected = createCachedSelector(
 )((state, sampleId) => sampleId);
 
 export const getSelectedSamples = createSelector([getSelectedSampleIds, getSampleDocuments], (selected, documents) =>
-    filter(documents, document => includes(selected, document.id))
+    intersectionWith(documents, selected, (document, selectedSample) => document.id === selectedSample)
 );
 
 export const getFilesUndersized = state => some(state.samples.detail.files, file => file.size < 10000000);
+
+export const getSelectedLabels = createSelector([getSelectedSamples], selectedSamples => {
+    const selectedLabelsCount = reduce(
+        selectedSamples,
+        (result, sample) => {
+            forEach(sample.labels, label => {
+                if (result[label.id]) {
+                    result[label.id].count++;
+                } else {
+                    result[label.id] = { ...label, count: 1 };
+                }
+            });
+            return result;
+        },
+        {}
+    );
+
+    return mapValues(selectedLabelsCount, label => {
+        label.allLabeled = label.count === selectedSamples.length;
+        delete label.count;
+        return label;
+    });
+});
+
+export const getPartiallySelectedLabels = createSelector([getSelectedLabels], selectedLabels =>
+    filter(selectedLabels, { allLabeled: false })
+);

@@ -43,6 +43,13 @@ export const SampleLabel = styled(({ className, color, name, role }) => (
     </StyledSampleLabel>
 ))``;
 
+export const SampleMultiSelectLabel = styled(({ className, color, name, role, partiallySelected }) => (
+    <StyledSampleLabel className={className} color={color} role={role}>
+        {color && <Icon name={partiallySelected ? "adjust" : "circle"} />}
+        {name}
+    </StyledSampleLabel>
+))``;
+
 export const SmallSampleLabel = styled(SampleLabel)`
     font-size: ${getFontSize("sm")};
     padding: 2px 7px 2px 5px;
