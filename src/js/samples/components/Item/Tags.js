@@ -28,8 +28,7 @@ const StyledSampleItemWorkflowTag = styled.div`
         border-bottom-right-radius: ${borderRadius.sm};
     }
 
-    &:not(:last-child),
-    &:not(:only-child) {
+    &:not(:last-child) {
         border-right: 2px solid ${props => props.theme.color.purple};
     }
 
@@ -81,6 +80,9 @@ const SampleItemWorkflowTagsContainer = styled.div`
 export const SampleItemWorkflowTags = ({ id, nuvs, pathoscope }) => (
     <StyledSampleWorkflowTags>
         <SampleItemWorkflowTagsContainer>
+            <SampleItemWorkflowTagLink as={Link} to={`/samples/${id}/analyses`}>
+                View
+            </SampleItemWorkflowTagLink>
             {!pathoscope && !nuvs && (
                 <SampleItemWorkflowTagNone>
                     <SampleItemLabelIcon>
@@ -91,9 +93,6 @@ export const SampleItemWorkflowTags = ({ id, nuvs, pathoscope }) => (
             )}
             {pathoscope && <SampleItemWorkflowTag label="Pathoscope" pending={pathoscope === "ip"} />}
             {nuvs && <SampleItemWorkflowTag label="NuVs" pending={nuvs === "ip"} />}
-            <SampleItemWorkflowTagLink as={Link} to={`/samples/${id}/analyses`}>
-                View
-            </SampleItemWorkflowTagLink>
         </SampleItemWorkflowTagsContainer>
     </StyledSampleWorkflowTags>
 );
