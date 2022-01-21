@@ -7,6 +7,7 @@ import { SampleSidebarSelector } from "./Selector";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, fontWeight, getColor } from "../../../app/theme";
+import { xor } from "lodash-es";
 
 const SampleLabelInner = ({ name, color, description }) => (
     <>
@@ -35,7 +36,9 @@ export const SampleLabels = ({ allLabels, sampleLabels, onUpdate }) => (
                 )}
                 sampleItems={allLabels}
                 selectedItems={sampleLabels}
-                onUpdate={onUpdate}
+                onUpdate={labelId => {
+                    onUpdate(xor(sampleLabels, [labelId]));
+                }}
                 selectionType="labels"
                 manageLink={"/samples/labels"}
             />

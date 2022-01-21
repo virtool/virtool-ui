@@ -11,6 +11,7 @@ import { findSamples } from "../actions";
 import { SampleFilters } from "./Filter/Filters";
 import SampleItem from "./Item/Item";
 import SampleToolbar from "./Toolbar";
+import SampleLabels from "./Sidebar/ManageLabels";
 
 const SamplesListHeader = styled.div`
     grid-column: 1;
@@ -55,7 +56,7 @@ export const SamplesList = ({
     }
 
     return (
-        <React.Fragment>
+        <>
             <QuickAnalysis />
             <StyledSamplesList>
                 <SamplesListHeader>
@@ -77,9 +78,9 @@ export const SamplesList = ({
                         />
                     )}
                 </SamplesListContent>
-                {!selected.length && <SampleFilters />}
+                {selected.length ? <SampleLabels /> : <SampleFilters />}
             </StyledSamplesList>
-        </React.Fragment>
+        </>
     );
 };
 

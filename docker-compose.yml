@@ -40,7 +40,7 @@ services:
       - backend
 
   api:
-    image: virtool/virtool:6.6.5
+    image: virtool/virtool:6.6.9
     depends_on:
       - mongo
       - redis
@@ -60,7 +60,7 @@ services:
       - vt_data:/data
 
   jobs-api:
-    image: virtool/virtool:6.6.5
+    image: virtool/virtool:6.6.3
     depends_on:
       - mongo
       - redis

@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ManageLabels> should be disabled if no labels exist 1`] = `
+<ManageLabels__StyledSideBarSection>
+  <SideBar__SidebarHeader>
+    Manage Labels
+    <SampleSidebarSelector
+      manageLink="/samples/labels"
+      onUpdate={[Function]}
+      partiallySelectedItems={Array []}
+      render={[Function]}
+      sampleItems={Array []}
+      selectedItems={
+        Array [
+          1,
+        ]
+      }
+      selectionType="labels"
+    />
+  </SideBar__SidebarHeader>
+  <SampleSidebarMultiselectList
+    items={
+      Object {
+        "1": Object {
+          "allLabeled": true,
+          "color": "#FCA5A5",
+          "description": "",
+          "id": 1,
+          "name": "test",
+        },
+      }
+    }
+    onUpdate={[Function]}
+  />
+  <ManageLabels__SampleLabelsFooter>
+    No labels found. 
+    <Link
+      to="/samples/labels"
+    >
+      Create one
+    </Link>
+    .
+  </ManageLabels__SampleLabelsFooter>
+</ManageLabels__StyledSideBarSection>
+`;
+
+exports[`<ManageLabels> should render 1`] = `
+<ManageLabels__StyledSideBarSection>
+  <SideBar__SidebarHeader>
+    Manage Labels
+    <SampleSidebarSelector
+      manageLink="/samples/labels"
+      onUpdate={[Function]}
+      partiallySelectedItems={Array []}
+      render={[Function]}
+      sampleItems={
+        Array [
+          Object {
+            "color": "#FCA5A5",
+            "description": "",
+            "id": 1,
+            "name": "test",
+          },
+          Object {
+            "color": "#FCA5A5",
+            "description": "",
+            "id": 2,
+            "name": "test2",
+          },
+          Object {
+            "color": "#FCA5A5",
+            "description": "",
+            "id": 3,
+            "name": "test3",
+          },
+        ]
+      }
+      selectedItems={
+        Array [
+          1,
+        ]
+      }
+      selectionType="labels"
+    />
+  </SideBar__SidebarHeader>
+  <SampleSidebarMultiselectList
+    items={
+      Object {
+        "1": Object {
+          "allLabeled": true,
+          "color": "#FCA5A5",
+          "description": "",
+          "id": 1,
+          "name": "test",
+        },
+      }
+    }
+    onUpdate={[Function]}
+  />
+  <Component />
+</ManageLabels__StyledSideBarSection>
+`;

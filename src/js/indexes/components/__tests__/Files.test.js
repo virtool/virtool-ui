@@ -35,7 +35,6 @@ describe("<IndexDetail />", () => {
     });
     it("should include url", () => {
         renderWithProviders(<Files {...props} />);
-        // console.log(screen.getAllByRole("link", {})[0]);
         expect(screen.getAllByRole("link", {})[0]).toHaveAttribute("href", "https://Virtool.ca/testUrl/foo");
     });
 });

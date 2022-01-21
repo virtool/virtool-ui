@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../../app/theme";
 import { BoxGroupSection, Icon } from "../../../base";
@@ -28,12 +28,14 @@ const SampleSidebarSelectorItemContents = styled.div`
     align-items: center;
 `;
 
-export const SampleSidebarSelectorItem = ({ checked, children, id, onClick }) => {
-    const handleSelect = useCallback(() => onClick(id), [id, onClick]);
+export const SampleSidebarSelectorItem = ({ selected, partiallySelected, children, id, onClick, name }) => {
+    const handleSelect = () => onClick(id);
 
     return (
-        <StyledSampleSidebarSelectorItem as="button" type={"button"} onClick={handleSelect}>
-            <SampleSidebarSelectorItemCheck>{checked && <Icon name="check" />}</SampleSidebarSelectorItemCheck>
+        <StyledSampleSidebarSelectorItem as="button" type={"button"} onClick={handleSelect} aria-label={name}>
+            <SampleSidebarSelectorItemCheck>
+                {selected && <Icon name={partiallySelected ? "minus" : "check"} />}
+            </SampleSidebarSelectorItemCheck>
             <SampleSidebarSelectorItemContents>{children}</SampleSidebarSelectorItemContents>
         </StyledSampleSidebarSelectorItem>
     );
