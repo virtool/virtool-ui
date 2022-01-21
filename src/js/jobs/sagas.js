@@ -39,7 +39,7 @@ export function* wsUpdateJob(action) {
 }
 
 export function* findJobs(action) {
-    yield apiCall(jobsAPI.find, action, FIND_JOBS);
+    yield apiCall(jobsAPI.find, action.payload, FIND_JOBS);
     yield pushFindTerm(action.term);
 }
 

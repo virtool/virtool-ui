@@ -62,15 +62,18 @@ export function* updateSearch(action) {
     yield put(push(pathname + search));
 }
 
-export function* findSamples() {
+export function* findSamples(action) {
     const routerLocation = yield select(getLocation);
     if (routerLocation.pathname === "/samples") {
         const term = yield select(getTermFromURL);
         const labels = yield select(getLabelsFromURL);
 
         const params = new URLSearchParams(routerLocation.search);
-
-        yield apiCall(samplesAPI.find, { term, labels, workflows: params.get("workflows") }, FIND_SAMPLES);
+        yield apiCall(
+            samplesAPI.find,
+            { term, labels, workflows: params.get("workflows"), page: action.payload.page },
+            FIND_SAMPLES
+        );
     }
 }
 
