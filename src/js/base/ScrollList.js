@@ -8,6 +8,7 @@ export const getScrollRatio = () =>
 export class ScrollList extends React.Component {
     componentDidMount() {
         window.addEventListener("scroll", this.onScroll);
+        this.prevPage = 0;
     }
 
     componentWillUnmount() {
@@ -15,7 +16,13 @@ export class ScrollList extends React.Component {
     }
 
     onScroll = () => {
-        if (this.props.documents.length && this.props.page < this.props.pageCount && getScrollRatio() > 0.8) {
+        if (
+            this.props.page !== this.prevPage &&
+            this.props.documents.length &&
+            this.props.page < this.props.pageCount &&
+            getScrollRatio() > 0.8
+        ) {
+            this.prevPage = this.props.page;
             this.props.onLoadNextPage(this.props.page + 1);
         }
     };
