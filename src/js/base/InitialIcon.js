@@ -25,7 +25,7 @@ const getFontSize = size => fontSize[size];
 
 export const StyledInitialIcon = styled.span`
     border-radius: 50%;
-    display: flex;
+    display: inline-flex;
     flex: 0 0 auto;
     justify-content: center;
     align-items: center;
