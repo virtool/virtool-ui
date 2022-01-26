@@ -7,9 +7,9 @@ import { RelativeTime } from "./RelativeTime";
 export const UnstyledAttribution = ({ className, time, user, verb = "created" }) => (
     <span className={className}>
         {user ? <InitialIcon size="md" handle={user} /> : null}
-        <span>{user}</span>
-        <span>{user ? verb : capitalize(verb)}</span>
-        <RelativeTime time={time} />
+        <span>
+            {user} {user ? verb : capitalize(verb)} <RelativeTime time={time} />
+        </span>
     </span>
 );
 
@@ -17,10 +17,6 @@ export const Attribution = styled(UnstyledAttribution)`
     align-items: center;
     display: inline-flex;
     font-size: inherit;
-
-    *:not(:first-child) {
-        margin-left: 3px;
-    }
     .InitialIcon {
         margin-right: 5px;
     }
@@ -28,9 +24,7 @@ export const Attribution = styled(UnstyledAttribution)`
 
 export const UnstyledNameAttribution = ({ className, user, verb = "created" }) => (
     <span className={className}>
-        <span>{capitalize(verb)} by </span>
-        {user ? <InitialIcon size="md" handle={user} /> : null}
-        <span>{user}</span>
+        {capitalize(verb)} by {user ? <InitialIcon size="md" handle={user} /> : null} {user}
     </span>
 );
 
@@ -39,11 +33,9 @@ export const NameAttribution = styled(UnstyledNameAttribution)`
     display: inline-flex;
     font-size: inherit;
 
-    *:not(:first-child) {
-        margin-left: 3px;
-    }
+
     .InitialIcon {
-        margin-right: 1px;
-        margin-left 7px;
+        margin-right: 3px;
+        margin-left 6px;
     }
 `;
