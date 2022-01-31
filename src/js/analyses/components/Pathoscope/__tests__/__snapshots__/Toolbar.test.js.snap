@@ -64,17 +64,19 @@ exports[`<Toolbar /> should render 1`] = `
   </Button>
   <Menu>
     <DropdownButton>
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="file-download"
-      />
-       Export 
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="caret-down"
-      />
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
     </DropdownButton>
     <Dropdown__DropdownMenuList>
       <Dropdown__DropdownMenuItem
@@ -166,17 +168,19 @@ exports[`<Toolbar /> should render when [filterIsolates=false] 1`] = `
   </Button>
   <Menu>
     <DropdownButton>
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="file-download"
-      />
-       Export 
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="caret-down"
-      />
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
     </DropdownButton>
     <Dropdown__DropdownMenuList>
       <Dropdown__DropdownMenuItem
@@ -268,17 +272,19 @@ exports[`<Toolbar /> should render when [filterOTUs=false] 1`] = `
   </Button>
   <Menu>
     <DropdownButton>
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="file-download"
-      />
-       Export 
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="caret-down"
-      />
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
     </DropdownButton>
     <Dropdown__DropdownMenuList>
       <Dropdown__DropdownMenuItem
@@ -370,17 +376,19 @@ exports[`<Toolbar /> should render when [showPathoscopeReads=true] 1`] = `
   </Button>
   <Menu>
     <DropdownButton>
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="file-download"
-      />
-       Export 
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="caret-down"
-      />
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
     </DropdownButton>
     <Dropdown__DropdownMenuList>
       <Dropdown__DropdownMenuItem
@@ -472,17 +480,19 @@ exports[`<Toolbar /> should render when [sortDescending=false] 1`] = `
   </Button>
   <Menu>
     <DropdownButton>
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="file-download"
-      />
-       Export 
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="caret-down"
-      />
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
     </DropdownButton>
     <Dropdown__DropdownMenuList>
       <Dropdown__DropdownMenuItem
@@ -574,17 +584,19 @@ exports[`<Toolbar /> should render when [sortKey="depth"] 1`] = `
   </Button>
   <Menu>
     <DropdownButton>
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="file-download"
-      />
-       Export 
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="caret-down"
-      />
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
     </DropdownButton>
     <Dropdown__DropdownMenuList>
       <Dropdown__DropdownMenuItem
@@ -676,17 +688,19 @@ exports[`<Toolbar /> should render when [sortKey="weight"] 1`] = `
   </Button>
   <Menu>
     <DropdownButton>
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="file-download"
-      />
-       Export 
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="caret-down"
-      />
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
     </DropdownButton>
     <Dropdown__DropdownMenuList>
       <Dropdown__DropdownMenuItem
