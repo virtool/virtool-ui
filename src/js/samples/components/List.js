@@ -12,6 +12,7 @@ import { SampleFilters } from "./Filter/Filters";
 import SampleItem from "./Item/Item";
 import SampleToolbar from "./Toolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
+import { useLocation } from "react-router-dom";
 
 const SamplesListHeader = styled.div`
     grid-column: 1;
@@ -31,7 +32,6 @@ const StyledSamplesList = styled.div`
 export const SamplesList = ({
     documents,
     loading,
-    match,
     page,
     pageCount,
     totalCount,
@@ -41,9 +41,10 @@ export const SamplesList = ({
 }) => {
     useEffect(onFindOther, [null]);
 
+    const { search } = useLocation();
     useEffect(() => {
         onFindSamples(1);
-    }, [match]);
+    }, [search]);
 
     if (loading) {
         return <LoadingPlaceholder />;
