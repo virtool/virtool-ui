@@ -84,13 +84,15 @@ export const PathoscopeToolbar = ({
             </Button>
             <Dropdown>
                 <DropdownButton>
-                    <Icon name="file-download" /> Export <Icon name="caret-down" />
+                    <span>
+                        <Icon name="file-download" /> Export <Icon name="caret-down" />
+                    </span>
                 </DropdownButton>
                 <DropdownMenuList>
-                    <DropdownMenuItem onSelect={() => followDownload(`/download/analyses/${analysisId}.csv`)}>
+                    <DropdownMenuItem onSelect={() => followDownload(`api/analyses/documents/${analysisId}.csv`)}>
                         <Icon name="file-csv" /> CSV
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => followDownload(`/download/analyses/${analysisId}.xlsx`)}>
+                    <DropdownMenuItem onSelect={() => followDownload(`api/analyses/documents/${analysisId}.xlsx`)}>
                         <Icon name="file-excel" /> Excel
                     </DropdownMenuItem>
                 </DropdownMenuList>
