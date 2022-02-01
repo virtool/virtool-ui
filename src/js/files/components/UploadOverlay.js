@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { map, reject, sortBy } from "lodash-es";
+import { map, reject, reverse } from "lodash-es";
 import { connect } from "react-redux";
 import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
 import { UploadItem } from "./UploadItem";
@@ -53,7 +53,7 @@ export const UploadOverlay = ({ uploads }) => {
 };
 
 export const mapStateToProps = state => {
-    return { uploads: sortBy(reject(state.files.uploads, { fileType: "reference" }), "progress") };
+    return { uploads: reverse(reject(state.files.uploads, { fileType: "reference" })) };
 };
 
 export default connect(mapStateToProps)(UploadOverlay);
