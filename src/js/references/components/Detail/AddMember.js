@@ -47,9 +47,9 @@ const StyledAddMemberItem = styled(BoxGroupSection)`
     }
 `;
 
-const AddMemberItem = ({ id, onClick }) => (
+const AddMemberItem = ({ handle, onClick }) => (
     <StyledAddMemberItem onClick={onClick}>
-        <InitialIcon size="md" handle={id} /> {id}
+        <InitialIcon size="md" handle={handle} /> {handle}
     </StyledAddMemberItem>
 );
 
@@ -86,7 +86,7 @@ export class AddReferenceMember extends React.Component {
 
         if (this.props.documents.length) {
             addMemberComponents = map(this.props.documents, document => (
-                <AddMemberItem key={document.id} id={document.id} onClick={() => this.handleAdd(document.id)} />
+                <AddMemberItem key={document.id} handle={document.handle} onClick={() => this.handleAdd(document.id)} />
             ));
         } else {
             addMemberComponents = <NoneFoundSection noun={`other ${this.props.noun}s`} />;

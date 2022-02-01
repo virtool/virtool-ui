@@ -5,12 +5,12 @@ import ReferenceMembers from "./Members";
 import RemoveReference from "./Remove";
 
 export const ReferenceSettings = ({ isRemote }) => (
-    <React.Fragment>
+    <>
         {isRemote ? null : <SourceTypes />}
         <ReferenceMembers noun="user" />
         <ReferenceMembers noun="group" />
         <RemoveReference />
-    </React.Fragment>
+    </>
 );
 
 export const mapStateToProps = state => ({
