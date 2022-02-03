@@ -12,7 +12,7 @@ export const ReferenceItemBuild = ({ id, latestBuild, progress }) => {
                     <Link to={`/refs/${id}/indexes/${latestBuild.id}`}>Index {latestBuild.version}</Link>
                 </h4>
                 <p>
-                    Created <RelativeTime time={latestBuild.created_at} /> by {latestBuild.user.id}
+                    Created <RelativeTime time={latestBuild.created_at} /> by {latestBuild.user.handle}
                 </p>
             </ReferenceItemInfo>
         );

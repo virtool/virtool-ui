@@ -10,7 +10,8 @@ describe("<ReferenceItemBuild />", () => {
                 created_at: "2018-01-01T00:00:00.000000Z",
                 id: "bar",
                 user: {
-                    id: "bob"
+                    id: "bob_id",
+                    handle: "bob"
                 },
                 version: 3
             },
