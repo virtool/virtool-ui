@@ -34,7 +34,8 @@ import {
     LOGIN,
     UPDATE_ACCOUNT,
     UPDATE_SAMPLE,
-    UPDATE_SETTINGS
+    UPDATE_SETTINGS,
+    UPLOAD
 } from "../app/actionTypes";
 import { reportAPIError } from "../utils/utils";
 
@@ -123,6 +124,7 @@ export const errorsReducer = createReducer({}, builder => {
                     case FIND_USERS.FAILED:
                     case GET_USER.FAILED:
                     case LOGIN.FAILED:
+                    case UPLOAD.FAILED:
                         state[errorName] = errorPayload;
                         break;
                     case CREATE_FIRST_USER.FAILED:

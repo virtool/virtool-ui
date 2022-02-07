@@ -4,7 +4,9 @@ import {
     WS_REMOVE_FILE,
     UPLOAD,
     UPLOAD_PROGRESS,
-    FIND_FILES
+    FIND_FILES,
+    UPLOAD_FAILED,
+    REMOVE_UPLOAD
 } from "../../app/actionTypes";
 import reducer, { initialState } from "../reducer";
 
@@ -125,7 +127,7 @@ describe("filesReducer()", () => {
         const result = reducer(state, action);
 
         expect(result).toEqual({
-            uploads: [...state.uploads, { localId, name, context, size, type, progress: 0 }]
+            uploads: [...state.uploads, { localId, name, context, size, type, progress: 0, failed: false }]
         });
     });
 
@@ -210,6 +212,49 @@ describe("filesReducer()", () => {
         const action = {
             type: UPLOAD.SUCCEEDED,
             payload: { localId: "foo", progress: 100 }
+        };
+        const result = reducer(state, action);
+        expect(result).toEqual({
+            uploads: [
+                { localId: "bar", progress: 0 },
+                { localId: "baz", progress: 100 }
+            ]
+        });
+    });
+
+    it("should update status of upload to failed when required", () => {
+        const state = {
+            uploads: [
+                { localId: "foo", progress: 50 },
+                { localId: "bar", progress: 0 },
+                { localId: "baz", progress: 100 }
+            ]
+        };
+        const action = {
+            type: UPLOAD_FAILED,
+            payload: { localId: "foo" }
+        };
+        const result = reducer(state, action);
+        expect(result).toEqual({
+            uploads: [
+                { localId: "foo", progress: 50, failed: true },
+                { localId: "bar", progress: 0 },
+                { localId: "baz", progress: 100 }
+            ]
+        });
+    });
+
+    it("should remove upload when requested", () => {
+        const state = {
+            uploads: [
+                { localId: "foo", progress: 50 },
+                { localId: "bar", progress: 0 },
+                { localId: "baz", progress: 100 }
+            ]
+        };
+        const action = {
+            type: REMOVE_UPLOAD,
+            payload: { localId: "foo" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({

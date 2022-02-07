@@ -3,17 +3,20 @@
 exports[`<UploadItem /> should render when [progress === 0] 1`] = `
 <UploadItem__StyledUploadItem>
   <ProgressBar__AffixedProgressBar
+    color="blue"
     now={0}
   />
-  <UploadItem__UploadItemTitle>
+  <UploadItem__UploadItemTitle
+    failed={false}
+  >
     <Icon
       faStyle="fas"
       fixedWidth={false}
       name="upload"
     />
-    <span>
+    <UploadItem__StyledFilename>
       Foo.fa
-    </span>
+    </UploadItem__StyledFilename>
     <span>
       871.3KB
     </span>
@@ -24,17 +27,20 @@ exports[`<UploadItem /> should render when [progress === 0] 1`] = `
 exports[`<UploadItem /> should render when [progress > 0] 1`] = `
 <UploadItem__StyledUploadItem>
   <ProgressBar__AffixedProgressBar
+    color="blue"
     now={51}
   />
-  <UploadItem__UploadItemTitle>
+  <UploadItem__UploadItemTitle
+    failed={false}
+  >
     <Icon
       faStyle="fas"
       fixedWidth={false}
       name="upload"
     />
-    <span>
+    <UploadItem__StyledFilename>
       Foo.fa
-    </span>
+    </UploadItem__StyledFilename>
     <span>
       871.3KB
     </span>

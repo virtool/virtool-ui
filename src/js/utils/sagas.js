@@ -63,10 +63,11 @@ export function* pushFindTerm(term, contains) {
  * @param error {object} the HTTP error from Superagent
  */
 export function* putGenericError(actionType, error) {
-    const { body, status } = error.response;
+    const { body, status } = error.response ? error.response : {};
 
+    const message = body ? body.message : null;
     yield put({
         type: actionType.FAILED,
-        payload: { message: body.message, error, status }
+        payload: { message, error, status }
     });
 }

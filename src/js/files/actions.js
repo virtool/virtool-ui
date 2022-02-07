@@ -11,7 +11,9 @@ import {
     FIND_FILES,
     REMOVE_FILE,
     UPLOAD,
-    UPLOAD_PROGRESS
+    UPLOAD_PROGRESS,
+    UPLOAD_FAILED,
+    REMOVE_UPLOAD
 } from "../app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
 
@@ -97,4 +99,26 @@ export const removeFile = createAction(REMOVE_FILE.REQUESTED, fileId => ({
  */
 export const uploadProgress = createAction(UPLOAD_PROGRESS, (localId, progress) => ({
     payload: { localId, progress }
+}));
+
+/**
+ * Returns and action that sets the status of an ongoing upload to failed
+ *
+ * @func
+ * @param localId {string} the local id for the upload (NOT the fileId)
+ * @returns {object}
+ */
+export const uploadFailed = createAction(UPLOAD_FAILED, localId => ({
+    payload: { localId }
+}));
+
+/**
+ * Returns and action that triggers the removal of the upload file specified
+ *
+ * @func
+ * @param localId {string} the local id for the upload (NOT the fileId)
+ * @returns {object}
+ */
+export const removeUpload = createAction(REMOVE_UPLOAD, localId => ({
+    payload: { localId }
 }));

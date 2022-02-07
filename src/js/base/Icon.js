@@ -20,7 +20,10 @@ const StyledIcon = styled.i`
     ${props => (props.fixedWidth ? fixedWidth : "")};
 
     :hover {
-        color: ${getIconHoverColor};
+        ${props =>
+            props.hoverable || props.onClick
+                ? `color: ${getIconHoverColor({ color: props.color, theme: props.theme })};`
+                : ""};
     }
 `;
 
@@ -39,6 +42,7 @@ export const Icon = ({ hoverable, style, ...props }) => {
             color={props.color}
             shade={props.shade}
             data-testid={props["data-testid"]}
+            aria-label={props["aria-label"]}
         />
     );
 
@@ -62,7 +66,8 @@ Icon.propTypes = {
     onClick: PropTypes.func,
     className: PropTypes.string,
     fixedWidth: PropTypes.bool,
-    style: PropTypes.object
+    style: PropTypes.object,
+    "aria-label": PropTypes.string
 };
 
 Icon.defaultProps = {

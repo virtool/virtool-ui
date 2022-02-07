@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { getBorder } from "../../app/theme";
+import { getBorder, getColor, getFontWeight } from "../../app/theme";
 import { AffixedProgressBar, Icon, Loader } from "../../base";
 import { byteSize } from "../../utils/utils";
+import { connect } from "react-redux";
+import { removeUpload } from "../actions";
 
 const StyledUploadItem = styled.div`
     padding: 0;
@@ -21,21 +23,52 @@ const UploadItemTitle = styled.div`
     i.fas {
         margin-right: 5px;
     }
-    div:first-child {
-        margin-right: 5px;
-    }
     span:last-child {
         margin-left: auto;
+        color: ${props => (props.failed ? getColor({ theme: props.theme, color: "red" }) : "inherit")};
+    }
+    i.fa-times {
+        font-size: 20px;
+    }
+    i.fa-trash {
+        margin-left: 5px;
+        font-size: 14px;
     }
 `;
 
-export const UploadItem = ({ name, progress, size }) => (
-    <StyledUploadItem>
-        <AffixedProgressBar now={progress} />
-        <UploadItemTitle>
-            {progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />}
-            <span>{name}</span>
-            <span>{byteSize(size)}</span>
-        </UploadItemTitle>
-    </StyledUploadItem>
-);
+const StyledFilename = styled.span`
+    font-weight: ${getFontWeight("thick")};
+`;
+
+export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) => {
+    let uploadIcon = progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />;
+    let uploadBookend = byteSize(size);
+
+    if (failed) {
+        uploadIcon = <Icon name="times" color={"red"} hoverable={false} />;
+        uploadBookend = (
+            <>
+                Failed <Icon aria-label={`delete ${name}`} name="trash" color="red" onClick={() => onRemove(localId)} />
+            </>
+        );
+    }
+
+    return (
+        <StyledUploadItem>
+            <AffixedProgressBar now={failed ? 100 : progress} color={failed ? "red" : "blue"} />
+            <UploadItemTitle failed={failed}>
+                {uploadIcon}
+                <StyledFilename>{name}</StyledFilename>
+                <span>{uploadBookend}</span>
+            </UploadItemTitle>
+        </StyledUploadItem>
+    );
+};
+
+const mapDispatchToProps = dispatch => ({
+    onRemove: localId => {
+        dispatch(removeUpload(localId));
+    }
+});
+
+export default connect(null, mapDispatchToProps)(UploadItem);

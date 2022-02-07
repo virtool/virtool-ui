@@ -1,13 +1,25 @@
 import {
-    WS_INSERT_FILE,
-    WS_UPDATE_FILE,
-    WS_REMOVE_FILE,
     FIND_FILES,
     REMOVE_FILE,
+    REMOVE_UPLOAD,
     UPLOAD,
-    UPLOAD_PROGRESS
+    UPLOAD_FAILED,
+    UPLOAD_PROGRESS,
+    WS_INSERT_FILE,
+    WS_REMOVE_FILE,
+    WS_UPDATE_FILE
 } from "../../app/actionTypes";
-import { wsInsertFile, wsUpdateFile, wsRemoveFile, findFiles, upload, removeFile, uploadProgress } from "../actions";
+import {
+    findFiles,
+    removeFile,
+    removeUpload,
+    upload,
+    uploadFailed,
+    uploadProgress,
+    wsInsertFile,
+    wsRemoveFile,
+    wsUpdateFile
+} from "../actions";
 
 describe("Files Action Creators", () => {
     it("wsInsertFile: returns action with websocket file insert data", () => {
@@ -78,7 +90,6 @@ describe("Files Action Creators", () => {
             payload: { fileId }
         });
     });
-
     it("uploadProgress: returns action with upload progress", () => {
         const localId = "random_string";
         const progress = 6;
@@ -86,6 +97,23 @@ describe("Files Action Creators", () => {
         expect(result).toEqual({
             type: UPLOAD_PROGRESS,
             payload: { localId, progress }
+        });
+    });
+
+    it("uploadFailed: returns action with failed upload Id", () => {
+        const localId = "random_string";
+        const result = uploadFailed(localId);
+        expect(result).toEqual({
+            type: UPLOAD_FAILED,
+            payload: { localId }
+        });
+    });
+    it("removeUpload: returns Id of upload to be removed", () => {
+        const localId = "random_string";
+        const result = removeUpload(localId);
+        expect(result).toEqual({
+            type: REMOVE_UPLOAD,
+            payload: { localId }
         });
     });
 });
