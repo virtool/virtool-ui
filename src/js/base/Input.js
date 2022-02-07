@@ -19,7 +19,7 @@ export const InputError = styled.p`
 
 export const StyledInputGroup = styled.div`
     margin: 0 0 15px;
-    min-height: 73px;
+    padding-bottom: 10px;
 `;
 
 export const InputGroup = ({ children, className, error }) => (
