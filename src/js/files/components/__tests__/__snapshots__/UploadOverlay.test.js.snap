@@ -6,16 +6,13 @@ exports[`<UploadOverlay /> should render 1`] = `
 >
   <UploadOverlay__UploadOverlayContent>
     <Box__BoxGroupHeader>
-      <strong>
-        Uploads
-      </strong>
-       
+      Uploads 
       <Badge>
         3
       </Badge>
     </Box__BoxGroupHeader>
     <UploadOverlay__UploadOverlayList>
-      <UploadItem
+      <Connect(UploadItem)
         fileType="subtraction"
         key="123abc"
         localId="123abc"
@@ -23,7 +20,7 @@ exports[`<UploadOverlay /> should render 1`] = `
         progress={100}
         size={1024}
       />
-      <UploadItem
+      <Connect(UploadItem)
         fileType="reads"
         key="456def"
         localId="456def"
@@ -31,7 +28,7 @@ exports[`<UploadOverlay /> should render 1`] = `
         progress={0}
         size={1024}
       />
-      <UploadItem
+      <Connect(UploadItem)
         fileType="reads"
         key="789ghi"
         localId="789ghi"

@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { map, reject, reverse } from "lodash-es";
 import { connect } from "react-redux";
 import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
-import { UploadItem } from "./UploadItem";
+import UploadItem from "./UploadItem";
+import { getFontWeight, getFontSize } from "../../app/theme";
 
 const StyledUploadOverlay = styled.div`
     bottom: 0;
@@ -23,6 +24,8 @@ const UploadOverlayContent = styled(BoxGroup)`
 
     ${BoxGroupHeader} {
         display: block;
+        font-weight: ${getFontWeight("thick")};
+        font-size: ${getFontSize("lg")};
     }
 `;
 
@@ -41,7 +44,7 @@ export const UploadOverlay = ({ uploads }) => {
             <StyledUploadOverlay show={uploads.length}>
                 <UploadOverlayContent>
                     <BoxGroupHeader>
-                        <strong>Uploads</strong> <Badge>{uploadComponents.length}</Badge>
+                        Uploads <Badge>{uploadComponents.length}</Badge>
                     </BoxGroupHeader>
                     <UploadOverlayList>{uploadComponents}</UploadOverlayList>
                 </UploadOverlayContent>

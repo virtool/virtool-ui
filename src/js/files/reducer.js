@@ -4,12 +4,14 @@
  * @module files/reducer
  */
 import { createReducer } from "@reduxjs/toolkit";
-import { map, reject } from "lodash-es";
+import { forEach, map, reject } from "lodash-es";
 import {
     FIND_FILES,
     UPLOAD,
     UPLOAD_PROGRESS,
+    UPLOAD_FAILED,
     UPLOAD_SAMPLE_FILE,
+    REMOVE_UPLOAD,
     WS_INSERT_FILE,
     WS_REMOVE_FILE,
     WS_UPDATE_FILE
@@ -37,7 +39,7 @@ export const appendUpload = (state, action) => {
 
     return {
         ...state,
-        uploads: state.uploads.concat([{ localId, progress: 0, name, size, type: fileType, context }])
+        uploads: state.uploads.concat([{ localId, progress: 0, name, size, type: fileType, context, failed: false }])
     };
 };
 
@@ -102,6 +104,16 @@ export const filesReducer = createReducer(initialState, builder => {
         })
         .addCase(UPLOAD_PROGRESS, (state, action) => {
             return updateProgress(state, action.payload);
+        })
+        .addCase(UPLOAD_FAILED, (state, action) => {
+            forEach(state.uploads, upload => {
+                if (upload.localId === action.payload.localId) {
+                    upload.failed = true;
+                }
+            });
+        })
+        .addCase(REMOVE_UPLOAD, (state, action) => {
+            state.uploads = reject(state.uploads, { localId: action.payload.localId });
         });
 });
 

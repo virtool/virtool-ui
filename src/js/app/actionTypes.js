@@ -84,6 +84,8 @@ export const REMOVE_FILE = createRequestActionType("REMOVE_FILE");
 export const UPLOAD = createRequestActionType("UPLOAD");
 export const UPLOAD_SAMPLE_FILE = createRequestActionType("UPLOAD_SAMPLE_FILE");
 export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
+export const UPLOAD_FAILED = "UPLOAD_FAILED";
+export const REMOVE_UPLOAD = "REMOVE_UPLOAD";
 
 // Groups
 export const WS_INSERT_GROUP = "WS_INSERT_GROUP";

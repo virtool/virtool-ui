@@ -3,7 +3,7 @@ import { buffers, END, eventChannel } from "redux-saga";
 import { call, put, take, takeEvery, throttle } from "redux-saga/effects";
 import { FIND_FILES, REMOVE_FILE, UPLOAD } from "../app/actionTypes";
 import { apiCall, putGenericError } from "../utils/sagas";
-import { uploadProgress } from "./actions";
+import { uploadFailed, uploadProgress } from "./actions";
 import * as filesAPI from "./api";
 
 export function* watchFiles() {
@@ -61,6 +61,7 @@ export function* watchUploadChannel(channel, actionType, localId) {
         const { progress = 0, response, err } = yield take(channel);
 
         if (err) {
+            yield put(uploadFailed(localId));
             return yield putGenericError(actionType, err);
         }
         if (response) {
