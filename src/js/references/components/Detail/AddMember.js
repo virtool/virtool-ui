@@ -22,8 +22,8 @@ import { addReferenceGroup, addReferenceUser } from "../../actions";
 const AddUserSearch = ({ term, onChange }) => (
     <InputGroup>
         <InputContainer align="left">
-            <InputIcon name="search" />
             <Input value={term} onChange={e => onChange(e.target.value)} />
+            <InputIcon name="search" />
         </InputContainer>
     </InputGroup>
 );
