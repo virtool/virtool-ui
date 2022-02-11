@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFuse } from "../utils/utils";
 
 export const useClickOutside = (popperElement, referenceElement, callback) => {
@@ -45,4 +45,12 @@ export const useKeyPress = (key, callback) => {
 
         return () => window.removeEventListener("keyup", handleKeyUp);
     });
+};
+
+export const usePrevious = value => {
+    const ref = useRef();
+    useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
 };

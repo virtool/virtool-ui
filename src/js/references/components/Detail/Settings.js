@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import SourceTypes from "../SourceTypes";
+import SourceTypes from "../SourceTypes/SourceTypes";
 import ReferenceMembers from "./Members";
 import RemoveReference from "./Remove";
 

@@ -1,6 +1,17 @@
+import { forEach } from "lodash-es";
+import React from "react";
+import { ThemeProvider } from "styled-components";
 import { EDIT_REFERENCE, UPDATE_SETTINGS } from "../../../app/actionTypes";
-import { Icon } from "../../../base/index";
-import { mapDispatchToProps, SourceTypes, SourceTypeItem } from "../SourceTypes";
+import { theme } from "../../../app/theme";
+import { mapDispatchToProps, SourceTypes } from "../SourceTypes/SourceTypes";
+import { SourceTypeItem } from "../SourceTypes/list";
+import userEvent from "@testing-library/user-event";
+import { screen, waitFor } from "@testing-library/react";
+
+const rerenderWithProviders = (rerender, ui) => {
+    const wrappedUi = <ThemeProvider theme={theme}>{ui}</ThemeProvider>;
+    return rerender(wrappedUi);
+};
 
 describe("<SourceTypes />", () => {
     let props;
@@ -18,75 +29,94 @@ describe("<SourceTypes />", () => {
     });
 
     it("should render when global", () => {
-        const wrapper = shallow(<SourceTypes {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<SourceTypes {...props} />);
+        expect(screen.getByText("Default Source Types")).toBeInTheDocument();
+        forEach(props.sourceTypes, sourceType => {
+            expect(screen.getByText(sourceType)).toBeInTheDocument();
+        });
+        expect(screen.getAllByLabelText("trash").length).toBe(2);
+        expect(screen.getByRole("textbox", { name: "Add Source Type" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
     });
 
     it("should render when remote", () => {
         props.global = false;
         props.remote = true;
-        const wrapper = shallow(<SourceTypes {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<SourceTypes {...props} />);
+        expect(screen.getByText("Source Types")).toBeInTheDocument();
+        forEach(props.sourceTypes, sourceType => {
+            expect(screen.getByText(sourceType)).toBeInTheDocument();
+        });
+        expect(screen.queryByLabelText("trash")).not.toBeInTheDocument();
+        expect(screen.queryByRole("textbox", { name: "Add Source Type" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Add" })).not.toBeInTheDocument();
     });
 
     it("should render when neither", () => {
         props.global = false;
         props.isRemote = false;
-        const wrapper = shallow(<SourceTypes {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<SourceTypes {...props} />);
+        expect(screen.getByText("Source Types")).toBeInTheDocument();
+        forEach(props.sourceTypes, sourceType => {
+            expect(screen.getByText(sourceType)).toBeInTheDocument();
+        });
+        expect(screen.getAllByLabelText("trash").length).toBe(2);
+        expect(screen.getByRole("textbox", { name: "Add Source Type" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Add" })).toBeInTheDocument();
     });
 
-    it("should call onUpdate() when onRemove() called", () => {
-        const wrapper = shallow(<SourceTypes {...props} />);
-        wrapper.instance().handleRemove("serotype");
-        expect(props.onUpdate).toHaveBeenCalledWith(["isolate"], true, "foo");
+    it("should call onUpdate when Add is clicked", async () => {
+        renderWithProviders(<SourceTypes {...props} />);
+        userEvent.type(screen.getByRole("textbox"), "test_source");
+        userEvent.click(screen.getByRole("button", { name: "Add" }));
+        await waitFor(() =>
+            expect(props.onUpdate).toHaveBeenCalledWith([...props.sourceTypes, "test_source"], true, "foo")
+        );
     });
 
-    it("should call onUpdate() when handleSubmit() is called successfully", () => {
-        const wrapper = shallow(<SourceTypes {...props} />);
-
-        const mockEvent = { preventDefault: jest.fn() };
-
-        // Won't be called be value is empty.
-        wrapper.setState({ value: "" });
-        wrapper.instance().handleSubmit(mockEvent);
-        expect(mockEvent.preventDefault).toHaveBeenCalled();
-        expect(props.onUpdate).not.toHaveBeenCalled();
-
-        wrapper.setState({ value: "Genotype" });
-        wrapper.instance().handleSubmit(mockEvent);
-        expect(props.onUpdate).toHaveBeenCalledWith(["isolate", "serotype", "genotype"], true, "foo");
-        expect(wrapper.state()).toEqual({ value: "", error: null });
+    it("should call onUpdate when trash is clicked", async () => {
+        renderWithProviders(<SourceTypes {...props} />);
+        userEvent.click(screen.getAllByLabelText("trash")[0]);
+        await waitFor(() => expect(props.onUpdate).toHaveBeenCalledWith([props.sourceTypes[1]], true, "foo"));
     });
 
-    it("should not call onUpdate() when submitted source type already exists", () => {
-        const wrapper = shallow(<SourceTypes {...props} />);
-        const mockEvent = { preventDefault: jest.fn() };
-        wrapper.setState({ value: "Isolate" });
-        wrapper.instance().handleSubmit(mockEvent);
-        expect(props.onUpdate).not.toHaveBeenCalled();
-        expect(wrapper.state("error")).toEqual("Source type already exists");
+    it("is should undo removal when Undo is clicked", async () => {
+        const { rerender } = renderWithProviders(
+            <SourceTypes {...{ ...props, sourceTypes: ["isolate", "serotype"] }} />
+        );
+        rerenderWithProviders(rerender, <SourceTypes {...{ ...props, sourceTypes: ["serotype"] }} />);
+        userEvent.click(screen.getByLabelText("undo"));
+        await waitFor(() => expect(props.onUpdate).toHaveBeenCalledWith(["serotype", "isolate"], true, "foo"));
     });
 
-    it("should not call onUpdate() when submitted source type contains space", () => {
-        const wrapper = shallow(<SourceTypes {...props} />);
-        const mockEvent = { preventDefault: jest.fn() };
-        wrapper.setState({ value: "With Spaces" });
-        wrapper.instance().handleSubmit(mockEvent);
-        expect(props.onUpdate).not.toHaveBeenCalled();
-        expect(wrapper.state("error")).toEqual("Source types may not contain spaces");
+    it("should not add source type to list if it already exists", async () => {
+        renderWithProviders(<SourceTypes {...props} />);
+        userEvent.type(screen.getByRole("textbox"), "isolate");
+        userEvent.click(screen.getByRole("button", { name: "Add" }));
+        await waitFor(() => expect(screen.getAllByText("isolate").length).toBe(1));
+        await waitFor(() => expect(screen.getByText("Source type already exists")).toBeInTheDocument());
+    });
+
+    it("should not add source type to list if it contains space", async () => {
+        renderWithProviders(<SourceTypes {...props} />);
+        userEvent.type(screen.getByRole("textbox"), "test source");
+        userEvent.click(screen.getByRole("button", { name: "Add" }));
+        await waitFor(() => expect(screen.queryByText("test source")).toBeNull());
+        await waitFor(() => expect(screen.getByText("Source types may not contain spaces")).toBeInTheDocument());
     });
 
     it("should call onToggle() when handleEnable() is called and [restrictSourceTypes=true]", () => {
-        const wrapper = shallow(<SourceTypes {...props} />);
-        wrapper.instance().handleEnable();
+        props.global = false;
+        renderWithProviders(<SourceTypes {...props} />);
+        userEvent.click(screen.getByRole("checkbox"));
         expect(props.onToggle).toHaveBeenCalledWith("foo", false);
     });
 
     it("should call onToggle() handleEnable() is called and [restrictSourceTypes=false]", () => {
         props.restrictSourceTypes = false;
-        const wrapper = shallow(<SourceTypes {...props} />);
-        wrapper.instance().handleEnable();
+        props.global = false;
+        renderWithProviders(<SourceTypes {...props} />);
+        userEvent.click(screen.getByRole("checkbox"));
         expect(props.onToggle).toHaveBeenCalledWith("foo", true);
     });
 });
@@ -103,21 +133,21 @@ describe("<SourceTypeItem />", () => {
     });
 
     it("should render when [disabled=false]", () => {
-        const wrapper = shallow(<SourceTypeItem {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<SourceTypeItem {...props} />);
+        expect(screen.getByText("genotype")).toBeInTheDocument();
+        expect(screen.getByLabelText("trash")).toBeInTheDocument();
     });
 
     it("should render when [disabled=true]", () => {
         props.disabled = true;
-        const wrapper = shallow(<SourceTypeItem {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<SourceTypeItem {...props} />);
+        expect(screen.getByText("genotype")).toBeInTheDocument();
+        expect(screen.queryByLabelText("trash")).toBeNull();
     });
 
     it("should call onRemove() when remove icon is clicked", () => {
-        const wrapper = shallow(<SourceTypeItem {...props} />);
-        expect(wrapper.find(Icon).length).toEqual(1);
-
-        wrapper.find(Icon).prop("onClick")();
+        renderWithProviders(<SourceTypeItem {...props} />);
+        userEvent.click(screen.queryByLabelText("trash"));
         expect(props.onRemove).toHaveBeenCalledWith("genotype");
     });
 });
