@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { mapSettingsStateToProps } from "../../administration/mappers";
 import { Container, LoadingPlaceholder, NarrowContainer, ViewHeader, ViewHeaderTitle } from "../../base";
-import SourceTypes from "./SourceTypes";
+import SourceTypes from "./SourceTypes/SourceTypes";
 import ReferenceList from "./List";
 import ReferenceDetail from "./Detail/Detail";
 import AddReference from "./Add";

@@ -74,6 +74,7 @@ export class UnstyledInput extends React.Component {
                 onBlur={this.props.onBlur}
                 onChange={this.props.onChange}
                 onFocus={this.props.onFocus}
+                disabled={this.props.disabled}
             />
         );
     }
