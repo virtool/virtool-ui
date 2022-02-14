@@ -1,11 +1,12 @@
 import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Badge, Box, BoxGroup, NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "../../../base";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
-import { selectIsolate, showAddIsolate } from "../../actions";
+import { selectIsolate } from "../../actions";
 import IsolateDetail from "./Isolates/Detail";
 import IsolateItem from "./Isolates/Item";
 
@@ -59,11 +60,7 @@ const IsolateEditor = props => {
         />
     ));
 
-    const addIsolateLink = props.canModify ? (
-        <a href="#" onClick={props.onShowAddIsolate}>
-            Add Isolate
-        </a>
-    ) : null;
+    const addIsolateLink = props.canModify ? <Link to={{ state: { addIsolate: true } }}>Add Isolate</Link> : null;
 
     const body = isolateComponents.length ? (
         <IsolateEditorContainer>
@@ -100,10 +97,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onSelectIsolate: isolateId => {
         dispatch(selectIsolate(isolateId));
-    },
-
-    onShowAddIsolate: () => {
-        dispatch(showAddIsolate());
     }
 });
 

@@ -15,7 +15,6 @@ import {
     REVERT,
     SELECT_ISOLATE,
     SET_ISOLATE_AS_DEFAULT,
-    SHOW_ADD_ISOLATE,
     SHOW_EDIT_ISOLATE,
     SHOW_EDIT_OTU,
     SHOW_REMOVE_ISOLATE,
@@ -283,12 +282,6 @@ describe("OTUs Reducer:", () => {
         expect(result).toEqual({ remove: true });
     });
 
-    it("should handle SHOW_ADD_ISOLATE", () => {
-        const action = { type: SHOW_ADD_ISOLATE };
-        const result = reducer({}, action);
-        expect(result).toEqual({ addIsolate: true });
-    });
-
     it("should handle SHOW_EDIT_ISOLATE", () => {
         const action = { type: SHOW_EDIT_ISOLATE };
         const result = reducer({}, action);
@@ -309,7 +302,6 @@ describe("OTUs Reducer:", () => {
 
     it("should handle HIDE_OTU_MODAL", () => {
         const state = {
-            addIsolate: true,
             edit: true,
             editIsolate: true,
             remove: false,
@@ -319,7 +311,6 @@ describe("OTUs Reducer:", () => {
         const action = { type: HIDE_OTU_MODAL };
         const result = reducer(state, action);
         expect(result).toEqual({
-            addIsolate: false,
             edit: false,
             editIsolate: false,
             remove: false,

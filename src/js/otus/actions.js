@@ -1,3 +1,4 @@
+import { createAction } from "@reduxjs/toolkit";
 import {
     ADD_ISOLATE,
     ADD_SEQUENCE,
@@ -15,7 +16,6 @@ import {
     REVERT,
     SELECT_ISOLATE,
     SET_ISOLATE_AS_DEFAULT,
-    SHOW_ADD_ISOLATE,
     SHOW_EDIT_ISOLATE,
     SHOW_EDIT_OTU,
     SHOW_REMOVE_ISOLATE,
@@ -25,8 +25,6 @@ import {
     WS_REMOVE_OTU,
     WS_UPDATE_OTU
 } from "../app/actionTypes";
-
-import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns an action that should be dispatched when an OTU is inserted via websocket.
@@ -319,14 +317,6 @@ export const showEditOTU = createAction(SHOW_EDIT_OTU);
  * @returns {object}
  */
 export const showRemoveOTU = createAction(SHOW_REMOVE_OTU);
-
-/**
- * Returns action for displaying the add isolate modal.
- *
- * @func
- * @returns {object}
- */
-export const showAddIsolate = createAction(SHOW_ADD_ISOLATE);
 
 /**
  * Returns action for displaying the edit isolate modal.
