@@ -15,7 +15,6 @@ import {
     REVERT,
     SELECT_ISOLATE,
     SET_ISOLATE_AS_DEFAULT,
-    SHOW_ADD_ISOLATE,
     SHOW_EDIT_ISOLATE,
     SHOW_EDIT_OTU,
     SHOW_REMOVE_ISOLATE,
@@ -42,7 +41,6 @@ import {
     revert,
     selectIsolate,
     setIsolateAsDefault,
-    showAddIsolate,
     showEditIsolate,
     showEditOTU,
     showRemoveIsolate,
@@ -205,10 +203,6 @@ describe("OTUs Action Creators", () => {
 
     it("showRemoveOTU: returns action to display remove otu modal", () => {
         expect(showRemoveOTU()).toEqual({ type: SHOW_REMOVE_OTU });
-    });
-
-    it("showAddIsolate: returns action to display add isolate modal", () => {
-        expect(showAddIsolate()).toEqual({ type: SHOW_ADD_ISOLATE });
     });
 
     it("showEditIsolate: returns action to display edit isolate modal", () => {

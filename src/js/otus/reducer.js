@@ -17,7 +17,6 @@ import {
     REVERT,
     SELECT_ISOLATE,
     SET_ISOLATE_AS_DEFAULT,
-    SHOW_ADD_ISOLATE,
     SHOW_EDIT_ISOLATE,
     SHOW_EDIT_OTU,
     SHOW_REMOVE_ISOLATE,
@@ -154,9 +153,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
         .addCase(SHOW_REMOVE_OTU, state => {
             state.remove = true;
         })
-        .addCase(SHOW_ADD_ISOLATE, state => {
-            state.addIsolate = true;
-        })
         .addCase(SHOW_EDIT_ISOLATE, state => {
             state.editIsolate = true;
         })
@@ -169,7 +165,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
         .addCase(HIDE_OTU_MODAL, state => {
             state.edit = false;
             state.remove = false;
-            state.addIsolate = false;
             state.editIsolate = false;
             state.removeIsolate = false;
             state.removeSequence = false;

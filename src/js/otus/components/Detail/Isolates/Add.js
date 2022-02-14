@@ -1,7 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
+import { pushState } from "../../../../app/actions";
 import { Modal, ModalHeader } from "../../../../base";
-import { addIsolate, hideOTUModal } from "../../../actions";
+import { routerLocationHasState } from "../../../../utils/utils";
+import { addIsolate } from "../../../actions";
 import IsolateForm from "./Form";
 
 const getInitialState = props => ({
@@ -57,7 +59,7 @@ class Add extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    show: state.otus.addIsolate,
+    show: routerLocationHasState(state, "addIsolate"),
     otuId: state.otus.detail.id,
     allowedSourceTypes: state.references.detail.source_types,
     restrictSourceTypes: state.references.detail.restrict_source_types
@@ -65,7 +67,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     onHide: () => {
-        dispatch(hideOTUModal());
+        dispatch(pushState({ addIsolate: false }));
     },
 
     onSave: (otuId, sourceType, sourceName) => {
