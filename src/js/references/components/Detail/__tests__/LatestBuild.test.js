@@ -7,7 +7,7 @@ describe("<LatestBuild />", () => {
             id: "bar",
             version: "1.0",
             created_at: "2",
-            user: { id: "baz" }
+            user: { id: "baz", handle: "baz_handle" }
         }
     };
 
