@@ -17,7 +17,7 @@ exports[`<LatestBuild /> should render when [latestBuild!=null] 1`] = `
         time="2"
       />
        by 
-      baz
+      baz_handle
     </span>
   </div>
 </LatestBuild__StyledLatestBuild>

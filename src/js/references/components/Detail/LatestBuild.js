@@ -23,7 +23,7 @@ export const LatestBuild = ({ id, latestBuild }) => {
                         <Link to={`/refs/${id}/indexes/${latestBuild.id}`}>Index {latestBuild.version}</Link>
                     </strong>
                     <span>
-                        &nbsp;/ Created <RelativeTime time={latestBuild.created_at} /> by {latestBuild.user.id}
+                        &nbsp;/ Created <RelativeTime time={latestBuild.created_at} /> by {latestBuild.user.handle}
                     </span>
                 </div>
                 {latestBuild.has_json && <DownloadLink id={latestBuild.id} />}
