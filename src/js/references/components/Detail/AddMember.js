@@ -86,7 +86,11 @@ export class AddReferenceMember extends React.Component {
 
         if (this.props.documents.length) {
             addMemberComponents = map(this.props.documents, document => (
-                <AddMemberItem key={document.id} handle={document.handle} onClick={() => this.handleAdd(document.id)} />
+                <AddMemberItem
+                    key={document.id}
+                    handle={document.handle || document.id}
+                    onClick={() => this.handleAdd(document.id)}
+                />
             ));
         } else {
             addMemberComponents = <NoneFoundSection noun={`other ${this.props.noun}s`} />;
