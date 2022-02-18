@@ -9,6 +9,8 @@ const StyledProgress = styled.progress`
     height: 20px;
     margin-bottom: 10px;
     width: 100%;
+    background-color: ${props => props.theme.color.grey};
+    border: 0px;
 
     ::-webkit-progress-value {
         background-color: ${getProgressColor};
@@ -28,6 +30,7 @@ const StyledAffixedProgress = styled(StyledProgress)`
     margin: 0;
     overflow: hidden;
     position: absolute;
+    background-color: transparent;
 
     ${props => (props.bottom ? "bottom" : "top")}: 0;
 
