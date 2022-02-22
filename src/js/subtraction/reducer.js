@@ -33,7 +33,7 @@ export const subtractionsReducer = createReducer(initialState, builder => {
             state.term = action.payload.term;
         })
         .addCase(FIND_SUBTRACTIONS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action.payload, "id");
+            return updateDocuments(state, action.payload, "name");
         })
         .addCase(SHORTLIST_SUBTRACTIONS.SUCCEEDED, (state, action) => {
             state.shortlist = action.payload;
