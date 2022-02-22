@@ -11,14 +11,6 @@ const LoginFooter = styled(WallDialogFooter)`
     border: none;
 `;
 
-const WallCenter = styled.div`
-    position: relative;
-    bottom: 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
 export class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -53,45 +45,39 @@ export class Login extends React.Component {
     render() {
         return (
             <WallContainer>
-                <WallCenter>
-                    <WallLogo height={42} />
-                    <WallDialog>
-                        <form onSubmit={this.handleSubmit}>
-                            <BoxGroupSection>
-                                <InputGroup>
-                                    <InputLabel>Username</InputLabel>
-                                    <Input
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={this.handleChange}
-                                        autoFocus
-                                    />
-                                </InputGroup>
-                                <InputGroup>
-                                    <InputLabel>Password</InputLabel>
-                                    <PasswordInput
-                                        name="password"
-                                        value={this.state.password}
-                                        onChange={this.handleChange}
-                                    />
-                                </InputGroup>
-
-                                <Checkbox
-                                    checked={this.state.remember}
-                                    onClick={this.handleRemember}
-                                    label="Remember Me"
+                <WallLogo height={42} />
+                <WallDialog>
+                    <form onSubmit={this.handleSubmit}>
+                        <BoxGroupSection>
+                            <InputGroup>
+                                <InputLabel>Username</InputLabel>
+                                <Input
+                                    name="username"
+                                    value={this.state.username}
+                                    onChange={this.handleChange}
+                                    autoFocus
                                 />
-                            </BoxGroupSection>
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLabel>Password</InputLabel>
+                                <PasswordInput
+                                    name="password"
+                                    value={this.state.password}
+                                    onChange={this.handleChange}
+                                />
+                            </InputGroup>
 
-                            <LoginFooter>
-                                <Button type="submit" color="blue">
-                                    Login
-                                </Button>
-                                <span>{this.props.error}</span>
-                            </LoginFooter>
-                        </form>
-                    </WallDialog>
-                </WallCenter>
+                            <Checkbox checked={this.state.remember} onClick={this.handleRemember} label="Remember Me" />
+                        </BoxGroupSection>
+
+                        <LoginFooter>
+                            <Button type="submit" color="blue">
+                                Login
+                            </Button>
+                            <span>{this.props.error}</span>
+                        </LoginFooter>
+                    </form>
+                </WallDialog>
             </WallContainer>
         );
     }
