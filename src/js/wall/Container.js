@@ -25,6 +25,7 @@ export const WallDialog = styled.div`
     flex-direction: column;
     overflow: hidden;
     width: ${props => (props.size === "lg" ? "620px" : "340px")};
+    margin-bottom: calc(45vh - 155px);
 `;
 
 export const WallDialogFooter = styled.div`
