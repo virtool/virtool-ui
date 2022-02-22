@@ -20,7 +20,8 @@ const UploadItemTitle = styled.div`
     display: flex;
     padding: 15px 15px 10px;
 
-    i.fas {
+    i.fas,
+    div:first-child {
         margin-right: 5px;
     }
     span:last-child {
