@@ -1,9 +1,14 @@
 import React from "react";
 import { map } from "lodash-es";
 import { LoadingPlaceholder } from "./index";
+import styled from "styled-components";
 
 export const getScrollRatio = () =>
     ((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight).toFixed(1);
+
+const StyledScrollList = styled.div`
+    padding-bottom: 20px;
+`;
 
 export class ScrollList extends React.Component {
     componentDidMount() {
@@ -37,12 +42,11 @@ export class ScrollList extends React.Component {
         if (documents === null && page < pageCount) {
             loading = <LoadingPlaceholder margin="20px" />;
         }
-
         return (
-            <div style={this.props.style}>
+            <StyledScrollList>
                 {entries}
                 {loading}
-            </div>
+            </StyledScrollList>
         );
     }
 }

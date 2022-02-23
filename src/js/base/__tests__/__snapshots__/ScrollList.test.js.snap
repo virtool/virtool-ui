@@ -1,6 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ScrollList /> should render when [noContainer=false] 1`] = `
+.c0 {
+  padding-bottom: 20px;
+}
+
 <ScrollList
   document={
     Array [
@@ -15,12 +19,16 @@ exports[`<ScrollList /> should render when [noContainer=false] 1`] = `
   page={1}
   pageCount={2}
 >
-  <div />
+  <ScrollList__StyledScrollList>
+    <div
+      className="c0"
+    />
+  </ScrollList__StyledScrollList>
 </ScrollList>
 `;
 
 exports[`<ScrollList /> should return LoadingPlaceholder when [documents=null] and [page<pageCount] 1`] = `
-.c1 {
+.c2 {
   -webkit-animation: dzGqrz 0.75s 0s infinite linear;
   animation: dzGqrz 0.75s 0s infinite linear;
   border: 2px solid;
@@ -34,9 +42,13 @@ exports[`<ScrollList /> should return LoadingPlaceholder when [documents=null] a
   width: 22px;
 }
 
-.c0 {
+.c1 {
   margin-top: 20px;
   text-align: center;
+}
+
+.c0 {
+  padding-bottom: 20px;
 }
 
 <ScrollList
@@ -53,38 +65,46 @@ exports[`<ScrollList /> should return LoadingPlaceholder when [documents=null] a
   page={1}
   pageCount={2}
 >
-  <div>
-    <LoadingPlaceholder
-      margin="20px"
+  <ScrollList__StyledScrollList>
+    <div
+      className="c0"
     >
-      <LoadingPlaceholder__StyledLoadingPlaceholder
+      <LoadingPlaceholder
         margin="20px"
       >
-        <div
-          className="c0"
+        <LoadingPlaceholder__StyledLoadingPlaceholder
+          margin="20px"
         >
-          <Loader>
-            <Loader__StyledLoader
-              color="greyDark"
-              size="22px"
-            >
-              <div
-                className="c1"
+          <div
+            className="c1"
+          >
+            <Loader>
+              <Loader__StyledLoader
                 color="greyDark"
                 size="22px"
               >
-                <div />
-              </div>
-            </Loader__StyledLoader>
-          </Loader>
-        </div>
-      </LoadingPlaceholder__StyledLoadingPlaceholder>
-    </LoadingPlaceholder>
-  </div>
+                <div
+                  className="c2"
+                  color="greyDark"
+                  size="22px"
+                >
+                  <div />
+                </div>
+              </Loader__StyledLoader>
+            </Loader>
+          </div>
+        </LoadingPlaceholder__StyledLoadingPlaceholder>
+      </LoadingPlaceholder>
+    </div>
+  </ScrollList__StyledScrollList>
 </ScrollList>
 `;
 
 exports[`<ScrollList /> should return React.Fragment when [noContainer=true] 1`] = `
+.c0 {
+  padding-bottom: 20px;
+}
+
 <ScrollList
   document={
     Array [
@@ -98,6 +118,10 @@ exports[`<ScrollList /> should return React.Fragment when [noContainer=true] 1`]
   page={1}
   pageCount={2}
 >
-  <div />
+  <ScrollList__StyledScrollList>
+    <div
+      className="c0"
+    />
+  </ScrollList__StyledScrollList>
 </ScrollList>
 `;
