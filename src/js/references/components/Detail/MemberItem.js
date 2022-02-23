@@ -8,11 +8,17 @@ const StyledMemberItem = styled(BoxGroupSection)`
     display: flex;
 `;
 
+const StyledMemberItemIcon = styled(FlexItem)`
+    display: flex;
+    align-items: center;
+    padding-right: 8px;
+`;
+
 const MemberItemIcon = ({ handle }) => {
     return (
-        <FlexItem grow={0} shrink={0} style={{ paddingRight: "8px" }}>
+        <StyledMemberItemIcon grow={0} shrink={0}>
             <InitialIcon handle={handle} size="lg" />
-        </FlexItem>
+        </StyledMemberItemIcon>
     );
 };
 
