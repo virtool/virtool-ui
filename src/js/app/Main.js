@@ -46,7 +46,7 @@ export const Main = ({ ready, onLoad }) => {
     }, [ready]);
     if (ready) {
         return (
-            <React.Fragment>
+            <>
                 <Helmet>
                     <title>Virtool</title>
                     <meta charSet="utf-8" />
@@ -74,7 +74,7 @@ export const Main = ({ ready, onLoad }) => {
 
                 <DevDialog />
                 <UploadOverlay />
-            </React.Fragment>
+            </>
         );
     }
 

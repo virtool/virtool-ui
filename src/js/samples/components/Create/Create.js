@@ -145,7 +145,7 @@ export const CreateSample = props => {
     };
 
     return (
-        <React.Fragment>
+        <>
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
                 <CreateSampleInputError>{props.error}</CreateSampleInputError>
@@ -232,7 +232,7 @@ export const CreateSample = props => {
                     </CreateSampleForm>
                 )}
             </Formik>
-        </React.Fragment>
+        </>
     );
 };
 

@@ -135,7 +135,7 @@ export class CreateAPIKey extends React.Component {
             );
         } else {
             content = (
-                <React.Fragment>
+                <>
                     <ModalHeader>Create API Key</ModalHeader>
 
                     <form onSubmit={this.handleSubmit}>
@@ -159,7 +159,7 @@ export class CreateAPIKey extends React.Component {
                             <SaveButton />
                         </ModalFooter>
                     </form>
-                </React.Fragment>
+                </>
             );
         }
 

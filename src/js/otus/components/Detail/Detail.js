@@ -84,7 +84,7 @@ class OTUDetail extends React.Component {
 
         if (this.props.canModify) {
             iconButtons = (
-                <React.Fragment>
+                <>
                     <Icon
                         key="edit-icon"
                         color="orange"
@@ -101,7 +101,7 @@ class OTUDetail extends React.Component {
                         tipPlacement="left"
                         onClick={this.props.showRemove}
                     />
-                </React.Fragment>
+                </>
             );
 
             modifyOTUComponents = (
@@ -113,7 +113,7 @@ class OTUDetail extends React.Component {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <ViewHeader title={name}>
                     <OTUDetailTitle>
                         {name} <small>{abbreviation || <em>No Abbreviation</em>}</small>
@@ -144,7 +144,7 @@ class OTUDetail extends React.Component {
                     <Route path="/refs/:refId/otus/:otuId/history" component={History} />
                     <Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />
                 </Switch>
-            </React.Fragment>
+            </>
         );
     };
 }

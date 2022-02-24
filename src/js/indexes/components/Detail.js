@@ -42,7 +42,7 @@ export class IndexDetail extends React.Component {
         const { version, created_at, user, id, has_json } = this.props.detail;
 
         return (
-            <React.Fragment>
+            <>
                 <SubviewHeader>
                     <SubviewHeaderTitle>Index {version}</SubviewHeaderTitle>
                     <IndexDetailSubtitle>
@@ -56,7 +56,7 @@ export class IndexDetail extends React.Component {
                 <NarrowContainer>
                     <IndexGeneral />
                 </NarrowContainer>
-            </React.Fragment>
+            </>
         );
     }
 }

@@ -25,7 +25,7 @@ export class Indexes extends React.Component {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <RebuildAlert />
                 <RebuildIndex />
 
@@ -38,7 +38,7 @@ export class Indexes extends React.Component {
                     pageCount={this.props.page_count}
                     renderRow={this.renderRow}
                 />
-            </React.Fragment>
+            </>
         );
     }
 }

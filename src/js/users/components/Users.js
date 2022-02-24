@@ -56,7 +56,7 @@ export class ManageUsers extends React.Component {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <Toolbar>
                     <SearchInput name="search" value={this.state.term} onChange={this.props.onFind} />
                     <LinkButton to={{ state: { groups: true } }} icon="users" tip="Manage Groups" />
@@ -67,7 +67,7 @@ export class ManageUsers extends React.Component {
 
                 <CreateUser />
                 <Groups />
-            </React.Fragment>
+            </>
         );
     }
 }

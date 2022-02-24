@@ -108,7 +108,7 @@ class ReferenceMembers extends React.Component {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <BoxGroup>
                     <ReferenceMembersHeader>
                         <h2>
@@ -121,7 +121,7 @@ class ReferenceMembers extends React.Component {
                 </BoxGroup>
                 <AddReferenceMember show={this.state.showAdd} noun={noun} onHide={this.handleHide} />
                 <EditReferenceMember show={this.state.showEdit} noun={noun} onHide={this.handleHide} />
-            </React.Fragment>
+            </>
         );
     }
 }

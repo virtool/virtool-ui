@@ -61,12 +61,12 @@ const Release = ({ release, checking, updating, onCheckUpdates, onUpdate }) => {
         );
 
         updateStats = (
-            <React.Fragment>
+            <>
                 <FlexItem pad>/ {release.name}</FlexItem>
                 <FlexItem pad>
                     / Published <RelativeTime time={release.published_at} />
                 </FlexItem>
-            </React.Fragment>
+            </>
         );
     }
 

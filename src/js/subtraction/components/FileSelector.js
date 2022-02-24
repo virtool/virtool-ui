@@ -46,10 +46,10 @@ export const SubtractionFileSelector = ({ files, value, onClick, error }) => {
         );
     }
     return (
-        <React.Fragment>
+        <>
             <SubtractionFileSelectorList>{fileComponents}</SubtractionFileSelectorList>
             <SubtractionFileSelectorError>{error}</SubtractionFileSelectorError>
-        </React.Fragment>
+        </>
     );
 };
 

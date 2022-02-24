@@ -29,7 +29,7 @@ const ReferenceDetail = ({ error, id, match, onGetReference }) => {
     }
 
     return (
-        <React.Fragment>
+        <>
             <Switch>
                 <Route path="/refs/:refId/otus/:otuId" />
                 <Route path="/refs">
@@ -51,7 +51,7 @@ const ReferenceDetail = ({ error, id, match, onGetReference }) => {
             </NarrowContainer>
 
             <EditReference />
-        </React.Fragment>
+        </>
     );
 };
 

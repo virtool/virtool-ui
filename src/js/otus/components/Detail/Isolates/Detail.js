@@ -53,7 +53,7 @@ export class Detail extends React.Component {
 
         if (this.props.canModify) {
             modifyIcons = (
-                <React.Fragment>
+                <>
                     <Icon
                         name="pencil-alt"
                         color="orange"
@@ -77,7 +77,7 @@ export class Detail extends React.Component {
                         tipPlacement="left"
                         onClick={this.props.showRemoveIsolate}
                     />
-                </React.Fragment>
+                </>
             );
         }
 

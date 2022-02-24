@@ -20,7 +20,7 @@ export const SequenceForm = ({ accession, definition, errors, host, sequence, on
     };
 
     return (
-        <React.Fragment>
+        <>
             <Accession
                 accession={accession}
                 error={errors.accession}
@@ -42,7 +42,7 @@ export const SequenceForm = ({ accession, definition, errors, host, sequence, on
             </InputGroup>
 
             <SequenceField name="sequence" sequence={sequence} onChange={handleChange} error={errors.sequence} />
-        </React.Fragment>
+        </>
     );
 };
 

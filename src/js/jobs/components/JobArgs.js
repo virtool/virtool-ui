@@ -11,25 +11,25 @@ const JobArgsRow = ({ children, title }) => (
 );
 
 export const AnalysisRows = ({ sample_id, analysis_id }) => (
-    <React.Fragment>
+    <>
         <JobArgsRow title="Sample">
             <Link to={`/samples/${sample_id}`}>{sample_id}</Link>
         </JobArgsRow>
         <JobArgsRow title="Analysis">
             <Link to={`/samples/${sample_id}/analyses/${analysis_id}`}>{analysis_id}</Link>
         </JobArgsRow>
-    </React.Fragment>
+    </>
 );
 
 export const BuildIndexRows = ({ index_id, ref_id }) => (
-    <React.Fragment>
+    <>
         <JobArgsRow title="Reference">
             <Link to={`/refs/${ref_id}`}>{ref_id}</Link>
         </JobArgsRow>
         <JobArgsRow title="Index">
             <Link to={`/refs/${ref_id}/indexes/${index_id}`}>{index_id}</Link>
         </JobArgsRow>
-    </React.Fragment>
+    </>
 );
 
 export const CreateSampleRows = ({ sample_id }) => (

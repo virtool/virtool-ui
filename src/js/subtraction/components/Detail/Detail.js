@@ -45,7 +45,7 @@ export class SubtractionDetail extends React.Component {
             return <LoadingPlaceholder message="Subtraction is still being imported" />;
         }
         return (
-            <React.Fragment>
+            <>
                 <ViewHeader title={detail.name}>
                     <ViewHeaderTitle>
                         {detail.name}
@@ -91,7 +91,7 @@ export class SubtractionDetail extends React.Component {
                 <SubtractionFiles />
                 <EditSubtraction show={this.state.showEdit} onHide={this.handleHide} />
                 <RemoveSubtraction />
-            </React.Fragment>
+            </>
         );
     }
 }

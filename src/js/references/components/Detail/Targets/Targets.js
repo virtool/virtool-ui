@@ -71,14 +71,14 @@ export class Targets extends React.Component {
             );
 
             modals = (
-                <React.Fragment>
+                <>
                     <AddTarget show={this.state.showAdd} onHide={this.handleHide} />
                     <EditTarget
                         show={this.state.showEdit}
                         onHide={this.handleHide}
                         activeName={this.state.activeName}
                     />
-                </React.Fragment>
+                </>
             );
         }
 
