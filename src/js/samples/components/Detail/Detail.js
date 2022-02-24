@@ -86,7 +86,7 @@ function SampleDetail({
     const prefix = `/samples/${sampleId}`;
 
     return (
-        <React.Fragment>
+        <>
             <ViewHeader title={detail.name}>
                 <ViewHeaderTitle>
                     {detail.name}
@@ -118,7 +118,7 @@ function SampleDetail({
             </Switch>
 
             <RemoveSample />
-        </React.Fragment>
+        </>
     );
 }
 

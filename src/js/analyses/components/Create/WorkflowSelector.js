@@ -24,7 +24,7 @@ export const WorkflowSelector = ({ dataType, hasError, hasHmm, workflows, onSele
     ));
 
     return (
-        <React.Fragment>
+        <>
             <label htmlFor="workflow-selector">Workflows</label>
             <MultiSelector
                 error={hasError && "Workflow(s) must be selected"}
@@ -35,7 +35,7 @@ export const WorkflowSelector = ({ dataType, hasError, hasHmm, workflows, onSele
             >
                 {workflowItems}
             </MultiSelector>
-        </React.Fragment>
+        </>
     );
 };
 

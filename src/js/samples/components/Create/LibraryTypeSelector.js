@@ -10,7 +10,7 @@ const LibraryTypeSelectBoxContainer = styled.div`
 `;
 
 export const LibraryTypeSelector = ({ onSelect, libraryType }) => (
-    <React.Fragment>
+    <>
         <label>Library Type</label>
         <LibraryTypeSelectBoxContainer>
             <SelectBox onClick={() => onSelect("normal")} active={libraryType === "normal"}>
@@ -28,5 +28,5 @@ export const LibraryTypeSelector = ({ onSelect, libraryType }) => (
                 <span>Search against barcode references using amplicon reads.</span>
             </SelectBox>
         </LibraryTypeSelectBoxContainer>
-    </React.Fragment>
+    </>
 );

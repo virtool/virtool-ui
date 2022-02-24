@@ -74,7 +74,7 @@ const IsolateEditor = props => {
     );
 
     return (
-        <React.Fragment>
+        <>
             <SubviewHeader>
                 <IsolateEditorTitle>
                     Isolates <Badge>{isolateComponents.length}</Badge>
@@ -82,7 +82,7 @@ const IsolateEditor = props => {
                 </IsolateEditorTitle>
             </SubviewHeader>
             {body}
-        </React.Fragment>
+        </>
     );
 };
 

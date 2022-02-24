@@ -41,7 +41,7 @@ export const CreateSubtraction = ({ onListFiles, onCreate, files }) => {
     };
 
     return (
-        <React.Fragment>
+        <>
             <ViewHeader title="Create Subtraction">
                 <ViewHeaderTitle>Create Subtraction</ViewHeaderTitle>
             </ViewHeader>
@@ -77,7 +77,7 @@ export const CreateSubtraction = ({ onListFiles, onCreate, files }) => {
                     </Form>
                 )}
             </Formik>
-        </React.Fragment>
+        </>
     );
 };
 

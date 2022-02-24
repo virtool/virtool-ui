@@ -36,7 +36,7 @@ export const IsolateSequences = ({ dataType, isolateName, sequences }) => {
     );
 
     return (
-        <React.Fragment>
+        <>
             <IsolateSequencesHeader>
                 <strong>Sequences</strong>
                 <Badge>{sequences.length}</Badge>
@@ -48,7 +48,7 @@ export const IsolateSequences = ({ dataType, isolateName, sequences }) => {
             <AddSequence />
             <EditSequence />
             <RemoveSequence isolateName={isolateName} />
-        </React.Fragment>
+        </>
     );
 };
 

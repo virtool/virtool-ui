@@ -19,7 +19,7 @@ export const Quality = ({ bases, composition, sequences }) => {
     return (
         <div ref={ref}>
             {width && (
-                <React.Fragment>
+                <>
                     <QualityTitle>
                         <strong>Quality Distribution at Read Positions</strong>
                     </QualityTitle>
@@ -34,7 +34,7 @@ export const Quality = ({ bases, composition, sequences }) => {
                         <strong>Read-wise Quality Occurrence</strong>
                     </QualityTitle>
                     <QualityChart createChart={drawSequencesChart} data={sequences} width={width} />
-                </React.Fragment>
+                </>
             )}
         </div>
     );

@@ -14,7 +14,7 @@ export const ReferenceForm = ({ description, organism, mode, name, errorName, on
     }
 
     return (
-        <React.Fragment>
+        <>
             <InputGroup>
                 <InputLabel>Name</InputLabel>
                 <Input name="name" error={errorName} value={name} onChange={onChange} />
@@ -27,6 +27,6 @@ export const ReferenceForm = ({ description, organism, mode, name, errorName, on
                 <InputLabel>Description</InputLabel>
                 <TextArea name="description" value={description} onChange={onChange} />
             </InputGroup>
-        </React.Fragment>
+        </>
     );
 };

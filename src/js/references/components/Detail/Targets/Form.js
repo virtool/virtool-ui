@@ -3,7 +3,7 @@ import { Checkbox, Input, InputError, InputGroup, InputLabel, TextArea } from ".
 
 export const TargetForm = ({ description, errorName, length, name, required, onChange, onClick }) => {
     return (
-        <React.Fragment>
+        <>
             <InputGroup>
                 <InputLabel>Name</InputLabel>
                 <Input error={errorName} name="name" value={name} onChange={onChange} />
@@ -21,6 +21,6 @@ export const TargetForm = ({ description, errorName, length, name, required, onC
             </InputGroup>
 
             <Checkbox label="Required" checked={required} onClick={onClick} />
-        </React.Fragment>
+        </>
     );
 };

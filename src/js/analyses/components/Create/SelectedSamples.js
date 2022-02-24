@@ -24,11 +24,11 @@ export const SelectedSamples = ({ samples }) => {
     ));
 
     return (
-        <React.Fragment>
+        <>
             <label>
                 Compatible Samples <Badge>{count}</Badge>
             </label>
             <SelectedSamplesList count={count}>{sampleComponents}</SelectedSamplesList>
-        </React.Fragment>
+        </>
     );
 };
