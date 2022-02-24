@@ -7,9 +7,9 @@ describe("<IndexDetail />", () => {
     beforeEach(() => {
         props = {
             files: [
-                { id: "1", name: "foo", download_url: "https://Virtool.ca/testUrl/foo", size: "1024" },
+                { id: "1", name: "foo", download_url: "/testUrl/foo", size: "1024" },
 
-                { id: "2", name: "bar", download_url: "https://Virtool.ca/testUrl/bar", size: "2048" }
+                { id: "2", name: "bar", download_url: "/testUrl/bar", size: "2048" }
             ]
         };
     });
@@ -35,6 +35,6 @@ describe("<IndexDetail />", () => {
     });
     it("should include url", () => {
         renderWithProviders(<Files {...props} />);
-        expect(screen.getAllByRole("link", {})[0]).toHaveAttribute("href", "https://Virtool.ca/testUrl/foo");
+        expect(screen.getAllByRole("link", {})[0]).toHaveAttribute("href", "/api/testUrl/foo");
     });
 });

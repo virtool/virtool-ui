@@ -14,7 +14,7 @@ exports[`<IndexDetail /> should render 1`] = `
   <File
     file={
       Object {
-        "download_url": "https://Virtool.ca/testUrl/foo",
+        "download_url": "/testUrl/foo",
         "id": "1",
         "name": "foo",
         "size": "1024",
@@ -25,7 +25,7 @@ exports[`<IndexDetail /> should render 1`] = `
   <File
     file={
       Object {
-        "download_url": "https://Virtool.ca/testUrl/bar",
+        "download_url": "/testUrl/bar",
         "id": "2",
         "name": "bar",
         "size": "2048",

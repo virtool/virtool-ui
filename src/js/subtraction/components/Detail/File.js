@@ -16,7 +16,7 @@ const StyledSubtractionFile = styled(BoxGroupSection)`
 
 export const File = ({ file: { download_url, name, size } }) => (
     <StyledSubtractionFile>
-        <a href={download_url}>{name}</a>
+        <a href={`/api${download_url}`}>{name}</a>
         <strong>{byteSize(size)}</strong>
     </StyledSubtractionFile>
 );
