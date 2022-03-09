@@ -9,6 +9,9 @@ describe("<Login />", () => {
         props = {
             onLogin: jest.fn()
         };
+        window.b2c = {
+            use: "true"
+        };
     });
 
     it("should render", () => {

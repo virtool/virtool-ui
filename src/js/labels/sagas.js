@@ -3,7 +3,7 @@ import { pushState } from "../app/actions";
 import { CREATE_LABEL, LIST_LABELS, REMOVE_LABEL, UPDATE_LABEL } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
 import * as labelsAPI from "./api";
-import { listLabels as listLabelsAction, listLabelsSuccess } from "./actions";
+import { listLabels as listLabelsAction } from "./actions";
 
 export function* watchLabels() {
     yield takeLatest(LIST_LABELS.REQUESTED, listLabels);
@@ -13,8 +13,7 @@ export function* watchLabels() {
 }
 
 export function* listLabels(action) {
-    const response = yield labelsAPI.listLabels(action);
-    yield put(listLabelsSuccess(response.body));
+    yield apiCall(labelsAPI.listLabels, action.payload, LIST_LABELS);
 }
 
 export function* createLabel(action) {

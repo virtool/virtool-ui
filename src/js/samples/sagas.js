@@ -14,7 +14,7 @@ import {
     WS_UPDATE_SAMPLE
 } from "../app/actionTypes";
 import * as filesAPI from "../files/api";
-import { apiCall, putGenericError } from "../utils/sagas";
+import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
 import * as samplesAPI from "./api";
 import { getLabelsFromURL, getSampleDetailId, getTermFromURL, getWorkflowsFromURL } from "./selectors";
 import { createFindURL } from "./utils";
@@ -91,7 +91,7 @@ export function* findReadFiles() {
 
 export function* getSample(action) {
     try {
-        const response = yield samplesAPI.get(action.payload);
+        const response = yield callWithAuthentication(samplesAPI.get, action.payload);
 
         const account = yield select(state => state.account);
 
