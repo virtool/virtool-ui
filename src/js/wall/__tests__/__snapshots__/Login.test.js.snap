@@ -31,23 +31,43 @@ exports[`<Login /> should render 1`] = `
             value=""
           />
         </InputGroup>
-        <Checkbox
-          checked={false}
-          disabled={false}
-          label="Remember Me"
-          onClick={[Function]}
-        />
+        <div
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <Checkbox
+            checked={false}
+            disabled={false}
+            label="Remember Me"
+            onClick={[Function]}
+          />
+          <Login__LoginError />
+        </div>
       </Box__BoxGroupSection>
       <Login__LoginFooter>
-        <Button
-          color="blue"
-          disabled={false}
-          tipPlacement="top"
-          type="submit"
-        >
-          Login
-        </Button>
-        <span />
+        <div>
+          <Button
+            color="grey"
+            disabled={false}
+            onClick={[Function]}
+            tipPlacement="top"
+            type="button"
+          >
+            Login Via B2C
+          </Button>
+          <Button
+            color="blue"
+            disabled={false}
+            tipPlacement="top"
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
       </Login__LoginFooter>
     </form>
   </Container__WallDialog>
@@ -85,23 +105,43 @@ exports[`<Login /> should render checked remember checkbox 1`] = `
             value=""
           />
         </InputGroup>
-        <Checkbox
-          checked={false}
-          disabled={false}
-          label="Remember Me"
-          onClick={[Function]}
-        />
+        <div
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <Checkbox
+            checked={false}
+            disabled={false}
+            label="Remember Me"
+            onClick={[Function]}
+          />
+          <Login__LoginError />
+        </div>
       </Box__BoxGroupSection>
       <Login__LoginFooter>
-        <Button
-          color="blue"
-          disabled={false}
-          tipPlacement="top"
-          type="submit"
-        >
-          Login
-        </Button>
-        <span />
+        <div>
+          <Button
+            color="grey"
+            disabled={false}
+            onClick={[Function]}
+            tipPlacement="top"
+            type="button"
+          >
+            Login Via B2C
+          </Button>
+          <Button
+            color="blue"
+            disabled={false}
+            tipPlacement="top"
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
       </Login__LoginFooter>
     </form>
   </Container__WallDialog>
@@ -139,23 +179,43 @@ exports[`<Login /> should render checked remember checkbox 2`] = `
             value=""
           />
         </InputGroup>
-        <Checkbox
-          checked={true}
-          disabled={false}
-          label="Remember Me"
-          onClick={[Function]}
-        />
+        <div
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <Checkbox
+            checked={true}
+            disabled={false}
+            label="Remember Me"
+            onClick={[Function]}
+          />
+          <Login__LoginError />
+        </div>
       </Box__BoxGroupSection>
       <Login__LoginFooter>
-        <Button
-          color="blue"
-          disabled={false}
-          tipPlacement="top"
-          type="submit"
-        >
-          Login
-        </Button>
-        <span />
+        <div>
+          <Button
+            color="grey"
+            disabled={false}
+            onClick={[Function]}
+            tipPlacement="top"
+            type="button"
+          >
+            Login Via B2C
+          </Button>
+          <Button
+            color="blue"
+            disabled={false}
+            tipPlacement="top"
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
       </Login__LoginFooter>
     </form>
   </Container__WallDialog>
@@ -193,23 +253,43 @@ exports[`<Login /> should render filled username and password fields 1`] = `
             value=""
           />
         </InputGroup>
-        <Checkbox
-          checked={false}
-          disabled={false}
-          label="Remember Me"
-          onClick={[Function]}
-        />
+        <div
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <Checkbox
+            checked={false}
+            disabled={false}
+            label="Remember Me"
+            onClick={[Function]}
+          />
+          <Login__LoginError />
+        </div>
       </Box__BoxGroupSection>
       <Login__LoginFooter>
-        <Button
-          color="blue"
-          disabled={false}
-          tipPlacement="top"
-          type="submit"
-        >
-          Login
-        </Button>
-        <span />
+        <div>
+          <Button
+            color="grey"
+            disabled={false}
+            onClick={[Function]}
+            tipPlacement="top"
+            type="button"
+          >
+            Login Via B2C
+          </Button>
+          <Button
+            color="blue"
+            disabled={false}
+            tipPlacement="top"
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
       </Login__LoginFooter>
     </form>
   </Container__WallDialog>
@@ -247,23 +327,43 @@ exports[`<Login /> should render filled username and password fields 2`] = `
             value=""
           />
         </InputGroup>
-        <Checkbox
-          checked={false}
-          disabled={false}
-          label="Remember Me"
-          onClick={[Function]}
-        />
+        <div
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <Checkbox
+            checked={false}
+            disabled={false}
+            label="Remember Me"
+            onClick={[Function]}
+          />
+          <Login__LoginError />
+        </div>
       </Box__BoxGroupSection>
       <Login__LoginFooter>
-        <Button
-          color="blue"
-          disabled={false}
-          tipPlacement="top"
-          type="submit"
-        >
-          Login
-        </Button>
-        <span />
+        <div>
+          <Button
+            color="grey"
+            disabled={false}
+            onClick={[Function]}
+            tipPlacement="top"
+            type="button"
+          >
+            Login Via B2C
+          </Button>
+          <Button
+            color="blue"
+            disabled={false}
+            tipPlacement="top"
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
       </Login__LoginFooter>
     </form>
   </Container__WallDialog>
@@ -301,23 +401,43 @@ exports[`<Login /> should render filled username and password fields 3`] = `
             value="foobar"
           />
         </InputGroup>
-        <Checkbox
-          checked={false}
-          disabled={false}
-          label="Remember Me"
-          onClick={[Function]}
-        />
+        <div
+          style={
+            Object {
+              "alignItems": "center",
+              "display": "flex",
+            }
+          }
+        >
+          <Checkbox
+            checked={false}
+            disabled={false}
+            label="Remember Me"
+            onClick={[Function]}
+          />
+          <Login__LoginError />
+        </div>
       </Box__BoxGroupSection>
       <Login__LoginFooter>
-        <Button
-          color="blue"
-          disabled={false}
-          tipPlacement="top"
-          type="submit"
-        >
-          Login
-        </Button>
-        <span />
+        <div>
+          <Button
+            color="grey"
+            disabled={false}
+            onClick={[Function]}
+            tipPlacement="top"
+            type="button"
+          >
+            Login Via B2C
+          </Button>
+          <Button
+            color="blue"
+            disabled={false}
+            tipPlacement="top"
+            type="submit"
+          >
+            Login
+          </Button>
+        </div>
       </Login__LoginFooter>
     </form>
   </Container__WallDialog>

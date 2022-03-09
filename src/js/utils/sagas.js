@@ -3,11 +3,57 @@
  *
  * @module sagaUtils
  */
+import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import { replace } from "connected-react-router";
 import { get, includes } from "lodash-es";
 import { put } from "redux-saga/effects";
 import { LOGOUT } from "../app/actionTypes";
+import { getProtectedResources } from "../app/authConfig";
 import { createFindURL } from "./utils";
+
+/**
+ * Gets access token for b2c authentication
+ * @returns {token} JWT access token for B2C
+ */
+export function getAccessToken() {
+    const protectedResources = getProtectedResources();
+    const account = window.msalInstance.getActiveAccount();
+    return window.msalInstance
+        .acquireTokenSilent({
+            scopes: protectedResources.backendApi.scopes,
+            account
+        })
+        .then(response => {
+            return response.accessToken;
+        })
+        .catch(error => {
+            if (error instanceof InteractionRequiredAuthError) {
+                window.msalInstance
+                    .acquireTokenPopup({
+                        scopes: protectedResources.backendApi.scopes
+                    })
+                    .then(response => {
+                        return response.accessToken;
+                    })
+                    .catch(error => console.log(error));
+            }
+        });
+}
+
+/**
+ * Add B2c authentication if appropriate then executes an API call
+ *
+ * @generator
+ * @param apiMethod {function} the function to call with ``action``
+ * @param action {object} an action to pass to ``apiMethod``
+ */
+export function* callWithAuthentication(apiMethod, action) {
+    if (window.b2c.use && window.msalInstance.getActiveAccount()) {
+        const accessToken = yield getAccessToken();
+        return yield apiMethod(action).set("Bearer", accessToken);
+    }
+    return yield apiMethod(action);
+}
 
 /**
  * Executes an API call by calling ``apiMethod`` with ``action``.
@@ -24,7 +70,7 @@ import { createFindURL } from "./utils";
  */
 export function* apiCall(apiMethod, action, actionType, context = {}) {
     try {
-        const response = yield apiMethod(action);
+        const response = yield callWithAuthentication(apiMethod, action);
         yield put({ type: actionType.SUCCEEDED, payload: response.body, context });
         return response;
     } catch (error) {

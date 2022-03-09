@@ -2,13 +2,23 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { login } from "../account/actions";
+import { login, loginSucceeded } from "../account/actions";
 import { BoxGroupSection, Button, Checkbox, Input, InputGroup, InputLabel, PasswordInput } from "../base";
 import { clearError } from "../errors/actions";
 import { WallContainer, WallDialog, WallDialogFooter, WallLogo } from "./Container";
+import { getLoginRequest } from "../app/authConfig";
 
 const LoginFooter = styled(WallDialogFooter)`
     border: none;
+    button: last-child {
+        margin-left: 5px;
+    }
+`;
+
+const LoginError = styled.span`
+    color: red;
+    margin-left: auto;
+    font-size: 12px;
 `;
 
 export class Login extends React.Component {
@@ -66,15 +76,31 @@ export class Login extends React.Component {
                                     onChange={this.handleChange}
                                 />
                             </InputGroup>
-
-                            <Checkbox checked={this.state.remember} onClick={this.handleRemember} label="Remember Me" />
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <Checkbox
+                                    checked={this.state.remember}
+                                    onClick={this.handleRemember}
+                                    label="Remember Me"
+                                />
+                                <LoginError>{this.props.error}</LoginError>
+                            </div>
                         </BoxGroupSection>
 
                         <LoginFooter>
-                            <Button type="submit" color="blue">
-                                Login
-                            </Button>
-                            <span>{this.props.error}</span>
+                            <div>
+                                {window.b2c.use && (
+                                    <Button
+                                        onClick={() =>
+                                            window.msalInstance.loginPopup(getLoginRequest()).then(this.props.setLogin)
+                                        }
+                                    >
+                                        Login Via B2C
+                                    </Button>
+                                )}
+                                <Button type="submit" color="blue">
+                                    Login
+                                </Button>
+                            </div>
                         </LoginFooter>
                     </form>
                 </WallDialog>
@@ -93,6 +119,10 @@ export const mapDispatchToProps = dispatch => ({
     },
     onLogin: (username, password, remember) => {
         dispatch(login(username, password, remember));
+    },
+    setLogin: msal => {
+        window.msalInstance.setActiveAccount(msal.account);
+        dispatch(loginSucceeded());
     }
 });
 

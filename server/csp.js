@@ -4,7 +4,6 @@ const fontAwesomeURL = "https://use.fontawesome.com";
 const defaultSrc = "default-src 'self'";
 const imgSrc = "img-src 'self' data:";
 const fontSrc = `font-src 'self' ${fontAwesomeURL}`;
-const connectSrc = "connect-src 'self' sentry.io";
 
 const generateCSPScriptSrc = (nonce) => {
   return `script-src 'self' 'nonce-${nonce}' ${fontAwesomeURL}`;
@@ -12,6 +11,12 @@ const generateCSPScriptSrc = (nonce) => {
 
 const generateCSPStyleSrc = (nonce) => {
   return `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com ${fontAwesomeURL}`;
+};
+
+const generateCSPConnectSrc = (tenant) => {
+  return `connect-src 'self' sentry.io ${
+    tenant ? `https://${tenant}.b2clogin.com` : ""
+  } `;
 };
 
 /**
@@ -23,15 +28,15 @@ const generateCSPStyleSrc = (nonce) => {
  * @param next {function} passes control to next middleware
  * @returns {N/A}
  */
-exports.applyCSPHeader = (req, res, next) => {
+exports.applyCSPHeader = (tenant) => (req, res, next) => {
   const nonce = crypto.randomBytes(32).toString("base64");
   res.locals.nonce = nonce;
 
   const csp = [
-    connectSrc,
     defaultSrc,
     fontSrc,
     imgSrc,
+    generateCSPConnectSrc(tenant),
     generateCSPScriptSrc(nonce),
     generateCSPStyleSrc(nonce),
   ];

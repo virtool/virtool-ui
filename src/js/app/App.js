@@ -4,9 +4,9 @@ import { connect, Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { WallContainer } from "../wall/Container";
 import Reset from "../wall/Reset";
+import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
-import { GlobalStyles } from "./GlobalStyles";
 
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
 const LazyLogin = React.lazy(() => import("../wall/Login"));
@@ -46,13 +46,15 @@ export const mapStateToProps = state => {
 
 const ConnectedApp = connect(mapStateToProps)(App);
 
-export default ({ store, history }) => (
-    <ThemeProvider theme={theme}>
-        <Provider store={store}>
-            <ConnectedRouter history={history}>
-                <GlobalStyles />
-                <ConnectedApp />
-            </ConnectedRouter>
-        </Provider>
-    </ThemeProvider>
-);
+export default ({ store, history }) => {
+    return (
+        <ThemeProvider theme={theme}>
+            <Provider store={store}>
+                <ConnectedRouter history={history}>
+                    <GlobalStyles />
+                    <ConnectedApp />
+                </ConnectedRouter>
+            </Provider>
+        </ThemeProvider>
+    );
+};

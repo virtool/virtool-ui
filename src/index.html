@@ -15,8 +15,17 @@
     <script nonce="<#= nonce #>">
         window.__webpack_nonce__ = "<#= nonce #>";
         window.virtool = {
-            sentryDSN: "<#= sentryDSN #>",
+            sentryDSN: "<#= sentry_dsn #>",
         }
+        window.b2c = {
+        use: "<#= use_b2c #>" === "true",
+        userflow: "<#= b2c_userflow #>",
+        tenant: "<#= b2c_tenant #>",
+        clientId: "<#= b2c_client_id #>",
+        APIClientId: "<#= b2c_api_client_id #>",
+        scope: "<#= b2c_scope #>"
+        };
+
     </script>
     <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon %>?v=2" type="images/x-icon"/>
 </head>

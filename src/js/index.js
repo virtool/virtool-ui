@@ -8,12 +8,22 @@ import App from "./app/App";
 import { createAppStore } from "./app/reducer";
 import { Request } from "./app/request";
 import { setInitialState } from "./app/actions";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { getMsalConfig } from "./app/authConfig";
 
 if (module.hot) {
     module.hot.accept(err => {
         throw err;
     });
     window.virtool.sentryDSN = null;
+    window.b2c = {
+        use: false,
+        userflow: "",
+        tenant: "",
+        clientId: "",
+        scope: "",
+        APIClientId: ""
+    };
 }
 
 Sentry.init({
@@ -37,5 +47,7 @@ Request.get("/api")
         window.virtool.dev = body.dev;
         window.store.dispatch(setInitialState(body));
     });
+
+window.msalInstance = window.b2c.use ? new PublicClientApplication(getMsalConfig()) : null;
 
 ReactDOM.render(<App store={window.store} history={history} />, document.getElementById("app-container"));

@@ -123,6 +123,18 @@ export const login = createAction(LOGIN.REQUESTED, (username, password, remember
 }));
 
 /**
+ * Returns action that updates the redux store to assume the user is logged in
+ *
+ * @func
+ * @returns {object}
+ */
+export const loginSucceeded = createAction(LOGIN.SUCCEEDED, () => ({
+    payload: {
+        reset: false
+    }
+}));
+
+/**
  * Returns action that can trigger an API call that will logout the current session.
  *
  * @func
