@@ -48,6 +48,20 @@ exports[`<JobStatusIcon /> should render when [pad=false] and [state="error"] 1`
 </Status__StyledJobStatus>
 `;
 
+exports[`<JobStatusIcon /> should render when [pad=false] and [state="preparing"] 1`] = `
+<Status__StyledJobStatus
+  pad={false}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    preparing
+  </span>
+</Status__StyledJobStatus>
+`;
+
 exports[`<JobStatusIcon /> should render when [pad=false] and [state="running"] 1`] = `
 <Status__StyledJobStatus
   pad={false}
@@ -120,6 +134,20 @@ exports[`<JobStatusIcon /> should render when [pad=true] and [state="error"] 1`]
   />
   <span>
     error
+  </span>
+</Status__StyledJobStatus>
+`;
+
+exports[`<JobStatusIcon /> should render when [pad=true] and [state="preparing"] 1`] = `
+<Status__StyledJobStatus
+  pad={true}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    preparing
   </span>
 </Status__StyledJobStatus>
 `;

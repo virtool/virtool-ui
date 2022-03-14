@@ -64,6 +64,10 @@ export const JobStepIcon = ({ complete, state }) => {
         return <Icon name="pause" color="purple" fixedWidth />;
     }
 
+    if (state === "preparing") {
+        return <Icon name="boxes-stacked" color="grey" fixedWidth />;
+    }
+
     if (complete) {
         return <Icon name="arrow-circle-down" color="blue" fixedWidth />;
     }

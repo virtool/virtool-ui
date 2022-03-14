@@ -68,7 +68,6 @@ class JobDetail extends React.Component {
                                 canCancel={this.props.canCancel}
                                 canRemove={this.props.canRemove}
                             />
-                            {/*<Icon color="red" name="trash" style={{ fontSize: "18px" }} onClick={this.handleClick} />*/}
                         </ViewHeaderIcons>
                     </ViewHeaderTitle>
                     <ViewHeaderAttribution time={detail.status[0].timestamp} user={detail.user.handle} />

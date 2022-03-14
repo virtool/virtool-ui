@@ -198,6 +198,13 @@ export const getStepDescription = (stage, state, workflow) => {
         };
     }
 
+    if (state === "preparing") {
+        return {
+            title: "Preparing",
+            description: "Preparing the workflow environment."
+        };
+    }
+
     if (state === "complete") {
         return {
             title: "Complete",

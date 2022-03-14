@@ -18,7 +18,7 @@ const StyledJobStatus = styled.div`
 `;
 
 export const JobStatus = ({ pad, state }) => {
-    if (state === "waiting" || state === "running") {
+    if (state === "waiting" || state === "running" || state === "preparing") {
         return (
             <StyledJobStatus pad={pad}>
                 <Loader size="14px" color="primary" />
