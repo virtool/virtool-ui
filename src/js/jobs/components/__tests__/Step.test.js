@@ -49,6 +49,12 @@ describe("<JobStepIcon />", () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    it("renders correct icon when state preparing", () => {
+        props.state = "preparing";
+        const wrapper = shallow(<JobStepIcon {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
     it("renders correct icon when state running", () => {
         props.state = "running";
         const wrapper = shallow(<JobStepIcon {...props} />);

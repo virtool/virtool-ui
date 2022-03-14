@@ -39,6 +39,15 @@ exports[`<JobStepIcon /> renders correct icon when state error 1`] = `
 />
 `;
 
+exports[`<JobStepIcon /> renders correct icon when state preparing 1`] = `
+<Icon
+  color="grey"
+  faStyle="fas"
+  fixedWidth={true}
+  name="boxes-stacked"
+/>
+`;
+
 exports[`<JobStepIcon /> renders correct icon when state running 1`] = `
 <Step__JobStepLoader
   color="primary"
