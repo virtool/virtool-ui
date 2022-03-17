@@ -42,7 +42,7 @@ export const StyledCheckbox = styled(CustomCheckboxContainer)`
 
 export const Checkbox = ({ checked, disabled, label, onClick }) => (
     <CheckboxContainer>
-        <StyledCheckbox checked={checked} onClick={disabled ? null : onClick}>
+        <StyledCheckbox checked={checked} onClick={disabled ? null : onClick} aria-label={label}>
             <Icon checked={checked} name="check" />
             <CheckboxInput />
         </StyledCheckbox>

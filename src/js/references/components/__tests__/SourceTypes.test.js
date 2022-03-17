@@ -108,7 +108,7 @@ describe("<SourceTypes />", () => {
     it("should call onToggle() when handleEnable() is called and [restrictSourceTypes=true]", () => {
         props.global = false;
         renderWithProviders(<SourceTypes {...props} />);
-        userEvent.click(screen.getByRole("checkbox"));
+        userEvent.click(screen.getByLabelText("Enable"));
         expect(props.onToggle).toHaveBeenCalledWith("foo", false);
     });
 
@@ -116,7 +116,7 @@ describe("<SourceTypes />", () => {
         props.restrictSourceTypes = false;
         props.global = false;
         renderWithProviders(<SourceTypes {...props} />);
-        userEvent.click(screen.getByRole("checkbox"));
+        userEvent.click(screen.getByLabelText("Enable"));
         expect(props.onToggle).toHaveBeenCalledWith("foo", true);
     });
 });

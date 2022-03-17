@@ -67,7 +67,10 @@ Icon.propTypes = {
     className: PropTypes.string,
     fixedWidth: PropTypes.bool,
     style: PropTypes.object,
-    "aria-label": PropTypes.string
+    "aria-label": PropTypes.string,
+    "data-testid": PropTypes.string,
+    hoverable: PropTypes.bool,
+    shade: PropTypes.string
 };
 
 Icon.defaultProps = {

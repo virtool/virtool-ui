@@ -24,7 +24,6 @@ exports[`<References /> should render when [loading=false] 1`] = `
           "$$typeof": Symbol(react.memo),
           "WrappedComponent": [Function],
           "compare": null,
-          "displayName": "Connect(ReferenceList)",
           "type": [Function],
         }
       }
@@ -45,7 +44,6 @@ exports[`<References /> should render when [loading=false] 1`] = `
           "$$typeof": Symbol(react.memo),
           "WrappedComponent": [Function],
           "compare": null,
-          "displayName": "Connect(AddReference)",
           "type": [Function],
         }
       }
@@ -57,7 +55,6 @@ exports[`<References /> should render when [loading=false] 1`] = `
           "$$typeof": Symbol(react.memo),
           "WrappedComponent": [Function],
           "compare": null,
-          "displayName": "Connect(ReferenceDetail)",
           "type": [Function],
         }
       }

@@ -3,6 +3,7 @@
 exports[`Checkbox should render 1`] = `
 <Checkbox__CheckboxContainer>
   <Checkbox__StyledCheckbox
+    aria-label="foo"
     checked={false}
     onClick={[MockFunction]}
   >
@@ -25,6 +26,7 @@ exports[`Checkbox should render 1`] = `
 exports[`Checkbox should render when [props.checked===true] 1`] = `
 <Checkbox__CheckboxContainer>
   <Checkbox__StyledCheckbox
+    aria-label="foo"
     checked={true}
     onClick={[MockFunction]}
   >
@@ -47,6 +49,7 @@ exports[`Checkbox should render when [props.checked===true] 1`] = `
 exports[`Checkbox should render when [props.label===''] 1`] = `
 <Checkbox__CheckboxContainer>
   <Checkbox__StyledCheckbox
+    aria-label=""
     checked={false}
     onClick={[MockFunction]}
   >

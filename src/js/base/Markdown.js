@@ -1,4 +1,4 @@
-import Marked from "marked";
+import { marked } from "marked";
 import React from "react";
 import styled from "styled-components";
 import { NoneFound } from "./NoneFound";
@@ -12,7 +12,7 @@ const StyledMarkdown = styled.div`
 
 export const Markdown = ({ markdown }) => {
     if (markdown) {
-        return <StyledMarkdown dangerouslySetInnerHTML={{ __html: Marked(markdown) }} />;
+        return <StyledMarkdown dangerouslySetInnerHTML={{ __html: marked(markdown) }} />;
     }
 
     return (

@@ -13,6 +13,7 @@ exports[`<UploadBar /> should render 1`] = `
     onDrop={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
+    role="button"
     tabIndex={0}
   >
     <input
@@ -58,6 +59,7 @@ exports[`<UploadBar /> should render optional message 1`] = `
     onDrop={[Function]}
     onFocus={[Function]}
     onKeyDown={[Function]}
+    role="button"
     tabIndex={0}
   >
     <input

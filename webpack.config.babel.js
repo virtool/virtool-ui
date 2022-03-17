@@ -1,6 +1,7 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
   entry: "./src/js/index.js",
@@ -10,15 +11,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        use: [
-          "babel-loader",
-          {
-            loader: "eslint-loader",
-            options: {
-              configFile: path.resolve(__dirname, "./.eslintrc"),
-            },
-          },
-        ],
+        use: ["babel-loader"],
       },
 
       {
@@ -50,6 +43,9 @@ module.exports = {
   mode: "development",
 
   plugins: [
+    new ESLintPlugin({
+      overrideConfigFile: path.resolve(__dirname, "./.eslintrc"),
+    }),
     new CleanWebpackPlugin(),
 
     new HTMLWebpackPlugin({
