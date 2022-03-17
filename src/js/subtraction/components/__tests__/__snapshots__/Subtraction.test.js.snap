@@ -10,7 +10,6 @@ exports[`<Subtraction /> should render 1`] = `
             "$$typeof": Symbol(react.memo),
             "WrappedComponent": [Function],
             "compare": null,
-            "displayName": "Connect(SubtractionList)",
             "type": [Function],
           }
         }
@@ -27,7 +26,6 @@ exports[`<Subtraction /> should render 1`] = `
             "$$typeof": Symbol(react.memo),
             "WrappedComponent": [Function],
             "compare": null,
-            "displayName": "Connect(CreateSubtraction)",
             "type": [Function],
           }
         }
@@ -39,7 +37,6 @@ exports[`<Subtraction /> should render 1`] = `
             "$$typeof": Symbol(react.memo),
             "WrappedComponent": [Function],
             "compare": null,
-            "displayName": "Connect(SubtractionDetail)",
             "type": [Function],
           }
         }

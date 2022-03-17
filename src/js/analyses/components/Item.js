@@ -50,19 +50,8 @@ const AnalysisItemTop = styled.div`
 `;
 
 export const AnalysisItem = props => {
-    const {
-        canModify,
-        created_at,
-        id,
-        index,
-        ready,
-        reference,
-        sampleId,
-        subtractions,
-        user,
-        workflow,
-        onRemove
-    } = props;
+    const { canModify, created_at, id, index, ready, reference, sampleId, subtractions, user, workflow, onRemove } =
+        props;
 
     const subtractionComponents = subtractions.map(subtraction => (
         <AnalysisItemTag key={subtraction.id}>

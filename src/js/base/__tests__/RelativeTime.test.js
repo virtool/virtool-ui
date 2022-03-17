@@ -27,15 +27,15 @@ describe("<RelativeTime />", () => {
     });
 
     it("should re-render when time string changes", async () => {
-        jest.useFakeTimers();
+        jest.useFakeTimers().setSystemTime(new Date("2019-04-22T10:20:30Z"));
 
         // Render with time that is only 10 seconds before the current (mocked) time.
         renderWithProviders(<RelativeTime time="2019-04-22T10:20:20Z" />);
         expect(await screen.getByText("10 seconds ago")).toBeInTheDocument();
 
         act(() => {
-            Date.now.mockReturnValue(new Date("2019-04-22T10:20:40Z"));
-            jest.advanceTimersToNextTimer();
+            jest.setSystemTime(new Date("2019-04-22T10:20:32Z"));
+            jest.advanceTimersByTime(8000);
         });
 
         expect(await screen.findByText("20 seconds ago")).toBeInTheDocument();

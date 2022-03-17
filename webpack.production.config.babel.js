@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HTMLPlugin = require("html-webpack-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
+const ESLintPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
   entry: "./src/js/index.js",
@@ -12,15 +13,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        use: [
-          "babel-loader",
-          {
-            loader: "eslint-loader",
-            options: {
-              configFile: path.resolve(__dirname, "./.eslintrc"),
-            },
-          },
-        ],
+        use: ["babel-loader"],
       },
 
       {
@@ -54,6 +47,9 @@ module.exports = {
   },
 
   plugins: [
+    new ESLintPlugin({
+      overrideConfigFile: path.resolve(__dirname, "./.eslintrc"),
+    }),
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),

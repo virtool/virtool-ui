@@ -34,7 +34,6 @@ exports[`<Account /> should render 1`] = `
             "$$typeof": Symbol(react.memo),
             "WrappedComponent": [Function],
             "compare": null,
-            "displayName": "Connect(AccountProfile)",
             "type": [Function],
           }
         }
@@ -46,7 +45,6 @@ exports[`<Account /> should render 1`] = `
             "$$typeof": Symbol(react.memo),
             "WrappedComponent": [Function],
             "compare": null,
-            "displayName": "Connect(APIKeys)",
             "type": [Function],
           }
         }

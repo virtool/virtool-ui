@@ -10,7 +10,6 @@ exports[`<HMM /> should render 1`] = `
             "$$typeof": Symbol(react.memo),
             "WrappedComponent": [Function],
             "compare": null,
-            "displayName": "Connect(HMMList)",
             "type": [Function],
           }
         }
@@ -27,7 +26,6 @@ exports[`<HMM /> should render 1`] = `
             "$$typeof": Symbol(react.memo),
             "WrappedComponent": [Function],
             "compare": null,
-            "displayName": "Connect(HMMDetail)",
             "type": [Function],
           }
         }
