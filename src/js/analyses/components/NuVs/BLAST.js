@@ -18,7 +18,13 @@ export const BLASTButton = styled(Button)`
 const StyledBLASTResultsHeader = styled(BoxGroupHeader)`
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
+    padding: 10px 15px 7px 15px;
+
+    i.fas {
+        margin-right: 5px;
+    }
 `;
 
 export const BLASTResults = ({ hits, onBlast }) => {
@@ -40,9 +46,10 @@ export const BLASTResults = ({ hits, onBlast }) => {
         <BoxGroup>
             <StyledBLASTResultsHeader>
                 <strong>NCBI BLAST</strong>
-                <a href="#" onClick={onBlast}>
-                    <Icon name="redo" /> Retry
-                </a>
+                <Button onClick={onBlast} color="blue">
+                    <Icon name="redo" />
+                    Retry
+                </Button>
             </StyledBLASTResultsHeader>
             <Table>
                 <thead>

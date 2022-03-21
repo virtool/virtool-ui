@@ -52,16 +52,19 @@ exports[`<BLASTResults /> should render 1`] = `
     <strong>
       NCBI BLAST
     </strong>
-    <a
-      href="#"
+    <Button
+      color="blue"
+      disabled={false}
+      tipPlacement="top"
+      type="button"
     >
       <Icon
         faStyle="fas"
         fixedWidth={false}
         name="redo"
       />
-       Retry
-    </a>
+      Retry
+    </Button>
   </BLAST__StyledBLASTResultsHeader>
   <Table>
     <thead>

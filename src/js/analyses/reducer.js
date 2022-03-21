@@ -185,8 +185,8 @@ export const analysesReducer = createReducer(initialState, builder => {
             });
         })
         .addCase(BLAST_NUVS.SUCCEEDED, (state, action) => {
-            const { analysisId, sequenceIndex } = action.payload.context;
-            return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload.payload);
+            const { analysisId, sequenceIndex } = action.context;
+            return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload);
         });
 });
 

@@ -23,7 +23,7 @@ export function* watchAnalyses() {
 export function* wsUpdateAnalysis(action) {
     const analysisId = yield select(getAnalysisDetailId);
 
-    if (analysisId === action.payload.data.id) {
+    if (analysisId === action.payload.id) {
         yield apiCall(analysesAPI.get, { analysisId }, GET_ANALYSIS);
     }
 }
