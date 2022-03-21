@@ -313,12 +313,10 @@ describe("Analyses Reducer", () => {
 
         const action = {
             type: BLAST_NUVS.SUCCEEDED,
-            payload: {
-                context: {
-                    analysisId: "testid",
-                    sequenceIndex: 3
-                },
-                payload: {}
+            payload: {},
+            context: {
+                analysisId: "testid",
+                sequenceIndex: 3
             }
         };
 
