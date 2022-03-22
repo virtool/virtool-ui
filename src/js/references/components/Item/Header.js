@@ -43,12 +43,7 @@ export const ReferenceItemHeader = ({ createdAt, dataType, id, name, organism, o
     <StyledReferenceItemHeader>
         <h2>
             <Link to={`/refs/${id}`}>{name}</Link>
-            <LinkIcon
-                to={{ pathname: "/refs/add", state: { newReference: true, cloneReference: true, id } }}
-                name="clone"
-                tip="Clone"
-                color="blue"
-            />
+            <LinkIcon to={{ state: { cloneReference: true, id } }} name="clone" tip="Clone" color="blue" />
         </h2>
         <p>
             <span>
@@ -70,5 +65,5 @@ ReferenceItemHeader.propTypes = {
     name: PropTypes.string.isRequired,
     organism: PropTypes.string,
     otuCount: PropTypes.number,
-    userHandle: PropTypes.string.isRequired
+    userHandle: PropTypes.string
 };

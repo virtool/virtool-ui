@@ -1,139 +1,86 @@
+import React from "react";
 import { CloneReference, mapDispatchToProps, mapStateToProps } from "../Clone";
-import { ReferenceSelector } from "../ReferenceSelector";
+import userEvent from "@testing-library/user-event";
+import { screen, waitFor } from "@testing-library/react";
 
 describe("<CloneReference />", () => {
     const props = {
         refId: "foo",
-        refDocuments: [{ foo: "bar" }],
-        onSubmit: jest.fn()
+        refDocuments: [
+            {
+                id: "foo",
+                data_type: "genome",
+                organism: "foo_organism",
+                name: "foo_name",
+                otu_count: 5,
+                user: { id: "foo_user_id" },
+                created_at: "2019-02-10T17:11:00.000000Z"
+            }
+        ],
+        show: true,
+        onSubmit: jest.fn(),
+        onHide: jest.fn()
     };
 
-    let state;
-    let e;
-
-    beforeEach(() => {
-        state = {
-            reference: "",
-            name: "",
-            description: "",
-            dataType: "genome",
-            organism: "",
-            errorName: "",
-            errorDataType: "",
-            errorSelect: "",
-            mode: "clone"
-        };
-        e = {
-            preventDefault: jest.fn(),
-            target: {
-                name: "foo",
-                value: "bar",
-                error: false
-            }
-        };
-    });
-
     it("should render", () => {
-        const wrapper = shallow(<CloneReference {...props} />);
-        expect(wrapper.state()).toMatchSnapshot();
+        renderWithProviders(<CloneReference {...props} />);
+        expect(screen.getByText("Clone Reference")).toBeInTheDocument();
+        expect(screen.getByText("5 OTUs")).toBeInTheDocument();
+        expect(screen.getByText("foo_name")).toBeInTheDocument();
+        expect(screen.getByText(/foo_user_id.+created/)).toBeInTheDocument();
+        expect(screen.getByText("3 years ago")).toBeInTheDocument();
+        expect(screen.getByRole("textbox")).toHaveValue("Clone of foo_name");
+        expect(screen.getByRole("button", { name: "Clone" })).toBeInTheDocument();
     });
 
-    it("handleChange() should return setState() when [name===name]", () => {
-        e.target = {
-            name: "name",
-            value: "foo",
-            error: "error"
-        };
-        const wrapper = shallow(<CloneReference {...props} />);
-        wrapper.find("ReferenceForm").simulate("change", e);
-        expect(wrapper.state()).toEqual({
-            ...state,
-            reference: "foo",
-            name: "foo"
-        });
+    it("should display an error when name input is cleared", async () => {
+        renderWithProviders(<CloneReference {...props} />);
+        userEvent.clear(screen.getByRole("textbox"));
+        userEvent.click(screen.getByRole("button", { name: "Clone" }));
+        await waitFor(() => expect(screen.getByText("Required Field")).toBeInTheDocument());
     });
-    it("handleChange() should return setState() when [name===reference]", () => {
-        e.target = {
-            name: "reference",
-            value: "bar",
-            error: "error"
-        };
-        const wrapper = shallow(<CloneReference {...props} />);
-        wrapper.find("ReferenceForm").simulate("change", e);
-        expect(wrapper.state()).toEqual({
-            ...state,
-            reference: "bar",
-            errorSelect: ""
-        });
-    });
-    it("handleChange() should return setState() when [name!=reference] and [name!=name]", () => {
-        e.target = {
-            name: "foo",
-            value: "bar",
-            error: "baz"
-        };
-        const wrapper = shallow(<CloneReference {...props} />);
-        wrapper.find("ReferenceForm").simulate("change", e);
-        expect(wrapper.state()).toEqual({
-            ...state,
-            reference: "foo",
-            foo: "bar"
-        });
+    it("handleSubmit() should call not call onSubmit when error is present", async () => {
+        renderWithProviders(<CloneReference {...props} />);
+        userEvent.clear(screen.getByRole("textbox"));
+        userEvent.click(screen.getByRole("button", { name: "Clone" }));
+        await waitFor(() => expect(screen.getByText("Required Field")).toBeInTheDocument());
+        expect(props.onSubmit).not.toBeCalled();
     });
 
-    it("should call handleSelect() when ReferenceSelector is selected", () => {
-        const wrapper = shallow(<CloneReference {...props} />);
-        wrapper.find(ReferenceSelector).simulate("select");
-        expect(wrapper.state()).toEqual({
-            ...state,
-            reference: undefined
-        });
+    it("handleSubmit() should call onSubmit with correct input", async () => {
+        renderWithProviders(<CloneReference {...props} />);
+        userEvent.click(screen.getByRole("button", { name: "Clone" }));
+        const {
+            refDocuments: [reference]
+        } = props;
+        await waitFor(() =>
+            expect(props.onSubmit).toBeCalledWith(
+                `Clone of ${reference.name}`,
+                `Cloned from ${reference.name}`,
+                reference.data_type,
+                reference.organism,
+                reference.id
+            )
+        );
     });
-
-    it("handleSubmit() should return errorName when [this.state.name.length=0]", () => {
-        const wrapper = shallow(<CloneReference {...props} />);
-        wrapper.setState({
-            ...state,
-            name: []
-        });
-        wrapper.find("form").simulate("submit", e);
-        expect(wrapper.state()).toEqual({
-            ...state,
-            name: [],
-            errorName: "Required Field"
-        });
-    });
-    it("handleSubmit() should return errorName when [this.state.dataType.length=0]", () => {
-        const wrapper = shallow(<CloneReference {...props} />);
-        wrapper.setState({
-            ...state,
-            name: [{ foo: "bar" }],
-            dataType: []
-        });
-        wrapper.find("form").simulate("submit", e);
-        expect(wrapper.state()).toEqual({
-            ...state,
-            name: [{ foo: "bar" }],
-            dataType: [],
-            errorDataType: "Required Field"
-        });
-    });
-    it("handleSubmit() should return errorName when [!this.state.reference]", () => {
-        const wrapper = shallow(<CloneReference {...props} />);
-        wrapper.setState({
-            ...state,
-            name: [{ foo: "bar" }],
-            dataType: [{ foo: "bar" }],
-            reference: ""
-        });
-        wrapper.find("form").simulate("submit", e);
-        expect(wrapper.state()).toEqual({
-            ...state,
-            name: [{ foo: "bar" }],
-            dataType: [{ foo: "bar" }],
-            reference: "",
-            errorSelect: "Please select a source reference"
-        });
+    it("handleSubmit() should call onSubmit with changed input", async () => {
+        renderWithProviders(<CloneReference {...props} />);
+        const name = "newName";
+        userEvent.clear(screen.getByRole("textbox"));
+        userEvent.type(screen.getByRole("textbox"), name);
+        userEvent.click(screen.getByRole("button", { name: "Clone" }));
+        const {
+            refDocuments: [reference]
+        } = props;
+        await waitFor(() =>
+            expect(props.onSubmit).toBeCalledWith(
+                name,
+                `Cloned from ${reference.name}`,
+                reference.data_type,
+                reference.organism,
+                reference.id
+            )
+        );
     });
 });
 
@@ -143,7 +90,8 @@ describe("mapStateToProps()", () => {
             router: {
                 location: {
                     state: {
-                        id: "foo"
+                        id: "foo",
+                        cloneReference: true
                     }
                 }
             },
@@ -152,7 +100,8 @@ describe("mapStateToProps()", () => {
         const result = mapStateToProps(state);
         expect(result).toEqual({
             refId: "foo",
-            refDocuments: "bar"
+            refDocuments: "bar",
+            show: true
         });
     });
 });
@@ -168,8 +117,8 @@ describe("mapDispatchToProps()", () => {
             type: "CLONE_REFERENCE_REQUESTED"
         });
     });
-    it("should return onClearError in props", () => {
-        props.onClearError(true);
-        expect(dispatch).toHaveBeenCalledWith({ payload: { error: true }, type: "CLEAR_ERROR" });
+    it("should return onHide in props", () => {
+        props.onHide();
+        expect(dispatch).toHaveBeenCalledWith({ payload: { state: { cloneReference: false } }, type: "PUSH_STATE" });
     });
 });

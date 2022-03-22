@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Badge, LoadingPlaceholder, NarrowContainer, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
-import { routerLocationHasState } from "../../utils/utils";
 import { findReferences, remoteReference } from "../actions";
 import { getTerm } from "../selectors";
+import Clone from "./Clone";
 import ReferenceItem from "./Item/Item";
 import ReferenceOfficial from "./Official";
 import ReferenceToolbar from "./Toolbar";
@@ -21,39 +21,40 @@ class ReferenceList extends React.Component {
         }
 
         return (
-            <NarrowContainer>
-                <ViewHeader title="References">
-                    <ViewHeaderTitle>
-                        References <Badge>{this.props.total_count}</Badge>
-                    </ViewHeaderTitle>
-                </ViewHeader>
+            <>
+                <NarrowContainer>
+                    <ViewHeader title="References">
+                        <ViewHeaderTitle>
+                            References <Badge>{this.props.total_count}</Badge>
+                        </ViewHeaderTitle>
+                    </ViewHeader>
 
-                <ReferenceToolbar />
-                <ReferenceOfficial />
+                    <ReferenceToolbar />
+                    <ReferenceOfficial />
 
-                <ScrollList
-                    documents={this.props.documents}
-                    onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
-                    page={this.props.page}
-                    pageCount={this.props.pageCount}
-                    renderRow={this.renderRow}
-                />
-            </NarrowContainer>
+                    <ScrollList
+                        documents={this.props.documents}
+                        onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
+                        page={this.props.page}
+                        pageCount={this.props.pageCount}
+                        renderRow={this.renderRow}
+                    />
+                </NarrowContainer>
+                <Clone />
+            </>
         );
     }
 }
 
 const mapStateToProps = state => ({
     ...state.references,
-    term: getTerm(state),
-    showModal: routerLocationHasState(state, "newReference")
+    term: getTerm(state)
 });
 
 const mapDispatchToProps = dispatch => ({
     onRemote: () => {
         dispatch(remoteReference());
     },
-
     onLoadNextPage: (term, page) => {
         dispatch(findReferences(term, page));
     }

@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { TabLink, ViewHeader, ViewHeaderTitle, Tabs, NarrowContainer } from "../../base";
 import { routerLocationHasState } from "../../utils/utils";
-import CloneReference from "./Clone";
 import EmptyReference from "./Empty";
 import ImportReference from "./Import";
 
@@ -40,10 +39,6 @@ export class AddReference extends React.Component {
             return <ImportReference lock={this.checkModalLock} />;
         }
 
-        if (this.props.isClone) {
-            return <CloneReference />;
-        }
-
         return <EmptyReference />;
     };
 
@@ -66,12 +61,6 @@ export class AddReference extends React.Component {
                     >
                         Import
                     </TabLink>
-                    <TabLink
-                        to={{ state: { newReference: true, cloneReference: true } }}
-                        isActive={this.checkActive("isClone")}
-                    >
-                        Clone
-                    </TabLink>
                 </Tabs>
 
                 {this.renderForm()}
@@ -81,13 +70,11 @@ export class AddReference extends React.Component {
 }
 
 const mapStateToProps = state => {
-    const isClone = routerLocationHasState(state, "cloneReference");
     const isCreate = routerLocationHasState(state, "emptyReference");
     const isImport = routerLocationHasState(state, "importReference");
     return {
         isCreate,
-        isImport,
-        isClone
+        isImport
     };
 };
 
