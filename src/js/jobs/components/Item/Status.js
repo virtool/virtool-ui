@@ -36,7 +36,7 @@ export const JobStatus = ({ pad, state }) => {
         );
     }
 
-    if (state === "error" || state === "cancelled") {
+    if (state === "error" || state === "cancelled" || state === "terminated") {
         return (
             <StyledJobStatus pad={pad}>
                 <Icon name="times fa-fw" color="red" />

@@ -44,7 +44,7 @@ exports[`<JobStepIcon /> renders correct icon when state preparing 1`] = `
   color="grey"
   faStyle="fas"
   fixedWidth={true}
-  name="boxes-stacked"
+  name="boxes"
 />
 `;
 
