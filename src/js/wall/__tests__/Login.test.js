@@ -1,6 +1,12 @@
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createStore } from "redux";
 import { LOGIN } from "../../app/actionTypes";
-import { Checkbox, Input, PasswordInput } from "../../base";
-import { Login, mapStateToProps, mapDispatchToProps } from "../Login";
+import { Login, mapDispatchToProps, mapStateToProps } from "../Login";
+
+const createAppStore = state => {
+    return () => createStore(state => state, state);
+};
 
 describe("<Login />", () => {
     let props;
@@ -10,60 +16,41 @@ describe("<Login />", () => {
             onLogin: jest.fn()
         };
         window.b2c = {
-            use: "true"
+            use: false
         };
     });
 
     it("should render", () => {
-        const wrapper = shallow(<Login {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<Login {...props} />, createAppStore(null));
+        expect(screen.getByText("Virtool")).toBeInTheDocument();
+        expect(screen.getByText("Sign in with your Virtool account")).toBeInTheDocument();
+        expect(screen.getByText("Username")).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Username" })).toBeInTheDocument();
+        expect(screen.getByText("Password")).toBeInTheDocument();
+        expect(screen.getByLabelText("Password")).toHaveValue("");
     });
 
-    it("should render filled username and password fields", () => {
-        const wrapper = shallow(<Login {...props} />);
-        expect(wrapper).toMatchSnapshot();
-
-        const username = wrapper.find(Input).at(0);
-        username.simulate("change", {
-            target: {
-                name: "username",
-                value: "bob"
-            }
-        });
-        expect(wrapper).toMatchSnapshot();
-
-        const password = wrapper.find(PasswordInput);
-        password.simulate("change", {
-            target: {
-                name: "password",
-                value: "foobar"
-            }
-        });
-        expect(wrapper).toMatchSnapshot();
+    it.each(["Username", "Password"], "should render filled %p field", name => {
+        renderWithProviders(<Login {...props} />, createAppStore(null));
+        userEvent.type(screen.getByLabelText(name), `test_${name}`);
+        expect(screen.getByLabelText(name)).toHaveValue(`test_${name}`);
     });
 
     it("should render checked remember checkbox", () => {
-        const wrapper = shallow(<Login {...props} />);
-        expect(wrapper).toMatchSnapshot();
-
-        wrapper.find(Checkbox).simulate("click");
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<Login {...props} />, createAppStore(null));
+        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "unchecked");
+        userEvent.click(screen.getByLabelText("Remember Me"));
+        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "checked");
     });
 
-    it("should call onLogin() and e.preventDefault() when submitted", () => {
-        const wrapper = shallow(<Login {...props} />);
-        wrapper.setState({
-            username: "bob",
-            password: "foobar",
-            remember: true
-        });
-        const form = wrapper.find("form");
-        const e = {
-            preventDefault: jest.fn()
-        };
-        form.simulate("submit", e);
-        expect(props.onLogin).toHaveBeenCalledWith("bob", "foobar", true);
-        expect(e.preventDefault).toHaveBeenCalled();
+    it("should call onLogin() with correct values when submitted", async () => {
+        renderWithProviders(<Login {...props} />, createAppStore(null));
+        userEvent.type(screen.getByLabelText("Username"), `test_Username`);
+        expect(screen.getByLabelText("Username")).toHaveValue(`test_Username`);
+        userEvent.type(screen.getByLabelText("Password"), `Password`);
+        expect(screen.getByLabelText("Password")).toHaveValue(`Password`);
+        userEvent.click(screen.getByRole("button", { name: "Login" }));
+        await waitFor(() => expect(props.onLogin).toHaveBeenCalledWith("test_Username", "Password", false));
     });
 });
 

@@ -2,8 +2,16 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { resetPassword } from "../account/actions";
-import { BoxGroupHeader, BoxGroupSection, Button, InputGroup, InputLabel, PasswordInput } from "../base";
-import { WallContainer, WallDialog, WallDialogFooter, WallLogo } from "./Container";
+import { InputGroup, InputLabel, PasswordInput } from "../base";
+import {
+    WallContainer,
+    WallDialog,
+    WallTitle,
+    WallLoginContainer,
+    WallHeader,
+    WallSubheader,
+    WallButton
+} from "./Container";
 
 export class Reset extends React.Component {
     constructor(props) {
@@ -25,29 +33,29 @@ export class Reset extends React.Component {
     render() {
         return (
             <WallContainer>
-                <WallLogo height={42} />
                 <WallDialog>
-                    <BoxGroupHeader>
-                        <p>You are required to set a new password before proceeding.</p>
-                    </BoxGroupHeader>
-                    <form onSubmit={this.handleSubmit}>
-                        <BoxGroupSection>
+                    <WallLoginContainer>
+                        <WallTitle />
+                        <WallHeader>Password Reset</WallHeader>
+                        <WallSubheader>You are required to set a new password before proceeding.</WallSubheader>
+
+                        <form onSubmit={this.handleSubmit}>
                             <InputGroup>
-                                <InputLabel>Password</InputLabel>
+                                <InputLabel htmlFor="password">Password</InputLabel>
                                 <PasswordInput
                                     name="password"
+                                    id="password"
                                     value={this.state.password}
                                     onChange={this.handleChange}
                                 />
                             </InputGroup>
-                        </BoxGroupSection>
-                        <WallDialogFooter>
-                            <Button type="submit" color="blue">
+
+                            <WallButton type="submit" color="blue">
                                 Reset
-                            </Button>
+                            </WallButton>
                             <span>{this.props.error}</span>
-                        </WallDialogFooter>
-                    </form>
+                        </form>
+                    </WallLoginContainer>
                 </WallDialog>
             </WallContainer>
         );
