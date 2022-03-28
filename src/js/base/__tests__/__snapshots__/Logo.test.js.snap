@@ -31,7 +31,6 @@ exports[`<Logo /> renders correctly 1`] = `
     L 235.3457 218.0918 L 235.3457 190.00781 z 
 "
       id="path4138-2"
-      style={Object {}}
     />
   </svg>
 </Logo__StyledVTLogo>

@@ -91,7 +91,7 @@ app.engine("html", require("ejs").renderFile);
 app.set("views", path.join(__dirname, "dist"));
 app.locals.delimiter = "#";
 
-app.get(/\.(?:js|map|ico)$/, express.static(path.join(__dirname, "dist")));
+app.get(/\.(?:js|map|ico|svg)$/, express.static(path.join(__dirname, "dist")));
 app.get("*", defaultPath(templateOptions));
 
 app.listen(options.port, options.host, () => {

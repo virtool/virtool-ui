@@ -2,23 +2,36 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { login, loginSucceeded } from "../account/actions";
-import { BoxGroupSection, Button, Checkbox, Input, InputGroup, InputLabel, PasswordInput } from "../base";
+import { login } from "../account/actions";
+import { BoxGroupSection, Checkbox, Input, InputGroup, InputLabel, PasswordInput } from "../base";
 import { clearError } from "../errors/actions";
-import { WallContainer, WallDialog, WallDialogFooter, WallLogo } from "./Container";
-import { getLoginRequest } from "../app/authConfig";
+import B2cLogin from "./B2CLogin";
+import {
+    WallButton,
+    WallContainer,
+    WallDialog,
+    WallHeader,
+    WallLoginContainer,
+    WallSubheader,
+    WallTitle
+} from "./Container";
 
-const LoginFooter = styled(WallDialogFooter)`
-    border: none;
-    button: last-child {
-        margin-left: 5px;
-    }
-`;
-
-const LoginError = styled.span`
+const LoginError = styled.div`
     color: red;
     margin-left: auto;
+    margin-bottom: 10px;
     font-size: 12px;
+    height: 10px;
+`;
+
+const LoginButton = styled(WallButton)`
+    margin-top: 20px;
+`;
+
+const LoginContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
 `;
 
 export class Login extends React.Component {
@@ -55,54 +68,50 @@ export class Login extends React.Component {
     render() {
         return (
             <WallContainer>
-                <WallLogo height={42} />
                 <WallDialog>
-                    <form onSubmit={this.handleSubmit}>
-                        <BoxGroupSection>
-                            <InputGroup>
-                                <InputLabel>Username</InputLabel>
-                                <Input
-                                    name="username"
-                                    value={this.state.username}
-                                    onChange={this.handleChange}
-                                    autoFocus
-                                />
-                            </InputGroup>
-                            <InputGroup>
-                                <InputLabel>Password</InputLabel>
-                                <PasswordInput
-                                    name="password"
-                                    value={this.state.password}
-                                    onChange={this.handleChange}
-                                />
-                            </InputGroup>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <Checkbox
-                                    checked={this.state.remember}
-                                    onClick={this.handleRemember}
-                                    label="Remember Me"
-                                />
-                                <LoginError>{this.props.error}</LoginError>
-                            </div>
-                        </BoxGroupSection>
+                    <WallLoginContainer>
+                        <WallTitle />
+                        <WallHeader>Login</WallHeader>
+                        {window.b2c.use && <B2cLogin />}
+                        <form onSubmit={this.handleSubmit}>
+                            <BoxGroupSection>
+                                <WallSubheader>
+                                    Sign in with your {window.b2c.use && "legacy"} Virtool account
+                                </WallSubheader>
+                                <InputGroup>
+                                    <InputLabel htmlFor="username">Username</InputLabel>
+                                    <Input
+                                        name="username"
+                                        id="username"
+                                        value={this.state.username}
+                                        onChange={this.handleChange}
+                                        autoFocus
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <InputLabel htmlFor="password">Password</InputLabel>
+                                    <PasswordInput
+                                        name="password"
+                                        id="password"
+                                        value={this.state.password}
+                                        onChange={this.handleChange}
+                                    />
+                                </InputGroup>
+                                <LoginContainer>
+                                    <Checkbox
+                                        checked={this.state.remember}
+                                        onClick={this.handleRemember}
+                                        label="Remember Me"
+                                    />
+                                    <LoginError>{this.props.error}</LoginError>
+                                </LoginContainer>
 
-                        <LoginFooter>
-                            <div>
-                                {window.b2c.use && (
-                                    <Button
-                                        onClick={() =>
-                                            window.msalInstance.loginPopup(getLoginRequest()).then(this.props.setLogin)
-                                        }
-                                    >
-                                        Login Via B2C
-                                    </Button>
-                                )}
-                                <Button type="submit" color="blue">
+                                <LoginButton type="submit" color="blue">
                                     Login
-                                </Button>
-                            </div>
-                        </LoginFooter>
-                    </form>
+                                </LoginButton>
+                            </BoxGroupSection>
+                        </form>
+                    </WallLoginContainer>
                 </WallDialog>
             </WallContainer>
         );
@@ -119,10 +128,6 @@ export const mapDispatchToProps = dispatch => ({
     },
     onLogin: (username, password, remember) => {
         dispatch(login(username, password, remember));
-    },
-    setLogin: msal => {
-        window.msalInstance.setActiveAccount(msal.account);
-        dispatch(loginSucceeded());
     }
 });
 

@@ -47,5 +47,6 @@ export * from "./UploadBar";
 export * from "./ViewHeader";
 export * from "./CloseButton";
 export * from "./Checkbox";
+export * from "./Divider";
 
 export { Flex, FlexItem, ScrollList };

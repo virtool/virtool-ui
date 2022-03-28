@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { getColor } from "../app/theme";
 
 const path = `
     M 235.00977 45.240234 L 224.64258 66.671875 L 186.9375 70.472656 L 175.11914 51.697266 L 148.99219 58.945312 
@@ -26,11 +27,11 @@ const StyledVTLogo = styled.div`
     color: currentColor;
     display: flex;
     justify-content: center;
-    max-width: 30px;
+    max-width: 200px;
     margin: 8px 8px 0 0;
 
     path {
-        fill: currentColor;
+        fill: ${getColor};
         fill-opacity: 1;
         stroke: none;
         stroke-width: 1;
@@ -40,11 +41,11 @@ const StyledVTLogo = styled.div`
     }
 `;
 
-export const VTLogo = ({ className, height = 30 }) => (
-    <StyledVTLogo className={className}>
+export const VTLogo = ({ className, height = 30, color }) => (
+    <StyledVTLogo className={className} color={color}>
         <svg id="svg2" viewBox="0 0 512 512" height={height}>
             <defs id="defs125" />
-            <path id="path4138-2" d={path} style={{}} />
+            <path id="path4138-2" d={path} />
         </svg>
     </StyledVTLogo>
 );

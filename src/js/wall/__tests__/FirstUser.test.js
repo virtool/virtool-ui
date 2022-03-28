@@ -21,9 +21,12 @@ describe("<FirstUser />", () => {
     });
 
     it("should render", () => {
-        const wrapper = shallow(<FirstUser {...props} />);
-
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<FirstUser {...props} />);
+        expect(screen.getByText("Setup Initial User")).toBeInTheDocument();
+        expect(screen.getByText("Create an initial administrative user to start using Virtool.")).toBeInTheDocument();
+        expect(screen.getByRole("textbox", "username")).toBeInTheDocument();
+        expect(screen.getByRole("textbox", "password")).toBeInTheDocument();
+        expect(screen.getByRole("button", "Create user")).toBeInTheDocument();
     });
 
     it.each(["username", "password"])("should render when %p changed", name => {
