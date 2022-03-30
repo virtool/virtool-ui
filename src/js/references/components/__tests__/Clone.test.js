@@ -57,8 +57,6 @@ describe("<CloneReference />", () => {
             expect(props.onSubmit).toBeCalledWith(
                 `Clone of ${reference.name}`,
                 `Cloned from ${reference.name}`,
-                reference.data_type,
-                reference.organism,
                 reference.id
             )
         );
@@ -72,15 +70,7 @@ describe("<CloneReference />", () => {
         const {
             refDocuments: [reference]
         } = props;
-        await waitFor(() =>
-            expect(props.onSubmit).toBeCalledWith(
-                name,
-                `Cloned from ${reference.name}`,
-                reference.data_type,
-                reference.organism,
-                reference.id
-            )
-        );
+        await waitFor(() => expect(props.onSubmit).toBeCalledWith(name, `Cloned from ${reference.name}`, reference.id));
     });
 });
 
@@ -111,9 +101,9 @@ describe("mapDispatchToProps()", () => {
     const props = mapDispatchToProps(dispatch);
 
     it("should return onSubmit in props", () => {
-        props.onSubmit("foo", "bar", "fee", "baz", "boo");
+        props.onSubmit("foo", "bar", "boo");
         expect(dispatch).toHaveBeenCalledWith({
-            payload: { name: "foo", description: "bar", dataType: "fee", organism: "baz", refId: "boo" },
+            payload: { name: "foo", description: "bar", refId: "boo" },
             type: "CLONE_REFERENCE_REQUESTED"
         });
     });

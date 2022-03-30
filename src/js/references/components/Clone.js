@@ -46,7 +46,7 @@ export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) 
     const reference = find(refDocuments, { id: refId });
 
     const handleSubmit = ({ name }) => {
-        onSubmit(name, `Cloned from ${reference.name}`, reference.data_type, reference.organism, reference.id);
+        onSubmit(name, `Cloned from ${reference.name}`, reference.id);
     };
 
     return (

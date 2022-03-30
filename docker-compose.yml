@@ -6,6 +6,7 @@ services:
       - "27017:27017"
     volumes:
       - vt_mongo_data:/data/db
+    command: --replSet rso
 
   redis:
     image: redis:6.0
@@ -13,6 +14,7 @@ services:
       - "6379:6379"
     volumes:
       - vt_redis_data:/data
+    
 
   postgres:
     image: postgres:13.1
@@ -40,7 +42,7 @@ services:
       - backend
 
   api:
-    image: virtool/virtool:6.8.0
+    image: virtool/virtool:7.1.4
     depends_on:
       - mongo
       - redis
@@ -60,7 +62,7 @@ services:
       - vt_data:/data
 
   jobs-api:
-    image: virtool/virtool:6.8.0
+    image: virtool/virtool:7.1.4
     depends_on:
       - mongo
       - redis
@@ -77,7 +79,7 @@ services:
       - vt_data:/data
 
   pathoscope:
-    image: virtool/pathoscope:2.1.2
+    image: virtool/pathoscope:2.1.4
     entrypoint: workflow
     restart: always
     command: >
@@ -123,7 +125,7 @@ services:
       jobs_build_index
       
   nuvs:
-    image: virtool/nuvs:3.0.2
+    image: virtool/nuvs:3.0.3
     restart: always
     entrypoint: workflow
     command: >

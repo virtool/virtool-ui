@@ -68,11 +68,11 @@ describe("mapStateToProps", () => {
     });
 
     it("should exclude reference uploads", () => {
-        state.files.uploads[1].fileType = "reference";
+        state.files.uploads[1].type = "reference";
         const props = mapStateToProps(state);
-        const [baz, foo] = props.uploads;
+        const [foo, baz] = props.uploads;
         expect(props).toEqual({
-            uploads: [baz, foo]
+            uploads: [foo, baz]
         });
     });
 });

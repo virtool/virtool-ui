@@ -1,79 +1,51 @@
+import { Form, Formik } from "formik";
 import React from "react";
 import { connect } from "react-redux";
+import * as Yup from "yup";
 import { pushState } from "../../../app/actions";
 import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../base";
-import { getTargetChange, routerLocationHasState } from "../../../utils/utils";
+import { routerLocationHasState } from "../../../utils/utils";
 import { editReference } from "../../actions";
 import { ReferenceForm } from "../Form";
 
-const getInitialState = detail => ({
+const getInitialValues = detail => ({
     name: detail.name,
     description: detail.description,
-    organism: detail.organism,
-    errorName: ""
+    organism: detail.organism
 });
 
-export class EditReference extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Required Field")
+});
 
-    handleChange = e => {
-        const { name, value, error } = getTargetChange(e.target);
-
-        if (name !== "name") {
-            return this.setState({ [name]: value });
-        }
-
-        this.setState({
-            [name]: value,
-            [error]: ""
-        });
+export const EditReference = ({ show, detail, onHide, onSubmit }) => {
+    const handleSubmit = ({ name, description, organism }) => {
+        onSubmit(detail.id, { name, description, organism });
+        onHide();
     };
 
-    handleModalEnter = () => {
-        this.setState(getInitialState(this.props.detail));
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-
-        if (!this.state.name.length) {
-            this.setState({ errorName: "Required Field" });
-        }
-
-        if (this.state.name.length) {
-            const { errorName, ...update } = this.state;
-            this.props.onSubmit(this.props.detail.id, update);
-            this.props.onHide();
-        }
-    };
-
-    render() {
-        return (
-            <Modal label="Edit" show={this.props.show} onHide={this.props.onHide} onEnter={this.handleModalEnter}>
-                <ModalHeader>Edit Reference</ModalHeader>
-                <form onSubmit={this.handleSubmit}>
-                    <ModalBody>
-                        <ReferenceForm
-                            description={this.state.description}
-                            organism={this.state.organism}
-                            mode={this.state.mode}
-                            name={this.state.name}
-                            errorName={this.state.errorSelect}
-                            onChange={this.handleChange}
-                        />
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <SaveButton />
-                    </ModalFooter>
-                </form>
-            </Modal>
-        );
-    }
-}
+    return (
+        <Modal label="Edit" show={show} onHide={onHide}>
+            <ModalHeader>Edit Reference</ModalHeader>
+            <Formik
+                initialValues={getInitialValues(detail)}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+            >
+                {({ touched, errors }) => (
+                    <Form>
+                        <ModalBody>
+                            <ReferenceForm errors={errors} touched={touched} mode={"edit"} />
+                        </ModalBody>
+                        <ModalFooter>
+                            <SaveButton />
+                        </ModalFooter>
+                    </Form>
+                )}
+            </Formik>
+        </Modal>
+    );
+};
 
 const mapStateToProps = state => ({
     show: routerLocationHasState(state, "editReference"),

@@ -1,31 +1,38 @@
 import React from "react";
 import { Input, InputError, InputGroup, InputLabel, TextArea } from "../../base";
+import { Field } from "formik";
+import styled from "styled-components";
 
-export const ReferenceForm = ({ description, organism, mode, name, errorName, onChange }) => {
+const StyledInputGroup = styled(InputGroup)`
+    padding-bottom: 0px;
+`;
+
+export const ReferenceForm = ({ errors, touched, mode }) => {
     let organismComponent;
 
-    if (mode === "empty") {
+    if (mode === "empty" || mode === "edit") {
         organismComponent = (
             <InputGroup>
-                <InputLabel>Organism</InputLabel>
-                <Input name="organism" value={organism} onChange={onChange} />
+                <InputLabel htmlFor="organism">Organism</InputLabel>
+                <Field as={Input} name="organism" id="organism" />
             </InputGroup>
         );
     }
+    const nameError = touched.name && errors.name;
 
     return (
         <>
-            <InputGroup>
-                <InputLabel>Name</InputLabel>
-                <Input name="name" error={errorName} value={name} onChange={onChange} />
-                <InputError>{errorName}</InputError>
-            </InputGroup>
+            <StyledInputGroup>
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <Field name="name" id="name" as={Input} error={nameError} />
+                <InputError>{nameError}</InputError>
+            </StyledInputGroup>
 
             {organismComponent}
 
             <InputGroup>
-                <InputLabel>Description</InputLabel>
-                <TextArea name="description" value={description} onChange={onChange} />
+                <InputLabel htmlFor="description">Description</InputLabel>
+                <Field as={TextArea} name="description" id="description" />
             </InputGroup>
         </>
     );

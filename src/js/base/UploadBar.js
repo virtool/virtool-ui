@@ -44,7 +44,7 @@ export const UploadBar = ({ message, onDrop }) => {
     return (
         <StyledUploadBar active={isDragAccept}>
             <div {...rootProps}>
-                <input {...getInputProps()} />
+                <input {...getInputProps()} data-testid="upload-input" />
                 {messageComponent}
             </div>
             <Button color="blue" icon="upload" onClick={open}>

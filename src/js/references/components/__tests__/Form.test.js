@@ -1,45 +1,65 @@
-import { Input, TextArea } from "../../../base";
+import { render as rtlRender, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Form, Formik } from "formik";
+import { ThemeProvider } from "styled-components";
+import { theme } from "../../../app/theme";
 import { ReferenceForm } from "../Form";
 
+const renderWithFormik = (renderer, ui, initialValues, onSubmit, mode) => {
+    const jsx = (
+        <ThemeProvider theme={theme}>
+            <Formik initialValues={initialValues} onSubmit={onSubmit}>
+                {({ touched, errors }) => (
+                    <Form>
+                        <ReferenceForm mode={mode} touched={touched} errors={errors} />
+                    </Form>
+                )}
+            </Formik>
+        </ThemeProvider>
+    );
+
+    return renderer(jsx);
+};
+
 describe("<ReferenceForm />", () => {
-    let props;
+    let initialValues;
+    let onSubmit;
+    let mode;
 
     beforeEach(() => {
-        props = {
+        initialValues = {
             description: "Foo reference",
-            errorName: "baz",
-            mode: "clone",
             name: "Foo",
-            organism: "Bar",
-            onChange: jest.fn()
+            organism: "Bar"
         };
+        onSubmit = jest.fn();
+        mode = "clone";
     });
 
     it("should render", () => {
-        const wrapper = shallow(<ReferenceForm {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithFormik(rtlRender, <ReferenceForm />, initialValues, onSubmit, mode);
+        expect(screen.getByText("Name")).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(initialValues.name);
+        expect(screen.getByText("Description")).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue(initialValues.description);
     });
 
-    it("should render error when provided in props", () => {
-        props.errorName = "Name required";
-        const wrapper = shallow(<ReferenceForm {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it.each(["edit", "empty"], "should render Organism when type is %p", mode => {
+        const { rerender } = renderWithFormik(rtlRender, <ReferenceForm />, initialValues, onSubmit, mode);
+        expect(screen.queryByText("Organism")).not.toBeInTheDocument();
+
+        renderWithFormik(rerender, <ReferenceForm />, initialValues, onSubmit, mode);
+        expect(screen.getByText("Organism")).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Organism" })).toHaveValue(initialValues.organism);
     });
 
-    it("should render organism field when [mode=empty]", () => {
-        props.mode = "empty";
-        const wrapper = shallow(<ReferenceForm {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
+    it.each(["Name", "Organism", "Description"])("should call onChange() when %p input changes", name => {
+        mode = "edit";
+        const newValue = `${initialValues[name.toLowerCase()]} changed`;
 
-    it.each(["name", "organism", "description"])("should call onChange() when %p input changes", name => {
-        props.mode = "empty";
-        const wrapper = shallow(<ReferenceForm {...props} />);
-        const e = { target: { name, value: "Baz" } };
-        wrapper
-            .find(name === "description" ? TextArea : Input)
-            .at(name === "organism" ? 1 : 0)
-            .simulate("change", e);
-        expect(props.onChange).toHaveBeenCalledWith(e);
+        renderWithFormik(rtlRender, <ReferenceForm />, initialValues, onSubmit, mode);
+        userEvent.clear(screen.getByRole("textbox", { name }));
+        userEvent.type(screen.getByRole("textbox", { name }), newValue);
+        expect(screen.getByRole("textbox", { name })).toHaveValue(newValue);
     });
 });

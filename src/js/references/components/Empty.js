@@ -1,89 +1,54 @@
+import { Form, Formik } from "formik";
 import React from "react";
 import { connect } from "react-redux";
+import * as Yup from "yup";
 import { Alert, Button } from "../../base";
-import { clearError } from "../../errors/actions";
-import { getTargetChange } from "../../utils/utils";
 import { emptyReference } from "../actions";
 import { DataTypeSelection } from "./DataTypeSelection";
 import { ReferenceForm } from "./Form";
+
+const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Required Field"),
+    dataType: Yup.string().required("Required Field")
+});
 
 const getInitialState = () => ({
     name: "",
     description: "",
     dataType: "genome",
     organism: "",
-    errorName: "",
-    errorDataType: "",
     mode: "empty"
 });
 
-export class EmptyReference extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = getInitialState();
-    }
-
-    handleChange = e => {
-        const { name, value, error } = getTargetChange(e.target);
-
-        this.setState({
-            [name]: value,
-            [error]: ""
-        });
+export const EmptyReference = ({ onSubmit }) => {
+    const handleSubmit = ({ name, description, dataType, organism }) => {
+        onSubmit(name, description, dataType, organism);
     };
 
-    handleChangeDataType = dataType => {
-        this.setState({ dataType });
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-
-        if (!this.state.name.length) {
-            this.setState({ errorName: "Required Field" });
-        }
-
-        if (!this.state.dataType.length) {
-            this.setState({ errorDataType: "Required Field" });
-        }
-
-        if (this.state.name.length && this.state.dataType.length) {
-            this.props.onSubmit(this.state.name, this.state.description, this.state.dataType, this.state.organism);
-        }
-    };
-
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <Alert>
-                    <strong>Create an empty reference.</strong>
-                </Alert>
-                <ReferenceForm
-                    description={this.state.description}
-                    errorFile={this.state.errorFile}
-                    errorSelect={this.state.errorSelect}
-                    errorName={this.state.errorName}
-                    name={this.state.name}
-                    mode={this.state.mode}
-                    organism={this.state.organism}
-                    onChange={this.handleChange}
-                />
-                <DataTypeSelection onSelect={this.handleChangeDataType} dataType={this.state.dataType} />
-                <Button type="submit" icon="save" color="blue">
-                    Save
-                </Button>
-            </form>
-        );
-    }
-}
+    return (
+        <Formik initialValues={getInitialState()} onSubmit={handleSubmit} validationSchema={validationSchema}>
+            {({ errors, touched, setFieldValue, values }) => (
+                <Form>
+                    <Alert>
+                        <strong>Create an empty reference.</strong>
+                    </Alert>
+                    <ReferenceForm errors={errors} touched={touched} mode={"empty"} />
+                    <DataTypeSelection
+                        onSelect={datatype => setFieldValue("dataType", datatype)}
+                        dataType={values.dataType}
+                    />
+                    <Button type="submit" icon="save" color="blue">
+                        Save
+                    </Button>
+                </Form>
+            )}
+        </Formik>
+    );
+};
 
 export const mapDispatchToProps = dispatch => ({
     onSubmit: (name, description, dataType, organism) => {
         dispatch(emptyReference(name, description, dataType, organism));
-    },
-
-    onClearError: error => {
-        dispatch(clearError(error));
     }
 });
 

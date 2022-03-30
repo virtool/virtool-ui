@@ -14,21 +14,17 @@ export const create = ({ name, description, dataType, organism }) =>
 
 export const edit = ({ refId, update }) => Request.patch(`/api/refs/${refId}`).send(update);
 
-export const importReference = ({ name, description, dataType, organism, fileId }) =>
+export const importReference = ({ name, description, fileId }) =>
     Request.post("/api/refs").send({
         name,
         description,
-        data_type: dataType,
-        organism,
         import_from: fileId
     });
 
-export const cloneReference = ({ name, description, dataType, organism, refId }) =>
+export const cloneReference = ({ name, description, refId }) =>
     Request.post("/api/refs").send({
         name,
         description,
-        data_type: dataType,
-        organism,
         clone_from: refId
     });
 

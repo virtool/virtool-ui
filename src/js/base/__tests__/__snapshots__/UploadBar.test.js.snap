@@ -18,6 +18,7 @@ exports[`<UploadBar /> should render 1`] = `
   >
     <input
       autoComplete="off"
+      data-testid="upload-input"
       multiple={true}
       onChange={[Function]}
       onClick={[Function]}
@@ -64,6 +65,7 @@ exports[`<UploadBar /> should render optional message 1`] = `
   >
     <input
       autoComplete="off"
+      data-testid="upload-input"
       multiple={true}
       onChange={[Function]}
       onClick={[Function]}
