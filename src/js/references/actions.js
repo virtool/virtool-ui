@@ -64,31 +64,21 @@ export const editReference = createAction(EDIT_REFERENCE.REQUESTED, (refId, upda
     payload: { refId, update }
 }));
 
-export const importReference = createAction(
-    IMPORT_REFERENCE.REQUESTED,
-    (name, description, dataType, organism, fileId) => ({
-        payload: {
-            name,
-            description,
-            dataType,
-            organism,
-            fileId
-        }
-    })
-);
+export const importReference = createAction(IMPORT_REFERENCE.REQUESTED, (name, description, fileId) => ({
+    payload: {
+        name,
+        description,
+        fileId
+    }
+}));
 
-export const cloneReference = createAction(
-    CLONE_REFERENCE.REQUESTED,
-    (name, description, dataType, organism, refId) => ({
-        payload: {
-            name,
-            description,
-            dataType,
-            organism,
-            refId
-        }
-    })
-);
+export const cloneReference = createAction(CLONE_REFERENCE.REQUESTED, (name, description, refId) => ({
+    payload: {
+        name,
+        description,
+        refId
+    }
+}));
 
 export const remoteReference = createAction(REMOTE_REFERENCE.REQUESTED);
 

@@ -56,7 +56,7 @@ export const UploadOverlay = ({ uploads }) => {
 };
 
 export const mapStateToProps = state => {
-    return { uploads: reverse(reject(state.files.uploads, { fileType: "reference" })) };
+    return { uploads: reverse(reject(state.files.uploads, { type: "reference" })) };
 };
 
 export default connect(mapStateToProps)(UploadOverlay);

@@ -102,26 +102,23 @@ describe("References Action Creators:", () => {
     it("importReference", () => {
         const name = "import";
         const description = "import reference";
-        const dataType = "genome";
-        const organism = "virus";
         const fileId = "test-file.txt";
-        const result = importReference(name, description, dataType, organism, fileId);
+        const result = importReference(name, description, fileId);
         expect(result).toEqual({
             type: IMPORT_REFERENCE.REQUESTED,
-            payload: { name, description, dataType, organism, fileId }
+            payload: { name, description, fileId }
         });
     });
 
     it("cloneReference", () => {
         const name = "clone";
         const description = "clone reference";
-        const dataType = "genome";
-        const organism = "virus";
+
         const refId = "123abc";
-        const result = cloneReference(name, description, dataType, organism, refId);
+        const result = cloneReference(name, description, refId);
         expect(result).toEqual({
             type: CLONE_REFERENCE.REQUESTED,
-            payload: { name, description, dataType, organism, refId }
+            payload: { name, description, refId }
         });
     });
 
