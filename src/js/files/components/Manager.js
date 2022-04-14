@@ -17,7 +17,7 @@ import { findFiles, upload } from "../actions";
 import { getFilteredFileIds } from "../selectors";
 import File from "./File";
 
-class FileManager extends React.Component {
+export class FileManager extends React.Component {
     componentDidMount() {
         this.props.onLoadNextPage(this.props.fileType, this.props.term, 1);
     }
@@ -33,6 +33,10 @@ class FileManager extends React.Component {
         return <File key={id} id={id} />;
     };
 
+    validateExtensions = file => {
+        return this.props.validationRegex.test(file.name) ? null : { code: "Invalid file type" };
+    };
+
     render() {
         if (
             this.props.documents === null ||
@@ -44,7 +48,14 @@ class FileManager extends React.Component {
         let toolbar;
 
         if (this.props.canUpload) {
-            toolbar = <UploadBar onDrop={this.handleDrop} />;
+            toolbar = (
+                <UploadBar
+                    onDrop={this.handleDrop}
+                    message={this.props.message || "Drag file here to upload."}
+                    validator={this.props.validationRegex ? this.validateExtensions : null}
+                    tip={this.props.tip}
+                />
+            );
         } else {
             toolbar = (
                 <Alert color="orange" level>
@@ -88,7 +99,7 @@ class FileManager extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
     const { found_count, page, page_count, total_count } = state.files;
 
     return {
@@ -102,7 +113,7 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
     onDrop: (fileType, acceptedFiles) => {
         forEach(acceptedFiles, file => {
             const localId = createRandomString();

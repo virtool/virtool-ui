@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import { Button } from "./index";
+import { Button, Icon } from "./index";
 
 const StyledUploadBar = styled.div`
     align-items: stretch;
@@ -26,16 +26,20 @@ const StyledUploadBar = styled.div`
         flex: 0 0 auto;
         margin-left: 3px;
     }
+
+    & > div > div:last-child {
+        margin-left: 5px;
+    }
 `;
 
-export const UploadBar = ({ message, onDrop }) => {
+export const UploadBar = ({ message, onDrop, validator, tip }) => {
     const messageComponent = <span>{message && message.length ? message : "Drag file here to upload"}</span>;
 
     const handleDrop = useCallback(acceptedFiles => {
         onDrop(acceptedFiles);
     }, []);
 
-    const { getRootProps, getInputProps, isDragAccept, open } = useDropzone({ onDrop: handleDrop });
+    const { getRootProps, getInputProps, isDragAccept, open } = useDropzone({ onDrop: handleDrop, validator });
 
     const rootProps = getRootProps({
         onClick: e => e.stopPropagation()
@@ -46,6 +50,9 @@ export const UploadBar = ({ message, onDrop }) => {
             <div {...rootProps}>
                 <input {...getInputProps()} data-testid="upload-input" />
                 {messageComponent}
+                {tip && tip.length && (
+                    <Icon aria-label="upload information" color="black" tip={tip} tipPlacement="top" />
+                )}
             </div>
             <Button color="blue" icon="upload" onClick={open}>
                 Upload
