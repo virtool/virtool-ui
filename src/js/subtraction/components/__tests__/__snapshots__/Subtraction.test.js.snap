@@ -50,5 +50,8 @@ exports[`<Subtraction /> should render 1`] = `
 exports[`<SubtractionFileManager /> should render 1`] = `
 <Connect(FileManager)
   fileType="subtraction"
+  message="Drag FASTA files here to upload"
+  tip="Accepts files ending in fa, fasta, fa.gz, or fasta.gz."
+  validationRegex={/\\.\\(\\?:fa\\|fasta\\)\\(\\?:\\.gz\\|\\.gzip\\)\\?\\$/}
 />
 `;
