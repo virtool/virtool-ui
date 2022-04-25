@@ -70,11 +70,11 @@ export class Login extends React.Component {
             <WallContainer>
                 <WallDialog>
                     <WallLoginContainer>
-                        <WallTitle />
-                        <WallHeader>Login</WallHeader>
-                        {window.b2c.use && <B2cLogin />}
-                        <form onSubmit={this.handleSubmit}>
-                            <BoxGroupSection>
+                        <BoxGroupSection>
+                            <WallTitle />
+                            <WallHeader>Login</WallHeader>
+                            {window.b2c.use && <B2cLogin />}
+                            <form onSubmit={this.handleSubmit}>
                                 <WallSubheader>
                                     Sign in with your {window.b2c.use && "legacy"} Virtool account
                                 </WallSubheader>
@@ -109,8 +109,8 @@ export class Login extends React.Component {
                                 <LoginButton type="submit" color="blue">
                                     Login
                                 </LoginButton>
-                            </BoxGroupSection>
-                        </form>
+                            </form>
+                        </BoxGroupSection>
                     </WallLoginContainer>
                 </WallDialog>
             </WallContainer>
