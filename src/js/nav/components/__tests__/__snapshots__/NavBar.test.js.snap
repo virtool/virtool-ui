@@ -3,7 +3,9 @@
 exports[`<Bar /> should render 1`] = `
 <NavBar__StyledNavBar>
   <NavBar__NavBarLeft>
-    <NavBar__NavBarLogo />
+    <NavBar__NavBarLogo
+      color="white"
+    />
     <NavBarItem
       to="/home"
     >

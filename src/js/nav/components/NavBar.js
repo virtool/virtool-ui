@@ -56,7 +56,7 @@ const StyledNavBar = styled.div`
 export const Bar = ({ administrator, dev, userId, onLogout }) => (
     <StyledNavBar>
         <NavBarLeft>
-            <NavBarLogo />
+            <NavBarLogo color="white" />
             <NavBarItem to="/home">Home</NavBarItem>
             <NavBarItem to="/jobs">Jobs</NavBarItem>
             <NavBarItem to="/samples">Samples</NavBarItem>

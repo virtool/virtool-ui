@@ -11,8 +11,6 @@ const StyledB2CLogin = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    margin: 10px 0px;
-    padding: 0px 15px;
 `;
 
 const BetaTag = styled.span`
