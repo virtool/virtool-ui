@@ -33,7 +33,6 @@ const HistoryList = ({ canModify, history, revert, unbuilt }) => {
                     <Badge>{changes.length}</Badge>
                 </h2>
             </BoxGroupHeader>
-            {/*changeComponents contains the bug*/}
             {changeComponents}
         </BoxGroup>
     );
