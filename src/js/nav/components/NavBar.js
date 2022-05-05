@@ -66,14 +66,6 @@ export const Bar = ({ administrator, dev, userId, onLogout }) => (
         </NavBarLeft>
 
         <NavBarRight>
-            <NavBarItem target="_blank" to="//gitter.im/virtool/virtool" rel="noopener noreferrer">
-                <Icon name="comments" />
-            </NavBarItem>
-
-            <NavBarItem target="_blank" to="//virtool.ca/docs/manual/start/installation/" rel="noopener noreferrer">
-                <Icon name="book" />
-            </NavBarItem>
-
             {dev && (
                 <NavBarItem to={{ state: { devCommands: true } }}>
                     <Icon color="red" name="bug" />
@@ -90,11 +82,11 @@ export const Bar = ({ administrator, dev, userId, onLogout }) => (
                     <DropdownMenuLink to="/account">Account</DropdownMenuLink>
                     {administrator && <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>}
                     <DropdownMenuLink
-                        to="//gitreports.com/issue/virtool/virtool"
                         target="_blank"
+                        to="//virtool.ca/docs/manual/start/installation/"
                         rel="noopener noreferrer"
                     >
-                        Report Issue
+                        Documentation
                     </DropdownMenuLink>
                     <DropdownMenuItem onSelect={onLogout}>Logout</DropdownMenuItem>
                 </DropdownMenuList>
