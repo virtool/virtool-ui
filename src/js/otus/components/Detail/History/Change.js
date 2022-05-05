@@ -107,7 +107,7 @@ export const Change = ({ id, createdAt, description, methodName, otu, unbuilt, u
                 <span>{description || "No Description"}</span>
             </Description>
 
-            <Attribution time={createdAt} user={user.id} verb="" />
+            <Attribution time={createdAt} user={user.handle} verb="" />
 
             {unbuilt && <Icon name="history" tip="Revert" onClick={handleRevert} />}
         </StyledChange>
