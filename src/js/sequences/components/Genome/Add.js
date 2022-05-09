@@ -24,6 +24,8 @@ export const AddGenomeSequence = ({ isolateId, otuId, show, onClearError, onHide
         const { accession, definition, host, sequence } = data;
         onClearError();
         onSave(otuId, isolateId, accession, definition, host, segment, sequence);
+        updateData({ accession: "", definition: "", host: "", sequence: "" });
+        setSegment();
     };
 
     const errors = {};
