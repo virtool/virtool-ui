@@ -38,34 +38,10 @@ exports[`<Bar /> should render 1`] = `
     </NavBarItem>
   </NavBar__NavBarLeft>
   <NavBar__NavBarRight>
-    <NavBarItem
-      rel="noopener noreferrer"
-      target="_blank"
-      to="//gitter.im/virtool/virtool"
-    >
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="comments"
-      />
-    </NavBarItem>
-    <NavBarItem
-      rel="noopener noreferrer"
-      target="_blank"
-      to="//virtool.ca/docs/manual/start/installation/"
-    >
-      <Icon
-        faStyle="fas"
-        fixedWidth={false}
-        name="book"
-      />
-    </NavBarItem>
     <Menu>
       <NavBar__NavDropdownButton>
-        <Icon
-          faStyle="fas"
-          fixedWidth={false}
-          name="user"
+        <InitialIcon
+          size="md"
         />
         <span />
         <Icon
@@ -75,6 +51,13 @@ exports[`<Bar /> should render 1`] = `
         />
       </NavBar__NavDropdownButton>
       <Dropdown__DropdownMenuList>
+        <Dropdown__DropdownMenuLink
+          to="/account"
+        >
+          Signed in as 
+          <b />
+        </Dropdown__DropdownMenuLink>
+        <Divider />
         <Dropdown__DropdownMenuLink
           to="/account"
         >
@@ -88,9 +71,9 @@ exports[`<Bar /> should render 1`] = `
         <Dropdown__DropdownMenuLink
           rel="noopener noreferrer"
           target="_blank"
-          to="//gitreports.com/issue/virtool/virtool"
+          to="//virtool.ca/docs/manual/start/installation/"
         >
-          Report Issue
+          Documentation
         </Dropdown__DropdownMenuLink>
         <Dropdown__DropdownMenuItem
           onSelect={[MockFunction]}

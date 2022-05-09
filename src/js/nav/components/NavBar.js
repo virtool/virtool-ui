@@ -1,9 +1,18 @@
 import { MenuButton } from "@reach/menu-button";
-import React from "react";
+import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { logout } from "../../account/actions";
-import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, VTLogo } from "../../base";
+import {
+    Dropdown,
+    DropdownMenuItem,
+    DropdownMenuLink,
+    DropdownMenuList,
+    Icon,
+    VTLogo,
+    Divider,
+    InitialIcon
+} from "../../base";
 import { NavBarItem } from "./NavBarItem";
 
 const NavBarLeft = styled.div`
@@ -53,7 +62,7 @@ const StyledNavBar = styled.div`
     z-index: 90;
 `;
 
-export const Bar = ({ administrator, dev, userId, onLogout }) => (
+export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
     <StyledNavBar>
         <NavBarLeft>
             <NavBarLogo color="white" />
@@ -74,11 +83,16 @@ export const Bar = ({ administrator, dev, userId, onLogout }) => (
 
             <Dropdown>
                 <NavDropdownButton>
-                    <Icon name="user" />
+                    <InitialIcon handle={handle} size="md"></InitialIcon>
+
                     <span>{userId}</span>
                     <Icon name="caret-down" />
                 </NavDropdownButton>
                 <DropdownMenuList>
+                    <DropdownMenuLink to="/account">
+                        Signed in as <b>{handle}</b>
+                    </DropdownMenuLink>
+                    <Divider />
                     <DropdownMenuLink to="/account">Account</DropdownMenuLink>
                     {administrator && <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>}
                     <DropdownMenuLink
@@ -98,7 +112,8 @@ export const Bar = ({ administrator, dev, userId, onLogout }) => (
 export const mapStateToProps = state => ({
     ...state.account,
     dev: state.app.dev,
-    pending: state.app.pending
+    pending: state.app.pending,
+    handle: state.account.handle
 });
 
 export const mapDispatchToProps = dispatch => ({
