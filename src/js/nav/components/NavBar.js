@@ -3,8 +3,9 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { logout } from "../../account/actions";
-import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, VTLogo } from "../../base";
+import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, InitialIcon, VTLogo } from "../../base";
 import { NavBarItem } from "./NavBarItem";
+import { getAccountHandle } from "../../account/selectors";
 
 const NavBarLeft = styled.div`
     display: flex;
@@ -53,7 +54,12 @@ const StyledNavBar = styled.div`
     z-index: 90;
 `;
 
-export const Bar = ({ administrator, dev, userId, onLogout }) => (
+const StyledDivider = styled.div`
+    color: ${props => props.theme.color.greyLight};
+    border-top: 2px solid;
+`;
+
+export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
     <StyledNavBar>
         <NavBarLeft>
             <NavBarLogo color="white" />
@@ -74,11 +80,17 @@ export const Bar = ({ administrator, dev, userId, onLogout }) => (
 
             <Dropdown>
                 <NavDropdownButton>
-                    <Icon name="user" />
+                    <InitialIcon handle={handle} size="md" />
+
                     <span>{userId}</span>
                     <Icon name="caret-down" />
                 </NavDropdownButton>
                 <DropdownMenuList>
+                    <DropdownMenuLink to="/account">
+                        Signed in as <strong>{handle}</strong>
+                    </DropdownMenuLink>
+
+                    <StyledDivider />
                     <DropdownMenuLink to="/account">Account</DropdownMenuLink>
                     {administrator && <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>}
                     <DropdownMenuLink
@@ -98,7 +110,8 @@ export const Bar = ({ administrator, dev, userId, onLogout }) => (
 export const mapStateToProps = state => ({
     ...state.account,
     dev: state.app.dev,
-    pending: state.app.pending
+    pending: state.app.pending,
+    handle: getAccountHandle(state)
 });
 
 export const mapDispatchToProps = dispatch => ({

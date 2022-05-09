@@ -40,10 +40,8 @@ exports[`<Bar /> should render 1`] = `
   <NavBar__NavBarRight>
     <Menu>
       <NavBar__NavDropdownButton>
-        <Icon
-          faStyle="fas"
-          fixedWidth={false}
-          name="user"
+        <InitialIcon
+          size="md"
         />
         <span />
         <Icon
@@ -53,6 +51,13 @@ exports[`<Bar /> should render 1`] = `
         />
       </NavBar__NavDropdownButton>
       <Dropdown__DropdownMenuList>
+        <Dropdown__DropdownMenuLink
+          to="/account"
+        >
+          Signed in as 
+          <strong />
+        </Dropdown__DropdownMenuLink>
+        <NavBar__StyledDivider />
         <Dropdown__DropdownMenuLink
           to="/account"
         >
