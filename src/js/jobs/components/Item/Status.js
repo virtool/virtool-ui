@@ -27,23 +27,13 @@ export const JobStatus = ({ pad, state }) => {
         );
     }
 
-    if (state === "complete") {
-        return (
-            <StyledJobStatus pad={pad}>
-                <Icon name="check fa-fw" color="green" />
-                <span>{state}</span>
-            </StyledJobStatus>
-        );
-    }
-
-    if (state === "error" || state === "cancelled" || state === "terminated") {
-        return (
-            <StyledJobStatus pad={pad}>
-                <Icon name="times fa-fw" color="red" />
-                <span>{state}</span>
-            </StyledJobStatus>
-        );
-    }
-
-    return null;
+    return (
+        <StyledJobStatus pad={pad}>
+            <Icon
+                name={`${state === "complete" ? "check" : state === "terminated" ? "skull" : "times"} fa-fw`}
+                color={`${state === "complete" ? "green" : "red"}`}
+            />
+            <span>{state}</span>
+        </StyledJobStatus>
+    );
 };
