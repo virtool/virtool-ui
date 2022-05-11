@@ -18,6 +18,7 @@ import labelsReducer from "../labels/reducer";
 import subtractionsReducer from "../subtraction/reducer";
 import tasksReducer from "../tasks/reducer";
 import usersReducer from "../users/reducer";
+import { formsReducer } from "../forms/reducer";
 import { CREATE_FIRST_USER, LOGIN, LOGOUT, RESET_PASSWORD, SET_INITIAL_STATE } from "./actionTypes";
 import rootSaga from "./sagas";
 import { createReducer } from "@reduxjs/toolkit";
@@ -76,6 +77,7 @@ export const createAppStore = history => {
             caches: cacheReducer,
             errors: errorsReducer,
             files: filesReducer,
+            forms: formsReducer,
             groups: groupsReducer,
             hmms: hmmsReducer,
             indexes: indexesReducer,

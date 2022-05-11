@@ -9,7 +9,7 @@ const StyledSidebar = styled(SideContainer)`
     flex-direction: column;
     display: flex;
     width: 320px;
-    z-index: 0;
+    z-index: 1;
 `;
 
 export const Sidebar = ({ className, sampleLabels, defaultSubtractions, onUpdate }) => (

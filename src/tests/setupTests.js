@@ -14,10 +14,14 @@ import { theme } from "../js/app/theme";
 // jest configuration settings specified in package.json instead of here.
 Enzyme.configure({ adapter: new Adapter() });
 
-const renderWithProviders = (ui, createAppStore) => {
+const wrapWithProviders = (ui, createAppStore) => {
     let wrappedUi = <ThemeProvider theme={theme}>{ui}</ThemeProvider>;
     if (createAppStore) wrappedUi = <Provider store={createAppStore()}> {wrappedUi} </Provider>;
-    return rtlRender(wrappedUi);
+    return wrappedUi;
+};
+
+const renderWithProviders = (ui, createAppStore) => {
+    return rtlRender(wrapWithProviders(ui, createAppStore));
 };
 
 // Globals are defined here to limit import redundancies.
@@ -26,4 +30,5 @@ global.mount = mount;
 global.React = React;
 global.render = render;
 global.renderWithProviders = renderWithProviders;
+global.wrapWithProviders = wrapWithProviders;
 global.shallow = shallow;
