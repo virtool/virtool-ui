@@ -47,8 +47,15 @@ const StyledJobStepDescription = styled.div`
     }
 `;
 
-export const JobStepDescription = ({ stage, state, workflow, timestamp }) => {
-    const { description, title } = getStepDescription(stage, state, workflow);
+export const JobStepDescription = ({ stage, state, workflow, timestamp, step }) => {
+    //const { description, title } = getStepDescription(stage, state, workflow);
+    const { description, title } =
+        step.step_name !== null && step.step_description !== null
+            ? {
+                  title: step.step_name,
+                  description: step.step_description
+              }
+            : getStepDescription(stage, state, workflow);
 
     return (
         <StyledJobStepDescription>
@@ -112,7 +119,7 @@ const JobStep = ({ complete, step, workflow }) => (
         <JobStepIconContainer>
             <JobStepIcon state={step.state} complete={complete} />
         </JobStepIconContainer>
-        <JobStepDescription {...step} workflow={workflow} />
+        <JobStepDescription {...step} workflow={workflow} step={step} />
     </StyledJobStep>
 );
 

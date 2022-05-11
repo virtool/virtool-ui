@@ -10,10 +10,10 @@ import { getFontSize, fontWeight, getColor } from "../../../app/theme";
 import { xor } from "lodash-es";
 
 const SampleLabelInner = ({ name, color, description }) => (
-    <>
+    <div>
         <SmallSampleLabel color={color} name={name} />
-        <p>{description}</p>
-    </>
+        <StyledParagraph>{description}</StyledParagraph>
+    </div>
 );
 
 const SampleLabelsFooter = styled.div`
@@ -24,6 +24,11 @@ const SampleLabelsFooter = styled.div`
         font-size: ${getFontSize("md")};
         font-weight: ${fontWeight.thick};
     }
+`;
+
+const StyledParagraph = styled.div`
+    color: ${props => getColor({ theme: props.theme, color: "greyDarkest" })};
+    font-size: ${getFontSize("sm")};
 `;
 
 export const SampleLabels = ({ allLabels, sampleLabels, onUpdate }) => (
