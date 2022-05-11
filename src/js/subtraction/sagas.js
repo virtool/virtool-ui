@@ -9,6 +9,7 @@ import {
     REMOVE_SUBTRACTION,
     SHORTLIST_SUBTRACTIONS
 } from "../app/actionTypes";
+import { deletePersistentFormState } from "../forms/actions";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as subtractionAPI from "./api";
 
@@ -26,6 +27,7 @@ export function* createSubtraction(action) {
 
     if (resp.ok) {
         yield put(push("/subtractions"));
+        deletePersistentFormState("create-subtraction");
     }
 }
 

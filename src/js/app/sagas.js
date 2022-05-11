@@ -17,6 +17,7 @@ import { watchLabels } from "../labels/sagas";
 import { watchSubtraction } from "../subtraction/sagas";
 import { watchTasks } from "../tasks/sagas";
 import { watchUsers } from "../users/sagas";
+import { watchForm } from "../forms/sagas";
 import { PUSH_STATE } from "./actionTypes";
 
 function* pushState(action) {
@@ -52,7 +53,8 @@ function* rootSaga() {
         watchSettings(),
         watchGroups(),
         watchUsers(),
-        watchReferences()
+        watchReferences(),
+        watchForm()
     ]);
 }
 

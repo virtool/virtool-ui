@@ -14,11 +14,12 @@ import {
     WS_UPDATE_SAMPLE
 } from "../app/actionTypes";
 import * as filesAPI from "../files/api";
+import { deletePersistentFormState } from "../forms/actions";
 import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
+import { getSampleSucceeded } from "./actions";
 import * as samplesAPI from "./api";
 import { getLabelsFromURL, getSampleDetailId, getTermFromURL, getWorkflowsFromURL } from "./selectors";
 import { createFindURL } from "./utils";
-import { getSampleSucceeded } from "./actions";
 
 export function* watchSamples() {
     yield takeLatest(UPDATE_SEARCH, updateSearch);
@@ -110,6 +111,7 @@ export function* createSample(action) {
 
     if (resp.ok) {
         yield put(push("/samples"));
+        yield put(deletePersistentFormState("create-sample"));
     }
 }
 

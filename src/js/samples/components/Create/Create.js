@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import { filter, find, get } from "lodash-es";
+import { filter, find, get, intersectionWith } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -19,6 +19,7 @@ import {
     ViewHeaderTitle
 } from "../../../base";
 import { clearError } from "../../../errors/actions";
+import PersistForm from "../../../forms/components/PersistForm";
 import { listLabels } from "../../../labels/actions";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getSubtractionShortlist } from "../../../subtraction/selectors";
@@ -54,7 +55,7 @@ const CreateSampleButtonArea = styled(Box)`
     border: none;
     display: flex;
     grid-column: 2;
-    grid-row: 1;
+    grid-row: 2;
     margin-top: 25px;
     padding: 15px;
 
@@ -63,11 +64,12 @@ const CreateSampleButtonArea = styled(Box)`
         font-weight: ${props => props.theme.fontWeight.thick};
         margin: 0 0 0 auto;
         padding-left: 15px;
+        text-align: center;
     }
 `;
 
 const CreateSampleFields = styled.div`
-    grid-row: 2;
+    grid-row: 3;
 `;
 
 const CreateSampleInputError = styled(InputError)`
@@ -88,22 +90,49 @@ const CreateSampleForm = styled(Form)`
 
 const CreateSampleName = styled(InputGroup)`
     grid-column: 1;
-`;
-
-const CreateSampleSidebar = styled(Field)`
     grid-row: 2;
-    grid-column: 2;
 `;
 
-export const CreateSample = props => {
-    useEffect(() => {
-        props.onLoadSubtractionsAndFiles();
-        props.onListLabels();
-    }, []);
+const SampleSidebar = styled(Field)`
+    grid-row: 3;
+`;
 
-    if (props.subtractions === null || props.readyReads === null || props.allLabels === null) {
-        return <LoadingPlaceholder margin="36px" />;
-    }
+const AlertContainer = styled.div`
+    grid-column: 1 / 3;
+    grid-row: 1;
+`;
+
+const castValues = (readyReads, subtractions, allLabels) => values => {
+    const readFiles = intersectionWith(
+        values.readFiles,
+        readyReads,
+        (readFile, readyRead) => readFile === readyRead.id
+    );
+    const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
+    const subtractionIds = intersectionWith(
+        values.sidebar.subtractionIds,
+        subtractions,
+        (subtractionId, subtraction) => subtractionId === subtraction.id
+    );
+    return { ...values, readFiles, sidebar: { labels, subtractionIds } };
+};
+
+export const CreateSample = ({
+    error,
+    forceGroupChoice,
+    groups,
+    readyReads,
+    subtractions,
+    allLabels,
+    onLoadSubtractionsAndFiles,
+    onCreate,
+    onClearError,
+    onListLabels
+}) => {
+    useEffect(() => {
+        onLoadSubtractionsAndFiles();
+        onListLabels();
+    }, []);
 
     const initialValues = {
         name: "",
@@ -112,12 +141,16 @@ export const CreateSample = props => {
         locale: "",
         libraryType: "normal",
         readFiles: [],
-        group: props.forceGroupChoice ? "none" : null,
+        group: forceGroupChoice ? "none" : null,
         sidebar: { labels: [], subtractionIds: [] }
     };
 
+    if (subtractions === null || readyReads === null || allLabels === null) {
+        return <LoadingPlaceholder margin="36px" />;
+    }
+
     const autofill = (selected, setFieldValue) => {
-        const fileName = getFileNameFromId(selected[0], props.readyReads);
+        const fileName = getFileNameFromId(selected[0], readyReads);
         if (fileName) {
             setFieldValue("name", fileName);
         }
@@ -127,8 +160,8 @@ export const CreateSample = props => {
         const { name, isolate, host, locale, libraryType, readFiles, group, sidebar } = values;
         const { subtractionIds, labels } = sidebar;
         // Only send the group if forceGroupChoice is true
-        if (props.forceGroupChoice) {
-            props.onCreate(
+        if (forceGroupChoice) {
+            onCreate(
                 name,
                 isolate,
                 host,
@@ -140,19 +173,24 @@ export const CreateSample = props => {
                 group === "none" ? "" : group
             );
         } else {
-            props.onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
+            onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
         }
     };
-
     return (
         <>
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
-                <CreateSampleInputError>{props.error}</CreateSampleInputError>
+                <CreateSampleInputError>{error}</CreateSampleInputError>
             </ViewHeader>
             <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
                 {({ errors, setFieldValue, touched, values }) => (
                     <CreateSampleForm>
+                        <AlertContainer>
+                            <PersistForm
+                                formName="create-sample"
+                                castValues={castValues(readyReads, subtractions, allLabels)}
+                            />
+                        </AlertContainer>
                         <CreateSampleName>
                             <InputLabel>Name</InputLabel>
                             <InputContainer align="right">
@@ -180,7 +218,7 @@ export const CreateSample = props => {
                                     aria-label="User Group"
                                     name="group"
                                     group={values.group}
-                                    groups={props.groups}
+                                    groups={groups}
                                     onChange={e => setFieldValue("group", e.target.value)}
                                 />
                                 <InputGroup>
@@ -209,7 +247,7 @@ export const CreateSample = props => {
                             <Field
                                 name="readFiles"
                                 as={ReadSelector}
-                                files={props.readyReads}
+                                files={readyReads}
                                 selected={values.readFiles}
                                 onSelect={selection => setFieldValue("readFiles", selection)}
                                 error={touched.readFiles ? errors.readFiles : null}
@@ -222,8 +260,7 @@ export const CreateSample = props => {
                                 <Icon name="clock" /> This will take some time.
                             </p>
                         </CreateSampleButtonArea>
-
-                        <CreateSampleSidebar
+                        <SampleSidebar
                             as={Sidebar}
                             onUpdate={(type, value) => setFieldValue(`sidebar.${type}`, value)}
                             sampleLabels={values.sidebar.labels}

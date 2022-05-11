@@ -178,3 +178,34 @@ export const toScientificNotation = number => {
 
 export const checkAdminOrPermission = (state, permission) =>
     getAccountAdministrator(state) || state.account.permissions[permission];
+
+/**
+ * Stores the passed object in local storage at key given
+ *
+ * @func
+ * @param {string} key
+ * @param {data} object
+ * @returns {undefined}
+ */
+export const setSessionStorage = (key, data) => {
+    try {
+        window.sessionStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {
+        //continue running regardless of error
+    }
+};
+
+/**
+ * Return the object stored in session storage at the given key
+ *
+ * @func
+ * @param {string} key
+ * @returns {object}
+ */
+export const getSessionStorage = key => {
+    try {
+        return JSON.parse(window.sessionStorage.getItem(key));
+    } catch (e) {
+        return null;
+    }
+};

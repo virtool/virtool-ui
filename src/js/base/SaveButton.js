@@ -1,8 +1,8 @@
 import React from "react";
 import { Button } from "./index";
 
-export const SaveButton = props => (
-    <Button type="submit" color="blue" icon="save" {...props}>
-        {props.altText || "Save"}
+export const SaveButton = ({ altText, disabled }) => (
+    <Button type="submit" color="blue" icon="save" disabled={disabled}>
+        {altText || "Save"}
     </Button>
 );

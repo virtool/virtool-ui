@@ -32,3 +32,13 @@ export const useElementSize = () => {
 
     return [ref, size];
 };
+
+export const useDidUpdateEffect = (onUpdate, deps) => {
+    const firstRef = useRef(false);
+    useEffect(() => {
+        if (firstRef.current) {
+            onUpdate();
+        }
+        firstRef.current = true;
+    }, deps);
+};

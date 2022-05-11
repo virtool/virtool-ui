@@ -22,6 +22,7 @@ describe("<CreateSample>", () => {
     let state;
 
     beforeEach(() => {
+        window.sessionStorage.clear();
         props = {
             error: "",
             readyReads: Array(3)
@@ -32,6 +33,14 @@ describe("<CreateSample>", () => {
                     name_on_disk: `${id}-${readFileName}.fq.gz`,
                     size: 0
                 })),
+            allLabels: [
+                { color: "#3B82F6", count: 0, description: "", id: 2, name: "testlabel1" },
+                { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" }
+            ],
+            subtractions: [
+                { name: "Foo Subtraction", id: "foo_subtraction", ready: true },
+                { name: "Bar Subtraction", id: "bar_subtraction", ready: true }
+            ],
             forceGroupChoice: false,
             onCreate: jest.fn(),
             onLoadSubtractionsAndFiles: jest.fn(),
@@ -58,7 +67,8 @@ describe("<CreateSample>", () => {
                     { name: "Foo Subtraction", id: "foo_subtraction", ready: true },
                     { name: "Bar Subtraction", id: "bar_subtraction", ready: true }
                 ]
-            }
+            },
+            forms: { formState: {} }
         };
     });
 
@@ -168,6 +178,22 @@ describe("<CreateSample>", () => {
                 [state.labels.documents[0].id]
             )
         );
+    });
+
+    it("should load form state from redux on first render", () => {
+        const { name, isolate, host, locale } = values;
+        state.forms.formState["create-sample"] = {
+            ...values,
+            sidebar: { labels: [state.labels.documents[0].id], subtractionIds: [state.subtraction.shortlist[0].id] }
+        };
+
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(name);
+        expect(screen.getByLabelText("Isolate")).toHaveValue(isolate);
+        expect(screen.getByLabelText("Host")).toHaveValue(host);
+        expect(screen.getByLabelText("Locale")).toHaveValue(locale);
+        expect(screen.getByText(state.subtraction.shortlist[0].name)).toBeInTheDocument();
+        expect(screen.getByText(state.labels.documents[0].name)).toBeInTheDocument();
     });
 
     it("should update the sample name when the magic icon is pressed", async () => {
