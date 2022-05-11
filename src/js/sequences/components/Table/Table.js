@@ -9,7 +9,6 @@ const SequenceCell = styled.td`
 
     textarea {
         width: 100%;
-        margin: 0 0 -4px 0;
         padding: 5px;
         border: none;
     }
