@@ -34,17 +34,20 @@ export const SampleSidebarSelector = ({
 }) => {
     const [results, term, setTerm] = useFuse(sampleItems, ["name"], [sampleId]);
     const [attributes, show, styles, setPopperElement, setReferenceElement, setShow] = usePopover();
-    const sampleItemComponents = results.map(item => (
-        <SampleSidebarSelectorItem
-            key={item.id}
-            selected={selectedItems.includes(item.id)}
-            partiallySelected={partiallySelectedItems.includes(item.id)}
-            {...item}
-            onClick={onUpdate}
-        >
-            {render(item)}
-        </SampleSidebarSelectorItem>
-    ));
+    const sampleItemComponents = results.map(item => {
+        const result = item.id ? item : item.item;
+        return (
+            <SampleSidebarSelectorItem
+                key={result.id}
+                selected={selectedItems.includes(result.id)}
+                partiallySelected={partiallySelectedItems.includes(result.id)}
+                {...result}
+                onClick={onUpdate}
+            >
+                {render(result)}
+            </SampleSidebarSelectorItem>
+        );
+    });
 
     return (
         <>
