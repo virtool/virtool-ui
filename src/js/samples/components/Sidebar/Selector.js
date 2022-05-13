@@ -11,7 +11,7 @@ const SampleSidebarSelectorInputContainer = styled(BoxGroupSection)`
     padding: 10px;
 `;
 
-const StyledLinkButton = styled.div`
+const SampleSidebarSelectorButton = styled.div`
     display: flex;
 
     a {
@@ -20,6 +20,11 @@ const StyledLinkButton = styled.div`
         font-weight: ${fontWeight.thick};
         padding: 10px 10px 10px 0px;
     }
+`;
+
+const SampleItemComponentsContainer = styled.div`
+    max-height: 300px;
+    overflow-y: scroll;
 `;
 
 export const SampleSidebarSelector = ({
@@ -72,10 +77,12 @@ export const SampleSidebarSelector = ({
                             autoFocus
                         />
                     </SampleSidebarSelectorInputContainer>
-                    {sampleItemComponents}
-                    <StyledLinkButton>
-                        <Link to={manageLink}> Manage</Link>
-                    </StyledLinkButton>
+                    <SampleItemComponentsContainer>
+                        {sampleItemComponents}
+                        <SampleSidebarSelectorButton>
+                            <Link to={manageLink}> Manage</Link>
+                        </SampleSidebarSelectorButton>
+                    </SampleItemComponentsContainer>
                 </PopoverBody>
             )}
         </>
