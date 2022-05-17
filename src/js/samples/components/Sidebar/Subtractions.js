@@ -15,7 +15,7 @@ const SampleSubtractionFooter = styled.div`
     display: flex;
     color: ${props => getColor({ theme: props.theme, color: "greyDarkest" })};
     a {
-        margin-left: 20px;
+        margin-left: 5px;
         font-size: ${getFontSize("md")};
         font-weight: ${fontWeight.thick};
     }
@@ -41,7 +41,7 @@ export const DefaultSubtractions = ({ defaultSubtractions, subtractionOptions, o
         />
         {Boolean(subtractionOptions.length) || (
             <SampleSubtractionFooter>
-                No subtractions found <Link to="/subtractions">Create one</Link>.
+                No subtractions found. <Link to="/subtractions">Create one</Link>.
             </SampleSubtractionFooter>
         )}
     </SideBarSection>
