@@ -219,6 +219,13 @@ export const getStepDescription = (stage, state, workflow) => {
         };
     }
 
+    if (state === "terminated") {
+        return {
+            title: "Terminated",
+            description: "There was a system malfunction"
+        };
+    }
+
     return get(stepDescriptions, [workflow, stage], {
         description: "",
         title: startCase(stage)
