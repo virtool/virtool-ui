@@ -31,7 +31,7 @@ const JobStepTimestamp = ({ timestamp }) => (
     </StyledJobStepTimestamp>
 );
 
-const StyledJobStepDescription = styled.div`
+const SampleJobStepDescription = styled.div`
     display: flex;
     flex-direction: column;
 
@@ -47,22 +47,14 @@ const StyledJobStepDescription = styled.div`
     }
 `;
 
-export const JobStepDescription = ({ stage, state, workflow, timestamp, step }) => {
-    //const { description, title } = getStepDescription(stage, state, workflow);
-    const { description, title } =
-        step.step_name !== null && step.step_description !== null
-            ? {
-                  title: step.step_name,
-                  description: step.step_description
-              }
-            : getStepDescription(stage, state, workflow);
-
+export const JobStepDescription = info => {
+    const { description, title } = getStepDescription(info.step);
     return (
-        <StyledJobStepDescription>
+        <SampleJobStepDescription>
             <h4>{title}</h4>
             <p>{description}</p>
-            <JobStepTimestamp timestamp={timestamp} />
-        </StyledJobStepDescription>
+            <JobStepTimestamp timestamp={info.timestamp} />
+        </SampleJobStepDescription>
     );
 };
 
@@ -114,12 +106,12 @@ const StyledJobStep = styled(BoxGroupSection)`
     display: flex;
 `;
 
-const JobStep = ({ complete, step, workflow }) => (
+const JobStep = ({ complete, step }) => (
     <StyledJobStep>
         <JobStepIconContainer>
             <JobStepIcon state={step.state} complete={complete} />
         </JobStepIconContainer>
-        <JobStepDescription {...step} workflow={workflow} step={step} />
+        <JobStepDescription {...step} step={step} />
     </StyledJobStep>
 );
 

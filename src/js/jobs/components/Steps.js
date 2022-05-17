@@ -8,7 +8,7 @@ export const JobSteps = ({ status, workflow }) => {
     const currentIndex = status.length - 1;
 
     const stepComponents = map(status, (step, index) => (
-        <JobStep key={index} complete={index < currentIndex} step={step} workflow={workflow} />
+        <JobStep key={index} complete={index < currentIndex} step={step} />
     ));
 
     return <BoxGroup>{stepComponents}</BoxGroup>;

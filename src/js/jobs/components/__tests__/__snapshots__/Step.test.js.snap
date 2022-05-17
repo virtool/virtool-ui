@@ -12,6 +12,54 @@ exports[`<JobStepDescription /> renders and calls getStepDescription 1`] = `
 </Step__StyledJobStepDescription>
 `;
 
+exports[`<JobStepDescription /> renders correct description when state is Decompress 1`] = `
+<Step__StyledJobStepDescription>
+  <h4>
+    Foo
+  </h4>
+  <p>
+    Bar
+  </p>
+  <JobStepTimestamp />
+</Step__StyledJobStepDescription>
+`;
+
+exports[`<JobStepDescription /> renders correct description when state is waiting 1`] = `
+<Step__StyledJobStepDescription>
+  <h4>
+    Foo
+  </h4>
+  <p>
+    Bar
+  </p>
+  <JobStepTimestamp />
+</Step__StyledJobStepDescription>
+`;
+
+exports[`<JobStepDescription /> renders correct description when step is waiting 1`] = `
+<Step__StyledJobStepDescription>
+  <h4>
+    Foo
+  </h4>
+  <p>
+    Bar
+  </p>
+  <JobStepTimestamp />
+</Step__StyledJobStepDescription>
+`;
+
+exports[`<JobStepDescription /> renders correct title and description when step complete 1`] = `
+<Step__StyledJobStepDescription>
+  <h4>
+    Foo
+  </h4>
+  <p>
+    Bar
+  </p>
+  <JobStepTimestamp />
+</Step__StyledJobStepDescription>
+`;
+
 exports[`<JobStepIcon /> renders correct icon when state cancelled 1`] = `
 <Icon
   color="red"

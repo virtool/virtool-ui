@@ -1,29 +1,36 @@
 jest.mock("../../utils");
-
-import { getStepDescription } from "../../utils";
+import { screen } from "@testing-library/react";
+import * as functions from "../../utils";
 import { JobStepDescription, JobStepIcon } from "../Step";
 
 describe("<JobStepDescription />", () => {
     let props;
-
-    getStepDescription.mockImplementation(() => ({
-        title: "Foo",
-        description: "Bar"
-    }));
-
+    const spyStepDescription = jest.spyOn(functions, "getStepDescription");
     beforeEach(() => {
+        spyStepDescription.mockClear().mockReturnValue({ description: "foo", title: "bar" });
         props = {
-            stage: "bowtie_build",
-            state: "running",
-            workflow: "create_subtraction"
+            step_description: "foo",
+            step_name: "bar",
+            title: "test",
+            timestamp: "2022-05-19T17:48:25.508000Z"
         };
     });
 
-    it("renders and calls getStepDescription", () => {
-        const wrapper = shallow(<JobStepDescription {...props} />);
-        const { stage, state, workflow } = props;
-        expect(getStepDescription).toHaveBeenCalledWith(stage, state, workflow);
-        expect(wrapper).toMatchSnapshot();
+    it("renders correctly", () => {
+        renderWithProviders(<JobStepDescription {...props} />);
+        expect(screen.getByText("foo")).toBeInTheDocument();
+        expect(screen.getByText("bar")).toBeInTheDocument();
+    });
+
+    it("getStepDescription is called 1 time", () => {
+        renderWithProviders(<JobStepDescription {...props} />);
+        expect(functions.getStepDescription).toHaveBeenCalledTimes(1);
+    });
+
+    it("getStepDescription returns correct values", () => {
+        let step = props;
+        let expectedVal = { description: "foo", title: "bar" };
+        expect(functions.getStepDescription(step)).toEqual(expectedVal);
     });
 });
 

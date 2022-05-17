@@ -10,7 +10,6 @@ exports[`<JobSteps /> should render 1`] = `
         "state": "waiting",
       }
     }
-    workflow="bowtie_build"
   />
   <JobStep
     complete={false}
@@ -20,7 +19,6 @@ exports[`<JobSteps /> should render 1`] = `
         "state": "running",
       }
     }
-    workflow="bowtie_build"
   />
 </Box__BoxGroup>
 `;
