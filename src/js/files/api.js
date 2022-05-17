@@ -7,7 +7,8 @@ import { Request } from "../app/request";
 
 export const find = ({ fileType }) =>
     Request.get("/api/uploads").query({
-        type: fileType
+        type: fileType,
+        ready: true
     });
 
 /**
@@ -20,7 +21,8 @@ export const find = ({ fileType }) =>
  */
 export const list = ({ fileType }) =>
     Request.get("/api/uploads").query({
-        type: fileType
+        type: fileType,
+        ready: true
     });
 
 /**
