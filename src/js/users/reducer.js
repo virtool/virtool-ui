@@ -22,10 +22,10 @@ export const initialState = {
 const reducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_USER, (state, action) => {
-            return insert(state, action.payload, "id");
+            return insert(state, action.payload, "handle");
         })
         .addCase(WS_UPDATE_USER, (state, action) => {
-            return update(state, action.payload, "id");
+            return update(state, action.payload, "handle");
         })
         .addCase(WS_REMOVE_USER, (state, action) => {
             return remove(state, action.payload);
@@ -34,7 +34,7 @@ const reducer = createReducer(initialState, builder => {
             state.term = action.payload.term;
         })
         .addCase(FIND_USERS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action.payload, "id");
+            return updateDocuments(state, action.payload, "handle");
         })
         .addCase(GET_USER.REQUESTED, state => {
             state.detail = null;
