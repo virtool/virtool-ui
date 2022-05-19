@@ -57,7 +57,7 @@ exports[`<Bar /> should render 1`] = `
           Signed in as 
           <strong />
         </Dropdown__DropdownMenuLink>
-        <NavBar__StyledDivider />
+        <NavBar__SampleDivider />
         <Dropdown__DropdownMenuLink
           to="/account"
         >

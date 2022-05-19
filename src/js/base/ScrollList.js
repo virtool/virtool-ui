@@ -8,6 +8,8 @@ export const getScrollRatio = () =>
 
 const StyledScrollList = styled.div`
     padding-bottom: 20px;
+    position: relative;
+    z-index: 0;
 `;
 
 export class ScrollList extends React.Component {
