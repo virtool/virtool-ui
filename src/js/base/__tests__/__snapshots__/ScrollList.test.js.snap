@@ -3,6 +3,8 @@
 exports[`<ScrollList /> should render when [noContainer=false] 1`] = `
 .c0 {
   padding-bottom: 20px;
+  position: relative;
+  z-index: 0;
 }
 
 <ScrollList
@@ -49,6 +51,8 @@ exports[`<ScrollList /> should return LoadingPlaceholder when [documents=null] a
 
 .c0 {
   padding-bottom: 20px;
+  position: relative;
+  z-index: 0;
 }
 
 <ScrollList
@@ -103,6 +107,8 @@ exports[`<ScrollList /> should return LoadingPlaceholder when [documents=null] a
 exports[`<ScrollList /> should return React.Fragment when [noContainer=true] 1`] = `
 .c0 {
   padding-bottom: 20px;
+  position: relative;
+  z-index: 0;
 }
 
 <ScrollList

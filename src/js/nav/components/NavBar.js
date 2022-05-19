@@ -54,7 +54,7 @@ const StyledNavBar = styled.div`
     z-index: 90;
 `;
 
-const StyledDivider = styled.div`
+const SampleDivider = styled.div`
     color: ${props => props.theme.color.greyLight};
     border-top: 2px solid;
 `;
@@ -90,7 +90,7 @@ export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
                         Signed in as <strong>{handle}</strong>
                     </DropdownMenuLink>
 
-                    <StyledDivider />
+                    <SampleDivider />
                     <DropdownMenuLink to="/account">Account</DropdownMenuLink>
                     {administrator && <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>}
                     <DropdownMenuLink
