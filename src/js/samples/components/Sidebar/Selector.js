@@ -13,6 +13,11 @@ const SampleSidebarSelectorInputContainer = styled(BoxGroupSection)`
 
 const SampleSidebarSelectorButton = styled.div`
     display: flex;
+    border-top: 1px solid;
+    border-color: ${props => props.theme.color.greyLight};
+    width: 100%;
+    display: flex;
+    align-items: right;
 
     a {
         margin-left: auto;
@@ -77,12 +82,10 @@ export const SampleSidebarSelector = ({
                             autoFocus
                         />
                     </SampleSidebarSelectorInputContainer>
-                    <SampleItemComponentsContainer>
-                        {sampleItemComponents}
-                        <SampleSidebarSelectorButton>
-                            <Link to={manageLink}> Manage</Link>
-                        </SampleSidebarSelectorButton>
-                    </SampleItemComponentsContainer>
+                    <SampleItemComponentsContainer>{sampleItemComponents}</SampleItemComponentsContainer>
+                    <SampleSidebarSelectorButton>
+                        <Link to={manageLink}> Manage</Link>
+                    </SampleSidebarSelectorButton>
                 </PopoverBody>
             )}
         </>
