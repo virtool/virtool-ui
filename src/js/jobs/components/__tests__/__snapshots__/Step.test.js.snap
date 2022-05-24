@@ -1,17 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<JobStepDescription /> renders and calls getStepDescription 1`] = `
-<Step__StyledJobStepDescription>
-  <h4>
-    Foo
-  </h4>
-  <p>
-    Bar
-  </p>
-  <JobStepTimestamp />
-</Step__StyledJobStepDescription>
-`;
-
 exports[`<JobStepIcon /> renders correct icon when state cancelled 1`] = `
 <Icon
   color="red"

@@ -47,14 +47,13 @@ const StyledJobStepDescription = styled.div`
     }
 `;
 
-export const JobStepDescription = ({ stage, state, workflow, timestamp }) => {
-    const { description, title } = getStepDescription(stage, state, workflow);
-
+export const JobStepDescription = ({ step }) => {
+    const { description, title } = getStepDescription(step);
     return (
         <StyledJobStepDescription>
             <h4>{title}</h4>
             <p>{description}</p>
-            <JobStepTimestamp timestamp={timestamp} />
+            <JobStepTimestamp timestamp={step.timestamp} />
         </StyledJobStepDescription>
     );
 };
@@ -107,12 +106,12 @@ const StyledJobStep = styled(BoxGroupSection)`
     display: flex;
 `;
 
-const JobStep = ({ complete, step, workflow }) => (
+const JobStep = ({ complete, step }) => (
     <StyledJobStep>
         <JobStepIconContainer>
             <JobStepIcon state={step.state} complete={complete} />
         </JobStepIconContainer>
-        <JobStepDescription {...step} workflow={workflow} />
+        <JobStepDescription step={step} />
     </StyledJobStep>
 );
 
