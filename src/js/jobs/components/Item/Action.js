@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "../../../base";
 
-export function JobAction({ state, canCancel, canRemove, onCancel, onRemove }) {
+export function JobAction({ state, canCancel, canArchive, onCancel, onArchive }) {
     if (state === "waiting" || state === "running") {
         if (canCancel) {
             return <Icon color="red" name="ban" onClick={onCancel} />;
@@ -10,8 +10,8 @@ export function JobAction({ state, canCancel, canRemove, onCancel, onRemove }) {
         return null;
     }
 
-    if (canRemove) {
-        return <Icon color="red" name="trash" onClick={onRemove} />;
+    if (canArchive) {
+        return <Icon color="red" name="archive" onClick={onArchive} />;
     }
 
     return null;

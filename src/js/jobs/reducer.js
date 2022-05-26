@@ -1,6 +1,14 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { assign } from "lodash-es";
-import { FIND_JOBS, GET_JOB, GET_LINKED_JOB, WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB } from "../app/actionTypes";
+import {
+    ARCHIVE_JOB,
+    FIND_JOBS,
+    GET_JOB,
+    GET_LINKED_JOB,
+    WS_INSERT_JOB,
+    WS_REMOVE_JOB,
+    WS_UPDATE_JOB
+} from "../app/actionTypes";
 import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
 export const initialState = {
@@ -39,6 +47,9 @@ export const jobsReducer = createReducer(initialState, builder => {
         })
         .addCase(GET_JOB.SUCCEEDED, (state, action) => {
             state.detail = action.payload;
+        })
+        .addCase(ARCHIVE_JOB.SUCCEEDED, (state, action) => {
+            return remove(state, action.payload);
         });
 });
 

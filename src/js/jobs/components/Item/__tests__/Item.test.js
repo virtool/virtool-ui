@@ -14,9 +14,9 @@ describe("<JobItem />", () => {
                 handle: "bob"
             },
             canCancel: true,
-            canRemove: true,
+            canArchive: true,
             onCancel: jest.fn(),
-            onRemove: jest.fn()
+            onArchive: jest.fn()
         };
     });
 
@@ -31,11 +31,11 @@ describe("<JobItem />", () => {
         [true, false],
         [false, true],
         [false, false]
-    ])("should render when [canCancel=%p] and [canRemove=%p]", (canCancel, canRemove) => {
+    ])("should render when [canCancel=%p] and [canArchive=%p]", (canCancel, canArchive) => {
         props = {
             ...props,
             canCancel,
-            canRemove
+            canArchive
         };
         const wrapper = shallow(<JobItem {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -54,15 +54,15 @@ describe("mapDispatchToProps", () => {
             payload: { jobId: "foo" }
         });
     });
-    it("should return onRemove() in props", () => {
+    it("should return onArchive() in props", () => {
         const dispatch = jest.fn();
         const props = mapDispatchToProps(dispatch);
 
-        props.onRemove("foo");
+        props.onArchive("foo");
 
         expect(dispatch).toHaveBeenCalledWith({
             payload: { jobId: "foo" },
-            type: "REMOVE_JOB_REQUESTED"
+            type: "ARCHIVE_JOB_REQUESTED"
         });
     });
 });

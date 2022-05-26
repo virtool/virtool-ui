@@ -130,6 +130,7 @@ export const GET_LINKED_JOB = createRequestActionType("GET_LINKED_JOB");
 export const CANCEL_JOB = createRequestActionType("CANCEL_JOB");
 export const REMOVE_JOB = createRequestActionType("REMOVE_JOB");
 export const CLEAR_JOBS = createRequestActionType("CLEAR_JOBS");
+export const ARCHIVE_JOB = createRequestActionType("ARCHIVE_JOB");
 
 // OTU
 export const WS_INSERT_OTU = "WS_INSERT_OTU";

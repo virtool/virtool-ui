@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<JobItem /> should render when [canCancel=false] and [canRemove=false] 1`] = `
+exports[`<JobItem /> should render when [canCancel=false] and [canArchive=false] 1`] = `
 <Item__JobItemContainer>
   <Item__JobItemLinkBox
     to="/jobs/foo"
@@ -26,16 +26,16 @@ exports[`<JobItem /> should render when [canCancel=false] and [canRemove=false] 
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={false}
       canCancel={false}
-      canRemove={false}
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
     />
   </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
-exports[`<JobItem /> should render when [canCancel=false] and [canRemove=true] 1`] = `
+exports[`<JobItem /> should render when [canCancel=false] and [canArchive=true] 1`] = `
 <Item__JobItemContainer>
   <Item__JobItemLinkBox
     to="/jobs/foo"
@@ -61,16 +61,16 @@ exports[`<JobItem /> should render when [canCancel=false] and [canRemove=true] 1
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={true}
       canCancel={false}
-      canRemove={true}
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
     />
   </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
-exports[`<JobItem /> should render when [canCancel=true] and [canRemove=false] 1`] = `
+exports[`<JobItem /> should render when [canCancel=true] and [canArchive=false] 1`] = `
 <Item__JobItemContainer>
   <Item__JobItemLinkBox
     to="/jobs/foo"
@@ -96,16 +96,16 @@ exports[`<JobItem /> should render when [canCancel=true] and [canRemove=false] 1
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={false}
       canCancel={true}
-      canRemove={false}
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
     />
   </Item__JobActionOverlay>
 </Item__JobItemContainer>
 `;
 
-exports[`<JobItem /> should render when [canCancel=true] and [canRemove=true] 1`] = `
+exports[`<JobItem /> should render when [canCancel=true] and [canArchive=true] 1`] = `
 <Item__JobItemContainer>
   <Item__JobItemLinkBox
     to="/jobs/foo"
@@ -131,10 +131,10 @@ exports[`<JobItem /> should render when [canCancel=true] and [canRemove=true] 1`
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={true}
       canCancel={true}
-      canRemove={true}
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
     />
   </Item__JobActionOverlay>
 </Item__JobItemContainer>
@@ -167,11 +167,11 @@ exports[`<JobItem /> should render when [state="cancelled"] 1`] = `
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={true}
       canCancel={true}
-      canRemove={true}
       key="cancelled"
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
       state="cancelled"
     />
   </Item__JobActionOverlay>
@@ -205,11 +205,11 @@ exports[`<JobItem /> should render when [state="complete"] 1`] = `
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={true}
       canCancel={true}
-      canRemove={true}
       key="complete"
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
       state="complete"
     />
   </Item__JobActionOverlay>
@@ -243,11 +243,11 @@ exports[`<JobItem /> should render when [state="error"] 1`] = `
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={true}
       canCancel={true}
-      canRemove={true}
       key="error"
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
       state="error"
     />
   </Item__JobActionOverlay>
@@ -281,11 +281,11 @@ exports[`<JobItem /> should render when [state="running"] 1`] = `
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={true}
       canCancel={true}
-      canRemove={true}
       key="running"
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
       state="running"
     />
   </Item__JobActionOverlay>
@@ -319,11 +319,11 @@ exports[`<JobItem /> should render when [state="waiting"] 1`] = `
   </Item__JobItemLinkBox>
   <Item__JobActionOverlay>
     <JobAction
+      canArchive={true}
       canCancel={true}
-      canRemove={true}
       key="waiting"
+      onArchive={[Function]}
       onCancel={[Function]}
-      onRemove={[Function]}
       state="waiting"
     />
   </Item__JobActionOverlay>
