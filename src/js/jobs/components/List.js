@@ -15,7 +15,7 @@ export class JobsList extends React.Component {
     renderRow = index => {
         const document = this.props.documents[index];
         return (
-            <Job key={document.id} {...document} canRemove={this.props.canRemove} canCancel={this.props.canCancel} />
+            <Job key={document.id} {...document} canArchive={this.props.canArchive} canCancel={this.props.canCancel} />
         );
     };
 
@@ -58,7 +58,7 @@ export const mapStateToProps = state => ({
     ...state.jobs,
     term: getTerm(state),
     canCancel: checkAdminOrPermission(state, "cancel_job"),
-    canRemove: checkAdminOrPermission(state, "remove_job")
+    canArchive: checkAdminOrPermission(state, "remove_job")
 });
 
 export const mapDispatchToProps = dispatch => ({

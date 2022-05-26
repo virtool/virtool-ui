@@ -14,7 +14,7 @@ describe("<JobsList />", () => {
             page_count: 3,
             term: "foo",
             onLoadNextPage: jest.fn(),
-            canRemove: jest.fn(),
+            canArchive: jest.fn(),
             canCancel: jest.fn()
         };
     });
@@ -94,7 +94,7 @@ describe("mapStateToProps", () => {
         );
 
         expect(result.canCancel).toEqual("bar");
-        expect(result.canRemove).toEqual("bar");
+        expect(result.canArchive).toEqual("bar");
     });
 });
 
@@ -104,6 +104,9 @@ describe("mapDispatchToProps", () => {
         const props = mapDispatchToProps(dispatch);
 
         props.onLoadNextPage("foo", "bar");
-        expect(dispatch).toHaveBeenCalledWith({ payload: { term: "foo", page: "bar" }, type: "FIND_JOBS_REQUESTED" });
+        expect(dispatch).toHaveBeenCalledWith({
+            payload: { term: "foo", page: "bar", archived: false },
+            type: "FIND_JOBS_REQUESTED"
+        });
     });
 });

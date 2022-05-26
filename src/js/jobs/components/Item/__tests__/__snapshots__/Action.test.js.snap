@@ -5,7 +5,7 @@ exports[`<JobActionIcon /> should render when [state="cancelled"] 1`] = `
   color="red"
   faStyle="fas"
   fixedWidth={false}
-  name="trash"
+  name="archive"
   onClick={[MockFunction]}
 />
 `;
@@ -15,19 +15,19 @@ exports[`<JobActionIcon /> should render when [state="complete"] 1`] = `
   color="red"
   faStyle="fas"
   fixedWidth={false}
-  name="trash"
+  name="archive"
   onClick={[MockFunction]}
 />
 `;
 
-exports[`<JobActionIcon /> should render when [state="complete"] and [canRemove=false] 1`] = `""`;
+exports[`<JobActionIcon /> should render when [state="complete"] and [canArchive=false] 1`] = `""`;
 
 exports[`<JobActionIcon /> should render when [state="error"] 1`] = `
 <Icon
   color="red"
   faStyle="fas"
   fixedWidth={false}
-  name="trash"
+  name="archive"
   onClick={[MockFunction]}
 />
 `;

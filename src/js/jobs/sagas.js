@@ -1,27 +1,9 @@
 import { has } from "lodash-es";
 import { select, takeEvery, takeLatest } from "redux-saga/effects";
-import {
-    CANCEL_JOB,
-    CLEAR_JOBS,
-    FIND_JOBS,
-    GET_JOB,
-    GET_LINKED_JOB,
-    REMOVE_JOB,
-    WS_UPDATE_JOB
-} from "../app/actionTypes";
+import { ARCHIVE_JOB, CANCEL_JOB, FIND_JOBS, GET_JOB, GET_LINKED_JOB, WS_UPDATE_JOB } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as jobsAPI from "./api";
 import { getJobDetailId, getLinkedJobs } from "./selectors";
-
-export function* watchJobs() {
-    yield takeLatest(FIND_JOBS.REQUESTED, findJobs);
-    yield takeLatest(GET_JOB.REQUESTED, getJob);
-    yield takeEvery(CANCEL_JOB.REQUESTED, cancelJob);
-    yield takeEvery(REMOVE_JOB.REQUESTED, removeJob);
-    yield takeLatest(CLEAR_JOBS.REQUESTED, clearJobs);
-    yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
-    yield takeEvery(GET_LINKED_JOB.REQUESTED, getLinkedJob);
-}
 
 export function* wsUpdateJob(action) {
     const jobId = action.payload.id;
@@ -55,10 +37,15 @@ export function* cancelJob(action) {
     yield apiCall(jobsAPI.cancel, action.payload, CANCEL_JOB);
 }
 
-export function* removeJob(action) {
-    yield apiCall(jobsAPI.remove, action.payload, REMOVE_JOB);
+export function* archiveJob(action) {
+    yield apiCall(jobsAPI.archive, action.payload, ARCHIVE_JOB);
 }
 
-export function* clearJobs(action) {
-    yield apiCall(jobsAPI.clear, action.payload, REMOVE_JOB);
+export function* watchJobs() {
+    yield takeLatest(FIND_JOBS.REQUESTED, findJobs);
+    yield takeLatest(GET_JOB.REQUESTED, getJob);
+    yield takeEvery(CANCEL_JOB.REQUESTED, cancelJob);
+    yield takeEvery(ARCHIVE_JOB.REQUESTED, archiveJob);
+    yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
+    yield takeEvery(GET_LINKED_JOB.REQUESTED, getLinkedJob);
 }

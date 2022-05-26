@@ -13,11 +13,12 @@ import {
     ViewHeaderTitle
 } from "../../base";
 import { checkAdminOrPermission, getWorkflowDisplayName } from "../../utils/utils";
-import { cancelJob, getJob, removeJob } from "../actions";
+import { archiveJob, cancelJob, getJob } from "../actions";
 import JobError from "./Error";
-import JobSteps from "./Steps";
-import { JobArgs } from "./JobArgs";
 import { JobAction } from "./Item/Action";
+import { JobArgs } from "./JobArgs";
+import JobSteps from "./Steps";
+
 const JobDetailBadge = styled(Badge)`
     text-transform: capitalize;
 `;
@@ -64,9 +65,9 @@ class JobDetail extends React.Component {
                             <JobAction
                                 state={detail.state}
                                 onCancel={() => this.props.onCancel(this.props.detail.id)}
-                                onRemove={() => this.props.onRemove(this.props.detail.id)}
+                                onArchive={() => this.props.onArchive(this.props.detail.id)}
                                 canCancel={this.props.canCancel}
-                                canRemove={this.props.canRemove}
+                                canArchive={this.props.canArchive}
                             />
                         </ViewHeaderIcons>
                     </ViewHeaderTitle>
@@ -87,7 +88,7 @@ const mapStateToProps = state => ({
     error: get(state, "errors.GET_JOB_ERROR", null),
     detail: state.jobs.detail,
     canCancel: checkAdminOrPermission(state, "cancel_job"),
-    canRemove: checkAdminOrPermission(state, "remove_job")
+    canArchive: checkAdminOrPermission(state, "remove_job")
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -97,8 +98,8 @@ const mapDispatchToProps = dispatch => ({
     onCancel: jobId => {
         dispatch(cancelJob(jobId));
     },
-    onRemove: jobId => {
-        dispatch(removeJob(jobId));
+    onArchive: jobId => {
+        dispatch(archiveJob(jobId));
         dispatch(push("/jobs"));
     }
 });

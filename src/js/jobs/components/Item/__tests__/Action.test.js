@@ -7,9 +7,9 @@ describe("<JobActionIcon />", () => {
         props = {
             state: "waiting",
             canCancel: true,
-            canRemove: true,
+            canArchive: true,
             onCancel: jest.fn(),
-            onRemove: jest.fn()
+            onArchive: jest.fn()
         };
     });
 
@@ -25,9 +25,9 @@ describe("<JobActionIcon />", () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('should render when [state="complete"] and [canRemove=false]', () => {
+    it('should render when [state="complete"] and [canArchive=false]', () => {
         props.state = "complete";
-        props.canRemove = false;
+        props.canArchive = false;
         const wrapper = shallow(<JobAction {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
@@ -38,10 +38,10 @@ describe("<JobActionIcon />", () => {
         expect(props.onCancel).toHaveBeenCalled();
     });
 
-    it("should call onRemove() when remove icon clicked", () => {
+    it("should call onArchive() when archive icon clicked", () => {
         props.state = "complete";
         const wrapper = shallow(<JobAction {...props} />);
         wrapper.find("Icon").prop("onClick")();
-        expect(props.onRemove).toHaveBeenCalled();
+        expect(props.onArchive).toHaveBeenCalled();
     });
 });

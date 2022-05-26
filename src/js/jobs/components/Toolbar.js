@@ -1,32 +1,21 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Icon, SearchInput, Toolbar } from "../../base";
-import { checkAdminOrPermission } from "../../utils/utils";
-import { clearJobs, findJobs } from "../actions";
+import { SearchInput, Toolbar } from "../../base";
+import { findJobs } from "../actions";
 
-export const JobsToolbar = ({ onClear, onFind, canRemove, term }) => (
+export const JobsToolbar = ({ onFind, term }) => (
     <Toolbar>
         <SearchInput value={term} onChange={onFind} placeholder="User or workflow" />
-        {canRemove && (
-            <Button onClick={() => onClear("finished")} tip="Clear Finished">
-                <Icon name="trash" />
-            </Button>
-        )}
     </Toolbar>
 );
 
 export const mapStateToProps = state => ({
-    term: state.jobs.term,
-    canRemove: checkAdminOrPermission(state, "remove_job")
+    term: state.jobs.term
 });
 
 export const mapDispatchToProps = dispatch => ({
     onFind: e => {
         dispatch(findJobs(e.target.value, 1));
-    },
-
-    onClear: scope => {
-        dispatch(clearJobs(scope));
     }
 });
 

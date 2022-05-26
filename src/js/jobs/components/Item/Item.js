@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { AffixedProgressBar, Attribution, LinkBox } from "../../../base";
 import { getWorkflowDisplayName } from "../../../utils/utils";
-import { cancelJob, removeJob } from "../../actions";
+import { archiveJob, cancelJob } from "../../actions";
 import { JobAction } from "./Action";
 import { JobStatus } from "./Status";
 
@@ -43,9 +43,20 @@ const JobActionOverlay = styled.div`
     z-index: 20;
 `;
 
-export function JobItem({ id, workflow, state, progress, created_at, user, canCancel, canRemove, onCancel, onRemove }) {
+export function JobItem({
+    id,
+    workflow,
+    state,
+    progress,
+    created_at,
+    user,
+    canCancel,
+    canArchive,
+    onCancel,
+    onArchive
+}) {
     const handleCancel = useCallback(() => onCancel(id), [id, onCancel]);
-    const handleRemove = useCallback(() => onRemove(id), [id, onRemove]);
+    const handleArchive = useCallback(() => onArchive(id), [id, onArchive]);
 
     let progressColor = "green";
 
@@ -56,7 +67,6 @@ export function JobItem({ id, workflow, state, progress, created_at, user, canCa
     if (state === "error" || state === "cancelled") {
         progressColor = "red";
     }
-
     // Create the option components for the selected fields.
     return (
         <JobItemContainer>
@@ -66,7 +76,7 @@ export function JobItem({ id, workflow, state, progress, created_at, user, canCa
                 <JobItemBody>
                     <JobItemHeader>
                         <span>{getWorkflowDisplayName(workflow)}</span>
-                        <JobStatus state={state} pad={canCancel || canRemove} />
+                        <JobStatus state={state} pad={canCancel || canArchive} />
                     </JobItemHeader>
                     <Attribution time={created_at} user={user.handle} />
                 </JobItemBody>
@@ -76,9 +86,9 @@ export function JobItem({ id, workflow, state, progress, created_at, user, canCa
                     key={state}
                     state={state}
                     canCancel={canCancel}
-                    canRemove={canRemove}
+                    canArchive={canArchive}
                     onCancel={handleCancel}
-                    onRemove={handleRemove}
+                    onArchive={handleArchive}
                 />
             </JobActionOverlay>
         </JobItemContainer>
@@ -90,8 +100,8 @@ export const mapDispatchToProps = dispatch => ({
         dispatch(cancelJob(jobId));
     },
 
-    onRemove: jobId => {
-        dispatch(removeJob(jobId));
+    onArchive: jobId => {
+        dispatch(archiveJob(jobId));
     }
 });
 

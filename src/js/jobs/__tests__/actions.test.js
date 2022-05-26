@@ -1,14 +1,13 @@
 import {
-    WS_INSERT_JOB,
-    WS_UPDATE_JOB,
-    WS_REMOVE_JOB,
-    GET_JOB,
+    ARCHIVE_JOB,
     CANCEL_JOB,
-    REMOVE_JOB,
-    CLEAR_JOBS,
-    FIND_JOBS
+    FIND_JOBS,
+    GET_JOB,
+    WS_INSERT_JOB,
+    WS_REMOVE_JOB,
+    WS_UPDATE_JOB
 } from "../../app/actionTypes";
-import { wsInsertJob, wsUpdateJob, wsRemoveJob, getJob, cancelJob, removeJob, clearJobs, findJobs } from "../actions";
+import { archiveJob, cancelJob, findJobs, getJob, wsInsertJob, wsRemoveJob, wsUpdateJob } from "../actions";
 
 describe("Jobs Action Creators:", () => {
     it("wsInsertJob: returns action for job insert via websocket", () => {
@@ -44,7 +43,7 @@ describe("Jobs Action Creators:", () => {
         const result = findJobs(term, page);
         expect(result).toEqual({
             type: FIND_JOBS.REQUESTED,
-            payload: { term, page }
+            payload: { term, page, archived: false }
         });
     });
 
@@ -66,21 +65,12 @@ describe("Jobs Action Creators:", () => {
         });
     });
 
-    it("removeJob: returns action for removing a specific job", () => {
+    it("ArchiveJob: returns action for archiving a specific job", () => {
         const jobId = "tester";
-        const result = removeJob(jobId);
+        const result = archiveJob(jobId);
         expect(result).toEqual({
-            type: REMOVE_JOB.REQUESTED,
+            type: ARCHIVE_JOB.REQUESTED,
             payload: { jobId }
-        });
-    });
-
-    it("clearJobs: returns action to clear a subset of jobs", () => {
-        const scope = "filter";
-        const result = clearJobs(scope);
-        expect(result).toEqual({
-            type: CLEAR_JOBS.REQUESTED,
-            payload: { scope }
         });
     });
 });
