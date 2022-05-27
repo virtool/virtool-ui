@@ -9,7 +9,7 @@ import SubtractionList from "./List";
 export const SubtractionFileManager = () => (
     <FileManager
         fileType="subtraction"
-        message="Drag FASTA files here to upload"
+        message="Drag FASTA files here to upload."
         tip="Accepts files ending in fa, fasta, fa.gz, or fasta.gz."
         validationRegex={/.(?:fa|fasta)(?:.gz|.gzip)?$/}
     />

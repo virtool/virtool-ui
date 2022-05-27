@@ -44,14 +44,19 @@ export const UploadBar = ({ message, onDrop, validator, tip }) => {
     const rootProps = getRootProps({
         onClick: e => e.stopPropagation()
     });
-
     return (
         <StyledUploadBar active={isDragAccept}>
             <div {...rootProps}>
                 <input {...getInputProps()} data-testid="upload-input" />
                 {messageComponent}
                 {tip && tip.length && (
-                    <Icon aria-label="upload information" color="black" tip={tip} tipPlacement="top" />
+                    <Icon
+                        aria-label="upload information"
+                        name="info-circle"
+                        color="black"
+                        tip={tip}
+                        tipPlacement="top"
+                    />
                 )}
             </div>
             <Button color="blue" icon="upload" onClick={open}>
