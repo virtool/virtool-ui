@@ -58,7 +58,7 @@ export function createFuse(collection, keys, id) {
     return new Fuse(collection, {
         keys,
         id,
-        minMatchCharLength: 2,
+        minMatchCharLength: 1,
         threshold: 0.3,
         tokenize: true
     });
