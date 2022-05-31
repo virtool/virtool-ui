@@ -18,7 +18,7 @@ const StyledMultiSelectorItem = styled(SelectBoxGroupSection)`
     user-select: none;
 `;
 
-export const MultiSelectorItem = ({ children, className, name, value }) => {
+export const MultiSelectorItem = ({ children, className, name, value, displayCheckbox }) => {
     const { selected, onSelect } = useContext(MultiSelectorContext);
     const active = selected.includes(value);
 
@@ -31,18 +31,18 @@ export const MultiSelectorItem = ({ children, className, name, value }) => {
             type="button"
             onClick={() => onSelect(value)}
         >
-            <Checkbox checked={active} /> {children}
+            {displayCheckbox && <Checkbox checked={active} />} {children}
         </StyledMultiSelectorItem>
     );
 };
 
-const MultiSelectorList = styled(BoxGroup)`
+export const MultiSelectorList = styled(BoxGroup)`
     ${props => (props.error ? `border-color: ${props.theme.color.red};` : "")};
-    max-height: 165px;
-    overflow-y: auto;
+    ${props => (props.noOverflow ? "" : "max-height: 160px")};
+    ${props => (props.noOverflow ? "" : "overflow-y: auto")};
 `;
 
-export const MultiSelector = ({ children, error, noun, selected, onChange }) => {
+export const MultiSelector = ({ children, error, noun, selected, onChange, noOverflow }) => {
     const handleSelect = value => {
         onChange(xor(selected, [value]));
     };
@@ -56,7 +56,13 @@ export const MultiSelector = ({ children, error, noun, selected, onChange }) => 
                 onSelect: handleSelect
             }}
         >
-            {children.length ? <MultiSelectorList error={error}>{children}</MultiSelectorList> : content}
+            {children ? (
+                <MultiSelectorList noOverflow={noOverflow} error={error}>
+                    {children}
+                </MultiSelectorList>
+            ) : (
+                content
+            )}
             {error && <MultiSelectorError>{error}</MultiSelectorError>}
         </MultiSelectorContext.Provider>
     );

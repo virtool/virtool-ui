@@ -33,6 +33,15 @@ describe("<CreateAnalysis />", () => {
                         name: "Plant Viruses",
                         data_type: "genome"
                     }
+                },
+                {
+                    id: "two",
+                    version: 1,
+                    reference: {
+                        id: "2",
+                        name: "test name 2",
+                        data_type: "genome"
+                    }
                 }
             ],
             dataType: "genome",
@@ -44,16 +53,11 @@ describe("<CreateAnalysis />", () => {
                 { id: "foo", name: "Foo" },
                 { id: "bar", name: "Bar" }
             ],
-            value: ["foo"],
+            value: [],
             onAnalyze: jest.fn(),
             onHide: jest.fn(),
             onShortlistSubtractions: jest.fn()
         };
-    });
-
-    it("should render", () => {
-        const wrapper = shallow(<CreateAnalysis {...props} />);
-        expect(wrapper).toMatchSnapshot();
     });
 
     it("should show errors when required fields aren't selected", () => {
@@ -97,6 +101,140 @@ describe("<CreateAnalysis />", () => {
             props.accountId,
             ["pathoscope_bowtie"]
         );
+    });
+
+    it("should render correctly when workflows empty, dataType = genome and hasHmm = true", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.getByRole("button", { name: "Pathoscope" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "NuVs" })).not.toBeInTheDocument();
+        expect(screen.getByText("No workflows selected")).toBeInTheDocument();
+        expect(screen.queryByText("All workflows selected")).not.toBeInTheDocument();
+    });
+
+    it("should render correctly when hasHmm = true", () => {
+        props.hasHmm = true;
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.getByRole("button", { name: "Pathoscope" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "NuVs" })).toBeInTheDocument();
+        expect(screen.getByText("No workflows selected")).toBeInTheDocument();
+        expect(screen.queryByText("All workflows selected")).not.toBeInTheDocument();
+    });
+
+    it("should render correctly when subtraction options not empty, value is empty", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.queryByText("No subtractions found")).not.toBeInTheDocument();
+        expect(screen.queryByPlaceholderText("Filter subtractions")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Bar" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Foo" })).toBeInTheDocument();
+        expect(screen.getByText("No subtractions selected")).toBeInTheDocument();
+        expect(screen.queryByText("All subtractions selected")).not.toBeInTheDocument();
+    });
+
+    it("should render correctly when when compatible indexes is not empty", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.getByRole("button", { name: "Plant Viruses Index Version 0" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "test name 2 Index Version 1" })).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("Filter references")).toBeInTheDocument();
+        expect(screen.getByText("No references selected")).toBeInTheDocument();
+        expect(screen.queryByText("Create one")).not.toBeInTheDocument();
+    });
+
+    it("should render correctly when subtractions.length = 0", () => {
+        props.subtractionOptions = [];
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.queryByPlaceholderText("Filter Subtractions")).not.toBeInTheDocument();
+        expect(screen.getByText("Create one")).toBeInTheDocument();
+        expect(screen.getByText("No subtractions selected")).toBeInTheDocument();
+        expect(screen.queryByText("All subtractions selected")).not.toBeInTheDocument();
+    });
+
+    it("it should render correctly when compatibleIndexes.length = 0", () => {
+        props.compatibleIndexes = [];
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.queryByPlaceholderText("Filter References")).not.toBeInTheDocument();
+        expect(screen.getByText("Create one")).toBeInTheDocument();
+        expect(screen.getByText("No references selected")).toBeInTheDocument();
+        expect(screen.queryByText("All references selected")).not.toBeInTheDocument();
+    });
+
+    it("should render correctly when all workflows selected", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        screen.getByRole("button", { name: "Pathoscope" }).click();
+        expect(screen.getByText("All workflows selected")).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Pathoscope" })).not.toBeInTheDocument();
+        expect(screen.getByText("Pathoscope")).toBeInTheDocument();
+    });
+
+    it("should render correctly when subtractions are selected", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.getByText("No subtractions selected")).toBeInTheDocument();
+        screen.getByRole("button", { name: "Foo" }).click();
+        expect(screen.queryByRole("button", { name: "Foo" })).not.toBeInTheDocument();
+        expect(screen.getByText("Foo")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Bar" })).toBeInTheDocument();
+        expect(screen.queryByText("No subtractions selected")).not.toBeInTheDocument();
+        screen.getByRole("button", { name: "Bar" }).click();
+        expect(screen.getByText("All subtractions selected")).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Bar" })).not.toBeInTheDocument();
+    });
+
+    it("should render correctly when references are selected", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.getByText("No references selected")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "test name 2 Index Version 1" })).toBeInTheDocument();
+        expect(screen.getByText("No references selected")).toBeInTheDocument();
+        screen.getByRole("button", { name: "test name 2 Index Version 1" }).click();
+        expect(screen.queryByRole("button", { name: "test name 2 Index Version 1" })).not.toBeInTheDocument();
+        screen.getByRole("button", { name: "Plant Viruses Index Version 0" }).click();
+        expect(screen.getByText("All references selected")).toBeInTheDocument();
+    });
+
+    it("should move workflow back to available when x button clicked", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.getByRole("button", { name: "Pathoscope" })).toBeInTheDocument();
+        screen.getByRole("button", { name: "Pathoscope" }).click();
+        expect(screen.queryByRole("button", { name: "Pathoscope" })).not.toBeInTheDocument();
+        expect(screen.getByText("Pathoscope")).toBeInTheDocument();
+        screen.getByRole("button", { name: "remove selected workflows" }).click();
+        expect(screen.getByText("No workflows selected")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Pathoscope" })).toBeInTheDocument();
+    });
+
+    it("should render correctly when selected subtractions are removed", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        screen.getByRole("button", { name: "Foo" }).click();
+        screen.getByRole("button", { name: "Bar" }).click();
+        expect(screen.queryByPlaceholderText("Filter subtractions")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Foo" })).not.toBeInTheDocument();
+        expect(screen.getByText("Foo")).toBeInTheDocument();
+        const deleteButtons = screen.getAllByRole("button", { name: "remove selected subtractions" });
+        deleteButtons[0].click();
+        expect(screen.getByRole("button", { name: "Foo" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Bar" })).not.toBeInTheDocument();
+        expect(screen.queryByText("No subtractions selected")).not.toBeInTheDocument();
+        deleteButtons[1].click();
+        expect(screen.getByText("No subtractions selected")).toBeInTheDocument();
+    });
+
+    it("should render correctly when references are removed", () => {
+        renderWithStore(<CreateAnalysis {...props} />);
+        expect(screen.getByText("No references selected")).toBeInTheDocument();
+        expect(screen.queryByText("All references selected")).not.toBeInTheDocument();
+        screen.getByRole("button", { name: "Plant Viruses Index Version 0" }).click();
+        screen.getByRole("button", { name: "test name 2 Index Version 1" }).click();
+        const deleteButtons = screen.getAllByRole("button", { name: "remove selected references" });
+        expect(screen.getByText("All references selected")).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Plant Viruses Index version 0" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "test name 2 Index version 1" })).not.toBeInTheDocument();
+        deleteButtons[0].click();
+        expect(screen.getByRole("button", { name: "Plant Viruses Index Version 0" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "test name 2 Index Version 1" })).not.toBeInTheDocument();
+        expect(screen.queryByText("All references selected")).not.toBeInTheDocument();
+        expect(screen.queryByText("No references selected")).not.toBeInTheDocument();
+        deleteButtons[1].click();
+        expect(screen.getByText("No references selected")).toBeInTheDocument();
+        expect(screen.queryByText("All references selected")).not.toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Plant Viruses Index Version 0" })).toBeInTheDocument();
     });
 });
 

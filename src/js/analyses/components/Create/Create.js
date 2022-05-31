@@ -18,11 +18,20 @@ import { ReferenceSelector } from "./ReferenceSelector";
 import { SubtractionSelector } from "./SubtractionSelector";
 import { CreateAnalysisSummary } from "./Summary";
 import { WorkflowSelector } from "./WorkflowSelector";
+import { getFontSize } from "../../../app/theme";
 
 const CreateAnalysisFooter = styled(ModalFooter)`
     align-items: center;
     display: flex;
     justify-content: space-between;
+`;
+
+const AnalyzeContainer = styled.div`
+    margin-bottom: 5px;
+`;
+
+const ExtraLargeLabel = styled.div`
+    font-size: ${getFontSize("xl")};
 `;
 
 export const CreateAnalysis = ({
@@ -65,42 +74,48 @@ export const CreateAnalysis = ({
 
     return (
         <Modal label="Analyze" show={show} size="lg" onHide={onHide}>
-            <ModalHeader>Analyze</ModalHeader>
-            <form onSubmit={handleSubmit}>
-                <ModalBody>
-                    <HMMAlert />
-                    <WorkflowSelector
-                        dataType={dataType}
-                        hasError={errors.workflows}
-                        hasHmm={hasHmm}
-                        workflows={workflows}
-                        onSelect={setWorkflows}
-                    />
-                    {dataType === "genome" && (
-                        <SubtractionSelector
-                            subtractions={subtractionOptions}
-                            value={subtractions}
-                            onChange={setSubtractions}
+            <ModalHeader>
+                <ExtraLargeLabel>Analyze</ExtraLargeLabel>
+            </ModalHeader>
+            <AnalyzeContainer>
+                <form onSubmit={handleSubmit}>
+                    <ModalBody>
+                        <HMMAlert />
+                        <WorkflowSelector
+                            dataType={dataType}
+                            hasError={errors.workflows}
+                            hasHmm={hasHmm}
+                            selectedWorkflows={workflows}
+                            onSelect={setWorkflows}
                         />
-                    )}
-                    <ReferenceSelector
-                        hasError={errors.references}
-                        indexes={compatibleIndexes}
-                        selected={references}
-                        onChange={setReferences}
-                    />
-                </ModalBody>
-                <CreateAnalysisFooter>
-                    <CreateAnalysisSummary
-                        sampleCount={1}
-                        indexCount={references.length}
-                        workflowCount={workflows.length}
-                    />
-                    <Button type="submit" color="blue" icon="play">
-                        Start
-                    </Button>
-                </CreateAnalysisFooter>
-            </form>
+
+                        {dataType === "genome" && (
+                            <SubtractionSelector
+                                subtractions={subtractionOptions}
+                                value={subtractions}
+                                onChange={setSubtractions}
+                            />
+                        )}
+
+                        <ReferenceSelector
+                            hasError={errors.references}
+                            indexes={compatibleIndexes}
+                            selected={references}
+                            onChange={setReferences}
+                        />
+                    </ModalBody>
+                    <CreateAnalysisFooter>
+                        <CreateAnalysisSummary
+                            sampleCount={1}
+                            indexCount={references.length}
+                            workflowCount={workflows.length}
+                        />
+                        <Button type="submit" color="blue" icon="play">
+                            Start
+                        </Button>
+                    </CreateAnalysisFooter>
+                </form>
+            </AnalyzeContainer>
         </Modal>
     );
 };
