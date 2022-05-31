@@ -143,8 +143,16 @@ describe("OTUs Reducer:", () => {
         const refId = "baz";
         const term = "foo";
         const action = { type: FIND_OTUS.REQUESTED, payload: { refId, term, page: 3 } };
-        const result = reducer({}, action);
+        const result = reducer({ refId: "baz" }, action);
         expect(result).toEqual({ term, refId });
+    });
+
+    it("should handle FIND_OTUS_REQUESTED when [payload.refId != state.refId]", () => {
+        const refId = "baz";
+        const term = "foo";
+        const action = { type: FIND_OTUS.REQUESTED, payload: { refId, term, page: 3 } };
+        const result = reducer({}, action);
+        expect(result).toEqual({ documents: null, term, refId });
     });
 
     it("should handle FIND_OTUS_SUCCEEDED", () => {

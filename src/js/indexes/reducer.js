@@ -42,15 +42,14 @@ export const indexesReducer = createReducer(initialState, builder => {
             return state;
         })
         .addCase(FIND_INDEXES.REQUESTED, (state, action) => {
+            if (action.payload.refId !== state.refId) {
+                state.documents = null;
+            }
             state.term = action.payload.term;
             state.refId = action.payload.refId;
         })
         .addCase(FIND_INDEXES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action.payload, "version", true);
-        })
-        .addCase(GET_INDEX.REQUESTED, (state, action) => {
-            state.refId = action.payload.refId;
-            state.detail = null;
         })
         .addCase(GET_INDEX.SUCCEEDED, (state, action) => {
             state.detail = action.payload;

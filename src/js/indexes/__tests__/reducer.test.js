@@ -112,6 +112,21 @@ describe("Indexes Reducer", () => {
     });
 
     it("should handle FIND_INDEXES_REQUESTED", () => {
+        const state = { refId: "foo" };
+        const term = "bar";
+        const refId = "foo";
+        const action = {
+            type: FIND_INDEXES.REQUESTED,
+            payload: { refId, term, page: 4 }
+        };
+        const result = reducer(state, action);
+        expect(result).toEqual({
+            term,
+            refId
+        });
+    });
+
+    it("should handle FIND_INDEXES_REQUESTED when [payload.refId != state.refId]", () => {
         const state = {};
         const term = "bar";
         const refId = "foo";
@@ -121,6 +136,7 @@ describe("Indexes Reducer", () => {
         };
         const result = reducer(state, action);
         expect(result).toEqual({
+            documents: null,
             term,
             refId
         });
@@ -143,13 +159,6 @@ describe("Indexes Reducer", () => {
             documents: [{ id: "1" }],
             page: 2
         });
-    });
-
-    it("should handle GET_INDEX_REQUESTED", () => {
-        const state = {};
-        const action = { type: GET_INDEX.REQUESTED, payload: {} };
-        const result = reducer(state, action);
-        expect(result).toEqual({ detail: null });
     });
 
     it("should handle GET_INDEX_SUCCEEDED", () => {
