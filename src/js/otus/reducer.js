@@ -115,6 +115,9 @@ export const OTUsReducer = createReducer(initialState, builder => {
             return remove(state, action.payload);
         })
         .addCase(FIND_OTUS.REQUESTED, (state, action) => {
+            if (action.payload.refId !== state.refId) {
+                state.documents = null;
+            }
             state.term = action.payload.term;
             state.verified = action.payload.verified;
             state.refId = action.payload.refId;
@@ -131,7 +134,7 @@ export const OTUsReducer = createReducer(initialState, builder => {
         .addCase(REMOVE_OTU.SUCCEEDED, state => {
             return hideOTUModal({ ...state, detail: null, activeIsolateId: null });
         })
-        .addCase(GET_OTU_HISTORY.REQUESTED, state => {
+        .addCase(GET_OTU_HISTORY.REQUESTED, (state, action) => {
             state.detailHistory = null;
         })
         .addCase(GET_OTU_HISTORY.SUCCEEDED, (state, action) => {
