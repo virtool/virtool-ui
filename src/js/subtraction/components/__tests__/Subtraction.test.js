@@ -1,11 +1,4 @@
-import Subtraction, { SubtractionFileManager } from "../Subtraction";
-
-describe("<SubtractionFileManager />", () => {
-    it("should render", () => {
-        const wrapper = shallow(<SubtractionFileManager />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
+import Subtraction from "../Subtraction";
 
 describe("<Subtraction />", () => {
     it("should render", () => {
