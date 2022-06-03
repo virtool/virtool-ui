@@ -2,18 +2,11 @@ import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 import { getColor } from "../app/theme";
-import { Badge } from "./Badge";
 
-const justificationRatio = { left: 5, center: 40, right: 75 };
-
-const LeftBorder = styled.div`
+const HorizontalBorder = styled.div`
     height: 2px;
     background-color: ${getColor};
-    flex: 1 0 ${props => justificationRatio[props.justification]}%;
-`;
-
-const RightBorder = styled(LeftBorder)`
-    flex: 1 0 ${props => 80 - justificationRatio[props.justification]}%;
+    flex: 1 0;
 `;
 
 const StyledText = styled.span`
@@ -22,22 +15,54 @@ const StyledText = styled.span`
     text-transform: capitalize;
 `;
 
-const StyledDivider = styled.div`
+const StyledHorizontalDivider = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 0 5px;
 `;
 
-export const Divider = ({ text, justification }) => (
-    <StyledDivider>
-        <LeftBorder color="greyLight" justification={justification || "center"} />
+export const HorizontalDivider = ({ text, className }) => (
+    <StyledHorizontalDivider className={className}>
+        <HorizontalBorder color="greyLight" />
         {text && <StyledText color="grey">{text}</StyledText>}
-        <RightBorder color="greyLight" justification={justification || "center"} />
-    </StyledDivider>
+        <HorizontalBorder color="greyLight" />
+    </StyledHorizontalDivider>
 );
 
-Badge.propTypes = {
+HorizontalDivider.propTypes = {
     text: PropTypes.string,
-    justifyText: PropTypes.string
+    className: PropTypes.string
+};
+
+HorizontalDivider.defaultProps = {
+    text: "",
+    className: ""
+};
+
+const VerticalBorder = styled.div`
+    width: 2px;
+    background-color: ${getColor};
+    flex: 1 0;
+`;
+
+const StyledVerticalDivider = styled(StyledHorizontalDivider)`
+    flex-direction: column;
+`;
+
+export const VerticalDivider = ({ text, className }) => (
+    <StyledVerticalDivider className={className}>
+        <VerticalBorder color="greyLight" />
+        {text && <StyledText color="grey">{text}</StyledText>}
+        <VerticalBorder color="greyLight" />
+    </StyledVerticalDivider>
+);
+
+VerticalDivider.propTypes = {
+    text: PropTypes.string,
+    className: PropTypes.string
+};
+
+VerticalDivider.defaultProps = {
+    text: "",
+    className: ""
 };

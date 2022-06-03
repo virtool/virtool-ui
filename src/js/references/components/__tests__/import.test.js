@@ -46,7 +46,7 @@ describe("<EmptyReference />", () => {
     it("should accept Uploaded File", async () => {
         renderWithProviders(<ImportReference {...props} />);
         const file = new File(["test"], "test_file.gz", { type: "application/gzip" });
-        await userEvent.upload(screen.getByTestId("upload-input"), file);
+        await userEvent.upload(screen.getByLabelText("Upload file"), file);
         expect(props.onDrop).toHaveBeenCalledWith(expect.stringMatching(/^.{8}$/), file, "reference");
     });
 
@@ -79,7 +79,7 @@ describe("<EmptyReference />", () => {
     it("should call onSubmit with correct values when a reference is uploaded and name textbox is populated", async () => {
         const { rerender } = renderWithProviders(<ImportReference {...props} />);
         const file = new File(["test"], "test_file.gz", { type: "application/gzip" });
-        await userEvent.upload(screen.getByTestId("upload-input"), file);
+        await userEvent.upload(screen.getByLabelText("Upload file"), file);
         expect(props.onDrop).toHaveBeenCalledWith(expect.stringMatching(/^.{8}$/), file, "reference");
 
         props.file = { id: 1, name: "test_reference_upload", progress: 100, ready: true };

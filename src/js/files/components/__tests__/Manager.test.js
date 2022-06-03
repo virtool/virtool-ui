@@ -52,7 +52,7 @@ describe("<FileManager>", () => {
         renderWithProviders(<FileManager {...props} />, createAppStore(state));
         expect(screen.getByText("Drag file here to upload.")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Upload" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Browse Files" })).toBeInTheDocument();
     });
 
     it("should remove upload bar if canUpload is false", () => {
@@ -68,19 +68,12 @@ describe("<FileManager>", () => {
         expect(screen.getByText("test_message")).toBeInTheDocument();
     });
 
-    it("should add tooltip if passed", () => {
-        props.tip = "test_tip";
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
-        userEvent.hover(screen.getByLabelText("upload information"));
-        expect(screen.getByText("test_tip")).toBeInTheDocument();
-    });
-
     it("should filter files according to passed regex", async () => {
         props.validationRegex = /.(?:fa|fasta)(?:.gz|.gzip)?$/;
         renderWithProviders(<FileManager {...props} />, createAppStore(state));
         const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
-        await userEvent.upload(screen.getByTestId("upload-input"), [invalidFile, validFile]);
+        await userEvent.upload(screen.getByLabelText("Upload file"), [invalidFile, validFile]);
         await waitFor(() => {
             expect(props.onDrop).toHaveBeenCalledWith(props.fileType, [validFile]);
         });

@@ -1,39 +1,50 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import { Button, Icon } from "./index";
+import { getColor } from "../app/theme";
+import { Button, VerticalDivider } from "./index";
 
 const StyledUploadBar = styled.div`
-    align-items: stretch;
     display: flex;
-    height: 38px;
+    align-items: stretch;
+    justify-content: center;
+    padding: 10px 15px;
     margin-bottom: 15px;
 
-    & > div:first-child {
-        align-items: center;
-        background-color: ${props => (props.active ? props.theme.greyLightest : "transparent")};
-        border: 1px solid ${props => (props.active ? props.theme.blue : props.theme.color.greyLight)};
-        border-radius: ${props => props.theme.borderRadius.sm};
-        box-sizing: border-box;
-        cursor: pointer;
-        display: flex;
-        flex: 1 0 auto;
-        justify-content: center;
-        margin: 0;
-    }
+    background-color: ${props =>
+        props.active ? getColor({ color: "greyLightest", theme: props.theme }) : "transparent"};
+    border: 1px solid ${props => getColor({ theme: props.theme, color: props.active ? "blue" : "greyLight" })};
+    border-radius: ${props => props.theme.borderRadius.sm};
+    cursor: pointer;
 
-    & > button {
-        flex: 0 0 auto;
-        margin-left: 3px;
-    }
-
-    & > div > div:last-child {
-        margin-left: 5px;
+    button {
+        margin: auto 0px;
     }
 `;
 
-export const UploadBar = ({ message, onDrop, validator, tip }) => {
-    const messageComponent = <span>{message && message.length ? message : "Drag file here to upload"}</span>;
+const MessageContainer = styled.div`
+    display: flex;
+    flex 1 0 50px;
+    justify-content: end;
+    align-items: center;
+    min-height: 60px;
+    margin: auto 0;
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    flex: 1 0 50px;
+`;
+
+const UploadBarDivider = styled(VerticalDivider)`
+    margin: 0 40px;
+    span {
+        text-transform: uppercase;
+    }
+`;
+
+export const UploadBar = ({ message, onDrop, validator }) => {
+    const messageComponent = <MessageContainer>{message || "Drag file here to upload"}</MessageContainer>;
 
     const handleDrop = useCallback(acceptedFiles => {
         onDrop(acceptedFiles);
@@ -46,17 +57,15 @@ export const UploadBar = ({ message, onDrop, validator, tip }) => {
     });
 
     return (
-        <StyledUploadBar active={isDragAccept}>
-            <div {...rootProps}>
-                <input {...getInputProps()} data-testid="upload-input" />
-                {messageComponent}
-                {tip && tip.length && (
-                    <Icon aria-label="upload information" color="black" tip={tip} tipPlacement="top" />
-                )}
-            </div>
-            <Button color="blue" icon="upload" onClick={open}>
-                Upload
-            </Button>
+        <StyledUploadBar active={isDragAccept} {...rootProps}>
+            <input {...getInputProps()} aria-label="Upload file" />
+            {messageComponent}
+            <UploadBarDivider text="or" justification="center" active={isDragAccept} />
+            <ButtonContainer>
+                <Button color="blue" icon="upload" onClick={open}>
+                    Browse Files
+                </Button>
+            </ButtonContainer>
         </StyledUploadBar>
     );
 };

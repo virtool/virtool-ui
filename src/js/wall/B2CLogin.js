@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { loginSucceeded } from "../account/actions";
 import { getLoginRequest } from "../app/authConfig";
 import { getColor } from "../app/theme";
-import { Button, Divider } from "../base";
+import { Button, HorizontalDivider } from "../base";
 import { WallSubheader } from "./Container";
 
 const StyledB2CLogin = styled.div`
@@ -19,8 +19,8 @@ const BetaTag = styled.span`
     transform-text: uppercase;
 `;
 
-const StyledDivider = styled(Divider)`
-    margin-bottom: 30px;
+const LoginDivider = styled(HorizontalDivider)`
+    margin: 10px 5px 20px;
 `;
 
 export const B2CLogin = ({ onSetLogin }) => {
@@ -35,7 +35,7 @@ export const B2CLogin = ({ onSetLogin }) => {
                 <Button onClick={() => window.msalInstance.loginPopup(getLoginRequest()).then(onLogin)}>Sign in</Button>
                 <BetaTag>Beta</BetaTag>
             </StyledB2CLogin>
-            <StyledDivider text="or" />
+            <LoginDivider text="or" />
         </>
     );
 };
