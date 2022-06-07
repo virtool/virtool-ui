@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Badge, LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { findJobs } from "../actions";
 import { getTerm } from "../selectors";
 import Job from "./Item/Item";
+import JobsSummary from "./Summary";
 import JobsToolbar from "./Toolbar";
 
 export class JobsList extends React.Component {
@@ -33,11 +34,10 @@ export class JobsList extends React.Component {
         return (
             <>
                 <ViewHeader title="Jobs">
-                    <ViewHeaderTitle>
-                        Jobs <Badge>{this.props.total_count}</Badge>
-                    </ViewHeaderTitle>
+                    <ViewHeaderTitle>Jobs</ViewHeaderTitle>
                 </ViewHeader>
 
+                <JobsSummary />
                 <JobsToolbar />
 
                 {noneFound}

@@ -27,7 +27,7 @@ const StyledLoader = styled.div`
 `;
 
 export const Loader = ({ className, color = "greyDark", size = "22px", style }) => (
-    <StyledLoader className={className} color={color} size={size} style={style}>
+    <StyledLoader className={className} color={color} size={size} style={style} aria-label="loading">
         <div />
     </StyledLoader>
 );

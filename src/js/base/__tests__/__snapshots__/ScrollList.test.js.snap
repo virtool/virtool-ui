@@ -84,10 +84,12 @@ exports[`<ScrollList /> should return LoadingPlaceholder when [documents=null] a
           >
             <Loader>
               <Loader__StyledLoader
+                aria-label="loading"
                 color="greyDark"
                 size="22px"
               >
                 <div
+                  aria-label="loading"
                   className="c2"
                   color="greyDark"
                   size="22px"

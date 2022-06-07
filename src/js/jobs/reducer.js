@@ -19,7 +19,8 @@ export const initialState = {
     detail: null,
     filter: "",
     fetched: false,
-    linkedJobs: {}
+    linkedJobs: {},
+    counts: {}
 };
 
 export const jobsReducer = createReducer(initialState, builder => {
