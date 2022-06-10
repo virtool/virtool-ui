@@ -202,7 +202,7 @@ describe("<CreateSample>", () => {
         expect(nameInput.value).toBe("");
 
         userEvent.click(screen.getByText(props.readyReads[0].name));
-        userEvent.click(screen.getByTestId("Auto Fill"));
+        userEvent.click(screen.getByRole("button", {name: "Auto Fill" }));
         expect(nameInput.value).toBe(readFileName);
     });
 });

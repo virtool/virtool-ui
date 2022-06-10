@@ -15,6 +15,8 @@ const fixedWidth = css`
 `;
 
 const StyledIcon = styled.i`
+    background: inherit;
+    border: none;
     color: ${getIconColor};
     ${props => (props.hoverable || props.onClick ? "cursor: pointer;" : "")};
     ${props => (props.fixedWidth ? fixedWidth : "")};
@@ -31,9 +33,10 @@ export const Icon = ({ hoverable, style, ...props }) => {
     const handleClick = useCallback(props.onClick, [props.onClick]);
 
     const className = `${props.className ? props.className + " " : ""} ${props.faStyle} fa-${props.name}`;
-
     const icon = (
         <StyledIcon
+            as={props.onClick ? "button" : "i"}
+            type="button"
             className={className}
             fixedWidth={props.fixedWidth}
             hoverable={hoverable}
@@ -41,7 +44,6 @@ export const Icon = ({ hoverable, style, ...props }) => {
             onClick={props.onClick ? handleClick : null}
             color={props.color}
             shade={props.shade}
-            data-testid={props["data-testid"]}
             aria-label={props["aria-label"]}
         />
     );
@@ -68,7 +70,6 @@ Icon.propTypes = {
     fixedWidth: PropTypes.bool,
     style: PropTypes.object,
     "aria-label": PropTypes.string,
-    "data-testid": PropTypes.string,
     hoverable: PropTypes.bool,
     shade: PropTypes.string
 };
