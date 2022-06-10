@@ -26,7 +26,7 @@ describe("<FirstUser />", () => {
         expect(screen.getByText("Create an initial administrative user to start using Virtool.")).toBeInTheDocument();
         expect(screen.getByRole("textbox", "username")).toBeInTheDocument();
         expect(screen.getByRole("textbox", "password")).toBeInTheDocument();
-        expect(screen.getByRole("button", "Create user")).toBeInTheDocument();
+        expect(screen.getByRole("button", {name: "Create User"})).toBeInTheDocument();
     });
 
     it.each(["username", "password"])("should render when %p changed", name => {

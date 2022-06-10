@@ -204,7 +204,7 @@ export const CreateSample = ({
                                 />
                                 <InputIcon
                                     name="magic"
-                                    data-testid="Auto Fill"
+                                    aria-label="Auto Fill"
                                     onClick={e => autofill(values.readFiles, setFieldValue, e)}
                                     disabled={!values.readFiles.length}
                                 />
