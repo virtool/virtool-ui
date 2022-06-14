@@ -49,7 +49,7 @@ const StyledAnalysisMapping = styled(Box)`
 
 export const AnalysisMapping = ({ index, reference, subtraction, toReference, total, toSubtraction = 0 }) => {
     const totalMapped = toReference + toSubtraction;
-    const sumPercent = totalMapped / total;
+    const sumPercent = toReference / total;
 
     const referenceTitle = <AnalysisMappingReferenceTitle index={index} reference={reference} />;
     const subtractionTitle = <AnalysisMappingSubtractionTitle subtraction={subtraction} />;
@@ -59,7 +59,7 @@ export const AnalysisMapping = ({ index, reference, subtraction, toReference, to
             <h3>
                 {numbro(sumPercent).format({ output: "percent", mantissa: 2 })} mapped
                 <small>
-                    {toThousand(totalMapped)} of {toThousand(total)} reads
+                    {toThousand(toReference)} of {toThousand(total)} reads
                 </small>
             </h3>
 
