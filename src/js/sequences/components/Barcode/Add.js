@@ -1,68 +1,74 @@
+import { Field, Form, Formik } from "formik";
+import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../../app/actions";
 import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../base";
-import { clearError } from "../../../errors/actions";
-import { getError } from "../../../errors/selectors";
+import PersistForm from "../../../forms/components/PersistForm";
 import { addSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
-import { useStateWithReset } from "../../../utils/hooks";
-import { useSequenceData } from "../../hooks";
-import { getDefaultTargetName } from "../../selectors";
-import { SequenceForm } from "../Form";
+import { getDefaultTargetName, getUnreferencedTargets } from "../../selectors";
+import { SequenceForm, validationSchema } from "../Form";
 import TargetsField from "./TargetField";
 
-const AddBarcodeSequence = ({ defaultTarget, error, isolateId, otuId, show, onClearError, onHide, onSave }) => {
+const getInitialValues = defaultTarget => ({
+    targetName: defaultTarget,
+    accession: "",
+    definition: "",
+    host: "",
+    sequence: ""
+});
+
+export const castValues = (targets, defaultTarget) => values => {
+    const targetName = find(targets, { name: values.targetName }) ? values.targetName : defaultTarget;
+    return { ...values, targetName };
+};
+
+export const AddBarcodeSequence = ({ defaultTarget, isolateId, otuId, show, onHide, onSave, targets }) => {
     const title = "Add Sequence";
 
-    const { data, updateData } = useSequenceData({});
-
-    const [targetName, setTargetName] = useStateWithReset(defaultTarget);
-
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        if (error) {
-            onClearError();
-        }
-
-        const { accession, definition, host, sequence } = data;
-
+    const handleSubmit = ({ accession, definition, host, sequence, targetName }) => {
         onSave(otuId, isolateId, accession, definition, host, sequence, targetName);
     };
 
-    const errors = {};
+    const initialValues = getInitialValues(defaultTarget);
 
     return (
         <Modal label={title} show={show} size="lg" onHide={onHide}>
             <ModalHeader>{title}</ModalHeader>
-            {show && (
-                <form onSubmit={handleSubmit}>
-                    <ModalBody>
-                        <TargetsField value={targetName} onChange={setTargetName} />
-                        <SequenceForm {...data} errors={errors} onChange={updateData} />
-                    </ModalBody>
-                    <ModalFooter>
-                        <SaveButton />
-                    </ModalFooter>
-                </form>
-            )}
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+                {({ errors, touched, setFieldValue }) => (
+                    <Form>
+                        <ModalBody>
+                            <PersistForm
+                                formName="addGenomeSequenceForm"
+                                castValues={castValues(targets, defaultTarget)}
+                            />
+                            <Field
+                                as={TargetsField}
+                                name="targetName"
+                                onChange={target => setFieldValue("targetName", target)}
+                            />
+                            <SequenceForm touched={touched} errors={errors} />
+                        </ModalBody>
+                        <ModalFooter>
+                            <SaveButton />
+                        </ModalFooter>
+                    </Form>
+                )}
+            </Formik>
         </Modal>
     );
 };
 
 export const mapStateToProps = state => ({
     defaultTarget: getDefaultTargetName(state),
-    error: getError(state, "ADD_SEQUENCE_ERROR"),
     isolateId: getActiveIsolateId(state),
-    otuId: getOTUDetailId(state)
+    otuId: getOTUDetailId(state),
+    targets: getUnreferencedTargets(state)
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onClearError: () => {
-        dispatch(clearError("ADD_SEQUENCE_ERROR"));
-    },
-
     onHide: () => {
         dispatch(pushState({ addSequence: false }));
     },
