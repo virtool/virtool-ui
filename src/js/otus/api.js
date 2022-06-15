@@ -53,13 +53,24 @@ export const addSequence = ({ otuId, isolateId, accession, definition, host, seq
         target
     });
 
-export const editSequence = ({ otuId, isolateId, sequenceId, accession, definition, host, sequence, segment }) =>
+export const editSequence = ({
+    otuId,
+    isolateId,
+    sequenceId,
+    accession,
+    definition,
+    host,
+    sequence,
+    segment,
+    target
+}) =>
     Request.patch(`/api/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`).send({
         accession,
         definition,
         host,
         sequence,
-        segment
+        segment,
+        target
     });
 
 export const removeSequence = ({ otuId, isolateId, sequenceId }) =>

@@ -1,72 +1,88 @@
+import { Field, Form, Formik } from "formik";
+import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../../app/actions";
 import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../base";
-import { clearError } from "../../../errors/actions";
-import { getError } from "../../../errors/selectors";
+import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
-import { useStateWithReset } from "../../../utils/hooks";
 import { routerLocationHasState } from "../../../utils/utils";
-import { useSequenceData } from "../../hooks";
-import { getActiveSequence } from "../../selectors";
-import { SequenceForm } from "../Form";
+import { getActiveSequence, getUnreferencedTargets } from "../../selectors";
+import { SequenceForm, validationSchema } from "../Form";
 import TargetsField from "./TargetField";
 
-const EditBarcodeSequence = ({
-    error,
+const getInitialValues = ({
+    initialTargetName,
+    initialAccession,
+    initialDefinition,
+    initialHost,
+    initialSequence
+}) => ({
+    targetName: initialTargetName || null,
+    accession: initialAccession || "",
+    definition: initialDefinition || "",
+    host: initialHost || "",
+    sequence: initialSequence || ""
+});
+
+export const castValues = (targets, initialTargetName) => values => {
+    const targetName = find(targets, { name: values.targetName }) ? values.targetName : initialTargetName;
+    return { ...values, targetName };
+};
+
+export const EditBarcodeSequence = ({
     id,
     initialAccession,
     initialDefinition,
     initialHost,
     initialSequence,
-    initialTarget,
+    initialTargetName,
+    targets,
     isolateId,
     otuId,
     show,
-    onClearError,
     onHide,
     onSave
 }) => {
-    const { data, updateData } = useSequenceData({
-        accession: initialAccession,
-        definition: initialDefinition,
-        host: initialHost,
-        sequence: initialSequence
-    });
-
     const title = "Edit Sequence";
 
-    const [targetName, setTargetName] = useStateWithReset(initialTarget);
-
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        if (error) {
-            onClearError();
-        }
-
-        const { accession, definition, host, sequence } = data;
-
+    const handleSubmit = ({ accession, definition, host, sequence, targetName }) => {
         onSave(otuId, isolateId, id, accession, definition, host, sequence, targetName);
     };
 
-    const errors = {};
+    const initialValues = getInitialValues({
+        initialTargetName,
+        initialAccession,
+        initialDefinition,
+        initialHost,
+        initialSequence
+    });
 
     return (
         <Modal label={title} show={show} size="lg" onHide={onHide}>
             <ModalHeader>{title}</ModalHeader>
-            {show && (
-                <form onSubmit={handleSubmit}>
-                    <ModalBody>
-                        <TargetsField value={targetName} onChange={setTargetName} />
-                        <SequenceForm {...data} errors={errors} onChange={updateData} />
-                    </ModalBody>
-                    <ModalFooter>
-                        <SaveButton />
-                    </ModalFooter>
-                </form>
-            )}
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+                {({ touched, errors, setFieldValue }) => (
+                    <Form>
+                        <PersistForm
+                            formName={`editGenomeSequenceForm${id}`}
+                            castValues={castValues(targets, initialTargetName)}
+                        />
+                        <ModalBody>
+                            <Field
+                                as={TargetsField}
+                                name="targetName"
+                                onChange={targetName => setFieldValue("targetName", targetName)}
+                            />
+                            <SequenceForm touched={touched} errors={errors} />
+                        </ModalBody>
+                        <ModalFooter>
+                            <SaveButton />
+                        </ModalFooter>
+                    </Form>
+                )}
+            </Formik>
         </Modal>
     );
 };
@@ -75,13 +91,13 @@ export const mapStateToProps = state => {
     const { accession, definition, host, id, sequence, target } = getActiveSequence(state);
 
     return {
-        error: getError("EDIT_SEQUENCE_ERROR"),
         id,
         initialAccession: accession,
         initialDefinition: definition,
         initialHost: host,
         initialSequence: sequence,
-        initialTarget: target,
+        initialTargetName: target,
+        targets: getUnreferencedTargets(state),
         isolateId: getActiveIsolateId(state),
         otuId: getOTUDetailId(state),
         show: routerLocationHasState(state, "editSequence")
@@ -89,16 +105,12 @@ export const mapStateToProps = state => {
 };
 
 export const mapDispatchToProps = dispatch => ({
-    onSave: (otuId, isolateId, accession, definition, host, sequence, target) => {
-        dispatch(editSequence(otuId, isolateId, sequenceId, { accession, definition, host, sequence, target }));
+    onSave: (otuId, isolateId, sequenceId, accession, definition, host, sequence, target) => {
+        dispatch(editSequence({ otuId, isolateId, sequenceId, accession, definition, host, sequence, target }));
     },
 
     onHide: () => {
         dispatch(pushState({ editSequence: false }));
-    },
-
-    onClearError: () => {
-        dispatch(clearError("EDIT_SEQUENCE_ERROR"));
     }
 });
 

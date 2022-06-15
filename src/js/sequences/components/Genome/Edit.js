@@ -1,17 +1,30 @@
+import { Field, Form, Formik } from "formik";
+import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../../app/actions";
 import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../base";
-import { clearError } from "../../../errors/actions";
 import { getError } from "../../../errors/selectors";
+import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
-import { useStateWithReset } from "../../../utils/hooks";
 import { routerLocationHasState } from "../../../utils/utils";
-import { useSequenceData } from "../../hooks";
-import { getActiveSequence } from "../../selectors";
-import { SequenceForm } from "../Form";
+import { getActiveSequence, getUnreferencedSegments } from "../../selectors";
+import { SequenceForm, validationSchema } from "../Form";
 import SegmentField from "./SegmentField";
+
+const getInitialValues = ({ initialSegment, initialAccession, initialDefinition, initialHost, initialSequence }) => ({
+    segment: initialSegment || null,
+    accession: initialAccession || "",
+    definition: initialDefinition || "",
+    host: initialHost || "",
+    sequence: initialSequence || ""
+});
+
+export const castValues = segments => values => {
+    const segment = find(segments, { name: values.segment }) ? values.segment : null;
+    return { ...values, segment };
+};
 
 export const EditGenomeSequence = ({
     initialAccession,
@@ -19,46 +32,50 @@ export const EditGenomeSequence = ({
     initialHost,
     initialSegment,
     initialSequence,
+    segments,
     id,
     isolateId,
     otuId,
     show,
-    onClearError,
     onHide,
     onSave
 }) => {
     const title = "Edit Sequence";
 
-    const { data, updateData } = useSequenceData({
-        accession: initialAccession,
-        definition: initialDefinition,
-        host: initialHost,
-        sequence: initialSequence
-    });
-
-    const [segment, setSegment] = useStateWithReset(initialSegment);
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        const { accession, definition, host, sequence } = data;
-        onClearError();
+    const handleSubmit = ({ accession, definition, host, sequence, segment }) => {
         onSave(otuId, isolateId, id, accession, definition, host, segment, sequence);
     };
 
-    const errors = {};
-
+    const initialValues = getInitialValues({
+        initialSegment,
+        initialAccession,
+        initialDefinition,
+        initialHost,
+        initialSequence
+    });
     return (
         <Modal label={title} show={show} size="lg" onHide={onHide}>
             <ModalHeader>{title}</ModalHeader>
-            <form onSubmit={handleSubmit}>
-                <ModalBody>
-                    <SegmentField value={segment} onChange={setSegment} />
-                    <SequenceForm {...data} errors={errors} onChange={updateData} />
-                </ModalBody>
-                <ModalFooter>
-                    <SaveButton />
-                </ModalFooter>
-            </form>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+                {({ setFieldValue, errors, touched }) => (
+                    <Form>
+                        <ModalBody>
+                            <PersistForm formName={`editGenomeSequenceForm${id}`} castValues={castValues(segments)} />
+                            <Field
+                                as={SegmentField}
+                                name="segment"
+                                onChange={segment => {
+                                    setFieldValue("segment", segment);
+                                }}
+                            />
+                            <SequenceForm touched={touched} errors={errors} />
+                        </ModalBody>
+                        <ModalFooter>
+                            <SaveButton />
+                        </ModalFooter>
+                    </Form>
+                )}
+            </Formik>
         </Modal>
     );
 };
@@ -73,6 +90,7 @@ export const mapStateToProps = state => {
         initialHost: host,
         initialSegment: segment,
         initialSequence: sequence,
+        segments: getUnreferencedSegments(state),
         isolateId: getActiveIsolateId(state),
         otuId: getOTUDetailId(state),
         error: getError(state, "EDIT_SEQUENCE_ERROR"),
@@ -81,10 +99,6 @@ export const mapStateToProps = state => {
 };
 
 export const mapDispatchToProps = dispatch => ({
-    onClearError: () => {
-        dispatch(clearError("EDIT_SEQUENCE_ERROR"));
-    },
-
     onHide: () => {
         dispatch(pushState({ addSequence: false, editSequence: false }));
     },

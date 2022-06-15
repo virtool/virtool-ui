@@ -17,6 +17,7 @@ import {
     REVERT,
     SET_ISOLATE_AS_DEFAULT
 } from "../app/actionTypes";
+import { deletePersistentFormState } from "../forms/actions";
 import { apiCall, pushFindTerm, putGenericError } from "../utils/sagas";
 import * as otusAPI from "./api";
 import { createAction } from "@reduxjs/toolkit";
@@ -94,6 +95,7 @@ export function* addSequence(action) {
 
     if (response.ok) {
         yield put(pushState({ addSequence: false }));
+        yield put(deletePersistentFormState("addGenomeSequenceForm"));
     }
 }
 
@@ -102,6 +104,8 @@ export function* editSequence(action) {
 
     if (response.ok) {
         yield put(pushState({ editSequence: false }));
+        const sequenceData = JSON.parse(response.text);
+        yield put(deletePersistentFormState(`editGenomeSequenceForm${sequenceData.id}`));
     }
 }
 
