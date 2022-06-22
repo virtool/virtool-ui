@@ -4,10 +4,9 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Alert, device, Icon, InitialIcon, LoadingPlaceholder, RemoveBanner } from "../../base";
+import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "../../base";
 import { listGroups } from "../../groups/actions";
-import { getUser, removeUser } from "../actions";
-import { getCanModifyUser } from "../selectors";
+import { getUser } from "../actions";
 import UserGroups from "./Groups";
 import Password from "./Password";
 import UserPermissions from "./Permissions";
@@ -55,10 +54,6 @@ export class UserDetail extends React.Component {
         this.props.onListGroups();
     }
 
-    handleRemove = () => {
-        this.props.onRemoveUser(this.props.detail.id);
-    };
-
     render() {
         if (this.props.error.length) {
             return (
@@ -100,21 +95,12 @@ export class UserDetail extends React.Component {
                 </UserDetailGroups>
 
                 <UserRole />
-
-                {this.props.canModifyUser ? (
-                    <RemoveBanner
-                        message="Permanently remove this user"
-                        buttonText="Delete"
-                        onClick={this.handleRemove}
-                    />
-                ) : null}
             </div>
         );
     }
 }
 
 export const mapStateToProps = state => ({
-    canModifyUser: getCanModifyUser(state),
     detail: state.users.detail,
     error: get(state, "errors.GET_USER_ERROR.message", ""),
     lastPasswordChange: get(state, "users.detail.last_password_change")
@@ -123,10 +109,6 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = dispatch => ({
     onGetUser: userId => {
         dispatch(getUser(userId));
-    },
-
-    onRemoveUser: userId => {
-        dispatch(removeUser(userId));
     },
 
     onListGroups: () => {

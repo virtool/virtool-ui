@@ -31,11 +31,6 @@ exports[`<UserDetail /> should render 1`] = `
     <Connect(UserPermissions) />
   </Detail__UserDetailGroups>
   <Connect(UserRole) />
-  <RemoveBanner
-    buttonText="Delete"
-    message="Permanently remove this user"
-    onClick={[Function]}
-  />
 </div>
 `;
 
@@ -66,11 +61,6 @@ exports[`<UserDetail /> should render when [administrator=false] 1`] = `
     <Connect(UserPermissions) />
   </Detail__UserDetailGroups>
   <Connect(UserRole) />
-  <RemoveBanner
-    buttonText="Delete"
-    message="Permanently remove this user"
-    onClick={[Function]}
-  />
 </div>
 `;
 

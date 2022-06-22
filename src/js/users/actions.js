@@ -4,18 +4,17 @@
  * @author igboyes
  */
 
+import { createAction } from "@reduxjs/toolkit";
 import {
-    WS_INSERT_USER,
-    WS_UPDATE_USER,
-    WS_REMOVE_USER,
-    FIND_USERS,
-    GET_USER,
+    CREATE_FIRST_USER,
     CREATE_USER,
     EDIT_USER,
-    REMOVE_USER,
-    CREATE_FIRST_USER
+    FIND_USERS,
+    GET_USER,
+    WS_INSERT_USER,
+    WS_REMOVE_USER,
+    WS_UPDATE_USER
 } from "../app/actionTypes";
-import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns an action that should be dispatched when a user document is inserted via websocket.
@@ -80,5 +79,3 @@ export const createFirstUser = createAction(CREATE_FIRST_USER.REQUESTED, (handle
 export const editUser = createAction(EDIT_USER.REQUESTED, (userId, update) => ({
     payload: { userId, update }
 }));
-
-export const removeUser = createAction(REMOVE_USER.REQUESTED, userId => ({ payload: { userId } }));

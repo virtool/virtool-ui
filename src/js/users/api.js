@@ -18,5 +18,3 @@ export const createFirst = ({ handle, password }) =>
     });
 
 export const edit = ({ userId, update }) => Request.patch(`/api/users/${userId}`).send(update);
-
-export const remove = ({ userId }) => Request.delete(`/api/users/${userId}`);
