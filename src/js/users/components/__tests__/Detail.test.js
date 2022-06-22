@@ -1,7 +1,6 @@
 jest.mock("../../selectors");
 
-import { UserDetail, mapStateToProps, mapDispatchToProps } from "../Detail";
-import { getCanModifyUser } from "../../selectors";
+import { mapDispatchToProps, mapStateToProps, UserDetail } from "../Detail";
 
 describe("<UserDetail />", () => {
     let props;
@@ -52,18 +51,12 @@ describe("<UserDetail />", () => {
         expect(props.onGetUser).toHaveBeenCalledWith("foo");
         expect(props.onListGroups).toHaveBeenCalled();
     });
-
-    it("should call onRemoveUser() when RemoveBanner clicked", () => {
-        const wrapper = shallow(<UserDetail {...props} />);
-        wrapper.find("RemoveBanner").prop("onClick")();
-        expect(props.onRemoveUser).toHaveBeenCalledWith("bob");
-    });
 });
 
 describe("mapStateToProps", () => {
     const state = {
         users: {
-            detail: "foo"
+            detail: { handle: "foo", last_password_change: 0 }
         },
         groups: {
             list: "foo",
@@ -71,18 +64,14 @@ describe("mapStateToProps", () => {
         }
     };
 
-    it.each([true, false])("should return props when [canModifyUser=%p]", canModifyUser => {
-        getCanModifyUser.mockReturnValue(canModifyUser);
-
+    it("should return correct props", () => {
         const props = mapStateToProps(state);
 
         expect(props).toEqual({
-            canModifyUser,
-            detail: "foo",
-            error: ""
+            detail: state.users.detail,
+            error: "",
+            lastPasswordChange: 0
         });
-
-        expect(getCanModifyUser).toHaveBeenCalledWith(state);
     });
 });
 
@@ -108,15 +97,6 @@ describe("mapDispatchToProps", () => {
         result.onListGroups();
         expect(dispatch).toHaveBeenCalledWith({
             type: "LIST_GROUPS_REQUESTED"
-        });
-    });
-
-    it("should return onRemoveUser() in props", () => {
-        const userId = "foo";
-        result.onRemoveUser(userId);
-        expect(dispatch).toHaveBeenCalledWith({
-            type: "REMOVE_USER_REQUESTED",
-            payload: { userId }
         });
     });
 });

@@ -1,23 +1,13 @@
 import {
-    WS_INSERT_USER,
-    WS_UPDATE_USER,
-    WS_REMOVE_USER,
-    GET_USER,
     CREATE_USER,
     EDIT_USER,
-    REMOVE_USER,
-    FIND_USERS
+    FIND_USERS,
+    GET_USER,
+    WS_INSERT_USER,
+    WS_REMOVE_USER,
+    WS_UPDATE_USER
 } from "../../app/actionTypes";
-import {
-    wsInsertUser,
-    wsUpdateUser,
-    wsRemoveUser,
-    getUser,
-    createUser,
-    editUser,
-    removeUser,
-    findUsers
-} from "../actions";
+import { createUser, editUser, findUsers, getUser, wsInsertUser, wsRemoveUser, wsUpdateUser } from "../actions";
 
 describe("Users Action Creators", () => {
     const userId = "bill";
@@ -82,14 +72,6 @@ describe("Users Action Creators", () => {
         expect(result).toEqual({
             type: EDIT_USER.REQUESTED,
             payload: { userId, update }
-        });
-    });
-
-    it("removeUser", () => {
-        const result = removeUser(userId);
-        expect(result).toEqual({
-            type: REMOVE_USER.REQUESTED,
-            payload: { userId }
         });
     });
 });
