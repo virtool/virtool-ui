@@ -1,9 +1,18 @@
 import { has } from "lodash-es";
 import { select, takeEvery, takeLatest } from "redux-saga/effects";
-import { ARCHIVE_JOB, CANCEL_JOB, FIND_JOBS, GET_JOB, GET_LINKED_JOB, WS_UPDATE_JOB } from "../app/actionTypes";
+import {
+    ARCHIVE_JOB,
+    CANCEL_JOB,
+    FIND_JOBS,
+    GET_JOB,
+    GET_LINKED_JOB,
+    WS_INSERT_JOB,
+    WS_REMOVE_JOB,
+    WS_UPDATE_JOB
+} from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as jobsAPI from "./api";
-import { getJobDetailId, getLinkedJobs } from "./selectors";
+import { getJobDetailId, getLinkedJobs, getTerm } from "./selectors";
 
 export function* wsUpdateJob(action) {
     const jobId = action.payload.id;
@@ -18,6 +27,11 @@ export function* wsUpdateJob(action) {
     if (has(linkedJobs, jobId)) {
         yield apiCall(jobsAPI.get, { jobId }, GET_LINKED_JOB);
     }
+}
+
+export function* getJobCount() {
+    const term = yield select(getTerm);
+    yield apiCall(jobsAPI.find, { term, archived: false }, FIND_JOBS);
 }
 
 export function* findJobs(action) {
@@ -47,5 +61,6 @@ export function* watchJobs() {
     yield takeEvery(CANCEL_JOB.REQUESTED, cancelJob);
     yield takeEvery(ARCHIVE_JOB.REQUESTED, archiveJob);
     yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
+    yield takeLatest([WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB], getJobCount);
     yield takeEvery(GET_LINKED_JOB.REQUESTED, getLinkedJob);
 }

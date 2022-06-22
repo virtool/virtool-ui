@@ -1,4 +1,4 @@
-import { map, reduce } from "lodash-es";
+import { isEmpty, map, reduce } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -74,7 +74,7 @@ export const JobsSummary = ({ allCounts }) => {
         return allCounts[state] ? <SummaryTag counts={allCounts[state]} name={state} key={state} /> : null;
     });
 
-    return <JobsSummaryContainer>{summaries}</JobsSummaryContainer>;
+    return isEmpty(allCounts) || <JobsSummaryContainer>{summaries}</JobsSummaryContainer>;
 };
 
 export const mapStateToProps = state => {
