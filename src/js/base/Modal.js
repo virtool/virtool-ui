@@ -134,24 +134,6 @@ export const ModalBody = styled(BoxGroupSection)`
 
 export const ModalContext = React.createContext({});
 
-export const ModalBodyOverlay = styled.div`
-    align-items: center;
-    background-color: rgba(203, 213, 224, 0.7);
-    display: flex;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    text-align: center;
-    z-index: 120;
-
-    span {
-        flex: auto;
-        font-size: ${props => props.theme.fontSize.xxl};
-    }
-`;
-
 export const ModalTabs = styled(Tabs)`
     border-bottom: none;
     margin-bottom: 0;
