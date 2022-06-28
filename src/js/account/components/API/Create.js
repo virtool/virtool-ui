@@ -1,5 +1,5 @@
 import { mapValues } from "lodash-es";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -8,8 +8,6 @@ import { pushState } from "../../../app/actions";
 import {
     ModalBody,
     ModalFooter,
-    Flex,
-    FlexItem,
     Icon,
     Input,
     InputContainer,
@@ -25,10 +23,11 @@ import { routerLocationHasState } from "../../../utils/utils";
 import { clearAPIKey, createAPIKey } from "../../actions";
 import CreateAPIKeyInfo from "./CreateInfo";
 import APIPermissions from "./Permissions";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 
 const CreateAPIKeyCopied = styled.p`
     color: ${props => props.theme.color.blue};
-    visibility: ${props => (props.show ? "visible" : "hidden")};
 `;
 
 const CreateAPIKeyInput = styled(Input)`
@@ -49,138 +48,113 @@ const StyledCreateAPIKey = styled(ModalBody)`
     }
 `;
 
-const StyledFlex = styled(Flex)`
+const APIKeyInputContainer = styled(InputContainer)`
     margin-top: 15px;
     margin-bottom: 10px;
 `;
 
-export const getInitialState = props => ({
-    name: "",
-    permissions: mapValues(props.permissions, () => false),
-    submitted: false,
-    copied: false,
-    error: "",
-    show: false
+const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Provide a name for the key")
 });
 
-export class CreateAPIKey extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = getInitialState(props);
-    }
+export const getInitialFormValues = props => ({
+    name: "",
+    permissions: mapValues(props.permissions, () => false)
+});
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (!prevState.show && nextProps.newKey) {
-            return { show: true };
+export const CreateAPIKey = props => {
+    const [copied, setCopied] = useState(false);
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        if (!show && props.newKey) {
+            setShow(true);
         }
-        return null;
-    }
+    }, [props.newKey]);
 
-    handleChange = e => {
-        this.setState({ name: e.target.value, error: "" });
+    const handleModalExited = () => {
+        setCopied(false);
+        setShow(false);
     };
 
-    handleCopy = () => {
-        this.setState({ copied: true });
+    const handleSubmit = ({ name, permissions }) => {
+        props.onCreate(name, permissions);
     };
 
-    handleModalExited = () => {
-        this.setState(getInitialState(this.props));
-    };
+    let content;
 
-    handleSubmit = e => {
-        e.preventDefault();
+    if (show) {
+        content = (
+            <StyledCreateAPIKey>
+                <strong>Here is your key.</strong>
+                <small>Make note of it now. For security purposes, it will not be shown again.</small>
 
-        const { name, permissions } = this.state;
-
-        if (!this.state.name) {
-            return this.setState({
-                error: "Provide a name for the key"
-            });
-        }
-
-        this.setState({ submitted: true }, () => {
-            this.props.onCreate(name, permissions);
-        });
-    };
-
-    handlePermissionChange = (key, value) => {
-        this.setState({ permissions: { ...this.state.permissions, [key]: value } });
-    };
-
-    render() {
-        let content;
-
-        if (this.state.show) {
-            content = (
-                <StyledCreateAPIKey>
-                    <strong>Here is your key.</strong>
-                    <small>Make note of it now. For security purposes, it will not be shown again.</small>
-
-                    <StyledFlex alignItems="stretch" alignContent="stretch">
-                        <FlexItem grow={1}>
-                            <InputContainer align="right">
-                                <CreateAPIKeyInput value={this.props.newKey} readOnly />
-                                <CopyToClipboard text={this.props.newKey} onCopy={this.handleCopy}>
-                                    <InputIcon name="copy" />
-                                </CopyToClipboard>
-                            </InputContainer>
-                        </FlexItem>
-                    </StyledFlex>
-
-                    <CreateAPIKeyCopied show={this.state.copied}>
+                <APIKeyInputContainer align="right">
+                    <CreateAPIKeyInput value={props.newKey} readOnly />
+                    <CopyToClipboard text={props.newKey} onCopy={() => setCopied(true)}>
+                        <InputIcon aria-label="copy" name="copy" />
+                    </CopyToClipboard>
+                </APIKeyInputContainer>
+                {copied && (
+                    <CreateAPIKeyCopied>
                         <Icon name="check" /> Copied
                     </CreateAPIKeyCopied>
-                </StyledCreateAPIKey>
-            );
-        } else {
-            content = (
-                <>
-                    <ModalHeader>Create API Key</ModalHeader>
+                )}
+            </StyledCreateAPIKey>
+        );
+    } else {
+        content = (
+            <>
+                <ModalHeader>Create API Key</ModalHeader>
+                <Formik
+                    onSubmit={handleSubmit}
+                    initialValues={getInitialFormValues(props)}
+                    validationSchema={validationSchema}
+                >
+                    {({ errors, setFieldValue, touched, values }) => (
+                        <Form>
+                            <CreateAPIKeyInfo />
+                            <ModalBody>
+                                <InputGroup>
+                                    <InputLabel htmlFor="name">Name</InputLabel>
+                                    <Field name="name" id="name" as={Input} />
+                                    <InputError>{touched.name && errors.name}</InputError>
+                                </InputGroup>
 
-                    <form onSubmit={this.handleSubmit}>
-                        <CreateAPIKeyInfo />
-                        <ModalBody>
-                            <InputGroup>
-                                <InputLabel>Name</InputLabel>
-                                <Input label="Name" value={this.state.name} onChange={this.handleChange} />
-                                <InputError>{this.state.error}</InputError>
-                            </InputGroup>
+                                <label>Permissions</label>
 
-                            <label>Permissions</label>
+                                <APIPermissions
+                                    keyPermissions={values.permissions}
+                                    onChange={(key, value) =>
+                                        setFieldValue("permissions", { ...values.permissions, [key]: value })
+                                    }
+                                />
+                            </ModalBody>
 
-                            <APIPermissions
-                                keyPermissions={this.state.permissions}
-                                onChange={this.handlePermissionChange}
-                            />
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <SaveButton />
-                        </ModalFooter>
-                    </form>
-                </>
-            );
-        }
-
-        return (
-            <Modal
-                label="Create API Key"
-                show={this.props.show}
-                onHide={this.props.onHide}
-                onExited={this.handleModalExited}
-            >
-                {content}
-            </Modal>
+                            <ModalFooter>
+                                <SaveButton />
+                            </ModalFooter>
+                        </Form>
+                    )}
+                </Formik>
+            </>
         );
     }
-}
 
-export const mapStateToProps = state => ({
-    show: routerLocationHasState(state, "createAPIKey"),
-    newKey: state.account.newKey,
-    permissions: state.account.permissions
-});
+    return (
+        <Modal label="Create API Key" show={props.show} onHide={props.onHide} onExited={handleModalExited}>
+            {content}
+        </Modal>
+    );
+};
+
+export const mapStateToProps = state => {
+    return {
+        show: routerLocationHasState(state, "createAPIKey"),
+        newKey: state.account.newKey,
+        permissions: state.account.permissions
+    };
+};
 
 export const mapDispatchToProps = dispatch => ({
     onCreate: (name, permissions) => {

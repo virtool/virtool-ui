@@ -1,130 +1,90 @@
 import { CLEAR_API_KEY, CREATE_API_KEY, PUSH_STATE } from "../../../../app/actionTypes";
-import { Input } from "../../../../base";
 import * as utils from "../../../../utils/utils";
-import { CreateAPIKey, getInitialState, mapDispatchToProps, mapStateToProps } from "../Create";
-
-const createMockEvent = value => {
-    const e = {
-        preventDefault: jest.fn()
-    };
-
-    if (value) {
-        e.target = {
-            value
-        };
-    }
-
-    return e;
-};
+import { CreateAPIKey, getInitialFormValues, mapDispatchToProps, mapStateToProps } from "../Create";
+import { createStore } from "redux";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 
 const expectedInitialState = {
     name: "",
-    permissions: { foo: false, bar: false },
-    submitted: false,
-    copied: false,
-    error: "",
-    show: false
+    permissions: { foo: false, bar: false }
 };
 
-describe("getInitialState()", () => {
+const createAppStore = state => {
+    return () => createStore(state => state, state);
+};
+
+describe("getInitialFormValues()", () => {
     it("should return correct initial state", () => {
         const props = {
             permissions: { foo: false, bar: true }
         };
 
-        expect(getInitialState(props)).toEqual(expectedInitialState);
+        expect(getInitialFormValues(props)).toEqual(expectedInitialState);
     });
 });
 
 describe("<CreateAPIKey />", () => {
     let props;
+    let state;
 
     beforeEach(() => {
         props = {
-            newKey: "",
+            newKey: null,
             permissions: { foo: false, bar: true },
             onCreate: jest.fn(),
             onHide: jest.fn(),
             show: true
         };
+        state = {
+            account: {
+                permissions: {
+                    permission1: false,
+                    permission2: false
+                }
+            }
+        };
     });
 
-    it("should render when [state.newKey] is empty", () => {
-        const wrapper = shallow(<CreateAPIKey {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render correctly when newKey is empty", () => {
+        renderWithProviders(<CreateAPIKey {...props} />, createAppStore(state));
+        expect(screen.getByText("Name")).toBeInTheDocument();
+        expect(screen.getByText("Permissions")).toBeInTheDocument();
+        expect(screen.getByText("foo")).toBeInTheDocument();
+        expect(screen.getByText("bar")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
     });
 
-    it("should render when [state.newKey] set", () => {
+    it("should render correctly when newKey is set", () => {
         props.newKey = "123abc";
-        const wrapper = shallow(<CreateAPIKey {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<CreateAPIKey {...props} />, createAppStore(state));
+        expect(screen.getByText("Here is your key.")).toBeInTheDocument();
+        expect(screen.getByDisplayValue("123abc")).toBeInTheDocument();
+        expect(screen.queryByText("Copied")).not.toBeInTheDocument();
+        screen.getByRole("button", { name: "copy" }).click();
+        expect(screen.getByText("Copied")).toBeInTheDocument();
     });
 
-    it("should render when [props.newKey] and [state.copied] set", () => {
-        props.newKey = "123abc";
-        const wrapper = shallow(<CreateAPIKey {...props} />);
-        wrapper.setState({ copied: true });
-        expect(wrapper).toMatchSnapshot();
-    });
+    it("should fail to submit and show errors when no name provided", async () => {
+        renderWithProviders(<CreateAPIKey {...props} />, createAppStore(state));
+        expect(screen.queryByText("Provide a name for the key")).not.toBeInTheDocument();
+        screen.getByRole("button", { name: "Save" }).click();
 
-    it("should set [state.copied=true] when key copied", () => {
-        props.newKey = "123abc";
-        const wrapper = shallow(<CreateAPIKey {...props} />);
-        expect(wrapper.state("copied")).toBe(false);
-        wrapper.find("CopyToClipboard").prop("onCopy")();
-        expect(wrapper.state("copied")).toBe(true);
-    });
-
-    it("should update [state.name] and [state.error] when input changes", () => {
-        const wrapper = shallow(<CreateAPIKey {...props} />);
-        wrapper.find(Input).prop("onChange")(createMockEvent("foo"));
-        expect(wrapper.state("name")).toBe("foo");
-    });
-
-    it("should display error when name missing during submission", () => {
-        const wrapper = shallow(<CreateAPIKey {...props} />);
-        wrapper.instance().handleSubmit(createMockEvent());
-        expect(wrapper.state("error")).toBe("Provide a name for the key");
-    });
-
-    it("should update state when handleModalExited() called", () => {
-        const wrapper = shallow(<CreateAPIKey {...props} />);
-        wrapper.setState({
-            permissions: { foo: true }
-        });
-        wrapper.instance().handleModalExited();
-        expect(wrapper.state()).toEqual(expectedInitialState);
-    });
-
-    describe("handlePermissionChange()", () => {
-        it("should update [state.permissions]", () => {
-            const wrapper = shallow(<CreateAPIKey {...props} />);
-            wrapper.instance().handlePermissionChange("foo", true);
-            expect(wrapper.state("permissions")).toEqual({ foo: true, bar: false });
+        await waitFor(() => {
+            expect(props.onCreate).not.toHaveBeenCalled();
+            expect(screen.getByText("Provide a name for the key")).toBeInTheDocument();
         });
     });
 
-    describe("handleSubmit()", () => {
-        it("should call preventDefault on event", () => {
-            const wrapper = shallow(<CreateAPIKey {...props} />);
-            const e = createMockEvent();
-            wrapper.instance().handleSubmit(e);
-            expect(e.preventDefault).toHaveBeenCalled();
-        });
+    it("should allow submission when name provided", async () => {
+        const testRender = renderWithProviders(<CreateAPIKey {...props} />, createAppStore(state));
+        const input = testRender.getByRole("textbox", { name: "Name" });
+        expect(screen.queryByText("Provide a name for the key")).not.toBeInTheDocument();
+        fireEvent.change(input, { target: { value: "testname" } });
+        screen.getByRole("button", { name: "Save" }).click();
 
-        it("should set [state.submitted=true] and call props.onCreate()", () => {
-            const name = "Foo 1";
-            const permissions = { foo: true, bar: true };
-
-            const wrapper = shallow(<CreateAPIKey {...props} />);
-            wrapper.setState({
-                name,
-                permissions
-            });
-            wrapper.instance().handleSubmit(createMockEvent());
-
-            expect(wrapper.state("submitted")).toBe(true);
-            expect(props.onCreate).toHaveBeenCalledWith(name, permissions);
+        await waitFor(() => {
+            expect(props.onCreate).toHaveBeenCalled();
+            expect(screen.queryByText("Provide a name for the key")).not.toBeInTheDocument();
         });
     });
 });

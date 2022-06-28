@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Icon, ModalAlert } from "../../../base";
 import { getAccountAdministrator } from "../../selectors";
 
-export const CreateAPIKeyInfo = ({ administrator }) => {
+export const APIKeyAdministratorInfo = ({ administrator }) => {
     if (administrator) {
         return (
             <ModalAlert color="purple">
@@ -28,4 +28,4 @@ export const mapStateToProps = state => ({
     administrator: getAccountAdministrator(state)
 });
 
-export default connect(mapStateToProps)(CreateAPIKeyInfo);
+export default connect(mapStateToProps)(APIKeyAdministratorInfo);
