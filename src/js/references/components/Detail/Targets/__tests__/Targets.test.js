@@ -1,21 +1,41 @@
 jest.mock("../../../../selectors");
 
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
+import { Router } from "react-router-dom";
+import { createStore } from "redux";
 import { checkReferenceRight } from "../../../../selectors";
-import { TargetItem } from "../Item";
 import { mapDispatchToProps, mapStateToProps, Targets } from "../Targets";
 
+const createAppStore = state => () => createStore(state => state, state);
+
+const renderWithRouter = (ui, state, history) => {
+    return renderWithProviders(<Router history={history}>{ui}</Router>, createAppStore(state));
+};
 describe("<Targets />", () => {
     let props;
-
+    let state;
+    let history;
     beforeEach(() => {
         props = {
             canModify: true,
             dataType: "barcode",
             targets: [{ name: "foo" }],
             onRemove: jest.fn(),
-            refId: "bar"
+            refId: "bar",
+            onShowEdit: jest.fn()
         };
+        state = {
+            references: {
+                detail: {}
+            },
+            router: {
+                location: {}
+            }
+        };
+        history = createBrowserHistory();
     });
 
     it("should render when [canModify=true]", () => {
@@ -35,38 +55,21 @@ describe("<Targets />", () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it("should show modal when showAdd() is called", () => {
-        const wrapper = shallow(<Targets {...props} />);
-        wrapper.find("a").simulate("click");
-        expect(wrapper.state()).toEqual({ showAdd: true, showEdit: false });
+    it("should show modal when showAdd() is called", async () => {
+        renderWithRouter(<Targets {...props} />, state, history);
+        userEvent.click(screen.getByRole("link", { name: "Add target" }));
+        await waitFor(() => expect(history.location.state.addTarget).toBe(true));
     });
 
     it("should show modal when showEdit() is called", () => {
-        const wrapper = shallow(<Targets {...props} />);
-        wrapper.find(TargetItem).prop("onEdit")("foo");
-        expect(wrapper.state()).toEqual({
-            activeName: "foo",
-            showAdd: false,
-            showEdit: true
-        });
-    });
-
-    it("should hide modals when handleHide() is called", () => {
-        const wrapper = shallow(<Targets {...props} />);
-        wrapper.setState({
-            showAdd: true,
-            showEdit: true
-        });
-        wrapper.instance().handleHide();
-        expect(wrapper.state()).toEqual({
-            showAdd: false,
-            showEdit: false
-        });
+        renderWithRouter(<Targets {...props} />, state, history);
+        userEvent.click(screen.getByRole("button", { name: "edit" }));
+        expect(props.onShowEdit).toHaveBeenCalledWith("foo");
     });
 
     it("should call onRemove() when TargetItem removed", () => {
-        const wrapper = shallow(<Targets {...props} />);
-        wrapper.find(TargetItem).prop("onRemove")("foo");
+        renderWithRouter(<Targets {...props} />, state, history);
+        userEvent.click(screen.getByRole("button", { name: "remove" }));
         expect(props.onRemove).toHaveBeenCalledWith("bar", { targets: [] });
     });
 });

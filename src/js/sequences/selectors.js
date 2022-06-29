@@ -1,4 +1,4 @@
-import { compact, find, get, indexOf, map, reject, sortBy } from "lodash-es";
+import { compact, filter, find, get, indexOf, map, reject, sortBy } from "lodash-es";
 import { createSelector } from "reselect";
 import { getActiveIsolate, getSchema, getTargets } from "../otus/selectors";
 
@@ -80,7 +80,7 @@ export const getUnreferencedTargets = createSelector(
     [getInactiveSequences, getTargets],
     (inactiveSequences, targets) => {
         const referencedTargetNames = map(inactiveSequences, sequence => sequence.target);
-        return targets.filter(target => !referencedTargetNames.includes(target.name));
+        return filter(targets, target => !referencedTargetNames.includes(target.name));
     }
 );
 

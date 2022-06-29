@@ -1,7 +1,9 @@
 import { map, reject } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { pushState } from "../../../../app/actions";
 import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "../../../../base";
 import { editReference } from "../../../actions";
 import { checkReferenceRight } from "../../../selectors";
@@ -16,28 +18,11 @@ const TargetsHeader = styled(BoxGroupHeader)`
     }
 `;
 
-const getInitialState = () => ({
-    showAdd: false,
-    showEdit: false
-});
-
 export class Targets extends React.Component {
     constructor(props) {
         super(props);
-        this.state = getInitialState();
+        this.state = {};
     }
-
-    handleHide = () => {
-        this.setState({ showAdd: false, showEdit: false });
-    };
-
-    showAdd = () => {
-        this.setState({ showAdd: true });
-    };
-
-    showEdit = name => {
-        this.setState({ showEdit: true, activeName: name });
-    };
 
     handleRemove = name => {
         this.props.onRemove(this.props.refId, {
@@ -55,7 +40,7 @@ export class Targets extends React.Component {
                 key={target.name}
                 {...target}
                 canModify={this.props.canModify}
-                onEdit={this.showEdit}
+                onEdit={this.props.onShowEdit}
                 onRemove={this.handleRemove}
             />
         ));
@@ -64,20 +49,12 @@ export class Targets extends React.Component {
         let modals;
 
         if (this.props.canModify) {
-            addButton = (
-                <a href="#" onClick={this.showAdd}>
-                    Add target
-                </a>
-            );
+            addButton = <Link to={{ state: { addTarget: true } }}>Add target</Link>;
 
             modals = (
                 <>
-                    <AddTarget show={this.state.showAdd} onHide={this.handleHide} />
-                    <EditTarget
-                        show={this.state.showEdit}
-                        onHide={this.handleHide}
-                        activeName={this.state.activeName}
-                    />
+                    <AddTarget />
+                    <EditTarget />
                 </>
             );
         }
@@ -116,6 +93,9 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = dispatch => ({
     onRemove: (refId, update) => {
         dispatch(editReference(refId, update));
+    },
+    onShowEdit: name => {
+        dispatch(pushState({ editTarget: name }));
     }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Targets);
