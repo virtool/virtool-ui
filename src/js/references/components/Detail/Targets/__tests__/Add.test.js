@@ -101,7 +101,8 @@ describe("mapStateToProps()", () => {
                     id: "boo",
                     targets: [{ Foo: "Bar" }]
                 }
-            }
+            },
+            router: { location: { state: { addTarget: true } } }
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({
@@ -109,7 +110,8 @@ describe("mapStateToProps()", () => {
             dataType: "bar",
             documents: "baz",
             refId: "boo",
-            targets: [{ Foo: "Bar" }]
+            targets: [{ Foo: "Bar" }],
+            show: true
         });
     });
 });

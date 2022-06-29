@@ -116,13 +116,9 @@ describe("<EditTarget />", () => {
 });
 
 describe("mapStateToProps()", () => {
-    let ownProps;
     let state;
 
     beforeEach(() => {
-        ownProps = {
-            activeName: "foo"
-        };
         state = {
             references: {
                 detail: {
@@ -132,12 +128,13 @@ describe("mapStateToProps()", () => {
                         { name: "Foo", description: "Bar", length: 2, required: true }
                     ]
                 }
-            }
+            },
+            router: { location: { state: { editTarget: "foo" } } }
         };
     });
 
     it("should return props when name matches a target", () => {
-        const result = mapStateToProps(state, ownProps);
+        const result = mapStateToProps(state);
         expect(result).toEqual({
             targets: [
                 { name: "foo", description: "bar", length: 1, required: false },
@@ -147,13 +144,14 @@ describe("mapStateToProps()", () => {
             description: "bar",
             length: 1,
             required: false,
-            refId: "baz"
+            refId: "baz",
+            show: true
         });
     });
 
     it("should return props when name does not match a target", () => {
-        ownProps.activeName = "fee";
-        const result = mapStateToProps(state, ownProps);
+        state.router.location.state = {};
+        const result = mapStateToProps(state);
 
         expect(result).toEqual({
             targets: [
@@ -164,7 +162,8 @@ describe("mapStateToProps()", () => {
             description: undefined,
             length: undefined,
             required: undefined,
-            refId: "baz"
+            refId: "baz",
+            show: false
         });
     });
 });

@@ -16,6 +16,7 @@ exports[`<EditTarget /> should render 1`] = `
     <Modal__ModalBody>
       <TargetForm
         description="Bar description"
+        errorName=""
         length={490}
         name="Bar"
         onChange={[Function]}
@@ -53,6 +54,7 @@ exports[`<EditTarget /> should render error when submitted without name 1`] = `
     <Modal__ModalBody>
       <TargetForm
         description="This is a test"
+        errorName="Required field"
         length={310}
         name=""
         onChange={[Function]}
@@ -90,6 +92,7 @@ exports[`<EditTarget /> should update when TargetForm onChange() prop called 1`]
     <Modal__ModalBody>
       <TargetForm
         description="Bar description"
+        errorName=""
         length={490}
         name="Foo"
         onChange={[Function]}

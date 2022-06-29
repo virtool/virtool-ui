@@ -1,8 +1,10 @@
-import { find, map, toNumber } from "lodash-es";
+import { find, get, map, toNumber } from "lodash-es";
 import React from "react";
 
 import { connect } from "react-redux";
+import { pushState } from "../../../../app/actions";
 import { Button, ModalBody, ModalFooter, Modal, ModalHeader } from "../../../../base";
+import { routerLocationHasState } from "../../../../utils/utils";
 import { editReference } from "../../../actions";
 import { TargetForm } from "./Form";
 
@@ -70,7 +72,7 @@ export class EditTarget extends React.Component {
                             description={this.state.description}
                             length={this.state.length}
                             required={this.state.required}
-                            errorName={this.errorName}
+                            errorName={this.state.errorName}
                         />
                     </ModalBody>
 
@@ -85,9 +87,8 @@ export class EditTarget extends React.Component {
     }
 }
 
-export const mapStateToProps = (state, ownProps) => {
-    const activeName = ownProps.activeName;
-
+export const mapStateToProps = state => {
+    const activeName = get(state, "router.location.state.editTarget") || "";
     let target = {};
 
     if (activeName) {
@@ -102,13 +103,18 @@ export const mapStateToProps = (state, ownProps) => {
         length,
         required,
         targets: state.references.detail.targets,
-        refId: state.references.detail.id
+        refId: state.references.detail.id,
+        show: routerLocationHasState(state, "editTarget")
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onSubmit: (refId, update) => {
         dispatch(editReference(refId, update));
+    },
+
+    onHide: () => {
+        dispatch(pushState({ editTarget: "" }));
     }
 });
 

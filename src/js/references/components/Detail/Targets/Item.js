@@ -33,8 +33,8 @@ export const TargetItem = ({ canModify, description, name, onEdit, onRemove }) =
     if (canModify) {
         icons = (
             <span>
-                <Icon name="edit" color="orange" tip="Modify" onClick={handleEdit} />
-                <Icon name="trash" color="red" tip="Remove" onClick={handleRemove} />
+                <Icon name="edit" aria-label="edit" color="orange" tip="Modify" onClick={handleEdit} />
+                <Icon name="trash" aria-label="remove" color="red" tip="Remove" onClick={handleRemove} />
             </span>
         );
     }
