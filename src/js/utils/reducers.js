@@ -1,4 +1,4 @@
-import { reject, map, includes, sortBy, unionBy } from "lodash-es";
+import { includes, map, reject, sortBy, unionBy } from "lodash-es";
 
 export const updateDocuments = (state, payload, sortKey, sortReverse) => {
     const existing = payload.page === 1 ? [] : state.documents || [];
@@ -14,6 +14,18 @@ export const updateDocuments = (state, payload, sortKey, sortReverse) => {
         ...payload,
         documents
     };
+};
+
+export const updateModeledDocuments = (state, payload, model, sortKey, sortReverse) => {
+    const existing = payload.page === 1 ? [] : state.documents || [];
+
+    const documents = sortBy(unionBy(payload.documents, existing, "id"), sortKey);
+
+    if (sortReverse) {
+        documents.reverse();
+    }
+
+    return { ...state, ...payload, documents: map(documents, document => model(document)) };
 };
 
 export const insert = (state, payload, sortKey, sortReverse = false) => {
