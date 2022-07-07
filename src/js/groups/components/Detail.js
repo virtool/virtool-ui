@@ -1,4 +1,4 @@
-import { filter, find, get, includes, map, transform } from "lodash-es";
+import { filter, find, get, map, some, transform } from "lodash-es";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -42,7 +42,7 @@ export const GroupDetail = ({ group, pending, users, onRemove, onSetPermission }
     }
 
     if (group) {
-        members = filter(users, user => includes(user.groups, group.id));
+        members = filter(users, user => some(user.groups, { id: group.id }));
     }
 
     const memberComponents =

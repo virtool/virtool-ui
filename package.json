@@ -36,6 +36,7 @@
     "minimist": "^1.2.6",
     "normalize.css": "^8.0.1",
     "numbro": "^2.3.6",
+    "objectmodel": "^4.3.0",
     "prop-types": "^15.8.1",
     "re-reselect": "^4.0.0",
     "react": "^17.0.2",
@@ -126,7 +127,7 @@
     "testURL": "https://www.virtool.ca",
     "testEnvironment": "jsdom",
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(lodash-es/|d3.*/).*|internmap|delaunator|robust-predicates)"
+      "<rootDir>/node_modules/(?!(lodash-es/|d3.*/).*|internmap|delaunator|robust-predicates|objectmodel)"
     ]
   }
 }
