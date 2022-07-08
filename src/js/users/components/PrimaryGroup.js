@@ -11,7 +11,7 @@ export const PrimaryGroupOption = styled.option`
 
 export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) => {
     const handleSetPrimaryGroup = useCallback(
-        e => onSetPrimaryGroup(id, e.target.value === "none" ? "" : e.target.value),
+        e => onSetPrimaryGroup(id, e.target.value === "none" ? null : e.target.value),
         [id, primaryGroup]
     );
 
@@ -24,7 +24,7 @@ export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) =>
     return (
         <InputGroup>
             <InputLabel>Primary Group</InputLabel>
-            <Select value={primaryGroup} onChange={handleSetPrimaryGroup}>
+            <Select value={primaryGroup || "none"} onChange={handleSetPrimaryGroup}>
                 <option key="none" value="none">
                     None
                 </option>

@@ -15,7 +15,7 @@ const defaultUser = {
     handle: "test_handle",
     administrator: false,
     groups: ["test"],
-    primary_group: "test_group",
+    primary_group: null,
     force_reset: false,
     last_password_change: "date",
     permissions: {
@@ -104,31 +104,10 @@ describe("Users Reducer", () => {
         const action = {
             type: FIND_USERS.SUCCEEDED,
             payload: {
-                documents: [
-                    {
-                        id: "bill",
-                        handle: "test_handle",
-                        administrator: false,
-                        groups: [{ id: "test" }],
-                        primary_group: "test_group",
-                        force_reset: false,
-                        last_password_change: "date",
-                        permissions: {
-                            cancel_job: Boolean,
-                            create_ref: Boolean,
-                            create_sample: Boolean,
-                            modify_hmm: Boolean,
-                            modify_subtraction: Boolean,
-                            remove_file: Boolean,
-                            remove_job: Boolean,
-                            upload_file: Boolean
-                        }
-                    }
-                ]
+                documents: [defaultUser]
             }
         };
         const result = reducer({}, action);
-        console.log(result.documents[0]);
         const expectedResult = { documents: [User(action.payload.documents[0])] };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
