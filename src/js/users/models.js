@@ -13,7 +13,7 @@ export const Permissions = Model({
 });
 
 /**
- * @todo Remove group reformatting logic once API provides groups as objects be default
+ * @todo Remove group reformatting logic once API provides groups as objects by default
  */
 export class Groups extends ArrayModel([String, { id: String }]) {
     constructor(groups) {
@@ -26,7 +26,7 @@ export const User = ObjectModel({
     administrator: Boolean,
     groups: Groups,
     permissions: Permissions,
-    primary_group: String,
+    primary_group: [String],
     force_reset: Boolean,
     last_password_change: String,
     id: String
