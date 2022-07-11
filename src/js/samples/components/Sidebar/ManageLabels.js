@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { SidebarHeader, SideBarSection } from "../../../base";
-import { SmallSampleLabel } from "../Label";
+import { SampleLabelInner } from "./Labels";
 import { SampleSidebarMultiselectList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
 import { Link } from "react-router-dom";
@@ -25,13 +25,6 @@ const StyledSideBarSection = styled(SideBarSection)`
     grid-row: 2;
     align-self: start;
 `;
-
-const SampleLabelInner = ({ name, color, description }) => (
-    <>
-        <SmallSampleLabel color={color} name={name} />
-        <p>{description}</p>
-    </>
-);
 
 export const ManageLabels = ({
     allLabels,
