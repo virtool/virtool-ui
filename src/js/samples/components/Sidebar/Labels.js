@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { getFontSize, fontWeight, getColor } from "../../../app/theme";
 import { xor } from "lodash-es";
 
-const SampleLabelInner = ({ name, color, description }) => (
+export const SampleLabelInner = ({ name, color, description }) => (
     <div>
         <SmallSampleLabel color={color} name={name} />
         <StyledParagraph>{description}</StyledParagraph>
