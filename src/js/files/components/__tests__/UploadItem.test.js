@@ -1,5 +1,6 @@
 import { UploadItem } from "../UploadItem";
 import userEvent from "@testing-library/user-event";
+import { screen } from "@testing-library/react";
 
 describe("<UploadItem />", () => {
     let props;
@@ -15,15 +16,17 @@ describe("<UploadItem />", () => {
         };
     });
 
-    it("should render when [progress === 0]", () => {
-        const wrapper = shallow(<UploadItem {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render correctly when [progress === 0]", () => {
+        renderWithProviders(<UploadItem {...props} />);
+        expect(screen.getByText("Foo.fa")).toBeInTheDocument();
+        expect(screen.getByText("871.3 KB")).toBeInTheDocument();
     });
 
-    it("should render when [progress > 0]", () => {
+    it("should render correctly when [progress > 0 and progress < 100]", () => {
         props.progress = 51;
-        const wrapper = shallow(<UploadItem {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<UploadItem {...props} />);
+        expect(screen.getByText("Foo.fa")).toBeInTheDocument();
+        expect(screen.getByText("871.3 KB")).toBeInTheDocument();
     });
 
     it("should dispatch action to remove sample", () => {

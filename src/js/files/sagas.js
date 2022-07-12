@@ -32,7 +32,8 @@ export const createUploadChannel = (action, apiMethod) =>
     eventChannel(emitter => {
         const onProgress = e => {
             if (e.lengthComputable) {
-                emitter({ progress: e.percent });
+                const { total, loaded, percent } = e;
+                emitter({ progress: percent, total, loaded });
             }
         };
 
@@ -57,23 +58,47 @@ export const createUploadChannel = (action, apiMethod) =>
     }, buffers.sliding(2));
 
 export function* watchUploadChannel(channel, actionType, localId) {
+    const startTime = new Date();
+    let intervalStart = startTime;
+
+    let lastProgress = 0;
+
+    let progressAtLastIntervalEnd = 0;
+
+    const intervalId = setInterval(() => {
+        intervalStart = new Date();
+        progressAtLastIntervalEnd = lastProgress;
+    }, 5000);
+
     while (true) {
-        const { progress = 0, response, err } = yield take(channel);
+        const { progress = 0, total, loaded, response, err } = yield take(channel);
+
+        lastProgress = progress;
 
         if (err) {
             yield put(uploadFailed(localId));
-            return yield putGenericError(actionType, err);
+            yield putGenericError(actionType, err);
+            break;
         }
         if (response) {
-            return yield put({
+            yield put({
                 type: actionType.SUCCEEDED,
                 payload: {
                     ...response.body,
                     localId
                 }
             });
+            break;
         }
 
-        yield put(uploadProgress(localId, progress));
+        const progressDuringInterval = lastProgress - progressAtLastIntervalEnd;
+        const timeElapsed = new Date() - intervalStart;
+        const uploadedDuringInterval = (progressDuringInterval / 100) * total;
+        const uploadSpeed = uploadedDuringInterval / (timeElapsed / 1000);
+        const remaining = (total - loaded) / uploadSpeed;
+
+        yield put(uploadProgress(localId, progress, uploadSpeed, remaining));
     }
+
+    clearInterval(intervalId);
 }
