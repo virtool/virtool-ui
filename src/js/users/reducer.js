@@ -23,10 +23,10 @@ export const initialState = {
 const reducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_USER, (state, action) => {
-            return insert(state, User(action.payload), "handle");
+            return insert(state, new User(action.payload), "handle");
         })
         .addCase(WS_UPDATE_USER, (state, action) => {
-            return update(state, User(action.payload), "handle");
+            return update(state, new User(action.payload), "handle");
         })
         .addCase(WS_REMOVE_USER, (state, action) => {
             return remove(state, action.payload);

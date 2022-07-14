@@ -1,4 +1,4 @@
-import { includes, map, xor } from "lodash-es";
+import { map, some, xor } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -13,7 +13,7 @@ const UserGroupsList = styled(BoxGroup)`
 
 export class UserGroups extends React.Component {
     handleEdit = groupId => {
-        this.props.onEditGroup(this.props.userId, xor(this.props.memberGroups, [groupId]));
+        this.props.onEditGroup(this.props.userId, xor(map(this.props.memberGroups, "id"), [groupId]));
     };
 
     render() {
@@ -22,7 +22,7 @@ export class UserGroups extends React.Component {
         }
 
         let groupComponents = map(this.props.documents, ({ id }) => (
-            <UserGroup key={id} id={id} toggled={includes(this.props.memberGroups, id)} onClick={this.handleEdit} />
+            <UserGroup key={id} id={id} toggled={some(this.props.memberGroups, { id })} onClick={this.handleEdit} />
         ));
 
         if (!groupComponents.length) {

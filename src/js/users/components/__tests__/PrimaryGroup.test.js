@@ -4,9 +4,9 @@ import { mapDispatchToProps, mapStateToProps, PrimaryGroup } from "../PrimaryGro
 
 describe("<PrimaryGroup />", () => {
     const props = {
-        groups: ["foo", "bar", "baz"],
+        groups: [{ id: "foo" }, { id: "bar" }, { id: "baz" }],
         id: "bob",
-        primaryGroup: "bar",
+        primaryGroup: { id: "bar" },
         onSetPrimaryGroup: jest.fn()
     };
 

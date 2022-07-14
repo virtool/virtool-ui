@@ -53,12 +53,12 @@ describe("Users Reducer", () => {
             payload: defaultUser
         };
         const result = reducer(state, action);
-        const expectedResult = { documents: [User(action.payload)] };
+        const expectedResult = { documents: [new User(action.payload)] };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
     it("should handle WS_UPDATE_USER", () => {
         const state = {
-            documents: [User({ ...defaultUser, id: "user_1" }), User({ ...defaultUser, id: "user_2" })]
+            documents: [new User({ ...defaultUser, id: "user_1" }), new User({ ...defaultUser, id: "user_2" })]
         };
         const action = {
             type: WS_UPDATE_USER,
@@ -67,8 +67,8 @@ describe("Users Reducer", () => {
         const result = reducer(state, action);
         const expectedResult = {
             documents: [
-                User({ ...defaultUser, id: "user_1", administrator: true }),
-                User({ ...defaultUser, id: "user_2" })
+                new User({ ...defaultUser, id: "user_1", administrator: true }),
+                new User({ ...defaultUser, id: "user_2" })
             ]
         };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
@@ -108,7 +108,7 @@ describe("Users Reducer", () => {
             }
         };
         const result = reducer({}, action);
-        const expectedResult = { documents: [User(action.payload.documents[0])] };
+        const expectedResult = { documents: [new User(action.payload.documents[0])] };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
 

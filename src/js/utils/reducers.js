@@ -25,7 +25,7 @@ export const updateModeledDocuments = (state, payload, model, sortKey, sortRever
         documents.reverse();
     }
 
-    return { ...state, ...payload, documents: map(documents, document => model(document)) };
+    return { ...state, ...payload, documents: map(documents, document => new model(document)) };
 };
 
 export const insert = (state, payload, sortKey, sortReverse = false) => {
