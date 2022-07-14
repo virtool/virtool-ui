@@ -15,16 +15,15 @@ export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) =>
         [id, primaryGroup]
     );
 
-    const groupOptions = map(groups, groupId => (
-        <PrimaryGroupOption key={groupId} value={groupId}>
-            {capitalize(groupId)}
+    const groupOptions = map(groups, ({ id }) => (
+        <PrimaryGroupOption key={id} value={id}>
+            {capitalize(id)}
         </PrimaryGroupOption>
     ));
-
     return (
         <InputGroup>
             <InputLabel>Primary Group</InputLabel>
-            <Select value={primaryGroup || "none"} onChange={handleSetPrimaryGroup}>
+            <Select value={primaryGroup?.id || "none"} onChange={handleSetPrimaryGroup}>
                 <option key="none" value="none">
                     None
                 </option>
