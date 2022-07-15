@@ -58,22 +58,30 @@ export const createUploadChannel = (action, apiMethod) =>
     }, buffers.sliding(2));
 
 export function* watchUploadChannel(channel, actionType, localId) {
-    const startTime = new Date();
-    let intervalStart = startTime;
+    let lastLoaded = 0;
 
-    let lastProgress = 0;
-
-    let progressAtLastIntervalEnd = 0;
+    const loadedWindow = [];
+    let count = 0;
+    let uploadSpeed = 0;
 
     const intervalId = setInterval(() => {
-        intervalStart = new Date();
-        progressAtLastIntervalEnd = lastProgress;
-    }, 5000);
+        let loadedDuringInterval = 0;
+        if (count < 6) {
+            loadedWindow.push(lastLoaded);
+            loadedDuringInterval = loadedWindow[loadedWindow.length - 1];
+            count++;
+        } else {
+            loadedWindow.shift();
+            loadedWindow.push(lastLoaded);
+            loadedDuringInterval = loadedWindow[loadedWindow.length - 1] - loadedWindow[0];
+        }
+        uploadSpeed = loadedDuringInterval / count;
+    }, 1000);
 
     while (true) {
         const { progress = 0, total, loaded, response, err } = yield take(channel);
 
-        lastProgress = progress;
+        lastLoaded = loaded;
 
         if (err) {
             yield put(uploadFailed(localId));
@@ -91,11 +99,8 @@ export function* watchUploadChannel(channel, actionType, localId) {
             break;
         }
 
-        const progressDuringInterval = lastProgress - progressAtLastIntervalEnd;
-        const timeElapsed = new Date() - intervalStart;
-        const uploadedDuringInterval = (progressDuringInterval / 100) * total;
-        const uploadSpeed = uploadedDuringInterval / (timeElapsed / 1000);
-        const remaining = (total - loaded) / uploadSpeed;
+        let remaining = (total - loaded) / uploadSpeed;
+        remaining = isFinite(remaining) ? remaining : 0;
 
         yield put(uploadProgress(localId, progress, uploadSpeed, remaining));
     }
