@@ -11,7 +11,7 @@ const StyledSourceTypeItem = styled(BoxGroupSection)`
     span: first-child {
         margin-right: 5px;
     }
-    i.fas {
+    button.fas {
         margin-left: auto;
     }
 `;
