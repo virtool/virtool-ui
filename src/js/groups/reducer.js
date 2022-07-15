@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer, current } from "@reduxjs/toolkit";
 import { concat, get, hasIn, some, sortBy, unionBy } from "lodash-es";
 import {
     CHANGE_ACTIVE_GROUP,

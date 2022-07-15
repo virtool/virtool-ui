@@ -7,11 +7,11 @@ import { SampleSidebarSelectorItem } from "./SelectorItem";
 import { Link } from "react-router-dom";
 import { getFontSize, fontWeight } from "../../../app/theme";
 
-const SampleSidebarSelectorInputContainer = styled(BoxGroupSection)`
+export const SampleSidebarSelectorInputContainer = styled(BoxGroupSection)`
     padding: 10px;
 `;
 
-const SampleSidebarSelectorButton = styled.div`
+export const SampleSidebarSelectorButton = styled.div`
     display: flex;
     border-top: 1px solid;
     border-color: ${props => props.theme.color.greyLight};
@@ -27,7 +27,7 @@ const SampleSidebarSelectorButton = styled.div`
     }
 `;
 
-const SampleItemComponentsContainer = styled.div`
+export const SampleItemComponentsContainer = styled.div`
     max-height: 300px;
     overflow-y: scroll;
 `;

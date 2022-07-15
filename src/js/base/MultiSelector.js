@@ -12,7 +12,7 @@ const MultiSelectorError = styled(InputError)`
     margin: -5px 0 15px;
 `;
 
-const StyledMultiSelectorItem = styled(SelectBoxGroupSection)`
+export const StyledMultiSelectorItem = styled(SelectBoxGroupSection)`
     align-items: center;
     display: flex;
     user-select: none;
@@ -36,7 +36,7 @@ export const MultiSelectorItem = ({ children, className, name, value }) => {
     );
 };
 
-const MultiSelectorList = styled(BoxGroup)`
+export const MultiSelectorList = styled(BoxGroup)`
     ${props => (props.error ? `border-color: ${props.theme.color.red};` : "")};
     max-height: 165px;
     overflow-y: auto;
