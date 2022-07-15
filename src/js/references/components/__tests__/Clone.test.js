@@ -14,7 +14,7 @@ describe("<CloneReference />", () => {
                 name: "foo_name",
                 otu_count: 5,
                 user: { id: "foo_user_id" },
-                created_at: "2019-02-10T17:11:00.000000Z"
+                created_at: new Date(Date.now())
             }
         ],
         show: true,
@@ -23,12 +23,13 @@ describe("<CloneReference />", () => {
     };
 
     it("should render", () => {
+        props.refDocuments[0].created_at.setFullYear(props.refDocuments[0].created_at.getFullYear() - 2);
         renderWithProviders(<CloneReference {...props} />);
         expect(screen.getByText("Clone Reference")).toBeInTheDocument();
         expect(screen.getByText("5 OTUs")).toBeInTheDocument();
         expect(screen.getByText("foo_name")).toBeInTheDocument();
         expect(screen.getByText(/foo_user_id.+created/)).toBeInTheDocument();
-        expect(screen.getByText("4 years ago")).toBeInTheDocument();
+        expect(screen.getByText("2 years ago")).toBeInTheDocument();
         expect(screen.getByRole("textbox")).toHaveValue("Clone of foo_name");
         expect(screen.getByRole("button", { name: "Clone" })).toBeInTheDocument();
     });

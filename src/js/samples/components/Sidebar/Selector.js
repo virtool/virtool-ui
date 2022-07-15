@@ -8,7 +8,11 @@ import { useFuse } from "../../../base/hooks";
 import { PopoverBody, usePopover } from "../../../base/Popover";
 import { SampleSidebarSelectorItem } from "./SelectorItem";
 
-const SampleSidebarSelectorButton = styled.div`
+export const SampleSidebarSelectorInputContainer = styled(BoxGroupSection)`
+    padding: 10px;
+`;
+
+export const SampleSidebarSelectorButton = styled.div`
     display: flex;
     border-top: 1px solid;
     border-color: ${props => props.theme.color.greyLight};
@@ -24,7 +28,7 @@ const SampleSidebarSelectorButton = styled.div`
     }
 `;
 
-const SampleItemComponentsContainer = styled.div`
+export const SampleItemComponentsContainer = styled.div`
     max-height: 300px;
     overflow-y: scroll;
 `;

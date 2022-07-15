@@ -7,18 +7,6 @@ exports[`<ManageUsers /> should render 1`] = `
       name="search"
     />
     <LinkButton
-      icon="users"
-      tip="Manage Groups"
-      tipPlacement="top"
-      to={
-        Object {
-          "state": Object {
-            "groups": true,
-          },
-        }
-      }
-    />
-    <LinkButton
       color="blue"
       icon="user-plus"
       tip="Create User"
@@ -34,6 +22,5 @@ exports[`<ManageUsers /> should render 1`] = `
   </Toolbar>
   <Connect(UsersList) />
   <Connect(CreateUser) />
-  <Connect(Groups) />
 </Fragment>
 `;
