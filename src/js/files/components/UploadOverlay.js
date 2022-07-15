@@ -51,8 +51,10 @@ const getFormat = timeInterval => {
         return "hours";
     } else if (timeInterval.minutes) {
         return "minutes";
+    } else if (timeInterval.seconds) {
+        return "seconds";
     }
-    return "seconds";
+    return "";
 };
 
 const UploadTiming = ({ remaining, uploadSpeed }) => {
@@ -62,7 +64,7 @@ const UploadTiming = ({ remaining, uploadSpeed }) => {
 
     let formattedTimeRemaining = "";
     if (timeRemainingInterval.hours > 12) {
-        formattedTimeRemaining = " > 12hr";
+        formattedTimeRemaining = " > 12hr remaining";
     } else {
         formattedTimeRemaining = formatDuration(
             {
@@ -70,15 +72,19 @@ const UploadTiming = ({ remaining, uploadSpeed }) => {
                 minutes: timeRemainingInterval.minutes,
                 seconds: timeRemainingInterval.seconds
             },
+
             {
                 format: [getFormat(timeRemainingInterval)]
             }
         );
+        formattedTimeRemaining = formattedTimeRemaining.length
+            ? `${formattedTimeRemaining} remaining`
+            : "0 seconds remaining";
     }
 
     return (
         <StyledUploadInformation>
-            <div>{`${formattedTimeRemaining} remaining`}</div>
+            <div>{formattedTimeRemaining}</div>
             <div>{`${estimatedUploadSpeed} MB/s`}</div>
         </StyledUploadInformation>
     );
