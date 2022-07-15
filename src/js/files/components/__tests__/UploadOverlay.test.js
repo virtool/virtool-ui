@@ -1,4 +1,5 @@
 import { UploadOverlay, mapStateToProps } from "../UploadOverlay";
+import { screen } from "@testing-library/react";
 
 describe("<UploadOverlay />", () => {
     let props;
@@ -16,30 +17,58 @@ describe("<UploadOverlay />", () => {
                 {
                     fileType: "reads",
                     localId: "456def",
-                    name: "test_reads.fastq.gz",
+                    name: "test_reads.fastq.gz2",
                     progress: 0,
-                    size: 1024
+                    size: 2025
                 },
                 {
                     fileType: "reads",
                     localId: "789ghi",
-                    name: "test_reads.fastq.gz",
+                    name: "test_reads.fastq.gz3",
                     progress: 50,
-                    size: 1024
+                    size: 871290
                 }
             ]
         };
     });
 
-    it("should render", () => {
-        const wrapper = shallow(<UploadOverlay {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render correctly when there is 1 uploads", () => {
+        props.uploads = [
+            {
+                fileType: "subtraction",
+                localId: "123abc",
+                name: "test_reads.fastq.gz",
+                progress: 100,
+                size: 871290
+            }
+        ];
+        renderWithProviders(<UploadOverlay {...props} />);
+        expect(screen.getByText("Uploads")).toBeInTheDocument();
+        expect(screen.getByText("1")).toBeInTheDocument();
+        expect(screen.getByText("test_reads.fastq.gz")).toBeInTheDocument();
+        expect(screen.getByText("871.3 KB")).toBeInTheDocument();
+        expect(screen.getByText("1 hour remaining")).toBeInTheDocument();
+        expect(screen.getByText("0 MB/s")).toBeInTheDocument();
     });
 
-    it("should return null if no uploads", () => {
+    it("should render correctly when there are 3 uploads in progress", () => {
+        renderWithProviders(<UploadOverlay {...props} />);
+        expect(screen.getByText("Uploads")).toBeInTheDocument();
+        expect(screen.getByText("3")).toBeInTheDocument();
+        expect(screen.getByText("test_reads.fastq.gz")).toBeInTheDocument();
+        expect(screen.getByText("test_reads.fastq.gz2")).toBeInTheDocument();
+        expect(screen.getByText("871.3 KB")).toBeInTheDocument();
+        expect(screen.getByText("1.0 KB")).toBeInTheDocument();
+        expect(screen.getByText("1 hour remaining")).toBeInTheDocument();
+        expect(screen.getByText("0 MB/s")).toBeInTheDocument();
+    });
+
+    it("should render null if no uploads in progress", () => {
         props.uploads = [];
-        const wrapper = shallow(<UploadOverlay {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<UploadOverlay {...props} />);
+        expect(screen.queryByText("Uploads")).not.toBeInTheDocument();
+        expect(screen.queryByText("NaN min remaining")).not.toBeInTheDocument();
+        expect(screen.queryByText("0.0 MB/s")).not.toBeInTheDocument();
     });
 });
 

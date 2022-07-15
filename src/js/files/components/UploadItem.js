@@ -16,7 +16,7 @@ const StyledUploadItem = styled.div`
 `;
 
 const UploadItemTitle = styled.div`
-    align-items: center;
+    justify-content: space-between;
     display: flex;
     padding: 15px 15px 10px;
 
@@ -37,13 +37,13 @@ const UploadItemTitle = styled.div`
     }
 `;
 
-const StyledFilename = styled.span`
+const UploadItemName = styled.span`
     font-weight: ${getFontWeight("thick")};
 `;
 
 export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) => {
     let uploadIcon = progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />;
-    let uploadBookend = byteSize(size);
+    let uploadBookend = byteSize(size, true);
 
     if (failed) {
         uploadIcon = <Icon name="times" color={"red"} hoverable={false} />;
@@ -59,7 +59,7 @@ export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) 
             <AffixedProgressBar now={failed ? 100 : progress} color={failed ? "red" : "blue"} />
             <UploadItemTitle failed={failed}>
                 {uploadIcon}
-                <StyledFilename>{name}</StyledFilename>
+                <UploadItemName>{name}</UploadItemName>
                 <span>{uploadBookend}</span>
             </UploadItemTitle>
         </StyledUploadItem>
