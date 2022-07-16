@@ -5,6 +5,7 @@ import {
     FIND_JOBS,
     GET_JOB,
     GET_LINKED_JOB,
+    UPDATE_JOB_SEARCH,
     WS_INSERT_JOB,
     WS_REMOVE_JOB,
     WS_UPDATE_JOB
@@ -44,8 +45,8 @@ export const wsRemoveJob = createAction(WS_REMOVE_JOB);
  * @returns {object}
  */
 
-export const findJobs = createAction(FIND_JOBS.REQUESTED, (term, page, archived = false) => ({
-    payload: { term, page, archived }
+export const findJobs = createAction(FIND_JOBS.REQUESTED, (page, archived = false) => ({
+    payload: { page, archived }
 }));
 
 /**
@@ -76,3 +77,7 @@ export const cancelJob = createAction(CANCEL_JOB.REQUESTED, jobId => ({ payload:
  * @returns {object}
  */
 export const archiveJob = createAction(ARCHIVE_JOB.REQUESTED, jobId => ({ payload: { jobId } }));
+
+export const updateJobsSearch = createAction(UPDATE_JOB_SEARCH, searchParameters => ({
+    payload: { searchParameters }
+}));

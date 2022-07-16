@@ -1,16 +1,32 @@
+import { isEqual } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import styled from "styled-components";
+import { LoadingPlaceholder, NarrowContainer, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
-import { findJobs } from "../actions";
-import { getTerm } from "../selectors";
+import { findJobs, updateJobsSearch } from "../actions";
+import { getFromURL, getTermFromURL } from "../selectors";
+import StatusFilter from "./filter/StatusFilter";
 import Job from "./Item/Item";
-import JobsSummary from "./Summary";
 import JobsToolbar from "./Toolbar";
+
+const JobsListViewContainer = styled.div`
+    display: flex;
+    justify-content: start;
+`;
 
 export class JobsList extends React.Component {
     componentDidMount() {
-        this.props.onLoadNextPage(this.props.term, 1);
+        if (!this.props.jobStates.length) {
+            this.props.onUpdateJobStateFilter(["preparing", "running"]);
+        }
+        this.props.onLoadNextPage(1);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!isEqual(prevProps.jobStates, this.props.jobStates) || prevProps.term !== this.props.term) {
+            this.props.onLoadNextPage(1);
+        }
     }
 
     renderRow = index => {
@@ -36,19 +52,22 @@ export class JobsList extends React.Component {
                 <ViewHeader title="Jobs">
                     <ViewHeaderTitle>Jobs</ViewHeaderTitle>
                 </ViewHeader>
+                <JobsListViewContainer>
+                    <NarrowContainer>
+                        <JobsToolbar />
 
-                <JobsSummary />
-                <JobsToolbar />
+                        {noneFound}
 
-                {noneFound}
-
-                <ScrollList
-                    documents={this.props.documents}
-                    page={this.props.page}
-                    pageCount={this.props.page_count}
-                    onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
-                    renderRow={this.renderRow}
-                />
+                        <ScrollList
+                            documents={this.props.documents}
+                            page={this.props.page}
+                            pageCount={this.props.page_count}
+                            onLoadNextPage={page => this.props.onLoadNextPage(page)}
+                            renderRow={this.renderRow}
+                        />
+                    </NarrowContainer>
+                    <StatusFilter />
+                </JobsListViewContainer>
             </>
         );
     }
@@ -56,15 +75,17 @@ export class JobsList extends React.Component {
 
 export const mapStateToProps = state => ({
     ...state.jobs,
-    term: getTerm(state),
+    term: getTermFromURL(state),
     canCancel: checkAdminOrPermission(state, "cancel_job"),
-    canArchive: checkAdminOrPermission(state, "remove_job")
+    canArchive: checkAdminOrPermission(state, "remove_job"),
+    jobStates: getFromURL("state", state)
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onLoadNextPage: (term, page) => {
-        dispatch(findJobs(term, page));
-    }
+    onLoadNextPage: page => {
+        dispatch(findJobs(page));
+    },
+    onUpdateJobStateFilter: states => dispatch(updateJobsSearch({ states }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobsList);

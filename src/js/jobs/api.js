@@ -1,13 +1,11 @@
+import { forEach } from "lodash-es";
 import { Request } from "../app/request";
 
-export const find = ({ term, page, archived }) =>
-    Request.get("/api/jobs")
-        .query({ find: term, page, archived, beta: true })
-        .query({ state: "cancelled" })
-        .query({ state: "error" })
-        .query({ state: "preparing" })
-        .query({ state: "running" })
-        .query({ state: "terminated" });
+export const find = ({ term, page, archived, states }) => {
+    const request = Request.get("/api/jobs").query({ find: term, page, archived, beta: true });
+    forEach(states, state => request.query({ state: state }));
+    return request;
+};
 
 export const get = ({ jobId }) => Request.get(`/api/jobs/${jobId}`);
 

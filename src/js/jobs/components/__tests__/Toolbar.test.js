@@ -1,5 +1,5 @@
 import React from "react";
-import { FIND_JOBS } from "../../../app/actionTypes";
+import { UPDATE_JOB_SEARCH } from "../../../app/actionTypes";
 import { JobsToolbar, mapDispatchToProps, mapStateToProps } from "../Toolbar.js";
 
 jest.mock("../../../utils/utils");
@@ -29,7 +29,8 @@ describe("mapStateToProps", () => {
             account: {
                 administrator: true,
                 permissions: true
-            }
+            },
+            router: { location: new window.URL("https://www.virtool.ca?find=bar") }
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({
@@ -47,10 +48,10 @@ describe("mapDispatchToProps", () => {
                 value: "Foo"
             }
         };
-        props.onFind(e, "foo", "bar");
+        props.onUpdateJobsSearch(e, "foo", "bar");
         expect(dispatch).toHaveBeenCalledWith({
-            type: FIND_JOBS.REQUESTED,
-            payload: { term: "Foo", page: 1, archived: false }
+            type: UPDATE_JOB_SEARCH,
+            payload: { searchParameters: { find: "Foo" } }
         });
     });
 });

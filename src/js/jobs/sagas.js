@@ -1,18 +1,21 @@
+import { push } from "connected-react-router";
 import { has } from "lodash-es";
-import { select, takeEvery, takeLatest } from "redux-saga/effects";
+import { put, select, takeEvery, takeLatest } from "redux-saga/effects";
 import {
     ARCHIVE_JOB,
     CANCEL_JOB,
     FIND_JOBS,
     GET_JOB,
     GET_LINKED_JOB,
+    UPDATE_JOB_SEARCH,
     WS_INSERT_JOB,
     WS_REMOVE_JOB,
     WS_UPDATE_JOB
 } from "../app/actionTypes";
-import { apiCall, pushFindTerm } from "../utils/sagas";
+import { apiCall } from "../utils/sagas";
 import * as jobsAPI from "./api";
 import { getJobDetailId, getLinkedJobs, getTerm } from "./selectors";
+import { getJobsSearchParamsFromURL, getUpdatedURL } from "./utils";
 
 export function* wsUpdateJob(action) {
     const jobId = action.payload.id;
@@ -35,8 +38,8 @@ export function* getJobCount() {
 }
 
 export function* findJobs(action) {
-    yield apiCall(jobsAPI.find, action.payload, FIND_JOBS);
-    yield pushFindTerm(action.term);
+    const { term, states } = getJobsSearchParamsFromURL();
+    yield apiCall(jobsAPI.find, { page: action.payload.page, term, states }, FIND_JOBS);
 }
 
 export function* getJob(action) {
@@ -55,6 +58,11 @@ export function* archiveJob(action) {
     yield apiCall(jobsAPI.archive, action.payload, ARCHIVE_JOB);
 }
 
+export function* updateJobsSearch(action) {
+    const updatedURL = yield getUpdatedURL(action.payload);
+    yield put(push(updatedURL.pathname + updatedURL.search));
+}
+
 export function* watchJobs() {
     yield takeLatest(FIND_JOBS.REQUESTED, findJobs);
     yield takeLatest(GET_JOB.REQUESTED, getJob);
@@ -63,4 +71,5 @@ export function* watchJobs() {
     yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
     yield takeLatest([WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB], getJobCount);
     yield takeEvery(GET_LINKED_JOB.REQUESTED, getLinkedJob);
+    yield takeLatest(UPDATE_JOB_SEARCH, updateJobsSearch);
 }
