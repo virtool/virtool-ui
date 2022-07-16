@@ -1,9 +1,9 @@
-import * as utils from "../../../utils/utils";
-import { JobsList, mapStateToProps, mapDispatchToProps } from "../List";
-
-import { createStore } from "redux";
 import { screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
+
+import { createStore } from "redux";
+import * as utils from "../../../utils/utils";
+import { JobsList, mapDispatchToProps, mapStateToProps } from "../List";
 
 const createAppStore = state => () => createStore(state => state, state);
 const renderWithAllProviders = (ui, store) => {
@@ -37,7 +37,9 @@ describe("<JobsList />", () => {
             term: "foo",
             onLoadNextPage: jest.fn(),
             canArchive: jest.fn(),
-            canCancel: jest.fn()
+            canCancel: jest.fn(),
+            jobStates: [],
+            onUpdateJobStateFilter: jest.fn()
         };
 
         state = {
@@ -49,7 +51,8 @@ describe("<JobsList />", () => {
             },
             account: {
                 administrator: true
-            }
+            },
+            router: { location: new window.URL("https://www.virtool.ca") }
         };
     });
 
@@ -64,7 +67,7 @@ describe("<JobsList />", () => {
     it("componentDidMount should call onLoadNextPage", () => {
         expect(props.onLoadNextPage).not.toHaveBeenCalled();
         renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(props.onLoadNextPage).toHaveBeenCalledWith("foo", 1);
+        expect(props.onLoadNextPage).toHaveBeenCalledWith(1);
     });
 
     it("should render when [this.props.documents=null]", () => {
@@ -98,7 +101,8 @@ describe("mapStateToProps", () => {
                     cancel_job: "fee",
                     remove_job: "bee"
                 }
-            }
+            },
+            router: { location: new window.URL("https://www.virtool.ca") }
         };
 
         const result = mapStateToProps(state);
@@ -114,7 +118,8 @@ describe("mapStateToProps", () => {
                         cancel_job: "fee",
                         remove_job: "bee"
                     }
-                }
+                },
+                router: { location: new window.URL("https://www.virtool.ca") }
             },
             "cancel_job"
         );
@@ -130,7 +135,8 @@ describe("mapStateToProps", () => {
                         cancel_job: "fee",
                         remove_job: "bee"
                     }
-                }
+                },
+                router: { location: new window.URL("https://www.virtool.ca") }
             },
             "remove_job"
         );
@@ -145,9 +151,9 @@ describe("mapDispatchToProps", () => {
         const dispatch = jest.fn();
         const props = mapDispatchToProps(dispatch);
 
-        props.onLoadNextPage("foo", "bar");
+        props.onLoadNextPage("foo");
         expect(dispatch).toHaveBeenCalledWith({
-            payload: { term: "foo", page: "bar", archived: false },
+            payload: { page: "foo", archived: false },
             type: "FIND_JOBS_REQUESTED"
         });
     });

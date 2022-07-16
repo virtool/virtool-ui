@@ -38,12 +38,11 @@ describe("Jobs Action Creators:", () => {
     });
 
     it("findJobs: returns action to retrieve specific page of job documents", () => {
-        const term = "foo";
         const page = 2;
-        const result = findJobs(term, page);
+        const result = findJobs(page);
         expect(result).toEqual({
             type: FIND_JOBS.REQUESTED,
-            payload: { term, page, archived: false }
+            payload: { page, archived: false }
         });
     });
 

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import {
     Badge,
     LoadingPlaceholder,
+    NarrowContainer,
     NotFound,
     ViewHeader,
     ViewHeaderAttribution,
@@ -57,7 +58,7 @@ class JobDetail extends React.Component {
         const workflow = getWorkflowDisplayName(detail.workflow);
 
         return (
-            <div>
+            <NarrowContainer>
                 <ViewHeader title={workflow}>
                     <ViewHeaderTitle>
                         {workflow} <JobDetailBadge color={color}>{latest.state}</JobDetailBadge>
@@ -79,7 +80,7 @@ class JobDetail extends React.Component {
                 <JobSteps />
 
                 <JobError error={latest.error} />
-            </div>
+            </NarrowContainer>
         );
     }
 }

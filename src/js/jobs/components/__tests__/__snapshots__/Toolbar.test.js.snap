@@ -3,7 +3,6 @@
 exports[`<JobsToolbar /> should render 1`] = `
 <Toolbar>
   <SearchInput
-    onChange={[MockFunction]}
     placeholder="User or workflow"
     value="foo"
   />

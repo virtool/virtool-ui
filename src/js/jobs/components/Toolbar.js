@@ -1,21 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
 import { SearchInput, Toolbar } from "../../base";
-import { findJobs } from "../actions";
 
-export const JobsToolbar = ({ onFind, term }) => (
+import { updateJobsSearch } from "../actions";
+import { getTermFromURL } from "../selectors";
+
+export const JobsToolbar = ({ onUpdateJobsSearch, term }) => (
     <Toolbar>
-        <SearchInput value={term} onChange={onFind} placeholder="User or workflow" />
+        <SearchInput value={term} onChange={onUpdateJobsSearch} placeholder="User or workflow" />
     </Toolbar>
 );
 
 export const mapStateToProps = state => ({
-    term: state.jobs.term
+    term: getTermFromURL(state)
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onFind: e => {
-        dispatch(findJobs(e.target.value, 1));
+    onUpdateJobsSearch: e => {
+        dispatch(updateJobsSearch({ find: e.target.value }));
     }
 });
 
