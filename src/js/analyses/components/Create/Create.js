@@ -1,4 +1,4 @@
-import { forEach } from "lodash-es";
+import { filter, forEach, map } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -14,24 +14,15 @@ import { analyze } from "../../actions";
 import { getCompatibleIndexesWithLibraryType } from "../../selectors";
 import HMMAlert from "../HMMAlert";
 import { useCreateAnalysis } from "./hooks";
-import { ReferenceSelector } from "./ReferenceSelector";
+import { IndexSelector } from "./IndexSelector";
 import { SubtractionSelector } from "./SubtractionSelector";
 import { CreateAnalysisSummary } from "./Summary";
 import { WorkflowSelector } from "./WorkflowSelector";
-import { getFontSize } from "../../../app/theme";
 
 const CreateAnalysisFooter = styled(ModalFooter)`
     align-items: center;
     display: flex;
     justify-content: space-between;
-`;
-
-const AnalyzeContainer = styled.div`
-    margin-bottom: 5px;
-`;
-
-const ExtraLargeLabel = styled.div`
-    font-size: ${getFontSize("xl")};
 `;
 
 export const CreateAnalysis = ({
@@ -53,69 +44,72 @@ export const CreateAnalysis = ({
         }
     }, [show]);
 
-    const { errors, references, subtractions, workflows, setErrors, setReferences, setSubtractions, setWorkflows } =
+    const { errors, indexes, subtractions, workflows, setErrors, setIndexes, setSubtractions, setWorkflows } =
         useCreateAnalysis(dataType, defaultSubtractions);
 
     const handleSubmit = e => {
         e.preventDefault();
 
         const errors = {
-            references: !references.length,
+            indexes: !indexes.length,
             workflows: !workflows.length
         };
 
-        if (errors.references || errors.workflows) {
+        if (errors.indexes || errors.workflows) {
             return setErrors(errors);
         }
 
-        onAnalyze(sampleId, references, subtractions, accountId, workflows);
+        onAnalyze(
+            sampleId,
+            map(
+                filter(compatibleIndexes, index => indexes.includes(index.id)),
+                "reference.id"
+            ),
+            subtractions,
+            accountId,
+            workflows
+        );
         onHide();
     };
 
     return (
         <Modal label="Analyze" show={show} size="lg" onHide={onHide}>
-            <ModalHeader>
-                <ExtraLargeLabel>Analyze</ExtraLargeLabel>
-            </ModalHeader>
-            <AnalyzeContainer>
-                <form onSubmit={handleSubmit}>
-                    <ModalBody>
-                        <HMMAlert />
-                        <WorkflowSelector
-                            dataType={dataType}
-                            hasError={errors.workflows}
-                            hasHmm={hasHmm}
-                            selectedWorkflows={workflows}
-                            onSelect={setWorkflows}
+            <ModalHeader>Analyze</ModalHeader>
+            <form onSubmit={handleSubmit}>
+                <ModalBody>
+                    <HMMAlert />
+                    <WorkflowSelector
+                        dataType={dataType}
+                        hasError={errors.workflows}
+                        hasHmm={hasHmm}
+                        selected={workflows}
+                        onSelect={setWorkflows}
+                    />
+                    {dataType === "genome" && (
+                        <SubtractionSelector
+                            subtractions={subtractionOptions}
+                            selected={subtractions}
+                            onChange={setSubtractions}
                         />
-
-                        {dataType === "genome" && (
-                            <SubtractionSelector
-                                subtractions={subtractionOptions}
-                                value={subtractions}
-                                onChange={setSubtractions}
-                            />
-                        )}
-
-                        <ReferenceSelector
-                            hasError={errors.references}
-                            indexes={compatibleIndexes}
-                            selected={references}
-                            onChange={setReferences}
-                        />
-                    </ModalBody>
-                    <CreateAnalysisFooter>
-                        <CreateAnalysisSummary
-                            sampleCount={1}
-                            indexCount={references.length}
-                            workflowCount={workflows.length}
-                        />
-                        <Button type="submit" color="blue" icon="play">
-                            Start
-                        </Button>
-                    </CreateAnalysisFooter>
-                </form>
-            </AnalyzeContainer>
+                    )}
+                    <IndexSelector
+                        hasError={errors.indexes}
+                        indexes={compatibleIndexes}
+                        selected={indexes}
+                        onChange={setIndexes}
+                    />
+                </ModalBody>
+                <CreateAnalysisFooter>
+                    <CreateAnalysisSummary
+                        sampleCount={1}
+                        indexCount={indexes.length}
+                        workflowCount={workflows.length}
+                    />
+                    <Button type="submit" color="blue" icon="play">
+                        Start
+                    </Button>
+                </CreateAnalysisFooter>
+            </form>
         </Modal>
     );
 };

@@ -6,9 +6,9 @@ describe("<ReadSelector />", () => {
 
     beforeEach(() => {
         props = {
-            files: [{ id: "foo", size: 1024, name: "bar" }],
+            files: [{ id: 21, size: 1024, name: "bar" }],
             error: "foo",
-            selected: ["foo", "bar"],
+            selected: [21, 23],
             onSelect: jest.fn(),
             handleSelect: jest.fn()
         };
@@ -22,7 +22,7 @@ describe("<ReadSelector />", () => {
     it("should call onChange() on update if files change", () => {
         const wrapper = shallow(<ReadSelector {...props} />);
         wrapper.setProps({
-            files: [{ id: "foo", size: 2048, name: "Bar" }]
+            files: [{ id: 21, size: 2048, name: "Bar" }]
         });
         expect(props.onSelect).toHaveBeenCalled();
     });
@@ -60,6 +60,6 @@ describe("<ReadSelector />", () => {
     it("should call reset when swap Button is clicked", () => {
         const wrapper = shallow(<ReadSelector {...props} />);
         wrapper.find(ReadSelectorButton).at(1).simulate("click");
-        expect(props.onSelect).toHaveBeenCalledWith(["bar", "foo"]);
+        expect(props.onSelect).toHaveBeenCalledWith([23, 21]);
     });
 });

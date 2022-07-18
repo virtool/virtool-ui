@@ -5,6 +5,7 @@ export * from "./Alert";
 export * from "./Attribution";
 export * from "./Badge";
 export * from "./Box";
+export * from "./BoxGroupSearch";
 export * from "./Breadcrumb";
 export * from "./Breakpoints";
 export * from "./Button";

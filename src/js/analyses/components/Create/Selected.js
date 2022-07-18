@@ -1,58 +1,42 @@
 import React from "react";
-import { MultiSelectorList } from "../../../base/MultiSelector";
-import { BoxGroupSection, Icon } from "../../../base";
 import styled from "styled-components";
-import { AllOrNoneSelectedBox } from "./WorkflowSelector";
+import { BoxGroup } from "../../../base";
 
-const SelectedContainer = styled(MultiSelectorList)`
+const SelectedContainer = styled(BoxGroup)`
+    background-color: ${props => props.theme.color.greyLightest};
+    flex: 1 1 auto;
     ${props => (props.error ? `border-color: ${props.theme.color.red};` : "")};
-    max-height: ${props => (props.type === "workflows" ? "80px" : "220px")};
-    height: ${props => (props.type === "workflows" ? "80px" : "220px")};
-    overflow-y: ${props => (props.type === "workflows" ? "hidden" : "auto")};
-    background-color: ${props => props.theme.color.greyHover};
+    overflow-y: auto;
+    height: 160px;
 `;
 
 const SelectedItemsContainer = styled.div`
     background-color: white;
-    outline: 1px solid;
-    outline-color: ${props => props.theme.color.greyLight};
+    outline-color: 1px solid ${props => props.theme.color.greyLight};
 `;
 
-const SelectedItem = styled(BoxGroupSection)`
+const NoneSelected = styled.span`
+    color: ${props => props.theme.color.greyDarkest};
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+
+const StyledCreateAnalysisSelected = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 `;
 
-const FormattedIcon = styled(Icon)`
-    margin-left: auto;
-`;
-
-export const SelectedAnalysesObject = ({ selected, resourceType, clearSelected, formattedLine }) => {
-    const formattedSelected = selected.map(item => {
-        const key = item.id ? item.id : item;
-        return (
-            <SelectedItem key={key} value={key}>
-                {formattedLine(item)}
-
-                <FormattedIcon
-                    aria-label={`remove selected ${resourceType}`}
-                    name="times fa-fw"
-                    onClick={() => clearSelected(item)}
-                />
-            </SelectedItem>
-        );
-    });
-    let analysesTypeSelected;
-
-    if (!selected.length) {
-        analysesTypeSelected = (
-            <AllOrNoneSelectedBox requireBorder={true} type={resourceType}>
-                No {resourceType} selected
-            </AllOrNoneSelectedBox>
-        );
-    } else {
-        analysesTypeSelected = <SelectedItemsContainer>{formattedSelected}</SelectedItemsContainer>;
-    }
-
-    return <SelectedContainer type={resourceType}>{analysesTypeSelected}</SelectedContainer>;
-};
+export const CreateAnalysisSelected = ({ items, render }) => (
+    <StyledCreateAnalysisSelected>
+        <label>Selected</label>
+        <SelectedContainer>
+            {items.length ? (
+                <SelectedItemsContainer>{items.map(item => render(item))}</SelectedItemsContainer>
+            ) : (
+                <NoneSelected>Nothing selected</NoneSelected>
+            )}
+        </SelectedContainer>
+    </StyledCreateAnalysisSelected>
+);
