@@ -41,7 +41,7 @@ export function getAccessToken() {
 }
 
 /**
- * Add B2c authentication if appropriate then executes an API call
+ * Add B2C authentication if appropriate then executes an API call
  *
  * @generator
  * @param apiMethod {function} the function to call with ``action``

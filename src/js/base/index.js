@@ -17,7 +17,6 @@ export * from "./Color";
 export * from "./Container";
 export * from "./Divider";
 export * from "./Dropdown";
-export * from "./Dropdown";
 export * from "./ExternalLink";
 export * from "./Icon";
 export * from "./InitialIcon";

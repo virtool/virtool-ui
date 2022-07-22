@@ -38,11 +38,11 @@ describe("Jobs Action Creators:", () => {
     });
 
     it("findJobs: returns action to retrieve specific page of job documents", () => {
-        const page = 2;
-        const result = findJobs(page);
+        const states = ["running", "errored"];
+        const result = findJobs(states, true);
         expect(result).toEqual({
-            type: FIND_JOBS.REQUESTED,
-            payload: { page, archived: false }
+            payload: { states, archived: true },
+            type: FIND_JOBS.REQUESTED
         });
     });
 
@@ -64,7 +64,7 @@ describe("Jobs Action Creators:", () => {
         });
     });
 
-    it("ArchiveJob: returns action for archiving a specific job", () => {
+    it("archiveJob: returns action for archiving a specific job", () => {
         const jobId = "tester";
         const result = archiveJob(jobId);
         expect(result).toEqual({

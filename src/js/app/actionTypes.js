@@ -129,7 +129,6 @@ export const GET_JOB = createRequestActionType("GET_JOB");
 export const GET_LINKED_JOB = createRequestActionType("GET_LINKED_JOB");
 export const CANCEL_JOB = createRequestActionType("CANCEL_JOB");
 export const ARCHIVE_JOB = createRequestActionType("ARCHIVE_JOB");
-export const UPDATE_JOB_SEARCH = "UPDATE_JOB_SEARCH";
 
 // OTU
 export const WS_INSERT_OTU = "WS_INSERT_OTU";

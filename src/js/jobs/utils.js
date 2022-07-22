@@ -1,5 +1,3 @@
-import { forEach } from "lodash-es";
-
 export const getStepDescription = ({ state, step_name, step_description }) => {
     if (step_name && step_description) {
         return {
@@ -17,7 +15,6 @@ export const getStepDescription = ({ state, step_name, step_description }) => {
 
     if (state === "preparing") {
         return {
-            title: "Preparing",
             description: "Preparing the workflow environment."
         };
     }
@@ -46,24 +43,4 @@ export const getStepDescription = ({ state, step_name, step_description }) => {
         title: "",
         description: ""
     };
-};
-
-export const getUpdatedURL = ({ searchParameters: { find, states } }) => {
-    const url = new window.URL(window.location);
-    if (typeof find === "string") {
-        url.searchParams.delete("find");
-        if (find) url.searchParams.append("find", find);
-    }
-    if (states) {
-        url.searchParams.delete("state");
-        forEach(states, state => url.searchParams.append("state", state));
-    }
-    return url;
-};
-
-export const getJobsSearchParamsFromURL = () => {
-    const urlSearchParams = new window.URLSearchParams(window.location.search);
-    const term = urlSearchParams.get("find");
-    const states = urlSearchParams.getAll("state");
-    return { term, states };
 };

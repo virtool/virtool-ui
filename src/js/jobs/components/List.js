@@ -1,91 +1,82 @@
-import { isEqual } from "lodash-es";
-import React from "react";
+import { map } from "lodash-es";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { LoadingPlaceholder, NarrowContainer, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Box, LoadingPlaceholder, NarrowContainer, ViewHeader, ViewHeaderTitle } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
-import { findJobs, updateJobsSearch } from "../actions";
-import { getFromURL, getTermFromURL } from "../selectors";
-import StatusFilter from "./filter/StatusFilter";
+import { findJobs } from "../actions";
 import Job from "./Item/Item";
-import JobsToolbar from "./Toolbar";
+import { JobFilters } from "./Filters/Filters";
+import { getJobCountsTotal } from "../selectors";
+import { getFontWeight } from "../../app/theme";
 
 const JobsListViewContainer = styled.div`
     display: flex;
+    gap: ${props => props.theme.gap.column};
     justify-content: start;
 `;
 
-export class JobsList extends React.Component {
-    componentDidMount() {
-        if (!this.props.jobStates.length) {
-            this.props.onUpdateJobStateFilter(["preparing", "running"]);
-        }
-        this.props.onLoadNextPage(1);
+const JobsListEmpty = styled(Box)`
+    align-items: center;
+    color: ${props => props.theme.color.greyDark};
+    display: flex;
+    justify-content: center;
+    height: 100%;
+
+    h3 {
+        font-weight: ${getFontWeight("thick")};
+    }
+`;
+
+export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onFind }) => {
+    useEffect(() => onFind(["preparing", "running"]), []);
+
+    if (jobs === null) {
+        return <LoadingPlaceholder />;
     }
 
-    componentDidUpdate(prevProps) {
-        if (!isEqual(prevProps.jobStates, this.props.jobStates) || prevProps.term !== this.props.term) {
-            this.props.onLoadNextPage(1);
-        }
-    }
+    let inner;
 
-    renderRow = index => {
-        const document = this.props.documents[index];
-        return (
-            <Job key={document.id} {...document} canArchive={this.props.canArchive} canCancel={this.props.canCancel} />
+    if (noJobs) {
+        inner = (
+            <JobsListEmpty>
+                <h3>No jobs found</h3>
+            </JobsListEmpty>
         );
-    };
-
-    render() {
-        if (this.props.documents === null) {
-            return <LoadingPlaceholder />;
-        }
-
-        let noneFound;
-
-        if (!this.props.documents.length) {
-            noneFound = <NoneFoundBox noun="jobs" />;
-        }
-
-        return (
-            <>
-                <ViewHeader title="Jobs">
-                    <ViewHeaderTitle>Jobs</ViewHeaderTitle>
-                </ViewHeader>
-                <JobsListViewContainer>
-                    <NarrowContainer>
-                        <JobsToolbar />
-
-                        {noneFound}
-
-                        <ScrollList
-                            documents={this.props.documents}
-                            page={this.props.page}
-                            pageCount={this.props.page_count}
-                            onLoadNextPage={page => this.props.onLoadNextPage(page)}
-                            renderRow={this.renderRow}
-                        />
-                    </NarrowContainer>
-                    <StatusFilter />
-                </JobsListViewContainer>
-            </>
+    } else if (jobs.length === 0) {
+        inner = (
+            <JobsListEmpty>
+                <h3>No jobs matching filters</h3>
+            </JobsListEmpty>
         );
+    } else {
+        inner = map(jobs, job => <Job key={job.id} {...job} canArchive={canArchive} canCancel={canCancel} />);
     }
-}
+
+    return (
+        <>
+            <ViewHeader title="Jobs">
+                <ViewHeaderTitle>Jobs</ViewHeaderTitle>
+            </ViewHeader>
+            <JobsListViewContainer>
+                <NarrowContainer>{inner}</NarrowContainer>
+                <JobFilters />
+            </JobsListViewContainer>
+        </>
+    );
+};
 
 export const mapStateToProps = state => ({
-    ...state.jobs,
-    term: getTermFromURL(state),
+    jobs: state.jobs.documents,
+    noJobs: getJobCountsTotal(state) === 0,
     canCancel: checkAdminOrPermission(state, "cancel_job"),
-    canArchive: checkAdminOrPermission(state, "remove_job"),
-    jobStates: getFromURL("state", state)
+    canArchive: checkAdminOrPermission(state, "remove_job")
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onLoadNextPage: page => {
-        dispatch(findJobs(page));
-    },
-    onUpdateJobStateFilter: states => dispatch(updateJobsSearch({ states }))
+    onFind: states => {
+        dispatch(findJobs(states));
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobsList);
