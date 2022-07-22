@@ -19,11 +19,6 @@ const StyledSidebar = styled.nav`
 
 export const Sidebar = ({ administrator }) => (
     <Switch>
-        <Route path="/home">
-            <StyledSidebar>
-                <SidebarItem title="About" link="/home" icon="info-circle" />
-            </StyledSidebar>
-        </Route>
         <Route path="/jobs">
             <StyledSidebar>
                 <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />

@@ -7,11 +7,6 @@ exports[`<Bar /> should render 1`] = `
       color="white"
     />
     <NavBarItem
-      to="/home"
-    >
-      Home
-    </NavBarItem>
-    <NavBarItem
       to="/jobs"
     >
       Jobs

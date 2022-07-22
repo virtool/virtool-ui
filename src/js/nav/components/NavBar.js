@@ -63,7 +63,6 @@ export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
     <StyledNavBar>
         <NavBarLeft>
             <NavBarLogo color="white" />
-            <NavBarItem to="/home">Home</NavBarItem>
             <NavBarItem to="/jobs">Jobs</NavBarItem>
             <NavBarItem to="/samples">Samples</NavBarItem>
             <NavBarItem to="/refs">References</NavBarItem>
