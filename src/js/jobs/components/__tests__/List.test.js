@@ -14,9 +14,10 @@ const renderWithAllProviders = (ui, store) => {
 describe("<JobsList />", () => {
     let props;
     let state;
+
     beforeEach(() => {
         props = {
-            documents: [
+            jobs: [
                 {
                     created_at: "2022-06-02T17:21:22.668000Z",
                     id: "test_id",
@@ -31,22 +32,16 @@ describe("<JobsList />", () => {
                     workflow: "create_sample"
                 }
             ],
-            total_count: 5,
-            page: 2,
-            page_count: 3,
-            term: "foo",
-            onLoadNextPage: jest.fn(),
-            canArchive: jest.fn(),
-            canCancel: jest.fn(),
-            jobStates: [],
-            onUpdateJobStateFilter: jest.fn()
+            onFind: jest.fn(),
+            canArchive: true,
+            canCancel: true
         };
 
         state = {
             jobs: {
                 counts: {
-                    running: { jobType1: 1, jobType2: 1 },
-                    complete: { jobType1: 2, jobType2: 2 }
+                    running: { pathoscope_bowtie: 1, nuvs: 1 },
+                    complete: { create_sample: 2, build_index: 2 }
                 }
             },
             account: {
@@ -58,32 +53,27 @@ describe("<JobsList />", () => {
 
     it("should render", () => {
         renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(screen.getByText("Jobs")).toBeInTheDocument();
-        expect(screen.getByText("running").textContent === "running 2").toBeTruthy();
+        expect(props.onFind).toHaveBeenCalled();
         expect(screen.getByText("Create Sample")).toBeInTheDocument();
-        expect(screen.getByPlaceholderText("User or workflow")).toBeInTheDocument();
     });
 
-    it("componentDidMount should call onLoadNextPage", () => {
-        expect(props.onLoadNextPage).not.toHaveBeenCalled();
+    it("should show spinner while loading", () => {
+        props.jobs = null;
         renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(props.onLoadNextPage).toHaveBeenCalledWith(1);
-    });
-
-    it("should render when [this.props.documents=null]", () => {
-        props.documents = null;
-        renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(screen.queryByText("Jobs")).not.toBeInTheDocument();
-        expect(screen.queryByPlaceholderText("User or workflow")).not.toBeInTheDocument();
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
     });
 
-    it("should render when [this.props.documents.length=0]", () => {
-        props.documents = [];
+    it("should show message when there are no unarchived jobs", () => {
+        props.jobs = [];
+        props.noJobs = true;
         renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(screen.getByText("Jobs")).toBeInTheDocument();
-        expect(screen.getByPlaceholderText("User or workflow")).toBeInTheDocument();
-        expect(screen.getByText("No jobs found.")).toBeInTheDocument();
+        expect(screen.getByText("No jobs found")).toBeInTheDocument();
+    });
+
+    it("should show message when no jobs match filters", () => {
+        props.jobs = [];
+        renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
+        expect(screen.getByText("No jobs matching filters")).toBeInTheDocument();
     });
 });
 
@@ -147,13 +137,15 @@ describe("mapStateToProps", () => {
 });
 
 describe("mapDispatchToProps", () => {
-    it("should return onLoadNextPage in props", () => {
+    it("should return onFind in props", () => {
         const dispatch = jest.fn();
         const props = mapDispatchToProps(dispatch);
 
-        props.onLoadNextPage("foo");
+        const states = ["running", "preparing"];
+
+        props.onFind(states);
         expect(dispatch).toHaveBeenCalledWith({
-            payload: { page: "foo", archived: false },
+            payload: { states, archived: false },
             type: "FIND_JOBS_REQUESTED"
         });
     });
