@@ -11,6 +11,7 @@ export * from "./Button";
 export * from "./ButtonGroup";
 export * from "./ButtonToolbar";
 export * from "./Checkbox";
+export * from "./Circle";
 export * from "./CloseButton";
 export * from "./Color";
 export * from "./Container";
