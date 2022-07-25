@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { map, reject, reverse, sum } from "lodash-es";
+import { map, reject, reverse, every, sumBy } from "lodash-es";
 import { connect } from "react-redux";
 import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
 import { UploadItem } from "./UploadItem";
@@ -92,17 +92,22 @@ const UploadTiming = ({ remaining, uploadSpeed }) => {
 
 export const UploadOverlay = ({ uploads }) => {
     if (uploads.length) {
-        const totalRemainingUploadTime = sum(uploads.map(upload => upload.remaining));
-        const overallUploadSpeed = sum(uploads.map(upload => upload.uploadSpeed));
-
+        const totalRemainingUploadTime = sumBy(uploads, "remaining");
+        const overallUploadSpeed = sumBy(uploads, "uploadSpeed");
         const uploadComponents = map(uploads, upload => <UploadItem key={upload.localId} {...upload} />);
+
+        const allUploadsComplete = every(uploads, ["progress", 100]);
 
         return (
             <StyledUploadOverlay show={uploads.length}>
                 <UploadOverlayContent>
                     <BoxGroupHeader>
                         Uploads <Badge>{uploadComponents.length}</Badge>
-                        <UploadTiming remaining={totalRemainingUploadTime} uploadSpeed={overallUploadSpeed} />
+                        {allUploadsComplete ? (
+                            <StyledUploadInformation>Finishing uploads</StyledUploadInformation>
+                        ) : (
+                            <UploadTiming remaining={totalRemainingUploadTime} uploadSpeed={overallUploadSpeed} />
+                        )}
                     </BoxGroupHeader>
                     <UploadOverlayList>{uploadComponents}</UploadOverlayList>
                 </UploadOverlayContent>
