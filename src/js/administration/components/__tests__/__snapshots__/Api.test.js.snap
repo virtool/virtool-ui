@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<API /> should render 1`] = `
+exports[`<Api /> should render 1`] = `
 <SettingsCheckbox
   enabled={true}
   onToggle={[MockFunction]}

@@ -4,7 +4,7 @@ import { updateSetting } from "../actions";
 import { ExternalLink } from "../../base/ExternalLink";
 import { SettingsCheckbox } from "./SettingsCheckbox";
 
-export const API = ({ enabled, onToggle }) => (
+export const Api = ({ enabled, onToggle }) => (
     <SettingsCheckbox enabled={enabled} onToggle={onToggle}>
         <h2>JSON API</h2>
         <small>Enable API access for clients other than Virtool. See </small>
@@ -22,4 +22,4 @@ export const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(API);
+export default connect(mapStateToProps, mapDispatchToProps)(Api);

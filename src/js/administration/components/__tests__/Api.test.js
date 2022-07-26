@@ -1,7 +1,7 @@
-import { API, mapStateToProps, mapDispatchToProps } from "../API";
+import { Api, mapStateToProps, mapDispatchToProps } from "../Api";
 import { UPDATE_SETTINGS } from "../../../app/actionTypes";
 
-describe("<API />", () => {
+describe("<Api />", () => {
     let props;
 
     beforeEach(() => {
@@ -12,17 +12,17 @@ describe("<API />", () => {
     });
 
     it("should render", () => {
-        const wrapper = shallow(<API {...props} />);
+        const wrapper = shallow(<Api {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
     it("should render when [onToggle=true]", () => {
-        const wrapper = shallow(<API {...props} />);
+        const wrapper = shallow(<Api {...props} />);
         wrapper.find("SettingsCheckbox").simulate("toggle", "foo");
         expect(props.onToggle).toHaveBeenCalledWith("foo");
     });
     it("should render when [onToggle=false]", () => {
         props.enabled = false;
-        const wrapper = shallow(<API {...props} />);
+        const wrapper = shallow(<Api {...props} />);
         wrapper.find("SettingsCheckbox").simulate("toggle", "foo");
         expect(props.onToggle).toHaveBeenCalledWith("foo");
     });
