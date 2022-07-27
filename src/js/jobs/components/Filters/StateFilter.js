@@ -23,6 +23,8 @@ const filterStatesByCategory = (category, selected) => {
 };
 
 const StyledStatusFilter = styled(SideBarSection)`
+    position: relative;
+    z-index: -1;
     align-items: center;
     width: 320px;
     margin: 0;
