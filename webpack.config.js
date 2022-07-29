@@ -9,9 +9,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        exclude: /(node_modules)/,
-        use: ["babel-loader"],
+        test: /\.jsx?|tsx?$/,
+        include: /src\/js/,
+        use: ["ts-loader"],
       },
 
       {
