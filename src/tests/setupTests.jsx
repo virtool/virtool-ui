@@ -1,12 +1,13 @@
-import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import Enzyme, { mount, render, shallow } from "enzyme";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import "jest-styled-components";
 import React from "react";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../js/app/theme";
+import "@testing-library/jest-dom";
+
+console.log("Shart");
 
 // React 16 Enzyme adapter
 
@@ -32,3 +33,5 @@ global.render = render;
 global.renderWithProviders = renderWithProviders;
 global.wrapWithProviders = wrapWithProviders;
 global.shallow = shallow;
+
+console.log("Skidmark");
