@@ -25,33 +25,7 @@ import CreateAPIKeyInfo from "./CreateInfo";
 import APIPermissions from "./Permissions";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-
-const CreateAPIKeyCopied = styled.p`
-    color: ${props => props.theme.color.blue};
-`;
-
-const CreateAPIKeyInput = styled(Input)`
-    text-align: center;
-`;
-
-const StyledCreateAPIKey = styled(ModalBody)`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    text-align: center;
-
-    strong {
-        color: ${props => props.theme.color.greenDark};
-        margin-bottom: 5px;
-    }
-`;
-
-const APIKeyInputContainer = styled(InputContainer)`
-    margin-top: 15px;
-    margin-bottom: 10px;
-`;
+import { getFontSize } from "../../../app/theme";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the key")
@@ -61,6 +35,32 @@ export const getInitialFormValues = props => ({
     name: "",
     permissions: mapValues(props.permissions, () => false)
 });
+
+const CreateAPIKeyCopied = styled.p`
+    color: ${props => props.theme.color.blue};
+`;
+
+const CreateAPIKeyInput = styled(Input)`
+    text-align: center;
+`;
+
+const CreateAPIKeyInputContainer = styled(InputContainer)`
+    margin-top: 15px;
+    margin-bottom: 10px;
+`;
+
+const StyledCreateAPIKey = styled(ModalBody)`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+    strong {
+        color: ${props => props.theme.color.greenDark};
+        font-size: ${getFontSize("lg")};
+        margin-bottom: 5px;
+    }
+`;
 
 export const CreateAPIKey = props => {
     const [copied, setCopied] = useState(false);
@@ -81,31 +81,27 @@ export const CreateAPIKey = props => {
         props.onCreate(name, permissions);
     };
 
-    let content;
+    return (
+        <Modal label="Create API Key" show={props.show} onHide={props.onHide} onExited={handleModalExited}>
+            <ModalHeader>Create API Key</ModalHeader>
+            {show ? (
+                <StyledCreateAPIKey>
+                    <strong>Here is your key.</strong>
+                    <p>Make note of it now. For security purposes, it will not be shown again.</p>
 
-    if (show) {
-        content = (
-            <StyledCreateAPIKey>
-                <strong>Here is your key.</strong>
-                <small>Make note of it now. For security purposes, it will not be shown again.</small>
-
-                <APIKeyInputContainer align="right">
-                    <CreateAPIKeyInput value={props.newKey} readOnly />
-                    <CopyToClipboard text={props.newKey} onCopy={() => setCopied(true)}>
-                        <InputIcon aria-label="copy" name="copy" />
-                    </CopyToClipboard>
-                </APIKeyInputContainer>
-                {copied && (
-                    <CreateAPIKeyCopied>
-                        <Icon name="check" /> Copied
-                    </CreateAPIKeyCopied>
-                )}
-            </StyledCreateAPIKey>
-        );
-    } else {
-        content = (
-            <>
-                <ModalHeader>Create API Key</ModalHeader>
+                    <CreateAPIKeyInputContainer align="right">
+                        <CreateAPIKeyInput value={props.newKey} readOnly />
+                        <CopyToClipboard text={props.newKey} onCopy={() => setCopied(true)}>
+                            <InputIcon aria-label="copy" name="copy" />
+                        </CopyToClipboard>
+                    </CreateAPIKeyInputContainer>
+                    {copied && (
+                        <CreateAPIKeyCopied>
+                            <Icon name="check" /> Copied
+                        </CreateAPIKeyCopied>
+                    )}
+                </StyledCreateAPIKey>
+            ) : (
                 <Formik
                     onSubmit={handleSubmit}
                     initialValues={getInitialFormValues(props)}
@@ -137,13 +133,7 @@ export const CreateAPIKey = props => {
                         </Form>
                     )}
                 </Formik>
-            </>
-        );
-    }
-
-    return (
-        <Modal label="Create API Key" show={props.show} onHide={props.onHide} onExited={handleModalExited}>
-            {content}
+            )}
         </Modal>
     );
 };

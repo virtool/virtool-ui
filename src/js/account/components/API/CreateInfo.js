@@ -1,13 +1,24 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Icon, ModalAlert } from "../../../base";
+import { AlertOuter } from "../../../base";
 import { getAccountAdministrator } from "../../selectors";
+import styled from "styled-components";
+
+const StyledAPIKeyAdministratorInfo = styled(AlertOuter)`
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 0;
+    padding: 15px;
+
+    p:last-of-type {
+        margin: 0;
+    }
+`;
 
 export const APIKeyAdministratorInfo = ({ administrator }) => {
     if (administrator) {
         return (
-            <ModalAlert color="purple">
-                <Icon name="user-shield" />
+            <StyledAPIKeyAdministratorInfo color="purple">
                 <div>
                     <p>
                         <strong>You are an administrator and can create API keys with any permissions you want.</strong>
@@ -17,7 +28,7 @@ export const APIKeyAdministratorInfo = ({ administrator }) => {
                         permissions.
                     </p>
                 </div>
-            </ModalAlert>
+            </StyledAPIKeyAdministratorInfo>
         );
     }
 
