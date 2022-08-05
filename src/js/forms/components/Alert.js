@@ -3,13 +3,14 @@ import styled from "styled-components";
 import { Alert, Icon } from "../../base";
 import { getColor } from "../../app/theme";
 
-const StyledAlert = styled(Alert)`
+const StyledRestoredAlert = styled(Alert)`
     display: flex;
     align-items: center;
 
     button {
         margin-left: 10px;
         color: ${props => getColor({ color: "greyDark", theme: props.theme })};
+
         :hover {
             color: ${props => getColor({ color: "greyDarkest", theme: props.theme })};
         }
@@ -27,10 +28,10 @@ export const RestoredAlert = ({ onClose, resetForm }) => {
     };
 
     return (
-        <StyledAlert>
+        <StyledRestoredAlert>
             <span>Resumed editing draft sample.</span>
             <Icon aria-label="undo restore" name="undo" color="grey" onClick={onUndoRestore} />
             <Icon aria-label="close" name="times" color="grey" onClick={onClose} />
-        </StyledAlert>
+        </StyledRestoredAlert>
     );
 };

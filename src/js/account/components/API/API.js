@@ -1,5 +1,5 @@
 import { map } from "lodash-es";
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -22,45 +22,35 @@ const APIKeysHeader = styled(Box)`
     }
 `;
 
-export class APIKeys extends React.Component {
-    componentDidMount() {
-        this.props.onGet();
+export const APIKeys = ({ keys, onGet }) => {
+    useEffect(onGet, []);
+
+    if (keys === null) {
+        return <LoadingPlaceholder margin="150px" />;
     }
 
-    render() {
-        if (this.props.apiKeys === null) {
-            return <LoadingPlaceholder margin="150px" />;
-        }
+    const keyComponents = map(keys, key => <APIKey key={key.id} apiKey={key} />);
 
-        let keyComponents = map(this.props.apiKeys, apiKey => <APIKey key={apiKey.id} apiKey={apiKey} />);
+    return (
+        <div>
+            <APIKeysHeader>
+                <div style={{ whiteSpace: "wrap" }}>
+                    <span>Manage API keys for accessing the </span>
+                    <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">Virtool API</ExternalLink>
+                    <span>.</span>
+                </div>
+                <Link to={{ state: { createAPIKey: true } }}>Create</Link>
+            </APIKeysHeader>
 
-        if (!keyComponents.length) {
-            keyComponents = <NoneFoundBox noun="API keys" />;
-        }
+            {keyComponents.length ? keyComponents : <NoneFoundBox noun="API keys" />}
 
-        return (
-            <div>
-                <APIKeysHeader>
-                    <div style={{ whiteSpace: "wrap" }}>
-                        <span>Manage API keys for accessing the </span>
-                        <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">
-                            Virtool API
-                        </ExternalLink>
-                        <span>.</span>
-                    </div>
-                    <Link to={{ state: { createAPIKey: true } }}>Create</Link>
-                </APIKeysHeader>
-
-                {keyComponents}
-
-                <CreateAPIKey />
-            </div>
-        );
-    }
-}
+            <CreateAPIKey />
+        </div>
+    );
+};
 
 const mapStateToProps = state => ({
-    apiKeys: state.account.apiKeys
+    keys: state.account.apiKeys
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -12,11 +12,11 @@ exports[`<APIKey /> should render when [state.changed=true] 1`] = `
     <Attribution
       time="2018-02-14T17:12:00.000000Z"
     />
-    <Key__APIKeyPermissions>
+    <Key__APIKeyPermissionCount>
       1
        permission
-    </Key__APIKeyPermissions>
-    <Key__APIKeyClose />
+    </Key__APIKeyPermissionCount>
+    <Key__APIKeyCloseContainer />
   </Key__APIKeyHeader>
 </Box__SpacedBox>
 `;
@@ -33,11 +33,11 @@ exports[`<APIKey /> should render when collapsed 1`] = `
     <Attribution
       time="2018-02-14T17:12:00.000000Z"
     />
-    <Key__APIKeyPermissions>
+    <Key__APIKeyPermissionCount>
       1
        permission
-    </Key__APIKeyPermissions>
-    <Key__APIKeyClose />
+    </Key__APIKeyPermissionCount>
+    <Key__APIKeyCloseContainer />
   </Key__APIKeyHeader>
 </Box__SpacedBox>
 `;
@@ -54,21 +54,21 @@ exports[`<APIKey /> should render when expanded 1`] = `
     <Attribution
       time="2018-02-14T17:12:00.000000Z"
     />
-    <Key__APIKeyPermissions>
+    <Key__APIKeyPermissionCount>
       1
        permission
-    </Key__APIKeyPermissions>
-    <Key__APIKeyClose>
+    </Key__APIKeyPermissionCount>
+    <Key__APIKeyCloseContainer>
       <Icon
         faStyle="fas"
         fixedWidth={false}
         name="times"
         onClick={[Function]}
       />
-    </Key__APIKeyClose>
+    </Key__APIKeyCloseContainer>
   </Key__APIKeyHeader>
   <div>
-    <Key__KeyAPIPermissions
+    <Key__APIKeyPermissions
       keyPermissions={
         Object {
           "bar": true,

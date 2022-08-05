@@ -6,11 +6,13 @@ import { Attribution, Button, ButtonToolbar, Icon, SpacedBox } from "../../../ba
 import { removeAPIKey, updateAPIKey } from "../../actions";
 import APIPermissions from "./Permissions";
 
-const APIKeyClose = styled.div`
-    text-align: right;
-`;
+export const getInitialState = ({ apiKey }) => ({
+    in: false,
+    changed: false,
+    permissions: apiKey.permissions
+});
 
-const APIKeyPermissions = styled.div`
+const APIKeyCloseContainer = styled.div`
     text-align: right;
 `;
 
@@ -19,13 +21,11 @@ const APIKeyHeader = styled.div`
     grid-template-columns: 3fr 2fr 1fr 1fr;
 `;
 
-export const getInitialState = ({ apiKey }) => ({
-    in: false,
-    changed: false,
-    permissions: apiKey.permissions
-});
+const APIKeyPermissionCount = styled.div`
+    text-align: right;
+`;
 
-const KeyAPIPermissions = styled(APIPermissions)`
+const APIKeyPermissions = styled(APIPermissions)`
     margin-top: 15px;
 `;
 
@@ -57,37 +57,6 @@ export class APIKey extends React.Component {
     };
 
     render() {
-        let lower;
-        let closeButton;
-
-        if (this.state.in) {
-            lower = (
-                <div>
-                    <KeyAPIPermissions
-                        userPermissions={this.props.permissions}
-                        keyPermissions={this.state.permissions}
-                        onChange={this.onPermissionChange}
-                    />
-
-                    <ButtonToolbar>
-                        <Button color="red" icon="trash" onClick={() => this.props.onRemove(this.props.apiKey.id)}>
-                            Remove
-                        </Button>
-                        <Button
-                            color="blue"
-                            icon="save"
-                            onClick={() => this.props.onUpdate(this.props.apiKey.id, this.state.permissions)}
-                            disabled={!this.state.changed}
-                        >
-                            Update
-                        </Button>
-                    </ButtonToolbar>
-                </div>
-            );
-
-            closeButton = <Icon name="times" onClick={this.toggleIn} />;
-        }
-
         const permissionCount = reduce(this.props.apiKey.permissions, (result, value) => result + (value ? 1 : 0), 0);
 
         return (
@@ -95,12 +64,36 @@ export class APIKey extends React.Component {
                 <APIKeyHeader>
                     <strong>{this.props.apiKey.name}</strong>
                     <Attribution time={this.props.apiKey.created_at} />
-                    <APIKeyPermissions>
+                    <APIKeyPermissionCount>
                         {permissionCount} permission{permissionCount === 1 ? null : "s"}
-                    </APIKeyPermissions>
-                    <APIKeyClose>{closeButton}</APIKeyClose>
+                    </APIKeyPermissionCount>
+                    <APIKeyCloseContainer>
+                        {this.state.in && <Icon name="times" onClick={this.toggleIn} />}
+                    </APIKeyCloseContainer>
                 </APIKeyHeader>
-                {lower}
+                {this.state.in && (
+                    <div>
+                        <APIKeyPermissions
+                            userPermissions={this.props.permissions}
+                            keyPermissions={this.state.permissions}
+                            onChange={this.onPermissionChange}
+                        />
+
+                        <ButtonToolbar>
+                            <Button color="red" icon="trash" onClick={() => this.props.onRemove(this.props.apiKey.id)}>
+                                Remove
+                            </Button>
+                            <Button
+                                color="blue"
+                                icon="save"
+                                onClick={() => this.props.onUpdate(this.props.apiKey.id, this.state.permissions)}
+                                disabled={!this.state.changed}
+                            >
+                                Update
+                            </Button>
+                        </ButtonToolbar>
+                    </div>
+                )}
             </SpacedBox>
         );
     }
