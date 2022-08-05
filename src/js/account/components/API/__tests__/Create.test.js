@@ -4,22 +4,16 @@ import { CreateAPIKey, getInitialFormValues, mapDispatchToProps, mapStateToProps
 import { createStore } from "redux";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 
-const expectedInitialState = {
-    name: "",
-    permissions: { foo: false, bar: false }
-};
-
 const createAppStore = state => {
     return () => createStore(state => state, state);
 };
 
 describe("getInitialFormValues()", () => {
     it("should return correct initial state", () => {
-        const props = {
-            permissions: { foo: false, bar: true }
-        };
-
-        expect(getInitialFormValues(props)).toEqual(expectedInitialState);
+        expect(getInitialFormValues({ foo: false, bar: true })).toEqual({
+            name: "",
+            permissions: { foo: false, bar: false }
+        });
     });
 });
 

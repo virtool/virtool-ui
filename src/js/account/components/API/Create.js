@@ -6,8 +6,6 @@ import styled from "styled-components";
 import { pushState } from "../../../app/actions";
 
 import {
-    ModalBody,
-    ModalFooter,
     Icon,
     Input,
     InputContainer,
@@ -16,14 +14,16 @@ import {
     InputIcon,
     InputLabel,
     Modal,
-    SaveButton,
-    ModalHeader
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    SaveButton
 } from "../../../base";
 import { routerLocationHasState } from "../../../utils/utils";
 import { clearAPIKey, createAPIKey } from "../../actions";
 import CreateAPIKeyInfo from "./CreateInfo";
 import APIPermissions from "./Permissions";
-import { Formik, Form, Field } from "formik";
+import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { getFontSize } from "../../../app/theme";
 
@@ -31,9 +31,9 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the key")
 });
 
-export const getInitialFormValues = props => ({
+export const getInitialFormValues = permissions => ({
     name: "",
-    permissions: mapValues(props.permissions, () => false)
+    permissions: mapValues(permissions, () => false)
 });
 
 const CreateAPIKeyCopied = styled.p`
@@ -62,36 +62,36 @@ const StyledCreateAPIKey = styled(ModalBody)`
     }
 `;
 
-export const CreateAPIKey = props => {
+export const CreateAPIKey = ({ newKey, permissions, show, onCreate, onHide }) => {
     const [copied, setCopied] = useState(false);
-    const [show, setShow] = useState(false);
+    const [showCreated, setShowCreated] = useState(false);
 
     useEffect(() => {
-        if (!show && props.newKey) {
-            setShow(true);
+        if (!showCreated && newKey) {
+            setShowCreated(true);
         }
-    }, [props.newKey]);
+    }, [newKey]);
 
     const handleModalExited = () => {
         setCopied(false);
-        setShow(false);
+        setShowCreated(false);
     };
 
     const handleSubmit = ({ name, permissions }) => {
-        props.onCreate(name, permissions);
+        onCreate(name, permissions);
     };
 
     return (
-        <Modal label="Create API Key" show={props.show} onHide={props.onHide} onExited={handleModalExited}>
+        <Modal label="Create API Key" show={show} onHide={onHide} onExited={handleModalExited}>
             <ModalHeader>Create API Key</ModalHeader>
-            {show ? (
+            {showCreated ? (
                 <StyledCreateAPIKey>
                     <strong>Here is your key.</strong>
                     <p>Make note of it now. For security purposes, it will not be shown again.</p>
 
                     <CreateAPIKeyInputContainer align="right">
-                        <CreateAPIKeyInput value={props.newKey} readOnly />
-                        <CopyToClipboard text={props.newKey} onCopy={() => setCopied(true)}>
+                        <CreateAPIKeyInput value={newKey} readOnly />
+                        <CopyToClipboard text={newKey} onCopy={() => setCopied(true)}>
                             <InputIcon aria-label="copy" name="copy" />
                         </CopyToClipboard>
                     </CreateAPIKeyInputContainer>
@@ -104,7 +104,7 @@ export const CreateAPIKey = props => {
             ) : (
                 <Formik
                     onSubmit={handleSubmit}
-                    initialValues={getInitialFormValues(props)}
+                    initialValues={getInitialFormValues(permissions)}
                     validationSchema={validationSchema}
                 >
                     {({ errors, setFieldValue, touched, values }) => (
@@ -138,13 +138,11 @@ export const CreateAPIKey = props => {
     );
 };
 
-export const mapStateToProps = state => {
-    return {
-        show: routerLocationHasState(state, "createAPIKey"),
-        newKey: state.account.newKey,
-        permissions: state.account.permissions
-    };
-};
+export const mapStateToProps = state => ({
+    show: routerLocationHasState(state, "createAPIKey"),
+    newKey: state.account.newKey,
+    permissions: state.account.permissions
+});
 
 export const mapDispatchToProps = dispatch => ({
     onCreate: (name, permissions) => {
