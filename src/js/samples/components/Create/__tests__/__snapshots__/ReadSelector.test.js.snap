@@ -41,9 +41,9 @@ exports[`<ReadSelector /> should render 1`] = `
     <ReadSelector__ReadSelectorList>
       <Box__BoxGroup>
         <ReadSelectorItem
-          id="foo"
+          id={21}
           index={0}
-          key="foo"
+          key="21"
           name="bar"
           onSelect={[Function]}
           selected={true}

@@ -11,20 +11,19 @@ export const PrimaryGroupOption = styled.option`
 
 export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) => {
     const handleSetPrimaryGroup = useCallback(
-        e => onSetPrimaryGroup(id, e.target.value === "none" ? "" : e.target.value),
+        e => onSetPrimaryGroup(id, e.target.value === "none" ? null : e.target.value),
         [id, primaryGroup]
     );
 
-    const groupOptions = map(groups, groupId => (
-        <PrimaryGroupOption key={groupId} value={groupId}>
-            {capitalize(groupId)}
+    const groupOptions = map(groups, ({ id }) => (
+        <PrimaryGroupOption key={id} value={id}>
+            {capitalize(id)}
         </PrimaryGroupOption>
     ));
-
     return (
         <InputGroup>
             <InputLabel>Primary Group</InputLabel>
-            <Select value={primaryGroup} onChange={handleSetPrimaryGroup}>
+            <Select value={primaryGroup?.id || "none"} onChange={handleSetPrimaryGroup}>
                 <option key="none" value="none">
                     None
                 </option>

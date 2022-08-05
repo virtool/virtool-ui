@@ -1,15 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroupSection, Icon, Input, SidebarHeaderButton } from "../../../base";
+import { fontWeight, getFontSize } from "../../../app/theme";
+import { Icon, SidebarHeaderButton } from "../../../base";
+import { BoxGroupSearch } from "../../../base/BoxGroupSearch.js";
 import { useFuse } from "../../../base/hooks";
 import { PopoverBody, usePopover } from "../../../base/Popover";
 import { SampleSidebarSelectorItem } from "./SelectorItem";
-import { Link } from "react-router-dom";
-import { getFontSize, fontWeight } from "../../../app/theme";
-
-const SampleSidebarSelectorInputContainer = styled(BoxGroupSection)`
-    padding: 10px;
-`;
 
 const SampleSidebarSelectorButton = styled.div`
     display: flex;
@@ -73,15 +70,7 @@ export const SampleSidebarSelector = ({
             )}
             {show && (
                 <PopoverBody ref={setPopperElement} show={show} style={styles.popper} {...attributes.popper}>
-                    <SampleSidebarSelectorInputContainer>
-                        <Input
-                            value={term}
-                            placeholder="Filter items"
-                            aria-label="Filter items"
-                            onChange={e => setTerm(e.target.value)}
-                            autoFocus
-                        />
-                    </SampleSidebarSelectorInputContainer>
+                    <BoxGroupSearch placeholder="Filter items" label="Filter items" value={term} onChange={setTerm} />
                     <SampleItemComponentsContainer>{sampleItemComponents}</SampleItemComponentsContainer>
                     <SampleSidebarSelectorButton>
                         <Link to={manageLink}> Manage</Link>

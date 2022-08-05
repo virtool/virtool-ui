@@ -1,69 +1,81 @@
-import React from "react";
+import { map } from "lodash-es";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import styled from "styled-components";
+import { Box, LoadingPlaceholder, NarrowContainer, ViewHeader, ViewHeaderTitle } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { findJobs } from "../actions";
-import { getTerm } from "../selectors";
 import Job from "./Item/Item";
-import JobsSummary from "./Summary";
-import JobsToolbar from "./Toolbar";
+import { JobFilters } from "./Filters/Filters";
+import { getJobCountsTotal } from "../selectors";
+import { getFontWeight } from "../../app/theme";
 
-export class JobsList extends React.Component {
-    componentDidMount() {
-        this.props.onLoadNextPage(this.props.term, 1);
+const JobsListViewContainer = styled.div`
+    display: flex;
+    gap: ${props => props.theme.gap.column};
+    justify-content: start;
+`;
+
+const JobsListEmpty = styled(Box)`
+    align-items: center;
+    color: ${props => props.theme.color.greyDark};
+    display: flex;
+    justify-content: center;
+    height: 100%;
+
+    h3 {
+        font-weight: ${getFontWeight("thick")};
+    }
+`;
+
+export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onFind }) => {
+    useEffect(() => onFind(["preparing", "running"]), []);
+
+    if (jobs === null) {
+        return <LoadingPlaceholder />;
     }
 
-    renderRow = index => {
-        const document = this.props.documents[index];
-        return (
-            <Job key={document.id} {...document} canArchive={this.props.canArchive} canCancel={this.props.canCancel} />
+    let inner;
+
+    if (noJobs) {
+        inner = (
+            <JobsListEmpty>
+                <h3>No jobs found</h3>
+            </JobsListEmpty>
         );
-    };
-
-    render() {
-        if (this.props.documents === null) {
-            return <LoadingPlaceholder />;
-        }
-
-        let noneFound;
-
-        if (!this.props.documents.length) {
-            noneFound = <NoneFoundBox noun="jobs" />;
-        }
-
-        return (
-            <>
-                <ViewHeader title="Jobs">
-                    <ViewHeaderTitle>Jobs</ViewHeaderTitle>
-                </ViewHeader>
-
-                <JobsSummary />
-                <JobsToolbar />
-
-                {noneFound}
-
-                <ScrollList
-                    documents={this.props.documents}
-                    page={this.props.page}
-                    pageCount={this.props.page_count}
-                    onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
-                    renderRow={this.renderRow}
-                />
-            </>
+    } else if (jobs.length === 0) {
+        inner = (
+            <JobsListEmpty>
+                <h3>No jobs matching filters</h3>
+            </JobsListEmpty>
         );
+    } else {
+        inner = map(jobs, job => <Job key={job.id} {...job} canArchive={canArchive} canCancel={canCancel} />);
     }
-}
+
+    return (
+        <>
+            <ViewHeader title="Jobs">
+                <ViewHeaderTitle>Jobs</ViewHeaderTitle>
+            </ViewHeader>
+            <JobsListViewContainer>
+                <NarrowContainer>{inner}</NarrowContainer>
+                <JobFilters />
+            </JobsListViewContainer>
+        </>
+    );
+};
 
 export const mapStateToProps = state => ({
-    ...state.jobs,
-    term: getTerm(state),
+    jobs: state.jobs.documents,
+    noJobs: getJobCountsTotal(state) === 0,
     canCancel: checkAdminOrPermission(state, "cancel_job"),
     canArchive: checkAdminOrPermission(state, "remove_job")
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onLoadNextPage: (term, page) => {
-        dispatch(findJobs(term, page));
+    onFind: states => {
+        dispatch(findJobs(states));
     }
 });
 

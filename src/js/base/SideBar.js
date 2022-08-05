@@ -3,7 +3,7 @@ import { borderRadius, boxShadow, fontWeight, getFontSize } from "../app/theme";
 import { Box } from "./Box";
 
 export const SideBarSection = styled(Box)`
-    background-color: #f8fafc;
+    background-color: ${props => props.theme.color.greyLightest};
     border: none;
     border-radius: ${borderRadius.md};
     box-shadow: ${boxShadow.sm};

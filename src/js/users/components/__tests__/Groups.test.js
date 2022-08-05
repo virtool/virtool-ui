@@ -7,7 +7,7 @@ describe("<UserGroups />", () => {
     beforeEach(() => {
         props = {
             documents: [{ id: "foo" }, { id: "bar" }, { id: "baz" }],
-            memberGroups: ["foo"],
+            memberGroups: [{ id: "foo" }],
             userId: "bob",
             onEditGroup: jest.fn()
         };

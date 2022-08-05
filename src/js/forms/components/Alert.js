@@ -7,7 +7,7 @@ const StyledAlert = styled(Alert)`
     display: flex;
     align-items: center;
 
-    i.fas {
+    button {
         margin-left: 10px;
         color: ${props => getColor({ color: "greyDark", theme: props.theme })};
         :hover {

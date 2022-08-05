@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import styled, { css } from "styled-components";
 import { Box, BoxGroupSection } from "./Box";
 import { Icon } from "./Icon";
@@ -46,8 +46,8 @@ const StyledNoneFoundBox = styled(Box)`
     min-height: 30px;
 `;
 
-export const NoneFoundBox = ({ noun, children }) => (
-    <StyledNoneFoundBox as={Box}>
+export const NoneFoundBox = ({ className, noun, children }) => (
+    <StyledNoneFoundBox as={Box} className={className}>
         <Icon name="info-circle" /> No {noun} found. &nbsp; {children}
     </StyledNoneFoundBox>
 );

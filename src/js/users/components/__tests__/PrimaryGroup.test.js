@@ -1,23 +1,38 @@
-import { Select } from "../../../base";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { mapDispatchToProps, mapStateToProps, PrimaryGroup } from "../PrimaryGroup";
 
 describe("<PrimaryGroup />", () => {
     const props = {
-        groups: ["foo", "bar", "baz"],
+        groups: [{ id: "foo" }, { id: "bar" }, { id: "baz" }],
         id: "bob",
-        primaryGroup: "bar",
+        primaryGroup: { id: "bar" },
         onSetPrimaryGroup: jest.fn()
     };
 
     it("should render", () => {
-        const wrapper = shallow(<PrimaryGroup {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<PrimaryGroup {...props} />);
+        expect(screen.getByText("Primary Group")).toBeInTheDocument();
+        expect(screen.getByRole("combobox")).toHaveValue("bar");
     });
 
-    it("should call onSetPrimaryGroup() when selection changes", () => {
-        const wrapper = shallow(<PrimaryGroup {...props} />);
-        wrapper.find(Select).simulate("change", { target: { value: "baz" } });
-        expect(props.onSetPrimaryGroup).toHaveBeenCalledWith("bob", "baz");
+    it("should render when [primaryGroup = null]", () => {
+        props.primaryGroup = null;
+        renderWithProviders(<PrimaryGroup {...props} />);
+        expect(screen.getByText("Primary Group")).toBeInTheDocument();
+        expect(screen.getByRole("combobox")).toHaveValue("none");
+    });
+
+    it("should call onSetPrimaryGroup() when selection changes", async () => {
+        props.primaryGroup = "baz";
+        renderWithProviders(<PrimaryGroup {...props} />);
+        expect(screen.getByText("Primary Group")).toBeInTheDocument();
+        userEvent.selectOptions(screen.getByRole("combobox"), "Bar");
+        userEvent.selectOptions(screen.getByRole("combobox"), "none");
+        await waitFor(() => {
+            expect(props.onSetPrimaryGroup).toHaveBeenNthCalledWith(1, "bob", "bar");
+            expect(props.onSetPrimaryGroup).toHaveBeenNthCalledWith(2, "bob", null);
+        });
     });
 });
 

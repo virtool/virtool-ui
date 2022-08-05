@@ -1,8 +1,13 @@
-import { map } from "lodash-es";
+import { concat, difference, without } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
-import { MultiSelector, MultiSelectorItem } from "../../../base/MultiSelector";
 import { getWorkflowDisplayName } from "../../../utils/utils";
+import { CreateAnalysisField, CreateAnalysisFieldTitle } from "./Field";
+import { CreateAnalysisSelected } from "./Selected";
+import { CreateAnalysisSelector } from "./Selector";
+import { SelectorItem } from "./SelectorItem";
+import { CreateAnalysisSelectorList } from "./CreateAnalysisSelectorList";
+import styled from "styled-components";
 
 export const getCompatibleWorkflows = (dataType, hasHmm) => {
     if (dataType === "barcode") {
@@ -16,26 +21,41 @@ export const getCompatibleWorkflows = (dataType, hasHmm) => {
     return ["pathoscope_bowtie"];
 };
 
-export const WorkflowSelector = ({ dataType, hasError, hasHmm, workflows, onSelect }) => {
-    const workflowItems = map(getCompatibleWorkflows(dataType, hasHmm), workflow => (
-        <MultiSelectorItem key={workflow} name={workflow} value={workflow}>
-            {getWorkflowDisplayName(workflow)}
-        </MultiSelectorItem>
-    ));
+const ShorterCreateAnalysisSelector = styled(CreateAnalysisSelector)`
+    height: 90px;
+`;
+
+export const WorkflowSelector = ({ dataType, hasError, hasHmm, selected, onSelect }) => {
+    const compatibleWorkflows = getCompatibleWorkflows(dataType, hasHmm);
+    const unselectedWorkflows = difference(compatibleWorkflows, selected);
 
     return (
-        <>
-            <label htmlFor="workflow-selector">Workflows</label>
-            <MultiSelector
+        <CreateAnalysisField>
+            <CreateAnalysisFieldTitle>Workflow</CreateAnalysisFieldTitle>
+            <ShorterCreateAnalysisSelector
                 error={hasError && "Workflow(s) must be selected"}
-                id="workflow-selector"
+                items={unselectedWorkflows}
                 noun="workflows"
-                selected={workflows}
-                onChange={onSelect}
             >
-                {workflowItems}
-            </MultiSelector>
-        </>
+                <CreateAnalysisSelectorList
+                    render={workflow => (
+                        <SelectorItem key={workflow} onClick={() => onSelect(concat(selected, workflow))}>
+                            {getWorkflowDisplayName(workflow)}
+                        </SelectorItem>
+                    )}
+                    items={unselectedWorkflows}
+                    onChange={false}
+                />
+            </ShorterCreateAnalysisSelector>
+            <CreateAnalysisSelected
+                render={workflow => (
+                    <SelectorItem key={workflow} onClick={() => onSelect(without(selected, workflow))}>
+                        {getWorkflowDisplayName(workflow)}
+                    </SelectorItem>
+                )}
+                items={selected}
+            />
+        </CreateAnalysisField>
     );
 };
 
@@ -43,6 +63,6 @@ WorkflowSelector.propTypes = {
     dataType: PropTypes.oneOf(["barcode", "genome"]),
     hasError: PropTypes.bool,
     hasHmm: PropTypes.bool,
-    workflows: PropTypes.arrayOf(PropTypes.string),
+    selected: PropTypes.arrayOf(PropTypes.string).isRequired,
     onSelect: PropTypes.func.isRequired
 };

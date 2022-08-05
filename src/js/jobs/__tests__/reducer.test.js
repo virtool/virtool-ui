@@ -1,4 +1,4 @@
-import { FIND_JOBS, GET_JOB, WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB } from "../../app/actionTypes";
+import { FIND_JOBS, GET_JOB } from "../../app/actionTypes";
 import reducer, { initialState as reducerInitialState } from "../reducer";
 
 describe("Job Reducer", () => {
@@ -15,98 +15,16 @@ describe("Job Reducer", () => {
         expect(result).toEqual(reducerInitialState);
     });
 
-    describe("should handle WS_INSERT_JOB", () => {
-        it("when documents are not yet fetched, returns state", () => {
-            const document = { id: "foo" };
-            const action = { type: WS_INSERT_JOB, payload: document };
-            const result = reducer({}, action);
-            expect(result).toEqual({
-                documents: [document]
-            });
-        });
-
-        it("otherwise insert entry into list", () => {
-            const state = {
-                documents: null,
-                page: 1
-            };
-            const action = { type: WS_INSERT_JOB, payload: { id: "test" } };
-            const result = reducer(state, action);
-            expect(result).toEqual({
-                ...state,
-                documents: [{ id: "test" }]
-            });
-        });
-    });
-
-    it("should handle WS_UPDATE_JOB", () => {
-        const state = {
-            documents: [
-                {
-                    id: "foo",
-                    workflow: "test_job"
-                },
-                {
-                    id: "bar",
-                    workflow: "running_job"
-                }
-            ]
-        };
-        const action = {
-            type: WS_UPDATE_JOB,
-            payload: {
-                id: "bar",
-                workflow: "finish_job"
-            }
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...state,
-            documents: [
-                {
-                    id: "foo",
-                    workflow: "test_job"
-                },
-                {
-                    id: "bar",
-                    workflow: "finish_job"
-                }
-            ]
-        });
-    });
-
-    it("should handle WS_REMOVE_JOB", () => {
-        const state = {
-            documents: [{ id: "test1" }, { id: "test2" }]
-        };
-        const action = {
-            type: WS_REMOVE_JOB,
-            payload: ["test2"]
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...state,
-            documents: [{ id: "test1" }]
-        });
-    });
-
-    it("should handle FIND_JOBS_REQUESTED", () => {
-        const action = { type: FIND_JOBS.REQUESTED, payload: { term: "foo" } };
-        const result = reducer({}, action);
-        expect(result).toEqual({ term: "foo" });
-    });
-
     it("should handle FIND_JOBS_SUCCEEDED", () => {
-        const state = { documents: null, page: 1 };
+        const state = { documents: null };
         const documents = [{ id: "foo" }];
         const action = {
             type: FIND_JOBS.SUCCEEDED,
-            payload: { documents, page: 2 }
+            payload: { documents }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents,
-            page: 2
+            documents
         });
     });
 

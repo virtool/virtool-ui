@@ -52,7 +52,12 @@ export const appendUpload = (state, action) => {
 export const updateProgress = (state, action) => {
     const uploads = map(state.uploads, upload => {
         if (upload.localId === action.localId) {
-            return { ...upload, progress: action.progress };
+            return {
+                ...upload,
+                progress: action.progress,
+                uploadSpeed: action.uploadSpeed,
+                remaining: action.remaining
+            };
         }
 
         return upload;

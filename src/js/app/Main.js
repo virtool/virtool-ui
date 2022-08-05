@@ -20,7 +20,6 @@ const Jobs = lazy(() => import("../jobs/components/Jobs"));
 const References = lazy(() => import("../references/components/References"));
 const Samples = lazy(() => import("../samples/components/Samples"));
 const Subtraction = lazy(() => import("../subtraction/components/Subtraction"));
-const Welcome = lazy(() => import("../home/components/Welcome"));
 
 const Fallback = () => (
     <Container>
@@ -57,8 +56,7 @@ export const Main = ({ ready, onLoad }) => {
                 <MainContainer>
                     <Suspense fallback={<Fallback />}>
                         <Switch>
-                            <Redirect from="/" to="/home" exact />
-                            <Route path="/home" component={Welcome} />
+                            <Redirect from="/" to="/samples" exact />
                             <Route path="/jobs" component={Jobs} />
                             <Route path="/samples" component={Samples} />
                             <Route path="/refs" component={References} />

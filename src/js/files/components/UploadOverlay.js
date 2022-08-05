@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { map, reject, reverse } from "lodash-es";
+import { map, reject, reverse, every, sumBy } from "lodash-es";
 import { connect } from "react-redux";
 import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
-import UploadItem from "./UploadItem";
+import { UploadItem } from "./UploadItem";
 import { getFontWeight, getFontSize } from "../../app/theme";
+import { intervalToDuration, formatDuration } from "date-fns";
 
 const StyledUploadOverlay = styled.div`
     bottom: 0;
@@ -23,6 +24,7 @@ const UploadOverlayContent = styled(BoxGroup)`
     margin: 0;
 
     ${BoxGroupHeader} {
+        align-items: auto;
         display: block;
         font-weight: ${getFontWeight("thick")};
         font-size: ${getFontSize("lg")};
@@ -36,15 +38,76 @@ const UploadOverlayList = styled(BoxGroupSection)`
     padding: 0;
 `;
 
+const StyledUploadInformation = styled.div`
+    display: flex;
+    justify-content: space-between;
+    font-size: ${getFontSize("md")};
+    font-weight: ${getFontWeight("normal")};
+    margin-top: 5px;
+`;
+
+const getFormat = timeInterval => {
+    if (timeInterval.hours) {
+        return "hours";
+    } else if (timeInterval.minutes) {
+        return "minutes";
+    } else if (timeInterval.seconds) {
+        return "seconds";
+    }
+    return "";
+};
+
+const UploadTiming = ({ remaining, uploadSpeed }) => {
+    const remainingTime = remaining ? remaining : 3600;
+    const estimatedUploadSpeed = uploadSpeed ? (uploadSpeed / 1000000).toFixed(0) : 0;
+    const timeRemainingInterval = intervalToDuration({ start: 0, end: remainingTime * 1000 });
+
+    let formattedTimeRemaining = "";
+    if (timeRemainingInterval.hours > 12) {
+        formattedTimeRemaining = " > 12hr remaining";
+    } else {
+        formattedTimeRemaining = formatDuration(
+            {
+                hours: timeRemainingInterval.hours,
+                minutes: timeRemainingInterval.minutes,
+                seconds: timeRemainingInterval.seconds
+            },
+
+            {
+                format: [getFormat(timeRemainingInterval)]
+            }
+        );
+        formattedTimeRemaining = formattedTimeRemaining.length
+            ? `${formattedTimeRemaining} remaining`
+            : "0 seconds remaining";
+    }
+
+    return (
+        <StyledUploadInformation>
+            <div>{formattedTimeRemaining}</div>
+            <div>{`${estimatedUploadSpeed} MB/s`}</div>
+        </StyledUploadInformation>
+    );
+};
+
 export const UploadOverlay = ({ uploads }) => {
     if (uploads.length) {
+        const totalRemainingUploadTime = sumBy(uploads, "remaining");
+        const overallUploadSpeed = sumBy(uploads, "uploadSpeed");
         const uploadComponents = map(uploads, upload => <UploadItem key={upload.localId} {...upload} />);
+
+        const allUploadsComplete = every(uploads, ["progress", 100]);
 
         return (
             <StyledUploadOverlay show={uploads.length}>
                 <UploadOverlayContent>
                     <BoxGroupHeader>
                         Uploads <Badge>{uploadComponents.length}</Badge>
+                        {allUploadsComplete ? (
+                            <StyledUploadInformation>Finishing uploads</StyledUploadInformation>
+                        ) : (
+                            <UploadTiming remaining={totalRemainingUploadTime} uploadSpeed={overallUploadSpeed} />
+                        )}
                     </BoxGroupHeader>
                     <UploadOverlayList>{uploadComponents}</UploadOverlayList>
                 </UploadOverlayContent>

@@ -21,9 +21,14 @@ export const alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
  * @param bytes {number}
  * @returns {string}
  */
-export const byteSize = bytes => {
+export const byteSize = (bytes, spaceSeparated) => {
     if (bytes) {
-        return numbro(bytes).format({ output: "byte", base: "decimal", mantissa: 1 });
+        return numbro(bytes).format({
+            output: "byte",
+            base: "decimal",
+            mantissa: 1,
+            spaceSeparated: spaceSeparated ? spaceSeparated : false
+        });
     }
 
     return "0.0B";

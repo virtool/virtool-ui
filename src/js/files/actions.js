@@ -97,8 +97,8 @@ export const removeFile = createAction(REMOVE_FILE.REQUESTED, fileId => ({
  * @param progress {number} the new progress value
  * @returns {object}
  */
-export const uploadProgress = createAction(UPLOAD_PROGRESS, (localId, progress) => ({
-    payload: { localId, progress }
+export const uploadProgress = createAction(UPLOAD_PROGRESS, (localId, progress, uploadSpeed, remaining) => ({
+    payload: { localId, progress, uploadSpeed, remaining }
 }));
 
 /**

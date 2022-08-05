@@ -1,13 +1,34 @@
 import {
-    WS_INSERT_USER,
-    WS_UPDATE_USER,
-    WS_REMOVE_USER,
+    CREATE_USER,
+    EDIT_USER,
     FIND_USERS,
     GET_USER,
-    CREATE_USER,
-    EDIT_USER
+    WS_INSERT_USER,
+    WS_REMOVE_USER,
+    WS_UPDATE_USER
 } from "../../app/actionTypes";
+import { User } from "../models";
 import reducer, { initialState } from "../reducer";
+
+const defaultUser = {
+    id: "bill",
+    handle: "test_handle",
+    administrator: false,
+    groups: ["test"],
+    primary_group: null,
+    force_reset: false,
+    last_password_change: "date",
+    permissions: {
+        cancel_job: Boolean,
+        create_ref: Boolean,
+        create_sample: Boolean,
+        modify_hmm: Boolean,
+        modify_subtraction: Boolean,
+        remove_file: Boolean,
+        remove_job: Boolean,
+        upload_file: Boolean
+    }
+};
 
 describe("Users Reducer", () => {
     it("should return the initial state on first pass", () => {
@@ -29,36 +50,28 @@ describe("Users Reducer", () => {
         };
         const action = {
             type: WS_INSERT_USER,
-            payload: {
-                id: "bill"
-            }
+            payload: defaultUser
         };
         const result = reducer(state, action);
-        expect(result).toEqual({
-            documents: [action.payload]
-        });
+        const expectedResult = { documents: [new User(action.payload)] };
+        expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
     it("should handle WS_UPDATE_USER", () => {
         const state = {
-            documents: [
-                { id: "bob", administrator: true },
-                { id: "fred", administrator: false }
-            ]
+            documents: [new User({ ...defaultUser, id: "user_1" }), new User({ ...defaultUser, id: "user_2" })]
         };
         const action = {
             type: WS_UPDATE_USER,
-            payload: {
-                id: "fred",
-                administrator: true
-            }
+            payload: { ...defaultUser, id: "user_1", administrator: true }
         };
         const result = reducer(state, action);
-        expect(result).toEqual({
+        const expectedResult = {
             documents: [
-                { id: "bob", administrator: true },
-                { id: "fred", administrator: true }
+                new User({ ...defaultUser, id: "user_1", administrator: true }),
+                new User({ ...defaultUser, id: "user_2" })
             ]
-        });
+        };
+        expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
 
     it("should handle WS_REMOVE_USER", () => {
@@ -91,11 +104,12 @@ describe("Users Reducer", () => {
         const action = {
             type: FIND_USERS.SUCCEEDED,
             payload: {
-                documents: [{ id: "foo" }]
+                documents: [defaultUser]
             }
         };
         const result = reducer({}, action);
-        expect(result).toEqual(action.payload);
+        const expectedResult = { documents: [new User(action.payload.documents[0])] };
+        expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
 
     it("should handle GET_USER_REQUESTED", () => {

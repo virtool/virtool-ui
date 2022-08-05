@@ -15,7 +15,6 @@ export const getStepDescription = ({ state, step_name, step_description }) => {
 
     if (state === "preparing") {
         return {
-            title: "Preparing",
             description: "Preparing the workflow environment."
         };
     }

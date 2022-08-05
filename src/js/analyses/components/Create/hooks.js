@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 
 export const useCreateAnalysis = (dataType, defaultSubtractions) => {
     const [errors, setErrors] = useState({});
-    const [references, setReferences] = useState([]);
+    const [indexes, setIndexes] = useState([]);
     const [subtractions, setSubtractions] = useState(defaultSubtractions);
     const [workflows, setWorkflows] = useState([]);
 
-    const setReferencesAndError = references => {
-        setReferences(references);
+    const setIndexesAndError = indexes => {
+        setIndexes(indexes);
         setErrors({
             ...errors,
-            references: false
+            indexes: false
         });
     };
 
@@ -24,17 +24,17 @@ export const useCreateAnalysis = (dataType, defaultSubtractions) => {
 
     useEffect(() => {
         setErrors({});
-        setReferences([]);
+        setIndexes([]);
         setWorkflows([]);
     }, [dataType]);
 
     return {
         errors,
-        references,
+        indexes,
         subtractions,
         workflows,
         setErrors,
-        setReferences: setReferencesAndError,
+        setIndexes: setIndexesAndError,
         setSubtractions,
         setWorkflows: setWorkflowsAndError
     };

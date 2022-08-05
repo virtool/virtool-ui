@@ -1,9 +1,19 @@
-import { has } from "lodash-es";
-import { select, takeEvery, takeLatest } from "redux-saga/effects";
-import { ARCHIVE_JOB, CANCEL_JOB, FIND_JOBS, GET_JOB, GET_LINKED_JOB, WS_UPDATE_JOB } from "../app/actionTypes";
-import { apiCall, pushFindTerm } from "../utils/sagas";
+import { getLocation, push } from "connected-react-router";
+import { forEach, has } from "lodash-es";
+import { put, select, takeEvery, takeLatest } from "redux-saga/effects";
+import {
+    ARCHIVE_JOB,
+    CANCEL_JOB,
+    FIND_JOBS,
+    GET_JOB,
+    GET_LINKED_JOB,
+    WS_INSERT_JOB,
+    WS_REMOVE_JOB,
+    WS_UPDATE_JOB
+} from "../app/actionTypes";
+import { apiCall } from "../utils/sagas";
 import * as jobsAPI from "./api";
-import { getJobDetailId, getLinkedJobs } from "./selectors";
+import { getJobDetailId, getLinkedJobs, getStatesFromURL } from "./selectors";
 
 export function* wsUpdateJob(action) {
     const jobId = action.payload.id;
@@ -22,7 +32,20 @@ export function* wsUpdateJob(action) {
 
 export function* findJobs(action) {
     yield apiCall(jobsAPI.find, action.payload, FIND_JOBS);
-    yield pushFindTerm(action.term);
+
+    const location = yield select(getLocation);
+    const params = new URLSearchParams(location.search);
+
+    params.delete("state");
+
+    forEach(action.payload.states, state => params.append("state", state));
+
+    yield put(push({ search: params.toString() }));
+}
+
+export function* refreshJobs() {
+    const states = yield select(getStatesFromURL);
+    yield apiCall(jobsAPI.find, { archived: false, states }, FIND_JOBS);
 }
 
 export function* getJob(action) {
@@ -42,7 +65,8 @@ export function* archiveJob(action) {
 }
 
 export function* watchJobs() {
-    yield takeLatest(FIND_JOBS.REQUESTED, findJobs);
+    yield takeLatest([WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB], refreshJobs);
+    yield takeLatest([FIND_JOBS.REQUESTED], findJobs);
     yield takeLatest(GET_JOB.REQUESTED, getJob);
     yield takeEvery(CANCEL_JOB.REQUESTED, cancelJob);
     yield takeEvery(ARCHIVE_JOB.REQUESTED, archiveJob);
