@@ -1,7 +1,9 @@
-import { forEach } from "lodash-es";
+import { Field, Form, Formik } from "formik";
+import { filter, forEach, map } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import * as Yup from "yup";
 import { getAccountId } from "../../../account/selectors";
 import { pushState } from "../../../app/actions";
 import {
@@ -19,6 +21,7 @@ import {
 import { deselectSamples } from "../../../samples/actions";
 import { getSelectedSamples } from "../../../samples/selectors";
 import { shortlistSubtractions } from "../../../subtraction/actions";
+import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 import { analyze } from "../../actions";
 import {
     getCompatibleIndexesWithDataType,
@@ -27,14 +30,11 @@ import {
     getQuickAnalysisMode
 } from "../../selectors";
 import HMMAlert from "../HMMAlert";
-import { ReferenceSelector } from "./ReferenceSelector";
+import { IndexSelector } from "./IndexSelector";
 import { SelectedSamples } from "./SelectedSamples";
 import { SubtractionSelector } from "./SubtractionSelector";
 import { CreateAnalysisSummary } from "./Summary";
 import { WorkflowSelector } from "./WorkflowSelector";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 
 const QuickAnalyzeFooter = styled(ModalFooter)`
     align-items: center;
@@ -54,13 +54,13 @@ const QuickAnalyzeError = styled(InputError)`
 const initialValues = {
     workflows: [],
     subtractions: [],
-    references: []
+    indexes: []
 };
 
 const validationSchema = Yup.object().shape({
     workflows: Yup.array().min(1, "At least one workflow must be selected"),
     subtractions: Yup.array().min(1, "At least one subtraction must be selected"),
-    references: Yup.array().min(1, "At least one reference must be selected")
+    indexes: Yup.array().min(1, "At least one reference must be selected")
 });
 
 export const QuickAnalyze = ({
@@ -94,8 +94,12 @@ export const QuickAnalyze = ({
     // Use this as the subtraction if none is selected.
     // const firstSubtractionId = get(subtractionOptions, [0, "id"]);
 
-    const handleSubmit = ({ references, subtractions, workflows }) => {
-        onAnalyze(compatibleSamples, references, subtractions, accountId, workflows);
+    const handleSubmit = ({ indexes, subtractions, workflows }) => {
+        const referenceIds = map(
+            filter(compatibleIndexes, index => indexes.includes(index.id)),
+            "reference.id"
+        );
+        onAnalyze(compatibleSamples, referenceIds, subtractions, accountId, workflows);
         onUnselect(compatibleSamples.map(sample => sample.id));
     };
 
@@ -126,7 +130,7 @@ export const QuickAnalyze = ({
                                 as={WorkflowSelector}
                                 dataType={mode || "genome"}
                                 hasHmm={hasHmm}
-                                workflows={values.workflows}
+                                selected={values.workflows}
                                 onSelect={workflows => setFieldValue("workflows", workflows)}
                             />
                             <QuickAnalyzeError>{touched.workflows && errors.workflows}</QuickAnalyzeError>
@@ -135,7 +139,7 @@ export const QuickAnalyze = ({
                                     <Field
                                         as={SubtractionSelector}
                                         subtractions={subtractionOptions}
-                                        value={values.subtractions}
+                                        selected={values.subtractions}
                                         onChange={value => setFieldValue("subtractions", value)}
                                     />
 
@@ -143,16 +147,16 @@ export const QuickAnalyze = ({
                                 </>
                             )}
                             <Field
-                                as={ReferenceSelector}
+                                as={IndexSelector}
                                 indexes={compatibleIndexes}
-                                selected={values.references}
-                                onChange={value => setFieldValue("references", value)}
+                                selected={values.indexes}
+                                onChange={value => setFieldValue("indexes", value)}
                             />
-                            <QuickAnalyzeError>{touched.references && errors.references}</QuickAnalyzeError>{" "}
+                            <QuickAnalyzeError>{touched.indexes && errors.indexes}</QuickAnalyzeError>{" "}
                         </ModalBody>
                         <QuickAnalyzeFooter>
                             <CreateAnalysisSummary
-                                indexCount={values.references.length}
+                                indexCount={values.indexes.length}
                                 sampleCount={compatibleSamples.length}
                                 workflowCount={values.workflows.length}
                             />

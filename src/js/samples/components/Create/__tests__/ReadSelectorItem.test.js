@@ -33,7 +33,7 @@ describe("<ReadSelectorItem />", () => {
     let props;
     beforeEach(() => {
         props = {
-            id: "foo",
+            id: 23,
             index: 0,
             name: "bar",
             selected: true,
@@ -54,6 +54,6 @@ describe("<ReadSelectorItem />", () => {
     it("should call onSelect when ReadSelectorItem is clicked", () => {
         const wrapper = shallow(<ReadSelectorItem {...props} />);
         wrapper.simulate("click");
-        expect(props.onSelect).toHaveBeenCalledWith("foo");
+        expect(props.onSelect).toHaveBeenCalledWith(23);
     });
 });
