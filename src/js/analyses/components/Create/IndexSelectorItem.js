@@ -8,11 +8,8 @@ const StyledIndexSelectorItem = styled(BoxGroupSection)`
     display: flex;
     width: 100%;
 
-    span {
-        flex: 1 0 auto;
-    }
-
     span:first-child {
+        flex: 1 0 auto;
         font-weight: ${getFontWeight("thick")};
         overflow: hidden;
         white-space: nowrap;

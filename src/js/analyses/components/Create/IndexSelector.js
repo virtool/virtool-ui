@@ -1,6 +1,6 @@
-import { differenceWith, groupBy, intersectionWith, xor } from "lodash-es";
+import { differenceWith, intersectionWith, sortBy, xor } from "lodash-es";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useMemo } from "react";
 import { useFuse } from "../../../base/hooks";
 import { CreateAnalysisField, CreateAnalysisFieldTitle } from "./Field";
 import { IndexSelectorItem } from "./IndexSelectorItem";
@@ -10,7 +10,8 @@ import { CreateAnalysisSelectorSearch } from "./Search";
 import { CreateAnalysisSelectorList } from "./CreateAnalysisSelectorList";
 
 export const IndexSelector = ({ hasError, indexes, selected, onChange }) => {
-    const [results, term, setTerm] = useFuse(indexes, ["reference.name"], [1]);
+    const sortedIndexes = useMemo(() => sortBy(indexes, "reference.name"), [indexes]);
+    const [results, term, setTerm] = useFuse(sortedIndexes, ["reference.name"], [1]);
 
     const unselectedIndexes = differenceWith(
         results.map(result => result.item || result),
@@ -18,7 +19,7 @@ export const IndexSelector = ({ hasError, indexes, selected, onChange }) => {
         (index, id) => index.id === id
     );
 
-    const selectedIndexes = intersectionWith(indexes, selected, (index, id) => index.id === id);
+    const selectedIndexes = intersectionWith(sortedIndexes, selected, (index, id) => index.id === id);
 
     const toggle = id => onChange(xor(selected, [id]));
 
