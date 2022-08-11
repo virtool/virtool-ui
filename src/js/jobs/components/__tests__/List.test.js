@@ -32,7 +32,7 @@ describe("<JobsList />", () => {
                     workflow: "create_sample"
                 }
             ],
-            onFind: jest.fn(),
+            onLoadNextPage: jest.fn(),
             canArchive: true,
             canCancel: true
         };
@@ -53,7 +53,7 @@ describe("<JobsList />", () => {
 
     it("should render", () => {
         renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(props.onFind).toHaveBeenCalled();
+        expect(props.onLoadNextPage).toHaveBeenCalled();
         expect(screen.getByText("Create Sample")).toBeInTheDocument();
     });
 
@@ -143,9 +143,9 @@ describe("mapDispatchToProps", () => {
 
         const states = ["running", "preparing"];
 
-        props.onFind(states);
+        props.onLoadNextPage(states, 1);
         expect(dispatch).toHaveBeenCalledWith({
-            payload: { states, archived: false },
+            payload: { states, page: 1, archived: false },
             type: "FIND_JOBS_REQUESTED"
         });
     });

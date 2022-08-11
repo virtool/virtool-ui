@@ -35,8 +35,8 @@ describe("<ScrollList />", () => {
         window.removeEventListener = jest.fn();
 
         const wrapper = mount(<ScrollList {...props} />);
-
-        expect(window.addEventListener).toHaveBeenCalledWith("scroll", wrapper.instance().onScroll);
+        expect(window.addEventListener.mock.calls.slice(-1)[0][0]).toBe("scroll");
+        expect(window.addEventListener.mock.calls.slice(-1)[0][1]).toBeInstanceOf(Function);
     });
 
     it("componentWillUnmount() should call removeEventListener()", () => {
@@ -44,9 +44,9 @@ describe("<ScrollList />", () => {
         window.removeEventListener = jest.fn();
 
         const wrapper = mount(<ScrollList {...props} />);
-        const onScroll = wrapper.instance().onScroll;
         wrapper.unmount();
 
-        expect(window.removeEventListener).toHaveBeenCalledWith("scroll", onScroll);
+        expect(window.removeEventListener.mock.calls.slice(-2)[0][0]).toBe("scroll");
+        expect(window.removeEventListener.mock.calls.slice(-2)[0][1]).toBeInstanceOf(Function);
     });
 });
