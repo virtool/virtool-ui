@@ -8,11 +8,18 @@ const StyledSelectorItem = styled(BoxGroupSection)`
     background-color: white;
     display: flex;
     user-select: none;
+
+    span:first-child {
+        width: 200px;
+        text-overflow: ellipsis;
+        white-space: no-wrap;
+        overflow: hidden;
+    }
 `;
 
 export const SelectorItem = ({ children, className, onClick }) => (
     <StyledSelectorItem as={onClick ? "button" : "div"} className={className} onClick={onClick}>
-        {children}
+        <span>{children}</span>
     </StyledSelectorItem>
 );
 
