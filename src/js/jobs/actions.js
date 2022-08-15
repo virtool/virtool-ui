@@ -43,8 +43,8 @@ export const wsRemoveJob = createAction(WS_REMOVE_JOB);
  * @returns {object}
  */
 
-export const findJobs = createAction(FIND_JOBS.REQUESTED, (states, archived = false) => ({
-    payload: { archived, states }
+export const findJobs = createAction(FIND_JOBS.REQUESTED, (states, page = 1, archived = false) => ({
+    payload: { archived, states, page }
 }));
 
 /**
