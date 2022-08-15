@@ -89,6 +89,7 @@ export const CreateAnalysis = ({
                         <SubtractionSelector
                             subtractions={subtractionOptions}
                             selected={subtractions}
+                            defaultSubtractions={defaultSubtractions}
                             onChange={setSubtractions}
                         />
                     )}

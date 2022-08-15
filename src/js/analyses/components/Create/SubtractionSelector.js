@@ -1,4 +1,4 @@
-import { filter, intersectionWith, xor } from "lodash-es";
+import { filter, intersectionWith, xor, includes } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
 import { useFuse } from "../../../base/hooks";
@@ -9,7 +9,7 @@ import { CreateAnalysisSelectorSearch } from "./Search";
 import { SubtractionSelectorItem } from "./SubtractionSelectorItem";
 import { CreateAnalysisSelectorList } from "./CreateAnalysisSelectorList";
 
-export const SubtractionSelector = ({ subtractions, selected, onChange }) => {
+export const SubtractionSelector = ({ subtractions, selected, defaultSubtractions, onChange }) => {
     const [results, term, setTerm] = useFuse(subtractions, ["name"], [1]);
 
     const unselectedSubtractions = filter(
@@ -28,14 +28,26 @@ export const SubtractionSelector = ({ subtractions, selected, onChange }) => {
                 <CreateAnalysisSelectorList
                     items={unselectedSubtractions}
                     render={({ id, name }) => (
-                        <SubtractionSelectorItem key={id} id={id} name={name} onClick={handleClick} />
+                        <SubtractionSelectorItem
+                            key={id}
+                            id={id}
+                            name={name}
+                            onClick={handleClick}
+                            isDefault={includes(defaultSubtractions, id) ? true : false}
+                        />
                     )}
                 />
             </CreateAnalysisSelector>
             <CreateAnalysisSelected
                 items={selectedSubtractions}
                 render={({ id, name }) => (
-                    <SubtractionSelectorItem key={id} id={id} name={name} onClick={handleClick} />
+                    <SubtractionSelectorItem
+                        key={id}
+                        id={id}
+                        name={name}
+                        onClick={handleClick}
+                        isDefault={includes(defaultSubtractions, id) ? true : false}
+                    />
                 )}
             />
         </CreateAnalysisField>
@@ -45,5 +57,6 @@ export const SubtractionSelector = ({ subtractions, selected, onChange }) => {
 SubtractionSelector.propTypes = {
     selected: PropTypes.arrayOf(PropTypes.string).isRequired,
     subtractions: PropTypes.arrayOf(PropTypes.object).isRequired,
+    defaultSubtractions: PropTypes.arrayOf(PropTypes.string).isRequired,
     onChange: PropTypes.func.isRequired
 };
