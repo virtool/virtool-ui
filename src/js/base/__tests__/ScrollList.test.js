@@ -34,7 +34,8 @@ describe("<ScrollList />", () => {
         window.addEventListener = jest.fn();
         window.removeEventListener = jest.fn();
 
-        const wrapper = mount(<ScrollList {...props} />);
+        mount(<ScrollList {...props} />);
+
         expect(window.addEventListener.mock.calls.slice(-1)[0][0]).toBe("scroll");
         expect(window.addEventListener.mock.calls.slice(-1)[0][1]).toBeInstanceOf(Function);
     });
