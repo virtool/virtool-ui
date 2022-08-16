@@ -1,8 +1,8 @@
 import { forEach } from "lodash-es";
 import { Request } from "../app/request";
 
-export const find = ({ archived, states }) => {
-    const request = Request.get("/api/jobs").query({ archived, beta: true });
+export const find = ({ archived, states, page }) => {
+    const request = Request.get("/api/jobs").query({ archived, page });
     forEach(states, state => request.query({ state }));
     return request;
 };

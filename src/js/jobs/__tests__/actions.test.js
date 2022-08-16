@@ -39,9 +39,9 @@ describe("Jobs Action Creators:", () => {
 
     it("findJobs: returns action to retrieve specific page of job documents", () => {
         const states = ["running", "errored"];
-        const result = findJobs(states, true);
+        const result = findJobs(states, 1, true);
         expect(result).toEqual({
-            payload: { states, archived: true },
+            payload: { states, page: 1, archived: true },
             type: FIND_JOBS.REQUESTED
         });
     });
