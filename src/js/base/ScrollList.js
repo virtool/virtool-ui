@@ -1,7 +1,8 @@
-import React from "react";
 import { map } from "lodash-es";
-import { LoadingPlaceholder } from "./index";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { usePrevious } from "./hooks";
+import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 export const getScrollRatio = () =>
     ((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight).toFixed(1);
@@ -12,43 +13,38 @@ const StyledScrollList = styled.div`
     z-index: 0;
 `;
 
-export class ScrollList extends React.Component {
-    componentDidMount() {
-        window.addEventListener("scroll", this.onScroll);
-        this.prevPage = 0;
-    }
+export const ScrollList = ({ page, documents, pageCount, onLoadNextPage, renderRow }) => {
+    const [prevRequestedPage, setPrevRequestedPage] = useState(1);
+    const prevPage = usePrevious(page);
 
-    componentWillUnmount() {
-        window.removeEventListener("scroll", this.onScroll);
-    }
-
-    onScroll = () => {
-        if (
-            this.props.page !== this.prevPage &&
-            this.props.documents.length &&
-            this.props.page < this.props.pageCount &&
-            getScrollRatio() > 0.8
-        ) {
-            this.prevPage = this.props.page;
-            this.props.onLoadNextPage(this.props.page + 1);
+    useEffect(() => {
+        if (page === 1 && prevPage > page) {
+            setPrevRequestedPage(1);
         }
-    };
 
-    render() {
-        const { documents, renderRow, page, pageCount } = this.props;
+        const onScroll = () => {
+            if (page + 1 !== prevRequestedPage && documents.length && page < pageCount && getScrollRatio() > 0.8) {
+                setPrevRequestedPage(page + 1);
+                onLoadNextPage(page + 1);
+            }
+        };
 
-        const entries = map(documents, (item, index) => renderRow(index));
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [prevRequestedPage, setPrevRequestedPage, onLoadNextPage, page, documents]);
 
-        let loading;
+    const entries = map(documents, (item, index) => renderRow(index));
 
-        if (documents === null && page < pageCount) {
-            loading = <LoadingPlaceholder margin="20px" />;
-        }
-        return (
-            <StyledScrollList>
-                {entries}
-                {loading}
-            </StyledScrollList>
-        );
+    let loading;
+
+    if (documents === null && page < pageCount) {
+        loading = <LoadingPlaceholder margin="20px" />;
     }
-}
+
+    return (
+        <StyledScrollList>
+            {entries}
+            {loading}
+        </StyledScrollList>
+    );
+};
