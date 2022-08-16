@@ -11,7 +11,7 @@ const StyledCreateAnalysisSelectorList = styled(BoxGroup)`
     height: 160px;
 
     ${BoxGroupSection} {
-        border-bottom: ${getBorder};
+        outline: ${getBorder};
     }
 `;
 export const CreateAnalysisSelectorList = ({ className, render, items }) => (

@@ -7,13 +7,19 @@ const StyledSelectorItem = styled(BoxGroupSection)`
     align-items: center;
     background-color: white;
     display: flex;
-    user-select: none;
     justify-content: space-between;
+    user-select: none;
+
+    span:first-child {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 `;
 
 export const SelectorItem = ({ children, className, onClick, isDefault }) => (
     <StyledSelectorItem as={onClick ? "button" : "div"} className={className} onClick={onClick}>
-        {children}
+        <span>{children}</span>
         {isDefault ? <Label>Default</Label> : null}
     </StyledSelectorItem>
 );

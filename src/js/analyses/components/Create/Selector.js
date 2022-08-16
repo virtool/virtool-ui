@@ -4,11 +4,10 @@ import { BoxGroup, InputError } from "../../../base";
 
 const CreateAnalysisSelectorContainer = styled(BoxGroup)`
     ${props => (props.error ? `border-color: ${props.theme.color.red};` : "")};
-    flex: 1 0 auto;
 `;
 
 const StyledCreateAnalysisSelector = styled.div`
-    flex: 1 0 auto;
+    min-width: 0;
 `;
 
 export const CreateAnalysisSelector = ({ children, error }) => (
