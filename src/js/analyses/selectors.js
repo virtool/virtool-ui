@@ -1,9 +1,29 @@
-import { filter, find, get, groupBy, intersection, keyBy, map, reject, sortBy, toNumber, toString } from "lodash-es";
+import {
+    filter,
+    find,
+    get,
+    groupBy,
+    intersection,
+    keyBy,
+    map,
+    reject,
+    sortBy,
+    toNumber,
+    toString,
+    keysIn,
+    includes
+} from "lodash-es";
 import { createSelector } from "reselect";
 import { getRouterLocationState } from "../app/selectors";
-import { getMaxReadLength, getSampleLibraryType, getSelectedSamples } from "../samples/selectors";
+import {
+    getMaxReadLength,
+    getSampleLibraryType,
+    getSelectedSamples,
+    getDefaultSubtractions
+} from "../samples/selectors";
 import { createFuse } from "../utils/utils";
 import { fuseSearchKeys } from "./utils";
+import { getReadySubtractionShortlist } from "../subtraction/selectors";
 
 export const getActiveId = state => state.analyses.activeId;
 export const getAnalysisDetailId = state => get(state, "analyses.detail.id", null);
@@ -81,6 +101,21 @@ export const getQuickAnalysisMode = createSelector(
         }
 
         return false;
+    }
+);
+
+export const getAnalysesSubtractions = createSelector(
+    [getReadySubtractionShortlist, getDefaultSubtractions],
+    (subtractions, defaultSubtractions) => {
+        const defaultSubtractionIds = map(keysIn(defaultSubtractions), key => defaultSubtractions[key].id);
+        const formattedSubtractions = map(keysIn(subtractions), key => {
+            return {
+                ...subtractions[key],
+                isDefault: includes(defaultSubtractionIds, subtractions[key].id) ? true : false
+            };
+        });
+
+        return filter(formattedSubtractions, { ready: true });
     }
 );
 
