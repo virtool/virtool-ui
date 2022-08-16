@@ -6,19 +6,19 @@ import { BoxGroupSection, Label } from "../../../base";
 const StyledIndexSelectorItem = styled(BoxGroupSection)`
     background: white;
     display: flex;
-    width: 100%;
+    gap: ${props => props.theme.gap.column};
+    justify-content: space-between;
 
     span:first-child {
-        flex: 1 0 auto;
         font-weight: ${getFontWeight("thick")};
         overflow: hidden;
-        white-space: nowrap;
         text-overflow: ellipsis;
-        width: 150px;
+        white-space: nowrap;
     }
 
     span:last-child {
-        margin-left: auto;
+        flex: 0 1 auto;
+        white-space: nowrap;
     }
 `;
 

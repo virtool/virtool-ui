@@ -10,9 +10,8 @@ const StyledSelectorItem = styled(BoxGroupSection)`
     user-select: none;
 
     span:first-child {
-        width: 200px;
         text-overflow: ellipsis;
-        white-space: no-wrap;
+        white-space: nowrap;
         overflow: hidden;
     }
 `;
