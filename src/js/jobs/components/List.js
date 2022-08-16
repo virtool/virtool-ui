@@ -1,14 +1,13 @@
-import { map } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Box, LoadingPlaceholder, NarrowContainer, ViewHeader, ViewHeaderTitle } from "../../base";
+import { getFontWeight } from "../../app/theme";
+import { Box, LoadingPlaceholder, NarrowContainer, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { findJobs } from "../actions";
-import Job from "./Item/Item";
-import { JobFilters } from "./Filters/Filters";
 import { getJobCountsTotal } from "../selectors";
-import { getFontWeight } from "../../app/theme";
+import { JobFilters } from "./Filters/Filters";
+import Job from "./Item/Item";
 
 const JobsListViewContainer = styled.div`
     display: flex;
@@ -28,8 +27,8 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
-export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onFind }) => {
-    useEffect(() => onFind(["preparing", "running"]), []);
+export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, page, page_count, states }) => {
+    useEffect(() => onLoadNextPage(["preparing", "running"], 1), []);
 
     if (jobs === null) {
         return <LoadingPlaceholder />;
@@ -50,7 +49,18 @@ export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onFind }) => {
             </JobsListEmpty>
         );
     } else {
-        inner = map(jobs, job => <Job key={job.id} {...job} canArchive={canArchive} canCancel={canCancel} />);
+        inner = (
+            <ScrollList
+                documents={jobs}
+                page={page}
+                pageCount={page_count}
+                onLoadNextPage={page => onLoadNextPage(states, page)}
+                renderRow={index => {
+                    const job = jobs[index];
+                    return <Job key={job.id} {...job} canArchive={canArchive} canCancel={canCancel} />;
+                }}
+            />
+        );
     }
 
     return (
@@ -67,6 +77,9 @@ export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onFind }) => {
 };
 
 export const mapStateToProps = state => ({
+    page: state.jobs.page,
+    page_count: state.jobs.page_count,
+    states: new URLSearchParams(state.router.location.search).getAll("state"),
     jobs: state.jobs.documents,
     noJobs: getJobCountsTotal(state) === 0,
     canCancel: checkAdminOrPermission(state, "cancel_job"),
@@ -74,8 +87,8 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onFind: states => {
-        dispatch(findJobs(states));
+    onLoadNextPage: (states, page) => {
+        dispatch(findJobs(states, page));
     }
 });
 

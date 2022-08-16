@@ -1,15 +1,20 @@
 import React from "react";
-import { CreateAPIKeyInfo, mapStateToProps } from "../CreateInfo";
+import { APIKeyAdministratorInfo, mapStateToProps } from "../CreateInfo";
+import { screen } from "@testing-library/react";
 
-describe("<CreateAPIKeyInfo />", () => {
+describe("<APIKeyAdministratorInfo />", () => {
     it("should render when administrator", () => {
-        const wrapper = shallow(<CreateAPIKeyInfo administrator />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<APIKeyAdministratorInfo administrator />);
+        expect(
+            screen.getByText("You are an administrator and can create API keys with any permissions you want.")
+        ).toBeInTheDocument();
     });
 
-    it("should return null when not administrator", () => {
-        const wrapper = shallow(<CreateAPIKeyInfo administrator={false} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should not render message when not an administrator", () => {
+        renderWithProviders(<APIKeyAdministratorInfo administrator={false} />);
+        expect(
+            screen.queryByText("You are an administrator and can create API keys with any permissions you want.")
+        ).not.toBeInTheDocument();
     });
 });
 

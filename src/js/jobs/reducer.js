@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { assign, sortBy } from "lodash-es";
+import { assign } from "lodash-es";
 import { ARCHIVE_JOB, FIND_JOBS, GET_JOB, GET_LINKED_JOB } from "../app/actionTypes";
-import { remove } from "../utils/reducers";
+import { remove, updateDocuments } from "../utils/reducers";
 
 export const initialState = {
     documents: null,
@@ -23,7 +23,7 @@ export const jobsReducer = createReducer(initialState, builder => {
             state.term = action.payload.term;
         })
         .addCase(FIND_JOBS.SUCCEEDED, (state, action) => {
-            return { ...state, ...action.payload, documents: sortBy(action.payload.documents, "created_at") };
+            return updateDocuments(state, action.payload, "created_at");
         })
         .addCase(GET_JOB.REQUESTED, state => {
             state.detail = null;

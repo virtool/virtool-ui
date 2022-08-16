@@ -18,7 +18,7 @@ exports[`<Targets /> should render when [canModify=false] 1`] = `
     canModify={false}
     key="foo"
     name="foo"
-    onEdit={[Function]}
+    onEdit={[MockFunction]}
     onRemove={[Function]}
   />
 </Box__BoxGroup>
@@ -31,12 +31,17 @@ exports[`<Targets /> should render when [canModify=true] 1`] = `
       <span>
         Targets
       </span>
-      <a
-        href="#"
-        onClick={[Function]}
+      <Link
+        to={
+          Object {
+            "state": Object {
+              "addTarget": true,
+            },
+          }
+        }
       >
         Add target
-      </a>
+      </Link>
     </h2>
     <p>
       Manage the allowable sequence targets for this barcode reference.
@@ -46,16 +51,10 @@ exports[`<Targets /> should render when [canModify=true] 1`] = `
     canModify={true}
     key="foo"
     name="foo"
-    onEdit={[Function]}
+    onEdit={[MockFunction]}
     onRemove={[Function]}
   />
-  <Connect(AddTarget)
-    onHide={[Function]}
-    show={false}
-  />
-  <Connect(EditTarget)
-    onHide={[Function]}
-    show={false}
-  />
+  <Connect(AddTarget) />
+  <Connect(EditTarget) />
 </Box__BoxGroup>
 `;

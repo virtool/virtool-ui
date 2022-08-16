@@ -1,7 +1,9 @@
 import { toNumber } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { pushState } from "../../../../app/actions";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../../base";
+import { routerLocationHasState } from "../../../../utils/utils";
 import { editReference } from "../../../actions";
 import { TargetForm } from "./Form";
 
@@ -94,12 +96,17 @@ export const mapStateToProps = state => ({
     dataType: state.references.detail.data_type,
     documents: state.references.documents,
     refId: state.references.detail.id,
-    targets: state.references.detail.targets
+    targets: state.references.detail.targets,
+    show: routerLocationHasState(state, "addTarget")
 });
 
 export const mapDispatchToProps = dispatch => ({
     onSubmit: (refId, update) => {
         dispatch(editReference(refId, update));
+    },
+
+    onHide: () => {
+        dispatch(pushState({ addTarget: false }));
     }
 });
 

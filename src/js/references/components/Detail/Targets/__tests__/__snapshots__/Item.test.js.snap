@@ -19,6 +19,7 @@ exports[`<TargetItem /> should render when [canModify=true] 1`] = `
     foo
     <span>
       <Icon
+        aria-label="edit"
         color="orange"
         faStyle="fas"
         fixedWidth={false}
@@ -27,6 +28,7 @@ exports[`<TargetItem /> should render when [canModify=true] 1`] = `
         tip="Modify"
       />
       <Icon
+        aria-label="remove"
         color="red"
         faStyle="fas"
         fixedWidth={false}
@@ -50,6 +52,7 @@ exports[`<TargetItem /> should render with no description 1`] = `
     foo
     <span>
       <Icon
+        aria-label="edit"
         color="orange"
         faStyle="fas"
         fixedWidth={false}
@@ -58,6 +61,7 @@ exports[`<TargetItem /> should render with no description 1`] = `
         tip="Modify"
       />
       <Icon
+        aria-label="remove"
         color="red"
         faStyle="fas"
         fixedWidth={false}

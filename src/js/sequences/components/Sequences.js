@@ -1,11 +1,12 @@
 import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { Badge, BoxGroup, NoneFoundSection } from "../../base";
-import { getActiveIsolate } from "../../otus/selectors";
-import { getDataType } from "../../references/selectors";
+import { getActiveIsolate, getTargets } from "../../otus/selectors";
+import { getDataType, getReferenceDetailId } from "../../references/selectors";
 import { formatIsolateName } from "../../utils/utils";
 import { getSequences } from "../selectors";
 import AddSequence from "./Add";
@@ -26,14 +27,22 @@ const IsolateSequencesHeader = styled.label`
     }
 `;
 
-export const IsolateSequences = ({ dataType, isolateName, sequences }) => {
+export const IsolateSequences = ({ dataType, isolateName, sequences, hasTargets, referenceId }) => {
     const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
 
-    const sequenceComponents = sequences.length ? (
-        map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />)
-    ) : (
-        <NoneFoundSection noun="sequences" />
-    );
+    let sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
+
+    if (!sequenceComponents.length) {
+        if (dataType === "barcode" && !hasTargets) {
+            sequenceComponents = (
+                <NoneFoundSection noun="targets">
+                    <Link to={`/refs/${referenceId}/manage`}>Create one</Link>
+                </NoneFoundSection>
+            );
+        } else {
+            sequenceComponents = <NoneFoundSection noun="sequences" />;
+        }
+    }
 
     return (
         <>
@@ -55,7 +64,9 @@ export const IsolateSequences = ({ dataType, isolateName, sequences }) => {
 export const mapStateToProps = state => ({
     dataType: getDataType(state),
     isolateName: formatIsolateName(getActiveIsolate(state)),
-    sequences: getSequences(state)
+    sequences: getSequences(state),
+    hasTargets: Boolean(getTargets(state)?.length),
+    referenceId: getReferenceDetailId(state)
 });
 
 export default connect(mapStateToProps)(IsolateSequences);
