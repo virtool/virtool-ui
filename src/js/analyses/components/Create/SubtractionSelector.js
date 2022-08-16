@@ -27,15 +27,21 @@ export const SubtractionSelector = ({ subtractions, selected, onChange }) => {
                 <CreateAnalysisSelectorSearch label="Filter subtractions" term={term} onChange={setTerm} />
                 <CreateAnalysisSelectorList
                     items={unselectedSubtractions}
-                    render={({ id, name }) => (
-                        <SubtractionSelectorItem key={id} id={id} name={name} onClick={handleClick} />
+                    render={({ id, name, isDefault }) => (
+                        <SubtractionSelectorItem
+                            key={id}
+                            id={id}
+                            name={name}
+                            onClick={handleClick}
+                            isDefault={isDefault}
+                        />
                     )}
                 />
             </CreateAnalysisSelector>
             <CreateAnalysisSelected
                 items={selectedSubtractions}
-                render={({ id, name }) => (
-                    <SubtractionSelectorItem key={id} id={id} name={name} onClick={handleClick} />
+                render={({ id, name, isDefault }) => (
+                    <SubtractionSelectorItem key={id} id={id} name={name} onClick={handleClick} isDefault={isDefault} />
                 )}
             />
         </CreateAnalysisField>
