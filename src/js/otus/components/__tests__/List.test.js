@@ -36,13 +36,6 @@ describe("<OTUsList />", () => {
         const wrapper = shallow(<OTUsList {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
-
-    it("componentDidMount should call onLoadNextPage", () => {
-        expect(props.onLoadNextPage).not.toHaveBeenCalled();
-        shallow(<OTUsList {...props} />);
-
-        expect(props.onLoadNextPage).toHaveBeenCalledWith("foo", "bar", true, 1);
-    });
 });
 
 describe("mapStateToProps()", () => {

@@ -3,6 +3,7 @@ import { find, hasIn, map } from "lodash-es";
 import {
     ADD_ISOLATE,
     ADD_SEQUENCE,
+    CREATE_OTU,
     EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
@@ -171,6 +172,11 @@ export const OTUsReducer = createReducer(initialState, builder => {
             state.editIsolate = false;
             state.removeIsolate = false;
             state.removeSequence = false;
+        })
+        .addCase(CREATE_OTU.SUCCEEDED, (state, action) => {
+            if (action.payload.reference.id === state.refId) {
+                return insert(state, action.payload, "name");
+            }
         })
         .addMatcher(
             action => {
