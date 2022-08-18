@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, Markdown, NarrowContainer, SideContainer, Table } from "../../../base";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../Edit/Edit";
-import SampleFileSizeWarning from "./FileSizeWarning.js";
+import SampleFileSizeWarning from "./FileSizeWarning";
 import Sidebar from "./Sidebar";
 
 const SampleDetailSidebarContainer = styled(SideContainer)`
