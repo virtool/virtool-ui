@@ -48,6 +48,6 @@ export * from "./TextArea";
 export * from "./Toolbar";
 export * from "./Tooltip";
 export * from "./UploadBar";
-export * from "./ViewHeader";
+export * from "./ViewHeader.jsx";
 
 export { Flex, FlexItem, ScrollList };

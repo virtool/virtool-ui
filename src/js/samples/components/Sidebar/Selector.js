@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getFontSize } from "../../../app/theme";
 import { Icon, SidebarHeaderButton } from "../../../base";
-import { BoxGroupSearch } from "../../../base/BoxGroupSearch.js";
+import { BoxGroupSearch } from "../../../base/BoxGroupSearch";
 import { useFuse } from "../../../base/hooks";
 import { PopoverBody, usePopover } from "../../../base/Popover";
 import { SampleSidebarSelectorItem } from "./SelectorItem";
