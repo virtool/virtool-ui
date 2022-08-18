@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Badge, BoxGroup, BoxGroupHeader, LoadingPlaceholder } from "../../../../base";
 import { getCanModifyReferenceOTU } from "../../../../references/selectors";
 import { getOTUHistory, revert } from "../../../actions";
-import { Change } from "./Change.js";
+import { Change } from "./Change";
 
 const HistoryList = ({ canModify, history, revert, unbuilt }) => {
     const changes = reverse(sortBy(history, "otu.version"));
