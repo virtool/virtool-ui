@@ -9,7 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /(node_modules)/,
         use: ["babel-loader"],
       },
@@ -28,6 +28,7 @@ module.exports = {
   devtool: "source-map",
 
   resolve: {
+    extensions: [".js", ".jsx"],
     fallback: {
       fs: false,
     },
