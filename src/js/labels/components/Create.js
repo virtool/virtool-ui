@@ -7,16 +7,18 @@ import { routerLocationHasState } from "../../utils/utils";
 import { createLabel } from "../actions";
 import { LabelForm } from "./Form";
 
+const initialState = {
+    name: "",
+    color: "#3C8786",
+    description: "",
+    errorName: "",
+    errorColor: ""
+};
+
 export class CreateLabel extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            name: "",
-            color: "#3C8786",
-            description: "",
-            errorName: "",
-            errorColor: ""
-        };
+        this.state = initialState;
     }
 
     handleChange = (name, value) => {
@@ -37,6 +39,7 @@ export class CreateLabel extends React.Component {
             this.setState({ errorColor: "Please select a color" });
         } else {
             this.props.onSubmit(this.state.name, this.state.description, this.state.color);
+            this.setState(initialState);
             this.props.onHide();
         }
     };

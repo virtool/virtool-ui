@@ -1,5 +1,5 @@
-import { get, map } from "lodash-es";
-import React from "react";
+import { get, map, sortBy } from "lodash-es";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -30,58 +30,56 @@ const LabelsHeader = styled(BoxGroupHeader)`
     }
 `;
 
-export class Labels extends React.Component {
-    componentDidMount = () => {
-        this.props.onLoadLabels();
-    };
+export const Labels = ({ onLoadLabels, labels, onRemove, onEdit }) => {
+    useEffect(() => {
+        onLoadLabels();
+    }, []);
 
-    render() {
-        if (this.props.labels === null) {
-            return <LoadingPlaceholder />;
-        }
-
-        let labels;
-
-        if (this.props.labels.length) {
-            labels = map(this.props.labels, label => (
-                <Item
-                    key={label.id}
-                    name={label.name}
-                    color={label.color}
-                    description={label.description}
-                    id={label.id}
-                    removeLabel={this.onRemove}
-                    editLabel={this.onEdit}
-                />
-            ));
-        } else {
-            labels = <NoneFoundSection noun="labels" />;
-        }
-
-        return (
-            <NarrowContainer>
-                <ViewHeader title="Labels">
-                    <ViewHeaderTitle>Labels</ViewHeaderTitle>
-                </ViewHeader>
-                <BoxGroup>
-                    <LabelsHeader>
-                        <h2>
-                            Labels
-                            <Link color="blue" to={{ state: { createLabel: true } }}>
-                                Create Label
-                            </Link>
-                        </h2>
-                        <p>Labels can help organize samples.</p>
-                    </LabelsHeader>
-                    {labels}
-                </BoxGroup>
-                <CreateLabel />
-                <EditLabel />
-                <RemoveLabel />
-            </NarrowContainer>
-        );
+    if (labels === null) {
+        return <LoadingPlaceholder />;
     }
-}
+
+    let labelComponents;
+
+    if (labels.length) {
+        labelComponents = map(sortBy(labels, "name"), label => (
+            <Item
+                key={label.id}
+                name={label.name}
+                color={label.color}
+                description={label.description}
+                id={label.id}
+                removeLabel={onRemove}
+                editLabel={onEdit}
+            />
+        ));
+    } else {
+        labelComponents = <NoneFoundSection noun="labels" />;
+    }
+
+    return (
+        <NarrowContainer>
+            <ViewHeader title="Labels">
+                <ViewHeaderTitle>Labels</ViewHeaderTitle>
+            </ViewHeader>
+            <BoxGroup>
+                <LabelsHeader>
+                    <h2>
+                        Labels
+                        <Link color="blue" to={{ state: { createLabel: true } }}>
+                            Create Label
+                        </Link>
+                    </h2>
+                    <p>Labels can help organize samples.</p>
+                </LabelsHeader>
+                {labelComponents}
+            </BoxGroup>
+            <CreateLabel />
+            <EditLabel />
+            <RemoveLabel />
+        </NarrowContainer>
+    );
+};
 
 export const mapStateToProps = state => ({
     show: routerLocationHasState(state, "removeLabel"),
