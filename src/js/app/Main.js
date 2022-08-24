@@ -1,3 +1,4 @@
+import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
@@ -34,6 +35,8 @@ const MainContainer = styled.div`
 const setupWebSocket = () => {
     if (!window.ws) {
         window.ws = new WSConnection(window.store);
+    }
+    if (includes(["abandoned", "initializing"], window.ws.connectionStatus)) {
         window.ws.establishConnection();
     }
 };

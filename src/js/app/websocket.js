@@ -11,6 +11,7 @@ import { wsUpdateStatus } from "../status/actions";
 import { wsInsertSubtraction, wsRemoveSubtraction, wsUpdateSubtraction } from "../subtraction/actions";
 import { wsInsertTask, wsUpdateTask } from "../tasks/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../users/actions";
+import { LOGOUT } from "./actionTypes";
 
 const actionCreatorWrapper = actionCreator => {
     return (state, message) => actionCreator(message.data);
@@ -103,6 +104,7 @@ export default function WSConnection({ getState, dispatch }) {
     };
 
     this.interval = 500;
+    this.connectionStatus = "initializing";
 
     this.establishConnection = () => {
         const protocol = window.location.protocol === "https:" ? "wss" : "ws";
@@ -111,22 +113,31 @@ export default function WSConnection({ getState, dispatch }) {
             : `${protocol}://${window.location.host}/ws`;
 
         this.connection = new window.WebSocket(websocketTarget);
+        this.connectionStatus = "connecting";
 
         this.connection.onopen = () => {
             this.interval = 500;
+            this.connectionStatus = "connected";
         };
 
         this.connection.onmessage = e => {
             this.handle(JSON.parse(e.data));
         };
 
-        this.connection.onclose = () => {
-            if (this.interval > 15000) {
+        this.connection.onclose = e => {
+            if (this.interval < 15000) {
                 this.interval += 500;
+            }
+
+            if (e.code === 4000) {
+                this.dispatch({ type: LOGOUT.SUCCEEDED });
+                this.connectionStatus = "abandoned";
+                return;
             }
 
             setTimeout(() => {
                 this.establishConnection();
+                this.connectionStatus = "reconnecting";
             }, this.interval);
         };
     };
