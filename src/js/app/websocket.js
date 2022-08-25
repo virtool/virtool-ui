@@ -77,6 +77,12 @@ const modifiers = {
     delete: removers
 };
 
+export const INITIALIZING = "initializing";
+export const CONNECTING = "connecting";
+export const CONNECTED = "connected";
+export const ABANDONED = "abandoned";
+export const RECONNECTING = "reconnecting";
+
 export default function WSConnection({ getState, dispatch }) {
     // The Redux store's dispatch method.
     this.dispatch = dispatch;
@@ -104,7 +110,7 @@ export default function WSConnection({ getState, dispatch }) {
     };
 
     this.interval = 500;
-    this.connectionStatus = "initializing";
+    this.connectionStatus = INITIALIZING;
 
     this.establishConnection = () => {
         const protocol = window.location.protocol === "https:" ? "wss" : "ws";
@@ -113,11 +119,11 @@ export default function WSConnection({ getState, dispatch }) {
             : `${protocol}://${window.location.host}/ws`;
 
         this.connection = new window.WebSocket(websocketTarget);
-        this.connectionStatus = "connecting";
+        this.connectionStatus = CONNECTING;
 
         this.connection.onopen = () => {
             this.interval = 500;
-            this.connectionStatus = "connected";
+            this.connectionStatus = CONNECTED;
         };
 
         this.connection.onmessage = e => {
@@ -131,13 +137,13 @@ export default function WSConnection({ getState, dispatch }) {
 
             if (e.code === 4000) {
                 this.dispatch({ type: LOGOUT.SUCCEEDED });
-                this.connectionStatus = "abandoned";
+                this.connectionStatus = ABANDONED;
                 return;
             }
 
             setTimeout(() => {
                 this.establishConnection();
-                this.connectionStatus = "reconnecting";
+                this.connectionStatus = RECONNECTING;
             }, this.interval);
         };
     };
