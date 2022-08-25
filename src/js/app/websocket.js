@@ -11,6 +11,7 @@ import { wsUpdateStatus } from "../status/actions";
 import { wsInsertSubtraction, wsRemoveSubtraction, wsUpdateSubtraction } from "../subtraction/actions";
 import { wsInsertTask, wsUpdateTask } from "../tasks/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../users/actions";
+import { LOGOUT } from "./actionTypes";
 
 const actionCreatorWrapper = actionCreator => {
     return (state, message) => actionCreator(message.data);
@@ -76,6 +77,12 @@ const modifiers = {
     delete: removers
 };
 
+export const INITIALIZING = "initializing";
+export const CONNECTING = "connecting";
+export const CONNECTED = "connected";
+export const ABANDONED = "abandoned";
+export const RECONNECTING = "reconnecting";
+
 export default function WSConnection({ getState, dispatch }) {
     // The Redux store's dispatch method.
     this.dispatch = dispatch;
@@ -103,6 +110,7 @@ export default function WSConnection({ getState, dispatch }) {
     };
 
     this.interval = 500;
+    this.connectionStatus = INITIALIZING;
 
     this.establishConnection = () => {
         const protocol = window.location.protocol === "https:" ? "wss" : "ws";
@@ -111,22 +119,31 @@ export default function WSConnection({ getState, dispatch }) {
             : `${protocol}://${window.location.host}/ws`;
 
         this.connection = new window.WebSocket(websocketTarget);
+        this.connectionStatus = CONNECTING;
 
         this.connection.onopen = () => {
             this.interval = 500;
+            this.connectionStatus = CONNECTED;
         };
 
         this.connection.onmessage = e => {
             this.handle(JSON.parse(e.data));
         };
 
-        this.connection.onclose = () => {
-            if (this.interval > 15000) {
+        this.connection.onclose = e => {
+            if (this.interval < 15000) {
                 this.interval += 500;
+            }
+
+            if (e.code === 4000) {
+                this.dispatch({ type: LOGOUT.SUCCEEDED });
+                this.connectionStatus = ABANDONED;
+                return;
             }
 
             setTimeout(() => {
                 this.establishConnection();
+                this.connectionStatus = RECONNECTING;
             }, this.interval);
         };
     };

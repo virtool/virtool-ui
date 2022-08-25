@@ -1,3 +1,4 @@
+import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
@@ -11,7 +12,7 @@ import UploadOverlay from "../files/components/UploadOverlay";
 import NavBar from "../nav/components/NavBar";
 import Sidebar from "../nav/components/Sidebar";
 import { listTasks } from "../tasks/actions";
-import WSConnection from "./websocket";
+import WSConnection, { ABANDONED, INITIALIZING } from "./websocket";
 
 const Administration = lazy(() => import("../administration/components/Settings"));
 const Account = lazy(() => import("../account/components/Account"));
@@ -34,6 +35,8 @@ const MainContainer = styled.div`
 const setupWebSocket = () => {
     if (!window.ws) {
         window.ws = new WSConnection(window.store);
+    }
+    if (includes([ABANDONED, INITIALIZING], window.ws.connectionStatus)) {
         window.ws.establishConnection();
     }
 };
