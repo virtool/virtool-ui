@@ -10,24 +10,7 @@ exports[`<OTUsList /> should render 1`] = `
         "foo",
       ]
     }
-    onLoadNextPage={
-      [MockFunction] {
-        "calls": Array [
-          Array [
-            "foo",
-            "bar",
-            true,
-            1,
-          ],
-        ],
-        "results": Array [
-          Object {
-            "type": "return",
-            "value": undefined,
-          },
-        ],
-      }
-    }
+    onLoadNextPage={[MockFunction]}
     otus={
       Object {
         "verified": true,
@@ -69,24 +52,7 @@ exports[`<OTUsList /> should render when [this.props.documents.length == false] 
   <Connect(OTUToolbar) />
   <Connect(CreateOTU)
     documents={false}
-    onLoadNextPage={
-      [MockFunction] {
-        "calls": Array [
-          Array [
-            "foo",
-            "bar",
-            true,
-            1,
-          ],
-        ],
-        "results": Array [
-          Object {
-            "type": "return",
-            "value": undefined,
-          },
-        ],
-      }
-    }
+    onLoadNextPage={[MockFunction]}
     otus={
       Object {
         "verified": true,

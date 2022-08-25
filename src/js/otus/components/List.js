@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../app/actions";
 import { LoadingPlaceholder, NarrowContainer, NoneFoundBox, ScrollList } from "../../base";
@@ -9,45 +9,41 @@ import CreateOTU from "./Create";
 import OTUItem from "./Item";
 import OTUToolbar from "./Toolbar";
 
-export class OTUsList extends React.Component {
-    componentDidMount() {
-        this.props.onLoadNextPage(this.props.refId, this.props.term, this.props.verified, 1);
+export const OTUsList = props => {
+    useEffect(() => {
+        props.onLoadNextPage(props.refId, props.term, props.verified, 1);
+    }, []);
+
+    const renderRow = index => <OTUItem key={index} index={index} />;
+
+    if (props.documents === null) {
+        return <LoadingPlaceholder />;
     }
 
-    renderRow = index => <OTUItem key={index} index={index} />;
+    let noneFound;
 
-    render() {
-        if (this.props.documents === null) {
-            return <LoadingPlaceholder />;
-        }
-
-        let noneFound;
-
-        if (!this.props.documents.length) {
-            noneFound = <NoneFoundBox noun="OTUs" />;
-        }
-
-        return (
-            <NarrowContainer>
-                <RebuildAlert />
-                <OTUToolbar />
-                <CreateOTU {...this.props} />
-
-                {noneFound}
-
-                <ScrollList
-                    documents={this.props.documents}
-                    onLoadNextPage={page =>
-                        this.props.onLoadNextPage(this.props.refId, this.props.term, this.props.verified, page)
-                    }
-                    page={this.props.page}
-                    pageCount={this.props.page_count}
-                    renderRow={this.renderRow}
-                />
-            </NarrowContainer>
-        );
+    if (!props.documents.length) {
+        noneFound = <NoneFoundBox noun="OTUs" />;
     }
-}
+
+    return (
+        <NarrowContainer>
+            <RebuildAlert />
+            <OTUToolbar />
+            <CreateOTU {...props} />
+
+            {noneFound}
+
+            <ScrollList
+                documents={props.documents}
+                onLoadNextPage={page => props.onLoadNextPage(props.refId, props.term, props.verified, page)}
+                page={props.page}
+                pageCount={props.page_count}
+                renderRow={renderRow}
+            />
+        </NarrowContainer>
+    );
+};
 
 export const mapStateToProps = state => ({
     ...state.otus,

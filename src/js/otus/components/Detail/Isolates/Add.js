@@ -23,12 +23,10 @@ class Add extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-
         const sourceType = this.state.sourceType || "unknown";
-
         const sourceName = sourceType === "unknown" ? "" : this.state.sourceName;
-
         this.props.onSave(this.props.otuId, sourceType, sourceName);
+        this.props.onHide();
     };
 
     handleModalExited = () => {
