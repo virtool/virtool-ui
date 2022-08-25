@@ -23,7 +23,7 @@ export const jobsReducer = createReducer(initialState, builder => {
             state.term = action.payload.term;
         })
         .addCase(FIND_JOBS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action.payload, "created_at");
+            return updateDocuments(state, action.payload, "created_at", true);
         })
         .addCase(GET_JOB.REQUESTED, state => {
             state.detail = null;
