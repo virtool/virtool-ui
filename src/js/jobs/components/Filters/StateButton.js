@@ -36,16 +36,16 @@ const StyledStateButton = styled(BoxGroupSection)`
     }
 `;
 
-export const StateButton = ({ active, count = 0, color, state, onClick }) => (
+export const StateButton = ({ active, count = 0, color, label, onClick }) => (
     <StyledStateButton active={active} onClick={onClick}>
-        <StateButtonCheckbox label={state} checked={active}>
+        <StateButtonCheckbox label={label} checked={active}>
             <StateButtonIndicator>
                 <i className="fas fa-check" />
             </StateButtonIndicator>
         </StateButtonCheckbox>
 
         <Circle color={color} />
-        {state}
+        {label}
         <Badge>{count}</Badge>
     </StyledStateButton>
 );
