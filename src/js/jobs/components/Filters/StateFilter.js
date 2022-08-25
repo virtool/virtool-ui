@@ -46,15 +46,23 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                         active: states.includes("waiting"),
                         color: "grey",
                         count: counts.waiting,
-                        state: "waiting"
+                        state: "waiting",
+                        label: "waiting"
                     },
                     {
                         active: states.includes("preparing"),
                         count: counts.preparing,
                         state: "preparing",
+                        label: "preparing",
                         color: "grey"
                     },
-                    { active: states.includes("running"), count: counts.running, state: "running", color: "blue" }
+                    {
+                        active: states.includes("running"),
+                        count: counts.running,
+                        state: "running",
+                        label: "running",
+                        color: "blue"
+                    }
                 ]}
                 onClick={handleClick}
             />
@@ -65,24 +73,28 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                         active: states.includes("complete"),
                         count: counts.complete,
                         state: "complete",
+                        label: "complete",
                         color: "green"
                     },
                     {
                         active: states.includes("cancelled"),
                         count: counts.cancelled,
                         state: "cancelled",
+                        label: "cancelled",
                         color: "red"
                     },
                     {
                         active: states.includes("errored"),
-                        count: counts.errored,
-                        state: "errored",
+                        count: counts.error,
+                        state: "error",
+                        label: "errored",
                         color: "red"
                     },
                     {
                         active: states.includes("terminated"),
                         count: counts.terminated,
                         state: "terminated",
+                        label: "terminated",
                         color: "red"
                     }
                 ]}

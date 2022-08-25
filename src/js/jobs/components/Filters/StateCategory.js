@@ -55,13 +55,13 @@ export const StateCategory = ({ states, label, onClick }) => (
             {label}
         </StateCategoryButton>
         <BoxGroup>
-            {map(states, ({ active, color, count, state }) => (
+            {map(states, ({ active, color, count, state, label }) => (
                 <StateButton
                     key={state}
                     active={active}
                     color={color}
                     count={count}
-                    state={state}
+                    label={label}
                     onClick={() => onClick(state)}
                 />
             ))}
