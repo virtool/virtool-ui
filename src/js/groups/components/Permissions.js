@@ -1,9 +1,9 @@
 import React from "react";
 import { map, find } from "lodash-es";
-import { GroupPermission } from "../../groups/components/Permission";
-import { GroupComponentsContainer } from "./SelectedGroup";
+import { GroupPermission } from "./Permission";
+import { GroupComponentsContainer } from "./GroupSelector";
 
-export const SelectedPermissions = ({ activeId, groupsList, onSetPermission }) => {
+export const Permissions = ({ activeId, groupsList, onSetPermission }) => {
     const selectedGroup = find(groupsList, { id: activeId });
 
     const permissionComponents = map(selectedGroup.permissions, (active, permission) => (

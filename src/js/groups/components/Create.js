@@ -13,13 +13,13 @@ import {
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
-import { createGroup } from "../../groups/actions";
+import { createGroup } from "../actions";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the group")
 });
 
-export const CreateGroup = ({ onCreate, showGroupCreation, setShowGroupCreation }) => {
+export const Create = ({ onCreate, showGroupCreation, setShowGroupCreation }) => {
     const handleSubmit = values => {
         onCreate(values.name);
         setShowGroupCreation(false);
@@ -54,4 +54,4 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(null, mapDispatchToProps)(CreateGroup);
+export default connect(null, mapDispatchToProps)(Create);

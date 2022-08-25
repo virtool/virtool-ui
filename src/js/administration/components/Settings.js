@@ -15,7 +15,7 @@ import UserDetail from "../../users/components/Detail";
 import Users from "../../users/components/Users";
 import { mapSettingsStateToProps } from "../mappers";
 import { ServerSettings } from "./Server";
-import GroupSelector from "../../groups/components/GroupSelector";
+import Groups from "../../groups/components/Groups";
 
 export const Settings = ({ loading }) => (
     <WideContainer>
@@ -38,7 +38,7 @@ export const Settings = ({ loading }) => (
                     <Route path="/administration/settings" component={ServerSettings} />
                     <Route path="/administration/users" component={Users} exact />
                     <Route path="/administration/users/:userId" component={UserDetail} />
-                    <Route path="/administration/groups" component={GroupSelector} />
+                    <Route path="/administration/groups" component={Groups} />
                 </Switch>
             )}
         </NarrowContainer>
