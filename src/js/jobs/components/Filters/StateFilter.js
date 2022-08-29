@@ -84,7 +84,7 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                         color: "red"
                     },
                     {
-                        active: states.includes("errored"),
+                        active: states.includes("error"),
                         count: counts.error,
                         state: "error",
                         label: "errored",
