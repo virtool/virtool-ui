@@ -42,7 +42,9 @@ const setupWebSocket = () => {
 };
 
 export const Main = ({ ready, onLoad }) => {
-    useEffect(() => onLoad(), [ready]);
+    useEffect(() => {
+        if (!ready) onLoad();
+    }, [ready]);
     useEffect(() => {
         if (ready) setupWebSocket();
     }, [ready]);
