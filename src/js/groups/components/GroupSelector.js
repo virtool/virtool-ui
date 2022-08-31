@@ -1,7 +1,10 @@
+import { map, sortBy } from "lodash-es";
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
-import { sortBy, map } from "lodash-es";
-import { SelectBoxGroupSection, BoxGroup } from "../../base";
+import { BoxGroup, SelectBoxGroupSection } from "../../base";
+import { getGroup } from "../actions";
+import { getActiveGroup, getGroups } from "../selectors";
 
 export const GroupsSelectBoxGroupSection = styled(SelectBoxGroupSection)`
     outline: 1px solid ${props => props.theme.color.greyLight};
@@ -18,12 +21,12 @@ export const GroupComponentsContainer = styled(BoxGroup)`
     overflow-y: auto;
 `;
 
-export const GroupSelector = ({ activeId, onChangeActiveGroup, groupsList }) => {
-    const groupComponents = map(sortBy(groupsList, "id"), group => {
+export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) => {
+    const groupComponents = map(sortBy(groups, "id"), group => {
         return (
             <GroupsSelectBoxGroupSection
                 selectable
-                active={activeId === group.id ? true : false}
+                active={activeGroupId === group.id ? true : false}
                 key={group.id}
                 onClick={() => onChangeActiveGroup(group.id)}
             >
@@ -39,3 +42,17 @@ export const GroupSelector = ({ activeId, onChangeActiveGroup, groupsList }) => 
         </div>
     );
 };
+
+const mapStateToProps = state => {
+    console.log(state);
+    return {
+        groups: getGroups(state),
+        activeGroupId: getActiveGroup(state).id
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    onChangeActiveGroup: groupId => dispatch(getGroup(groupId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(GroupSelector);

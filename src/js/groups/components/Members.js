@@ -1,22 +1,30 @@
+import { filter, map, some } from "lodash-es";
 import React from "react";
-import { map, filter, some } from "lodash-es";
-import { GroupsSelectBoxGroupSection, GroupComponentsContainer } from "./GroupSelector";
+import { connect } from "react-redux";
+import { getUsers } from "../../users/selectors";
+import { getActiveGroup } from "../selectors";
 import { NoneSelected } from "./Groups";
+import { GroupComponentsContainer, GroupsSelectBoxGroupSection } from "./GroupSelector";
 
-export const Members = ({ users, activeId }) => {
-    const groupMembers = users ? filter(users, user => some(user.groups, { id: activeId })) : null;
-    const memberComponents = groupMembers.length ? (
-        map(groupMembers, member => (
-            <GroupsSelectBoxGroupSection key={member.id}>{member.handle}</GroupsSelectBoxGroupSection>
-        ))
-    ) : (
-        <NoneSelected>No Group Members</NoneSelected>
-    );
-
+export const Members = ({ users, activeGroupId }) => {
+    const activeGroupMembers = filter(users, user => some(user.groups, { id: activeGroupId }));
+    const memberComponents = map(activeGroupMembers, member => (
+        <GroupsSelectBoxGroupSection key={member.id}>{member.handle}</GroupsSelectBoxGroupSection>
+    ));
     return (
         <div>
             <label>Group members</label>
-            <GroupComponentsContainer>{memberComponents}</GroupComponentsContainer>
+            <GroupComponentsContainer>
+                {memberComponents}
+                {Boolean(memberComponents.length) || <NoneSelected>No Group Members</NoneSelected>}
+            </GroupComponentsContainer>
         </div>
     );
 };
+
+const mapStateToProps = state => ({
+    users: getUsers(state),
+    activeGroupId: getActiveGroup(state).id
+});
+
+export default connect(mapStateToProps)(Members);

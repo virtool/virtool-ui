@@ -1,4 +1,6 @@
 import React from "react";
+import { pushState } from "../../app/actions";
+import { getRouterLocationStateValue } from "../../app/selectors";
 import {
     Modal,
     ModalBody,
@@ -14,19 +16,18 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 import { createGroup } from "../actions";
+import { get } from "lodash-es";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the group")
 });
 
-export const Create = ({ onCreate, showGroupCreation, setShowGroupCreation }) => {
+export const Create = ({ onCreate, show, onHide, error }) => {
     const handleSubmit = values => {
         onCreate(values.name);
-        setShowGroupCreation(false);
     };
-
     return (
-        <Modal label="Create Group" onHide={() => setShowGroupCreation(false)} show={showGroupCreation} size="lg">
+        <Modal label="Create Group" onHide={onHide} show={show} size="lg">
             <ModalHeader>Create Group</ModalHeader>
             <Formik onSubmit={handleSubmit} initialValues={{ name: "" }} validationSchema={validationSchema}>
                 {({ errors, touched }) => (
@@ -35,7 +36,7 @@ export const Create = ({ onCreate, showGroupCreation, setShowGroupCreation }) =>
                             <InputGroup>
                                 <InputLabel>Name</InputLabel>
                                 <Field name="name" id="name" as={Input} />
-                                <InputError>{touched.name && errors.name}</InputError>
+                                <InputError>{touched.name && (error || errors.name)}</InputError>
                             </InputGroup>
                         </ModalBody>
                         <ModalFooter>
@@ -48,10 +49,18 @@ export const Create = ({ onCreate, showGroupCreation, setShowGroupCreation }) =>
     );
 };
 
+const mapStateToProps = state => ({
+    show: Boolean(getRouterLocationStateValue(state, "createGroup")),
+    error: get(state, "errors.CREATE_GROUP_ERROR.message", "")
+});
+
 const mapDispatchToProps = dispatch => ({
     onCreate: groupId => {
         dispatch(createGroup(groupId));
+    },
+    onHide: () => {
+        dispatch(pushState({ createGroup: false }));
     }
 });
 
-export default connect(null, mapDispatchToProps)(Create);
+export default connect(mapStateToProps, mapDispatchToProps)(Create);

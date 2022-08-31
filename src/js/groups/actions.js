@@ -6,7 +6,8 @@ import {
     CREATE_GROUP,
     SET_GROUP_PERMISSION,
     REMOVE_GROUP,
-    CHANGE_ACTIVE_GROUP
+    CHANGE_ACTIVE_GROUP,
+    GET_GROUP
 } from "../app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
 
@@ -54,3 +55,12 @@ export const setGroupPermission = createAction(SET_GROUP_PERMISSION.REQUESTED, (
  * @returns {object}
  */
 export const removeGroup = createAction(REMOVE_GROUP.REQUESTED, groupId => ({ payload: { groupId } }));
+
+/**
+ * Returns an action that triggers a API request to fetch complete information for the group of id `groupId`.
+ *
+ * @func
+ * @param groupId {string} the id for the new group
+ * @returns {object}
+ */
+export const getGroup = createAction(GET_GROUP.REQUESTED, groupId => ({ payload: { groupId } }));

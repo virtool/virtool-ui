@@ -21,6 +21,7 @@ import { watchForm } from "../forms/sagas";
 import { PUSH_STATE } from "./actionTypes";
 
 function* pushState(action) {
+    console.log("pushSTate");
     const routerLocation = yield select(getLocation);
     yield put(push({ ...routerLocation, state: action.payload.state }));
 }

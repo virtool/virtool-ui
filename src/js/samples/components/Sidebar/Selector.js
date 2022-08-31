@@ -2,17 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getFontSize } from "../../../app/theme";
-import { Icon, SidebarHeaderButton } from "../../../base";
+import { BoxGroupSection, Icon, SidebarHeaderButton } from "../../../base";
 import { BoxGroupSearch } from "../../../base/BoxGroupSearch.js";
 import { useFuse } from "../../../base/hooks";
 import { PopoverBody, usePopover } from "../../../base/Popover";
 import { SampleSidebarSelectorItem } from "./SelectorItem";
 
-export const SampleSidebarSelectorInputContainer = styled(BoxGroupSection)`
-    padding: 10px;
-`;
-
-export const SampleSidebarSelectorButton = styled.div`
+const SampleSidebarSelectorButton = styled.div`
     display: flex;
     border-top: 1px solid;
     border-color: ${props => props.theme.color.greyLight};
@@ -28,7 +24,7 @@ export const SampleSidebarSelectorButton = styled.div`
     }
 `;
 
-export const SampleItemComponentsContainer = styled.div`
+const SampleItemComponentsContainer = styled.div`
     max-height: 300px;
     overflow-y: scroll;
 `;

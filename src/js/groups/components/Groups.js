@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Button, LoadingPlaceholder, BoxGroup } from "../../base";
-import Create from "./Create";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { setGroupPermission, removeGroup, listGroups, changeActiveGroup } from "../actions";
-import { Permissions } from "./Permissions";
-import { GroupSelector } from "./GroupSelector";
+import { pushState } from "../../app/actions";
+import { BoxGroup, Button, LoadingPlaceholder } from "../../base";
 import { findUsers } from "../../users/actions";
-import { Members } from "./Members";
-import { getActiveId, getGroups, getLoading, getUsers } from "../selectors";
+import { getUsers } from "../../users/selectors";
+import { listGroups, removeGroup } from "../actions";
+import { getActiveGroup, getGroups } from "../selectors";
+import Create from "./Create";
+import GroupSelector from "./GroupSelector";
+import Members from "./Members";
+import Permissions from "./Permissions";
 
 const ManageGroupsContainer = styled.div`
     display: grid;
@@ -46,19 +48,7 @@ export const NoneSelected = styled.div`
     transform: translate(-50%, -50%);
 `;
 
-export const Groups = ({
-    loading,
-    groups,
-    users,
-    activeId,
-    onChangeActiveGroup,
-    onSetPermission,
-    onRemove,
-    onListGroups,
-    onFindUsers
-}) => {
-    const [showGroupCreation, setShowGroupCreation] = useState(false);
-
+export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemove, onListGroups, onFindUsers }) => {
     useEffect(() => {
         onListGroups();
         onFindUsers();
@@ -80,14 +70,12 @@ export const Groups = ({
         groupComponents = (
             <>
                 <ManageGroupsContainer>
-                    <GroupSelector activeId={activeId} onChangeActiveGroup={onChangeActiveGroup} groupsList={groups} />
-
-                    <Permissions activeId={activeId} onSetPermission={onSetPermission} groupsList={groups} />
-
-                    <Members activeId={activeId} users={users} />
+                    <GroupSelector />
+                    <Permissions />
+                    <Members />
                 </ManageGroupsContainer>
 
-                <StyledGroupsButton icon="trash" color="red" onClick={() => onRemove(activeId)}>
+                <StyledGroupsButton icon="trash" color="red" onClick={() => onRemove(activeGroup.id)}>
                     Remove Group
                 </StyledGroupsButton>
             </>
@@ -98,22 +86,22 @@ export const Groups = ({
         <>
             <StyledGroupsHeader>
                 <h2>Manage Groups</h2>
-                <Button icon="user-plus" tip="Create Group" color="blue" onClick={() => setShowGroupCreation(true)} />
+                <Button icon="user-plus" tip="Create Group" color="blue" onClick={onShowCreateGroup} />
             </StyledGroupsHeader>
 
             {groupComponents}
 
-            <Create showGroupCreation={showGroupCreation} setShowGroupCreation={setShowGroupCreation} />
+            <Create />
         </>
     );
 };
 
 const mapStateToProps = state => {
+    const props = { groups: getGroups(state), activeGroup: getActiveGroup(state) };
+    const users = getUsers(state);
     return {
-        loading: getLoading(state),
-        groups: getGroups(state),
-        users: getUsers(state),
-        activeId: getActiveId(state)
+        ...props,
+        loading: !props.groups || !props.activeGroup || !users
     };
 };
 
@@ -121,18 +109,11 @@ const mapDispatchToProps = dispatch => ({
     onListGroups: () => {
         dispatch(listGroups());
     },
-
+    onFindUsers: () => dispatch(findUsers("", 1)),
     onRemove: groupId => {
         dispatch(removeGroup(groupId));
     },
-
-    onSetPermission: (groupId, permission, value) => {
-        dispatch(setGroupPermission(groupId, permission, value));
-    },
-
-    onFindUsers: () => dispatch(findUsers("", 1)),
-
-    onChangeActiveGroup: activeGroup => dispatch(changeActiveGroup(activeGroup))
+    onShowCreateGroup: () => dispatch(pushState({ createGroup: true }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Groups);
