@@ -11,15 +11,6 @@ import { watchRouter } from "../../app/sagas";
 
 const createGenericReducer = initState => state => state || initState;
 
-const renderWithRouter = (ui, state, history) => {
-    const wrappedUI = (
-        <Provider store={createAppStore(state, history)}>
-            <ConnectedRouter history={history}> {ui} </ConnectedRouter>
-        </Provider>
-    );
-    renderWithProviders(wrappedUI);
-};
-
 const createAppStore = (state, history) => {
     const reducer = combineReducers({
         router: connectRouter(history),
@@ -32,6 +23,15 @@ const createAppStore = (state, history) => {
     sagaMiddleware.run(watchRouter);
 
     return store;
+};
+
+const renderWithRouter = (ui, state, history) => {
+    const wrappedUI = (
+        <Provider store={createAppStore(state, history)}>
+            <ConnectedRouter history={history}> {ui} </ConnectedRouter>
+        </Provider>
+    );
+    renderWithProviders(wrappedUI);
 };
 
 describe("Groups", () => {

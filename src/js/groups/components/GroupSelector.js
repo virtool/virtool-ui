@@ -2,22 +2,24 @@ import { map, sortBy } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { getColor } from "../../app/theme";
 import { BoxGroup, SelectBoxGroupSection } from "../../base";
 import { getGroup } from "../actions";
 import { getActiveGroup, getGroups } from "../selectors";
 
 export const GroupsSelectBoxGroupSection = styled(SelectBoxGroupSection)`
-    outline: 1px solid ${props => props.theme.color.greyLight};
-    background-color: ${props => (props.active ? `${props => props.theme.color.blue}` : "white")};
+    outline: 1px solid ${props => getColor({ color: "greyLight", theme: props.theme })};
+    background-color: ${props => getColor({ color: props.active ? "blue" : "white", theme: props.theme })};
     cursor: ${props => (props.selectable ? "pointer" : "default")};
     hover {
-        background-color: ${props => (props.selectable ? props.theme.color.greyLightest : "white")};
+        background-color: ${props =>
+            getColor({ theme: props.theme, color: props.selectable ? "greyLightest" : "white" })};
     }
 `;
 
 export const GroupComponentsContainer = styled(BoxGroup)`
     height: 333px;
-    background-color: ${props => props.theme.color.greyLightest};
+    background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
     overflow-y: auto;
 `;
 
@@ -26,7 +28,7 @@ export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) =>
         return (
             <GroupsSelectBoxGroupSection
                 selectable
-                active={activeGroupId === group.id ? true : false}
+                active={activeGroupId === group.id}
                 key={group.id}
                 onClick={() => onChangeActiveGroup(group.id)}
             >
@@ -44,7 +46,6 @@ export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) =>
 };
 
 const mapStateToProps = state => {
-    console.log(state);
     return {
         groups: getGroups(state),
         activeGroupId: getActiveGroup(state).id

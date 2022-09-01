@@ -13,27 +13,18 @@ import { apiCall } from "../utils/sagas";
 import * as groupsAPI from "./api";
 import { getActiveGroup, getGroups } from "./selectors";
 
-export function* watchGroups() {
-    yield takeLatest(LIST_GROUPS.REQUESTED, listGroups);
-    yield throttle(200, CREATE_GROUP.REQUESTED, createGroup);
-    yield takeEvery(SET_GROUP_PERMISSION.REQUESTED, setGroupPermission);
-    yield throttle(100, REMOVE_GROUP.REQUESTED, removeGroup);
-    yield takeLatest(GET_GROUP.REQUESTED, getGroup);
-    yield takeLatest(WS_REMOVE_GROUP, UpdateActiveGroup);
+function* UpdateActiveGroup() {
+    const activeGroup = yield select(getActiveGroup);
+    const groups = yield select(getGroups);
+    if (!activeGroup || !some(groups, { id: activeGroup.id })) {
+        if (groups.length) yield getGroup({ payload: { groupId: groups[0].id } });
+    }
 }
 
 function* listGroups(action) {
     const resp = yield apiCall(groupsAPI.list, action, LIST_GROUPS);
     if (resp.ok) {
         yield UpdateActiveGroup();
-    }
-}
-
-function* UpdateActiveGroup() {
-    const activeGroup = yield select(getActiveGroup);
-    const groups = yield select(getGroups);
-    if (!activeGroup || !some(groups, { id: activeGroup.id })) {
-        if (groups.length) yield getGroup({ payload: { groupId: groups[0].id } });
     }
 }
 
@@ -55,4 +46,13 @@ function* setGroupPermission(action) {
 
 function* removeGroup(action) {
     yield apiCall(groupsAPI.remove, action.payload, REMOVE_GROUP);
+}
+
+export function* watchGroups() {
+    yield takeLatest(LIST_GROUPS.REQUESTED, listGroups);
+    yield throttle(200, CREATE_GROUP.REQUESTED, createGroup);
+    yield takeEvery(SET_GROUP_PERMISSION.REQUESTED, setGroupPermission);
+    yield throttle(100, REMOVE_GROUP.REQUESTED, removeGroup);
+    yield takeLatest(GET_GROUP.REQUESTED, getGroup);
+    yield takeLatest(WS_REMOVE_GROUP, UpdateActiveGroup);
 }

@@ -1,13 +1,11 @@
 import {
-    WS_INSERT_GROUP,
-    WS_UPDATE_GROUP,
-    WS_REMOVE_GROUP,
     LIST_GROUPS,
-    CREATE_GROUP,
     SET_GROUP_PERMISSION,
-    REMOVE_GROUP
+    WS_INSERT_GROUP,
+    WS_REMOVE_GROUP,
+    WS_UPDATE_GROUP
 } from "../../app/actionTypes";
-import reducer, { initialState as reducerInitialState, updateGroup, insertGroup } from "../reducer";
+import reducer, { initialState as reducerInitialState, insertGroup, updateGroup } from "../reducer";
 
 describe("Groups Reducer", () => {
     it("should return the initial state on first pass", () => {

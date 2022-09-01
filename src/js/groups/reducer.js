@@ -2,7 +2,6 @@ import { createReducer } from "@reduxjs/toolkit";
 import { concat, sortBy, unionBy } from "lodash-es";
 import {
     CHANGE_ACTIVE_GROUP,
-    CREATE_GROUP,
     GET_GROUP,
     LIST_GROUPS,
     SET_GROUP_PERMISSION,

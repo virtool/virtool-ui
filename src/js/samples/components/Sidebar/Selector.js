@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getFontSize } from "../../../app/theme";
-import { BoxGroupSection, Icon, SidebarHeaderButton } from "../../../base";
+import { Icon, SidebarHeaderButton } from "../../../base";
 import { BoxGroupSearch } from "../../../base/BoxGroupSearch.js";
 import { useFuse } from "../../../base/hooks";
 import { PopoverBody, usePopover } from "../../../base/Popover";
