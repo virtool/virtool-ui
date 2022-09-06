@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Badge, LoadingPlaceholder, NarrowContainer, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findReferences, remoteReference } from "../actions";
@@ -8,46 +8,47 @@ import ReferenceItem from "./Item/Item";
 import ReferenceOfficial from "./Official";
 import ReferenceToolbar from "./Toolbar";
 
-class ReferenceList extends React.Component {
-    componentDidMount() {
-        this.props.onLoadNextPage(this.props.term, 1);
+const ReferenceList = ({ term, documents, total_count, onLoadNextPage, page, pageCount }) => {
+    useEffect(() => {
+        onLoadNextPage(term, 1);
+    }, []);
+
+    const renderRow = index => <ReferenceItem key={documents[index].id} index={index} />;
+
+    if (documents === null) {
+        return <LoadingPlaceholder />;
     }
 
-    renderRow = index => <ReferenceItem key={this.props.documents[index].id} index={index} />;
+    return (
+        <>
+            <NarrowContainer>
+                <ViewHeader title="References">
+                    <ViewHeaderTitle>
+                        References <Badge>{total_count}</Badge>
+                    </ViewHeaderTitle>
+                </ViewHeader>
 
-    render() {
-        if (this.props.documents === null) {
-            return <LoadingPlaceholder />;
-        }
+                <ReferenceToolbar />
+                <ReferenceOfficial />
 
-        return (
-            <>
-                <NarrowContainer>
-                    <ViewHeader title="References">
-                        <ViewHeaderTitle>
-                            References <Badge>{this.props.total_count}</Badge>
-                        </ViewHeaderTitle>
-                    </ViewHeader>
-
-                    <ReferenceToolbar />
-                    <ReferenceOfficial />
-
-                    <ScrollList
-                        documents={this.props.documents}
-                        onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
-                        page={this.props.page}
-                        pageCount={this.props.pageCount}
-                        renderRow={this.renderRow}
-                    />
-                </NarrowContainer>
-                <Clone />
-            </>
-        );
-    }
-}
+                <ScrollList
+                    documents={documents}
+                    onLoadNextPage={page => onLoadNextPage(term, page)}
+                    page={page}
+                    pageCount={pageCount}
+                    renderRow={renderRow}
+                />
+            </NarrowContainer>
+            <Clone />
+        </>
+    );
+};
 
 const mapStateToProps = state => ({
-    ...state.references,
+    documents: state.references.documents,
+    total_count: state.references.total_count,
+    page: state.references.page,
+    pageCount: state.references.pageCount,
     term: getTerm(state)
 });
 
