@@ -8,7 +8,7 @@ import ReferenceItem from "./Item/Item";
 import ReferenceOfficial from "./Official";
 import ReferenceToolbar from "./Toolbar";
 
-const ReferenceList = ({ term, documents, total_count, onLoadNextPage, page, pageCount }) => {
+const ReferenceList = ({ term, documents, totalCount, onLoadNextPage, page, pageCount }) => {
     useEffect(() => {
         onLoadNextPage(term, 1);
     }, []);
@@ -24,7 +24,7 @@ const ReferenceList = ({ term, documents, total_count, onLoadNextPage, page, pag
             <NarrowContainer>
                 <ViewHeader title="References">
                     <ViewHeaderTitle>
-                        References <Badge>{total_count}</Badge>
+                        References <Badge>{totalCount}</Badge>
                     </ViewHeaderTitle>
                 </ViewHeader>
 
@@ -46,9 +46,9 @@ const ReferenceList = ({ term, documents, total_count, onLoadNextPage, page, pag
 
 const mapStateToProps = state => ({
     documents: state.references.documents,
-    total_count: state.references.total_count,
+    totalCount: state.references.total_count,
     page: state.references.page,
-    pageCount: state.references.pageCount,
+    pageCount: state.references.page_count,
     term: getTerm(state)
 });
 
