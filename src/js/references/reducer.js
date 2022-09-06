@@ -9,6 +9,7 @@ import {
     EDIT_REFERENCE_USER,
     FIND_REFERENCES,
     GET_REFERENCE,
+    REMOTE_REFERENCE,
     REMOVE_REFERENCE_GROUP,
     REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
@@ -149,6 +150,9 @@ export const referenceReducer = createReducer(initialState, builder => {
                 state.pendingRemoveGroups = without(state.pendingRemoveGroups, groupId);
                 state.detail.groups = reject(state.detail.groups, { id: groupId });
             }
+        })
+        .addCase(REMOTE_REFERENCE.SUCCEEDED, state => {
+            state.official_installed = true;
         });
 });
 
