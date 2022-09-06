@@ -1,4 +1,4 @@
-import { SelectedSamples } from "../SelectedSamples.js";
+import { SelectedSamples } from "../SelectedSamples";
 
 describe("<SelectedSamples />", () => {
     let props;

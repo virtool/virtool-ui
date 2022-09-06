@@ -114,6 +114,7 @@
     ],
     "moduleFileExtensions": [
       "js",
+      "jsx",
       "json"
     ],
     "moduleNameMapper": {
