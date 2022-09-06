@@ -1,4 +1,4 @@
-import CacheGeneral from "../General.js";
+import CacheGeneral from "../General";
 
 describe("<CacheGeneral />", () => {
     it("should render", () => {

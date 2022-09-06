@@ -1,4 +1,4 @@
-import CacheParameters from "../Parameters.js";
+import CacheParameters from "../Parameters";
 
 describe("<CacheParameters />", () => {
     const props = {

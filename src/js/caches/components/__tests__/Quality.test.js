@@ -1,4 +1,4 @@
-import { CacheQuality, mapStateToProps } from "../Quality.js";
+import { CacheQuality, mapStateToProps } from "../Quality";
 
 describe("<CacheQuality />", () => {
     it("should render", () => {

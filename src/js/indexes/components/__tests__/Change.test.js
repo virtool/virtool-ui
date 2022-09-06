@@ -1,4 +1,4 @@
-import { IndexChange, mapStateToProps } from "../Change.js";
+import { IndexChange, mapStateToProps } from "../Change";
 
 describe("<IndexChange />", () => {
     let props;
