@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<CreateUser /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<CreateUser /> > should render when name has changed 1`] = `ShallowWrapper {}`;
+
+exports[`<CreateUser /> > should render when name has changed 2`] = `ShallowWrapper {}`;
+
+exports[`<CreateUser /> > should render when password has changed 1`] = `ShallowWrapper {}`;
+
+exports[`<CreateUser /> > should render when password has changed 2`] = `ShallowWrapper {}`;
+
+exports[`<CreateUser /> > should render with error 1`] = `ShallowWrapper {}`;

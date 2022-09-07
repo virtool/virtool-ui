@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<OTUItem /> > should render when [verified=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<OTUItem /> > should render when [verified=true] 1`] = `ShallowWrapper {}`;

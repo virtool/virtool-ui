@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<Permissions /> > should render correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<Permissions /> > should render no permission disabled when [props.administrator=true] 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<MemberRight /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<MemberRight /> > should render when right is modify_otu 1`] = `ShallowWrapper {}`;
+
+exports[`<MemberRight /> > should render when right is not enabled 1`] = `ShallowWrapper {}`;

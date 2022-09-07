@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<OTUsList /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<OTUsList /> > should render when [this.props.documents === null] 1`] = `ShallowWrapper {}`;
+
+exports[`<OTUsList /> > should render when [this.props.documents.length == false] 1`] = `ShallowWrapper {}`;

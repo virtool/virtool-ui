@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`Group > should render as active when [active=true] 1`] = `ShallowWrapper {}`;
+
+exports[`Group > should render correct with default props 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`<BLASTInProgress /> > should render when [rid=%p] ABC123 1`] = `ShallowWrapper {}`;
+
+exports[`<BLASTInProgress /> > should render when [rid=%p] null 1`] = `ShallowWrapper {}`;
+
+exports[`<BLASTResults /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<NuVsBLAST /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<NuVsBLAST /> > should render alert when no blast data available 1`] = `ShallowWrapper {}`;
+
+exports[`<NuVsBLAST /> > should render with an in-progress BLAST 1`] = `ShallowWrapper {}`;
+
+exports[`<NuVsBLAST /> > should render with no BLAST hits 1`] = `ShallowWrapper {}`;

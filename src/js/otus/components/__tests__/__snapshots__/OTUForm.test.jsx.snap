@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<OTUForm /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<OTUForm /> > should render with error 1`] = `ShallowWrapper {}`;

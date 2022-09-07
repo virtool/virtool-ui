@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<UserItem /> > should render when administrator=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<UserItem /> > should render when administrator=%p] true 1`] = `ShallowWrapper {}`;

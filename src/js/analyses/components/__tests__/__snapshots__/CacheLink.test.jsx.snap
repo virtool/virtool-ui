@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<AnalysisCacheLink /> > should render when id is defined 1`] = `ShallowWrapper {}`;
+
+exports[`<AnalysisCacheLink /> > should return null when id is undefined 1`] = `ShallowWrapper {}`;

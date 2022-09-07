@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`<HMMInstaller /> > should render when [this.props.task = undefined] and [this.props.installed = false] 1`] = `ShallowWrapper {}`;
+
+exports[`<HMMInstaller /> > should render when [this.props.task = undefined] and [this.props.installed = true] 1`] = `ShallowWrapper {}`;
+
+exports[`<HMMInstaller /> > should render when [this.props.task exists] and [this.props.installed=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<HMMInstaller /> > should render when [this.props.task exists] and [this.props.installed=true] 1`] = `ShallowWrapper {}`;

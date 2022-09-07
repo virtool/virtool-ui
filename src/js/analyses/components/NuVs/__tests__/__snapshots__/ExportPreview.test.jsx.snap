@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<NuVsExportPreview /> > renders correctly otherwise 1`] = `ShallowWrapper {}`;
+
+exports[`<NuVsExportPreview /> > renders correctly when [mode=contigs] 1`] = `ShallowWrapper {}`;

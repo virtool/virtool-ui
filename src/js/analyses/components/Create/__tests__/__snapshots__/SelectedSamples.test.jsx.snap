@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SelectedSamples /> > should render when [samples.length=1] 1`] = `ShallowWrapper {}`;
+
+exports[`<SelectedSamples /> > should return when [samples.length=0] 1`] = `ShallowWrapper {}`;

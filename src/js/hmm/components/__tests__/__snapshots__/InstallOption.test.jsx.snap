@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<InstallOption /> > should render button when [canInstall=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<InstallOption /> > should render permission alert when [canInstall=false] 1`] = `ShallowWrapper {}`;

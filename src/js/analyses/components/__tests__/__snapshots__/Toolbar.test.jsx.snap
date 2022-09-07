@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<AnalysesToolbar /> > should render with [canModify=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<AnalysesToolbar /> > should render with default props 1`] = `ShallowWrapper {}`;

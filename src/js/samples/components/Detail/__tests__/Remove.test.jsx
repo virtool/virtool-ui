@@ -1,0 +1,40 @@
+import { RemoveModal } from "../../../../base";
+import { RemoveSample } from "../Remove";
+import { vi } from "vitest";
+
+describe("<Remove />", () => {
+    let props;
+
+    beforeEach(() => {
+        props = {
+            id: "foo",
+            name: "test",
+            show: true,
+            onHide: vi.fn(),
+            onConfirm: vi.fn()
+        };
+    });
+
+    it("renders when [show=true]", () => {
+        const wrapper = shallow(<RemoveSample {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    it("renders when [show=false]", () => {
+        props.show = false;
+        const wrapper = shallow(<RemoveSample {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    it("calls onConfirm() with id when confirmed", () => {
+        const wrapper = shallow(<RemoveSample {...props} />);
+        wrapper.find(RemoveModal).props().onConfirm();
+        expect(props.onConfirm).toHaveBeenCalledWith("foo");
+    });
+
+    it("calls onHide() when RemoveModal.onHide() is called", () => {
+        const wrapper = shallow(<RemoveSample {...props} />);
+        wrapper.find(RemoveModal).props().onHide();
+        expect(props.onHide).toHaveBeenCalled();
+    });
+});

@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`<Toolbar /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<Toolbar /> > should render when [filterIsolates=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<Toolbar /> > should render when [filterOTUs=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<Toolbar /> > should render when [showPathoscopeReads=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<Toolbar /> > should render when [sortDescending=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<Toolbar /> > should render when [sortKey=%p] depth 1`] = `ShallowWrapper {}`;
+
+exports[`<Toolbar /> > should render when [sortKey=%p] weight 1`] = `ShallowWrapper {}`;

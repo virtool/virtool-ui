@@ -1,0 +1,11 @@
+// Vitest Snapshot v1
+
+exports[`<Icon /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<Icon /> > should render placed tooltip when tipPlacement props defined 1`] = `ShallowWrapper {}`;
+
+exports[`<Icon /> > should render tooltip when tip props is defined 1`] = `ShallowWrapper {}`;
+
+exports[`<Icon /> > should render when [fixedWith=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<Icon /> > should render when className prop provided 1`] = `ShallowWrapper {}`;

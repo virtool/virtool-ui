@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<HMMPurge /> > should not render purge button when [canPurge=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<HMMPurge /> > should render purge button when [canPurge=true] 1`] = `ShallowWrapper {}`;

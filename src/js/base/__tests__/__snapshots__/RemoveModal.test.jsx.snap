@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<RemoveModal /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<RemoveModal /> > should render when [show=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<RemoveModal /> > should render with message 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,11 @@
+// Vitest Snapshot v1
+
+exports[`<NuVsExport /> > renders correctly 1`] = `
+<NuVsExport
+  analysisId="test-analysis"
+  onHide={[MockFunction spy]}
+  results={[]}
+  sampleName="test-sample"
+  show={true}
+/>
+`;

@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<LatestBuild /> > should render when [latestBuild!=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<LatestBuild /> > should render when [latestBuild=null] 1`] = `ShallowWrapper {}`;

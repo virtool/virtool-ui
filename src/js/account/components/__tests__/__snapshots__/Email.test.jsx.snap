@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<Email /> > should call onUpdateEmail() when valid form submitted 1`] = `ShallowWrapper {}`;
+
+exports[`<Email /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<Email /> > should render when submitted value is invalid error 1`] = `ShallowWrapper {}`;
+
+exports[`<Email /> > should render when submitted value is invalid error 2`] = `ShallowWrapper {}`;
+
+exports[`<Email /> > should render when when input changes 1`] = `ShallowWrapper {}`;
+
+exports[`<Email /> > should render without initial email 1`] = `ShallowWrapper {}`;

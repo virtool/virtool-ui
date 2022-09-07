@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<RebuildAlert /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<RebuildAlert /> > should render when [showCountAlert!=0, showIndexAlert=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<RebuildAlert /> > should return null when [showCountAlert!=0, showIndexAlert=false] 1`] = `ShallowWrapper {}`;

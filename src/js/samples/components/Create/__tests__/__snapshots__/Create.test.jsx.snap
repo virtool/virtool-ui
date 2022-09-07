@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<CreateSample> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<CreateSample> > should render LoadingPlaceholder when [props.readyReads=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<CreateSample> > should render LoadingPlaceholder when [props.subtractions=null] 1`] = `ShallowWrapper {}`;

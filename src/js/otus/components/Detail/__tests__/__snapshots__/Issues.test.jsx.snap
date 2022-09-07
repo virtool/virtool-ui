@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<OTUIssues /> > renders correctly with issues 1`] = `ShallowWrapper {}`;
+
+exports[`<OTUIssues /> > renders correctly without issues 1`] = `ShallowWrapper {}`;

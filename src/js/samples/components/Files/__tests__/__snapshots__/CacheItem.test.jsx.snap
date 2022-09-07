@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SampleCacheItem /> > should render when [missing=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleCacheItem /> > should render when [missing=%p] true 1`] = `ShallowWrapper {}`;

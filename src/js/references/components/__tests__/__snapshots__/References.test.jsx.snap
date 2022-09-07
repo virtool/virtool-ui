@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceSettings /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<References /> > should render when [loading=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<References /> > should render when [loading=%p] true 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<SampleFileSizeWarning /> > should not render link when [showLink=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleFileSizeWarning /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleFileSizeWarning /> > should render when [show=false] 1`] = `ShallowWrapper {}`;

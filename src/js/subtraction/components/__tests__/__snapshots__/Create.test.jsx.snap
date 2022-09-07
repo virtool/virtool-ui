@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<CreateSubtraction /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionFileItem /> > should render when [active=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionFileItem /> > should render when [active=%p] true 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<AnalysisItem /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<UserRole /> > should render empty when [canModifyUser=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<UserRole /> > should render when [role=%p] administrator 1`] = `ShallowWrapper {}`;
+
+exports[`<UserRole /> > should render when [role=%p] limited 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<Settings /> > should render when [props.loading=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<Settings /> > should render when [props.loading=%p] true 1`] = `ShallowWrapper {}`;

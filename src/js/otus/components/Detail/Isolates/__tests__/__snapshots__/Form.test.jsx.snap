@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<IsolateForm /> > should render with source types restricted 1`] = `ShallowWrapper {}`;
+
+exports[`<IsolateForm /> > should render with source types unrestricted 1`] = `ShallowWrapper {}`;

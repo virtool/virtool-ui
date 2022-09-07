@@ -1,5 +1,3 @@
-jest.mock("../utils");
-
 import {
     BLAST_NUVS,
     CLEAR_ANALYSIS,
@@ -19,6 +17,9 @@ import {
 } from "../../app/actionTypes";
 import reducer, { setNuvsBLAST } from "../reducer";
 import { formatData } from "../utils";
+import { vi } from "vitest";
+
+vi.mock("../utils.js");
 
 formatData.mockImplementation(({ ready, workflow }) => ({
     ready,

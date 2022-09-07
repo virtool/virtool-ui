@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<Radio /> > FlexItem subcomponent > displays provided label 1`] = `ShallowWrapper {}`;
+
+exports[`<Radio /> > FlexItem subcomponent > when no label provided, empty component (null) 1`] = `ShallowWrapper {}`;
+
+exports[`<Radio /> > Icon subcomponent > if checked, [name='dot-circle'] 1`] = `ShallowWrapper {}`;
+
+exports[`<Radio /> > Icon subcomponent > otherwise [name='circle'] 1`] = `ShallowWrapper {}`;
+
+exports[`<Radio /> > renders a Flex component containing an Icon and a FlexItem component 1`] = `ShallowWrapper {}`;
+
+exports[`<Radio /> > renders correctly 1`] = `ShallowWrapper {}`;

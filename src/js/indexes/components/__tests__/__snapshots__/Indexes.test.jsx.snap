@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<Indexes /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<Indexes /> > should render with [documents=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<Indexes /> > should render with empty documents array 1`] = `ShallowWrapper {}`;

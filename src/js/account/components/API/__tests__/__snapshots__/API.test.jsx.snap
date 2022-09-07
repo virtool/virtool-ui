@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<API /> > should render two API keys 1`] = `ShallowWrapper {}`;
+
+exports[`<API /> > should render when loading API keys 1`] = `ShallowWrapper {}`;
+
+exports[`<API /> > should render with 0 API keys 1`] = `ShallowWrapper {}`;

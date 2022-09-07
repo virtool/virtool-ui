@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<Analyses /> > should render placeholder when loading 1`] = `ShallowWrapper {}`;
+
+exports[`<Analyses /> > should render sub-components when not loading 1`] = `ShallowWrapper {}`;

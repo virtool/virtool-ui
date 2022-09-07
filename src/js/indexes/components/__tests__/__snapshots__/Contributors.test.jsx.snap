@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<Contributor /> > should render when count is 1 1`] = `ShallowWrapper {}`;
+
+exports[`<Contributor /> > should render when count is 5 1`] = `ShallowWrapper {}`;
+
+exports[`<Contributors /> > should render 1`] = `ShallowWrapper {}`;

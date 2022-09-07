@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<Tooltip /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<Tooltip /> > should render with children 1`] = `ShallowWrapper {}`;
+
+exports[`<Tooltip /> > should render without position prop 1`] = `ShallowWrapper {}`;

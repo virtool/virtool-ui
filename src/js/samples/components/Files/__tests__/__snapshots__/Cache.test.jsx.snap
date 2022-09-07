@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SampleFilesCache /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleFilesCache /> > should render NoneFound when caches array empty 1`] = `ShallowWrapper {}`;

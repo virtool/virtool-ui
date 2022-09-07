@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`<NoneFound /> > should render with [noun='files' 1`] = `ShallowWrapper {}`;
+
+exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `ShallowWrapper {}`;
+
+exports[`<NoneFoundSection /> > should render with [noun='sections' 1`] = `ShallowWrapper {}`;
+
+exports[`<NoneFoundSection /> > should render with [noun='sections'] and children 1`] = `ShallowWrapper {}`;

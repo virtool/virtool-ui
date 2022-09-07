@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<UniqueNames /> > should render when [enabled=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<UniqueNames /> > should render when [enabled=%p] true 1`] = `ShallowWrapper {}`;

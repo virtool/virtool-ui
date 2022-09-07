@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<LoadingPlaceholder /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<LoadingPlaceholder /> > should render the provided message 1`] = `ShallowWrapper {}`;

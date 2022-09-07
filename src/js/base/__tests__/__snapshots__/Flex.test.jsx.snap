@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<Flex /> > <FlexItem /> > applies given css props to component style 1`] = `ShallowWrapper {}`;
+
+exports[`<Flex /> > <FlexItem /> > applies given style and className props 1`] = `ShallowWrapper {}`;
+
+exports[`<Flex /> > <FlexItem /> > renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<Flex /> > applies given css props to component style 1`] = `ShallowWrapper {}`;
+
+exports[`<Flex /> > applies given style and className props 1`] = `ShallowWrapper {}`;
+
+exports[`<Flex /> > renders correctly 1`] = `ShallowWrapper {}`;

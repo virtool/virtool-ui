@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SampleFileManager /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<Samples /> > should render 1`] = `ShallowWrapper {}`;

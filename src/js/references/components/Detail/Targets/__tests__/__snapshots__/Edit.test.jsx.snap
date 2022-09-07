@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<EditTarget /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<EditTarget /> > should render error when submitted without name 1`] = `ShallowWrapper {}`;
+
+exports[`<EditTarget /> > should update when TargetForm onChange() prop called 1`] = `ShallowWrapper {}`;

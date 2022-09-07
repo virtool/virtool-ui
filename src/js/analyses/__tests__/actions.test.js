@@ -30,6 +30,7 @@ import {
     wsRemoveAnalysis,
     wsUpdateAnalysis
 } from "../actions";
+import { vi } from "vitest";
 
 it("wsInsertAnalysis should return action to insert analysis via websocket", () => {
     const data = { id: "foo" };
@@ -108,7 +109,7 @@ it("clearAnalysis() should return action to clear stored analysis data", () => {
 it("analyze() should return action to analyze sample", () => {
     const originalDate = global.Date;
     const testDate = new Date("2018");
-    global.Date = jest.fn(() => testDate);
+    global.Date = vi.fn(() => testDate);
 
     const sampleId = "foo";
     const workflow = "workflow";

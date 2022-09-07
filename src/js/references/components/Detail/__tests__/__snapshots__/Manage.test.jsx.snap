@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceManage /> > should render when [props.cloned_from={ Bar: 'Bee' }] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReferenceManage /> > should render when [props.remotes_from=null] 1`] = `ShallowWrapper {}`;

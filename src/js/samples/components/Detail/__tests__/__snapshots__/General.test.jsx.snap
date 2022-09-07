@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SampleDetailGeneral /> > should render with [paired=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleDetailGeneral /> > should render with [paired=%p] true 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<ReadOrientation /> > should render when [index=0] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReadOrientation /> > should render when [index=1] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReadOrientation /> > should render when [selected=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReadOrientation /> > should render when [selected=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReadSelectorItem /> > should render when [selected=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReadSelectorItem /> > should render when [selected=true] 1`] = `ShallowWrapper {}`;

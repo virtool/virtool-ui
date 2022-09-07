@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<UserDetail /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<UserDetail /> > should render when [administrator=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<UserDetail /> > should render when [canModifyUser=false] 1`] = `ShallowWrapper {}`;

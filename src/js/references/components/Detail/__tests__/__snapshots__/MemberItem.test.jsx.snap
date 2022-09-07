@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<MemberItem /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<MemberItem /> > should render with [canModify=true] 1`] = `ShallowWrapper {}`;

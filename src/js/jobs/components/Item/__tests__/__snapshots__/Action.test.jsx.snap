@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`<JobActionIcon /> > should render when [state="complete"] and [canArchive=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<JobActionIcon /> > should render when [state="waiting"] and [canCancel=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<JobActionIcon /> > should render when [state=%p] cancelled 1`] = `ShallowWrapper {}`;
+
+exports[`<JobActionIcon /> > should render when [state=%p] complete 1`] = `ShallowWrapper {}`;
+
+exports[`<JobActionIcon /> > should render when [state=%p] error 1`] = `ShallowWrapper {}`;
+
+exports[`<JobActionIcon /> > should render when [state=%p] running 1`] = `ShallowWrapper {}`;
+
+exports[`<JobActionIcon /> > should render when [state=%p] waiting 1`] = `ShallowWrapper {}`;

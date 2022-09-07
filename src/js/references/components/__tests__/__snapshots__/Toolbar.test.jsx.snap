@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceToolbar /> > should not render creation button when [canCreate=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReferenceToolbar /> > should render creation button when [canCreate=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReferenceToolbar /> > should render when [term='foo'] 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<ScrollList /> > should render when [noContainer=false] 1`] = `ReactWrapper {}`;
+
+exports[`<ScrollList /> > should return LoadingPlaceholder when [documents=null] and [page<pageCount] 1`] = `ReactWrapper {}`;
+
+exports[`<ScrollList /> > should return React.Fragment when [noContainer=true] 1`] = `ReactWrapper {}`;

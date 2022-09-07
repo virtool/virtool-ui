@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<Remove /> > should render when [show=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<Remove /> > should render when [show=true] 1`] = `ShallowWrapper {}`;

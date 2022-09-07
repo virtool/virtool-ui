@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceItem /> > should render when [organism='virus'] and [progress=32] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReferenceItem /> > should render when [organism=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<ReferenceItem /> > should render when [progress=100] 1`] = `ShallowWrapper {}`;

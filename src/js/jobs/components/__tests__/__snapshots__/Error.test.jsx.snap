@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<JobError /> > renders correctly with error details 1`] = `ShallowWrapper {}`;
+
+exports[`<JobError /> > renders correctly without error details 1`] = `ShallowWrapper {}`;

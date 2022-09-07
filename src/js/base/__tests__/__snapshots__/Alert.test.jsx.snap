@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<Alert /> > should render when [color=%p] blue 1`] = `ShallowWrapper {}`;
+
+exports[`<Alert /> > should render when [color=%p] green 1`] = `ShallowWrapper {}`;
+
+exports[`<Alert /> > should render when [color=%p] red 1`] = `ShallowWrapper {}`;

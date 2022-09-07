@@ -1,0 +1,19 @@
+// Vitest Snapshot v1
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] false false 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] false true 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] true false 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] true true 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [state=%p] cancelled 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [state=%p] complete 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [state=%p] error 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [state=%p] running 1`] = `ShallowWrapper {}`;
+
+exports[`<JobItem /> > should render when [state=%p] waiting 1`] = `ShallowWrapper {}`;

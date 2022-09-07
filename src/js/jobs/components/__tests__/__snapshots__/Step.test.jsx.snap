@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`<JobStepIcon /> > renders correct icon when state cancelled 1`] = `ShallowWrapper {}`;
+
+exports[`<JobStepIcon /> > renders correct icon when state complete 1`] = `ShallowWrapper {}`;
+
+exports[`<JobStepIcon /> > renders correct icon when state error 1`] = `ShallowWrapper {}`;
+
+exports[`<JobStepIcon /> > renders correct icon when state preparing 1`] = `ShallowWrapper {}`;
+
+exports[`<JobStepIcon /> > renders correct icon when state running 1`] = `ShallowWrapper {}`;
+
+exports[`<JobStepIcon /> > renders correct icon when state waiting 1`] = `ShallowWrapper {}`;
+
+exports[`<JobStepIcon /> > renders correct icon when step complete 1`] = `ShallowWrapper {}`;

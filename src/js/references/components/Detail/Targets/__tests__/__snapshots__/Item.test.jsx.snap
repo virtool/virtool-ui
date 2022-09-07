@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<TargetItem /> > should render when [canModify=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<TargetItem /> > should render when [canModify=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<TargetItem /> > should render with no description 1`] = `ShallowWrapper {}`;

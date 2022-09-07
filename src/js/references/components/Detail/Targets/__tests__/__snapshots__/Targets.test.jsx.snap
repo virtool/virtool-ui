@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<Targets /> > should render null when [dataType!=barcode] 1`] = `ShallowWrapper {}`;
+
+exports[`<Targets /> > should render when [canModify=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<Targets /> > should render when [canModify=true] 1`] = `ShallowWrapper {}`;

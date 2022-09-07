@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<Jobs /> > should render placeholder when loading 1`] = `ShallowWrapper {}`;
+
+exports[`<Jobs /> > should render when loaded 1`] = `ShallowWrapper {}`;

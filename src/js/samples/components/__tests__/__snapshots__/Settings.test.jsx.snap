@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SamplesSettings /> > should render when [loading=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<SamplesSettings /> > should render when [loading=%p] true 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<LibraryTypeSelector> > should have Amplicon selected when [libraryType='amplicon'] 1`] = `ShallowWrapper {}`;
+
+exports[`<LibraryTypeSelector> > should have Normal selected [libraryType='normal'] 1`] = `ShallowWrapper {}`;
+
+exports[`<LibraryTypeSelector> > should have sRNA selected when [libraryType='srna'] 1`] = `ShallowWrapper {}`;

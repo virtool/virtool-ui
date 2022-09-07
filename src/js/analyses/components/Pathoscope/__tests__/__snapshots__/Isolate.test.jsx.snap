@@ -1,0 +1,11 @@
+// Vitest Snapshot v1
+
+exports[`<PathoscopeIsolate /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<PathoscopeIsolate /> > should render read count 1`] = `ShallowWrapper {}`;
+
+exports[`<PathoscopeIsolateWeight /> > should render reads 1`] = `ShallowWrapper {}`;
+
+exports[`<PathoscopeIsolateWeight /> > should render weight 1`] = `ShallowWrapper {}`;
+
+exports[`<PathoscopeIsolateWeight /> > should render weight in scientific notation 1`] = `ShallowWrapper {}`;

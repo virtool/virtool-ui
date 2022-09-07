@@ -1,0 +1,23 @@
+// Vitest Snapshot v1
+
+exports[`<AffixedProgressBar /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<AffixedProgressBar /> > should render when [bottom=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<AffixedProgressBar /> > should render when [color=%p] blue 1`] = `ShallowWrapper {}`;
+
+exports[`<AffixedProgressBar /> > should render when [color=%p] green 1`] = `ShallowWrapper {}`;
+
+exports[`<AffixedProgressBar /> > should render when [color=%p] orange 1`] = `ShallowWrapper {}`;
+
+exports[`<AffixedProgressBar /> > should render when [color=%p] red 1`] = `ShallowWrapper {}`;
+
+exports[`<ProgressBar /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<ProgressBar /> > should render when [color=%p] blue 1`] = `ShallowWrapper {}`;
+
+exports[`<ProgressBar /> > should render when [color=%p] green 1`] = `ShallowWrapper {}`;
+
+exports[`<ProgressBar /> > should render when [color=%p] orange 1`] = `ShallowWrapper {}`;
+
+exports[`<ProgressBar /> > should render when [color=%p] red 1`] = `ShallowWrapper {}`;

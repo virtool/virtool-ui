@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<UserGroups /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<UserGroups /> > should render LoadingPlaceholder when [documents=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<UserGroups /> > should render NoneFound when [documents=[]] 1`] = `ShallowWrapper {}`;

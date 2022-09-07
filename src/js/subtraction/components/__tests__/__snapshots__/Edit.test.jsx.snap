@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<EditSubtraction /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<EditSubtraction /> > should render after name is changed 1`] = `ShallowWrapper {}`;
+
+exports[`<EditSubtraction /> > should render after name is changed 2`] = `ShallowWrapper {}`;
+
+exports[`<EditSubtraction /> > should render after nickname is changed 1`] = `ShallowWrapper {}`;
+
+exports[`<EditSubtraction /> > should render after nickname is changed 2`] = `ShallowWrapper {}`;
+
+exports[`<EditSubtraction /> > should render when [show=false] 1`] = `ShallowWrapper {}`;

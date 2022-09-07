@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<IndexChange /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexChange /> > should render when [otuName=null] 1`] = `ShallowWrapper {}`;

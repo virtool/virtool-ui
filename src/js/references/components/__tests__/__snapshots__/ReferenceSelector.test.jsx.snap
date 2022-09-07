@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceSelector /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<ReferenceSelector /> > should render NoneFound when [references.length=0] 1`] = `ShallowWrapper {}`;

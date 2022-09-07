@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<ManageLabels> > should be disabled if no labels exist 1`] = `ShallowWrapper {}`;
+
+exports[`<ManageLabels> > should render 1`] = `ShallowWrapper {}`;

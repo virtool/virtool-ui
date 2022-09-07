@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<OTUToolbar /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<OTUToolbar /> > should render when [verified=true] 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,19 @@
+// Vitest Snapshot v1
+
+exports[`<IndexItem /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemChangeDescription /> > should render 'No Changes' when changeCount is 0 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemChangeDescription /> > should render empty when changeCount is null 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemChangeDescription /> > should render valid description when changeCount is 1 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemChangeDescription /> > should render valid description when changeCount is 13 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemChangeDescription /> > should render valid description when modifiedCount is 1 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemIcon /> > should render checkmark when active 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemIcon /> > should render nothing when ready, but not active 1`] = `ShallowWrapper {}`;
+
+exports[`<IndexItemIcon /> > should render spinner when not ready 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`Checkbox > should render 1`] = `ShallowWrapper {}`;
+
+exports[`Checkbox > should render when [props.checked===true] 1`] = `ShallowWrapper {}`;
+
+exports[`Checkbox > should render when [props.label===''] 1`] = `ShallowWrapper {}`;

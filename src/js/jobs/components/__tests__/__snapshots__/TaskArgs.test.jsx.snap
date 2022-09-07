@@ -1,0 +1,25 @@
+// Vitest Snapshot v1
+
+exports[`<AnalysisRows /> > renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<BuildIndexRows /> > renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<CreateSampleRows /> > renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<CreateSubtractionRows /> > renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`<JobArgs /> > renders <JobArgsRows /> correctly when workflow is %p aodp 1`] = `ShallowWrapper {}`;
+
+exports[`<JobArgs /> > renders <JobArgsRows /> correctly when workflow is %p build_index 1`] = `ShallowWrapper {}`;
+
+exports[`<JobArgs /> > renders <JobArgsRows /> correctly when workflow is %p create_sample 1`] = `ShallowWrapper {}`;
+
+exports[`<JobArgs /> > renders <JobArgsRows /> correctly when workflow is %p create_subtraction 1`] = `ShallowWrapper {}`;
+
+exports[`<JobArgs /> > renders <JobArgsRows /> correctly when workflow is %p nuvs 1`] = `ShallowWrapper {}`;
+
+exports[`<JobArgs /> > renders <JobArgsRows /> correctly when workflow is %p pathoscope_bowtie 1`] = `ShallowWrapper {}`;
+
+exports[`<JobArgs /> > renders <JobArgsRows /> correctly when workflow is %p update_sample 1`] = `ShallowWrapper {}`;
+
+exports[`<UpdateSampleRows /> > renders correctly 1`] = `ShallowWrapper {}`;

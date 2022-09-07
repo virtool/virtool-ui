@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<AddTarget /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<AddTarget /> > should render error when submitted without name 1`] = `ShallowWrapper {}`;
+
+exports[`<AddTarget /> > should render required when form onClick() prop is called 1`] = `ShallowWrapper {}`;

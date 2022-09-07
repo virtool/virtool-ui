@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<RebuildHistory /> > should render <LoadingPlaceholder /> when unbuilt is null 1`] = `ShallowWrapper {}`;
+
+exports[`<RebuildHistory /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<RebuildHistoryEllipsis /> > should render when page_count greater than 1 1`] = `ShallowWrapper {}`;
+
+exports[`<RebuildHistoryEllipsis /> > should render when page_count is 1 1`] = `ShallowWrapper {}`;
+
+exports[`<RebuildHistoryItem /> > should render with description 1`] = `ShallowWrapper {}`;
+
+exports[`<RebuildHistoryItem /> > should render without description 1`] = `ShallowWrapper {}`;

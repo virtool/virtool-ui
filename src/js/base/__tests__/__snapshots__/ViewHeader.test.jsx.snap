@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<ViewHeader /> > should render renders children 1`] = `ShallowWrapper {}`;
+
+exports[`<ViewHeader /> > should render with count 1`] = `ShallowWrapper {}`;
+
+exports[`<ViewHeader /> > should render with title 1`] = `ShallowWrapper {}`;

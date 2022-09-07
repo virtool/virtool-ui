@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<SubtractionItem /> > should render when [create_at=%p] 0 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionItem /> > should render when [create_at=%p] null 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionItem /> > should render when [ready=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionItem /> > should render when [ready=%p] true 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionItemIcon /> > should render when [ready=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionItemIcon /> > should render when [ready=%p] true 1`] = `ShallowWrapper {}`;

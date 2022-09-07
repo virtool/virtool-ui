@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<UsersList /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<UsersList /> > should render when [documents=null] 1`] = `ShallowWrapper {}`;

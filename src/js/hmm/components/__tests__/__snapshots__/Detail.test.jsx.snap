@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<HMMDetail /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<HMMDetail /> > should return LoadingPlaceholder when [props.detail=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<HMMDetail /> > should return NotFound when [props.error=true] 1`] = `ShallowWrapper {}`;

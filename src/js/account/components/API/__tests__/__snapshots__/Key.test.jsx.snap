@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<APIKey /> > should render when [state.changed=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<APIKey /> > should render when collapsed 1`] = `ShallowWrapper {}`;
+
+exports[`<APIKey /> > should render when expanded 1`] = `ShallowWrapper {}`;

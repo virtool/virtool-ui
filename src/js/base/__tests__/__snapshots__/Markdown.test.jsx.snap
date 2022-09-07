@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<Markdown /> > should render NoneFound without markdown 1`] = `ShallowWrapper {}`;
+
+exports[`<Markdown /> > should render with markdown 1`] = `ShallowWrapper {}`;

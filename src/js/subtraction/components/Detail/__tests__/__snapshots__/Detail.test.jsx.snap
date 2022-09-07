@@ -1,0 +1,13 @@
+// Vitest Snapshot v1
+
+exports[`<SubtractionDetail /> > should not render icons when [canModify=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionDetail /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionDetail /> > should render file id when name not defined 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionDetail /> > should render loading when [detail=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionDetail /> > should render not found on request error 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionDetail /> > should render pending message when subtraction is not ready 1`] = `ShallowWrapper {}`;

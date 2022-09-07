@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<AnalysisHMMAlert /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<AnalysisHMMAlert /> > should render when [installed = false] 1`] = `ShallowWrapper {}`;

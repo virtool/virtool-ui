@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<CacheParameters /> > should rander when [hash=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<CacheParameters /> > should render 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<UserGroup /> > should render with [toggled=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<UserGroup /> > should render with [toggled=true] 1`] = `ShallowWrapper {}`;

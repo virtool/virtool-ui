@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] false 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] true 1`] = `ShallowWrapper {}`;

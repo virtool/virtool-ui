@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<TargetForm /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<TargetForm /> > should render with error 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<SampleRights /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleRights /> > should return LoadingPlaceholder when[this.props.groups=null] 1`] = `ShallowWrapper {}`;
+
+exports[`<SampleRights /> > should return Not allowed panel when[this.props.canModifyRights=false] 1`] = `ShallowWrapper {}`;

@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`<SubtractionToolbar /> > should not render create button when [canModify=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<SubtractionToolbar /> > should render create button when [canModify=true] 1`] = `ShallowWrapper {}`;

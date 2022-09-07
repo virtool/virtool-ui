@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<NotFound /> > should render default 1`] = `ShallowWrapper {}`;
+
+exports[`<NotFound /> > should render with message 1`] = `ShallowWrapper {}`;
+
+exports[`<NotFound /> > should render with status 1`] = `ShallowWrapper {}`;

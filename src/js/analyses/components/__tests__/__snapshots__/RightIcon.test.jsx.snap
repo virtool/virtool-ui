@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<RightIcon /> > should render loader when [ready=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<RightIcon /> > should render remove icon when [ready=true] and [canModify=true] 1`] = `ShallowWrapper {}`;
+
+exports[`<RightIcon /> > should return null when [ready=true] and [canModify=false] 1`] = `ShallowWrapper {}`;

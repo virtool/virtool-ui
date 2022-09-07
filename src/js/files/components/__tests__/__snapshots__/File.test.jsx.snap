@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`<File /> > should render 1`] = `ShallowWrapper {}`;
+
+exports[`<File /> > should render when [canRemove=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<File /> > should render when [ready=false] 1`] = `ShallowWrapper {}`;
+
+exports[`<File /> > should render when [user=null] 1`] = `ShallowWrapper {}`;
