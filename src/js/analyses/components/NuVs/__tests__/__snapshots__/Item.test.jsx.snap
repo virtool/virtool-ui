@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`<NuVsItem /> > should render when active 1`] = `ShallowWrapper {}`;
+
+exports[`<NuVsItem /> > should render when not active 1`] = `ShallowWrapper {}`;
+
+exports[`<NuVsItem /> > should render when not active 2`] = `ShallowWrapper {}`;

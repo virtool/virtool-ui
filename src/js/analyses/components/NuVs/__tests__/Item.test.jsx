@@ -1,6 +1,5 @@
 import { NuVsItem } from "../Item";
 import { vi } from "vitest";
-import { VerticalDivider } from "../../../../base";
 
 describe("<NuVsItem />", () => {
     let props;
@@ -19,7 +18,7 @@ describe("<NuVsItem />", () => {
                     hits: [1]
                 }
             ],
-            onSetActiveId: VerticalDivider.fn()
+            onSetActiveId: vi.fn()
         };
     });
 

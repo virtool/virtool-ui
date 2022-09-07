@@ -85,18 +85,19 @@ describe("<AddBarcodeSequence>", () => {
         userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
         userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "ATG");
 
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
         await waitFor(() => {
-            expect(props.onSave).toHaveBeenCalledWith(
-                "test_otu_id",
-                "test_isolate_id",
-                "user_typed_accession",
-                "user_typed_definition",
-                "user_typed_host",
-                "ATG",
-                "test_target_name_2"
-            );
+            userEvent.click(screen.getByRole("button", { name: "Save" }));
         });
+
+        expect(props.onSave).toHaveBeenCalledWith(
+            "test_otu_id",
+            "test_isolate_id",
+            "user_typed_accession",
+            "user_typed_definition",
+            "user_typed_host",
+            "ATG",
+            "test_target_name_2"
+        );
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
         renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
