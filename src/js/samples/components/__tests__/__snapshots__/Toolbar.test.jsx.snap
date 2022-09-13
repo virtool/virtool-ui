@@ -1,5 +1,33 @@
 // Vitest Snapshot v1
 
-exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] false 1`] = `ShallowWrapper {}`;
+exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] false 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[Function]}
+    placeholder="Sample name"
+    value="foo"
+  />
+</styled.div>
+`;
 
-exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] true 1`] = `ShallowWrapper {}`;
+exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] true 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[Function]}
+    placeholder="Sample name"
+    value="foo"
+  />
+  <LinkButton
+    color="blue"
+    tip="Create"
+    tipPlacement="top"
+    to="/samples/create"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="plus-square fa-fw"
+    />
+  </LinkButton>
+</styled.div>
+`;

@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
 import * as utils from "../../../utils/utils";
 import { JobsList, mapDispatchToProps, mapStateToProps } from "../List";
-import { vi } from "vitest";
 
 const createAppStore = state => () => createStore(state => state, state);
 const renderWithAllProviders = (ui, store) => {

@@ -1,5 +1,4 @@
 import { ManageUsers, mapStateToProps, mapDispatchToProps } from "../Users";
-import { vi } from "vitest";
 
 describe("<ManageUsers />", () => {
     let props;

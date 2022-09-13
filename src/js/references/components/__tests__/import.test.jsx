@@ -4,7 +4,6 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../../../app/theme";
 import { ImportReference, mapDispatchToProps, mapStateToProps } from "../Import";
-import { vi } from "vitest";
 
 const rerenderWithProviders = (rerender, ui) => {
     const wrappedUi = <ThemeProvider theme={theme}>{ui}</ThemeProvider>;

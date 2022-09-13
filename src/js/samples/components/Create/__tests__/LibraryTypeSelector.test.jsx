@@ -1,5 +1,4 @@
 import { LibraryTypeSelector } from "../LibraryTypeSelector";
-import { vi } from "vitest";
 
 describe("<LibraryTypeSelector>", () => {
     let props;

@@ -1,7 +1,232 @@
 // Vitest Snapshot v1
 
-exports[`<AnalysisItem /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<AnalysisItem /> > should render 1`] = `
+<Styled(Styled(styled.div))>
+  <styled.div>
+    <Link
+      to="/samples/bar/analyses/baz"
+    >
+      NuVs
+    </Link>
+    <AnalysisItemRightIcon
+      canModify={true}
+      onRemove={[MockFunction spy]}
+      ready={false}
+    />
+  </styled.div>
+  <Styled(UnstyledAttribution)
+    time="2018-02-14T17:12:00.000000Z"
+    user="bob"
+  />
+  <styled.div>
+    <styled.span
+      key="reference"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="equals"
+      />
+      <styled.ul>
+        <li>
+          <Link
+            to="/refs/foo"
+          >
+            Foo
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/refs/foo/indexes/ind"
+          >
+            Index 
+            3
+          </Link>
+        </li>
+      </styled.ul>
+    </styled.span>
+    <styled.span
+      key="pru"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="not-equal"
+      />
+      <Link
+        to="/subtractions/pru"
+      >
+        Prunus persica
+      </Link>
+    </styled.span>
+    <styled.span
+      key="ara"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="not-equal"
+      />
+      <Link
+        to="/subtractions/ara"
+      >
+        Arabidopsis thaliana
+      </Link>
+    </styled.span>
+  </styled.div>
+</Styled(Styled(styled.div))>
+`;
 
-exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `ShallowWrapper {}`;
+exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `
+<Styled(Styled(styled.div))>
+  <styled.div>
+    <Link
+      to="/samples/bar/analyses/baz"
+    >
+      NuVs
+    </Link>
+    <AnalysisItemRightIcon
+      canModify={true}
+      onRemove={[MockFunction spy]}
+      ready={false}
+    />
+  </styled.div>
+  <Styled(UnstyledAttribution)
+    time="2018-02-14T17:12:00.000000Z"
+    user="bob"
+  />
+  <styled.div>
+    <styled.span
+      key="reference"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="equals"
+      />
+      <styled.ul>
+        <li>
+          <Link
+            to="/refs/foo"
+          >
+            Foo
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/refs/foo/indexes/ind"
+          >
+            Index 
+            3
+          </Link>
+        </li>
+      </styled.ul>
+    </styled.span>
+    <styled.span
+      key="pru"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="not-equal"
+      />
+      <Link
+        to="/subtractions/pru"
+      >
+        Prunus persica
+      </Link>
+    </styled.span>
+    <styled.span
+      key="ara"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="not-equal"
+      />
+      <Link
+        to="/subtractions/ara"
+      >
+        Arabidopsis thaliana
+      </Link>
+    </styled.span>
+  </styled.div>
+</Styled(Styled(styled.div))>
+`;
 
-exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `ShallowWrapper {}`;
+exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `
+<Styled(Styled(styled.div))>
+  <styled.div>
+    <Link
+      to="/samples/bar/analyses/baz"
+    >
+      NuVs
+    </Link>
+    <AnalysisItemRightIcon
+      canModify={true}
+      onRemove={[MockFunction spy]}
+      ready={false}
+    />
+  </styled.div>
+  <Styled(UnstyledAttribution)
+    time="2018-02-14T17:12:00.000000Z"
+    user="bob"
+  />
+  <styled.div>
+    <styled.span
+      key="reference"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="equals"
+      />
+      <styled.ul>
+        <li>
+          <Link
+            to="/refs/foo"
+          >
+            Foo
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/refs/foo/indexes/ind"
+          >
+            Index 
+            3
+          </Link>
+        </li>
+      </styled.ul>
+    </styled.span>
+    <styled.span
+      key="pru"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="not-equal"
+      />
+      <Link
+        to="/subtractions/pru"
+      >
+        Prunus persica
+      </Link>
+    </styled.span>
+    <styled.span
+      key="ara"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="not-equal"
+      />
+      <Link
+        to="/subtractions/ara"
+      >
+        Arabidopsis thaliana
+      </Link>
+    </styled.span>
+  </styled.div>
+</Styled(Styled(styled.div))>
+`;

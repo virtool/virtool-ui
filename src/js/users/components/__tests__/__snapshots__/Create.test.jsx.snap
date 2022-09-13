@@ -1,13 +1,311 @@
 // Vitest Snapshot v1
 
-exports[`<CreateUser /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<CreateUser /> > should render 1`] = `
+<Modal
+  label="Create User"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Create User
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <InputGroup>
+        <styled.label>
+          Username
+        </styled.label>
+        <Styled(UnstyledInput)
+          name="handle"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p />
+      </InputGroup>
+      <InputGroup>
+        <styled.label>
+          Password
+        </styled.label>
+        <PasswordInput
+          name="password"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p />
+      </InputGroup>
+      <Checkbox
+        checked={false}
+        disabled={false}
+        label="Force user to reset password on login"
+        onClick={[Function]}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <SaveButton />
+    </Styled(Component)>
+  </form>
+</Modal>
+`;
 
-exports[`<CreateUser /> > should render when name has changed 1`] = `ShallowWrapper {}`;
+exports[`<CreateUser /> > should render when name has changed 1`] = `
+<Modal
+  label="Create User"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Create User
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <InputGroup>
+        <styled.label>
+          Username
+        </styled.label>
+        <Styled(UnstyledInput)
+          name="handle"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p>
+          Error
+        </styled.p>
+      </InputGroup>
+      <InputGroup>
+        <styled.label>
+          Password
+        </styled.label>
+        <PasswordInput
+          name="password"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p />
+      </InputGroup>
+      <Checkbox
+        checked={false}
+        disabled={false}
+        label="Force user to reset password on login"
+        onClick={[Function]}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <SaveButton />
+    </Styled(Component)>
+  </form>
+</Modal>
+`;
 
-exports[`<CreateUser /> > should render when name has changed 2`] = `ShallowWrapper {}`;
+exports[`<CreateUser /> > should render when name has changed 2`] = `
+<Modal
+  label="Create User"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Create User
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <InputGroup>
+        <styled.label>
+          Username
+        </styled.label>
+        <Styled(UnstyledInput)
+          name="handle"
+          onChange={[Function]}
+          value="bob"
+        />
+        <styled.p>
+          Error
+        </styled.p>
+      </InputGroup>
+      <InputGroup>
+        <styled.label>
+          Password
+        </styled.label>
+        <PasswordInput
+          name="password"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p />
+      </InputGroup>
+      <Checkbox
+        checked={false}
+        disabled={false}
+        label="Force user to reset password on login"
+        onClick={[Function]}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <SaveButton />
+    </Styled(Component)>
+  </form>
+</Modal>
+`;
 
-exports[`<CreateUser /> > should render when password has changed 1`] = `ShallowWrapper {}`;
+exports[`<CreateUser /> > should render when password has changed 1`] = `
+<Modal
+  label="Create User"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Create User
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <InputGroup>
+        <styled.label>
+          Username
+        </styled.label>
+        <Styled(UnstyledInput)
+          name="handle"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p>
+          Error
+        </styled.p>
+      </InputGroup>
+      <InputGroup>
+        <styled.label>
+          Password
+        </styled.label>
+        <PasswordInput
+          name="password"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p />
+      </InputGroup>
+      <Checkbox
+        checked={false}
+        disabled={false}
+        label="Force user to reset password on login"
+        onClick={[Function]}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <SaveButton />
+    </Styled(Component)>
+  </form>
+</Modal>
+`;
 
-exports[`<CreateUser /> > should render when password has changed 2`] = `ShallowWrapper {}`;
+exports[`<CreateUser /> > should render when password has changed 2`] = `
+<Modal
+  label="Create User"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Create User
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <InputGroup>
+        <styled.label>
+          Username
+        </styled.label>
+        <Styled(UnstyledInput)
+          name="handle"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p>
+          Error
+        </styled.p>
+      </InputGroup>
+      <InputGroup>
+        <styled.label>
+          Password
+        </styled.label>
+        <PasswordInput
+          name="password"
+          onChange={[Function]}
+          value="password"
+        />
+        <styled.p />
+      </InputGroup>
+      <Checkbox
+        checked={false}
+        disabled={false}
+        label="Force user to reset password on login"
+        onClick={[Function]}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <SaveButton />
+    </Styled(Component)>
+  </form>
+</Modal>
+`;
 
-exports[`<CreateUser /> > should render with error 1`] = `ShallowWrapper {}`;
+exports[`<CreateUser /> > should render with error 1`] = `
+<Modal
+  label="Create User"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Create User
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <InputGroup>
+        <styled.label>
+          Username
+        </styled.label>
+        <Styled(UnstyledInput)
+          name="handle"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p />
+      </InputGroup>
+      <InputGroup>
+        <styled.label>
+          Password
+        </styled.label>
+        <PasswordInput
+          name="password"
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p>
+          Password too short
+        </styled.p>
+      </InputGroup>
+      <Checkbox
+        checked={false}
+        disabled={false}
+        label="Force user to reset password on login"
+        onClick={[Function]}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <SaveButton />
+    </Styled(Component)>
+  </form>
+</Modal>
+`;

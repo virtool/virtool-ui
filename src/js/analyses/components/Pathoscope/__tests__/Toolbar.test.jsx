@@ -8,7 +8,6 @@ import { Button } from "../../../../base";
 import { getFuse } from "../../../selectors";
 import { AnalysisViewerSort } from "../../Viewer/Sort";
 import { mapDispatchToProps, mapStateToProps, PathoscopeToolbar } from "../Toolbar";
-import { vi } from "vitest";
 
 vi.mock("../../../selectors");
 

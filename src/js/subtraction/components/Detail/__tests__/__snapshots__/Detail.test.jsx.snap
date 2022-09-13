@@ -1,13 +1,223 @@
 // Vitest Snapshot v1
 
-exports[`<SubtractionDetail /> > should not render icons when [canModify=false] 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionDetail /> > should not render icons when [canModify=false] 1`] = `
+<Fragment>
+  <ViewHeader
+    title="Foo"
+  >
+    <styled.h1>
+      Foo
+    </styled.h1>
+  </ViewHeader>
+  <styled.table>
+    <tbody>
+      <tr>
+        <th>
+          Nickname
+        </th>
+        <td>
+          foo-nickname
+        </td>
+      </tr>
+      <tr>
+        <th>
+          File
+        </th>
+        <td>
+          Foo.fa.gz
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Sequence Count
+        </th>
+        <td />
+      </tr>
+      <tr>
+        <th>
+          GC Estimate
+        </th>
+        <td>
+          0.400
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Linked Samples
+        </th>
+        <td>
+          2
+        </td>
+      </tr>
+    </tbody>
+  </styled.table>
+  <Connect(SubtractionFiles) />
+  <Connect(EditSubtraction)
+    onHide={[Function]}
+    show={false}
+  />
+  <Connect(RemoveSubtraction) />
+</Fragment>
+`;
 
-exports[`<SubtractionDetail /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionDetail /> > should render 1`] = `
+<Fragment>
+  <ViewHeader
+    title="Foo"
+  >
+    <styled.h1>
+      Foo
+      <styled.div>
+        <Icon
+          color="orange"
+          faStyle="fas"
+          fixedWidth={false}
+          name="pencil-alt"
+          onClick={[Function]}
+        />
+        <Icon
+          color="red"
+          faStyle="fas"
+          fixedWidth={false}
+          name="trash"
+          onClick={[MockFunction spy]}
+        />
+      </styled.div>
+    </styled.h1>
+  </ViewHeader>
+  <styled.table>
+    <tbody>
+      <tr>
+        <th>
+          Nickname
+        </th>
+        <td>
+          foo-nickname
+        </td>
+      </tr>
+      <tr>
+        <th>
+          File
+        </th>
+        <td>
+          Foo.fa.gz
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Sequence Count
+        </th>
+        <td />
+      </tr>
+      <tr>
+        <th>
+          GC Estimate
+        </th>
+        <td>
+          0.400
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Linked Samples
+        </th>
+        <td>
+          2
+        </td>
+      </tr>
+    </tbody>
+  </styled.table>
+  <Connect(SubtractionFiles) />
+  <Connect(EditSubtraction)
+    onHide={[Function]}
+    show={false}
+  />
+  <Connect(RemoveSubtraction) />
+</Fragment>
+`;
 
-exports[`<SubtractionDetail /> > should render file id when name not defined 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionDetail /> > should render file id when name not defined 1`] = `
+<Fragment>
+  <ViewHeader
+    title="Foo"
+  >
+    <styled.h1>
+      Foo
+      <styled.div>
+        <Icon
+          color="orange"
+          faStyle="fas"
+          fixedWidth={false}
+          name="pencil-alt"
+          onClick={[Function]}
+        />
+        <Icon
+          color="red"
+          faStyle="fas"
+          fixedWidth={false}
+          name="trash"
+          onClick={[MockFunction spy]}
+        />
+      </styled.div>
+    </styled.h1>
+  </ViewHeader>
+  <styled.table>
+    <tbody>
+      <tr>
+        <th>
+          Nickname
+        </th>
+        <td>
+          foo-nickname
+        </td>
+      </tr>
+      <tr>
+        <th>
+          File
+        </th>
+        <td>
+          123-Foo.fa.gz
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Sequence Count
+        </th>
+        <td />
+      </tr>
+      <tr>
+        <th>
+          GC Estimate
+        </th>
+        <td>
+          0.400
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Linked Samples
+        </th>
+        <td>
+          2
+        </td>
+      </tr>
+    </tbody>
+  </styled.table>
+  <Connect(SubtractionFiles) />
+  <Connect(EditSubtraction)
+    onHide={[Function]}
+    show={false}
+  />
+  <Connect(RemoveSubtraction) />
+</Fragment>
+`;
 
-exports[`<SubtractionDetail /> > should render loading when [detail=null] 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionDetail /> > should render loading when [detail=null] 1`] = `<LoadingPlaceholder />`;
 
-exports[`<SubtractionDetail /> > should render not found on request error 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionDetail /> > should render not found on request error 1`] = `<NotFound />`;
 
-exports[`<SubtractionDetail /> > should render pending message when subtraction is not ready 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionDetail /> > should render pending message when subtraction is not ready 1`] = `
+<LoadingPlaceholder
+  message="Subtraction is still being imported"
+/>
+`;

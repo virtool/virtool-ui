@@ -1,6 +1,5 @@
 import { CHANGE_ACTIVE_GROUP } from "../../../app/actionTypes";
 import { Group, mapDispatchToProps, mapStateToProps } from "../Group";
-import { vi } from "vitest";
 
 describe("Group", () => {
     let props;

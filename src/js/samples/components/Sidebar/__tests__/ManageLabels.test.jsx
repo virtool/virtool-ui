@@ -4,7 +4,6 @@ import React from "react";
 import { ManageLabels, mapDispatchToProps } from "../ManageLabels";
 import { BrowserRouter } from "react-router-dom";
 import { getSelectedSamples, getSelectedLabels, getPartiallySelectedLabels } from "../../../selectors";
-import { vi } from "vitest";
 
 const routerRenderWithProviders = ui => {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;

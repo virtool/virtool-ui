@@ -1,7 +1,6 @@
 import { EmptyReference, mapDispatchToProps } from "../Empty";
 import userEvent from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
 
 describe("<EmptyReference />", () => {
     let props;

@@ -1,7 +1,6 @@
 import { PUSH_STATE } from "../../../app/actionTypes";
 import { Input, PasswordInput } from "../../../base";
 import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
-import { vi } from "vitest";
 
 describe("<CreateUser />", () => {
     let props;

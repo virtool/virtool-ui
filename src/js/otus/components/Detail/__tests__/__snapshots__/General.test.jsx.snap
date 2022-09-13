@@ -1,5 +1,25 @@
 // Vitest Snapshot v1
 
-exports[`<OTUGeneral /> > should render with issues 1`] = `ShallowWrapper {}`;
+exports[`<OTUGeneral /> > should render with issues 1`] = `
+<OTUIssues
+  isolates={
+    [
+      {
+        "id": "baz",
+      },
+    ]
+  }
+  issues={
+    {
+      "empty_isolate": [
+        "456def",
+      ],
+      "empty_otu": false,
+      "empty_sequence": false,
+      "isolate_inconsistency": false,
+    }
+  }
+/>
+`;
 
-exports[`<OTUGeneral /> > should render without issues 1`] = `ShallowWrapper {}`;
+exports[`<OTUGeneral /> > should render without issues 1`] = `""`;

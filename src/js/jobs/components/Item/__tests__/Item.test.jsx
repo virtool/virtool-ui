@@ -1,5 +1,4 @@
 import { JobItem, mapDispatchToProps } from "../Item";
-import { vi } from "vitest";
 
 describe("<JobItem />", () => {
     let props;

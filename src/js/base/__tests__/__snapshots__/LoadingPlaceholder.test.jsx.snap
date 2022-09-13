@@ -1,5 +1,16 @@
 // Vitest Snapshot v1
 
-exports[`<LoadingPlaceholder /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<LoadingPlaceholder /> > should render 1`] = `
+<styled.div>
+  <Loader />
+</styled.div>
+`;
 
-exports[`<LoadingPlaceholder /> > should render the provided message 1`] = `ShallowWrapper {}`;
+exports[`<LoadingPlaceholder /> > should render the provided message 1`] = `
+<styled.div>
+  <p>
+    Test Message
+  </p>
+  <Loader />
+</styled.div>
+`;

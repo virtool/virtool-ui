@@ -1,5 +1,4 @@
 import { ReferenceSelector } from "../ReferenceSelector";
-import { vi } from "vitest";
 
 describe("<ReferenceSelector />", () => {
     let props;

@@ -1,7 +1,5 @@
 import { Input } from "../../../base";
 import { Email, EmailForm } from "../Email";
-import { vi } from "vitest";
-
 
 describe("<Email />", () => {
     let props;

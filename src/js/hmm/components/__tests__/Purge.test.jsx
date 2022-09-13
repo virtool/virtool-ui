@@ -1,5 +1,4 @@
 import { HMMPurge } from "../Purge";
-import { vi } from "vitest";
 
 describe("<HMMPurge />", () => {
     let props;

@@ -1,3 +1,29 @@
 // Vitest Snapshot v1
 
-exports[`<AnalysisViewerList /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<AnalysisViewerList /> > should render 1`] = `
+<styled.div>
+  <styled.div>
+    Showing 
+    4
+     of 
+    10
+  </styled.div>
+  <Styled(List)
+    height={500}
+    itemCount={4}
+  >
+    foo
+  </Styled(List)>
+  <styled.div>
+    Use 
+    <styled.kbd>
+      w
+    </styled.kbd>
+     and 
+    <styled.kbd>
+      s
+    </styled.kbd>
+     to move
+  </styled.div>
+</styled.div>
+`;

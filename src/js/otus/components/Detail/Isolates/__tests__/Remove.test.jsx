@@ -1,6 +1,5 @@
 import { HIDE_OTU_MODAL, REMOVE_ISOLATE } from "../../../../../app/actionTypes";
 import { Remove, mapStateToProps, mapDispatchToProps } from "../Remove";
-import { vi } from "vitest";
 
 describe("<Remove />", () => {
     let props;

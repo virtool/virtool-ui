@@ -1,7 +1,86 @@
 // Vitest Snapshot v1
 
-exports[`<OTUsList /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<OTUsList /> > should render 1`] = `
+<styled.div>
+  <Connect(RebuildAlert) />
+  <Connect(OTUToolbar) />
+  <Connect(CreateOTU)
+    documents={
+      [
+        "foo",
+      ]
+    }
+    onLoadNextPage={[MockFunction spy]}
+    otus={
+      {
+        "verified": true,
+      }
+    }
+    page={1}
+    page_count={1}
+    refId="foo"
+    references={
+      {
+        "detail": {
+          "id": 1,
+        },
+      }
+    }
+    renderRow={true}
+    term="bar"
+    verified={true}
+  />
+  <ScrollList
+    documents={
+      [
+        "foo",
+      ]
+    }
+    onLoadNextPage={[Function]}
+    page={1}
+    pageCount={1}
+    renderRow={[Function]}
+  />
+</styled.div>
+`;
 
-exports[`<OTUsList /> > should render when [this.props.documents === null] 1`] = `ShallowWrapper {}`;
+exports[`<OTUsList /> > should render when [this.props.documents === null] 1`] = `<LoadingPlaceholder />`;
 
-exports[`<OTUsList /> > should render when [this.props.documents.length == false] 1`] = `ShallowWrapper {}`;
+exports[`<OTUsList /> > should render when [this.props.documents.length == false] 1`] = `
+<styled.div>
+  <Connect(RebuildAlert) />
+  <Connect(OTUToolbar) />
+  <Connect(CreateOTU)
+    documents={false}
+    onLoadNextPage={[MockFunction spy]}
+    otus={
+      {
+        "verified": true,
+      }
+    }
+    page={1}
+    page_count={1}
+    refId="foo"
+    references={
+      {
+        "detail": {
+          "id": 1,
+        },
+      }
+    }
+    renderRow={true}
+    term="bar"
+    verified={true}
+  />
+  <NoneFoundBox
+    noun="OTUs"
+  />
+  <ScrollList
+    documents={false}
+    onLoadNextPage={[Function]}
+    page={1}
+    pageCount={1}
+    renderRow={[Function]}
+  />
+</styled.div>
+`;

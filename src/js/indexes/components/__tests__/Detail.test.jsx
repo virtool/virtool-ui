@@ -1,6 +1,5 @@
 import { GET_INDEX, GET_INDEX_HISTORY } from "../../../app/actionTypes";
 import { IndexDetail, mapDispatchToProps, mapStateToProps } from "../Detail";
-import { vi } from "vitest";
 
 describe("<IndexDetail />", () => {
     let props;

@@ -1,5 +1,4 @@
 import { mapDispatchToProps, mapStateToProps, UserDetail } from "../Detail";
-import { vi } from "vitest";
 
 vi.mock("../../selectors");
 

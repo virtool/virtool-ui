@@ -1,6 +1,5 @@
 import { BLASTButton, BLASTResults, NuVsBLAST } from "../BLAST";
 import { BLASTInProgress } from "../BLASTInProgress";
-import { vi } from "vitest";
 
 describe("<BLASTInProgress />", () => {
     it.each(["ABC123", null])("should render when [rid=%p]", rid => {

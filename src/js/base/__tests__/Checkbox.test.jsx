@@ -1,5 +1,4 @@
 import { Checkbox, StyledCheckbox } from "../Checkbox";
-import { vi } from "vitest";
 
 describe("Checkbox", () => {
     let props;

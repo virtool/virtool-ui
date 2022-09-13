@@ -2,7 +2,6 @@ import userEvent from "@testing-library/user-event";
 import { AddBarcodeSequence, castValues } from "../Add";
 import { createStore } from "redux";
 import { screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
 
 const createAppStore = state => () => createStore(state => state, state);
 

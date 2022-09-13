@@ -1,6 +1,5 @@
 import { InstallOption, mapStateToProps, mapDispatchToProps } from "../InstallOption";
 import { checkAdminOrPermission } from "../../../utils/utils";
-import { vi } from "vitest";
 
 vi.mock("../../../utils/utils.js");
 

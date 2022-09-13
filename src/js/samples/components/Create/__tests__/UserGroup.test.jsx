@@ -1,6 +1,5 @@
 import { Select } from "../../../../base";
 import { SampleUserGroup } from "../UserGroup";
-import { vi } from "vitest";
 
 describe("SampleUserGroup", () => {
     let props;

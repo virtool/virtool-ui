@@ -1,5 +1,4 @@
 import { APIKeys } from "../API";
-import { vi } from "vitest";
 
 describe("<API />", () => {
     let props;

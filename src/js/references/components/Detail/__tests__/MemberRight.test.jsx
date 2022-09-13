@@ -1,5 +1,4 @@
 import { MemberRight, MemberRightCheckbox } from "../MemberRight";
-import { vi } from "vitest";
 
 describe("<MemberRight />", () => {
     let props;

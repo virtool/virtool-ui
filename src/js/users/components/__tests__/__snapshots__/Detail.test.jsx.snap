@@ -1,7 +1,99 @@
 // Vitest Snapshot v1
 
-exports[`<UserDetail /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<UserDetail /> > should render 1`] = `
+<div>
+  <styled.div>
+    <styled.div>
+      <InitialIcon
+        handle="bob"
+        size="xl"
+      />
+      <span>
+        bob
+      </span>
+      <Styled(Icon)
+        color="blue"
+        name="user-shield"
+      />
+      <Link
+        to="/administration/users"
+      >
+        Back To List
+      </Link>
+    </styled.div>
+  </styled.div>
+  <Connect(Password) />
+  <styled.div>
+    <div>
+      <Connect(UserGroups) />
+      <Connect(PrimaryGroup) />
+    </div>
+    <Connect(UserPermissions) />
+  </styled.div>
+  <Connect(UserRole) />
+</div>
+`;
 
-exports[`<UserDetail /> > should render when [administrator=false] 1`] = `ShallowWrapper {}`;
+exports[`<UserDetail /> > should render when [administrator=false] 1`] = `
+<div>
+  <styled.div>
+    <styled.div>
+      <InitialIcon
+        handle="bob"
+        size="xl"
+      />
+      <span>
+        bob
+      </span>
+      <Link
+        to="/administration/users"
+      >
+        Back To List
+      </Link>
+    </styled.div>
+  </styled.div>
+  <Connect(Password) />
+  <styled.div>
+    <div>
+      <Connect(UserGroups) />
+      <Connect(PrimaryGroup) />
+    </div>
+    <Connect(UserPermissions) />
+  </styled.div>
+  <Connect(UserRole) />
+</div>
+`;
 
-exports[`<UserDetail /> > should render when [canModifyUser=false] 1`] = `ShallowWrapper {}`;
+exports[`<UserDetail /> > should render when [canModifyUser=false] 1`] = `
+<div>
+  <styled.div>
+    <styled.div>
+      <InitialIcon
+        handle="bob"
+        size="xl"
+      />
+      <span>
+        bob
+      </span>
+      <Styled(Icon)
+        color="blue"
+        name="user-shield"
+      />
+      <Link
+        to="/administration/users"
+      >
+        Back To List
+      </Link>
+    </styled.div>
+  </styled.div>
+  <Connect(Password) />
+  <styled.div>
+    <div>
+      <Connect(UserGroups) />
+      <Connect(PrimaryGroup) />
+    </div>
+    <Connect(UserPermissions) />
+  </styled.div>
+  <Connect(UserRole) />
+</div>
+`;

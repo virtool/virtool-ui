@@ -6,7 +6,6 @@ import { Router } from "react-router-dom";
 import { createStore } from "redux";
 import { checkReferenceRight } from "../../../../selectors";
 import { mapDispatchToProps, mapStateToProps, Targets } from "../Targets";
-import { vi } from "vitest";
 
 vi.mock("../../../../selectors.js");
 

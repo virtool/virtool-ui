@@ -1,7 +1,6 @@
 import { BoxGroupSection, Checkbox, PasswordInput } from "../../../base";
 import { Password, mapStateToProps, mapDispatchToProps } from "../Password";
 import { editUser } from "../../actions";
-import { vi } from "vitest";
 
 describe("<Password />", () => {
     let props;

@@ -1,7 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { UploadBar } from "../UploadBar";
 import { screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
 
 describe("<UploadBar />", () => {
     let props;

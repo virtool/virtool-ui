@@ -1,7 +1,105 @@
 // Vitest Snapshot v1
 
-exports[`<APIKey /> > should render when [state.changed=true] 1`] = `ShallowWrapper {}`;
+exports[`<APIKey /> > should render when [state.changed=true] 1`] = `
+<Styled(styled.div)
+  key="123abc"
+  onClick={[Function]}
+>
+  <styled.div>
+    <strong>
+      tester
+    </strong>
+    <Styled(UnstyledAttribution)
+      time="2018-02-14T17:12:00.000000Z"
+    />
+    <styled.div>
+      1
+       permission
+    </styled.div>
+    <styled.div />
+  </styled.div>
+</Styled(styled.div)>
+`;
 
-exports[`<APIKey /> > should render when collapsed 1`] = `ShallowWrapper {}`;
+exports[`<APIKey /> > should render when collapsed 1`] = `
+<Styled(styled.div)
+  key="123abc"
+  onClick={[Function]}
+>
+  <styled.div>
+    <strong>
+      tester
+    </strong>
+    <Styled(UnstyledAttribution)
+      time="2018-02-14T17:12:00.000000Z"
+    />
+    <styled.div>
+      1
+       permission
+    </styled.div>
+    <styled.div />
+  </styled.div>
+</Styled(styled.div)>
+`;
 
-exports[`<APIKey /> > should render when expanded 1`] = `ShallowWrapper {}`;
+exports[`<APIKey /> > should render when expanded 1`] = `
+<Styled(styled.div)
+  key="123abc"
+  onClick={null}
+>
+  <styled.div>
+    <strong>
+      tester
+    </strong>
+    <Styled(UnstyledAttribution)
+      time="2018-02-14T17:12:00.000000Z"
+    />
+    <styled.div>
+      1
+       permission
+    </styled.div>
+    <styled.div>
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="times"
+        onClick={[Function]}
+      />
+    </styled.div>
+  </styled.div>
+  <div>
+    <Styled(Connect(APIPermissions))
+      keyPermissions={
+        {
+          "bar": true,
+          "baz": false,
+          "foo": false,
+        }
+      }
+      onChange={[Function]}
+    />
+    <styled.div>
+      <Button
+        color="red"
+        disabled={false}
+        icon="trash"
+        onClick={[Function]}
+        tipPlacement="top"
+        type="button"
+      >
+        Remove
+      </Button>
+      <Button
+        color="blue"
+        disabled={true}
+        icon="save"
+        onClick={[Function]}
+        tipPlacement="top"
+        type="button"
+      >
+        Update
+      </Button>
+    </styled.div>
+  </div>
+</Styled(styled.div)>
+`;

@@ -1,7 +1,80 @@
 // Vitest Snapshot v1
 
-exports[`<TargetItem /> > should render when [canModify=false] 1`] = `ShallowWrapper {}`;
+exports[`<TargetItem /> > should render when [canModify=false] 1`] = `
+<styled.div>
+  <styled.h3>
+    foo
+  </styled.h3>
+  <styled.p
+    description="bar"
+  >
+    bar
+  </styled.p>
+</styled.div>
+`;
 
-exports[`<TargetItem /> > should render when [canModify=true] 1`] = `ShallowWrapper {}`;
+exports[`<TargetItem /> > should render when [canModify=true] 1`] = `
+<styled.div>
+  <styled.h3>
+    foo
+    <span>
+      <Icon
+        aria-label="edit"
+        color="orange"
+        faStyle="fas"
+        fixedWidth={false}
+        name="edit"
+        onClick={[Function]}
+        tip="Modify"
+      />
+      <Icon
+        aria-label="remove"
+        color="red"
+        faStyle="fas"
+        fixedWidth={false}
+        name="trash"
+        onClick={[Function]}
+        tip="Remove"
+      />
+    </span>
+  </styled.h3>
+  <styled.p
+    description="bar"
+  >
+    bar
+  </styled.p>
+</styled.div>
+`;
 
-exports[`<TargetItem /> > should render with no description 1`] = `ShallowWrapper {}`;
+exports[`<TargetItem /> > should render with no description 1`] = `
+<styled.div>
+  <styled.h3>
+    foo
+    <span>
+      <Icon
+        aria-label="edit"
+        color="orange"
+        faStyle="fas"
+        fixedWidth={false}
+        name="edit"
+        onClick={[Function]}
+        tip="Modify"
+      />
+      <Icon
+        aria-label="remove"
+        color="red"
+        faStyle="fas"
+        fixedWidth={false}
+        name="trash"
+        onClick={[Function]}
+        tip="Remove"
+      />
+    </span>
+  </styled.h3>
+  <styled.p
+    description=""
+  >
+    No description
+  </styled.p>
+</styled.div>
+`;

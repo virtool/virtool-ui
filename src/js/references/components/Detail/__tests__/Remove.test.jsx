@@ -3,7 +3,6 @@ import { REMOVE_REFERENCE } from "../../../../app/actionTypes";
 import { RemoveBanner } from "../../../../base";
 import { checkReferenceRight } from "../../../selectors";
 import { mapDispatchToProps, mapStateToProps, RemoveReference } from "../Remove";
-import { vi } from "vitest";
 
 vi.mock("../../../selectors.js");
 

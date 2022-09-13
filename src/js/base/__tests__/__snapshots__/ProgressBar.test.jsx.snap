@@ -1,23 +1,87 @@
 // Vitest Snapshot v1
 
-exports[`<AffixedProgressBar /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<AffixedProgressBar /> > should render 1`] = `
+<_AffixedProgressBar
+  className="sc-dkPtRN"
+  now={68}
+/>
+`;
 
-exports[`<AffixedProgressBar /> > should render when [bottom=true] 1`] = `ShallowWrapper {}`;
+exports[`<AffixedProgressBar /> > should render when [bottom=true] 1`] = `
+<_AffixedProgressBar
+  bottom={true}
+  className="sc-dkPtRN"
+  now={68}
+/>
+`;
 
-exports[`<AffixedProgressBar /> > should render when [color=%p] blue 1`] = `ShallowWrapper {}`;
+exports[`<AffixedProgressBar /> > should render when [color=%p] blue 1`] = `
+<_AffixedProgressBar
+  className="sc-dkPtRN"
+  color="blue"
+  now={68}
+/>
+`;
 
-exports[`<AffixedProgressBar /> > should render when [color=%p] green 1`] = `ShallowWrapper {}`;
+exports[`<AffixedProgressBar /> > should render when [color=%p] green 1`] = `
+<_AffixedProgressBar
+  className="sc-dkPtRN"
+  color="green"
+  now={68}
+/>
+`;
 
-exports[`<AffixedProgressBar /> > should render when [color=%p] orange 1`] = `ShallowWrapper {}`;
+exports[`<AffixedProgressBar /> > should render when [color=%p] orange 1`] = `
+<_AffixedProgressBar
+  className="sc-dkPtRN"
+  color="orange"
+  now={68}
+/>
+`;
 
-exports[`<AffixedProgressBar /> > should render when [color=%p] red 1`] = `ShallowWrapper {}`;
+exports[`<AffixedProgressBar /> > should render when [color=%p] red 1`] = `
+<_AffixedProgressBar
+  className="sc-dkPtRN"
+  color="red"
+  now={68}
+/>
+`;
 
-exports[`<ProgressBar /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<ProgressBar /> > should render 1`] = `
+<styled.progress
+  max="100"
+  value={32}
+/>
+`;
 
-exports[`<ProgressBar /> > should render when [color=%p] blue 1`] = `ShallowWrapper {}`;
+exports[`<ProgressBar /> > should render when [color=%p] blue 1`] = `
+<styled.progress
+  color="blue"
+  max="100"
+  value={32}
+/>
+`;
 
-exports[`<ProgressBar /> > should render when [color=%p] green 1`] = `ShallowWrapper {}`;
+exports[`<ProgressBar /> > should render when [color=%p] green 1`] = `
+<styled.progress
+  color="green"
+  max="100"
+  value={32}
+/>
+`;
 
-exports[`<ProgressBar /> > should render when [color=%p] orange 1`] = `ShallowWrapper {}`;
+exports[`<ProgressBar /> > should render when [color=%p] orange 1`] = `
+<styled.progress
+  color="orange"
+  max="100"
+  value={32}
+/>
+`;
 
-exports[`<ProgressBar /> > should render when [color=%p] red 1`] = `ShallowWrapper {}`;
+exports[`<ProgressBar /> > should render when [color=%p] red 1`] = `
+<styled.progress
+  color="red"
+  max="100"
+  value={32}
+/>
+`;

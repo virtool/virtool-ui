@@ -1,6 +1,5 @@
 import { Checkbox } from "../../../../../base";
 import { TargetForm } from "../Form";
-import { vi } from "vitest";
 
 describe("<TargetForm />", () => {
     const props = {

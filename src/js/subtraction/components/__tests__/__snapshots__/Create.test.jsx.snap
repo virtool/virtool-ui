@@ -1,7 +1,162 @@
 // Vitest Snapshot v1
 
-exports[`<CreateSubtraction /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<CreateSubtraction /> > should render 1`] = `
+<Fragment>
+  <ViewHeader
+    title="Create Subtraction"
+  >
+    <styled.h1>
+      Create Subtraction
+    </styled.h1>
+  </ViewHeader>
+  <Formik
+    initialValues={
+      {
+        "name": "",
+        "nickname": "",
+        "uploadId": "",
+      }
+    }
+    onSubmit={[Function]}
+    validationSchema={
+      ObjectSchema {
+        "_blacklist": ReferenceSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_blacklistError": undefined,
+        "_excludedEdges": [],
+        "_nodes": [
+          "uploadId",
+          "name",
+        ],
+        "_sortErrors": [Function],
+        "_typeError": [Function],
+        "_whitelist": ReferenceSet {
+          "list": Set {},
+          "refs": Map {},
+        },
+        "_whitelistError": undefined,
+        "conditions": [],
+        "deps": [],
+        "exclusiveTests": {},
+        "fields": {
+          "name": StringSchema {
+            "_blacklist": ReferenceSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_blacklistError": undefined,
+            "_mutate": undefined,
+            "_typeError": [Function],
+            "_whitelist": ReferenceSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_whitelistError": undefined,
+            "conditions": [],
+            "deps": [],
+            "exclusiveTests": {
+              "required": true,
+            },
+            "spec": {
+              "abortEarly": true,
+              "nullable": false,
+              "presence": "required",
+              "recursive": true,
+              "strict": false,
+              "strip": false,
+            },
+            "tests": [
+              [Function],
+            ],
+            "transforms": [
+              [Function],
+            ],
+            "type": "string",
+          },
+          "uploadId": StringSchema {
+            "_blacklist": ReferenceSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_blacklistError": undefined,
+            "_mutate": undefined,
+            "_typeError": [Function],
+            "_whitelist": ReferenceSet {
+              "list": Set {},
+              "refs": Map {},
+            },
+            "_whitelistError": undefined,
+            "conditions": [],
+            "deps": [],
+            "exclusiveTests": {
+              "required": true,
+            },
+            "spec": {
+              "abortEarly": true,
+              "nullable": false,
+              "presence": "required",
+              "recursive": true,
+              "strict": false,
+              "strip": false,
+            },
+            "tests": [
+              [Function],
+            ],
+            "transforms": [
+              [Function],
+            ],
+            "type": "string",
+          },
+        },
+        "spec": {
+          "abortEarly": true,
+          "nullable": false,
+          "presence": "optional",
+          "recursive": true,
+          "strict": false,
+          "strip": false,
+        },
+        "tests": [],
+        "transforms": [
+          [Function],
+        ],
+        "type": "object",
+      }
+    }
+  >
+    <Component />
+  </Formik>
+</Fragment>
+`;
 
-exports[`<SubtractionFileItem /> > should render when [active=%p] false 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionFileItem /> > should render when [active=%p] false 1`] = `
+<Styled(Styled(styled.div))
+  active={false}
+  onClick={[Function]}
+>
+  <strong>
+    test
+  </strong>
+  <Styled(UnstyledAttribution)
+    time="2018-02-14T17:12:00.000000Z"
+    user="test-user"
+  />
+</Styled(Styled(styled.div))>
+`;
 
-exports[`<SubtractionFileItem /> > should render when [active=%p] true 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionFileItem /> > should render when [active=%p] true 1`] = `
+<Styled(Styled(styled.div))
+  active={true}
+  onClick={[Function]}
+>
+  <strong>
+    test
+  </strong>
+  <Styled(UnstyledAttribution)
+    time="2018-02-14T17:12:00.000000Z"
+    user="test-user"
+  />
+</Styled(Styled(styled.div))>
+`;

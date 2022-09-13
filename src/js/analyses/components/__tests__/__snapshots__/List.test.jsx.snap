@@ -1,3 +1,26 @@
 // Vitest Snapshot v1
 
-exports[`<AnalysesList /> > renders 1`] = `ShallowWrapper {}`;
+exports[`<AnalysesList /> > renders 1`] = `
+<styled.div>
+  <Connect(AnalysisHMMAlert) />
+  <Connect(AnalysesToolbar) />
+  <Connect(AnalysisItem)
+    id="bar"
+    key="bar"
+  />
+  <Connect(CreateAnalysis)
+    hasHmm={true}
+    id="foo"
+    onHide={[Function]}
+    refIndexes={
+      [
+        {
+          "id": "indy",
+        },
+      ]
+    }
+    show={false}
+    userId="bob"
+  />
+</styled.div>
+`;

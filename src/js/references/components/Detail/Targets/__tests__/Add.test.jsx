@@ -1,6 +1,5 @@
 import { AddTarget, mapStateToProps, mapDispatchToProps } from "../Add";
 import { TargetForm } from "../Form";
-import { vi } from "vitest";
 
 describe("<AddTarget />", () => {
     let props;

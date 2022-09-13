@@ -1,5 +1,4 @@
 import { SubtractionList } from "../List";
-import { vi } from "vitest";
 
 describe("<SubtractionList />", () => {
     let props;

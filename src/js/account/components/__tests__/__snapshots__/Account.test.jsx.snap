@@ -1,3 +1,56 @@
 // Vitest Snapshot v1
 
-exports[`<Account /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<Account /> > should render 1`] = `
+<styled.div>
+  <ViewHeader
+    title="Account"
+  >
+    <styled.h1>
+      Account
+    </styled.h1>
+  </ViewHeader>
+  <styled.nav>
+    <Styled(NavLink)
+      to="/account/profile"
+    >
+      Profile
+    </Styled(NavLink)>
+    <Styled(NavLink)
+      to="/account/api"
+    >
+      API
+    </Styled(NavLink)>
+  </styled.nav>
+  <styled.div>
+    <Switch>
+      <Redirect
+        exact={true}
+        from="/account"
+        to="/account/profile"
+      />
+      <Route
+        component={
+          {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        path="/account/profile"
+      />
+      <Route
+        component={
+          {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        path="/account/api"
+      />
+    </Switch>
+  </styled.div>
+</styled.div>
+`;

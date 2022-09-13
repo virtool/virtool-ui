@@ -1,5 +1,4 @@
 import { ReadSelectorItem, ReadOrientation } from "../ReadSelectorItem";
-import { vi } from "vitest";
 
 describe("<ReadOrientation />", () => {
     let props;

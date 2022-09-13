@@ -1,7 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RestoredAlert } from "../Alert";
-import { vi } from "vitest";
 
 describe("<Alert />", () => {
     let props;

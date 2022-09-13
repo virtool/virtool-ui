@@ -1,7 +1,6 @@
 import { REMOVE_FILE } from "../../../app/actionTypes";
 import { File, mapStateToProps, mapDispatchToProps } from "../File";
 import { checkAdminOrPermission } from "../../../utils/utils";
-import { vi } from "vitest";
 
 vi.mock("../../../utils/utils.js");
 

@@ -1,7 +1,55 @@
 // Vitest Snapshot v1
 
-exports[`<MemberRight /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<MemberRight /> > should render 1`] = `
+<styled.div>
+  <Styled(Checkbox)
+    checked={true}
+    key="build"
+    onClick={[Function]}
+  />
+  <styled.div>
+    <strong>
+      build
+    </strong>
+    <small>
+      Can build new indexes for the reference.
+    </small>
+  </styled.div>
+</styled.div>
+`;
 
-exports[`<MemberRight /> > should render when right is modify_otu 1`] = `ShallowWrapper {}`;
+exports[`<MemberRight /> > should render when right is modify_otu 1`] = `
+<styled.div>
+  <Styled(Checkbox)
+    checked={true}
+    key="modify_otu"
+    onClick={[Function]}
+  />
+  <styled.div>
+    <strong>
+      modify_otu
+    </strong>
+    <small>
+      Can modify OTU records in the reference.
+    </small>
+  </styled.div>
+</styled.div>
+`;
 
-exports[`<MemberRight /> > should render when right is not enabled 1`] = `ShallowWrapper {}`;
+exports[`<MemberRight /> > should render when right is not enabled 1`] = `
+<styled.div>
+  <Styled(Checkbox)
+    checked={false}
+    key="build"
+    onClick={[Function]}
+  />
+  <styled.div>
+    <strong>
+      build
+    </strong>
+    <small>
+      Can build new indexes for the reference.
+    </small>
+  </styled.div>
+</styled.div>
+`;

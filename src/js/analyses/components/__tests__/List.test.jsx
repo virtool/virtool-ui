@@ -1,5 +1,4 @@
 import { AnalysesList } from "../List";
-import { vi } from "vitest";
 
 describe("<AnalysesList />", () => {
     let props;

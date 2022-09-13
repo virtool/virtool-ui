@@ -2,7 +2,6 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PUSH_STATE } from "../../../app/actionTypes";
 import { EditLabel, mapDispatchToProps } from "../Edit";
-import { vi } from "vitest";
 
 describe("<EditLabel>", () => {
     let props;

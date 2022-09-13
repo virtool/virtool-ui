@@ -1,6 +1,5 @@
 import { SearchInput } from "../../../base";
 import { OTUToolbar } from "../Toolbar";
-import { vi } from "vitest";
 
 describe("<OTUToolbar />", () => {
     const props = {

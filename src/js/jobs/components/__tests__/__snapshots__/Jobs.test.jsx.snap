@@ -1,5 +1,33 @@
 // Vitest Snapshot v1
 
-exports[`<Jobs /> > should render placeholder when loading 1`] = `ShallowWrapper {}`;
+exports[`<Jobs /> > should render placeholder when loading 1`] = `<LoadingPlaceholder />`;
 
-exports[`<Jobs /> > should render when loaded 1`] = `ShallowWrapper {}`;
+exports[`<Jobs /> > should render when loaded 1`] = `
+<styled.div>
+  <Switch>
+    <Route
+      component={
+        {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      exact={true}
+      path="/jobs"
+    />
+    <Route
+      component={
+        {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      path="/jobs/:jobId"
+    />
+  </Switch>
+</styled.div>
+`;

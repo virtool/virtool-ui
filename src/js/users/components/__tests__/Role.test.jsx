@@ -1,7 +1,6 @@
 import { Select } from "../../../base";
 import { getCanModifyUser } from "../../selectors";
 import { UserRole, mapStateToProps } from "../Role";
-import { vi } from "vitest";
 
 vi.mock("../../selectors.js");
 

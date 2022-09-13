@@ -1,6 +1,5 @@
 import { RemoveModal } from "../../../../base";
 import { RemoveSample } from "../Remove";
-import { vi } from "vitest";
 
 describe("<Remove />", () => {
     let props;

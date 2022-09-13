@@ -4,7 +4,6 @@ import { FIND_ANALYSES, PUSH_STATE } from "../../../app/actionTypes";
 import { Button, SearchInput } from "../../../base";
 import { getCanModify } from "../../../samples/selectors";
 import { AnalysesToolbar, mapDispatchToProps, mapStateToProps } from "../Toolbar";
-import { vi } from "vitest";
 
 describe("<AnalysesToolbar />", () => {
     let props;

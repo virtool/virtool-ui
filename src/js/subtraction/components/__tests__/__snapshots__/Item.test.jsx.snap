@@ -1,13 +1,111 @@
 // Vitest Snapshot v1
 
-exports[`<SubtractionItem /> > should render when [create_at=%p] 0 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionItem /> > should render when [create_at=%p] 0 1`] = `
+<Styled(Link)
+  key="foo"
+  to="/subtractions/foo"
+>
+  <styled.div>
+    <span>
+      Foo
+    </span>
+    <span>
+      <SubtractionItemIcon
+        ready={true}
+      />
+       
+      Ready
+    </span>
+  </styled.div>
+  <SubtractionAttribution
+    handle="bar"
+    time={0}
+  />
+</Styled(Link)>
+`;
 
-exports[`<SubtractionItem /> > should render when [create_at=%p] null 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionItem /> > should render when [create_at=%p] null 1`] = `
+<Styled(Link)
+  key="foo"
+  to="/subtractions/foo"
+>
+  <styled.div>
+    <span>
+      Foo
+    </span>
+    <span>
+      <SubtractionItemIcon
+        ready={true}
+      />
+       
+      Ready
+    </span>
+  </styled.div>
+  <SubtractionAttribution
+    handle="bar"
+    time={null}
+  />
+</Styled(Link)>
+`;
 
-exports[`<SubtractionItem /> > should render when [ready=%p] false 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionItem /> > should render when [ready=%p] false 1`] = `
+<Styled(Link)
+  key="foo"
+  to="/subtractions/foo"
+>
+  <styled.div>
+    <span>
+      Foo
+    </span>
+    <span>
+      <SubtractionItemIcon
+        ready={false}
+      />
+       
+      Creating
+    </span>
+  </styled.div>
+  <SubtractionAttribution
+    handle="bar"
+  />
+</Styled(Link)>
+`;
 
-exports[`<SubtractionItem /> > should render when [ready=%p] true 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionItem /> > should render when [ready=%p] true 1`] = `
+<Styled(Link)
+  key="foo"
+  to="/subtractions/foo"
+>
+  <styled.div>
+    <span>
+      Foo
+    </span>
+    <span>
+      <SubtractionItemIcon
+        ready={true}
+      />
+       
+      Ready
+    </span>
+  </styled.div>
+  <SubtractionAttribution
+    handle="bar"
+  />
+</Styled(Link)>
+`;
 
-exports[`<SubtractionItemIcon /> > should render when [ready=%p] false 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionItemIcon /> > should render when [ready=%p] false 1`] = `
+<Loader
+  color="primary"
+  size="14px"
+/>
+`;
 
-exports[`<SubtractionItemIcon /> > should render when [ready=%p] true 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionItemIcon /> > should render when [ready=%p] true 1`] = `
+<Icon
+  color="green"
+  faStyle="fas"
+  fixedWidth={false}
+  name="check"
+/>
+`;

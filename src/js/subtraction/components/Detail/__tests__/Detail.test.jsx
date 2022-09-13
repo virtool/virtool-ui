@@ -1,5 +1,4 @@
 import { SubtractionDetail } from "../Detail";
-import { vi } from "vitest";
 
 describe("<SubtractionDetail />", () => {
     let props;

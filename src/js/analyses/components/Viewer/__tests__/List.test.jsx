@@ -1,6 +1,5 @@
 import { getMatches, getResults } from "../../../selectors";
 import { mapStateToProps, AnalysisViewerList } from "../List";
-import { vi } from "vitest";
 
 vi.mock("../../../selectors.js");
 

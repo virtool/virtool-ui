@@ -5,7 +5,6 @@ import { createStore } from "redux";
 import { LIST_LABELS } from "../../../../app/actionTypes";
 import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
 import { BrowserRouter } from "react-router-dom";
-import { vi } from "vitest";
 
 const routerRenderWithProviders = (ui, store) => {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;

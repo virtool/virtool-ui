@@ -1,6 +1,5 @@
 import { Icon } from "../../../../base";
 import MemberItem from "../MemberItem";
-import { vi } from "vitest";
 
 describe("<MemberItem />", () => {
     let props;

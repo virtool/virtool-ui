@@ -1,3 +1,21 @@
 // Vitest Snapshot v1
 
-exports[`<ReferenceSelectorItem /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<ReferenceSelectorItem /> > should render 1`] = `
+<Styled(Styled(styled.div))
+  onClick={[MockFunction spy]}
+>
+  <strong>
+    foo
+  </strong>
+  <Styled(UnstyledAttribution)
+    time="boo"
+    user="foo"
+  />
+  <div>
+    <styled.span>
+      bar
+       OTUs
+    </styled.span>
+  </div>
+</Styled(Styled(styled.div))>
+`;

@@ -1,6 +1,5 @@
 import { UPDATE_SETTINGS } from "../../../app/actionTypes";
 import { UniqueNames, mapStateToProps, mapDispatchToProps } from "../UniqueNames";
-import { vi } from "vitest";
 
 describe("<UniqueNames />", () => {
     it.each([true, false])("should render when [enabled=%p]", enabled => {

@@ -1,3 +1,26 @@
 // Vitest Snapshot v1
 
-exports[`SampleUserGroup > should render 1`] = `ShallowWrapper {}`;
+exports[`SampleUserGroup > should render 1`] = `
+<InputGroup>
+  <styled.label>
+    User Group
+  </styled.label>
+  <Select
+    onChange={[MockFunction spy]}
+    value="bar"
+  >
+    <option
+      key="none"
+      value="none"
+    >
+      None
+    </option>
+    <styled.option
+      key="foo"
+      value="foo"
+    >
+      foo
+    </styled.option>
+  </Select>
+</InputGroup>
+`;

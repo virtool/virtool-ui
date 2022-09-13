@@ -1,5 +1,37 @@
 // Vitest Snapshot v1
 
-exports[`<ReferenceSelector /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<ReferenceSelector /> > should render 1`] = `
+<styled.div>
+  <label>
+    Source Reference
+  </label>
+  <Styled(Styled(styled.div))>
+    <ReferenceSelectorItem
+      active={false}
+      key="foo"
+      onClick={[Function]}
+      reference={
+        {
+          "id": "foo",
+          "key": "bar",
+        }
+      }
+    />
+  </Styled(Styled(styled.div))>
+  <styled.p />
+</styled.div>
+`;
 
-exports[`<ReferenceSelector /> > should render NoneFound when [references.length=0] 1`] = `ShallowWrapper {}`;
+exports[`<ReferenceSelector /> > should render NoneFound when [references.length=0] 1`] = `
+<styled.div>
+  <label>
+    Source Reference
+  </label>
+  <Styled(Styled(styled.div))>
+    <NoneFoundSection
+      noun="source references"
+    />
+  </Styled(Styled(styled.div))>
+  <styled.p />
+</styled.div>
+`;

@@ -4,7 +4,6 @@ import { Form, Formik } from "formik";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../../../app/theme";
 import { ReferenceForm } from "../Form";
-import { vi } from "vitest";
 
 const renderWithFormik = (renderer, ui, initialValues, onSubmit, mode) => {
     const jsx = (

@@ -1,6 +1,6 @@
 import { Input, Modal } from "../../../base";
 import { EditSubtraction, mapDispatchToProps } from "../Edit";
-import { vi } from "vitest";
+
 describe("<EditSubtraction />", () => {
     let e;
     let props;

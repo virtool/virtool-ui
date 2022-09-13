@@ -1,15 +1,176 @@
 // Vitest Snapshot v1
 
-exports[`<BLASTInProgress /> > should render when [rid=%p] ABC123 1`] = `ShallowWrapper {}`;
+exports[`<BLASTInProgress /> > should render when [rid=%p] ABC123 1`] = `
+<Styled(styled.div)>
+  <Loader
+    color="primary"
+    size="16px"
+  />
+  <div>
+    <div>
+      <span>
+        BLAST in progress
+      </span>
+      <RIDLink
+        rid="ABC123"
+      />
+    </div>
+    <RIDTiming
+      interval={5}
+      lastCheckedAt="2018-02-14T17:12:00.000000Z"
+    />
+  </div>
+</Styled(styled.div)>
+`;
 
-exports[`<BLASTInProgress /> > should render when [rid=%p] null 1`] = `ShallowWrapper {}`;
+exports[`<BLASTInProgress /> > should render when [rid=%p] null 1`] = `
+<Styled(styled.div)>
+  <Loader
+    color="primary"
+    size="16px"
+  />
+  <div>
+    <div>
+      <span>
+        BLAST in progress
+      </span>
+      <RIDLink
+        rid={null}
+      />
+    </div>
+    <RIDTiming
+      interval={5}
+      lastCheckedAt="2018-02-14T17:12:00.000000Z"
+    />
+  </div>
+</Styled(styled.div)>
+`;
 
-exports[`<BLASTResults /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<BLASTResults /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(Styled(styled.div))>
+    <strong>
+      NCBI BLAST
+    </strong>
+    <Button
+      color="blue"
+      disabled={false}
+      tipPlacement="top"
+      type="button"
+    >
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="redo"
+      />
+      Retry
+    </Button>
+  </Styled(Styled(styled.div))>
+  <styled.table>
+    <thead>
+      <tr>
+        <th>
+          Accession
+        </th>
+        <th>
+          Name
+        </th>
+        <th>
+          E-value
+        </th>
+        <th>
+          Score
+        </th>
+        <th>
+          Identity
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        key="0"
+      >
+        <td>
+          <Styled(UnstyledExternalLink)
+            href="https://www.ncbi.nlm.nih.gov/nuccore/NC123"
+          >
+            NC123
+          </Styled(UnstyledExternalLink)>
+        </td>
+        <td>
+          test
+        </td>
+        <td>
+          3
+        </td>
+        <td>
+          1
+        </td>
+        <td>
+          0.50
+        </td>
+      </tr>
+    </tbody>
+  </styled.table>
+</Styled(styled.div)>
+`;
 
-exports[`<NuVsBLAST /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<NuVsBLAST /> > should render 1`] = `
+<BLASTResults
+  hits={
+    [
+      {
+        "accession": "BAR123",
+        "align_len": 4,
+        "evalue": 3,
+        "identity": 2,
+        "name": "bar",
+        "score": 1,
+      },
+    ]
+  }
+  onBlast={[Function]}
+/>
+`;
 
-exports[`<NuVsBLAST /> > should render alert when no blast data available 1`] = `ShallowWrapper {}`;
+exports[`<NuVsBLAST /> > should render alert when no blast data available 1`] = `
+<Styled(_Alert)
+  color="purple"
+  level={true}
+>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="info-circle"
+  />
+  <span>
+    This sequence has no BLAST information attached to it.
+  </span>
+  <Styled(Button)
+    color="purple"
+    icon="cloud"
+    onClick={[Function]}
+  >
+    BLAST at NCBI
+  </Styled(Button)>
+</Styled(_Alert)>
+`;
 
-exports[`<NuVsBLAST /> > should render with an in-progress BLAST 1`] = `ShallowWrapper {}`;
+exports[`<NuVsBLAST /> > should render with an in-progress BLAST 1`] = `
+<BLASTInProgress
+  interval={5}
+  lastCheckedAt="2018-02-14T17:12:00.000000Z"
+  rid="ABC123"
+/>
+`;
 
-exports[`<NuVsBLAST /> > should render with no BLAST hits 1`] = `ShallowWrapper {}`;
+exports[`<NuVsBLAST /> > should render with no BLAST hits 1`] = `
+<styled.div>
+  <styled.h1>
+    NCBI BLAST
+  </styled.h1>
+  <p>
+    No BLAST hits found.
+  </p>
+</styled.div>
+`;

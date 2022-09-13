@@ -1,5 +1,4 @@
 import { HMMInstaller, mapStateToProps, mapDispatchToProps } from "../Installer";
-import { vi } from "vitest";
 
 describe("<HMMInstaller />", () => {
     let props;

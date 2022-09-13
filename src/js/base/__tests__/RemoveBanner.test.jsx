@@ -1,6 +1,5 @@
 import { RemoveBanner } from "../RemoveBanner";
 import { Button } from "../Button";
-import { vi } from "vitest";
 
 describe("<RemoveBanner />", () => {
     let props;

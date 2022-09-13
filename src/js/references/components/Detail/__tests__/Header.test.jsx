@@ -1,5 +1,4 @@
 import { mapDispatchToProps, mapStateToProps, ReferenceDetailHeader, ReferenceDetailHeaderIcon } from "../Header";
-import { vi } from "vitest";
 
 describe("<ReferenceDetailHeaderIcon />", () => {
     let props;

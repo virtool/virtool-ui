@@ -1,7 +1,6 @@
 import { Input } from "../../../../../base";
 import { IsolateForm } from "../Form";
 import { SourceType } from "../../SourceType";
-import { vi } from "vitest";
 
 describe("<IsolateForm />", () => {
     let props;

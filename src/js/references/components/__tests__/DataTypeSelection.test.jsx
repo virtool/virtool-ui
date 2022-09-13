@@ -1,5 +1,4 @@
 import { DataTypeSelection } from "../DataTypeSelection";
-import { vi } from "vitest";
 
 describe("<DataTypeSelection />", () => {
     const props = {

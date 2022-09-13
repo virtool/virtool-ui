@@ -1,5 +1,4 @@
 import { ScrollList } from "../ScrollList";
-import { vi } from "vitest";
 
 describe("<ScrollList />", () => {
     let props;

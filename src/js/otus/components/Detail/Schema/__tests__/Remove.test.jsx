@@ -1,5 +1,4 @@
 import { RemoveSegment, mapStateToProps } from "../Remove";
-import { vi } from "vitest";
 
 describe("<RemoveSegment />", () => {
     const props = {

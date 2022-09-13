@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { SequenceForm, validationSchema } from "../Form";
 import { Formik, Form } from "formik";
 import { SaveButton } from "../../../base";
-import { vi } from "vitest";
 
 const initialValues = { accession: "", definition: "", host: "", sequence: "" };
 

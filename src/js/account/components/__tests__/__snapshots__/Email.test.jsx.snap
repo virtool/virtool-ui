@@ -1,13 +1,171 @@
 // Vitest Snapshot v1
 
-exports[`<Email /> > should call onUpdateEmail() when valid form submitted 1`] = `ShallowWrapper {}`;
+exports[`<Email /> > should call onUpdateEmail() when valid form submitted 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Email
+    </h2>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    onSubmit={[Function]}
+  >
+    <InputGroup>
+      <styled.label>
+        Email Address
+      </styled.label>
+      <styled.div>
+        <Styled(UnstyledInput)
+          onBlur={[Function]}
+          onChange={[Function]}
+          value="baz@example.com"
+        />
+        <styled.p />
+      </styled.div>
+    </InputGroup>
+    <SaveButton />
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;
 
-exports[`<Email /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<Email /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Email
+    </h2>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    onSubmit={[Function]}
+  >
+    <InputGroup>
+      <styled.label>
+        Email Address
+      </styled.label>
+      <styled.div>
+        <Styled(UnstyledInput)
+          onBlur={[Function]}
+          onChange={[Function]}
+          value="foo@example.com"
+        />
+        <styled.p />
+      </styled.div>
+    </InputGroup>
+    <SaveButton />
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;
 
-exports[`<Email /> > should render when submitted value is invalid error 1`] = `ShallowWrapper {}`;
+exports[`<Email /> > should render when submitted value is invalid error 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Email
+    </h2>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    onSubmit={[Function]}
+  >
+    <InputGroup>
+      <styled.label>
+        Email Address
+      </styled.label>
+      <styled.div>
+        <Styled(UnstyledInput)
+          onBlur={[Function]}
+          onChange={[Function]}
+          value="not_an_email"
+        />
+        <styled.p />
+      </styled.div>
+    </InputGroup>
+    <SaveButton />
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;
 
-exports[`<Email /> > should render when submitted value is invalid error 2`] = `ShallowWrapper {}`;
+exports[`<Email /> > should render when submitted value is invalid error 2`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Email
+    </h2>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    onSubmit={[Function]}
+  >
+    <InputGroup>
+      <styled.label>
+        Email Address
+      </styled.label>
+      <styled.div>
+        <Styled(UnstyledInput)
+          onBlur={[Function]}
+          onChange={[Function]}
+          value="not_an_email"
+        />
+        <styled.p>
+          Please provide a valid email address
+        </styled.p>
+      </styled.div>
+    </InputGroup>
+    <SaveButton />
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;
 
-exports[`<Email /> > should render when when input changes 1`] = `ShallowWrapper {}`;
+exports[`<Email /> > should render when when input changes 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Email
+    </h2>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    onSubmit={[Function]}
+  >
+    <InputGroup>
+      <styled.label>
+        Email Address
+      </styled.label>
+      <styled.div>
+        <Styled(UnstyledInput)
+          onBlur={[Function]}
+          onChange={[Function]}
+          value="bar@example.com"
+        />
+        <styled.p />
+      </styled.div>
+    </InputGroup>
+    <SaveButton />
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;
 
-exports[`<Email /> > should render without initial email 1`] = `ShallowWrapper {}`;
+exports[`<Email /> > should render without initial email 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Email
+    </h2>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    onSubmit={[Function]}
+  >
+    <InputGroup>
+      <styled.label>
+        Email Address
+      </styled.label>
+      <styled.div>
+        <Styled(UnstyledInput)
+          onBlur={[Function]}
+          onChange={[Function]}
+          value=""
+        />
+        <styled.p />
+      </styled.div>
+    </InputGroup>
+    <SaveButton />
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;

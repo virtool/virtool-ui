@@ -1,7 +1,118 @@
 // Vitest Snapshot v1
 
-exports[`<AddTarget /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<AddTarget /> > should render 1`] = `
+<Modal
+  label="Add Target"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Add target
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <TargetForm
+        description=""
+        errorName=""
+        length={0}
+        name=""
+        onChange={[Function]}
+        onClick={[Function]}
+        required={false}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <Button
+        color="blue"
+        disabled={false}
+        icon="save"
+        tipPlacement="top"
+        type="submit"
+      >
+        Submit
+      </Button>
+    </Styled(Component)>
+  </form>
+</Modal>
+`;
 
-exports[`<AddTarget /> > should render error when submitted without name 1`] = `ShallowWrapper {}`;
+exports[`<AddTarget /> > should render error when submitted without name 1`] = `
+<Modal
+  label="Add Target"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Add target
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <TargetForm
+        description=""
+        errorName="Required Field"
+        length={0}
+        name=""
+        onChange={[Function]}
+        onClick={[Function]}
+        required={false}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <Button
+        color="blue"
+        disabled={false}
+        icon="save"
+        tipPlacement="top"
+        type="submit"
+      >
+        Submit
+      </Button>
+    </Styled(Component)>
+  </form>
+</Modal>
+`;
 
-exports[`<AddTarget /> > should render required when form onClick() prop is called 1`] = `ShallowWrapper {}`;
+exports[`<AddTarget /> > should render required when form onClick() prop is called 1`] = `
+<Modal
+  label="Add Target"
+  onExited={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Add target
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <Styled(styled.div)>
+      <TargetForm
+        description=""
+        errorName=""
+        length={0}
+        name=""
+        onChange={[Function]}
+        onClick={[Function]}
+        required={true}
+      />
+    </Styled(styled.div)>
+    <Styled(Component)>
+      <Button
+        color="blue"
+        disabled={false}
+        icon="save"
+        tipPlacement="top"
+        type="submit"
+      >
+        Submit
+      </Button>
+    </Styled(Component)>
+  </form>
+</Modal>
+`;

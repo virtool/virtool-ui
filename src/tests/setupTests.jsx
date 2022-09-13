@@ -5,6 +5,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../js/app/theme";
+import { createSerializer } from "enzyme-to-json";
 import "@testing-library/jest-dom";
 
 // React 16 Enzyme adapter
@@ -12,6 +13,7 @@ import "@testing-library/jest-dom";
 // Note that enzyme-to-json snapshot serializer is configured in
 // jest configuration settings specified in package.json instead of here.
 Enzyme.configure({ adapter: new Adapter() });
+expect.addSnapshotSerializer(createSerializer({ mode: "deep" }));
 
 const wrapWithProviders = (ui, createAppStore) => {
     let wrappedUi = <ThemeProvider theme={theme}>{ui}</ThemeProvider>;

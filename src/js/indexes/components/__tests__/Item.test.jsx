@@ -1,6 +1,5 @@
 import { IndexItemDescription, IndexItem, IndexItemIcon, mapStateToProps } from "../Item";
 import { getActiveIndexId } from "../../selectors";
-import { vi } from "vitest";
 
 vi.mock("../../selectors.js");
 

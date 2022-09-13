@@ -1,6 +1,5 @@
 import { PUSH_STATE } from "../../../app/actionTypes";
 import { mapStateToProps, mapDispatchToProps, OTUsList } from "../List";
-import { vi } from "vitest";
 
 describe("<OTUsList />", () => {
     let props;

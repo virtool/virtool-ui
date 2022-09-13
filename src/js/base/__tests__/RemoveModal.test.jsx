@@ -1,7 +1,6 @@
 import { Modal } from "../Modal";
 import { RemoveModal } from "../RemoveModal";
 import { Button } from "../Button";
-import { vi } from "vitest";
 
 describe("<RemoveModal />", () => {
     let props;

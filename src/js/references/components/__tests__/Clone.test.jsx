@@ -2,7 +2,6 @@ import React from "react";
 import { CloneReference, mapDispatchToProps, mapStateToProps } from "../Clone";
 import userEvent from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
 
 describe("<CloneReference />", () => {
     const props = {

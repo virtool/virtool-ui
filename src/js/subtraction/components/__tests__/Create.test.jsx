@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
 import { CreateSubtraction } from "../Create";
 import { SubtractionFileItem } from "../FileSelector";
-import { vi } from "vitest";
 
 const routerRenderWithProviders = (ui, store) => {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;

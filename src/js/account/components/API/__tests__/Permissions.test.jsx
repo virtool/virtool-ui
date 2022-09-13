@@ -1,6 +1,5 @@
 import { SelectBoxGroupSection } from "../../../../base";
 import { APIPermissions } from "../Permissions";
-import { vi } from "vitest";
 
 describe("<Permissions />", () => {
     let props;

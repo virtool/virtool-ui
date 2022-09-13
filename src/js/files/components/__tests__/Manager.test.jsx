@@ -2,7 +2,6 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createStore } from "redux";
 import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
-import { vi } from "vitest";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);

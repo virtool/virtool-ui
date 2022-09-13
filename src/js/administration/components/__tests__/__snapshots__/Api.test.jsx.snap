@@ -1,3 +1,21 @@
 // Vitest Snapshot v1
 
-exports[`<Api /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<Api /> > should render 1`] = `
+<SettingsCheckbox
+  enabled={true}
+  onToggle={[MockFunction spy]}
+>
+  <h2>
+    JSON API
+  </h2>
+  <small>
+    Enable API access for clients other than Virtool. See 
+  </small>
+  <Styled(UnstyledExternalLink)
+    href="https://www.virtool.ca/docs/developer/api_account"
+  >
+    API documentation
+  </Styled(UnstyledExternalLink)>
+  .
+</SettingsCheckbox>
+`;

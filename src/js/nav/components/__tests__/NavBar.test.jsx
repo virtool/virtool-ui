@@ -2,7 +2,6 @@ import { PublicClientApplication } from "@azure/msal-browser";
 import { getMsalConfig } from "../../../app/authConfig";
 import { Bar, mapStateToProps, mapDispatchToProps } from "../NavBar";
 import crypto from "crypto";
-import { vi } from "vitest";
 
 describe("<Bar />", () => {
     const props = {

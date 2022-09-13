@@ -1,7 +1,6 @@
 import { REMOVE_API_KEY, UPDATE_API_KEY } from "../../../../app/actionTypes";
 import { Button, Icon } from "../../../../base";
 import { APIKey, getInitialState, mapDispatchToProps, mapStateToProps } from "../Key";
-import { vi } from "vitest";
 
 describe("getInitialState()", () => {
     it("should return expected initial state", () => {

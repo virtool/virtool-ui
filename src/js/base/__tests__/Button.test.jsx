@@ -1,5 +1,4 @@
 import { Button } from "../Button";
-import { vi } from "vitest";
 
 describe("<Button />", () => {
     let props;

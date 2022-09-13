@@ -1,5 +1,4 @@
 import { JobAction } from "../Action";
-import { vi } from "vitest";
 
 describe("<JobActionIcon />", () => {
     let props;

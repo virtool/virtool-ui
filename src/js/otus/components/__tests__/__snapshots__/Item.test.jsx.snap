@@ -1,5 +1,35 @@
 // Vitest Snapshot v1
 
-exports[`<OTUItem /> > should render when [verified=false] 1`] = `ShallowWrapper {}`;
+exports[`<OTUItem /> > should render when [verified=false] 1`] = `
+<Styled(Styled(Link))
+  key="foo"
+  to="/refs/baz/otus/foo"
+>
+  <styled.strong>
+    Foo
+  </styled.strong>
+  <styled.span>
+    FB
+  </styled.span>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="tag"
+    tip="This OTU is unverified"
+  />
+</Styled(Styled(Link))>
+`;
 
-exports[`<OTUItem /> > should render when [verified=true] 1`] = `ShallowWrapper {}`;
+exports[`<OTUItem /> > should render when [verified=true] 1`] = `
+<Styled(Styled(Link))
+  key="foo"
+  to="/refs/baz/otus/foo"
+>
+  <styled.strong>
+    Foo
+  </styled.strong>
+  <styled.span>
+    FB
+  </styled.span>
+</Styled(Styled(Link))>
+`;

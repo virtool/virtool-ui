@@ -1,7 +1,130 @@
 // Vitest Snapshot v1
 
-exports[`<LibraryTypeSelector> > should have Amplicon selected when [libraryType='amplicon'] 1`] = `ShallowWrapper {}`;
+exports[`<LibraryTypeSelector> > should have Amplicon selected when [libraryType='amplicon'] 1`] = `
+<Fragment>
+  <label>
+    Library Type
+  </label>
+  <styled.div>
+    <Styled(styled.div)
+      active={false}
+      onClick={[Function]}
+    >
+      <div>
+        Normal
+      </div>
+      <span>
+        Search against whole genome references using normal reads.
+      </span>
+    </Styled(styled.div)>
+    <Styled(styled.div)
+      active={false}
+      onClick={[Function]}
+    >
+      <div>
+        sRNA
+      </div>
+      <span>
+        Search against whole genome references using sRNA reads
+      </span>
+    </Styled(styled.div)>
+    <Styled(styled.div)
+      active={true}
+      onClick={[Function]}
+    >
+      <div>
+        Amplicon
+      </div>
+      <span>
+        Search against barcode references using amplicon reads.
+      </span>
+    </Styled(styled.div)>
+  </styled.div>
+</Fragment>
+`;
 
-exports[`<LibraryTypeSelector> > should have Normal selected [libraryType='normal'] 1`] = `ShallowWrapper {}`;
+exports[`<LibraryTypeSelector> > should have Normal selected [libraryType='normal'] 1`] = `
+<Fragment>
+  <label>
+    Library Type
+  </label>
+  <styled.div>
+    <Styled(styled.div)
+      active={true}
+      onClick={[Function]}
+    >
+      <div>
+        Normal
+      </div>
+      <span>
+        Search against whole genome references using normal reads.
+      </span>
+    </Styled(styled.div)>
+    <Styled(styled.div)
+      active={false}
+      onClick={[Function]}
+    >
+      <div>
+        sRNA
+      </div>
+      <span>
+        Search against whole genome references using sRNA reads
+      </span>
+    </Styled(styled.div)>
+    <Styled(styled.div)
+      active={false}
+      onClick={[Function]}
+    >
+      <div>
+        Amplicon
+      </div>
+      <span>
+        Search against barcode references using amplicon reads.
+      </span>
+    </Styled(styled.div)>
+  </styled.div>
+</Fragment>
+`;
 
-exports[`<LibraryTypeSelector> > should have sRNA selected when [libraryType='srna'] 1`] = `ShallowWrapper {}`;
+exports[`<LibraryTypeSelector> > should have sRNA selected when [libraryType='srna'] 1`] = `
+<Fragment>
+  <label>
+    Library Type
+  </label>
+  <styled.div>
+    <Styled(styled.div)
+      active={false}
+      onClick={[Function]}
+    >
+      <div>
+        Normal
+      </div>
+      <span>
+        Search against whole genome references using normal reads.
+      </span>
+    </Styled(styled.div)>
+    <Styled(styled.div)
+      active={true}
+      onClick={[Function]}
+    >
+      <div>
+        sRNA
+      </div>
+      <span>
+        Search against whole genome references using sRNA reads
+      </span>
+    </Styled(styled.div)>
+    <Styled(styled.div)
+      active={false}
+      onClick={[Function]}
+    >
+      <div>
+        Amplicon
+      </div>
+      <span>
+        Search against barcode references using amplicon reads.
+      </span>
+    </Styled(styled.div)>
+  </styled.div>
+</Fragment>
+`;

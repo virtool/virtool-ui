@@ -1,5 +1,4 @@
 import { mapDispatchToProps } from "../Labels";
-import { vi } from "vitest";
 
 describe("mapDispatchToProps()", () => {
     let dispatch;

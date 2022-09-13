@@ -1,5 +1,35 @@
 // Vitest Snapshot v1
 
-exports[`<Analyses /> > should render placeholder when loading 1`] = `ShallowWrapper {}`;
+exports[`<Analyses /> > should render placeholder when loading 1`] = `
+<LoadingPlaceholder
+  margin="150px"
+/>
+`;
 
-exports[`<Analyses /> > should render sub-components when not loading 1`] = `ShallowWrapper {}`;
+exports[`<Analyses /> > should render sub-components when not loading 1`] = `
+<Switch>
+  <Route
+    component={
+      {
+        "$$typeof": Symbol(react.memo),
+        "WrappedComponent": [Function],
+        "compare": null,
+        "type": [Function],
+      }
+    }
+    exact={true}
+    path="/samples/:sampleId/analyses"
+  />
+  <Route
+    component={
+      {
+        "$$typeof": Symbol(react.memo),
+        "WrappedComponent": [Function],
+        "compare": null,
+        "type": [Function],
+      }
+    }
+    path="/samples/:sampleId/analyses/:analysisId"
+  />
+</Switch>
+`;

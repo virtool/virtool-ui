@@ -1,6 +1,5 @@
 import { Radio } from "../Radio";
 import { Flex, FlexItem, Icon } from "../index";
-import { vi } from "vitest";
 
 describe("<Radio />", () => {
     let props;

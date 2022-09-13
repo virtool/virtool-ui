@@ -1,3 +1,30 @@
 // Vitest Snapshot v1
 
-exports[`<SubtractionList /> > renders correctly 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionList /> > renders correctly 1`] = `
+<Fragment>
+  <ViewHeader
+    title="Subtractions"
+  >
+    <styled.h1>
+      Subtractions 
+      <styled.span>
+        1
+      </styled.span>
+    </styled.h1>
+  </ViewHeader>
+  <Connect(SubtractionToolbar) />
+  <ScrollList
+    documents={
+      [
+        "one",
+        "two",
+        "three",
+      ]
+    }
+    onLoadNextPage={[Function]}
+    page={1}
+    pageCount={1}
+    renderRow={[Function]}
+  />
+</Fragment>
+`;

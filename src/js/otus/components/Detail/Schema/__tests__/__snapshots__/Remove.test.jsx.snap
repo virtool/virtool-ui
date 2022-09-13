@@ -1,5 +1,21 @@
 // Vitest Snapshot v1
 
-exports[`<RemoveSegment /> > should render when [show=false] 1`] = `ShallowWrapper {}`;
+exports[`<RemoveSegment /> > should render when [show=false] 1`] = `
+<RemoveModal
+  name="bar"
+  noun="Segment"
+  onConfirm={[Function]}
+  onHide={[MockFunction spy]}
+  show={false}
+/>
+`;
 
-exports[`<RemoveSegment /> > should render when [show=true] 1`] = `ShallowWrapper {}`;
+exports[`<RemoveSegment /> > should render when [show=true] 1`] = `
+<RemoveModal
+  name="bar"
+  noun="Segment"
+  onConfirm={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+/>
+`;

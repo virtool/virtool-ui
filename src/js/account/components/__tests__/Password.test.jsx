@@ -1,7 +1,6 @@
 import { CHANGE_ACCOUNT_PASSWORD, CLEAR_ERROR } from "../../../app/actionTypes";
 import { BoxGroupSection, PasswordInput } from "../../../base";
 import { ChangePassword, mapDispatchToProps, mapStateToProps } from "../Password";
-import { vi } from "vitest";
 
 describe("<ChangePassword />", () => {
     let props;

@@ -1,6 +1,5 @@
 import { ReferenceItem, mapStateToProps } from "../Item";
 import { getReferenceItemProgress } from "../../../selectors";
-import { vi } from "vitest";
 
 vi.mock("../../../selectors.js");
 

@@ -1,5 +1,4 @@
 import App from "../App";
-import { vi } from "vitest";
 
 describe("<App />", () => {
     let store;

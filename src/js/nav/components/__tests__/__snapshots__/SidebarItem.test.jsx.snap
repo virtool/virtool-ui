@@ -1,3 +1,18 @@
 // Vitest Snapshot v1
 
-exports[`<SidebarItem /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<SidebarItem /> > should render 1`] = `
+<Styled(NavLink)
+  activeClassName="active"
+  isActive={[Function]}
+  to="/foo/bar"
+>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="fa-foo"
+  />
+  <p>
+    Foobar
+  </p>
+</Styled(NavLink)>
+`;

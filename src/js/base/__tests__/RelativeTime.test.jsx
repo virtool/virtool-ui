@@ -1,6 +1,5 @@
 import { act, screen } from "@testing-library/react";
 import { RelativeTime } from "../RelativeTime";
-import { vi } from "vitest";
 
 const fakeTime = "2019-02-10T17:11:00.000000Z";
 const RealDate = Date;

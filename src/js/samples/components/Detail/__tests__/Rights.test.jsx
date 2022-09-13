@@ -1,7 +1,7 @@
 import { Select } from "../../../../base";
 import { SampleRights, mapStateToProps, mapDispatchToProps } from "../Rights";
 import { getCanModifyRights } from "../../../selectors";
-import { vi } from "vitest";
+
 vi.mock("../../../selectors.js");
 
 describe("<SampleRights />", () => {

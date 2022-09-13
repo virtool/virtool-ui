@@ -1,6 +1,5 @@
 import { CacheDetail, mapStateToProps, mapDispatchToProps } from "../Detail";
 import { GET_CACHE } from "../../../app/actionTypes";
-import { vi } from "vitest";
 
 describe("<CacheDetail />", () => {
     let props;

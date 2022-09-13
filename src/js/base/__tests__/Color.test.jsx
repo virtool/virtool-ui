@@ -1,7 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { Color } from "../Color";
-import { vi } from "vitest";
 
 describe("<Color />", () => {
     it("should call onChange when color clicked or input changed", () => {

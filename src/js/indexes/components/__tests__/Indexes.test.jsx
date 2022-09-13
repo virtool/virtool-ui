@@ -1,5 +1,4 @@
 import { Indexes } from "../Indexes";
-import { vi } from "vitest";
 
 describe("<Indexes />", () => {
     let props;

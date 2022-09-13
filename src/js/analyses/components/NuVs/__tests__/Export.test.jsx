@@ -1,5 +1,4 @@
 import { NuVsExport } from "../Export";
-import { vi } from "vitest";
 
 describe("<NuVsExport />", () => {
     it("renders correctly", () => {

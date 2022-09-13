@@ -3,7 +3,6 @@ import { ThemeProvider } from "styled-components";
 import { FIND_USERS } from "../../../app/actionTypes";
 import { ScrollList } from "../../../base";
 import { UsersList, mapStateToProps, mapDispatchToProps } from "../List";
-import { vi } from "vitest";
 
 const ThemeProviderWrapper = ({ children }) => {
     const theme = {

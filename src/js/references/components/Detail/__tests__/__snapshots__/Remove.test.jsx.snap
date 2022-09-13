@@ -1,5 +1,11 @@
 // Vitest Snapshot v1
 
-exports[`<RemoveReference /> > should not render when user does not have permission 1`] = `ShallowWrapper {}`;
+exports[`<RemoveReference /> > should not render when user does not have permission 1`] = `""`;
 
-exports[`<RemoveReference /> > should render when user has permission 1`] = `ShallowWrapper {}`;
+exports[`<RemoveReference /> > should render when user has permission 1`] = `
+<RemoveBanner
+  buttonText="Delete"
+  message="Permanently delete this reference"
+  onClick={[Function]}
+/>
+`;

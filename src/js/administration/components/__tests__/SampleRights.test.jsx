@@ -2,7 +2,6 @@ import { UPDATE_SETTINGS } from "../../../app/actionTypes";
 import { Select } from "../../../base";
 import { mapDispatchToProps, mapStateToProps, SampleRights } from "../SampleRights";
 import { screen } from "@testing-library/react";
-import { vi } from "vitest";
 
 describe("<SampleRights />", () => {
     let props;

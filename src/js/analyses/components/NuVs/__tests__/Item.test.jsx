@@ -1,5 +1,4 @@
 import { NuVsItem } from "../Item";
-import { vi } from "vitest";
 
 describe("<NuVsItem />", () => {
     let props;

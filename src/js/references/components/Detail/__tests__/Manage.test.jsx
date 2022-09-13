@@ -1,5 +1,4 @@
 import { ReferenceManage, mapStateToProps, mapDispatchToProps } from "../Manage";
-import { vi } from "vitest";
 
 describe("<ReferenceManage />", () => {
     let props;

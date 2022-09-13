@@ -1,6 +1,5 @@
 import { Input } from "../../../base";
 import { OTUForm } from "../Form";
-import { vi } from "vitest";
 
 describe("<OTUForm />", () => {
     let props;

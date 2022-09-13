@@ -1,5 +1,4 @@
 import { RIDTiming } from "../BLASTInProgress";
-import { vi } from "vitest";
 
 describe("<RIDTiming>", () => {
     const props = {

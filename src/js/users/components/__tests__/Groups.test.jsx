@@ -1,6 +1,5 @@
 import { editUser } from "../../actions";
 import { mapDispatchToProps, mapStateToProps, UserGroups } from "../Groups";
-import { vi } from "vitest";
 
 describe("<UserGroups />", () => {
     let props;

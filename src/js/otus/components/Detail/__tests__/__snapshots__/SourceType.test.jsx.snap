@@ -1,5 +1,44 @@
 // Vitest Snapshot v1
 
-exports[`<SourceType /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<SourceType /> > should render 1`] = `
+<InputGroup>
+  <styled.label>
+    Source Type
+  </styled.label>
+  <Select
+    onChange={[MockFunction spy]}
+    value="Bar"
+  >
+    <option
+      key="default"
+      value="unknown"
+    >
+      Unknown
+    </option>
+    <option
+      key="foo"
+      value="Foo"
+    >
+      Foo
+    </option>
+    <option
+      key="bar"
+      value="Bar"
+    >
+      Bar
+    </option>
+  </Select>
+</InputGroup>
+`;
 
-exports[`<SourceType /> > should render when [restrictSourceTypes=false] 1`] = `ShallowWrapper {}`;
+exports[`<SourceType /> > should render when [restrictSourceTypes=false] 1`] = `
+<InputGroup>
+  <styled.label>
+    Source type
+  </styled.label>
+  <Styled(UnstyledInput)
+    onChange={[MockFunction spy]}
+    value="Bar"
+  />
+</InputGroup>
+`;

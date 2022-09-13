@@ -2,7 +2,6 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React, { useState } from "react";
 import SequenceField from "../Field";
-import { vi } from "vitest";
 
 const FieldStateManager = ({ UIElement, SequenceFieldProps }) => {
     const [fieldValue, setFieldValue] = useState("");

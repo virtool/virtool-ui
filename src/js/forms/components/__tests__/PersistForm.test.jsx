@@ -2,7 +2,6 @@ import { render, waitFor } from "@testing-library/react";
 import { FormikContext } from "formik";
 import { SET_PERSISTENT_FORM_STATE } from "../../../app/actionTypes";
 import { mapDispatchToProps, mapStateToProps, PersistForm } from "../PersistForm";
-import { vi } from "vitest";
 
 const wrapWithContext = (ui, contextValues) =>
     wrapWithProviders(<FormikContext.Provider value={contextValues}> {ui} </FormikContext.Provider>);

@@ -4,7 +4,6 @@ import { createStore } from "redux";
 import { SubtractionFileManager } from "../FileManager";
 import { screen, waitFor } from "@testing-library/react";
 import { UPLOAD } from "../../../app/actionTypes";
-import { vi } from "vitest";
 
 const createAppStore = (state, reducer) => {
     return () => createStore(reducer ? reducer : state => state, state);

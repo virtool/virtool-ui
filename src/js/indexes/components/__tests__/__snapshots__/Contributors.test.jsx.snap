@@ -1,7 +1,57 @@
 // Vitest Snapshot v1
 
-exports[`<Contributor /> > should render when count is 1 1`] = `ShallowWrapper {}`;
+exports[`<Contributor /> > should render when count is 1 1`] = `
+<Styled(styled.div)
+  key="bob"
+>
+  <InitialIcon
+    handle="bob"
+    size="md"
+  />
+  bob
+  <styled.span>
+    1
+     change
+  </styled.span>
+</Styled(styled.div)>
+`;
 
-exports[`<Contributor /> > should render when count is 5 1`] = `ShallowWrapper {}`;
+exports[`<Contributor /> > should render when count is 5 1`] = `
+<Styled(styled.div)
+  key="bob"
+>
+  <InitialIcon
+    handle="bob"
+    size="md"
+  />
+  bob
+  <styled.span>
+    5
+     change
+    s
+  </styled.span>
+</Styled(styled.div)>
+`;
 
-exports[`<Contributors /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<Contributors /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Contributors 
+      <styled.span>
+        2
+      </styled.span>
+    </h2>
+  </Styled(styled.div)>
+  <Contributor
+    count={5}
+    id="bob"
+    key="bob"
+  />
+  <Contributor
+    count={12}
+    id="fred"
+    key="fred"
+  />
+</Styled(styled.div)>
+`;

@@ -2,7 +2,6 @@ import { FIND_SUBTRACTIONS } from "../../../app/actionTypes";
 import { SearchInput } from "../../../base";
 import { mapDispatchToProps, mapStateToProps, SubtractionToolbar } from "../Toolbar";
 import { checkAdminOrPermission } from "../../../utils/utils";
-import { vi } from "vitest";
 
 vi.mock("../../../utils/utils.js");
 

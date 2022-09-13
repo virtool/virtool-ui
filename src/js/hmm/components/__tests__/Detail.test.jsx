@@ -1,5 +1,4 @@
 import { HMMDetail, mapStateToProps, mapDispatchToProps } from "../Detail";
-import { vi } from "vitest";
 
 describe("<HMMDetail />", () => {
     let props;

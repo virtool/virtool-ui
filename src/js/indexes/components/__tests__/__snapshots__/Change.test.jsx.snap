@@ -1,5 +1,17 @@
 // Vitest Snapshot v1
 
-exports[`<IndexChange /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<IndexChange /> > should render 1`] = `
+<Styled(Styled(styled.div))>
+  <strong>
+    bar
+  </strong>
+  foo
+</Styled(Styled(styled.div))>
+`;
 
-exports[`<IndexChange /> > should render when [otuName=null] 1`] = `ShallowWrapper {}`;
+exports[`<IndexChange /> > should render when [otuName=null] 1`] = `
+<Styled(Styled(styled.div))>
+  <strong />
+  foo
+</Styled(Styled(styled.div))>
+`;

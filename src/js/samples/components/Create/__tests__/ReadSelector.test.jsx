@@ -1,6 +1,5 @@
 import { SearchInput } from "../../../../base";
 import ReadSelector, { ReadSelectorButton } from "../ReadSelector";
-import { vi } from "vitest";
 
 describe("<ReadSelector />", () => {
     let props;

@@ -1,7 +1,97 @@
 // Vitest Snapshot v1
 
-exports[`<RemoveModal /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<RemoveModal /> > should render 1`] = `
+<Modal
+  color="red"
+  label="Remove"
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Remove bar
+  </ModalHeader>
+  <Styled(Styled(styled.div))>
+    <span>
+      Are you sure you want to remove 
+      <strong>
+        Foo
+      </strong>
+      ?
+    </span>
+  </Styled(Styled(styled.div))>
+  <Styled(Component)>
+    <Button
+      color="red"
+      disabled={false}
+      icon="check"
+      onClick={[MockFunction spy]}
+      tipPlacement="top"
+      type="button"
+    >
+      Confirm
+    </Button>
+  </Styled(Component)>
+</Modal>
+`;
 
-exports[`<RemoveModal /> > should render when [show=false] 1`] = `ShallowWrapper {}`;
+exports[`<RemoveModal /> > should render when [show=false] 1`] = `
+<Modal
+  color="red"
+  label="Remove"
+  onHide={[MockFunction spy]}
+  show={false}
+>
+  <ModalHeader>
+    Remove bar
+  </ModalHeader>
+  <Styled(Styled(styled.div))>
+    <span>
+      Are you sure you want to remove 
+      <strong>
+        Foo
+      </strong>
+      ?
+    </span>
+  </Styled(Styled(styled.div))>
+  <Styled(Component)>
+    <Button
+      color="red"
+      disabled={false}
+      icon="check"
+      onClick={[MockFunction spy]}
+      tipPlacement="top"
+      type="button"
+    >
+      Confirm
+    </Button>
+  </Styled(Component)>
+</Modal>
+`;
 
-exports[`<RemoveModal /> > should render with message 1`] = `ShallowWrapper {}`;
+exports[`<RemoveModal /> > should render with message 1`] = `
+<Modal
+  color="red"
+  label="Remove"
+  onHide={[MockFunction spy]}
+  show={true}
+>
+  <ModalHeader>
+    Remove bar
+  </ModalHeader>
+  <Styled(Styled(styled.div))>
+    Are you sure about this?
+  </Styled(Styled(styled.div))>
+  <Styled(Component)>
+    <Button
+      color="red"
+      disabled={false}
+      icon="check"
+      onClick={[MockFunction spy]}
+      tipPlacement="top"
+      type="button"
+    >
+      Confirm
+    </Button>
+  </Styled(Component)>
+</Modal>
+`;

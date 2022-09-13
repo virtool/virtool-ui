@@ -1,7 +1,43 @@
 // Vitest Snapshot v1
 
-exports[`<ViewHeader /> > should render renders children 1`] = `ShallowWrapper {}`;
+exports[`<ViewHeader /> > should render renders children 1`] = `
+<styled.div>
+  <HelmetWrapper
+    defer={true}
+    encodeSpecialCharacters={true}
+  >
+    <title>
+      test-child
+    </title>
+  </HelmetWrapper>
+  <div>
+    Hello world
+  </div>
+</styled.div>
+`;
 
-exports[`<ViewHeader /> > should render with count 1`] = `ShallowWrapper {}`;
+exports[`<ViewHeader /> > should render with count 1`] = `
+<styled.div>
+  <HelmetWrapper
+    defer={true}
+    encodeSpecialCharacters={true}
+  >
+    <title>
+      Foo
+    </title>
+  </HelmetWrapper>
+</styled.div>
+`;
 
-exports[`<ViewHeader /> > should render with title 1`] = `ShallowWrapper {}`;
+exports[`<ViewHeader /> > should render with title 1`] = `
+<styled.div>
+  <HelmetWrapper
+    defer={true}
+    encodeSpecialCharacters={true}
+  >
+    <title>
+      Foo
+    </title>
+  </HelmetWrapper>
+</styled.div>
+`;

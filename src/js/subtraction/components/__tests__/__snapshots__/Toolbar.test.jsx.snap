@@ -1,5 +1,28 @@
 // Vitest Snapshot v1
 
-exports[`<SubtractionToolbar /> > should not render create button when [canModify=false] 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionToolbar /> > should not render create button when [canModify=false] 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[MockFunction spy]}
+    placeholder="Name"
+    value="foo"
+  />
+</styled.div>
+`;
 
-exports[`<SubtractionToolbar /> > should render create button when [canModify=true] 1`] = `ShallowWrapper {}`;
+exports[`<SubtractionToolbar /> > should render create button when [canModify=true] 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[MockFunction spy]}
+    placeholder="Name"
+    value="foo"
+  />
+  <LinkButton
+    color="blue"
+    icon="plus-square"
+    tip="Create"
+    tipPlacement="top"
+    to="subtractions/create"
+  />
+</styled.div>
+`;

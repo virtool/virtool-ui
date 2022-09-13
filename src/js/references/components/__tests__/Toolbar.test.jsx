@@ -1,6 +1,5 @@
 import { SearchInput } from "../../../base";
 import { ReferenceToolbar } from "../Toolbar";
-import { vi } from "vitest";
 
 describe("<ReferenceToolbar />", () => {
     let props;

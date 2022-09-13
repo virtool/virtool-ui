@@ -1,7 +1,124 @@
 // Vitest Snapshot v1
 
-exports[`<API /> > should render two API keys 1`] = `ShallowWrapper {}`;
+exports[`<API /> > should render two API keys 1`] = `
+<div>
+  <Styled(styled.div)>
+    <div
+      style={
+        {
+          "whiteSpace": "wrap",
+        }
+      }
+    >
+      <span>
+        Manage API keys for accessing the 
+      </span>
+      <Styled(UnstyledExternalLink)
+        href="https://www.virtool.ca/docs/developer/api_account/"
+      >
+        Virtool API
+      </Styled(UnstyledExternalLink)>
+      <span>
+        .
+      </span>
+    </div>
+    <Link
+      to={
+        {
+          "state": {
+            "createAPIKey": true,
+          },
+        }
+      }
+    >
+      Create
+    </Link>
+  </Styled(styled.div)>
+  <NoneFoundBox
+    noun="API keys"
+  />
+  <Connect(CreateAPIKey) />
+</div>
+`;
 
-exports[`<API /> > should render when loading API keys 1`] = `ShallowWrapper {}`;
+exports[`<API /> > should render when loading API keys 1`] = `
+<div>
+  <Styled(styled.div)>
+    <div
+      style={
+        {
+          "whiteSpace": "wrap",
+        }
+      }
+    >
+      <span>
+        Manage API keys for accessing the 
+      </span>
+      <Styled(UnstyledExternalLink)
+        href="https://www.virtool.ca/docs/developer/api_account/"
+      >
+        Virtool API
+      </Styled(UnstyledExternalLink)>
+      <span>
+        .
+      </span>
+    </div>
+    <Link
+      to={
+        {
+          "state": {
+            "createAPIKey": true,
+          },
+        }
+      }
+    >
+      Create
+    </Link>
+  </Styled(styled.div)>
+  <NoneFoundBox
+    noun="API keys"
+  />
+  <Connect(CreateAPIKey) />
+</div>
+`;
 
-exports[`<API /> > should render with 0 API keys 1`] = `ShallowWrapper {}`;
+exports[`<API /> > should render with 0 API keys 1`] = `
+<div>
+  <Styled(styled.div)>
+    <div
+      style={
+        {
+          "whiteSpace": "wrap",
+        }
+      }
+    >
+      <span>
+        Manage API keys for accessing the 
+      </span>
+      <Styled(UnstyledExternalLink)
+        href="https://www.virtool.ca/docs/developer/api_account/"
+      >
+        Virtool API
+      </Styled(UnstyledExternalLink)>
+      <span>
+        .
+      </span>
+    </div>
+    <Link
+      to={
+        {
+          "state": {
+            "createAPIKey": true,
+          },
+        }
+      }
+    >
+      Create
+    </Link>
+  </Styled(styled.div)>
+  <NoneFoundBox
+    noun="API keys"
+  />
+  <Connect(CreateAPIKey) />
+</div>
+`;

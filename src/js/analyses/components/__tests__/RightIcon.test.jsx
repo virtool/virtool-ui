@@ -1,5 +1,4 @@
 import { AnalysisItemRightIcon } from "../RightIcon";
-import { vi } from "vitest";
 
 describe("<RightIcon />", () => {
     let props;

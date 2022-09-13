@@ -1,6 +1,5 @@
 import { GET_ACCOUNT } from "../../../app/actionTypes";
 import { Account, mapStateToProps, mapDispatchToProps } from "../Account";
-import { vi } from "vitest";
 
 describe("<Account />", () => {
     it("should render", () => {

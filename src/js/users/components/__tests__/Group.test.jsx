@@ -1,5 +1,4 @@
 import { UserGroup } from "../Group";
-import { vi } from "vitest";
 
 describe("<UserGroup />", () => {
     let props;

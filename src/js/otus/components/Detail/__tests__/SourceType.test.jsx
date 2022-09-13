@@ -1,6 +1,5 @@
 import { Input, Select } from "../../../../base";
 import { SourceType } from "../SourceType";
-import { vi } from "vitest";
 
 describe("<SourceType />", () => {
     let props;

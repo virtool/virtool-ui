@@ -1,3 +1,49 @@
 // Vitest Snapshot v1
 
-exports[`<HMMTaxonomy /> > should render 1`] = `ShallowWrapper {}`;
+exports[`<HMMTaxonomy /> > should render 1`] = `
+<div>
+  <Styled(styled.div)>
+    <Styled(styled.div)>
+      <h2 />
+    </Styled(styled.div)>
+    <Styled(styled.div)>
+      <Styled(styled.div)
+        key="Begomovirus"
+      >
+        Begomovirus
+         
+        <styled.span>
+          191
+        </styled.span>
+      </Styled(styled.div)>
+      <Styled(styled.div)
+        key="Curtovirus"
+      >
+        Curtovirus
+         
+        <styled.span>
+          3
+        </styled.span>
+      </Styled(styled.div)>
+      <Styled(styled.div)
+        key="None"
+      >
+        None
+         
+        <styled.span>
+          1
+        </styled.span>
+      </Styled(styled.div)>
+      <Styled(styled.div)
+        key="Topocuvirus"
+      >
+        Topocuvirus
+         
+        <styled.span>
+          1
+        </styled.span>
+      </Styled(styled.div)>
+    </Styled(styled.div)>
+  </Styled(styled.div)>
+</div>
+`;

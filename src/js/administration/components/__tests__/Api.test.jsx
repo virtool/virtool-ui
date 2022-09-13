@@ -1,6 +1,5 @@
 import { Api, mapStateToProps, mapDispatchToProps } from "../Api";
 import { UPDATE_SETTINGS } from "../../../app/actionTypes";
-import { vi } from "vitest";
 
 describe("<Api />", () => {
     let props;

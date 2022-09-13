@@ -7,7 +7,6 @@ import { mapDispatchToProps, SourceTypes } from "../SourceTypes/SourceTypes";
 import { SourceTypeItem } from "../SourceTypes/list";
 import userEvent from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
 
 const rerenderWithProviders = (rerender, ui) => {
     const wrappedUi = <ThemeProvider theme={theme}>{ui}</ThemeProvider>;

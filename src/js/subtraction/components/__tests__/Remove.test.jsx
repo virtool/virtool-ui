@@ -1,7 +1,6 @@
 import { PUSH_STATE, REMOVE_SUBTRACTION } from "../../../app/actionTypes";
 import { routerLocationHasState } from "../../../utils/utils";
 import { mapDispatchToProps, mapStateToProps, RemoveSubtraction } from "../Remove";
-import { vi } from "vitest";
 
 vi.mock("../../../utils/utils.js");
 

@@ -3,7 +3,6 @@ import * as utils from "../../../../utils/utils";
 import { CreateAPIKey, getInitialFormValues, mapDispatchToProps, mapStateToProps } from "../Create";
 import { createStore } from "redux";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);

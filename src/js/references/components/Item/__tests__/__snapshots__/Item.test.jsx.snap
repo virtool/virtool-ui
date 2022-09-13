@@ -1,7 +1,130 @@
 // Vitest Snapshot v1
 
-exports[`<ReferenceItem /> > should render when [organism='virus'] and [progress=32] 1`] = `ShallowWrapper {}`;
+exports[`<ReferenceItem /> > should render when [organism='virus'] and [progress=32] 1`] = `
+<Styled(Styled(styled.div))>
+  <ReferenceItemHeader
+    createdAt="2018-01-01T00:00:00.000000Z"
+    id="foo"
+    name="Foo"
+    organism="virus"
+    userHandle="bob"
+  />
+  <styled.div>
+    <ReferenceItemOrigin
+      clonedFrom={
+        {
+          "id": "clonedFrom",
+        }
+      }
+      importedFrom={
+        {
+          "id": "importedFrom",
+        }
+      }
+      remotesFrom={
+        {
+          "id": "remotesFrom",
+        }
+      }
+    />
+    <ReferenceItemBuild
+      id="foo"
+      latestBuild={
+        {
+          "id": "bar",
+        }
+      }
+      progress={32}
+    />
+  </styled.div>
+  <ReferenceItemProgress
+    now={32}
+  />
+</Styled(Styled(styled.div))>
+`;
 
-exports[`<ReferenceItem /> > should render when [organism=null] 1`] = `ShallowWrapper {}`;
+exports[`<ReferenceItem /> > should render when [organism=null] 1`] = `
+<Styled(Styled(styled.div))>
+  <ReferenceItemHeader
+    createdAt="2018-01-01T00:00:00.000000Z"
+    id="foo"
+    name="Foo"
+    organism={null}
+    userHandle="bob"
+  />
+  <styled.div>
+    <ReferenceItemOrigin
+      clonedFrom={
+        {
+          "id": "clonedFrom",
+        }
+      }
+      importedFrom={
+        {
+          "id": "importedFrom",
+        }
+      }
+      remotesFrom={
+        {
+          "id": "remotesFrom",
+        }
+      }
+    />
+    <ReferenceItemBuild
+      id="foo"
+      latestBuild={
+        {
+          "id": "bar",
+        }
+      }
+      progress={32}
+    />
+  </styled.div>
+  <ReferenceItemProgress
+    now={32}
+  />
+</Styled(Styled(styled.div))>
+`;
 
-exports[`<ReferenceItem /> > should render when [progress=100] 1`] = `ShallowWrapper {}`;
+exports[`<ReferenceItem /> > should render when [progress=100] 1`] = `
+<Styled(Styled(styled.div))>
+  <ReferenceItemHeader
+    createdAt="2018-01-01T00:00:00.000000Z"
+    id="foo"
+    name="Foo"
+    organism="virus"
+    userHandle="bob"
+  />
+  <styled.div>
+    <ReferenceItemOrigin
+      clonedFrom={
+        {
+          "id": "clonedFrom",
+        }
+      }
+      importedFrom={
+        {
+          "id": "importedFrom",
+        }
+      }
+      remotesFrom={
+        {
+          "id": "remotesFrom",
+        }
+      }
+    />
+    <ReferenceItemBuild
+      id="foo"
+      latestBuild={
+        {
+          "id": "bar",
+        }
+      }
+      progress={100}
+    />
+  </styled.div>
+  <ReferenceItemProgress
+    now={100}
+  />
+</Styled(Styled(styled.div))>
+`;
