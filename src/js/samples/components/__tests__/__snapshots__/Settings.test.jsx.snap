@@ -1,0 +1,17 @@
+// Vitest Snapshot v1
+
+exports[`<SamplesSettings /> > should render when [loading=%p] false 1`] = `
+<styled.div>
+  <ViewHeader
+    title="Sample Settings"
+  >
+    <styled.h1>
+      Sample Settings
+    </styled.h1>
+  </ViewHeader>
+  <Connect(UniqueNames) />
+  <Connect(SampleRights) />
+</styled.div>
+`;
+
+exports[`<SamplesSettings /> > should render when [loading=%p] true 1`] = `<LoadingPlaceholder />`;

@@ -1,0 +1,37 @@
+// Vitest Snapshot v1
+
+exports[`<HMM /> > should render 1`] = `
+<styled.div>
+  <styled.div>
+    <Switch>
+      <Route
+        component={
+          {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        exact={true}
+        path="/hmm"
+      />
+      <Route
+        component={[Function]}
+        path="/hmm/settings"
+      />
+      <Route
+        component={
+          {
+            "$$typeof": Symbol(react.memo),
+            "WrappedComponent": [Function],
+            "compare": null,
+            "type": [Function],
+          }
+        }
+        path="/hmm/:hmmId"
+      />
+    </Switch>
+  </styled.div>
+</styled.div>
+`;

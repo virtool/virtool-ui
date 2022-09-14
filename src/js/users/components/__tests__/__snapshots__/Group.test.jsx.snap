@@ -1,0 +1,27 @@
+// Vitest Snapshot v1
+
+exports[`<UserGroup /> > should render with [toggled=false] 1`] = `
+<Styled(Styled(styled.div))
+  active={false}
+  onClick={[Function]}
+>
+  <Checkbox
+    checked={false}
+    disabled={false}
+    label="bob"
+  />
+</Styled(Styled(styled.div))>
+`;
+
+exports[`<UserGroup /> > should render with [toggled=true] 1`] = `
+<Styled(Styled(styled.div))
+  active={true}
+  onClick={[Function]}
+>
+  <Checkbox
+    checked={true}
+    disabled={false}
+    label="bob"
+  />
+</Styled(Styled(styled.div))>
+`;

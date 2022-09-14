@@ -29,11 +29,11 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: "14"
       - name: Test
         run: |
           npm i
-          npx jest --coverage
+          npm run test
           npx webpack --config webpack.production.config.babel.js
   release:
     runs-on: ubuntu-20.04

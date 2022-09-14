@@ -1,0 +1,93 @@
+// Vitest Snapshot v1
+
+exports[`<IndexItem /> > should render 1`] = `
+<Styled(Link)
+  to="/refs/foo/indexes/bar"
+>
+  <styled.h3>
+    <styled.strong>
+      Version 
+      0
+    </styled.strong>
+    <IndexItemDescription
+      changeCount={3}
+      modifiedCount={5}
+    />
+    <IndexItemIcon
+      id="bar"
+      ready={true}
+    />
+  </styled.h3>
+  <Styled(UnstyledAttribution)
+    time="2018-02-14T17:12:00.000000Z"
+    user="bob"
+  />
+</Styled(Link)>
+`;
+
+exports[`<IndexItemChangeDescription /> > should render 'No Changes' when changeCount is 0 1`] = `"No changes"`;
+
+exports[`<IndexItemChangeDescription /> > should render empty when changeCount is null 1`] = `""`;
+
+exports[`<IndexItemChangeDescription /> > should render valid description when changeCount is 1 1`] = `
+<styled.span>
+  1
+   change
+   made in 
+  3
+   OTU
+  s
+</styled.span>
+`;
+
+exports[`<IndexItemChangeDescription /> > should render valid description when changeCount is 13 1`] = `
+<styled.span>
+  13
+   change
+  s
+   made in 
+  3
+   OTU
+  s
+</styled.span>
+`;
+
+exports[`<IndexItemChangeDescription /> > should render valid description when modifiedCount is 1 1`] = `
+<styled.span>
+  13
+   change
+  s
+   made in 
+  1
+   OTU
+</styled.span>
+`;
+
+exports[`<IndexItemIcon /> > should render checkmark when active 1`] = `
+<styled.div>
+  <Icon
+    color="green"
+    faStyle="fas"
+    fixedWidth={false}
+    name="check"
+  />
+   
+  <span>
+    Active
+  </span>
+</styled.div>
+`;
+
+exports[`<IndexItemIcon /> > should render nothing when ready, but not active 1`] = `""`;
+
+exports[`<IndexItemIcon /> > should render spinner when not ready 1`] = `
+<styled.div>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+     Building
+  </span>
+</styled.div>
+`;

@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<IndexGeneral /> should render 1`] = `
-<Fragment>
-  <Connect(Contributors) />
-  <Connect(Files) />
-  <Connect(IndexOTUs) />
-</Fragment>
-`;

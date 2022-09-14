@@ -1,0 +1,181 @@
+// Vitest Snapshot v1
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] cancelled 1`] = `
+<styled.div
+  pad={false}
+>
+  <Icon
+    color="red"
+    faStyle="fas"
+    fixedWidth={false}
+    name="times fa-fw"
+  />
+  <span>
+    cancelled
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] complete 1`] = `
+<styled.div
+  pad={false}
+>
+  <Icon
+    color="green"
+    faStyle="fas"
+    fixedWidth={false}
+    name="check fa-fw"
+  />
+  <span>
+    complete
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] error 1`] = `
+<styled.div
+  pad={false}
+>
+  <Icon
+    color="red"
+    faStyle="fas"
+    fixedWidth={false}
+    name="times fa-fw"
+  />
+  <span>
+    error
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] preparing 1`] = `
+<styled.div
+  pad={false}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    preparing
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] running 1`] = `
+<styled.div
+  pad={false}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    running
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] waiting 1`] = `
+<styled.div
+  pad={false}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    waiting
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] cancelled 1`] = `
+<styled.div
+  pad={true}
+>
+  <Icon
+    color="red"
+    faStyle="fas"
+    fixedWidth={false}
+    name="times fa-fw"
+  />
+  <span>
+    cancelled
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] complete 1`] = `
+<styled.div
+  pad={true}
+>
+  <Icon
+    color="green"
+    faStyle="fas"
+    fixedWidth={false}
+    name="check fa-fw"
+  />
+  <span>
+    complete
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] error 1`] = `
+<styled.div
+  pad={true}
+>
+  <Icon
+    color="red"
+    faStyle="fas"
+    fixedWidth={false}
+    name="times fa-fw"
+  />
+  <span>
+    error
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] preparing 1`] = `
+<styled.div
+  pad={true}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    preparing
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] running 1`] = `
+<styled.div
+  pad={true}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    running
+  </span>
+</styled.div>
+`;
+
+exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] waiting 1`] = `
+<styled.div
+  pad={true}
+>
+  <Loader
+    color="primary"
+    size="14px"
+  />
+  <span>
+    waiting
+  </span>
+</styled.div>
+`;

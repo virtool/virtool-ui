@@ -1,0 +1,21 @@
+// Vitest Snapshot v1
+
+exports[`<Remove /> > should render with [show=false] 1`] = `
+<RemoveModal
+  name="Foo"
+  noun="Isolate"
+  onConfirm={[Function]}
+  onHide={[MockFunction spy]}
+  show={false}
+/>
+`;
+
+exports[`<Remove /> > should render with [show=true] 1`] = `
+<RemoveModal
+  name="Foo"
+  noun="Isolate"
+  onConfirm={[Function]}
+  onHide={[MockFunction spy]}
+  show={true}
+/>
+`;

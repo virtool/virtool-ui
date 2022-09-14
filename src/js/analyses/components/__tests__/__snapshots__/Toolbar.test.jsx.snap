@@ -1,0 +1,37 @@
+// Vitest Snapshot v1
+
+exports[`<AnalysesToolbar /> > should render with [canModify=false] 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[Function]}
+    value="baz"
+  />
+  <Button
+    color="blue"
+    disabled={true}
+    icon="plus-square fa-fw"
+    onClick={[Function]}
+    tip="New Analysis"
+    tipPlacement="top"
+    type="button"
+  />
+</styled.div>
+`;
+
+exports[`<AnalysesToolbar /> > should render with default props 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[Function]}
+    value="baz"
+  />
+  <Button
+    color="blue"
+    disabled={false}
+    icon="plus-square fa-fw"
+    onClick={[Function]}
+    tip="New Analysis"
+    tipPlacement="top"
+    type="button"
+  />
+</styled.div>
+`;

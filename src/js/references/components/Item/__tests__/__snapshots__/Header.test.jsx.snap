@@ -1,0 +1,49 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceItemHeader /> > should render 1`] = `
+<styled.div>
+  <h2>
+    <Link
+      to="/refs/foo"
+    >
+      Foo
+    </Link>
+    <LinkIcon
+      color="blue"
+      name="clone"
+      tip="Clone"
+      to={
+        {
+          "state": {
+            "cloneReference": true,
+            "id": "foo",
+          },
+        }
+      }
+    />
+  </h2>
+  <p>
+    <span>
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="barcode"
+      />
+      <styled.strong>
+        unknown
+         
+        genome
+        s
+      </styled.strong>
+      <span>
+         organized into 
+         OTUs
+      </span>
+    </span>
+    <Styled(UnstyledAttribution)
+      time="2018-01-01T00:00:00.000000Z"
+      user="bob"
+    />
+  </p>
+</styled.div>
+`;

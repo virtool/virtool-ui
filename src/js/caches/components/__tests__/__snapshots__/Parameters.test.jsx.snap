@@ -1,0 +1,54 @@
+// Vitest Snapshot v1
+
+exports[`<CacheParameters /> > should rander when [hash=null] 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    Trim Parameters
+  </Styled(styled.div)>
+  <styled.table>
+    <tbody />
+  </styled.table>
+</Styled(styled.div)>
+`;
+
+exports[`<CacheParameters /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    Trim Parameters
+  </Styled(styled.div)>
+  <styled.table>
+    <tbody>
+      <tr
+        key="0"
+      >
+        <styled.th>
+          0
+        </styled.th>
+        <td>
+          f
+        </td>
+      </tr>
+      <tr
+        key="1"
+      >
+        <styled.th>
+          1
+        </styled.th>
+        <td>
+          o
+        </td>
+      </tr>
+      <tr
+        key="2"
+      >
+        <styled.th>
+          2
+        </styled.th>
+        <td>
+          o
+        </td>
+      </tr>
+    </tbody>
+  </styled.table>
+</Styled(styled.div)>
+`;

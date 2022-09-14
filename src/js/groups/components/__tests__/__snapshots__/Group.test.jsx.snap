@@ -1,0 +1,21 @@
+// Vitest Snapshot v1
+
+exports[`Group > should render as active when [active=true] 1`] = `
+<Styled(styled.div)
+  active={true}
+  key="foo"
+  onClick={[MockFunction spy]}
+>
+  foo
+</Styled(styled.div)>
+`;
+
+exports[`Group > should render correct with default props 1`] = `
+<Styled(styled.div)
+  active={false}
+  key="foo"
+  onClick={[MockFunction spy]}
+>
+  foo
+</Styled(styled.div)>
+`;

@@ -1,0 +1,75 @@
+// Vitest Snapshot v1
+
+exports[`<SampleFileManager /> > should render 1`] = `
+<styled.div>
+  <Connect(FileManager)
+    fileType="reads"
+  />
+</styled.div>
+`;
+
+exports[`<Samples /> > should render 1`] = `
+<styled.div>
+  <Switch>
+    <Route
+      component={
+        {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      path="/samples/settings"
+    />
+    <Route
+      component={[Function]}
+      path="/samples/files"
+    />
+    <Route
+      component={
+        {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      path="/samples/labels"
+    />
+    <Route
+      component={
+        {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      path="/samples/create"
+    />
+    <Route
+      component={
+        {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      path="/samples/:sampleId"
+    />
+    <Route
+      component={
+        {
+          "$$typeof": Symbol(react.memo),
+          "WrappedComponent": [Function],
+          "compare": null,
+          "type": [Function],
+        }
+      }
+      path="/samples"
+    />
+  </Switch>
+</styled.div>
+`;
