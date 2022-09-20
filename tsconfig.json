@@ -5,7 +5,7 @@
     "module": "commonjs",                                /* Specify what module code is generated. */
     "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
     "typeRoots": ["node_modules/@types"],                                  /* Specify multiple folders that act like './node_modules/@types'. */
-    "types": ["node", "jest"],
+    "types": ["node", "vitest"],
 
     /* JavaScript Support */
      "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
@@ -21,7 +21,7 @@
 
     /* Type Checking */
     "strict": true,                                  /* Enable all strict type-checking options. */
-    "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    "noImplicitAny": false,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
     "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */

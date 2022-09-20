@@ -7,3 +7,6 @@ const StyledButton = styled(Icon)`
 `;
 
 export const CloseButton = ({ onClick }) => <StyledButton name="times" onClick={onClick} />;
+
+
+
