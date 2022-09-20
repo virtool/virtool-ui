@@ -22,9 +22,9 @@
     /* Type Checking */
     "strict": true,                                  /* Enable all strict type-checking options. */
     "noImplicitAny": false,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
-    "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
+    "strictNullChecks": false,                         /* When type checking, take into account 'null' and 'undefined'. */
     "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
-    "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
+    "strictPropertyInitialization": false,             /* Check for class properties that are declared but not set in the constructor. */
     "noImplicitThis": true,                           /* Enable error reporting when 'this' is given the type 'any'. */
     "alwaysStrict": true,                             /* Ensure 'use strict' is always emitted. */
 

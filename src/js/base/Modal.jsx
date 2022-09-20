@@ -7,7 +7,7 @@ import styled, { keyframes } from "styled-components";
 import { colors, getBorder } from "../app/theme";
 import { Alert } from "./Alert";
 import { BoxGroupSection } from "./Box";
-import { CloseButton } from "./CloseButton.tsx";
+import { CloseButton } from "./CloseButton";
 import { Tabs } from "./Tabs";
 
 const modalOverlayOpen = keyframes`

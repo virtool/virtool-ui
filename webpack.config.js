@@ -9,7 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?|tsx?$/,
+        test: /\.[jt]sx?$/,
         include: /src\/js/,
         use: ["ts-loader"],
       },
@@ -28,7 +28,7 @@ module.exports = {
   devtool: "source-map",
 
   resolve: {
-    extensions: [".js", ".jsx", ".ts", "tsx"],
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     fallback: {
       fs: false,
     },
