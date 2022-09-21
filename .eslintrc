@@ -6,7 +6,7 @@
     "console": true,
     "fetch": true
   },
-  "parser": "@babel/eslint-parser",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
@@ -78,7 +78,7 @@
   },
   "overrides": [
     {
-      "files": ["setupTests.js", "webpack.*.config.babel.js"],
+      "files": ["setupTests.js", "webpack.*.config.js"],
       "env": {
         "vitest-globals/env": true
       },

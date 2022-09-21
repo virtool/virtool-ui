@@ -11,9 +11,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        exclude: /(node_modules)/,
-        use: ["babel-loader"],
+        test: /\.[jt]sx?$/,
+        include: /src\/js/,
+        use: ["ts-loader"],
       },
 
       {
@@ -28,7 +28,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     fallback: {
       fs: false,
     },
