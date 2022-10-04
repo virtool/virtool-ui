@@ -6,7 +6,10 @@ describe("<AccountProfile />", () => {
     beforeEach(() => {
         props = {
             handle: "foo",
-            groups: ["test"],
+            groups: [
+                { id: "ac091sa1", name: "Technicians" },
+                { id: "980s921a", name: "Managers" }
+            ],
             administrator: false
         };
     });
