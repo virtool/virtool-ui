@@ -46,21 +46,11 @@ const AccountProfileHeader = styled.div`
 `;
 
 export const AccountProfile = ({ handle, groups, administrator }) => {
-    const groupLabels = map(groups, groupId => (
-        <Label key={groupId}>
-            <Icon name="users" /> {groupId}
+    const groupLabels = map(groups, ({ id, name }) => (
+        <Label key={id}>
+            <Icon name="users" /> {name}
         </Label>
     ));
-
-    let adminLabel;
-
-    if (administrator) {
-        adminLabel = (
-            <Label key="administrator" color="purple">
-                <Icon name="user-shield" /> Administrator
-            </Label>
-        );
-    }
 
     return (
         <div>
@@ -69,7 +59,11 @@ export const AccountProfile = ({ handle, groups, administrator }) => {
                 <div>
                     <h3>
                         {handle}
-                        {adminLabel}
+                        {administrator && (
+                            <Label key="administrator" color="purple">
+                                <Icon name="user-shield" /> Administrator
+                            </Label>
+                        )}
                     </h3>
                     <AccountProfileGroups>{groupLabels}</AccountProfileGroups>
                 </div>
@@ -82,9 +76,9 @@ export const AccountProfile = ({ handle, groups, administrator }) => {
 };
 
 export const mapStateToProps = state => ({
-    handle: getAccountHandle(state),
+    administrator: getAccountAdministrator(state),
     groups: state.account.groups,
-    administrator: getAccountAdministrator(state)
+    handle: getAccountHandle(state)
 });
 
 export default connect(mapStateToProps)(AccountProfile);
