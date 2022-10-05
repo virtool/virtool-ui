@@ -3,7 +3,8 @@ WORKDIR /build
 COPY .eslintrc /build/
 COPY package.json /build/
 COPY package-lock.json /build/
-COPY webpack.config.ts /build/
+COPY tsconfig.json /build/
+COPY webpack.config.js /build/
 COPY webpack.production.config.js /build/
 RUN npm i
 COPY src /build/src
