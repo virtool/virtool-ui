@@ -118,5 +118,5 @@ export const drawBasesChart = (element, data, baseWidth) => {
         .style("text-anchor", "end")
         .attr("transform", "rotate(-90)");
 
-    appendLegend(svg, width, series);
+    appendLegend(svg, width, series, 8);
 };
