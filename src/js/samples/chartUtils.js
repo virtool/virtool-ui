@@ -1,7 +1,5 @@
-import { scaleOrdinal } from "d3-scale";
 import { select } from "d3-selection";
-import { legendColor } from "d3-svg-legend";
-import { map } from "lodash-es";
+import { map, keysIn } from "lodash-es";
 
 const height = 300;
 
@@ -12,16 +10,21 @@ const margin = {
     right: 20
 };
 
-export const appendLegend = (svg, width, series) => {
-    const legendScale = scaleOrdinal().domain(map(series, "label")).range(map(series, "color"));
-
-    const legend = legendColor().shape("circle").shapeRadius(8).shapePadding(10).scale(legendScale);
-
-    // Append legend, calling rendering function.
-    svg.append("g")
-        .attr("class", "legendOrdinal")
-        .attr("transform", `translate(${width - 60}, 5)`)
-        .call(legend);
+export const appendLegend = (svg, width, series, legendCircleRadius) => {
+    map(keysIn(series), index => {
+        svg.append("circle")
+            .attr("cy", index * 25)
+            .attr("r", legendCircleRadius)
+            .attr("class", "legendOrdinal")
+            .attr("transform", `translate(${width - 60}, 5)`)
+            .attr("fill", series[index].color);
+        svg.append("text")
+            .attr("y", index * 25 + 6)
+            .attr("x", 17)
+            .attr("class", "legendOrdinal")
+            .attr("transform", `translate(${width - 60}, 5)`)
+            .text(series[index].label);
+    });
 };
 
 export const createSVG = (element, width) => {
