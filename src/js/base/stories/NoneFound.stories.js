@@ -11,13 +11,7 @@ const Template = args => <NoneFound {...args} />;
 export const shortNoneFound = Template.bind({});
 
 shortNoneFound.args = {
-    noun: "hello"
-};
-
-export const longNoneFound = Template.bind({});
-
-longNoneFound.args = {
-    noun: "writing a very long none found noun ... writing a very long none found noun ..."
+    noun: "items"
 };
 
 export const noNoneFound = Template.bind({});

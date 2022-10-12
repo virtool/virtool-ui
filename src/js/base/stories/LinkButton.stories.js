@@ -12,15 +12,6 @@ export const greenLinkButton = Template.bind({});
 
 greenLinkButton.args = {
     color: "green",
-    to: "/",
-    children: "this is a green link button"
-};
-
-export const extremelyLongLinkButton = Template.bind({});
-
-extremelyLongLinkButton.args = {
-    color: "blue",
-    to: "/",
-    children:
-        "this is an exxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxtremely long linnnnnnnnnnnnk buttttttttttttttton"
+    to: "#",
+    children: "Link Button"
 };

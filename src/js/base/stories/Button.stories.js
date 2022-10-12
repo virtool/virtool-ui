@@ -29,19 +29,3 @@ buttonWithChildren.args = {
     active: true,
     children: "hello"
 };
-
-export const buttonWithVeryLongChild = Template.bind({});
-
-buttonWithVeryLongChild.args = {
-    color: "purple",
-    active: true,
-    children: "aaaaaaaaaaaaaaaaaaaaaassssssssssssssssddddddddddddddddd"
-};
-
-export const submitButtonWithManyChildren = Template.bind({});
-
-submitButtonWithManyChildren.args = {
-    color: "green",
-    type: "submit",
-    children: ["aaa", "bbb", "ccc", "ddd", "eee", "fff", "ggg"]
-};
