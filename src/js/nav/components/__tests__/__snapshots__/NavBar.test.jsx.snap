@@ -1,0 +1,82 @@
+// Vitest Snapshot v1
+
+exports[`<Bar /> > should render 1`] = `
+<styled.div>
+  <styled.div>
+    <Styled(VTLogo)
+      color="white"
+    />
+    <Styled(NavLink)
+      to="/jobs"
+    >
+      Jobs
+    </Styled(NavLink)>
+    <Styled(NavLink)
+      to="/samples"
+    >
+      Samples
+    </Styled(NavLink)>
+    <Styled(NavLink)
+      to="/refs"
+    >
+      References
+    </Styled(NavLink)>
+    <Styled(NavLink)
+      to="/hmm"
+    >
+      HMM
+    </Styled(NavLink)>
+    <Styled(NavLink)
+      to="/subtractions"
+    >
+      Subtractions
+    </Styled(NavLink)>
+  </styled.div>
+  <styled.div>
+    <Menu>
+      <Styled(MenuButton)>
+        <InitialIcon
+          size="md"
+        />
+        <span />
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </Styled(MenuButton)>
+      <Styled(MenuList)>
+        <Styled(Component)
+          to="/account"
+        >
+          Signed in as 
+          <strong />
+        </Styled(Component)>
+        <styled.div />
+        <Styled(Component)
+          to="/account"
+        >
+          Account
+        </Styled(Component)>
+        <Styled(Component)
+          to="/administration"
+        >
+          Administration 
+        </Styled(Component)>
+        <Styled(Component)
+          rel="noopener noreferrer"
+          target="_blank"
+          to="//virtool.ca/docs/manual/start/installation/"
+        >
+          Documentation
+        </Styled(Component)>
+        <Styled(MenuItem)
+          onSelect={[MockFunction spy]}
+        >
+          Logout
+        </Styled(MenuItem)>
+      </Styled(MenuList)>
+    </Menu>
+  </styled.div>
+</styled.div>
+`;

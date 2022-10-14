@@ -1,0 +1,27 @@
+// Vitest Snapshot v1
+
+exports[`<IndexDetail /> > should render <LoadingPlaceholder /> when index or reference detail is null 1`] = `<LoadingPlaceholder />`;
+
+exports[`<IndexDetail /> > should render <NotFound /> when GET_INDEX_ERROR is set 1`] = `<NotFound />`;
+
+exports[`<IndexDetail /> > should render 1`] = `
+<Fragment>
+  <styled.div>
+    <styled.div>
+      Index 
+      3
+    </styled.div>
+    <styled.div>
+      <styled.span>
+         built 
+        <RelativeTime
+          time="2018-02-14T17:12:00.000000Z"
+        />
+      </styled.span>
+    </styled.div>
+  </styled.div>
+  <styled.div>
+    <IndexGeneral />
+  </styled.div>
+</Fragment>
+`;

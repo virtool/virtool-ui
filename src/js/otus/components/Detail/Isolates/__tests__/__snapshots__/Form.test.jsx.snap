@@ -1,0 +1,89 @@
+// Vitest Snapshot v1
+
+exports[`<IsolateForm /> > should render with source types restricted 1`] = `
+<form
+  onSubmit={[MockFunction spy]}
+>
+  <Styled(styled.div)>
+    <styled.div>
+      <SourceType
+        allowedSourceTypes={
+          [
+            "isolate",
+            "genotype",
+          ]
+        }
+        onChange={[Function]}
+        restrictSourceTypes={true}
+        value="isolate"
+      />
+      <InputGroup>
+        <styled.label>
+          Source Name
+        </styled.label>
+        <Styled(UnstyledInput)
+          disabled={false}
+          onChange={[Function]}
+          value="A"
+        />
+      </InputGroup>
+    </styled.div>
+    <InputGroup>
+      <styled.label>
+        Isolate Name
+      </styled.label>
+      <Styled(UnstyledInput)
+        readOnly={true}
+        value="Isolate A"
+      />
+    </InputGroup>
+  </Styled(styled.div)>
+  <Styled(Component)>
+    <SaveButton />
+  </Styled(Component)>
+</form>
+`;
+
+exports[`<IsolateForm /> > should render with source types unrestricted 1`] = `
+<form
+  onSubmit={[MockFunction spy]}
+>
+  <Styled(styled.div)>
+    <styled.div>
+      <SourceType
+        allowedSourceTypes={
+          [
+            "isolate",
+            "genotype",
+          ]
+        }
+        onChange={[Function]}
+        restrictSourceTypes={false}
+        value="isolate"
+      />
+      <InputGroup>
+        <styled.label>
+          Source Name
+        </styled.label>
+        <Styled(UnstyledInput)
+          disabled={false}
+          onChange={[Function]}
+          value="A"
+        />
+      </InputGroup>
+    </styled.div>
+    <InputGroup>
+      <styled.label>
+        Isolate Name
+      </styled.label>
+      <Styled(UnstyledInput)
+        readOnly={true}
+        value="Isolate A"
+      />
+    </InputGroup>
+  </Styled(styled.div)>
+  <Styled(Component)>
+    <SaveButton />
+  </Styled(Component)>
+</form>
+`;

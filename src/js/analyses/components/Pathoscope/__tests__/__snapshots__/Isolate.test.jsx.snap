@@ -1,0 +1,103 @@
+// Vitest Snapshot v1
+
+exports[`<PathoscopeIsolate /> > should render 1`] = `
+<styled.div>
+  <styled.div>
+    Isolate A
+    <PathoscopeIsolateWeight
+      pi={0.712}
+      reads={102}
+      showPathoscopeReads={false}
+    />
+    <styled.strong>
+      13
+    </styled.strong>
+    <styled.strong>
+      NaN
+    </styled.strong>
+  </styled.div>
+  <ScrollSyncPane
+    enabled={true}
+    group="default"
+  >
+    <styled.div>
+      <CoverageChart
+        definition="Foo Hit"
+        id="foo"
+        key="0"
+        length={5}
+        showYAxis={true}
+        yMax={22}
+      />
+      <CoverageChart
+        definition="Bar Hit"
+        id="bar"
+        key="1"
+        length={8}
+        showYAxis={false}
+        yMax={22}
+      />
+    </styled.div>
+  </ScrollSyncPane>
+</styled.div>
+`;
+
+exports[`<PathoscopeIsolate /> > should render read count 1`] = `
+<styled.div>
+  <styled.div>
+    Isolate A
+    <PathoscopeIsolateWeight
+      pi={0.712}
+      reads={102}
+      showPathoscopeReads={true}
+    />
+    <styled.strong>
+      13
+    </styled.strong>
+    <styled.strong>
+      NaN
+    </styled.strong>
+  </styled.div>
+  <ScrollSyncPane
+    enabled={true}
+    group="default"
+  >
+    <styled.div>
+      <CoverageChart
+        definition="Foo Hit"
+        id="foo"
+        key="0"
+        length={5}
+        showYAxis={true}
+        yMax={22}
+      />
+      <CoverageChart
+        definition="Bar Hit"
+        id="bar"
+        key="1"
+        length={8}
+        showYAxis={false}
+        yMax={22}
+      />
+    </styled.div>
+  </ScrollSyncPane>
+</styled.div>
+`;
+
+exports[`<PathoscopeIsolateWeight /> > should render reads 1`] = `
+<styled.strong>
+  121
+</styled.strong>
+`;
+
+exports[`<PathoscopeIsolateWeight /> > should render weight 1`] = `
+<styled.strong>
+  0.321
+</styled.strong>
+`;
+
+exports[`<PathoscopeIsolateWeight /> > should render weight in scientific notation 1`] = `
+<styled.strong>
+  3.21E-7
+</styled.strong>
+`;

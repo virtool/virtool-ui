@@ -1,0 +1,31 @@
+// Vitest Snapshot v1
+
+exports[`<IndexOTU /> > should render when [changeCount = 1] 1`] = `
+<Styled(styled.div)>
+  <Link
+    to="/refs/foo/otus/bar"
+  >
+    baz
+  </Link>
+  <styled.span>
+    1
+     
+    change
+  </styled.span>
+</Styled(styled.div)>
+`;
+
+exports[`<IndexOTU /> > should render when [changeCount = 2] 1`] = `
+<Styled(styled.div)>
+  <Link
+    to="/refs/foo/otus/bar"
+  >
+    baz
+  </Link>
+  <styled.span>
+    2
+     
+    changes
+  </styled.span>
+</Styled(styled.div)>
+`;

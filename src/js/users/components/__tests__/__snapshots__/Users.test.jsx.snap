@@ -1,0 +1,39 @@
+// Vitest Snapshot v1
+
+exports[`<ManageUsers /> > should render 1`] = `
+<Fragment>
+  <styled.div>
+    <SearchInput
+      name="search"
+    />
+    <LinkButton
+      icon="users"
+      tip="Manage Groups"
+      tipPlacement="top"
+      to={
+        {
+          "state": {
+            "groups": true,
+          },
+        }
+      }
+    />
+    <LinkButton
+      color="blue"
+      icon="user-plus"
+      tip="Create User"
+      tipPlacement="top"
+      to={
+        {
+          "state": {
+            "createUser": true,
+          },
+        }
+      }
+    />
+  </styled.div>
+  <Connect(UsersList) />
+  <Connect(CreateUser) />
+  <Connect(Groups) />
+</Fragment>
+`;

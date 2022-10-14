@@ -1,0 +1,21 @@
+// Vitest Snapshot v1
+
+exports[`<IndexOTUs /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      OTUs 
+      <styled.span>
+        1
+      </styled.span>
+    </h2>
+  </Styled(styled.div)>
+  <IndexOTU
+    changeCount={1}
+    id="Foo"
+    key="Foo"
+    name="Bar"
+    refId="baz"
+  />
+</Styled(styled.div)>
+`;

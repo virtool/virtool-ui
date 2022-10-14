@@ -1,0 +1,61 @@
+// Vitest Snapshot v1
+
+exports[`<SampleFilesCache /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Cached Trims
+    </h2>
+    <p>
+      Trimmed reads saved from analysis runs that can be reused in future analyses.
+    </p>
+  </Styled(styled.div)>
+  <Connect(SampleCacheItem)
+    createdAt="2018-01-01T00:00:00.000000Z"
+    files={
+      [
+        {
+          "name": "reads_1.fastq.gz",
+          "size": 136569053,
+        },
+      ]
+    }
+    hash="abc123"
+    id="foo"
+    key="foo"
+    missing={false}
+  />
+  <Connect(SampleCacheItem)
+    createdAt="2018-02-01T00:00:00.000000Z"
+    files={
+      [
+        {
+          "name": "reads_1.fastq.gz",
+          "size": 290100291,
+        },
+      ]
+    }
+    hash="xyz789"
+    id="baz"
+    key="baz"
+    missing={true}
+  />
+</Styled(styled.div)>
+`;
+
+exports[`<SampleFilesCache /> > should render NoneFound when caches array empty 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Cached Trims
+    </h2>
+    <p>
+      Trimmed reads saved from analysis runs that can be reused in future analyses.
+    </p>
+  </Styled(styled.div)>
+  <NoneFoundSection
+    key="none"
+    noun="cached trims"
+  />
+</Styled(styled.div)>
+`;

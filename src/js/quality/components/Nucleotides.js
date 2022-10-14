@@ -63,5 +63,5 @@ export const drawNucleotidesChart = (element, data, baseWidth) => {
         .style("text-anchor", "end")
         .text("% Composition");
 
-    appendLegend(svg, width, series);
+    appendLegend(svg, width, series, 8);
 };

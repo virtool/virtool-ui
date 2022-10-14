@@ -1,0 +1,26 @@
+// Vitest Snapshot v1
+
+exports[`SampleUserGroup > should render 1`] = `
+<InputGroup>
+  <styled.label>
+    User GroupItem
+  </styled.label>
+  <Select
+    onChange={[MockFunction spy]}
+    value="bar"
+  >
+    <option
+      key="none"
+      value="none"
+    >
+      None
+    </option>
+    <styled.option
+      key="bar_id"
+      value="bar_id"
+    >
+      bar
+    </styled.option>
+  </Select>
+</InputGroup>
+`;

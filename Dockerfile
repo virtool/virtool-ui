@@ -1,14 +1,14 @@
 FROM library/node:16-buster as build
 WORKDIR /build
 COPY .eslintrc /build/
-COPY babel.config.js /build/
 COPY package.json /build/
 COPY package-lock.json /build/
-COPY webpack.config.babel.js /build/
-COPY webpack.production.config.babel.js /build/
+COPY tsconfig.json /build/
+COPY webpack.config.js /build/
+COPY webpack.production.config.js /build/
 RUN npm i
 COPY src /build/src
-RUN npx webpack --config webpack.production.config.babel.js
+RUN npx webpack --config webpack.production.config.js
 
 FROM library/node:16-buster
 WORKDIR /ui

@@ -1,0 +1,123 @@
+// Vitest Snapshot v1
+
+exports[`<Permissions /> > should render correctly 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)
+    active={true}
+    disabled={false}
+    key="test_create"
+    onClick={[Function]}
+  >
+    <Checkbox
+      checked={true}
+      disabled={false}
+    />
+    <code>
+      test_create
+    </code>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    active={false}
+    disabled={false}
+    key="test_edit"
+    onClick={[Function]}
+  >
+    <Checkbox
+      checked={false}
+      disabled={false}
+    />
+    <code>
+      test_edit
+    </code>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    active={true}
+    disabled={true}
+    key="test_remove"
+    onClick={null}
+  >
+    <Checkbox
+      checked={true}
+      disabled={false}
+    />
+    <code>
+      test_remove
+    </code>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    active={false}
+    disabled={true}
+    key="test_view"
+    onClick={null}
+  >
+    <Checkbox
+      checked={false}
+      disabled={false}
+    />
+    <code>
+      test_view
+    </code>
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;
+
+exports[`<Permissions /> > should render no permission disabled when [props.administrator=true] 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)
+    active={true}
+    disabled={false}
+    key="test_create"
+    onClick={[Function]}
+  >
+    <Checkbox
+      checked={true}
+      disabled={false}
+    />
+    <code>
+      test_create
+    </code>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    active={false}
+    disabled={false}
+    key="test_edit"
+    onClick={[Function]}
+  >
+    <Checkbox
+      checked={false}
+      disabled={false}
+    />
+    <code>
+      test_edit
+    </code>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    active={true}
+    disabled={false}
+    key="test_remove"
+    onClick={[Function]}
+  >
+    <Checkbox
+      checked={true}
+      disabled={false}
+    />
+    <code>
+      test_remove
+    </code>
+  </Styled(styled.div)>
+  <Styled(styled.div)
+    active={false}
+    disabled={false}
+    key="test_view"
+    onClick={[Function]}
+  >
+    <Checkbox
+      checked={false}
+      disabled={false}
+    />
+    <code>
+      test_view
+    </code>
+  </Styled(styled.div)>
+</Styled(styled.div)>
+`;

@@ -1,0 +1,79 @@
+// Vitest Snapshot v1
+
+exports[`<ReadOrientation /> > should render when [index=0] 1`] = `
+<styled.div>
+  LEFT
+</styled.div>
+`;
+
+exports[`<ReadOrientation /> > should render when [index=1] 1`] = `
+<styled.div>
+  RIGHT
+</styled.div>
+`;
+
+exports[`<ReadOrientation /> > should render when [selected=false] 1`] = `""`;
+
+exports[`<ReadOrientation /> > should render when [selected=true] 1`] = `
+<styled.div>
+  LEFT
+</styled.div>
+`;
+
+exports[`<ReadSelectorItem /> > should render when [selected=false] 1`] = `
+<Styled(Styled(styled.div))
+  active={false}
+  onClick={[Function]}
+>
+  <styled.div>
+    <styled.span>
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="file"
+      />
+    </styled.span>
+    <div>
+      <strong>
+        bar
+      </strong>
+      <div>
+        0.0B
+      </div>
+    </div>
+  </styled.div>
+  <ReadOrientation
+    index={0}
+    selected={false}
+  />
+</Styled(Styled(styled.div))>
+`;
+
+exports[`<ReadSelectorItem /> > should render when [selected=true] 1`] = `
+<Styled(Styled(styled.div))
+  active={true}
+  onClick={[Function]}
+>
+  <styled.div>
+    <styled.span>
+      <Icon
+        faStyle="fas"
+        fixedWidth={false}
+        name="file"
+      />
+    </styled.span>
+    <div>
+      <strong>
+        bar
+      </strong>
+      <div>
+        0.0B
+      </div>
+    </div>
+  </styled.div>
+  <ReadOrientation
+    index={0}
+    selected={true}
+  />
+</Styled(Styled(styled.div))>
+`;

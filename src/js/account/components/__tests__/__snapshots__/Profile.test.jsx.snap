@@ -1,0 +1,96 @@
+// Vitest Snapshot v1
+
+exports[`<AccountProfile /> > should render when administrator 1`] = `
+<div>
+  <styled.div>
+    <InitialIcon
+      handle="foo"
+      size="xxl"
+    />
+    <div>
+      <h3>
+        foo
+        <styled.span
+          color="purple"
+          key="administrator"
+        >
+          <Icon
+            faStyle="fas"
+            fixedWidth={false}
+            name="user-shield"
+          />
+           Administrator
+        </styled.span>
+      </h3>
+      <styled.div>
+        <styled.span
+          key="ac091sa1"
+        >
+          <Icon
+            faStyle="fas"
+            fixedWidth={false}
+            name="users"
+          />
+           
+          Technicians
+        </styled.span>
+        <styled.span
+          key="980s921a"
+        >
+          <Icon
+            faStyle="fas"
+            fixedWidth={false}
+            name="users"
+          />
+           
+          Managers
+        </styled.span>
+      </styled.div>
+    </div>
+  </styled.div>
+  <Connect(Email) />
+  <Connect(ChangePassword) />
+</div>
+`;
+
+exports[`<AccountProfile /> > should render when not administrator 1`] = `
+<div>
+  <styled.div>
+    <InitialIcon
+      handle="foo"
+      size="xxl"
+    />
+    <div>
+      <h3>
+        foo
+      </h3>
+      <styled.div>
+        <styled.span
+          key="ac091sa1"
+        >
+          <Icon
+            faStyle="fas"
+            fixedWidth={false}
+            name="users"
+          />
+           
+          Technicians
+        </styled.span>
+        <styled.span
+          key="980s921a"
+        >
+          <Icon
+            faStyle="fas"
+            fixedWidth={false}
+            name="users"
+          />
+           
+          Managers
+        </styled.span>
+      </styled.div>
+    </div>
+  </styled.div>
+  <Connect(Email) />
+  <Connect(ChangePassword) />
+</div>
+`;

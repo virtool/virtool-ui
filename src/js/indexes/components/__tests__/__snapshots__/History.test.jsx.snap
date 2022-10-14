@@ -1,0 +1,75 @@
+// Vitest Snapshot v1
+
+exports[`<RebuildHistory /> > should render <LoadingPlaceholder /> when unbuilt is null 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    Changes
+  </Styled(styled.div)>
+  <LoadingPlaceholder
+    margin="22px"
+  />
+</Styled(styled.div)>
+`;
+
+exports[`<RebuildHistory /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    Changes
+  </Styled(styled.div)>
+  <styled.div>
+    <RebuildHistoryItem
+      description="test-description"
+      key="123abc"
+      otuName="test-otu"
+    />
+    <RebuildHistoryEllipsis
+      unbuilt={
+        {
+          "documents": [
+            {
+              "description": "test-description",
+              "id": "123abc",
+              "otu": {
+                "name": "test-otu",
+              },
+            },
+          ],
+          "page_count": 2,
+          "per_page": 5,
+          "total_count": 10,
+        }
+      }
+    />
+  </styled.div>
+</Styled(styled.div)>
+`;
+
+exports[`<RebuildHistoryEllipsis /> > should render when page_count greater than 1 1`] = `
+<Styled(styled.div)
+  key="last-item"
+>
+  + 
+  48
+   more changes
+</Styled(styled.div)>
+`;
+
+exports[`<RebuildHistoryEllipsis /> > should render when page_count is 1 1`] = `""`;
+
+exports[`<RebuildHistoryItem /> > should render with description 1`] = `
+<Styled(styled.div)>
+  <strong>
+    Foobar Virus
+  </strong>
+  Removed OTU
+</Styled(styled.div)>
+`;
+
+exports[`<RebuildHistoryItem /> > should render without description 1`] = `
+<Styled(styled.div)>
+  <strong>
+    Foobar Virus
+  </strong>
+  No Description
+</Styled(styled.div)>
+`;

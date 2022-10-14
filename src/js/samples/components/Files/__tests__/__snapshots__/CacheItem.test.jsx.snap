@@ -1,0 +1,104 @@
+// Vitest Snapshot v1
+
+exports[`<SampleCacheItem /> > should render when [missing=%p] false 1`] = `
+<Styled(styled.div)>
+  <Flex
+    alignContent="stretch"
+    alignItems="center"
+    direction="row"
+    justifyContent="flex-start"
+    wrap="nowrap"
+  >
+    <i
+      className="fas fa-archive fa-fw"
+      style={
+        {
+          "fontSize": "24px",
+        }
+      }
+    />
+    <FlexItem
+      alignSelf={null}
+      basis="auto"
+      grow={0}
+      pad={10}
+      shrink={1}
+    >
+      <Styled(Link)
+        to="/samples/bar/files/foo"
+      >
+        abc123
+      </Styled(Link)>
+      <small>
+        Created 
+        <RelativeTime
+          time="2018-01-01T00:00:00.000000Z"
+        />
+      </small>
+    </FlexItem>
+  </Flex>
+  <styled.div>
+    <div />
+    <div>
+      136.6MB
+    </div>
+  </styled.div>
+</Styled(styled.div)>
+`;
+
+exports[`<SampleCacheItem /> > should render when [missing=%p] true 1`] = `
+<Styled(styled.div)>
+  <Flex
+    alignContent="stretch"
+    alignItems="center"
+    direction="row"
+    justifyContent="flex-start"
+    wrap="nowrap"
+  >
+    <i
+      className="fas fa-archive fa-fw"
+      style={
+        {
+          "fontSize": "24px",
+        }
+      }
+    />
+    <FlexItem
+      alignSelf={null}
+      basis="auto"
+      grow={0}
+      pad={10}
+      shrink={1}
+    >
+      <Styled(Link)
+        to="/samples/bar/files/foo"
+      >
+        abc123
+      </Styled(Link)>
+      <small>
+        Created 
+        <RelativeTime
+          time="2018-01-01T00:00:00.000000Z"
+        />
+      </small>
+    </FlexItem>
+  </Flex>
+  <styled.div>
+    <div>
+      <styled.span
+        color="red"
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="exclamation-circle"
+        />
+         Files Missing
+      </styled.span>
+    </div>
+    <div>
+      136.6MB
+    </div>
+  </styled.div>
+</Styled(styled.div)>
+`;

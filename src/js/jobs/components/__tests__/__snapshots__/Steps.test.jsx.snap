@@ -1,0 +1,26 @@
+// Vitest Snapshot v1
+
+exports[`<JobSteps /> > should render 1`] = `
+<Styled(styled.div)>
+  <JobStep
+    complete={true}
+    key="0"
+    step={
+      {
+        "state": "waiting",
+      }
+    }
+    workflow="bowtie_build"
+  />
+  <JobStep
+    complete={false}
+    key="1"
+    step={
+      {
+        "state": "running",
+      }
+    }
+    workflow="bowtie_build"
+  />
+</Styled(styled.div)>
+`;

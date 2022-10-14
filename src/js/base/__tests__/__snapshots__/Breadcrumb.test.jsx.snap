@@ -1,0 +1,17 @@
+// Vitest Snapshot v1
+
+exports[`<BreadcrumbItem /> > should render 1`] = `
+<li>
+  <Link
+    to="bar"
+  >
+    foo
+  </Link>
+</li>
+`;
+
+exports[`<BreadcrumbItem /> > should return when [to=null] 1`] = `
+<li>
+  foo
+</li>
+`;

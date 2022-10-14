@@ -1,8 +1,4 @@
 /**
- * @module actionTypes
- */
-
-/**
  * Create a special action type used for requests.
  *
  * The request is an object with three properties assigned with action types used for API requests.

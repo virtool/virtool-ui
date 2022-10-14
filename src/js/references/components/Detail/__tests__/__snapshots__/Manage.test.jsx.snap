@@ -1,0 +1,137 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceManage /> > should render when [props.cloned_from={ Bar: 'Bee' }] 1`] = `
+<styled.div>
+  <Styled(styled.div)>
+    <Styled(styled.div)>
+      <h2>
+        General
+      </h2>
+    </Styled(styled.div)>
+    <Styled(styled.table)>
+      <tbody>
+        <tr>
+          <th>
+            Description
+          </th>
+          <td>
+            boo
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Organism
+          </th>
+          <td>
+            Bar
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Data Type
+          </th>
+          <td>
+            Boo
+          </td>
+        </tr>
+      </tbody>
+    </Styled(styled.table)>
+  </Styled(styled.div)>
+  <Connect(Remote) />
+  <Clone
+    source={
+      {
+        "bar": "bee",
+      }
+    }
+  />
+  <Styled(styled.div)>
+    <Styled(styled.div)>
+      <h2>
+        Latest Index Build
+      </h2>
+    </Styled(styled.div)>
+    <LatestBuild
+      id="foo"
+      latestBuild={
+        {
+          "Foo": "fee",
+        }
+      }
+    />
+  </Styled(styled.div)>
+  <Contributors
+    contributors="baz"
+  />
+  <Connect(Targets) />
+  <Connect(ExportReference) />
+</styled.div>
+`;
+
+exports[`<ReferenceManage /> > should render when [props.remotes_from=null] 1`] = `
+<styled.div>
+  <Styled(styled.div)>
+    <Styled(styled.div)>
+      <h2>
+        General
+      </h2>
+    </Styled(styled.div)>
+    <Styled(styled.table)>
+      <tbody>
+        <tr>
+          <th>
+            Description
+          </th>
+          <td>
+            boo
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Organism
+          </th>
+          <td>
+            Bar
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Data Type
+          </th>
+          <td>
+            Boo
+          </td>
+        </tr>
+      </tbody>
+    </Styled(styled.table)>
+  </Styled(styled.div)>
+  <Connect(Remote) />
+  <Clone
+    source={
+      {
+        "bar": "bee",
+      }
+    }
+  />
+  <Styled(styled.div)>
+    <Styled(styled.div)>
+      <h2>
+        Latest Index Build
+      </h2>
+    </Styled(styled.div)>
+    <LatestBuild
+      id="foo"
+      latestBuild={
+        {
+          "Foo": "fee",
+        }
+      }
+    />
+  </Styled(styled.div)>
+  <Contributors
+    contributors="baz"
+  />
+  <Connect(Targets) />
+  <Connect(ExportReference) />
+</styled.div>
+`;

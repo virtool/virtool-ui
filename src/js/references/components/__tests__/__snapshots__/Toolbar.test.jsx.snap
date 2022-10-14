@@ -1,0 +1,71 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceToolbar /> > should not render creation button when [canCreate=false] 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[MockFunction spy]}
+    placeholder="Reference name"
+    value=""
+  />
+</styled.div>
+`;
+
+exports[`<ReferenceToolbar /> > should render creation button when [canCreate=true] 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[MockFunction spy]}
+    placeholder="Reference name"
+    value=""
+  />
+  <LinkButton
+    color="blue"
+    tip="Create"
+    tipPlacement="top"
+    to={
+      {
+        "pathname": "/refs/add",
+        "state": {
+          "emptyReference": true,
+          "newReference": true,
+        },
+      }
+    }
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="plus-square fa-fw"
+    />
+  </LinkButton>
+</styled.div>
+`;
+
+exports[`<ReferenceToolbar /> > should render when [term='foo'] 1`] = `
+<styled.div>
+  <SearchInput
+    onChange={[MockFunction spy]}
+    placeholder="Reference name"
+    value="foo"
+  />
+  <LinkButton
+    color="blue"
+    tip="Create"
+    tipPlacement="top"
+    to={
+      {
+        "pathname": "/refs/add",
+        "state": {
+          "emptyReference": true,
+          "newReference": true,
+        },
+      }
+    }
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="plus-square fa-fw"
+    />
+  </LinkButton>
+</styled.div>
+`;

@@ -1,0 +1,15 @@
+// Vitest Snapshot v1
+
+exports[`<UserPermissions /> > should render 1`] = `
+<div>
+  <styled.div>
+    <label>
+      Permissions
+    </label>
+    <small>
+      Change group membership to modify permissions
+    </small>
+  </styled.div>
+  <Styled(styled.div) />
+</div>
+`;

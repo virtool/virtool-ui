@@ -20,12 +20,12 @@ The default CSP configuration expects API requests to be made to the same domain
 ## Configuration
 
 | Option              | Env                | Description                                    |
-|---------------------|--------------------|------------------------------------------------|
+| ------------------- | ------------------ | ---------------------------------------------- |
 | `-p`, `--port`      | `VT_UI_PORT`       | The port the UI server should listen on        |
 | `-H`, `--host`      | `VT_UI_HOST`       | The host the UI server should listen on        |
 | `-a`, `--api-url`   | `VT_UI_API_URL`    | The URL API requests should be made to         |
 | `-P`, `--use-proxy` | `VT_UI_USE_PROXY`  | Proxy API requests through the UI server       |
- | `--sentry-dsn`      | `VT_UI_SENTRY_DSN` | The DSN that sentry will send logged errors to |
+| `--sentry-dsn`      | `VT_UI_SENTRY_DSN` | The DSN that sentry will send logged errors to |
 
 ### API Proxy
 
@@ -94,3 +94,15 @@ ui:
 ```
 
 **The service (eg. Virtool API server) running on localhost must listen on `0.0.0.0` for this to work**.
+
+## Storybook
+
+Instructions for running storybook during development
+
+1. Start storybook locally
+
+   ```
+   npm run storybook
+   ```
+
+2. Depending on system configuration the address will either open automatically or the address must be manually entered by the user.
