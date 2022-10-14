@@ -16,10 +16,10 @@ exports[`SampleUserGroup > should render 1`] = `
       None
     </option>
     <styled.option
-      key="foo"
-      value="foo"
+      key="bar_id"
+      value="bar_id"
     >
-      foo
+      bar
     </styled.option>
   </Select>
 </InputGroup>

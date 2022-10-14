@@ -217,7 +217,7 @@ export const CreateSample = ({
                                     as={SampleUserGroup}
                                     aria-label="User Group"
                                     name="group"
-                                    group={values.group}
+                                    selected={values.group}
                                     groups={groups}
                                     onChange={e => setFieldValue("group", e.target.value)}
                                 />
