@@ -5,9 +5,9 @@ describe("SampleUserGroup", () => {
     let props;
     beforeEach(() => {
         props = {
-            groups: ["foo"],
+            groups: [{ name: "bar", id: "bar_id" }],
             onChange: vi.fn(),
-            group: "bar"
+            selected: "bar"
         };
     });
 
