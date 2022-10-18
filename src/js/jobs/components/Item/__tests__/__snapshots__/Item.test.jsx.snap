@@ -1,0 +1,331 @@
+// Vitest Snapshot v1
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] false false 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="green"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={false}
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={false}
+      canCancel={false}
+      onArchive={[Function]}
+      onCancel={[Function]}
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] false true 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="green"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={true}
+      canCancel={false}
+      onArchive={[Function]}
+      onCancel={[Function]}
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] true false 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="green"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={false}
+      canCancel={true}
+      onArchive={[Function]}
+      onCancel={[Function]}
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] true true 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="green"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={true}
+      canCancel={true}
+      onArchive={[Function]}
+      onCancel={[Function]}
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [state=%p] cancelled 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="red"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+          state="cancelled"
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={true}
+      canCancel={true}
+      key="cancelled"
+      onArchive={[Function]}
+      onCancel={[Function]}
+      state="cancelled"
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [state=%p] complete 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="green"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+          state="complete"
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={true}
+      canCancel={true}
+      key="complete"
+      onArchive={[Function]}
+      onCancel={[Function]}
+      state="complete"
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [state=%p] error 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="red"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+          state="error"
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={true}
+      canCancel={true}
+      key="error"
+      onArchive={[Function]}
+      onCancel={[Function]}
+      state="error"
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [state=%p] running 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="blue"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+          state="running"
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={true}
+      canCancel={true}
+      key="running"
+      onArchive={[Function]}
+      onCancel={[Function]}
+      state="running"
+    />
+  </styled.div>
+</styled.div>
+`;
+
+exports[`<JobItem /> > should render when [state=%p] waiting 1`] = `
+<styled.div>
+  <Styled(Styled(Link))
+    to="/jobs/foo"
+  >
+    <Styled(_AffixedProgressBar)
+      color="green"
+      now={100}
+    />
+    <styled.div>
+      <styled.div>
+        <span>
+          Build Index
+        </span>
+        <JobStatus
+          pad={true}
+          state="waiting"
+        />
+      </styled.div>
+      <Styled(UnstyledAttribution)
+        time="Foo"
+        user="bob"
+      />
+    </styled.div>
+  </Styled(Styled(Link))>
+  <styled.div>
+    <JobAction
+      canArchive={true}
+      canCancel={true}
+      key="waiting"
+      onArchive={[Function]}
+      onCancel={[Function]}
+      state="waiting"
+    />
+  </styled.div>
+</styled.div>
+`;

@@ -1,0 +1,32 @@
+// Vitest Snapshot v1
+
+exports[`<ScrollList /> > should render when [noContainer=false] 1`] = `
+<div
+  className="sc-dkrFOg bEHAPZ"
+/>
+`;
+
+exports[`<ScrollList /> > should return LoadingPlaceholder when [documents=null] and [page<pageCount] 1`] = `
+<div
+  className="sc-dkrFOg bEHAPZ"
+>
+  <div
+    className="sc-gswNZR LuiSG"
+  >
+    <div
+      aria-label="loading"
+      className="sc-bcXHqe fJUQtf"
+      color="greyDark"
+      size="22px"
+    >
+      <div />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<ScrollList /> > should return React.Fragment when [noContainer=true] 1`] = `
+<div
+  className="sc-dkrFOg bEHAPZ"
+/>
+`;

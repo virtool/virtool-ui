@@ -1,0 +1,64 @@
+// Vitest Snapshot v1
+
+exports[`<NuVsItem /> > should render when active 1`] = `
+<Styled(Styled(styled.div))
+  active={true}
+  onClick={[Function]}
+>
+  <styled.div>
+    <strong>
+      Sequence 
+      4
+    </strong>
+    <styled.span>
+      13
+    </styled.span>
+  </styled.div>
+  <NuVsValues
+    e="0.0012"
+    orfCount={2}
+  />
+</Styled(Styled(styled.div))>
+`;
+
+exports[`<NuVsItem /> > should render when not active 1`] = `
+<Styled(Styled(styled.div))
+  active={false}
+  onClick={[Function]}
+>
+  <styled.div>
+    <strong>
+      Sequence 
+      4
+    </strong>
+    <styled.span>
+      13
+    </styled.span>
+  </styled.div>
+  <NuVsValues
+    e="0.0012"
+    orfCount={2}
+  />
+</Styled(Styled(styled.div))>
+`;
+
+exports[`<NuVsItem /> > should render when not active 2`] = `
+<Styled(Styled(styled.div))
+  active={false}
+  onClick={[Function]}
+>
+  <styled.div>
+    <strong>
+      Sequence 
+      4
+    </strong>
+    <styled.span>
+      13
+    </styled.span>
+  </styled.div>
+  <NuVsValues
+    e="0.0012"
+    orfCount={2}
+  />
+</Styled(Styled(styled.div))>
+`;

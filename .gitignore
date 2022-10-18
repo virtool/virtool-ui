@@ -22,3 +22,4 @@ settings.json
 .pytest_cache
 env
 tags
+.vscode

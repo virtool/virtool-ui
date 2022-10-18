@@ -12,3 +12,5 @@ export const setPermission = ({ groupId, permission, value }) =>
     });
 
 export const remove = ({ groupId }) => Request.delete(`/api/groups/${groupId}`);
+
+export const get = ({ groupId }) => Request.get(`/api/groups/${groupId}`);

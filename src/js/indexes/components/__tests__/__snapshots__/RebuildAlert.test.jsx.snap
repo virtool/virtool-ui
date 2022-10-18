@@ -1,0 +1,52 @@
+// Vitest Snapshot v1
+
+exports[`<RebuildAlert /> > should render 1`] = `
+<Styled(_Alert)
+  color="orange"
+  level={true}
+>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="exclamation-circle"
+  />
+  <strong>
+    At least one OTU must be added to the database before an index can be built.
+  </strong>
+</Styled(_Alert)>
+`;
+
+exports[`<RebuildAlert /> > should render when [showCountAlert!=0, showIndexAlert=true] 1`] = `
+<Styled(_Alert)
+  color="orange"
+  level={true}
+>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="info-circle"
+  />
+  <span>
+    <span>
+      There are unbuilt changes. 
+    </span>
+    <Link
+      to={
+        {
+          "pathname": "/refs/foo/indexes",
+          "state": {
+            "rebuild": true,
+          },
+        }
+      }
+    >
+      Rebuild the index
+    </Link>
+    <span>
+       to use the changes in future analyses.
+    </span>
+  </span>
+</Styled(_Alert)>
+`;
+
+exports[`<RebuildAlert /> > should return null when [showCountAlert!=0, showIndexAlert=false] 1`] = `""`;

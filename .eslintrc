@@ -6,7 +6,7 @@
     "console": true,
     "fetch": true
   },
-  "parser": "@babel/eslint-parser",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
@@ -14,7 +14,7 @@
     }
   },
   "extends": [
-    "plugin:jest/recommended",
+    "plugin:vitest-globals/recommended",
     "plugin:prettier/recommended"
   ],
   "settings": {
@@ -22,7 +22,7 @@
       "version": "detect"
     }
   },
-  "plugins": ["import", "jest", "prettier", "react", "react-hooks"],
+  "plugins": ["import", "vitest", "prettier", "react", "react-hooks"],
   "rules": {
     "prettier/prettier": "error",
 
@@ -78,13 +78,11 @@
   },
   "overrides": [
     {
-      "files": ["setupTests.js", "webpack.*.config.babel.js"],
+      "files": ["setupTests.js", "webpack.*.config.js"],
       "env": {
-        "jest/globals": true
+        "vitest-globals/env": true
       },
       "rules": {
-        "jest/prefer-to-have-length": "off",
-        "jest/no-focused-tests": "warn",
         "react/react-in-jsx-scope": "off",
         "no-undef": "off",
         "array-bracket-newline": "off"

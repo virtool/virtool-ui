@@ -1,0 +1,102 @@
+// Vitest Snapshot v1
+
+exports[`<ManageLabels> > should be disabled if no labels exist 1`] = `
+<Styled(Styled(styled.div))>
+  <styled.h3>
+    Manage Labels
+    <SampleSidebarSelector
+      manageLink="/samples/labels"
+      onUpdate={[Function]}
+      partiallySelectedItems={[]}
+      render={[Function]}
+      sampleItems={[]}
+      selectedItems={
+        [
+          1,
+        ]
+      }
+      selectionType="labels"
+    />
+  </styled.h3>
+  <SampleSidebarMultiselectList
+    items={
+      {
+        "1": {
+          "allLabeled": true,
+          "color": "#FCA5A5",
+          "description": "",
+          "id": 1,
+          "name": "test",
+        },
+      }
+    }
+    onUpdate={[Function]}
+  />
+  <styled.div>
+    No labels found. 
+    <Link
+      to="/samples/labels"
+    >
+      Create one
+    </Link>
+    .
+  </styled.div>
+</Styled(Styled(styled.div))>
+`;
+
+exports[`<ManageLabels> > should render 1`] = `
+<Styled(Styled(styled.div))>
+  <styled.h3>
+    Manage Labels
+    <SampleSidebarSelector
+      manageLink="/samples/labels"
+      onUpdate={[Function]}
+      partiallySelectedItems={[]}
+      render={[Function]}
+      sampleItems={
+        [
+          {
+            "color": "#FCA5A5",
+            "description": "",
+            "id": 1,
+            "name": "test",
+          },
+          {
+            "color": "#FCA5A5",
+            "description": "",
+            "id": 2,
+            "name": "test2",
+          },
+          {
+            "color": "#FCA5A5",
+            "description": "",
+            "id": 3,
+            "name": "test3",
+          },
+        ]
+      }
+      selectedItems={
+        [
+          1,
+        ]
+      }
+      selectionType="labels"
+    />
+  </styled.h3>
+  <SampleSidebarMultiselectList
+    items={
+      {
+        "1": {
+          "allLabeled": true,
+          "color": "#FCA5A5",
+          "description": "",
+          "id": 1,
+          "name": "test",
+        },
+      }
+    }
+    onUpdate={[Function]}
+  />
+  <Component />
+</Styled(Styled(styled.div))>
+`;

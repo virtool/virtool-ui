@@ -14,7 +14,7 @@ const generateCSPStyleSrc = (nonce) => {
 };
 
 const generateCSPConnectSrc = (tenant) => {
-  return `connect-src 'self' sentry.io ${
+  return `connect-src 'self' *.sentry.io ${
     tenant ? `https://${tenant}.b2clogin.com` : ""
   } `;
 };

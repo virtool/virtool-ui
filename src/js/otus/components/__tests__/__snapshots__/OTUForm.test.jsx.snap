@@ -1,0 +1,71 @@
+// Vitest Snapshot v1
+
+exports[`<OTUForm /> > should render 1`] = `
+<form
+  onSubmit={[MockFunction spy]}
+>
+  <Styled(Styled(styled.div))>
+    <InputGroup>
+      <styled.label>
+        Name
+      </styled.label>
+      <Styled(UnstyledInput)
+        error=""
+        name="name"
+        onChange={[MockFunction spy]}
+        value="test"
+      />
+      <styled.p />
+    </InputGroup>
+    <InputGroup>
+      <styled.label>
+        Abbreviation
+      </styled.label>
+      <Styled(UnstyledInput)
+        name="abbreviation"
+        onChange={[MockFunction spy]}
+        value="T"
+      />
+    </InputGroup>
+  </Styled(Styled(styled.div))>
+  <Styled(Component)>
+    <SaveButton />
+  </Styled(Component)>
+</form>
+`;
+
+exports[`<OTUForm /> > should render with error 1`] = `
+<form
+  onSubmit={[MockFunction spy]}
+>
+  <Styled(Styled(styled.div))>
+    <InputGroup>
+      <styled.label>
+        Name
+      </styled.label>
+      <Styled(UnstyledInput)
+        error="Name is used already"
+        name="name"
+        onChange={[MockFunction spy]}
+        value="test"
+      />
+      <styled.p>
+        Name is used already
+      </styled.p>
+    </InputGroup>
+    <InputGroup>
+      <styled.label>
+        Abbreviation
+      </styled.label>
+      <Styled(UnstyledInput)
+        name="abbreviation"
+        onChange={[MockFunction spy]}
+        value="T"
+      />
+    </InputGroup>
+  </Styled(Styled(styled.div))>
+  <Styled(Component)>
+    <SaveButton />
+  </Styled(Component)>
+</form>
+`;

@@ -1,0 +1,30 @@
+// Vitest Snapshot v1
+
+exports[`<LatestBuild /> > should render when [latestBuild!=null] 1`] = `
+<Styled(styled.div)>
+  <div>
+    <strong>
+      <Link
+        to="/refs/foo/indexes/bar"
+      >
+        Index 
+        1.0
+      </Link>
+    </strong>
+    <span>
+       / Created 
+      <RelativeTime
+        time="2"
+      />
+       by 
+      baz_handle
+    </span>
+  </div>
+</Styled(styled.div)>
+`;
+
+exports[`<LatestBuild /> > should render when [latestBuild=null] 1`] = `
+<NoneFoundSection
+  noun="index builds"
+/>
+`;

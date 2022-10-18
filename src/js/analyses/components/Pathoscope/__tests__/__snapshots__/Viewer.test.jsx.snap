@@ -1,0 +1,10 @@
+// Vitest Snapshot v1
+
+exports[`<PathoscopeViewer /> > should render 1`] = `
+<div>
+  <Connect(AnalysisMapping) />
+  <Connect(PathoscopeToolbar) />
+  <Connect(PathoscopeList) />
+  <PathoscopeViewerScroller />
+</div>
+`;

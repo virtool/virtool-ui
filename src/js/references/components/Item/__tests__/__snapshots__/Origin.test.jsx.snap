@@ -1,0 +1,22 @@
+// Vitest Snapshot v1
+
+exports[`<ReferenceItemOrigin /> > should render for cloned references 1`] = `
+<ClonedFrom
+  id="foo"
+  name="Foo"
+/>
+`;
+
+exports[`<ReferenceItemOrigin /> > should render for imported references 1`] = `
+<ImportedFrom
+  id="bar"
+  name="Bar"
+/>
+`;
+
+exports[`<ReferenceItemOrigin /> > should render for remoted references 1`] = `
+<RemotesFrom
+  id="baz"
+  name="Baz"
+/>
+`;

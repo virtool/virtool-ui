@@ -1,0 +1,14 @@
+// Vitest Snapshot v1
+
+exports[`<HMMSettings /> > should render 1`] = `
+<div>
+  <ViewHeader
+    title="HMM Settings"
+  >
+    <styled.h1>
+      HMM Settings
+    </styled.h1>
+  </ViewHeader>
+  <Connect(HMMPurge) />
+</div>
+`;

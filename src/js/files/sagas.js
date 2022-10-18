@@ -32,7 +32,8 @@ export const createUploadChannel = (action, apiMethod) =>
     eventChannel(emitter => {
         const onProgress = e => {
             if (e.lengthComputable) {
-                emitter({ progress: e.percent });
+                const { total, loaded, percent } = e;
+                emitter({ progress: percent, total, loaded });
             }
         };
 
@@ -57,23 +58,52 @@ export const createUploadChannel = (action, apiMethod) =>
     }, buffers.sliding(2));
 
 export function* watchUploadChannel(channel, actionType, localId) {
+    let lastLoaded = 0;
+
+    const loadedWindow = [];
+    let count = 0;
+    let uploadSpeed = 0;
+
+    const intervalId = setInterval(() => {
+        let loadedDuringInterval = 0;
+        if (count < 6) {
+            loadedWindow.push(lastLoaded);
+            loadedDuringInterval = loadedWindow[loadedWindow.length - 1];
+            count++;
+        } else {
+            loadedWindow.shift();
+            loadedWindow.push(lastLoaded);
+            loadedDuringInterval = loadedWindow[loadedWindow.length - 1] - loadedWindow[0];
+        }
+        uploadSpeed = loadedDuringInterval / count;
+    }, 1000);
+
     while (true) {
-        const { progress = 0, response, err } = yield take(channel);
+        const { progress = 0, total, loaded, response, err } = yield take(channel);
+
+        lastLoaded = loaded;
 
         if (err) {
             yield put(uploadFailed(localId));
-            return yield putGenericError(actionType, err);
+            yield putGenericError(actionType, err);
+            break;
         }
         if (response) {
-            return yield put({
+            yield put({
                 type: actionType.SUCCEEDED,
                 payload: {
                     ...response.body,
                     localId
                 }
             });
+            break;
         }
 
-        yield put(uploadProgress(localId, progress));
+        let remaining = (total - loaded) / uploadSpeed;
+        remaining = isFinite(remaining) ? remaining : 0;
+
+        yield put(uploadProgress(localId, progress, uploadSpeed, remaining));
     }
+
+    clearInterval(intervalId);
 }

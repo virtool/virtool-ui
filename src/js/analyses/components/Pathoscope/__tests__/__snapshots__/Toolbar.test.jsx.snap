@@ -1,0 +1,729 @@
+// Vitest Snapshot v1
+
+exports[`<Toolbar /> > should render 1`] = `
+<Styled(styled.div)>
+  <SearchInput
+    onChange={[Function]}
+    onKeyDown={[Function]}
+  />
+  <AnalysisViewerSort
+    onSelect={[MockFunction spy]}
+    sortKey="coverage"
+    workflow="pathoscope"
+  />
+  <Button
+    color="grey"
+    disabled={false}
+    onClick={[MockFunction spy]}
+    tip="Sort List"
+    tipPlacement="top"
+    title="Sort Direction"
+    type="button"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="sort-amount-down"
+    />
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="weight-hanging"
+    onClick={[MockFunction spy]}
+    tip="Show read pseudo-counts instead of weight"
+    tipPlacement="top"
+    type="button"
+  >
+    Show Reads
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide OTUs with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter OTUs
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide isolates with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter Isolates
+  </Button>
+  <Menu>
+    <DropdownButton>
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
+    </DropdownButton>
+    <Styled(MenuList)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-csv"
+        />
+         CSV
+      </Styled(MenuItem)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-excel"
+        />
+         Excel
+      </Styled(MenuItem)>
+    </Styled(MenuList)>
+  </Menu>
+</Styled(styled.div)>
+`;
+
+exports[`<Toolbar /> > should render when [filterIsolates=false] 1`] = `
+<Styled(styled.div)>
+  <SearchInput
+    onChange={[Function]}
+    onKeyDown={[Function]}
+  />
+  <AnalysisViewerSort
+    onSelect={[MockFunction spy]}
+    sortKey="coverage"
+    workflow="pathoscope"
+  />
+  <Button
+    color="grey"
+    disabled={false}
+    onClick={[MockFunction spy]}
+    tip="Sort List"
+    tipPlacement="top"
+    title="Sort Direction"
+    type="button"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="sort-amount-down"
+    />
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="weight-hanging"
+    onClick={[MockFunction spy]}
+    tip="Show read pseudo-counts instead of weight"
+    tipPlacement="top"
+    type="button"
+  >
+    Show Reads
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide OTUs with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter OTUs
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide isolates with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter Isolates
+  </Button>
+  <Menu>
+    <DropdownButton>
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
+    </DropdownButton>
+    <Styled(MenuList)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-csv"
+        />
+         CSV
+      </Styled(MenuItem)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-excel"
+        />
+         Excel
+      </Styled(MenuItem)>
+    </Styled(MenuList)>
+  </Menu>
+</Styled(styled.div)>
+`;
+
+exports[`<Toolbar /> > should render when [filterOTUs=false] 1`] = `
+<Styled(styled.div)>
+  <SearchInput
+    onChange={[Function]}
+    onKeyDown={[Function]}
+  />
+  <AnalysisViewerSort
+    onSelect={[MockFunction spy]}
+    sortKey="coverage"
+    workflow="pathoscope"
+  />
+  <Button
+    color="grey"
+    disabled={false}
+    onClick={[MockFunction spy]}
+    tip="Sort List"
+    tipPlacement="top"
+    title="Sort Direction"
+    type="button"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="sort-amount-down"
+    />
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="weight-hanging"
+    onClick={[MockFunction spy]}
+    tip="Show read pseudo-counts instead of weight"
+    tipPlacement="top"
+    type="button"
+  >
+    Show Reads
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide OTUs with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter OTUs
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide isolates with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter Isolates
+  </Button>
+  <Menu>
+    <DropdownButton>
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
+    </DropdownButton>
+    <Styled(MenuList)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-csv"
+        />
+         CSV
+      </Styled(MenuItem)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-excel"
+        />
+         Excel
+      </Styled(MenuItem)>
+    </Styled(MenuList)>
+  </Menu>
+</Styled(styled.div)>
+`;
+
+exports[`<Toolbar /> > should render when [showPathoscopeReads=true] 1`] = `
+<Styled(styled.div)>
+  <SearchInput
+    onChange={[Function]}
+    onKeyDown={[Function]}
+  />
+  <AnalysisViewerSort
+    onSelect={[MockFunction spy]}
+    sortKey="coverage"
+    workflow="pathoscope"
+  />
+  <Button
+    color="grey"
+    disabled={false}
+    onClick={[MockFunction spy]}
+    tip="Sort List"
+    tipPlacement="top"
+    title="Sort Direction"
+    type="button"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="sort-amount-down"
+    />
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="weight-hanging"
+    onClick={[MockFunction spy]}
+    tip="Show read pseudo-counts instead of weight"
+    tipPlacement="top"
+    type="button"
+  >
+    Show Reads
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide OTUs with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter OTUs
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide isolates with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter Isolates
+  </Button>
+  <Menu>
+    <DropdownButton>
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
+    </DropdownButton>
+    <Styled(MenuList)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-csv"
+        />
+         CSV
+      </Styled(MenuItem)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-excel"
+        />
+         Excel
+      </Styled(MenuItem)>
+    </Styled(MenuList)>
+  </Menu>
+</Styled(styled.div)>
+`;
+
+exports[`<Toolbar /> > should render when [sortDescending=false] 1`] = `
+<Styled(styled.div)>
+  <SearchInput
+    onChange={[Function]}
+    onKeyDown={[Function]}
+  />
+  <AnalysisViewerSort
+    onSelect={[MockFunction spy]}
+    sortKey="coverage"
+    workflow="pathoscope"
+  />
+  <Button
+    color="grey"
+    disabled={false}
+    onClick={[MockFunction spy]}
+    tip="Sort List"
+    tipPlacement="top"
+    title="Sort Direction"
+    type="button"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="sort-amount-down"
+    />
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="weight-hanging"
+    onClick={[MockFunction spy]}
+    tip="Show read pseudo-counts instead of weight"
+    tipPlacement="top"
+    type="button"
+  >
+    Show Reads
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide OTUs with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter OTUs
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide isolates with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter Isolates
+  </Button>
+  <Menu>
+    <DropdownButton>
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
+    </DropdownButton>
+    <Styled(MenuList)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-csv"
+        />
+         CSV
+      </Styled(MenuItem)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-excel"
+        />
+         Excel
+      </Styled(MenuItem)>
+    </Styled(MenuList)>
+  </Menu>
+</Styled(styled.div)>
+`;
+
+exports[`<Toolbar /> > should render when [sortKey=%p] depth 1`] = `
+<Styled(styled.div)>
+  <SearchInput
+    onChange={[Function]}
+    onKeyDown={[Function]}
+  />
+  <AnalysisViewerSort
+    onSelect={[MockFunction spy]}
+    sortKey="depth"
+    workflow="pathoscope"
+  />
+  <Button
+    color="grey"
+    disabled={false}
+    onClick={[MockFunction spy]}
+    tip="Sort List"
+    tipPlacement="top"
+    title="Sort Direction"
+    type="button"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="sort-amount-down"
+    />
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="weight-hanging"
+    onClick={[MockFunction spy]}
+    tip="Show read pseudo-counts instead of weight"
+    tipPlacement="top"
+    type="button"
+  >
+    Show Reads
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide OTUs with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter OTUs
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide isolates with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter Isolates
+  </Button>
+  <Menu>
+    <DropdownButton>
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
+    </DropdownButton>
+    <Styled(MenuList)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-csv"
+        />
+         CSV
+      </Styled(MenuItem)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-excel"
+        />
+         Excel
+      </Styled(MenuItem)>
+    </Styled(MenuList)>
+  </Menu>
+</Styled(styled.div)>
+`;
+
+exports[`<Toolbar /> > should render when [sortKey=%p] weight 1`] = `
+<Styled(styled.div)>
+  <SearchInput
+    onChange={[Function]}
+    onKeyDown={[Function]}
+  />
+  <AnalysisViewerSort
+    onSelect={[MockFunction spy]}
+    sortKey="weight"
+    workflow="pathoscope"
+  />
+  <Button
+    color="grey"
+    disabled={false}
+    onClick={[MockFunction spy]}
+    tip="Sort List"
+    tipPlacement="top"
+    title="Sort Direction"
+    type="button"
+  >
+    <Icon
+      faStyle="fas"
+      fixedWidth={false}
+      name="sort-amount-down"
+    />
+  </Button>
+  <Button
+    active={false}
+    color="grey"
+    disabled={false}
+    icon="weight-hanging"
+    onClick={[MockFunction spy]}
+    tip="Show read pseudo-counts instead of weight"
+    tipPlacement="top"
+    type="button"
+  >
+    Show Reads
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide OTUs with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter OTUs
+  </Button>
+  <Button
+    active={true}
+    color="grey"
+    disabled={false}
+    icon="filter"
+    onClick={[MockFunction spy]}
+    tip="Hide isolates with low coverage support"
+    tipPlacement="top"
+    type="button"
+  >
+    Filter Isolates
+  </Button>
+  <Menu>
+    <DropdownButton>
+      <span>
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-download"
+        />
+         Export 
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="caret-down"
+        />
+      </span>
+    </DropdownButton>
+    <Styled(MenuList)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-csv"
+        />
+         CSV
+      </Styled(MenuItem)>
+      <Styled(MenuItem)
+        onSelect={[Function]}
+      >
+        <Icon
+          faStyle="fas"
+          fixedWidth={false}
+          name="file-excel"
+        />
+         Excel
+      </Styled(MenuItem)>
+    </Styled(MenuList)>
+  </Menu>
+</Styled(styled.div)>
+`;

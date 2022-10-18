@@ -1,0 +1,115 @@
+// Vitest Snapshot v1
+
+exports[`<SampleRights /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Default Sample Rights
+    </h2>
+    <p>
+      Set the method used to assign groups to new samples and the default rights.
+    </p>
+  </Styled(styled.div)>
+  <styled.div>
+    <label>
+      Sample Group
+    </label>
+    <styled.div>
+      <Styled(styled.div)
+        active=""
+        onClick={[Function]}
+      >
+        <strong>
+          None
+        </strong>
+        <p>
+          Samples are assigned no group and only
+          <em>
+             all users'
+          </em>
+           rights apply
+        </p>
+      </Styled(styled.div)>
+      <Styled(styled.div)
+        active={true}
+        onClick={[Function]}
+      >
+        <strong>
+          Force choice
+        </strong>
+        <p>
+          Samples are automatically assigned the creating user's primary group
+        </p>
+      </Styled(styled.div)>
+      <Styled(styled.div)
+        active=""
+        onClick={[Function]}
+      >
+        <strong>
+          User's primary group
+        </strong>
+        <p>
+          Samples are assigned by the user in the creation form
+        </p>
+      </Styled(styled.div)>
+    </styled.div>
+    <InputGroup>
+      <styled.label>
+        Group Rights
+      </styled.label>
+      <Select
+        onChange={[Function]}
+        value="rw"
+      >
+        <option
+          key="0"
+          value=""
+        >
+          None
+        </option>
+        <option
+          key="1"
+          value="r"
+        >
+          Read
+        </option>
+        <option
+          key="2"
+          value="rw"
+        >
+          Read & write
+        </option>
+      </Select>
+    </InputGroup>
+    <InputGroup>
+      <styled.label>
+        All Users' Rights
+      </styled.label>
+      <Select
+        name="all"
+        onChange={[Function]}
+        value="rw"
+      >
+        <option
+          key="0"
+          value=""
+        >
+          None
+        </option>
+        <option
+          key="1"
+          value="r"
+        >
+          Read
+        </option>
+        <option
+          key="2"
+          value="rw"
+        >
+          Read & write
+        </option>
+      </Select>
+    </InputGroup>
+  </styled.div>
+</Styled(styled.div)>
+`;

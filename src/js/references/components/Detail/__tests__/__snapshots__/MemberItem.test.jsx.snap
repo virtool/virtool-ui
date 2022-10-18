@@ -1,0 +1,37 @@
+// Vitest Snapshot v1
+
+exports[`<MemberItem /> > should render 1`] = `
+<Styled(styled.div)>
+  <MemberItemIcon
+    handle="bob"
+  />
+  bob
+</Styled(styled.div)>
+`;
+
+exports[`<MemberItem /> > should render with [canModify=true] 1`] = `
+<Styled(styled.div)>
+  <MemberItemIcon
+    handle="bob"
+  />
+  bob
+  <styled.span>
+    <Icon
+      color="orange"
+      faStyle="fas"
+      fixedWidth={false}
+      name="edit"
+      onClick={[Function]}
+      tip="Modify"
+    />
+    <Icon
+      color="red"
+      faStyle="fas"
+      fixedWidth={false}
+      name="trash"
+      onClick={[Function]}
+      tip="Remove"
+    />
+  </styled.span>
+</Styled(styled.div)>
+`;

@@ -1,0 +1,33 @@
+// Vitest Snapshot v1
+
+exports[`<DataTypeSelection /> > should render 1`] = `
+<div>
+  <label>
+    Data Type
+  </label>
+  <styled.div>
+    <Styled(styled.div)
+      active={true}
+      onClick={[Function]}
+    >
+      <div>
+        Genome
+      </div>
+      <span>
+        Whole genomes for mapping-based detection
+      </span>
+    </Styled(styled.div)>
+    <Styled(styled.div)
+      active={false}
+      onClick={[Function]}
+    >
+      <div>
+        Barcode
+      </div>
+      <span>
+        Target sequences for barcode analysis
+      </span>
+    </Styled(styled.div)>
+  </styled.div>
+</div>
+`;

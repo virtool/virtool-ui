@@ -1,0 +1,37 @@
+// Vitest Snapshot v1
+
+exports[`<IndexDetail /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Files
+      <styled.span>
+        2
+      </styled.span>
+    </h2>
+    Data files available to workflows using this index.
+  </Styled(styled.div)>
+  <File
+    file={
+      {
+        "download_url": "/testUrl/foo",
+        "id": "1",
+        "name": "foo",
+        "size": "1024",
+      }
+    }
+    key="1"
+  />
+  <File
+    file={
+      {
+        "download_url": "/testUrl/bar",
+        "id": "2",
+        "name": "bar",
+        "size": "2048",
+      }
+    }
+    key="2"
+  />
+</Styled(styled.div)>
+`;

@@ -1,0 +1,115 @@
+// Vitest Snapshot v1
+
+exports[`<HMMDetail /> > should render 1`] = `
+<div>
+  <ViewHeader
+    title="foo"
+  >
+    <styled.h1>
+      foo
+    </styled.h1>
+  </ViewHeader>
+  <Styled(styled.div)>
+    <Styled(styled.div)>
+      <h2>
+        General
+      </h2>
+    </Styled(styled.div)>
+    <styled.table>
+      <tbody>
+        <tr>
+          <th>
+            Cluster
+          </th>
+          <td>
+            bar
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Best Definitions
+          </th>
+          <td>
+            <styled.span
+              key="0"
+              spaced={true}
+            >
+              foo
+            </styled.span>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Length
+          </th>
+          <td />
+        </tr>
+        <tr>
+          <th>
+            Mean Entropy
+          </th>
+          <td>
+            baz
+          </td>
+        </tr>
+        <tr>
+          <th>
+            Total Entropy
+          </th>
+          <td>
+            boo
+          </td>
+        </tr>
+      </tbody>
+    </styled.table>
+  </Styled(styled.div)>
+  <Styled(styled.div)>
+    <Styled(styled.div)>
+      <h2>
+        Cluster Members 
+        <styled.span>
+          1
+        </styled.span>
+      </h2>
+    </Styled(styled.div)>
+    <Styled(styled.table)>
+      <thead>
+        <tr>
+          <th>
+            Accession
+          </th>
+          <th>
+            Name
+          </th>
+          <th>
+            Organism
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ClusterMember
+          key="0"
+        />
+      </tbody>
+    </Styled(styled.table)>
+  </Styled(styled.div)>
+  <styled.div>
+    <HMMTaxonomy
+      counts="Bar"
+      title="Families"
+    />
+    <HMMTaxonomy
+      counts="Baz"
+      title="Genera"
+    />
+  </styled.div>
+</div>
+`;
+
+exports[`<HMMDetail /> > should return LoadingPlaceholder when [props.detail=null] 1`] = `
+<LoadingPlaceholder
+  margin="130px"
+/>
+`;
+
+exports[`<HMMDetail /> > should return NotFound when [props.error=true] 1`] = `<NotFound />`;

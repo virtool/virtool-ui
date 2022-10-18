@@ -1,8 +1,4 @@
 /**
- * @module actionTypes
- */
-
-/**
  * Create a special action type used for requests.
  *
  * The request is an object with three properties assigned with action types used for API requests.
@@ -98,6 +94,7 @@ export const WS_UPDATE_GROUP = "WS_UPDATE_GROUP";
 export const WS_REMOVE_GROUP = "WS_REMOVE_GROUP";
 export const CHANGE_ACTIVE_GROUP = "CHANGE_ACTIVE_GROUP";
 export const LIST_GROUPS = createRequestActionType("LIST_GROUPS");
+export const GET_GROUP = createRequestActionType("GET_GROUP");
 export const CREATE_GROUP = createRequestActionType("CREATE_GROUP");
 export const SET_GROUP_PERMISSION = createRequestActionType("SET_GROUP_PERMISSION");
 export const REMOVE_GROUP = createRequestActionType("REMOVE_GROUP");

@@ -1,0 +1,24 @@
+// Vitest Snapshot v1
+
+exports[`<Clone /> > should render 1`] = `
+<Styled(styled.div)>
+  <Styled(styled.div)>
+    <h2>
+      Clone Reference
+    </h2>
+  </Styled(styled.div)>
+  <styled.div>
+    <strong>
+      Source Reference
+    </strong>
+    <span>
+       / 
+      <a
+        href="/refs/foo"
+      >
+        bar
+      </a>
+    </span>
+  </styled.div>
+</Styled(styled.div)>
+`;

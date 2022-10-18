@@ -1,0 +1,105 @@
+// Vitest Snapshot v1
+
+exports[`<NoneFound /> > should render with [noun='files' 1`] = `
+<styled.div>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="info-circle"
+  />
+   No 
+  files
+   found
+</styled.div>
+`;
+
+exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
+<Styled(styled.div)
+  as={
+    {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": [],
+      "componentStyle": e {
+        "baseHash": 677740513,
+        "baseStyle": undefined,
+        "componentId": "sc-pyfCe",
+        "isStatic": false,
+        "rules": [
+          "
+    border: ",
+          [Function],
+          ";
+    border-radius: ",
+          [Function],
+          ";
+    box-sizing: border-box;
+    cursor: ",
+          [Function],
+          ";
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    position: relative;
+
+    &:hover {
+        ",
+          [Function],
+          "
+    }
+",
+        ],
+        "staticRulesId": "",
+      },
+      "foldedComponentIds": [],
+      "render": [Function],
+      "shouldForwardProp": undefined,
+      "styledComponentId": "sc-pyfCe",
+      "target": "div",
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+    }
+  }
+>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="info-circle"
+  />
+   No 
+  boxes
+   found.   
+</Styled(styled.div)>
+`;
+
+exports[`<NoneFoundSection /> > should render with [noun='sections' 1`] = `
+<Styled(styled.div)>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="info-circle"
+  />
+   No 
+  sections
+   found
+</Styled(styled.div)>
+`;
+
+exports[`<NoneFoundSection /> > should render with [noun='sections'] and children 1`] = `
+<Styled(styled.div)>
+  <Icon
+    faStyle="fas"
+    fixedWidth={false}
+    name="info-circle"
+  />
+   No 
+  sections
+   found
+  <span>
+    . 
+    <span>
+      foo
+    </span>
+    .
+  </span>
+</Styled(styled.div)>
+`;

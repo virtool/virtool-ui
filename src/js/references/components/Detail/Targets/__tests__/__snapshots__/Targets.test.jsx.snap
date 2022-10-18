@@ -1,0 +1,60 @@
+// Vitest Snapshot v1
+
+exports[`<Targets /> > should render null when [dataType!=barcode] 1`] = `""`;
+
+exports[`<Targets /> > should render when [canModify=false] 1`] = `
+<Styled(styled.div)>
+  <Styled(Styled(styled.div))>
+    <h2>
+      <span>
+        Targets
+      </span>
+    </h2>
+    <p>
+      Manage the allowable sequence targets for this barcode reference.
+    </p>
+  </Styled(Styled(styled.div))>
+  <TargetItem
+    canModify={false}
+    key="foo"
+    name="foo"
+    onEdit={[MockFunction spy]}
+    onRemove={[Function]}
+  />
+</Styled(styled.div)>
+`;
+
+exports[`<Targets /> > should render when [canModify=true] 1`] = `
+<Styled(styled.div)>
+  <Styled(Styled(styled.div))>
+    <h2>
+      <span>
+        Targets
+      </span>
+      <Link
+        to={
+          {
+            "state": {
+              "addTarget": true,
+            },
+          }
+        }
+      >
+        Add target
+      </Link>
+    </h2>
+    <p>
+      Manage the allowable sequence targets for this barcode reference.
+    </p>
+  </Styled(Styled(styled.div))>
+  <TargetItem
+    canModify={true}
+    key="foo"
+    name="foo"
+    onEdit={[MockFunction spy]}
+    onRemove={[Function]}
+  />
+  <Connect(AddTarget) />
+  <Connect(EditTarget) />
+</Styled(styled.div)>
+`;

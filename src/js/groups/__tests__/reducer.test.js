@@ -1,13 +1,11 @@
 import {
-    WS_INSERT_GROUP,
-    WS_UPDATE_GROUP,
-    WS_REMOVE_GROUP,
     LIST_GROUPS,
-    CREATE_GROUP,
     SET_GROUP_PERMISSION,
-    REMOVE_GROUP
+    WS_INSERT_GROUP,
+    WS_REMOVE_GROUP,
+    WS_UPDATE_GROUP
 } from "../../app/actionTypes";
-import reducer, { initialState as reducerInitialState, updateGroup, insertGroup } from "../reducer";
+import reducer, { initialState as reducerInitialState, insertGroup, updateGroup } from "../reducer";
 
 describe("Groups Reducer", () => {
     it("should return the initial state on first pass", () => {
@@ -55,10 +53,10 @@ describe("Groups Reducer", () => {
     });
 
     it("should handle WS_REMOVE_GROUP", () => {
-        const state = { documents: [{ id: "foo" }, { id: "bar" }], activeId: "bar" };
+        const state = { documents: [{ id: "foo" }, { id: "bar" }] };
         const action = { type: WS_REMOVE_GROUP, payload: ["bar"] };
         const result = reducer(state, action);
-        expect(result).toEqual({ ...state, documents: [{ id: "foo" }], activeId: "foo" });
+        expect(result).toEqual({ ...state, documents: [{ id: "foo" }] });
     });
 
     it("should handle LIST_GROUPS_SUCCEEDED", () => {
@@ -71,76 +69,15 @@ describe("Groups Reducer", () => {
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            documents: payload,
-            activeId: "foo"
+            documents: payload
         });
-    });
-
-    it("should handle CREATE_GROUP_REQUESTED", () => {
-        const state = {};
-        const action = {
-            type: CREATE_GROUP.REQUESTED
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({ ...state, pending: true });
-    });
-
-    it("should handle REMOVE_GROUP_REQUESTED", () => {
-        const action = {
-            type: REMOVE_GROUP.REQUESTED
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({ pending: true });
-    });
-
-    it("should handle SET_GROUP_PERMISSION_REQUESTED", () => {
-        const action = {
-            type: SET_GROUP_PERMISSION.REQUESTED
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({ pending: true });
-    });
-
-    it("should handle CREATE_GROUP_SUCCEEDED", () => {
-        const id = "foo";
-        const action = { type: CREATE_GROUP.SUCCEEDED, payload: { id } };
-        const result = reducer({}, action);
-        expect(result).toEqual({ pending: false, activeId: id });
-    });
-
-    it("should handle REMOVE_GROUP_SUCCEEDED", () => {
-        const action = { type: REMOVE_GROUP.SUCCEEDED };
-        const result = reducer({}, action);
-        expect(result).toEqual({ pending: false, activeId: "" });
     });
 
     it("should handle SET_GROUP_PERMISSION_SUCCEEDED", () => {
-        const action = { type: SET_GROUP_PERMISSION.SUCCEEDED };
+        const payload = { id: "testGroupId" };
+        const action = { type: SET_GROUP_PERMISSION.SUCCEEDED, payload };
         const result = reducer({}, action);
-        expect(result).toEqual({ pending: false });
-    });
-
-    describe("should handle CREATE_GROUP_FAILED", () => {
-        it("with 'Group already exists' error", () => {
-            const action = {
-                type: CREATE_GROUP.FAILED,
-                message: "Group already exists"
-            };
-            const result = reducer({}, action);
-            expect(result).toEqual({
-                createError: true,
-                pending: false
-            });
-        });
-
-        it("with some other error", () => {
-            const action = {
-                type: CREATE_GROUP.FAILED,
-                message: "different error"
-            };
-            const result = reducer({}, action);
-            expect(result).toEqual({});
-        });
+        expect(result).toEqual({ activeGroup: { ...payload } });
     });
 
     describe("Groups Reducer Helper Functions", () => {
@@ -170,7 +107,6 @@ describe("Groups Reducer", () => {
             const result = updateGroup(state, update);
             expect(result).toEqual({
                 ...state,
-                pending: false,
                 documents: [
                     {
                         id: "tester",

@@ -1,0 +1,40 @@
+// Vitest Snapshot v1
+
+exports[`<NotFound /> > should render default 1`] = `
+<styled.div>
+  <styled.span
+    color="red"
+  >
+    404
+  </styled.span>
+  <strong>
+    Not found
+  </strong>
+</styled.div>
+`;
+
+exports[`<NotFound /> > should render with message 1`] = `
+<styled.div>
+  <styled.span
+    color="red"
+  >
+    404
+  </styled.span>
+  <strong>
+    Resource missing
+  </strong>
+</styled.div>
+`;
+
+exports[`<NotFound /> > should render with status 1`] = `
+<styled.div>
+  <styled.span
+    color="red"
+  >
+    409
+  </styled.span>
+  <strong>
+    Not found
+  </strong>
+</styled.div>
+`;

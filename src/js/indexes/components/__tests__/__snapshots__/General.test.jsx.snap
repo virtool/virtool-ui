@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`<IndexGeneral /> > should render 1`] = `
+<Fragment>
+  <Connect(Contributors) />
+  <Connect(Files) />
+  <Connect(IndexOTUs) />
+</Fragment>
+`;

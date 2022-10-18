@@ -1,0 +1,21 @@
+// Vitest Snapshot v1
+
+exports[`<RemoveBanner /> > renders correctly 1`] = `
+<Styled(Styled(_Alert))
+  color="red"
+>
+  <strong>
+    test
+  </strong>
+  <Button
+    color="red"
+    disabled={false}
+    icon="trash"
+    onClick={[MockFunction spy]}
+    tipPlacement="top"
+    type="button"
+  >
+    Delete
+  </Button>
+</Styled(Styled(_Alert))>
+`;
