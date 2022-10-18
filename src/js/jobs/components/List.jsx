@@ -27,15 +27,11 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
-export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, page, page_count, states }) => {
-    const initialStates = ["preparing", "running"];
+const initialState = ["preparing", "running"];
 
+export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, page, page_count, states }) => {
     useEffect(() => {
-        if (!states?.length) {
-            onLoadNextPage(initialStates, 1);
-        } else {
-            onLoadNextPage(states, 1);
-        }
+        onLoadNextPage(states?.length ? states : initialState, 1);
     }, []);
 
     if (jobs === null) {
