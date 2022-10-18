@@ -5,12 +5,16 @@ const getFiles = state => state.files.documents;
 
 export const getFilesById = createSelector(getFiles, files => keyBy(files, "id"));
 
-export const getFilteredFileIds = createSelector(getFiles, list =>
-    map(
-        sortBy(
-            reject(list, document => document.reserved || !document.ready),
-            "uploaded_at"
-        ).reverse(),
-        "id"
-    )
-);
+export const getFilteredFileIds = createSelector(getFiles, documents => {
+    if (documents) {
+        return map(
+            sortBy(
+                reject(documents, document => document.reserved || !document.ready),
+                "uploaded_at"
+            ).reverse(),
+            "id"
+        );
+    }
+
+    return null;
+});
