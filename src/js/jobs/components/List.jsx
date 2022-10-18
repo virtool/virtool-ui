@@ -27,8 +27,12 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
+const initialState = ["preparing", "running"];
+
 export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, page, page_count, states }) => {
-    useEffect(() => onLoadNextPage(["preparing", "running"], 1), []);
+    useEffect(() => {
+        onLoadNextPage(states?.length ? states : initialState, 1);
+    }, []);
 
     if (jobs === null) {
         return <LoadingPlaceholder />;
