@@ -1,5 +1,5 @@
 import React from "react";
-import { NoneFoundBox } from "../NoneFound";
+import { NoneFoundBox } from "../../NoneFound";
 
 export default {
     title: "base/NoneFound/NoneFoundBox",
