@@ -1,5 +1,5 @@
 import React from "react";
-import { NoneFound } from "../NoneFound";
+import { NoneFound } from "../../NoneFound";
 
 export default {
     title: "base/NoneFound/NoneFound",
