@@ -3,8 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { setGroupPermission } from "../actions";
 import { getActiveGroup } from "../selectors";
-import { GroupComponentsContainer } from "./GroupSelector";
 import { GroupPermission } from "./Permission";
+import { GroupsHeaderContainer, GroupsInfoBoxGroupSection, SelectedGroupInfoContainer } from "./Members";
 
 export const Permissions = ({ activeGroup, onSetPermission }) => {
     const permissionComponents = map(activeGroup.permissions, (active, permission) => (
@@ -17,10 +17,12 @@ export const Permissions = ({ activeGroup, onSetPermission }) => {
     ));
 
     return (
-        <div>
-            <label>Permissions</label>
-            <GroupComponentsContainer>{permissionComponents}</GroupComponentsContainer>
-        </div>
+        <GroupsInfoBoxGroupSection>
+            <GroupsHeaderContainer>
+                <h4>Permissions</h4>
+            </GroupsHeaderContainer>
+            <SelectedGroupInfoContainer>{permissionComponents}</SelectedGroupInfoContainer>
+        </GroupsInfoBoxGroupSection>
     );
 };
 

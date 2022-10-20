@@ -27,7 +27,7 @@ export const Create = ({ error, show, onCreate, onHide }) => {
         onCreate(values.name);
     };
     return (
-        <Modal label="Create" onHide={onHide} show={show} size="md">
+        <Modal label="Create" onHide={onHide} show={show} size="sm">
             <ModalHeader>Create Group</ModalHeader>
             <Formik onSubmit={handleSubmit} initialValues={{ name: "" }} validationSchema={validationSchema}>
                 {({ errors, touched }) => (

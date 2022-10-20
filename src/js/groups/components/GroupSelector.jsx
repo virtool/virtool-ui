@@ -18,9 +18,10 @@ export const GroupsSelectBoxGroupSection = styled(SelectBoxGroupSection)`
 `;
 
 export const GroupComponentsContainer = styled(BoxGroup)`
-    height: 333px;
-    background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
+    height: "514px";
     overflow-y: auto;
+    background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
+    border-bottom: 1px solid ${props => getColor({ theme: props.theme, color: "greyLight" })};
 `;
 
 export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) => {
@@ -37,12 +38,7 @@ export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) =>
         );
     });
 
-    return (
-        <div>
-            <label>Groups</label>
-            <GroupComponentsContainer>{groupComponents}</GroupComponentsContainer>
-        </div>
-    );
+    return <GroupComponentsContainer>{groupComponents}</GroupComponentsContainer>;
 };
 
 const mapStateToProps = state => {

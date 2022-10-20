@@ -118,38 +118,38 @@ describe("Groups", () => {
     it("should render correctly when loading = true", () => {
         state.groups.documents = null;
         renderWithRouter(<Groups />, state, history);
-        renderWithRouter(<Groups />, state, history);
         expect(screen.queryByText("Manage Groups")).not.toBeInTheDocument();
         expect(screen.queryByText("No Groups Found")).not.toBeInTheDocument();
         expect(screen.queryByText("cancel_job")).not.toBeInTheDocument();
         expect(screen.queryByText("No Group Members")).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Remove Group" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
     });
 
     it("should render correctly when no groups exist", () => {
         state.groups.documents = [];
         renderWithRouter(<Groups />, state, history);
         expect(screen.getByText("No Groups Found")).toBeInTheDocument();
-        expect(screen.queryByText("Groups")).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Remove Group" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
         expect(screen.getByText("Manage Groups")).toBeInTheDocument();
-        expect(screen.queryByText("Create Group")).not.toBeInTheDocument();
+        expect(screen.getByText("Use groups to organize users and control access")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
     });
 
     it("should render correctly when one groups exists and group contains no members", () => {
         renderWithRouter(<Groups />, state, history);
-        expect(screen.queryByText("No groups exist")).not.toBeInTheDocument();
+        expect(screen.queryByText("No groups found")).not.toBeInTheDocument();
         expect(screen.getByText("Manage Groups")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Remove Group" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
         expect(screen.getByText("cancel_job")).toBeInTheDocument();
         expect(screen.getByText("No Group Members")).toBeInTheDocument();
-        expect(screen.getByText("testid")).toBeInTheDocument();
+        const groupNameOccurrences = screen.getAllByText("testid");
+        expect(groupNameOccurrences.length).toBe(2);
     });
 
     it("should render create new group view correctly", () => {
         renderWithRouter(<Groups />, state, history);
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-        userEvent.click(screen.getByRole("button", { name: "" }));
+        userEvent.click(screen.getByRole("button", { name: "Create" }));
         expect(screen.getByRole("dialog")).toBeInTheDocument();
         expect(screen.getByText("Name")).toBeInTheDocument();
         const saveButton = screen.getByRole("button", { name: "Save" });
@@ -161,8 +161,9 @@ describe("Groups", () => {
     it("should render correctly when active group has a group member", () => {
         state.users.documents = [{ handle: "testuser1", groups: { 0: { id: "testid" } } }];
         renderWithRouter(<Groups />, state, history);
+        expect(screen.getByText("Members")).toBeInTheDocument();
         expect(screen.getByText("testuser1")).toBeInTheDocument();
-        expect(screen.queryByText("No Members Found")).not.toBeInTheDocument();
+        expect(screen.queryByText("No Group Members")).not.toBeInTheDocument();
     });
 
     it("should render correctly when more than one group exists", () => {
@@ -196,7 +197,8 @@ describe("Groups", () => {
             }
         ];
         renderWithRouter(<Groups {...props} />, state, history);
-        expect(screen.getByText("testid")).toBeInTheDocument();
+        const groupNameOccurrences = screen.getAllByText("testid");
+        expect(groupNameOccurrences.length).toBe(2);
         expect(screen.getByText("secondtestid")).toBeInTheDocument();
         expect(screen.getByText("testuser1")).toBeInTheDocument();
     });

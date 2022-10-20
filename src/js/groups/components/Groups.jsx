@@ -2,38 +2,36 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { pushState } from "../../app/actions";
-import { BoxGroup, Button, LoadingPlaceholder } from "../../base";
+import { BoxGroup, Button, LoadingPlaceholder, RemoveBanner, BoxGroupHeader } from "../../base";
 import { listGroups, removeGroup } from "../actions";
 import { getActiveGroup, getGroups } from "../selectors";
+import { findUsers } from "../../users/actions";
 import Create from "./Create";
 import GroupSelector from "./GroupSelector";
 import Members from "./Members";
 import Permissions from "./Permissions";
+import { getColor } from "../../app/theme";
 
 const ManageGroupsContainer = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 3fr;
     column-gap: 15px;
 `;
 
 const StyledGroupsHeader = styled.div`
     display: flex;
     padding-bottom: 5px;
+    justify-content: space-between;
     button {
-        height: 50%;
-        margin-top: 25%;
         margin-left: 15px;
+        height: 36px;
     }
-`;
-
-const StyledGroupsButton = styled(Button)`
-    margin-top: 5px;
 `;
 
 const StyledNoneFoundContainer = styled(BoxGroup)`
     display: flex;
     flex-direction: column;
-    background-color: ${props => props.theme.color.greyLightest};
+    background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
     flex: 1 1 auto;
     height: 300px;
 `;
@@ -46,9 +44,10 @@ export const NoneSelected = styled.div`
     transform: translate(-50%, -50%);
 `;
 
-export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemove, onListGroups }) => {
+export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemove, onListGroups, onFindUsers }) => {
     useEffect(() => {
         onListGroups();
+        onFindUsers();
     }, []);
 
     if (loading) {
@@ -59,17 +58,24 @@ export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemo
 
     if (groups.length) {
         groupComponents = (
-            <>
-                <ManageGroupsContainer>
-                    <GroupSelector />
+            <ManageGroupsContainer>
+                <GroupSelector />
+                <div>
+                    <BoxGroup>
+                        <BoxGroupHeader>
+                            <h2>{activeGroup.id}</h2>
+                        </BoxGroupHeader>
+                    </BoxGroup>
+
                     <Permissions />
                     <Members />
-                </ManageGroupsContainer>
-
-                <StyledGroupsButton icon="trash" color="red" onClick={() => onRemove(activeGroup.id)}>
-                    Remove Group
-                </StyledGroupsButton>
-            </>
+                    <RemoveBanner
+                        message={`Permanently delete ${activeGroup.id}`}
+                        buttonText="Delete"
+                        onClick={() => onRemove(activeGroup.id)}
+                    />
+                </div>
+            </ManageGroupsContainer>
         );
     } else {
         groupComponents = (
@@ -81,9 +87,13 @@ export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemo
 
     return (
         <>
+            <h2>Manage Groups</h2>
             <StyledGroupsHeader>
-                <h2>Manage Groups</h2>
-                <Button icon="user-plus" tip="Create" color="blue" onClick={onShowCreateGroup} />
+                <h3>Use groups to organize users and control access</h3>
+
+                <Button tip="Create" color="blue" onClick={onShowCreateGroup}>
+                    Create
+                </Button>
             </StyledGroupsHeader>
 
             {groupComponents}
@@ -107,6 +117,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onListGroups: () => {
         dispatch(listGroups());
+    },
+    onFindUsers: () => {
+        dispatch(findUsers());
     },
     onRemove: groupId => {
         dispatch(removeGroup(groupId));
