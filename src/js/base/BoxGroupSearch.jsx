@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { BoxGroupSection } from "./Box";
 import { Icon } from "./Icon";
 import { Input } from "./Input";
+import PropTypes from "prop-types";
 
 const IconContainer = styled.div`
 align-items: center;
@@ -32,3 +33,8 @@ export const BoxGroupSearch = ({ label, placeholder, value, onChange, autoFocus 
         </IconContainer>
     </StyledBoxGroupSearch>
 );
+
+BoxGroupSearch.propTypes = {
+    autoFocus: PropTypes.bool,
+    placeholder: PropTypes.string
+};
