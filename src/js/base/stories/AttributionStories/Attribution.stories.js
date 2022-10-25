@@ -11,10 +11,10 @@ export default {
 
 const Template = args => <Attribution {...args} />;
 
-export const NoUserAttribution = Template.bind({});
+export const attributionWithUsername = Template.bind({});
 
-export const TestUserAttribution = Template.bind({});
-
-TestUserAttribution.args = {
-    user: "test user"
+attributionWithUsername.args = {
+    user: "James Smith"
 };
+
+export const attributionWithNoUsername = Template.bind({});

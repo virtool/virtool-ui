@@ -3,15 +3,23 @@ import { LinkButton } from "../../Button";
 
 export default {
     title: "base/Button/LinkButton",
-    component: LinkButton
+    component: LinkButton,
+    argTypes: {
+        color: {
+            options: ["red", "orange", "purple", "blue", "black"],
+            control: { type: "radio" },
+            defaultValue: "blue"
+        }
+    },
+    args: {
+        children: "Virtool Samples Page"
+    }
 };
 
 const Template = args => <LinkButton {...args} />;
 
-export const greenLinkButton = Template.bind({});
+export const linkButton = Template.bind({});
 
-greenLinkButton.args = {
-    color: "green",
-    to: "#",
-    children: "Link Button"
+linkButton.args = {
+    to: "#"
 };

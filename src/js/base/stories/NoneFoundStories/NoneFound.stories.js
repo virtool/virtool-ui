@@ -8,10 +8,14 @@ export default {
 
 const Template = args => <NoneFound {...args} />;
 
-export const shortNoneFound = Template.bind({});
+export const exampleNoneFound = Template.bind({});
 
-shortNoneFound.args = {
-    noun: "items"
+exampleNoneFound.args = {
+    noun: "{plural nouns}"
 };
 
-export const noNoneFound = Template.bind({});
+export const sampleNoneFound = Template.bind({});
+
+sampleNoneFound.args = {
+    noun: "samples"
+};
