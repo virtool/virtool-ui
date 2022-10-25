@@ -8,8 +8,8 @@ export default {
 
 const Template = args => <NameAttribution {...args} />;
 
-export const TestUserAttribution = Template.bind({});
+export const nameAttribution = Template.bind({});
 
-TestUserAttribution.args = {
-    user: "test user"
+nameAttribution.args = {
+    user: "James Smith"
 };

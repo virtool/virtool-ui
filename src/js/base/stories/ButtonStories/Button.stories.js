@@ -3,29 +3,23 @@ import { Button } from "../../Button";
 
 export default {
     title: "base/Button/Button",
-    component: Button
+    component: Button,
+    args: {
+        children: "Click Here"
+    },
+    argTypes: {
+        color: {
+            options: ["red", "orange", "purple", "blue", "black"],
+            control: { type: "radio" },
+            defaultValue: "blue"
+        }
+    }
 };
 
 const Template = args => <Button {...args} />;
 
-export const greenBasicButton = Template.bind({});
+export const basicButton = Template.bind({});
 
-greenBasicButton.args = {
-    color: "green",
-    active: true
-};
-
-export const redBasicButton = Template.bind({});
-
-redBasicButton.args = {
-    color: "red",
-    active: true
-};
-
-export const buttonWithChildren = Template.bind({});
-
-buttonWithChildren.args = {
-    color: "blue",
-    active: true,
-    children: "hello"
+basicButton.args = {
+    active: false
 };

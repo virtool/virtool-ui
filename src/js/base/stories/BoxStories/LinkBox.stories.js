@@ -11,6 +11,6 @@ const Template = args => <LinkBox {...args} />;
 export const testLinkBox = Template.bind({});
 
 testLinkBox.args = {
-    children: "test link",
+    children: "Virtool Samples Page",
     to: "#"
 };
