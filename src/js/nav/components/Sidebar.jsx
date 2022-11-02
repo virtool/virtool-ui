@@ -52,7 +52,6 @@ export const Sidebar = ({ administrator }) => (
         <Route path="/hmm">
             <StyledSidebar>
                 <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
-                {administrator ? <SidebarItem title="Settings" link="/hmm/settings" icon="cogs" /> : null}
             </StyledSidebar>
         </Route>
     </Switch>
