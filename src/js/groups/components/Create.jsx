@@ -4,7 +4,7 @@ import { getRouterLocationStateValue } from "../../app/selectors";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
-import { createGroup } from "../actions";
+import { createGroup, getGroup } from "../actions";
 import { get } from "lodash-es";
 import {
     Input,
@@ -55,6 +55,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    onChangeActiveGroup: groupId => dispatch(getGroup(groupId)),
     onCreate: groupId => {
         dispatch(createGroup(groupId));
     },

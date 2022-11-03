@@ -7,17 +7,20 @@ import {
     LIST_GROUPS,
     REMOVE_GROUP,
     SET_GROUP_PERMISSION,
-    WS_REMOVE_GROUP
+    WS_REMOVE_GROUP,
+    WS_INSERT_GROUP
 } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
 import * as groupsAPI from "./api";
 import { getActiveGroup, getGroups } from "./selectors";
+import { removeActiveGroup } from "./actions";
 
 function* UpdateActiveGroup() {
     const activeGroup = yield select(getActiveGroup);
     const groups = yield select(getGroups);
     if (!activeGroup || !some(groups, { id: activeGroup.id })) {
         if (groups.length) yield getGroup({ payload: { groupId: groups[0].id } });
+        else yield put(removeActiveGroup(null));
     }
 }
 
@@ -54,5 +57,5 @@ export function* watchGroups() {
     yield takeEvery(SET_GROUP_PERMISSION.REQUESTED, setGroupPermission);
     yield throttle(100, REMOVE_GROUP.REQUESTED, removeGroup);
     yield takeLatest(GET_GROUP.REQUESTED, getGroup);
-    yield takeLatest(WS_REMOVE_GROUP, UpdateActiveGroup);
+    yield takeLatest([WS_REMOVE_GROUP, WS_INSERT_GROUP, "test"], UpdateActiveGroup);
 }

@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { concat, sortBy, unionBy } from "lodash-es";
 import {
-    CHANGE_ACTIVE_GROUP,
+    REMOVE_ACTIVE_GROUP,
     GET_GROUP,
     LIST_GROUPS,
     SET_GROUP_PERMISSION,
@@ -18,15 +18,15 @@ export const initialState = {
 
 export const updateGroup = (state, updateVal) => ({
     ...state,
-    documents: sortBy(unionBy([updateVal], state.documents, "id"), "id")
+    documents: sortBy(unionBy([updateVal], state.documents, "id"), "name")
 });
 
-export const insertGroup = (documents, entry) => sortBy(concat(documents, [entry]), "id");
+export const insertGroup = (documents, entry) => sortBy(concat(documents, [entry]), "name");
 
 export const groupsReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_GROUP, (state, action) => {
-            return insert(state, action.payload, "id");
+            return insert(state, action.payload, "name");
         })
         .addCase(WS_UPDATE_GROUP, (state, action) => {
             return update(state, action.payload);
@@ -34,11 +34,11 @@ export const groupsReducer = createReducer(initialState, builder => {
         .addCase(WS_REMOVE_GROUP, (state, action) => {
             return remove(state, action.payload);
         })
-        .addCase(CHANGE_ACTIVE_GROUP, (state, action) => {
-            state.activeId = action.payload.id;
+        .addCase(REMOVE_ACTIVE_GROUP, state => {
+            state.activeGroup = null;
         })
         .addCase(LIST_GROUPS.SUCCEEDED, (state, action) => {
-            return { ...state, documents: action.payload };
+            state.documents = action.payload;
         })
         .addCase(GET_GROUP.SUCCEEDED, (state, action) => {
             state.activeGroup = action.payload;

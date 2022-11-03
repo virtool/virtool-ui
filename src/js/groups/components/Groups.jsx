@@ -106,11 +106,10 @@ export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemo
 const mapStateToProps = state => {
     const groups = getGroups(state);
     const activeGroup = getActiveGroup(state);
-
     return {
-        activeGroup,
+        activeGroup: activeGroup || {},
         groups,
-        loading: !groups || !activeGroup
+        loading: !groups || (!activeGroup && groups.length !== 0)
     };
 };
 

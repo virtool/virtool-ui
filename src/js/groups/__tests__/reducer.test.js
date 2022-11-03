@@ -125,10 +125,10 @@ describe("Groups Reducer", () => {
         });
 
         it("insertGroup: adds new entry to current list and sorts by id", () => {
-            const list = [{ id: "a" }, { id: "d" }, { id: "g" }];
-            const entry = { id: "c" };
+            const list = [{ name: "a" }, { name: "d" }, { name: "g" }];
+            const entry = { name: "c" };
             const result = insertGroup(list, entry);
-            expect(result).toEqual([{ id: "a" }, { id: "c" }, { id: "d" }, { id: "g" }]);
+            expect(result).toEqual([{ name: "a" }, { name: "c" }, { name: "d" }, { name: "g" }]);
         });
     });
 });
