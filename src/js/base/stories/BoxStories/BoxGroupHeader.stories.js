@@ -4,13 +4,23 @@ import { BoxGroup, BoxGroupHeader } from "../../Box";
 export default {
     title: "base/Box/BoxGroupHeader",
     component: BoxGroupHeader,
-    subcomponents: BoxGroup
+    parameters: {
+        controls: {
+            hideNoControlsWarning: true
+        }
+    },
+    argTypes: {
+        children: {
+            type: "string",
+            defaultValue: "This is a BoxGroupHeader!"
+        }
+    }
 };
 
 const Template = args => (
     <BoxGroup>
-        <BoxGroupHeader {...args}>
-            <h2>This is a BoxGroupHeader!</h2>
+        <BoxGroupHeader>
+            <h2 {...args} />
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
@@ -21,3 +31,5 @@ const Template = args => (
 );
 
 export const testBoxGroupHeader = Template.bind({});
+
+testBoxGroupHeader.args = {};

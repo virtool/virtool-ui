@@ -1,17 +1,11 @@
 import React from "react";
-import { BoxGroup, BoxGroupHeader } from "../../Box";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../Box";
 import { Input } from "../../Input";
 import { Button } from "../../Button";
 import styled from "styled-components";
 
-const StyledDiv = styled.div`
-    button {
-        margin: 5px;
-    }
-    input {
-        margin: 5px 0px 0px 5px;
-        width: 50%;
-    }
+const StyledButton = styled(Button)`
+    margin-top: 10px;
 `;
 
 export default {
@@ -20,32 +14,43 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: "A wrapper element designed to contain children"
+                component:
+                    "Similar to a box but adds additional styling for visual consistency. This styling targets children and prevents double borders from occuring at the top."
             }
-        }
+        },
+        controls: { hideNoControlsWarning: true }
     }
 };
 
 const Template = args => (
-    <StyledDiv>
-        <BoxGroup {...args}>
-            <BoxGroupHeader>
-                <h2>This is a BoxGroup</h2>
-            </BoxGroupHeader>
+    <BoxGroup>
+        <BoxGroupHeader>
+            <h2 {...args} />
+        </BoxGroupHeader>
+        <BoxGroupSection>
             <Input type="text" placeholder="Enter a valid email here!" />
-            <Button type="submit" color="blue">
+            <StyledButton type="submit" color="blue">
                 Submit
-            </Button>
-        </BoxGroup>
-    </StyledDiv>
+            </StyledButton>
+        </BoxGroupSection>
+    </BoxGroup>
 );
 
 export const exampleBoxGroup = Template.bind({});
 
-const PlainTemplate = args => <BoxGroup {...args} />;
-
-export const emptyBoxGroup = PlainTemplate.bind({});
-
-emptyBoxGroup.args = {
-    children: "Empty BoxGroup"
+exampleBoxGroup.args = {
+    children: "This is a BoxGroup"
 };
+
+const BoxWithElementsTemplate = args => (
+    <BoxGroup {...args}>
+        <BoxGroupHeader {...args}>
+            <h2>This is a BoxGroup with a header and 3 elements!</h2>
+        </BoxGroupHeader>
+        <BoxGroupSection>Element 1</BoxGroupSection>
+        <BoxGroupSection>Element 2</BoxGroupSection>
+        <BoxGroupSection>Element 3</BoxGroupSection>
+    </BoxGroup>
+);
+
+export const exampleBox = BoxWithElementsTemplate.bind({});

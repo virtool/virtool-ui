@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, BoxGroupHeader, BoxGroupSection } from "../../Box";
+import { Box } from "../../Box";
 
 export default {
     title: "base/Box/Box",
@@ -7,7 +7,8 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: "A simple box wrapper element"
+                component:
+                    "A box wrapper element that is useful for building custom wrapping elements or when a simple box is needed."
             }
         }
     }
@@ -27,16 +28,3 @@ clickableBox.args = {
     children: "This is a clickable Box!",
     onClick: () => console.log("clicked")
 };
-
-const BoxWithElementsTemplate = args => (
-    <Box {...args}>
-        <BoxGroupHeader {...args}>
-            <h2>This is a Box with a header and 3 elements!</h2>
-        </BoxGroupHeader>
-        <BoxGroupSection>Element 1</BoxGroupSection>
-        <BoxGroupSection>Element 2</BoxGroupSection>
-        <BoxGroupSection>Element 3</BoxGroupSection>
-    </Box>
-);
-
-export const exampleBox = BoxWithElementsTemplate.bind({});

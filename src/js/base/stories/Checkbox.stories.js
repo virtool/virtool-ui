@@ -1,5 +1,6 @@
 import React from "react";
 import { Checkbox } from "../Checkbox";
+import { useArgs } from "@storybook/client-api";
 
 export default {
     title: "base/Checkbox",
@@ -11,7 +12,10 @@ export default {
     }
 };
 
-const Template = args => <Checkbox {...args} />;
+const Template = args => {
+    const [{ checked }, updateArgs] = useArgs(false);
+    return <Checkbox checked={checked} onClick={() => updateArgs({ checked: !checked })} {...args} />;
+};
 
 export const SampleCheckbox = Template.bind({});
 
