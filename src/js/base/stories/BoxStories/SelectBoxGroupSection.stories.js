@@ -6,7 +6,6 @@ import { useArgs } from "@storybook/client-api";
 export default {
     title: "base/Box/SelectBoxGroupSection",
     component: SelectBoxGroupSection,
-    subcomponents: Checkbox,
     args: {
         active: false
     },
@@ -14,23 +13,25 @@ export default {
         docs: {
             description: {
                 component:
-                    "A wrapper element for elements contained inside a box or boxgroup. Usually accompanied by a checkbox."
+                    "Similar to a BoxGroupSection but contains additional styling for handling select functionality. Usually accompanied by a checkbox."
             }
         }
     }
 };
 
-const Template = args => (
-    <BoxGroup>
-        <SelectBoxGroupSection {...args} />
-    </BoxGroup>
-);
+const Template = args => {
+    const [{ active }, updateArgs] = useArgs(false);
+    return (
+        <BoxGroup>
+            <SelectBoxGroupSection {...args} checked={active} onClick={() => updateArgs({ active: !active })} />
+        </BoxGroup>
+    );
+};
 
 export const testSelectBoxGroupSection = Template.bind({});
 
 testSelectBoxGroupSection.args = {
-    children: "This is a SelectBoxGroupSection!",
-    onClick: () => console.log("clicked")
+    children: "This is a SelectBoxGroupSection!"
 };
 
 const Template2 = args => {
@@ -38,7 +39,7 @@ const Template2 = args => {
     return (
         <BoxGroup>
             <SelectBoxGroupSection {...args} onClick={() => updateArgs({ active: !active })}>
-                <Checkbox checked={active} label="this is a SelectBoxGroupSection with a Checkbox!" />
+                <Checkbox checked={active} label="This is a SelectBoxGroupSection with a Checkbox!" />
             </SelectBoxGroupSection>
         </BoxGroup>
     );

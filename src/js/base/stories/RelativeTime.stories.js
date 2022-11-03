@@ -19,11 +19,11 @@ currentRelativeTime.args = {
 export const futureRelativeTime = Template.bind({});
 
 futureRelativeTime.args = {
-    time: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7)
+    time: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 8)
 };
 
 export const pastRelativeTime = Template.bind({});
 
 pastRelativeTime.args = {
-    time: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7)
+    time: new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)
 };

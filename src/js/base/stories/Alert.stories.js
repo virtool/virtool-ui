@@ -4,6 +4,11 @@ import { Alert } from "../Alert";
 export default {
     title: "base/Alert",
     component: Alert,
+    parameters: {
+        controls: {
+            exclude: "level"
+        }
+    },
     argTypes: {
         color: {
             options: ["red", "orange", "purple", "blue", "black"],
