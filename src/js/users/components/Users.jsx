@@ -5,7 +5,6 @@ import { getAccountAdministrator } from "../../account/selectors";
 import { Alert, Icon, LinkButton, LoadingPlaceholder, SearchInput, Toolbar } from "../../base";
 import { clearError } from "../../errors/actions";
 import { listGroups } from "../../groups/actions";
-import Groups from "../../groups/components/Groups";
 import { findUsers } from "../actions";
 import CreateUser from "./Create";
 import UsersList from "./List";
@@ -59,14 +58,12 @@ export class ManageUsers extends React.Component {
             <>
                 <Toolbar>
                     <SearchInput name="search" value={this.state.term} onChange={this.props.onFind} />
-                    <LinkButton to={{ state: { groups: true } }} icon="users" tip="Manage Groups" />
                     <LinkButton to={{ state: { createUser: true } }} icon="user-plus" tip="Create User" color="blue" />
                 </Toolbar>
 
                 <UsersList />
 
                 <CreateUser />
-                <Groups />
             </>
         );
     }

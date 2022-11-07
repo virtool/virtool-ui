@@ -1,162 +1,129 @@
-import { push } from "connected-react-router";
-import { get, includes, map, sortBy } from "lodash-es";
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import {
-    BoxGroup,
-    Input,
-    InputContainer,
-    InputError,
-    InputGroup,
-    InputIcon,
-    LoadingPlaceholder,
-    Modal,
-    ModalBody,
-    ModalHeader
-} from "../../base";
-import { clearError } from "../../errors/actions";
-import { routerLocationHasState } from "../../utils/utils";
+import { pushState } from "../../app/actions";
+import { BoxGroup, Button, LoadingPlaceholder, RemoveBanner, BoxGroupHeader } from "../../base";
+import { listGroups, removeGroup } from "../actions";
+import { getActiveGroup, getGroups } from "../selectors";
+import { findUsers } from "../../users/actions";
+import Create from "./Create";
+import GroupSelector from "./GroupSelector";
+import Members from "./Members";
+import Permissions from "./Permissions";
+import { getColor } from "../../app/theme";
 
-import { createGroup } from "../actions";
-import GroupDetail from "./Detail";
-import Group from "./Group";
-
-const GroupsModalBody = styled(ModalBody)`
+const ManageGroupsContainer = styled.div`
     display: grid;
-    grid-template-columns: 2fr 3fr;
-    grid-column-gap: ${props => props.theme.gap.column};
+    grid-template-columns: 1fr 3fr;
+    column-gap: 15px;
 `;
 
-class Groups extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            createGroupId: "",
-            spaceError: false,
-            submitted: false,
-            error: ""
-        };
+const StyledGroupsHeader = styled.div`
+    display: flex;
+    padding-bottom: 5px;
+    justify-content: space-between;
+    button {
+        margin-left: 15px;
+        height: 36px;
+    }
+`;
+
+const StyledNoneFoundContainer = styled(BoxGroup)`
+    display: flex;
+    flex-direction: column;
+    background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
+    flex: 1 1 auto;
+    height: 300px;
+`;
+
+export const NoneSelected = styled.div`
+    color: ${props => props.theme.color.greyDarkest};
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+
+export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemove, onListGroups, onFindUsers }) => {
+    useEffect(() => {
+        onListGroups();
+        onFindUsers();
+    }, []);
+
+    if (loading) {
+        return <LoadingPlaceholder margin="130px" />;
     }
 
-    handleModalExited = () => {
-        this.setState({
-            createGroupId: "",
-            spaceError: false,
-            submitted: false,
-            error: ""
-        });
+    let groupComponents;
 
-        if (this.props.error) {
-            this.props.onClearError();
-        }
-    };
+    if (groups.length) {
+        groupComponents = (
+            <ManageGroupsContainer>
+                <GroupSelector />
+                <div>
+                    <BoxGroup>
+                        <BoxGroupHeader>
+                            <h2>{activeGroup.id}</h2>
+                        </BoxGroupHeader>
+                    </BoxGroup>
 
-    handleChange = e => {
-        this.setState({
-            createGroupId: e.target.value,
-            spaceError: this.state.spaceError && includes(e.target.value, " "),
-            submitted: false,
-            error: ""
-        });
-
-        if (this.props.error) {
-            this.props.onClearError();
-        }
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-
-        if (this.state.createGroupId === "") {
-            this.setState({
-                error: "Name is required"
-            });
-        } else if (includes(this.state.createGroupId, " ")) {
-            this.setState({
-                spaceError: true
-            });
-        } else {
-            this.setState(
-                {
-                    spaceError: false,
-                    submitted: true,
-                    error: ""
-                },
-                () => this.props.onCreate(this.state.createGroupId)
-            );
-        }
-    };
-
-    render() {
-        if (this.props.loading) {
-            return <LoadingPlaceholder margin="130px" />;
-        }
-
-        const groupComponents = map(sortBy(this.props.groups, "id"), group => <Group key={group.id} {...group} />);
-
-        let error;
-
-        if (this.state.submitted && this.props.error) {
-            error = this.props.error;
-        }
-
-        if (this.state.spaceError) {
-            error = "Group names may not contain spaces";
-        }
-
-        return (
-            <Modal
-                label="Manage Groups"
-                show={this.props.show}
-                size="lg"
-                onHide={this.props.onHide}
-                onExited={this.handleModalExited}
-            >
-                <ModalHeader>Manage Groups</ModalHeader>
-                <GroupsModalBody>
-                    <div>
-                        <form onSubmit={this.handleSubmit}>
-                            <InputGroup>
-                                <InputContainer align="right">
-                                    <Input
-                                        value={this.state.createGroupId}
-                                        onChange={this.handleChange}
-                                        placeholder="New"
-                                    />
-                                    <InputIcon name="plus-circle" bsStyle="primary" onClick={this.handleSubmit} />
-                                </InputContainer>
-                                <InputError>{error || this.state.error}</InputError>
-                            </InputGroup>
-                        </form>
-                        <BoxGroup>{groupComponents}</BoxGroup>
-                    </div>
-                    <GroupDetail />
-                </GroupsModalBody>
-            </Modal>
+                    <Permissions />
+                    <Members />
+                    <RemoveBanner
+                        message={`Permanently delete ${activeGroup.id}`}
+                        buttonText="Delete"
+                        onClick={() => onRemove(activeGroup.id)}
+                    />
+                </div>
+            </ManageGroupsContainer>
+        );
+    } else {
+        groupComponents = (
+            <StyledNoneFoundContainer>
+                <NoneSelected>No Groups Found</NoneSelected>
+            </StyledNoneFoundContainer>
         );
     }
-}
 
-const mapStateToProps = state => ({
-    loading: state.groups.documents === null || state.users.documents === null,
-    show: routerLocationHasState(state, "groups"),
-    groups: state.groups.documents,
-    error: get(state, "errors.CREATE_GROUP_ERROR.message", "")
-});
+    return (
+        <>
+            <h2>Manage Groups</h2>
+            <StyledGroupsHeader>
+                <h3>Use groups to organize users and control access</h3>
+
+                <Button tip="Create" color="blue" onClick={onShowCreateGroup}>
+                    Create
+                </Button>
+            </StyledGroupsHeader>
+
+            {groupComponents}
+
+            <Create />
+        </>
+    );
+};
+
+const mapStateToProps = state => {
+    const groups = getGroups(state);
+    const activeGroup = getActiveGroup(state);
+    return {
+        activeGroup: activeGroup || {},
+        groups,
+        loading: !groups || (!activeGroup && groups.length !== 0)
+    };
+};
 
 const mapDispatchToProps = dispatch => ({
-    onCreate: groupId => {
-        dispatch(createGroup(groupId));
+    onListGroups: () => {
+        dispatch(listGroups());
     },
-
-    onHide: () => {
-        dispatch(push({ ...window.location, state: { groups: false } }));
+    onFindUsers: () => {
+        dispatch(findUsers());
     },
-
-    onClearError: () => {
-        dispatch(clearError("CREATE_GROUP_ERROR"));
-    }
+    onRemove: groupId => {
+        dispatch(removeGroup(groupId));
+    },
+    onShowCreateGroup: () => dispatch(pushState({ createGroup: true }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Groups);

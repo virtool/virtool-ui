@@ -1,8 +1,8 @@
-// Vitest Snapshot v1
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ManageUsers /> > should render 1`] = `
+exports[`<ManageUsers /> should render 1`] = `
 <Fragment>
-  <styled.div>
+  <Toolbar>
     <SearchInput
       name="search"
     />
@@ -12,14 +12,14 @@ exports[`<ManageUsers /> > should render 1`] = `
       tip="Create User"
       tipPlacement="top"
       to={
-        {
-          "state": {
+        Object {
+          "state": Object {
             "createUser": true,
           },
         }
       }
     />
-  </styled.div>
+  </Toolbar>
   <Connect(UsersList) />
   <Connect(CreateUser) />
 </Fragment>

@@ -215,7 +215,7 @@ export const CreateSample = ({
                             <CreateSampleInputs>
                                 <Field
                                     as={SampleUserGroup}
-                                    aria-label="User Group"
+                                    aria-label="User GroupItem"
                                     name="group"
                                     selected={values.group}
                                     groups={groups}
