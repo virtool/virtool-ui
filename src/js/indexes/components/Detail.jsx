@@ -52,7 +52,9 @@ export class IndexDetail extends React.Component {
                         <SubviewHeaderAttribution>
                             {user.handle} built <RelativeTime time={created_at} />
                         </SubviewHeaderAttribution>
-                        {has_json && <DownloadLink id={id} />}
+                        {has_json && (
+                            <DownloadLink href={`/api/indexes/${id}/files/reference.json.gz`}>Download</DownloadLink>
+                        )}
                     </IndexDetailSubtitle>
                 </SubviewHeader>
 

@@ -6,7 +6,6 @@ import { BoxGroup, BoxGroupHeader, NarrowContainer, Table } from "../../../base"
 import { Contributors } from "../../../indexes/components/Contributors";
 import { checkUpdates, updateRemoteReference } from "../../actions";
 import { Clone } from "./Clone";
-import ReferenceExport from "./Export";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
 import Targets from "./Targets/Targets";
@@ -66,7 +65,6 @@ export const ReferenceManage = ({
 
         <Contributors contributors={contributors} />
         <Targets />
-        <ReferenceExport />
     </NarrowContainer>
 );
 

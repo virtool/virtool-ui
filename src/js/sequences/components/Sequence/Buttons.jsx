@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { CloseButton, Icon, LinkIcon } from "../../../base";
 import { showRemoveSequence } from "../../../otus/actions";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
+import { DownloadLink } from "../../../references/components/Detail/DownloadLink";
+import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
 
 const SequenceHeaderButtons = styled.span`
     align-items: center;
@@ -25,8 +27,10 @@ const SequenceHeaderButtons = styled.span`
     }
 `;
 
-export const SequenceButtons = ({ canModify, id, onCollapse, onRemoveSequence }) => {
+export const SequenceButtons = ({ canModify, id, isolateId, otuId, onCollapse, onRemoveSequence }) => {
     const removeSequence = useCallback(() => onRemoveSequence(id), [id]);
+
+    const href = `/api/otus/${otuId}/isolates/${isolateId}/sequences/${id}.fa`;
 
     return (
         <SequenceHeaderButtons>
@@ -34,14 +38,16 @@ export const SequenceButtons = ({ canModify, id, onCollapse, onRemoveSequence })
                 <LinkIcon name="pencil-alt" color="orange" tip="Edit Sequence" to={{ state: { editSequence: id } }} />
             )}
             {canModify && <Icon name="trash" color="red" tip="Remove Sequence" onClick={removeSequence} />}
-            <LinkIcon name="download" tip="Download FASTA" to={`/download/sequences/${id}`} />
+            <DownloadLink href={href}>FASTA</DownloadLink>
             <CloseButton onClick={onCollapse} />
         </SequenceHeaderButtons>
     );
 };
 
 export const mapStateToProps = state => ({
-    canModify: getCanModifyReferenceOTU(state)
+    canModify: getCanModifyReferenceOTU(state),
+    isolateId: getActiveIsolateId(state),
+    otuId: getOTUDetailId(state)
 });
 
 export const mapDispatchToProps = dispatch => ({

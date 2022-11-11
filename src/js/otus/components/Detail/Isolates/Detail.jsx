@@ -2,12 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Box, Icon, Label } from "../../../../base";
-import { getCanModifyReferenceOTU } from "../../../../references/selectors";
+import { getCanModifyReferenceOTU, getReferenceDetailId } from "../../../../references/selectors";
 import IsolateSequences from "../../../../sequences/components/Sequences";
-import { followDownload } from "../../../../utils/utils";
 import { setIsolateAsDefault, showEditIsolate, showRemoveIsolate } from "../../../actions";
 import EditIsolate from "./Edit";
 import RemoveIsolate from "./Remove";
+import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
 
 const IsolateDetailHeader = styled(Box)`
     align-items: center;
@@ -23,6 +23,10 @@ const IsolateDetailHeader = styled(Box)`
     i.fas {
         padding-left: 5px;
     }
+
+    a:last-child {
+        margin-left: 5px;
+    }
 `;
 
 const StyledIsolateDetail = styled.div`
@@ -32,10 +36,6 @@ const StyledIsolateDetail = styled.div`
 `;
 
 export class Detail extends React.Component {
-    handleDownload = () => {
-        followDownload(`/download/otus/${this.props.otuId}/isolates/${this.props.activeIsolate.id}`);
-    };
-
     handleSetDefaultIsolate = () => {
         this.props.setIsolateAsDefault(this.props.otuId, this.props.activeIsolate.id);
     };
@@ -98,7 +98,9 @@ export class Detail extends React.Component {
                     <div>
                         {defaultIsolateLabel}
                         {modifyIcons}
-                        <Icon name="download" tip="Download FASTA" tipPlacement="left" onClick={this.handleDownload} />
+                        <DownloadLink href={`/api/otus/${this.props.otuId}/isolates/${this.props.activeIsolate.id}.fa`}>
+                            FASTA
+                        </DownloadLink>
                     </div>
                 </IsolateDetailHeader>
 
@@ -111,6 +113,7 @@ export class Detail extends React.Component {
 const mapStateToProps = state => ({
     isolates: state.otus.detail.isolates,
     otuId: state.otus.detail.id,
+    refId: getReferenceDetailId(state),
     activeIsolate: state.otus.activeIsolate,
     activeIsolateId: state.otus.activeIsolateId,
     activeSequenceId: state.otus.activeSequenceId,

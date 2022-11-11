@@ -64,7 +64,6 @@ exports[`<ReferenceManage /> > should render when [props.cloned_from={ Bar: 'Bee
     contributors="baz"
   />
   <Connect(Targets) />
-  <Connect(ExportReference) />
 </styled.div>
 `;
 
@@ -132,6 +131,5 @@ exports[`<ReferenceManage /> > should render when [props.remotes_from=null] 1`] 
     contributors="baz"
   />
   <Connect(Targets) />
-  <Connect(ExportReference) />
 </styled.div>
 `;

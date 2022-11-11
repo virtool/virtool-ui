@@ -1,7 +1,12 @@
 import React from "react";
+import styled from "styled-components";
 
-export const DownloadLink = ({ id }) => (
-    <a href={`/download/indexes/${id}`} download>
-        Download Index
-    </a>
+const StyledDownloadLink = styled.a`
+    font-weight: 500;
+`;
+
+export const DownloadLink = ({ children, href }) => (
+    <StyledDownloadLink href={href} download>
+        {children}
+    </StyledDownloadLink>
 );
