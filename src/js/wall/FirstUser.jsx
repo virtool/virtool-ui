@@ -38,7 +38,7 @@ export const FirstUser = ({ onSubmit, errors }) => {
                         <Form>
                             <InputGroup>
                                 <InputLabel>Username</InputLabel>
-                                <Field type="text" name="username" as={Input} />
+                                <Field type="text" name="username" as={Input} autoFocus />
                                 {errors.usernameErrors.map(error => (
                                     <InputError key={error}>{error}</InputError>
                                 ))}
