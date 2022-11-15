@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { Button } from "../base";
 import styled from "styled-components";
-import { range } from "lodash-es";
+import { range, min, max, map } from "lodash-es";
 
 const StyledPaginationBox = styled.div`
-    justify-content: center;
     display: flex;
     width: 500px;
+    justify-content: center;
     margin-left: 25%;
-    margin-right: 25%;
-    button:first-of-type {
+
+    button:first-child {
         width: 100px;
     }
     button:last-child {
@@ -22,55 +22,46 @@ const StyledPaginationBox = styled.div`
     }
 `;
 
-export const sliceData = (items, currentPage, itemsPerPage) => {
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    return items.slice(indexOfFirstItem, indexOfLastItem);
+const usePagination = (pageCount, currentPage) => {
+    const paginationRange = useMemo(() => {
+        const maxVal = min([pageCount + 1, currentPage + 4]);
+        const minVal = max([1, maxVal - 4]);
+
+        if (currentPage > 1 && currentPage < pageCount - 2) {
+            return range(minVal - 1, maxVal - 1);
+        }
+
+        return range(minVal, maxVal);
+    }, [pageCount, currentPage]);
+    return paginationRange;
 };
 
-const getPagesToDisplay = (pageNumbers, currentPage) => {
-    if (pageNumbers.length <= 4) {
-        return pageNumbers;
-    } else if (currentPage === 1) {
-        return pageNumbers.slice(0, 4);
-    } else if (currentPage === pageNumbers.length) {
-        return pageNumbers.slice(pageNumbers.length - 4, pageNumbers.length);
-    } else if (currentPage === pageNumbers.length - 1) {
-        return pageNumbers.slice(currentPage - 3, currentPage + 1);
-    }
-    return pageNumbers.slice(currentPage - 2, currentPage + 2);
-};
+export const Pagination = ({ currentPage, pageCount, onPageChange }) => {
+    const paginationRange = usePagination(pageCount, currentPage);
 
-export const Pagination = ({ itemsPerPage, totalItems, color }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const paginate = number => setCurrentPage(number);
-
-    const pageNumbers = range(1, Math.ceil(totalItems / itemsPerPage + 1));
-    const pageNumbersToDisplay = getPagesToDisplay(pageNumbers, currentPage);
-
-    const pageButtons = pageNumbersToDisplay.map(pageNumber => (
+    const pageButtons = map(paginationRange, pageNumber => (
         <Button
-            color={currentPage === pageNumber ? color : ""}
+            color={currentPage === pageNumber ? "blue" : ""}
             key={pageNumber}
-            active={currentPage === pageNumber ? true : false}
-            onClick={() => paginate(pageNumber)}
+            active={currentPage === pageNumber}
+            onClick={() => onPageChange(pageNumber)}
         >
             {pageNumber}
         </Button>
     ));
 
     return (
-        <StyledPaginationBox size={pageNumbers.length}>
-            <Button onClick={() => paginate(currentPage - 1)} color={color} disabled={currentPage === 1 ? true : false}>
-                {"< Previous"}
+        <StyledPaginationBox>
+            <Button onClick={() => onPageChange(currentPage - 1)} color="blue" disabled={currentPage === 1}>
+                Previous
             </Button>
             {pageButtons}
             <Button
-                onClick={() => paginate(currentPage + 1)}
-                color={color}
-                disabled={currentPage === pageNumbers.length ? true : false}
+                onClick={() => onPageChange(currentPage + 1)}
+                color="blue"
+                disabled={currentPage === pageCount ? true : false}
             >
-                {"Next >"}
+                Next
             </Button>
         </StyledPaginationBox>
     );

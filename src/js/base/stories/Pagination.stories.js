@@ -1,5 +1,6 @@
 import React from "react";
 import { Pagination } from "../Pagination";
+import { useArgs } from "@storybook/client-api";
 
 export default {
     title: "base/pagination",
@@ -11,22 +12,17 @@ export default {
                     "A pagination component useful for dividing large amounts of content into smaller sections across multiple pages."
             }
         }
-    },
-    argTypes: {
-        color: {
-            options: ["blue", "grey", "orange", "green"],
-            control: { type: "radio" },
-            defaultValue: "blue"
-        }
     }
 };
 
-const Template = args => <Pagination {...args} />;
+const Template = args => {
+    const [{ currentPage }, updateArgs] = useArgs(1);
+    return <Pagination onPageChange={page => updateArgs({ currentPage: page })} currentPage={currentPage} {...args} />;
+};
 
 export const testPagination = Template.bind({});
 
 testPagination.args = {
-    itemsPerPage: 5,
-    totalItems: 100,
-    color: "blue"
+    pageCount: 10,
+    currentPage: 1
 };

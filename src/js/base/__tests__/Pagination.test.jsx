@@ -6,41 +6,47 @@ describe("<Pagination />", () => {
 
     beforeEach(() => {
         props = {
-            itemsPerPage: 5,
-            totalItems: 30
+            pageCount: 6,
+            currentPage: 1
         };
     });
 
-    it("Should render correctly when itemsPerPage=5 and totalItems=30", () => {
+    it("Should render correctly when pageCount=6 and currentPage=1", () => {
         renderWithProviders(<Pagination {...props} />);
-        const previousButton = screen.getByRole("button", { name: "< Previous" });
-        const nextButton = screen.getByRole("button", { name: "Next >" });
-        expect(previousButton).toBeInTheDocument();
-        expect(nextButton).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Previous" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "1" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "3" })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "5" })).not.toBeInTheDocument();
-        nextButton.click();
-        nextButton.click();
-        expect(screen.getByRole("button", { name: "5" })).toBeInTheDocument();
-        nextButton.click();
-        nextButton.click();
-        expect(screen.queryByRole("button", { name: "7" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "6" })).not.toBeInTheDocument();
     });
 
-    it("should render correctly when totalItems=0", () => {
-        props.totalItems = 0;
+    it("should render correclty when pageCount=6 and currentPage = 3", () => {
+        props.currentPage = 3;
         renderWithProviders(<Pagination {...props} />);
-        expect(screen.getByRole("button", { name: "< Previous" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Next >" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Previous" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "2" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "3" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "5" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "1" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "6" })).not.toBeInTheDocument();
+    });
+
+    it("should render correctly when pageCount=0", () => {
+        props.pageCount = 0;
+        renderWithProviders(<Pagination {...props} />);
+        expect(screen.getByRole("button", { name: "Previous" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "1" })).not.toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "3" })).not.toBeInTheDocument();
     });
 
-    it("should render correctly when itemsPerPage=5 and totalItems=14", () => {
-        props.totalItems = 14;
+    it("should render correctly when pageCount=3", () => {
+        props.pageCount = 3;
         renderWithProviders(<Pagination {...props} />);
-        expect(screen.getByRole("button", { name: "< Previous" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Next >" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Previous" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "1" })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "2" })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "3" })).toBeInTheDocument();
