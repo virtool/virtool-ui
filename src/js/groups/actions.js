@@ -27,13 +27,13 @@ export const removeActiveGroup = createAction(REMOVE_ACTIVE_GROUP);
 export const listGroups = createAction(LIST_GROUPS.REQUESTED);
 
 /**
- * Returns an action that triggers a API request to create a group with the given `groupId`.
+ * Returns an action that triggers a API request to create a group with the given `name`.
  *
  * @func
- * @param groupId {string} the id for the new group
+ * @param name {string} the name for the new group
  * @returns {object}
  */
-export const createGroup = createAction(CREATE_GROUP.REQUESTED, groupId => ({ payload: { groupId } }));
+export const createGroup = createAction(CREATE_GROUP.REQUESTED, name => ({ payload: { name } }));
 
 /**
  * Returns action that can trigger an API request for modifying group permissions.

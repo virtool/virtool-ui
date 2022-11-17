@@ -2,7 +2,7 @@ import { Request } from "../app/request";
 
 export const list = () => Request.get("/api/groups");
 
-export const create = ({ groupId }) => Request.post("/api/groups").send({ group_id: groupId });
+export const create = ({ name }) => Request.post("/api/groups").send({ name });
 
 export const setPermission = ({ groupId, permission, value }) =>
     Request.patch(`/api/groups/${groupId}`).send({

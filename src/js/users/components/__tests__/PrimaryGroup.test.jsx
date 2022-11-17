@@ -4,16 +4,21 @@ import { mapDispatchToProps, mapStateToProps, PrimaryGroup } from "../PrimaryGro
 
 describe("<PrimaryGroup />", () => {
     const props = {
-        groups: [{ id: "foo" }, { id: "bar" }, { id: "baz" }],
+        groups: [
+            { id: "1", name: "foo" },
+            { id: "2", name: "bar" },
+            { id: "3", name: "baz" }
+        ],
         id: "bob",
-        primaryGroup: { id: "bar" },
+        primaryGroup: { id: "2", name: "bar" },
         onSetPrimaryGroup: vi.fn()
     };
 
     it("should render", () => {
         renderWithProviders(<PrimaryGroup {...props} />);
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
-        expect(screen.getByRole("combobox")).toHaveValue("bar");
+        expect(screen.getByRole("combobox")).toHaveValue("2");
+        expect(screen.getByText("Bar")).toBeInTheDocument();
     });
 
     it("should render when [primaryGroup = null]", () => {
@@ -24,13 +29,13 @@ describe("<PrimaryGroup />", () => {
     });
 
     it("should call onSetPrimaryGroup() when selection changes", async () => {
-        props.primaryGroup = "baz";
+        props.primaryGroup = "3";
         renderWithProviders(<PrimaryGroup {...props} />);
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
         userEvent.selectOptions(screen.getByRole("combobox"), "Bar");
         userEvent.selectOptions(screen.getByRole("combobox"), "none");
         await waitFor(() => {
-            expect(props.onSetPrimaryGroup).toHaveBeenNthCalledWith(1, "bob", "bar");
+            expect(props.onSetPrimaryGroup).toHaveBeenNthCalledWith(1, "bob", "2");
             expect(props.onSetPrimaryGroup).toHaveBeenNthCalledWith(2, "bob", null);
         });
     });

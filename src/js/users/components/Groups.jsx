@@ -21,8 +21,14 @@ export class UserGroups extends React.Component {
             return <LoadingPlaceholder />;
         }
 
-        let groupComponents = map(this.props.documents, ({ id }) => (
-            <UserGroup key={id} id={id} toggled={some(this.props.memberGroups, { id })} onClick={this.handleEdit} />
+        let groupComponents = map(this.props.documents, ({ id, name }) => (
+            <UserGroup
+                key={id}
+                id={id}
+                name={name}
+                toggled={some(this.props.memberGroups, { id })}
+                onClick={this.handleEdit}
+            />
         ));
 
         if (!groupComponents.length) {

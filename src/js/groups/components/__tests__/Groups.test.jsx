@@ -44,7 +44,8 @@ describe("Groups", () => {
             loading: false,
             groups: [
                 {
-                    id: "testid",
+                    name: "testName",
+                    id: 1,
                     permissions: {
                         cancel_job: true,
                         create_ref: false,
@@ -59,7 +60,8 @@ describe("Groups", () => {
             ],
             onShowCreateGroup: vi.fn(),
             activeGroup: {
-                id: "testid",
+                name: "testName",
+                id: 1,
                 permissions: {
                     cancel_job: true,
                     create_ref: false,
@@ -78,7 +80,8 @@ describe("Groups", () => {
             groups: {
                 documents: [
                     {
-                        id: "testid",
+                        name: "testName",
+                        id: 1,
                         permissions: {
                             cancel_job: true,
                             create_ref: false,
@@ -92,7 +95,8 @@ describe("Groups", () => {
                     }
                 ],
                 activeGroup: {
-                    id: "testid",
+                    name: "testName",
+                    id: 1,
                     permissions: {
                         cancel_job: true,
                         create_ref: false,
@@ -107,7 +111,7 @@ describe("Groups", () => {
             },
             users: {
                 documents: {
-                    handle: "testuser",
+                    handle: "testUser",
                     permissions: { permission1: true, permission2: false, permission3: true }
                 }
             }
@@ -142,7 +146,7 @@ describe("Groups", () => {
         expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
         expect(screen.getByText("cancel_job")).toBeInTheDocument();
         expect(screen.getByText("No Group Members")).toBeInTheDocument();
-        const groupNameOccurrences = screen.getAllByText("testid");
+        const groupNameOccurrences = screen.getAllByText("testName");
         expect(groupNameOccurrences.length).toBe(2);
     });
 
@@ -159,18 +163,19 @@ describe("Groups", () => {
     });
 
     it("should render correctly when active group has a group member", () => {
-        state.users.documents = [{ handle: "testuser1", groups: { 0: { id: "testid" } } }];
+        state.users.documents = [{ handle: "testUser1", groups: { 0: { id: 1 } } }];
         renderWithRouter(<Groups />, state, history);
         expect(screen.getByText("Members")).toBeInTheDocument();
-        expect(screen.getByText("testuser1")).toBeInTheDocument();
+        expect(screen.getByText("testUser1")).toBeInTheDocument();
         expect(screen.queryByText("No Group Members")).not.toBeInTheDocument();
     });
 
     it("should render correctly when more than one group exists", () => {
-        state.users.documents = [{ handle: "testuser1", groups: { 0: { id: "testid" } } }];
+        state.users.documents = [{ handle: "testUser1", groups: { 0: { id: 1 } } }];
         state.groups.documents = [
             {
-                id: "testid",
+                name: "testName",
+                id: 1,
                 permissions: {
                     cancel_job: true,
                     create_ref: false,
@@ -183,7 +188,8 @@ describe("Groups", () => {
                 }
             },
             {
-                id: "secondtestid",
+                name: "secondTestName",
+                id: 2,
                 permissions: {
                     cancel_job: false,
                     create_ref: false,
@@ -197,9 +203,9 @@ describe("Groups", () => {
             }
         ];
         renderWithRouter(<Groups {...props} />, state, history);
-        const groupNameOccurrences = screen.getAllByText("testid");
+        const groupNameOccurrences = screen.getAllByText("testName");
         expect(groupNameOccurrences.length).toBe(2);
-        expect(screen.getByText("secondtestid")).toBeInTheDocument();
-        expect(screen.getByText("testuser1")).toBeInTheDocument();
+        expect(screen.getByText("secondTestName")).toBeInTheDocument();
+        expect(screen.getByText("testUser1")).toBeInTheDocument();
     });
 });

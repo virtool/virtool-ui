@@ -53,11 +53,11 @@ describe("Groups Action Creators:", () => {
     });
 
     it("createGroup: returns action to create a new group", () => {
-        const groupId = "testerid";
-        const result = createGroup(groupId);
+        const name = "testName";
+        const result = createGroup(name);
         expect(result).toEqual({
             type: CREATE_GROUP.REQUESTED,
-            payload: { groupId }
+            payload: { name }
         });
     });
 
