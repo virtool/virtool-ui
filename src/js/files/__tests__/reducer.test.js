@@ -29,19 +29,14 @@ describe("filesReducer()", () => {
 
         it("otherwise insert entry into list", () => {
             const state = {
-                fetched: true,
-                fileType: "reads",
-                documents: [],
-                page: 1,
-                per_page: 3,
-                total_count: 0
+                stale: true
             };
             const action = {
                 type: WS_INSERT_FILE,
                 payload: { type: "reads", id: "test" }
             };
             const result = reducer(state, action);
-            expect(result).toEqual({ ...state, documents: [action.payload], total_count: 0 });
+            expect(result).toEqual({ stale: true });
         });
     });
 
@@ -60,14 +55,15 @@ describe("filesReducer()", () => {
     it("should handle WS_REMOVE_FILE", () => {
         const state = {
             documents: [{ id: "test", foo: "bar" }],
-            total_count: 1
+            total_count: 1,
+            stale: true
         };
         const action = {
             type: WS_REMOVE_FILE,
             payload: ["test"]
         };
         const result = reducer(state, action);
-        expect(result).toEqual({ documents: [], total_count: 1 });
+        expect(result).toEqual({ documents: [{ id: "test", foo: "bar" }], total_count: 1, stale: true });
     });
 
     it("should handle LIST_FILES_REQUESTED", () => {
@@ -94,7 +90,8 @@ describe("filesReducer()", () => {
         expect(result).toEqual({
             ...state,
             ...action.payload,
-            fileType: "test"
+            fileType: "test",
+            stale: false
         });
     });
 

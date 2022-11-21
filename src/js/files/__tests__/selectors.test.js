@@ -6,7 +6,7 @@ describe("getFilteredFileIds()", () => {
     beforeEach(() => {
         state = {
             files: {
-                documents: [
+                items: [
                     { id: "foo", ready: true, reserved: false, uploaded_at: "2020-01-24T23:54:02Z" },
                     { id: "bar", ready: true, reserved: false, uploaded_at: "2020-04-24T23:54:02Z" },
                     { id: "baz", ready: true, reserved: false, uploaded_at: "2020-02-24T23:54:02Z" }
@@ -15,14 +15,8 @@ describe("getFilteredFileIds()", () => {
         };
     });
 
-    it("should return all document ids when appropriate", () => {
+    it("should return all document ids", () => {
         const result = getFilteredFileIds(state);
-        expect(result).toEqual(["bar", "baz", "foo"]);
-    });
-
-    it("should return only non-reserved document ids", () => {
-        state.files.documents[1].reserved = true;
-        const result = getFilteredFileIds(state);
-        expect(result).toEqual(["baz", "foo"]);
+        expect(result).toEqual(["foo", "bar", "baz"]);
     });
 });

@@ -19,10 +19,12 @@ export const find = ({ fileType }) =>
  * @param page {number} the page of results to get
  * @returns {promise}
  */
-export const list = ({ fileType }) =>
+export const list = ({ fileType, page }) =>
     Request.get("/api/uploads").query({
         type: fileType,
-        ready: true
+        ready: true,
+        paginate: true,
+        page
     });
 
 /**

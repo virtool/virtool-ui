@@ -16,7 +16,7 @@ import {
     WS_REMOVE_FILE,
     WS_UPDATE_FILE
 } from "../app/actionTypes";
-import { insert, remove, update, updateDocuments } from "../utils/reducers";
+import { update, updateDocuments } from "../utils/reducers";
 
 /**
  * The initial state to give the reducer.
@@ -30,7 +30,8 @@ export const initialState = {
     found_count: 0,
     page: 0,
     total_count: 0,
-    uploads: []
+    uploads: [],
+    stale: true
 };
 
 export const appendUpload = (state, action) => {
@@ -77,15 +78,14 @@ export const filesReducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_FILE, (state, action) => {
             if (action.payload.type === state.fileType) {
-                return insert(state, action.payload, "uploaded_at", true);
+                state.stale = true;
             }
-            return state;
         })
         .addCase(WS_UPDATE_FILE, (state, action) => {
             return update(state, action.payload, "uploaded_at", true);
         })
-        .addCase(WS_REMOVE_FILE, (state, action) => {
-            return remove(state, action.payload);
+        .addCase(WS_REMOVE_FILE, state => {
+            state.stale = true;
         })
         .addCase(FIND_FILES.REQUESTED, (state, action) => {
             state.term = action.payload.term;
@@ -95,7 +95,8 @@ export const filesReducer = createReducer(initialState, builder => {
         .addCase(FIND_FILES.SUCCEEDED, (state, action) => {
             return {
                 ...updateDocuments(state, action.payload, "uploaded_at", true),
-                fileType: action.context.fileType
+                fileType: action.context.fileType,
+                stale: false
             };
         })
         .addCase(UPLOAD.REQUESTED, (state, action) => {

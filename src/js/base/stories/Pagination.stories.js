@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pagination } from "../Pagination";
-import { useArgs } from "@storybook/client-api";
 
 export default {
     title: "base/pagination",
@@ -16,8 +15,8 @@ export default {
 };
 
 const Template = args => {
-    const [{ currentPage }, updateArgs] = useArgs(1);
-    return <Pagination onPageChange={page => updateArgs({ currentPage: page })} currentPage={currentPage} {...args} />;
+    const [currentPage, setCurrentPage] = useState(1);
+    return <Pagination onLoadNextPage={page => setCurrentPage(page)} currentPage={currentPage} {...args} />;
 };
 
 export const testPagination = Template.bind({});

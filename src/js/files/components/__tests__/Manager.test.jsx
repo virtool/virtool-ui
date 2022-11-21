@@ -2,6 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createStore } from "redux";
 import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
+import { MemoryRouter } from "react-router-dom";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);
@@ -28,7 +29,7 @@ describe("<FileManager>", () => {
         };
         state = {
             files: {
-                documents: [
+                items: [
                     {
                         id: 1,
                         name: "subtraction.fq.gz",
@@ -49,7 +50,13 @@ describe("<FileManager>", () => {
     });
 
     it("should render", () => {
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            createAppStore(state)
+        );
         expect(screen.getByText("Drag file here to upload.")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Browse Files" })).toBeInTheDocument();
@@ -57,20 +64,38 @@ describe("<FileManager>", () => {
 
     it("should remove upload bar if canUpload is false", () => {
         props.canUpload = false;
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            createAppStore(state)
+        );
         expect(screen.getByText("You do not have permission to upload files.")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
     });
 
     it("should change message if passed", () => {
         props.message = "test_message";
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            createAppStore(state)
+        );
         expect(screen.getByText("test_message")).toBeInTheDocument();
     });
 
     it("should filter files according to passed regex", async () => {
         props.validationRegex = /.(?:fa|fasta)(?:.gz|.gzip)?$/;
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            createAppStore(state)
+        );
         const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
         await userEvent.upload(screen.getByLabelText("Upload file"), [invalidFile, validFile]);
@@ -87,11 +112,12 @@ describe("mapStateToProps()", () => {
         state = {
             files: {
                 found_count: 6,
+                per_page: 1,
                 page: 1,
                 page_count: 1,
                 total_count: 1,
                 fileType: "test_fileType",
-                documents: [
+                items: [
                     {
                         id: 1,
                         name: "subtraction.fq.gz",
@@ -114,12 +140,16 @@ describe("mapStateToProps()", () => {
     it("should return correct values", () => {
         const expected = {
             found_count: 6,
+            per_page: 1,
             page: 1,
             page_count: 1,
             total_count: 1,
             storedFileType: "test_fileType",
             documents: [1],
-            canUpload: true
+            canUpload: true,
+            urlPage: 1,
+            stale: undefined,
+            loading: true
         };
         expect(mapStateToProps(state)).toEqual(expected);
     });

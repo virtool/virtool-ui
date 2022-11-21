@@ -4,6 +4,7 @@ import { createStore } from "redux";
 import { SubtractionFileManager } from "../FileManager";
 import { screen, waitFor } from "@testing-library/react";
 import { UPLOAD } from "../../../app/actionTypes";
+import { MemoryRouter } from "react-router-dom";
 
 const createAppStore = (state, reducer) => {
     return () => createStore(reducer ? reducer : state => state, state);
@@ -16,7 +17,7 @@ const createFiles = fileNames => {
 describe("<SubtractionFileManager />", () => {
     const state = {
         files: {
-            documents: [
+            items: [
                 {
                     id: 1,
                     name: "subtraction.fq.gz",
@@ -36,7 +37,12 @@ describe("<SubtractionFileManager />", () => {
     };
 
     it("should render", () => {
-        renderWithProviders(<SubtractionFileManager />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <SubtractionFileManager />
+            </MemoryRouter>,
+            createAppStore(state)
+        );
         expect(screen.getByText("Drag FASTA files here to upload")).toBeInTheDocument();
         expect(screen.getByText("Accepts files ending in fa, fasta, fa.gz, or fasta.gz.")).toBeInTheDocument();
     });
@@ -48,7 +54,12 @@ describe("<SubtractionFileManager />", () => {
             return state;
         };
 
-        renderWithProviders(<SubtractionFileManager />, createAppStore(state, reducer));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <SubtractionFileManager />
+            </MemoryRouter>,
+            createAppStore(state, reducer)
+        );
 
         const validFiles = createFiles(["test.fa", "test.fa.gz", "test.fasta", "test.fasta.gz"]);
         const invalidFiles = createFiles([

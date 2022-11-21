@@ -49,5 +49,6 @@ export * from "./Toolbar";
 export * from "./Tooltip";
 export * from "./UploadBar";
 export * from "./ViewHeader";
+export * from "./Pagination";
 
 export { Flex, FlexItem, ScrollList };

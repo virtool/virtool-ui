@@ -1,5 +1,5 @@
-import { capitalize, forEach } from "lodash-es";
-import React from "react";
+import { capitalize, forEach, toString } from "lodash-es";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import {
     Alert,
@@ -7,109 +7,126 @@ import {
     Icon,
     LoadingPlaceholder,
     NoneFoundBox,
-    ScrollList,
     UploadBar,
     ViewHeader,
-    ViewHeaderTitle
+    ViewHeaderTitle,
+    Pagination
 } from "../../base";
 import { checkAdminOrPermission, createRandomString } from "../../utils/utils";
 import { findFiles, upload } from "../actions";
 import { getFilteredFileIds } from "../selectors";
 import File from "./File";
 
-export class FileManager extends React.Component {
-    componentDidMount() {
-        this.props.onLoadNextPage(this.props.fileType, this.props.term, 1);
+export const FileManager = ({
+    onLoadNextPage,
+    canUpload,
+    onDrop,
+    documents,
+    validationRegex,
+    message,
+    total_count,
+    page,
+    tip,
+    fileType,
+    page_count,
+    urlPage,
+    stale,
+    loading,
+    found_count
+}) => {
+    useEffect(() => {
+        if (stale || loading) {
+            onLoadNextPage(fileType, "1", urlPage);
+        }
+    }, [stale]);
+
+    if (loading) {
+        return <LoadingPlaceholder />;
     }
 
-    handleDrop = acceptedFiles => {
-        if (this.props.canUpload) {
-            this.props.onDrop(this.props.fileType, acceptedFiles);
+    const handleDrop = acceptedFiles => {
+        if (canUpload) {
+            onDrop(fileType, acceptedFiles);
         }
     };
 
-    renderRow = index => {
-        const id = this.props.documents[index];
+    const renderRow = index => {
+        const id = documents[index];
         return <File key={id} id={id} />;
     };
 
-    validateExtensions = file => {
-        return this.props.validationRegex.test(file.name) ? null : { code: "Invalid file type" };
+    const validateExtensions = file => {
+        return validationRegex.test(file.name) ? null : { code: "Invalid file type" };
     };
 
-    render() {
-        if (
-            this.props.documents === null ||
-            (this.props.storedFileType && this.props.fileType !== this.props.storedFileType)
-        ) {
-            return <LoadingPlaceholder />;
-        }
+    let toolbar;
 
-        let toolbar;
-
-        if (this.props.canUpload) {
-            toolbar = (
-                <UploadBar
-                    onDrop={this.handleDrop}
-                    message={this.props.message || "Drag file here to upload."}
-                    validator={this.props.validationRegex ? this.validateExtensions : null}
-                    tip={this.props.tip}
-                />
-            );
-        } else {
-            toolbar = (
-                <Alert color="orange" level>
-                    <Icon name="exclamation-circle" />
-                    <span>
-                        <strong>You do not have permission to upload files.</strong>
-                        <span> Contact an administrator.</span>
-                    </span>
-                </Alert>
-            );
-        }
-
-        let noneFound;
-
-        if (!this.props.documents.length) {
-            noneFound = <NoneFoundBox noun="files" />;
-        }
-
-        const title = `${this.props.fileType === "reads" ? "Read" : capitalize(this.props.fileType)} Files`;
-
-        return (
-            <>
-                <ViewHeader title={title}>
-                    <ViewHeaderTitle>
-                        {title} <Badge>{this.props.total_count}</Badge>
-                    </ViewHeaderTitle>
-                </ViewHeader>
-
-                {toolbar}
-                {noneFound}
-
-                <ScrollList
-                    documents={this.props.documents}
-                    onLoadNextPage={page => this.props.onLoadNextPage(this.props.fileType, this.props.term, page)}
-                    page={this.props.page}
-                    pageCount={this.props.page_count}
-                    renderRow={this.renderRow}
-                />
-            </>
+    if (canUpload) {
+        toolbar = (
+            <UploadBar
+                onDrop={handleDrop}
+                message={message || "Drag file here to upload."}
+                validator={validationRegex ? validateExtensions : null}
+                tip={tip}
+            />
+        );
+    } else {
+        toolbar = (
+            <Alert color="orange" level>
+                <Icon name="exclamation-circle" />
+                <span>
+                    <strong>You do not have permission to upload files.</strong>
+                    <span> Contact an administrator.</span>
+                </span>
+            </Alert>
         );
     }
-}
 
-export const mapStateToProps = state => {
-    const { found_count, page, page_count, total_count } = state.files;
+    let noneFound;
+
+    if (!documents.length) {
+        noneFound = found_count === 0 ? <NoneFoundBox noun="files" /> : <LoadingPlaceholder />;
+    }
+
+    const title = `${fileType === "reads" ? "Read" : capitalize(fileType)} Files`;
+
+    return (
+        <>
+            <ViewHeader title={title} />
+            <ViewHeaderTitle>
+                {title} <Badge>{total_count}</Badge>
+            </ViewHeaderTitle>
+            {toolbar}
+            {noneFound}
+
+            <Pagination
+                documents={documents}
+                renderRow={renderRow}
+                currentPage={page}
+                pageCount={page_count}
+                onLoadNextPage={pageNumber => onLoadNextPage(fileType, toString(pageNumber), pageNumber)}
+            />
+        </>
+    );
+};
+
+export const mapStateToProps = (state, ownProps) => {
+    const { found_count, page, page_count, total_count, per_page } = state.files;
+    const documents = getFilteredFileIds(state);
+    const storedFileType = state.files.fileType;
 
     return {
         found_count,
+        per_page,
         page,
         page_count,
         total_count,
         canUpload: checkAdminOrPermission(state, "upload_file"),
-        documents: getFilteredFileIds(state),
-        storedFileType: state.files.fileType
+        documents,
+        storedFileType,
+        urlPage: new URLSearchParams(state.router?.location.search).get("page") || 1,
+        stale: state.files.stale,
+        loading: documents === null || (storedFileType && ownProps?.fileType !== storedFileType)
     };
 };
 
@@ -122,7 +139,7 @@ export const mapDispatchToProps = dispatch => ({
     },
 
     onLoadNextPage: (fileType, term, page = 1) => {
-        dispatch(findFiles(fileType, term, page));
+        dispatch(findFiles(fileType, term, page || 1));
     }
 });
 
