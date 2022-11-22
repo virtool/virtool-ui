@@ -88,6 +88,7 @@ export function* apiCall(apiMethod, action, actionType, context = {}) {
             return error.response;
         }
 
+        window.captureException(error);
         throw error;
     }
 }
