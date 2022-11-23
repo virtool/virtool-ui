@@ -1,7 +1,5 @@
-import { PublicClientApplication } from "@azure/msal-browser";
-import { getMsalConfig } from "../../../app/authConfig";
-import { Bar, mapStateToProps, mapDispatchToProps } from "../NavBar";
-import crypto from "crypto";
+import {Bar, mapDispatchToProps, mapStateToProps} from "../NavBar";
+import {logout} from "../../../account/actions";
 
 describe("<Bar />", () => {
     const props = {
@@ -35,15 +33,13 @@ describe("mapStateToProps", () => {
 describe("mapDispatchToProps", () => {
     const dispatch = vi.fn();
 
-    global.crypto = crypto;
     window.b2c = {
-        clientId: "null"
+        use: false
     };
-    window.msalInstance = new PublicClientApplication(getMsalConfig());
 
     it("should return onLogout in props", () => {
         const props = mapDispatchToProps(dispatch);
         props.onLogout();
-        expect(dispatch).toHaveBeenCalled();
+        expect(dispatch).toHaveBeenCalledWith(logout());
     });
 });

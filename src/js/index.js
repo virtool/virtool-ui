@@ -37,7 +37,8 @@ const sentryCheck = res => {
     return res;
 };
 
-window.captureException = error => (window.virtool.dev ? console.error(error) : window.Sentry.captureException(error));
+window.captureException = error => (window.virtool.dev ? console.error(error) : Sentry.captureException(error));
+
 const history = createBrowserHistory();
 window.store = createAppStore(history);
 

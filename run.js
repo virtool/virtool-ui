@@ -31,8 +31,7 @@ program
   .option(
     "--sentry-dsn <DSN>",
     "DSN for sentry logging",
-    process.env.VT_UI_SENTRY_DSN ||
-      "https://d9ea493cb0f34ad4a141da5506e6b03b@sentry.io/220541"
+    process.env.VT_UI_SENTRY_DSN || ""
   )
   .option(
     "--use-b2c [bool]",
