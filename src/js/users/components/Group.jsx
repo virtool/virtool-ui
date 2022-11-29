@@ -11,6 +11,7 @@ const StyledUserGroup = styled(SelectBoxGroupSection)`
 export class UserGroup extends React.Component {
     static propTypes = {
         id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
         toggled: PropTypes.bool.isRequired,
         onClick: PropTypes.func.isRequired
     };
@@ -22,7 +23,7 @@ export class UserGroup extends React.Component {
     render() {
         return (
             <StyledUserGroup active={this.props.toggled} onClick={this.handleClick}>
-                <Checkbox checked={this.props.toggled} label={this.props.id} />
+                <Checkbox checked={this.props.toggled} label={this.props.name} />
             </StyledUserGroup>
         );
     }

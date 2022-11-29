@@ -15,9 +15,9 @@ export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) =>
         [id, primaryGroup]
     );
 
-    const groupOptions = map(groups, ({ id }) => (
+    const groupOptions = map(groups, ({ id, name }) => (
         <PrimaryGroupOption key={id} value={id}>
-            {capitalize(id)}
+            {capitalize(name)}
         </PrimaryGroupOption>
     ));
     return (

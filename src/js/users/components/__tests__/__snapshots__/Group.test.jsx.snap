@@ -8,7 +8,6 @@ exports[`<UserGroup /> > should render with [toggled=false] 1`] = `
   <Checkbox
     checked={false}
     disabled={false}
-    label="bob"
   />
 </Styled(Styled(styled.div))>
 `;
@@ -21,7 +20,6 @@ exports[`<UserGroup /> > should render with [toggled=true] 1`] = `
   <Checkbox
     checked={true}
     disabled={false}
-    label="bob"
   />
 </Styled(Styled(styled.div))>
 `;

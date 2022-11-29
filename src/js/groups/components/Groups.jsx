@@ -63,14 +63,14 @@ export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemo
                 <div>
                     <BoxGroup>
                         <BoxGroupHeader>
-                            <h2>{activeGroup.id}</h2>
+                            <h2>{activeGroup.name}</h2>
                         </BoxGroupHeader>
                     </BoxGroup>
 
                     <Permissions />
                     <Members />
                     <RemoveBanner
-                        message={`Permanently delete ${activeGroup.id}`}
+                        message={`Permanently delete ${activeGroup.name}`}
                         buttonText="Delete"
                         onClick={() => onRemove(activeGroup.id)}
                     />

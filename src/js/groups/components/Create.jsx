@@ -55,9 +55,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onChangeActiveGroup: groupId => dispatch(getGroup(groupId)),
-    onCreate: groupId => {
-        dispatch(createGroup(groupId));
+    onChangeActiveGroup: groupId => {
+        dispatch(getGroup(groupId));
+    },
+    onCreate: name => {
+        dispatch(createGroup(name));
     },
     onHide: () => {
         dispatch(pushState({ createGroup: false }));

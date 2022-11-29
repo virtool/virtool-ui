@@ -33,7 +33,7 @@ export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) =>
                 key={group.id}
                 onClick={() => onChangeActiveGroup(group.id)}
             >
-                {group.id}
+                {group.name}
             </GroupsSelectBoxGroupSection>
         );
     });
