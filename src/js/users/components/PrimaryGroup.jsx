@@ -20,6 +20,7 @@ export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) =>
             {capitalize(name)}
         </PrimaryGroupOption>
     ));
+
     return (
         <InputGroup>
             <InputLabel>Primary Group</InputLabel>
@@ -35,6 +36,7 @@ export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) =>
 
 export const mapStateToProps = state => {
     const { groups, id, primary_group } = state.users.detail;
+
     return {
         groups,
         id,

@@ -98,12 +98,22 @@ export class CreateUser extends React.PureComponent {
                     <ModalBody>
                         <InputGroup>
                             <InputLabel>Username</InputLabel>
-                            <Input name="handle" value={this.state.handle} onChange={this.handleChange} />
+                            <Input
+                                aria-label="username"
+                                name="handle"
+                                value={this.state.handle}
+                                onChange={this.handleChange}
+                            />
                             <InputError>{this.state.errorHandle}</InputError>
                         </InputGroup>
                         <InputGroup>
                             <InputLabel>Password</InputLabel>
-                            <PasswordInput name="password" value={this.state.password} onChange={this.handleChange} />
+                            <PasswordInput
+                                aria-label="password"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                            />
                             <InputError>{this.state.errorPassword}</InputError>
                         </InputGroup>
 

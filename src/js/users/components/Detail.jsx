@@ -55,7 +55,7 @@ export class UserDetail extends React.Component {
     }
 
     render() {
-        if (this.props.error.length) {
+        if (this.props.error?.length) {
             return (
                 <Alert color="orange" level>
                     <Icon name="exclamation-circle" />
@@ -79,12 +79,12 @@ export class UserDetail extends React.Component {
                     <UserDetailTitle>
                         <InitialIcon size="xl" handle={handle} />
                         <span>{handle}</span>
-                        {administrator ? <AdminIcon name="user-shield" color="blue" /> : null}
+                        {administrator ? <AdminIcon aria-label="admin" name="user-shield" color="blue" /> : null}
                         <Link to="/administration/users">Back To List</Link>
                     </UserDetailTitle>
                 </UserDetailHeader>
 
-                <Password key={this.props.lastPasswordChange} />
+                <Password key={this.props.detail.lastPasswordChange} />
 
                 <UserDetailGroups>
                     <div>
@@ -102,8 +102,7 @@ export class UserDetail extends React.Component {
 
 export const mapStateToProps = state => ({
     detail: state.users.detail,
-    error: get(state, "errors.GET_USER_ERROR.message", ""),
-    lastPasswordChange: get(state, "users.detail.last_password_change")
+    error: get(state, "errors.GET_USER_ERROR.message", "")
 });
 
 export const mapDispatchToProps = dispatch => ({

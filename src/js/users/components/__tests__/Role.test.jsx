@@ -1,6 +1,6 @@
-import { Select } from "../../../base";
 import { getCanModifyUser } from "../../selectors";
 import { UserRole, mapStateToProps } from "../Role";
+import { screen } from "@testing-library/react";
 
 vi.mock("../../selectors.js");
 
@@ -16,22 +16,33 @@ describe("<UserRole />", () => {
         };
     });
 
-    it.each(["administrator", "limited"])("should render when [role=%p]", role => {
-        props.role = role;
-        const wrapper = shallow(<UserRole {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render correctly when role = administrator", () => {
+        renderWithProviders(<UserRole {...props} />);
+        expect(screen.getByText("User Role")).toBeInTheDocument();
+        expect(screen.getByText("Administrator")).toBeInTheDocument();
+        expect(screen.getByText("Limited")).toBeInTheDocument();
+        const options = screen.getAllByRole("option");
+        expect(options[0].selected).toBeTruthy();
+        expect(options[1].selected).not.toBeTruthy();
     });
 
-    it("should render empty when [canModifyUser=false]", () => {
+    it("should render correctly when role = limited", () => {
+        props.role = "limited";
+        renderWithProviders(<UserRole {...props} />);
+        expect(screen.getByText("User Role")).toBeInTheDocument();
+        expect(screen.getByText("Administrator")).toBeInTheDocument();
+        expect(screen.getByText("Limited")).toBeInTheDocument();
+        const options = screen.getAllByRole("option");
+        expect(options[0].selected).not.toBeTruthy();
+        expect(options[1].selected).toBeTruthy();
+    });
+
+    it("should render empty when canModifyUser = false", () => {
         props.canModifyUser = false;
-        const wrapper = shallow(<UserRole {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it("should call onSetUserRole() when selection changes", () => {
-        const wrapper = shallow(<UserRole {...props} />);
-        wrapper.find(Select).prop("onChange")({ target: { value: "limited" } });
-        expect(props.onSetUserRole).toHaveBeenCalledWith("bob", "limited");
+        renderWithProviders(<UserRole {...props} />);
+        expect(screen.queryByText("User Role")).not.toBeInTheDocument();
+        expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
+        expect(screen.queryByText("Limited")).not.toBeInTheDocument();
     });
 });
 

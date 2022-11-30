@@ -38,7 +38,7 @@ export class ManageUsers extends React.Component {
     }
 
     render() {
-        if (this.state.error.length) {
+        if (this.props.error !== "") {
             return (
                 <Alert color="orange" level>
                     <Icon name="exclamation-circle" />
@@ -57,7 +57,12 @@ export class ManageUsers extends React.Component {
         return (
             <>
                 <Toolbar>
-                    <SearchInput name="search" value={this.state.term} onChange={this.props.onFind} />
+                    <SearchInput
+                        name="search"
+                        aria-label="search"
+                        value={this.state.term}
+                        onChange={this.props.onFind}
+                    />
                     <LinkButton to={{ state: { createUser: true } }} icon="user-plus" tip="Create User" color="blue" />
                 </Toolbar>
 
@@ -68,6 +73,17 @@ export class ManageUsers extends React.Component {
         );
     }
 }
+
+// export const mapStateToProps = state => {
+//     console.log("the state is");
+//     console.log(state);
+//     const isAdmin = getAccountAdministrator(state);
+//     const term = state.users.filter;
+//     const groups = state.groups.list;
+//     const groupsFetched = state.groups.fetched;
+//     const error = get(state, "errors.LIST_USERS_ERROR.message", "");
+//     return { isAdmin, term, groups, groupsFetched, error };
+// };
 
 export const mapStateToProps = state => ({
     isAdmin: getAccountAdministrator(state),
