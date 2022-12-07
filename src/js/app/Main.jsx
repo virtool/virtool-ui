@@ -13,6 +13,8 @@ import NavBar from "../nav/components/NavBar";
 import Sidebar from "../nav/components/Sidebar";
 import { listTasks } from "../tasks/actions";
 import WSConnection, { ABANDONED, INITIALIZING } from "./websocket";
+import { NavContainer } from "../nav/components/NavContainer";
+import MessageBanner from "../message/components/MessageBanner";
 
 const Administration = lazy(() => import("../administration/components/Settings"));
 const Account = lazy(() => import("../account/components/Account"));
@@ -22,6 +24,14 @@ const References = lazy(() => import("../references/components/References"));
 const Samples = lazy(() => import("../samples/components/Samples"));
 const Subtraction = lazy(() => import("../subtraction/components/Subtraction"));
 
+const setupWebSocket = () => {
+    if (!window.ws) {
+        window.ws = new WSConnection(window.store);
+    }
+    if (includes([ABANDONED, INITIALIZING], window.ws.connectionStatus)) {
+        window.ws.establishConnection();
+    }
+};
 const Fallback = () => (
     <Container>
         <LoadingPlaceholder />
@@ -31,15 +41,6 @@ const Fallback = () => (
 const MainContainer = styled.div`
     padding-top: 80px;
 `;
-
-const setupWebSocket = () => {
-    if (!window.ws) {
-        window.ws = new WSConnection(window.store);
-    }
-    if (includes([ABANDONED, INITIALIZING], window.ws.connectionStatus)) {
-        window.ws.establishConnection();
-    }
-};
 
 export const Main = ({ ready, onLoad }) => {
     useEffect(() => {
@@ -56,7 +57,10 @@ export const Main = ({ ready, onLoad }) => {
                     <meta charSet="utf-8" />
                 </Helmet>
 
-                <NavBar />
+                <NavContainer>
+                    <MessageBanner />
+                    <NavBar />
+                </NavContainer>
 
                 <MainContainer>
                     <Suspense fallback={<Fallback />}>

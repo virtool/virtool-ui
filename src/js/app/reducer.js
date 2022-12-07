@@ -22,6 +22,7 @@ import { formsReducer } from "../forms/reducer";
 import { CREATE_FIRST_USER, LOGIN, LOGOUT, RESET_PASSWORD, SET_INITIAL_STATE } from "./actionTypes";
 import rootSaga from "./sagas";
 import { createReducer } from "@reduxjs/toolkit";
+import { instanceMessageReducer } from "../message/reducer";
 
 const initialState = {
     login: false,
@@ -81,6 +82,7 @@ export const createAppStore = history => {
             groups: groupsReducer,
             hmms: hmmsReducer,
             indexes: indexesReducer,
+            instanceMessage: instanceMessageReducer,
             jobs: jobsReducer,
             labels: labelsReducer,
             otus: OTUsReducer,

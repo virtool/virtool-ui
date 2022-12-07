@@ -19,6 +19,7 @@ import { watchTasks } from "../tasks/sagas";
 import { watchUsers } from "../users/sagas";
 import { watchForm } from "../forms/sagas";
 import { PUSH_STATE } from "./actionTypes";
+import { watchInstanceMessage } from "../message/sagas";
 
 function* pushState(action) {
     const routerLocation = yield select(getLocation);
@@ -44,6 +45,7 @@ function* rootSaga() {
         watchSubtraction(),
         watchHmms(),
         watchIndexes(),
+        watchInstanceMessage(),
         watchJobs(),
         watchLabels(),
         watchOTUs(),

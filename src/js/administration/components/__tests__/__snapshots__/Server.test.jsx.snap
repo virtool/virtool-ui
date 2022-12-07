@@ -1,7 +1,0 @@
-// Vitest Snapshot v1
-
-exports[`<ServerSettings /> > should render 1`] = `
-<styled.div>
-  <Connect(Api) />
-</styled.div>
-`;
