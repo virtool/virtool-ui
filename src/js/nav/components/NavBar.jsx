@@ -42,23 +42,18 @@ const NavDropdownButton = styled(MenuButton)`
     }
 `;
 
+const NavDivider = styled.div`
+    color: ${props => props.theme.color.greyLight};
+    border-top: 2px solid;
+`;
+
 const StyledNavBar = styled.div`
     background-color: ${props => props.theme.color.primary};
     color: white;
     display: flex;
     height: 45px;
     justify-content: space-between;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 90;
 `;
-
-const SampleDivider = styled.div`
-    color: ${props => props.theme.color.greyLight};
-    border-top: 2px solid;
-`;
-
 export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
     <StyledNavBar>
         <NavBarLeft>
@@ -80,7 +75,6 @@ export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
             <Dropdown>
                 <NavDropdownButton>
                     <InitialIcon handle={handle} size="md" />
-
                     <span>{userId}</span>
                     <Icon name="caret-down" />
                 </NavDropdownButton>
@@ -89,7 +83,7 @@ export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
                         Signed in as <strong>{handle}</strong>
                     </DropdownMenuLink>
 
-                    <SampleDivider />
+                    <NavDivider />
                     <DropdownMenuLink to="/account">Account</DropdownMenuLink>
                     {administrator && <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>}
                     <DropdownMenuLink

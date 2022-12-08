@@ -117,6 +117,11 @@ export const CREATE_INDEX = createRequestActionType("CREATE_INDEX");
 export const GET_INDEX_HISTORY = createRequestActionType("GET_INDEX_HISTORY");
 export const LIST_READY_INDEXES = createRequestActionType("LIST_READY_INDEXES");
 
+// Instance Message
+export const GET_INSTANCE_MESSAGE = createRequestActionType("GET_INSTANCE_MESSAGE");
+export const SET_INSTANCE_MESSAGE = createRequestActionType("SET_INSTANCE_MESSAGE");
+export const UPDATE_INSTANCE_MESSAGE = createRequestActionType("UPDATE_INSTANCE_MESSAGE");
+
 // Jobs
 export const WS_INSERT_JOB = "WS_INSERT_JOB";
 export const WS_UPDATE_JOB = "WS_UPDATE_JOB";
