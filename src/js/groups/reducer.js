@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { concat, sortBy, unionBy } from "lodash-es";
+import { concat, map, sortBy, unionBy } from "lodash-es";
 import {
     REMOVE_ACTIVE_GROUP,
     GET_GROUP,
@@ -7,7 +7,8 @@ import {
     SET_GROUP_PERMISSION,
     WS_INSERT_GROUP,
     WS_REMOVE_GROUP,
-    WS_UPDATE_GROUP
+    WS_UPDATE_GROUP,
+    SET_GROUP_NAME
 } from "../app/actionTypes";
 import { insert, remove, update } from "../utils/reducers";
 
@@ -45,6 +46,21 @@ export const groupsReducer = createReducer(initialState, builder => {
         })
         .addCase(SET_GROUP_PERMISSION.SUCCEEDED, (state, action) => {
             state.activeGroup = action.payload;
+        })
+        .addCase(SET_GROUP_NAME.SUCCEEDED, (state, action) => {
+            const name = action.payload.name;
+
+            return {
+                ...state,
+                activeGroup: { ...state.activeGroup, name },
+                documents: map(state.documents, document => {
+                    if (document.id === action.payload.id) {
+                        return { ...document, name };
+                    }
+
+                    return document;
+                })
+            };
         });
 });
 

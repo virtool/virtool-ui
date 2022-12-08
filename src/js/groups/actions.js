@@ -7,7 +7,8 @@ import {
     SET_GROUP_PERMISSION,
     REMOVE_GROUP,
     REMOVE_ACTIVE_GROUP,
-    GET_GROUP
+    GET_GROUP,
+    SET_GROUP_NAME
 } from "../app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
 
@@ -34,6 +35,8 @@ export const listGroups = createAction(LIST_GROUPS.REQUESTED);
  * @returns {object}
  */
 export const createGroup = createAction(CREATE_GROUP.REQUESTED, name => ({ payload: { name } }));
+
+export const setGroupName = createAction(SET_GROUP_NAME.REQUESTED, (groupId, name) => ({ payload: { groupId, name } }));
 
 /**
  * Returns action that can trigger an API request for modifying group permissions.

@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { pushState } from "../../app/actions";
-import { BoxGroup, Button, LoadingPlaceholder, RemoveBanner, BoxGroupHeader } from "../../base";
-import { listGroups, removeGroup } from "../actions";
+import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "../../base";
+import { listGroups, removeGroup, setGroupName } from "../actions";
 import { getActiveGroup, getGroups } from "../selectors";
 import { findUsers } from "../../users/actions";
 import Create from "./Create";
@@ -11,6 +10,7 @@ import GroupSelector from "./GroupSelector";
 import Members from "./Members";
 import Permissions from "./Permissions";
 import { getColor } from "../../app/theme";
+import { InputHeader } from "../../base/InputHeader";
 
 const ManageGroupsContainer = styled.div`
     display: grid;
@@ -18,17 +18,14 @@ const ManageGroupsContainer = styled.div`
     column-gap: 15px;
 `;
 
-const StyledGroupsHeader = styled.div`
+const GroupsHeader = styled.div`
+    align-items: center;
     display: flex;
-    padding-bottom: 5px;
     justify-content: space-between;
-    button {
-        margin-left: 15px;
-        height: 36px;
-    }
+    margin-bottom: 15px;
 `;
 
-const StyledNoneFoundContainer = styled(BoxGroup)`
+const NoneSelectedContainer = styled(BoxGroup)`
     display: flex;
     flex-direction: column;
     background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
@@ -44,7 +41,7 @@ export const NoneSelected = styled.div`
     transform: translate(-50%, -50%);
 `;
 
-export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemove, onListGroups, onFindUsers }) => {
+export const Groups = ({ activeGroup, groups, loading, onFindUsers, onListGroups, onRemove, onSetName }) => {
     useEffect(() => {
         onListGroups();
         onFindUsers();
@@ -61,16 +58,15 @@ export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemo
             <ManageGroupsContainer>
                 <GroupSelector />
                 <div>
-                    <BoxGroup>
-                        <BoxGroupHeader>
-                            <h2>{activeGroup.name}</h2>
-                        </BoxGroupHeader>
-                    </BoxGroup>
-
+                    <InputHeader
+                        id="name"
+                        value={activeGroup.name}
+                        onSubmit={name => onSetName(activeGroup.id, name)}
+                    />
                     <Permissions />
                     <Members />
                     <RemoveBanner
-                        message={`Permanently delete ${activeGroup.name}`}
+                        message="Permanently delete this group."
                         buttonText="Delete"
                         onClick={() => onRemove(activeGroup.id)}
                     />
@@ -79,22 +75,20 @@ export const Groups = ({ loading, groups, activeGroup, onShowCreateGroup, onRemo
         );
     } else {
         groupComponents = (
-            <StyledNoneFoundContainer>
+            <NoneSelectedContainer>
                 <NoneSelected>No Groups Found</NoneSelected>
-            </StyledNoneFoundContainer>
+            </NoneSelectedContainer>
         );
     }
 
     return (
         <>
-            <h2>Manage Groups</h2>
-            <StyledGroupsHeader>
-                <h3>Use groups to organize users and control access</h3>
-
-                <Button tip="Create" color="blue" onClick={onShowCreateGroup}>
+            <GroupsHeader>
+                <h2>Groups</h2>
+                <LinkButton color="blue" to={{ state: { createGroup: true } }}>
                     Create
-                </Button>
-            </StyledGroupsHeader>
+                </LinkButton>
+            </GroupsHeader>
 
             {groupComponents}
 
@@ -114,16 +108,18 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    onListGroups: () => {
-        dispatch(listGroups());
-    },
     onFindUsers: () => {
         dispatch(findUsers());
+    },
+    onListGroups: () => {
+        dispatch(listGroups());
     },
     onRemove: groupId => {
         dispatch(removeGroup(groupId));
     },
-    onShowCreateGroup: () => dispatch(pushState({ createGroup: true }))
+    onSetName: (groupId, name) => {
+        dispatch(setGroupName(groupId, name));
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Groups);
