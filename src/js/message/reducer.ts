@@ -17,7 +17,7 @@ export const instanceMessageReducer = createReducer(initialState, builder => {
         .addCase(SET_INSTANCE_MESSAGE.SUCCEEDED, (state, action) => {
             state.loaded = true;
 
-            if (action.payload == null) {
+            if (action.payload === null) {
                 state.color = null;
                 state.message = null;
             } else {

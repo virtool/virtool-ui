@@ -16,15 +16,10 @@ type NavBannerProps = {
     color: string;
     loaded: boolean;
     message: string;
-    onLoad: Function;
+    onLoad: () => undefined;
 };
 
-const MessageBanner: FunctionComponent<NavBannerProps> = ({
-    color,
-    loaded,
-    message,
-    onLoad
-}) => {
+const MessageBanner: FunctionComponent<NavBannerProps> = ({ color, loaded, message, onLoad }) => {
     useEffect(() => onLoad(), [loaded, message]);
 
     if (loaded && message) {

@@ -16,7 +16,7 @@ const InstanceMessageSubtitle = styled.p`
     margin: 0 0 15px;
 `;
 
-function InstanceMessage({ color, loaded, message, onLoad, onSet }) {
+function InstanceMessage({ loaded, message, onLoad, onSet }) {
     useEffect(() => onLoad(), [loaded, message]);
 
     if (!loaded) {
@@ -39,7 +39,7 @@ function InstanceMessage({ color, loaded, message, onLoad, onSet }) {
                     <Form>
                         <InputGroup>
                             <InputLabel>Message</InputLabel>
-                            <Field type="text" name="message" as={Input} autoFocus />
+                            <Field type="text" name="message" as={Input} />
                         </InputGroup>
                         <SaveButton />
                     </Form>
