@@ -18,6 +18,7 @@ describe("<Targets />", () => {
     let props;
     let state;
     let history;
+
     beforeEach(() => {
         props = {
             canModify: true,
@@ -57,19 +58,19 @@ describe("<Targets />", () => {
 
     it("should show modal when showAdd() is called", async () => {
         renderWithRouter(<Targets {...props} />, state, history);
-        userEvent.click(screen.getByRole("link", { name: "Add target" }));
-        await waitFor(() => expect(history.location.state.addTarget).toBe(true));
+        await userEvent.click(screen.getByRole("link", { name: "Add target" }));
+        expect(history.location.state.addTarget).toBe(true);
     });
 
-    it("should show modal when showEdit() is called", () => {
+    it("should show modal when showEdit() is called", async () => {
         renderWithRouter(<Targets {...props} />, state, history);
-        userEvent.click(screen.getByRole("button", { name: "edit" }));
+        await userEvent.click(screen.getByRole("button", { name: "edit" }));
         expect(props.onShowEdit).toHaveBeenCalledWith("foo");
     });
 
-    it("should call onRemove() when TargetItem removed", () => {
+    it("should call onRemove() when TargetItem removed", async () => {
         renderWithRouter(<Targets {...props} />, state, history);
-        userEvent.click(screen.getByRole("button", { name: "remove" }));
+        await userEvent.click(screen.getByRole("button", { name: "remove" }));
         expect(props.onRemove).toHaveBeenCalledWith("bar", { targets: [] });
     });
 });

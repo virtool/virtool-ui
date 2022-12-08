@@ -17,9 +17,9 @@ describe("<BLASTError />", () => {
         expect(screen.getByText("Failure. BLAST did not work.")).toBeInTheDocument();
     });
 
-    it("should call onBlast when retry button clicked", () => {
+    it("should call onBlast when retry button clicked", async () => {
         renderWithProviders(<BLASTError {...props} />);
-        userEvent.click(screen.getByText("Retry"));
+        await userEvent.click(screen.getByText("Retry"));
         expect(props.onBlast).toHaveBeenCalled();
     });
 });

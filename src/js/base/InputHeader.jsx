@@ -54,6 +54,7 @@ export function InputHeader({ id, value = "", onSubmit }) {
     return (
         <InputHeaderContainer onSubmit={formik.handleSubmit}>
             <InputHeaderControl
+                aria-label={id}
                 autoComplete="off"
                 id={id}
                 name={id}

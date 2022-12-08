@@ -26,13 +26,13 @@ describe("<EditLabel>", () => {
         expect(screen.queryByLabelText("Name")).not.toBeInTheDocument();
     });
 
-    it("should call onSubmit when successfully submitted", () => {
+    it("should call onSubmit when successfully submitted", async () => {
         renderWithProviders(<EditLabel {...props} />);
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
         expect(props.onSubmit).toHaveBeenCalledWith(1, "Foo", "This is a description", "#1DAD57");
     });
 
-    it("should initialize and update name and description", () => {
+    it("should initialize and update name and description", async () => {
         renderWithProviders(<EditLabel {...props} />);
 
         const descriptionInput = screen.getByLabelText("Description");
@@ -43,19 +43,19 @@ describe("<EditLabel>", () => {
         expect(descriptionInput).toHaveValue("This is a description");
 
         // Check fields clear.
-        userEvent.clear(descriptionInput);
-        userEvent.clear(nameInput);
+        await userEvent.clear(descriptionInput);
+        await userEvent.clear(nameInput);
         expect(descriptionInput).toHaveValue("");
         expect(nameInput).toHaveValue("");
 
         // Check typing changes input value
-        userEvent.type(descriptionInput, "This is a label");
-        userEvent.type(nameInput, "Bar");
+        await userEvent.type(descriptionInput, "This is a label");
+        await userEvent.type(nameInput, "Bar");
         expect(descriptionInput).toHaveValue("This is a label");
         expect(nameInput).toHaveValue("Bar");
     });
 
-    it("should initialize and update color", () => {
+    it("should initialize and update color", async () => {
         renderWithProviders(<EditLabel {...props} />);
 
         const colorInput = screen.getByLabelText("Color");
@@ -64,15 +64,15 @@ describe("<EditLabel>", () => {
         expect(colorInput).toHaveValue(props.color);
 
         // Updates when input cleared.
-        userEvent.clear(colorInput);
+        await userEvent.clear(colorInput);
         expect(colorInput).toHaveValue("");
 
         // Updates when input is typed in.
-        userEvent.type(colorInput, "#DFDF12");
+        await userEvent.type(colorInput, "#DFDF12");
         expect(colorInput).toHaveValue("#DFDF12");
 
         // Updates when color square is clicked.
-        userEvent.click(screen.getByTitle("#3B82F6"));
+        await userEvent.click(screen.getByTitle("#3B82F6"));
         expect(colorInput).toHaveValue("#3B82F6");
     });
 });
@@ -91,7 +91,9 @@ describe("mapDispatchToProps()", () => {
         const name = "FooBar";
         const description = "BarFoo";
         const color = "#000000";
+
         props.onSubmit(labelId, name, description, color);
+
         expect(dispatch).toHaveBeenCalledWith({
             type: "UPDATE_LABEL_REQUESTED",
             payload: { labelId, name, description, color }

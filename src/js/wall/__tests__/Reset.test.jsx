@@ -4,38 +4,17 @@ import { RESET_PASSWORD } from "../../app/actionTypes";
 import { mapDispatchToProps, mapStateToProps, Reset } from "../Reset";
 import { vi } from "vitest";
 
-describe("<Reset />", () => {
-    let props;
-    beforeEach(() => {
-        props = {
-            error: "",
-            resetCode: "test_reset_code",
-            onReset: vi.fn()
-        };
-    });
+test("<Reset />", async () => {
+    const onReset = vi.fn();
 
-    it("should render", () => {
-        renderWithProviders(<Reset {...props} />);
-        expect(screen.getByText("Password Reset")).toBeInTheDocument();
-        expect(screen.getByText("You are required to set a new password before proceeding.")).toBeInTheDocument();
-        expect(screen.getByLabelText("Password")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
-    });
+    renderWithProviders(<Reset error="" resetCode="test_reset_code" onReset={onReset} />);
+    const field = screen.getByLabelText("Password");
 
-    it("should render filled password field", () => {
-        renderWithProviders(<Reset {...props} />);
-        userEvent.type(screen.getByLabelText("Password"), `Password`);
-        expect(screen.getByLabelText("Password")).toHaveValue(`Password`);
-    });
+    await userEvent.type(field, "P@ssword123");
+    expect(field).toHaveValue("P@ssword123");
 
-    it("should call onReset with correct parameters", async () => {
-        renderWithProviders(<Reset {...props} />);
-        const testPassword = "test_password";
-        userEvent.type(screen.getByLabelText("Password"), testPassword);
-        expect(screen.getByLabelText("Password")).toHaveValue(testPassword);
-        userEvent.click(screen.getByRole("button", { name: "Reset" }));
-        await waitFor(() => expect(props.onReset).toHaveBeenCalledWith("test_password", "test_reset_code"));
-    });
+    await userEvent.click(screen.getByRole("button", { name: "Reset" }));
+    expect(onReset).toHaveBeenCalledWith("P@ssword123", "test_reset_code");
 });
 
 describe("mapStateToProps()", () => {

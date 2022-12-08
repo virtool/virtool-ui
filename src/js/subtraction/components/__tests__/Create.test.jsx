@@ -74,24 +74,10 @@ describe("<CreateSubtraction />", () => {
         };
     });
 
-    it("should render", () => {
-        const wrapper = shallow(<CreateSubtraction {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
     it("should render when no files available", () => {
         state.files.documents = [];
         routerRenderWithProviders(<CreateSubtraction {...props} />, createAppStore(state));
         expect(screen.getByText(/no files found/i)).toBeInTheDocument();
-    });
-
-    it.each([
-        ["name", "Foo"],
-        ["nickname", "Bar"]
-    ])("should render after %p input changes", (name, value) => {
-        routerRenderWithProviders(<CreateSubtraction {...props} />, createAppStore(state));
-        userEvent.type(screen.getByRole("textbox", { name: "name" }), value);
-        expect(screen.getByDisplayValue(value)).toBeInTheDocument();
     });
 
     it("should render error when submitted with no name or file entered", async () => {
@@ -101,12 +87,11 @@ describe("<CreateSubtraction />", () => {
             </BrowserRouter>,
             createAppStore(state)
         );
-        userEvent.click(screen.getByText(/save/i));
 
-        await waitFor(() => {
-            expect(screen.getByText("A name is required")).toBeInTheDocument();
-            expect(screen.getByText("Please select a file")).toBeInTheDocument();
-        });
+        await userEvent.click(screen.getByText(/save/i));
+
+        expect(screen.getByText("A name is required")).toBeInTheDocument();
+        expect(screen.getByText("Please select a file")).toBeInTheDocument();
     });
 
     it("should submit correct values when all fields selected", async () => {
@@ -116,16 +101,18 @@ describe("<CreateSubtraction />", () => {
             </BrowserRouter>,
             createAppStore(state)
         );
+
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";
-        userEvent.type(screen.getByRole("textbox", { name: "name" }), name);
-        userEvent.type(screen.getByRole("textbox", { name: "nickname" }), nickname);
-        userEvent.click(screen.getByText(/testsubtraction1/i));
-        userEvent.click(screen.getByText(/save/i));
+
+        await userEvent.type(screen.getByRole("textbox", { name: "name" }), name);
+        await userEvent.type(screen.getByRole("textbox", { name: "nickname" }), nickname);
+        await userEvent.click(screen.getByText(/testsubtraction1/i));
+        await userEvent.click(screen.getByText(/save/i));
 
         const uploadId = state.files.documents[0].id;
 
-        await waitFor(() => expect(props.onCreate).toHaveBeenCalledWith({ uploadId, name, nickname }));
+        expect(props.onCreate).toHaveBeenCalledWith({ uploadId, name, nickname });
     });
 
     it("should restore form with correct values", () => {

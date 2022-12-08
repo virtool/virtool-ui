@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { AddBarcodeSequence, castValues } from "../Add";
 import { createStore } from "redux";
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 
 const createAppStore = state => () => createStore(state => state, state);
 
@@ -77,16 +77,15 @@ describe("<AddBarcodeSequence>", () => {
 
     it("should submit correct data when all fields changed", async () => {
         renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
-        userEvent.click(screen.getByRole("button", { name: "test_target_name test_target_description" }));
-        userEvent.click(screen.getByText("test_target_name_2"));
-        userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
-        userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
-        userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
-        userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "ATG");
 
-        await waitFor(() => {
-            userEvent.click(screen.getByRole("button", { name: "Save" }));
-        });
+        await userEvent.click(screen.getByRole("button", { name: "test_target_name test_target_description" }));
+        await userEvent.click(screen.getByText("test_target_name_2"));
+        await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
+        await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
+        await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
+        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "ATG");
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(props.onSave).toHaveBeenCalledWith(
             "test_otu_id",
@@ -101,24 +100,23 @@ describe("<AddBarcodeSequence>", () => {
     it("should display errors when accession, definition, or sequence not defined", async () => {
         renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
 
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
-        await waitFor(() => {
-            expect(props.onSave).not.toHaveBeenCalled();
-            expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getAllByText("Required Field").length).toBe(3);
-        });
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(props.onSave).not.toHaveBeenCalled();
+        expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
     it("should display specific error when sequence contains chars !== ATCGN", async () => {
         renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
-        userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "atbcq");
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
-        await waitFor(() => {
-            expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
-        });
+
+        await userEvent.type(screen.getByRole("textbox", { name: /Sequence/ }), "atbcq");
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(screen.getByRole("textbox", { name: /Sequence/ })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
     });
 });
 

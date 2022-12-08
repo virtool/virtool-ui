@@ -25,23 +25,22 @@ describe("<LabelForm />", () => {
         expect(screen.getByLabelText("Name")).toHaveValue(props.name);
     });
 
-    it("should call onChange() when fields change", () => {
+    it("should call onChange() when fields change", async () => {
         renderWithProviders(<LabelForm {...props} />);
 
-        const nameInput = screen.getByLabelText("Name");
-        userEvent.type(nameInput, "B");
+        await userEvent.type(screen.getByLabelText("Name"), "B");
         expect(props.onChange).toHaveBeenCalledWith("name", "FooB");
 
-        const descriptionInput = screen.getByLabelText("Description");
-        userEvent.type(descriptionInput, "A");
+        await userEvent.type(screen.getByLabelText("Description"), "A");
         expect(props.onChange).toHaveBeenCalledWith("description", "This is a test labelA");
     });
 
-    it("should call onSubmit() when save button clicked", () => {
+    it("should call onSubmit() when save button clicked", async () => {
         renderWithProviders(<LabelForm {...props} />);
+
         expect(props.onSubmit).not.toHaveBeenCalled();
-        const saveButton = screen.getByRole("button", { name: "Save" });
-        userEvent.click(saveButton);
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
         expect(props.onSubmit).toHaveBeenCalled();
     });
 });

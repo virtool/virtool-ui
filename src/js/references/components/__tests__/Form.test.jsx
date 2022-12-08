@@ -38,9 +38,8 @@ describe("<ReferenceForm />", () => {
 
     it("should render", () => {
         renderWithFormik(rtlRender, <ReferenceForm />, initialValues, onSubmit, mode);
-        expect(screen.getByText("Name")).toBeInTheDocument();
+
         expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(initialValues.name);
-        expect(screen.getByText("Description")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue(initialValues.description);
     });
 
@@ -53,13 +52,14 @@ describe("<ReferenceForm />", () => {
         expect(screen.getByRole("textbox", { name: "Organism" })).toHaveValue(initialValues.organism);
     });
 
-    it.each(["Name", "Organism", "Description"])("should call onChange() when %p input changes", name => {
+    it.each(["Name", "Organism", "Description"])("should call onChange() when %p input changes", async name => {
         mode = "edit";
         const newValue = `${initialValues[name.toLowerCase()]} changed`;
 
         renderWithFormik(rtlRender, <ReferenceForm />, initialValues, onSubmit, mode);
-        userEvent.clear(screen.getByRole("textbox", { name }));
-        userEvent.type(screen.getByRole("textbox", { name }), newValue);
+
+        await userEvent.clear(screen.getByRole("textbox", { name }));
+        await userEvent.type(screen.getByRole("textbox", { name }), newValue);
         expect(screen.getByRole("textbox", { name })).toHaveValue(newValue);
     });
 });

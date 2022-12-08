@@ -12,22 +12,15 @@ describe("<Alert />", () => {
         };
     });
 
-    it("Should render", () => {
+    it("Should call onClose when close icon clicked", async () => {
         renderWithProviders(<RestoredAlert {...props} />);
-        expect(screen.getByText("Resumed editing draft sample.")).toBeInTheDocument();
-        expect(screen.getByLabelText("undo restore")).toBeInTheDocument();
-        expect(screen.getByLabelText("close")).toBeInTheDocument();
-    });
-
-    it("Should call onClose when close icon clicked", () => {
-        renderWithProviders(<RestoredAlert {...props} />);
-        userEvent.click(screen.getByLabelText("close"));
+        await userEvent.click(screen.getByLabelText("close"));
         expect(props.onClose).toHaveBeenCalled();
     });
 
-    it("Should call resetForm when undo Icon clicked", () => {
+    it("Should call resetForm when undo Icon clicked", async () => {
         renderWithProviders(<RestoredAlert {...props} />);
-        userEvent.click(screen.getByLabelText("undo restore"));
+        await userEvent.click(screen.getByLabelText("undo restore"));
         expect(props.resetForm).toHaveBeenCalled();
         expect(props.onClose).toHaveBeenCalled();
     });

@@ -22,8 +22,8 @@ describe("mapStateToProps", () => {
                 }
             }
         };
-        const result = mapStateToProps(state);
-        expect(result).toEqual({
+
+        expect(mapStateToProps(state)).toEqual({
             id: "bar",
             otuCount: 321
         });

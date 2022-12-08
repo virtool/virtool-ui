@@ -23,11 +23,6 @@ describe("<EditSubtraction />", () => {
         };
     });
 
-    it("should render", () => {
-        const wrapper = shallow(<EditSubtraction {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
     it("should render when [show=false]", () => {
         props.show = false;
         const wrapper = shallow(<EditSubtraction {...props} />);

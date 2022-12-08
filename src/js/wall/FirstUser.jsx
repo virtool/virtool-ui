@@ -44,8 +44,8 @@ export const FirstUser = ({ onSubmit, errors }) => {
                                 ))}
                             </InputGroup>
                             <InputGroup>
-                                <InputLabel>Password</InputLabel>
-                                <Field name="password" as={PasswordInput} />
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <Field id="password" name="password" as={PasswordInput} />
                                 {errors.passwordErrors.map(error => (
                                     <InputError key={error}>{error}</InputError>
                                 ))}

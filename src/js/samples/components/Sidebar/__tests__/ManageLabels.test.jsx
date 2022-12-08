@@ -68,11 +68,6 @@ describe("<ManageLabels>", () => {
         partiallySelectedLabels: getPartiallySelectedLabels(state)
     });
 
-    it("should render", () => {
-        const wrapper = shallow(<ManageLabels {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
     it("should be disabled if no labels exist", () => {
         props.allLabels = [];
         const wrapper = shallow(<ManageLabels {...props} />);
@@ -83,18 +78,20 @@ describe("<ManageLabels>", () => {
         renderWithProviders(<ManageLabels {...props} />);
         expect(screen.getByText("test")).toBeInTheDocument();
     });
+
     it("should display labels of two selected documents", () => {
         state.samples.selected = ["foo_sample", "bar_sample"];
         renderWithProviders(<ManageLabels {...updateProps(props, state)} />);
         expect(screen.getByText(`test2`)).toBeInTheDocument();
     });
 
-    it("should call onLabelUpdate with selectedSamples, selectedLabels, and the label to be changed", () => {
+    it("should call onLabelUpdate with selectedSamples, selectedLabels, and the label to be changed", async () => {
         state.samples.selected = ["foo_sample", "bar_sample"];
         props = updateProps(props, state);
         routerRenderWithProviders(<ManageLabels {...props} />);
-        userEvent.click(screen.getByRole("button", { name: "select labels" }));
-        userEvent.click(screen.getByRole("button", { name: "test3" }));
+
+        await userEvent.click(screen.getByRole("button", { name: "select labels" }));
+        await userEvent.click(screen.getByRole("button", { name: "test3" }));
         expect(props.onLabelUpdate).toHaveBeenCalledWith(props.selectedSamples, props.selectedLabels, 3);
     });
 });

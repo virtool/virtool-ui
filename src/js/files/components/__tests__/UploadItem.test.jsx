@@ -29,10 +29,9 @@ describe("<UploadItem />", () => {
         expect(screen.getByText("871.3 KB")).toBeInTheDocument();
     });
 
-    it("should dispatch action to remove sample", () => {
-        props.failed = true;
-        const screen = renderWithProviders(<UploadItem {...props} />);
-        userEvent.click(screen.getByLabelText("delete Foo.fa"));
+    it("should dispatch action to remove sample", async () => {
+        const screen = renderWithProviders(<UploadItem {...props} failed={true} />);
+        await userEvent.click(screen.getByLabelText("delete Foo.fa"));
         expect(props.onRemove).toHaveBeenCalledWith(props.localId);
     });
 });

@@ -30,33 +30,32 @@ describe("<FirstUser />", () => {
         expect(screen.getByRole("button", { name: "Create User" })).toBeInTheDocument();
     });
 
-    it.each(["username", "password"])("should render when %p changed", name => {
-        const value = name === "username" ? "bob" : "password";
-
-        renderWithProviders(<FirstUser {...props} />);
-
-        userEvent.type(screen.getByRole("textbox", name), value);
-        expect(screen.getByRole("textbox", name).value).toBe(value);
-    });
-
     it("should call onSubmit when form is submitted", async () => {
         props = {
             onSubmit: vi.fn(),
             ...errorMessages
         };
+
         const usernameInput = "Username";
         const passwordInput = "Password";
 
         renderWithProviders(<FirstUser {...props} />);
 
-        userEvent.type(screen.getByRole("textbox", /username/i), usernameInput);
-        userEvent.type(screen.getByRole("textbox", /password/i), passwordInput);
-        userEvent.click(screen.getByRole("button", { name: /Create User/i }));
+        const usernameField = screen.getByRole("textbox", /username/i);
+        const passwordField = screen.getByLabelText("Password");
 
-        // Await must be used to allow the Formik component to call onSubmit asynchronously
-        await waitFor(() =>
-            expect(props.onSubmit).toHaveBeenCalledWith(usernameInput + passwordInput, expect.anything())
-        );
+        expect(usernameField).toHaveValue("");
+        expect(passwordField).toHaveValue("");
+
+        await userEvent.type(usernameField, usernameInput);
+        expect(usernameField).toHaveValue(usernameInput);
+
+        await userEvent.type(passwordField, passwordInput);
+        expect(passwordField).toHaveValue(passwordInput);
+
+        await userEvent.click(screen.getByRole("button", { name: /Create User/i }));
+
+        expect(props.onSubmit).toHaveBeenCalledWith("Username", "Password");
     });
 });
 
