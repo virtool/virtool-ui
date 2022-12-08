@@ -21,6 +21,7 @@ const FormikWrapper = (UI, onSubmit) => {
 
 describe("<SequenceForm />", () => {
     let onSubmit;
+
     beforeEach(() => {
         onSubmit = vi.fn();
     });
@@ -36,23 +37,22 @@ describe("<SequenceForm />", () => {
     it("should display errors when accession, definition, or sequence not defined", async () => {
         renderWithProviders(FormikWrapper(SequenceForm, onSubmit));
 
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
-        await waitFor(() => {
-            expect(onSubmit).not.toHaveBeenCalled();
-            expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getAllByText("Required Field").length).toBe(3);
-        });
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(onSubmit).not.toHaveBeenCalled();
+        expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
     it("should display specific error when sequence contains chars !== ATCG", async () => {
         renderWithProviders(FormikWrapper(SequenceForm, onSubmit));
-        userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "atbcq");
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
-        await waitFor(() => {
-            expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
-        });
+
+        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "atbcq");
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
     });
 });

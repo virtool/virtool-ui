@@ -21,37 +21,33 @@ describe("<Login />", () => {
         };
     });
 
-    it("should render", () => {
+    it.each(["Username", "Password"], "should render filled %p field", async name => {
         renderWithProviders(<Login {...props} />, createAppStore(null));
-        expect(screen.getByText("Virtool")).toBeInTheDocument();
-        expect(screen.getByText("Sign in with your Virtool account")).toBeInTheDocument();
-        expect(screen.getByText("Username")).toBeInTheDocument();
-        expect(screen.getByRole("textbox", { name: "Username" })).toBeInTheDocument();
-        expect(screen.getByText("Password")).toBeInTheDocument();
-        expect(screen.getByLabelText("Password")).toHaveValue("");
-    });
-
-    it.each(["Username", "Password"], "should render filled %p field", name => {
-        renderWithProviders(<Login {...props} />, createAppStore(null));
-        userEvent.type(screen.getByLabelText(name), `test_${name}`);
+        await userEvent.type(screen.getByLabelText(name), `test_${name}`);
         expect(screen.getByLabelText(name)).toHaveValue(`test_${name}`);
     });
 
-    it("should render checked remember checkbox", () => {
+    it("should render checked remember checkbox", async () => {
         renderWithProviders(<Login {...props} />, createAppStore(null));
         expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "unchecked");
-        userEvent.click(screen.getByLabelText("Remember Me"));
+
+        await userEvent.click(screen.getByLabelText("Remember Me"));
         expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "checked");
     });
 
     it("should call onLogin() with correct values when submitted", async () => {
         renderWithProviders(<Login {...props} />, createAppStore(null));
-        userEvent.type(screen.getByLabelText("Username"), `test_Username`);
-        expect(screen.getByLabelText("Username")).toHaveValue(`test_Username`);
-        userEvent.type(screen.getByLabelText("Password"), `Password`);
-        expect(screen.getByLabelText("Password")).toHaveValue(`Password`);
-        userEvent.click(screen.getByRole("button", { name: "Login" }));
-        await waitFor(() => expect(props.onLogin).toHaveBeenCalledWith("test_Username", "Password", false));
+
+        const usernameField = screen.getByLabelText("Username");
+        await userEvent.type(usernameField, `test_Username`);
+        expect(usernameField).toHaveValue(`test_Username`);
+
+        const passwordField = screen.getByLabelText("Password");
+        await userEvent.type(passwordField, "Password");
+        expect(passwordField).toHaveValue("Password");
+
+        await userEvent.click(screen.getByRole("button", { name: "Login" }));
+        expect(props.onLogin).toHaveBeenCalledWith("test_Username", "Password", false);
     });
 });
 
@@ -69,7 +65,9 @@ describe("mapDispatchToProps()", () => {
     it("should return props with valid onLogin()", () => {
         const dispatch = vi.fn();
         const props = mapDispatchToProps(dispatch);
+
         props.onLogin("bob", "foobar", false, "baz");
+
         expect(dispatch).toHaveBeenCalledWith({
             type: LOGIN.REQUESTED,
             payload: { username: "bob", password: "foobar", remember: false }

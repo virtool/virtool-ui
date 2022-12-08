@@ -42,7 +42,9 @@ describe("<SourceTypes />", () => {
     it("should render when remote", () => {
         props.global = false;
         props.remote = true;
+
         renderWithProviders(<SourceTypes {...props} />);
+
         expect(screen.getByText("Source Types")).toBeInTheDocument();
         forEach(props.sourceTypes, sourceType => {
             expect(screen.getByText(sourceType)).toBeInTheDocument();
@@ -55,7 +57,9 @@ describe("<SourceTypes />", () => {
     it("should render when neither", () => {
         props.global = false;
         props.isRemote = false;
+
         renderWithProviders(<SourceTypes {...props} />);
+
         expect(screen.getByText("Source Types")).toBeInTheDocument();
         forEach(props.sourceTypes, sourceType => {
             expect(screen.getByText(sourceType)).toBeInTheDocument();
@@ -67,56 +71,66 @@ describe("<SourceTypes />", () => {
 
     it("should call onUpdate when Add is clicked", async () => {
         renderWithProviders(<SourceTypes {...props} />);
-        userEvent.type(screen.getByRole("textbox"), "test_source");
-        userEvent.click(screen.getByRole("button", { name: "Add" }));
-        await waitFor(() =>
-            expect(props.onUpdate).toHaveBeenCalledWith([...props.sourceTypes, "test_source"], true, "foo")
-        );
+
+        await userEvent.type(screen.getByRole("textbox"), "test_source");
+        await userEvent.click(screen.getByRole("button", { name: "Add" }));
+
+        expect(props.onUpdate).toHaveBeenCalledWith([...props.sourceTypes, "test_source"], true, "foo");
     });
 
     it("should call onUpdate when trash is clicked", async () => {
         renderWithProviders(<SourceTypes {...props} />);
-        userEvent.click(screen.getAllByLabelText("trash")[0]);
-        await waitFor(() => expect(props.onUpdate).toHaveBeenCalledWith([props.sourceTypes[1]], true, "foo"));
+        await userEvent.click(screen.getAllByLabelText("trash")[0]);
+        expect(props.onUpdate).toHaveBeenCalledWith([props.sourceTypes[1]], true, "foo");
     });
 
     it("is should undo removal when Undo is clicked", async () => {
         const { rerender } = renderWithProviders(
             <SourceTypes {...{ ...props, sourceTypes: ["isolate", "serotype"] }} />
         );
+
         rerenderWithProviders(rerender, <SourceTypes {...{ ...props, sourceTypes: ["serotype"] }} />);
-        userEvent.click(screen.getByLabelText("undo"));
-        await waitFor(() => expect(props.onUpdate).toHaveBeenCalledWith(["serotype", "isolate"], true, "foo"));
+
+        await userEvent.click(screen.getByLabelText("undo"));
+        expect(props.onUpdate).toHaveBeenCalledWith(["serotype", "isolate"], true, "foo");
     });
 
     it("should not add source type to list if it already exists", async () => {
         renderWithProviders(<SourceTypes {...props} />);
-        userEvent.type(screen.getByRole("textbox"), "isolate");
-        userEvent.click(screen.getByRole("button", { name: "Add" }));
-        await waitFor(() => expect(screen.getAllByText("isolate").length).toBe(1));
-        await waitFor(() => expect(screen.getByText("Source type already exists")).toBeInTheDocument());
+
+        await userEvent.type(screen.getByRole("textbox"), "isolate");
+        await userEvent.click(screen.getByRole("button", { name: "Add" }));
+
+        expect(screen.getAllByText("isolate").length).toBe(1);
+        expect(screen.getByText("Source type already exists")).toBeInTheDocument();
     });
 
     it("should not add source type to list if it contains space", async () => {
         renderWithProviders(<SourceTypes {...props} />);
-        userEvent.type(screen.getByRole("textbox"), "test source");
-        userEvent.click(screen.getByRole("button", { name: "Add" }));
-        await waitFor(() => expect(screen.queryByText("test source")).toBeNull());
-        await waitFor(() => expect(screen.getByText("Source types may not contain spaces")).toBeInTheDocument());
+
+        await userEvent.type(screen.getByRole("textbox"), "test source");
+        await userEvent.click(screen.getByRole("button", { name: "Add" }));
+
+        expect(screen.queryByText("test source")).toBeNull();
+        expect(screen.getByText("Source types may not contain spaces")).toBeInTheDocument();
     });
 
-    it("should call onToggle() when handleEnable() is called and [restrictSourceTypes=true]", () => {
-        props.global = false;
-        renderWithProviders(<SourceTypes {...props} />);
-        userEvent.click(screen.getByLabelText("Enable"));
+    it("should call onToggle() when handleEnable() is called and [restrictSourceTypes=true]", async () => {
+        renderWithProviders(<SourceTypes {...props} global={false} />);
+
+        await userEvent.click(screen.getByLabelText("Enable"));
+
         expect(props.onToggle).toHaveBeenCalledWith("foo", false);
     });
 
-    it("should call onToggle() handleEnable() is called and [restrictSourceTypes=false]", () => {
+    it("should call onToggle() handleEnable() is called and [restrictSourceTypes=false]", async () => {
         props.restrictSourceTypes = false;
         props.global = false;
+
         renderWithProviders(<SourceTypes {...props} />);
-        userEvent.click(screen.getByLabelText("Enable"));
+
+        await userEvent.click(screen.getByLabelText("Enable"));
+
         expect(props.onToggle).toHaveBeenCalledWith("foo", true);
     });
 });
@@ -145,9 +159,9 @@ describe("<SourceTypeItem />", () => {
         expect(screen.queryByLabelText("trash")).toBeNull();
     });
 
-    it("should call onRemove() when remove icon is clicked", () => {
+    it("should call onRemove() when remove icon is clicked", async () => {
         renderWithProviders(<SourceTypeItem {...props} />);
-        userEvent.click(screen.queryByLabelText("trash"));
+        await userEvent.click(screen.queryByLabelText("trash"));
         expect(props.onRemove).toHaveBeenCalledWith("genotype");
     });
 });

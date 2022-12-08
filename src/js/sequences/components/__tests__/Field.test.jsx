@@ -43,9 +43,7 @@ describe("<SequenceField />", () => {
         props.value = "";
         renderWithProviders(<FieldStateManager UIElement={SequenceField} SequenceFieldProps={props} />);
         await userEvent.type(screen.getByRole("textbox"), "ATAG");
-        await waitFor(() => {
-            expect(screen.getByRole("textbox")).toHaveValue("ATAG");
-        });
+        expect(screen.getByRole("textbox")).toHaveValue("ATAG");
     });
 
     it("should not accept input when [readOnly=true]", async () => {
@@ -53,9 +51,7 @@ describe("<SequenceField />", () => {
         props.readOnly = true;
         renderWithProviders(<FieldStateManager UIElement={SequenceField} SequenceFieldProps={props} />);
         expect(screen.getByRole("textbox")).toHaveStyle("background-color: #EDF2F7");
-        userEvent.type(screen.getByRole("textbox"), "ATAG");
-        await waitFor(() => {
-            expect(screen.getByRole("textbox")).toHaveValue("");
-        });
+        await userEvent.type(screen.getByRole("textbox"), "ATAG");
+        expect(screen.getByRole("textbox")).toHaveValue("");
     });
 });

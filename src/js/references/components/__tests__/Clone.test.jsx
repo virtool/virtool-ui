@@ -24,6 +24,7 @@ describe("<CloneReference />", () => {
 
     it("should render", () => {
         renderWithProviders(<CloneReference {...props} />);
+
         expect(screen.getByText("Clone Reference")).toBeInTheDocument();
         expect(screen.getByText("5 OTUs")).toBeInTheDocument();
         expect(screen.getByText("foo_name")).toBeInTheDocument();
@@ -35,41 +36,47 @@ describe("<CloneReference />", () => {
 
     it("should display an error when name input is cleared", async () => {
         renderWithProviders(<CloneReference {...props} />);
-        userEvent.clear(screen.getByRole("textbox"));
-        userEvent.click(screen.getByRole("button", { name: "Clone" }));
-        await waitFor(() => expect(screen.getByText("Required Field")).toBeInTheDocument());
+
+        await userEvent.clear(screen.getByRole("textbox"));
+        await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+
+        expect(screen.getByText("Required Field")).toBeInTheDocument();
     });
     it("handleSubmit() should call not call onSubmit when error is present", async () => {
         renderWithProviders(<CloneReference {...props} />);
-        userEvent.clear(screen.getByRole("textbox"));
-        userEvent.click(screen.getByRole("button", { name: "Clone" }));
-        await waitFor(() => expect(screen.getByText("Required Field")).toBeInTheDocument());
+
+        await userEvent.clear(screen.getByRole("textbox"));
+        await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+
+        expect(screen.getByText("Required Field")).toBeInTheDocument();
         expect(props.onSubmit).not.toBeCalled();
     });
 
     it("handleSubmit() should call onSubmit with correct input", async () => {
         renderWithProviders(<CloneReference {...props} />);
-        userEvent.click(screen.getByRole("button", { name: "Clone" }));
-        const {
-            refDocuments: [reference]
-        } = props;
-        await waitFor(() =>
-            expect(props.onSubmit).toBeCalledWith(
-                `Clone of ${reference.name}`,
-                `Cloned from ${reference.name}`,
-                reference.id
-            )
+
+        await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+
+        const reference = props.refDocuments[0];
+
+        expect(props.onSubmit).toBeCalledWith(
+            `Clone of ${reference.name}`,
+            `Cloned from ${reference.name}`,
+            reference.id
         );
     });
+
     it("handleSubmit() should call onSubmit with changed input", async () => {
         renderWithProviders(<CloneReference {...props} />);
+
         const name = "newName";
-        userEvent.clear(screen.getByRole("textbox"));
-        userEvent.type(screen.getByRole("textbox"), name);
-        userEvent.click(screen.getByRole("button", { name: "Clone" }));
-        const {
-            refDocuments: [reference]
-        } = props;
+
+        await userEvent.clear(screen.getByRole("textbox"));
+        await userEvent.type(screen.getByRole("textbox"), name);
+        await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+
+        const reference = props.refDocuments[0];
+
         await waitFor(() => expect(props.onSubmit).toBeCalledWith(name, `Cloned from ${reference.name}`, reference.id));
     });
 });

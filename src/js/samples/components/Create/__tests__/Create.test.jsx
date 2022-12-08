@@ -23,6 +23,7 @@ describe("<CreateSample>", () => {
 
     beforeEach(() => {
         window.sessionStorage.clear();
+
         props = {
             error: "",
             readyReads: Array(3)
@@ -46,6 +47,7 @@ describe("<CreateSample>", () => {
             onLoadSubtractionsAndFiles: vi.fn(),
             onListLabels: vi.fn()
         };
+
         values = {
             name: "Sample 1",
             selected: ["abc123-Foo.fq.gz", "789xyz-Bar.fq.gz"],
@@ -55,6 +57,7 @@ describe("<CreateSample>", () => {
             subtractionId: "sub_bar",
             libraryType: "sRNA"
         };
+
         state = {
             labels: {
                 documents: [
@@ -74,11 +77,11 @@ describe("<CreateSample>", () => {
 
     const submitForm = () => userEvent.click(screen.getByRole("button", { name: /Create/i }));
 
-    const inputFormRequirements = (sampleName = "Name") => {
-        userEvent.type(screen.getByLabelText("Name"), sampleName);
-        userEvent.click(screen.getByText(props.readyReads[0].name));
-        userEvent.click(screen.getByText(props.readyReads[1].name));
-    };
+    async function inputFormRequirements(props, sampleName = "Name") {
+        await userEvent.type(screen.getByLabelText("Name"), sampleName);
+        await userEvent.click(screen.getByText(props.readyReads[0].name));
+        await userEvent.click(screen.getByText(props.readyReads[1].name));
+    }
 
     it("should render", () => {
         const wrapper = shallow(<CreateSample {...props} />);
@@ -99,84 +102,81 @@ describe("<CreateSample>", () => {
 
     it("should fail to submit and show errors on empty submission", async () => {
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
-        // Ensure errors aren't shown prematurely
+
         expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
         expect(screen.queryByText("At least one read file must be attached to the sample")).not.toBeInTheDocument();
 
-        submitForm();
+        await submitForm();
 
-        await waitFor(() => {
-            expect(props.onCreate).toHaveBeenCalledTimes(0);
-            expect(screen.getByText("Required Field")).toBeInTheDocument();
-            expect(screen.getByText("At least one read file must be attached to the sample")).toBeInTheDocument();
-        });
+        expect(props.onCreate).toHaveBeenCalledTimes(0);
+        expect(screen.getByText("Required Field")).toBeInTheDocument();
+        expect(screen.getByText("At least one read file must be attached to the sample")).toBeInTheDocument();
     });
 
     it("should submit when required fields are completed", async () => {
-        const { name } = values;
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
-        inputFormRequirements(name);
-        submitForm();
 
-        await waitFor(() => expect(props.onCreate).toHaveBeenCalledWith(name, "", "", "", "normal", [], [0, 1], []));
+        await inputFormRequirements(props, values.name);
+        await submitForm();
+
+        expect(props.onCreate).toHaveBeenCalledWith(values.name, "", "", "", "normal", [], [0, 1], []);
     });
 
     it("should submit expected results when form is fully completed", async () => {
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
-        inputFormRequirements(name);
+
+        await inputFormRequirements(props, name);
 
         // Fill out the rest of the form and submit
-        userEvent.type(screen.getByLabelText("Isolate"), isolate);
-        userEvent.type(screen.getByLabelText("Host"), host);
-        userEvent.type(screen.getByLabelText("Locale"), locale);
-        userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
-        userEvent.click(screen.getByText(state.subtraction.shortlist[0].name));
+        await userEvent.type(screen.getByLabelText("Isolate"), isolate);
+        await userEvent.type(screen.getByLabelText("Host"), host);
+        await userEvent.type(screen.getByLabelText("Locale"), locale);
+        await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
+        await userEvent.click(screen.getByText(state.subtraction.shortlist[0].name));
+        await userEvent.click(screen.getByText(libraryType));
 
-        userEvent.click(screen.getByText(libraryType));
-        submitForm();
+        await submitForm();
 
-        await waitFor(() =>
-            expect(props.onCreate).toHaveBeenCalledWith(
-                name,
-                isolate,
-                host,
-                locale,
-                libraryType.toLowerCase(),
-                [state.subtraction.shortlist[0].id],
-                [0, 1],
-                []
-            )
+        expect(props.onCreate).toHaveBeenCalledWith(
+            name,
+            isolate,
+            host,
+            locale,
+            libraryType.toLowerCase(),
+            [state.subtraction.shortlist[0].id],
+            [0, 1],
+            []
         );
     });
 
     it("should include labels when submitting a completed form", async () => {
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
-        inputFormRequirements(name);
+
+        await inputFormRequirements(props, name);
 
         // Fill out the rest of the form and submit
-        userEvent.type(screen.getByLabelText("Isolate"), isolate);
-        userEvent.type(screen.getByLabelText("Host"), host);
-        userEvent.type(screen.getByLabelText("Locale"), locale);
-        userEvent.click(screen.getByText(libraryType));
-        userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
-        userEvent.click(screen.getByText(state.subtraction.shortlist[0].name));
-        userEvent.click(screen.getByRole("button", { name: "select labels" }));
-        userEvent.click(screen.getByText(state.labels.documents[0].name));
-        submitForm();
+        await userEvent.type(screen.getByLabelText("Isolate"), isolate);
+        await userEvent.type(screen.getByLabelText("Host"), host);
+        await userEvent.type(screen.getByLabelText("Locale"), locale);
+        await userEvent.click(screen.getByText(libraryType));
+        await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
+        await userEvent.click(screen.getByText(state.subtraction.shortlist[0].name));
+        await userEvent.click(screen.getByRole("button", { name: "select labels" }));
+        await userEvent.click(screen.getByText(state.labels.documents[0].name));
 
-        await waitFor(() =>
-            expect(props.onCreate).toHaveBeenCalledWith(
-                name,
-                isolate,
-                host,
-                locale,
-                libraryType.toLowerCase(),
-                [state.subtraction.shortlist[0].id],
-                [0, 1],
-                [state.labels.documents[0].id]
-            )
+        await submitForm();
+
+        expect(props.onCreate).toHaveBeenCalledWith(
+            name,
+            isolate,
+            host,
+            locale,
+            libraryType.toLowerCase(),
+            [state.subtraction.shortlist[0].id],
+            [0, 1],
+            [state.labels.documents[0].id]
         );
     });
 
@@ -188,6 +188,7 @@ describe("<CreateSample>", () => {
         };
 
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
+
         expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(name);
         expect(screen.getByLabelText("Isolate")).toHaveValue(isolate);
         expect(screen.getByLabelText("Host")).toHaveValue(host);
@@ -198,12 +199,14 @@ describe("<CreateSample>", () => {
 
     it("should update the sample name when the magic icon is pressed", async () => {
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
-        const nameInput = screen.getByRole("textbox", { name: /Name/i });
-        expect(nameInput.value).toBe("");
 
-        userEvent.click(screen.getByText(props.readyReads[0].name));
-        userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
-        expect(nameInput.value).toBe(readFileName);
+        const field = screen.getByRole("textbox", { name: /Name/i });
+
+        expect(field).toHaveValue("");
+
+        await userEvent.click(screen.getByText(props.readyReads[0].name));
+        await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+        expect(field).toHaveValue(readFileName);
     });
 });
 
@@ -259,7 +262,9 @@ describe("mapStateToProps()", () => {
                 ]
             }
         };
+
         const props = mapStateToProps(state);
+
         expect(props).toEqual({
             error: "",
             forceGroupChoice: true,

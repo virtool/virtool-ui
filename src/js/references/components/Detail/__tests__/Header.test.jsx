@@ -15,16 +15,19 @@ describe("<ReferenceDetailHeaderIcon />", () => {
         const wrapper = shallow(<ReferenceDetailHeaderIcon {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
     it("should render when [canModify=false]", () => {
         props.canModify = false;
         const wrapper = shallow(<ReferenceDetailHeaderIcon {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
     it("should render when [isRemote=false]", () => {
         props.isRemote = false;
         const wrapper = shallow(<ReferenceDetailHeaderIcon {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
     it("should render when [both canModify=false, isRemote=false]", () => {
         props.canModify = false;
         props.isRemote = false;

@@ -51,36 +51,6 @@ export const Groups = ({ activeGroup, groups, loading, onFindUsers, onListGroups
         return <LoadingPlaceholder margin="130px" />;
     }
 
-    let groupComponents;
-
-    if (groups.length) {
-        groupComponents = (
-            <ManageGroupsContainer>
-                <GroupSelector />
-                <div>
-                    <InputHeader
-                        id="name"
-                        value={activeGroup.name}
-                        onSubmit={name => onSetName(activeGroup.id, name)}
-                    />
-                    <Permissions />
-                    <Members />
-                    <RemoveBanner
-                        message="Permanently delete this group."
-                        buttonText="Delete"
-                        onClick={() => onRemove(activeGroup.id)}
-                    />
-                </div>
-            </ManageGroupsContainer>
-        );
-    } else {
-        groupComponents = (
-            <NoneSelectedContainer>
-                <NoneSelected>No Groups Found</NoneSelected>
-            </NoneSelectedContainer>
-        );
-    }
-
     return (
         <>
             <GroupsHeader>
@@ -90,7 +60,29 @@ export const Groups = ({ activeGroup, groups, loading, onFindUsers, onListGroups
                 </LinkButton>
             </GroupsHeader>
 
-            {groupComponents}
+            {groups.length ? (
+                <ManageGroupsContainer>
+                    <GroupSelector />
+                    <div>
+                        <InputHeader
+                            id="name"
+                            value={activeGroup.name}
+                            onSubmit={name => onSetName(activeGroup.id, name)}
+                        />
+                        <Permissions />
+                        <Members />
+                        <RemoveBanner
+                            message="Permanently delete this group."
+                            buttonText="Delete"
+                            onClick={() => onRemove(activeGroup.id)}
+                        />
+                    </div>
+                </ManageGroupsContainer>
+            ) : (
+                <NoneSelectedContainer>
+                    <NoneSelected>No Groups Found</NoneSelected>
+                </NoneSelectedContainer>
+            )}
 
             <Create />
         </>

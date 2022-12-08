@@ -72,6 +72,7 @@ describe("<EditBarcodeSequence>", () => {
 
     it("should render all fields with current sequence data", () => {
         renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
+
         expect(screen.getByText("Target")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "test_target_name test_target_description" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveValue(props.initialAccession);
@@ -82,19 +83,27 @@ describe("<EditBarcodeSequence>", () => {
 
     it("should submit correct data when all fields changed", async () => {
         renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
-        userEvent.click(screen.getByRole("button", { name: "test_target_name test_target_description" }));
-        userEvent.click(screen.getByText("test_target_name_2"));
-        userEvent.type(
-            screen.getByRole("textbox", { name: "Accession (ID)" }),
-            "{selectall}{delete}user_typed_accession"
-        );
-        userEvent.type(screen.getByRole("textbox", { name: "Host" }), "{selectall}{delete}user_typed_host");
-        userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "{selectall}{delete}user_typed_definition");
-        userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "{selectall}{delete}ACG");
 
-        await waitFor(() => {
-            userEvent.click(screen.getByRole("button", { name: "Save" }));
-        });
+        await userEvent.click(screen.getByRole("button", { name: "test_target_name test_target_description" }));
+        await userEvent.click(screen.getByText("test_target_name_2"));
+
+        const accessionField = screen.getByRole("textbox", { name: "Accession (ID)" });
+        await userEvent.clear(accessionField);
+        await userEvent.type(accessionField, "user_typed_accession");
+
+        const hostField = screen.getByRole("textbox", { name: "Host" });
+        await userEvent.clear(hostField);
+        await userEvent.type(hostField, "user_typed_host");
+
+        const definitionField = screen.getByRole("textbox", { name: "Definition" });
+        await userEvent.clear(definitionField);
+        await userEvent.type(definitionField, "user_typed_definition");
+
+        const sequenceField = screen.getByRole("textbox", { name: "Sequence 4" });
+        await userEvent.clear(sequenceField);
+        await userEvent.type(sequenceField, "ACG");
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(props.onSave).toHaveBeenCalledWith(
             "test_otu_id",
@@ -109,27 +118,27 @@ describe("<EditBarcodeSequence>", () => {
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
         renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
-        userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "{selectall}{delete}");
-        userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "{selectall}{delete}");
-        userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "{selectall}{delete}");
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
-        await waitFor(() => {
-            expect(props.onSave).not.toHaveBeenCalled();
-            expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getAllByText("Required Field").length).toBe(3);
-        });
+
+        await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
+        await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
+        await userEvent.clear(screen.getByRole("textbox", { name: "Sequence 4" }));
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(props.onSave).not.toHaveBeenCalled();
+        expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
     it("should display specific error when sequence contains chars !== ATCGN", async () => {
         renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
-        userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
-        userEvent.click(screen.getByRole("button", { name: "Save" }));
-        await waitFor(() => {
-            expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
-            expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
-        });
+
+        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
+        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
     });
 });
 
