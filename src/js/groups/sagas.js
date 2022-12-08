@@ -8,7 +8,8 @@ import {
     REMOVE_GROUP,
     SET_GROUP_PERMISSION,
     WS_REMOVE_GROUP,
-    WS_INSERT_GROUP
+    WS_INSERT_GROUP,
+    SET_GROUP_NAME
 } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
 import * as groupsAPI from "./api";
@@ -47,6 +48,10 @@ function* setGroupPermission(action) {
     yield apiCall(groupsAPI.setPermission, action.payload, SET_GROUP_PERMISSION);
 }
 
+function* setGroupName(action) {
+    yield apiCall(groupsAPI.setName, action.payload, SET_GROUP_NAME);
+}
+
 function* removeGroup(action) {
     yield apiCall(groupsAPI.remove, action.payload, REMOVE_GROUP);
 }
@@ -58,4 +63,5 @@ export function* watchGroups() {
     yield throttle(100, REMOVE_GROUP.REQUESTED, removeGroup);
     yield takeLatest(GET_GROUP.REQUESTED, getGroup);
     yield takeLatest([WS_REMOVE_GROUP, WS_INSERT_GROUP, "test"], UpdateActiveGroup);
+    yield takeLatest(SET_GROUP_NAME.REQUESTED, setGroupName);
 }
