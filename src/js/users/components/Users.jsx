@@ -74,17 +74,6 @@ export class ManageUsers extends React.Component {
     }
 }
 
-// export const mapStateToProps = state => {
-//     console.log("the state is");
-//     console.log(state);
-//     const isAdmin = getAccountAdministrator(state);
-//     const term = state.users.filter;
-//     const groups = state.groups.list;
-//     const groupsFetched = state.groups.fetched;
-//     const error = get(state, "errors.LIST_USERS_ERROR.message", "");
-//     return { isAdmin, term, groups, groupsFetched, error };
-// };
-
 export const mapStateToProps = state => ({
     isAdmin: getAccountAdministrator(state),
     term: state.users.filter,

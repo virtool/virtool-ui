@@ -1,45 +1,25 @@
 import { ManageUsers, mapStateToProps, mapDispatchToProps } from "../Users";
 import React from "react";
 import { screen } from "@testing-library/react";
-import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
+import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
-import { Provider } from "react-redux";
-import createSagaMiddleware from "redux-saga";
-import { applyMiddleware, combineReducers, createStore } from "redux";
-import { watchRouter } from "../../../app/sagas";
-import { getFakeDocuments } from "../../classes";
+import { combineReducers } from "redux";
+import { createFakeDocuments } from "../../classes";
+import { renderWithRouter, createGenericReducer } from "../../../../tests/RenderWithRouter";
 
-const createGenericReducer = initState => state => state || initState;
-
-const createAppStore = (state, history) => {
-    const reducer = combineReducers({
+const createReducer = (state, history) =>
+    combineReducers({
         router: connectRouter(history),
         users: createGenericReducer(state.users),
         settings: createGenericReducer(state.settings)
     });
-    const sagaMiddleware = createSagaMiddleware();
-    const store = createStore(reducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
-
-    sagaMiddleware.run(watchRouter);
-
-    return store;
-};
-
-const renderWithRouter = (ui, state, history) => {
-    const wrappedUI = (
-        <Provider store={createAppStore(state, history)}>
-            <ConnectedRouter history={history}> {ui} </ConnectedRouter>
-        </Provider>
-    );
-    renderWithProviders(wrappedUI);
-};
 
 describe("<ManageUsers />", () => {
     let props;
     let state;
 
     beforeEach(() => {
-        const documents = getFakeDocuments(3);
+        const documents = createFakeDocuments(3);
         props = {
             isAdmin: true,
             filter: "test",
@@ -76,9 +56,10 @@ describe("<ManageUsers />", () => {
         state.users.documents[0].administrator = true;
         state.users.documents[1].handle = "Peter";
         state.users.documents[2].handle = "Sam";
-        renderWithRouter(<ManageUsers {...props} />, state, history);
-        const createButton = screen.getByLabelText("user-plus");
-        expect(createButton).toBeInTheDocument();
+
+        renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
+
+        expect(screen.getByLabelText("user-plus")).toBeInTheDocument();
         expect(screen.getByLabelText("search")).toBeInTheDocument();
         expect(screen.getAllByText("Administrator").length).toBeGreaterThan(0);
         expect(screen.getByText("Bob")).toBeInTheDocument();
@@ -88,9 +69,10 @@ describe("<ManageUsers />", () => {
 
     it("should render correctly when documents = null", () => {
         state.users.documents = null;
-        renderWithRouter(<ManageUsers {...props} />, state, history);
-        const createButton = screen.getByLabelText("user-plus");
-        expect(createButton).toBeInTheDocument();
+
+        renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
+
+        expect(screen.getByLabelText("user-plus")).toBeInTheDocument();
         expect(screen.getByLabelText("search")).toBeInTheDocument();
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
@@ -105,12 +87,13 @@ describe("<ManageUsers />", () => {
                 status: 403
             }
         };
-        renderWithRouter(<ManageUsers {...props} />, state, history);
+
+        renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
+
         expect(screen.getByText("You do not have permission to manage users.")).toBeInTheDocument();
         expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
         expect(screen.queryByText("Bob")).not.toBeInTheDocument();
-        const createButton = screen.queryByLabelText("user-plus");
-        expect(createButton).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("user-plus")).not.toBeInTheDocument();
         expect(screen.queryByLabelText("search")).not.toBeInTheDocument();
         expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });

@@ -30,11 +30,13 @@ class UserDetail {
     primary_group: Group;
 }
 
-export function getFakeUserDetail(): UserDetail {
-    const groups = [];
-    times(5, (i: number) =>
-        groups.push({ id: faker.random.alphaNumeric(9, { casing: "lower" }), name: `group${i}`, toggled: true })
-    );
+export function createFakeUserDetail(): UserDetail {
+    const groups = times(5, (i: number) => ({
+        id: faker.random.alphaNumeric(9, { casing: "lower" }),
+        name: `group${i}`,
+        toggled: true
+    }));
+
     return {
         active: faker.datatype.boolean(),
         administrator: faker.datatype.boolean(),
@@ -57,9 +59,4 @@ export function getFakeUserDetail(): UserDetail {
     };
 }
 
-export function getFakeDocuments(numOfDocs: number): UserDetail[] {
-    const documents = [];
-    times(numOfDocs, () => documents.push(getFakeUserDetail()));
-
-    return documents;
-}
+export const createFakeDocuments = (numOfDocs: number): UserDetail[] => times(numOfDocs, () => createFakeUserDetail());

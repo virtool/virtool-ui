@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mapDispatchToProps, mapStateToProps, PrimaryGroup } from "../PrimaryGroup";
 
@@ -20,6 +20,7 @@ describe("<PrimaryGroup />", () => {
 
     it("should render correctly when 3 groups exist", () => {
         renderWithProviders(<PrimaryGroup {...props} />);
+
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toHaveValue("2");
         expect(screen.getByRole("combobox")).not.toHaveValue("3");
@@ -31,7 +32,9 @@ describe("<PrimaryGroup />", () => {
 
     it("should render when [primaryGroup = null]", () => {
         props.primaryGroup = null;
+
         renderWithProviders(<PrimaryGroup {...props} />);
+
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toHaveValue("none");
         expect(screen.getByRole("option", { name: "Foo" })).toBeInTheDocument();
@@ -40,7 +43,9 @@ describe("<PrimaryGroup />", () => {
 
     it("should render correctly when groups = []", () => {
         props.groups = [];
+
         renderWithProviders(<PrimaryGroup {...props} />);
+
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toHaveValue("none");
         expect(screen.queryByRole("option", { name: "Foo" })).not.toBeInTheDocument();
@@ -48,14 +53,18 @@ describe("<PrimaryGroup />", () => {
 
     it("should call onSetPrimaryGroup() when selection changes", async () => {
         props.primaryGroup = "3";
+
         renderWithProviders(<PrimaryGroup {...props} />);
+
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
-        userEvent.selectOptions(screen.getByRole("combobox"), "Bar");
-        userEvent.selectOptions(screen.getByRole("combobox"), "none");
-        await waitFor(() => {
-            expect(props.onSetPrimaryGroup).toHaveBeenNthCalledWith(1, "bob", "2");
-            expect(props.onSetPrimaryGroup).toHaveBeenNthCalledWith(2, "bob", null);
-        });
+
+        await userEvent.selectOptions(screen.getByRole("combobox"), "Bar");
+
+        expect(props.onSetPrimaryGroup).toHaveBeenCalledWith("bob", "2");
+
+        await userEvent.selectOptions(screen.getByRole("combobox"), "none");
+
+        expect(props.onSetPrimaryGroup).toHaveBeenCalledWith("bob", null);
     });
 });
 

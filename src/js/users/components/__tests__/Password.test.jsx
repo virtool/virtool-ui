@@ -1,6 +1,7 @@
 import { Password, mapStateToProps, mapDispatchToProps } from "../Password";
 import { editUser } from "../../actions";
-import { fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 describe("<Password />", () => {
     let props;
@@ -18,6 +19,7 @@ describe("<Password />", () => {
 
     it("should render correctly when forceReset = false", () => {
         renderWithProviders(<Password {...props} />);
+
         expect(screen.getByText("Change Password")).toBeInTheDocument();
         expect(screen.getByText(/Last changed/)).toBeInTheDocument();
         expect(screen.getByText("Force user to reset password on next login")).toBeInTheDocument();
@@ -25,31 +27,37 @@ describe("<Password />", () => {
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
     });
 
-    it("should call onSubmit when submitted value long enough", () => {
+    it("should call onSubmit when submitted value long enough", async () => {
         renderWithProviders(<Password {...props} />);
-        const passwordInput = screen.getByLabelText("password");
-        const saveButton = screen.getByRole("button", { name: "Save" });
-        fireEvent.change(passwordInput, { target: { value: "newPassword" } });
+
+        await userEvent.type(screen.getByLabelText("password"), "newPassword");
+
         expect(props.onSubmit).not.toHaveBeenCalled();
-        saveButton.click();
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
         expect(props.onSubmit).toHaveBeenCalledWith("bob", "newPassword");
     });
 
-    it("should not call onSubmit when submitted value too short", () => {
+    it("should not call onSubmit when submitted value too short", async () => {
         renderWithProviders(<Password {...props} />);
-        const passwordInput = screen.getByLabelText("password");
-        const saveButton = screen.getByRole("button", { name: "Save" });
-        fireEvent.change(passwordInput, { target: { value: "123" } });
+
+        await userEvent.type(screen.getByLabelText("password"), "123");
+
         expect(props.onSubmit).not.toHaveBeenCalled();
-        saveButton.click();
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
         expect(props.onSubmit).not.toHaveBeenCalled();
     });
 
-    it("should call onsetForceReset when checkbox is clicked", () => {
+    it("should call onsetForceReset when checkbox is clicked", async () => {
         renderWithProviders(<Password {...props} />);
-        const checkbox = screen.getByLabelText("Force user to reset password on next login");
+
         expect(props.onSetForceReset).not.toHaveBeenCalled();
-        fireEvent.click(checkbox);
+
+        await userEvent.click(screen.getByLabelText("Force user to reset password on next login"));
+
         expect(props.onSetForceReset).toHaveBeenCalledTimes(1);
     });
 });

@@ -1,34 +1,10 @@
 import { PUSH_STATE } from "../../../app/actionTypes";
 import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
-import { fireEvent, screen } from "@testing-library/react";
-import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
 import React from "react";
-import { Provider } from "react-redux";
-import createSagaMiddleware from "redux-saga";
-import { applyMiddleware, combineReducers, createStore } from "redux";
-import { watchRouter } from "../../../app/sagas";
-
-const createAppStore = (state, history) => {
-    const reducer = combineReducers({
-        router: connectRouter(history)
-    });
-    const sagaMiddleware = createSagaMiddleware();
-    const store = createStore(reducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
-
-    sagaMiddleware.run(watchRouter);
-
-    return store;
-};
-
-const renderWithRouter = (ui, state, history) => {
-    const wrappedUI = (
-        <Provider store={createAppStore(state, history)}>
-            <ConnectedRouter history={history}> {ui} </ConnectedRouter>
-        </Provider>
-    );
-    renderWithProviders(wrappedUI);
-};
+import { renderWithRouter } from "../../../../tests/RenderWithRouter";
 
 describe("<CreateUser />", () => {
     let props;
@@ -56,6 +32,7 @@ describe("<CreateUser />", () => {
 
     it("should render correctly when show=true", () => {
         renderWithRouter(<CreateUser {...props} />, state, history);
+
         expect(screen.getByText("Create User")).toBeInTheDocument();
         expect(screen.getByText("Username")).toBeInTheDocument();
         expect(screen.getByText("Password")).toBeInTheDocument();
@@ -63,33 +40,38 @@ describe("<CreateUser />", () => {
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
     });
 
-    it("should render correct error messages", () => {
+    it("should render correct error messages", async () => {
         renderWithRouter(<CreateUser {...props} />, state, history);
-        const saveButton = screen.getByRole("button", { name: "Save" });
-        saveButton.click();
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
         expect(screen.getByText("Please specify a username")).toBeInTheDocument();
         expect(screen.getByText("Passwords must contain at least 8 characters")).toBeInTheDocument();
         expect(props.onCreate).not.toHaveBeenCalled();
     });
 
-    it("should not display error messages and should call onCreate when valid info entered", () => {
+    it("should not display error messages and should call onCreate when valid info entered", async () => {
         renderWithRouter(<CreateUser {...props} />, state, history);
-        const userNameInput = screen.getByLabelText("username");
-        const passwordInput = screen.getByLabelText("password");
-        const saveButton = screen.getByRole("button", { name: "Save" });
-        fireEvent.change(userNameInput, { target: { value: "newUsername" } });
-        fireEvent.change(passwordInput, { target: { value: "newPassword" } });
+
+        await userEvent.type(screen.getByRole("textbox", { name: "username" }), "newUsername");
+        await userEvent.type(screen.getByLabelText("password"), "newPassword");
+
         expect(props.onCreate).not.toHaveBeenCalled();
-        saveButton.click();
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
         expect(props.onCreate).toHaveBeenCalled();
     });
 
-    it("should call onHide when model exited", () => {
+    it("should call onHide when model exited", async () => {
         props.error = "Error";
+
         renderWithRouter(<CreateUser {...props} />, state, history);
-        const closeButton = screen.getByLabelText("close");
-        expect(props.onHide).toHaveBeenCalledTimes(0);
-        fireEvent.click(closeButton);
+
+        expect(props.onHide).not.toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole("button", { name: "close" }));
+
         expect(props.onHide).toHaveBeenCalledTimes(1);
     });
 });
