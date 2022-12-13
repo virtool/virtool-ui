@@ -25,6 +25,15 @@ const renderWithProviders = (ui, createAppStore) => {
     return rtlRender(wrapWithProviders(ui, createAppStore));
 };
 
+class ResizeObserver {
+    observe() {}
+    unobserve() {}
+}
+
+export const attachResizeObserver = () => {
+    window.ResizeObserver = ResizeObserver;
+};
+
 // Globals are defined here to limit import redundancies.
 global.fireEvent = fireEvent;
 global.mount = mount;

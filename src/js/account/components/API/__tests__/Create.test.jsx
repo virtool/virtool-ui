@@ -3,15 +3,11 @@ import * as utils from "../../../../utils/utils";
 import { CreateAPIKey, getInitialFormValues, mapDispatchToProps, mapStateToProps } from "../Create";
 import { createStore } from "redux";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { attachResizeObserver } from "../../../../../tests/setupTests";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);
 };
-
-class ResizeObserver {
-    observe() {}
-    unobserve() {}
-}
 
 describe("getInitialFormValues()", () => {
     it("should return correct initial state", () => {
@@ -23,7 +19,7 @@ describe("getInitialFormValues()", () => {
 });
 
 describe("<CreateAPIKey />", () => {
-    window.ResizeObserver = ResizeObserver;
+    attachResizeObserver();
     let props;
     let state;
 
