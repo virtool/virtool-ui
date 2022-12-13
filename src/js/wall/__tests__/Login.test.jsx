@@ -1,15 +1,17 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createStore } from "redux";
 import { LOGIN } from "../../app/actionTypes";
 import { Login, mapDispatchToProps, mapStateToProps } from "../Login";
 import { vi } from "vitest";
+import { attachResizeObserver } from "../../../tests/setupTests";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);
 };
 
 describe("<Login />", () => {
+    attachResizeObserver();
     let props;
 
     beforeEach(() => {

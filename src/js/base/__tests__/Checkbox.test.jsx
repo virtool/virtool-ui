@@ -1,7 +1,10 @@
-import { Checkbox, StyledCheckbox } from "../Checkbox";
+import { Checkbox } from "../Checkbox";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 describe("Checkbox", () => {
     let props;
+
     beforeEach(() => {
         props = {
             checked: false,
@@ -11,33 +14,56 @@ describe("Checkbox", () => {
         };
     });
 
-    it("should render", () => {
-        const wrapper = shallow(<Checkbox {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render correctly when checked = false", () => {
+        renderWithProviders(<Checkbox {...props} />);
+
+        const checkbox = screen.getByRole("checkbox", { name: "foo" });
+        expect(checkbox).toBeInTheDocument();
+        expect(screen.getByText("foo")).toBeInTheDocument();
+        expect(checkbox).not.toBeChecked();
     });
 
-    it("should render when [props.label==='']", () => {
-        props.label = "";
-        const wrapper = shallow(<Checkbox {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it("should render when [props.checked===true]", () => {
+    it("should render correctly when checked = true", () => {
         props.checked = true;
-        const wrapper = shallow(<Checkbox {...props} />);
-        expect(wrapper).toMatchSnapshot();
+
+        renderWithProviders(<Checkbox {...props} />);
+
+        const checkbox = screen.getByRole("checkbox", { name: "foo" });
+        expect(checkbox).toBeInTheDocument();
+        expect(screen.getByText("foo")).toBeInTheDocument();
+        expect(checkbox).toBeChecked();
     });
 
-    it("should call onClick when Checkbox is clicked", () => {
-        const wrapper = shallow(<Checkbox {...props} />);
-        wrapper.find(StyledCheckbox).simulate("click");
-        expect(props.onClick).toHaveBeenCalled();
+    it("should render correctly with no label", () => {
+        props.label = "";
+
+        renderWithProviders(<Checkbox {...props} />);
+
+        const checkbox = screen.getByRole("checkbox", { name: "checkbox" });
+        expect(checkbox).toBeInTheDocument();
+        expect(screen.queryByRole("checkbox", { name: "foo" })).not.toBeInTheDocument();
+        expect(checkbox).not.toBeChecked();
     });
 
-    it("should call onClick when [props.disabled===true]", () => {
+    it("should call onClick when checkbox clicked", async () => {
+        renderWithProviders(<Checkbox {...props} />);
+
+        expect(props.onClick).not.toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole("checkbox", { name: "foo" }));
+
+        expect(props.onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not call onClick when disabled = true", async () => {
         props.disabled = true;
-        const wrapper = shallow(<Checkbox {...props} />);
-        wrapper.find(StyledCheckbox).simulate("click");
+
+        renderWithProviders(<Checkbox {...props} />);
+
+        expect(props.onClick).not.toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole("checkbox", { name: "foo" }));
+
         expect(props.onClick).not.toHaveBeenCalled();
     });
 });
