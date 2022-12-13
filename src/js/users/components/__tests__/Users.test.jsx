@@ -1,11 +1,9 @@
 import { ManageUsers, mapStateToProps, mapDispatchToProps } from "../Users";
-import React from "react";
 import { screen } from "@testing-library/react";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
 import { createFakeDocuments } from "../../classes";
-import { renderWithRouter, createGenericReducer } from "../../../../tests/RenderWithRouter";
 
 const createReducer = (state, history) =>
     combineReducers({

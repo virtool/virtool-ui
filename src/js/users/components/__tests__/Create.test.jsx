@@ -1,10 +1,7 @@
 import { PUSH_STATE } from "../../../app/actionTypes";
 import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
 import { screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
-import React from "react";
-import { renderWithRouter } from "../../../../tests/RenderWithRouter";
 
 describe("<CreateUser />", () => {
     let props;

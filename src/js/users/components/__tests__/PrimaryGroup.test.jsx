@@ -1,5 +1,4 @@
 import { screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { mapDispatchToProps, mapStateToProps, PrimaryGroup } from "../PrimaryGroup";
 
 describe("<PrimaryGroup />", () => {

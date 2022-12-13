@@ -2,10 +2,8 @@ import { createFakeUserDetail } from "../../classes";
 import { UserDetail, mapDispatchToProps, mapStateToProps } from "../Detail";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
-import React from "react";
 import { combineReducers } from "redux";
 import { screen } from "@testing-library/react";
-import { renderWithRouter, createGenericReducer } from "../../../../tests/RenderWithRouter";
 
 const createReducer = (state, history) =>
     combineReducers({

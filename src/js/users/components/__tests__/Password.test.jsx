@@ -1,7 +1,6 @@
 import { Password, mapStateToProps, mapDispatchToProps } from "../Password";
 import { editUser } from "../../actions";
 import { screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 
 describe("<Password />", () => {
     let props;
