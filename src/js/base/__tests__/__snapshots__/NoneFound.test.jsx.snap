@@ -20,9 +20,9 @@ exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
       "$$typeof": Symbol(react.forward_ref),
       "attrs": [],
       "componentStyle": e {
-        "baseHash": 677740513,
+        "baseHash": 183687572,
         "baseStyle": undefined,
-        "componentId": "sc-pyfCe",
+        "componentId": "sc-ftTHYK",
         "isStatic": false,
         "rules": [
           "
@@ -52,7 +52,7 @@ exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
       "foldedComponentIds": [],
       "render": [Function],
       "shouldForwardProp": undefined,
-      "styledComponentId": "sc-pyfCe",
+      "styledComponentId": "sc-ftTHYK",
       "target": "div",
       "toString": [Function],
       "warnTooManyClasses": [Function],

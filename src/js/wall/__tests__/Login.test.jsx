@@ -9,7 +9,13 @@ const createAppStore = state => {
     return () => createStore(state => state, state);
 };
 
+class ResizeObserver {
+    observe() {}
+    unobserve() {}
+}
+
 describe("<Login />", () => {
+    window.ResizeObserver = ResizeObserver;
     let props;
 
     beforeEach(() => {
