@@ -4,6 +4,7 @@ import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
 import { screen } from "@testing-library/react";
+import { attachResizeObserver } from "../../../../tests/setupTests";
 
 const createReducer = (state, history) =>
     combineReducers({
@@ -20,7 +21,9 @@ describe("<UserDetail />", () => {
     let history;
 
     beforeEach(() => {
+        attachResizeObserver();
         const userDetail = createFakeUserDetail();
+
         props = {
             match: {
                 params: {

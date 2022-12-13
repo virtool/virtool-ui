@@ -1,11 +1,14 @@
 import { Password, mapStateToProps, mapDispatchToProps } from "../Password";
 import { editUser } from "../../actions";
 import { screen } from "@testing-library/react";
+import { attachResizeObserver } from "../../../../tests/setupTests";
 
 describe("<Password />", () => {
     let props;
 
     beforeEach(() => {
+        attachResizeObserver();
+
         props = {
             id: "bob",
             forceReset: false,

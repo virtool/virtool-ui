@@ -46,15 +46,6 @@ const createAppStore = (state, history, createReducer) => {
     return store;
 };
 
-const renderWithRouter = (ui, state, history, createReducer) => {
-    const wrappedUI = (
-        <Provider store={createAppStore(state, history, createReducer)}>
-            <ConnectedRouter history={history}> {ui} </ConnectedRouter>
-        </Provider>
-    );
-    renderWithProviders(wrappedUI);
-};
-
 class ResizeObserver {
     observe() {}
     unobserve() {}
@@ -62,6 +53,15 @@ class ResizeObserver {
 
 export const attachResizeObserver = () => {
     window.ResizeObserver = ResizeObserver;
+};
+
+const renderWithRouter = (ui, state, history, createReducer) => {
+    const wrappedUI = (
+        <Provider store={createAppStore(state, history, createReducer)}>
+            <ConnectedRouter history={history}> {ui} </ConnectedRouter>
+        </Provider>
+    );
+    renderWithProviders(wrappedUI);
 };
 
 // Globals are defined here to limit import redundancies.

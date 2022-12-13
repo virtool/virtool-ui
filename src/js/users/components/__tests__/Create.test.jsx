@@ -2,12 +2,15 @@ import { PUSH_STATE } from "../../../app/actionTypes";
 import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
 import { screen } from "@testing-library/react";
 import { createBrowserHistory } from "history";
+import { attachResizeObserver } from "../../../../tests/setupTests";
 
 describe("<CreateUser />", () => {
     let props;
     let state;
 
     beforeEach(() => {
+        attachResizeObserver();
+
         props = {
             error: "",
             show: true,
