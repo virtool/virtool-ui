@@ -79,7 +79,12 @@ export class Password extends React.Component {
                 <BoxGroupSection as="form" onSubmit={this.handleSubmit}>
                     <InputGroup error={this.state.error}>
                         <InputContainer>
-                            <PasswordInput name="password" value={this.state.password} onChange={this.handleChange} />
+                            <PasswordInput
+                                aria-label="password"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.handleChange}
+                            />
                             <InputError />
                         </InputContainer>
                     </InputGroup>

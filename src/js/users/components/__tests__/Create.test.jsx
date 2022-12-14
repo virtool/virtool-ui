@@ -1,15 +1,20 @@
 import { PUSH_STATE } from "../../../app/actionTypes";
-import { Input, PasswordInput } from "../../../base";
 import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
+import { screen } from "@testing-library/react";
+import { createBrowserHistory } from "history";
+import { attachResizeObserver } from "../../../../tests/setupTests";
 
 describe("<CreateUser />", () => {
     let props;
     let state;
 
     beforeEach(() => {
+        attachResizeObserver();
+
         props = {
             error: "",
             show: true,
+            minimumPasswordLength: 8,
             onClearError: vi.fn(),
             onCreate: vi.fn(),
             onHide: vi.fn()
@@ -22,80 +27,52 @@ describe("<CreateUser />", () => {
             password: "",
             handle: ""
         };
+        history = createBrowserHistory();
     });
 
-    it("should render", () => {
-        const wrapper = shallow(<CreateUser {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render correctly when show=true", () => {
+        renderWithRouter(<CreateUser {...props} />, state, history);
+
+        expect(screen.getByText("Create User")).toBeInTheDocument();
+        expect(screen.getByText("Username")).toBeInTheDocument();
+        expect(screen.getByText("Password")).toBeInTheDocument();
+        expect(screen.getByText("Force user to reset password on login"));
+        expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
     });
 
-    it("should render with error", () => {
-        const wrapper = shallow(<CreateUser {...props} />);
-        wrapper.setState({
-            errorPassword: "Password too short"
-        });
-        expect(wrapper).toMatchSnapshot();
+    it("should render correct error messages", async () => {
+        renderWithRouter(<CreateUser {...props} />, state, history);
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(screen.getByText("Please specify a username")).toBeInTheDocument();
+        expect(screen.getByText("Passwords must contain at least 8 characters")).toBeInTheDocument();
+        expect(props.onCreate).not.toHaveBeenCalled();
     });
 
-    it("should render when name has changed", () => {
-        const e = {
-            target: { name: "handle", value: "bob" }
-        };
-        const wrapper = shallow(<CreateUser {...props} error="Error" />);
-        expect(wrapper).toMatchSnapshot();
-        wrapper.find(Input).simulate("change", e);
-        expect(props.onClearError).toHaveBeenCalled();
-        expect(wrapper).toMatchSnapshot();
+    it("should not display error messages and should call onCreate when valid info entered", async () => {
+        renderWithRouter(<CreateUser {...props} />, state, history);
+
+        await userEvent.type(screen.getByRole("textbox", { name: "username" }), "newUsername");
+        await userEvent.type(screen.getByLabelText("password"), "newPassword");
+
+        expect(props.onCreate).not.toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+        expect(props.onCreate).toHaveBeenCalled();
     });
 
-    it("should render when password has changed", () => {
-        const e = {
-            target: { name: "password", value: "password" }
-        };
-        const wrapper = shallow(<CreateUser {...props} error="Error" />);
-        expect(wrapper).toMatchSnapshot();
-        wrapper.find(PasswordInput).simulate("change", e);
-        expect(props.onClearError).toHaveBeenCalled();
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it("should call onClearError() when handleModalExited() is called", () => {
+    it("should call onHide when model exited", async () => {
         props.error = "Error";
-        const wrapper = shallow(<CreateUser {...props} />);
-        wrapper.instance().handleModalExited();
-        expect(props.onClearError).toHaveBeenCalledWith();
-    });
 
-    it("should call handleToggleForceReset when Checkbox is clicked", () => {
-        const wrapper = shallow(<CreateUser {...props} />);
-        wrapper.find("Checkbox").simulate("click");
-        expect(wrapper.state()).toEqual({ ...state, forceReset: true });
-    });
+        renderWithRouter(<CreateUser {...props} />, state, history);
 
-    it("should call handleSubmit when form is submitted and [!this.state.Handle=true]", () => {
-        const e = {
-            preventDefault: vi.fn()
-        };
-        const wrapper = shallow(<CreateUser {...props} />);
-        wrapper.find("form").simulate("submit", e);
-        expect(wrapper.state()).toEqual({ ...state, errorHandle: "Please specify a username" });
-    });
+        expect(props.onHide).not.toHaveBeenCalled();
 
-    it("should call handleSubmit when form is submitted and [this.state.password.length < this.props.minimumPasswordLength]", () => {
-        const e = {
-            preventDefault: vi.fn()
-        };
-        props.minimumPasswordLength = 2;
-        const wrapper = shallow(<CreateUser {...props} />);
-        wrapper.setState({ handle: "foo", password: "f", confirm: "f" });
-        wrapper.find("form").simulate("submit", e);
-        expect(wrapper.state()).toEqual({
-            ...state,
-            handle: "foo",
-            password: "f",
-            confirm: "f",
-            errorPassword: "Passwords must contain at least 2 characters"
-        });
+        await userEvent.click(screen.getByRole("button", { name: "close" }));
+
+        expect(props.onHide).toHaveBeenCalledTimes(1);
     });
 });
 

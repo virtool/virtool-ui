@@ -38,7 +38,7 @@ export class ManageUsers extends React.Component {
     }
 
     render() {
-        if (this.state.error.length) {
+        if (this.props.error !== "") {
             return (
                 <Alert color="orange" level>
                     <Icon name="exclamation-circle" />
@@ -57,7 +57,12 @@ export class ManageUsers extends React.Component {
         return (
             <>
                 <Toolbar>
-                    <SearchInput name="search" value={this.state.term} onChange={this.props.onFind} />
+                    <SearchInput
+                        name="search"
+                        aria-label="search"
+                        value={this.state.term}
+                        onChange={this.props.onFind}
+                    />
                     <LinkButton to={{ state: { createUser: true } }} icon="user-plus" tip="Create User" color="blue" />
                 </Toolbar>
 

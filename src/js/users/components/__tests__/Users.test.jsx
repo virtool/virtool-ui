@@ -1,38 +1,99 @@
 import { ManageUsers, mapStateToProps, mapDispatchToProps } from "../Users";
+import { screen } from "@testing-library/react";
+import { connectRouter } from "connected-react-router";
+import { createBrowserHistory } from "history";
+import { combineReducers } from "redux";
+import { createFakeDocuments } from "../../classes";
+
+const createReducer = (state, history) =>
+    combineReducers({
+        router: connectRouter(history),
+        users: createGenericReducer(state.users),
+        settings: createGenericReducer(state.settings)
+    });
 
 describe("<ManageUsers />", () => {
     let props;
-    let wrapper;
+    let state;
 
     beforeEach(() => {
+        const documents = createFakeDocuments(3);
         props = {
             isAdmin: true,
             filter: "test",
             groups: [],
-            groupsFetched: true,
             error: "",
+            groupsFetched: true,
             onFilter: vi.fn(),
             onClearError: vi.fn(),
             onListGroups: vi.fn()
         };
+        state = {
+            users: {
+                documents,
+                term: "",
+                page: "",
+                page_count: 0
+            },
+            settings: {
+                data: {
+                    minimimum_password_length: 8
+                }
+            },
+            createUser: false,
+            isAdmin: true,
+            term: "",
+            groups: [],
+            groupsFetched: ""
+        };
+        history = createBrowserHistory();
     });
 
-    it("should render", () => {
-        wrapper = shallow(<ManageUsers {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render correctly with 3 users", () => {
+        state.users.documents[0].handle = "Bob";
+        state.users.documents[0].administrator = true;
+        state.users.documents[1].handle = "Peter";
+        state.users.documents[2].handle = "Sam";
+
+        renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
+
+        expect(screen.getByLabelText("user-plus")).toBeInTheDocument();
+        expect(screen.getByLabelText("search")).toBeInTheDocument();
+        expect(screen.getAllByText("Administrator").length).toBeGreaterThan(0);
+        expect(screen.getByText("Bob")).toBeInTheDocument();
+        expect(screen.getByText("Peter")).toBeInTheDocument();
+        expect(screen.getByText("Sam")).toBeInTheDocument();
     });
 
-    it("should call onListGroups() when component renders", () => {
-        props.groupsFetched = false;
-        shallow(<ManageUsers {...props} />);
-        expect(props.onListGroups).toHaveBeenCalled();
+    it("should render correctly when documents = null", () => {
+        state.users.documents = null;
+
+        renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
+
+        expect(screen.getByLabelText("user-plus")).toBeInTheDocument();
+        expect(screen.getByLabelText("search")).toBeInTheDocument();
+        expect(screen.getByLabelText("loading")).toBeInTheDocument();
+        expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });
 
-    it("should call onClearError() when component unmounts", () => {
-        props.error = ["foo"];
-        const wrapper = shallow(<ManageUsers {...props} />);
-        wrapper.unmount();
-        expect(props.onClearError).toHaveBeenCalledWith("LIST_USERS_ERROR");
+    it("should render correctly with error", () => {
+        state.users.documents[0].handle = "Bob";
+        state.users.documents[0].administrator = true;
+        props.error = {
+            LIST_USERS_ERROR: {
+                message: "Requires administrative privilege",
+                status: 403
+            }
+        };
+
+        renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
+
+        expect(screen.getByText("You do not have permission to manage users.")).toBeInTheDocument();
+        expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
+        expect(screen.queryByText("Bob")).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("user-plus")).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("search")).not.toBeInTheDocument();
+        expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });
 });
 

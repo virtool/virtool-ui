@@ -18,13 +18,13 @@ const StyledPermissionItem = styled(BoxGroupSection)`
 export const PermissionItem = ({ permission, value }) => {
     if (value) {
         return (
-            <StyledPermissionItem>
+            <StyledPermissionItem aria-label={`${permission}:${value}`}>
                 <PermissionIcon value={value} /> <code>{permission}</code>
             </StyledPermissionItem>
         );
     }
     return (
-        <StyledPermissionItem>
+        <StyledPermissionItem aria-label={`${permission}:${value}`}>
             <PermissionIcon value={value} /> <code>{permission}</code>
         </StyledPermissionItem>
     );

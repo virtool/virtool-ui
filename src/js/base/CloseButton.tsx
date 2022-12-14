@@ -6,4 +6,4 @@ const StyledButton = styled(Icon)`
     color: inherit;
 `;
 
-export const CloseButton = ({ onClick }) => <StyledButton name="times" onClick={onClick} />;
+export const CloseButton = ({ onClick }) => <StyledButton aria-label="close" name="times" onClick={onClick} />;

@@ -97,7 +97,14 @@ export const StyledButton = styled.button`
 
 export const LinkButton = ({ children, color, className, icon, replace, tip, to }) => {
     const button = (
-        <StyledButton as={NavLink} className={className} color={color} replace={replace} to={to}>
+        <StyledButton
+            as={NavLink}
+            aria-label={children || icon}
+            className={className}
+            color={color}
+            replace={replace}
+            to={to}
+        >
             {icon && <Icon name={icon} />}
             {children ? <span>{children}</span> : null}
         </StyledButton>
