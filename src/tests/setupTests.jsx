@@ -1,4 +1,4 @@
-import { fireEvent, render as rtlRender } from "@testing-library/react";
+import { fireEvent, screen, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Enzyme, { mount, render, shallow } from "enzyme";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
@@ -46,15 +46,6 @@ const createAppStore = (state, history, createReducer) => {
     return store;
 };
 
-class ResizeObserver {
-    observe() {}
-    unobserve() {}
-}
-
-export const attachResizeObserver = () => {
-    window.ResizeObserver = ResizeObserver;
-};
-
 const renderWithRouter = (ui, state, history, createReducer) => {
     const wrappedUI = (
         <Provider store={createAppStore(state, history, createReducer)}>
@@ -64,11 +55,21 @@ const renderWithRouter = (ui, state, history, createReducer) => {
     renderWithProviders(wrappedUI);
 };
 
+class ResizeObserver {
+    observe() {}
+    unobserve() {}
+}
+
+export const attachResizeObserver = () => {
+    window.ResizeObserver = ResizeObserver;
+};
+
 // Globals are defined here to limit import redundancies.
 global.fireEvent = fireEvent;
 global.userEvent = userEvent;
 global.mount = mount;
 global.React = React;
+global.screen = screen;
 global.render = render;
 global.renderWithProviders = renderWithProviders;
 global.wrapWithProviders = wrapWithProviders;
