@@ -8,7 +8,7 @@ type Entry = {
     organism: string;
 };
 
-type families = {
+type Families = {
     family1: number;
     family2: number;
 };
@@ -17,7 +17,7 @@ class HMMDetail {
     cluster: number;
     count: number;
     entries: Entry[];
-    families: families;
+    families: Families;
     genera: {
         genera1: number;
         genera2: number;
@@ -64,7 +64,7 @@ function createFakeHMMDetail(): HMMDetail {
 type HMMDocument = {
     cluster: number;
     count: number;
-    families: families;
+    families: Families;
     id: string;
     names: string[];
 };
