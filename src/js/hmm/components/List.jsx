@@ -7,7 +7,7 @@ import HMMInstaller from "./Installer";
 import HMMItem from "./Item";
 import HMMToolbar from "./Toolbar";
 
-class HMMList extends React.Component {
+export class HMMList extends React.Component {
     componentDidMount() {
         this.props.onLoadNextPage(this.props.term, 1);
     }
