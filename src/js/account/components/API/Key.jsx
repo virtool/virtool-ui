@@ -68,7 +68,7 @@ export class APIKey extends React.Component {
                         {permissionCount} permission{permissionCount === 1 ? null : "s"}
                     </APIKeyPermissionCount>
                     <APIKeyCloseContainer>
-                        {this.state.in && <Icon name="times" onClick={this.toggleIn} />}
+                        {this.state.in && <Icon name="times" aria-label="close" onClick={this.toggleIn} />}
                     </APIKeyCloseContainer>
                 </APIKeyHeader>
                 {this.state.in && (
