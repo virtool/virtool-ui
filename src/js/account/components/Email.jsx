@@ -68,9 +68,14 @@ export class Email extends React.Component {
                 </BoxGroupHeader>
                 <EmailForm onSubmit={this.handleSubmit}>
                     <InputGroup>
-                        <InputLabel>Email Address</InputLabel>
+                        <InputLabel htmlFor="email">Email Address</InputLabel>
                         <InputContainer>
-                            <Input value={this.state.email} onChange={this.handleChange} onBlur={this.handleBlur} />
+                            <Input
+                                id="email"
+                                value={this.state.email}
+                                onChange={this.handleChange}
+                                onBlur={this.handleBlur}
+                            />
                             <InputError>{this.state.error}</InputError>
                         </InputContainer>
                     </InputGroup>

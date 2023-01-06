@@ -1,51 +1,74 @@
-import { AccountProfile, mapStateToProps } from "../Profile";
+import AccountProfile from "../Profile";
+
+import userEvent from "@testing-library/user-event";
+import { connectRouter } from "connected-react-router";
+import { createBrowserHistory } from "history";
+import { combineReducers } from "redux";
+import { createFakeAccount } from "../../types";
+
+function createReducer(state, history) {
+    return combineReducers({
+        account: createGenericReducer(state.account),
+        settings: createGenericReducer(state.settings),
+        router: connectRouter(history)
+    });
+}
 
 describe("<AccountProfile />", () => {
-    let props;
+    let history;
+    let state;
 
     beforeEach(() => {
-        props = {
-            handle: "foo",
-            groups: [
-                { id: "ac091sa1", name: "Technicians" },
-                { id: "980s921a", name: "Managers" }
-            ],
-            administrator: false
+        history = createBrowserHistory();
+
+        state = {
+            account: { ...createFakeAccount(), administrator: true, handle: "amanda36" },
+            settings: { data: { minimumPasswordLength: 8 } }
         };
     });
 
     it("should render when administrator", () => {
-        props.administrator = true;
-        const wrapper = shallow(<AccountProfile {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithRouter(<AccountProfile />, state, history, createReducer);
+
+        expect(screen.getByText("amanda36")).toBeInTheDocument();
+        expect(screen.getByText("Administrator")).toBeInTheDocument();
+        expect(screen.queryAllByText("AM")).toHaveLength(2);
     });
 
     it("should render when not administrator", () => {
-        const wrapper = shallow(<AccountProfile {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
-
-describe("mapStateToProps()", () => {
-    const state = {
-        account: {
-            handle: "foo",
-            groups: ["test"],
-            administrator: true
-        }
-    };
-    const expected = {
-        handle: "foo",
-        groups: ["test"],
-        administrator: true
-    };
-    it("should return props when administrator", () => {
-        const props = mapStateToProps(state);
-        expect(props).toEqual(expected);
-    });
-    it("should return props when not administrator", () => {
         state.account.administrator = false;
-        const props = mapStateToProps(state);
-        expect(props).toEqual({ ...expected, administrator: false });
+        renderWithRouter(<AccountProfile />, state, history, createReducer);
+
+        expect(screen.getByText("amanda36")).toBeInTheDocument();
+    });
+
+    it("should handle email changes", async () => {
+        renderWithRouter(<AccountProfile />, state, history, createReducer);
+
+        const emailInput = screen.getByLabelText("Email Address");
+        expect(emailInput.value).toBe("");
+
+        await userEvent.type(emailInput, "invalid");
+        await userEvent.click(screen.getByText("Save"), { role: "button" });
+
+        expect(emailInput).toHaveValue("invalid");
+        expect(screen.getByText("Please provide a valid email address")).toBeInTheDocument();
+
+        await userEvent.clear(emailInput);
+        await userEvent.type(emailInput, "virtool.devs@gmail.com");
+        await userEvent.click(screen.getByText("Save"), { role: "button" });
+    });
+
+    it("should handle password changes", async () => {
+        renderWithRouter(<AccountProfile />, state, history, createReducer);
+
+        const oldPasswordInput = screen.getByLabelText("Old Password");
+        const newPasswordInput = screen.getByLabelText("New Password");
+
+        await userEvent.type(oldPasswordInput, "expected_password");
+        await userEvent.type(newPasswordInput, "short");
+        await userEvent.click(screen.getByText("Change"), { role: "button" });
+
+        expect(screen.getByText("Password must be at least 8 characters")).toBeInTheDocument();
     });
 });

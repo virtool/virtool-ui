@@ -109,16 +109,26 @@ export class ChangePassword extends React.Component {
                 </BoxGroupHeader>
                 <BoxGroupSection as="form" onSubmit={this.onSubmit}>
                     <InputGroup>
-                        <InputLabel>Old Password</InputLabel>
+                        <InputLabel htmlFor="oldPassword">Old Password</InputLabel>
                         <InputContainer>
-                            <PasswordInput name="oldPassword" value={oldPassword} onChange={this.handleChange} />
+                            <PasswordInput
+                                id="oldPassword"
+                                name="oldPassword"
+                                value={oldPassword}
+                                onChange={this.handleChange}
+                            />
                             <InputError>{errorOldPassword}</InputError>
                         </InputContainer>
                     </InputGroup>
                     <InputGroup>
-                        <InputLabel>New password</InputLabel>
+                        <InputLabel htmlFor="newPassword">New Password</InputLabel>
                         <InputContainer>
-                            <PasswordInput name="newPassword" value={newPassword} onChange={this.handleChange} />
+                            <PasswordInput
+                                id="newPassword"
+                                name="newPassword"
+                                value={newPassword}
+                                onChange={this.handleChange}
+                            />
                             <InputError>{errorNewPassword}</InputError>
                         </InputContainer>
                     </InputGroup>

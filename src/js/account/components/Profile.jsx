@@ -53,7 +53,7 @@ export const AccountProfile = ({ handle, groups, administrator }) => {
     ));
 
     return (
-        <div>
+        <>
             <AccountProfileHeader>
                 <InitialIcon handle={handle} size="xxl" />
                 <div>
@@ -71,7 +71,7 @@ export const AccountProfile = ({ handle, groups, administrator }) => {
 
             <Email />
             <ChangePassword />
-        </div>
+        </>
     );
 };
 
