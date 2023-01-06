@@ -56,7 +56,7 @@ const collectErrors = (props, state) => {
     return state;
 };
 
-export class ChangePassword extends React.Component {
+class ChangePassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = getInitialState(props);
@@ -105,20 +105,30 @@ export class ChangePassword extends React.Component {
         return (
             <BoxGroup>
                 <BoxGroupHeader>
-                    <h2>Password</h2>
+                    <h2>Password - minimum = {this.props.minimumLength}</h2>
                 </BoxGroupHeader>
                 <BoxGroupSection as="form" onSubmit={this.onSubmit}>
                     <InputGroup>
-                        <InputLabel>Old Password</InputLabel>
+                        <InputLabel htmlFor="oldPassword">Old Password</InputLabel>
                         <InputContainer>
-                            <PasswordInput name="oldPassword" value={oldPassword} onChange={this.handleChange} />
+                            <PasswordInput
+                                id="oldPassword"
+                                name="oldPassword"
+                                value={oldPassword}
+                                onChange={this.handleChange}
+                            />
                             <InputError>{errorOldPassword}</InputError>
                         </InputContainer>
                     </InputGroup>
                     <InputGroup>
-                        <InputLabel>New password</InputLabel>
+                        <InputLabel htmlFor="newPassword">New Password</InputLabel>
                         <InputContainer>
-                            <PasswordInput name="newPassword" value={newPassword} onChange={this.handleChange} />
+                            <PasswordInput
+                                id="newPassword"
+                                name="newPassword"
+                                value={newPassword}
+                                onChange={this.handleChange}
+                            />
                             <InputError>{errorNewPassword}</InputError>
                         </InputContainer>
                     </InputGroup>
@@ -134,21 +144,25 @@ export class ChangePassword extends React.Component {
     }
 }
 
-export const mapStateToProps = state => ({
-    lastPasswordChange: state.account.last_password_change,
-    minimumLength: get(state, "settings.data.minimum_password_length"),
-    ready: Boolean(state.settings.data),
-    error: get(state, "errors.CHANGE_ACCOUNT_PASSWORD_ERROR", "")
-});
+function mapStateToProps(state) {
+    return {
+        lastPasswordChange: state.account.last_password_change,
+        minimumLength: get(state, "settings.data.minimum_password_length"),
+        ready: Boolean(state.settings.data),
+        error: get(state, "errors.CHANGE_ACCOUNT_PASSWORD_ERROR", "")
+    };
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onChangePassword: (oldPassword, newPassword) => {
-        dispatch(changePassword(oldPassword, newPassword));
-    },
+function mapDispatchToProps(dispatch) {
+    return {
+        onChangePassword: (oldPassword, newPassword) => {
+            dispatch(changePassword(oldPassword, newPassword));
+        },
 
-    onClearError: () => {
-        dispatch(clearError("CHANGE_ACCOUNT_PASSWORD_ERROR"));
-    }
-});
+        onClearError: () => {
+            dispatch(clearError("CHANGE_ACCOUNT_PASSWORD_ERROR"));
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);

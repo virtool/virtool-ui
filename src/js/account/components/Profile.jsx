@@ -45,7 +45,7 @@ const AccountProfileHeader = styled.div`
     }
 `;
 
-export const AccountProfile = ({ handle, groups, administrator }) => {
+function AccountProfile({ handle, groups, administrator }) {
     const groupLabels = map(groups, ({ id, name }) => (
         <Label key={id}>
             <Icon name="users" /> {name}
@@ -53,7 +53,7 @@ export const AccountProfile = ({ handle, groups, administrator }) => {
     ));
 
     return (
-        <div>
+        <>
             <AccountProfileHeader>
                 <InitialIcon handle={handle} size="xxl" />
                 <div>
@@ -71,14 +71,16 @@ export const AccountProfile = ({ handle, groups, administrator }) => {
 
             <Email />
             <ChangePassword />
-        </div>
+        </>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    administrator: getAccountAdministrator(state),
-    groups: state.account.groups,
-    handle: getAccountHandle(state)
-});
+function mapStateToProps(state) {
+    return {
+        administrator: getAccountAdministrator(state),
+        groups: state.account.groups,
+        handle: getAccountHandle(state)
+    };
+}
 
 export default connect(mapStateToProps)(AccountProfile);

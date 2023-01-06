@@ -1,17 +1,17 @@
-import { fireEvent, screen, render as rtlRender } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Enzyme, { mount, render, shallow } from "enzyme";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
+import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
+import Enzyme, { mount, render, shallow } from "enzyme";
+import { createSerializer } from "enzyme-to-json";
 import React from "react";
 import { Provider } from "react-redux";
-import { ThemeProvider } from "styled-components";
-import { theme } from "../js/app/theme";
-import { createSerializer } from "enzyme-to-json";
-import "@testing-library/jest-dom";
-import { ConnectedRouter, routerMiddleware, connectRouter } from "connected-react-router";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
-import { applyMiddleware, createStore, combineReducers } from "redux";
+import { ThemeProvider } from "styled-components";
 import { watchRouter } from "../js/app/sagas";
+import { theme } from "../js/app/theme";
 
 // React 16 Enzyme adapter
 
@@ -63,6 +63,8 @@ class ResizeObserver {
 export const attachResizeObserver = () => {
     window.ResizeObserver = ResizeObserver;
 };
+
+attachResizeObserver();
 
 // Globals are defined here to limit import redundancies.
 global.fireEvent = fireEvent;
