@@ -17,7 +17,7 @@ COPY webpack.production.config.js ./
 COPY src /build/src
 RUN npx webpack --config webpack.production.config.js
 
-FROM library/node:16-buster as final
+FROM library/node:16-buster as dist
 WORKDIR /ui
 COPY --from=build /build/dist dist
 RUN npm install commander express http-proxy-middleware ejs
