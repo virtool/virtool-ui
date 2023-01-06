@@ -16,7 +16,7 @@ import { updateAccount } from "../actions";
 
 const re = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
-export const EmailForm = styled(BoxGroupSection).attrs(() => ({ as: "form" }))`
+const EmailForm = styled(BoxGroupSection).attrs(() => ({ as: "form" }))`
     display: flex;
     flex-direction: column;
 
@@ -86,14 +86,18 @@ export class Email extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    email: state.account.email
-});
+function mapStateToProps(state) {
+    return {
+        email: state.account.email
+    };
+}
 
-const mapDispatchToProps = dispatch => ({
-    onUpdateEmail: email => {
-        dispatch(updateAccount(email));
-    }
-});
+function mapDispatchToProps(dispatch) {
+    return {
+        onUpdateEmail: email => {
+            dispatch(updateAccount(email));
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Email);

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Switch, Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import { NarrowContainer, TabLink, Tabs, ViewHeader, ViewHeaderTitle, WideContainer } from "../../base";
 import { getAccount } from "../actions";
@@ -8,7 +8,7 @@ import { getAccountId } from "../selectors";
 import AccountProfile from "./Profile";
 import APIKeys from "./API/API";
 
-export const Account = ({ userId, onGet }) => {
+function Account({ userId, onGet }) {
     useEffect(() => onGet(), [userId]);
 
     return (
@@ -31,16 +31,20 @@ export const Account = ({ userId, onGet }) => {
             </NarrowContainer>
         </WideContainer>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    userId: getAccountId(state)
-});
+function mapStateToProps(state) {
+    return {
+        userId: getAccountId(state)
+    };
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onGet: () => {
-        dispatch(getAccount());
-    }
-});
+function mapDispatchToProps(dispatch) {
+    return {
+        onGet: () => {
+            dispatch(getAccount());
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

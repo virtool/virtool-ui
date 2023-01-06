@@ -23,7 +23,7 @@ describe("<AccountProfile />", () => {
 
         state = {
             account: { ...createFakeAccount(), administrator: true, handle: "amanda36" },
-            settings: { data: { minimumPasswordLength: 8 } }
+            settings: { data: { minimum_password_length: 8 } }
         };
     });
 
@@ -40,6 +40,13 @@ describe("<AccountProfile />", () => {
         renderWithRouter(<AccountProfile />, state, history, createReducer);
 
         expect(screen.getByText("amanda36")).toBeInTheDocument();
+    });
+
+    it("should render with initial email", () => {
+        state.account.email = "virtool.devs@gmail.com";
+        renderWithRouter(<AccountProfile />, state, history, createReducer);
+        const emailInput = screen.getByLabelText("Email Address");
+        expect(emailInput.value).toBe("virtool.devs@gmail.com");
     });
 
     it("should handle email changes", async () => {
@@ -65,10 +72,20 @@ describe("<AccountProfile />", () => {
         const oldPasswordInput = screen.getByLabelText("Old Password");
         const newPasswordInput = screen.getByLabelText("New Password");
 
-        await userEvent.type(oldPasswordInput, "expected_password");
-        await userEvent.type(newPasswordInput, "short");
+        // Try without providing old password.
+        await userEvent.type(newPasswordInput, "long_enough_password");
         await userEvent.click(screen.getByText("Change"), { role: "button" });
 
-        expect(screen.getByText("Password must be at least 8 characters")).toBeInTheDocument();
+        expect(screen.getByText("Please provide your old password")).toBeInTheDocument();
+
+        await userEvent.clear(newPasswordInput);
+        await userEvent.type(oldPasswordInput, "expected_password");
+        await userEvent.type(newPasswordInput, "short");
+
+        expect(screen.getByLabelText("New Password")).toHaveValue("short");
+
+        await userEvent.click(screen.getByText("Change"), { role: "button" });
+
+        expect(screen.getByText("Passwords must contain at least 8 characters")).toBeInTheDocument();
     });
 });
