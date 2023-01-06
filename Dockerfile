@@ -1,18 +1,25 @@
-FROM library/node:16-buster as build
+FROM library/node:16-buster as npm
 WORKDIR /build
-COPY .eslintrc /build/
-COPY package.json /build/
-COPY package-lock.json /build/
-COPY tsconfig.json /build/
-COPY webpack.config.js /build/
-COPY webpack.production.config.js /build/
+COPY package.json package-lock.json tsconfig.json /build/
 RUN npm i
+
+FROM library/node:16-buster as dev
+WORKDIR /build
+COPY --from=npm /build/node_modules /build/node_modules
+COPY package.json package-lock.json webpack.config.js tsconfig.json .eslintrc run.js /build/
+COPY server /build/server
+COPY src /build/src
+CMD ["npx", "webpack-dev-server"]
+
+FROM npm as build
+COPY --from=npm /build/node_modules /build/node_modules
+COPY .eslintrc webpack.production.config.js ./
 COPY src /build/src
 RUN npx webpack --config webpack.production.config.js
 
-FROM library/node:16-buster
+FROM library/node:16-buster as dist
 WORKDIR /ui
-COPY --from=build /build/dist dist
+COPY --from=build /build/dist /ui/dist
 RUN npm install commander express http-proxy-middleware ejs
 COPY run.js /ui/
 COPY ./server /ui/server
