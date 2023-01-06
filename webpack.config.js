@@ -48,11 +48,10 @@ module.exports = {
   mode: "development",
 
   plugins: [
+    new CleanWebpackPlugin(),
     new ESLintPlugin({
       overrideConfigFile: path.resolve(__dirname, "./.eslintrc"),
     }),
-    new CleanWebpackPlugin(),
-
     new HTMLWebpackPlugin({
       filename: "index.html",
       title: "Virtool",
@@ -63,23 +62,18 @@ module.exports = {
   ],
   ignoreWarnings: [{ message: /Unexpected console statement/ }],
   devServer: {
-    hot: true,
-    proxy: {
-      "/api": {
-        target: "http://localhost:9950",
-        pathRewrite: {
-          "/api": "",
-        },
-      },
-      "/websocket": {
-        target: "ws://localhost:9950",
-        ws: true,
-        pathRewrite: {
-          "^/websocket": "/ws",
-        },
+    allowedHosts: "all",
+    client: {
+      webSocketURL: {
+        hostname: "localhost",
+        pathname: "/ws",
+        port: 9900,
+        protocol: "ws",
       },
     },
     historyApiFallback: true,
+    host: "0.0.0.0",
+    hot: true,
     port: 9900,
   },
 };
