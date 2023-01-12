@@ -16,30 +16,6 @@ describe("filesReducer()", () => {
         expect(result).toEqual(initialState);
     });
 
-    describe("should handle WS_INSERT_FILE", () => {
-        it("if list is empty or fileType doesn't match, return state", () => {
-            const state = { fileType: "reads" };
-            const action = {
-                type: WS_INSERT_FILE,
-                payload: { type: "subtraction" }
-            };
-            const result = reducer(state, action);
-            expect(result).toEqual(state);
-        });
-
-        it("otherwise insert entry into list", () => {
-            const state = {
-                stale: true
-            };
-            const action = {
-                type: WS_INSERT_FILE,
-                payload: { type: "reads", id: "test" }
-            };
-            const result = reducer(state, action);
-            expect(result).toEqual({ stale: true });
-        });
-    });
-
     it("should handle WS_UPDATE_FILE", () => {
         const state = {
             documents: [{ id: "test", foo: "bar" }]
@@ -52,46 +28,32 @@ describe("filesReducer()", () => {
         expect(result).toEqual({ ...state, documents: [action.payload] });
     });
 
-    it("should handle WS_REMOVE_FILE", () => {
-        const state = {
-            documents: [{ id: "test", foo: "bar" }],
-            total_count: 1,
-            stale: true
-        };
-        const action = {
-            type: WS_REMOVE_FILE,
-            payload: ["test"]
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({ documents: [{ id: "test", foo: "bar" }], total_count: 1, stale: true });
-    });
-
     it("should handle LIST_FILES_REQUESTED", () => {
-        const state = {};
+        const state = { items: [], fileType: "test_filetype" };
         const action = {
             type: FIND_FILES.REQUESTED,
-            payload: { term: "foo", page: 5 }
+            payload: { term: "foo", paginate: true, fileType: "test_filetype" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
+            ...state,
             term: "foo",
-            fileType: ""
+            paginate: true
         });
     });
 
     it("should handle LIST_FILES_SUCCEEDED", () => {
-        const state = { documents: [], page: 1 };
+        const state = { items: [], page: 1 };
         const action = {
             type: FIND_FILES.SUCCEEDED,
-            payload: { documents: [] },
+            payload: { items: [] },
             context: { fileType: "test" }
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
             ...action.payload,
-            fileType: "test",
-            stale: false
+            fileType: "test"
         });
     });
 

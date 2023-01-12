@@ -9,6 +9,7 @@ describe("<Pagination />", () => {
         props = {
             pageCount: 6,
             currentPage: 1,
+            storedPage: 1,
             onLoadNextPage: vi.fn()
         };
     });
@@ -27,8 +28,8 @@ describe("<Pagination />", () => {
         expect(screen.queryByRole("link", { name: "6" })).not.toBeInTheDocument();
     });
 
-    it("should render correclty when pageCount=6 and currentPage = 3", () => {
-        props.currentPage = 3;
+    it("should render correctly when pageCount=6 and currentPage = 3", () => {
+        props.storedPage = 3;
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />

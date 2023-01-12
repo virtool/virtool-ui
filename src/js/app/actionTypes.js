@@ -76,6 +76,7 @@ export const WS_INSERT_FILE = "WS_INSERT_FILE";
 export const WS_UPDATE_FILE = "WS_UPDATE_FILE";
 export const WS_REMOVE_FILE = "WS_REMOVE_FILE";
 export const FIND_FILES = createRequestActionType("FIND_FILES");
+export const WS_REFRESH_FILES = createRequestActionType("WS_REFRESH_FILES");
 export const REMOVE_FILE = createRequestActionType("REMOVE_FILE");
 export const UPLOAD = createRequestActionType("UPLOAD");
 export const UPLOAD_SAMPLE_FILE = createRequestActionType("UPLOAD_SAMPLE_FILE");

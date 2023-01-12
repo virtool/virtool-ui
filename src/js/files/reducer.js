@@ -4,19 +4,20 @@
  * @module files/reducer
  */
 import { createReducer } from "@reduxjs/toolkit";
-import { forEach, map, reject } from "lodash-es";
+import { forEach, map, reject, sortBy } from "lodash-es";
 import {
     FIND_FILES,
-    UPLOAD,
-    UPLOAD_PROGRESS,
-    UPLOAD_FAILED,
-    UPLOAD_SAMPLE_FILE,
     REMOVE_UPLOAD,
+    UPLOAD,
+    UPLOAD_FAILED,
+    UPLOAD_PROGRESS,
+    UPLOAD_SAMPLE_FILE,
     WS_INSERT_FILE,
+    WS_REFRESH_FILES,
     WS_REMOVE_FILE,
     WS_UPDATE_FILE
 } from "../app/actionTypes";
-import { update, updateDocuments } from "../utils/reducers";
+import { insert, remove, update } from "../utils/reducers";
 
 /**
  * The initial state to give the reducer.
@@ -25,8 +26,10 @@ import { update, updateDocuments } from "../utils/reducers";
  * @type {object}
  */
 export const initialState = {
-    documents: null,
+    items: null,
     fileType: null,
+    paginate: false,
+    term: "",
     found_count: 0,
     page: 0,
     total_count: 0,
@@ -76,27 +79,29 @@ export const updateProgress = (state, action) => {
  */
 export const filesReducer = createReducer(initialState, builder => {
     builder
-        .addCase(WS_INSERT_FILE, (state, action) => {
-            if (action.payload.type === state.fileType) {
-                state.stale = true;
-            }
-        })
         .addCase(WS_UPDATE_FILE, (state, action) => {
             return update(state, action.payload, "uploaded_at", true);
         })
-        .addCase(WS_REMOVE_FILE, state => {
-            state.stale = true;
+        .addCase(WS_REFRESH_FILES.SUCCEEDED, (state, action) => {
+            if (state.fileType === action.context.fileType) {
+                return {
+                    ...state,
+                    ...action.payload,
+                    items: sortBy(action.payload.items || action.payload.documents, "uploaded_at").reverse()
+                };
+            }
         })
         .addCase(FIND_FILES.REQUESTED, (state, action) => {
             state.term = action.payload.term;
-            state.documents = state.fileType === action.payload.fileType ? state.documents : null;
-            state.fileType = "";
+            state.items = state.fileType === action.payload.fileType ? state.items : null;
+            state.paginate = action.payload.paginate;
         })
         .addCase(FIND_FILES.SUCCEEDED, (state, action) => {
             return {
-                ...updateDocuments(state, action.payload, "uploaded_at", true),
-                fileType: action.context.fileType,
-                stale: false
+                ...state,
+                ...action.payload,
+                items: sortBy(action.payload.items || action.payload.documents, "uploaded_at").reverse(),
+                fileType: action.context.fileType
             };
         })
         .addCase(UPLOAD.REQUESTED, (state, action) => {

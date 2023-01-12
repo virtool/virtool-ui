@@ -17,6 +17,7 @@ import { findFiles } from "../../files/actions";
 import PersistForm from "../../forms/components/PersistForm";
 import { createSubtraction } from "../actions";
 import SubtractionFileSelector from "./FileSelector";
+import { getFiles } from "../../files/selectors";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("A name is required"),
@@ -86,17 +87,19 @@ export const CreateSubtraction = ({ onListFiles, onCreate, files }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    files: state.files.fileType === "subtraction" ? filter(state.files.documents, { type: "subtraction" }) : null
-});
+const mapStateToProps = state => {
+    console.log(state.router.location);
+    return {
+        files: state.files.fileType === "subtraction" ? getFiles(state) : null
+    };
+};
 
 const mapDispatchToProps = dispatch => ({
     onCreate: ({ uploadId, name, nickname }) => {
         dispatch(createSubtraction(uploadId, name, nickname));
     },
-
     onListFiles: () => {
-        dispatch(findFiles("subtraction"));
+        dispatch(findFiles("subtraction", "", false));
     }
 });
 

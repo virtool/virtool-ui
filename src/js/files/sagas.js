@@ -1,21 +1,53 @@
 import { noop } from "lodash-es";
 import { buffers, END, eventChannel } from "redux-saga";
-import { call, put, take, takeEvery, throttle } from "redux-saga/effects";
-import { FIND_FILES, REMOVE_FILE, UPLOAD } from "../app/actionTypes";
-import { apiCall, putGenericError } from "../utils/sagas";
+import { call, put, select, take, takeEvery, throttle } from "redux-saga/effects";
+import { FIND_FILES, REMOVE_FILE, UPLOAD, WS_INSERT_FILE, WS_REFRESH_FILES, WS_REMOVE_FILE } from "../app/actionTypes";
+import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
 import { uploadFailed, uploadProgress } from "./actions";
 import * as filesAPI from "./api";
+import { replace } from "connected-react-router";
+import { updateSearchString } from "../utils/utils";
 
 export function* watchFiles() {
     yield throttle(100, FIND_FILES.REQUESTED, findFiles);
     yield takeEvery(REMOVE_FILE.REQUESTED, removeFile);
     yield takeEvery(UPLOAD.REQUESTED, upload);
+    yield throttle(500, [WS_INSERT_FILE, WS_REMOVE_FILE], handleWebsocket);
+}
+
+export function* handleWebsocket(action) {
+    let { paginate, term, page, fileType } = yield select(state => state.files);
+
+    if (fileType && (!action.payload?.fileType || fileType === action.payload?.type)) {
+        const location = yield select(state => state.router.location);
+        const params = new URLSearchParams(location.search);
+        term = params.get("term") || term;
+        page = params.get("page") || page || 1;
+
+        let resp = yield callWithAuthentication(filesAPI.list, { page, term, paginate, fileType });
+
+        const pageCount = resp.body.page_count;
+        if (paginate && page > pageCount) {
+            resp = yield callWithAuthentication(filesAPI.list, { page: pageCount, term, paginate, fileType });
+            yield put(replace({ search: updateSearchString(location.search, { page: pageCount }) }));
+        }
+
+        yield put({ type: WS_REFRESH_FILES.SUCCEEDED, payload: resp.body, context: { fileType } });
+    }
 }
 
 export function* findFiles(action) {
-    yield apiCall(filesAPI.list, action.payload, FIND_FILES, {
-        fileType: action.payload.fileType
-    });
+    let resp = yield callWithAuthentication(filesAPI.list, action.payload);
+
+    const pageCount = resp.body.page_count;
+
+    if (action.payload.paginate && action.payload.page > pageCount) {
+        const location = yield select(state => state.router.location);
+        resp = yield callWithAuthentication(filesAPI.list, { ...action.payload, page: pageCount });
+        yield put(replace({ search: updateSearchString(location.search, { page: pageCount }) }));
+    }
+
+    yield put({ type: FIND_FILES.SUCCEEDED, payload: resp.body, context: { fileType: action.payload.fileType } });
 }
 
 export function* removeFile(action) {

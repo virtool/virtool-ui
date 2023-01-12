@@ -62,10 +62,11 @@ describe("Files Action Creators", () => {
         const fileType = "reads";
         const term = "foo";
         const page = 3;
-        const result = findFiles(fileType, "foo", page);
+        const paginate = false;
+        const result = findFiles(fileType, term, paginate, page);
         expect(result).toEqual({
             type: FIND_FILES.REQUESTED,
-            payload: { fileType, term, page }
+            payload: { fileType, term, paginate, page }
         });
     });
 

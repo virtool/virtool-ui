@@ -3,9 +3,10 @@
  *
  */
 import Fuse from "fuse.js";
-import { capitalize, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
+import { capitalize, forEach, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
 import numbro from "numbro";
 import { getAccountAdministrator } from "../account/selectors";
+import { getLocation, push } from "connected-react-router";
 
 /**
  * A string containing all alphanumeric digits in both cases.
@@ -213,4 +214,22 @@ export const getSessionStorage = key => {
     } catch (e) {
         return null;
     }
+};
+
+/**
+ * Return a search string with specified passed parameters updated
+ *
+ * @func
+ * @param {string} search URL ready search string to be updated
+ * @param {object} params
+ * @returns {string}
+ */
+export const updateSearchString = (search, params) => {
+    const searchParams = new URLSearchParams(search);
+
+    forEach(params, (value, key) => {
+        searchParams.set(key, value);
+    });
+
+    return searchParams.toString();
 };
