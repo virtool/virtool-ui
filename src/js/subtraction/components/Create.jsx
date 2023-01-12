@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import { filter, find } from "lodash-es";
+import { find } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import * as Yup from "yup";
@@ -87,12 +87,9 @@ export const CreateSubtraction = ({ onListFiles, onCreate, files }) => {
     );
 };
 
-const mapStateToProps = state => {
-    console.log(state.router.location);
-    return {
-        files: state.files.fileType === "subtraction" ? getFiles(state) : null
-    };
-};
+const mapStateToProps = state => ({
+    files: state.files.fileType === "subtraction" ? getFiles(state) : null
+});
 
 const mapDispatchToProps = dispatch => ({
     onCreate: ({ uploadId, name, nickname }) => {

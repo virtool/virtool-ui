@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import styled from "styled-components";
 import { map, max, min, range } from "lodash-es";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LinkButton } from "./Button";
-import { connect } from "react-redux";
 
 import { getColor, getFontSize } from "../app/theme";
 

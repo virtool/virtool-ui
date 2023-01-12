@@ -1,12 +1,10 @@
 import {
-    WS_INSERT_FILE,
-    WS_UPDATE_FILE,
-    WS_REMOVE_FILE,
-    UPLOAD,
-    UPLOAD_PROGRESS,
     FIND_FILES,
+    REMOVE_UPLOAD,
+    UPLOAD,
     UPLOAD_FAILED,
-    REMOVE_UPLOAD
+    UPLOAD_PROGRESS,
+    WS_UPDATE_FILE
 } from "../../app/actionTypes";
 import reducer, { initialState } from "../reducer";
 

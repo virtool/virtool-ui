@@ -12,12 +12,10 @@ import {
     UPLOAD_FAILED,
     UPLOAD_PROGRESS,
     UPLOAD_SAMPLE_FILE,
-    WS_INSERT_FILE,
     WS_REFRESH_FILES,
-    WS_REMOVE_FILE,
     WS_UPDATE_FILE
 } from "../app/actionTypes";
-import { insert, remove, update } from "../utils/reducers";
+import { update } from "../utils/reducers";
 
 /**
  * The initial state to give the reducer.
@@ -90,6 +88,7 @@ export const filesReducer = createReducer(initialState, builder => {
                     items: sortBy(action.payload.items || action.payload.documents, "uploaded_at").reverse()
                 };
             }
+            return state;
         })
         .addCase(FIND_FILES.REQUESTED, (state, action) => {
             state.term = action.payload.term;

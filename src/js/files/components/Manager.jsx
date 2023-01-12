@@ -1,23 +1,12 @@
-import { capitalize, forEach, max, min, toString } from "lodash-es";
+import { capitalize, min, toString } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import {
-    Alert,
-    Badge,
-    Icon,
-    LoadingPlaceholder,
-    NoneFoundBox,
-    UploadBar,
-    ViewHeader,
-    ViewHeaderTitle,
-    Pagination
-} from "../../base";
-import { checkAdminOrPermission, createRandomString } from "../../utils/utils";
-import { findFiles, upload } from "../actions";
+import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
+import { findFiles } from "../actions";
 import { getFilteredFileIds } from "../selectors";
 import File from "./File";
 import UploadToolbar from "./Toolbar";
-import { replace } from "connected-react-router";
+
 const renderRow = item => <File key={item} id={item} />;
 
 export const FileManager = ({

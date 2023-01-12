@@ -3,8 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { createStore } from "redux";
 import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
 import { MemoryRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { UploadToolbar } from "../Toolbar";
 import { UPLOAD } from "../../../app/actionTypes";
 
 const createAppStore = state => {

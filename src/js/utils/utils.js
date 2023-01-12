@@ -6,7 +6,6 @@ import Fuse from "fuse.js";
 import { capitalize, forEach, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
 import numbro from "numbro";
 import { getAccountAdministrator } from "../account/selectors";
-import { getLocation, push } from "connected-react-router";
 
 /**
  * A string containing all alphanumeric digits in both cases.
