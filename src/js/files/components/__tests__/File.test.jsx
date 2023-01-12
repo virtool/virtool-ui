@@ -58,7 +58,7 @@ describe("mapStateToProps()", () => {
         ownProps = { id: "foo" };
         state = {
             files: {
-                documents: [
+                items: [
                     {
                         id: "foo",
                         name: "Foo",

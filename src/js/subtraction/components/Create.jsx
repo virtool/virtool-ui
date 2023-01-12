@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import { filter, find } from "lodash-es";
+import { find } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import * as Yup from "yup";
@@ -17,6 +17,7 @@ import { findFiles } from "../../files/actions";
 import PersistForm from "../../forms/components/PersistForm";
 import { createSubtraction } from "../actions";
 import SubtractionFileSelector from "./FileSelector";
+import { getFiles } from "../../files/selectors";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("A name is required"),
@@ -87,16 +88,15 @@ export const CreateSubtraction = ({ onListFiles, onCreate, files }) => {
 };
 
 const mapStateToProps = state => ({
-    files: state.files.fileType === "subtraction" ? filter(state.files.documents, { type: "subtraction" }) : null
+    files: state.files.fileType === "subtraction" ? getFiles(state) : null
 });
 
 const mapDispatchToProps = dispatch => ({
     onCreate: ({ uploadId, name, nickname }) => {
         dispatch(createSubtraction(uploadId, name, nickname));
     },
-
     onListFiles: () => {
-        dispatch(findFiles("subtraction"));
+        dispatch(findFiles("subtraction", "", false));
     }
 });
 

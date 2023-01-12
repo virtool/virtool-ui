@@ -1,7 +1,7 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../src/js/app/theme";
-import { MemoryRouter } from "react-router";
+import { MemoryRouter } from "react-router-dom";
 import { GlobalStyles } from "../src/js/app/GlobalStyles";
 
 export const decorators = [

@@ -48,13 +48,16 @@ export const wsRemoveFile = createAction(WS_REMOVE_FILE, data => ({
  *
  * @func
  * @param fileType {string} a file type to filter the returned documents by
+ * @param term {number} search term to filter by
+ * @param pagination {boolean} should the results by paginated
  * @param page {number} which page of results to return
  * @returns {object}
  */
-export const findFiles = createAction(FIND_FILES.REQUESTED, (fileType, term, page) => ({
+export const findFiles = createAction(FIND_FILES.REQUESTED, (fileType, term, paginate, page) => ({
     payload: {
         fileType,
         term,
+        paginate,
         page
     }
 }));

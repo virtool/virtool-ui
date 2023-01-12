@@ -5,12 +5,6 @@
  */
 import { Request } from "../app/request";
 
-export const find = ({ fileType }) =>
-    Request.get("/api/uploads").query({
-        type: fileType,
-        ready: true
-    });
-
 /**
  * Get files of the given ``fileType``. Get a specific page of results using the ``page`` argument.
  *
@@ -19,10 +13,12 @@ export const find = ({ fileType }) =>
  * @param page {number} the page of results to get
  * @returns {promise}
  */
-export const list = ({ fileType }) =>
+export const list = ({ fileType, paginate, page }) =>
     Request.get("/api/uploads").query({
-        type: fileType,
-        ready: true
+        upload_type: fileType,
+        ready: true,
+        paginate,
+        page
     });
 
 /**

@@ -80,11 +80,10 @@ export function* findSamples(action) {
 
 export function* findReadFiles() {
     yield apiCall(
-        filesAPI.find,
+        filesAPI.list,
         {
             fileType: "reads",
-            page: 1,
-            perPage: 500
+            paginate: false
         },
         FIND_READ_FILES
     );

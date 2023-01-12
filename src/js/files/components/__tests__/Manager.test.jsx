@@ -2,6 +2,8 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createStore } from "redux";
 import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
+import { MemoryRouter } from "react-router-dom";
+import { UPLOAD } from "../../../app/actionTypes";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);
@@ -16,19 +18,16 @@ describe("<FileManager>", () => {
             page: 1,
             page_count: 1,
             total_count: 1,
-            canUpload: true,
-            documents: [1],
-            storedFileType: "test_file_type",
+            items: [1],
             fileType: "test_file_type",
             message: "",
             tip: "",
             validationRegex: "",
-            onDrop: vi.fn(),
             onLoadNextPage: vi.fn()
         };
         state = {
             files: {
-                documents: [
+                items: [
                     {
                         id: 1,
                         name: "subtraction.fq.gz",
@@ -44,38 +43,68 @@ describe("<FileManager>", () => {
                     }
                 ]
             },
-            account: { administrator: true }
+            account: { administrator: true, permissions: { upload_file: false } }
         };
     });
 
     it("should render", () => {
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            createAppStore(state)
+        );
         expect(screen.getByText("Drag file here to upload.")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Browse Files" })).toBeInTheDocument();
     });
 
     it("should remove upload bar if canUpload is false", () => {
-        props.canUpload = false;
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        state.account.administrator = false;
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            createAppStore(state)
+        );
         expect(screen.getByText("You do not have permission to upload files.")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
     });
 
     it("should change message if passed", () => {
         props.message = "test_message";
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            createAppStore(state)
+        );
         expect(screen.getByText("test_message")).toBeInTheDocument();
     });
 
     it("should filter files according to passed regex", async () => {
         props.validationRegex = /.(?:fa|fasta)(?:.gz|.gzip)?$/;
-        renderWithProviders(<FileManager {...props} />, createAppStore(state));
+        const mockUpload = vi.fn();
+        const reducer = (state, action) => {
+            if (action.type === UPLOAD.REQUESTED) mockUpload(action.payload.fileType, action.payload.file);
+            return state;
+        };
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
+                <FileManager {...props} />
+            </MemoryRouter>,
+
+            () => createStore(reducer, state)
+        );
         const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
         await userEvent.upload(screen.getByLabelText("Upload file"), [invalidFile, validFile]);
         await waitFor(() => {
-            expect(props.onDrop).toHaveBeenCalledWith(props.fileType, [validFile]);
+            expect(mockUpload).toHaveBeenCalledTimes(1);
+            expect(mockUpload).toHaveBeenCalledWith(props.fileType, validFile);
         });
     });
 });
@@ -87,11 +116,12 @@ describe("mapStateToProps()", () => {
         state = {
             files: {
                 found_count: 6,
+                per_page: 1,
                 page: 1,
                 page_count: 1,
                 total_count: 1,
                 fileType: "test_fileType",
-                documents: [
+                items: [
                     {
                         id: 1,
                         name: "subtraction.fq.gz",
@@ -114,12 +144,14 @@ describe("mapStateToProps()", () => {
     it("should return correct values", () => {
         const expected = {
             found_count: 6,
+            per_page: 1,
             page: 1,
             page_count: 1,
             total_count: 1,
-            storedFileType: "test_fileType",
-            documents: [1],
-            canUpload: true
+            items: [1],
+            URLPage: 1,
+            stale: undefined,
+            loading: true
         };
         expect(mapStateToProps(state)).toEqual(expected);
     });
@@ -130,19 +162,9 @@ describe("mapDispatchToProps", () => {
     beforeEach(() => {
         dispatch = vi.fn();
     });
-
-    it("should return onDrop", () => {
-        const { onDrop } = mapDispatchToProps(dispatch);
-        const file = new File(["test"], "test_file.fa.gz", { type: "application/gzip" });
-        onDrop("test_fileType", [file]);
-        expect(dispatch).toHaveBeenCalledWith({
-            type: "UPLOAD_REQUESTED",
-            payload: { context: {}, file, fileType: "test_fileType", localId: expect.stringMatching(/.{8}/) }
-        });
-    });
     it("should return onLoadNextPage", () => {
         const { onLoadNextPage } = mapDispatchToProps(dispatch);
-        const payload = { fileType: "test_fileType", term: "test", page: 2 };
+        const payload = { fileType: "test_fileType", term: "test", page: 2, paginate: true };
         const { fileType, term, page } = payload;
         onLoadNextPage(fileType, term, page);
         expect(dispatch).toHaveBeenCalledWith({
