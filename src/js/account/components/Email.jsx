@@ -25,7 +25,7 @@ const EmailForm = styled(BoxGroupSection).attrs(() => ({ as: "form" }))`
     }
 `;
 
-export class Email extends React.Component {
+class Email extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

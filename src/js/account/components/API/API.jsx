@@ -22,7 +22,7 @@ const APIKeysHeader = styled(Box)`
     }
 `;
 
-export const APIKeys = ({ keys, onGet }) => {
+function APIKeys({ keys, onGet }) {
     useEffect(onGet, []);
 
     if (keys === null) {
@@ -47,7 +47,7 @@ export const APIKeys = ({ keys, onGet }) => {
             <CreateAPIKey />
         </div>
     );
-};
+}
 
 const mapStateToProps = state => ({
     keys: state.account.apiKeys
