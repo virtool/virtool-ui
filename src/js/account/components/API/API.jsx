@@ -34,7 +34,7 @@ export function APIKeys({ keys, onGet }) {
     return (
         <div>
             <APIKeysHeader>
-                <div style={{ whiteSpace: "wrap" }}>
+                <div>
                     <span>Manage API keys for accessing the </span>
                     <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">Virtool API</ExternalLink>
                     <span>.</span>
