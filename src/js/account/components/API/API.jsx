@@ -22,7 +22,7 @@ const APIKeysHeader = styled(Box)`
     }
 `;
 
-function APIKeys({ keys, onGet }) {
+export function APIKeys({ keys, onGet }) {
     useEffect(onGet, []);
 
     if (keys === null) {
