@@ -36,6 +36,47 @@ const getBestHit = items =>
         { name: null, e: 10 }
     );
 
+const exportContigData = (hits, sampleName) =>
+    map(hits, result => {
+        const orfNames = reduce(
+            result.orfs,
+            (names, orf) => {
+                // Get the best hit for the current ORF.
+                if (orf.hits.length) {
+                    const bestHit = getBestHit(orf.hits);
+
+                    if (bestHit.name) {
+                        names.push(bestHit.name);
+                    }
+                }
+
+                return names;
+            },
+            []
+        );
+        return `>sequence_${result.index}|${sampleName}|${orfNames.join("|")}\n${result.sequence}`;
+    });
+
+const exportORFData = (hits, sampleName) =>
+    reduce(
+        hits,
+        (lines, result) => {
+            forEach(result.orfs, orf => {
+                // Get the best hit for the current ORF.
+                if (orf.hits.length) {
+                    const bestHit = getBestHit(orf.hits);
+
+                    if (bestHit.name) {
+                        lines.push(`>orf_${result.index}_${orf.index}|${sampleName}|${bestHit.name}\n${orf.pro}`);
+                    }
+                }
+            });
+
+            return lines;
+        },
+        []
+    );
+
 const downloadData = (analysisId, content, sampleName, suffix) =>
     followDynamicDownload(`nuvs.${replace(sampleName, " ", "_")}.${analysisId}.${suffix}.fa`, content.join("\n"));
 
@@ -56,53 +97,24 @@ export class NuVsExport extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        const sampleName = this.props.sampleName;
+        const {
+            sampleName,
+            analysisId,
+            results: { hits }
+        } = this.props;
+
+        let content;
+        let suffix;
 
         if (this.state.mode === "contigs") {
-            const content = map(this.props.results, result => {
-                const orfNames = reduce(
-                    result.orfs,
-                    (names, orf) => {
-                        // Get the best hit for the current ORF.
-                        if (orf.hits.length) {
-                            const bestHit = getBestHit(orf.hits);
-
-                            if (bestHit.name) {
-                                names.push(bestHit.name);
-                            }
-                        }
-
-                        return names;
-                    },
-                    []
-                );
-
-                return `>sequence_${result.index}|${sampleName}|${orfNames.join("|")}\n${result.sequence}`;
-            });
-
-            return downloadData(this.props.analysisId, content, sampleName, "contigs");
+            content = exportContigData(hits, sampleName);
+            suffix = "contigs";
+        } else {
+            content = exportORFData(hits, sampleName);
+            suffix = "orfs";
         }
 
-        const content = reduce(
-            this.props.results,
-            (lines, result) => {
-                forEach(result.orfs, orf => {
-                    // Get the best hit for the current ORF.
-                    if (orf.hits.length) {
-                        const bestHit = getBestHit(orf.hits);
-
-                        if (bestHit.name) {
-                            lines.push(`>orf_${result.index}_${orf.index}|${sampleName}|${bestHit.name}\n${orf.pro}`);
-                        }
-                    }
-                });
-
-                return lines;
-            },
-            []
-        );
-
-        downloadData(this.props.analysisId, content, this.props.sampleName, "orfs");
+        downloadData(analysisId, content, sampleName, suffix);
     };
 
     render() {
