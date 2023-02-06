@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import SampleRights from "../../administration/components/SampleRights";
-import UniqueNames from "../../administration/components/UniqueNames";
 import { mapSettingsStateToProps } from "../../administration/mappers";
 import { LoadingPlaceholder, NarrowContainer, ViewHeader, ViewHeaderTitle } from "../../base";
 
@@ -15,7 +14,6 @@ export const SamplesSettings = ({ loading }) => {
             <ViewHeader title="Sample Settings">
                 <ViewHeaderTitle>Sample Settings</ViewHeaderTitle>
             </ViewHeader>
-            <UniqueNames />
             <SampleRights />
         </NarrowContainer>
     );
