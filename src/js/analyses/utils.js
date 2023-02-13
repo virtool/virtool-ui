@@ -1,6 +1,7 @@
 import {
     compact,
     fill,
+    filter,
     flatMap,
     fromPairs,
     has,
@@ -19,7 +20,7 @@ import {
 } from "lodash-es";
 import { formatIsolateName } from "../utils/utils";
 
-const calculateAnnotatedOrfCount = orfs => reject(orfs, { "hits.length": 0 }).length;
+export const calculateAnnotatedOrfCount = orfs => filter(orfs, orf => orf.hits.length).length;
 
 const calculateORFMinimumE = hits => {
     if (hits.length === 0) {
