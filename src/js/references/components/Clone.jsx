@@ -64,7 +64,7 @@ export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) 
                             {reference && (
                                 <ReferenceBox id="selectedReference">
                                     <strong>{reference.name}</strong> <Badge>{reference.otu_count} OTUs</Badge>
-                                    <Attribution time={reference.created_at} user={reference.user.id} />
+                                    <Attribution time={reference.created_at} user={reference.user.handle} />
                                 </ReferenceBox>
                             )}
                             <label htmlFor="name"> Name </label>
