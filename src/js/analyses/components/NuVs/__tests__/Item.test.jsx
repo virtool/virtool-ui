@@ -17,6 +17,7 @@ describe("<NuVsItem />", () => {
                     hits: [1]
                 }
             ],
+            orfCount: 2,
             onSetActiveId: vi.fn()
         };
     });

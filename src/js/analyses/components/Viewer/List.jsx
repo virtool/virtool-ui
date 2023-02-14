@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { getBorder, getFontSize } from "../../../app/theme";
 import { Key } from "../../../base";
 import { setActiveHitId } from "../../actions";
-import { getActiveHit, getHits, getMatches, getResults } from "../../selectors";
+import { getActiveHit, getHits, getMatches } from "../../selectors";
 import { useKeyNavigation } from "./hooks";
 
 const AnalysisViewerListHeader = styled.div`

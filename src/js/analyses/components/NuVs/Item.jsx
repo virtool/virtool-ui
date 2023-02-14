@@ -1,4 +1,3 @@
-import { filter } from "lodash-es";
 import numbro from "numbro";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
