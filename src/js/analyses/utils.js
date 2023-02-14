@@ -78,19 +78,9 @@ export const fillAlign = ({ align, length }) => {
     });
 };
 
-export const formatData = detail => {
-    if (startsWith(detail.workflow, "pathoscope")) {
-        return formatPathoscopeData(detail);
-    }
+const getIdentities = data => flatMap(data, item => item.identities);
 
-    if (detail.workflow === "nuvs") {
-        return formatNuVsData(detail);
-    }
-
-    if (detail.workflow === "aodp") {
-        return formatAODPData(detail);
-    }
-};
+const getSequenceIdentities = sequence => flatMap(sequence.hits, hit => hit.identity);
 
 export const formatAODPData = detail => {
     const results = map(detail.results, result => {
@@ -122,10 +112,6 @@ export const formatAODPData = detail => {
     return { ...detail, results };
 };
 
-const getIdentities = data => flatMap(data, item => item.identities);
-
-const getSequenceIdentities = sequence => flatMap(sequence.hits, hit => hit.identity);
-
 export const formatNuVsData = detail => {
     const hits = map(detail.results.hits, hit => ({
         ...hit,
@@ -153,6 +139,40 @@ export const formatNuVsData = detail => {
         workflow,
         maxSequenceLength: longestSequence.sequence.length
     };
+};
+
+/**
+ * Calculate the median of an Array of numbers.
+ *
+ * @param values - an array of numbers
+ * @returns {number|*} - the median
+ */
+export const median = values => {
+    const sorted = values.slice().sort((a, b) => a - b);
+
+    const midIndex = (sorted.length - 1) / 2;
+
+    if (midIndex % 1 === 0) {
+        return sorted[midIndex];
+    }
+
+    const lowerIndex = Math.floor(midIndex);
+    const upperIndex = Math.ceil(midIndex);
+
+    return Math.round((sorted[lowerIndex] + sorted[upperIndex]) / 2);
+};
+
+/**
+ * Merge the coverage arrays for the given isolates. This is used to render a representative coverage chart for the
+ * parent OTU.
+ *
+ * @param isolates
+ * @returns {Array}
+ */
+export const mergeCoverage = isolates => {
+    const longest = maxBy(isolates, isolate => isolate.filled.length);
+    const coverages = map(isolates, isolate => isolate.filled);
+    return map(longest.filled, (depth, index) => max(map(coverages, coverage => coverage[index])));
 };
 
 export const formatSequence = (sequence, readCount) => ({
@@ -244,36 +264,16 @@ export const fuseSearchKeys = {
     aodp: ["name"]
 };
 
-/**
- * Calculate the median of an Array of numbers.
- *
- * @param values - an array of numbers
- * @returns {number|*} - the median
- */
-export const median = values => {
-    const sorted = values.slice().sort((a, b) => a - b);
-
-    const midIndex = (sorted.length - 1) / 2;
-
-    if (midIndex % 1 === 0) {
-        return sorted[midIndex];
+export const formatData = detail => {
+    if (startsWith(detail.workflow, "pathoscope")) {
+        return formatPathoscopeData(detail);
     }
 
-    const lowerIndex = Math.floor(midIndex);
-    const upperIndex = Math.ceil(midIndex);
+    if (detail.workflow === "nuvs") {
+        return formatNuVsData(detail);
+    }
 
-    return Math.round((sorted[lowerIndex] + sorted[upperIndex]) / 2);
-};
-
-/**
- * Merge the coverage arrays for the given isolates. This is used to render a representative coverage chart for the
- * parent OTU.
- *
- * @param isolates
- * @returns {Array}
- */
-export const mergeCoverage = isolates => {
-    const longest = maxBy(isolates, isolate => isolate.filled.length);
-    const coverages = map(isolates, isolate => isolate.filled);
-    return map(longest.filled, (depth, index) => max(map(coverages, coverage => coverage[index])));
+    if (detail.workflow === "aodp") {
+        return formatAODPData(detail);
+    }
 };
