@@ -10,6 +10,7 @@ import NuVsBLAST from "./BLAST";
 import { NuVsORF } from "./ORF";
 import { NuVsSequence } from "./Sequence";
 import { NuVsValues } from "./Values";
+import { calculateAnnotatedOrfCount } from "../../utils";
 
 const StyledNuVsFamilies = styled.div`
     border: ${getBorder};
@@ -104,7 +105,7 @@ export const NuVsDetail = ({ filterORFs, hit, maxSequenceLength }) => {
                     Sequence {index}
                     <Badge>{sequence.length} bp</Badge>
                 </h3>
-                <NuVsValues e={e} orfCount={orfs.length} />
+                <NuVsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
                 <NuVsFamilies families={families} />
             </NuVsDetailTitle>
             <NuVsLayout>

@@ -27,7 +27,7 @@ export function* handleWebsocket(action) {
         let resp = yield callWithAuthentication(filesAPI.list, { page, term, paginate, fileType });
 
         const pageCount = resp.body.page_count;
-        if (paginate && page > pageCount) {
+        if (paginate && pageCount && page > pageCount) {
             resp = yield callWithAuthentication(filesAPI.list, { page: pageCount, term, paginate, fileType });
             yield put(replace({ search: updateSearchString(location.search, { page: pageCount }) }));
         }
@@ -41,7 +41,7 @@ export function* findFiles(action) {
 
     const pageCount = resp.body.page_count;
 
-    if (action.payload.paginate && action.payload.page > pageCount) {
+    if (action.payload.paginate && pageCount && action.payload.page > pageCount) {
         const location = yield select(state => state.router.location);
         resp = yield callWithAuthentication(filesAPI.list, { ...action.payload, page: pageCount });
         yield put(replace({ search: updateSearchString(location.search, { page: pageCount }) }));

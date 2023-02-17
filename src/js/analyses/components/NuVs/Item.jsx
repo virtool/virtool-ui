@@ -1,4 +1,3 @@
-import { filter } from "lodash-es";
 import numbro from "numbro";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
@@ -8,8 +7,6 @@ import { setActiveHitId } from "../../actions";
 import { getActiveHit, getMatches } from "../../selectors";
 import { AnalysisViewerItem } from "../Viewer/Item";
 import { NuVsValues } from "./Values";
-
-const calculateAnnotatedOrfCount = orfs => filter(orfs, orf => orf.hits.length).length;
 
 const NuVsItemHeader = styled.div`
     align-items: center;
@@ -24,24 +21,23 @@ const StyledNuVsItem = styled(AnalysisViewerItem)`
     margin: 0;
 `;
 
-export const NuVsItem = ({ active, e, orfs, sequence, sequenceIndex, style, onSetActiveId }) => {
+export const NuVsItem = ({ active, e, orfCount, sequence, sequenceIndex, style, onSetActiveId }) => {
     const handleClick = useCallback(() => onSetActiveId(sequenceIndex), [sequenceIndex]);
-
     return (
         <StyledNuVsItem active={active} onClick={handleClick} style={style}>
             <NuVsItemHeader>
                 <strong>Sequence {sequenceIndex}</strong>
                 <Badge>{sequence.length}</Badge>
             </NuVsItemHeader>
-            <NuVsValues e={numbro(e).format()} orfCount={calculateAnnotatedOrfCount(orfs)} />
+            <NuVsValues e={numbro(e).format()} orfCount={orfCount} />
         </StyledNuVsItem>
     );
 };
 
 const mapStateToProps = (state, ownProps) => {
     const activeId = getActiveHit(state).index;
-    const { e, index, orfs, sequence } = getMatches(state)[ownProps.index];
-    return { e, orfs, sequence, sequenceIndex: index, active: activeId === index };
+    const { e, index, annotatedOrfCount, sequence } = getMatches(state)[ownProps.index];
+    return { e, orfCount: annotatedOrfCount, sequence, sequenceIndex: index, active: activeId === index };
 };
 
 const mapDispatchToProps = dispatch => ({
