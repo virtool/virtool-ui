@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { getBorder, getFontSize } from "../../../app/theme";
 import { Key } from "../../../base";
 import { setActiveHitId } from "../../actions";
-import { getActiveHit, getMatches, getResults } from "../../selectors";
+import { getActiveHit, getHits, getMatches } from "../../selectors";
 import { useKeyNavigation } from "./hooks";
 
 const AnalysisViewerListHeader = styled.div`
@@ -92,10 +92,9 @@ export const mapStateToProps = state => {
             nextId = matches[nextIndex].id;
         }
     }
-
     return {
         shown: matches.length,
-        total: getResults(state).length,
+        total: getHits(state).length,
         activeId,
         nextId,
         nextIndex,

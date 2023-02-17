@@ -1,4 +1,4 @@
-import { getMatches, getResults } from "../../../selectors";
+import { getMatches, getHits } from "../../../selectors";
 import { mapStateToProps, AnalysisViewerList } from "../List";
 
 vi.mock("../../../selectors.js");
@@ -17,7 +17,7 @@ describe("<AnalysisViewerList />", () => {
 
 describe("mapStateToProps()", () => {
     getMatches.mockReturnValue(["foo", "bar"]);
-    getResults.mockReturnValue(["foo", "bar", "baz", "bat", "fob"]);
+    getHits.mockReturnValue(["foo", "bar", "baz", "bat", "fob"]);
 
     const state = {
         foo: "bar"
@@ -26,7 +26,7 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const props = mapStateToProps(state);
         expect(getMatches).toHaveBeenCalledWith(state);
-        expect(getResults).toHaveBeenCalledWith(state);
+        expect(getHits).toHaveBeenCalledWith(state);
         expect(props).toEqual({
             shown: 2,
             total: 5

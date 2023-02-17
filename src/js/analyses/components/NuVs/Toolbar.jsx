@@ -5,6 +5,7 @@ import { Button, LinkButton, SearchInput, Toolbar } from "../../../base";
 import { setAnalysisSortKey, setSearchIds, toggleFilterORFs, toggleFilterSequences } from "../../actions";
 import { getFuse, getResults } from "../../selectors";
 import { AnalysisViewerSort } from "../Viewer/Sort";
+import { map } from "lodash-es";
 
 const StyledNuVsToolbar = styled(Toolbar)`
     margin-bottom: 10px;
@@ -71,7 +72,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(toggleFilterORFs());
     },
     onSearch: (term, fuse) => {
-        dispatch(setSearchIds(term ? fuse.search(term) : null));
+        const searchIds = map(fuse.search(term), hit => hit.item.id);
+        dispatch(setSearchIds(searchIds.length ? searchIds : null));
     },
     onSelect: sortKey => {
         dispatch(setAnalysisSortKey(sortKey));
