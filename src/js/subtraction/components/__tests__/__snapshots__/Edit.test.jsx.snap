@@ -5,6 +5,7 @@ exports[`<EditSubtraction /> > should render after name is changed 1`] = `
   label="Edit Subtraction"
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Edit Subtraction
@@ -12,31 +13,31 @@ exports[`<EditSubtraction /> > should render after name is changed 1`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Name
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="name"
           onChange={[Function]}
           value="Prunus persica"
         />
       </InputGroup>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Nickname
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="nickname"
           onChange={[Function]}
           value="Peach"
         />
       </InputGroup>
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <SaveButton />
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -46,6 +47,7 @@ exports[`<EditSubtraction /> > should render after name is changed 2`] = `
   label="Edit Subtraction"
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Edit Subtraction
@@ -53,31 +55,31 @@ exports[`<EditSubtraction /> > should render after name is changed 2`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Name
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="name"
           onChange={[Function]}
           value="Foo"
         />
       </InputGroup>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Nickname
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="nickname"
           onChange={[Function]}
           value="Peach"
         />
       </InputGroup>
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <SaveButton />
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -87,6 +89,7 @@ exports[`<EditSubtraction /> > should render after nickname is changed 1`] = `
   label="Edit Subtraction"
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Edit Subtraction
@@ -94,31 +97,31 @@ exports[`<EditSubtraction /> > should render after nickname is changed 1`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Name
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="name"
           onChange={[Function]}
           value="Prunus persica"
         />
       </InputGroup>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Nickname
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="nickname"
           onChange={[Function]}
           value="Peach"
         />
       </InputGroup>
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <SaveButton />
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -128,6 +131,7 @@ exports[`<EditSubtraction /> > should render after nickname is changed 2`] = `
   label="Edit Subtraction"
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Edit Subtraction
@@ -135,31 +139,31 @@ exports[`<EditSubtraction /> > should render after nickname is changed 2`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Name
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="name"
           onChange={[Function]}
           value="Prunus persica"
         />
       </InputGroup>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Nickname
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="nickname"
           onChange={[Function]}
           value="Foo"
         />
       </InputGroup>
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <SaveButton />
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -169,6 +173,7 @@ exports[`<EditSubtraction /> > should render when [show=false] 1`] = `
   label="Edit Subtraction"
   onHide={[MockFunction spy]}
   show={false}
+  size="sm"
 >
   <ModalHeader>
     Edit Subtraction
@@ -176,31 +181,31 @@ exports[`<EditSubtraction /> > should render when [show=false] 1`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Name
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="name"
           onChange={[Function]}
           value="Prunus persica"
         />
       </InputGroup>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Nickname
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           name="nickname"
           onChange={[Function]}
           value="Peach"
         />
       </InputGroup>
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <SaveButton />
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;

@@ -1,21 +1,21 @@
 // Vitest Snapshot v1
 
 exports[`<RebuildHistory /> > should render <LoadingPlaceholder /> when unbuilt is null 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     Changes
-  </Styled(styled.div)>
+  </BoxGroupHeader>
   <LoadingPlaceholder
     margin="22px"
   />
-</Styled(styled.div)>
+</BoxGroup>
 `;
 
 exports[`<RebuildHistory /> > should render 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     Changes
-  </Styled(styled.div)>
+  </BoxGroupHeader>
   <styled.div>
     <RebuildHistoryItem
       description="test-description"
@@ -41,35 +41,35 @@ exports[`<RebuildHistory /> > should render 1`] = `
       }
     />
   </styled.div>
-</Styled(styled.div)>
+</BoxGroup>
 `;
 
 exports[`<RebuildHistoryEllipsis /> > should render when page_count greater than 1 1`] = `
-<Styled(styled.div)
+<Styled(BoxGroupSection)
   key="last-item"
 >
   + 
   48
    more changes
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<RebuildHistoryEllipsis /> > should render when page_count is 1 1`] = `""`;
 
 exports[`<RebuildHistoryItem /> > should render with description 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <strong>
     Foobar Virus
   </strong>
   Removed OTU
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<RebuildHistoryItem /> > should render without description 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <strong>
     Foobar Virus
   </strong>
   No Description
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;

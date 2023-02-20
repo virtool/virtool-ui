@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<SampleCacheItem /> > should render when [missing=%p] false 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <Flex
     alignContent="stretch"
     alignItems="center"
@@ -43,11 +43,11 @@ exports[`<SampleCacheItem /> > should render when [missing=%p] false 1`] = `
       136.6MB
     </div>
   </styled.div>
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<SampleCacheItem /> > should render when [missing=%p] true 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <Flex
     alignContent="stretch"
     alignItems="center"
@@ -85,20 +85,18 @@ exports[`<SampleCacheItem /> > should render when [missing=%p] true 1`] = `
   </Flex>
   <styled.div>
     <div>
-      <styled.span
+      <Badge
         color="red"
       >
         <Icon
-          faStyle="fas"
-          fixedWidth={false}
           name="exclamation-circle"
         />
          Files Missing
-      </styled.span>
+      </Badge>
     </div>
     <div>
       136.6MB
     </div>
   </styled.div>
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;

@@ -2,7 +2,7 @@ import { debounce } from "lodash-es";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../app/actions";
-import { Icon, LinkButton, SearchInput, Toolbar } from "../../base";
+import { Icon, LinkButton, InputSearch, Toolbar } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { clearSampleSelection, updateSearch } from "../actions";
 import { getTermFromURL } from "../selectors";
@@ -29,7 +29,7 @@ export const SampleSearchToolbar = ({ canCreate, initialTerm, onFind }) => {
 
     return (
         <Toolbar>
-            <SearchInput value={term} onChange={handleChange} placeholder="Sample name" />
+            <InputSearch value={term} onChange={handleChange} placeholder="Sample name" />
             {createButton}
         </Toolbar>
     );

@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { Badge, BoxGroupSection, Circle } from "../../../base";
+import * as Checkbox from "@radix-ui/react-checkbox";
 import PropTypes from "prop-types";
 import React from "react";
-import * as Checkbox from "@radix-ui/react-checkbox";
+import styled from "styled-components";
+import { Badge, BoxGroupSection, Circle } from "../../../base";
 
 const StateButtonCheckbox = styled(Checkbox.Root)`
     align-items: center;

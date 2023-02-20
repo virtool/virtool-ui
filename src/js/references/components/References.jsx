@@ -2,19 +2,19 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { mapSettingsStateToProps } from "../../administration/mappers";
-import { Container, LoadingPlaceholder, NarrowContainer, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Container, LoadingPlaceholder, ContainerNarrow, ViewHeader, ViewHeaderTitle } from "../../base";
 import SourceTypes from "./SourceTypes/SourceTypes";
 import ReferenceList from "./List";
 import ReferenceDetail from "./Detail/Detail";
 import AddReference from "./Add";
 
 export const ReferenceSettings = () => (
-    <NarrowContainer>
+    <ContainerNarrow>
         <ViewHeader title="Reference Settings">
             <ViewHeaderTitle>Settings</ViewHeaderTitle>
         </ViewHeader>
         <SourceTypes global />
-    </NarrowContainer>
+    </ContainerNarrow>
 );
 
 export const References = ({ loading }) => {

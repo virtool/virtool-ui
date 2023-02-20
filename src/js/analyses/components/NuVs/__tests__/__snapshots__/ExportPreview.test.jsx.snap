@@ -34,7 +34,7 @@ exports[`<NuVsExportPreview /> > renders correctly otherwise 1`] = `
   <label>
     Header Fields
   </label>
-  <styled.table>
+  <Table>
     <thead>
       <tr>
         <th>
@@ -77,7 +77,7 @@ exports[`<NuVsExportPreview /> > renders correctly otherwise 1`] = `
         </td>
       </tr>
     </tbody>
-  </styled.table>
+  </Table>
 </div>
 `;
 
@@ -115,7 +115,7 @@ exports[`<NuVsExportPreview /> > renders correctly when [mode=contigs] 1`] = `
   <label>
     Header Fields
   </label>
-  <styled.table>
+  <Table>
     <thead>
       <tr>
         <th>
@@ -158,6 +158,6 @@ exports[`<NuVsExportPreview /> > renders correctly when [mode=contigs] 1`] = `
         </td>
       </tr>
     </tbody>
-  </styled.table>
+  </Table>
 </div>
 `;

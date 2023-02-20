@@ -2,15 +2,15 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { resetPassword } from "../account/actions";
-import { InputGroup, InputLabel, PasswordInput } from "../base";
+import { InputGroup, InputLabel, InputPassword } from "../base";
 import {
+    WallButton,
     WallContainer,
     WallDialog,
-    WallTitle,
-    WallLoginContainer,
     WallHeader,
+    WallLoginContainer,
     WallSubheader,
-    WallButton
+    WallTitle
 } from "./Container";
 
 export class Reset extends React.Component {
@@ -42,7 +42,7 @@ export class Reset extends React.Component {
                         <form onSubmit={this.handleSubmit}>
                             <InputGroup>
                                 <InputLabel htmlFor="password">Password</InputLabel>
-                                <PasswordInput
+                                <InputPassword
                                     name="password"
                                     id="password"
                                     value={this.state.password}

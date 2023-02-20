@@ -1,6 +1,6 @@
 import React from "react";
-import { NoneFoundSection } from "../../NoneFound";
 import { Link } from "react-router-dom";
+import { NoneFoundSection } from "../../NoneFoundSection";
 
 export default {
     title: "base/NoneFound/NoneFoundSection",

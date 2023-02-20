@@ -1,5 +1,5 @@
-import { UserGroup } from "../Group";
 import { screen } from "@testing-library/react";
+import { UserGroup } from "../Group";
 
 describe("<UserGroup />", () => {
     let props;

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<Contributor /> > should render when count is 1 1`] = `
-<Styled(styled.div)
+<Styled(BoxGroupSection)
   key="bob"
 >
   <InitialIcon
@@ -9,15 +9,15 @@ exports[`<Contributor /> > should render when count is 1 1`] = `
     size="md"
   />
   bob
-  <styled.span>
+  <Badge>
     1
      change
-  </styled.span>
-</Styled(styled.div)>
+  </Badge>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<Contributor /> > should render when count is 5 1`] = `
-<Styled(styled.div)
+<Styled(BoxGroupSection)
   key="bob"
 >
   <InitialIcon
@@ -25,24 +25,24 @@ exports[`<Contributor /> > should render when count is 5 1`] = `
     size="md"
   />
   bob
-  <styled.span>
+  <Badge>
     5
      change
     s
-  </styled.span>
-</Styled(styled.div)>
+  </Badge>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<Contributors /> > should render 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     <h2>
       Contributors 
-      <styled.span>
+      <Badge>
         2
-      </styled.span>
+      </Badge>
     </h2>
-  </Styled(styled.div)>
+  </BoxGroupHeader>
   <Contributor
     count={5}
     id="bob"
@@ -53,5 +53,5 @@ exports[`<Contributors /> > should render 1`] = `
     id="fred"
     key="fred"
   />
-</Styled(styled.div)>
+</BoxGroup>
 `;

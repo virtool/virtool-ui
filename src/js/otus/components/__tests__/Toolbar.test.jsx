@@ -1,4 +1,4 @@
-import { SearchInput } from "../../../base";
+import { InputSearch } from "../../../base";
 import { OTUToolbar } from "../Toolbar";
 
 describe("<OTUToolbar />", () => {
@@ -25,7 +25,7 @@ describe("<OTUToolbar />", () => {
     it("should call onFind() when input changes", () => {
         const wrapper = shallow(<OTUToolbar {...props} />);
         const e = { target: { value: "baz" } };
-        wrapper.find(SearchInput).simulate("change", e);
+        wrapper.find(InputSearch).simulate("change", e);
         expect(props.onFind).toHaveBeenCalledWith(props.refId, "baz", props.verified, 1);
     });
 

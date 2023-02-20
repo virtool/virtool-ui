@@ -2,18 +2,18 @@
 
 exports[`<CacheDetail /> > should render 1`] = `
 <styled.div>
-  <styled.div>
-    <styled.div>
+  <SubviewHeader>
+    <SubviewHeaderTitle>
       Cache for 
       Foo
-    </styled.div>
-    <styled.span>
+    </SubviewHeaderTitle>
+    <SubviewHeaderAttribution>
       Created 
       <RelativeTime
         time="2018-01-01T00:00:00.000000Z"
       />
-    </styled.span>
-  </styled.div>
+    </SubviewHeaderAttribution>
+  </SubviewHeader>
   <CacheGeneral
     created_at="2018-01-01T00:00:00.000000Z"
     hash="123abc"

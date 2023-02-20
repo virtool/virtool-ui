@@ -1,5 +1,6 @@
 import React from "react";
-import { BoxTitle, Box } from "../../Box";
+import { Box } from "../../Box";
+import { BoxTitle } from "../../BoxTitle";
 
 export default {
     title: "base/Box/BoxTitle",

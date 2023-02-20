@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<JobError /> > renders correctly with error details 1`] = `
-<Styled(Styled(_Alert))
+<Error__StyledJobError
   color="red"
 >
   <div>
@@ -24,16 +24,16 @@ exports[`<JobError /> > renders correctly with error details 1`] = `
   </div>
   <p>
     TestErrorWithStackTrace
-    <styled.span>
+    <Error__JobErrorDetails>
       : 
       test error details
-    </styled.span>
+    </Error__JobErrorDetails>
   </p>
-</Styled(Styled(_Alert))>
+</Error__StyledJobError>
 `;
 
 exports[`<JobError /> > renders correctly without error details 1`] = `
-<Styled(Styled(_Alert))
+<Error__StyledJobError
   color="red"
 >
   <div>
@@ -42,5 +42,5 @@ exports[`<JobError /> > renders correctly without error details 1`] = `
   <p>
     TestErrorWithoutStackTrace
   </p>
-</Styled(Styled(_Alert))>
+</Error__StyledJobError>
 `;

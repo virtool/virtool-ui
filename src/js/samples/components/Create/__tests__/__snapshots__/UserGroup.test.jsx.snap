@@ -2,10 +2,10 @@
 
 exports[`SampleUserGroup > should render 1`] = `
 <InputGroup>
-  <styled.label>
+  <InputLabel>
     User Group
-  </styled.label>
-  <Select
+  </InputLabel>
+  <InputSelect
     onChange={[MockFunction spy]}
     value="bar"
   >
@@ -21,6 +21,6 @@ exports[`SampleUserGroup > should render 1`] = `
     >
       bar
     </styled.option>
-  </Select>
+  </InputSelect>
 </InputGroup>
 `;

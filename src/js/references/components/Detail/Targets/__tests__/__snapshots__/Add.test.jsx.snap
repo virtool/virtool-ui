@@ -6,6 +6,7 @@ exports[`<AddTarget /> > should render 1`] = `
   onExited={[Function]}
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Add target
@@ -13,7 +14,7 @@ exports[`<AddTarget /> > should render 1`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <TargetForm
         description=""
         errorName=""
@@ -23,18 +24,16 @@ exports[`<AddTarget /> > should render 1`] = `
         onClick={[Function]}
         required={false}
       />
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <Button
         color="blue"
-        disabled={false}
         icon="save"
-        tipPlacement="top"
         type="submit"
       >
         Submit
       </Button>
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -45,6 +44,7 @@ exports[`<AddTarget /> > should render error when submitted without name 1`] = `
   onExited={[Function]}
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Add target
@@ -52,7 +52,7 @@ exports[`<AddTarget /> > should render error when submitted without name 1`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <TargetForm
         description=""
         errorName="Required Field"
@@ -62,18 +62,16 @@ exports[`<AddTarget /> > should render error when submitted without name 1`] = `
         onClick={[Function]}
         required={false}
       />
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <Button
         color="blue"
-        disabled={false}
         icon="save"
-        tipPlacement="top"
         type="submit"
       >
         Submit
       </Button>
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -84,6 +82,7 @@ exports[`<AddTarget /> > should render required when form onClick() prop is call
   onExited={[Function]}
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Add target
@@ -91,7 +90,7 @@ exports[`<AddTarget /> > should render required when form onClick() prop is call
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <TargetForm
         description=""
         errorName=""
@@ -101,18 +100,16 @@ exports[`<AddTarget /> > should render required when form onClick() prop is call
         onClick={[Function]}
         required={true}
       />
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <Button
         color="blue"
-        disabled={false}
         icon="save"
-        tipPlacement="top"
         type="submit"
       >
         Submit
       </Button>
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;

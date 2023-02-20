@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import {
-    AffixedProgressBar,
     BoxGroup,
     BoxGroupHeader,
     BoxGroupSection,
@@ -11,6 +10,7 @@ import {
     FlexItem,
     Icon,
     Loader,
+    ProgressBarAffixed,
     RelativeTime
 } from "../../../base";
 import { checkUpdates, updateRemoteReference } from "../../actions";
@@ -111,7 +111,7 @@ const StyledUpgrade = styled(BoxGroupSection)`
 
 const Upgrade = ({ progress }) => (
     <StyledUpgrade>
-        <AffixedProgressBar color="green" now={progress} />
+        <ProgressBarAffixed color="green" now={progress} />
         <Icon name="arrow-alt-circle-up" />
         <strong>Updating</strong>
     </StyledUpgrade>

@@ -1,29 +1,29 @@
 // Vitest Snapshot v1
 
 exports[`<ReferenceDetailTabs /> > should render 1`] = `
-<styled.nav>
-  <Styled(NavLink)
+<Tabs>
+  <TabsLink
     to="/refs/foo/manage"
   >
     Manage
-  </Styled(NavLink)>
-  <Styled(NavLink)
+  </TabsLink>
+  <TabsLink
     to="/refs/foo/otus"
   >
     OTUs 
-    <styled.span>
+    <Badge>
       203
-    </styled.span>
-  </Styled(NavLink)>
-  <Styled(NavLink)
+    </Badge>
+  </TabsLink>
+  <TabsLink
     to="/refs/foo/indexes"
   >
     Indexes
-  </Styled(NavLink)>
-  <Styled(NavLink)
+  </TabsLink>
+  <TabsLink
     to="/refs/foo/settings"
   >
     Settings
-  </Styled(NavLink)>
-</styled.nav>
+  </TabsLink>
+</Tabs>
 `;

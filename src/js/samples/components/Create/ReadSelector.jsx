@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontWeight } from "../../../app/theme";
-import { Box, BoxGroup, Button, InputError, NoneFoundSection, SearchInput, Toolbar } from "../../../base";
+import { Box, BoxGroup, Button, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 const ReadSelectorBox = styled(Box)`
@@ -141,7 +141,7 @@ export default class ReadSelector extends React.PureComponent {
 
                 <ReadSelectorBox error={this.props.error}>
                     <Toolbar>
-                        <SearchInput
+                        <InputSearch
                             placeholder="Filename"
                             value={this.state.filter}
                             onChange={e => this.setState({ filter: e.target.value })}

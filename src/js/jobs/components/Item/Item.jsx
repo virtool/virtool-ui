@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { AffixedProgressBar, Attribution, LinkBox } from "../../../base";
+import { Attribution, BoxLink, ProgressBarAffixed } from "../../../base";
 import { getWorkflowDisplayName } from "../../../utils/utils";
 import { archiveJob, cancelJob } from "../../actions";
 import { JobAction } from "./Action";
@@ -27,7 +27,7 @@ const JobItemHeader = styled.div`
     font-weight: ${getFontWeight("thick")};
 `;
 
-const JobItemLinkBox = styled(LinkBox)`
+const JobItemLinkBox = styled(BoxLink)`
     padding: 5px 0 0 0;
     z-index: 10;
 `;
@@ -71,7 +71,7 @@ export function JobItem({
     return (
         <JobItemContainer>
             <JobItemLinkBox to={`/jobs/${id}`}>
-                <AffixedProgressBar now={progress} color={progressColor} />
+                <ProgressBarAffixed now={progress} color={progressColor} />
 
                 <JobItemBody>
                     <JobItemHeader>

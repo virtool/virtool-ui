@@ -6,11 +6,12 @@ exports[`<RemoveModal /> > should render 1`] = `
   label="Remove"
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Remove bar
   </ModalHeader>
-  <Styled(Styled(styled.div))>
+  <RemoveModal__RemoveModalBody>
     <span>
       Are you sure you want to remove 
       <strong>
@@ -18,19 +19,16 @@ exports[`<RemoveModal /> > should render 1`] = `
       </strong>
       ?
     </span>
-  </Styled(Styled(styled.div))>
-  <Styled(Component)>
+  </RemoveModal__RemoveModalBody>
+  <ModalFooter>
     <Button
       color="red"
-      disabled={false}
       icon="check"
       onClick={[MockFunction spy]}
-      tipPlacement="top"
-      type="button"
     >
       Confirm
     </Button>
-  </Styled(Component)>
+  </ModalFooter>
 </Modal>
 `;
 
@@ -40,11 +38,12 @@ exports[`<RemoveModal /> > should render when [show=false] 1`] = `
   label="Remove"
   onHide={[MockFunction spy]}
   show={false}
+  size="sm"
 >
   <ModalHeader>
     Remove bar
   </ModalHeader>
-  <Styled(Styled(styled.div))>
+  <RemoveModal__RemoveModalBody>
     <span>
       Are you sure you want to remove 
       <strong>
@@ -52,19 +51,16 @@ exports[`<RemoveModal /> > should render when [show=false] 1`] = `
       </strong>
       ?
     </span>
-  </Styled(Styled(styled.div))>
-  <Styled(Component)>
+  </RemoveModal__RemoveModalBody>
+  <ModalFooter>
     <Button
       color="red"
-      disabled={false}
       icon="check"
       onClick={[MockFunction spy]}
-      tipPlacement="top"
-      type="button"
     >
       Confirm
     </Button>
-  </Styled(Component)>
+  </ModalFooter>
 </Modal>
 `;
 
@@ -74,24 +70,22 @@ exports[`<RemoveModal /> > should render with message 1`] = `
   label="Remove"
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Remove bar
   </ModalHeader>
-  <Styled(Styled(styled.div))>
+  <RemoveModal__RemoveModalBody>
     Are you sure about this?
-  </Styled(Styled(styled.div))>
-  <Styled(Component)>
+  </RemoveModal__RemoveModalBody>
+  <ModalFooter>
     <Button
       color="red"
-      disabled={false}
       icon="check"
       onClick={[MockFunction spy]}
-      tipPlacement="top"
-      type="button"
     >
       Confirm
     </Button>
-  </Styled(Component)>
+  </ModalFooter>
 </Modal>
 `;

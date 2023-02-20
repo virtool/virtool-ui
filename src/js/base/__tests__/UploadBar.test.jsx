@@ -1,22 +1,21 @@
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { UploadBar } from "../UploadBar";
-import { screen, waitFor } from "@testing-library/react";
 
 describe("<UploadBar />", () => {
     let props;
     beforeEach(() => {
-        props = { message: "", onDrop: vi.fn(), validator: () => null };
+        props = { onDrop: vi.fn(), validator: () => null };
     });
 
-    it("should render RTL", () => {
+    it("should render", () => {
         renderWithProviders(<UploadBar {...props} />);
         expect(screen.getByText("Drag file here to upload")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Browse Files" })).toBeInTheDocument();
     });
 
     it("should display optional message", () => {
-        props.message = "test_message";
-        renderWithProviders(<UploadBar {...props} />);
+        renderWithProviders(<UploadBar {...props} message="test_message" />);
         expect(screen.getByText("test_message")).toBeInTheDocument();
     });
 

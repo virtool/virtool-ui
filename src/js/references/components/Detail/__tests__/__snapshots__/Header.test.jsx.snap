@@ -4,17 +4,17 @@ exports[`<ReferenceDetailHeader/> > should render 1`] = `
 <ViewHeader
   title="baz"
 >
-  <styled.h1>
+  <ViewHeaderTitle>
     baz
-    <styled.div>
+    <ViewHeaderIcons>
       <ReferenceDetailHeaderIcon
         canModify={true}
         isRemote={true}
         onEdit={[MockFunction spy]}
       />
-    </styled.div>
-  </styled.h1>
-  <Styled(Styled(UnstyledAttribution))
+    </ViewHeaderIcons>
+  </ViewHeaderTitle>
+  <ViewHeaderAttribution
     time="foo"
     user={1}
   />
@@ -25,10 +25,10 @@ exports[`<ReferenceDetailHeader/> > should render when [showIcons=false] 1`] = `
 <ViewHeader
   title="baz"
 >
-  <styled.h1>
+  <ViewHeaderTitle>
     baz
-  </styled.h1>
-  <Styled(Styled(UnstyledAttribution))
+  </ViewHeaderTitle>
+  <ViewHeaderAttribution
     time="foo"
     user={1}
   />
@@ -38,8 +38,6 @@ exports[`<ReferenceDetailHeader/> > should render when [showIcons=false] 1`] = `
 exports[`<ReferenceDetailHeaderIcon /> > should render 1`] = `
 <Icon
   color="grey"
-  faStyle="fas"
-  fixedWidth={false}
   name="lock"
 />
 `;
@@ -49,8 +47,6 @@ exports[`<ReferenceDetailHeaderIcon /> > should render when [both canModify=fals
 exports[`<ReferenceDetailHeaderIcon /> > should render when [canModify=false] 1`] = `
 <Icon
   color="grey"
-  faStyle="fas"
-  fixedWidth={false}
   name="lock"
 />
 `;
@@ -58,8 +54,6 @@ exports[`<ReferenceDetailHeaderIcon /> > should render when [canModify=false] 1`
 exports[`<ReferenceDetailHeaderIcon /> > should render when [isRemote=false] 1`] = `
 <Icon
   color="orange"
-  faStyle="fas"
-  fixedWidth={false}
   name="pencil-alt"
   onClick={[MockFunction spy]}
   tip="Edit"

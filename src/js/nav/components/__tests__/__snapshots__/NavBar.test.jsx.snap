@@ -1,9 +1,9 @@
 // Vitest Snapshot v1
 
 exports[`<Bar /> > should render 1`] = `
-<styled.div>
-  <styled.div>
-    <Styled(VTLogo)
+<NavBar__StyledNavBar>
+  <NavBar__NavBarLeft>
+    <NavBar__NavBarLogo
       color="white"
     />
     <Styled(NavLink)
@@ -31,52 +31,50 @@ exports[`<Bar /> > should render 1`] = `
     >
       Subtractions
     </Styled(NavLink)>
-  </styled.div>
-  <styled.div>
+  </NavBar__NavBarLeft>
+  <NavBar__NavBarRight>
     <Menu>
-      <Styled(MenuButton)>
+      <NavBar__NavDropdownButton>
         <InitialIcon
           size="md"
         />
         <span />
         <Icon
-          faStyle="fas"
-          fixedWidth={false}
           name="caret-down"
         />
-      </Styled(MenuButton)>
-      <Styled(MenuList)>
-        <Styled(Component)
+      </NavBar__NavDropdownButton>
+      <DropdownMenuList>
+        <DropdownMenuLink
           to="/account"
         >
           Signed in as 
           <strong />
-        </Styled(Component)>
-        <styled.div />
-        <Styled(Component)
+        </DropdownMenuLink>
+        <NavBar__NavDivider />
+        <DropdownMenuLink
           to="/account"
         >
           Account
-        </Styled(Component)>
-        <Styled(Component)
+        </DropdownMenuLink>
+        <DropdownMenuLink
           to="/administration"
         >
           Administration 
-        </Styled(Component)>
-        <Styled(Component)
+        </DropdownMenuLink>
+        <DropdownMenuLink
           rel="noopener noreferrer"
           target="_blank"
           to="//virtool.ca/docs/manual/start/installation/"
         >
           Documentation
-        </Styled(Component)>
-        <Styled(MenuItem)
+        </DropdownMenuLink>
+        <DropdownMenuItem
           onSelect={[MockFunction spy]}
         >
           Logout
-        </Styled(MenuItem)>
-      </Styled(MenuList)>
+        </DropdownMenuItem>
+      </DropdownMenuList>
     </Menu>
-  </styled.div>
-</styled.div>
+  </NavBar__NavBarRight>
+</NavBar__StyledNavBar>
 `;

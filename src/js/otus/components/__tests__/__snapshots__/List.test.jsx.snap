@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<OTUsList /> > should render 1`] = `
-<styled.div>
+<ContainerNarrow>
   <Connect(RebuildAlert) />
   <Connect(OTUToolbar) />
   <Connect(CreateOTU)
@@ -41,13 +41,13 @@ exports[`<OTUsList /> > should render 1`] = `
     pageCount={1}
     renderRow={[Function]}
   />
-</styled.div>
+</ContainerNarrow>
 `;
 
 exports[`<OTUsList /> > should render when [this.props.documents === null] 1`] = `<LoadingPlaceholder />`;
 
 exports[`<OTUsList /> > should render when [this.props.documents.length == false] 1`] = `
-<styled.div>
+<ContainerNarrow>
   <Connect(RebuildAlert) />
   <Connect(OTUToolbar) />
   <Connect(CreateOTU)
@@ -82,5 +82,5 @@ exports[`<OTUsList /> > should render when [this.props.documents.length == false
     pageCount={1}
     renderRow={[Function]}
   />
-</styled.div>
+</ContainerNarrow>
 `;

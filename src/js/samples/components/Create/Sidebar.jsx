@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { SideContainer } from "../../../base";
+import { ContainerSide } from "../../../base";
 import SampleLabels from "../Sidebar/Labels";
 import DefaultSubtractions from "../Sidebar/Subtractions";
 
-const StyledSidebar = styled(SideContainer)`
+const StyledSidebar = styled(ContainerSide)`
     align-items: stretch;
     flex-direction: column;
     display: flex;

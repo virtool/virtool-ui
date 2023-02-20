@@ -11,11 +11,11 @@ exports[`<Api /> > should render 1`] = `
   <small>
     Enable API access for clients other than Virtool. See 
   </small>
-  <Styled(UnstyledExternalLink)
+  <ExternalLink
     href="https://www.virtool.ca/docs/developer/api_account"
   >
     API documentation
-  </Styled(UnstyledExternalLink)>
+  </ExternalLink>
   .
 </SettingsCheckbox>
 `;

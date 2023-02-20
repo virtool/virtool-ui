@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Icon, LinkButton, SearchInput, Toolbar } from "../../base";
+import { Icon, LinkButton, InputSearch, Toolbar } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { findReferences } from "../actions";
 
@@ -21,7 +21,7 @@ export const ReferenceToolbar = ({ term, onFind, canCreate }) => {
 
     return (
         <Toolbar>
-            <SearchInput placeholder="Reference name" value={term} onChange={onFind} />
+            <InputSearch placeholder="Reference name" value={term} onChange={onFind} />
             {createButton}
         </Toolbar>
     );

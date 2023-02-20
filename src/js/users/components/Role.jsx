@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { InputGroup, InputLabel, Select } from "../../base";
+import { InputGroup, InputLabel, InputSelect } from "../../base";
 import { editUser } from "../actions";
 import { getCanModifyUser } from "../selectors";
 
@@ -9,14 +9,14 @@ export const UserRole = ({ canModifyUser, id, role, onSetUserRole }) => {
         return (
             <InputGroup>
                 <InputLabel>User Role</InputLabel>
-                <Select value={role} onChange={e => onSetUserRole(id, e.target.value)}>
+                <InputSelect value={role} onChange={e => onSetUserRole(id, e.target.value)}>
                     <option key="administrator" value="administrator">
                         Administrator
                     </option>
                     <option key="limited" value="limited">
                         Limited
                     </option>
-                </Select>
+                </InputSelect>
             </InputGroup>
         );
     }

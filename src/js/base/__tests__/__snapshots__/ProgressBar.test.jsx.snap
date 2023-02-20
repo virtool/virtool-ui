@@ -1,61 +1,61 @@
 // Vitest Snapshot v1
 
 exports[`<AffixedProgressBar /> > should render 1`] = `
-<_AffixedProgressBar
-  className="sc-dkrFOg"
+<Component
+  className="ProgressBarAffixed-sc-mfnoiw-1"
   now={68}
 />
 `;
 
 exports[`<AffixedProgressBar /> > should render when [bottom=true] 1`] = `
-<_AffixedProgressBar
+<Component
   bottom={true}
-  className="sc-dkrFOg"
+  className="ProgressBarAffixed-sc-mfnoiw-1"
   now={68}
 />
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] blue 1`] = `
-<_AffixedProgressBar
-  className="sc-dkrFOg"
+<Component
+  className="ProgressBarAffixed-sc-mfnoiw-1"
   color="blue"
   now={68}
 />
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] green 1`] = `
-<_AffixedProgressBar
-  className="sc-dkrFOg"
+<Component
+  className="ProgressBarAffixed-sc-mfnoiw-1"
   color="green"
   now={68}
 />
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] orange 1`] = `
-<_AffixedProgressBar
-  className="sc-dkrFOg"
+<Component
+  className="ProgressBarAffixed-sc-mfnoiw-1"
   color="orange"
   now={68}
 />
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] red 1`] = `
-<_AffixedProgressBar
-  className="sc-dkrFOg"
+<Component
+  className="ProgressBarAffixed-sc-mfnoiw-1"
   color="red"
   now={68}
 />
 `;
 
 exports[`<ProgressBar /> > should render 1`] = `
-<styled.progress
+<StyledProgress
   max="100"
   value={32}
 />
 `;
 
 exports[`<ProgressBar /> > should render when [color=%p] blue 1`] = `
-<styled.progress
+<StyledProgress
   color="blue"
   max="100"
   value={32}
@@ -63,7 +63,7 @@ exports[`<ProgressBar /> > should render when [color=%p] blue 1`] = `
 `;
 
 exports[`<ProgressBar /> > should render when [color=%p] green 1`] = `
-<styled.progress
+<StyledProgress
   color="green"
   max="100"
   value={32}
@@ -71,7 +71,7 @@ exports[`<ProgressBar /> > should render when [color=%p] green 1`] = `
 `;
 
 exports[`<ProgressBar /> > should render when [color=%p] orange 1`] = `
-<styled.progress
+<StyledProgress
   color="orange"
   max="100"
   value={32}
@@ -79,7 +79,7 @@ exports[`<ProgressBar /> > should render when [color=%p] orange 1`] = `
 `;
 
 exports[`<ProgressBar /> > should render when [color=%p] red 1`] = `
-<styled.progress
+<StyledProgress
   color="red"
   max="100"
   value={32}

@@ -12,7 +12,7 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-    PasswordInput,
+    InputPassword,
     SaveButton
 } from "../../base";
 import { clearError } from "../../errors/actions";
@@ -108,7 +108,7 @@ export class CreateUser extends React.PureComponent {
                         </InputGroup>
                         <InputGroup>
                             <InputLabel>Password</InputLabel>
-                            <PasswordInput
+                            <InputPassword
                                 aria-label="password"
                                 name="password"
                                 value={this.state.password}

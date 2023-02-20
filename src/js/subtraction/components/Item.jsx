@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Icon, LinkBox, Loader } from "../../base";
+import { BoxLink, Icon, Loader } from "../../base";
 import { SubtractionAttribution } from "./Attribution";
 
 export const SubtractionItemIcon = ({ ready }) => {
@@ -26,7 +26,7 @@ const StyledSubtractionItemHeader = styled.div`
 
 export const SubtractionItem = ({ id, user, name, ready, created_at }) => {
     return (
-        <LinkBox key={id} to={`/subtractions/${id}`}>
+        <BoxLink key={id} to={`/subtractions/${id}`}>
             <StyledSubtractionItemHeader>
                 <span>{name}</span>
                 <span>
@@ -34,7 +34,7 @@ export const SubtractionItem = ({ id, user, name, ready, created_at }) => {
                 </span>
             </StyledSubtractionItemHeader>
             <SubtractionAttribution handle={user.handle} time={created_at} />
-        </LinkBox>
+        </BoxLink>
     );
 };
 

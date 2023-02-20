@@ -11,8 +11,8 @@ import {
     InputError,
     InputGroup,
     InputLabel,
+    InputPassword,
     LoadingPlaceholder,
-    PasswordInput,
     RelativeTime,
     SaveButton
 } from "../../base";
@@ -111,7 +111,7 @@ class ChangePassword extends React.Component {
                     <InputGroup>
                         <InputLabel htmlFor="oldPassword">Old Password</InputLabel>
                         <InputContainer>
-                            <PasswordInput
+                            <InputPassword
                                 id="oldPassword"
                                 name="oldPassword"
                                 value={oldPassword}
@@ -123,7 +123,7 @@ class ChangePassword extends React.Component {
                     <InputGroup>
                         <InputLabel htmlFor="newPassword">New Password</InputLabel>
                         <InputContainer>
-                            <PasswordInput
+                            <InputPassword
                                 id="newPassword"
                                 name="newPassword"
                                 value={newPassword}

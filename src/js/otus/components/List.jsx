@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../app/actions";
-import { LoadingPlaceholder, NarrowContainer, NoneFoundBox, ScrollList } from "../../base";
+import { LoadingPlaceholder, ContainerNarrow, NoneFoundBox, ScrollList } from "../../base";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
 import { findOTUs } from "../actions";
 import { getTerm } from "../selectors";
@@ -27,7 +27,7 @@ export const OTUsList = props => {
     }
 
     return (
-        <NarrowContainer>
+        <ContainerNarrow>
             <RebuildAlert />
             <OTUToolbar />
             <CreateOTU {...props} />
@@ -41,7 +41,7 @@ export const OTUsList = props => {
                 pageCount={props.page_count}
                 renderRow={renderRow}
             />
-        </NarrowContainer>
+        </ContainerNarrow>
     );
 };
 

@@ -33,7 +33,7 @@ export const useFuse = (collection, keys, deps) => {
     return [term ? fuse.search(term) : collection, term, setTerm];
 };
 
-export const useKeyPress = (key, callback) => {
+export function useKeyPress(key, callback) {
     useEffect(() => {
         function handleKeyUp(e) {
             if (e.key === key) {
@@ -45,12 +45,14 @@ export const useKeyPress = (key, callback) => {
 
         return () => window.removeEventListener("keyup", handleKeyUp);
     });
-};
+}
 
-export const usePrevious = value => {
+export function usePrevious(value) {
     const ref = useRef();
+
     useEffect(() => {
         ref.current = value;
     });
-    return ref.current;
-};
+
+    return ref.current || 1;
+}

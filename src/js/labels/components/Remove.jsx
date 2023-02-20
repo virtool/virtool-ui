@@ -7,11 +7,11 @@ import { RemoveModal } from "../../base";
 import { removeLabel } from "../actions";
 import { getLabelById } from "../selectors";
 
-export const RemoveLabel = ({ id, name, show, onHide, onRemove }) => {
+function RemoveLabel({ id, name, show, onHide, onRemove }) {
     return <RemoveModal noun="Label" name={name} show={show} onConfirm={() => onRemove(id)} onHide={onHide} />;
-};
+}
 
-export const mapStateToProps = state => {
+function mapStateToProps(state) {
     const id = getRouterLocationStateValue(state, "removeLabel");
     const name = get(getLabelById(state, id), "name");
 
@@ -20,16 +20,18 @@ export const mapStateToProps = state => {
         name,
         show: Boolean(id)
     };
-};
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onRemove: id => {
-        dispatch(removeLabel(id));
-    },
+function mapDispatchToProps(dispatch) {
+    return {
+        onRemove: id => {
+            dispatch(removeLabel(id));
+        },
 
-    onHide: () => {
-        dispatch(pushState({ removeLabel: false }));
-    }
-});
+        onHide: () => {
+            dispatch(pushState({ removeLabel: false }));
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(RemoveLabel);

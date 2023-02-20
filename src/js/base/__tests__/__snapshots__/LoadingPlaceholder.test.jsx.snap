@@ -1,16 +1,20 @@
 // Vitest Snapshot v1
 
 exports[`<LoadingPlaceholder /> > should render 1`] = `
-<styled.div>
+<LoadingPlaceholder__StyledLoadingPlaceholder
+  margin="220px"
+>
   <Loader />
-</styled.div>
+</LoadingPlaceholder__StyledLoadingPlaceholder>
 `;
 
 exports[`<LoadingPlaceholder /> > should render the provided message 1`] = `
-<styled.div>
+<LoadingPlaceholder__StyledLoadingPlaceholder
+  margin="220px"
+>
   <p>
     Test Message
   </p>
   <Loader />
-</styled.div>
+</LoadingPlaceholder__StyledLoadingPlaceholder>
 `;

@@ -1,15 +1,15 @@
 // Vitest Snapshot v1
 
 exports[`<Markdown /> > should render NoneFound without markdown 1`] = `
-<styled.div>
+<Markdown__StyledMarkdown>
   <NoneFound
     noun="notes"
   />
-</styled.div>
+</Markdown__StyledMarkdown>
 `;
 
 exports[`<Markdown /> > should render with markdown 1`] = `
-<styled.div
+<Markdown__StyledMarkdown
   dangerouslySetInnerHTML={
     {
       "__html": "<pre><code>        # Heading

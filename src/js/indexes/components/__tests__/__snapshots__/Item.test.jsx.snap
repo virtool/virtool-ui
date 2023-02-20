@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<IndexItem /> > should render 1`] = `
-<Styled(Link)
+<BoxLink
   to="/refs/foo/indexes/bar"
 >
   <styled.h3>
@@ -18,11 +18,11 @@ exports[`<IndexItem /> > should render 1`] = `
       ready={true}
     />
   </styled.h3>
-  <Styled(UnstyledAttribution)
+  <Attribution
     time="2018-02-14T17:12:00.000000Z"
     user="bob"
   />
-</Styled(Link)>
+</BoxLink>
 `;
 
 exports[`<IndexItemChangeDescription /> > should render 'No Changes' when changeCount is 0 1`] = `"No changes"`;
@@ -67,8 +67,6 @@ exports[`<IndexItemIcon /> > should render checkmark when active 1`] = `
 <styled.div>
   <Icon
     color="green"
-    faStyle="fas"
-    fixedWidth={false}
     name="check"
   />
    

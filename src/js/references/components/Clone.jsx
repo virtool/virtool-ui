@@ -1,25 +1,25 @@
+import { Field, Form, Formik } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import * as Yup from "yup";
 import { pushState } from "../../app/actions";
 import {
     Attribution,
     Badge,
     Box,
+    Input,
+    InputError,
     InputGroup,
     Modal,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    SaveButton,
-    Input,
-    InputError
+    SaveButton
 } from "../../base";
 import { routerLocationHasState } from "../../utils/utils";
 import { cloneReference } from "../actions";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
 
 const getInitialValues = originalRef => ({
     name: originalRef ? `Clone of ${originalRef.name}` : ""

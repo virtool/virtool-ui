@@ -1,12 +1,12 @@
 import React from "react";
-import { NameAttribution } from "../../Attribution";
+import { AttributionWithName } from "../../AttributionWithName";
 
 export default {
     title: "base/Attribution/NameAttribution",
-    component: NameAttribution
+    component: AttributionWithName
 };
 
-const Template = args => <NameAttribution {...args} />;
+const Template = args => <AttributionWithName {...args} />;
 
 export const nameAttribution = Template.bind({});
 

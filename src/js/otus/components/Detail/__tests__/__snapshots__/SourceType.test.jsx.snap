@@ -2,10 +2,10 @@
 
 exports[`<SourceType /> > should render 1`] = `
 <InputGroup>
-  <styled.label>
+  <InputLabel>
     Source Type
-  </styled.label>
-  <Select
+  </InputLabel>
+  <InputSelect
     onChange={[MockFunction spy]}
     value="Bar"
   >
@@ -27,16 +27,16 @@ exports[`<SourceType /> > should render 1`] = `
     >
       Bar
     </option>
-  </Select>
+  </InputSelect>
 </InputGroup>
 `;
 
 exports[`<SourceType /> > should render when [restrictSourceTypes=false] 1`] = `
 <InputGroup>
-  <styled.label>
+  <InputLabel>
     Source type
-  </styled.label>
-  <Styled(UnstyledInput)
+  </InputLabel>
+  <Input
     onChange={[MockFunction spy]}
     value="Bar"
   />

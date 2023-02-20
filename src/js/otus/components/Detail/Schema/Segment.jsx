@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-import { Icon, Label, SpacedBox } from "../../../../base";
+import { Icon, Label, BoxSpaced } from "../../../../base";
 
-const StyledSegment = styled(SpacedBox)`
+const StyledSegment = styled(BoxSpaced)`
     display: grid;
     align-items: center;
     grid-template-columns: 45fr 1fr 10fr;

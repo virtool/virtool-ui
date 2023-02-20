@@ -1,11 +1,11 @@
 import { MenuButton } from "@reach/menu-button";
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { logout } from "../../account/actions";
-import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, InitialIcon, VTLogo } from "../../base";
-import { NavBarItem } from "./NavBarItem";
 import { getAccountHandle } from "../../account/selectors";
+import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, InitialIcon, Logo } from "../../base";
+import { NavBarItem } from "./NavBarItem";
 
 const NavBarLeft = styled.div`
     display: flex;
@@ -18,7 +18,7 @@ const NavBarRight = styled.div`
     margin-right: calc(100% - 100vw + 20px);
 `;
 
-const NavBarLogo = styled(VTLogo)`
+const NavBarLogo = styled(Logo)`
     margin: 0 30px 0 35px;
 `;
 

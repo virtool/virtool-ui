@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { getColor } from "../../app/theme";
 import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "../../base";
+import { InputHeader } from "../../base/InputHeader";
+import { findUsers } from "../../users/actions";
 import { listGroups, removeGroup, setGroupName } from "../actions";
 import { getActiveGroup, getGroups } from "../selectors";
-import { findUsers } from "../../users/actions";
 import Create from "./Create";
 import GroupSelector from "./GroupSelector";
 import Members from "./Members";
 import Permissions from "./Permissions";
-import { getColor } from "../../app/theme";
-import { InputHeader } from "../../base/InputHeader";
 
 const ManageGroupsContainer = styled.div`
     display: grid;

@@ -6,7 +6,7 @@ exports[`<LibraryTypeSelector> > should have Amplicon selected when [libraryType
     Library Type
   </label>
   <styled.div>
-    <Styled(styled.div)
+    <SelectBox
       active={false}
       onClick={[Function]}
     >
@@ -16,8 +16,8 @@ exports[`<LibraryTypeSelector> > should have Amplicon selected when [libraryType
       <span>
         Search against whole genome references using normal reads.
       </span>
-    </Styled(styled.div)>
-    <Styled(styled.div)
+    </SelectBox>
+    <SelectBox
       active={false}
       onClick={[Function]}
     >
@@ -27,8 +27,8 @@ exports[`<LibraryTypeSelector> > should have Amplicon selected when [libraryType
       <span>
         Search against whole genome references using sRNA reads
       </span>
-    </Styled(styled.div)>
-    <Styled(styled.div)
+    </SelectBox>
+    <SelectBox
       active={true}
       onClick={[Function]}
     >
@@ -38,7 +38,7 @@ exports[`<LibraryTypeSelector> > should have Amplicon selected when [libraryType
       <span>
         Search against barcode references using amplicon reads.
       </span>
-    </Styled(styled.div)>
+    </SelectBox>
   </styled.div>
 </Fragment>
 `;
@@ -49,7 +49,7 @@ exports[`<LibraryTypeSelector> > should have Normal selected [libraryType='norma
     Library Type
   </label>
   <styled.div>
-    <Styled(styled.div)
+    <SelectBox
       active={true}
       onClick={[Function]}
     >
@@ -59,8 +59,8 @@ exports[`<LibraryTypeSelector> > should have Normal selected [libraryType='norma
       <span>
         Search against whole genome references using normal reads.
       </span>
-    </Styled(styled.div)>
-    <Styled(styled.div)
+    </SelectBox>
+    <SelectBox
       active={false}
       onClick={[Function]}
     >
@@ -70,8 +70,8 @@ exports[`<LibraryTypeSelector> > should have Normal selected [libraryType='norma
       <span>
         Search against whole genome references using sRNA reads
       </span>
-    </Styled(styled.div)>
-    <Styled(styled.div)
+    </SelectBox>
+    <SelectBox
       active={false}
       onClick={[Function]}
     >
@@ -81,7 +81,7 @@ exports[`<LibraryTypeSelector> > should have Normal selected [libraryType='norma
       <span>
         Search against barcode references using amplicon reads.
       </span>
-    </Styled(styled.div)>
+    </SelectBox>
   </styled.div>
 </Fragment>
 `;
@@ -92,7 +92,7 @@ exports[`<LibraryTypeSelector> > should have sRNA selected when [libraryType='sr
     Library Type
   </label>
   <styled.div>
-    <Styled(styled.div)
+    <SelectBox
       active={false}
       onClick={[Function]}
     >
@@ -102,8 +102,8 @@ exports[`<LibraryTypeSelector> > should have sRNA selected when [libraryType='sr
       <span>
         Search against whole genome references using normal reads.
       </span>
-    </Styled(styled.div)>
-    <Styled(styled.div)
+    </SelectBox>
+    <SelectBox
       active={true}
       onClick={[Function]}
     >
@@ -113,8 +113,8 @@ exports[`<LibraryTypeSelector> > should have sRNA selected when [libraryType='sr
       <span>
         Search against whole genome references using sRNA reads
       </span>
-    </Styled(styled.div)>
-    <Styled(styled.div)
+    </SelectBox>
+    <SelectBox
       active={false}
       onClick={[Function]}
     >
@@ -124,7 +124,7 @@ exports[`<LibraryTypeSelector> > should have sRNA selected when [libraryType='sr
       <span>
         Search against barcode references using amplicon reads.
       </span>
-    </Styled(styled.div)>
+    </SelectBox>
   </styled.div>
 </Fragment>
 `;

@@ -3,7 +3,7 @@ import { get } from "lodash-es";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { LinkBox, Icon } from "../../base";
+import { BoxLink, Icon } from "../../base";
 
 const OTUItemAbbreviation = styled.span`
     margin-left: auto;
@@ -14,7 +14,7 @@ const OTUItemName = styled.strong`
     font-weight: ${getFontWeight("thick")};
 `;
 
-const StyledOTUItem = styled(LinkBox)`
+const StyledOTUItem = styled(BoxLink)`
     align-items: center;
     display: flex;
 `;

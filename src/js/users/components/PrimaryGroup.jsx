@@ -2,7 +2,7 @@ import { capitalize, map } from "lodash-es";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { InputGroup, InputLabel, Select } from "../../base";
+import { InputGroup, InputLabel, InputSelect } from "../../base";
 import { editUser } from "../actions";
 
 export const PrimaryGroupOption = styled.option`
@@ -24,12 +24,12 @@ export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) =>
     return (
         <InputGroup>
             <InputLabel>Primary Group</InputLabel>
-            <Select value={primaryGroup?.id || "none"} onChange={handleSetPrimaryGroup}>
+            <InputSelect value={primaryGroup?.id || "none"} onChange={handleSetPrimaryGroup}>
                 <option key="none" value="none">
                     None
                 </option>
                 {groupOptions}
-            </Select>
+            </InputSelect>
         </InputGroup>
     );
 };

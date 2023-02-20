@@ -16,11 +16,11 @@ exports[`<ReadSelector /> > should render 1`] = `
        selected
     </span>
   </styled.label>
-  <Styled(styled.div)
+  <Styled(Box)
     error="foo"
   >
-    <styled.div>
-      <SearchInput
+    <Toolbar>
+      <InputSearch
         onChange={[Function]}
         placeholder="Filename"
         value=""
@@ -37,9 +37,9 @@ exports[`<ReadSelector /> > should render 1`] = `
         tip="Swap Orientations"
         type="button"
       />
-    </styled.div>
+    </Toolbar>
     <styled.div>
-      <Styled(styled.div)>
+      <BoxGroup>
         <ReadSelectorItem
           id={21}
           index={0}
@@ -49,11 +49,11 @@ exports[`<ReadSelector /> > should render 1`] = `
           selected={true}
           size={1024}
         />
-      </Styled(styled.div)>
+      </BoxGroup>
     </styled.div>
-    <Styled(styled.p)>
+    <Styled(InputError)>
       foo
-    </Styled(styled.p)>
-  </Styled(styled.div)>
+    </Styled(InputError)>
+  </Styled(Box)>
 </div>
 `;

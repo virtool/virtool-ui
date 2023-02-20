@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { LinkButton, SearchInput, Toolbar } from "../../base";
+import { InputSearch, LinkButton, Toolbar } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { findSubtractions } from "../actions";
 
@@ -13,7 +13,7 @@ export const SubtractionToolbar = ({ term, onFind, canModify }) => {
 
     return (
         <Toolbar>
-            <SearchInput value={term} onChange={onFind} placeholder="Name" />
+            <InputSearch value={term} onChange={onFind} placeholder="Name" />
             {createButton}
         </Toolbar>
     );

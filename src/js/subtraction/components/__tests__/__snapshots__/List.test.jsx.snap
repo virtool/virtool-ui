@@ -5,12 +5,12 @@ exports[`<SubtractionList /> > renders correctly 1`] = `
   <ViewHeader
     title="Subtractions"
   >
-    <styled.h1>
+    <ViewHeaderTitle>
       Subtractions 
-      <styled.span>
+      <Badge>
         1
-      </styled.span>
-    </styled.h1>
+      </Badge>
+    </ViewHeaderTitle>
   </ViewHeader>
   <Connect(SubtractionToolbar) />
   <ScrollList

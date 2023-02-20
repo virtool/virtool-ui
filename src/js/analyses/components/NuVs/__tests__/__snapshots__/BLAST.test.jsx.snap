@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<BLASTInProgress /> > should render when [rid=%p] ABC123 1`] = `
-<Styled(styled.div)>
+<Styled(Box)>
   <Loader
     color="primary"
     size="16px"
@@ -20,11 +20,11 @@ exports[`<BLASTInProgress /> > should render when [rid=%p] ABC123 1`] = `
       lastCheckedAt="2018-02-14T17:12:00.000000Z"
     />
   </div>
-</Styled(styled.div)>
+</Styled(Box)>
 `;
 
 exports[`<BLASTInProgress /> > should render when [rid=%p] null 1`] = `
-<Styled(styled.div)>
+<Styled(Box)>
   <Loader
     color="primary"
     size="16px"
@@ -43,30 +43,25 @@ exports[`<BLASTInProgress /> > should render when [rid=%p] null 1`] = `
       lastCheckedAt="2018-02-14T17:12:00.000000Z"
     />
   </div>
-</Styled(styled.div)>
+</Styled(Box)>
 `;
 
 exports[`<BLASTResults /> > should render 1`] = `
-<Styled(styled.div)>
-  <Styled(Styled(styled.div))>
+<BoxGroup>
+  <Styled(BoxGroupHeader)>
     <strong>
       NCBI BLAST
     </strong>
     <Button
       color="blue"
-      disabled={false}
-      tipPlacement="top"
-      type="button"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="redo"
       />
       Retry
     </Button>
-  </Styled(Styled(styled.div))>
-  <styled.table>
+  </Styled(BoxGroupHeader)>
+  <Table>
     <thead>
       <tr>
         <th>
@@ -91,11 +86,11 @@ exports[`<BLASTResults /> > should render 1`] = `
         key="0"
       >
         <td>
-          <Styled(UnstyledExternalLink)
+          <ExternalLink
             href="https://www.ncbi.nlm.nih.gov/nuccore/NC123"
           >
             NC123
-          </Styled(UnstyledExternalLink)>
+          </ExternalLink>
         </td>
         <td>
           test
@@ -111,8 +106,8 @@ exports[`<BLASTResults /> > should render 1`] = `
         </td>
       </tr>
     </tbody>
-  </styled.table>
-</Styled(styled.div)>
+  </Table>
+</BoxGroup>
 `;
 
 exports[`<NuVsBLAST /> > should render 1`] = `
@@ -134,13 +129,11 @@ exports[`<NuVsBLAST /> > should render 1`] = `
 `;
 
 exports[`<NuVsBLAST /> > should render alert when no blast data available 1`] = `
-<Styled(_Alert)
+<Alert
   color="purple"
   level={true}
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
   <span>
@@ -153,7 +146,7 @@ exports[`<NuVsBLAST /> > should render alert when no blast data available 1`] = 
   >
     BLAST at NCBI
   </Styled(Button)>
-</Styled(_Alert)>
+</Alert>
 `;
 
 exports[`<NuVsBLAST /> > should render with an in-progress BLAST 1`] = `
@@ -165,12 +158,12 @@ exports[`<NuVsBLAST /> > should render with an in-progress BLAST 1`] = `
 `;
 
 exports[`<NuVsBLAST /> > should render with no BLAST hits 1`] = `
-<styled.div>
-  <styled.h1>
+<Box>
+  <BoxTitle>
     NCBI BLAST
-  </styled.h1>
+  </BoxTitle>
   <p>
     No BLAST hits found.
   </p>
-</styled.div>
+</Box>
 `;

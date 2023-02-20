@@ -1,4 +1,4 @@
-import { AddTarget, mapStateToProps, mapDispatchToProps } from "../Add";
+import { AddTarget, mapDispatchToProps, mapStateToProps } from "../Add";
 import { TargetForm } from "../Form";
 
 describe("<AddTarget />", () => {

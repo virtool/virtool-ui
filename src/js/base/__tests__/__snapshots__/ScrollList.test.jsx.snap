@@ -2,20 +2,20 @@
 
 exports[`<ScrollList /> > should render when [noContainer=false] 1`] = `
 <div
-  className="sc-dkrFOg bEHAPZ"
+  className="ScrollList__StyledScrollList-sc-54ymw7-0 eMWAoQ"
 />
 `;
 
 exports[`<ScrollList /> > should return LoadingPlaceholder when [documents=null] and [page<pageCount] 1`] = `
 <div
-  className="sc-dkrFOg bEHAPZ"
+  className="ScrollList__StyledScrollList-sc-54ymw7-0 eMWAoQ"
 >
   <div
-    className="sc-gswNZR LuiSG"
+    className="LoadingPlaceholder__StyledLoadingPlaceholder-sc-1na1baf-0 dSdbPY"
   >
     <div
       aria-label="loading"
-      className="sc-bcXHqe fJUQtf"
+      className="Loader__StyledLoader-sc-1m5gelq-0 jcfwQF"
       color="greyDark"
       size="22px"
     >
@@ -27,6 +27,6 @@ exports[`<ScrollList /> > should return LoadingPlaceholder when [documents=null]
 
 exports[`<ScrollList /> > should return React.Fragment when [noContainer=true] 1`] = `
 <div
-  className="sc-dkrFOg bEHAPZ"
+  className="ScrollList__StyledScrollList-sc-54ymw7-0 eMWAoQ"
 />
 `;

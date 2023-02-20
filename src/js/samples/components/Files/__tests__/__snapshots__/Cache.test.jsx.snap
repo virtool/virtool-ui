@@ -1,15 +1,15 @@
 // Vitest Snapshot v1
 
 exports[`<SampleFilesCache /> > should render 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     <h2>
       Cached Trims
     </h2>
     <p>
       Trimmed reads saved from analysis runs that can be reused in future analyses.
     </p>
-  </Styled(styled.div)>
+  </BoxGroupHeader>
   <Connect(SampleCacheItem)
     createdAt="2018-01-01T00:00:00.000000Z"
     files={
@@ -40,22 +40,22 @@ exports[`<SampleFilesCache /> > should render 1`] = `
     key="baz"
     missing={true}
   />
-</Styled(styled.div)>
+</BoxGroup>
 `;
 
 exports[`<SampleFilesCache /> > should render NoneFound when caches array empty 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     <h2>
       Cached Trims
     </h2>
     <p>
       Trimmed reads saved from analysis runs that can be reused in future analyses.
     </p>
-  </Styled(styled.div)>
+  </BoxGroupHeader>
   <NoneFoundSection
     key="none"
     noun="cached trims"
   />
-</Styled(styled.div)>
+</BoxGroup>
 `;

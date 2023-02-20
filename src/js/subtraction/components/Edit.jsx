@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { ModalBody, ModalFooter, Input, InputGroup, InputLabel, Modal, SaveButton, ModalHeader } from "../../base";
+import { Input, InputGroup, InputLabel, Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../base";
 import { editSubtraction } from "../actions";
 
 export class EditSubtraction extends React.Component {

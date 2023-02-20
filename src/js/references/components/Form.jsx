@@ -1,7 +1,7 @@
-import React from "react";
-import { Input, InputError, InputGroup, InputLabel, TextArea } from "../../base";
 import { Field } from "formik";
+import React from "react";
 import styled from "styled-components";
+import { Input, InputError, InputGroup, InputLabel, TextArea } from "../../base";
 
 const StyledInputGroup = styled(InputGroup)`
     padding-bottom: 0px;

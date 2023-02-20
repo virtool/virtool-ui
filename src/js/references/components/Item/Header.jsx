@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Attribution, Icon, LinkIcon } from "../../../base";
+import { Attribution, Icon, IconLink } from "../../../base";
 
 const ReferenceItemDataDescriptor = styled.strong`
     text-transform: capitalize;
@@ -43,7 +43,7 @@ export const ReferenceItemHeader = ({ createdAt, dataType, id, name, organism, o
     <StyledReferenceItemHeader>
         <h2>
             <Link to={`/refs/${id}`}>{name}</Link>
-            <LinkIcon to={{ state: { cloneReference: true, id } }} name="clone" tip="Clone" color="blue" />
+            <IconLink to={{ state: { cloneReference: true, id } }} name="clone" tip="Clone" color="blue" />
         </h2>
         <p>
             <span>

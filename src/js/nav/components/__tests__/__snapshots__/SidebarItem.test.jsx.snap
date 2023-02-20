@@ -7,8 +7,6 @@ exports[`<SidebarItem /> > should render 1`] = `
   to="/foo/bar"
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="fa-foo"
   />
   <p>

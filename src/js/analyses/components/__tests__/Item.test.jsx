@@ -1,6 +1,6 @@
 import { REMOVE_ANALYSIS } from "../../../app/actionTypes";
-import { AnalysisItem, mapStateToProps, mapDispatchToProps } from "../Item";
 import { getCanModify } from "../../../samples/selectors";
+import { AnalysisItem, mapDispatchToProps, mapStateToProps } from "../Item";
 
 vi.mock("../../../samples/selectors");
 

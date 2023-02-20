@@ -2,7 +2,7 @@ import { isEqual, reduce } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Attribution, Button, ButtonToolbar, Icon, SpacedBox } from "../../../base/index";
+import { Attribution, Button, ButtonToolbar, Icon, BoxSpaced } from "../../../base/index";
 import { removeAPIKey, updateAPIKey } from "../../actions";
 import APIPermissions from "./Permissions";
 
@@ -60,7 +60,7 @@ export class APIKey extends React.Component {
         const permissionCount = reduce(this.props.apiKey.permissions, (result, value) => result + (value ? 1 : 0), 0);
 
         return (
-            <SpacedBox key={this.props.apiKey.id} onClick={this.state.in ? null : this.toggleIn}>
+            <BoxSpaced key={this.props.apiKey.id} onClick={this.state.in ? null : this.toggleIn}>
                 <APIKeyHeader>
                     <strong>{this.props.apiKey.name}</strong>
                     <Attribution time={this.props.apiKey.created_at} />
@@ -94,7 +94,7 @@ export class APIKey extends React.Component {
                         </ButtonToolbar>
                     </div>
                 )}
-            </SpacedBox>
+            </BoxSpaced>
         );
     }
 }

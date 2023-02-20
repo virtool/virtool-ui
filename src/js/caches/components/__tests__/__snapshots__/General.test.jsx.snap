@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<CacheGeneral /> > should render 1`] = `
-<styled.table>
+<Table>
   <tbody>
     <tr>
       <th>
@@ -20,5 +20,5 @@ exports[`<CacheGeneral /> > should render 1`] = `
       </td>
     </tr>
   </tbody>
-</styled.table>
+</Table>
 `;

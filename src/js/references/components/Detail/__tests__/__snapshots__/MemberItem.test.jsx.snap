@@ -1,16 +1,16 @@
 // Vitest Snapshot v1
 
 exports[`<MemberItem /> > should render 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <MemberItemIcon
     handle="bob"
   />
   bob
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<MemberItem /> > should render with [canModify=true] 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <MemberItemIcon
     handle="bob"
   />
@@ -18,20 +18,16 @@ exports[`<MemberItem /> > should render with [canModify=true] 1`] = `
   <styled.span>
     <Icon
       color="orange"
-      faStyle="fas"
-      fixedWidth={false}
       name="edit"
       onClick={[Function]}
       tip="Modify"
     />
     <Icon
       color="red"
-      faStyle="fas"
-      fixedWidth={false}
       name="trash"
       onClick={[Function]}
       tip="Remove"
     />
   </styled.span>
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;

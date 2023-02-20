@@ -1,8 +1,8 @@
 // Vitest Snapshot v1
 
 exports[`<AnalysesToolbar /> > should render with [canModify=false] 1`] = `
-<styled.div>
-  <SearchInput
+<Toolbar>
+  <InputSearch
     onChange={[Function]}
     value="baz"
   />
@@ -12,15 +12,13 @@ exports[`<AnalysesToolbar /> > should render with [canModify=false] 1`] = `
     icon="plus-square fa-fw"
     onClick={[Function]}
     tip="New Analysis"
-    tipPlacement="top"
-    type="button"
   />
-</styled.div>
+</Toolbar>
 `;
 
 exports[`<AnalysesToolbar /> > should render with default props 1`] = `
-<styled.div>
-  <SearchInput
+<Toolbar>
+  <InputSearch
     onChange={[Function]}
     value="baz"
   />
@@ -30,8 +28,6 @@ exports[`<AnalysesToolbar /> > should render with default props 1`] = `
     icon="plus-square fa-fw"
     onClick={[Function]}
     tip="New Analysis"
-    tipPlacement="top"
-    type="button"
   />
-</styled.div>
+</Toolbar>
 `;

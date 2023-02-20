@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import * as Yup from "yup";
-import { AffixedProgressBar, Alert, Box, InputError, SaveButton, UploadBar } from "../../base";
+import { Alert, Box, InputError, ProgressBarAffixed, SaveButton, UploadBar } from "../../base";
 import { upload } from "../../files/actions";
 import { createRandomString } from "../../utils/utils";
 import { importReference } from "../actions";
@@ -59,7 +59,7 @@ export const ImportReference = ({ file, onDrop, onSubmit }) => {
                         </strong>
                     </Alert>
                     <ImportReferenceUploadContainer>
-                        <AffixedProgressBar color={progress === 100 ? "green" : "orange"} now={progress} />
+                        <ProgressBarAffixed color={progress === 100 ? "green" : "orange"} now={progress} />
                         <UploadBar message={message} onDrop={handleDrop(setFieldValue, setFieldError)} />
                     </ImportReferenceUploadContainer>
 

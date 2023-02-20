@@ -2,7 +2,7 @@ import { get, replace } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { AffixedProgressBar, Box, ExternalLink, Icon } from "../../base";
+import { Box, ExternalLink, Icon, ProgressBarAffixed } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { installHMMs } from "../actions";
 import { getTask } from "../selectors";
@@ -46,7 +46,7 @@ export const HMMInstaller = ({ installed, task }) => {
 
         return (
             <HMMInstalling>
-                <AffixedProgressBar color="blue" now={progress} />
+                <ProgressBarAffixed color="blue" now={progress} />
                 <div>
                     <h3>Installing</h3>
                     <p>{step}</p>

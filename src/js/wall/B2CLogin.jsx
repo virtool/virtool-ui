@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { loginSucceeded } from "../account/actions";
 import { getLoginRequest } from "../app/authConfig";
 import { getColor } from "../app/theme";
-import { Button, HorizontalDivider } from "../base";
+import { Button, DividerHorizontal } from "../base";
 import { WallSubheader } from "./Container";
 
 const StyledB2CLogin = styled.div`
@@ -19,7 +19,7 @@ const BetaTag = styled.span`
     transform-text: uppercase;
 `;
 
-const LoginDivider = styled(HorizontalDivider)`
+const LoginDivider = styled(DividerHorizontal)`
     margin: 10px 5px 20px;
 `;
 

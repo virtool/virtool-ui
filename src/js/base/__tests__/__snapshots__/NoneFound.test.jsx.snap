@@ -1,58 +1,44 @@
 // Vitest Snapshot v1
 
 exports[`<NoneFound /> > should render with [noun='files' 1`] = `
-<styled.div>
+<NoneFound__StyledNoneFound>
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
   files
    found
-</styled.div>
+</NoneFound__StyledNoneFound>
 `;
 
 exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
-<Styled(styled.div)
+<NoneFoundBox__StyledNoneFoundBox
   as={
     {
       "$$typeof": Symbol(react.forward_ref),
       "attrs": [],
       "componentStyle": e {
-        "baseHash": 183687572,
+        "baseHash": -1700734099,
         "baseStyle": undefined,
-        "componentId": "sc-ftTHYK",
+        "componentId": "Box-sc-1gxeswo-0",
         "isStatic": false,
         "rules": [
-          "
-    border: ",
+          "border:",
           [Function],
-          ";
-    border-radius: ",
+          ";border-radius:",
           [Function],
-          ";
-    box-sizing: border-box;
-    cursor: ",
+          ";box-sizing:border-box;cursor:",
           [Function],
-          ";
-    margin-bottom: 15px;
-    padding: 10px 15px;
-    position: relative;
-
-    &:hover {
-        ",
+          ";margin-bottom:15px;padding:10px 15px;position:relative;&:hover{",
           [Function],
-          "
-    }
-",
+          "}",
         ],
         "staticRulesId": "",
       },
       "foldedComponentIds": [],
       "render": [Function],
       "shouldForwardProp": undefined,
-      "styledComponentId": "sc-ftTHYK",
+      "styledComponentId": "Box-sc-1gxeswo-0",
       "target": "div",
       "toString": [Function],
       "warnTooManyClasses": [Function],
@@ -61,34 +47,28 @@ exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
   }
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
   boxes
    found.   
-</Styled(styled.div)>
+</NoneFoundBox__StyledNoneFoundBox>
 `;
 
 exports[`<NoneFoundSection /> > should render with [noun='sections' 1`] = `
-<Styled(styled.div)>
+<NoneFoundSection__StyledNoneFoundSection>
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
   sections
    found
-</Styled(styled.div)>
+</NoneFoundSection__StyledNoneFoundSection>
 `;
 
 exports[`<NoneFoundSection /> > should render with [noun='sections'] and children 1`] = `
-<Styled(styled.div)>
+<NoneFoundSection__StyledNoneFoundSection>
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
@@ -101,5 +81,5 @@ exports[`<NoneFoundSection /> > should render with [noun='sections'] and childre
     </span>
     .
   </span>
-</Styled(styled.div)>
+</NoneFoundSection__StyledNoneFoundSection>
 `;

@@ -3,9 +3,9 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Icon, InitialIcon, Label, LinkBox } from "../../base";
+import { Icon, InitialIcon, Label, BoxLink } from "../../base";
 
-const StyledUserItem = styled(LinkBox)`
+const StyledUserItem = styled(BoxLink)`
     display: flex;
     align-items: center;
 

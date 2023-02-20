@@ -5,10 +5,10 @@ exports[`<CreateSample> > should render 1`] = `
   <ViewHeader
     title="Create Sample"
   >
-    <styled.h1>
+    <ViewHeaderTitle>
       Create Sample
-    </styled.h1>
-    <Styled(styled.p) />
+    </ViewHeaderTitle>
+    <Styled(InputError) />
   </ViewHeader>
   <Formik
     initialValues={

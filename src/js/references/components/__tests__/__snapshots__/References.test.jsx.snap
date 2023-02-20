@@ -1,22 +1,22 @@
 // Vitest Snapshot v1
 
 exports[`<ReferenceSettings /> > should render 1`] = `
-<styled.div>
+<ContainerNarrow>
   <ViewHeader
     title="Reference Settings"
   >
-    <styled.h1>
+    <ViewHeaderTitle>
       Settings
-    </styled.h1>
+    </ViewHeaderTitle>
   </ViewHeader>
   <Connect(SourceTypes)
     global={true}
   />
-</styled.div>
+</ContainerNarrow>
 `;
 
 exports[`<References /> > should render when [loading=%p] false 1`] = `
-<styled.div>
+<Container>
   <Switch>
     <Route
       component={
@@ -61,7 +61,7 @@ exports[`<References /> > should render when [loading=%p] false 1`] = `
       path="/refs/:refId"
     />
   </Switch>
-</styled.div>
+</Container>
 `;
 
 exports[`<References /> > should render when [loading=%p] true 1`] = `<LoadingPlaceholder />`;

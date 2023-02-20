@@ -8,7 +8,7 @@ exports[`<ReferenceItemHeader /> > should render 1`] = `
     >
       Foo
     </Link>
-    <LinkIcon
+    <IconLink
       color="blue"
       name="clone"
       tip="Clone"
@@ -25,8 +25,6 @@ exports[`<ReferenceItemHeader /> > should render 1`] = `
   <p>
     <span>
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="barcode"
       />
       <styled.strong>
@@ -40,7 +38,7 @@ exports[`<ReferenceItemHeader /> > should render 1`] = `
          OTUs
       </span>
     </span>
-    <Styled(UnstyledAttribution)
+    <Attribution
       time="2018-01-01T00:00:00.000000Z"
       user="bob"
     />

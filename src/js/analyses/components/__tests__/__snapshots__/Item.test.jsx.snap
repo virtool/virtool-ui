@@ -1,8 +1,8 @@
 // Vitest Snapshot v1
 
 exports[`<AnalysisItem /> > should render 1`] = `
-<Styled(Styled(styled.div))>
-  <styled.div>
+<Item__StyledAnalysisItem>
+  <Item__AnalysisItemTop>
     <Link
       to="/samples/bar/analyses/baz"
     >
@@ -13,21 +13,19 @@ exports[`<AnalysisItem /> > should render 1`] = `
       onRemove={[MockFunction spy]}
       ready={false}
     />
-  </styled.div>
-  <Styled(UnstyledAttribution)
+  </Item__AnalysisItemTop>
+  <Attribution
     time="2018-02-14T17:12:00.000000Z"
     user="bob"
   />
-  <styled.div>
-    <styled.span
+  <Item__AnalysisItemTags>
+    <Item__AnalysisItemTag
       key="reference"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="equals"
       />
-      <styled.ul>
+      <SlashList>
         <li>
           <Link
             to="/refs/foo"
@@ -43,14 +41,12 @@ exports[`<AnalysisItem /> > should render 1`] = `
             3
           </Link>
         </li>
-      </styled.ul>
-    </styled.span>
-    <styled.span
+      </SlashList>
+    </Item__AnalysisItemTag>
+    <Item__AnalysisItemTag
       key="pru"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="not-equal"
       />
       <Link
@@ -58,13 +54,11 @@ exports[`<AnalysisItem /> > should render 1`] = `
       >
         Prunus persica
       </Link>
-    </styled.span>
-    <styled.span
+    </Item__AnalysisItemTag>
+    <Item__AnalysisItemTag
       key="ara"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="not-equal"
       />
       <Link
@@ -72,14 +66,14 @@ exports[`<AnalysisItem /> > should render 1`] = `
       >
         Arabidopsis thaliana
       </Link>
-    </styled.span>
-  </styled.div>
-</Styled(Styled(styled.div))>
+    </Item__AnalysisItemTag>
+  </Item__AnalysisItemTags>
+</Item__StyledAnalysisItem>
 `;
 
 exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `
-<Styled(Styled(styled.div))>
-  <styled.div>
+<Item__StyledAnalysisItem>
+  <Item__AnalysisItemTop>
     <Link
       to="/samples/bar/analyses/baz"
     >
@@ -90,21 +84,19 @@ exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `
       onRemove={[MockFunction spy]}
       ready={false}
     />
-  </styled.div>
-  <Styled(UnstyledAttribution)
+  </Item__AnalysisItemTop>
+  <Attribution
     time="2018-02-14T17:12:00.000000Z"
     user="bob"
   />
-  <styled.div>
-    <styled.span
+  <Item__AnalysisItemTags>
+    <Item__AnalysisItemTag
       key="reference"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="equals"
       />
-      <styled.ul>
+      <SlashList>
         <li>
           <Link
             to="/refs/foo"
@@ -120,14 +112,12 @@ exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `
             3
           </Link>
         </li>
-      </styled.ul>
-    </styled.span>
-    <styled.span
+      </SlashList>
+    </Item__AnalysisItemTag>
+    <Item__AnalysisItemTag
       key="pru"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="not-equal"
       />
       <Link
@@ -135,13 +125,11 @@ exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `
       >
         Prunus persica
       </Link>
-    </styled.span>
-    <styled.span
+    </Item__AnalysisItemTag>
+    <Item__AnalysisItemTag
       key="ara"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="not-equal"
       />
       <Link
@@ -149,14 +137,14 @@ exports[`<AnalysisItem /> > should render when [placeholder=true] 1`] = `
       >
         Arabidopsis thaliana
       </Link>
-    </styled.span>
-  </styled.div>
-</Styled(Styled(styled.div))>
+    </Item__AnalysisItemTag>
+  </Item__AnalysisItemTags>
+</Item__StyledAnalysisItem>
 `;
 
 exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `
-<Styled(Styled(styled.div))>
-  <styled.div>
+<Item__StyledAnalysisItem>
+  <Item__AnalysisItemTop>
     <Link
       to="/samples/bar/analyses/baz"
     >
@@ -167,21 +155,19 @@ exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `
       onRemove={[MockFunction spy]}
       ready={false}
     />
-  </styled.div>
-  <Styled(UnstyledAttribution)
+  </Item__AnalysisItemTop>
+  <Attribution
     time="2018-02-14T17:12:00.000000Z"
     user="bob"
   />
-  <styled.div>
-    <styled.span
+  <Item__AnalysisItemTags>
+    <Item__AnalysisItemTag
       key="reference"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="equals"
       />
-      <styled.ul>
+      <SlashList>
         <li>
           <Link
             to="/refs/foo"
@@ -197,14 +183,12 @@ exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `
             3
           </Link>
         </li>
-      </styled.ul>
-    </styled.span>
-    <styled.span
+      </SlashList>
+    </Item__AnalysisItemTag>
+    <Item__AnalysisItemTag
       key="pru"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="not-equal"
       />
       <Link
@@ -212,13 +196,11 @@ exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `
       >
         Prunus persica
       </Link>
-    </styled.span>
-    <styled.span
+    </Item__AnalysisItemTag>
+    <Item__AnalysisItemTag
       key="ara"
     >
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="not-equal"
       />
       <Link
@@ -226,7 +208,7 @@ exports[`<AnalysisItem /> > should render when [ready=false] 1`] = `
       >
         Arabidopsis thaliana
       </Link>
-    </styled.span>
-  </styled.div>
-</Styled(Styled(styled.div))>
+    </Item__AnalysisItemTag>
+  </Item__AnalysisItemTags>
+</Item__StyledAnalysisItem>
 `;

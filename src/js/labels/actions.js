@@ -10,15 +10,6 @@ import { createAction } from "@reduxjs/toolkit";
 export const listLabels = createAction(LIST_LABELS.REQUESTED);
 
 /**
- * Returns action that can trigger an API call to get sample labels.
- *
- * @func
- * @param payload {onject} label list object response from the server
- * @returns {object}
- */
-export const listLabelsSuccess = createAction(LIST_LABELS.SUCCEEDED);
-
-/**
  * Returns action that can trigger an API call for removing a label.
  *
  * @func

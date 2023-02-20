@@ -1,9 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { getBorder, getColor, getFontWeight } from "../../app/theme";
-import { AffixedProgressBar, Icon, Loader } from "../../base";
+import { Icon, Loader, ProgressBarAffixed } from "../../base";
 import { byteSize } from "../../utils/utils";
-import { connect } from "react-redux";
 import { removeUpload } from "../actions";
 
 const StyledUploadItem = styled.div`
@@ -56,7 +56,7 @@ export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) 
 
     return (
         <StyledUploadItem>
-            <AffixedProgressBar now={failed ? 100 : progress} color={failed ? "red" : "blue"} />
+            <ProgressBarAffixed now={failed ? 100 : progress} color={failed ? "red" : "blue"} />
             <UploadItemTitle failed={failed}>
                 {uploadIcon}
                 <UploadItemName>{name}</UploadItemName>

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<File /> > should render 1`] = `
-<Styled(styled.div)>
+<BoxSpaced>
   <styled.h5>
     <span>
       foo.fa
@@ -10,8 +10,6 @@ exports[`<File /> > should render 1`] = `
       <span />
       <Icon
         color="red"
-        faStyle="fas"
-        fixedWidth={false}
         name="trash"
         onClick={[Function]}
         style={
@@ -31,11 +29,11 @@ exports[`<File /> > should render 1`] = `
      by 
     bill
   </styled.span>
-</Styled(styled.div)>
+</BoxSpaced>
 `;
 
 exports[`<File /> > should render when [canRemove=false] 1`] = `
-<Styled(styled.div)>
+<BoxSpaced>
   <styled.h5>
     <span>
       foo.fa
@@ -52,11 +50,11 @@ exports[`<File /> > should render when [canRemove=false] 1`] = `
      by 
     bill
   </styled.span>
-</Styled(styled.div)>
+</BoxSpaced>
 `;
 
 exports[`<File /> > should render when [ready=false] 1`] = `
-<Styled(styled.div)>
+<BoxSpaced>
   <styled.h5>
     <span>
       foo.fa
@@ -75,11 +73,11 @@ exports[`<File /> > should render when [ready=false] 1`] = `
      by 
     bill
   </styled.span>
-</Styled(styled.div)>
+</BoxSpaced>
 `;
 
 exports[`<File /> > should render when [user=null] 1`] = `
-<Styled(styled.div)>
+<BoxSpaced>
   <styled.h5>
     <span>
       foo.fa
@@ -88,8 +86,6 @@ exports[`<File /> > should render when [user=null] 1`] = `
       <span />
       <Icon
         color="red"
-        faStyle="fas"
-        fixedWidth={false}
         name="trash"
         onClick={[Function]}
         style={
@@ -107,5 +103,5 @@ exports[`<File /> > should render when [user=null] 1`] = `
       time="2018-02-14T17:12:00.000000Z"
     />
   </styled.span>
-</Styled(styled.div)>
+</BoxSpaced>
 `;

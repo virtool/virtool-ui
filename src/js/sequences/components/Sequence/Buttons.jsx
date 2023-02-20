@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { CloseButton, Icon, LinkIcon } from "../../../base";
+import { CloseButton, Icon, IconLink } from "../../../base";
 import { showRemoveSequence } from "../../../otus/actions";
-import { getCanModifyReferenceOTU } from "../../../references/selectors";
-import { DownloadLink } from "../../../references/components/Detail/DownloadLink";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
+import { DownloadLink } from "../../../references/components/Detail/DownloadLink";
+import { getCanModifyReferenceOTU } from "../../../references/selectors";
 
 const SequenceHeaderButtons = styled.span`
     align-items: center;
@@ -35,7 +35,7 @@ export const SequenceButtons = ({ canModify, id, isolateId, otuId, onCollapse, o
     return (
         <SequenceHeaderButtons>
             {canModify && (
-                <LinkIcon name="pencil-alt" color="orange" tip="Edit Sequence" to={{ state: { editSequence: id } }} />
+                <IconLink name="pencil-alt" color="orange" tip="Edit Sequence" to={{ state: { editSequence: id } }} />
             )}
             {canModify && <Icon name="trash" color="red" tip="Remove Sequence" onClick={removeSequence} />}
             <DownloadLink href={href}>FASTA</DownloadLink>

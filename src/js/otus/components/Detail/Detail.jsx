@@ -8,7 +8,7 @@ import {
     Icon,
     LoadingPlaceholder,
     NotFound,
-    TabLink,
+    TabsLink,
     Tabs,
     ViewHeader,
     ViewHeaderIcons,
@@ -77,7 +77,7 @@ class OTUDetail extends React.Component {
 
         let segmentComponent;
         if (this.props.dataType !== "barcode") {
-            segmentComponent = <TabLink to={`/refs/${refId}/otus/${id}/schema`}>Schema</TabLink>;
+            segmentComponent = <TabsLink to={`/refs/${refId}/otus/${id}/schema`}>Schema</TabsLink>;
         }
 
         let iconButtons;
@@ -131,9 +131,9 @@ class OTUDetail extends React.Component {
                 </ViewHeader>
 
                 <Tabs>
-                    <TabLink to={`/refs/${refId}/otus/${id}/otu`}>OTU</TabLink>
+                    <TabsLink to={`/refs/${refId}/otus/${id}/otu`}>OTU</TabsLink>
                     {segmentComponent}
-                    <TabLink to={`/refs/${refId}/otus/${id}/history`}>History</TabLink>
+                    <TabsLink to={`/refs/${refId}/otus/${id}/history`}>History</TabsLink>
                 </Tabs>
 
                 {modifyOTUComponents}
