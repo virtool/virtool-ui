@@ -1,7 +1,7 @@
-import userEvent from "@testing-library/user-event";
-import { AddBarcodeSequence, castValues } from "../Add";
-import { createStore } from "redux";
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createStore } from "redux";
+import { AddBarcodeSequence, castValues } from "../Add";
 
 const createAppStore = state => () => createStore(state => state, state);
 

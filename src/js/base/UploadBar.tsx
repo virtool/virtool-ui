@@ -2,7 +2,8 @@ import React, { useCallback } from "react";
 import { FileError, useDropzone } from "react-dropzone";
 import styled, { DefaultTheme } from "styled-components/macro";
 import { getColor } from "../app/theme";
-import { Button, DividerVertical } from "./index";
+import { Button } from "./Button";
+import { DividerVertical } from "./DividerVertical";
 
 type StyledUploadBarProps = {
     active: boolean;

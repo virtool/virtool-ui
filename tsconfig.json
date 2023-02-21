@@ -1,41 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "jsx": "react",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "typeRoots": [
-      "node_modules/@types",
-      "./src/js/types"
-    ],
-    "types": [
-      "node",
-      "vitest"
-    ],
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "checkJs": false,
-    "sourceMap": true,
+    "esModuleInterop": false,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["DOM", "ESNext", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noEmit": true,
     "outDir": "./build/",
     "rootDir": "./src",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": false,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "watch": true
+    "strict": false,
+    "target": "ESNext",
+    "typeRoots": ["node_modules/@types", "./src/js/types"]
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+  "include": ["src/**/*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

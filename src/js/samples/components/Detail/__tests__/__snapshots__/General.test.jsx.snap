@@ -119,7 +119,7 @@ exports[`<SampleDetailGeneral /> > should render with [paired=%p] false 1`] = `
           Additional notes about the sample.
         </p>
       </BoxGroupHeader>
-      <Component
+      <Markdown
         markdown="Example notes"
       />
     </BoxGroup>
@@ -250,7 +250,7 @@ exports[`<SampleDetailGeneral /> > should render with [paired=%p] true 1`] = `
           Additional notes about the sample.
         </p>
       </BoxGroupHeader>
-      <Component
+      <Markdown
         markdown="Example notes"
       />
     </BoxGroup>
