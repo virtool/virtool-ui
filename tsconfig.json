@@ -17,6 +17,5 @@
     "target": "ESNext",
     "typeRoots": ["node_modules/@types", "./src/js/types"]
   },
-  "include": ["src/**/*"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src/**/*"]
 }
