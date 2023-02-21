@@ -8,8 +8,8 @@ import {
     Icon,
     LoadingPlaceholder,
     NotFound,
-    TabsLink,
     Tabs,
+    TabsLink,
     ViewHeader,
     ViewHeaderIcons,
     ViewHeaderTitle
@@ -24,13 +24,15 @@ import AddIsolate from "./Isolates/Add";
 import RemoveOTU from "./Remove";
 import Schema from "./Schema/Schema";
 
-const OTUSection = () => (
-    <div>
-        <General />
-        <IsolateEditor />
-        <AddIsolate />
-    </div>
-);
+function OTUSection() {
+    return (
+        <div>
+            <General />
+            <IsolateEditor />
+            <AddIsolate />
+        </div>
+    );
+}
 
 const OTUDetailTitle = styled(ViewHeaderTitle)`
     align-items: baseline;

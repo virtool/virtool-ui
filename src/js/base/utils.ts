@@ -7,5 +7,9 @@ type getBadgeOrLabelColorProps = {
 };
 
 export function getBadgeOrLabelColor(props: getBadgeOrLabelColorProps): string {
-    return getColor(props) || props.theme.color.greyDark;
+    if (props.color) {
+        return getColor(props);
+    }
+
+    return props.theme.color.greyDark;
 }

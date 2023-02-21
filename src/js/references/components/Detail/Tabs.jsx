@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Badge, TabsLink, Tabs } from "../../../base";
+import { Badge, Tabs, TabsLink } from "../../../base";
 
 export const ReferenceDetailTabs = ({ id, otuCount }) => (
     <Tabs>
