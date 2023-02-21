@@ -1,10 +1,10 @@
-import React from "react";
+import { every, map } from "lodash-es";
 import PropTypes from "prop-types";
-import { BoxGroup, BoxGroupSection } from "../../../base";
+import React from "react";
 import styled from "styled-components";
 import { getFontWeight } from "../../../app/theme";
+import { BoxGroup, BoxGroupSection } from "../../../base";
 import { StateButton } from "./StateButton";
-import { every, map } from "lodash-es";
 
 const StyledStateCategory = styled(BoxGroup)`
     background-color: ${props => props.theme.color.white};

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Badge, LoadingPlaceholder, NarrowContainer, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, LoadingPlaceholder, ContainerNarrow, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findReferences, remoteReference } from "../actions";
 import { getTerm } from "../selectors";
 import Clone from "./Clone";
@@ -21,7 +21,7 @@ const ReferenceList = ({ term, documents, totalCount, onLoadNextPage, page, page
 
     return (
         <>
-            <NarrowContainer>
+            <ContainerNarrow>
                 <ViewHeader title="References">
                     <ViewHeaderTitle>
                         References <Badge>{totalCount}</Badge>
@@ -38,7 +38,7 @@ const ReferenceList = ({ term, documents, totalCount, onLoadNextPage, page, page
                     pageCount={pageCount}
                     renderRow={renderRow}
                 />
-            </NarrowContainer>
+            </ContainerNarrow>
             <Clone />
         </>
     );

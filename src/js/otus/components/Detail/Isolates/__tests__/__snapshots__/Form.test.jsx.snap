@@ -4,7 +4,7 @@ exports[`<IsolateForm /> > should render with source types restricted 1`] = `
 <form
   onSubmit={[MockFunction spy]}
 >
-  <Styled(styled.div)>
+  <ModalBody>
     <styled.div>
       <SourceType
         allowedSourceTypes={
@@ -18,10 +18,10 @@ exports[`<IsolateForm /> > should render with source types restricted 1`] = `
         value="isolate"
       />
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Source Name
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           disabled={false}
           onChange={[Function]}
           value="A"
@@ -29,18 +29,18 @@ exports[`<IsolateForm /> > should render with source types restricted 1`] = `
       </InputGroup>
     </styled.div>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         Isolate Name
-      </styled.label>
-      <Styled(UnstyledInput)
+      </InputLabel>
+      <Input
         readOnly={true}
         value="Isolate A"
       />
     </InputGroup>
-  </Styled(styled.div)>
-  <Styled(Component)>
+  </ModalBody>
+  <ModalFooter>
     <SaveButton />
-  </Styled(Component)>
+  </ModalFooter>
 </form>
 `;
 
@@ -48,7 +48,7 @@ exports[`<IsolateForm /> > should render with source types unrestricted 1`] = `
 <form
   onSubmit={[MockFunction spy]}
 >
-  <Styled(styled.div)>
+  <ModalBody>
     <styled.div>
       <SourceType
         allowedSourceTypes={
@@ -62,10 +62,10 @@ exports[`<IsolateForm /> > should render with source types unrestricted 1`] = `
         value="isolate"
       />
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Source Name
-        </styled.label>
-        <Styled(UnstyledInput)
+        </InputLabel>
+        <Input
           disabled={false}
           onChange={[Function]}
           value="A"
@@ -73,17 +73,17 @@ exports[`<IsolateForm /> > should render with source types unrestricted 1`] = `
       </InputGroup>
     </styled.div>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         Isolate Name
-      </styled.label>
-      <Styled(UnstyledInput)
+      </InputLabel>
+      <Input
         readOnly={true}
         value="Isolate A"
       />
     </InputGroup>
-  </Styled(styled.div)>
-  <Styled(Component)>
+  </ModalBody>
+  <ModalFooter>
     <SaveButton />
-  </Styled(Component)>
+  </ModalFooter>
 </form>
 `;

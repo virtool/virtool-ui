@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Label, LinkBox } from "../../base";
+import { Label, BoxLink } from "../../base";
 
-const StyledHMMItem = styled(LinkBox)`
+const StyledHMMItem = styled(BoxLink)`
     display: flex;
     font-size: ${getFontSize("lg")};
 `;

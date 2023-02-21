@@ -15,11 +15,13 @@ describe("<Api />", () => {
         const wrapper = shallow(<Api {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
     it("should render when [onToggle=true]", () => {
         const wrapper = shallow(<Api {...props} />);
         wrapper.find("SettingsCheckbox").simulate("toggle", "foo");
         expect(props.onToggle).toHaveBeenCalledWith("foo");
     });
+
     it("should render when [onToggle=false]", () => {
         props.enabled = false;
         const wrapper = shallow(<Api {...props} />);

@@ -1,15 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection, LinkIcon } from "../../base";
+import { BoxGroupSection, IconLink } from "../../base";
 import { SampleLabel } from "../../samples/components/Label";
-
-const LabelItemContainer = styled.div`
-    position: relative;
-`;
 
 const LabelItemBox = styled(BoxGroupSection)`
     align-items: center;
     display: flex;
+`;
+const LabelItemContainer = styled.div`
+    position: relative;
 `;
 
 const LabelItemExampleContainer = styled.div`
@@ -33,17 +32,19 @@ const LabelItemIcons = styled.div`
     }
 `;
 
-export const Item = ({ name, color, description, id }) => (
-    <LabelItemContainer>
-        <LabelItemBox>
-            <LabelItemExampleContainer>
-                <SampleLabel name={name} color={color} />
-            </LabelItemExampleContainer>
-            {description}
-        </LabelItemBox>
-        <LabelItemIcons>
-            <LinkIcon to={{ state: { editLabel: id } }} color="orange" name="pencil-alt" tip="Edit" />
-            <LinkIcon to={{ state: { removeLabel: id } }} color="red" name="fas fa-trash" tip="Remove" />
-        </LabelItemIcons>
-    </LabelItemContainer>
-);
+export function Item({ name, color, description, id }) {
+    return (
+        <LabelItemContainer>
+            <LabelItemBox>
+                <LabelItemExampleContainer>
+                    <SampleLabel name={name} color={color} />
+                </LabelItemExampleContainer>
+                {description}
+            </LabelItemBox>
+            <LabelItemIcons>
+                <IconLink to={{ state: { editLabel: id } }} color="orange" name="pencil-alt" tip="Edit" />
+                <IconLink to={{ state: { removeLabel: id } }} color="red" name="fas fa-trash" tip="Remove" />
+            </LabelItemIcons>
+        </LabelItemContainer>
+    );
+}

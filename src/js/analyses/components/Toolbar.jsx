@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../app/actions";
-import { Button, SearchInput, Toolbar } from "../../base";
+import { Button, InputSearch, Toolbar } from "../../base";
 import { getCanModify } from "../../samples/selectors";
 import { findAnalyses } from "../actions";
 
 export const AnalysesToolbar = ({ canModify, onFind, onShowCreate, page, sampleId, term }) => (
     <Toolbar>
-        <SearchInput value={term} onChange={e => onFind(sampleId, e.target.value, page)} />
+        <InputSearch value={term} onChange={e => onFind(sampleId, e.target.value, page)} />
         <Button
             icon="plus-square fa-fw"
             tip="New Analysis"

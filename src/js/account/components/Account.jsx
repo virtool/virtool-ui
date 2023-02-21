@@ -2,34 +2,34 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 
-import { NarrowContainer, TabLink, Tabs, ViewHeader, ViewHeaderTitle, WideContainer } from "../../base";
+import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "../../base";
 import { getAccount } from "../actions";
 import { getAccountId } from "../selectors";
-import AccountProfile from "./Profile";
 import APIKeys from "./API/API";
+import AccountProfile from "./Profile";
 
 function Account({ userId, onGet }) {
     useEffect(() => onGet(), [userId]);
 
     return (
-        <WideContainer>
+        <ContainerWide>
             <ViewHeader title="Account">
                 <ViewHeaderTitle>Account</ViewHeaderTitle>
             </ViewHeader>
 
             <Tabs>
-                <TabLink to="/account/profile">Profile</TabLink>
-                <TabLink to="/account/api">API</TabLink>
+                <TabsLink to="/account/profile">Profile</TabsLink>
+                <TabsLink to="/account/api">API</TabsLink>
             </Tabs>
 
-            <NarrowContainer>
+            <ContainerNarrow>
                 <Switch>
                     <Redirect from="/account" to="/account/profile" exact />
                     <Route path="/account/profile" component={AccountProfile} />
                     <Route path="/account/api" component={APIKeys} />
                 </Switch>
-            </NarrowContainer>
-        </WideContainer>
+            </ContainerNarrow>
+        </ContainerWide>
     );
 }
 

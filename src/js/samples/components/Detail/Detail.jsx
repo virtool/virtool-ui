@@ -5,10 +5,10 @@ import { Link, Redirect, Route, Switch } from "react-router-dom";
 import Analyses from "../../../analyses/components/Analyses";
 import {
     Icon,
-    LinkIcon,
+    IconLink,
     LoadingPlaceholder,
     NotFound,
-    TabLink,
+    TabsLink,
     Tabs,
     ViewHeader,
     ViewHeaderAttribution,
@@ -73,12 +73,12 @@ function SampleDetail({
             );
         }
 
-        removeIcon = <LinkIcon color="red" to={{ state: { removeSample: true } }} name="trash" tip="Remove" />;
+        removeIcon = <IconLink color="red" to={{ state: { removeSample: true } }} name="trash" tip="Remove" />;
 
         rightsTabLink = (
-            <TabLink to={`/samples/${sampleId}/rights`}>
+            <TabsLink to={`/samples/${sampleId}/rights`}>
                 <Icon name="key" />
-            </TabLink>
+            </TabsLink>
         );
     }
 
@@ -100,10 +100,10 @@ function SampleDetail({
             </ViewHeader>
 
             <Tabs bsStyle="tabs">
-                <TabLink to={`${prefix}/general`}>General</TabLink>
-                <TabLink to={`${prefix}/files`}>Files</TabLink>
-                <TabLink to={`${prefix}/quality`}>Quality</TabLink>
-                <TabLink to={`${prefix}/analyses`}>Analyses</TabLink>
+                <TabsLink to={`${prefix}/general`}>General</TabsLink>
+                <TabsLink to={`${prefix}/files`}>Files</TabsLink>
+                <TabsLink to={`${prefix}/quality`}>Quality</TabsLink>
+                <TabsLink to={`${prefix}/analyses`}>Analyses</TabsLink>
                 {rightsTabLink}
             </Tabs>
 

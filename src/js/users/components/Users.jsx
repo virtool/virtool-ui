@@ -2,7 +2,7 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { getAccountAdministrator } from "../../account/selectors";
-import { Alert, Icon, LinkButton, LoadingPlaceholder, SearchInput, Toolbar } from "../../base";
+import { Alert, Icon, LinkButton, LoadingPlaceholder, InputSearch, Toolbar } from "../../base";
 import { clearError } from "../../errors/actions";
 import { listGroups } from "../../groups/actions";
 import { findUsers } from "../actions";
@@ -57,7 +57,7 @@ export class ManageUsers extends React.Component {
         return (
             <>
                 <Toolbar>
-                    <SearchInput
+                    <InputSearch
                         name="search"
                         aria-label="search"
                         value={this.state.term}

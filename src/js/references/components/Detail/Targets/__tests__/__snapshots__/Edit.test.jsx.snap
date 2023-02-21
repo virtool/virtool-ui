@@ -6,6 +6,7 @@ exports[`<EditTarget /> > should render 1`] = `
   onEnter={[Function]}
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Edit Target
@@ -13,7 +14,7 @@ exports[`<EditTarget /> > should render 1`] = `
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <TargetForm
         description="Bar description"
         errorName=""
@@ -22,18 +23,16 @@ exports[`<EditTarget /> > should render 1`] = `
         onChange={[Function]}
         required={true}
       />
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <Button
         color="blue"
-        disabled={false}
         icon="save"
-        tipPlacement="top"
         type="submit"
       >
         Submit
       </Button>
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -44,6 +43,7 @@ exports[`<EditTarget /> > should render error when submitted without name 1`] = 
   onEnter={[Function]}
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Edit Target
@@ -51,7 +51,7 @@ exports[`<EditTarget /> > should render error when submitted without name 1`] = 
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <TargetForm
         description="This is a test"
         errorName="Required field"
@@ -60,18 +60,16 @@ exports[`<EditTarget /> > should render error when submitted without name 1`] = 
         onChange={[Function]}
         required={false}
       />
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <Button
         color="blue"
-        disabled={false}
         icon="save"
-        tipPlacement="top"
         type="submit"
       >
         Submit
       </Button>
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;
@@ -82,6 +80,7 @@ exports[`<EditTarget /> > should update when TargetForm onChange() prop called 1
   onEnter={[Function]}
   onHide={[MockFunction spy]}
   show={true}
+  size="sm"
 >
   <ModalHeader>
     Edit Target
@@ -89,7 +88,7 @@ exports[`<EditTarget /> > should update when TargetForm onChange() prop called 1
   <form
     onSubmit={[Function]}
   >
-    <Styled(styled.div)>
+    <ModalBody>
       <TargetForm
         description="Bar description"
         errorName=""
@@ -98,18 +97,16 @@ exports[`<EditTarget /> > should update when TargetForm onChange() prop called 1
         onChange={[Function]}
         required={true}
       />
-    </Styled(styled.div)>
-    <Styled(Component)>
+    </ModalBody>
+    <ModalFooter>
       <Button
         color="blue"
-        disabled={false}
         icon="save"
-        tipPlacement="top"
         type="submit"
       >
         Submit
       </Button>
-    </Styled(Component)>
+    </ModalFooter>
   </form>
 </Modal>
 `;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { NarrowContainer, Container } from "../../base";
+import { ContainerNarrow, Container } from "../../base";
 
 import FileManager from "../../files/components/Manager";
 import Labels from "../../labels/components/Labels";
@@ -10,9 +10,9 @@ import SamplesSettings from "./Settings";
 import CreateSample from "./Create/Create";
 
 export const SampleFileManager = () => (
-    <NarrowContainer>
+    <ContainerNarrow>
         <FileManager fileType="reads" />
-    </NarrowContainer>
+    </ContainerNarrow>
 );
 
 export const Samples = () => (

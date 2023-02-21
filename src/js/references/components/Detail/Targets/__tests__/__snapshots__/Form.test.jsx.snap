@@ -3,21 +3,21 @@
 exports[`<TargetForm /> > should render 1`] = `
 <Fragment>
   <InputGroup>
-    <styled.label>
+    <InputLabel>
       Name
-    </styled.label>
-    <Styled(UnstyledInput)
+    </InputLabel>
+    <Input
       error=""
       name="name"
       onChange={[MockFunction spy]}
       value="foo"
     />
-    <styled.p />
+    <InputError />
   </InputGroup>
   <InputGroup>
-    <styled.label>
+    <InputLabel>
       Description
-    </styled.label>
+    </InputLabel>
     <TextArea
       name="description"
       onChange={[MockFunction spy]}
@@ -25,10 +25,10 @@ exports[`<TargetForm /> > should render 1`] = `
     />
   </InputGroup>
   <InputGroup>
-    <styled.label>
+    <InputLabel>
       Length
-    </styled.label>
-    <Styled(UnstyledInput)
+    </InputLabel>
+    <Input
       name="length"
       onChange={[MockFunction spy]}
       type="number"
@@ -37,7 +37,6 @@ exports[`<TargetForm /> > should render 1`] = `
   </InputGroup>
   <Checkbox
     checked={false}
-    disabled={false}
     label="Required"
     onClick={[MockFunction spy]}
   />
@@ -47,21 +46,21 @@ exports[`<TargetForm /> > should render 1`] = `
 exports[`<TargetForm /> > should render with error 1`] = `
 <Fragment>
   <InputGroup>
-    <styled.label>
+    <InputLabel>
       Name
-    </styled.label>
-    <Styled(UnstyledInput)
+    </InputLabel>
+    <Input
       error=""
       name="name"
       onChange={[MockFunction spy]}
       value="foo"
     />
-    <styled.p />
+    <InputError />
   </InputGroup>
   <InputGroup>
-    <styled.label>
+    <InputLabel>
       Description
-    </styled.label>
+    </InputLabel>
     <TextArea
       name="description"
       onChange={[MockFunction spy]}
@@ -69,10 +68,10 @@ exports[`<TargetForm /> > should render with error 1`] = `
     />
   </InputGroup>
   <InputGroup>
-    <styled.label>
+    <InputLabel>
       Length
-    </styled.label>
-    <Styled(UnstyledInput)
+    </InputLabel>
+    <Input
       name="length"
       onChange={[MockFunction spy]}
       type="number"
@@ -81,7 +80,6 @@ exports[`<TargetForm /> > should render with error 1`] = `
   </InputGroup>
   <Checkbox
     checked={false}
-    disabled={false}
     label="Required"
     onClick={[MockFunction spy]}
   />

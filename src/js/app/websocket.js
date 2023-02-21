@@ -114,11 +114,8 @@ export default function WSConnection({ getState, dispatch }) {
 
     this.establishConnection = () => {
         const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-        const websocketTarget = module.hot
-            ? `${protocol}://${window.location.host}/websocket`
-            : `${protocol}://${window.location.host}/ws`;
 
-        this.connection = new window.WebSocket(websocketTarget);
+        this.connection = new window.WebSocket(`${protocol}://${window.location.host}/ws`);
         this.connectionStatus = CONNECTING;
 
         this.connection.onopen = () => {

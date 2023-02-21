@@ -6,22 +6,22 @@ exports[`<IndexDetail /> > should render <NotFound /> when GET_INDEX_ERROR is se
 
 exports[`<IndexDetail /> > should render 1`] = `
 <Fragment>
-  <styled.div>
-    <styled.div>
+  <SubviewHeader>
+    <SubviewHeaderTitle>
       Index 
       3
-    </styled.div>
+    </SubviewHeaderTitle>
     <styled.div>
-      <styled.span>
+      <SubviewHeaderAttribution>
          built 
         <RelativeTime
           time="2018-02-14T17:12:00.000000Z"
         />
-      </styled.span>
+      </SubviewHeaderAttribution>
     </styled.div>
-  </styled.div>
-  <styled.div>
+  </SubviewHeader>
+  <ContainerNarrow>
     <IndexGeneral />
-  </styled.div>
+  </ContainerNarrow>
 </Fragment>
 `;

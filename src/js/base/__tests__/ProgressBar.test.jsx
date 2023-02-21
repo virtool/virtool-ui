@@ -1,4 +1,5 @@
-import { ProgressBar, AffixedProgressBar } from "../ProgressBar";
+import { ProgressBar } from "../ProgressBar";
+import { ProgressBarAffixed } from "../ProgressBarAffixed";
 
 describe("<ProgressBar />", () => {
     const props = {
@@ -23,18 +24,18 @@ describe("<AffixedProgressBar />", () => {
     };
 
     it("should render", () => {
-        const wrapper = shallow(<AffixedProgressBar {...props} />);
+        const wrapper = shallow(<ProgressBarAffixed {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     it("should render when [bottom=true]", () => {
-        const wrapper = shallow(<AffixedProgressBar {...props} bottom />);
+        const wrapper = shallow(<ProgressBarAffixed {...props} bottom />);
         expect(wrapper).toMatchSnapshot();
     });
 
     it.each(["green", "blue", "red", "orange"])("should render when [color=%p]", color => {
         props.color = color;
-        const wrapper = shallow(<AffixedProgressBar {...props} />);
+        const wrapper = shallow(<ProgressBarAffixed {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
 });

@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import {
     Badge,
+    ContainerNarrow,
     LoadingPlaceholder,
-    NarrowContainer,
     NotFound,
     ViewHeader,
     ViewHeaderAttribution,
@@ -58,7 +58,7 @@ class JobDetail extends React.Component {
         const workflow = getWorkflowDisplayName(detail.workflow);
 
         return (
-            <NarrowContainer>
+            <ContainerNarrow>
                 <ViewHeader title={workflow}>
                     <ViewHeaderTitle>
                         {workflow} <JobDetailBadge color={color}>{latest.state}</JobDetailBadge>
@@ -80,7 +80,7 @@ class JobDetail extends React.Component {
                 <JobSteps />
 
                 <JobError error={latest.error} />
-            </NarrowContainer>
+            </ContainerNarrow>
         );
     }
 }

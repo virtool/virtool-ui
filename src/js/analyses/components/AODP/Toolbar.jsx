@@ -2,7 +2,7 @@ import { toNumber } from "lodash-es";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Input, SearchInput, Toolbar } from "../../../base";
+import { Input, InputSearch, Toolbar } from "../../../base";
 import { setAnalysisSortKey, setAODPFilter, setSearchIds } from "../../actions";
 import { getFuse } from "../../selectors";
 import { AnalysisViewerSort } from "../Viewer/Sort";
@@ -27,7 +27,7 @@ export const AODPToolBar = ({ filterAODP, fuse, id, sortKey, onSearch, onSelect,
 
     return (
         <StyledAODPToolbar>
-            <SearchInput onChange={handleChangeSearch} onKeyDown={e => e.stopPropagation()} placeholder="Name" />
+            <InputSearch onChange={handleChangeSearch} onKeyDown={e => e.stopPropagation()} placeholder="Name" />
             <AnalysisViewerSort workflow="aodp" sortKey={sortKey} onSelect={onSelect} />
             <Input
                 type="number"

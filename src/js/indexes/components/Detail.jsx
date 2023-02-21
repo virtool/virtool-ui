@@ -3,8 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import {
+    ContainerNarrow,
     LoadingPlaceholder,
-    NarrowContainer,
     NotFound,
     RelativeTime,
     SubviewHeader,
@@ -58,9 +58,9 @@ export class IndexDetail extends React.Component {
                     </IndexDetailSubtitle>
                 </SubviewHeader>
 
-                <NarrowContainer>
+                <ContainerNarrow>
                     <IndexGeneral />
-                </NarrowContainer>
+                </ContainerNarrow>
             </>
         );
     }

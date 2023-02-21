@@ -1,4 +1,4 @@
-import { Input, Select } from "../../../../base";
+import { Input, InputSelect } from "../../../../base";
 import { SourceType } from "../SourceType";
 
 describe("<SourceType />", () => {
@@ -43,7 +43,7 @@ describe("<SourceType />", () => {
                 value: "Foo"
             }
         };
-        wrapper.find(Select).simulate("change", e);
+        wrapper.find(InputSelect).simulate("change", e);
         expect(props.onChange).toHaveBeenCalledWith(e);
     });
 });

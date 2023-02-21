@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the key")
 });
 
-export const getInitialFormValues = permissions => ({
+const getInitialFormValues = permissions => ({
     name: "",
     permissions: mapValues(permissions, () => false)
 });
@@ -62,7 +62,7 @@ const StyledCreateAPIKey = styled(ModalBody)`
     }
 `;
 
-export const CreateAPIKey = ({ newKey, permissions, show, onCreate, onHide }) => {
+function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
 
@@ -136,23 +136,27 @@ export const CreateAPIKey = ({ newKey, permissions, show, onCreate, onHide }) =>
             )}
         </Modal>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    show: routerLocationHasState(state, "createAPIKey"),
-    newKey: state.account.newKey,
-    permissions: state.account.permissions
-});
+function mapStateToProps(state) {
+    return {
+        show: routerLocationHasState(state, "createAPIKey"),
+        newKey: state.account.newKey,
+        permissions: state.account.permissions
+    };
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onCreate: (name, permissions) => {
-        dispatch(createAPIKey(name, permissions));
-    },
+function mapDispatchToProps(dispatch) {
+    return {
+        onCreate: (name, permissions) => {
+            dispatch(createAPIKey(name, permissions));
+        },
 
-    onHide: () => {
-        dispatch(pushState({ createAPIKey: false }));
-        dispatch(clearAPIKey());
-    }
-});
+        onHide: () => {
+            dispatch(pushState({ createAPIKey: false }));
+            dispatch(clearAPIKey());
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateAPIKey);

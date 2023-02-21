@@ -1,5 +1,5 @@
 import { FIND_SUBTRACTIONS } from "../../../app/actionTypes";
-import { SearchInput } from "../../../base";
+import { InputSearch } from "../../../base";
 import { mapDispatchToProps, mapStateToProps, SubtractionToolbar } from "../Toolbar";
 import { checkAdminOrPermission } from "../../../utils/utils";
 
@@ -34,7 +34,7 @@ describe("<SubtractionToolbar />", () => {
                 value: "Foo"
             }
         };
-        wrapper.find(SearchInput).simulate("change", e);
+        wrapper.find(InputSearch).simulate("change", e);
         expect(props.onFind).toHaveBeenCalledWith(e);
     });
 });

@@ -28,6 +28,7 @@ const initialState = {
     login: false,
     reset: false
 };
+
 export const appReducer = createReducer(initialState, builder => {
     builder
         .addCase(LOGIN.SUCCEEDED, (state, action) => {

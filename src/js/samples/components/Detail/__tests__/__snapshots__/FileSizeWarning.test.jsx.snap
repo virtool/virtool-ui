@@ -1,13 +1,11 @@
 // Vitest Snapshot v1
 
 exports[`<SampleFileSizeWarning /> > should not render link when [showLink=false] 1`] = `
-<Styled(_Alert)
+<Alert
   color="orange"
   level={true}
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="exclamation-triangle"
   />
   <span>
@@ -19,17 +17,15 @@ exports[`<SampleFileSizeWarning /> > should not render link when [showLink=false
        and ensure they are correct.
     </span>
   </span>
-</Styled(_Alert)>
+</Alert>
 `;
 
 exports[`<SampleFileSizeWarning /> > should render 1`] = `
-<Styled(_Alert)
+<Alert
   color="orange"
   level={true}
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="exclamation-triangle"
   />
   <span>
@@ -45,7 +41,7 @@ exports[`<SampleFileSizeWarning /> > should render 1`] = `
        and ensure they are correct.
     </span>
   </span>
-</Styled(_Alert)>
+</Alert>
 `;
 
 exports[`<SampleFileSizeWarning /> > should render when [show=false] 1`] = `""`;

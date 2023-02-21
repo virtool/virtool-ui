@@ -1,3 +1,4 @@
+import { createAction } from "@reduxjs/toolkit";
 import {
     ANALYZE,
     BLAST_NUVS,
@@ -20,7 +21,6 @@ import {
     WS_REMOVE_ANALYSIS,
     WS_UPDATE_ANALYSIS
 } from "../app/actionTypes";
-import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns an action that should be dispatched when a analysis document is inserted via websocket.

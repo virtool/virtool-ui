@@ -6,7 +6,7 @@ exports[`<DataTypeSelection /> > should render 1`] = `
     Data Type
   </label>
   <styled.div>
-    <Styled(styled.div)
+    <SelectBox
       active={true}
       onClick={[Function]}
     >
@@ -16,8 +16,8 @@ exports[`<DataTypeSelection /> > should render 1`] = `
       <span>
         Whole genomes for mapping-based detection
       </span>
-    </Styled(styled.div)>
-    <Styled(styled.div)
+    </SelectBox>
+    <SelectBox
       active={false}
       onClick={[Function]}
     >
@@ -27,7 +27,7 @@ exports[`<DataTypeSelection /> > should render 1`] = `
       <span>
         Target sequences for barcode analysis
       </span>
-    </Styled(styled.div)>
+    </SelectBox>
   </styled.div>
 </div>
 `;

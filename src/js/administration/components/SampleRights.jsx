@@ -2,7 +2,7 @@ import { includes, map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, InputGroup, InputLabel, Select, SelectBox } from "../../base";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, InputGroup, InputLabel, InputSelect, SelectBox } from "../../base";
 import { updateSetting, updateSettings } from "../actions";
 
 const rights = [
@@ -63,16 +63,20 @@ export const SampleRights = props => {
 
                 <InputGroup>
                     <InputLabel>Group Rights</InputLabel>
-                    <Select value={props.group} onChange={e => props.onChangeRights("group", e.target.value)}>
+                    <InputSelect value={props.group} onChange={e => props.onChangeRights("group", e.target.value)}>
                         {options}
-                    </Select>
+                    </InputSelect>
                 </InputGroup>
 
                 <InputGroup>
                     <InputLabel>All Users' Rights</InputLabel>
-                    <Select name="all" value={props.all} onChange={e => props.onChangeRights("all", e.target.value)}>
+                    <InputSelect
+                        name="all"
+                        value={props.all}
+                        onChange={e => props.onChangeRights("all", e.target.value)}
+                    >
                         {options}
-                    </Select>
+                    </InputSelect>
                 </InputGroup>
             </BoxGroupSection>
         </BoxGroup>

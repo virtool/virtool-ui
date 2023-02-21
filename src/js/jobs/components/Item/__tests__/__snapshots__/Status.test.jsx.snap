@@ -6,8 +6,6 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
 >
   <Icon
     color="red"
-    faStyle="fas"
-    fixedWidth={false}
     name="times fa-fw"
   />
   <span>
@@ -22,8 +20,6 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
 >
   <Icon
     color="green"
-    faStyle="fas"
-    fixedWidth={false}
     name="check fa-fw"
   />
   <span>
@@ -38,8 +34,6 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
 >
   <Icon
     color="red"
-    faStyle="fas"
-    fixedWidth={false}
     name="times fa-fw"
   />
   <span>
@@ -96,8 +90,6 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] c
 >
   <Icon
     color="red"
-    faStyle="fas"
-    fixedWidth={false}
     name="times fa-fw"
   />
   <span>
@@ -112,8 +104,6 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] c
 >
   <Icon
     color="green"
-    faStyle="fas"
-    fixedWidth={false}
     name="check fa-fw"
   />
   <span>
@@ -128,8 +118,6 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] e
 >
   <Icon
     color="red"
-    faStyle="fas"
-    fixedWidth={false}
     name="times fa-fw"
   />
   <span>

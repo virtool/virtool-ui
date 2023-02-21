@@ -3,8 +3,6 @@
 exports[`<NoneFound /> > should render with [noun='files' 1`] = `
 <styled.div>
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
@@ -14,15 +12,15 @@ exports[`<NoneFound /> > should render with [noun='files' 1`] = `
 `;
 
 exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
-<Styled(styled.div)
+<Styled(Box)
   as={
     {
       "$$typeof": Symbol(react.forward_ref),
       "attrs": [],
       "componentStyle": e {
-        "baseHash": 183687572,
+        "baseHash": 816878857,
         "baseStyle": undefined,
-        "componentId": "sc-ftTHYK",
+        "componentId": "sc-jSUZER",
         "isStatic": false,
         "rules": [
           "
@@ -52,7 +50,7 @@ exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
       "foldedComponentIds": [],
       "render": [Function],
       "shouldForwardProp": undefined,
-      "styledComponentId": "sc-ftTHYK",
+      "styledComponentId": "sc-jSUZER",
       "target": "div",
       "toString": [Function],
       "warnTooManyClasses": [Function],
@@ -61,34 +59,28 @@ exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
   }
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
   boxes
    found.   
-</Styled(styled.div)>
+</Styled(Box)>
 `;
 
 exports[`<NoneFoundSection /> > should render with [noun='sections' 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
   sections
    found
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<NoneFoundSection /> > should render with [noun='sections'] and children 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
    No 
@@ -101,5 +93,5 @@ exports[`<NoneFoundSection /> > should render with [noun='sections'] and childre
     </span>
     .
   </span>
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;

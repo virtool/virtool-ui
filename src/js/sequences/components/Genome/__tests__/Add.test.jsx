@@ -1,7 +1,7 @@
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { AddGenomeSequence, castValues } from "../Add";
 import { createStore } from "redux";
-import { screen, waitFor } from "@testing-library/react";
+import { AddGenomeSequence, castValues } from "../Add";
 
 const createAppStore = state => () => createStore(state => state, state);
 

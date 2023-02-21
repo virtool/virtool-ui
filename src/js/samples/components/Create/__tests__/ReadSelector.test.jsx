@@ -1,4 +1,4 @@
-import { SearchInput } from "../../../../base";
+import { InputSearch } from "../../../../base";
 import ReadSelector, { ReadSelectorButton } from "../ReadSelector";
 
 describe("<ReadSelector />", () => {
@@ -43,7 +43,7 @@ describe("<ReadSelector />", () => {
                 value: "Baz"
             }
         };
-        wrapper.find(SearchInput).simulate("change", e);
+        wrapper.find(InputSearch).simulate("change", e);
         expect(wrapper.state()).toEqual({ filter: "Baz" });
     });
 

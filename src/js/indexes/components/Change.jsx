@@ -1,9 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { connect } from "react-redux";
-import { SpacedBox } from "../../base";
+import styled from "styled-components";
+import { BoxSpaced } from "../../base";
 
-const StyledIndexChange = styled(SpacedBox)`
+const StyledIndexChange = styled(BoxSpaced)`
     display: grid;
     grid-template-columns: 1fr 1fr;
 `;

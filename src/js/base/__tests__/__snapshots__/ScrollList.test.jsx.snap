@@ -15,7 +15,7 @@ exports[`<ScrollList /> > should return LoadingPlaceholder when [documents=null]
   >
     <div
       aria-label="loading"
-      className="sc-bcXHqe fJUQtf"
+      className="sc-bcXHqe ghdfBl"
       color="greyDark"
       size="22px"
     >

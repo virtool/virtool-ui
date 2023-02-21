@@ -1,21 +1,21 @@
 // Vitest Snapshot v1
 
 exports[`<SampleRights /> > should render 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     <h2>
       Default Sample Rights
     </h2>
     <p>
       Set the method used to assign groups to new samples and the default rights.
     </p>
-  </Styled(styled.div)>
-  <styled.div>
+  </BoxGroupHeader>
+  <BoxGroupSection>
     <label>
       Sample Group
     </label>
     <styled.div>
-      <Styled(styled.div)
+      <SelectBox
         active=""
         onClick={[Function]}
       >
@@ -29,8 +29,8 @@ exports[`<SampleRights /> > should render 1`] = `
           </em>
            rights apply
         </p>
-      </Styled(styled.div)>
-      <Styled(styled.div)
+      </SelectBox>
+      <SelectBox
         active={true}
         onClick={[Function]}
       >
@@ -40,8 +40,8 @@ exports[`<SampleRights /> > should render 1`] = `
         <p>
           Samples are automatically assigned the creating user's primary group
         </p>
-      </Styled(styled.div)>
-      <Styled(styled.div)
+      </SelectBox>
+      <SelectBox
         active=""
         onClick={[Function]}
       >
@@ -51,13 +51,13 @@ exports[`<SampleRights /> > should render 1`] = `
         <p>
           Samples are assigned by the user in the creation form
         </p>
-      </Styled(styled.div)>
+      </SelectBox>
     </styled.div>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         Group Rights
-      </styled.label>
-      <Select
+      </InputLabel>
+      <InputSelect
         onChange={[Function]}
         value="rw"
       >
@@ -79,13 +79,13 @@ exports[`<SampleRights /> > should render 1`] = `
         >
           Read & write
         </option>
-      </Select>
+      </InputSelect>
     </InputGroup>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         All Users' Rights
-      </styled.label>
-      <Select
+      </InputLabel>
+      <InputSelect
         name="all"
         onChange={[Function]}
         value="rw"
@@ -108,8 +108,8 @@ exports[`<SampleRights /> > should render 1`] = `
         >
           Read & write
         </option>
-      </Select>
+      </InputSelect>
     </InputGroup>
-  </styled.div>
-</Styled(styled.div)>
+  </BoxGroupSection>
+</BoxGroup>
 `;

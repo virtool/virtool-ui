@@ -1,4 +1,4 @@
-import { ReferenceDetailTabs, mapStateToProps } from "../Tabs";
+import { mapStateToProps, ReferenceDetailTabs } from "../Tabs";
 
 describe("<ReferenceDetailTabs />", () => {
     it("should render", () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { TabLink, ViewHeader, ViewHeaderTitle, Tabs, NarrowContainer } from "../../base";
+import { ContainerNarrow, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "../../base";
 import { routerLocationHasState } from "../../utils/utils";
 import EmptyReference from "./Empty";
 import ImportReference from "./Import";
@@ -44,27 +44,27 @@ export class AddReference extends React.Component {
 
     render() {
         return (
-            <NarrowContainer>
+            <ContainerNarrow>
                 <ViewHeader title="Create Reference">
                     <ViewHeaderTitle>Create Reference</ViewHeaderTitle>
                 </ViewHeader>
                 <Tabs>
-                    <TabLink
+                    <TabsLink
                         to={{ state: { newReference: true, emptyReference: true } }}
                         isActive={this.checkActive("isCreate")}
                     >
                         Empty
-                    </TabLink>
-                    <TabLink
+                    </TabsLink>
+                    <TabsLink
                         to={{ state: { newReference: true, importReference: true } }}
                         isActive={this.checkActive("isImport")}
                     >
                         Import
-                    </TabLink>
+                    </TabsLink>
                 </Tabs>
 
                 {this.renderForm()}
-            </NarrowContainer>
+            </ContainerNarrow>
         );
     }
 }

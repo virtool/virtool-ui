@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<Icon /> > should render 1`] = `
-<styled.i
+<Icon
   as="i"
   className=" fas fa-test"
   fixedWidth={false}
@@ -15,7 +15,7 @@ exports[`<Icon /> > should render placed tooltip when tipPlacement props defined
   position="bottom"
   tip="Tooltip"
 >
-  <styled.i
+  <Icon
     as="i"
     className=" fas fa-test"
     fixedWidth={false}
@@ -30,7 +30,7 @@ exports[`<Icon /> > should render tooltip when tip props is defined 1`] = `
   position="top"
   tip="Tooltip"
 >
-  <styled.i
+  <Icon
     as="i"
     className=" fas fa-test"
     fixedWidth={false}
@@ -41,7 +41,7 @@ exports[`<Icon /> > should render tooltip when tip props is defined 1`] = `
 `;
 
 exports[`<Icon /> > should render when [fixedWith=true] 1`] = `
-<styled.i
+<Icon
   as="i"
   className=" fas fa-test"
   fixedWidth={true}
@@ -51,7 +51,7 @@ exports[`<Icon /> > should render when [fixedWith=true] 1`] = `
 `;
 
 exports[`<Icon /> > should render when className prop provided 1`] = `
-<styled.i
+<Icon
   as="i"
   className="heavy  fas fa-test"
   fixedWidth={false}

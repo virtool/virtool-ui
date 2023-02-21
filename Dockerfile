@@ -6,21 +6,22 @@ RUN npm i
 FROM library/node:16-buster as dev
 WORKDIR /build
 COPY --from=npm /build/node_modules /build/node_modules
-COPY package.json package-lock.json webpack.config.js tsconfig.json .eslintrc run.js /build/
+COPY package.json package-lock.json vite.config.js /build/
 COPY server /build/server
 COPY src /build/src
-CMD ["npx", "webpack-dev-server"]
+CMD ["npx", "vite", "serve"]
 
-FROM npm as build
+FROM library/node:16-buster as build
+WORKDIR /build
 COPY --from=npm /build/node_modules /build/node_modules
-COPY .eslintrc webpack.production.config.js ./
+COPY vite.config.js ./
 COPY src /build/src
-RUN npx webpack --config webpack.production.config.js
+RUN npx vite build
 
 FROM library/node:16-buster as dist
 WORKDIR /ui
 COPY --from=build /build/dist /ui/dist
-RUN npm install commander express http-proxy-middleware ejs
+RUN npm install commander express
 COPY run.js /ui/
 COPY ./server /ui/server
 EXPOSE 9900

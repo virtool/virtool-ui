@@ -2,7 +2,6 @@ const express = require("express");
 const { program } = require("commander");
 const { defaultPath } = require("./server/routes");
 const { applyCSPHeader } = require("./server/csp");
-const { createProxyMiddleware } = require("http-proxy-middleware");
 const { logging } = require("./server/logging");
 const path = require("path");
 const { formatTemplateOptions } = require("./server/templateOptions");
@@ -71,22 +70,10 @@ const options = program.opts();
 const app = express();
 
 app.disable("x-powered-by");
-if (options.useProxy) {
-  app.use(
-    createProxyMiddleware(["/api", "/ws"], {
-      target: options.apiUrl,
-      ws: true,
-      pathRewrite: { "/api": "" },
-    })
-  );
-
-  console.log(`Proxying API requests to ${options.apiUrl}`);
-}
 
 const templateOptions = formatTemplateOptions(options);
 
 app.use([applyCSPHeader(options.b2cTenant), logging]);
-app.engine("html", require("ejs").renderFile);
 app.set("views", path.join(__dirname, "dist"));
 app.locals.delimiter = "#";
 

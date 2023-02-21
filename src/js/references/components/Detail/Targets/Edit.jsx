@@ -1,9 +1,8 @@
 import { find, get, map, toNumber } from "lodash-es";
 import React from "react";
-
 import { connect } from "react-redux";
 import { pushState } from "../../../../app/actions";
-import { Button, ModalBody, ModalFooter, Modal, ModalHeader } from "../../../../base";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../../base";
 import { routerLocationHasState } from "../../../../utils/utils";
 import { editReference } from "../../../actions";
 import { TargetForm } from "./Form";

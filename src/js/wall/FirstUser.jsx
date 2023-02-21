@@ -2,8 +2,7 @@ import { Field, Form, Formik } from "formik";
 import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-
-import { Input, InputError, InputGroup, InputLabel, PasswordInput } from "../base";
+import { Input, InputError, InputGroup, InputLabel, InputPassword } from "../base";
 import { createFirstUser } from "../users/actions";
 import {
     WallButton,
@@ -45,7 +44,7 @@ export const FirstUser = ({ onSubmit, errors }) => {
                             </InputGroup>
                             <InputGroup>
                                 <InputLabel htmlFor="password">Password</InputLabel>
-                                <Field id="password" name="password" as={PasswordInput} />
+                                <Field id="password" name="password" as={InputPassword} />
                                 {errors.passwordErrors.map(error => (
                                     <InputError key={error}>{error}</InputError>
                                 ))}

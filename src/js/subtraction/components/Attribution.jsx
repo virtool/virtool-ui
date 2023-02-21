@@ -1,7 +1,8 @@
-import { Attribution, NameAttribution } from "../../base";
 import React from "react";
-import { theme, getColor, getFontSize } from "../../app/theme";
 import styled from "styled-components";
+import { getColor, getFontSize, theme } from "../../app/theme";
+import { Attribution, AttributionWithName } from "../../base";
+
 const StyledNoneFoundAttribution = styled.div`
     color: ${getColor({ color: "grey", theme })};
     font-size: ${getFontSize("sm")};
@@ -15,7 +16,7 @@ export function SubtractionAttribution({ handle, time }) {
         if (time) {
             return <Attribution user={handle} time={time} />;
         }
-        return <NameAttribution user={handle} />;
+        return <AttributionWithName user={handle} />;
     }
     return <StyledNoneFoundAttribution> Creator and timestamp unavailable</StyledNoneFoundAttribution>;
 }

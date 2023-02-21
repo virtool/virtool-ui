@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { SpacedBox, device } from "../../../base";
+import { BoxSpaced, device } from "../../../base";
 import { getReferenceItemProgress } from "../../selectors";
 import { ReferenceItemBuild } from "./Build";
 import { ReferenceItemHeader } from "./Header";
@@ -21,7 +21,7 @@ const ReferenceItemBody = styled.div`
     }
 `;
 
-const StyledReferenceItem = styled(SpacedBox)`
+const StyledReferenceItem = styled(BoxSpaced)`
     padding: 0 0 10px;
     margin-bottom: 15px;
 `;

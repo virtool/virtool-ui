@@ -1,4 +1,4 @@
-import { SearchInput } from "../../../base";
+import { InputSearch } from "../../../base";
 import { ReferenceToolbar } from "../Toolbar";
 
 describe("<ReferenceToolbar />", () => {
@@ -32,7 +32,7 @@ describe("<ReferenceToolbar />", () => {
     it("should call onFind() when input changes", () => {
         const wrapper = shallow(<ReferenceToolbar {...props} />);
         const e = { target: { value: "baz" } };
-        wrapper.find(SearchInput).simulate("change", e);
+        wrapper.find(InputSearch).simulate("change", e);
         expect(props.onFind).toHaveBeenCalledWith(e);
     });
 });

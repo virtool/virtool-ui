@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<LatestBuild /> > should render when [latestBuild!=null] 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <div>
     <strong>
       <Link
@@ -20,7 +20,7 @@ exports[`<LatestBuild /> > should render when [latestBuild!=null] 1`] = `
       baz_handle
     </span>
   </div>
-</Styled(styled.div)>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<LatestBuild /> > should render when [latestBuild=null] 1`] = `

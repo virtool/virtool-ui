@@ -1,4 +1,6 @@
-import { NoneFound, NoneFoundBox, NoneFoundSection } from "../NoneFound";
+import { NoneFound } from "../NoneFound";
+import { NoneFoundSection } from "../NoneFoundSection";
+import { NoneFoundBox } from "../NoneFoundBox";
 
 describe("<NoneFound />", () => {
     it("should render with [noun='files'", () => {

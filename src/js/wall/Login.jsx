@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { login } from "../account/actions";
-import { BoxGroupSection, Checkbox, Input, InputGroup, InputLabel, PasswordInput } from "../base";
+import { BoxGroupSection, Checkbox, Input, InputGroup, InputLabel, InputPassword } from "../base";
 import { clearError } from "../errors/actions";
 import B2cLogin from "./B2CLogin";
 import {
@@ -90,7 +90,7 @@ export class Login extends React.Component {
                                 </InputGroup>
                                 <InputGroup>
                                     <InputLabel htmlFor="password">Password</InputLabel>
-                                    <PasswordInput
+                                    <InputPassword
                                         name="password"
                                         id="password"
                                         value={this.state.password}

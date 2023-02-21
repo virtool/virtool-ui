@@ -1,6 +1,6 @@
-import { Select } from "../../../../base";
-import { SampleRights, mapStateToProps, mapDispatchToProps } from "../Rights";
+import { InputSelect } from "../../../../base";
 import { getCanModifyRights } from "../../../selectors";
+import { mapDispatchToProps, mapStateToProps, SampleRights } from "../Rights";
 
 vi.mock("../../../selectors.js");
 
@@ -39,13 +39,13 @@ describe("<SampleRights />", () => {
 
     it("should call handleChangeGroup() when input is changed", () => {
         const wrapper = shallow(<SampleRights {...props} />);
-        wrapper.find(Select).at(0).simulate("change", e);
+        wrapper.find(InputSelect).at(0).simulate("change", e);
         expect(props.onChangeGroup).toHaveBeenCalledWith("foo", "bar");
     });
 
     it("should call handleChangeRights() when input is changed", () => {
         const wrapper = shallow(<SampleRights {...props} />);
-        wrapper.find(Select).at(1).simulate("change", e);
+        wrapper.find(InputSelect).at(1).simulate("change", e);
         expect(props.onChangeRights).toHaveBeenCalledWith("foo", "group", "bar");
     });
 

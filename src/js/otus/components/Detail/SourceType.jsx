@@ -1,6 +1,6 @@
 import { capitalize, map } from "lodash-es";
 import React from "react";
-import { Input, InputGroup, InputLabel, Select } from "../../../base";
+import { Input, InputGroup, InputLabel, InputSelect } from "../../../base";
 
 export const SourceType = ({ restrictSourceTypes, allowedSourceTypes, value, onChange }) => {
     if (restrictSourceTypes) {
@@ -13,12 +13,12 @@ export const SourceType = ({ restrictSourceTypes, allowedSourceTypes, value, onC
         return (
             <InputGroup>
                 <InputLabel>Source Type</InputLabel>
-                <Select value={capitalize(value)} onChange={onChange}>
+                <InputSelect value={capitalize(value)} onChange={onChange}>
                     <option key="default" value="unknown">
                         Unknown
                     </option>
                     {optionComponents}
-                </Select>
+                </InputSelect>
             </InputGroup>
         );
     }

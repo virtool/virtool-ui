@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-import { BoxGroup, BoxGroupHeader, NarrowContainer, Table } from "../../../base";
+import { BoxGroup, BoxGroupHeader, ContainerNarrow, Table } from "../../../base";
 import { Contributors } from "../../../indexes/components/Contributors";
 import { checkUpdates, updateRemoteReference } from "../../actions";
 import { Clone } from "./Clone";
@@ -30,7 +30,7 @@ export const ReferenceManage = ({
     organism,
     remotesFrom
 }) => (
-    <NarrowContainer>
+    <ContainerNarrow>
         <BoxGroup>
             <BoxGroupHeader>
                 <h2>General</h2>
@@ -65,7 +65,7 @@ export const ReferenceManage = ({
 
         <Contributors contributors={contributors} />
         <Targets />
-    </NarrowContainer>
+    </ContainerNarrow>
 );
 
 export const mapStateToProps = state => ({

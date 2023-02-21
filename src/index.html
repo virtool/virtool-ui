@@ -11,26 +11,28 @@
     <meta http-equiv="Expires" content="0"/>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"/>
-    <base href="/" />
-    <script nonce="<#= nonce #>">
-        window.__webpack_nonce__ = "<#= nonce #>";
-        window.virtool = {
-            sentryDSN: "<#= sentry_dsn #>",
-        }
-        window.b2c = {
-        use: "<#= use_b2c #>" === "true",
-        userflow: "<#= b2c_userflow #>",
-        tenant: "<#= b2c_tenant #>",
-        clientId: "<#= b2c_client_id #>",
-        APIClientId: "<#= b2c_api_client_id #>",
-        scope: "<#= b2c_scope #>"
-        };
 
+    <script nonce="NONCE">
+        window.__webpack_nonce__ = "NONCE"
+        window.virtool = {
+            b2c: {
+                apiClientId: "B2C_API_CLIENT_ID",
+                clientId: "B2C_CLIENT_ID",
+                enabled: Boolean("B2C_ENABLED"),
+                tenant: "B2C_TENANT",
+                userFlow: "B2C_USER_FLOW",
+                scope: "B2C_SCOPE",
+            },
+            sentryDsn: "SENTRY_DSN",
+            version: "VERSION"
+        }
     </script>
+
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon"/>
+    <script type="module" src="./js/index.jsx"></script>
 </head>
 
 <body>
-<div id="app-container"/>
+    <div id="app-container"/>
 </body>
 </html>

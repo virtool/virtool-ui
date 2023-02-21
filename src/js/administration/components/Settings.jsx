@@ -2,13 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import {
+    ContainerNarrow,
+    ContainerWide,
     LoadingPlaceholder,
-    NarrowContainer,
-    TabLink,
     Tabs,
+    TabsLink,
     ViewHeader,
-    ViewHeaderTitle,
-    WideContainer
+    ViewHeaderTitle
 } from "../../base";
 
 import UserDetail from "../../users/components/Detail";
@@ -18,18 +18,18 @@ import { ServerSettings } from "./Server";
 import Groups from "../../groups/components/Groups";
 
 export const Settings = ({ loading }) => (
-    <WideContainer>
+    <ContainerWide>
         <ViewHeader title="Administration">
             <ViewHeaderTitle>Administration</ViewHeaderTitle>
         </ViewHeader>
 
         <Tabs bsStyle="tabs">
-            <TabLink to="/administration/settings">Settings</TabLink>
-            <TabLink to="/administration/users">Users</TabLink>
-            <TabLink to="/administration/groups">Groups</TabLink>
+            <TabsLink to="/administration/settings">Settings</TabsLink>
+            <TabsLink to="/administration/users">Users</TabsLink>
+            <TabsLink to="/administration/groups">Groups</TabsLink>
         </Tabs>
 
-        <NarrowContainer>
+        <ContainerNarrow>
             {loading ? (
                 <LoadingPlaceholder />
             ) : (
@@ -41,8 +41,8 @@ export const Settings = ({ loading }) => (
                     <Route path="/administration/groups" component={Groups} />
                 </Switch>
             )}
-        </NarrowContainer>
-    </WideContainer>
+        </ContainerNarrow>
+    </ContainerWide>
 );
 
 export default connect(mapSettingsStateToProps)(Settings);

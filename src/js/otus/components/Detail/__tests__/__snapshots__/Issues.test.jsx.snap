@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<OTUIssues /> > renders correctly with issues 1`] = `
-<Styled(Styled(_Alert))
+<Styled(Alert)
   block={true}
   color="orange"
 >
@@ -56,11 +56,11 @@ exports[`<OTUIssues /> > renders correctly with issues 1`] = `
       </ul>
     </li>
   </ul>
-</Styled(Styled(_Alert))>
+</Styled(Alert)>
 `;
 
 exports[`<OTUIssues /> > renders correctly without issues 1`] = `
-<Styled(Styled(_Alert))
+<Styled(Alert)
   block={true}
   color="orange"
 >
@@ -68,5 +68,5 @@ exports[`<OTUIssues /> > renders correctly without issues 1`] = `
     There are some issues that must be resolved before this OTU can be included in the next index build
   </h5>
   <ul />
-</Styled(Styled(_Alert))>
+</Styled(Alert)>
 `;

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { fontWeight, getFontSize } from "../../app/theme";
-import { Attribution, Icon, LinkBox, Loader } from "../../base";
+import { Attribution, Icon, BoxLink, Loader } from "../../base";
 import { getActiveIndexId } from "../selectors";
 
 const StyledIndexItemDescription = styled.span`
@@ -67,14 +67,14 @@ const IndexItemVersion = styled.strong`
 `;
 
 export const IndexItem = ({ activeId, document, refId }) => (
-    <LinkBox to={`/refs/${refId}/indexes/${document.id}`}>
+    <BoxLink to={`/refs/${refId}/indexes/${document.id}`}>
         <IndexItemTop>
             <IndexItemVersion>Version {document.version}</IndexItemVersion>
             <IndexItemDescription changeCount={document.change_count} modifiedCount={document.modified_otu_count} />
             <IndexItemIcon activeId={activeId} id={document.id} ready={document.ready} />
         </IndexItemTop>
         <Attribution time={document.created_at} user={document.user.handle} />
-    </LinkBox>
+    </BoxLink>
 );
 
 export const mapStateToProps = (state, props) => ({

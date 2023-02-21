@@ -1,6 +1,6 @@
-import { getCanModifyUser } from "../../selectors";
-import { UserRole, mapStateToProps } from "../Role";
 import { screen } from "@testing-library/react";
+import { getCanModifyUser } from "../../selectors";
+import { mapStateToProps, UserRole } from "../Role";
 
 vi.mock("../../selectors.js");
 

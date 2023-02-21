@@ -1,3 +1,4 @@
+import { difference, union, xor } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -5,7 +6,6 @@ import { SidebarHeader, SideBarSection } from "../../../base";
 import { findJobs } from "../../actions";
 import { getJobCountsByState, getStatesFromURL } from "../../selectors";
 import { StateCategory } from "./StateCategory";
-import { difference, union, xor } from "lodash-es";
 
 const active = ["waiting", "preparing", "running"];
 const inactive = ["complete", "cancelled", "errored", "terminated"];

@@ -2,18 +2,18 @@
 
 exports[`<SampleDetailGeneral /> > should render with [paired=%p] false 1`] = `
 <styled.div>
-  <styled.div>
+  <ContainerNarrow>
     <Connect(SampleFileSizeWarning) />
-    <Styled(styled.div)>
-      <Styled(styled.div)>
+    <BoxGroup>
+      <BoxGroupHeader>
         <h2>
           General
         </h2>
         <p>
           User-defined information about the sample.
         </p>
-      </Styled(styled.div)>
-      <styled.table>
+      </BoxGroupHeader>
+      <Table>
         <tbody>
           <tr>
             <th>
@@ -48,18 +48,18 @@ exports[`<SampleDetailGeneral /> > should render with [paired=%p] false 1`] = `
             </td>
           </tr>
         </tbody>
-      </styled.table>
-    </Styled(styled.div)>
-    <Styled(styled.div)>
-      <Styled(styled.div)>
+      </Table>
+    </BoxGroup>
+    <BoxGroup>
+      <BoxGroupHeader>
         <h2>
           Library
         </h2>
         <p>
           Information about the sequencing reads in this sample.
         </p>
-      </Styled(styled.div)>
-      <styled.table>
+      </BoxGroupHeader>
+      <Table>
         <tbody>
           <tr>
             <th>
@@ -108,43 +108,43 @@ exports[`<SampleDetailGeneral /> > should render with [paired=%p] false 1`] = `
             </td>
           </tr>
         </tbody>
-      </styled.table>
-    </Styled(styled.div)>
-    <Styled(styled.div)>
-      <Styled(styled.div)>
+      </Table>
+    </BoxGroup>
+    <BoxGroup>
+      <BoxGroupHeader>
         <h2>
           Notes
         </h2>
         <p>
           Additional notes about the sample.
         </p>
-      </Styled(styled.div)>
+      </BoxGroupHeader>
       <Markdown
         markdown="Example notes"
       />
-    </Styled(styled.div)>
-  </styled.div>
-  <Styled(styled.div)>
+    </BoxGroup>
+  </ContainerNarrow>
+  <Styled(ContainerSide)>
     <Connect(Sidebar) />
-  </Styled(styled.div)>
+  </Styled(ContainerSide)>
   <Connect(EditSample) />
 </styled.div>
 `;
 
 exports[`<SampleDetailGeneral /> > should render with [paired=%p] true 1`] = `
 <styled.div>
-  <styled.div>
+  <ContainerNarrow>
     <Connect(SampleFileSizeWarning) />
-    <Styled(styled.div)>
-      <Styled(styled.div)>
+    <BoxGroup>
+      <BoxGroupHeader>
         <h2>
           General
         </h2>
         <p>
           User-defined information about the sample.
         </p>
-      </Styled(styled.div)>
-      <styled.table>
+      </BoxGroupHeader>
+      <Table>
         <tbody>
           <tr>
             <th>
@@ -179,18 +179,18 @@ exports[`<SampleDetailGeneral /> > should render with [paired=%p] true 1`] = `
             </td>
           </tr>
         </tbody>
-      </styled.table>
-    </Styled(styled.div)>
-    <Styled(styled.div)>
-      <Styled(styled.div)>
+      </Table>
+    </BoxGroup>
+    <BoxGroup>
+      <BoxGroupHeader>
         <h2>
           Library
         </h2>
         <p>
           Information about the sequencing reads in this sample.
         </p>
-      </Styled(styled.div)>
-      <styled.table>
+      </BoxGroupHeader>
+      <Table>
         <tbody>
           <tr>
             <th>
@@ -239,25 +239,25 @@ exports[`<SampleDetailGeneral /> > should render with [paired=%p] true 1`] = `
             </td>
           </tr>
         </tbody>
-      </styled.table>
-    </Styled(styled.div)>
-    <Styled(styled.div)>
-      <Styled(styled.div)>
+      </Table>
+    </BoxGroup>
+    <BoxGroup>
+      <BoxGroupHeader>
         <h2>
           Notes
         </h2>
         <p>
           Additional notes about the sample.
         </p>
-      </Styled(styled.div)>
+      </BoxGroupHeader>
       <Markdown
         markdown="Example notes"
       />
-    </Styled(styled.div)>
-  </styled.div>
-  <Styled(styled.div)>
+    </BoxGroup>
+  </ContainerNarrow>
+  <Styled(ContainerSide)>
     <Connect(Sidebar) />
-  </Styled(styled.div)>
+  </Styled(ContainerSide)>
   <Connect(EditSample) />
 </styled.div>
 `;

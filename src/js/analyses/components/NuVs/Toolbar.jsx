@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Button, LinkButton, SearchInput, Toolbar } from "../../../base";
+import { Button, LinkButton, InputSearch, Toolbar } from "../../../base";
 import { setAnalysisSortKey, setSearchIds, toggleFilterORFs, toggleFilterSequences } from "../../actions";
 import { getFuse, getResults } from "../../selectors";
 import { AnalysisViewerSort } from "../Viewer/Sort";
@@ -31,7 +31,7 @@ const NuVsToolbar = ({
 
     return (
         <StyledNuVsToolbar>
-            <SearchInput onChange={handleChange} onKeyDown={e => e.stopPropagation()} placeholder="Name or family" />
+            <InputSearch onChange={handleChange} onKeyDown={e => e.stopPropagation()} placeholder="Name or family" />
             <AnalysisViewerSort workflow="nuvs" sortKey={sortKey} onSelect={onSelect} />
             <Button
                 icon="filter"

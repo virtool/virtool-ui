@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<NuVsItem /> > should render when active 1`] = `
-<Styled(Styled(styled.div))
+<Styled(Styled(Box))
   active={true}
   onClick={[Function]}
 >
@@ -10,19 +10,19 @@ exports[`<NuVsItem /> > should render when active 1`] = `
       Sequence 
       4
     </strong>
-    <styled.span>
+    <Badge>
       13
-    </styled.span>
+    </Badge>
   </styled.div>
   <NuVsValues
     e="0.0012"
     orfCount={2}
   />
-</Styled(Styled(styled.div))>
+</Styled(Styled(Box))>
 `;
 
 exports[`<NuVsItem /> > should render when not active 1`] = `
-<Styled(Styled(styled.div))
+<Styled(Styled(Box))
   active={false}
   onClick={[Function]}
 >
@@ -31,19 +31,19 @@ exports[`<NuVsItem /> > should render when not active 1`] = `
       Sequence 
       4
     </strong>
-    <styled.span>
+    <Badge>
       13
-    </styled.span>
+    </Badge>
   </styled.div>
   <NuVsValues
     e="0.0012"
     orfCount={2}
   />
-</Styled(Styled(styled.div))>
+</Styled(Styled(Box))>
 `;
 
 exports[`<NuVsItem /> > should render when not active 2`] = `
-<Styled(Styled(styled.div))
+<Styled(Styled(Box))
   active={false}
   onClick={[Function]}
 >
@@ -52,13 +52,13 @@ exports[`<NuVsItem /> > should render when not active 2`] = `
       Sequence 
       4
     </strong>
-    <styled.span>
+    <Badge>
       13
-    </styled.span>
+    </Badge>
   </styled.div>
   <NuVsValues
     e="0.0012"
     orfCount={2}
   />
-</Styled(Styled(styled.div))>
+</Styled(Styled(Box))>
 `;

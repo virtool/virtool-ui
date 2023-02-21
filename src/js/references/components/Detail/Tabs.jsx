@@ -1,15 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Badge, TabLink, Tabs } from "../../../base";
+import { Badge, Tabs, TabsLink } from "../../../base";
 
 export const ReferenceDetailTabs = ({ id, otuCount }) => (
     <Tabs>
-        <TabLink to={`/refs/${id}/manage`}>Manage</TabLink>
-        <TabLink to={`/refs/${id}/otus`}>
+        <TabsLink to={`/refs/${id}/manage`}>Manage</TabsLink>
+        <TabsLink to={`/refs/${id}/otus`}>
             OTUs <Badge>{otuCount}</Badge>
-        </TabLink>
-        <TabLink to={`/refs/${id}/indexes`}>Indexes</TabLink>
-        <TabLink to={`/refs/${id}/settings`}>Settings</TabLink>
+        </TabsLink>
+        <TabsLink to={`/refs/${id}/indexes`}>Indexes</TabsLink>
+        <TabsLink to={`/refs/${id}/settings`}>Settings</TabsLink>
     </Tabs>
 );
 

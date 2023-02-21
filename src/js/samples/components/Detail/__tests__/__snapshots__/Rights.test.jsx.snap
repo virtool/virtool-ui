@@ -1,22 +1,22 @@
 // Vitest Snapshot v1
 
 exports[`<SampleRights /> > should render 1`] = `
-<styled.div>
-  <Styled(styled.div)>
-    <Styled(styled.div)>
+<ContainerNarrow>
+  <BoxGroup>
+    <BoxGroupHeader>
       <h2>
         Sample Rights
       </h2>
       <p>
         Control who can read and write this sample and which user group owns the sample.
       </p>
-    </Styled(styled.div)>
-    <styled.div>
+    </BoxGroupHeader>
+    <BoxGroupSection>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Group
-        </styled.label>
-        <Select
+        </InputLabel>
+        <InputSelect
           onChange={[Function]}
         >
           <option
@@ -36,13 +36,13 @@ exports[`<SampleRights /> > should render 1`] = `
           >
             Technicians
           </option>
-        </Select>
+        </InputSelect>
       </InputGroup>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           Group Rights
-        </styled.label>
-        <Select
+        </InputLabel>
+        <InputSelect
           name="groupRights"
           onChange={[Function]}
           value="rw"
@@ -62,13 +62,13 @@ exports[`<SampleRights /> > should render 1`] = `
           >
             Read & write
           </option>
-        </Select>
+        </InputSelect>
       </InputGroup>
       <InputGroup>
-        <styled.label>
+        <InputLabel>
           All Users' Rights
-        </styled.label>
-        <Select
+        </InputLabel>
+        <InputSelect
           label="All Users' Rights"
           name="allUsers"
           onChange={[Function]}
@@ -89,17 +89,17 @@ exports[`<SampleRights /> > should render 1`] = `
           >
             Read & write
           </option>
-        </Select>
+        </InputSelect>
       </InputGroup>
-    </styled.div>
-  </Styled(styled.div)>
-</styled.div>
+    </BoxGroupSection>
+  </BoxGroup>
+</ContainerNarrow>
 `;
 
 exports[`<SampleRights /> > should return LoadingPlaceholder when[this.props.groups=null] 1`] = `<LoadingPlaceholder />`;
 
 exports[`<SampleRights /> > should return Not allowed panel when[this.props.canModifyRights=false] 1`] = `
-<styled.div>
+<Box>
   Not allowed
-</styled.div>
+</Box>
 `;

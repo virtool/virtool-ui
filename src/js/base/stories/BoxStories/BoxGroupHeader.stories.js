@@ -1,5 +1,6 @@
 import React from "react";
-import { BoxGroup, BoxGroupHeader } from "../../Box";
+import { BoxGroup } from "../../BoxGroup";
+import { BoxGroupHeader } from "../../BoxGroupHeader";
 
 export default {
     title: "base/Box/BoxGroupHeader",

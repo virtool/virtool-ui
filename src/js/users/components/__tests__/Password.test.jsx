@@ -1,7 +1,7 @@
-import { Password, mapStateToProps, mapDispatchToProps } from "../Password";
-import { editUser } from "../../actions";
 import { screen } from "@testing-library/react";
 import { attachResizeObserver } from "../../../../tests/setupTests";
+import { editUser } from "../../actions";
+import { mapDispatchToProps, mapStateToProps, Password } from "../Password";
 
 describe("<Password />", () => {
     let props;

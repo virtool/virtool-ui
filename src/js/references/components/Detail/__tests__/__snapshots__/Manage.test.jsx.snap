@@ -1,14 +1,14 @@
 // Vitest Snapshot v1
 
 exports[`<ReferenceManage /> > should render when [props.cloned_from={ Bar: 'Bee' }] 1`] = `
-<styled.div>
-  <Styled(styled.div)>
-    <Styled(styled.div)>
+<ContainerNarrow>
+  <BoxGroup>
+    <BoxGroupHeader>
       <h2>
         General
       </h2>
-    </Styled(styled.div)>
-    <Styled(styled.table)>
+    </BoxGroupHeader>
+    <Styled(Table)>
       <tbody>
         <tr>
           <th>
@@ -35,8 +35,8 @@ exports[`<ReferenceManage /> > should render when [props.cloned_from={ Bar: 'Bee
           </td>
         </tr>
       </tbody>
-    </Styled(styled.table)>
-  </Styled(styled.div)>
+    </Styled(Table)>
+  </BoxGroup>
   <Connect(Remote) />
   <Clone
     source={
@@ -45,12 +45,12 @@ exports[`<ReferenceManage /> > should render when [props.cloned_from={ Bar: 'Bee
       }
     }
   />
-  <Styled(styled.div)>
-    <Styled(styled.div)>
+  <BoxGroup>
+    <BoxGroupHeader>
       <h2>
         Latest Index Build
       </h2>
-    </Styled(styled.div)>
+    </BoxGroupHeader>
     <LatestBuild
       id="foo"
       latestBuild={
@@ -59,23 +59,23 @@ exports[`<ReferenceManage /> > should render when [props.cloned_from={ Bar: 'Bee
         }
       }
     />
-  </Styled(styled.div)>
+  </BoxGroup>
   <Contributors
     contributors="baz"
   />
   <Connect(Targets) />
-</styled.div>
+</ContainerNarrow>
 `;
 
 exports[`<ReferenceManage /> > should render when [props.remotes_from=null] 1`] = `
-<styled.div>
-  <Styled(styled.div)>
-    <Styled(styled.div)>
+<ContainerNarrow>
+  <BoxGroup>
+    <BoxGroupHeader>
       <h2>
         General
       </h2>
-    </Styled(styled.div)>
-    <Styled(styled.table)>
+    </BoxGroupHeader>
+    <Styled(Table)>
       <tbody>
         <tr>
           <th>
@@ -102,8 +102,8 @@ exports[`<ReferenceManage /> > should render when [props.remotes_from=null] 1`] 
           </td>
         </tr>
       </tbody>
-    </Styled(styled.table)>
-  </Styled(styled.div)>
+    </Styled(Table)>
+  </BoxGroup>
   <Connect(Remote) />
   <Clone
     source={
@@ -112,12 +112,12 @@ exports[`<ReferenceManage /> > should render when [props.remotes_from=null] 1`] 
       }
     }
   />
-  <Styled(styled.div)>
-    <Styled(styled.div)>
+  <BoxGroup>
+    <BoxGroupHeader>
       <h2>
         Latest Index Build
       </h2>
-    </Styled(styled.div)>
+    </BoxGroupHeader>
     <LatestBuild
       id="foo"
       latestBuild={
@@ -126,10 +126,10 @@ exports[`<ReferenceManage /> > should render when [props.remotes_from=null] 1`] 
         }
       }
     />
-  </Styled(styled.div)>
+  </BoxGroup>
   <Contributors
     contributors="baz"
   />
   <Connect(Targets) />
-</styled.div>
+</ContainerNarrow>
 `;

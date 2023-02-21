@@ -1,8 +1,10 @@
 import React from "react";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../Box";
-import { Input } from "../../Input";
-import { Button } from "../../Button";
 import styled from "styled-components";
+import { BoxGroup } from "../../BoxGroup";
+import { BoxGroupHeader } from "../../BoxGroupHeader";
+import { BoxGroupSection } from "../../BoxGroupSection";
+import { Button } from "../../Button";
+import { Input } from "../../Input";
 
 const StyledButton = styled(Button)`
     margin-top: 10px;

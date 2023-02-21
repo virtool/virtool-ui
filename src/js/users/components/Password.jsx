@@ -9,7 +9,7 @@ import {
     InputContainer,
     InputError,
     InputGroup,
-    PasswordInput,
+    InputPassword,
     RelativeTime,
     SaveButton
 } from "../../base";
@@ -79,7 +79,7 @@ export class Password extends React.Component {
                 <BoxGroupSection as="form" onSubmit={this.handleSubmit}>
                     <InputGroup error={this.state.error}>
                         <InputContainer>
-                            <PasswordInput
+                            <InputPassword
                                 aria-label="password"
                                 name="password"
                                 value={this.state.password}

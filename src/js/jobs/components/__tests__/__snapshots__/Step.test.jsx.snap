@@ -3,7 +3,6 @@
 exports[`<JobStepIcon /> > renders correct icon when state cancelled 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
   fixedWidth={true}
   name="ban"
 />
@@ -12,7 +11,6 @@ exports[`<JobStepIcon /> > renders correct icon when state cancelled 1`] = `
 exports[`<JobStepIcon /> > renders correct icon when state complete 1`] = `
 <Icon
   color="green"
-  faStyle="fas"
   fixedWidth={true}
   name="check"
 />
@@ -21,7 +19,6 @@ exports[`<JobStepIcon /> > renders correct icon when state complete 1`] = `
 exports[`<JobStepIcon /> > renders correct icon when state error 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
   fixedWidth={true}
   name="times"
 />
@@ -30,7 +27,6 @@ exports[`<JobStepIcon /> > renders correct icon when state error 1`] = `
 exports[`<JobStepIcon /> > renders correct icon when state preparing 1`] = `
 <Icon
   color="grey"
-  faStyle="fas"
   fixedWidth={true}
   name="boxes"
 />
@@ -46,7 +42,6 @@ exports[`<JobStepIcon /> > renders correct icon when state running 1`] = `
 exports[`<JobStepIcon /> > renders correct icon when state waiting 1`] = `
 <Icon
   color="purple"
-  faStyle="fas"
   fixedWidth={true}
   name="pause"
 />
@@ -55,7 +50,6 @@ exports[`<JobStepIcon /> > renders correct icon when state waiting 1`] = `
 exports[`<JobStepIcon /> > renders correct icon when step complete 1`] = `
 <Icon
   color="blue"
-  faStyle="fas"
   fixedWidth={true}
   name="arrow-circle-down"
 />

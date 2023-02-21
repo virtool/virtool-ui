@@ -8,7 +8,7 @@ import {
     DropdownMenuItem,
     DropdownMenuList,
     Icon,
-    SearchInput,
+    InputSearch,
     Toolbar
 } from "../../../base";
 import { followDownload } from "../../../utils/utils";
@@ -53,7 +53,7 @@ export const PathoscopeToolbar = ({
 
     return (
         <StyledPathoscopeToolbar>
-            <SearchInput onChange={handleChange} onKeyDown={e => e.stopPropagation()} />
+            <InputSearch onChange={handleChange} onKeyDown={e => e.stopPropagation()} />
             <AnalysisViewerSort workflow="pathoscope" sortKey={sortKey} onSelect={onSetSortKey} />
             <Button title="Sort Direction" onClick={onToggleSortDescending} tip="Sort List">
                 <Icon name={sortDescending ? "sort-amount-down" : "sort-amount-up"} />

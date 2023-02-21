@@ -4,33 +4,33 @@ exports[`<OTUForm /> > should render 1`] = `
 <form
   onSubmit={[MockFunction spy]}
 >
-  <Styled(Styled(styled.div))>
+  <Styled(ModalBody)>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         Name
-      </styled.label>
-      <Styled(UnstyledInput)
+      </InputLabel>
+      <Input
         error=""
         name="name"
         onChange={[MockFunction spy]}
         value="test"
       />
-      <styled.p />
+      <InputError />
     </InputGroup>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         Abbreviation
-      </styled.label>
-      <Styled(UnstyledInput)
+      </InputLabel>
+      <Input
         name="abbreviation"
         onChange={[MockFunction spy]}
         value="T"
       />
     </InputGroup>
-  </Styled(Styled(styled.div))>
-  <Styled(Component)>
+  </Styled(ModalBody)>
+  <ModalFooter>
     <SaveButton />
-  </Styled(Component)>
+  </ModalFooter>
 </form>
 `;
 
@@ -38,34 +38,34 @@ exports[`<OTUForm /> > should render with error 1`] = `
 <form
   onSubmit={[MockFunction spy]}
 >
-  <Styled(Styled(styled.div))>
+  <Styled(ModalBody)>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         Name
-      </styled.label>
-      <Styled(UnstyledInput)
+      </InputLabel>
+      <Input
         error="Name is used already"
         name="name"
         onChange={[MockFunction spy]}
         value="test"
       />
-      <styled.p>
+      <InputError>
         Name is used already
-      </styled.p>
+      </InputError>
     </InputGroup>
     <InputGroup>
-      <styled.label>
+      <InputLabel>
         Abbreviation
-      </styled.label>
-      <Styled(UnstyledInput)
+      </InputLabel>
+      <Input
         name="abbreviation"
         onChange={[MockFunction spy]}
         value="T"
       />
     </InputGroup>
-  </Styled(Styled(styled.div))>
-  <Styled(Component)>
+  </Styled(ModalBody)>
+  <ModalFooter>
     <SaveButton />
-  </Styled(Component)>
+  </ModalFooter>
 </form>
 `;

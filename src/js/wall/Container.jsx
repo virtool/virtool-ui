@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getColor, getFontSize, getFontWeight } from "../app/theme";
-import { Button, VTLogo } from "../base";
+import { Button, Logo } from "../base";
 
 export const WallContainer = styled.div`
     align-items: center;
@@ -69,7 +69,7 @@ const StyledWallTitle = styled.div`
 
 export const WallTitle = () => (
     <StyledWallTitle>
-        <VTLogo height={60} color="black" />
+        <Logo height={60} color="black" />
         Virtool
     </StyledWallTitle>
 );

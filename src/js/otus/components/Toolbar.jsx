@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Icon, LinkButton, SearchInput, Toolbar } from "../../base";
+import { Button, Icon, LinkButton, InputSearch, Toolbar } from "../../base";
 import { getCanModifyReferenceOTU } from "../../references/selectors";
 import { findOTUs } from "../actions";
 
@@ -26,7 +26,7 @@ export class OTUToolbar extends React.Component {
 
         return (
             <Toolbar>
-                <SearchInput placeholder="Name or abbreviation" value={term} onChange={this.find} />
+                <InputSearch placeholder="Name or abbreviation" value={term} onChange={this.find} />
 
                 <Button id="verified-button" tip="Filter Unverified" onClick={this.filterVerified} active={verified}>
                     <Icon name="filter" />

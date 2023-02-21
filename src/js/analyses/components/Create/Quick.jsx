@@ -16,7 +16,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalTabs,
-    TabLink
+    TabsLink
 } from "../../../base";
 import { deselectSamples } from "../../../samples/actions";
 import { getSelectedSamples } from "../../../samples/selectors";
@@ -108,14 +108,14 @@ export const QuickAnalyze = ({
             <ModalHeader>Quick Analyze</ModalHeader>
             <ModalTabs>
                 {genome.length > 0 && (
-                    <TabLink to={{ state: { quickAnalysis: "genome" } }} isActive={() => mode === "genome"}>
+                    <TabsLink to={{ state: { quickAnalysis: "genome" } }} isActive={() => mode === "genome"}>
                         <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
-                    </TabLink>
+                    </TabsLink>
                 )}
                 {barcode.length > 0 && (
-                    <TabLink to={{ state: { quickAnalysis: "barcode" } }} isActive={() => mode === "barcode"}>
+                    <TabsLink to={{ state: { quickAnalysis: "barcode" } }} isActive={() => mode === "barcode"}>
                         <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
-                    </TabLink>
+                    </TabsLink>
                 )}
                 <QuickAnalyzeSelected>{samples.length} samples selected</QuickAnalyzeSelected>
             </ModalTabs>

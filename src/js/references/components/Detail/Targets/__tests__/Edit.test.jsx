@@ -1,4 +1,4 @@
-import { EditTarget, mapStateToProps, mapDispatchToProps } from "../Edit";
+import { EditTarget, mapDispatchToProps, mapStateToProps } from "../Edit";
 import { TargetForm } from "../Form";
 
 describe("<EditTarget />", () => {

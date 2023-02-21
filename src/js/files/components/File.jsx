@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Icon, Loader, RelativeTime, SpacedBox } from "../../base";
+import { Icon, Loader, RelativeTime, BoxSpaced } from "../../base";
 import { byteSize, checkAdminOrPermission } from "../../utils/utils";
 
 import { removeFile } from "../actions";
@@ -53,14 +53,14 @@ export const File = ({ canRemove, id, name, ready, size, uploadedAt, user, onRem
     );
 
     return (
-        <SpacedBox>
+        <BoxSpaced>
             <FileHeader>
                 <span>{name}</span>
                 {right}
             </FileHeader>
 
             {attribution}
-        </SpacedBox>
+        </BoxSpaced>
     );
 };
 

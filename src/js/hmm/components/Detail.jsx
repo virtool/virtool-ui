@@ -5,10 +5,10 @@ import styled from "styled-components";
 import { getBorder } from "../../app/theme";
 
 import {
-    device,
     Badge,
     BoxGroup,
     BoxGroupHeader,
+    device,
     Label,
     LoadingPlaceholder,
     NotFound,

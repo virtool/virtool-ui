@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontWeight } from "../../app/theme";
-import { Box, LoadingPlaceholder, NarrowContainer, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Box, ContainerNarrow, LoadingPlaceholder, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";
 import { findJobs } from "../actions";
 import { getJobCountsTotal } from "../selectors";
@@ -73,7 +73,7 @@ export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, 
                 <ViewHeaderTitle>Jobs</ViewHeaderTitle>
             </ViewHeader>
             <JobsListViewContainer>
-                <NarrowContainer>{inner}</NarrowContainer>
+                <ContainerNarrow>{inner}</ContainerNarrow>
                 <JobFilters />
             </JobsListViewContainer>
         </>

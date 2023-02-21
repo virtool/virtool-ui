@@ -1,8 +1,8 @@
 // Vitest Snapshot v1
 
 exports[`<Subtraction /> > should render 1`] = `
-<styled.div>
-  <styled.div>
+<Container>
+  <ContainerNarrow>
     <Switch>
       <Route
         component={
@@ -43,6 +43,6 @@ exports[`<Subtraction /> > should render 1`] = `
         path="/subtractions/:subtractionId"
       />
     </Switch>
-  </styled.div>
-</styled.div>
+  </ContainerNarrow>
+</Container>
 `;

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<SubtractionItem /> > should render when [create_at=%p] 0 1`] = `
-<Styled(Link)
+<BoxLink
   key="foo"
   to="/subtractions/foo"
 >
@@ -21,11 +21,11 @@ exports[`<SubtractionItem /> > should render when [create_at=%p] 0 1`] = `
     handle="bar"
     time={0}
   />
-</Styled(Link)>
+</BoxLink>
 `;
 
 exports[`<SubtractionItem /> > should render when [create_at=%p] null 1`] = `
-<Styled(Link)
+<BoxLink
   key="foo"
   to="/subtractions/foo"
 >
@@ -45,11 +45,11 @@ exports[`<SubtractionItem /> > should render when [create_at=%p] null 1`] = `
     handle="bar"
     time={null}
   />
-</Styled(Link)>
+</BoxLink>
 `;
 
 exports[`<SubtractionItem /> > should render when [ready=%p] false 1`] = `
-<Styled(Link)
+<BoxLink
   key="foo"
   to="/subtractions/foo"
 >
@@ -68,11 +68,11 @@ exports[`<SubtractionItem /> > should render when [ready=%p] false 1`] = `
   <SubtractionAttribution
     handle="bar"
   />
-</Styled(Link)>
+</BoxLink>
 `;
 
 exports[`<SubtractionItem /> > should render when [ready=%p] true 1`] = `
-<Styled(Link)
+<BoxLink
   key="foo"
   to="/subtractions/foo"
 >
@@ -91,7 +91,7 @@ exports[`<SubtractionItem /> > should render when [ready=%p] true 1`] = `
   <SubtractionAttribution
     handle="bar"
   />
-</Styled(Link)>
+</BoxLink>
 `;
 
 exports[`<SubtractionItemIcon /> > should render when [ready=%p] false 1`] = `
@@ -104,8 +104,6 @@ exports[`<SubtractionItemIcon /> > should render when [ready=%p] false 1`] = `
 exports[`<SubtractionItemIcon /> > should render when [ready=%p] true 1`] = `
 <Icon
   color="green"
-  faStyle="fas"
-  fixedWidth={false}
   name="check"
 />
 `;

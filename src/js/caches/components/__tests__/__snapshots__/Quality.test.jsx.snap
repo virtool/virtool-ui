@@ -1,14 +1,14 @@
 // Vitest Snapshot v1
 
 exports[`<CacheQuality /> > should render 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     Quality
-  </Styled(styled.div)>
-  <styled.div>
+  </BoxGroupHeader>
+  <BoxGroupSection>
     <Quality
       foo="bar"
     />
-  </styled.div>
-</Styled(styled.div)>
+  </BoxGroupSection>
+</BoxGroup>
 `;

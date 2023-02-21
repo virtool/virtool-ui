@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-
-import { getIndexHistory } from "../actions";
 import { LoadingPlaceholder, ScrollList } from "../../base";
+import { getIndexHistory } from "../actions";
 import IndexChange from "./Change";
 
 class IndexChanges extends React.Component {

@@ -4,20 +4,20 @@ exports[`<SelectedSamples /> > should render when [samples.length=1] 1`] = `
 <Fragment>
   <label>
     Compatible Samples 
-    <styled.span>
+    <Badge>
       1
-    </styled.span>
+    </Badge>
   </label>
-  <Styled(Styled(styled.div))
+  <Styled(BoxGroup)
     count={1}
   >
-    <styled.div
+    <BoxGroupSection
       disabled={true}
       key="foo"
     >
       bar
-    </styled.div>
-  </Styled(Styled(styled.div))>
+    </BoxGroupSection>
+  </Styled(BoxGroup)>
 </Fragment>
 `;
 
@@ -25,11 +25,11 @@ exports[`<SelectedSamples /> > should return when [samples.length=0] 1`] = `
 <Fragment>
   <label>
     Compatible Samples 
-    <styled.span>
+    <Badge>
       0
-    </styled.span>
+    </Badge>
   </label>
-  <Styled(Styled(styled.div))
+  <Styled(BoxGroup)
     count={0}
   />
 </Fragment>

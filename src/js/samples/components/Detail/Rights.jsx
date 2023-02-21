@@ -11,8 +11,8 @@ import {
     InputGroup,
     InputLabel,
     LoadingPlaceholder,
-    NarrowContainer,
-    Select
+    ContainerNarrow,
+    InputSelect
 } from "../../../base";
 import { listGroups } from "../../../groups/actions";
 import { updateSampleRights } from "../../actions";
@@ -53,7 +53,7 @@ export class SampleRights extends React.Component {
         ));
 
         return (
-            <NarrowContainer>
+            <ContainerNarrow>
                 <BoxGroup>
                     <BoxGroupHeader>
                         <h2>Sample Rights</h2>
@@ -62,15 +62,15 @@ export class SampleRights extends React.Component {
                     <BoxGroupSection>
                         <InputGroup>
                             <InputLabel>Group</InputLabel>
-                            <Select value={this.props.group} onChange={this.handleChangeGroup}>
+                            <InputSelect value={this.props.group} onChange={this.handleChangeGroup}>
                                 <option value="none">None</option>
                                 {groupOptionComponents}
-                            </Select>
+                            </InputSelect>
                         </InputGroup>
 
                         <InputGroup>
                             <InputLabel>Group Rights</InputLabel>
-                            <Select
+                            <InputSelect
                                 name="groupRights"
                                 value={groupRights}
                                 onChange={e => this.handleChangeRights(e, "group")}
@@ -78,12 +78,12 @@ export class SampleRights extends React.Component {
                                 <option value="">None</option>
                                 <option value="r">Read</option>
                                 <option value="rw">Read & write</option>
-                            </Select>
+                            </InputSelect>
                         </InputGroup>
 
                         <InputGroup>
                             <InputLabel>All Users' Rights</InputLabel>
-                            <Select
+                            <InputSelect
                                 name="allUsers"
                                 label="All Users' Rights"
                                 value={allRights}
@@ -92,11 +92,11 @@ export class SampleRights extends React.Component {
                                 <option value="">None</option>
                                 <option value="r">Read</option>
                                 <option value="rw">Read & write</option>
-                            </Select>
+                            </InputSelect>
                         </InputGroup>
                     </BoxGroupSection>
                 </BoxGroup>
-            </NarrowContainer>
+            </ContainerNarrow>
         );
     }
 }

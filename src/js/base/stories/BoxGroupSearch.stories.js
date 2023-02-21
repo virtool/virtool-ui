@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BoxGroupSearch } from "../BoxGroupSearch";
-import { BoxGroup, BoxGroupHeader } from "../Box";
+import { BoxGroup } from "../BoxGroup";
+import { BoxGroupHeader } from "../BoxGroupHeader";
 
 export default {
     title: "base/BoxGroupSearch",

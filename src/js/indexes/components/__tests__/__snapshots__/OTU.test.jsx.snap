@@ -1,31 +1,31 @@
 // Vitest Snapshot v1
 
 exports[`<IndexOTU /> > should render when [changeCount = 1] 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <Link
     to="/refs/foo/otus/bar"
   >
     baz
   </Link>
-  <styled.span>
+  <Badge>
     1
      
     change
-  </styled.span>
-</Styled(styled.div)>
+  </Badge>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<IndexOTU /> > should render when [changeCount = 2] 1`] = `
-<Styled(styled.div)>
+<Styled(BoxGroupSection)>
   <Link
     to="/refs/foo/otus/bar"
   >
     baz
   </Link>
-  <styled.span>
+  <Badge>
     2
      
     changes
-  </styled.span>
-</Styled(styled.div)>
+  </Badge>
+</Styled(BoxGroupSection)>
 `;

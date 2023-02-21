@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Checkbox, Input, InputContainer, InputError, InputGroup, InputLabel, Select } from "../../../../base";
+import { Checkbox, Input, InputContainer, InputError, InputGroup, InputLabel, InputSelect } from "../../../../base";
 
 const moleculeTypes = ["", "ssDNA", "dsDNA", "ssRNA+", "ssRNA-", "ssRNA", "dsRNA"];
 
@@ -84,9 +84,9 @@ class SegmentForm extends React.Component {
 
                 <InputGroup>
                     <InputLabel>Molecule Type</InputLabel>
-                    <Select value={this.props.newEntry.molecule} onChange={this.handleChangeMolecule}>
+                    <InputSelect value={this.props.newEntry.molecule} onChange={this.handleChangeMolecule}>
                         {molecules}
-                    </Select>
+                    </InputSelect>
                 </InputGroup>
 
                 <Checkbox label="Segment Required" checked={this.state.isChecked} onClick={this.toggleRequired} />

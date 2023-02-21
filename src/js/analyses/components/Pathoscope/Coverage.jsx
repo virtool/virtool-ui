@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef } from "react";
-import styled from "styled-components";
 import { axisBottom, axisLeft } from "d3-axis";
 import { format } from "d3-format";
 import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { area } from "d3-shape";
+import React, { useContext, useEffect, useRef } from "react";
+import styled from "styled-components";
 import { PathoscopeDetailContext } from "./Detail";
 
 const draw = (element, data, length, meta, yMax, xMin, onRendered) => {

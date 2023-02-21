@@ -21,15 +21,13 @@ exports[`<ReadOrientation /> > should render when [selected=true] 1`] = `
 `;
 
 exports[`<ReadSelectorItem /> > should render when [selected=false] 1`] = `
-<Styled(Styled(styled.div))
+<Styled(SelectBoxGroupSection)
   active={false}
   onClick={[Function]}
 >
   <styled.div>
     <styled.span>
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="file"
       />
     </styled.span>
@@ -46,19 +44,17 @@ exports[`<ReadSelectorItem /> > should render when [selected=false] 1`] = `
     index={0}
     selected={false}
   />
-</Styled(Styled(styled.div))>
+</Styled(SelectBoxGroupSection)>
 `;
 
 exports[`<ReadSelectorItem /> > should render when [selected=true] 1`] = `
-<Styled(Styled(styled.div))
+<Styled(SelectBoxGroupSection)
   active={true}
   onClick={[Function]}
 >
   <styled.div>
     <styled.span>
       <Icon
-        faStyle="fas"
-        fixedWidth={false}
         name="file"
       />
     </styled.span>
@@ -75,5 +71,5 @@ exports[`<ReadSelectorItem /> > should render when [selected=true] 1`] = `
     index={0}
     selected={true}
   />
-</Styled(Styled(styled.div))>
+</Styled(SelectBoxGroupSection)>
 `;

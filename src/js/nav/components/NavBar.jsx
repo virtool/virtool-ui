@@ -3,14 +3,16 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { logout } from "../../account/actions";
-import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, InitialIcon, VTLogo } from "../../base";
-import { NavBarItem } from "./NavBarItem";
 import { getAccountHandle } from "../../account/selectors";
+import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, InitialIcon, Logo } from "../../base";
+import { NavBarItem } from "./NavBarItem";
 
 const NavBarLeft = styled.div`
     display: flex;
     align-items: center;
 `;
+
+NavBarLeft.displayName = "NavBarLeft";
 
 const NavBarRight = styled.div`
     display: flex;
@@ -18,9 +20,13 @@ const NavBarRight = styled.div`
     margin-right: calc(100% - 100vw + 20px);
 `;
 
-const NavBarLogo = styled(VTLogo)`
+NavBarRight.displayName = "NavBarRight";
+
+const NavBarLogo = styled(Logo)`
     margin: 0 30px 0 35px;
 `;
+
+NavBarLogo.displayName = "NavBarLogo";
 
 const NavDropdownButton = styled(MenuButton)`
     align-items: center;
@@ -42,10 +48,14 @@ const NavDropdownButton = styled(MenuButton)`
     }
 `;
 
+NavDropdownButton.displayName = "NavDropdownButton";
+
 const NavDivider = styled.div`
     color: ${props => props.theme.color.greyLight};
     border-top: 2px solid;
 `;
+
+NavDivider.displayName = "NavDivider";
 
 const StyledNavBar = styled.div`
     background-color: ${props => props.theme.color.primary};
@@ -54,6 +64,9 @@ const StyledNavBar = styled.div`
     height: 45px;
     justify-content: space-between;
 `;
+
+StyledNavBar.displayName = "NavBar";
+
 export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
     <StyledNavBar>
         <NavBarLeft>

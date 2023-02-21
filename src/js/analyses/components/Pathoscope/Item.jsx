@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getActiveShadow, getColor } from "../../../app/theme";
-import { SpacedBox } from "../../../base";
+import { BoxSpaced } from "../../../base";
 import { toScientificNotation } from "../../../utils/utils";
 import { setActiveHitId } from "../../actions";
 import { getActiveHit, getMatches, getReadCount } from "../../selectors";
@@ -57,7 +57,7 @@ const PathoscopeItemTitle = styled.div`
     }
 `;
 
-const StyledPathoscopeItem = styled(SpacedBox)`
+const StyledPathoscopeItem = styled(BoxSpaced)`
     box-shadow: ${getActiveShadow};
 `;
 

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<Button /> > should render 1`] = `
-<styled.button
+<StyledButton
   color="grey"
   disabled={false}
   onClick={[MockFunction spy]}
@@ -10,7 +10,7 @@ exports[`<Button /> > should render 1`] = `
 `;
 
 exports[`<Button /> > should render with children 1`] = `
-<styled.button
+<StyledButton
   color="grey"
   disabled={false}
   onClick={[MockFunction spy]}
@@ -21,30 +21,27 @@ exports[`<Button /> > should render with children 1`] = `
       Test
     </span>
   </span>
-</styled.button>
+</StyledButton>
 `;
 
 exports[`<Button /> > should render with icon 1`] = `
-<styled.button
+<StyledButton
   color="grey"
   disabled={false}
   onClick={[MockFunction spy]}
   type="button"
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="folder"
   />
-</styled.button>
+</StyledButton>
 `;
 
 exports[`<Button /> > should render with tooltip 1`] = `
 <Tooltip
-  position="top"
   tip="Tooltip"
 >
-  <styled.button
+  <StyledButton
     color="grey"
     disabled={false}
     onClick={[MockFunction spy]}
@@ -55,10 +52,9 @@ exports[`<Button /> > should render with tooltip 1`] = `
 
 exports[`<Button /> > should render with tooltip using tipPlacement prop 1`] = `
 <Tooltip
-  position="top"
   tip="Tooltip"
 >
-  <styled.button
+  <StyledButton
     color="grey"
     disabled={false}
     onClick={[MockFunction spy]}

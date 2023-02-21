@@ -1,8 +1,8 @@
-import { PUSH_STATE } from "../../../app/actionTypes";
-import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
 import { screen } from "@testing-library/react";
 import { createBrowserHistory } from "history";
 import { attachResizeObserver } from "../../../../tests/setupTests";
+import { PUSH_STATE } from "../../../app/actionTypes";
+import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
 
 describe("<CreateUser />", () => {
     let props;

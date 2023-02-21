@@ -7,8 +7,6 @@ exports[`<JobActionIcon /> > should render when [state="waiting"] and [canCancel
 exports[`<JobActionIcon /> > should render when [state=%p] cancelled 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
-  fixedWidth={false}
   name="archive"
   onClick={[MockFunction spy]}
 />
@@ -17,8 +15,6 @@ exports[`<JobActionIcon /> > should render when [state=%p] cancelled 1`] = `
 exports[`<JobActionIcon /> > should render when [state=%p] complete 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
-  fixedWidth={false}
   name="archive"
   onClick={[MockFunction spy]}
 />
@@ -27,8 +23,6 @@ exports[`<JobActionIcon /> > should render when [state=%p] complete 1`] = `
 exports[`<JobActionIcon /> > should render when [state=%p] error 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
-  fixedWidth={false}
   name="archive"
   onClick={[MockFunction spy]}
 />
@@ -37,8 +31,6 @@ exports[`<JobActionIcon /> > should render when [state=%p] error 1`] = `
 exports[`<JobActionIcon /> > should render when [state=%p] running 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
-  fixedWidth={false}
   name="ban"
   onClick={[MockFunction spy]}
 />
@@ -47,8 +39,6 @@ exports[`<JobActionIcon /> > should render when [state=%p] running 1`] = `
 exports[`<JobActionIcon /> > should render when [state=%p] waiting 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
-  fixedWidth={false}
   name="ban"
   onClick={[MockFunction spy]}
 />

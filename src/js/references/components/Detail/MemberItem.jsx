@@ -1,26 +1,21 @@
 import PropTypes from "prop-types";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { BoxGroupSection, FlexItem, Icon, InitialIcon } from "../../../base";
+import { BoxGroupSection, Icon, InitialIcon } from "../../../base";
 
-const StyledMemberItem = styled(BoxGroupSection)`
+const StyledMemberItemIcon = styled.div`
     align-items: center;
     display: flex;
-`;
-
-const StyledMemberItemIcon = styled(FlexItem)`
-    display: flex;
-    align-items: center;
     padding-right: 8px;
 `;
 
-const MemberItemIcon = ({ handle }) => {
+function MemberItemIcon({ handle }) {
     return (
-        <StyledMemberItemIcon grow={0} shrink={0}>
+        <StyledMemberItemIcon>
             <InitialIcon handle={handle} size="lg" />
         </StyledMemberItemIcon>
     );
-};
+}
 
 const MemberItemIcons = styled.span`
     align-items: center;
@@ -32,7 +27,12 @@ const MemberItemIcons = styled.span`
     }
 `;
 
-const MemberItem = ({ canModify, id, handle, onEdit, onRemove }) => {
+const StyledMemberItem = styled(BoxGroupSection)`
+    align-items: center;
+    display: flex;
+`;
+
+function MemberItem({ canModify, id, handle, onEdit, onRemove }) {
     const displayName = handle || id;
     const handleEdit = useCallback(() => onEdit(id), [id]);
     const handleRemove = useCallback(() => onRemove(id), [id]);
@@ -55,7 +55,7 @@ const MemberItem = ({ canModify, id, handle, onEdit, onRemove }) => {
             {icons}
         </StyledMemberItem>
     );
-};
+}
 
 MemberItem.propTypes = {
     canModify: PropTypes.bool.isRequired,

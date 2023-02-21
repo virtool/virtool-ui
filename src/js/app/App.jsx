@@ -11,7 +11,7 @@ import { theme } from "./theme";
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
 const LazyLogin = React.lazy(() => import("../wall/Login"));
 
-export const App = ({ first, login, reset }) => {
+function App({ first, login, reset }) {
     if (first) {
         return (
             <Suspense fallback={<WallContainer />}>
@@ -33,16 +33,16 @@ export const App = ({ first, login, reset }) => {
     }
 
     return <Main />;
-};
+}
 
-export const mapStateToProps = state => {
+function mapStateToProps(state) {
     const { first, login, reset } = state.app;
     return {
         first,
         login,
         reset
     };
-};
+}
 
 const ConnectedApp = connect(mapStateToProps)(App);
 

@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { updateSetting } from "../actions";
-import { ExternalLink } from "../../base/ExternalLink";
+import { ExternalLink } from "../../base";
 import { SettingsCheckbox } from "./SettingsCheckbox";
 
 export const Api = ({ enabled, onToggle }) => (
     <SettingsCheckbox enabled={enabled} onToggle={onToggle}>
         <h2>JSON API</h2>
         <small>Enable API access for clients other than Virtool. See </small>
-        <ExternalLink children="API documentation" href="https://www.virtool.ca/docs/developer/api_account" />.
+        <ExternalLink href="https://www.virtool.ca/docs/developer/api_account">API documentation</ExternalLink>.
     </SettingsCheckbox>
 );
 

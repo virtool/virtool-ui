@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<JobSteps /> > should render 1`] = `
-<Styled(styled.div)>
+<BoxGroup>
   <JobStep
     complete={true}
     key="0"
@@ -22,5 +22,5 @@ exports[`<JobSteps /> > should render 1`] = `
     }
     workflow="bowtie_build"
   />
-</Styled(styled.div)>
+</BoxGroup>
 `;

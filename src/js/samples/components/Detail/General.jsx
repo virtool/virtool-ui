@@ -2,13 +2,13 @@ import numbro from "numbro";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, Markdown, NarrowContainer, SideContainer, Table } from "../../../base";
+import { BoxGroup, BoxGroupHeader, Markdown, ContainerNarrow, ContainerSide, Table } from "../../../base";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../Edit/Edit";
 import SampleFileSizeWarning from "./FileSizeWarning";
 import Sidebar from "./Sidebar";
 
-const SampleDetailSidebarContainer = styled(SideContainer)`
+const SampleDetailSidebarContainer = styled(ContainerSide)`
     padding-left: 15px;
 `;
 
@@ -35,7 +35,7 @@ export const SampleDetailGeneral = ({
     paired
 }) => (
     <StyledSampleDetailGeneral>
-        <NarrowContainer>
+        <ContainerNarrow>
             <SampleFileSizeWarning />
             <BoxGroup>
                 <BoxGroupHeader>
@@ -106,7 +106,7 @@ export const SampleDetailGeneral = ({
                 </BoxGroupHeader>
                 <Markdown markdown={notes} />
             </BoxGroup>
-        </NarrowContainer>
+        </ContainerNarrow>
 
         <SampleDetailSidebarContainer>
             <Sidebar />

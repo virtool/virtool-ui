@@ -16,13 +16,13 @@ exports[`<AnalysisViewerList /> > should render 1`] = `
   </Styled(List)>
   <styled.div>
     Use 
-    <styled.kbd>
+    <Key>
       w
-    </styled.kbd>
+    </Key>
      and 
-    <styled.kbd>
+    <Key>
       s
-    </styled.kbd>
+    </Key>
      to move
   </styled.div>
 </styled.div>

@@ -1,11 +1,10 @@
+import { Field, Form, Formik } from "formik";
+import { get } from "lodash-es";
 import React from "react";
+import { connect } from "react-redux";
+import * as Yup from "yup";
 import { pushState } from "../../app/actions";
 import { getRouterLocationStateValue } from "../../app/selectors";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { connect } from "react-redux";
-import { createGroup, getGroup } from "../actions";
-import { get } from "lodash-es";
 import {
     Input,
     InputError,
@@ -17,6 +16,7 @@ import {
     ModalHeader,
     SaveButton
 } from "../../base";
+import { createGroup, getGroup } from "../actions";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the group")

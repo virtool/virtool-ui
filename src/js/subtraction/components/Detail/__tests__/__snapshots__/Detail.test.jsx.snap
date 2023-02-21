@@ -5,11 +5,11 @@ exports[`<SubtractionDetail /> > should not render icons when [canModify=false] 
   <ViewHeader
     title="Foo"
   >
-    <styled.h1>
+    <ViewHeaderTitle>
       Foo
-    </styled.h1>
+    </ViewHeaderTitle>
   </ViewHeader>
-  <styled.table>
+  <Table>
     <tbody>
       <tr>
         <th>
@@ -50,7 +50,7 @@ exports[`<SubtractionDetail /> > should not render icons when [canModify=false] 
         </td>
       </tr>
     </tbody>
-  </styled.table>
+  </Table>
   <Connect(SubtractionFiles) />
   <Connect(EditSubtraction)
     onHide={[Function]}
@@ -65,27 +65,23 @@ exports[`<SubtractionDetail /> > should render 1`] = `
   <ViewHeader
     title="Foo"
   >
-    <styled.h1>
+    <ViewHeaderTitle>
       Foo
-      <styled.div>
+      <ViewHeaderIcons>
         <Icon
           color="orange"
-          faStyle="fas"
-          fixedWidth={false}
           name="pencil-alt"
           onClick={[Function]}
         />
         <Icon
           color="red"
-          faStyle="fas"
-          fixedWidth={false}
           name="trash"
           onClick={[MockFunction spy]}
         />
-      </styled.div>
-    </styled.h1>
+      </ViewHeaderIcons>
+    </ViewHeaderTitle>
   </ViewHeader>
-  <styled.table>
+  <Table>
     <tbody>
       <tr>
         <th>
@@ -126,7 +122,7 @@ exports[`<SubtractionDetail /> > should render 1`] = `
         </td>
       </tr>
     </tbody>
-  </styled.table>
+  </Table>
   <Connect(SubtractionFiles) />
   <Connect(EditSubtraction)
     onHide={[Function]}
@@ -141,27 +137,23 @@ exports[`<SubtractionDetail /> > should render file id when name not defined 1`]
   <ViewHeader
     title="Foo"
   >
-    <styled.h1>
+    <ViewHeaderTitle>
       Foo
-      <styled.div>
+      <ViewHeaderIcons>
         <Icon
           color="orange"
-          faStyle="fas"
-          fixedWidth={false}
           name="pencil-alt"
           onClick={[Function]}
         />
         <Icon
           color="red"
-          faStyle="fas"
-          fixedWidth={false}
           name="trash"
           onClick={[MockFunction spy]}
         />
-      </styled.div>
-    </styled.h1>
+      </ViewHeaderIcons>
+    </ViewHeaderTitle>
   </ViewHeader>
-  <styled.table>
+  <Table>
     <tbody>
       <tr>
         <th>
@@ -202,7 +194,7 @@ exports[`<SubtractionDetail /> > should render file id when name not defined 1`]
         </td>
       </tr>
     </tbody>
-  </styled.table>
+  </Table>
   <Connect(SubtractionFiles) />
   <Connect(EditSubtraction)
     onHide={[Function]}

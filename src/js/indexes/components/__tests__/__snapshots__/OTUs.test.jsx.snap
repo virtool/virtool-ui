@@ -1,15 +1,15 @@
 // Vitest Snapshot v1
 
 exports[`<IndexOTUs /> > should render 1`] = `
-<Styled(styled.div)>
-  <Styled(styled.div)>
+<BoxGroup>
+  <BoxGroupHeader>
     <h2>
       OTUs 
-      <styled.span>
+      <Badge>
         1
-      </styled.span>
+      </Badge>
     </h2>
-  </Styled(styled.div)>
+  </BoxGroupHeader>
   <IndexOTU
     changeCount={1}
     id="Foo"
@@ -17,5 +17,5 @@ exports[`<IndexOTUs /> > should render 1`] = `
     name="Bar"
     refId="baz"
   />
-</Styled(styled.div)>
+</BoxGroup>
 `;

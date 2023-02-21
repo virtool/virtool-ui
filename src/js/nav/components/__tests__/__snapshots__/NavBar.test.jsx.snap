@@ -1,9 +1,9 @@
 // Vitest Snapshot v1
 
 exports[`<Bar /> > should render 1`] = `
-<styled.div>
-  <styled.div>
-    <Styled(VTLogo)
+<NavBar>
+  <NavBarLeft>
+    <NavBarLogo
       color="white"
     />
     <Styled(NavLink)
@@ -31,52 +31,50 @@ exports[`<Bar /> > should render 1`] = `
     >
       Subtractions
     </Styled(NavLink)>
-  </styled.div>
-  <styled.div>
-    <Menu>
-      <Styled(MenuButton)>
+  </NavBarLeft>
+  <NavBarRight>
+    <Dropdown>
+      <NavDropdownButton>
         <InitialIcon
           size="md"
         />
         <span />
         <Icon
-          faStyle="fas"
-          fixedWidth={false}
           name="caret-down"
         />
-      </Styled(MenuButton)>
-      <Styled(MenuList)>
-        <Styled(Component)
+      </NavDropdownButton>
+      <DropdownMenuList>
+        <DropdownMenuLink
           to="/account"
         >
           Signed in as 
           <strong />
-        </Styled(Component)>
-        <styled.div />
-        <Styled(Component)
+        </DropdownMenuLink>
+        <NavDivider />
+        <DropdownMenuLink
           to="/account"
         >
           Account
-        </Styled(Component)>
-        <Styled(Component)
+        </DropdownMenuLink>
+        <DropdownMenuLink
           to="/administration"
         >
           Administration 
-        </Styled(Component)>
-        <Styled(Component)
+        </DropdownMenuLink>
+        <DropdownMenuLink
           rel="noopener noreferrer"
           target="_blank"
           to="//virtool.ca/docs/manual/start/installation/"
         >
           Documentation
-        </Styled(Component)>
-        <Styled(MenuItem)
+        </DropdownMenuLink>
+        <DropdownMenuItem
           onSelect={[MockFunction spy]}
         >
           Logout
-        </Styled(MenuItem)>
-      </Styled(MenuList)>
-    </Menu>
-  </styled.div>
-</styled.div>
+        </DropdownMenuItem>
+      </DropdownMenuList>
+    </Dropdown>
+  </NavBarRight>
+</NavBar>
 `;

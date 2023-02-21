@@ -1,6 +1,6 @@
 import React from "react";
-import { Badge } from "../Badge";
 import styled from "styled-components";
+import { Badge } from "../Badge";
 
 const StyledBadgeHeader = styled.div`
     align-items: center;

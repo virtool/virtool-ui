@@ -14,10 +14,10 @@ import {
     ViewHeaderTitle
 } from "../../base";
 import { findFiles } from "../../files/actions";
+import { getFiles } from "../../files/selectors";
 import PersistForm from "../../forms/components/PersistForm";
 import { createSubtraction } from "../actions";
 import SubtractionFileSelector from "./FileSelector";
-import { getFiles } from "../../files/selectors";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("A name is required"),

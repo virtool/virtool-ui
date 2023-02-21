@@ -1,7 +1,7 @@
-import { getMatches, getHits } from "../../../selectors";
-import { mapStateToProps, AnalysisViewerList } from "../List";
+import { getHits, getMatches } from "../../../selectors";
+import { AnalysisViewerList, mapStateToProps } from "../List";
 
-vi.mock("../../../selectors.js");
+vi.mock("../../../selectors");
 
 describe("<AnalysisViewerList />", () => {
     it("should render", () => {

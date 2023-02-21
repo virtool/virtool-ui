@@ -1,7 +1,7 @@
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { InputGroup, InputLabel, Select } from "../../../base";
+import { InputGroup, InputLabel, InputSelect } from "../../../base";
 
 const SampleUserGroupItem = styled.option`
     text-transform: capitalize;
@@ -17,12 +17,12 @@ export const SampleUserGroup = ({ selected, groups, onChange }) => {
     return (
         <InputGroup>
             <InputLabel>User Group</InputLabel>
-            <Select value={selected} onChange={onChange}>
+            <InputSelect value={selected} onChange={onChange}>
                 <option key="none" value="none">
                     None
                 </option>
                 {groupComponents}
-            </Select>
+            </InputSelect>
         </InputGroup>
     );
 };

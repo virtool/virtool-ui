@@ -1,7 +1,8 @@
 import React from "react";
-import { SelectBoxGroupSection, BoxGroup } from "../../Box";
 import { Checkbox } from "../../Checkbox";
 import { useArgs } from "@storybook/client-api";
+import { BoxGroup } from "../../BoxGroup";
+import { SelectBoxGroupSection } from "../../BoxGroupSectionSelect";
 
 export default {
     title: "base/Box/SelectBoxGroupSection",

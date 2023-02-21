@@ -3,8 +3,8 @@
 exports[`<Targets /> > should render null when [dataType!=barcode] 1`] = `""`;
 
 exports[`<Targets /> > should render when [canModify=false] 1`] = `
-<Styled(styled.div)>
-  <Styled(Styled(styled.div))>
+<BoxGroup>
+  <Styled(BoxGroupHeader)>
     <h2>
       <span>
         Targets
@@ -13,7 +13,7 @@ exports[`<Targets /> > should render when [canModify=false] 1`] = `
     <p>
       Manage the allowable sequence targets for this barcode reference.
     </p>
-  </Styled(Styled(styled.div))>
+  </Styled(BoxGroupHeader)>
   <TargetItem
     canModify={false}
     key="foo"
@@ -21,12 +21,12 @@ exports[`<Targets /> > should render when [canModify=false] 1`] = `
     onEdit={[MockFunction spy]}
     onRemove={[Function]}
   />
-</Styled(styled.div)>
+</BoxGroup>
 `;
 
 exports[`<Targets /> > should render when [canModify=true] 1`] = `
-<Styled(styled.div)>
-  <Styled(Styled(styled.div))>
+<BoxGroup>
+  <Styled(BoxGroupHeader)>
     <h2>
       <span>
         Targets
@@ -46,7 +46,7 @@ exports[`<Targets /> > should render when [canModify=true] 1`] = `
     <p>
       Manage the allowable sequence targets for this barcode reference.
     </p>
-  </Styled(Styled(styled.div))>
+  </Styled(BoxGroupHeader)>
   <TargetItem
     canModify={true}
     key="foo"
@@ -56,5 +56,5 @@ exports[`<Targets /> > should render when [canModify=true] 1`] = `
   />
   <Connect(AddTarget) />
   <Connect(EditTarget) />
-</Styled(styled.div)>
+</BoxGroup>
 `;

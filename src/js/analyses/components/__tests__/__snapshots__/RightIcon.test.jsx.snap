@@ -10,8 +10,6 @@ exports[`<RightIcon /> > should render loader when [ready=false] 1`] = `
 exports[`<RightIcon /> > should render remove icon when [ready=true] and [canModify=true] 1`] = `
 <Icon
   color="red"
-  faStyle="fas"
-  fixedWidth={false}
   name="trash"
   onClick={[MockFunction spy]}
   style={

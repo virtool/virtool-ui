@@ -2,7 +2,7 @@ import { get } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { LoadingPlaceholder, NarrowContainer, NotFound } from "../../../base";
+import { LoadingPlaceholder, ContainerNarrow, NotFound } from "../../../base";
 import IndexDetail from "../../../indexes/components/Detail";
 import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/Detail";
@@ -38,7 +38,7 @@ const ReferenceDetail = ({ error, id, match, onGetReference }) => {
                 </Route>
             </Switch>
 
-            <NarrowContainer>
+            <ContainerNarrow>
                 <Switch>
                     <Redirect from="/refs/:refId" to={`/refs/${id}/manage`} exact />
                     <Route path="/refs/:refId/manage" component={ReferenceManage} />
@@ -48,7 +48,7 @@ const ReferenceDetail = ({ error, id, match, onGetReference }) => {
                     <Route path="/refs/:refId/indexes/:indexId" component={IndexDetail} />
                     <Route path="/refs/:refId/settings" component={ReferenceSettings} />
                 </Switch>
-            </NarrowContainer>
+            </ContainerNarrow>
 
             <EditReference />
         </>

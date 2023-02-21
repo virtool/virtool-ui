@@ -1,31 +1,31 @@
 // Vitest Snapshot v1
 
 exports[`<SubtractionFileItem /> > should render when [active=%p] false 1`] = `
-<Styled(Styled(styled.div))
+<Styled(SelectBoxGroupSection)
   active={false}
   onClick={[Function]}
 >
   <strong>
     test
   </strong>
-  <Styled(UnstyledAttribution)
+  <Attribution
     time="2018-02-14T17:12:00.000000Z"
     user="test-user"
   />
-</Styled(Styled(styled.div))>
+</Styled(SelectBoxGroupSection)>
 `;
 
 exports[`<SubtractionFileItem /> > should render when [active=%p] true 1`] = `
-<Styled(Styled(styled.div))
+<Styled(SelectBoxGroupSection)
   active={true}
   onClick={[Function]}
 >
   <strong>
     test
   </strong>
-  <Styled(UnstyledAttribution)
+  <Attribution
     time="2018-02-14T17:12:00.000000Z"
     user="test-user"
   />
-</Styled(Styled(styled.div))>
+</Styled(SelectBoxGroupSection)>
 `;

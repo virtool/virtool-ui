@@ -2,10 +2,10 @@
 
 exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] false false 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="green"
       now={100}
     />
@@ -18,12 +18,12 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] fal
           pad={false}
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={false}
@@ -37,10 +37,10 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] fal
 
 exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] false true 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="green"
       now={100}
     />
@@ -53,12 +53,12 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] fal
           pad={true}
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={true}
@@ -72,10 +72,10 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] fal
 
 exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] true false 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="green"
       now={100}
     />
@@ -88,12 +88,12 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] tru
           pad={true}
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={false}
@@ -107,10 +107,10 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] tru
 
 exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] true true 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="green"
       now={100}
     />
@@ -123,12 +123,12 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] tru
           pad={true}
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={true}
@@ -142,10 +142,10 @@ exports[`<JobItem /> > should render when [canCancel=%p] and [canArchive=%p] tru
 
 exports[`<JobItem /> > should render when [state=%p] cancelled 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="red"
       now={100}
     />
@@ -159,12 +159,12 @@ exports[`<JobItem /> > should render when [state=%p] cancelled 1`] = `
           state="cancelled"
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={true}
@@ -180,10 +180,10 @@ exports[`<JobItem /> > should render when [state=%p] cancelled 1`] = `
 
 exports[`<JobItem /> > should render when [state=%p] complete 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="green"
       now={100}
     />
@@ -197,12 +197,12 @@ exports[`<JobItem /> > should render when [state=%p] complete 1`] = `
           state="complete"
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={true}
@@ -218,10 +218,10 @@ exports[`<JobItem /> > should render when [state=%p] complete 1`] = `
 
 exports[`<JobItem /> > should render when [state=%p] error 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="red"
       now={100}
     />
@@ -235,12 +235,12 @@ exports[`<JobItem /> > should render when [state=%p] error 1`] = `
           state="error"
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={true}
@@ -256,10 +256,10 @@ exports[`<JobItem /> > should render when [state=%p] error 1`] = `
 
 exports[`<JobItem /> > should render when [state=%p] running 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="blue"
       now={100}
     />
@@ -273,12 +273,12 @@ exports[`<JobItem /> > should render when [state=%p] running 1`] = `
           state="running"
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={true}
@@ -294,10 +294,10 @@ exports[`<JobItem /> > should render when [state=%p] running 1`] = `
 
 exports[`<JobItem /> > should render when [state=%p] waiting 1`] = `
 <styled.div>
-  <Styled(Styled(Link))
+  <Styled(BoxLink)
     to="/jobs/foo"
   >
-    <Styled(_AffixedProgressBar)
+    <ProgressBarAffixed
       color="green"
       now={100}
     />
@@ -311,12 +311,12 @@ exports[`<JobItem /> > should render when [state=%p] waiting 1`] = `
           state="waiting"
         />
       </styled.div>
-      <Styled(UnstyledAttribution)
+      <Attribution
         time="Foo"
         user="bob"
       />
     </styled.div>
-  </Styled(Styled(Link))>
+  </Styled(BoxLink)>
   <styled.div>
     <JobAction
       canArchive={true}

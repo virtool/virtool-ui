@@ -1,8 +1,8 @@
 // Vitest Snapshot v1
 
 exports[`<ManageLabels> > should be disabled if no labels exist 1`] = `
-<Styled(Styled(styled.div))>
-  <styled.h3>
+<Styled(SideBarSection)>
+  <SidebarHeader>
     Manage Labels
     <SampleSidebarSelector
       manageLink="/samples/labels"
@@ -17,7 +17,7 @@ exports[`<ManageLabels> > should be disabled if no labels exist 1`] = `
       }
       selectionType="labels"
     />
-  </styled.h3>
+  </SidebarHeader>
   <SampleSidebarMultiselectList
     items={
       {
@@ -41,5 +41,5 @@ exports[`<ManageLabels> > should be disabled if no labels exist 1`] = `
     </Link>
     .
   </styled.div>
-</Styled(Styled(styled.div))>
+</Styled(SideBarSection)>
 `;

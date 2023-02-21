@@ -1,14 +1,14 @@
 // Vitest Snapshot v1
 
 exports[`<AffixedProgressBar /> > should render 1`] = `
-<_AffixedProgressBar
+<Component
   className="sc-dkrFOg"
   now={68}
 />
 `;
 
 exports[`<AffixedProgressBar /> > should render when [bottom=true] 1`] = `
-<_AffixedProgressBar
+<Component
   bottom={true}
   className="sc-dkrFOg"
   now={68}
@@ -16,7 +16,7 @@ exports[`<AffixedProgressBar /> > should render when [bottom=true] 1`] = `
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] blue 1`] = `
-<_AffixedProgressBar
+<Component
   className="sc-dkrFOg"
   color="blue"
   now={68}
@@ -24,7 +24,7 @@ exports[`<AffixedProgressBar /> > should render when [color=%p] blue 1`] = `
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] green 1`] = `
-<_AffixedProgressBar
+<Component
   className="sc-dkrFOg"
   color="green"
   now={68}
@@ -32,7 +32,7 @@ exports[`<AffixedProgressBar /> > should render when [color=%p] green 1`] = `
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] orange 1`] = `
-<_AffixedProgressBar
+<Component
   className="sc-dkrFOg"
   color="orange"
   now={68}
@@ -40,7 +40,7 @@ exports[`<AffixedProgressBar /> > should render when [color=%p] orange 1`] = `
 `;
 
 exports[`<AffixedProgressBar /> > should render when [color=%p] red 1`] = `
-<_AffixedProgressBar
+<Component
   className="sc-dkrFOg"
   color="red"
   now={68}

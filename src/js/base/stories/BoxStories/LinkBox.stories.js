@@ -1,12 +1,12 @@
 import React from "react";
-import { LinkBox } from "../../Box";
+import { BoxLink } from "../../BoxLink";
 
 export default {
     title: "base/Box/LinkBox",
-    component: LinkBox
+    component: BoxLink
 };
 
-const Template = args => <LinkBox {...args} />;
+const Template = args => <BoxLink {...args} />;
 
 export const testLinkBox = Template.bind({});
 

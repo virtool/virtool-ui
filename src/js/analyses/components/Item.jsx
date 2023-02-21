@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Attribution, Icon, SlashList, SpacedBox } from "../../base";
+import { Attribution, BoxSpaced, Icon, SlashList } from "../../base";
 import { getCanModify } from "../../samples/selectors";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { removeAnalysis } from "../actions";
 import { AnalysisItemRightIcon } from "./RightIcon";
 
-const StyledAnalysisItem = styled(SpacedBox)`
+const StyledAnalysisItem = styled(BoxSpaced)`
     color: ${props => props.theme.color.greyDarkest};
 
     &:hover {

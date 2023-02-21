@@ -3,13 +3,11 @@
 exports[`<AnalysisHMMAlert /> > should render 1`] = `""`;
 
 exports[`<AnalysisHMMAlert /> > should render when [installed = false] 1`] = `
-<Styled(_Alert)
+<Alert
   color="orange"
   level={true}
 >
   <Icon
-    faStyle="fas"
-    fixedWidth={false}
     name="info-circle"
   />
   <span>
@@ -25,5 +23,5 @@ exports[`<AnalysisHMMAlert /> > should render when [installed = false] 1`] = `
        to run NuV analyses.
     </span>
   </span>
-</Styled(_Alert)>
+</Alert>
 `;

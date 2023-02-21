@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<ReferenceItem /> > should render when [organism='virus'] and [progress=32] 1`] = `
-<Styled(Styled(styled.div))>
+<Styled(BoxSpaced)>
   <ReferenceItemHeader
     createdAt="2018-01-01T00:00:00.000000Z"
     id="foo"
@@ -40,11 +40,11 @@ exports[`<ReferenceItem /> > should render when [organism='virus'] and [progress
   <ReferenceItemProgress
     now={32}
   />
-</Styled(Styled(styled.div))>
+</Styled(BoxSpaced)>
 `;
 
 exports[`<ReferenceItem /> > should render when [organism=null] 1`] = `
-<Styled(Styled(styled.div))>
+<Styled(BoxSpaced)>
   <ReferenceItemHeader
     createdAt="2018-01-01T00:00:00.000000Z"
     id="foo"
@@ -83,11 +83,11 @@ exports[`<ReferenceItem /> > should render when [organism=null] 1`] = `
   <ReferenceItemProgress
     now={32}
   />
-</Styled(Styled(styled.div))>
+</Styled(BoxSpaced)>
 `;
 
 exports[`<ReferenceItem /> > should render when [progress=100] 1`] = `
-<Styled(Styled(styled.div))>
+<Styled(BoxSpaced)>
   <ReferenceItemHeader
     createdAt="2018-01-01T00:00:00.000000Z"
     id="foo"
@@ -126,5 +126,5 @@ exports[`<ReferenceItem /> > should render when [progress=100] 1`] = `
   <ReferenceItemProgress
     now={100}
   />
-</Styled(Styled(styled.div))>
+</Styled(BoxSpaced)>
 `;

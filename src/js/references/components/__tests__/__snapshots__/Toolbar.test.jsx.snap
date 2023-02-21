@@ -1,18 +1,18 @@
 // Vitest Snapshot v1
 
 exports[`<ReferenceToolbar /> > should not render creation button when [canCreate=false] 1`] = `
-<styled.div>
-  <SearchInput
+<Toolbar>
+  <InputSearch
     onChange={[MockFunction spy]}
     placeholder="Reference name"
     value=""
   />
-</styled.div>
+</Toolbar>
 `;
 
 exports[`<ReferenceToolbar /> > should render creation button when [canCreate=true] 1`] = `
-<styled.div>
-  <SearchInput
+<Toolbar>
+  <InputSearch
     onChange={[MockFunction spy]}
     placeholder="Reference name"
     value=""
@@ -20,7 +20,6 @@ exports[`<ReferenceToolbar /> > should render creation button when [canCreate=tr
   <LinkButton
     color="blue"
     tip="Create"
-    tipPlacement="top"
     to={
       {
         "pathname": "/refs/add",
@@ -32,17 +31,15 @@ exports[`<ReferenceToolbar /> > should render creation button when [canCreate=tr
     }
   >
     <Icon
-      faStyle="fas"
-      fixedWidth={false}
       name="plus-square fa-fw"
     />
   </LinkButton>
-</styled.div>
+</Toolbar>
 `;
 
 exports[`<ReferenceToolbar /> > should render when [term='foo'] 1`] = `
-<styled.div>
-  <SearchInput
+<Toolbar>
+  <InputSearch
     onChange={[MockFunction spy]}
     placeholder="Reference name"
     value="foo"
@@ -50,7 +47,6 @@ exports[`<ReferenceToolbar /> > should render when [term='foo'] 1`] = `
   <LinkButton
     color="blue"
     tip="Create"
-    tipPlacement="top"
     to={
       {
         "pathname": "/refs/add",
@@ -62,10 +58,8 @@ exports[`<ReferenceToolbar /> > should render when [term='foo'] 1`] = `
     }
   >
     <Icon
-      faStyle="fas"
-      fixedWidth={false}
       name="plus-square fa-fw"
     />
   </LinkButton>
-</styled.div>
+</Toolbar>
 `;
