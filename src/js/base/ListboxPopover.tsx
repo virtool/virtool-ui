@@ -1,6 +1,5 @@
 import { ListboxPopover as ReachListboxPopover } from "@reach/listbox";
-import { keyframes } from "styled-components";
-import styled from "styled-components/macro";
+import styled, { keyframes } from "styled-components";
 import { border, borderRadius, boxShadow } from "../app/theme";
 
 const focusShadow = "0 0 0 2px rgba(43, 108, 176, 0.5)";

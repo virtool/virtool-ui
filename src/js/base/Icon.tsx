@@ -1,7 +1,6 @@
 import { get } from "lodash-es";
 import React, { useCallback } from "react";
-import { css } from "styled-components";
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { css, DefaultTheme } from "styled-components";
 import { getColorProps } from "../app/theme";
 import { Tooltip } from "./Tooltip";
 
@@ -40,6 +39,8 @@ const StyledIcon = styled.i<StyledIconProps>`
                 : ""};
     }
 `;
+
+StyledIcon.displayName = "Icon";
 
 interface IconProps {
     "aria-label"?: string;

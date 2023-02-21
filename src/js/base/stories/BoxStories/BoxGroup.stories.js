@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { BoxGroup } from "../../BoxGroup";
 import { BoxGroupHeader } from "../../BoxGroupHeader";
 import { BoxGroupSection } from "../../BoxGroupSection";

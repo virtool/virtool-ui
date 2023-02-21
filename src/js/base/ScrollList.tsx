@@ -1,18 +1,12 @@
 import { map } from "lodash-es";
 import React, { useEffect, useState } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { usePrevious } from "./hooks";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 function getScrollRatio(): number {
     return Math.round((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight);
 }
-
-const StyledScrollList = styled.div`
-    padding-bottom: 20px;
-    position: relative;
-    z-index: 0;
-`;
 
 type ScrollListProps = {
     page: number;
@@ -21,6 +15,12 @@ type ScrollListProps = {
     onLoadNextPage: (page: number) => void;
     renderRow: (index: number) => React.ReactNode;
 };
+
+const StyledScrollList = styled.div`
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 0;
+`;
 
 export const ScrollList = ({ page, documents, pageCount, onLoadNextPage, renderRow }: ScrollListProps) => {
     const [prevRequestedPage, setPrevRequestedPage] = useState(1);
@@ -57,3 +57,5 @@ export const ScrollList = ({ page, documents, pageCount, onLoadNextPage, renderR
         </StyledScrollList>
     );
 };
+
+StyledScrollList.displayName = "ScrollList";

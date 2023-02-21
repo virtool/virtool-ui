@@ -1,7 +1,7 @@
 import { map, max, min, range } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 import { getColor, getFontSize } from "../app/theme";
 import { LinkButton } from "./LinkButton";

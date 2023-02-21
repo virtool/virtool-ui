@@ -87,6 +87,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-vitest": "^0.0.46",
     "eslint-plugin-vitest-globals": "^1.3.1",
+    "jest-styled-components": "^7.1.1",
     "prettier": "^2.8.4",
     "prettier-plugin-organize-imports": "^3.2.2",
     "react-test-renderer": "^17.0.2",
@@ -104,33 +105,6 @@
     "test": "vitest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
-  },
-  "vitest": {
-    "preset": "ts-vitest",
-    "collectCoverageFrom": [
-      "src/js/**/*.{js,jsx, ts, tsx}"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "ts",
-      "tsx"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
-    },
-    "setupFilesAfterEnv": [
-      "./src/tests/setupTests.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
-    "testURL": "https://www.virtool.ca",
-    "testEnvironment": "jsdom",
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(lodash-es/|d3.*/).*|internmap|delaunator|robust-predicates|objectmodel)"
-    ]
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"

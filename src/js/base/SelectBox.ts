@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { Box } from "./Box";
 
 type SelectBoxProps = {
@@ -25,3 +25,5 @@ export const SelectBox = styled(Box).attrs(() => ({
         padding-top: 5px;
     }
 `;
+
+SelectBox.displayName = "SelectBox";

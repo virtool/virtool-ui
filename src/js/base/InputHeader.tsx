@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import React, { useRef } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { borderRadius, getFontSize, getFontWeight } from "../app/theme";
 
 const InputHeaderContainer = styled.form`

@@ -21,7 +21,7 @@ exports[`<ReadOrientation /> > should render when [selected=true] 1`] = `
 `;
 
 exports[`<ReadSelectorItem /> > should render when [selected=false] 1`] = `
-<Styled(BoxGroupSectionSelect__SelectBoxGroupSection)
+<Styled(SelectBoxGroupSection)
   active={false}
   onClick={[Function]}
 >
@@ -44,11 +44,11 @@ exports[`<ReadSelectorItem /> > should render when [selected=false] 1`] = `
     index={0}
     selected={false}
   />
-</Styled(BoxGroupSectionSelect__SelectBoxGroupSection)>
+</Styled(SelectBoxGroupSection)>
 `;
 
 exports[`<ReadSelectorItem /> > should render when [selected=true] 1`] = `
-<Styled(BoxGroupSectionSelect__SelectBoxGroupSection)
+<Styled(SelectBoxGroupSection)
   active={true}
   onClick={[Function]}
 >
@@ -71,5 +71,5 @@ exports[`<ReadSelectorItem /> > should render when [selected=true] 1`] = `
     index={0}
     selected={true}
   />
-</Styled(BoxGroupSectionSelect__SelectBoxGroupSection)>
+</Styled(SelectBoxGroupSection)>
 `;

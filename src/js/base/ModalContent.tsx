@@ -1,7 +1,6 @@
 import { DialogContent as ReachDialogContent } from "@reach/dialog";
 import React from "react";
-import { keyframes } from "styled-components";
-import styled from "styled-components/macro";
+import styled, { keyframes } from "styled-components";
 
 const modalContentOpen = keyframes`
     100% {
@@ -35,3 +34,5 @@ export const ModalContent = styled(({ close, size, ...rest }) => <ReachDialogCon
         width: 600px;
     }
 `;
+
+ModalContent.displayName = "ModalContent";

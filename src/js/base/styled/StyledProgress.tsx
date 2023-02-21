@@ -1,5 +1,5 @@
 import { get } from "lodash-es";
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 
 interface StyledProgressProps {
     color?: string;

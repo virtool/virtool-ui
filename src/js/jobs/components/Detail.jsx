@@ -2,7 +2,7 @@ import { push } from "connected-react-router";
 import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {
     Badge,
     ContainerNarrow,

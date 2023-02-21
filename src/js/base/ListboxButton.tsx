@@ -1,6 +1,6 @@
 import { ListboxButton as ReachListboxButton } from "@reach/listbox";
 import "@reach/listbox/styles.css";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { borderRadius } from "../app/theme";
 
 const focusShadow = "0 0 0 2px rgba(43, 108, 176, 0.5)";
@@ -20,3 +20,5 @@ export const ListboxButton = styled(ReachListboxButton)`
         box-shadow: ${focusShadow};
     }
 `;
+
+ListboxButton.displayName = "ListboxButton";

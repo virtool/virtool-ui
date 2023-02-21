@@ -1,11 +1,13 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 const StyledViewHeader = styled.div`
     display: block;
     margin: 10px 0 20px;
 `;
+
+StyledViewHeader.displayName = "StyledViewHeader";
 
 type ViewHeaderProps = {
     children: React.ReactNode;
@@ -23,3 +25,5 @@ export function ViewHeader({ className, title, children }: ViewHeaderProps) {
         </StyledViewHeader>
     );
 }
+
+ViewHeader.displayName = "ViewHeader";

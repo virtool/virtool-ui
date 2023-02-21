@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { Badge } from "./Badge";
 
 export const ViewHeaderTitle = styled.h1`
@@ -13,3 +13,5 @@ export const ViewHeaderTitle = styled.h1`
         padding: 5px 7px;
     }
 `;
+
+ViewHeaderTitle.displayName = "ViewHeaderTitle";

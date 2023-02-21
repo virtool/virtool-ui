@@ -1,6 +1,6 @@
 import { get } from "lodash-es";
 import React, { useContext } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getColorProps } from "../app/theme";
 import { BoxGroupSection } from "./BoxGroupSection";
 import { CloseButton } from "./CloseButton";
@@ -25,6 +25,8 @@ const StyledModalHeader = styled(BoxGroupSection)`
     height: 55px;
     justify-content: space-between;
 `;
+
+StyledModalHeader.displayName = "ModalHeader";
 
 interface ModalHeaderProps {
     children: React.ReactNode;

@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 
 type ViewHeaderIconsProps = {
     theme: DefaultTheme;
@@ -14,3 +14,5 @@ export const ViewHeaderIcons = styled.div<ViewHeaderIconsProps>`
         margin-right: 5px;
     }
 `;
+
+ViewHeaderIcons.displayName = "ViewHeaderIcons";

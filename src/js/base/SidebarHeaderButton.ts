@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { boxShadow, getFontSize } from "../app/theme";
 
 export const SidebarHeaderButton = styled.button`
@@ -26,3 +26,5 @@ export const SidebarHeaderButton = styled.button`
         background-color: ${props => props.theme.color.grey};
     }
 `;
+
+SidebarHeaderButton.displayName = "SidebarHeaderButton";

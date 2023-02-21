@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 import { Tooltip as TippyTooltip, TooltipProps as TippyTooltipProps } from "react-tippy";
 import "react-tippy/dist/tippy.css";
@@ -11,6 +11,8 @@ interface StyledTooltipProps extends TippyTooltipProps {
 const StyledTooltip = styled(TippyTooltip)<StyledTooltipProps>`
     display: inline-flex !important;
 `;
+
+StyledTooltip.displayName = "StyledTooltip";
 
 type TooltipProps = {
     children: React.ReactNode;
@@ -25,3 +27,5 @@ export function Tooltip({ tip, position = "top", children }: TooltipProps) {
         </StyledTooltip>
     );
 }
+
+Tooltip.displayName = "Tooltip";

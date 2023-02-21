@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { BoxGroupSection } from "./BoxGroupSection";
 import { Icon } from "./Icon";
 import { Input } from "./Input";

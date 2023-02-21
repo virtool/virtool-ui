@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 export const ButtonToolbar = styled.div`
     align-items: center;
@@ -14,3 +14,5 @@ export const ButtonToolbar = styled.div`
         }
     }
 `;
+
+ButtonToolbar.displayName = "ButtonToolbar";

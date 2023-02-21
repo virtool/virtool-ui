@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getBadgeOrLabelColor } from "./utils";
 
 type LabelProps = {

@@ -13,3 +13,5 @@ export function SaveButton({ altText = "Save", disabled = false }: SaveButtonPro
         </Button>
     );
 }
+
+SaveButton.displayName = "SaveButton";

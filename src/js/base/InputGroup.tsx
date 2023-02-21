@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { InputContext } from "./InputContext";
 
 export const StyledInputGroup = styled.div`

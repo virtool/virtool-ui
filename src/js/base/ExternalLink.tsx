@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 type ExternalLinkProps = {
     children: ReactNode;
@@ -12,3 +12,5 @@ export const ExternalLink = styled(({ children, className = "", href }: External
         {children}
     </a>
 ))``;
+
+ExternalLink.displayName = "ExternalLink";

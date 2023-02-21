@@ -1,6 +1,5 @@
 import { MenuList } from "@reach/menu-button";
-import { keyframes } from "styled-components";
-import styled from "styled-components/macro";
+import styled, { keyframes } from "styled-components";
 import { getBorder, getFontSize } from "../app/theme";
 
 const slideDown = keyframes`
@@ -24,3 +23,5 @@ export const DropdownMenuList = styled(MenuList)`
     font-size: ${getFontSize("md")};
     padding: 0;
 `;
+
+DropdownMenuList.displayName = "DropdownMenuList";

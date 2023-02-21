@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { Input } from "./Input";
 import { InputContainer } from "./InputContainer";
 
@@ -27,3 +27,5 @@ export const Toolbar = styled.div`
         flex: 0 0 auto;
     }
 `;
+
+Toolbar.displayName = "Toolbar";

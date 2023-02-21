@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getFontWeight } from "../../app/theme";
 import { Box, ContainerNarrow, LoadingPlaceholder, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
 import { checkAdminOrPermission } from "../../utils/utils";

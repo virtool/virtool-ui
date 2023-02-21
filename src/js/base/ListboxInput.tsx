@@ -1,5 +1,5 @@
 import { ListboxInput as ReachListboxInput } from "@reach/listbox";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 export const ListboxInput = styled(ReachListboxInput)`
     [data-reach-listbox-button][aria-expanded="true"] {
@@ -7,3 +7,5 @@ export const ListboxInput = styled(ReachListboxInput)`
         border-bottom-left-radius: 0;
     }
 `;
+
+ListboxInput.displayName = "ListboxInput";

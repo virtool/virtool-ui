@@ -5,7 +5,7 @@ exports[`<DataTypeSelection /> > should render 1`] = `
   <label>
     Data Type
   </label>
-  <DataTypeSelection__SelectBoxContainer>
+  <styled.div>
     <SelectBox
       active={true}
       onClick={[Function]}
@@ -28,6 +28,6 @@ exports[`<DataTypeSelection /> > should render 1`] = `
         Target sequences for barcode analysis
       </span>
     </SelectBox>
-  </DataTypeSelection__SelectBoxContainer>
+  </styled.div>
 </div>
 `;

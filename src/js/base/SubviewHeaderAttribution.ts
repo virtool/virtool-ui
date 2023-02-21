@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getFontWeight } from "../app/theme";
 
 export const SubviewHeaderAttribution = styled.span`
@@ -6,3 +6,5 @@ export const SubviewHeaderAttribution = styled.span`
     font-size: ${props => props.theme.fontSize.md};
     font-weight: ${getFontWeight("thick")};
 `;
+
+SubviewHeaderAttribution.displayName = "SubviewHeaderAttribution";

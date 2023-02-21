@@ -1,5 +1,5 @@
 import * as RadixCheckbox from "@radix-ui/react-checkbox";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 function getBackgroundColor({ checked, theme }): string {
     return theme.color[checked ? "primary" : "transparent"];

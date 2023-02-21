@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getFontWeight } from "../app/theme";
 
 export const InputError = styled.p`
@@ -9,3 +9,5 @@ export const InputError = styled.p`
     min-height: 18px;
     text-align: right;
 `;
+
+InputError.displayName = "InputError";

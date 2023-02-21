@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { getBorder } from "../app/theme";
 
 type BoxGroupSectionProps = {
@@ -34,3 +34,5 @@ export const BoxGroupSection = styled.div<BoxGroupSectionProps>`
         border-bottom: ${getBorder};
     }
 `;
+
+BoxGroupSection.displayName = "BoxGroupSection";

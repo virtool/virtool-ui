@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<RemoveBanner /> > renders correctly 1`] = `
-<RemoveBanner__StyledRemoveBanner
+<Styled(Alert)
   color="red"
 >
   <strong>
@@ -14,5 +14,5 @@ exports[`<RemoveBanner /> > renders correctly 1`] = `
   >
     Delete
   </Button>
-</RemoveBanner__StyledRemoveBanner>
+</Styled(Alert)>
 `;

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<ViewHeader /> > should render renders children 1`] = `
-<ViewHeader__StyledViewHeader>
+<StyledViewHeader>
   <HelmetWrapper
     defer={true}
     encodeSpecialCharacters={true}
@@ -13,11 +13,11 @@ exports[`<ViewHeader /> > should render renders children 1`] = `
   <div>
     Hello world
   </div>
-</ViewHeader__StyledViewHeader>
+</StyledViewHeader>
 `;
 
 exports[`<ViewHeader /> > should render with count 1`] = `
-<ViewHeader__StyledViewHeader>
+<StyledViewHeader>
   <HelmetWrapper
     defer={true}
     encodeSpecialCharacters={true}
@@ -26,11 +26,11 @@ exports[`<ViewHeader /> > should render with count 1`] = `
       Foo
     </title>
   </HelmetWrapper>
-</ViewHeader__StyledViewHeader>
+</StyledViewHeader>
 `;
 
 exports[`<ViewHeader /> > should render with title 1`] = `
-<ViewHeader__StyledViewHeader>
+<StyledViewHeader>
   <HelmetWrapper
     defer={true}
     encodeSpecialCharacters={true}
@@ -39,5 +39,5 @@ exports[`<ViewHeader /> > should render with title 1`] = `
       Foo
     </title>
   </HelmetWrapper>
-</ViewHeader__StyledViewHeader>
+</StyledViewHeader>
 `;

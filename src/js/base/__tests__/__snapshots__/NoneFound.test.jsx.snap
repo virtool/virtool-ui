@@ -1,44 +1,56 @@
 // Vitest Snapshot v1
 
 exports[`<NoneFound /> > should render with [noun='files' 1`] = `
-<NoneFound__StyledNoneFound>
+<styled.div>
   <Icon
     name="info-circle"
   />
    No 
   files
    found
-</NoneFound__StyledNoneFound>
+</styled.div>
 `;
 
 exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
-<NoneFoundBox__StyledNoneFoundBox
+<Styled(Box)
   as={
     {
       "$$typeof": Symbol(react.forward_ref),
       "attrs": [],
       "componentStyle": e {
-        "baseHash": -1700734099,
+        "baseHash": 816878857,
         "baseStyle": undefined,
-        "componentId": "Box-sc-1gxeswo-0",
+        "componentId": "sc-jSUZER",
         "isStatic": false,
         "rules": [
-          "border:",
+          "
+    border: ",
           [Function],
-          ";border-radius:",
+          ";
+    border-radius: ",
           [Function],
-          ";box-sizing:border-box;cursor:",
+          ";
+    box-sizing: border-box;
+    cursor: ",
           [Function],
-          ";margin-bottom:15px;padding:10px 15px;position:relative;&:hover{",
+          ";
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    position: relative;
+
+    &:hover {
+        ",
           [Function],
-          "}",
+          "
+    }
+",
         ],
         "staticRulesId": "",
       },
       "foldedComponentIds": [],
       "render": [Function],
       "shouldForwardProp": undefined,
-      "styledComponentId": "Box-sc-1gxeswo-0",
+      "styledComponentId": "sc-jSUZER",
       "target": "div",
       "toString": [Function],
       "warnTooManyClasses": [Function],
@@ -52,22 +64,22 @@ exports[`<NoneFoundBox /> > should render with [noun='boxes' 1`] = `
    No 
   boxes
    found.   
-</NoneFoundBox__StyledNoneFoundBox>
+</Styled(Box)>
 `;
 
 exports[`<NoneFoundSection /> > should render with [noun='sections' 1`] = `
-<NoneFoundSection__StyledNoneFoundSection>
+<Styled(BoxGroupSection)>
   <Icon
     name="info-circle"
   />
    No 
   sections
    found
-</NoneFoundSection__StyledNoneFoundSection>
+</Styled(BoxGroupSection)>
 `;
 
 exports[`<NoneFoundSection /> > should render with [noun='sections'] and children 1`] = `
-<NoneFoundSection__StyledNoneFoundSection>
+<Styled(BoxGroupSection)>
   <Icon
     name="info-circle"
   />
@@ -81,5 +93,5 @@ exports[`<NoneFoundSection /> > should render with [noun='sections'] and childre
     </span>
     .
   </span>
-</NoneFoundSection__StyledNoneFoundSection>
+</Styled(BoxGroupSection)>
 `;

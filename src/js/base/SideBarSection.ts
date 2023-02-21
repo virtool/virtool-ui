@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { borderRadius, boxShadow } from "../app/theme";
 import { Box } from "./Box";
 
@@ -10,3 +10,5 @@ export const SideBarSection = styled(Box)`
     margin-bottom: 15px;
     position: static;
 `;
+
+SideBarSection.displayName = "SideBarSection";

@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getBorder } from "../app/theme";
 
 type BoxProps = {
@@ -18,3 +18,5 @@ export const Box = styled.div<BoxProps>`
         ${props => (props.onClick ? `background-color: ${props.theme.color.greyHover};` : "")}
     }
 `;
+
+Box.displayName = "Box";

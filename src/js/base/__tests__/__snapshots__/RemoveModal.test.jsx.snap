@@ -11,7 +11,7 @@ exports[`<RemoveModal /> > should render 1`] = `
   <ModalHeader>
     Remove bar
   </ModalHeader>
-  <RemoveModal__RemoveModalBody>
+  <RemoveModalBody>
     <span>
       Are you sure you want to remove 
       <strong>
@@ -19,7 +19,7 @@ exports[`<RemoveModal /> > should render 1`] = `
       </strong>
       ?
     </span>
-  </RemoveModal__RemoveModalBody>
+  </RemoveModalBody>
   <ModalFooter>
     <Button
       color="red"
@@ -43,7 +43,7 @@ exports[`<RemoveModal /> > should render when [show=false] 1`] = `
   <ModalHeader>
     Remove bar
   </ModalHeader>
-  <RemoveModal__RemoveModalBody>
+  <RemoveModalBody>
     <span>
       Are you sure you want to remove 
       <strong>
@@ -51,7 +51,7 @@ exports[`<RemoveModal /> > should render when [show=false] 1`] = `
       </strong>
       ?
     </span>
-  </RemoveModal__RemoveModalBody>
+  </RemoveModalBody>
   <ModalFooter>
     <Button
       color="red"
@@ -75,9 +75,9 @@ exports[`<RemoveModal /> > should render with message 1`] = `
   <ModalHeader>
     Remove bar
   </ModalHeader>
-  <RemoveModal__RemoveModalBody>
+  <RemoveModalBody>
     Are you sure about this?
-  </RemoveModal__RemoveModalBody>
+  </RemoveModalBody>
   <ModalFooter>
     <Button
       color="red"

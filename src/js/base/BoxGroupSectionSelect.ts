@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { BoxGroupSection } from "./BoxGroupSection";
 import { CheckboxLabel } from "./CheckboxLabel";
 import { StyledCheckbox } from "./styled/StyledCheckbox";
@@ -29,3 +29,5 @@ export const SelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSecti
         margin: 0;
     }
 `;
+
+SelectBoxGroupSection.displayName = "SelectBoxGroupSection";

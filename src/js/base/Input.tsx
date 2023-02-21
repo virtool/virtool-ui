@@ -1,5 +1,5 @@
 import React, { useImperativeHandle } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 function getInputFocusColor({ error }: { error?: string }) {
     return error ? "rgba(229, 62, 62, 0.5)" : "rgba(43, 108, 176, 0.5)";
@@ -114,3 +114,5 @@ export const Input = styled(UnstyledInput)<InputProps>`
         background-color: ${props => props.theme.color.greyLightest};
     }
 `;
+
+Input.displayName = "Input";

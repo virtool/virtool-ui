@@ -1,6 +1,6 @@
 import { reduce } from "lodash-es";
 import React, { useMemo } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getColor, getFontWeight, theme } from "../app/theme";
 
 const iconSize = {

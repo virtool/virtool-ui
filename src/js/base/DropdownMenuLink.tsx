@@ -1,7 +1,7 @@
 import { MenuLink } from "@reach/menu-button";
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { DropdownItemMixin } from "./DropdownItemMixin";
 
 export const DropdownMenuLink = styled(({ children, className, to, target, rel }) => (
@@ -11,3 +11,5 @@ export const DropdownMenuLink = styled(({ children, className, to, target, rel }
 ))`
     ${DropdownItemMixin}
 `;
+
+DropdownMenuLink.displayName = "DropdownMenuLink";

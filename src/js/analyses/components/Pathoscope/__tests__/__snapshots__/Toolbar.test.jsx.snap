@@ -44,7 +44,7 @@ exports[`<Toolbar /> > should render 1`] = `
   >
     Filter Isolates
   </Button>
-  <Menu>
+  <Dropdown>
     <DropdownButton>
       <span>
         <Icon
@@ -74,7 +74,7 @@ exports[`<Toolbar /> > should render 1`] = `
          Excel
       </DropdownMenuItem>
     </DropdownMenuList>
-  </Menu>
+  </Dropdown>
 </Styled(Toolbar)>
 `;
 
@@ -122,7 +122,7 @@ exports[`<Toolbar /> > should render when [filterIsolates=false] 1`] = `
   >
     Filter Isolates
   </Button>
-  <Menu>
+  <Dropdown>
     <DropdownButton>
       <span>
         <Icon
@@ -152,7 +152,7 @@ exports[`<Toolbar /> > should render when [filterIsolates=false] 1`] = `
          Excel
       </DropdownMenuItem>
     </DropdownMenuList>
-  </Menu>
+  </Dropdown>
 </Styled(Toolbar)>
 `;
 
@@ -200,7 +200,7 @@ exports[`<Toolbar /> > should render when [filterOTUs=false] 1`] = `
   >
     Filter Isolates
   </Button>
-  <Menu>
+  <Dropdown>
     <DropdownButton>
       <span>
         <Icon
@@ -230,7 +230,7 @@ exports[`<Toolbar /> > should render when [filterOTUs=false] 1`] = `
          Excel
       </DropdownMenuItem>
     </DropdownMenuList>
-  </Menu>
+  </Dropdown>
 </Styled(Toolbar)>
 `;
 
@@ -278,7 +278,7 @@ exports[`<Toolbar /> > should render when [showPathoscopeReads=true] 1`] = `
   >
     Filter Isolates
   </Button>
-  <Menu>
+  <Dropdown>
     <DropdownButton>
       <span>
         <Icon
@@ -308,7 +308,7 @@ exports[`<Toolbar /> > should render when [showPathoscopeReads=true] 1`] = `
          Excel
       </DropdownMenuItem>
     </DropdownMenuList>
-  </Menu>
+  </Dropdown>
 </Styled(Toolbar)>
 `;
 
@@ -356,7 +356,7 @@ exports[`<Toolbar /> > should render when [sortDescending=false] 1`] = `
   >
     Filter Isolates
   </Button>
-  <Menu>
+  <Dropdown>
     <DropdownButton>
       <span>
         <Icon
@@ -386,7 +386,7 @@ exports[`<Toolbar /> > should render when [sortDescending=false] 1`] = `
          Excel
       </DropdownMenuItem>
     </DropdownMenuList>
-  </Menu>
+  </Dropdown>
 </Styled(Toolbar)>
 `;
 
@@ -434,7 +434,7 @@ exports[`<Toolbar /> > should render when [sortKey=%p] depth 1`] = `
   >
     Filter Isolates
   </Button>
-  <Menu>
+  <Dropdown>
     <DropdownButton>
       <span>
         <Icon
@@ -464,7 +464,7 @@ exports[`<Toolbar /> > should render when [sortKey=%p] depth 1`] = `
          Excel
       </DropdownMenuItem>
     </DropdownMenuList>
-  </Menu>
+  </Dropdown>
 </Styled(Toolbar)>
 `;
 
@@ -512,7 +512,7 @@ exports[`<Toolbar /> > should render when [sortKey=%p] weight 1`] = `
   >
     Filter Isolates
   </Button>
-  <Menu>
+  <Dropdown>
     <DropdownButton>
       <span>
         <Icon
@@ -542,6 +542,6 @@ exports[`<Toolbar /> > should render when [sortKey=%p] weight 1`] = `
          Excel
       </DropdownMenuItem>
     </DropdownMenuList>
-  </Menu>
+  </Dropdown>
 </Styled(Toolbar)>
 `;

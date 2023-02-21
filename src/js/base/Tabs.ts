@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getBorder } from "../app/theme";
 
 export const Tabs = styled.nav`
@@ -7,3 +7,5 @@ export const Tabs = styled.nav`
     margin-bottom: 15px;
     width: 100%;
 `;
+
+Tabs.displayName = "Tabs";

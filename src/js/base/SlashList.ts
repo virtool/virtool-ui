@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 export const SlashList = styled.ul`
     align-items: center;
@@ -11,3 +11,5 @@ export const SlashList = styled.ul`
         padding: 0 5px;
     }
 `;
+
+SlashList.displayName = "SlashList";

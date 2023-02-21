@@ -1,17 +1,17 @@
 import { capitalize } from "lodash-es";
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { InitialIcon } from "./InitialIcon";
 import { RelativeTime } from "./RelativeTime";
 
-type UnstyledAttributionProps = {
+type AttributionProps = {
     className?: string;
     time: string;
     user?: string;
     verb?: string;
 };
 
-function UnstyledAttribution({ className = "", time, user, verb = "created" }: UnstyledAttributionProps) {
+export const Attribution = styled(({ className = "", time, user, verb = "created" }: AttributionProps) => {
     return (
         <span className={className}>
             {user ? <InitialIcon size="md" handle={user} /> : null}
@@ -20,9 +20,7 @@ function UnstyledAttribution({ className = "", time, user, verb = "created" }: U
             </span>
         </span>
     );
-}
-
-export const Attribution = styled(UnstyledAttribution)`
+})`
     align-items: center;
     display: inline-flex;
     font-size: inherit;
@@ -30,3 +28,5 @@ export const Attribution = styled(UnstyledAttribution)`
         margin-right: 5px;
     }
 `;
+
+Attribution.displayName = "Attribution";

@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getBorder, getFontWeight } from "../app/theme";
 
 export const Table = styled.table`

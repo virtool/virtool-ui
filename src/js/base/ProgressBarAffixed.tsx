@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { StyledProgress } from "./styled/StyledProgress";
 
 interface ProgressBarAffixedProps {
@@ -35,3 +35,5 @@ const StyledProgressBarAffixed = styled(StyledProgress)<StyledProgressBarAffixed
 export const ProgressBarAffixed = styled(({ className, now, color, bottom }: ProgressBarAffixedProps) => {
     return <StyledProgressBarAffixed className={className} max="100" value={now} color={color} bottom={bottom} />;
 })``;
+
+ProgressBarAffixed.displayName = "ProgressBarAffixed";

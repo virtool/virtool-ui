@@ -1,9 +1,9 @@
 // Vitest Snapshot v1
 
 exports[`<Bar /> > should render 1`] = `
-<NavBar__StyledNavBar>
-  <NavBar__NavBarLeft>
-    <NavBar__NavBarLogo
+<NavBar>
+  <NavBarLeft>
+    <NavBarLogo
       color="white"
     />
     <Styled(NavLink)
@@ -31,10 +31,10 @@ exports[`<Bar /> > should render 1`] = `
     >
       Subtractions
     </Styled(NavLink)>
-  </NavBar__NavBarLeft>
-  <NavBar__NavBarRight>
-    <Menu>
-      <NavBar__NavDropdownButton>
+  </NavBarLeft>
+  <NavBarRight>
+    <Dropdown>
+      <NavDropdownButton>
         <InitialIcon
           size="md"
         />
@@ -42,7 +42,7 @@ exports[`<Bar /> > should render 1`] = `
         <Icon
           name="caret-down"
         />
-      </NavBar__NavDropdownButton>
+      </NavDropdownButton>
       <DropdownMenuList>
         <DropdownMenuLink
           to="/account"
@@ -50,7 +50,7 @@ exports[`<Bar /> > should render 1`] = `
           Signed in as 
           <strong />
         </DropdownMenuLink>
-        <NavBar__NavDivider />
+        <NavDivider />
         <DropdownMenuLink
           to="/account"
         >
@@ -74,7 +74,7 @@ exports[`<Bar /> > should render 1`] = `
           Logout
         </DropdownMenuItem>
       </DropdownMenuList>
-    </Menu>
-  </NavBar__NavBarRight>
-</NavBar__StyledNavBar>
+    </Dropdown>
+  </NavBarRight>
+</NavBar>
 `;

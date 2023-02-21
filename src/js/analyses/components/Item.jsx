@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Attribution, BoxSpaced, Icon, SlashList } from "../../base";
 import { getCanModify } from "../../samples/selectors";

@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { fontWeight, getFontSize } from "../app/theme";
 import { SidebarHeaderButton } from "./SidebarHeaderButton";
 
@@ -22,3 +22,5 @@ export const SidebarHeader = styled.h3<SidebarHeaderProps>`
         font-size: ${getFontSize("md")};
     }
 `;
+
+SidebarHeader.displayName = "SidebarHeader";

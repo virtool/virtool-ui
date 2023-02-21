@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { getBorder } from "../app/theme";
 
 type BoxLinkProps = {
@@ -22,3 +22,5 @@ export const BoxLink = styled(Link)<BoxLinkProps>`
         background-color: ${props => props.theme.color.greyHover};
     }
 `;
+
+BoxLink.displayName = "BoxLink";

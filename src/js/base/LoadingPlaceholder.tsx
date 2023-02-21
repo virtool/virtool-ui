@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { Loader } from "./Loader";
 
 type StyledLoadingPlaceholderProps = {
@@ -10,6 +10,8 @@ const StyledLoadingPlaceholder = styled.div<StyledLoadingPlaceholderProps>`
     margin-top: ${props => props.margin || "220px"};
     text-align: center;
 `;
+
+StyledLoadingPlaceholder.displayName = "LoadingPlaceholder";
 
 type LoadingPlaceholderProps = {
     margin?: string;

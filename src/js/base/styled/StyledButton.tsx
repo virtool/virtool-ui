@@ -1,5 +1,5 @@
 import { get } from "lodash-es";
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { getColorProps } from "../../app/theme";
 
 function getButtonHoverColor({ color, theme }: getColorProps): string {
@@ -103,3 +103,5 @@ export const StyledButton = styled.button<StyledButtonProps>`
         opacity: 1;
     }
 `;
+
+StyledButton.displayName = "StyledButton";

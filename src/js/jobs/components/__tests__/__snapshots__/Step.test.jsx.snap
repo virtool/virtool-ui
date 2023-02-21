@@ -33,7 +33,7 @@ exports[`<JobStepIcon /> > renders correct icon when state preparing 1`] = `
 `;
 
 exports[`<JobStepIcon /> > renders correct icon when state running 1`] = `
-<Step__JobStepLoader
+<Styled(Loader)
   color="primary"
   size="12px"
 />

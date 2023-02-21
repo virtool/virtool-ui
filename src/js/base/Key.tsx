@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getBorder } from "../app/theme";
 
 export const Key = styled.kbd`
@@ -12,3 +12,5 @@ export const Key = styled.kbd`
     vertical-align: middle;
     width: 20px;
 `;
+
+Key.displayName = "Key";

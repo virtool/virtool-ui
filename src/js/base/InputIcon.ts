@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { Icon } from "./Icon";
 
 export const InputIcon = styled(Icon)`

@@ -1,13 +1,13 @@
 import { filter, map, some } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
+import { getColor } from "../../app/theme";
+import { BoxGroup, InitialIcon } from "../../base";
 import { getUsers } from "../../users/selectors";
 import { getActiveGroup } from "../selectors";
 import { NoneSelected } from "./Groups";
 import { GroupsSelectBoxGroupSection } from "./GroupSelector";
-import { InitialIcon, BoxGroup } from "../../base";
-import styled from "styled-components";
-import { getColor } from "../../app/theme";
 
 const GroupMemberContainer = styled.div`
     display: flex;
@@ -59,7 +59,7 @@ export const Members = ({ users, activeGroupId }) => {
             </GroupsHeaderContainer>
             <SelectedGroupInfoContainer>
                 {memberComponents}
-                {Boolean(memberComponents.length) || <NoneSelected>No Group Members</NoneSelected>}
+                {Boolean(memberComponents.length) || <NoneSelected key="none-selected">No Group Members</NoneSelected>}
             </SelectedGroupInfoContainer>
         </GroupsInfoBoxGroupSection>
     );

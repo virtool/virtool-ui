@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { getColor } from "../app/theme";
 
 type AlertInnerProps = {
@@ -14,3 +14,5 @@ export const AlertInner = styled.div<AlertInnerProps>`
     display: ${props => (props.block ? "block" : "flex")};
     padding: 15px;
 `;
+
+AlertInner.displayName = "AlertInner";

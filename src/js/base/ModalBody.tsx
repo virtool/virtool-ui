@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getBorder } from "../app/theme";
 import { BoxGroupSection } from "./BoxGroupSection";
 import { ModalAlert } from "./ModalAlert";
@@ -14,3 +14,5 @@ export const ModalBody = styled(BoxGroupSection)`
         border-top: none;
     }
 `;
+
+ModalBody.displayName = "ModalBody";

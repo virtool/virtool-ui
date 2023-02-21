@@ -1,6 +1,6 @@
 import { capitalize } from "lodash-es";
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { InitialIcon } from "./InitialIcon";
 
 type UnstyledAttributionWithNameProps = {

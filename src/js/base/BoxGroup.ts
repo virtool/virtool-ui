@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { Box } from "./Box";
 import { Table } from "./Table";
 
@@ -32,3 +32,5 @@ export const BoxGroup = styled(Box)<BoxGroupProps>`
         }
     }
 `;
+
+BoxGroup.displayName = "BoxGroup";

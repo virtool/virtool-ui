@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { getFontSize, getFontWeight } from "../app/theme";
 import { Badge } from "./Badge";
 import { BoxGroupSection } from "./BoxGroupSection";
@@ -32,3 +32,5 @@ export const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
         margin: 5px 0 0;
     }
 `;
+
+BoxGroupHeader.displayName = "BoxGroupHeader";

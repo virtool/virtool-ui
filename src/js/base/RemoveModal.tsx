@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { Button } from "./Button";
 import { Modal } from "./Modal";
 import { ModalBody } from "./ModalBody";
@@ -9,6 +9,8 @@ import { ModalHeader } from "./ModalHeader";
 const RemoveModalBody = styled(ModalBody)`
     padding: 15px 15px 25px;
 `;
+
+RemoveModalBody.displayName = "RemoveModalBody";
 
 interface RemoveModalProps {
     message?: React.ReactNode;
@@ -47,3 +49,5 @@ export const RemoveModal = ({ message, name, noun, show, onConfirm, onHide }: Re
         </ModalFooter>
     </Modal>
 );
+
+RemoveModal.displayName = "RemoveModal";

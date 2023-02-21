@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getBadgeOrLabelColor } from "./utils";
 
 type BadgeProps = {
@@ -19,3 +19,5 @@ export const Badge = styled.span<BadgeProps>`
     vertical-align: middle;
     white-space: nowrap;
 `;
+
+Badge.displayName = "Badge";

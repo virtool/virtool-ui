@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../app/theme";
 
 export const TabsLink = styled(NavLink)`
@@ -19,3 +19,5 @@ export const TabsLink = styled(NavLink)`
         box-shadow: inset 0 -1px 0 0 ${props => props.theme.color.grey};
     }
 `;
+
+TabsLink.displayName = "TabsLink";

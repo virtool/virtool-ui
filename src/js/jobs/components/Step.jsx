@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { BoxGroupSection, Icon, Loader } from "../../base";
 import { getStepDescription } from "../utils";
 

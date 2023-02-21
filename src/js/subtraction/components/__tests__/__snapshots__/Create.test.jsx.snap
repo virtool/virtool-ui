@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<SubtractionFileItem /> > should render when [active=%p] false 1`] = `
-<Styled(BoxGroupSectionSelect__SelectBoxGroupSection)
+<Styled(SelectBoxGroupSection)
   active={false}
   onClick={[Function]}
 >
@@ -12,11 +12,11 @@ exports[`<SubtractionFileItem /> > should render when [active=%p] false 1`] = `
     time="2018-02-14T17:12:00.000000Z"
     user="test-user"
   />
-</Styled(BoxGroupSectionSelect__SelectBoxGroupSection)>
+</Styled(SelectBoxGroupSection)>
 `;
 
 exports[`<SubtractionFileItem /> > should render when [active=%p] true 1`] = `
-<Styled(BoxGroupSectionSelect__SelectBoxGroupSection)
+<Styled(SelectBoxGroupSection)
   active={true}
   onClick={[Function]}
 >
@@ -27,5 +27,5 @@ exports[`<SubtractionFileItem /> > should render when [active=%p] true 1`] = `
     time="2018-02-14T17:12:00.000000Z"
     user="test-user"
   />
-</Styled(BoxGroupSectionSelect__SelectBoxGroupSection)>
+</Styled(SelectBoxGroupSection)>
 `;

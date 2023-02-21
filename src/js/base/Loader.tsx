@@ -1,6 +1,5 @@
 import React from "react";
-import { keyframes } from "styled-components";
-import styled from "styled-components/macro";
+import styled, { keyframes } from "styled-components";
 import { getColor } from "../app/theme";
 
 const rotate = keyframes`
@@ -43,5 +42,3 @@ export function Loader({ className, color = "greyDark", size = "22px" }: LoaderP
         </StyledLoader>
     );
 }
-
-Loader.displayName = "Loader";

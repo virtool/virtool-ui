@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 export const ButtonGroup = styled.div`
     display: flex;
@@ -25,3 +25,5 @@ export const ButtonGroup = styled.div`
         }
     }
 `;
+
+ButtonGroup.displayName = "ButtonGroup";

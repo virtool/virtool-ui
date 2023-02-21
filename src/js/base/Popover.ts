@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePopper } from "react-popper";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { borderRadius, boxShadow, getBorder } from "../app/theme";
 import { BoxGroup } from "./BoxGroup";
 import { useClickOutside, useKeyPress } from "./hooks";

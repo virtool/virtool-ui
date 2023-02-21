@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { FileError, useDropzone } from "react-dropzone";
-import styled, { DefaultTheme } from "styled-components/macro";
+import styled, { DefaultTheme } from "styled-components";
 import { getColor } from "../app/theme";
 import { Button } from "./Button";
 import { DividerVertical } from "./DividerVertical";

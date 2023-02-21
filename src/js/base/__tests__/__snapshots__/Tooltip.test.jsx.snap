@@ -1,7 +1,7 @@
 // Vitest Snapshot v1
 
 exports[`<Tooltip /> > should render 1`] = `
-<Tooltip__StyledTooltip
+<StyledTooltip
   arrow={true}
   position="left"
   size="regular"
@@ -10,18 +10,18 @@ exports[`<Tooltip /> > should render 1`] = `
 `;
 
 exports[`<Tooltip /> > should render with children 1`] = `
-<Tooltip__StyledTooltip
+<StyledTooltip
   arrow={true}
   position="left"
   size="regular"
   title="Tip"
 >
   Hello world
-</Tooltip__StyledTooltip>
+</StyledTooltip>
 `;
 
 exports[`<Tooltip /> > should render without position prop 1`] = `
-<Tooltip__StyledTooltip
+<StyledTooltip
   arrow={true}
   position="left"
   size="regular"
