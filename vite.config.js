@@ -7,9 +7,6 @@ export default defineConfig({
   build: {
     outDir: "../dist",
   },
-  define: {
-    "process.env": { REACT_APP_SC_ATTR: false, SC_ATTR: false },
-  },
   plugins: [
     createHtmlPlugin({}),
     react({
