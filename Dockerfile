@@ -11,7 +11,7 @@ COPY server /build/server
 COPY src /build/src
 CMD ["npx", "vite", "serve"]
 
-FROM npm as build
+FROM library/node:16-buster as build
 WORKDIR /build
 COPY --from=npm /build/node_modules /build/node_modules
 COPY vite.config.js ./
