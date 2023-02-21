@@ -6,8 +6,6 @@ import {
     BoxGroupHeader,
     BoxGroupSection,
     Button,
-    Flex,
-    FlexItem,
     Icon,
     Loader,
     ProgressBarAffixed,
@@ -24,14 +22,11 @@ const ReleaseButtonContainer = styled.div`
 const ReleaseHeader = styled.div`
     align-items: center;
     display: flex;
+    gap: ${props => props.theme.gap.text};
 
     > i,
     > strong {
         color: ${props => props.theme.color[props.newer ? "blue" : "greenDark"]};
-    }
-
-    > strong {
-        margin-left: 5px;
     }
 `;
 
@@ -48,37 +43,7 @@ const ReleaseLastChecked = styled.span`
 const StyledRelease = styled(BoxGroupSection)``;
 
 const Release = ({ release, checking, updating, onCheckUpdates, onUpdate }) => {
-    let button;
-    let updateStats;
-
-    if (!updating && release.newer) {
-        button = (
-            <ReleaseButtonContainer>
-                <Button icon="download" color="blue" onClick={onUpdate} disabled={updating}>
-                    Install
-                </Button>
-            </ReleaseButtonContainer>
-        );
-
-        updateStats = (
-            <>
-                <FlexItem pad>/ {release.name}</FlexItem>
-                <FlexItem pad>
-                    / Published <RelativeTime time={release.published_at} />
-                </FlexItem>
-            </>
-        );
-    }
-
-    let lastChecked;
-
-    if (release.retrieved_at) {
-        lastChecked = (
-            <span>
-                Last checked <RelativeTime time={release.retrieved_at} />
-            </span>
-        );
-    }
+    const hasUpdate = !updating && release.newer;
 
     return (
         <StyledRelease newer={release.newer}>
@@ -86,15 +51,34 @@ const Release = ({ release, checking, updating, onCheckUpdates, onUpdate }) => {
                 <Icon name={release.newer ? "arrow-alt-circle-up" : "check"} />
                 <strong>{release.newer ? "Update Available" : "Up-to-date"}</strong>
 
-                {updateStats}
+                {hasUpdate && (
+                    <>
+                        <span>/</span>
+                        <span>{release.name}</span>
+                        <span>/</span>
+                        <span>
+                            Published <RelativeTime time={release.published_at} />
+                        </span>
+                    </>
+                )}
 
                 <ReleaseLastChecked>
-                    {lastChecked}
+                    {release.retrieved_at && (
+                        <span>
+                            Last checked <RelativeTime time={release.retrieved_at} />
+                        </span>
+                    )}
                     {checking ? <Loader size="14px" /> : <Icon name="sync" onClick={onCheckUpdates} />}
                 </ReleaseLastChecked>
             </ReleaseHeader>
 
-            {button}
+            {hasUpdate && (
+                <ReleaseButtonContainer>
+                    <Button icon="download" color="blue" onClick={onUpdate} disabled={updating}>
+                        Install
+                    </Button>
+                </ReleaseButtonContainer>
+            )}
         </StyledRelease>
     );
 };
@@ -117,61 +101,56 @@ const Upgrade = ({ progress }) => (
     </StyledUpgrade>
 );
 
+const RemoteHeader = styled(BoxGroupHeader)`
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const InstalledHeader = styled(BoxGroupSection)`
+    align-items: center;
+    display: flex;
+    gap: ${props => props.theme.gap.text};
+`;
+
 const Remote = ({ detail, onCheckUpdates, onUpdate, checking, progress }) => {
     const { id, installed, release, remotes_from, updating } = detail;
 
     const slug = remotes_from.slug;
 
-    let installedComponent;
-
-    if (installed) {
-        installedComponent = (
-            <BoxGroupSection>
-                <Flex alignItems="center">
-                    <FlexItem>
-                        <Icon name="hdd" />
-                    </FlexItem>
-                    <FlexItem pad={5}>
-                        <strong>Installed Version</strong>
-                    </FlexItem>
-                    <FlexItem pad>/ {installed.name}</FlexItem>
-                    <FlexItem pad>
-                        / Published <RelativeTime time={installed.published_at} />
-                    </FlexItem>
-                </Flex>
-            </BoxGroupSection>
-        );
-    }
-
-    const statusComponent = updating ? (
-        <Upgrade progress={progress} />
-    ) : (
-        <Release
-            release={release}
-            checking={checking}
-            updating={updating}
-            onCheckUpdates={() => onCheckUpdates(id)}
-            onUpdate={() => onUpdate(id)}
-        />
-    );
-
     return (
         <BoxGroup>
-            <BoxGroupHeader>
-                <Flex>
-                    <FlexItem grow={1}>
-                        <h2>Remote Reference</h2>
-                    </FlexItem>
-                    <FlexItem>
-                        <a href={`https://github.com/${slug}`} target="_blank" rel="noopener noreferrer">
-                            <Icon faStyle="fab" name="github" /> {slug}
-                        </a>
-                    </FlexItem>
-                </Flex>
-            </BoxGroupHeader>
+            <RemoteHeader>
+                <h2>Remote Reference</h2>
+                <a href={`https://github.com/${slug}`} target="_blank" rel="noopener noreferrer">
+                    <Icon faStyle="fab" name="github" /> {slug}
+                </a>
+            </RemoteHeader>
 
-            {installedComponent}
-            {statusComponent}
+            {installed && (
+                <InstalledHeader>
+                    <Icon name="hdd" />
+                    <strong>Installed Version</strong>
+                    <span>/</span>
+                    <span>{installed.name}</span>
+                    <span>/</span>
+                    <span>Published</span>
+                    <RelativeTime time={installed.published_at} />
+                </InstalledHeader>
+            )}
+
+            {updating ? (
+                <Upgrade progress={progress} />
+            ) : (
+                <Release
+                    release={release}
+                    checking={checking}
+                    updating={updating}
+                    onCheckUpdates={() => onCheckUpdates(id)}
+                    onUpdate={() => onUpdate(id)}
+                />
+            )}
         </BoxGroup>
     );
 };

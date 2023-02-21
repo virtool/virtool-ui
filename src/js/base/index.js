@@ -34,7 +34,6 @@ export { DropdownMenuItem } from "./DropdownMenuItem";
 export { DropdownMenuLink } from "./DropdownMenuLink";
 export { DropdownMenuList } from "./DropdownMenuList";
 export { ExternalLink } from "./ExternalLink";
-export { Flex, FlexItem } from "./Flex";
 export { Icon } from "./Icon";
 export { IconLink } from "./IconLink";
 export { InitialIcon } from "./InitialIcon";

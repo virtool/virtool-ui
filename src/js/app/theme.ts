@@ -79,7 +79,8 @@ export const theme: DefaultTheme = {
         bold: 700
     },
     gap: {
-        column: "15px"
+        column: "15px",
+        text: "5px"
     },
     ring: {
         sm: "0 0 0 2px",

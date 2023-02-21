@@ -78,6 +78,7 @@ declare module "styled-components" {
         };
         gap: {
             column: string;
+            text: string;
         };
         ring: {
             sm: string;
