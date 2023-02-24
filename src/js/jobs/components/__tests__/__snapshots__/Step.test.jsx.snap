@@ -9,7 +9,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 1`
       class="sc-kZLDfD cRjHzp"
     >
       <i
-        class="sc-hLBbgP kiiEvQ  fas fa-hourglass-end"
+        class="sc-hLBbgP iFSptS  fas fa-hourglass-end"
         color="red"
         title="timeout"
       />
@@ -53,7 +53,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 2`
       class="sc-kZLDfD cRjHzp"
     >
       <i
-        class="sc-hLBbgP kiiEvQ  fas fa-skull"
+        class="sc-hLBbgP iFSptS  fas fa-skull"
         color="red"
         title="terminated"
       />
@@ -97,7 +97,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 3`
       class="sc-kZLDfD cRjHzp"
     >
       <i
-        class="sc-hLBbgP jzTLOe  fas fa-check"
+        class="sc-hLBbgP eAOQkA  fas fa-check"
         color="green"
         title="complete"
       />
@@ -139,7 +139,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 4`
       class="sc-kZLDfD cRjHzp"
     >
       <i
-        class="sc-hLBbgP kiiEvQ  fas fa-exclamation-triangle"
+        class="sc-hLBbgP iFSptS  fas fa-exclamation-triangle"
         color="red"
         title="error"
       />
@@ -181,7 +181,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 5`
       class="sc-kZLDfD cRjHzp"
     >
       <i
-        class="sc-hLBbgP eKMOGa  fas fa-boxes"
+        class="sc-hLBbgP lbuzuw  fas fa-boxes"
         color="grey"
         title="preparing"
       />
@@ -225,7 +225,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 6`
       class="sc-kZLDfD cRjHzp"
     >
       <i
-        class="sc-hLBbgP knbGil  fas fa-clock"
+        class="sc-hLBbgP jjOKAv  fas fa-clock"
         color="purple"
         title="waiting"
       />
