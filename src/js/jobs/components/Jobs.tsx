@@ -6,7 +6,11 @@ import { Container, LoadingPlaceholder } from "../../base";
 import JobDetail from "./Detail";
 import JobsList from "./List";
 
-export const Jobs = ({ loading }) => {
+interface JobsProps {
+    loading: boolean;
+}
+
+export function Jobs({ loading }: JobsProps) {
     if (loading) {
         return <LoadingPlaceholder />;
     }
@@ -19,6 +23,6 @@ export const Jobs = ({ loading }) => {
             </Switch>
         </Container>
     );
-};
+}
 
 export default connect(mapSettingsStateToProps)(Jobs);

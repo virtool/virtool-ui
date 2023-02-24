@@ -6,7 +6,6 @@ exports[`<Icon /> > should render 1`] = `
   className=" fas fa-test"
   fixedWidth={false}
   onClick={null}
-  type="button"
 />
 `;
 
@@ -20,7 +19,6 @@ exports[`<Icon /> > should render placed tooltip when tipPlacement props defined
     className=" fas fa-test"
     fixedWidth={false}
     onClick={null}
-    type="button"
   />
 </Tooltip>
 `;
@@ -35,7 +33,6 @@ exports[`<Icon /> > should render tooltip when tip props is defined 1`] = `
     className=" fas fa-test"
     fixedWidth={false}
     onClick={null}
-    type="button"
   />
 </Tooltip>
 `;
@@ -46,7 +43,6 @@ exports[`<Icon /> > should render when [fixedWith=true] 1`] = `
   className=" fas fa-test"
   fixedWidth={true}
   onClick={null}
-  type="button"
 />
 `;
 
@@ -56,6 +52,5 @@ exports[`<Icon /> > should render when className prop provided 1`] = `
   className="heavy  fas fa-test"
   fixedWidth={false}
   onClick={null}
-  type="button"
 />
 `;

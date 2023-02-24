@@ -51,7 +51,7 @@ class JobDetail extends React.Component {
             color = "blue";
         }
 
-        if (latest.state === "error" || latest.state === "cancelled") {
+        if (latest.state === "error" || latest.state === "cancelled" || latest.state === "timeout") {
             color = "red";
         }
 

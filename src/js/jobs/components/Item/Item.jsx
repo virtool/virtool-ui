@@ -1,46 +1,35 @@
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Attribution, BoxLink, ProgressBarAffixed } from "../../../base";
+import { Attribution, Box, ProgressBarAffixed } from "../../../base";
 import { getWorkflowDisplayName } from "../../../utils/utils";
 import { archiveJob, cancelJob } from "../../actions";
 import { JobAction } from "./Action";
 import { JobStatus } from "./Status";
 
-const JobItemBody = styled.div`
-    font-size: ${getFontSize("lg")};
-    padding: 10px 15px;
-
-    ${Attribution} {
-        font-size: ${getFontSize("md")};
-    }
-`;
-
-const JobItemContainer = styled.div`
-    position: relative;
-`;
-
 const JobItemHeader = styled.div`
     align-items: center;
     display: flex;
     font-weight: ${getFontWeight("thick")};
+    margin-bottom: 5px;
 `;
 
-const JobItemLinkBox = styled(BoxLink)`
-    padding: 5px 0 0 0;
-    z-index: 10;
+const JobItemHeaderRight = styled.div`
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
 `;
 
-const JobActionOverlay = styled.div`
-    background-color: transparent;
-    font-size: 17px;
-    padding: 15px 15px 0;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 20;
+const StyledJobItem = styled(Box)`
+    font-size: ${getFontSize("lg")};
+    padding-top: 15px;
+
+    ${Attribution} {
+        font-size: ${getFontSize("md")};
+    }
 `;
 
 export function JobItem({
@@ -64,34 +53,29 @@ export function JobItem({
         progressColor = "blue";
     }
 
-    if (state === "error" || state === "cancelled") {
+    if (state === "error" || state === "cancelled" || state === "timeout") {
         progressColor = "red";
     }
-    // Create the option components for the selected fields.
-    return (
-        <JobItemContainer>
-            <JobItemLinkBox to={`/jobs/${id}`}>
-                <ProgressBarAffixed now={progress} color={progressColor} />
 
-                <JobItemBody>
-                    <JobItemHeader>
-                        <span>{getWorkflowDisplayName(workflow)}</span>
-                        <JobStatus state={state} pad={canCancel || canArchive} />
-                    </JobItemHeader>
-                    <Attribution time={created_at} user={user.handle} />
-                </JobItemBody>
-            </JobItemLinkBox>
-            <JobActionOverlay>
-                <JobAction
-                    key={state}
-                    state={state}
-                    canCancel={canCancel}
-                    canArchive={canArchive}
-                    onCancel={handleCancel}
-                    onArchive={handleArchive}
-                />
-            </JobActionOverlay>
-        </JobItemContainer>
+    return (
+        <StyledJobItem>
+            <ProgressBarAffixed now={progress} color={progressColor} />
+            <JobItemHeader>
+                <Link to={`/jobs/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
+                <JobItemHeaderRight>
+                    <JobStatus state={state} pad={canCancel || canArchive} />
+                    <JobAction
+                        key={state}
+                        state={state}
+                        canCancel={canCancel}
+                        canArchive={canArchive}
+                        onCancel={handleCancel}
+                        onArchive={handleArchive}
+                    />
+                </JobItemHeaderRight>
+            </JobItemHeader>
+            <Attribution time={created_at} user={user.handle} />
+        </StyledJobItem>
     );
 }
 

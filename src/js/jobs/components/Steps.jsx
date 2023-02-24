@@ -2,7 +2,7 @@ import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { BoxGroup } from "../../base";
-import JobStep from "./Step";
+import { JobStep } from "./Step";
 
 export const JobSteps = ({ status, workflow }) => {
     const currentIndex = status.length - 1;

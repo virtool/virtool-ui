@@ -4,12 +4,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
 <styled.div
   pad={false}
 >
-  <Icon
-    color="red"
-    name="times fa-fw"
+  <JobStateIcon
+    state="cancelled"
   />
   <span>
-    cancelled
+    Cancelled
   </span>
 </styled.div>
 `;
@@ -18,12 +17,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
 <styled.div
   pad={false}
 >
-  <Icon
-    color="green"
-    name="check fa-fw"
+  <JobStateIcon
+    state="complete"
   />
   <span>
-    complete
+    Complete
   </span>
 </styled.div>
 `;
@@ -32,12 +30,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
 <styled.div
   pad={false}
 >
-  <Icon
-    color="red"
-    name="times fa-fw"
+  <JobStateIcon
+    state="error"
   />
   <span>
-    error
+    Error
   </span>
 </styled.div>
 `;
@@ -47,11 +44,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
   pad={false}
 >
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    preparing
+    Preparing
   </span>
 </styled.div>
 `;
@@ -61,11 +58,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
   pad={false}
 >
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    running
+    Running
   </span>
 </styled.div>
 `;
@@ -74,12 +71,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] 
 <styled.div
   pad={false}
 >
-  <Loader
-    color="primary"
-    size="14px"
+  <JobStateIcon
+    state="waiting"
   />
   <span>
-    waiting
+    Waiting
   </span>
 </styled.div>
 `;
@@ -88,12 +84,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] c
 <styled.div
   pad={true}
 >
-  <Icon
-    color="red"
-    name="times fa-fw"
+  <JobStateIcon
+    state="cancelled"
   />
   <span>
-    cancelled
+    Cancelled
   </span>
 </styled.div>
 `;
@@ -102,12 +97,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] c
 <styled.div
   pad={true}
 >
-  <Icon
-    color="green"
-    name="check fa-fw"
+  <JobStateIcon
+    state="complete"
   />
   <span>
-    complete
+    Complete
   </span>
 </styled.div>
 `;
@@ -116,12 +110,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] e
 <styled.div
   pad={true}
 >
-  <Icon
-    color="red"
-    name="times fa-fw"
+  <JobStateIcon
+    state="error"
   />
   <span>
-    error
+    Error
   </span>
 </styled.div>
 `;
@@ -131,11 +124,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] p
   pad={true}
 >
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    preparing
+    Preparing
   </span>
 </styled.div>
 `;
@@ -145,11 +138,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] r
   pad={true}
 >
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    running
+    Running
   </span>
 </styled.div>
 `;
@@ -158,12 +151,11 @@ exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] w
 <styled.div
   pad={true}
 >
-  <Loader
-    color="primary"
-    size="14px"
+  <JobStateIcon
+    state="waiting"
   />
   <span>
-    waiting
+    Waiting
   </span>
 </styled.div>
 `;
