@@ -1,7 +1,10 @@
 version = 1
 
 test_patterns = [
-  "*.test.js"
+  "*.test.js",
+  "*.test.ts",
+  "*.test.jsx",
+  "*.test.tsx"
 ]
 
 [[analyzers]]
@@ -10,7 +13,3 @@ enabled = true
 
   [analyzers.meta]
   plugins = ["react"]
-
-[[analyzers]]
-name = "test-coverage"
-enabled = true
