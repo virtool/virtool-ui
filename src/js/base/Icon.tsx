@@ -2,6 +2,7 @@ import { get } from "lodash-es";
 import React, { useCallback } from "react";
 import styled, { css, DefaultTheme } from "styled-components";
 import { getColorProps } from "../app/theme";
+import { IconColor } from "../jobs/types";
 import { Tooltip } from "./Tooltip";
 
 function getIconColor({ color, theme }: getColorProps): string {
@@ -44,7 +45,7 @@ StyledIcon.displayName = "Icon";
 
 interface IconProps {
     "aria-label"?: string;
-    color?: "blue" | "green" | "grey" | "red" | "orange" | "purple";
+    color?: IconColor;
     name: string;
     className?: string;
     faStyle?: "fas" | "far" | "fal" | "fab";
@@ -55,6 +56,7 @@ interface IconProps {
     style?: any;
     tip?: string;
     tipPlacement?: "top" | "right" | "bottom" | "left";
+    title?: string;
 }
 
 export const Icon = ({
@@ -64,23 +66,27 @@ export const Icon = ({
     style,
     tip,
     tipPlacement,
+    title,
     ...props
 }: IconProps) => {
     const handleClick = useCallback(props.onClick, [props.onClick]);
 
     const className = `${props.className ? props.className + " " : ""} ${faStyle} fa-${props.name}`;
 
+    const type = props.onClick ? "button" : undefined;
+
     const icon = (
         <StyledIcon
             as={props.onClick ? "button" : "i"}
-            type="button"
+            aria-label={props["aria-label"]}
             className={className}
+            color={props.color}
             fixedWidth={fixedWidth}
             hoverable={hoverable}
             style={style}
+            title={title}
+            type={type}
             onClick={props.onClick ? handleClick : null}
-            color={props.color}
-            aria-label={props["aria-label"]}
         />
     );
 

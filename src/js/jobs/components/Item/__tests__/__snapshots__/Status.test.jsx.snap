@@ -1,169 +1,137 @@
 // Vitest Snapshot v1
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] cancelled 1`] = `
-<styled.div
-  pad={false}
->
-  <Icon
-    color="red"
-    name="times fa-fw"
+<Fragment>
+  <JobStateIcon
+    state="cancelled"
   />
   <span>
-    cancelled
+    Cancelled
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] complete 1`] = `
-<styled.div
-  pad={false}
->
-  <Icon
-    color="green"
-    name="check fa-fw"
+<Fragment>
+  <JobStateIcon
+    state="complete"
   />
   <span>
-    complete
+    Complete
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] error 1`] = `
-<styled.div
-  pad={false}
->
-  <Icon
-    color="red"
-    name="times fa-fw"
+<Fragment>
+  <JobStateIcon
+    state="error"
   />
   <span>
-    error
+    Error
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] preparing 1`] = `
-<styled.div
-  pad={false}
->
+<Fragment>
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    preparing
+    Preparing
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] running 1`] = `
-<styled.div
-  pad={false}
->
+<Fragment>
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    running
+    Running
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] false > and [state=%p] waiting 1`] = `
-<styled.div
-  pad={false}
->
-  <Loader
-    color="primary"
-    size="14px"
+<Fragment>
+  <JobStateIcon
+    state="waiting"
   />
   <span>
-    waiting
+    Waiting
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] cancelled 1`] = `
-<styled.div
-  pad={true}
->
-  <Icon
-    color="red"
-    name="times fa-fw"
+<Fragment>
+  <JobStateIcon
+    state="cancelled"
   />
   <span>
-    cancelled
+    Cancelled
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] complete 1`] = `
-<styled.div
-  pad={true}
->
-  <Icon
-    color="green"
-    name="check fa-fw"
+<Fragment>
+  <JobStateIcon
+    state="complete"
   />
   <span>
-    complete
+    Complete
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] error 1`] = `
-<styled.div
-  pad={true}
->
-  <Icon
-    color="red"
-    name="times fa-fw"
+<Fragment>
+  <JobStateIcon
+    state="error"
   />
   <span>
-    error
+    Error
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] preparing 1`] = `
-<styled.div
-  pad={true}
->
+<Fragment>
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    preparing
+    Preparing
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] running 1`] = `
-<styled.div
-  pad={true}
->
+<Fragment>
   <Loader
-    color="primary"
+    color="blue"
     size="14px"
   />
   <span>
-    running
+    Running
   </span>
-</styled.div>
+</Fragment>
 `;
 
 exports[`<JobStatusIcon /> > should render when [pad=%p] true > and [state=%p] waiting 1`] = `
-<styled.div
-  pad={true}
->
-  <Loader
-    color="primary"
-    size="14px"
+<Fragment>
+  <JobStateIcon
+    state="waiting"
   />
   <span>
-    waiting
+    Waiting
   </span>
-</styled.div>
+</Fragment>
 `;

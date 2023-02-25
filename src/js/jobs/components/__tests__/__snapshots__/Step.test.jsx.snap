@@ -1,56 +1,261 @@
 // Vitest Snapshot v1
 
-exports[`<JobStepIcon /> > renders correct icon when state cancelled 1`] = `
-<Icon
-  color="red"
-  fixedWidth={true}
-  name="ban"
-/>
+exports[`<JobStep /> > should render text and icon when state is special case 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-ipEyDJ sc-xWrgk jkUaNF gavIfo"
+  >
+    <div
+      class="sc-kZLDfD cRjHzp"
+    >
+      <i
+        class="sc-hLBbgP iFSptS  fas fa-hourglass-end"
+        color="red"
+        title="timeout"
+      />
+    </div>
+    <div
+      class="sc-hAQmFe iIWcio"
+    >
+      <h4>
+        Timed Out
+      </h4>
+      <p>
+        The job timed out.
+      </p>
+      <div
+        class="sc-eGJbfJ dHwfiE"
+      >
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-clock"
+        />
+        <span>
+          17:48:05
+        </span>
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-calendar"
+        />
+        <span>
+          2022-05-19
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
-exports[`<JobStepIcon /> > renders correct icon when state complete 1`] = `
-<Icon
-  color="green"
-  fixedWidth={true}
-  name="check"
-/>
+exports[`<JobStep /> > should render text and icon when state is special case 2`] = `
+<DocumentFragment>
+  <div
+    class="sc-ipEyDJ sc-xWrgk jkUaNF gavIfo"
+  >
+    <div
+      class="sc-kZLDfD cRjHzp"
+    >
+      <i
+        class="sc-hLBbgP iFSptS  fas fa-skull"
+        color="red"
+        title="terminated"
+      />
+    </div>
+    <div
+      class="sc-hAQmFe iIWcio"
+    >
+      <h4>
+        Terminated
+      </h4>
+      <p>
+        There was a system malfunction
+      </p>
+      <div
+        class="sc-eGJbfJ dHwfiE"
+      >
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-clock"
+        />
+        <span>
+          17:48:05
+        </span>
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-calendar"
+        />
+        <span>
+          2022-05-19
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
-exports[`<JobStepIcon /> > renders correct icon when state error 1`] = `
-<Icon
-  color="red"
-  fixedWidth={true}
-  name="times"
-/>
+exports[`<JobStep /> > should render text and icon when state is special case 3`] = `
+<DocumentFragment>
+  <div
+    class="sc-ipEyDJ sc-xWrgk jkUaNF gavIfo"
+  >
+    <div
+      class="sc-kZLDfD cRjHzp"
+    >
+      <i
+        class="sc-hLBbgP eAOQkA  fas fa-check"
+        color="green"
+        title="complete"
+      />
+    </div>
+    <div
+      class="sc-hAQmFe iIWcio"
+    >
+      <h4>
+        Complete
+      </h4>
+      <p />
+      <div
+        class="sc-eGJbfJ dHwfiE"
+      >
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-clock"
+        />
+        <span>
+          17:48:05
+        </span>
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-calendar"
+        />
+        <span>
+          2022-05-19
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
-exports[`<JobStepIcon /> > renders correct icon when state preparing 1`] = `
-<Icon
-  color="grey"
-  fixedWidth={true}
-  name="boxes"
-/>
+exports[`<JobStep /> > should render text and icon when state is special case 4`] = `
+<DocumentFragment>
+  <div
+    class="sc-ipEyDJ sc-xWrgk jkUaNF gavIfo"
+  >
+    <div
+      class="sc-kZLDfD cRjHzp"
+    >
+      <i
+        class="sc-hLBbgP iFSptS  fas fa-exclamation-triangle"
+        color="red"
+        title="error"
+      />
+    </div>
+    <div
+      class="sc-hAQmFe iIWcio"
+    >
+      <h4>
+        Error
+      </h4>
+      <p />
+      <div
+        class="sc-eGJbfJ dHwfiE"
+      >
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-clock"
+        />
+        <span>
+          17:48:05
+        </span>
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-calendar"
+        />
+        <span>
+          2022-05-19
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
-exports[`<JobStepIcon /> > renders correct icon when state running 1`] = `
-<Styled(Loader)
-  color="primary"
-  size="12px"
-/>
+exports[`<JobStep /> > should render text and icon when state is special case 5`] = `
+<DocumentFragment>
+  <div
+    class="sc-ipEyDJ sc-xWrgk jkUaNF gavIfo"
+  >
+    <div
+      class="sc-kZLDfD cRjHzp"
+    >
+      <i
+        class="sc-hLBbgP lbuzuw  fas fa-boxes"
+        color="grey"
+        title="preparing"
+      />
+    </div>
+    <div
+      class="sc-hAQmFe iIWcio"
+    >
+      <h4>
+        Preparing
+      </h4>
+      <p>
+        Preparing the workflow environment.
+      </p>
+      <div
+        class="sc-eGJbfJ dHwfiE"
+      >
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-clock"
+        />
+        <span>
+          17:48:05
+        </span>
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-calendar"
+        />
+        <span>
+          2022-05-19
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
-exports[`<JobStepIcon /> > renders correct icon when state waiting 1`] = `
-<Icon
-  color="purple"
-  fixedWidth={true}
-  name="pause"
-/>
-`;
-
-exports[`<JobStepIcon /> > renders correct icon when step complete 1`] = `
-<Icon
-  color="blue"
-  fixedWidth={true}
-  name="arrow-circle-down"
-/>
+exports[`<JobStep /> > should render text and icon when state is special case 6`] = `
+<DocumentFragment>
+  <div
+    class="sc-ipEyDJ sc-xWrgk jkUaNF gavIfo"
+  >
+    <div
+      class="sc-kZLDfD cRjHzp"
+    >
+      <i
+        class="sc-hLBbgP jjOKAv  fas fa-clock"
+        color="purple"
+        title="waiting"
+      />
+    </div>
+    <div
+      class="sc-hAQmFe iIWcio"
+    >
+      <h4>
+        Waiting
+      </h4>
+      <p>
+        Waiting for resources to become available.
+      </p>
+      <div
+        class="sc-eGJbfJ dHwfiE"
+      >
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-clock"
+        />
+        <span>
+          17:48:05
+        </span>
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-calendar"
+        />
+        <span>
+          2022-05-19
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;

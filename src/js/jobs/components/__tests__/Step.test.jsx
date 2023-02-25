@@ -1,7 +1,8 @@
-import { JobStepDescription, JobStepIcon } from "../Step";
 import { screen } from "@testing-library/react";
+import React from "react";
+import { JobStep } from "../Step";
 
-describe("<JobStepDescription />", () => {
+describe("<JobStep />", () => {
     let props;
 
     beforeEach(() => {
@@ -17,89 +18,29 @@ describe("<JobStepDescription />", () => {
         };
     });
 
-    it("should render correctly when step_name and step_description = empty string and state is special case", () => {
-        renderWithProviders(<JobStepDescription {...props} />);
-        expect(screen.getByText("Waiting")).toBeInTheDocument();
-        expect(screen.getByText("Waiting for resources to become available.")).toBeInTheDocument();
-        props.step.state = "terminated";
-        renderWithProviders(<JobStepDescription {...props} />);
-        expect(screen.getByText("Terminated")).toBeInTheDocument();
-        expect(screen.getByText("There was a system malfunction")).toBeInTheDocument();
-    });
-    
-    it("should render correctly when step_name and step_description sent from server", () => {
-        props.step.step_name = "foo step";
-        props.step.step_description = "bar description";
-        renderWithProviders(<JobStepDescription {...props} />);
-        expect(screen.getByText("foo step")).toBeInTheDocument();
-        expect(screen.getByText("bar description")).toBeInTheDocument();
-    });
-
-    it("should render correctly when no step_name and no step_description and state is not a special case", () => {
-        props.step.state = "zzz";
-        renderWithProviders(<JobStepDescription {...props} />);
-        const length = screen.queryAllByText("");
-        expect(length).toHaveLength(8); // if title and description not empty length is 6
-        expect(screen.queryByText(/"zzz"i/)).not.toBeInTheDocument();
-    });
-
-    it("should render correctly when step_description and no step_name and state is a special case", ()=>{
-        props.step.step_description = "foo test";
-        renderWithProviders(<JobStepDescription {...props} />);
-        expect(screen.getByText("Waiting")).toBeInTheDocument();
-        expect(screen.getByText("Waiting for resources to become available.")).toBeInTheDocument();
-    })
-});
-
-describe("<JobStepIcon />", () => {
-    let props;
-
-    beforeEach(() => {
-        props = {
-            complete: false,
-            state: "running"
+    test("should render correctly when step_name and step_description sent from server", () => {
+        const step = {
+            ...props.step,
+            state: "running",
+            step_description: "Do something complex to the data.",
+            step_name: "Reticulate Splines"
         };
+
+        renderWithProviders(<JobStep {...props} step={step} />);
+
+        expect(screen.getByText(step.step_description)).toBeInTheDocument();
+        expect(screen.getByText(step.step_name)).toBeInTheDocument();
     });
 
-    it("renders correct icon when step complete", () => {
-        props.complete = true;
-        const wrapper = shallow(<JobStepIcon {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
+    test.each(["timeout", "terminated", "complete", "error", "preparing", "waiting"])(
+        "should render text and icon when state is special case",
+        state => {
+            props.step.state = state;
 
-    it("renders correct icon when state complete", () => {
-        props.state = "complete";
-        const wrapper = shallow(<JobStepIcon {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
+            const { asFragment } = renderWithProviders(<JobStep {...props} />);
 
-    it("renders correct icon when state preparing", () => {
-        props.state = "preparing";
-        const wrapper = shallow(<JobStepIcon {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it("renders correct icon when state running", () => {
-        props.state = "running";
-        const wrapper = shallow(<JobStepIcon {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it("renders correct icon when state cancelled", () => {
-        props.state = "cancelled";
-        const wrapper = shallow(<JobStepIcon {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it("renders correct icon when state error", () => {
-        props.state = "error";
-        const wrapper = shallow(<JobStepIcon {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    it("renders correct icon when state waiting", () => {
-        props.state = "waiting";
-        const wrapper = shallow(<JobStepIcon {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
+            expect(screen.getByTitle(state)).toBeInTheDocument();
+            expect(asFragment()).toMatchSnapshot();
+        }
+    );
 });
