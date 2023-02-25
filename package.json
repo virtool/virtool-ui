@@ -99,7 +99,7 @@
   "scripts": {
     "build": "vite build",
     "develop": "vite serve",
-    "test": "vitest",
+    "test": "TZ=UTC vitest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
