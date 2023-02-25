@@ -33,6 +33,12 @@ export const Running = () => {
             step_description: null,
             step_name: null,
             timestamp: Date.now()
+        },
+        {
+            state: "terminated",
+            step_description: null,
+            step_name: null,
+            timestamp: Date.now()
         }
     ];
 

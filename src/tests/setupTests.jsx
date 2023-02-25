@@ -13,6 +13,8 @@ import { ThemeProvider } from "styled-components";
 import { watchRouter } from "../js/app/sagas";
 import { theme } from "../js/app/theme";
 
+process.env.TZ = "UTC";
+
 // Note that enzyme-to-json snapshot serializer is configured in
 // jest configuration settings specified in package.json instead of here.
 Enzyme.configure({ adapter: new Adapter() });
