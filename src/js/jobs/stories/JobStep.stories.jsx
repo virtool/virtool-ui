@@ -47,7 +47,7 @@ export const Running = () => {
             {steps.map((step, index) => (
                 <JobStep key={index} complete={false} step={step} />
             ))}
-            <JobStep key="complete" complete={true} step={steps[2]} />
+            <JobStep key="complete" complete step={steps[2]} />
         </>
     );
 };

@@ -30,7 +30,7 @@ describe("<UploadItem />", () => {
     });
 
     it("should dispatch action to remove sample", async () => {
-        const screen = renderWithProviders(<UploadItem {...props} failed={true} />);
+        const screen = renderWithProviders(<UploadItem {...props} failed />);
         await userEvent.click(screen.getByLabelText("delete Foo.fa"));
         expect(props.onRemove).toHaveBeenCalledWith(props.localId);
     });
