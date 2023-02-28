@@ -16,7 +16,7 @@ export const Cancellable = () => (
     <JobItem
         id="foo"
         created_at={Date.now()}
-        canCancel={true}
+        canCancel
         progress={23}
         onArchive={() => {}}
         user={user}

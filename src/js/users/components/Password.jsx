@@ -72,7 +72,7 @@ export class Password extends React.Component {
                 <BoxGroupHeader>
                     <h2>Change Password</h2>
                     <p>
-                        Last changed <RelativeTime time={lastPasswordChange} em={true} />
+                        Last changed <RelativeTime time={lastPasswordChange} em />
                     </p>
                 </BoxGroupHeader>
 
