@@ -99,9 +99,9 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                     },
                     {
                         active: states.includes("timeout"),
-                        count: counts.terminated,
+                        count: counts.timeout,
                         state: "timeout",
-                        label: "timeout",
+                        label: "timed out",
                         color: "red"
                     }
                 ]}
