@@ -96,6 +96,13 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                         state: "terminated",
                         label: "terminated",
                         color: "red"
+                    },
+                    {
+                        active: states.includes("timeout"),
+                        count: counts.terminated,
+                        state: "timeout",
+                        label: "timeout",
+                        color: "red"
                     }
                 ]}
                 onClick={handleClick}
