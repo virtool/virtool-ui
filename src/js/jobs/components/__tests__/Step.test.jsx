@@ -32,7 +32,7 @@ describe("<JobStep />", () => {
         expect(screen.getByText(step.step_name)).toBeInTheDocument();
     });
 
-    test.each(["timeout", "terminated", "complete", "error", "preparing", "waiting"])(
+    test.each(["timeout", "terminated", "complete", "error", "preparing", "waiting", "timeout"])(
         "should render text and icon when state is special case",
         state => {
             props.step.state = state;
