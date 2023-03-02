@@ -259,3 +259,47 @@ exports[`<JobStep /> > should render text and icon when state is special case 6`
   </div>
 </DocumentFragment>
 `;
+
+exports[`<JobStep /> > should render text and icon when state is special case 7`] = `
+<DocumentFragment>
+  <div
+    class="sc-ipEyDJ sc-xWrgk jkUaNF gavIfo"
+  >
+    <div
+      class="sc-kZLDfD cRjHzp"
+    >
+      <i
+        class="sc-hLBbgP iFSptS  fas fa-hourglass-end"
+        color="red"
+        title="timeout"
+      />
+    </div>
+    <div
+      class="sc-hAQmFe iIWcio"
+    >
+      <h4>
+        Timed Out
+      </h4>
+      <p>
+        The job timed out.
+      </p>
+      <div
+        class="sc-eGJbfJ dHwfiE"
+      >
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-clock"
+        />
+        <span>
+          17:48:05
+        </span>
+        <i
+          class="sc-hLBbgP icWVMU  fas fa-calendar"
+        />
+        <span>
+          2022-05-19
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
