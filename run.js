@@ -78,7 +78,7 @@ app.set("views", path.join(__dirname, "dist"));
 app.locals.delimiter = "#";
 
 app.get(
-  /\.(?:js|map|ico|svg)$/,
+  /\.(?:js|map|ico|svg|css)$/,
   express.static(path.join(__dirname, "dist"), {
     maxAge: 31536000000,
   })
