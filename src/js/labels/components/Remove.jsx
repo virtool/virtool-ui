@@ -21,12 +21,12 @@ export function RemoveLabel({ id, name }) {
 
     const queryClient = useQueryClient();
 
-    const mutation = useMutation(id => {
+    const mutation = useMutation(() => {
         return Request.delete(`/api/labels/${id}`);
     });
 
     const handleDelete = () => {
-        mutation.mutate(id, {
+        mutation.mutate(["label", id], {
             onSuccess: () => {
                 setShow(false);
                 queryClient.invalidateQueries("labels");

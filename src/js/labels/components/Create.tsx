@@ -22,7 +22,6 @@ export function CreateLabel() {
                 setOpen(false);
             },
             onError: error => {
-                console.log(error.response.body.message);
                 setError(error.response.body.message);
             }
         }

@@ -1,8 +1,6 @@
-import { get, map, sortBy } from "lodash-es";
+import { map, sortBy } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { pushState } from "../../app/actions";
 import {
     BoxGroup,
     ContainerNarrow,
@@ -12,7 +10,6 @@ import {
     ViewHeaderSubtitle,
     ViewHeaderTitle
 } from "../../base";
-import { routerLocationHasState } from "../../utils/utils";
 import { useFetchLabels } from "../hooks";
 import { CreateLabel } from "./Create";
 import { Item } from "./Item";
@@ -23,14 +20,7 @@ const LabelsHeader = styled(ViewHeader)`
     justify-content: space-between;
 `;
 
-type LabelsProps = {
-    labels: any;
-    showCreate: boolean;
-    onHide: () => void;
-    onLoadLabels: () => void;
-};
-
-function Labels({ showCreate, onHide }: LabelsProps) {
+export function Labels() {
     const { data, isLoading } = useFetchLabels();
 
     if (isLoading) {
@@ -66,20 +56,3 @@ function Labels({ showCreate, onHide }: LabelsProps) {
         </ContainerNarrow>
     );
 }
-
-function mapStateToProps(state) {
-    return {
-        showCreate: routerLocationHasState(state, "createLabel"),
-        error: get(state, "errors.UPDATE_SAMPLE_ERROR.message", "")
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onHide: () => {
-            dispatch(pushState({ createLabel: false, removeLabel: false }));
-        }
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Labels);

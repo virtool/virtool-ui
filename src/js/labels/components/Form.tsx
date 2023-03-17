@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { getFontWeight } from "../../app/theme";
 import { Box, Button, Color, InputError, InputGroup, InputLabel, InputSimple } from "../../base";
 import { SampleLabel } from "../../samples/components/Label";
 
 const LabelFormPreview = styled(Box)`
     padding: 10px;
+`;
+
+const LabelFormPreviewLabel = styled.p`
+    font-weight: ${getFontWeight("thick")};
 `;
 
 interface LabelFormProps {
@@ -49,7 +54,7 @@ export function LabelForm({ color = "#D1D5DB", description = "", error = "", nam
                 <InputLabel htmlFor="color">Color</InputLabel>
                 <Color id="color" value={newColor} onChange={color => setColor(color)} />
             </InputGroup>
-            <label>Preview</label>
+            <LabelFormPreviewLabel>Preview</LabelFormPreviewLabel>
             <LabelFormPreview>
                 <SampleLabel color={newColor || "#D1D5DB"} name={watch("name") || "Preview"} />
             </LabelFormPreview>

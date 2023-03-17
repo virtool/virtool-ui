@@ -12,7 +12,16 @@ import { theme } from "./theme";
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
 const LazyLogin = React.lazy(() => import("../wall/Login"));
 
-function App({ first, login, reset }) {
+function mapStateToProps(state) {
+    const { first, login, reset } = state.app;
+    return {
+        first,
+        login,
+        reset
+    };
+}
+
+const ConnectedApp = connect(mapStateToProps)(({ first, login, reset }) => {
     if (first) {
         return (
             <Suspense fallback={<WallContainer />}>
@@ -34,22 +43,11 @@ function App({ first, login, reset }) {
     }
 
     return <Main />;
-}
-
-function mapStateToProps(state) {
-    const { first, login, reset } = state.app;
-    return {
-        first,
-        login,
-        reset
-    };
-}
-
-const ConnectedApp = connect(mapStateToProps)(App);
+});
 
 const queryClient = new QueryClient();
 
-export default ({ store, history }) => {
+export default function App({ store, history }) {
     return (
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
@@ -62,4 +60,4 @@ export default ({ store, history }) => {
             </QueryClientProvider>
         </ThemeProvider>
     );
-};
+}
