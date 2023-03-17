@@ -1,6 +1,7 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { ResponseError } from "superagent";
 import { Request } from "../../app/request";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
 import { StyledButton } from "../../base/styled/StyledButton";
@@ -21,7 +22,7 @@ export function CreateLabel() {
                 queryClient.invalidateQueries("labels");
                 setOpen(false);
             },
-            onError: error => {
+            onError: (error: ResponseError) => {
                 setError(error.response.body.message);
             }
         }

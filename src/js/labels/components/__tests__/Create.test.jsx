@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
@@ -78,24 +78,22 @@ describe("<CreateLabel>", () => {
     });
 
     it("errors with name conflict", async () => {
-        const scope = nock("http://localhost")
-            .post("/api/labels", { name: "Foo", description: "This is a description", color: "#D1D5DB" })
-            .reply(400, {
-                message: "Label name already exists."
-            });
+        const scope = nock("http://localhost").post("/api/labels").reply(400, {
+            id: "bad_request",
+            message: "Label name already exists"
+        });
 
         renderWithProviders(<CreateLabel />);
 
         await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
-        expect(screen.queryByText("Label name already exists.")).not.toBeInTheDocument();
+        expect(screen.queryByText("Label name already exists")).not.toBeInTheDocument();
 
         await userEvent.type(screen.getByLabelText("Name"), "Foo");
-        await userEvent.type(screen.getByLabelText("Description"), "This is a description");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(screen.queryByText("Label name already exists.")).toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByText("Label name already exists")).toBeInTheDocument());
 
-        scope.isDone();
+        expect(scope.isDone()).toBeTruthy();
     });
 });

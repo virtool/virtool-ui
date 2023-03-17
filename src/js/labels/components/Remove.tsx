@@ -16,26 +16,30 @@ const RemoveLabelFooter = styled.footer`
     margin-top: 30px;
 `;
 
-export function RemoveLabel({ id, name }) {
-    const [show, setShow] = useState(false);
+interface RemoveLabelProps {
+    id: string;
+    name: string;
+}
+
+export function RemoveLabel({ id, name }: RemoveLabelProps) {
+    const [open, setOpen] = useState(false);
 
     const queryClient = useQueryClient();
 
-    const mutation = useMutation(() => {
-        return Request.delete(`/api/labels/${id}`);
-    });
-
-    const handleDelete = () => {
-        mutation.mutate(["label", id], {
+    const mutation = useMutation(
+        () => {
+            return Request.delete(`/api/labels/${id}`);
+        },
+        {
             onSuccess: () => {
-                setShow(false);
+                setOpen(false);
                 queryClient.invalidateQueries("labels");
             }
-        });
-    };
+        }
+    );
 
     return (
-        <Dialog show={show} onOpenChange={open => setShow(open)}>
+        <Dialog open={open} onOpenChange={open => setOpen(open)}>
             <StyledButtonSmall as={DialogTrigger}>Delete</StyledButtonSmall>
             <DialogPortal>
                 <DialogOverlay />
@@ -45,7 +49,7 @@ export function RemoveLabel({ id, name }) {
                         Are you sure you want to delete the label <strong>{name}</strong>?
                     </RemoveLabelQuestion>
                     <RemoveLabelFooter>
-                        <Button type="button" color="red" onClick={handleDelete}>
+                        <Button type="button" color="red" onClick={mutation.mutate}>
                             Delete
                         </Button>
                     </RemoveLabelFooter>
