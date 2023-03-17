@@ -1,5 +1,6 @@
 import { ConnectedRouter } from "connected-react-router";
 import React, { Suspense } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { connect, Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { WallContainer } from "../wall/Container";
@@ -46,15 +47,19 @@ function mapStateToProps(state) {
 
 const ConnectedApp = connect(mapStateToProps)(App);
 
+const queryClient = new QueryClient();
+
 export default ({ store, history }) => {
     return (
         <ThemeProvider theme={theme}>
-            <Provider store={store}>
-                <ConnectedRouter history={history}>
-                    <GlobalStyles />
-                    <ConnectedApp />
-                </ConnectedRouter>
-            </Provider>
+            <QueryClientProvider client={queryClient}>
+                <Provider store={store}>
+                    <ConnectedRouter history={history}>
+                        <GlobalStyles />
+                        <ConnectedApp />
+                    </ConnectedRouter>
+                </Provider>
+            </QueryClientProvider>
         </ThemeProvider>
     );
 };

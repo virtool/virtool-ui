@@ -1,37 +1,56 @@
-import { get } from "lodash-es";
-import React from "react";
-import { connect } from "react-redux";
-import { pushState } from "../../app/actions";
-import { getRouterLocationStateValue } from "../../app/selectors";
-import { RemoveModal } from "../../base";
-import { removeLabel } from "../actions";
-import { getLabelById } from "../selectors";
+import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import styled from "styled-components";
+import { Request } from "../../app/request";
+import { getFontSize } from "../../app/theme";
+import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
+import { StyledButtonSmall } from "../../base/styled/StyledButtonSmall";
 
-function RemoveLabel({ id, name, show, onHide, onRemove }) {
-    return <RemoveModal noun="Label" name={name} show={show} onConfirm={() => onRemove(id)} onHide={onHide} />;
-}
+const RemoveLabelQuestion = styled.p`
+    font-size: ${getFontSize("lg")};
+`;
 
-function mapStateToProps(state) {
-    const id = getRouterLocationStateValue(state, "removeLabel");
-    const name = get(getLabelById(state, id), "name");
+const RemoveLabelFooter = styled.footer`
+    display: flex;
+    margin-top: 30px;
+`;
 
-    return {
-        id,
-        name,
-        show: Boolean(id)
+export function RemoveLabel({ id, name }) {
+    const [show, setShow] = useState(false);
+
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation(id => {
+        return Request.delete(`/api/labels/${id}`);
+    });
+
+    const handleDelete = () => {
+        mutation.mutate(id, {
+            onSuccess: () => {
+                setShow(false);
+                queryClient.invalidateQueries("labels");
+            }
+        });
     };
+
+    return (
+        <Dialog show={show} onOpenChange={open => setShow(open)}>
+            <StyledButtonSmall as={DialogTrigger}>Delete</StyledButtonSmall>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Delete Label</DialogTitle>
+                    <RemoveLabelQuestion>
+                        Are you sure you want to delete the label <strong>{name}</strong>?
+                    </RemoveLabelQuestion>
+                    <RemoveLabelFooter>
+                        <Button type="button" color="red" onClick={handleDelete}>
+                            Delete
+                        </Button>
+                    </RemoveLabelFooter>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
+    );
 }
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onRemove: id => {
-            dispatch(removeLabel(id));
-        },
-
-        onHide: () => {
-            dispatch(pushState({ removeLabel: false }));
-        }
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RemoveLabel);
