@@ -1,5 +1,6 @@
 import { ConnectedRouter } from "connected-react-router";
 import React, { Suspense } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { connect, Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { WallContainer } from "../wall/Container";
@@ -11,7 +12,16 @@ import { theme } from "./theme";
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
 const LazyLogin = React.lazy(() => import("../wall/Login"));
 
-function App({ first, login, reset }) {
+function mapStateToProps(state) {
+    const { first, login, reset } = state.app;
+    return {
+        first,
+        login,
+        reset
+    };
+}
+
+const ConnectedApp = connect(mapStateToProps)(({ first, login, reset }) => {
     if (first) {
         return (
             <Suspense fallback={<WallContainer />}>
@@ -33,28 +43,21 @@ function App({ first, login, reset }) {
     }
 
     return <Main />;
-}
+});
 
-function mapStateToProps(state) {
-    const { first, login, reset } = state.app;
-    return {
-        first,
-        login,
-        reset
-    };
-}
+const queryClient = new QueryClient();
 
-const ConnectedApp = connect(mapStateToProps)(App);
-
-export default ({ store, history }) => {
+export default function App({ store, history }) {
     return (
         <ThemeProvider theme={theme}>
-            <Provider store={store}>
-                <ConnectedRouter history={history}>
-                    <GlobalStyles />
-                    <ConnectedApp />
-                </ConnectedRouter>
-            </Provider>
+            <QueryClientProvider client={queryClient}>
+                <Provider store={store}>
+                    <ConnectedRouter history={history}>
+                        <GlobalStyles />
+                        <ConnectedApp />
+                    </ConnectedRouter>
+                </Provider>
+            </QueryClientProvider>
         </ThemeProvider>
     );
-};
+}

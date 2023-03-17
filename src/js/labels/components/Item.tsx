@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection, IconLink } from "../../base";
+import { BoxGroupSection } from "../../base";
 import { SampleLabel } from "../../samples/components/Label";
+import { EditLabel } from "./Edit";
+import { RemoveLabel } from "./Remove";
 
 const LabelItemBox = styled(BoxGroupSection)`
     align-items: center;
     display: flex;
 `;
+
 const LabelItemContainer = styled.div`
     position: relative;
 `;
@@ -32,7 +35,14 @@ const LabelItemIcons = styled.div`
     }
 `;
 
-export function Item({ name, color, description, id }) {
+interface ItemProps {
+    name: string;
+    color: string;
+    description: string;
+    id: string;
+}
+
+export function Item({ name, color, description, id }: ItemProps) {
     return (
         <LabelItemContainer>
             <LabelItemBox>
@@ -42,8 +52,8 @@ export function Item({ name, color, description, id }) {
                 {description}
             </LabelItemBox>
             <LabelItemIcons>
-                <IconLink to={{ state: { editLabel: id } }} color="orange" name="pencil-alt" tip="Edit" />
-                <IconLink to={{ state: { removeLabel: id } }} color="red" name="fas fa-trash" tip="Remove" />
+                <EditLabel id={id} color={color} description={description} name={name} />
+                <RemoveLabel id={id} name={name} />
             </LabelItemIcons>
         </LabelItemContainer>
     );

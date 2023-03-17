@@ -6,6 +6,7 @@ import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-reac
 import Enzyme, { mount, render, shallow } from "enzyme";
 import { createSerializer } from "enzyme-to-json";
 import React from "react";
+import { QueryClient, QueryClientProvider, setLogger } from "react-query";
 import { Provider } from "react-redux";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
@@ -20,9 +21,25 @@ process.env.TZ = "UTC";
 Enzyme.configure({ adapter: new Adapter() });
 expect.addSnapshotSerializer(createSerializer({ mode: "deep" }));
 
+setLogger({
+    log: console.log,
+    warn: console.warn,
+    error: () => {}
+});
+
 const wrapWithProviders = (ui, createAppStore) => {
-    let wrappedUi = <ThemeProvider theme={theme}>{ui}</ThemeProvider>;
-    if (createAppStore) wrappedUi = <Provider store={createAppStore()}> {wrappedUi} </Provider>;
+    const queryClient = new QueryClient();
+
+    let wrappedUi = (
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={theme}>{ui}</ThemeProvider>
+        </QueryClientProvider>
+    );
+
+    if (createAppStore) {
+        wrappedUi = <Provider store={createAppStore()}> {wrappedUi} </Provider>;
+    }
+
     return wrappedUi;
 };
 

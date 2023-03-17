@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { PUSH_STATE } from "../../../app/actionTypes";
-import { EditLabel, mapDispatchToProps } from "../Edit";
+import nock from "nock";
+import { EditLabel } from "../Edit";
 
 describe("<EditLabel>", () => {
     let props;
@@ -11,29 +11,18 @@ describe("<EditLabel>", () => {
             id: 1,
             name: "Foo",
             description: "This is a description",
-            color: "#1DAD57",
-            show: true,
-            onHide: vi.fn(),
-            onSubmit: vi.fn()
+            color: "#1DAD57"
         };
     });
 
-    it("should change visibility based on show prop", () => {
-        const { rerender } = renderWithProviders(<EditLabel {...props} />);
-        expect(screen.queryByLabelText("Name")).toBeInTheDocument();
+    it("edits label", async () => {
+        const scope = nock("http://localhost")
+            .patch("/api/labels/1")
+            .reply(200, (uri, body) => body);
 
-        rerender(<EditLabel {...props} show={false} />);
-        expect(screen.queryByLabelText("Name")).not.toBeInTheDocument();
-    });
-
-    it("should call onSubmit when successfully submitted", async () => {
         renderWithProviders(<EditLabel {...props} />);
-        await userEvent.click(screen.getByRole("button", { name: "Save" }));
-        expect(props.onSubmit).toHaveBeenCalledWith(1, "Foo", "This is a description", "#1DAD57");
-    });
 
-    it("should initialize and update name and description", async () => {
-        renderWithProviders(<EditLabel {...props} />);
+        await userEvent.click(screen.getByText("Edit"));
 
         const descriptionInput = screen.getByLabelText("Description");
         const nameInput = screen.getByLabelText("Name");
@@ -51,64 +40,12 @@ describe("<EditLabel>", () => {
         // Check typing changes input value
         await userEvent.type(descriptionInput, "This is a label");
         await userEvent.type(nameInput, "Bar");
+
         expect(descriptionInput).toHaveValue("This is a label");
         expect(nameInput).toHaveValue("Bar");
-    });
 
-    it("should initialize and update color", async () => {
-        renderWithProviders(<EditLabel {...props} />);
+        await userEvent.click(screen.getByText("Save"));
 
-        const colorInput = screen.getByLabelText("Color");
-
-        // Initializes from props.
-        expect(colorInput).toHaveValue(props.color);
-
-        // Updates when input cleared.
-        await userEvent.clear(colorInput);
-        expect(colorInput).toHaveValue("");
-
-        // Updates when input is typed in.
-        await userEvent.type(colorInput, "#DFDF12");
-        expect(colorInput).toHaveValue("#DFDF12");
-
-        // Updates when color square is clicked.
-        await userEvent.click(screen.getByTitle("#3B82F6"));
-        expect(colorInput).toHaveValue("#3B82F6");
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    let dispatch;
-    let props;
-
-    beforeEach(() => {
-        dispatch = vi.fn();
-        props = mapDispatchToProps(dispatch);
-    });
-
-    it("should return onSubmit in props", () => {
-        const labelId = "1";
-        const name = "FooBar";
-        const description = "BarFoo";
-        const color = "#000000";
-
-        props.onSubmit(labelId, name, description, color);
-
-        expect(dispatch).toHaveBeenCalledWith({
-            type: "UPDATE_LABEL_REQUESTED",
-            payload: { labelId, name, description, color }
-        });
-    });
-
-    it("should return onHide in props", () => {
-        props.onHide();
-        expect(dispatch).toHaveBeenCalledWith({
-            type: PUSH_STATE,
-            payload: {
-                state: {
-                    editLabel: false
-                }
-            }
-        });
+        scope.isDone();
     });
 });
