@@ -7,6 +7,12 @@ import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
 import { StyledButton } from "../../base/styled/StyledButton";
 import { LabelForm } from "./Form";
 
+type NewLabel = {
+    color: string;
+    description: string;
+    name: string;
+};
+
 export function CreateLabel() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
@@ -14,7 +20,7 @@ export function CreateLabel() {
     const queryClient = useQueryClient();
 
     const mutation = useMutation(
-        newLabel => {
+        (newLabel: NewLabel) => {
             return Request.post("/api/labels").send(newLabel);
         },
         {
@@ -28,9 +34,8 @@ export function CreateLabel() {
         }
     );
 
-    const handleSubmit = ({ color, name, description }) => {
-        const data = { color, description, name };
-        mutation.mutate(data, {});
+    const handleSubmit = ({ color, name, description }: NewLabel) => {
+        mutation.mutate({ color, description, name });
     };
 
     return (
