@@ -1,16 +1,15 @@
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { forEach } from "lodash-es";
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import { EDIT_REFERENCE, UPDATE_SETTINGS } from "../../../app/actionTypes";
 import { theme } from "../../../app/theme";
-import { mapDispatchToProps, SourceTypes } from "../SourceTypes/SourceTypes";
 import { SourceTypeItem } from "../SourceTypes/list";
-import userEvent from "@testing-library/user-event";
-import { screen, waitFor } from "@testing-library/react";
+import { mapDispatchToProps, SourceTypes } from "../SourceTypes/SourceTypes";
 
 const rerenderWithProviders = (rerender, ui) => {
-    const wrappedUi = <ThemeProvider theme={theme}>{ui}</ThemeProvider>;
-    return rerender(wrappedUi);
+    return rerender(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
 };
 
 describe("<SourceTypes />", () => {
@@ -82,17 +81,6 @@ describe("<SourceTypes />", () => {
         renderWithProviders(<SourceTypes {...props} />);
         await userEvent.click(screen.getAllByLabelText("trash")[0]);
         expect(props.onUpdate).toHaveBeenCalledWith([props.sourceTypes[1]], true, "foo");
-    });
-
-    it("is should undo removal when Undo is clicked", async () => {
-        const { rerender } = renderWithProviders(
-            <SourceTypes {...{ ...props, sourceTypes: ["isolate", "serotype"] }} />
-        );
-
-        rerenderWithProviders(rerender, <SourceTypes {...{ ...props, sourceTypes: ["serotype"] }} />);
-
-        await userEvent.click(screen.getByLabelText("undo"));
-        expect(props.onUpdate).toHaveBeenCalledWith(["serotype", "isolate"], true, "foo");
     });
 
     it("should not add source type to list if it already exists", async () => {

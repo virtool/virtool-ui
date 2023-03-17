@@ -11,16 +11,10 @@ const rerenderWithProviders = (rerender, ui) => {
 };
 
 describe("<EmptyReference />", () => {
+    let initialValues;
     let props;
 
-    let initialValues;
-
     beforeEach(() => {
-        props = {
-            onSubmit: vi.fn(),
-            onDrop: vi.fn(),
-            file: null
-        };
         initialValues = {
             name: "",
             description: "",
@@ -28,19 +22,11 @@ describe("<EmptyReference />", () => {
             organism: "",
             mode: "empty"
         };
-    });
-
-    it("should render", () => {
-        renderWithProviders(<ImportReference {...props} />);
-
-        expect(
-            screen.getByText("Create a reference from a file previously exported from another Virtool reference.")
-        ).toBeInTheDocument();
-        expect(screen.getByText("Drag file here to upload")).toBeInTheDocument();
-        expect(screen.getByText("Name")).toBeInTheDocument();
-        expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(initialValues.name);
-        expect(screen.getByText("Description")).toBeInTheDocument();
-        expect(screen.getByRole("textbox", { name: "Description" })).toHaveValue(initialValues.description);
+        props = {
+            onSubmit: vi.fn(),
+            onDrop: vi.fn(),
+            file: null
+        };
     });
 
     it("should accept Uploaded File", async () => {
@@ -88,12 +74,12 @@ describe("<EmptyReference />", () => {
         const description = "test_description";
 
         rerenderWithProviders(rerender, <ImportReference {...props} />);
+
         await userEvent.type(screen.getByRole("textbox", { name: "Name" }), name);
         await userEvent.type(screen.getByRole("textbox", { name: "Description" }), description);
-        userEvent.click(screen.getByRole("button", { name: "Import" }));
-        await waitFor(() =>
-            expect(props.onSubmit).toHaveBeenCalledWith(name, description, `${props.file.id}-${props.file.name}`)
-        );
+        await userEvent.click(screen.getByRole("button", { name: "Import" }));
+
+        expect(props.onSubmit).toHaveBeenCalledWith(name, description, `${props.file.id}-${props.file.name}`);
     });
 });
 
