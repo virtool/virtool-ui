@@ -5,6 +5,7 @@ import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
 import Enzyme, { mount, render, shallow } from "enzyme";
 import { createSerializer } from "enzyme-to-json";
+import { noop } from "lodash-es";
 import React from "react";
 import { QueryClient, QueryClientProvider, setLogger } from "react-query";
 import { Provider } from "react-redux";
@@ -24,28 +25,38 @@ expect.addSnapshotSerializer(createSerializer({ mode: "deep" }));
 setLogger({
     log: console.log,
     warn: console.warn,
-    error: () => {}
+    error: noop
 });
 
 const wrapWithProviders = (ui, createAppStore) => {
     const queryClient = new QueryClient();
 
-    let wrappedUi = (
+    if (createAppStore) {
+        return (
+            <Provider store={createAppStore()}>
+                <QueryClientProvider client={queryClient}>
+                    <ThemeProvider theme={theme}>{ui}</ThemeProvider>
+                </QueryClientProvider>
+            </Provider>
+        );
+    }
+
+    return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={theme}>{ui}</ThemeProvider>
         </QueryClientProvider>
     );
+};
 
-    if (createAppStore) {
-        wrappedUi = <Provider store={createAppStore()}> {wrappedUi} </Provider>;
+export function renderWithProviders(ui, createAppStore) {
+    const { rerender, ...rest } = rtlRender(wrapWithProviders(ui, createAppStore));
+
+    function rerenderWithProviders(ui) {
+        return rerender(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
     }
 
-    return wrappedUi;
-};
-
-const renderWithProviders = (ui, createAppStore) => {
-    return rtlRender(wrapWithProviders(ui, createAppStore));
-};
+    return { ...rest, rerender: rerenderWithProviders };
+}
 
 const createGenericReducer = initState => state => state || initState;
 

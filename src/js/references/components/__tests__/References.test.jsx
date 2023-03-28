@@ -1,13 +1,17 @@
-import { References, ReferenceSettings } from "../References";
+import { screen } from "@testing-library/react";
+import nock from "nock";
+import React from "react";
+import { test } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
+import { References } from "../References";
 
-describe("<ReferenceSettings />", () => {
-    it("should render", () => {
-        const wrapper = shallow(<ReferenceSettings />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
+test("<References />", () => {
+    nock("http://localhost").get("/api/settings").reply(200, {});
 
-describe("<References />", () => {
+    renderWithProviders(<References />);
+
+    expect(screen.queryByText("Loading")).not.toBeInTheDocument();
+
     it.each([true, false])("should render when [loading=%p]", loading => {
         const wrapper = shallow(<References loading={loading} />);
         expect(wrapper).toMatchSnapshot();

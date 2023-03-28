@@ -1,5 +1,5 @@
 import { push } from "connected-react-router";
-import { put, takeEvery, takeLatest, throttle } from "redux-saga/effects";
+import { put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
 import {
     ADD_REFERENCE_GROUP,
     ADD_REFERENCE_USER,
@@ -16,10 +16,12 @@ import {
     REMOVE_REFERENCE,
     REMOVE_REFERENCE_GROUP,
     REMOVE_REFERENCE_USER,
-    UPDATE_REMOTE_REFERENCE
+    UPDATE_REMOTE_REFERENCE,
+    WS_UPDATE_REFERENCE
 } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as referenceAPI from "./api";
+import { getReferenceDetailId } from "./selectors";
 
 export function* afterReferenceCreation() {
     yield put(
@@ -37,6 +39,14 @@ export function* afterReferenceCreation() {
 export function* findReferences(action) {
     yield apiCall(referenceAPI.find, action.payload, FIND_REFERENCES);
     yield pushFindTerm(action.payload.term);
+}
+
+export function* wsGetReference(action) {
+    const refId = yield select(getReferenceDetailId);
+
+    if (action.payload.id === refId) {
+        yield apiCall(referenceAPI.get, { refId }, GET_REFERENCE);
+    }
 }
 
 export function* getReference(action) {
@@ -146,4 +156,5 @@ export function* watchReferences() {
     yield takeEvery(REMOVE_REFERENCE_GROUP.REQUESTED, removeRefGroup);
     yield takeEvery(CHECK_REMOTE_UPDATES.REQUESTED, checkRemoteUpdates);
     yield takeEvery(UPDATE_REMOTE_REFERENCE.REQUESTED, updateRemoteReference);
+    yield takeLatest(WS_UPDATE_REFERENCE, wsGetReference);
 }

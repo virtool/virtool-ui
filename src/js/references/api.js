@@ -1,50 +1,78 @@
 import { Request } from "../app/request";
 
-export const find = ({ term, page }) => Request.get("/api/refs").query({ find: term, page });
+export function find({ term, page }) {
+    return Request.get("/api/refs").query({ find: term, page });
+}
 
-export const get = ({ refId }) => Request.get(`/api/refs/${refId}`);
+export function get({ refId }) {
+    return Request.get(`/api/refs/${refId}`);
+}
 
-export const create = ({ name, description, dataType, organism }) =>
-    Request.post("/api/refs").send({
+export function create({ name, description, dataType, organism }) {
+    return Request.post("/api/refs").send({
         name,
         description,
         data_type: dataType,
         organism
     });
+}
 
-export const edit = ({ refId, update }) => Request.patch(`/api/refs/${refId}`).send(update);
+export function edit({ refId, update }) {
+    return Request.patch(`/api/refs/${refId}`).send(update);
+}
 
-export const importReference = ({ name, description, fileId }) =>
-    Request.post("/api/refs").send({
+export function importReference({ name, description, fileId }) {
+    return Request.post("/api/refs").send({
         name,
         description,
         import_from: fileId
     });
+}
 
-export const cloneReference = ({ name, description, refId }) =>
-    Request.post("/api/refs").send({
+export function cloneReference({ name, description, refId }) {
+    return Request.post("/api/refs").send({
         name,
         description,
         clone_from: refId
     });
+}
 
-export const remoteReference = ({ remote_from }) => Request.post("/api/refs").send({ remote_from });
+export function remoteReference({ remote_from }) {
+    return Request.post("/api/refs").send({ remote_from });
+}
 
-export const remove = ({ refId }) => Request.delete(`/api/refs/${refId}`);
+export function remove({ refId }) {
+    return Request.delete(`/api/refs/${refId}`);
+}
 
-export const addUser = ({ refId, user }) => Request.post(`/api/refs/${refId}/users`).send({ user_id: user });
+export function addUser({ refId, user }) {
+    return Request.post(`/api/refs/${refId}/users`).send({ user_id: user });
+}
 
-export const editUser = ({ refId, userId, update }) => Request.patch(`/api/refs/${refId}/users/${userId}`).send(update);
+export function editUser({ refId, userId, update }) {
+    return Request.patch(`/api/refs/${refId}/users/${userId}`).send(update);
+}
 
-export const removeUser = ({ refId, userId }) => Request.delete(`/api/refs/${refId}/users/${userId}`);
+export function removeUser({ refId, userId }) {
+    return Request.delete(`/api/refs/${refId}/users/${userId}`);
+}
 
-export const addGroup = ({ refId, group }) => Request.post(`/api/refs/${refId}/groups`).send({ group_id: group });
+export function addGroup({ refId, group }) {
+    return Request.post(`/api/refs/${refId}/groups`).send({ group_id: group });
+}
 
-export const editGroup = ({ refId, groupId, update }) =>
-    Request.patch(`/api/refs/${refId}/groups/${groupId}`).send(update);
+export function editGroup({ refId, groupId, update }) {
+    return Request.patch(`/api/refs/${refId}/groups/${groupId}`).send(update);
+}
 
-export const removeGroup = ({ refId, groupId }) => Request.delete(`/api/refs/${refId}/groups/${groupId}`);
+export function removeGroup({ refId, groupId }) {
+    return Request.delete(`/api/refs/${refId}/groups/${groupId}`);
+}
 
-export const checkUpdates = ({ refId }) => Request.get(`/api/refs/${refId}/release`);
+export function checkUpdates({ refId }) {
+    return Request.get(`/api/refs/${refId}/release`);
+}
 
-export const updateRemote = ({ refId }) => Request.post(`/api/refs/${refId}/updates`).send({});
+export function updateRemote({ refId }) {
+    return Request.post(`/api/refs/${refId}/updates`).send({});
+}
