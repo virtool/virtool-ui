@@ -63,11 +63,19 @@ const UploadBarDivider = styled(DividerVertical)`
 
 type UploadBarProps = {
     message?: string;
+    multiple?: boolean;
+    onBlur?: () => void;
     onDrop: (acceptedFiles: File[]) => void;
     validator?: (file: File) => FileError;
 };
 
-export const UploadBar = ({ message = "Drag file here to upload", onDrop, validator }: UploadBarProps) => {
+export const UploadBar = ({
+    message = "Drag file here to upload",
+    multiple = true,
+    onBlur,
+    onDrop,
+    validator
+}: UploadBarProps) => {
     const handleDrop = useCallback(
         acceptedFiles => {
             onDrop(acceptedFiles);
@@ -83,11 +91,11 @@ export const UploadBar = ({ message = "Drag file here to upload", onDrop, valida
 
     return (
         <StyledUploadBar active={isDragAccept} {...rootProps}>
-            <input {...getInputProps()} aria-label="Upload file" />
+            <input {...getInputProps()} aria-label="Upload file" multiple={multiple} />
             <MessageContainer>{message}</MessageContainer>
             <UploadBarDivider text="or" />
             <ButtonContainer>
-                <Button color="blue" icon="upload" onClick={open}>
+                <Button color="blue" icon="upload" onClick={open} onBlur={onBlur}>
                     Browse Files
                 </Button>
             </ButtonContainer>

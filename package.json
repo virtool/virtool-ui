@@ -2,6 +2,7 @@
   "dependencies": {
     "@azure/msal-browser": "^2.33.0",
     "@azure/msal-react": "^1.5.3",
+    "@hookform/resolvers": "^2.9.11",
     "@popperjs/core": "^2.11.6",
     "@radix-ui/react-checkbox": "^1.0.1",
     "@radix-ui/react-dialog": "^1.0.3",

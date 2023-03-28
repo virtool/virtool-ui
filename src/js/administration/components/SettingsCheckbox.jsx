@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { Box, Checkbox } from "../../base";
@@ -30,11 +30,15 @@ const StyledSettingsCheckbox = styled(Box)`
     }
 `;
 
-export const SettingsCheckbox = ({ children, enabled, onToggle }) => (
-    <StyledSettingsCheckbox>
-        <SettingsCheckboxChildren>{children}</SettingsCheckboxChildren>
-        <SettingsCheckboxContainer>
-            <Checkbox checked={enabled} onClick={() => onToggle(!enabled)} />
-        </SettingsCheckboxContainer>
-    </StyledSettingsCheckbox>
-);
+export function SettingsCheckbox({ children, enabled, onToggle }) {
+    const handleClick = useCallback(() => onToggle(!enabled), [enabled, onToggle]);
+
+    return (
+        <StyledSettingsCheckbox>
+            <SettingsCheckboxChildren>{children}</SettingsCheckboxChildren>
+            <SettingsCheckboxContainer>
+                <Checkbox checked={enabled} onClick={handleClick} />
+            </SettingsCheckboxContainer>
+        </StyledSettingsCheckbox>
+    );
+}

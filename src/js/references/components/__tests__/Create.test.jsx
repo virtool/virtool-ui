@@ -1,6 +1,7 @@
-import { EmptyReference, mapDispatchToProps } from "../Empty";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { screen, waitFor } from "@testing-library/react";
+import React from "react";
+import { EmptyReference, mapDispatchToProps } from "../Empty";
 
 describe("<EmptyReference />", () => {
     let props;
@@ -11,7 +12,7 @@ describe("<EmptyReference />", () => {
         };
     });
 
-    it("Should display error and block submission when name textbox is empty", async () => {
+    it("should display error and block submission when name textbox is empty", async () => {
         renderWithProviders(<EmptyReference {...props} />);
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));

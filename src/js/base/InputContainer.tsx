@@ -3,7 +3,7 @@ import { Input } from "./Input";
 import { InputIcon } from "./InputIcon";
 
 type InputContainerProps = {
-    align: "left" | "right";
+    align?: "left" | "right";
 };
 
 export const InputContainer = styled.div<InputContainerProps>`
@@ -17,3 +17,7 @@ export const InputContainer = styled.div<InputContainerProps>`
     ${props => props.align}: 0;
   }
 `;
+
+InputContainer.defaultProps = {
+    align: "left"
+};

@@ -1,6 +1,7 @@
 import { render as rtlRender, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form, Formik } from "formik";
+import React from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../../../app/theme";
 import { ReferenceForm } from "../Form";
@@ -60,6 +61,7 @@ describe("<ReferenceForm />", () => {
 
         await userEvent.clear(screen.getByRole("textbox", { name }));
         await userEvent.type(screen.getByRole("textbox", { name }), newValue);
+
         expect(screen.getByRole("textbox", { name })).toHaveValue(newValue);
     });
 });

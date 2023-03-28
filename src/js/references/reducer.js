@@ -46,13 +46,7 @@ export const referenceReducer = createReducer(initialState, builder => {
             };
         })
         .addCase(WS_UPDATE_REFERENCE, (state, action) => {
-            const updated = update(state, action.payload, "name");
-
-            if (state.detail && state.detail.id === action.payload.id) {
-                state.detail = { ...state.detail, ...action.payload };
-            } else {
-                assign(state, updated);
-            }
+            assign(state, update(state, action.payload, "name"));
         })
         .addCase(WS_REMOVE_REFERENCE, (state, action) => {
             return remove(state, action.payload);
@@ -62,9 +56,6 @@ export const referenceReducer = createReducer(initialState, builder => {
         })
         .addCase(FIND_REFERENCES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action.payload, "name");
-        })
-        .addCase(GET_REFERENCE.REQUESTED, state => {
-            state.detail = null;
         })
         .addCase(GET_REFERENCE.SUCCEEDED, (state, action) => {
             state.detail = action.payload;

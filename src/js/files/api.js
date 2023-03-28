@@ -41,10 +41,11 @@ export const remove = ({ fileId }) => Request.delete(`/api/uploads/${fileId}`);
  * @param onFailure {function} a callback to call when the upload fails
  * @returns {promise}
  */
-export const upload = ({ file, fileType, onProgress, onSuccess, onFailure }) =>
-    Request.post(`/api/uploads`)
+export function upload({ file, fileType, onProgress, onSuccess, onFailure }) {
+    return Request.post("/api/uploads")
         .query({ name: file.name, type: fileType })
         .attach("file", file)
         .on("progress", onProgress)
         .then(onSuccess)
         .catch(onFailure);
+}
