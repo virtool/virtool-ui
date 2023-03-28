@@ -58,9 +58,12 @@ export function ImportReference() {
         const formData = new FormData();
         formData.append("file", file);
 
-        return Request.post(`/api/uploads`)
+        return Request.post("/api/uploads")
             .query({ name: file.name, type: "reference" })
             .send(formData)
+            .on("progress", event => {
+                setProgress(event.percent);
+            })
             .then(response => {
                 setFileName(response.body.name);
                 setFileNameOnDisk(response.body.name_on_disk);

@@ -61,7 +61,7 @@ interface GlobalSourceTypesProps {
 export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
     const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
         "default_source_types",
-        `/api/settings`,
+        "/api/settings",
         "settings",
         sourceTypes
     );

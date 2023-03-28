@@ -42,7 +42,7 @@ export const remove = ({ fileId }) => Request.delete(`/api/uploads/${fileId}`);
  * @returns {promise}
  */
 export function upload({ file, fileType, onProgress, onSuccess, onFailure }) {
-    return Request.post(`/api/uploads`)
+    return Request.post("/api/uploads")
         .query({ name: file.name, type: fileType })
         .attach("file", file)
         .on("progress", onProgress)

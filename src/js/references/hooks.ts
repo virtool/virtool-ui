@@ -102,7 +102,7 @@ export function useUpdateSourceTypes(
 
     function handleRemove(sourceType) {
         mutation.mutate(
-            sourceTypes.filter(s => s != sourceType),
+            sourceTypes.filter(s => s !== sourceType),
             {
                 onSuccess: () => {
                     setLastRemoved(sourceType);
