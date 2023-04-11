@@ -8,22 +8,6 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  dockerhub:
-    name: dockerhub
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Login
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and Push
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: virtool/ui:${{ github.event.release.tag_name }}
   ghcr:
     runs-on: ubuntu-20.04
     permissions:
