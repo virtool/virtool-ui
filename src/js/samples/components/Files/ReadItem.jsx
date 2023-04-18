@@ -24,7 +24,7 @@ export const ReadItem = ({ name, download_url, from, size }) => (
         <ReadItemMain>
             <i className={`fas fa-${getFileIconName(name)} fa-fw`} style={{ fontSize: "24px" }} />
             <div>
-                <a href={download_url} download>
+                <a href={`/api/${download_url}`} download>
                     {name}
                 </a>
                 {from && (
