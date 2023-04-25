@@ -8,12 +8,12 @@ import {
     IconLink,
     LoadingPlaceholder,
     NotFound,
-    TabsLink,
     Tabs,
+    TabsLink,
     ViewHeader,
     ViewHeaderAttribution,
     ViewHeaderIcons,
-    ViewHeaderTitle
+    ViewHeaderTitle,
 } from "../../../base";
 import Cache from "../../../caches/components/Detail";
 import { getError } from "../../../errors/selectors";
@@ -37,7 +37,7 @@ function SampleDetail({
     onGetSample,
     onListLabels,
     onShortlistSubtractions,
-    subtractionOptions
+    subtractionOptions,
 }) {
     const sampleId = match.params.sampleId;
 
@@ -127,7 +127,7 @@ export const mapStateToProps = state => ({
     detail: state.samples.detail,
     error: getError("GET_SAMPLE_ERROR"),
     labels: get(state, "labels.documents"),
-    subtractionOptions: get(state, "subtraction.shortlist", "")
+    subtractionOptions: get(state, "subtraction.shortlist", ""),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -139,7 +139,7 @@ export const mapDispatchToProps = dispatch => ({
     },
     onListLabels: () => {
         dispatch(listLabels());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleDetail);

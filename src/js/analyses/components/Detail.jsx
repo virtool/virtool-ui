@@ -11,27 +11,26 @@ import {
     SubviewHeaderTitle
 } from "../../base/index";
 import { getWorkflowDisplayName } from "../../utils/utils";
-import { clearAnalysis, getAnalysis } from "../actions";
+import { getAnalysis } from "../actions";
 import AODPViewer from "./AODP/Viewer";
 import AnalysisCache from "./CacheLink";
 import NuVsViewer from "./NuVs/Viewer";
-import PathoscopeViewer from "./Pathoscope/Viewer";
+import { PathoscopeViewer } from "./Pathoscope/Viewer";
 
-export const AnalysisDetail = props => {
+export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis }) {
+    const analysisId = match.params.analysisId;
+
     useEffect(() => {
-        props.getAnalysis(props.match.params.analysisId);
-        return props.clearAnalysis;
-    }, [props.match.params.analysisId]);
+        onGetAnalysis(analysisId);
+    }, [analysisId]);
 
-    if (props.error) {
+    if (error) {
         return <NotFound />;
     }
 
-    if (props.detail === null) {
+    if (detail === null || detail.id !== analysisId) {
         return <LoadingPlaceholder />;
     }
-
-    const { detail, sampleName } = props;
 
     if (!detail.ready) {
         return (
@@ -50,7 +49,7 @@ export const AnalysisDetail = props => {
     } else if (detail.workflow === "aodp") {
         content = <AODPViewer />;
     } else {
-        return <div>Unusable analysis detail content</div>;
+        return <div>Invalid analysis content</div>;
     }
 
     return (
@@ -68,23 +67,22 @@ export const AnalysisDetail = props => {
             {content}
         </div>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    detail: state.analyses.detail,
-    error: get(state, "errors.GET_ANALYSIS_ERROR", null),
-    quality: state.samples.detail.quality,
-    sampleName: state.samples.detail.name
-});
+export function mapStateToProps(state) {
+    return {
+        detail: state.analyses.detail,
+        error: get(state, "errors.GET_ANALYSIS_ERROR", null),
+        sampleName: state.samples.detail.name
+    };
+}
 
-export const mapDispatchToProps = dispatch => ({
-    getAnalysis: analysisId => {
-        dispatch(getAnalysis(analysisId));
-    },
-
-    clearAnalysis: () => {
-        dispatch(clearAnalysis());
-    }
-});
+export function mapDispatchToProps(dispatch) {
+    return {
+        onGetAnalysis: analysisId => {
+            dispatch(getAnalysis(analysisId));
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnalysisDetail);

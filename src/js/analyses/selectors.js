@@ -3,29 +3,30 @@ import {
     find,
     get,
     groupBy,
+    includes,
     intersection,
     keyBy,
+    keysIn,
     map,
     reject,
     sortBy,
     toNumber,
-    toString,
-    keysIn,
-    includes
+    toString
 } from "lodash-es";
 import { createSelector } from "reselect";
 import { getRouterLocationState } from "../app/selectors";
 import {
+    getDefaultSubtractions,
     getMaxReadLength,
     getSampleLibraryType,
-    getSelectedSamples,
-    getDefaultSubtractions
+    getSelectedSamples
 } from "../samples/selectors";
+import { getReadySubtractionShortlist } from "../subtraction/selectors";
 import { createFuse } from "../utils/utils";
 import { fuseSearchKeys } from "./utils";
-import { getReadySubtractionShortlist } from "../subtraction/selectors";
 
 export const getActiveId = state => state.analyses.activeId;
+
 export const getAnalysisDetailId = state => get(state, "analyses.detail.id", null);
 export const getFilterOTUs = state => state.analyses.filterOTUs;
 export const getFilterSequences = state => state.analyses.filterSequences;

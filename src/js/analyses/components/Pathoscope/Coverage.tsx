@@ -4,17 +4,17 @@ import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { area } from "d3-shape";
 import React, { useContext, useEffect, useRef } from "react";
-import styled from "styled-components";
+import styled, { DefaultTheme } from "styled-components";
 import { PathoscopeDetailContext } from "./Detail";
 
-const draw = (element, data, length, meta, yMax, xMin, onRendered) => {
-    let svg = select(element).append("svg");
+function draw(element, data, length, meta, yMax, xMin, onRendered) {
+    select(element).append("svg");
 
     const margin = {
         top: 10,
         left: 35,
         bottom: 50,
-        right: 10
+        right: 10,
     };
 
     const height = 200 - margin.top - margin.bottom;
@@ -28,13 +28,12 @@ const draw = (element, data, length, meta, yMax, xMin, onRendered) => {
     width -= margin.left + margin.right;
 
     const x = scaleLinear().range([0, width]).domain([0, length]);
-
     const y = scaleLinear().range([height, 0]).domain([0, yMax]);
 
     select(element).selectAll("*").remove();
 
     // Construct the SVG canvas.
-    svg = select(element)
+    const svg = select(element)
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -50,7 +49,7 @@ const draw = (element, data, length, meta, yMax, xMin, onRendered) => {
         svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
     }
 
-    // Set-up a y-axis that will appear at the top of the chart.
+    // Set up a y-axis that will appear at the top of the chart.
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", `translate(0,${height})`)
@@ -71,9 +70,13 @@ const draw = (element, data, length, meta, yMax, xMin, onRendered) => {
         .text(`${meta.accession} - ${meta.definition}`);
 
     onRendered();
+}
+
+type StyledCoverageChartProps = {
+    theme: DefaultTheme;
 };
 
-const StyledCoverageChart = styled.div`
+const StyledCoverageChart = styled.div<StyledCoverageChartProps>`
     display: inline-block;
     margin-top: 5px;
 
@@ -83,7 +86,16 @@ const StyledCoverageChart = styled.div`
     }
 `;
 
-export const CoverageChart = ({ accession, data, definition, id, length, yMax }) => {
+interface CoverageChartProps {
+    accession: string;
+    data: any;
+    definition: string;
+    id: string;
+    length: number;
+    yMax: number;
+}
+
+export function CoverageChart({ accession, data, definition, id, length, yMax }: CoverageChartProps) {
     const chartEl = useRef(null);
 
     const { onRendered } = useContext(PathoscopeDetailContext);
@@ -96,11 +108,11 @@ export const CoverageChart = ({ accession, data, definition, id, length, yMax })
             { accession, id, definition },
             yMax,
             chartEl.current.offsetWidth,
-            onRendered
+            onRendered,
         );
     }, [id, onRendered]);
 
     return <StyledCoverageChart ref={chartEl} />;
-};
+}
 
 export default CoverageChart;

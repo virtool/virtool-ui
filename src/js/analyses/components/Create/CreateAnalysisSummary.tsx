@@ -6,7 +6,13 @@ const StyledCreateAnalysisSummary = styled.div`
     text-align: left;
 `;
 
-export const CreateAnalysisSummary = ({ indexCount, sampleCount, workflowCount }) => {
+interface CreateAnalysisSummaryProps {
+    indexCount: number;
+    sampleCount: number;
+    workflowCount: number;
+}
+
+export function CreateAnalysisSummary({ indexCount, sampleCount, workflowCount }: CreateAnalysisSummaryProps) {
     const product = indexCount * sampleCount * workflowCount;
 
     if (product === 0) {
@@ -19,4 +25,4 @@ export const CreateAnalysisSummary = ({ indexCount, sampleCount, workflowCount }
             {product === 1 ? "" : "s"} will be started
         </StyledCreateAnalysisSummary>
     );
-};
+}

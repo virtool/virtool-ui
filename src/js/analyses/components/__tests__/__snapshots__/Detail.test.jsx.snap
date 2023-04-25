@@ -22,7 +22,7 @@ exports[`<AnalysisDetail /> > should render 1`] = `
 
 exports[`<AnalysisDetail /> > should render error when workflow is invalid] 1`] = `
 <div>
-  Unusable analysis detail content
+  Invalid analysis content
 </div>
 `;
 

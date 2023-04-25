@@ -1,20 +1,25 @@
 import { filter, intersectionWith, xor } from "lodash-es";
-import PropTypes from "prop-types";
 import React from "react";
 import { useFuse } from "../../../base/hooks";
-import { CreateAnalysisField, CreateAnalysisFieldTitle } from "./Field";
-import { CreateAnalysisSelected } from "./Selected";
-import { CreateAnalysisSelector } from "./Selector";
-import { CreateAnalysisSelectorSearch } from "./Search";
-import { SubtractionSelectorItem } from "./SubtractionSelectorItem";
+import { CreateAnalysisField } from "./CreateAnalysisField";
+import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
+import { CreateAnalysisSelected } from "./CreateAnalysisSelected";
+import { CreateAnalysisSelector } from "./CreateAnalysisSelector";
 import { CreateAnalysisSelectorList } from "./CreateAnalysisSelectorList";
+import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
+import { SubtractionSelectorItem } from "./SubtractionSelectorItem";
 
-export const SubtractionSelector = ({ subtractions, selected, onChange }) => {
+interface SubtractionSelectorProps {
+    selected: string[];
+    subtractions: object[];
+    onChange: (selected: string[]) => void;
+}
+export function SubtractionSelector({ subtractions, selected, onChange }: SubtractionSelectorProps) {
     const [results, term, setTerm] = useFuse(subtractions, ["name"], [1]);
 
     const unselectedSubtractions = filter(
         results.map(result => result.item || result),
-        subtraction => !selected.includes(subtraction.id)
+        subtraction => !selected.includes(subtraction.id),
     );
     const selectedSubtractions = intersectionWith(subtractions, selected, (subtraction, id) => subtraction.id === id);
 
@@ -23,7 +28,7 @@ export const SubtractionSelector = ({ subtractions, selected, onChange }) => {
     return (
         <CreateAnalysisField>
             <CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
-            <CreateAnalysisSelector items={subtractions} link="/subtractions/create" noun="subtractions">
+            <CreateAnalysisSelector>
                 <CreateAnalysisSelectorSearch label="Filter subtractions" term={term} onChange={setTerm} />
                 <CreateAnalysisSelectorList
                     items={unselectedSubtractions}
@@ -46,10 +51,4 @@ export const SubtractionSelector = ({ subtractions, selected, onChange }) => {
             />
         </CreateAnalysisField>
     );
-};
-
-SubtractionSelector.propTypes = {
-    selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-    subtractions: PropTypes.arrayOf(PropTypes.object).isRequired,
-    onChange: PropTypes.func.isRequired
-};
+}

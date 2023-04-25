@@ -1,12 +1,12 @@
+import { replace } from "connected-react-router";
 import { noop } from "lodash-es";
 import { buffers, END, eventChannel } from "redux-saga";
 import { call, put, select, take, takeEvery, throttle } from "redux-saga/effects";
 import { FIND_FILES, REMOVE_FILE, UPLOAD, WS_INSERT_FILE, WS_REFRESH_FILES, WS_REMOVE_FILE } from "../app/actionTypes";
 import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
+import { updateSearchString } from "../utils/utils";
 import { uploadFailed, uploadProgress } from "./actions";
 import * as filesAPI from "./api";
-import { replace } from "connected-react-router";
-import { updateSearchString } from "../utils/utils";
 
 export function* watchFiles() {
     yield throttle(100, FIND_FILES.REQUESTED, findFiles);
@@ -97,7 +97,8 @@ export function* watchUploadChannel(channel, actionType, localId) {
     let uploadSpeed = 0;
 
     const intervalId = setInterval(() => {
-        let loadedDuringInterval = 0;
+        let loadedDuringInterval;
+
         if (count < 6) {
             loadedWindow.push(lastLoaded);
             loadedDuringInterval = loadedWindow[loadedWindow.length - 1];
@@ -107,6 +108,7 @@ export function* watchUploadChannel(channel, actionType, localId) {
             loadedWindow.push(lastLoaded);
             loadedDuringInterval = loadedWindow[loadedWindow.length - 1] - loadedWindow[0];
         }
+
         uploadSpeed = loadedDuringInterval / count;
     }, 1000);
 

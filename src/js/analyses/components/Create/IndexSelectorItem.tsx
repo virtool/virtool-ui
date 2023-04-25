@@ -22,7 +22,14 @@ const StyledIndexSelectorItem = styled(BoxGroupSection)`
     }
 `;
 
-export function IndexSelectorItem({ id, name, version, onClick }) {
+interface IndexSelectorItemProps {
+    id: string;
+    name: string;
+    version: number;
+    onClick: (id: string) => void;
+}
+
+export function IndexSelectorItem({ id, name, version, onClick }: IndexSelectorItemProps) {
     const handleClick = useCallback(() => {
         onClick(id);
     }, [id, onClick]);

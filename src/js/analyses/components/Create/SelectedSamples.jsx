@@ -1,6 +1,6 @@
+import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { map } from "lodash-es";
 
 import { Badge, BoxGroup, BoxGroupSection } from "../../../base";
 
@@ -14,7 +14,7 @@ const SelectedSamplesList = styled(BoxGroup)`
     }
 `;
 
-export const SelectedSamples = ({ samples }) => {
+export function SelectedSamples({ samples }) {
     const count = samples.length;
 
     const sampleComponents = map(samples, ({ id, name }) => (
@@ -31,4 +31,4 @@ export const SelectedSamples = ({ samples }) => {
             <SelectedSamplesList count={count}>{sampleComponents}</SelectedSamplesList>
         </>
     );
-};
+}

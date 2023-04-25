@@ -13,7 +13,7 @@ export type ReferenceContributor = {
     id: string;
 };
 
-export type ReferenceDataType = "genome" | "barcode";
+export type ReferenceDataType = "barcode" | "genome";
 
 export type ReferenceGroup = {
     build: boolean;

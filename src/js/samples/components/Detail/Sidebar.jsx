@@ -35,7 +35,7 @@ export const mapStateToProps = state => ({
     sampleId: getSampleDetailId(state),
     sampleLabels: getSampleLabels(state),
     defaultSubtractions: getDefaultSubtractions(state),
-    subtractionOptions: getSubtractionOptions(state)
+    subtractionOptions: getSubtractionOptions(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -44,7 +44,7 @@ export const mapDispatchToProps = dispatch => ({
     },
     onSubtractionUpdate: (sampleId, subtractions) => {
         dispatch(editSample(sampleId, { subtractions }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

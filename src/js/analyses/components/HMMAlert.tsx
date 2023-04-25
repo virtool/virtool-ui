@@ -5,7 +5,11 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Alert, Icon } from "../../base";
 
-export const AnalysisHMMAlert = ({ installed }) => {
+interface AnalysisHMMAlertProps {
+    installed: boolean;
+}
+
+export function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
     if (installed) {
         return null;
     }
@@ -20,10 +24,12 @@ export const AnalysisHMMAlert = ({ installed }) => {
             </span>
         </Alert>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    installed: Boolean(get(state, "hmms.status.installed"))
-});
+export function mapStateToProps(state) {
+    return {
+        installed: Boolean(get(state, "hmms.status.installed"))
+    };
+}
 
 export default connect(mapStateToProps)(AnalysisHMMAlert);
