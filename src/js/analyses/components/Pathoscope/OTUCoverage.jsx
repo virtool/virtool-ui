@@ -51,11 +51,11 @@ const StyledOTUCoverage = styled.div`
     }
 `;
 
-export const OTUCoverage = ({ filled }) => {
+export function OTUCoverage({ filled }) {
     const [ref, { width }] = useElementSize();
     useLayoutEffect(() => draw(ref.current, filled, width));
     return <StyledOTUCoverage ref={ref} />;
-};
+}
 
 OTUCoverage.propTypes = {
     filled: PropTypes.arrayOf(PropTypes.number).isRequired

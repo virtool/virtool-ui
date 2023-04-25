@@ -39,17 +39,19 @@ const StyledPathoscopeIsolateWeight = styled.strong`
     font-size: ${props => props.theme.fontSize.sm};
 `;
 
-export const PathoscopeIsolateWeight = ({ pi, reads, showPathoscopeReads }) => (
-    <StyledPathoscopeIsolateWeight>
-        {showPathoscopeReads ? reads : toScientificNotation(pi)}
-    </StyledPathoscopeIsolateWeight>
-);
+export function PathoscopeIsolateWeight({ pi, reads, showPathoscopeReads }) {
+    return (
+        <StyledPathoscopeIsolateWeight>
+            {showPathoscopeReads ? reads : toScientificNotation(pi)}
+        </StyledPathoscopeIsolateWeight>
+    );
+}
 
 const StyledPathoscopeIsolate = styled.div`
     position: relative;
 `;
 
-export const PathoscopeIsolate = ({ coverage, depth, maxDepth, name, pi, reads, sequences, showPathoscopeReads }) => {
+export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, sequences, showPathoscopeReads }) {
     const hitComponents = map(sequences, (hit, i) => (
         <Coverage
             key={i}
@@ -76,4 +78,4 @@ export const PathoscopeIsolate = ({ coverage, depth, maxDepth, name, pi, reads, 
             </ScrollSyncPane>
         </StyledPathoscopeIsolate>
     );
-};
+}

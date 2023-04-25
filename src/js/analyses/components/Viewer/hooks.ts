@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-export const useKeyNavigation = (activeId, nextId, nextIndex, previousId, previousIndex, scroll, onSetActiveId) => {
+export function useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, scroll, onSetActiveId) {
     const ref = useRef(null);
 
     const handleKeyPress = useCallback(
@@ -21,7 +21,7 @@ export const useKeyNavigation = (activeId, nextId, nextIndex, previousId, previo
                 onSetActiveId(nextId);
             }
         },
-        [activeId, nextId, previousId]
+        [activeId, nextId, previousId],
     );
 
     useEffect(() => {
@@ -32,4 +32,4 @@ export const useKeyNavigation = (activeId, nextId, nextIndex, previousId, previo
     });
 
     return ref;
-};
+}

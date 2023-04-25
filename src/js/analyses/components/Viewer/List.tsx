@@ -33,12 +33,16 @@ const AnalysisViewerListWindow = styled(FixedSizeList)`
     z-index: 10;
 `;
 
-const StyledAnalysisViewerList = styled.div`
+type StyledAnalysisViewerListProps = {
+    width: number;
+};
+
+const StyledAnalysisViewerList = styled.div<StyledAnalysisViewerListProps>`
     position: relative;
     width: ${props => props.width}px;
 `;
 
-export const AnalysisViewerList = ({
+export function AnalysisViewerList({
     activeId,
     children,
     itemSize,
@@ -49,8 +53,8 @@ export const AnalysisViewerList = ({
     shown,
     total,
     width,
-    onSetActiveId
-}) => {
+    onSetActiveId,
+}) {
     const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, onSetActiveId);
 
     return (
@@ -66,21 +70,19 @@ export const AnalysisViewerList = ({
             </AnalysisViewerListFooter>
         </StyledAnalysisViewerList>
     );
-};
+}
 
-export const mapStateToProps = state => {
-    const matches = getMatches(state);
+function mapStateToProps(state) {
     const active = getActiveHit(state);
+    const matches = getMatches(state);
 
-    let activeId;
     let nextId;
     let nextIndex;
     let previousId;
     let previousIndex;
 
     if (active) {
-        const activeId = active.id;
-        const windowIndex = findIndex(matches, { id: activeId });
+        const windowIndex = findIndex(matches, { id: active.id });
 
         if (windowIndex > 0) {
             previousIndex = windowIndex - 1;
@@ -93,20 +95,22 @@ export const mapStateToProps = state => {
         }
     }
     return {
+        activeId: active?.id,
         shown: matches.length,
         total: getHits(state).length,
-        activeId,
         nextId,
         nextIndex,
         previousId,
-        previousIndex
+        previousIndex,
     };
-};
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onSetActiveId: index => {
-        dispatch(setActiveHitId(index));
-    }
-});
+function mapDispatchToProps(dispatch) {
+    return {
+        onSetActiveId: index => {
+            dispatch(setActiveHitId(index));
+        },
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnalysisViewerList);

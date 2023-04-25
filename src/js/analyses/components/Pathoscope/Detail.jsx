@@ -2,11 +2,10 @@ import { filter, map, sum } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { ScrollSync } from "react-scroll-sync";
-import styled from "styled-components";
 import { getActiveHit } from "../../selectors";
 import { PathoscopeIsolate } from "./Isolate";
 
-const getContextValue = (isolates, onRendered) => {
+function getContextValue(isolates, onRendered) {
     let count = sum(map(isolates, isolate => isolate.sequences.length));
 
     return {
@@ -16,12 +15,9 @@ const getContextValue = (isolates, onRendered) => {
             if (count === 0) {
                 onRendered();
             }
-        }
+        },
     };
-};
-
-const StyledPathoscopeDetail = styled.div``;
-
+}
 export const PathoscopeDetailContext = React.createContext();
 
 export const PathoscopeDetail = ({ filterIsolates, hit, mappedReads, showPathoscopeReads, onRendered }) => {
@@ -42,20 +38,22 @@ export const PathoscopeDetail = ({ filterIsolates, hit, mappedReads, showPathosc
 
     return (
         <PathoscopeDetailContext.Provider value={contextValue}>
-            <StyledPathoscopeDetail>
+            <div>
                 <ScrollSync>
                     <div>{isolateComponents}</div>
                 </ScrollSync>
-            </StyledPathoscopeDetail>
+            </div>
         </PathoscopeDetailContext.Provider>
     );
 };
 
-const mapStateToProps = state => ({
-    hit: getActiveHit(state),
-    filterIsolates: state.analyses.filterIsolates,
-    mappedReads: state.analyses.detail.read_count,
-    showPathoscopeReads: state.analyses.showPathoscopeReads
-});
+function mapStateToProps(state) {
+    return {
+        hit: getActiveHit(state),
+        filterIsolates: state.analyses.filterIsolates,
+        mappedReads: state.analyses.detail.read_count,
+        showPathoscopeReads: state.analyses.showPathoscopeReads,
+    };
+}
 
 export default connect(mapStateToProps)(PathoscopeDetail);

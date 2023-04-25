@@ -1,7 +1,7 @@
+import { vi } from "vitest";
 import {
     ANALYZE,
     BLAST_NUVS,
-    CLEAR_ANALYSIS,
     FIND_ANALYSES,
     GET_ANALYSIS,
     REMOVE_ANALYSIS,
@@ -17,7 +17,6 @@ import {
 import {
     analyze,
     blastNuvs,
-    clearAnalysis,
     findAnalyses,
     getAnalysis,
     removeAnalysis,
@@ -30,7 +29,6 @@ import {
     wsRemoveAnalysis,
     wsUpdateAnalysis
 } from "../actions";
-import { vi } from "vitest";
 
 it("wsInsertAnalysis should return action to insert analysis via websocket", () => {
     const data = { id: "foo" };
@@ -100,10 +98,6 @@ it("get() should return action to get a specific analysis", () => {
         type: GET_ANALYSIS.REQUESTED,
         payload: { analysisId }
     });
-});
-
-it("clearAnalysis() should return action to clear stored analysis data", () => {
-    expect(clearAnalysis()).toEqual({ type: CLEAR_ANALYSIS });
 });
 
 it("analyze() should return action to analyze sample", () => {

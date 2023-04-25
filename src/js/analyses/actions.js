@@ -2,8 +2,6 @@ import { createAction } from "@reduxjs/toolkit";
 import {
     ANALYZE,
     BLAST_NUVS,
-    CLEAR_ANALYSES,
-    CLEAR_ANALYSIS,
     FIND_ANALYSES,
     GET_ANALYSIS,
     REMOVE_ANALYSIS,
@@ -87,9 +85,6 @@ export const findAnalyses = createAction(FIND_ANALYSES.REQUESTED, (sampleId, ter
 export const getAnalysis = createAction(GET_ANALYSIS.REQUESTED, analysisId => ({
     payload: { analysisId }
 }));
-
-export const clearAnalyses = createAction(CLEAR_ANALYSES);
-export const clearAnalysis = createAction(CLEAR_ANALYSIS);
 
 /**
  * Returns action that can trigger an API call for sample analysis.

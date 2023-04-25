@@ -97,7 +97,7 @@ export function* pushFindTerm(term, contains) {
     const url = createFindURL(term);
 
     if (!contains || includes(url.pathname, contains)) {
-        yield put(replace(url.pathname + url.search, window.history.state.state));
+        yield put(replace(url.pathname + url.search, window.history.state));
     }
 }
 
