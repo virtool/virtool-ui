@@ -3,15 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { resetPassword } from "../account/actions";
 import { InputGroup, InputLabel, InputPassword } from "../base";
-import {
-    WallButton,
-    WallContainer,
-    WallDialog,
-    WallHeader,
-    WallLoginContainer,
-    WallSubheader,
-    WallTitle
-} from "./Container";
+import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
+import { WallTitle } from "./WallTitle";
 
 export class Reset extends React.Component {
     constructor(props) {
