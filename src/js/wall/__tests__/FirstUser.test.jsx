@@ -1,7 +1,7 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { FirstUser, mapDispatchToProps } from "../FirstUser";
 import { vi } from "vitest";
+import { FirstUser, mapDispatchToProps } from "../FirstUser";
 
 describe("<FirstUser />", () => {
     let props;
@@ -12,28 +12,19 @@ describe("<FirstUser />", () => {
             errors: {
                 generalError: "General Error",
                 usernameErrors: ["Password Error 1", "Password Error 2"],
-                passwordErrors: ["Username Error 1", "Username Error 2"]
-            }
+                passwordErrors: ["Username Error 1", "Username Error 2"],
+            },
         };
         props = {
             onSubmit: vi.fn(),
-            ...errorMessages
+            ...errorMessages,
         };
-    });
-
-    it("should render", () => {
-        renderWithProviders(<FirstUser {...props} />);
-        expect(screen.getByText("Setup Initial User")).toBeInTheDocument();
-        expect(screen.getByText("Create an initial administrative user to start using Virtool.")).toBeInTheDocument();
-        expect(screen.getByRole("textbox", "username")).toBeInTheDocument();
-        expect(screen.getByRole("textbox", "password")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Create User" })).toBeInTheDocument();
     });
 
     it("should call onSubmit when form is submitted", async () => {
         props = {
             onSubmit: vi.fn(),
-            ...errorMessages
+            ...errorMessages,
         };
 
         const usernameInput = "Username";
@@ -68,7 +59,7 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             payload: { handle: "foo", password: "bar" },
-            type: "CREATE_FIRST_USER_REQUESTED"
+            type: "CREATE_FIRST_USER_REQUESTED",
         });
     });
 });

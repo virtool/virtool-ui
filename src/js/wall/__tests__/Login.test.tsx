@@ -1,10 +1,11 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import { createStore } from "redux";
+import { vi } from "vitest";
+import { attachResizeObserver, renderWithProviders } from "../../../tests/setupTests";
 import { LOGIN } from "../../app/actionTypes";
 import { Login, mapDispatchToProps, mapStateToProps } from "../Login";
-import { vi } from "vitest";
-import { attachResizeObserver } from "../../../tests/setupTests";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);
@@ -16,25 +17,11 @@ describe("<Login />", () => {
 
     beforeEach(() => {
         props = {
-            onLogin: vi.fn()
+            onLogin: vi.fn(),
         };
         window.b2c = {
-            use: false
+            use: false,
         };
-    });
-
-    it.each(["Username", "Password"], "should render filled %p field", async name => {
-        renderWithProviders(<Login {...props} />, createAppStore(null));
-        await userEvent.type(screen.getByLabelText(name), `test_${name}`);
-        expect(screen.getByLabelText(name)).toHaveValue(`test_${name}`);
-    });
-
-    it("should render checked remember checkbox", async () => {
-        renderWithProviders(<Login {...props} />, createAppStore(null));
-        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "unchecked");
-
-        await userEvent.click(screen.getByLabelText("Remember Me"));
-        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "checked");
     });
 
     it("should call onLogin() with correct values when submitted", async () => {
@@ -48,15 +35,19 @@ describe("<Login />", () => {
         await userEvent.type(passwordField, "Password");
         expect(passwordField).toHaveValue("Password");
 
+        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "unchecked");
+        await userEvent.click(screen.getByLabelText("Remember Me"));
+        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "checked");
+
         await userEvent.click(screen.getByRole("button", { name: "Login" }));
-        expect(props.onLogin).toHaveBeenCalledWith("test_Username", "Password", false);
+        await waitFor(() => expect(props.onLogin).toHaveBeenCalledWith("test_Username", "Password", true));
     });
 });
 
 describe("mapStateToProps()", () => {
     it("should return props given state", () => {
         const state = {
-            app: {}
+            app: {},
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({});
@@ -72,7 +63,7 @@ describe("mapDispatchToProps()", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: LOGIN.REQUESTED,
-            payload: { username: "bob", password: "foobar", remember: false }
+            payload: { username: "bob", password: "foobar", remember: false },
         });
     });
 });
