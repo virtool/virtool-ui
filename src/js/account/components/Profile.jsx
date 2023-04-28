@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Icon, InitialIcon, Label } from "../../base";
-import { getAccountAdministrator, getAccountHandle } from "../selectors";
+import { getAccountAdministratorRole, getAccountHandle } from "../selectors";
 import Email from "./Email";
 import ChangePassword from "./Password";
 
@@ -45,7 +45,11 @@ const AccountProfileHeader = styled.div`
     }
 `;
 
-function AccountProfile({ handle, groups, administrator }) {
+const AdministratorTag = styled(Label)`
+    text-transform: capitalize;
+`;
+
+function AccountProfile({ handle, groups, administratorRole }) {
     const groupLabels = map(groups, ({ id, name }) => (
         <Label key={id}>
             <Icon name="users" /> {name}
@@ -59,10 +63,10 @@ function AccountProfile({ handle, groups, administrator }) {
                 <div>
                     <h3>
                         {handle}
-                        {administrator && (
-                            <Label key="administrator" color="purple">
-                                <Icon name="user-shield" /> Administrator
-                            </Label>
+                        {administratorRole && (
+                            <AdministratorTag key="administrator" color="purple">
+                                <Icon name="user-shield" /> {administratorRole} Administrator
+                            </AdministratorTag>
                         )}
                     </h3>
                     <AccountProfileGroups>{groupLabels}</AccountProfileGroups>
@@ -77,7 +81,7 @@ function AccountProfile({ handle, groups, administrator }) {
 
 function mapStateToProps(state) {
     return {
-        administrator: getAccountAdministrator(state),
+        administratorRole: getAccountAdministratorRole(state),
         groups: state.account.groups,
         handle: getAccountHandle(state)
     };

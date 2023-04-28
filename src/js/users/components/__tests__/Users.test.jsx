@@ -1,9 +1,10 @@
-import { ManageUsers, mapStateToProps, mapDispatchToProps } from "../Users";
 import { screen } from "@testing-library/react";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
+import { AdministratorRoles } from "../../../administration/types";
 import { createFakeDocuments } from "../../classes";
+import { ManageUsers, mapDispatchToProps, mapStateToProps } from "../Users";
 
 const createReducer = (state, history) =>
     combineReducers({
@@ -19,7 +20,7 @@ describe("<ManageUsers />", () => {
     beforeEach(() => {
         const documents = createFakeDocuments(3);
         props = {
-            isAdmin: true,
+            canEditUsers: true,
             filter: "test",
             groups: [],
             error: "",
@@ -51,7 +52,7 @@ describe("<ManageUsers />", () => {
 
     it("should render correctly with 3 users", () => {
         state.users.documents[0].handle = "Bob";
-        state.users.documents[0].administrator = true;
+        state.users.documents[0].administrator_role = AdministratorRoles.FULL;
         state.users.documents[1].handle = "Peter";
         state.users.documents[2].handle = "Sam";
 
@@ -59,7 +60,7 @@ describe("<ManageUsers />", () => {
 
         expect(screen.getByLabelText("user-plus")).toBeInTheDocument();
         expect(screen.getByLabelText("search")).toBeInTheDocument();
-        expect(screen.getAllByText("Administrator").length).toBeGreaterThan(0);
+        expect(screen.getByText(/Administrator/)).toBeInTheDocument();
         expect(screen.getByText("Bob")).toBeInTheDocument();
         expect(screen.getByText("Peter")).toBeInTheDocument();
         expect(screen.getByText("Sam")).toBeInTheDocument();
@@ -101,7 +102,7 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const state = {
             account: {
-                administrator: true
+                administrator_role: AdministratorRoles.USERS
             },
             users: {
                 filter: "foo"
@@ -113,7 +114,7 @@ describe("mapStateToProps()", () => {
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({
-            isAdmin: true,
+            canEditUsers: true,
             term: "foo",
             groups: "bar",
             groupsFetched: true,

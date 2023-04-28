@@ -1,9 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createStore } from "redux";
-import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
 import { MemoryRouter } from "react-router-dom";
+import { createStore } from "redux";
+import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
+import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);
@@ -43,7 +44,10 @@ describe("<FileManager>", () => {
                     }
                 ]
             },
-            account: { administrator: true, permissions: { upload_file: false } }
+            account: {
+                permissions: { upload_file: false },
+                administrator_role: AdministratorRoles.FULL
+            }
         };
     });
 
@@ -61,7 +65,7 @@ describe("<FileManager>", () => {
     });
 
     it("should remove upload bar if canUpload is false", () => {
-        state.account.administrator = false;
+        state.account.administrator_role = null;
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <FileManager {...props} />

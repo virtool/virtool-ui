@@ -3,6 +3,7 @@ import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
 import { attachResizeObserver } from "../../../../tests/setupTests";
+import { AdministratorRoles } from "../../../administration/types";
 import { createFakeUserDetail } from "../../classes";
 import { mapDispatchToProps, mapStateToProps, UserDetail } from "../Detail";
 
@@ -54,7 +55,7 @@ describe("<UserDetail />", () => {
             },
             account: {
                 id: userDetail.id,
-                administrator: true
+                administrator_role: null
             }
         };
         history = createBrowserHistory();
@@ -65,7 +66,7 @@ describe("<UserDetail />", () => {
             state.users.detail.id = "123456789";
             props.detail.handle = "bob";
             props.detail.id = "1";
-            props.detail.administrator = true;
+            props.detail.administrator_role = AdministratorRoles.FULL;
 
             renderWithRouter(<UserDetail {...props} />, state, history, createReducer);
 
@@ -91,8 +92,6 @@ describe("<UserDetail />", () => {
             expect(screen.getByText("Change group membership to modify permissions")).toBeInTheDocument();
             expect(screen.getByText("cancel_job")).toBeInTheDocument();
             expect(screen.getByText("create_sample")).toBeInTheDocument();
-
-            expect(screen.getByText("User Role")).toBeInTheDocument();
         });
 
         it("should render correctly when details = null", () => {
@@ -202,33 +201,6 @@ describe("<UserDetail />", () => {
             expect(screen.getByLabelText("create_sample:true")).toBeInTheDocument();
             expect(screen.getByLabelText("remove_file:false")).toBeInTheDocument();
             expect(screen.getByLabelText("upload_file:false")).toBeInTheDocument();
-        });
-    });
-    describe("<UserRole", () => {
-        it("should render correctly when canModifyUser=true", () => {
-            state.users.detail.id = "123456789";
-
-            renderWithRouter(<UserDetail {...props} />, state, history, createReducer);
-
-            expect(screen.getByText("User Role")).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "Administrator" })).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "Limited" })).toBeInTheDocument();
-        });
-        it("should not render when canModifyUser=false", () => {
-            renderWithRouter(<UserDetail {...props} />, state, history, createReducer);
-
-            expect(screen.queryByText("User Role")).not.toBeInTheDocument();
-            expect(screen.queryByRole("option", { name: "Administrator" })).not.toBeInTheDocument();
-            expect(screen.queryByRole("option", { name: "Limited" })).not.toBeInTheDocument();
-        });
-        it("should render correctly when administrator = false", () => {
-            props.detail.id = "123456789";
-            props.detail.administrator = false;
-
-            renderWithRouter(<UserDetail {...props} />, state, history, createReducer);
-
-            expect(screen.getByRole("option", { name: "Administrator" }).selected).not.toBeTruthy();
-            expect(screen.getByRole("option", { name: "Limited" }).selected).toBeTruthy();
         });
     });
 });

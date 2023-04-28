@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { logout } from "../../account/actions";
 import { getAccountHandle } from "../../account/selectors";
+import { AdministratorRoles } from "../../administration/types";
+import { hasSufficientAdminRole } from "../../administration/utils";
 import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, InitialIcon, Logo } from "../../base";
 import { NavBarItem } from "./NavBarItem";
 
@@ -67,7 +69,7 @@ const StyledNavBar = styled.div`
 
 StyledNavBar.displayName = "NavBar";
 
-export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
+export const Bar = ({ administrator, administrator_role, dev, userId, onLogout, handle }) => (
     <StyledNavBar>
         <NavBarLeft>
             <NavBarLogo color="white" />
@@ -98,7 +100,9 @@ export const Bar = ({ administrator, dev, userId, onLogout, handle }) => (
 
                     <NavDivider />
                     <DropdownMenuLink to="/account">Account</DropdownMenuLink>
-                    {administrator && <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>}
+                    {hasSufficientAdminRole(AdministratorRoles.USERS, administrator_role) && (
+                        <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>
+                    )}
                     <DropdownMenuLink
                         target="_blank"
                         to="//virtool.ca/docs/manual/start/installation/"

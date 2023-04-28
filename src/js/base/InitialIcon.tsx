@@ -41,6 +41,7 @@ type StyledInitialIconProps = {
 const StyledInitialIcon = styled.svg<StyledInitialIconProps>`
     height: ${props => getIconSize(props.size)};
     width: ${props => getIconSize(props.size)};
+    overflow: visible;
 
     circle {
         cx: ${props => getFontSize(props.size)};

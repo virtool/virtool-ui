@@ -1,3 +1,4 @@
+import { AdministratorRoles } from "../../administration/types";
 import {
     getCanModify,
     getDefaultSubtractions,
@@ -14,8 +15,8 @@ describe("getCanModify()", () => {
         state = {
             account: {
                 id: "fred",
-                administrator: false,
-                groups: ["foo"]
+                groups: ["foo"],
+                administrator_role: null
             },
             samples: {
                 detail: {
@@ -60,10 +61,10 @@ describe("getCanModify()", () => {
         expect(getCanModify(state)).toBe(true);
     });
 
-    it("should return [true] when user is administrator", () => {
+    it("should return [true] when user is a full administrator", () => {
         state.account = {
             id: "fred",
-            administrator: true,
+            administrator_role: AdministratorRoles.FULL,
             groups: []
         };
         expect(getCanModify(state)).toBe(true);

@@ -16,18 +16,6 @@ export const updateDocuments = (state, payload, sortKey, sortReverse) => {
     };
 };
 
-export const updateModeledDocuments = (state, payload, model, sortKey, sortReverse) => {
-    const existing = payload.page === 1 ? [] : state.documents || [];
-
-    const documents = sortBy(unionBy(payload.documents, existing, "id"), sortKey);
-
-    if (sortReverse) {
-        documents.reverse();
-    }
-
-    return { ...state, ...payload, documents: map(documents, document => new model(document)) };
-};
-
 export const insert = (state, payload, sortKey, sortReverse = false) => {
     const documents = sortBy(unionBy(state.documents || [], [payload], "id"), sortKey);
     if (sortReverse) {

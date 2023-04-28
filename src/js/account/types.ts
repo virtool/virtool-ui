@@ -1,8 +1,9 @@
 import { faker } from "@faker-js/faker";
+import { AdministratorRoles } from "../administration/types";
 
-class Account {
+export class Account {
     id: string;
-    administrator: boolean;
+    administrator_role: AdministratorRoles;
     groups: string[];
     handle: string;
     last_password_change: Date;
@@ -11,7 +12,7 @@ class Account {
 export function createFakeAccount(): Account {
     return {
         id: "3691nwak3",
-        administrator: faker.datatype.boolean(),
+        administrator_role: null,
         groups: [],
         handle: faker.internet.userName(),
         last_password_change: faker.date.past()

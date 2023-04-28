@@ -5,7 +5,6 @@
 import Fuse from "fuse.js";
 import { capitalize, forEach, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
 import numbro from "numbro";
-import { getAccountAdministrator } from "../account/selectors";
 
 /**
  * A string containing all alphanumeric digits in both cases.
@@ -180,9 +179,6 @@ export const toScientificNotation = number => {
 
     return numbro(number).format("0.000");
 };
-
-export const checkAdminOrPermission = (state, permission) =>
-    getAccountAdministrator(state) || state.account.permissions[permission];
 
 /**
  * Stores the passed object in local storage at key given

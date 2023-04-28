@@ -1,18 +1,18 @@
 import { capitalize, includes, map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { getAccountAdministrator, getAccountId } from "../../../account/selectors";
+import { getAccountId } from "../../../account/selectors";
 
 import {
     Box,
     BoxGroup,
     BoxGroupHeader,
     BoxGroupSection,
+    ContainerNarrow,
     InputGroup,
     InputLabel,
-    LoadingPlaceholder,
-    ContainerNarrow,
-    InputSelect
+    InputSelect,
+    LoadingPlaceholder
 } from "../../../base";
 import { listGroups } from "../../../groups/actions";
 import { updateSampleRights } from "../../actions";
@@ -107,7 +107,6 @@ export const mapStateToProps = state => {
     return {
         canModifyRights: getCanModifyRights(state),
         accountId: getAccountId(state),
-        isAdmin: getAccountAdministrator(state),
         groups: state.groups.documents,
         ownerId: user.id,
         sampleId: id,

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { Badge, LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
-import { checkAdminOrPermission } from "../../utils/utils";
 import { findSubtractions } from "../actions";
 import SubtractionItem from "./Item";
 import SubtractionToolbar from "./Toolbar";
@@ -53,7 +53,7 @@ export class SubtractionList extends React.Component {
 
 const mapStateToProps = state => ({
     ...state.subtraction,
-    canModify: checkAdminOrPermission(state, "modify_subtraction")
+    canModify: checkAdminRoleOrPermission(state, "modify_subtraction")
 });
 
 const mapDispatchToProps = dispatch => ({

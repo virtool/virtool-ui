@@ -92,7 +92,6 @@ describe("mapStateToProps()", () => {
             group_read: true,
             group_write: false,
             groups: "bar",
-            isAdmin: true,
             ownerId: "Baz",
             sampleId: "Boo"
         });
@@ -111,7 +110,6 @@ describe("mapStateToProps()", () => {
             group_read: true,
             group_write: false,
             groups: "bar",
-            isAdmin: true,
             ownerId: "Baz",
             sampleId: "Boo"
         });

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
-import { checkAdminOrPermission } from "../../utils/utils";
 import { findSubtractions } from "../actions";
 
 export const SubtractionToolbar = ({ term, onFind, canModify }) => {
@@ -21,7 +21,7 @@ export const SubtractionToolbar = ({ term, onFind, canModify }) => {
 
 export const mapStateToProps = state => ({
     term: state.subtraction.term || "",
-    canModify: checkAdminOrPermission(state, "modify_subtraction")
+    canModify: checkAdminRoleOrPermission(state, "modify_subtraction")
 });
 
 export const mapDispatchToProps = dispatch => ({

@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { times } from "lodash-es";
+import { AdministratorRoles } from "../administration/types";
 
 type Group = {
     id: string;
@@ -21,6 +22,7 @@ type Permissions = {
 class UserDetail {
     active: boolean;
     administrator: boolean;
+    administrator_role: AdministratorRoles;
     force_reset: boolean;
     groups: Group[];
     handle: string;
@@ -40,6 +42,7 @@ export function createFakeUserDetail(): UserDetail {
     return {
         active: faker.datatype.boolean(),
         administrator: faker.datatype.boolean(),
+        administrator_role: null,
         force_reset: faker.datatype.boolean(),
         groups,
         handle: faker.name.firstName(),

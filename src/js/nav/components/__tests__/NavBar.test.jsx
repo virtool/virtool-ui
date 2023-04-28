@@ -1,9 +1,10 @@
-import {Bar, mapDispatchToProps, mapStateToProps} from "../NavBar";
-import {logout} from "../../../account/actions";
+import { logout } from "../../../account/actions";
+import { AdministratorRoles } from "../../../administration/types";
+import { Bar, mapDispatchToProps, mapStateToProps } from "../NavBar";
 
 describe("<Bar />", () => {
     const props = {
-        administrator: true,
+        administrator_role: AdministratorRoles.FULL,
         id: "foo",
         pending: false,
         onLogout: vi.fn()

@@ -2,17 +2,21 @@ import { map, sortBy } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
+import { AdministratorPermissions, hasSufficientAdminRole } from "../../../administration/utils";
 import { BoxGroup, Checkbox, SelectBoxGroupSection } from "../../../base";
-import { getAccountAdministrator } from "../../selectors";
+import { getAccountAdministratorRole } from "../../selectors";
 
-export const APIPermissions = ({ administrator, className, userPermissions, keyPermissions, onChange }) => {
+export const APIPermissions = ({ administrator_role, className, userPermissions, keyPermissions, onChange }) => {
     const permissions = map(keyPermissions, (value, key) => ({
         name: key,
         allowed: value
     }));
 
     const rowComponents = map(sortBy(permissions, "name"), permission => {
-        const disabled = !administrator && !userPermissions[permission.name];
+        const disabled =
+            !hasSufficientAdminRole(AdministratorPermissions[permission.name], administrator_role) &&
+            !userPermissions[permission.name];
+        console.log({ disabled, permission, administrator_role, userPermissions, AdministratorPermissions });
 
         return (
             <SelectBoxGroupSection
@@ -31,7 +35,7 @@ export const APIPermissions = ({ administrator, className, userPermissions, keyP
 };
 
 APIPermissions.propTypes = {
-    administrator: PropTypes.bool.isRequired,
+    fullAdministrator: PropTypes.bool.isRequired,
     userPermissions: PropTypes.object.isRequired,
     keyPermissions: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -39,7 +43,7 @@ APIPermissions.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    administrator: getAccountAdministrator(state),
+    administrator_role: getAccountAdministratorRole(state),
     userPermissions: state.account.permissions
 });
 

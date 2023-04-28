@@ -1,8 +1,8 @@
 import { Request } from "../app/request";
 
-export const find = ({ term, page }) => Request.get("/api/users").query({ find: term, page });
+export const find = ({ term, page }) => Request.get("/api/admin/users").query({ find: term, page });
 
-export const get = ({ userId }) => Request.get(`/api/users/${userId}`);
+export const get = ({ userId }) => Request.get(`/api/admin/users/${userId}`);
 
 export const create = ({ handle, password, forceReset }) =>
     Request.post("/api/users").send({
@@ -17,4 +17,4 @@ export const createFirst = ({ handle, password }) =>
         password
     });
 
-export const edit = ({ userId, update }) => Request.patch(`/api/users/${userId}`).send(update);
+export const edit = ({ userId, update }) => Request.patch(`/api/admin/users/${userId}`).send(update);

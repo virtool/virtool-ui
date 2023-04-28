@@ -1,8 +1,10 @@
 import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { getAccountAdministrator } from "../../account/selectors";
-import { Alert, Icon, LinkButton, LoadingPlaceholder, InputSearch, Toolbar } from "../../base";
+import { getAccountAdministratorRole } from "../../account/selectors";
+import { AdministratorRoles } from "../../administration/types";
+import { hasSufficientAdminRole } from "../../administration/utils";
+import { Alert, Icon, InputSearch, LinkButton, LoadingPlaceholder, Toolbar } from "../../base";
 import { clearError } from "../../errors/actions";
 import { listGroups } from "../../groups/actions";
 import { findUsers } from "../actions";
@@ -25,7 +27,7 @@ export class ManageUsers extends React.Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (!nextProps.isAdmin && prevState.error !== nextProps.error) {
+        if (!nextProps.canEditUsers && prevState.error !== nextProps.error) {
             return { error: nextProps.error };
         }
         return null;
@@ -75,7 +77,7 @@ export class ManageUsers extends React.Component {
 }
 
 export const mapStateToProps = state => ({
-    isAdmin: getAccountAdministrator(state),
+    canEditUsers: hasSufficientAdminRole(AdministratorRoles.USERS, getAccountAdministratorRole(state)),
     term: state.users.filter,
     groups: state.groups.list,
     groupsFetched: state.groups.fetched,

@@ -2,8 +2,8 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { Alert, Button } from "../../base";
-import { checkAdminOrPermission } from "../../utils/utils";
 import { installHMMs } from "../actions";
 
 const InstallOptionAlert = styled(Alert)`
@@ -29,7 +29,7 @@ export const InstallOption = ({ canInstall, onInstall, releaseId }) => {
 };
 
 export const mapStateToProps = state => ({
-    canInstall: checkAdminOrPermission(state, "modify_hmm"),
+    canInstall: checkAdminRoleOrPermission(state, "modify_hmm"),
     releaseId: get(state.hmms.status, "release.id")
 });
 

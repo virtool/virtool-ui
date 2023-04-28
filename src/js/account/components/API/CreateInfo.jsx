@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { AlertOuter } from "../../../base";
-import { getAccountAdministrator } from "../../selectors";
 import styled from "styled-components";
+import { AlertOuter } from "../../../base";
+import { getAccountAdministratorRole } from "../../selectors";
 
 const StyledAPIKeyAdministratorInfo = styled(AlertOuter)`
     border-radius: 0;
@@ -21,11 +21,13 @@ export const APIKeyAdministratorInfo = ({ administrator }) => {
             <StyledAPIKeyAdministratorInfo color="purple">
                 <div>
                     <p>
-                        <strong>You are an administrator and can create API keys with any permissions you want.</strong>
+                        <strong>
+                            You are an administrator and can create API keys with any permissions granted by that role.
+                        </strong>
                     </p>
                     <p>
-                        If you lose your administrator role, this API key will revert to your new limited set of
-                        permissions.
+                        If your administrator role is reduced or removed, this API key will revert to your new limited
+                        set of permissions.
                     </p>
                 </div>
             </StyledAPIKeyAdministratorInfo>
@@ -36,7 +38,7 @@ export const APIKeyAdministratorInfo = ({ administrator }) => {
 };
 
 export const mapStateToProps = state => ({
-    administrator: getAccountAdministrator(state)
+    administrator: getAccountAdministratorRole(state) !== null
 });
 
 export default connect(mapStateToProps)(APIKeyAdministratorInfo);

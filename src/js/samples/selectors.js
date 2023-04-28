@@ -1,7 +1,9 @@
-import { every, get, includes, some, toNumber, intersectionWith, reduce, mapValues, filter, forEach } from "lodash-es";
+import { every, filter, forEach, get, includes, intersectionWith, mapValues, reduce, some, toNumber } from "lodash-es";
 import createCachedSelector from "re-reselect";
 import { createSelector } from "reselect";
-import { getAccountAdministrator, getAccountId } from "../account/selectors";
+import { getAccountAdministratorRole, getAccountId } from "../account/selectors";
+import { AdministratorRoles } from "../administration/types";
+import { hasSufficientAdminRole } from "../administration/utils";
 import { getTermSelectorFactory } from "../utils/selectors";
 
 export const getSampleGroups = state => state.account.groups;
@@ -12,11 +14,11 @@ export const getSampleDocuments = state => state.samples.documents;
 export const getSelectedSampleIds = state => state.samples.selected;
 
 export const getCanModify = createSelector(
-    [getAccountAdministrator, getSampleGroups, getSampleDetail, getAccountId],
-    (administrator, groups, sample, userId) => {
+    [getAccountAdministratorRole, getSampleGroups, getSampleDetail, getAccountId],
+    (administratorRole, groups, sample, userId) => {
         if (sample) {
             return (
-                administrator ||
+                hasSufficientAdminRole(AdministratorRoles.FULL, administratorRole) ||
                 sample.all_write ||
                 sample.user.id === userId ||
                 (sample.group_write && includes(groups, sample.group))
@@ -26,13 +28,13 @@ export const getCanModify = createSelector(
 );
 
 export const getCanModifyRights = createSelector(
-    [getAccountAdministrator, getAccountId, getSampleDetail],
-    (administrator, userId, sample) => {
+    [getAccountAdministratorRole, getAccountId, getSampleDetail],
+    (administratorRole, userId, sample) => {
         if (sample === null) {
             return;
         }
 
-        return administrator || sample.user.id === userId;
+        return hasSufficientAdminRole(AdministratorRoles.FULL, administratorRole) || sample.user.id === userId;
     }
 );
 

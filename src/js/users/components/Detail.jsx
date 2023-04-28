@@ -11,7 +11,6 @@ import UserGroups from "./Groups";
 import Password from "./Password";
 import UserPermissions from "./Permissions";
 import PrimaryGroup from "./PrimaryGroup";
-import UserRole from "./Role";
 
 const AdminIcon = styled(Icon)`
     padding-left: 10px;
@@ -48,57 +47,53 @@ const UserDetailTitle = styled.div`
     }
 `;
 
-export class UserDetail extends React.Component {
-    componentDidMount() {
-        this.props.onGetUser(this.props.match.params.userId);
-        this.props.onListGroups();
-    }
+export const UserDetail = ({ detail, error, match, onGetUser, onListGroups }) => {
+    React.useEffect(() => {
+        onGetUser(match.params.userId);
+        onListGroups();
+    }, []);
 
-    render() {
-        if (this.props.error?.length) {
-            return (
-                <Alert color="orange" level>
-                    <Icon name="exclamation-circle" />
-                    <span>
-                        <strong>You do not have permission to manage users.</strong>
-                        <span> Contact an administrator.</span>
-                    </span>
-                </Alert>
-            );
-        }
-
-        if (this.props.detail === null) {
-            return <LoadingPlaceholder />;
-        }
-
-        const { handle, administrator } = this.props.detail;
-
+    if (error?.length) {
         return (
-            <div>
-                <UserDetailHeader>
-                    <UserDetailTitle>
-                        <InitialIcon size="xl" handle={handle} />
-                        <span>{handle}</span>
-                        {administrator ? <AdminIcon aria-label="admin" name="user-shield" color="blue" /> : null}
-                        <Link to="/administration/users">Back To List</Link>
-                    </UserDetailTitle>
-                </UserDetailHeader>
-
-                <Password key={this.props.detail.lastPasswordChange} />
-
-                <UserDetailGroups>
-                    <div>
-                        <UserGroups />
-                        <PrimaryGroup />
-                    </div>
-                    <UserPermissions />
-                </UserDetailGroups>
-
-                <UserRole />
-            </div>
+            <Alert color="orange" level>
+                <Icon name="exclamation-circle" />
+                <span>
+                    <strong>You do not have permission to manage users.</strong>
+                    <span> Contact an administrator.</span>
+                </span>
+            </Alert>
         );
     }
-}
+
+    if (!detail) {
+        return <LoadingPlaceholder />;
+    }
+
+    const { handle, administrator_role } = detail;
+
+    return (
+        <div>
+            <UserDetailHeader>
+                <UserDetailTitle>
+                    <InitialIcon size="xl" handle={handle} />
+                    <span>{handle}</span>
+                    {administrator_role ? <AdminIcon aria-label="admin" name="user-shield" color="blue" /> : null}
+                    <Link to="/administration/users">Back To List</Link>
+                </UserDetailTitle>
+            </UserDetailHeader>
+
+            <Password key={detail.lastPasswordChange} />
+
+            <UserDetailGroups>
+                <div>
+                    <UserGroups />
+                    <PrimaryGroup />
+                </div>
+                <UserPermissions />
+            </UserDetailGroups>
+        </div>
+    );
+};
 
 export const mapStateToProps = state => ({
     detail: state.users.detail,

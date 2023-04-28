@@ -1,8 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import { getAccountAdministrator } from "../../account/selectors";
+import styled from "styled-components";
+import { getAccountAdministratorRole } from "../../account/selectors";
+import { AdministratorRoles } from "../../administration/types";
+import { hasSufficientAdminRole } from "../../administration/utils";
 import SidebarItem from "./SidebarItem";
 
 const StyledSidebar = styled.nav`
@@ -17,7 +19,7 @@ const StyledSidebar = styled.nav`
     position: fixed;
 `;
 
-export const Sidebar = ({ administrator }) => (
+export const Sidebar = ({ fullAdministrator }) => (
     <Switch>
         <Route path="/jobs">
             <StyledSidebar>
@@ -34,13 +36,13 @@ export const Sidebar = ({ administrator }) => (
                 />
                 <SidebarItem title="Files" link="/samples/files?page=1" icon="folder-open" />
                 <SidebarItem title="Labels" link="/samples/labels" icon="fas fa-tag" />
-                {administrator ? <SidebarItem title="Settings" link="/samples/settings" icon="cogs" /> : null}
+                {fullAdministrator ? <SidebarItem title="Settings" link="/samples/settings" icon="cogs" /> : null}
             </StyledSidebar>
         </Route>
         <Route path="/refs">
             <StyledSidebar>
                 <SidebarItem exclude={["/refs/settings"]} title="Browse" link="/refs" icon="th-list" />
-                {administrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
+                {fullAdministrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
             </StyledSidebar>
         </Route>
         <Route path="/subtractions">
@@ -58,7 +60,7 @@ export const Sidebar = ({ administrator }) => (
 );
 
 const mapStateToProps = state => ({
-    administrator: getAccountAdministrator(state)
+    fullAdministrator: hasSufficientAdminRole(AdministratorRoles.FULL, getAccountAdministratorRole(state))
 });
 
 export default connect(mapStateToProps, null)(Sidebar);
