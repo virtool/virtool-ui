@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
-import { getColor, getFontSize, getFontWeight } from "../app/theme";
-import { Button, Logo } from "../base";
+import { getFontWeight } from "../app/theme";
+import { Button } from "../base";
 
 export const WallContainer = styled.div`
     align-items: center;
@@ -18,7 +17,6 @@ export const WallContainer = styled.div`
 export const WallDialog = styled.div`
     background-color: ${props => props.theme.color.white};
     border: none;
-
     display: flex;
     flex: 0 1 600px;
     flex-direction: row;
@@ -28,48 +26,21 @@ export const WallDialog = styled.div`
 `;
 
 export const WallLoginContainer = styled.div`
-    display: flex;
     align-items: stretch;
+    display: flex;
     flex: 0 1 450px;
     flex-direction: column;
 `;
 
-export const WallHeader = styled.div`
-    font-size: ${getFontSize("xl")};
-    font-weight: ${getFontWeight("bold")};
-    margin-bottom: 20px;
-    color: ${props => getColor({ theme: props.theme, color: "greyDarkest" })};
-`;
+export const WallHeader = styled.h2``;
 
 export const WallSubheader = styled.div`
-    margin-bottom: 5px;
-    font-size: ${getFontSize("sm")};
-    font-weight: ${getFontWeight("normal")};
-    color: ${props => getColor({ theme: props.theme, color: "greyDark" })};
+    color: ${props => props.theme.color.greyDarkest};
+    margin-bottom: 1rem;
+    font-weight: ${getFontWeight("thick")};
 `;
 
 export const WallButton = styled(Button)`
     width: 100%;
     margin-bottom: 10px;
 `;
-
-const StyledWallTitle = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: max(calc(35vh - 200px), 0px);
-    margin-bottom: 30px;
-    font-size: ${getFontSize("xxl")};
-    font-weight: ${getFontWeight("bold")};
-
-    div {
-        margin: 0 0;
-    }
-`;
-
-export const WallTitle = () => (
-    <StyledWallTitle>
-        <Logo height={60} color="black" />
-        Virtool
-    </StyledWallTitle>
-);

@@ -4,15 +4,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Input, InputError, InputGroup, InputLabel, InputPassword } from "../base";
 import { createFirstUser } from "../users/actions";
-import {
-    WallButton,
-    WallContainer,
-    WallDialog,
-    WallHeader,
-    WallLoginContainer,
-    WallSubheader,
-    WallTitle
-} from "./Container";
+import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
+import { WallTitle } from "./WallTitle";
 
 const initialValues = {
     username: "",
@@ -29,9 +22,10 @@ export const FirstUser = ({ onSubmit, errors }) => {
             <WallDialog>
                 <WallLoginContainer>
                     <WallTitle />
-
-                    <WallHeader>Setup Initial User</WallHeader>
-                    <WallSubheader>Create an initial administrative user to start using Virtool.</WallSubheader>
+                    <WallHeader>Setup First User</WallHeader>
+                    <WallSubheader>
+                        Create an administrative user that can be used to configure your new Virtool instance.
+                    </WallSubheader>
 
                     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
                         <Form>

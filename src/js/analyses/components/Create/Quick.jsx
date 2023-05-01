@@ -16,7 +16,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalTabs,
-    TabsLink
+    TabsLink,
 } from "../../../base";
 import { deselectSamples } from "../../../samples/actions";
 import { getSelectedSamples } from "../../../samples/selectors";
@@ -27,13 +27,13 @@ import {
     getCompatibleIndexesWithDataType,
     getCompatibleSamples,
     getQuickAnalysisGroups,
-    getQuickAnalysisMode
+    getQuickAnalysisMode,
 } from "../../selectors";
 import HMMAlert from "../HMMAlert";
+import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
 import { SelectedSamples } from "./SelectedSamples";
 import { SubtractionSelector } from "./SubtractionSelector";
-import { CreateAnalysisSummary } from "./Summary";
 import { WorkflowSelector } from "./WorkflowSelector";
 
 const QuickAnalyzeFooter = styled(ModalFooter)`
@@ -54,13 +54,13 @@ const QuickAnalyzeError = styled(InputError)`
 const initialValues = {
     workflows: [],
     subtractions: [],
-    indexes: []
+    indexes: [],
 };
 
 const validationSchema = Yup.object().shape({
     workflows: Yup.array().min(1, "At least one workflow must be selected"),
     subtractions: Yup.array().min(1, "At least one subtraction must be selected"),
-    indexes: Yup.array().min(1, "At least one reference must be selected")
+    indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
 export const QuickAnalyze = ({
@@ -76,7 +76,7 @@ export const QuickAnalyze = ({
     onAnalyze,
     onHide,
     onShortlistSubtractions,
-    onUnselect
+    onUnselect,
 }) => {
     const show = Boolean(mode);
 
@@ -97,7 +97,7 @@ export const QuickAnalyze = ({
     const handleSubmit = ({ indexes, subtractions, workflows }) => {
         const referenceIds = map(
             filter(compatibleIndexes, index => indexes.includes(index.id)),
-            "reference.id"
+            "reference.id",
         );
         onAnalyze(compatibleSamples, referenceIds, subtractions, accountId, workflows);
         onUnselect(compatibleSamples.map(sample => sample.id));
@@ -179,7 +179,7 @@ export const mapStateToProps = state => ({
     hasHmm: Boolean(state.hmms.total_count),
     mode: getQuickAnalysisMode(state),
     samples: getSelectedSamples(state),
-    subtractionOptions: getReadySubtractionShortlist(state)
+    subtractionOptions: getReadySubtractionShortlist(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -201,7 +201,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onUnselect: sampleIds => {
         dispatch(deselectSamples(sampleIds));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuickAnalyze);

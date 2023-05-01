@@ -26,7 +26,7 @@ const StyledPathoscopeViewerScroller = styled.div`
     }
 `;
 
-const PathoscopeViewerScroller = () => {
+function PathoscopeViewerScroller() {
     const [show, setShow] = useState(false);
 
     const handleClick = useCallback(() => {
@@ -51,15 +51,15 @@ const PathoscopeViewerScroller = () => {
     }
 
     return null;
-};
+}
 
-export const PathoscopeViewer = () => (
-    <div>
-        <Mapping />
-        <PathoscopeToolbar />
-        <PathoscopeList />
-        <PathoscopeViewerScroller />
-    </div>
-);
-
-export default PathoscopeViewer;
+export function PathoscopeViewer() {
+    return (
+        <>
+            <Mapping />
+            <PathoscopeToolbar />
+            <PathoscopeList />
+            <PathoscopeViewerScroller />
+        </>
+    );
+}

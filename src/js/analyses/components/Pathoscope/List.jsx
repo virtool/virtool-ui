@@ -8,23 +8,27 @@ import PathoscopeItem from "./Item";
 
 export const PathoscopeList = ({ activeId, nextId, nextIndex, previousId, previousIndex, matches, onSetActiveId }) => {
     const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, false, onSetActiveId);
-    const itemComponents = map(matches, (match, index) => <PathoscopeItem key={match.id} index={index} {...match} />);
-    return <div ref={ref}>{itemComponents}</div>;
+
+    return (
+        <div ref={ref}>
+            {map(matches, (match, index) => (
+                <PathoscopeItem key={match.id} index={index} {...match} />
+            ))}
+        </div>
+    );
 };
 
-export const mapStateToProps = state => {
+export function mapStateToProps(state) {
     const matches = getMatches(state);
     const active = getActiveHit(state);
 
-    let activeId;
     let nextId;
     let nextIndex;
     let previousId;
     let previousIndex;
 
     if (active) {
-        const activeId = active.id;
-        const windowIndex = findIndex(matches, { id: activeId });
+        const windowIndex = findIndex(matches, { id: active.id });
 
         if (windowIndex > 0) {
             previousIndex = windowIndex - 1;
@@ -38,21 +42,23 @@ export const mapStateToProps = state => {
     }
 
     return {
+        activeId: active?.id,
         shown: matches.length,
         total: getResults(state).length,
-        activeId,
         matches,
         nextId,
         nextIndex,
         previousId,
         previousIndex
     };
-};
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onSetActiveId: index => {
-        dispatch(setActiveHitId(index));
-    }
-});
+export function mapDispatchToProps(dispatch) {
+    return {
+        onSetActiveId: index => {
+            dispatch(setActiveHitId(index));
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(PathoscopeList);

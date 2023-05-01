@@ -1,28 +1,29 @@
+import { compose, createReducer } from "@reduxjs/toolkit";
+import { createReduxEnhancer } from "@sentry/react";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 import accountReducer from "../account/reducer";
-import cacheReducer from "../caches/reducer";
 import settingsReducer from "../administration/reducer";
 import analysesReducer from "../analyses/reducer";
+import cacheReducer from "../caches/reducer";
 import errorsReducer from "../errors/reducer";
 import filesReducer from "../files/reducer";
+import { formsReducer } from "../forms/reducer";
 import groupsReducer from "../groups/reducer";
 import hmmsReducer from "../hmm/reducer";
 import indexesReducer from "../indexes/reducer";
 import jobsReducer from "../jobs/reducer";
+import labelsReducer from "../labels/reducer";
+import { instanceMessageReducer } from "../message/reducer";
 import OTUsReducer from "../otus/reducer";
 import referenceReducer from "../references/reducer";
 import samplesReducer from "../samples/reducer";
-import labelsReducer from "../labels/reducer";
 import subtractionsReducer from "../subtraction/reducer";
 import tasksReducer from "../tasks/reducer";
 import usersReducer from "../users/reducer";
-import { formsReducer } from "../forms/reducer";
 import { CREATE_FIRST_USER, LOGIN, LOGOUT, RESET_PASSWORD, SET_INITIAL_STATE } from "./actionTypes";
 import rootSaga from "./sagas";
-import { createReducer } from "@reduxjs/toolkit";
-import { instanceMessageReducer } from "../message/reducer";
 
 const initialState = {
     login: false,
@@ -68,6 +69,8 @@ export const appReducer = createReducer(initialState, builder => {
         });
 });
 
+const sentryReduxEnhancer = createReduxEnhancer();
+
 export const createAppStore = history => {
     const sagaMiddleware = createSagaMiddleware();
 
@@ -95,7 +98,7 @@ export const createAppStore = history => {
             tasks: tasksReducer,
             users: usersReducer
         }),
-        applyMiddleware(sagaMiddleware, routerMiddleware(history))
+        compose(applyMiddleware(sagaMiddleware, routerMiddleware(history)), sentryReduxEnhancer)
     );
 
     sagaMiddleware.run(rootSaga);

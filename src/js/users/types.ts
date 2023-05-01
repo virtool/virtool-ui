@@ -34,3 +34,9 @@ export type UserResponse = {
     per_page: number;
     total_count: number;
 };
+
+export type UserNested = {
+    administrator: boolean;
+    id: string;
+    handle: string;
+};

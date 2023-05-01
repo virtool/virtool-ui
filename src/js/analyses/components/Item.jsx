@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Attribution, BoxSpaced, Icon, SlashList } from "../../base";
@@ -49,16 +49,9 @@ const AnalysisItemTop = styled.div`
     }
 `;
 
-export const AnalysisItem = props => {
-    const { canModify, created_at, id, index, ready, reference, sampleId, subtractions, user, workflow, onRemove } =
-        props;
+function AnalysisItem({ canModify, created_at, id, index, ready, reference, subtractions, user, workflow, onRemove }) {
+    const sampleId = useRouteMatch().params.sampleId;
 
-    const subtractionComponents = subtractions.map(subtraction => (
-        <AnalysisItemTag key={subtraction.id}>
-            <Icon name="not-equal" />
-            <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
-        </AnalysisItemTag>
-    ));
     return (
         <StyledAnalysisItem>
             <AnalysisItemTop>
@@ -78,21 +71,29 @@ export const AnalysisItem = props => {
                         </li>
                     </SlashList>
                 </AnalysisItemTag>
-                {subtractionComponents}
+                {subtractions.map(subtraction => (
+                    <AnalysisItemTag key={subtraction.id}>
+                        <Icon name="not-equal" />
+                        <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+                    </AnalysisItemTag>
+                ))}
             </AnalysisItemTags>
         </StyledAnalysisItem>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    sampleId: state.samples.detail.id,
-    canModify: getCanModify(state)
-});
+export function mapStateToProps(state) {
+    return {
+        canModify: getCanModify(state)
+    };
+}
 
-export const mapDispatchToProps = (dispatch, ownProps) => ({
-    onRemove: () => {
-        dispatch(removeAnalysis(ownProps.id));
-    }
-});
+function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        onRemove: () => {
+            dispatch(removeAnalysis(ownProps.id));
+        }
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnalysisItem);

@@ -1,8 +1,7 @@
+import { vi } from "vitest";
 import {
     BLAST_NUVS,
-    CLEAR_ANALYSIS,
     FIND_ANALYSES,
-    GET_ANALYSIS,
     LIST_READY_INDEXES,
     SET_ANALYSIS_SORT_KEY,
     TOGGLE_ANALYSIS_SORT_DESCENDING,
@@ -13,18 +12,17 @@ import {
     TOGGLE_SHOW_PATHOSCOPE_READS,
     WS_INSERT_ANALYSIS,
     WS_REMOVE_ANALYSIS,
-    WS_UPDATE_ANALYSIS
+    WS_UPDATE_ANALYSIS,
 } from "../../app/actionTypes";
 import reducer, { setNuvsBLAST } from "../reducer";
 import { formatData } from "../utils";
-import { vi } from "vitest";
 
 vi.mock("../utils.js");
 
 formatData.mockImplementation(({ ready, workflow }) => ({
     ready,
     workflow,
-    foo: "bar"
+    foo: "bar",
 }));
 
 describe("Analyses Reducer", () => {
@@ -32,7 +30,6 @@ describe("Analyses Reducer", () => {
         const result = reducer(undefined, {});
         expect(result).toEqual({
             activeId: null,
-            data: null,
             detail: null,
             documents: null,
             filterAODP: 0.97,
@@ -46,13 +43,13 @@ describe("Analyses Reducer", () => {
             sortDescending: true,
             sortIds: null,
             sortKey: "coverage",
-            term: ""
+            term: "",
         });
     });
 
     it("should return the existing state for unhandled action types", () => {
         const state = {
-            foo: "bar"
+            foo: "bar",
         };
         const action = { type: "UNHANDLED_ACTION" };
         const result = reducer(state, action);
@@ -61,7 +58,7 @@ describe("Analyses Reducer", () => {
 
     it("should handle WS_INSERT_ANALYSIS", () => {
         const state = {
-            documents: []
+            documents: [],
         };
         const action = {
             type: WS_INSERT_ANALYSIS,
@@ -69,19 +66,19 @@ describe("Analyses Reducer", () => {
                 id: "foo",
                 created_at: "2018-01-01T00:00:00.000000Z",
                 sample: {
-                    id: "baz"
-                }
-            }
+                    id: "baz",
+                },
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: [action.payload]
+            documents: [action.payload],
         });
     });
 
     it("should handle WS_UPDATE_ANALYSIS", () => {
         const state = {
-            documents: [{ id: "foo", created_at: "2018-01-01T00:00:00.000000Z", sample: { id: "baz" } }]
+            documents: [{ id: "foo", created_at: "2018-01-01T00:00:00.000000Z", sample: { id: "baz" } }],
         };
 
         const action = {
@@ -90,27 +87,27 @@ describe("Analyses Reducer", () => {
                 id: "foo",
                 created_at: "2018-01-01T00:00:00.000000Z",
                 sample: {
-                    id: "baz"
-                }
-            }
+                    id: "baz",
+                },
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: [action.payload]
+            documents: [action.payload],
         });
     });
 
     it("should handle WS_REMOVE_ANALYSIS", () => {
         const state = {
-            documents: [{ id: "foo" }]
+            documents: [{ id: "foo" }],
         };
         const action = {
             type: WS_REMOVE_ANALYSIS,
-            payload: ["foo"]
+            payload: ["foo"],
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: []
+            documents: [],
         });
     });
 
@@ -119,7 +116,7 @@ describe("Analyses Reducer", () => {
             filterIsolates: false,
             filterOTUs: initial,
             filterORFs: false,
-            filterSequences: false
+            filterSequences: false,
         };
         const action = { type: TOGGLE_FILTER_OTUS };
         const result = reducer(state, action);
@@ -127,7 +124,7 @@ describe("Analyses Reducer", () => {
             filterIsolates: false,
             filterOTUs: !initial,
             filterORFs: false,
-            filterSequences: false
+            filterSequences: false,
         });
     });
 
@@ -191,56 +188,39 @@ describe("Analyses Reducer", () => {
         const initialState = { documents: null };
         const action = {
             type: FIND_ANALYSES.SUCCEEDED,
-            payload: { documents: ["foo"] }
+            payload: { documents: ["foo"] },
         };
         const result = reducer(initialState, action);
         expect(result).toEqual({ ...initialState, documents: ["foo"] });
-    });
-
-    it("should handle GET_ANALYSIS_REQUESTED", () => {
-        const action = {
-            type: GET_ANALYSIS.REQUESTED,
-            payload: {}
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({
-            activeId: null,
-            detail: null,
-            filterIds: null,
-            searchIds: null,
-            sortKey: "length"
-        });
     });
 
     it.each([true, false])("should handle GET_ANALYSIS_SUCCEEDED for nuvs when [action.ready=%p]", ready => {
         const workflow = "nuvs";
         const state = {
             activeId: null,
-            data: null,
             detail: null,
             searchIds: ["bar", "baz"],
-            sortKey: "depth"
+            sortKey: "depth",
         };
         const action = {
             type: "GET_ANALYSIS_SUCCEEDED",
             payload: {
                 workflow,
                 ready,
-                results: []
-            }
+                results: [],
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             activeId: null,
-            data: null,
             detail: {
                 workflow,
                 ready,
-                foo: "bar"
+                foo: "bar",
             },
             filterIds: null,
             searchIds: null,
-            sortKey: "length"
+            sortKey: "length",
         });
     });
 
@@ -252,8 +232,8 @@ describe("Analyses Reducer", () => {
             payload: {
                 workflow,
                 ready,
-                results: []
-            }
+                results: [],
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
@@ -261,19 +241,12 @@ describe("Analyses Reducer", () => {
             detail: {
                 workflow,
                 ready,
-                foo: "bar"
+                foo: "bar",
             },
             filterIds: null,
             searchIds: null,
-            sortKey: "coverage"
+            sortKey: "coverage",
         });
-    });
-
-    it("should handle CLEAR_ANALYSIS", () => {
-        const state = { detail: {}, searchIds: ["foo"] };
-        const action = { type: CLEAR_ANALYSIS };
-        const result = reducer(state, action);
-        expect(result).toEqual({ detail: null, searchIds: null });
     });
 
     it("should handle BLAST_NUVS_REQUESTED", () => {
@@ -281,13 +254,13 @@ describe("Analyses Reducer", () => {
             detail: {
                 id: "testid",
                 workflow: "nuvs",
-                results: { hits: [{ index: 3 }, { index: 5 }] }
-            }
+                results: { hits: [{ index: 3 }, { index: 5 }] },
+            },
         };
 
         const action = {
             type: BLAST_NUVS.REQUESTED,
-            payload: { analysisId: "testid", sequenceIndex: 3 }
+            payload: { analysisId: "testid", sequenceIndex: 3 },
         };
 
         const result = reducer(state, action);
@@ -297,9 +270,9 @@ describe("Analyses Reducer", () => {
             detail: {
                 ...state.detail,
                 results: {
-                    hits: [{ index: 3, blast: { ready: false } }, { index: 5 }]
-                }
-            }
+                    hits: [{ index: 3, blast: { ready: false } }, { index: 5 }],
+                },
+            },
         });
     });
 
@@ -308,8 +281,8 @@ describe("Analyses Reducer", () => {
             detail: {
                 id: "testid",
                 workflow: "nuvs",
-                results: { hits: [{ index: 3 }, { index: 5 }] }
-            }
+                results: { hits: [{ index: 3 }, { index: 5 }] },
+            },
         };
 
         const action = {
@@ -317,8 +290,8 @@ describe("Analyses Reducer", () => {
             payload: {},
             context: {
                 analysisId: "testid",
-                sequenceIndex: 3
-            }
+                sequenceIndex: 3,
+            },
         };
 
         const result = reducer(state, action);
@@ -326,8 +299,8 @@ describe("Analyses Reducer", () => {
         expect(result).toEqual({
             detail: {
                 ...state.detail,
-                results: { hits: [{ index: 3, blast: {} }, { index: 5 }] }
-            }
+                results: { hits: [{ index: 3, blast: {} }, { index: 5 }] },
+            },
         });
     });
 
@@ -338,9 +311,9 @@ describe("Analyses Reducer", () => {
                     id: "foo",
                     workflow: "nuvs",
                     results: {
-                        hits: [{ index: 3 }, { index: 5 }]
-                    }
-                }
+                        hits: [{ index: 3 }, { index: 5 }],
+                    },
+                },
             };
 
             const analysisId = "foo";
@@ -352,9 +325,9 @@ describe("Analyses Reducer", () => {
                 detail: {
                     ...state.detail,
                     results: {
-                        hits: [{ index: 3, blast: { payload: "data_to_be_added" } }, { index: 5 }]
-                    }
-                }
+                        hits: [{ index: 3, blast: { payload: "data_to_be_added" } }, { index: 5 }],
+                    },
+                },
             });
         });
 
@@ -363,8 +336,8 @@ describe("Analyses Reducer", () => {
                 detail: {
                     id: "foo",
                     workflow: "nuvs",
-                    results: [{ index: 3 }, { index: 5 }]
-                }
+                    results: [{ index: 3 }, { index: 5 }],
+                },
             };
             const analysisId = "bar";
             const sequenceIndex = 3;

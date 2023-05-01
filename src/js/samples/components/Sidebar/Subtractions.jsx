@@ -1,13 +1,13 @@
+import { xor } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { SidebarHeader, SideBarSection } from "../../../base";
 import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 import { SampleSidebarList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import { xor } from "lodash-es";
 
 const SubtractionInner = ({ name }) => name;
 
@@ -48,7 +48,7 @@ export const DefaultSubtractions = ({ defaultSubtractions, subtractionOptions, o
 );
 
 export const mapStateToProps = state => ({
-    subtractionOptions: getReadySubtractionShortlist(state)
+    subtractionOptions: getReadySubtractionShortlist(state),
 });
 
 export default connect(mapStateToProps)(DefaultSubtractions);

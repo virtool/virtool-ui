@@ -121,14 +121,14 @@ const mapStateToProps = (state, ownProps) => {
         hit,
         active: activeId === hit.id,
         mappedCount: getReadCount(state),
-        showPathoscopeReads: state.analyses.showPathoscopeReads
+        showPathoscopeReads: state.analyses.showPathoscopeReads,
     };
 };
 
 const mapDispatchToProps = dispatch => ({
     onSetActiveId: id => {
         dispatch(setActiveHitId(id));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PathoscopeItem);

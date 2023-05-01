@@ -26,7 +26,7 @@ export const byteSize = (bytes, spaceSeparated) => {
             output: "byte",
             base: "decimal",
             mantissa: 1,
-            spaceSeparated: spaceSeparated ? spaceSeparated : false
+            spaceSeparated: spaceSeparated ? spaceSeparated : false,
         });
     }
 
@@ -64,7 +64,7 @@ export function createFuse(collection, keys, id) {
         id,
         minMatchCharLength: 1,
         threshold: 0.3,
-        tokenize: true
+        tokenize: true,
     });
 }
 
@@ -133,7 +133,9 @@ export const formatIsolateName = isolate => {
  * @param workflow {string} plain workflow ID
  * @returns {string} human-readable workflow name
  */
-export const getWorkflowDisplayName = workflow => get(workflowDisplayNames, workflow, startCase(workflow));
+export function getWorkflowDisplayName(workflow) {
+    return get(workflowDisplayNames, workflow, startCase(workflow));
+}
 
 export const reportAPIError = action => window.captureException(action.payload.error);
 
@@ -144,7 +146,7 @@ export const routerLocationHasState = (state, key, value) =>
 export const getTargetChange = target => ({
     name: target.name,
     value: target.value,
-    error: `error${upperFirst(target.name)}`
+    error: `error${upperFirst(target.name)}`,
 });
 
 /**
@@ -159,7 +161,7 @@ export const workflowDisplayNames = {
     nuvs: "NuVs",
     pathoscope_bowtie: "Pathoscope",
     pathoscope_snap: "Pathoscope",
-    build_index: "Build Index"
+    build_index: "Build Index",
 };
 
 export const toThousand = number => numbro(number).format({ thousandSeparated: true });

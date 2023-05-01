@@ -1,24 +1,16 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import { mapSettingsStateToProps } from "../../administration/mappers";
-import { Container, LoadingPlaceholder, ContainerNarrow, ViewHeader, ViewHeaderTitle } from "../../base";
-import SourceTypes from "./SourceTypes/SourceTypes";
-import ReferenceList from "./List";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { useFetchSettings } from "../../administration/hooks";
+import { Container, LoadingPlaceholder } from "../../base";
+import { CreateReference } from "./Create";
 import ReferenceDetail from "./Detail/Detail";
-import AddReference from "./Add";
+import ReferenceList from "./List";
+import { ReferenceSettings } from "./ReferenceSettings";
 
-export const ReferenceSettings = () => (
-    <ContainerNarrow>
-        <ViewHeader title="Reference Settings">
-            <ViewHeaderTitle>Settings</ViewHeaderTitle>
-        </ViewHeader>
-        <SourceTypes global />
-    </ContainerNarrow>
-);
+export function References() {
+    const { isLoading } = useFetchSettings();
 
-export const References = ({ loading }) => {
-    if (loading) {
+    if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
@@ -28,11 +20,11 @@ export const References = ({ loading }) => {
                 <Route path="/refs" component={ReferenceList} exact />
                 <Redirect from="/refs/settings/*" to="/refs/settings" />
                 <Route path="/refs/settings" component={ReferenceSettings} />
-                <Route path="/refs/add" component={AddReference} />
+                <Route path="/refs/add" component={CreateReference} />
                 <Route path="/refs/:refId" component={ReferenceDetail} />
             </Switch>
         </Container>
     );
-};
+}
 
-export default connect(mapSettingsStateToProps)(References);
+export default References;
