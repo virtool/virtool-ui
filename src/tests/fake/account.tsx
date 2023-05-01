@@ -1,13 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { AdministratorRoles } from "../administration/types";
-
-export type Account = {
-    id: string;
-    administrator_role: AdministratorRoles;
-    groups: string[];
-    handle: string;
-    last_password_change: Date;
-};
+import nock from "nock";
+import { Account } from "../../js/account/types";
 
 export function createFakeAccount(): Account {
     return {
@@ -17,4 +10,8 @@ export function createFakeAccount(): Account {
         handle: faker.internet.userName(),
         last_password_change: faker.date.past()
     };
+}
+
+export function mockAccountApi() {
+    return nock("http://localhost").patch("/api/account").reply(200, createFakeAccount);
 }
