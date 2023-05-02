@@ -68,7 +68,6 @@ export function Login({ error, onLogin }: LoginProps) {
                                 <Controller
                                     name="remember"
                                     control={control}
-                                    rules={{ required: true }}
                                     render={({ field: { onChange, value } }) => (
                                         <Checkbox
                                             checked={value}
