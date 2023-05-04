@@ -20,7 +20,7 @@ const UserItem = styled.div`
     }
 `;
 
-const specialText = user => {
+const renderRow = user => {
     return (
         <UserItem aria-label={user.handle}>
             <InitialIcon handle={user.handle} size="md" />
@@ -45,7 +45,7 @@ export const UserSelect = ({ term, users, value, onChange, onTermChange, id }: U
             items={users}
             term={term}
             selectedItem={value || null}
-            renderRow={specialText}
+            renderRow={renderRow}
             itemToString={toString}
             onFilter={onTermChange}
             onChange={onChange}

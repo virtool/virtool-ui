@@ -11,7 +11,7 @@ import { AdministratorItem } from "./Item";
 
 const renderRow = roles => item => <AdministratorItem key={item.id} user={item} roles={roles} />;
 export const ManageAdministrators = () => {
-    const [term, setTerm] = useState();
+    const [term, setTerm] = useState("");
 
     const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 

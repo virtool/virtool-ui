@@ -1,10 +1,21 @@
 import * as Select from "@radix-ui/react-select";
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { borderRadius, boxShadow, getColor } from "../../app/theme";
 import { Icon } from "../Icon";
 
+const ContentOpen = keyframes`  
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 const Content = styled(Select.Content)`
+    transform-origin: top center;
+    animation: ${ContentOpen} 150ms cubic-bezier(0.16, 1, 0.3, 1);
     background-color: white;
     border-radius: ${borderRadius["md"]};
     box-shadow: ${boxShadow["md"]};
@@ -12,6 +23,10 @@ const Content = styled(Select.Content)`
     z-index: 110;
     max-height: var(--radix-select-content-available-height);
     min-width: var(--radix-select-trigger-width);
+
+    :first-child {
+        margin-top: 10px;
+    }
 `;
 
 const ScrollSection = styled(Select.ScrollUpButton)`
