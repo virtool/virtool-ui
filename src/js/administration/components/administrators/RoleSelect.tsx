@@ -8,7 +8,7 @@ type RoleSelectProps = {
     value: string;
     onChange: (value: string) => void;
     className?: string;
-    id: string;
+    id?: string;
 };
 
 export const RoleSelect = ({ value, roles, onChange, className, id }: RoleSelectProps) => {

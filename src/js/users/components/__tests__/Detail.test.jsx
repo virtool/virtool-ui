@@ -25,7 +25,7 @@ describe("<UserDetail />", () => {
 
     beforeEach(() => {
         attachResizeObserver();
-        const groups = times(5, index => createFakeGroupMinimal(`group${index}`));
+        const groups = times(5, index => createFakeGroupMinimal({ name: `group${index}` }));
         const userDetail = createFakeUser({ groups });
 
         props = {

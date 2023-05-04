@@ -21,6 +21,7 @@ export const ManageAdministrators = () => {
         term,
         true,
     );
+
     const { data: account, isLoading: isLoadingAccount }: { data: Account; isLoading: boolean } = useGetAccount();
     const { data: roles, isLoading: isLoadingRoles }: { data: Array<AdministratorRole>; isLoading: boolean } =
         useGetAdministratorRoles();

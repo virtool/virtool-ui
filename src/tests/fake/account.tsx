@@ -23,8 +23,9 @@ type createFakeAccountProps = {
     email?: string;
 };
 
-export function createFakeAccount(props: createFakeAccountProps): Account {
-    const { settings, email, ...userProps } = props;
+export function createFakeAccount(props?: createFakeAccountProps): Account {
+    const { settings, email, ...userProps } = props || {};
+
     return {
         email: email || faker.internet.email(),
         settings: { ...defaultSettings, ...settings },

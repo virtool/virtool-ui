@@ -22,7 +22,7 @@ type createFakePermissionsProps = {
     upload_file?: boolean;
 };
 
-export const createFakePermissions = (permissions: createFakePermissionsProps): Permissions => ({
+export const createFakePermissions = (permissions?: createFakePermissionsProps): Permissions => ({
     ...defaultPermissions,
     ...permissions,
 });

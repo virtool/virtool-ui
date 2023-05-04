@@ -15,13 +15,9 @@ type createFakeUserProps = {
     administrator_role?: AdministratorRoles;
 };
 
-export function createFakeUser({
-    permissions,
-    groups,
-    primary_group,
-    handle,
-    administrator_role,
-}: createFakeUserProps): User {
+export function createFakeUser(props?: createFakeUserProps): User {
+    let { permissions, groups, primary_group, handle, administrator_role } = props || {};
+
     groups = groups || [createFakeGroupMinimal()];
     return {
         id: faker.random.alphaNumeric(8),
@@ -38,7 +34,7 @@ export function createFakeUser({
 }
 
 export function createFakeUsers(count: number): Array<User> {
-    return times(count || 1, () => createFakeUser({}));
+    return times(count || 1, () => createFakeUser());
 }
 
 type Query = {

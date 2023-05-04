@@ -23,7 +23,7 @@ describe("<AccountProfile />", () => {
         history = createBrowserHistory();
 
         state = {
-            account: { ...createFakeAccount({}), administrator_role: AdministratorRoles.FULL, handle: "amanda36" },
+            account: { ...createFakeAccount(), administrator_role: AdministratorRoles.FULL, handle: "amanda36" },
             settings: { data: { minimum_password_length: 8 } },
         };
     });

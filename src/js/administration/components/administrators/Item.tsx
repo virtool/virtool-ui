@@ -24,12 +24,12 @@ const StyledAdministrator = styled(BoxSpaced)`
     }
 `;
 
-const StyledHandle = styled.span`
+const UserHandle = styled.span`
     font-weight: ${getFontWeight("thick")};
     font-size: ${getFontSize("lg")};
 `;
 
-const ListRoleSelect = styled(RoleSelect)`
+const InlineRoleSelect = styled(RoleSelect)`
     width: 200px;
 `;
 
@@ -37,6 +37,7 @@ type AdministratorItemProps = {
     user: User;
     roles: Array<AdministratorRole>;
 };
+
 export const AdministratorItem = ({ user, roles }: AdministratorItemProps) => {
     const editMutation = useSetAdministratorRole();
     const onChange = (value: AdministratorRoles) => {
@@ -46,8 +47,8 @@ export const AdministratorItem = ({ user, roles }: AdministratorItemProps) => {
     return (
         <StyledAdministrator key={user.id}>
             <InitialIcon handle={user.handle} size={"lg"} />
-            <StyledHandle>{user.handle}</StyledHandle>
-            <ListRoleSelect value={user.administrator_role} roles={roles} onChange={onChange} />
+            <UserHandle>{user.handle}</UserHandle>
+            <InlineRoleSelect value={user.administrator_role} roles={roles} onChange={onChange} />
             <Icon name="trash" color="red" onClick={() => onChange(null)} aria-label={`remove role`} />
         </StyledAdministrator>
     );

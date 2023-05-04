@@ -21,7 +21,7 @@ describe("<Settings />", () => {
     let state;
 
     beforeEach(() => {
-        account = createFakeAccount({});
+        account = createFakeAccount();
         history = createBrowserHistory();
         history.push("/administration/settings");
         state = {

@@ -34,7 +34,7 @@ export const APIPermissions = ({ administrator_role, className, userPermissions,
 };
 
 APIPermissions.propTypes = {
-    fullAdministrator: PropTypes.bool.isRequired,
+    administrator_role: PropTypes.string,
     userPermissions: PropTypes.object.isRequired,
     keyPermissions: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
