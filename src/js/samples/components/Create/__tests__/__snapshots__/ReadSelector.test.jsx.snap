@@ -20,7 +20,7 @@ exports[`<ReadSelector /> > should render 1`] = `
     error="foo"
   >
     <Toolbar>
-      <InputSearch
+      <ForwardRef
         onChange={[Function]}
         placeholder="Filename"
         value=""

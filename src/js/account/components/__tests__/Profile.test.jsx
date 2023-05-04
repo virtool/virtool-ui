@@ -4,14 +4,14 @@ import userEvent from "@testing-library/user-event";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
+import { createFakeAccount } from "../../../../tests/fake/account";
 import { AdministratorRoles } from "../../../administration/types";
-import { createFakeAccount } from "../../types";
 
 function createReducer(state, history) {
     return combineReducers({
         account: createGenericReducer(state.account),
         settings: createGenericReducer(state.settings),
-        router: connectRouter(history)
+        router: connectRouter(history),
     });
 }
 
@@ -23,8 +23,8 @@ describe("<AccountProfile />", () => {
         history = createBrowserHistory();
 
         state = {
-            account: { ...createFakeAccount(), administrator_role: AdministratorRoles.FULL, handle: "amanda36" },
-            settings: { data: { minimum_password_length: 8 } }
+            account: { ...createFakeAccount({}), administrator_role: AdministratorRoles.FULL, handle: "amanda36" },
+            settings: { data: { minimum_password_length: 8 } },
         };
     });
 
@@ -51,6 +51,7 @@ describe("<AccountProfile />", () => {
     });
 
     it("should handle email changes", async () => {
+        state.account.email = "";
         renderWithRouter(<AccountProfile />, state, history, createReducer);
 
         const emailInput = screen.getByLabelText("Email Address");

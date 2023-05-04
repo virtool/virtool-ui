@@ -2,15 +2,15 @@ import { screen } from "@testing-library/react";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
+import { createFakeUsers } from "../../../../tests/fake/user";
 import { AdministratorRoles } from "../../../administration/types";
-import { createFakeDocuments } from "../../classes";
 import { ManageUsers, mapDispatchToProps, mapStateToProps } from "../Users";
 
 const createReducer = (state, history) =>
     combineReducers({
         router: connectRouter(history),
         users: createGenericReducer(state.users),
-        settings: createGenericReducer(state.settings)
+        settings: createGenericReducer(state.settings),
     });
 
 describe("<ManageUsers />", () => {
@@ -18,7 +18,7 @@ describe("<ManageUsers />", () => {
     let state;
 
     beforeEach(() => {
-        const documents = createFakeDocuments(3);
+        const documents = createFakeUsers(3);
         props = {
             canEditUsers: true,
             filter: "test",
@@ -27,25 +27,25 @@ describe("<ManageUsers />", () => {
             groupsFetched: true,
             onFilter: vi.fn(),
             onClearError: vi.fn(),
-            onListGroups: vi.fn()
+            onListGroups: vi.fn(),
         };
         state = {
             users: {
                 documents,
                 term: "",
                 page: "",
-                page_count: 0
+                page_count: 0,
             },
             settings: {
                 data: {
-                    minimimum_password_length: 8
-                }
+                    minimimum_password_length: 8,
+                },
             },
             createUser: false,
             isAdmin: true,
             term: "",
             groups: [],
-            groupsFetched: ""
+            groupsFetched: "",
         };
         history = createBrowserHistory();
     });
@@ -83,8 +83,8 @@ describe("<ManageUsers />", () => {
         props.error = {
             LIST_USERS_ERROR: {
                 message: "Requires administrative privilege",
-                status: 403
-            }
+                status: 403,
+            },
         };
 
         renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
@@ -102,15 +102,15 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const state = {
             account: {
-                administrator_role: AdministratorRoles.USERS
+                administrator_role: AdministratorRoles.USERS,
             },
             users: {
-                filter: "foo"
+                filter: "foo",
             },
             groups: {
                 list: "bar",
-                fetched: true
-            }
+                fetched: true,
+            },
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({
@@ -118,7 +118,7 @@ describe("mapStateToProps()", () => {
             term: "foo",
             groups: "bar",
             groupsFetched: true,
-            error: ""
+            error: "",
         });
     });
 });
@@ -135,13 +135,13 @@ describe("mapDispatchToProps", () => {
     it("should return onFind in props", () => {
         const e = {
             target: {
-                value: "foo"
-            }
+                value: "foo",
+            },
         };
         result.onFind(e);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { page: 1, term: "foo" },
-            type: "FIND_USERS_REQUESTED"
+            type: "FIND_USERS_REQUESTED",
         });
     });
 
@@ -150,7 +150,7 @@ describe("mapDispatchToProps", () => {
         result.onClearError(error);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { error: "foo" },
-            type: "CLEAR_ERROR"
+            type: "CLEAR_ERROR",
         });
     });
 

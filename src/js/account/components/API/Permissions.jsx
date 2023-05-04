@@ -9,14 +9,13 @@ import { getAccountAdministratorRole } from "../../selectors";
 export const APIPermissions = ({ administrator_role, className, userPermissions, keyPermissions, onChange }) => {
     const permissions = map(keyPermissions, (value, key) => ({
         name: key,
-        allowed: value
+        allowed: value,
     }));
 
     const rowComponents = map(sortBy(permissions, "name"), permission => {
         const disabled =
             !hasSufficientAdminRole(AdministratorPermissions[permission.name], administrator_role) &&
             !userPermissions[permission.name];
-        console.log({ disabled, permission, administrator_role, userPermissions, AdministratorPermissions });
 
         return (
             <SelectBoxGroupSection
@@ -39,12 +38,12 @@ APIPermissions.propTypes = {
     userPermissions: PropTypes.object.isRequired,
     keyPermissions: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
     administrator_role: getAccountAdministratorRole(state),
-    userPermissions: state.account.permissions
+    userPermissions: state.account.permissions,
 });
 
 export default connect(mapStateToProps)(APIPermissions);

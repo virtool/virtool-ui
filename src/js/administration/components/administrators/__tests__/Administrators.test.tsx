@@ -1,32 +1,80 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import nock from "nock";
-import React from "react";
-import { createFakeAccount } from "../../../../account/types";
+import * as React from "react";
+import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
+import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
+import { createFakeUser, createFakeUsers, mockGetUsersAPI } from "../../../../../tests/fake/user";
+import { renderWithProviders } from "../../../../../tests/setupTests";
+
+import { AdministratorRoles } from "../../../types";
 import { ManageAdministrators } from "../Administrators";
-describe("<EditLabel>", () => {
-    let props;
 
-    beforeEach(() => {
-        props = {
-            id: 1,
-            name: "Foo",
-            description: "This is a description",
-            color: "#1DAD57"
-        };
-    });
-
+describe("<Administrators>", () => {
     it("should render", async () => {
-        const account = createFakeAccount();
-        const account_scope = nock("http://localhost").patch("/api/account").reply(200, account);
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
 
-        const user_scope = nock("http://localhost").patch("/api/admin/users").reply(200);
-        const set_role_scope = nock("http://localhost").patch("/api/admin/users/{#####id}/roles").reply(200);
-        const roles_acope = nock("http://localhost").patch("/api/admin/roles").reply(200);
+        const users = createFakeUsers(2);
+        users[0].administrator_role = AdministratorRoles.FULL;
+        users[1].administrator_role = AdministratorRoles.BASE;
+        mockGetUsersAPI(users);
+
+        mockGetAdministratorRoles();
 
         renderWithProviders(<ManageAdministrators />);
 
-        expect(screen.getByRole("textbox")).toBeInTheDocument();
+        expect(await screen.findByRole("textbox", { name: "search" })).toBeInTheDocument();
 
-        scope.isDone();
+        expect(screen.getByText(users[0].handle)).toBeInTheDocument();
+        const user_1 = screen.getByText(users[0].handle).closest("div");
+        expect(within(user_1).getByRole("button", { name: "remove role" })).toBeInTheDocument();
+        expect(within(user_1).getByText(`${AdministratorRoles.FULL} Administrator`)).toBeInTheDocument();
+
+        const user_2 = screen.getByText(users[1].handle).closest("div");
+        expect(within(user_2).getByRole("button", { name: "remove role" })).toBeInTheDocument();
+        expect(within(user_2).getByText(`${AdministratorRoles.BASE} Administrator`)).toBeInTheDocument();
+
+        nock.cleanAll();
+    });
+
+    it("should change user role when dropdown is changed", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
+
+        const user = createFakeUser({ administrator_role: AdministratorRoles.FULL });
+        mockGetUsersAPI([user]);
+
+        mockGetAdministratorRoles();
+
+        const set_role_scope = mockSetAdministratorRoleAPI({ user, new_role: AdministratorRoles.BASE });
+
+        renderWithProviders(<ManageAdministrators />);
+
+        await userEvent.click(await screen.findByRole("combobox"));
+        await userEvent.click(await screen.findByRole("option", { name: `${AdministratorRoles.BASE} Administrator` }));
+
+        await waitFor(() => set_role_scope.done());
+        nock.cleanAll();
+    });
+
+    it("should remove admin role when trash icon clicked", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
+
+        const user = createFakeUser({ administrator_role: AdministratorRoles.FULL });
+        mockGetUsersAPI([user]);
+
+        mockGetAdministratorRoles();
+
+        const set_role_scope = mockSetAdministratorRoleAPI({ user, new_role: null });
+
+        renderWithProviders(<ManageAdministrators />);
+
+        await userEvent.click(await screen.findByRole("button", { name: "remove role" }));
+
+        set_role_scope.done();
+
+        nock.cleanAll();
     });
 });

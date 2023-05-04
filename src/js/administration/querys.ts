@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Request } from "../app/request";
 import { AdministratorRoles } from "./types";
 
-const getRoles = () => Request.get("/api/admin/roles").then(response => response.body);
+const getAdministratorRoles = () => Request.get("/api/admin/roles").then(response => response.body);
 
-export const useGetRoles = () => {
-    return useQuery("roles", getRoles);
+export const useGetAdministratorRoles = () => {
+    return useQuery("roles", getAdministratorRoles);
 };
 
 const getUsers = (page: number, per_page: number, term: string, administrator: boolean) =>
@@ -17,7 +17,7 @@ const getUsers = (page: number, per_page: number, term: string, administrator: b
 
 export const useGetUsers = (page: number, per_page: number, term: string, administrator: boolean) => {
     return useQuery(["users", page, term, administrator], () => getUsers(page, per_page, term, administrator), {
-        keepPreviousData: true
+        keepPreviousData: true,
     });
 };
 
@@ -33,7 +33,7 @@ export const useSetAdministratorRole = () => {
             onSuccess: () => {
                 queryClient.invalidateQueries("users");
                 queryClient.invalidateQueries("detailed_user");
-            }
-        }
+            },
+        },
     );
 };

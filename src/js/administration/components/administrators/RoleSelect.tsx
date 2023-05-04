@@ -8,16 +8,17 @@ type RoleSelectProps = {
     value: string;
     onChange: (value: string) => void;
     className?: string;
+    id: string;
 };
 
-export const RoleSelect = ({ value, roles, onChange, className }: RoleSelectProps) => {
+export const RoleSelect = ({ value, roles, onChange, className, id }: RoleSelectProps) => {
     const roleItems = map(roles, role => (
         <SelectItem value={role.id} key={role.id} text={`${role.id} Administrator`} description={role.description} />
     ));
 
     return (
         <Select value={value} onValueChange={onChange}>
-            <SelectButton placeholder="Select administrator role" icon="chevron-down" className={className} />
+            <SelectButton placeholder="Select administrator role" icon="chevron-down" className={className} id={id} />
             <SelectContent position="popper" align="start">
                 {roleItems}
             </SelectContent>

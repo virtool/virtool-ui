@@ -2,7 +2,7 @@
 
 exports[`<Toolbar /> > should render 1`] = `
 <Styled(Toolbar)>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     onKeyDown={[Function]}
   />
@@ -80,7 +80,7 @@ exports[`<Toolbar /> > should render 1`] = `
 
 exports[`<Toolbar /> > should render when [filterIsolates=false] 1`] = `
 <Styled(Toolbar)>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     onKeyDown={[Function]}
   />
@@ -158,7 +158,7 @@ exports[`<Toolbar /> > should render when [filterIsolates=false] 1`] = `
 
 exports[`<Toolbar /> > should render when [filterOTUs=false] 1`] = `
 <Styled(Toolbar)>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     onKeyDown={[Function]}
   />
@@ -236,7 +236,7 @@ exports[`<Toolbar /> > should render when [filterOTUs=false] 1`] = `
 
 exports[`<Toolbar /> > should render when [showPathoscopeReads=true] 1`] = `
 <Styled(Toolbar)>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     onKeyDown={[Function]}
   />
@@ -314,7 +314,7 @@ exports[`<Toolbar /> > should render when [showPathoscopeReads=true] 1`] = `
 
 exports[`<Toolbar /> > should render when [sortDescending=false] 1`] = `
 <Styled(Toolbar)>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     onKeyDown={[Function]}
   />
@@ -392,7 +392,7 @@ exports[`<Toolbar /> > should render when [sortDescending=false] 1`] = `
 
 exports[`<Toolbar /> > should render when [sortKey=%p] depth 1`] = `
 <Styled(Toolbar)>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     onKeyDown={[Function]}
   />
@@ -470,7 +470,7 @@ exports[`<Toolbar /> > should render when [sortKey=%p] depth 1`] = `
 
 exports[`<Toolbar /> > should render when [sortKey=%p] weight 1`] = `
 <Styled(Toolbar)>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     onKeyDown={[Function]}
   />

@@ -1,6 +1,5 @@
 import { AdministratorRoles } from "../administration/types";
-
-type GroupMinimal = { id: string; name?: string };
+import { GroupMinimal } from "../groups/types";
 
 type UserB2C = {
     display_name?: string;
@@ -23,9 +22,10 @@ export type User = {
     groups: Array<GroupMinimal>;
     last_password_change: Date;
     permissions: Permissions;
-    primary_group: Array<GroupMinimal>;
+    primary_group: GroupMinimal;
     administrator_role: AdministratorRoles;
 };
+
 export type UserResponse = {
     items: Array<User>;
     found_count: number;
@@ -39,4 +39,15 @@ export type UserNested = {
     administrator: boolean;
     id: string;
     handle: string;
+};
+
+export type Permissions = {
+    cancel_job: boolean;
+    create_ref: boolean;
+    create_sample: boolean;
+    modify_hmm: boolean;
+    modify_subtraction: boolean;
+    remove_file: boolean;
+    remove_job: boolean;
+    upload_file: boolean;
 };

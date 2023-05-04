@@ -24,10 +24,11 @@ type SelectButtonProps = {
     placeholder?: string;
     icon?: string;
     className?: string;
+    id?: string;
 };
 
-export const SelectButton = ({ placeholder, icon, className }: SelectButtonProps) => (
-    <SelectTrigger className={className}>
+export const SelectButton = ({ placeholder, icon, className, id }: SelectButtonProps) => (
+    <SelectTrigger className={className} id={id}>
         <RadixSelect.Value placeholder={placeholder} />
         {icon ? <Icon name={icon} /> : null}
     </SelectTrigger>

@@ -2,7 +2,7 @@
 
 exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] false 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     placeholder="Sample name"
     value="foo"
@@ -12,7 +12,7 @@ exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] false 1`] =
 
 exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] true 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     placeholder="Sample name"
     value="foo"

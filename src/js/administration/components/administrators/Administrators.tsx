@@ -2,9 +2,9 @@ import { filter } from "lodash-es";
 import React, { useState } from "react";
 import { useGetAccount } from "../../../account/querys";
 import { Account } from "../../../account/types";
-import { InputSearch, LoadingPlaceholder, Pagination, Toolbar } from "../../../base";
+import { InputSearch, LoadingPlaceholder, NoneFoundBox, Pagination, Toolbar } from "../../../base";
 import { UserResponse } from "../../../users/types";
-import { useGetRoles, useGetUsers } from "../../querys";
+import { useGetAdministratorRoles, useGetUsers } from "../../querys";
 import { AdministratorRole } from "../../types";
 import { CreateAdministrator } from "./Create";
 import { AdministratorItem } from "./Item";
@@ -19,23 +19,23 @@ export const ManageAdministrators = () => {
         page,
         25,
         term,
-        true
+        true,
     );
     const { data: account, isLoading: isLoadingAccount }: { data: Account; isLoading: boolean } = useGetAccount();
     const { data: roles, isLoading: isLoadingRoles }: { data: Array<AdministratorRole>; isLoading: boolean } =
-        useGetRoles();
-
-    const filteredUsers = filter(users?.items, user => user.id !== account.id);
+        useGetAdministratorRoles();
 
     if (isLoadingUsers || isLoadingRoles || isLoadingAccount) {
         return <LoadingPlaceholder />;
     }
 
+    const filteredUsers = filter(users.items, user => user.id !== account.id);
+
     return (
         <>
             <Toolbar>
                 <InputSearch name="search" aria-label="search" value={term} onChange={e => setTerm(e.target.value)} />
-                <CreateAdministrator roles={roles} />
+                <CreateAdministrator />
             </Toolbar>
             <Pagination
                 items={filteredUsers}
@@ -45,6 +45,7 @@ export const ManageAdministrators = () => {
                 pageCount={users.page_count}
                 onLoadNextPage={() => {}}
             />
+            {!filteredUsers.length && <NoneFoundBox noun="administrators" />}
         </>
     );
 };

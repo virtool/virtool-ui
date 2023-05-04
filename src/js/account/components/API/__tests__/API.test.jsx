@@ -8,7 +8,7 @@ import { APIKeys } from "../API";
 const createReducer = (state, history) =>
     combineReducers({
         account: createGenericReducer(state.account),
-        router: connectRouter(history)
+        router: connectRouter(history),
     });
 
 describe("<API />", () => {
@@ -24,26 +24,26 @@ describe("<API />", () => {
                     id: "1234",
                     name: "testName1",
                     created_at: "2022-12-22T21:37:49.429000Z",
-                    permissions: { cancel_job: true, create_ref: true, upload_file: false }
-                }
+                    permissions: { cancel_job: true, create_ref: true, upload_file: false },
+                },
             ],
-            onGet: vi.fn()
+            onGet: vi.fn(),
         };
         state = {
             account: {
                 permissions: {
                     cancel_job: true,
                     create_ref: true,
-                    upload_file: false
+                    upload_file: false,
                 },
                 newKey: null,
-                administrator_role: null
-            }
+                administrator_role: null,
+            },
         };
 
         history = createBrowserHistory();
         history.location.state = {
-            createAPIKey: false
+            createAPIKey: false,
         };
     });
 
@@ -81,7 +81,7 @@ describe("<API />", () => {
     describe("<CreateAPIKey", () => {
         beforeEach(() => {
             history.location.state = {
-                createAPIKey: true
+                createAPIKey: true,
             };
         });
         it("should render correctly when newKey = empty", async () => {
@@ -135,7 +135,7 @@ describe("<API />", () => {
 
                 expect(screen.getByText(/You are an administrator/)).toBeInTheDocument();
                 expect(
-                    screen.getByText(/If your administrator role is reduced or removed, this API/)
+                    screen.getByText(/If your administrator role is reduced or removed, this API/),
                 ).toBeInTheDocument();
             });
 
@@ -144,7 +144,7 @@ describe("<API />", () => {
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
                 expect(
-                    screen.queryByText(/If your administrator role is reduced or removed, this API/)
+                    screen.queryByText(/If your administrator role is reduced or removed, this API/),
                 ).not.toBeInTheDocument();
             });
         });
@@ -193,7 +193,7 @@ describe("<API />", () => {
     describe("APIPermissions", () => {
         it("should render permissions correctly and check and uncheck permissions when clicked, administrator_role == full", async () => {
             state.account.administrator_role = AdministratorRoles.FULL;
-            console.log(state);
+
             renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
             await userEvent.click(screen.getByText("testName1"));

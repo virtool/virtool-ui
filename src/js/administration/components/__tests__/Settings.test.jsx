@@ -3,7 +3,7 @@ import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import nock from "nock";
 import { combineReducers } from "redux";
-import { createFakeAccount } from "../../../account/types";
+import { createFakeAccount } from "../../../../tests/fake/account";
 import { AdministratorRoles } from "../../types";
 import { Settings } from "../Settings";
 
@@ -11,7 +11,7 @@ const createReducer = (state, history) =>
     combineReducers({
         instanceMessage: createGenericReducer(state.instanceMessage),
         settings: createGenericReducer(state.settings),
-        router: connectRouter(history)
+        router: connectRouter(history),
     });
 
 describe("<Settings />", () => {
@@ -21,12 +21,12 @@ describe("<Settings />", () => {
     let state;
 
     beforeEach(() => {
-        account = createFakeAccount();
+        account = createFakeAccount({});
         history = createBrowserHistory();
         history.push("/administration/settings");
         state = {
             instanceMessage: { color: "red", loaded: true, message: "" },
-            settings: { data: { enable_api: false } }
+            settings: { data: { enable_api: false } },
         };
     });
 

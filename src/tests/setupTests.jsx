@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { ThemeProvider } from "styled-components";
+import { vi } from "vitest";
 import { watchRouter } from "../js/app/sagas";
 import { theme } from "../js/app/theme";
 
@@ -25,7 +26,7 @@ expect.addSnapshotSerializer(createSerializer({ mode: "deep" }));
 setLogger({
     log: console.log,
     warn: console.warn,
-    error: noop
+    error: noop,
 });
 
 const wrapWithProviders = (ui, createAppStore) => {
@@ -64,7 +65,7 @@ const createAppStore = (state, history, createReducer) => {
     const reducer = createReducer
         ? createReducer(state, history)
         : combineReducers({
-              router: connectRouter(history)
+              router: connectRouter(history),
           });
     const sagaMiddleware = createSagaMiddleware();
     const store = createStore(reducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
@@ -83,9 +84,15 @@ const renderWithRouter = (ui, state, history, createReducer) => {
     renderWithProviders(wrappedUI);
 };
 
+//mocks HTML element prototypes that are not implemented in jsdom
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
+window.HTMLElement.prototype.releasePointerCapture = vi.fn();
+window.HTMLElement.prototype.hasPointerCapture = vi.fn();
+
 class ResizeObserver {
     observe() {}
     unobserve() {}
+    disconnect() {}
 }
 
 export const attachResizeObserver = () => {

@@ -1,10 +1,10 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { InputError, InputGroup, InputLabel, LoadingPlaceholder, SaveButton } from "../../../base";
+import { InputError, InputGroup, InputLabel, SaveButton } from "../../../base";
 import { User } from "../../../users/types";
-import { useGetUsers, useSetAdministratorRole } from "../../querys";
-import { AdministratorRole, AdministratorRoles } from "../../types";
+import { useGetAdministratorRoles, useGetUsers, useSetAdministratorRole } from "../../querys";
+import { AdministratorRoles } from "../../types";
 import { RoleSelect } from "./RoleSelect";
 import { UserSelect } from "./UserSelect";
 
@@ -33,44 +33,43 @@ interface FormInputValues {
 }
 
 type AdministratorFormProps = {
-    roles: Array<AdministratorRole>;
     onClose: Function;
 };
 
-export function AdministratorForm({ roles, onClose }: AdministratorFormProps): JSX.Element {
+export function AdministratorForm({ onClose }: AdministratorFormProps): JSX.Element {
     const {
         formState: { errors },
         handleSubmit,
-        control
+        control,
     } = useForm<FormInputValues>();
 
     const [userSearchTerm, setUserSearchTerm] = React.useState("");
 
-    const { data: users, isLoading } = useGetUsers(1, 25, userSearchTerm, false);
+    const { data: users } = useGetUsers(1, 25, userSearchTerm, false);
+
+    const { data: roles } = useGetAdministratorRoles();
 
     const administratorRoleMutator = useSetAdministratorRole();
+
     const onSubmit = ({ user, role }: FormInputValues) => {
         administratorRoleMutator.mutate({ user_id: user.id, role });
         onClose();
     };
 
-    if (isLoading) {
-        return <LoadingPlaceholder />;
-    }
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <InputGroup>
-                <InputLabel htmlFor="name">Name</InputLabel>
+                <InputLabel htmlFor="user">User</InputLabel>
                 <UserSelectContainer>
                     <Controller
                         render={({ field: { onChange, value } }) => (
                             <UserSelect
                                 onChange={onChange}
                                 value={value}
-                                users={users.items}
+                                users={users?.items || []}
                                 onTermChange={setUserSearchTerm}
                                 term={userSearchTerm}
+                                id="user"
                             />
                         )}
                         name="user"
@@ -85,7 +84,7 @@ export function AdministratorForm({ roles, onClose }: AdministratorFormProps): J
                 <RoleSelectContainer>
                     <Controller
                         render={({ field: { onChange, value } }) => (
-                            <RoleSelect onChange={onChange} value={value} roles={roles} />
+                            <RoleSelect onChange={onChange} value={value} roles={roles || []} id="role" />
                         )}
                         name="role"
                         control={control}

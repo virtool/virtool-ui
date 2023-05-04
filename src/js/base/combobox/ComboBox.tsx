@@ -1,6 +1,7 @@
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useCombobox } from "downshift";
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { borderRadius, boxShadow, getBorder, getColor, getFontWeight } from "../../app/theme";
 import { Icon } from "../Icon";
 import { InputSearch } from "../InputSearch";
@@ -16,16 +17,33 @@ const ComboBoxItem = styled.li`
 const WrapRow = (renderRow, getItemProps) => (item, index) => {
     return (
         <ComboBoxItem
-            key={`${item}${index}`}
+            key={item.id}
             {...getItemProps({
                 item: item.id,
-                index
+                index,
             })}
         >
             {renderRow(item)}
         </ComboBoxItem>
     );
 };
+
+const dialogOverlayOpen = keyframes`  
+    from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+export const DialogOverlay = styled(DialogPrimitive.Overlay)`
+    animation: ${dialogOverlayOpen} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    background-color: rgba(107, 114, 128, 0.6);
+    inset: 0;
+    position: fixed;
+    z-index: 110;
+`;
 
 interface ComboBoxPopdownProps {
     $isOpen: boolean;
@@ -51,13 +69,8 @@ const ComboBoxPopdown = styled.ul<ComboBoxPopdownProps>`
     display: ${props => (props.$isOpen ? "block" : "none")};
 `;
 
-interface InputSearchContainerProps {
-    $isOpen: boolean;
-}
-
-const InputSearchContainer = styled.div<InputSearchContainerProps>`
+const InputSearchContainer = styled.div`
     margin: 10px 5px;
-    display: ${props => (props.$isOpen ? "block" : "none")};
 `;
 
 const ComboBoxContainer = styled.div`
@@ -75,10 +88,20 @@ type ComboBoxProps = {
     onFilter: (term: string) => void;
     onChange: (item: any) => void;
     itemToString?: (item: any) => string;
+    id?: string;
 };
 
 const defaultToString = (item: any) => item;
-export const ComboBox = ({ items, selectedItem, term, renderRow, onFilter, onChange, itemToString }: ComboBoxProps) => {
+export const ComboBox = ({
+    items,
+    selectedItem,
+    term,
+    renderRow,
+    onFilter,
+    onChange,
+    itemToString,
+    id,
+}: ComboBoxProps) => {
     itemToString = itemToString || defaultToString;
 
     const { getToggleButtonProps, getMenuProps, getItemProps, getInputProps, isOpen } = useCombobox({
@@ -91,7 +114,7 @@ export const ComboBox = ({ items, selectedItem, term, renderRow, onFilter, onCha
         onSelectedItemChange: ({ selectedItem }) => {
             onChange(selectedItem);
         },
-        itemToString
+        itemToString,
     });
 
     const rows = items.map(WrapRow(renderRow, getItemProps));
@@ -102,10 +125,11 @@ export const ComboBox = ({ items, selectedItem, term, renderRow, onFilter, onCha
                 TriggerButtonProps={getToggleButtonProps()}
                 selectedItem={selectedItem}
                 renderRow={renderRow}
+                id={id}
             />
 
             <ComboBoxPopdown {...getMenuProps()} $isOpen={isOpen}>
-                <InputSearchContainer $isOpen={isOpen}>
+                <InputSearchContainer>
                     <InputSearch {...getInputProps()} />
                 </InputSearchContainer>
                 {isOpen && rows}
@@ -129,9 +153,9 @@ const StyledTriggerButton = styled.button`
         margin-left: 5px;
     }
 `;
-const TriggerButton = ({ TriggerButtonProps, selectedItem, renderRow }) => {
+const TriggerButton = ({ TriggerButtonProps, selectedItem, renderRow, id }) => {
     return (
-        <StyledTriggerButton {...TriggerButtonProps} type="button">
+        <StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
             {selectedItem ? renderRow(selectedItem) : "Select user"}
             <Icon name="chevron-down" />
         </StyledTriggerButton>

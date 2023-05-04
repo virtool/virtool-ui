@@ -1,10 +1,12 @@
 import { screen } from "@testing-library/react";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
+import { times } from "lodash-es";
 import { combineReducers } from "redux";
+import { createFakeGroupMinimal } from "../../../../tests/fake/groups";
+import { createFakeUser } from "../../../../tests/fake/user";
 import { attachResizeObserver } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
-import { createFakeUserDetail } from "../../classes";
 import { mapDispatchToProps, mapStateToProps, UserDetail } from "../Detail";
 
 const createReducer = (state, history) =>
@@ -13,7 +15,7 @@ const createReducer = (state, history) =>
         users: createGenericReducer(state.users),
         settings: createGenericReducer(state.settings),
         groups: createGenericReducer(state.groups),
-        account: createGenericReducer(state.account)
+        account: createGenericReducer(state.account),
     });
 
 describe("<UserDetail />", () => {
@@ -23,13 +25,14 @@ describe("<UserDetail />", () => {
 
     beforeEach(() => {
         attachResizeObserver();
-        const userDetail = createFakeUserDetail();
+        const groups = times(5, index => createFakeGroupMinimal(`group${index}`));
+        const userDetail = createFakeUser({ groups });
 
         props = {
             match: {
                 params: {
-                    userId: "foo"
-                }
+                    userId: "foo",
+                },
             },
             error: [],
             detail: userDetail,
@@ -38,25 +41,25 @@ describe("<UserDetail />", () => {
             onRemoveUser: vi.fn(),
             onListGroups: vi.fn(),
             onSetPrimaryGroup: vi.fn(),
-            onSubmit: vi.fn()
+            onSubmit: vi.fn(),
         };
 
         state = {
             users: {
-                detail: userDetail
+                detail: userDetail,
             },
             settings: {
                 data: {
-                    minimum_password_length: 4
-                }
+                    minimum_password_length: 4,
+                },
             },
             groups: {
-                documents: userDetail.groups
+                documents: userDetail.groups,
             },
             account: {
                 id: userDetail.id,
-                administrator_role: null
-            }
+                administrator_role: null,
+            },
         };
         history = createBrowserHistory();
     });
@@ -190,7 +193,7 @@ describe("<UserDetail />", () => {
                 modify_subtraction: true,
                 remove_file: false,
                 remove_job: false,
-                upload_file: false
+                upload_file: false,
             };
 
             renderWithRouter(<UserDetail {...props} />, state, history, createReducer);
@@ -208,12 +211,12 @@ describe("<UserDetail />", () => {
 describe("mapStateToProps", () => {
     const state = {
         users: {
-            detail: { handle: "foo", last_password_change: 0 }
+            detail: { handle: "foo", last_password_change: 0 },
         },
         groups: {
             list: "foo",
-            fetched: true
-        }
+            fetched: true,
+        },
     };
 
     it("should return correct props", () => {
@@ -221,7 +224,7 @@ describe("mapStateToProps", () => {
 
         expect(props).toEqual({
             detail: state.users.detail,
-            error: ""
+            error: "",
         });
     });
 });
@@ -240,14 +243,14 @@ describe("mapDispatchToProps", () => {
         result.onGetUser(userId);
         expect(dispatch).toHaveBeenCalledWith({
             type: "GET_USER_REQUESTED",
-            payload: { userId }
+            payload: { userId },
         });
     });
 
     it("should return onListGroups() in props", () => {
         result.onListGroups();
         expect(dispatch).toHaveBeenCalledWith({
-            type: "LIST_GROUPS_REQUESTED"
+            type: "LIST_GROUPS_REQUESTED",
         });
     });
 });

@@ -22,7 +22,7 @@ const UserItem = styled.div`
 
 const specialText = user => {
     return (
-        <UserItem>
+        <UserItem aria-label={user.handle}>
             <InitialIcon handle={user.handle} size="md" />
             <span>{user.handle}</span>
         </UserItem>
@@ -37,8 +37,9 @@ type UserSelectProps = {
     value: User;
     onChange: (value: string) => void;
     onTermChange: (value: string) => void;
+    id: string;
 };
-export const UserSelect = ({ term, users, value, onChange, onTermChange }: UserSelectProps) => {
+export const UserSelect = ({ term, users, value, onChange, onTermChange, id }: UserSelectProps) => {
     return (
         <ComboBox
             items={users}
@@ -48,6 +49,7 @@ export const UserSelect = ({ term, users, value, onChange, onTermChange }: UserS
             itemToString={toString}
             onFilter={onTermChange}
             onChange={onChange}
+            id={id}
         />
     );
 };
