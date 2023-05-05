@@ -21,14 +21,14 @@ export const useGetUsers = (page: number, per_page: number, term: string, admini
     });
 };
 
-const setAdministratorRole = (role: String, user_id: String) => {
+const setAdministratorRole = (role: string, user_id: string) => {
     return Request.put(`/api/admin/users/${user_id}/role`).send({ role });
 };
 
 export const useSetAdministratorRole = () => {
     const queryClient = useQueryClient();
     return useMutation(
-        ({ role, user_id }: { role: AdministratorRoles; user_id: String }) => setAdministratorRole(role, user_id),
+        ({ role, user_id }: { role: AdministratorRoles; user_id: string }) => setAdministratorRole(role, user_id),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("users");

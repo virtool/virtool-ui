@@ -35,8 +35,7 @@ const Content = styled.ul<Content>`
     transition: opacity 0.1s ease;
     box-shadow: ${boxShadow.md};
     border: ${getBorder};
-    border-radius: ${borderRadius["md"]};
-    box-shadow: ${boxShadow["md"]};
+    border-radius: ${borderRadius.md};
     z-index: 110;
     display: ${props => (props.$isOpen ? "block" : "none")};
 `;
@@ -49,17 +48,17 @@ const ComboBoxContainer = styled.div`
 `;
 
 type ComboBoxProps = {
-    items: any[];
-    selectedItem?: any;
+    items: unknown[];
+    selectedItem?: unknown;
     term: string;
-    renderRow: (item: any) => JSX.Element;
+    renderRow: (item: unknown) => JSX.Element;
     onFilter: (term: string) => void;
-    onChange: (item: any) => void;
-    itemToString?: (item: any) => string;
+    onChange: (item: unknown) => void;
+    itemToString?: (item: unknown) => string;
     id?: string;
 };
 
-const defaultToString = (item: any) => item;
+const defaultToString = (item: string) => item;
 
 export const ComboBox = ({
     items,
@@ -75,7 +74,7 @@ export const ComboBox = ({
 
     const { getToggleButtonProps, getMenuProps, getItemProps, getInputProps, isOpen } = useCombobox({
         items,
-        selectedItem: selectedItem,
+        selectedItem,
         inputValue: term,
         onInputValueChange: ({ inputValue }) => {
             onFilter(inputValue);

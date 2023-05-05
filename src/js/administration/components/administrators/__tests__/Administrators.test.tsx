@@ -1,7 +1,7 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
-import * as React from "react";
+import React from "react";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
 import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
 import { createFakeUser, createFakeUsers, mockGetUsersAPI } from "../../../../../tests/fake/user";

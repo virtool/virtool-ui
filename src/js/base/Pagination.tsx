@@ -54,7 +54,7 @@ interface PaginationProps {
     storedPage: number;
     currentPage: number;
     pageCount: number;
-    onLoadNextPage: (pageNumber: number) => void;
+    onLoadNextPage?: (pageNumber: number) => void;
 }
 
 export const Pagination = ({
@@ -63,8 +63,10 @@ export const Pagination = ({
     storedPage,
     currentPage,
     pageCount,
-    onLoadNextPage
+    onLoadNextPage,
 }: PaginationProps) => {
+    onLoadNextPage = onLoadNextPage || (() => {});
+
     const entries = map(items, item => renderRow(item));
 
     const pageButtons = map(getPageRange(pageCount, storedPage), pageNumber => (

@@ -10,7 +10,7 @@ const StyledTriggerButton = styled.button`
     padding: 5px 10px;
     background-color: ${({ theme }) => getColor({ color: "white", theme })};
     border: ${getBorder};
-    border-radius: ${borderRadius["sm"]};
+    border-radius: ${borderRadius.sm};
     font-weight: ${getFontWeight("thick")};
     text-transform: capitalize;
     width: 100%;

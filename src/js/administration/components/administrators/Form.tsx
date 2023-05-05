@@ -33,7 +33,7 @@ interface FormInputValues {
 }
 
 type AdministratorFormProps = {
-    onClose: Function;
+    onClose: () => void;
 };
 
 export function AdministratorForm({ onClose }: AdministratorFormProps): JSX.Element {

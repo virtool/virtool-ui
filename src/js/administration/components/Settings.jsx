@@ -22,7 +22,6 @@ export const Settings = ({ loading }) => {
         ? "settings"
         : "users";
 
-    console.log({ account });
     return (
         <ContainerWide>
             <ViewHeader title="Administration">

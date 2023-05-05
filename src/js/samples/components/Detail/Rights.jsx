@@ -12,7 +12,7 @@ import {
     InputGroup,
     InputLabel,
     InputSelect,
-    LoadingPlaceholder
+    LoadingPlaceholder,
 } from "../../../base";
 import { listGroups } from "../../../groups/actions";
 import { updateSampleRights } from "../../actions";
@@ -82,7 +82,7 @@ export class SampleRights extends React.Component {
                         </InputGroup>
 
                         <InputGroup>
-                            <InputLabel>All Users' Rights</InputLabel>
+                            <InputLabel>{"All Users' Rights"}</InputLabel>
                             <InputSelect
                                 name="allUsers"
                                 label="All Users' Rights"
@@ -114,7 +114,7 @@ export const mapStateToProps = state => {
         group_read,
         group_write,
         all_read,
-        all_write
+        all_write,
     };
 };
 
@@ -130,11 +130,11 @@ export const mapDispatchToProps = dispatch => ({
     onChangeRights: (sampleId, scope, value) => {
         const update = {
             [`${scope}_read`]: includes(value, "r"),
-            [`${scope}_write`]: includes(value, "w")
+            [`${scope}_write`]: includes(value, "w"),
         };
 
         dispatch(updateSampleRights(sampleId, update));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleRights);

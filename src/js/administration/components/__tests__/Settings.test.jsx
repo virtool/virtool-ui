@@ -35,7 +35,7 @@ describe("<Settings />", () => {
         scope = nock("http://localhost").get("/api/account").reply(200, account);
         renderWithRouter(<Settings loading={false} />, state, history, createReducer);
 
-        await waitFor(async () => expect(screen.getByText("Settings")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Settings")).toBeInTheDocument());
         expect(screen.getByText("Instance Message")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Message" })).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("<Settings />", () => {
 
         renderWithRouter(<Settings loading={false} />, state, history, createReducer);
 
-        await waitFor(async () => expect(screen.getByText("Users")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Users")).toBeInTheDocument());
         expect(screen.getByText("Settings")).toBeInTheDocument();
         expect(screen.getByText("Administrators")).toBeInTheDocument();
         expect(screen.getByText("Groups")).toBeInTheDocument();
@@ -65,7 +65,7 @@ describe("<Settings />", () => {
 
         renderWithRouter(<Settings loading={false} />, state, history, createReducer);
 
-        await waitFor(async () => expect(screen.getByText("Users")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Users")).toBeInTheDocument());
         expect(screen.queryByText("Settings")).not.toBeInTheDocument();
         expect(screen.queryByText("Administrators")).not.toBeInTheDocument();
         expect(screen.getByText("Groups")).toBeInTheDocument();

@@ -25,7 +25,7 @@ export function createFakeUser(props?: createFakeUserProps): User {
         handle: handle || faker.internet.userName(),
         active: true,
         force_reset: false,
-        groups: groups,
+        groups,
         last_password_change: faker.date.past(),
         permissions: createFakePermissions(permissions),
         primary_group: primary_group || groups[0],
