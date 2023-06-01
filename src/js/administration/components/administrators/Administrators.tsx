@@ -13,7 +13,6 @@ const renderRow = roles => item => <AdministratorItem key={item.id} user={item} 
 
 export const ManageAdministrators = () => {
     const [term, setTerm] = useState("");
-    const onSearch = e => setTerm(e.target.value);
 
     const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
@@ -37,7 +36,7 @@ export const ManageAdministrators = () => {
     return (
         <>
             <Toolbar>
-                <InputSearch name="search" aria-label="search" value={term} onChange={onSearch} />
+                <InputSearch name="search" aria-label="search" value={term} onChange={e => setTerm(e.target.value)} />
                 <CreateAdministrator />
             </Toolbar>
             <Pagination

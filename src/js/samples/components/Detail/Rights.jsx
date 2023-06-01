@@ -82,7 +82,7 @@ export class SampleRights extends React.Component {
                         </InputGroup>
 
                         <InputGroup>
-                            <InputLabel>{"All Users' Rights"}</InputLabel>
+                            <InputLabel>All Users' Rights</InputLabel>
                             <InputSelect
                                 name="allUsers"
                                 label="All Users' Rights"

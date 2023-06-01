@@ -49,7 +49,7 @@ export const AdministratorItem = ({ user, roles }: AdministratorItemProps) => {
             <InitialIcon handle={user.handle} size="lg" />
             <UserHandle>{user.handle}</UserHandle>
             <InlineRoleSelect value={user.administrator_role} roles={roles} onChange={onChange} />
-            <Icon name="trash" color="red" onClick={() => onChange(null)} aria-label="remove role" />
+            <Icon name="trash" color="red" onClick={() => onChange(null)} aria-label="Remove administrator role" />
         </StyledAdministrator>
     );
 };

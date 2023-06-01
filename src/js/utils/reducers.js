@@ -29,15 +29,16 @@ export const insert = (state, payload, sortKey, sortReverse = false) => {
 };
 
 export const updateMember = (list, payload) => {
-    if (!list) {
-        return list;
+    if (list) {
+        return map(list, item => {
+            if (item.id === payload.id) {
+                return payload;
+            }
+            return item;
+        });
     }
-    return map(list, item => {
-        if (item.id === payload.id) {
-            return payload;
-        }
-        return item;
-    });
+
+    return list;
 };
 
 export const update = (state, payload, sortKey, sortReverse = false) => {
