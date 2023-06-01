@@ -1,3 +1,3 @@
-import { Root } from "@radix-ui/react-select";
+import * as RadixSelect from "@radix-ui/react-select";
 
-export const Select = Root;
+export const Select = RadixSelect.Root;

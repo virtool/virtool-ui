@@ -1,4 +1,4 @@
-import { Content, Portal, ScrollDownButton, ScrollUpButton, Viewport } from "@radix-ui/react-select";
+import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { borderRadius, boxShadow, getColor } from "../../app/theme";
@@ -13,7 +13,7 @@ const ContentOpen = keyframes`
   }
 `;
 
-const StyledContent = styled(Content)`
+const StyledContent = styled(RadixSelect.Content)`
     transform-origin: top center;
     animation: ${ContentOpen} 150ms cubic-bezier(0.16, 1, 0.3, 1);
     background-color: white;
@@ -29,7 +29,7 @@ const StyledContent = styled(Content)`
     }
 `;
 
-const ScrollSection = styled(ScrollUpButton)`
+const ScrollSection = styled(RadixSelect.ScrollUpButton)`
     margin: 5px 0;
     display: flex;
     justify-content: center;
@@ -40,16 +40,16 @@ const ScrollSection = styled(ScrollUpButton)`
 
 export const SelectContent = ({ children, position, align }) => {
     return (
-        <Portal>
+        <RadixSelect.Portal>
             <StyledContent position={position} align={align} side="bottom" avoidCollisions={false}>
                 <ScrollSection>
                     <Icon name="chevron-up" />
                 </ScrollSection>
-                <Viewport>{children}</Viewport>
-                <ScrollSection as={ScrollDownButton}>
+                <RadixSelect.Viewport>{children}</RadixSelect.Viewport>
+                <ScrollSection as={RadixSelect.ScrollDownButton}>
                     <Icon name="chevron-down" />
                 </ScrollSection>
             </StyledContent>
-        </Portal>
+        </RadixSelect.Portal>
     );
 };

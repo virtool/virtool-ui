@@ -1,10 +1,10 @@
-import { Trigger, Value } from "@radix-ui/react-select";
+import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled from "styled-components";
 import { borderRadius, getBorder, getColor, getFontWeight } from "../../app/theme";
 import { Icon } from "../Icon";
 
-const SelectTrigger = styled(Trigger)`
+const SelectTrigger = styled(RadixSelect.Trigger)`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,7 +29,7 @@ type SelectButtonProps = {
 
 export const SelectButton = ({ placeholder, icon, className, id }: SelectButtonProps) => (
     <SelectTrigger className={className} id={id}>
-        <Value placeholder={placeholder} />
+        <RadixSelect.Value placeholder={placeholder} />
         {icon ? <Icon name={icon} /> : null}
     </SelectTrigger>
 );
