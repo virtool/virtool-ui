@@ -18,7 +18,7 @@ const StyledTriggerButton = styled.button`
         margin-left: 5px;
     }
 `;
-export const TriggerButton = ({ TriggerButtonProps, selectedItem, renderRow, id }) => {
+export const ComboboxTriggerButton = ({ TriggerButtonProps, selectedItem, renderRow, id }) => {
     return (
         <StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
             {selectedItem ? renderRow(selectedItem) : "Select user"}

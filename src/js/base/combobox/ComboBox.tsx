@@ -2,9 +2,9 @@ import { useCombobox } from "downshift";
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { borderRadius, boxShadow, getBorder } from "../../app/theme";
-import { WrapRow } from "./Item";
-import { ComboBoxSearch } from "./Search";
-import { TriggerButton } from "./Trigger";
+import { WrapRow } from "./ComboBoxItem";
+import { ComboBoxSearch } from "./ComboBoxSearch";
+import { ComboboxTriggerButton } from "./ComboboxTrigger";
 
 const ComboBoxContentOpen = keyframes`  
   from {
@@ -89,7 +89,7 @@ export const ComboBox = ({
 
     return (
         <ComboBoxContainer>
-            <TriggerButton
+            <ComboboxTriggerButton
                 TriggerButtonProps={getToggleButtonProps()}
                 selectedItem={selectedItem}
                 renderRow={renderRow}
