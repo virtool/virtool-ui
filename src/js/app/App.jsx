@@ -17,7 +17,7 @@ function mapStateToProps(state) {
     return {
         first,
         login,
-        reset
+        reset,
     };
 }
 
@@ -45,7 +45,23 @@ const ConnectedApp = connect(mapStateToProps)(({ first, login, reset }) => {
     return <Main />;
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            onError: error => {
+                if (error.response.status === 401) {
+                    window.location.reload();
+                }
+            },
+            retry: (failureCount, error) => {
+                if (error.response.status === 401) {
+                    return false;
+                }
+                return failureCount <= 3;
+            },
+        },
+    },
+});
 
 export default function App({ store, history }) {
     return (
