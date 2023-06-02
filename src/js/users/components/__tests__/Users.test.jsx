@@ -1,15 +1,16 @@
-import { ManageUsers, mapStateToProps, mapDispatchToProps } from "../Users";
 import { screen } from "@testing-library/react";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
-import { createFakeDocuments } from "../../classes";
+import { createFakeUsers } from "../../../../tests/fake/user";
+import { AdministratorRoles } from "../../../administration/types";
+import { ManageUsers, mapDispatchToProps, mapStateToProps } from "../Users";
 
 const createReducer = (state, history) =>
     combineReducers({
         router: connectRouter(history),
         users: createGenericReducer(state.users),
-        settings: createGenericReducer(state.settings)
+        settings: createGenericReducer(state.settings),
     });
 
 describe("<ManageUsers />", () => {
@@ -17,41 +18,41 @@ describe("<ManageUsers />", () => {
     let state;
 
     beforeEach(() => {
-        const documents = createFakeDocuments(3);
+        const documents = createFakeUsers(3);
         props = {
-            isAdmin: true,
+            canEditUsers: true,
             filter: "test",
             groups: [],
             error: "",
             groupsFetched: true,
             onFilter: vi.fn(),
             onClearError: vi.fn(),
-            onListGroups: vi.fn()
+            onListGroups: vi.fn(),
         };
         state = {
             users: {
                 documents,
                 term: "",
                 page: "",
-                page_count: 0
+                page_count: 0,
             },
             settings: {
                 data: {
-                    minimimum_password_length: 8
-                }
+                    minimimum_password_length: 8,
+                },
             },
             createUser: false,
             isAdmin: true,
             term: "",
             groups: [],
-            groupsFetched: ""
+            groupsFetched: "",
         };
         history = createBrowserHistory();
     });
 
     it("should render correctly with 3 users", () => {
         state.users.documents[0].handle = "Bob";
-        state.users.documents[0].administrator = true;
+        state.users.documents[0].administrator_role = AdministratorRoles.FULL;
         state.users.documents[1].handle = "Peter";
         state.users.documents[2].handle = "Sam";
 
@@ -59,7 +60,7 @@ describe("<ManageUsers />", () => {
 
         expect(screen.getByLabelText("user-plus")).toBeInTheDocument();
         expect(screen.getByLabelText("search")).toBeInTheDocument();
-        expect(screen.getAllByText("Administrator").length).toBeGreaterThan(0);
+        expect(screen.getByText(/Administrator/)).toBeInTheDocument();
         expect(screen.getByText("Bob")).toBeInTheDocument();
         expect(screen.getByText("Peter")).toBeInTheDocument();
         expect(screen.getByText("Sam")).toBeInTheDocument();
@@ -82,8 +83,8 @@ describe("<ManageUsers />", () => {
         props.error = {
             LIST_USERS_ERROR: {
                 message: "Requires administrative privilege",
-                status: 403
-            }
+                status: 403,
+            },
         };
 
         renderWithRouter(<ManageUsers {...props} />, state, history, createReducer);
@@ -101,23 +102,23 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const state = {
             account: {
-                administrator: true
+                administrator_role: AdministratorRoles.USERS,
             },
             users: {
-                filter: "foo"
+                filter: "foo",
             },
             groups: {
                 list: "bar",
-                fetched: true
-            }
+                fetched: true,
+            },
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({
-            isAdmin: true,
+            canEditUsers: true,
             term: "foo",
             groups: "bar",
             groupsFetched: true,
-            error: ""
+            error: "",
         });
     });
 });
@@ -134,13 +135,13 @@ describe("mapDispatchToProps", () => {
     it("should return onFind in props", () => {
         const e = {
             target: {
-                value: "foo"
-            }
+                value: "foo",
+            },
         };
         result.onFind(e);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { page: 1, term: "foo" },
-            type: "FIND_USERS_REQUESTED"
+            type: "FIND_USERS_REQUESTED",
         });
     });
 
@@ -149,7 +150,7 @@ describe("mapDispatchToProps", () => {
         result.onClearError(error);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { error: "foo" },
-            type: "CLEAR_ERROR"
+            type: "CLEAR_ERROR",
         });
     });
 

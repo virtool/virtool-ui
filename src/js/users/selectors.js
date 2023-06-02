@@ -1,5 +1,7 @@
 import { get } from "lodash-es";
-import { getAccountAdministrator, getAccountId } from "../account/selectors";
+import { getAccountAdministratorRole, getAccountId } from "../account/selectors";
+import { AdministratorRoles } from "../administration/types";
+import { hasSufficientAdminRole } from "../administration/utils";
 import { getTermSelectorFactory } from "../utils/selectors";
 
 const getStateTerm = state => state.users.term;
@@ -10,5 +12,9 @@ export const getUserDetailId = state => get(state, "users.detail.id");
 
 export const getCanModifyUser = state => {
     const activeUserId = getAccountId(state);
-    return activeUserId && getAccountAdministrator(state) && activeUserId !== getUserDetailId(state);
+    return (
+        activeUserId &&
+        hasSufficientAdminRole(AdministratorRoles.USERS, getAccountAdministratorRole(state)) &&
+        activeUserId !== getUserDetailId(state)
+    );
 };

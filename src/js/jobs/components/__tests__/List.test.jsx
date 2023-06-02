@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 
 import { createStore } from "redux";
-import * as utils from "../../../utils/utils";
+import * as utils from "../../../administration/utils";
 import { JobsList, mapDispatchToProps, mapStateToProps } from "../List";
 
 const createAppStore = state => () => createStore(state => state, state);
@@ -80,13 +80,13 @@ describe("<JobsList />", () => {
 describe("mapStateToProps", () => {
     it("checkAdminOrPermission should return state.account.permissions[permission]", () => {
         vi.clearAllMocks();
-        vi.spyOn(utils, "checkAdminOrPermission");
+        vi.spyOn(utils, "checkAdminRoleOrPermission");
         const state = {
             jobs: {
                 term: "foo"
             },
             account: {
-                administrator: false,
+                administrator_role: null,
                 permissions: {
                     cancel_job: "fee",
                     remove_job: "bee"
@@ -96,14 +96,14 @@ describe("mapStateToProps", () => {
         };
 
         const result = mapStateToProps(state);
-        expect(utils.checkAdminOrPermission).toHaveBeenNthCalledWith(
+        expect(utils.checkAdminRoleOrPermission).toHaveBeenNthCalledWith(
             1,
             {
                 jobs: {
                     term: "foo"
                 },
                 account: {
-                    administrator: false,
+                    administrator_role: null,
                     permissions: {
                         cancel_job: "fee",
                         remove_job: "bee"
@@ -113,14 +113,14 @@ describe("mapStateToProps", () => {
             },
             "cancel_job"
         );
-        expect(utils.checkAdminOrPermission).toHaveBeenNthCalledWith(
+        expect(utils.checkAdminRoleOrPermission).toHaveBeenNthCalledWith(
             2,
             {
                 jobs: {
                     term: "foo"
                 },
                 account: {
-                    administrator: false,
+                    administrator_role: null,
                     permissions: {
                         cancel_job: "fee",
                         remove_job: "bee"

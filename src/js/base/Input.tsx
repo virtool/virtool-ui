@@ -11,7 +11,7 @@ type InputHandle = {
 };
 
 interface InputProps {
-    "aria-label?": string;
+    "aria-label"?: string;
     autoFocus?: boolean;
     children?: React.ReactNode;
     className?: string;
@@ -48,7 +48,7 @@ const UnstyledInput = React.forwardRef<InputHandle, InputProps>((props: InputPro
         value,
         onBlur,
         onChange,
-        onFocus
+        onFocus,
     } = props;
 
     const ariaLabel = props["aria-label"];
@@ -61,7 +61,7 @@ const UnstyledInput = React.forwardRef<InputHandle, InputProps>((props: InputPro
         },
         focus: () => {
             inputRef.current.focus();
-        }
+        },
     }));
 
     return (

@@ -1,10 +1,11 @@
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { forEach } from "lodash-es";
-import { createStore } from "redux";
-import { SubtractionFileManager } from "../FileManager";
-import { screen, waitFor } from "@testing-library/react";
-import { UPLOAD } from "../../../app/actionTypes";
 import { MemoryRouter } from "react-router-dom";
+import { createStore } from "redux";
+import { AdministratorRoles } from "../../../administration/types";
+import { UPLOAD } from "../../../app/actionTypes";
+import { SubtractionFileManager } from "../FileManager";
 
 const createAppStore = (state, reducer) => {
     return () => createStore(reducer ? reducer : state => state, state);
@@ -33,7 +34,7 @@ describe("<SubtractionFileManager />", () => {
                 }
             ]
         },
-        account: { administrator: true }
+        account: { administrator_role: AdministratorRoles.FULL }
     };
 
     it("should render", () => {

@@ -3,9 +3,10 @@ import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Icon, Loader, RelativeTime, BoxSpaced } from "../../base";
-import { byteSize, checkAdminOrPermission } from "../../utils/utils";
+import { BoxSpaced, Icon, Loader, RelativeTime } from "../../base";
+import { byteSize } from "../../utils/utils";
 
+import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { removeFile } from "../actions";
 import { getFilesById } from "../selectors";
 
@@ -73,7 +74,7 @@ export const mapStateToProps = (state, ownProps) => {
         ready,
         size,
         user,
-        canRemove: checkAdminOrPermission(state, "remove_file"),
+        canRemove: checkAdminRoleOrPermission(state, "remove_file"),
         uploadedAt: uploaded_at
     };
 };

@@ -1,9 +1,10 @@
-import { Alert, Icon, UploadBar } from "../../base";
-import React from "react";
 import { forEach } from "lodash-es";
-import { checkAdminOrPermission, createRandomString } from "../../utils/utils";
-import { upload } from "../actions";
+import React from "react";
 import { connect } from "react-redux";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
+import { Alert, Icon, UploadBar } from "../../base";
+import { createRandomString } from "../../utils/utils";
+import { upload } from "../actions";
 
 export const UploadToolbar = ({ canUpload, onDrop, fileType, message, validationRegex, tip }) => {
     if (!canUpload) {
@@ -34,7 +35,9 @@ export const UploadToolbar = ({ canUpload, onDrop, fileType, message, validation
     );
 };
 
-export const mapStateToProps = state => ({ canUpload: checkAdminOrPermission(state, "upload_file") });
+export const mapStateToProps = state => ({
+    canUpload: checkAdminRoleOrPermission(state, "upload_file")
+});
 
 export const mapDispatchToProps = dispatch => ({
     onDrop: (fileType, acceptedFiles) => {

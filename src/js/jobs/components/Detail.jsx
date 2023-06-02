@@ -3,6 +3,7 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
 import {
     Badge,
     ContainerNarrow,
@@ -13,7 +14,7 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle
 } from "../../base";
-import { checkAdminOrPermission, getWorkflowDisplayName } from "../../utils/utils";
+import { getWorkflowDisplayName } from "../../utils/utils";
 import { archiveJob, cancelJob, getJob } from "../actions";
 import JobError from "./Error";
 import { JobAction } from "./Item/Action";
@@ -88,8 +89,8 @@ class JobDetail extends React.Component {
 const mapStateToProps = state => ({
     error: get(state, "errors.GET_JOB_ERROR", null),
     detail: state.jobs.detail,
-    canCancel: checkAdminOrPermission(state, "cancel_job"),
-    canArchive: checkAdminOrPermission(state, "remove_job")
+    canCancel: checkAdminRoleOrPermission(state, "cancel_job"),
+    canArchive: checkAdminRoleOrPermission(state, "remove_job")
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -3,9 +3,7 @@ import { BLASTInProgress } from "../BLASTInProgress";
 
 describe("<BLASTInProgress />", () => {
     it.each(["ABC123", null])("should render when [rid=%p]", rid => {
-        const wrapper = shallow(
-            <BLASTInProgress interval={5} lastCheckedAt={"2018-02-14T17:12:00.000000Z"} rid={rid} />
-        );
+        const wrapper = shallow(<BLASTInProgress interval={5} lastCheckedAt="2018-02-14T17:12:00.000000Z" rid={rid} />);
         expect(wrapper).toMatchSnapshot();
     });
 });
@@ -20,9 +18,9 @@ describe("<BLASTResults />", () => {
                     evalue: 3,
                     score: 1,
                     identity: 2,
-                    align_len: 4
-                }
-            ]
+                    align_len: 4,
+                },
+            ],
         };
         const wrapper = shallow(<BLASTResults {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -44,14 +42,14 @@ describe("<NuVsBLAST />", () => {
                             evalue: 3,
                             score: 1,
                             identity: 2,
-                            align_len: 4
-                        }
-                    ]
-                }
+                            align_len: 4,
+                        },
+                    ],
+                },
             },
             analysisId: "foo",
             sequenceIndex: 5,
-            onBlast: vi.fn()
+            onBlast: vi.fn(),
         };
     });
 
@@ -71,7 +69,7 @@ describe("<NuVsBLAST />", () => {
             ready: false,
             interval: 5,
             last_checked_at: "2018-02-14T17:12:00.000000Z",
-            rid: "ABC123"
+            rid: "ABC123",
         };
         const wrapper = shallow(<NuVsBLAST {...props} />);
         expect(wrapper).toMatchSnapshot();

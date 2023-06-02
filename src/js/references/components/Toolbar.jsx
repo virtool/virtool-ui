@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Icon, LinkButton, InputSearch, Toolbar } from "../../base";
-import { checkAdminOrPermission } from "../../utils/utils";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
+import { Icon, InputSearch, LinkButton, Toolbar } from "../../base";
 import { findReferences } from "../actions";
 
 export const ReferenceToolbar = ({ term, onFind, canCreate }) => {
@@ -28,7 +28,7 @@ export const ReferenceToolbar = ({ term, onFind, canCreate }) => {
 };
 
 const mapStateToProps = state => ({
-    canCreate: checkAdminOrPermission(state, "create_ref"),
+    canCreate: checkAdminRoleOrPermission(state, "create_ref"),
     term: state.references.term
 });
 

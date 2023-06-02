@@ -1,9 +1,9 @@
+import { checkAdminRoleOrPermission } from "../../../administration/utils";
 import { FIND_SUBTRACTIONS } from "../../../app/actionTypes";
 import { InputSearch } from "../../../base";
 import { mapDispatchToProps, mapStateToProps, SubtractionToolbar } from "../Toolbar";
-import { checkAdminOrPermission } from "../../../utils/utils";
 
-vi.mock("../../../utils/utils.js");
+vi.mock("../../../administration/utils.ts");
 
 describe("<SubtractionToolbar />", () => {
     let props;
@@ -51,7 +51,7 @@ describe("mapStateToProps()", () => {
     });
 
     it.each([true, false])("should return props when [canModify=%p]", canModify => {
-        checkAdminOrPermission.mockReturnValue(canModify);
+        checkAdminRoleOrPermission.mockReturnValue(canModify);
 
         const props = mapStateToProps(state);
         expect(props).toEqual({
@@ -61,7 +61,7 @@ describe("mapStateToProps()", () => {
     });
 
     it("should return props when term in state is null", () => {
-        checkAdminOrPermission.mockReturnValue(true);
+        checkAdminRoleOrPermission.mockReturnValue(true);
         state.subtraction.term = null;
 
         const props = mapStateToProps(state);

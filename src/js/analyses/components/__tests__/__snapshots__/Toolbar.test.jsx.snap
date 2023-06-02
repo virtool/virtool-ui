@@ -2,7 +2,7 @@
 
 exports[`<AnalysesToolbar /> > should render with [canModify=false] 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     value="baz"
   />
@@ -18,7 +18,7 @@ exports[`<AnalysesToolbar /> > should render with [canModify=false] 1`] = `
 
 exports[`<AnalysesToolbar /> > should render with default props 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     value="baz"
   />

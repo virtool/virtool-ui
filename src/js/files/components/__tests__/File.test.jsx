@@ -1,8 +1,8 @@
+import { checkAdminRoleOrPermission } from "../../../administration/utils";
 import { REMOVE_FILE } from "../../../app/actionTypes";
-import { File, mapStateToProps, mapDispatchToProps } from "../File";
-import { checkAdminOrPermission } from "../../../utils/utils";
+import { File, mapDispatchToProps, mapStateToProps } from "../File";
 
-vi.mock("../../../utils/utils.js");
+vi.mock("../../../administration/utils.ts");
 
 describe("<File />", () => {
     let props;
@@ -83,7 +83,7 @@ describe("mapStateToProps()", () => {
     });
 
     it.each([true, false])("should return expected props when [canRemove=%p]", canRemove => {
-        checkAdminOrPermission.mockReturnValue(canRemove);
+        checkAdminRoleOrPermission.mockReturnValue(canRemove);
 
         const props = mapStateToProps(state, ownProps);
 
@@ -96,7 +96,7 @@ describe("mapStateToProps()", () => {
             uploadedAt: "time_1",
             user: { id: "bob" }
         });
-        expect(checkAdminOrPermission).toHaveBeenCalledWith(state, "remove_file");
+        expect(checkAdminRoleOrPermission).toHaveBeenCalledWith(state, "remove_file");
     });
 });
 

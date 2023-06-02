@@ -12,20 +12,8 @@ export const updateDocuments = (state, payload, sortKey, sortReverse) => {
     return {
         ...state,
         ...payload,
-        documents
+        documents,
     };
-};
-
-export const updateModeledDocuments = (state, payload, model, sortKey, sortReverse) => {
-    const existing = payload.page === 1 ? [] : state.documents || [];
-
-    const documents = sortBy(unionBy(payload.documents, existing, "id"), sortKey);
-
-    if (sortReverse) {
-        documents.reverse();
-    }
-
-    return { ...state, ...payload, documents: map(documents, document => new model(document)) };
 };
 
 export const insert = (state, payload, sortKey, sortReverse = false) => {
@@ -36,8 +24,21 @@ export const insert = (state, payload, sortKey, sortReverse = false) => {
 
     return {
         ...state,
-        documents
+        documents,
     };
+};
+
+export const updateMember = (list, payload) => {
+    if (list) {
+        return map(list, item => {
+            if (item.id === payload.id) {
+                return payload;
+            }
+            return item;
+        });
+    }
+
+    return list;
 };
 
 export const update = (state, payload, sortKey, sortReverse = false) => {
@@ -53,7 +54,7 @@ export const update = (state, payload, sortKey, sortReverse = false) => {
 
     return {
         ...state,
-        documents
+        documents,
     };
 };
 
@@ -64,18 +65,6 @@ export const remove = (state, payload) => {
 
     return {
         ...state,
-        documents: reject(state.documents, ({ id }) => includes(payload, id))
+        documents: reject(state.documents, ({ id }) => includes(payload, id)),
     };
-};
-
-export const updateMember = (list, payload) => {
-    if (!list) {
-        return list;
-    }
-    return map(list, item => {
-        if (item.id === payload.id) {
-            return payload;
-        }
-        return item;
-    });
 };

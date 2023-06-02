@@ -2,7 +2,7 @@
 
 exports[`<SubtractionToolbar /> > should not render create button when [canModify=false] 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[MockFunction spy]}
     placeholder="Name"
     value="foo"
@@ -12,7 +12,7 @@ exports[`<SubtractionToolbar /> > should not render create button when [canModif
 
 exports[`<SubtractionToolbar /> > should render create button when [canModify=true] 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[MockFunction spy]}
     placeholder="Name"
     value="foo"

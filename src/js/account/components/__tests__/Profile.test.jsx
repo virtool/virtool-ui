@@ -4,13 +4,14 @@ import userEvent from "@testing-library/user-event";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
-import { createFakeAccount } from "../../types";
+import { createFakeAccount } from "../../../../tests/fake/account";
+import { AdministratorRoles } from "../../../administration/types";
 
 function createReducer(state, history) {
     return combineReducers({
         account: createGenericReducer(state.account),
         settings: createGenericReducer(state.settings),
-        router: connectRouter(history)
+        router: connectRouter(history),
     });
 }
 
@@ -22,8 +23,8 @@ describe("<AccountProfile />", () => {
         history = createBrowserHistory();
 
         state = {
-            account: { ...createFakeAccount(), administrator: true, handle: "amanda36" },
-            settings: { data: { minimum_password_length: 8 } }
+            account: { ...createFakeAccount(), administrator_role: AdministratorRoles.FULL, handle: "amanda36" },
+            settings: { data: { minimum_password_length: 8 } },
         };
     });
 
@@ -31,12 +32,12 @@ describe("<AccountProfile />", () => {
         renderWithRouter(<AccountProfile />, state, history, createReducer);
 
         expect(screen.getByText("amanda36")).toBeInTheDocument();
-        expect(screen.getByText("Administrator")).toBeInTheDocument();
+        expect(screen.getByText("full Administrator")).toBeInTheDocument();
         expect(screen.queryAllByText("AM")).toHaveLength(2);
     });
 
     it("should render when not administrator", () => {
-        state.account.administrator = false;
+        state.account.administrator_role = null;
         renderWithRouter(<AccountProfile />, state, history, createReducer);
 
         expect(screen.getByText("amanda36")).toBeInTheDocument();
@@ -50,6 +51,7 @@ describe("<AccountProfile />", () => {
     });
 
     it("should handle email changes", async () => {
+        state.account.email = "";
         renderWithRouter(<AccountProfile />, state, history, createReducer);
 
         const emailInput = screen.getByLabelText("Email Address");

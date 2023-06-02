@@ -1,9 +1,9 @@
 import { debounce } from "lodash-es";
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { pushState } from "../../app/actions";
-import { Icon, LinkButton, InputSearch, Toolbar } from "../../base";
-import { checkAdminOrPermission } from "../../utils/utils";
+import { Icon, InputSearch, LinkButton, Toolbar } from "../../base";
 import { clearSampleSelection, updateSearch } from "../actions";
 import { getTermFromURL } from "../selectors";
 import { SampleSelectionToolbar } from "./SelectionToolbar";
@@ -44,7 +44,7 @@ const SampleToolbar = props => {
 };
 
 const mapStateToProps = state => ({
-    canCreate: checkAdminOrPermission(state, "create_sample"),
+    canCreate: checkAdminRoleOrPermission(state, "create_sample"),
     initialTerm: getTermFromURL(state),
     selected: state.samples.selected
 });

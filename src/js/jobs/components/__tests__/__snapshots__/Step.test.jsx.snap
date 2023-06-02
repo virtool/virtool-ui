@@ -3,10 +3,10 @@
 exports[`<JobStep /> > should render text and icon when state is special case 1`] = `
 <DocumentFragment>
   <div
-    class="sc-eDWCr sc-jmpzUR gmERkp lhGyiP"
+    class="sc-eDWCr sc-fmPOXC gmERkp jnlqUu"
   >
     <div
-      class="sc-lknQiW eKJquE"
+      class="sc-gkSfol iHRBbU"
     >
       <i
         class="sc-hLBbgP iFSptS  fas fa-hourglass-end"
@@ -15,7 +15,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 1`
       />
     </div>
     <div
-      class="sc-fmZqYP kdxPrn"
+      class="sc-gzrROc fVkVgH"
     >
       <h4>
         Timed Out
@@ -24,7 +24,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 1`
         The job timed out.
       </p>
       <div
-        class="sc-eDZJfc gPtMge"
+        class="sc-fIhvWL zTTmc"
       >
         <i
           class="sc-hLBbgP icWVMU  fas fa-clock"
@@ -47,10 +47,10 @@ exports[`<JobStep /> > should render text and icon when state is special case 1`
 exports[`<JobStep /> > should render text and icon when state is special case 2`] = `
 <DocumentFragment>
   <div
-    class="sc-eDWCr sc-jmpzUR gmERkp lhGyiP"
+    class="sc-eDWCr sc-fmPOXC gmERkp jnlqUu"
   >
     <div
-      class="sc-lknQiW eKJquE"
+      class="sc-gkSfol iHRBbU"
     >
       <i
         class="sc-hLBbgP iFSptS  fas fa-skull"
@@ -59,7 +59,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 2`
       />
     </div>
     <div
-      class="sc-fmZqYP kdxPrn"
+      class="sc-gzrROc fVkVgH"
     >
       <h4>
         Terminated
@@ -68,7 +68,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 2`
         There was a system malfunction
       </p>
       <div
-        class="sc-eDZJfc gPtMge"
+        class="sc-fIhvWL zTTmc"
       >
         <i
           class="sc-hLBbgP icWVMU  fas fa-clock"
@@ -91,10 +91,10 @@ exports[`<JobStep /> > should render text and icon when state is special case 2`
 exports[`<JobStep /> > should render text and icon when state is special case 3`] = `
 <DocumentFragment>
   <div
-    class="sc-eDWCr sc-jmpzUR gmERkp lhGyiP"
+    class="sc-eDWCr sc-fmPOXC gmERkp jnlqUu"
   >
     <div
-      class="sc-lknQiW eKJquE"
+      class="sc-gkSfol iHRBbU"
     >
       <i
         class="sc-hLBbgP eAOQkA  fas fa-check"
@@ -103,14 +103,14 @@ exports[`<JobStep /> > should render text and icon when state is special case 3`
       />
     </div>
     <div
-      class="sc-fmZqYP kdxPrn"
+      class="sc-gzrROc fVkVgH"
     >
       <h4>
         Complete
       </h4>
       <p />
       <div
-        class="sc-eDZJfc gPtMge"
+        class="sc-fIhvWL zTTmc"
       >
         <i
           class="sc-hLBbgP icWVMU  fas fa-clock"
@@ -133,10 +133,10 @@ exports[`<JobStep /> > should render text and icon when state is special case 3`
 exports[`<JobStep /> > should render text and icon when state is special case 4`] = `
 <DocumentFragment>
   <div
-    class="sc-eDWCr sc-jmpzUR gmERkp lhGyiP"
+    class="sc-eDWCr sc-fmPOXC gmERkp jnlqUu"
   >
     <div
-      class="sc-lknQiW eKJquE"
+      class="sc-gkSfol iHRBbU"
     >
       <i
         class="sc-hLBbgP iFSptS  fas fa-exclamation-triangle"
@@ -145,14 +145,14 @@ exports[`<JobStep /> > should render text and icon when state is special case 4`
       />
     </div>
     <div
-      class="sc-fmZqYP kdxPrn"
+      class="sc-gzrROc fVkVgH"
     >
       <h4>
         Error
       </h4>
       <p />
       <div
-        class="sc-eDZJfc gPtMge"
+        class="sc-fIhvWL zTTmc"
       >
         <i
           class="sc-hLBbgP icWVMU  fas fa-clock"
@@ -175,10 +175,10 @@ exports[`<JobStep /> > should render text and icon when state is special case 4`
 exports[`<JobStep /> > should render text and icon when state is special case 5`] = `
 <DocumentFragment>
   <div
-    class="sc-eDWCr sc-jmpzUR gmERkp lhGyiP"
+    class="sc-eDWCr sc-fmPOXC gmERkp jnlqUu"
   >
     <div
-      class="sc-lknQiW eKJquE"
+      class="sc-gkSfol iHRBbU"
     >
       <i
         class="sc-hLBbgP lbuzuw  fas fa-boxes"
@@ -187,7 +187,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 5`
       />
     </div>
     <div
-      class="sc-fmZqYP kdxPrn"
+      class="sc-gzrROc fVkVgH"
     >
       <h4>
         Preparing
@@ -196,7 +196,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 5`
         Preparing the workflow environment.
       </p>
       <div
-        class="sc-eDZJfc gPtMge"
+        class="sc-fIhvWL zTTmc"
       >
         <i
           class="sc-hLBbgP icWVMU  fas fa-clock"
@@ -219,10 +219,10 @@ exports[`<JobStep /> > should render text and icon when state is special case 5`
 exports[`<JobStep /> > should render text and icon when state is special case 6`] = `
 <DocumentFragment>
   <div
-    class="sc-eDWCr sc-jmpzUR gmERkp lhGyiP"
+    class="sc-eDWCr sc-fmPOXC gmERkp jnlqUu"
   >
     <div
-      class="sc-lknQiW eKJquE"
+      class="sc-gkSfol iHRBbU"
     >
       <i
         class="sc-hLBbgP jjOKAv  fas fa-clock"
@@ -231,7 +231,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 6`
       />
     </div>
     <div
-      class="sc-fmZqYP kdxPrn"
+      class="sc-gzrROc fVkVgH"
     >
       <h4>
         Waiting
@@ -240,7 +240,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 6`
         Waiting for resources to become available.
       </p>
       <div
-        class="sc-eDZJfc gPtMge"
+        class="sc-fIhvWL zTTmc"
       >
         <i
           class="sc-hLBbgP icWVMU  fas fa-clock"
@@ -263,10 +263,10 @@ exports[`<JobStep /> > should render text and icon when state is special case 6`
 exports[`<JobStep /> > should render text and icon when state is special case 7`] = `
 <DocumentFragment>
   <div
-    class="sc-eDWCr sc-jmpzUR gmERkp lhGyiP"
+    class="sc-eDWCr sc-fmPOXC gmERkp jnlqUu"
   >
     <div
-      class="sc-lknQiW eKJquE"
+      class="sc-gkSfol iHRBbU"
     >
       <i
         class="sc-hLBbgP iFSptS  fas fa-hourglass-end"
@@ -275,7 +275,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 7`
       />
     </div>
     <div
-      class="sc-fmZqYP kdxPrn"
+      class="sc-gzrROc fVkVgH"
     >
       <h4>
         Timed Out
@@ -284,7 +284,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 7`
         The job timed out.
       </p>
       <div
-        class="sc-eDZJfc gPtMge"
+        class="sc-fIhvWL zTTmc"
       >
         <i
           class="sc-hLBbgP icWVMU  fas fa-clock"

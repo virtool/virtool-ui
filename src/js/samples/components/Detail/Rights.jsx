@@ -1,18 +1,18 @@
 import { capitalize, includes, map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { getAccountAdministrator, getAccountId } from "../../../account/selectors";
+import { getAccountId } from "../../../account/selectors";
 
 import {
     Box,
     BoxGroup,
     BoxGroupHeader,
     BoxGroupSection,
+    ContainerNarrow,
     InputGroup,
     InputLabel,
+    InputSelect,
     LoadingPlaceholder,
-    ContainerNarrow,
-    InputSelect
 } from "../../../base";
 import { listGroups } from "../../../groups/actions";
 import { updateSampleRights } from "../../actions";
@@ -107,7 +107,6 @@ export const mapStateToProps = state => {
     return {
         canModifyRights: getCanModifyRights(state),
         accountId: getAccountId(state),
-        isAdmin: getAccountAdministrator(state),
         groups: state.groups.documents,
         ownerId: user.id,
         sampleId: id,
@@ -115,7 +114,7 @@ export const mapStateToProps = state => {
         group_read,
         group_write,
         all_read,
-        all_write
+        all_write,
     };
 };
 
@@ -131,11 +130,11 @@ export const mapDispatchToProps = dispatch => ({
     onChangeRights: (sampleId, scope, value) => {
         const update = {
             [`${scope}_read`]: includes(value, "r"),
-            [`${scope}_write`]: includes(value, "w")
+            [`${scope}_write`]: includes(value, "w"),
         };
 
         dispatch(updateSampleRights(sampleId, update));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleRights);

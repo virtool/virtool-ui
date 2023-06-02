@@ -1,19 +1,19 @@
-import { faker } from "@faker-js/faker";
+import { User } from "../users/types";
 
-class Account {
-    id: string;
-    administrator: boolean;
-    groups: string[];
-    handle: string;
-    last_password_change: Date;
+export enum QuickAnalyzeWorkflow {
+    aodp = "aodp",
+    nuvs = "nuvs",
+    pathoscope_bowtie = "pathoscope_bowtie",
 }
 
-export function createFakeAccount(): Account {
-    return {
-        id: "3691nwak3",
-        administrator: faker.datatype.boolean(),
-        groups: [],
-        handle: faker.internet.userName(),
-        last_password_change: faker.date.past()
-    };
-}
+export type AccountSettings = {
+    quick_analyze_workflow: QuickAnalyzeWorkflow;
+    show_ids: boolean;
+    show_versions: boolean;
+    skip_quick_analyze_dialog: boolean;
+};
+
+export type Account = User & {
+    settings: AccountSettings;
+    email?: string;
+};

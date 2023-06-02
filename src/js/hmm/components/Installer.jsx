@@ -2,8 +2,8 @@ import { get, replace } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { Box, ExternalLink, Icon, ProgressBarAffixed } from "../../base";
-import { checkAdminOrPermission } from "../../utils/utils";
 import { installHMMs } from "../actions";
 import { getTask } from "../selectors";
 import InstallOption from "./InstallOption";
@@ -73,7 +73,7 @@ export const HMMInstaller = ({ installed, task }) => {
 export const mapStateToProps = state => ({
     releaseId: get(state.hmms.status, "release.id"),
     installed: Boolean(state.hmms.status.installed),
-    canInstall: checkAdminOrPermission(state, "modify_hmm"),
+    canInstall: checkAdminRoleOrPermission(state, "modify_hmm"),
     task: getTask(state)
 });
 

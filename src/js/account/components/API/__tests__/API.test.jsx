@@ -1,13 +1,14 @@
-import { APIKeys } from "../API";
+import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { combineReducers } from "redux";
-import { connectRouter } from "connected-react-router";
 import { attachResizeObserver } from "../../../../../tests/setupTests";
+import { AdministratorRoles } from "../../../../administration/types";
+import { APIKeys } from "../API";
 
 const createReducer = (state, history) =>
     combineReducers({
         account: createGenericReducer(state.account),
-        router: connectRouter(history)
+        router: connectRouter(history),
     });
 
 describe("<API />", () => {
@@ -23,26 +24,26 @@ describe("<API />", () => {
                     id: "1234",
                     name: "testName1",
                     created_at: "2022-12-22T21:37:49.429000Z",
-                    permissions: { Permission1: true, Permission2: true, Permission3: false }
-                }
+                    permissions: { cancel_job: true, create_ref: true, upload_file: false },
+                },
             ],
-            onGet: vi.fn()
+            onGet: vi.fn(),
         };
         state = {
             account: {
                 permissions: {
-                    permission1: true,
-                    permission2: true,
-                    permission3: false
+                    cancel_job: true,
+                    create_ref: true,
+                    upload_file: false,
                 },
                 newKey: null,
-                administrator: false
-            }
+                administrator_role: null,
+            },
         };
 
         history = createBrowserHistory();
         history.location.state = {
-            createAPIKey: false
+            createAPIKey: false,
         };
     });
 
@@ -80,7 +81,7 @@ describe("<API />", () => {
     describe("<CreateAPIKey", () => {
         beforeEach(() => {
             history.location.state = {
-                createAPIKey: true
+                createAPIKey: true,
             };
         });
         it("should render correctly when newKey = empty", async () => {
@@ -92,8 +93,8 @@ describe("<API />", () => {
 
             expect(screen.getByText("Name")).toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();
-            expect(screen.getByText("permission1")).toBeInTheDocument();
-            expect(screen.getByText("permission2")).toBeInTheDocument();
+            expect(screen.getByText("cancel_job")).toBeInTheDocument();
+            expect(screen.getByText("create_ref")).toBeInTheDocument();
 
             expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
         });
@@ -128,19 +129,23 @@ describe("<API />", () => {
 
         describe("APIKeyAdiminstratorInfo", () => {
             it("should render correctly when newKey is empty and state.administrator = true", () => {
-                state.account.administrator = true;
+                state.account.administrator_role = AdministratorRoles.FULL;
 
                 renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
                 expect(screen.getByText(/You are an administrator/)).toBeInTheDocument();
-                expect(screen.getByText(/If you lose your administrator role, this API/)).toBeInTheDocument();
+                expect(
+                    screen.getByText(/If your administrator role is reduced or removed, this API/),
+                ).toBeInTheDocument();
             });
 
             it("should render correctly when newKey is empty and state.administrator = false", () => {
                 renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
-                expect(screen.queryByText(/If you lose your administrator role, this API/)).not.toBeInTheDocument();
+                expect(
+                    screen.queryByText(/If your administrator role is reduced or removed, this API/),
+                ).not.toBeInTheDocument();
             });
         });
     });
@@ -163,8 +168,8 @@ describe("<API />", () => {
             expect(screen.getByText(/Created/)).toBeInTheDocument();
             expect(screen.getByText("2 permissions")).toBeInTheDocument();
 
-            expect(screen.getByText("Permission1")).toBeInTheDocument();
-            expect(screen.getByText("Permission3")).toBeInTheDocument();
+            expect(screen.getByText("cancel_job")).toBeInTheDocument();
+            expect(screen.getByText("upload_file")).toBeInTheDocument();
 
             expect(screen.getByText("Remove")).toBeInTheDocument();
             expect(screen.getByText("Update")).toBeInTheDocument();
@@ -175,56 +180,80 @@ describe("<API />", () => {
 
             await userEvent.click(screen.getByText("testName1"));
 
-            expect(screen.getByText("Permission1")).toBeInTheDocument();
+            expect(screen.getByText("cancel_job")).toBeInTheDocument();
             expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
 
             await userEvent.click(screen.getByRole("button", { name: "close" }));
 
-            expect(screen.queryByText("Permission1")).not.toBeInTheDocument();
+            expect(screen.queryByText("cancel_job")).not.toBeInTheDocument();
             expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
         });
     });
 
     describe("APIPermissions", () => {
-        it("should render permissions correctly and check and uncheck permissions when clicked, administrator = true", async () => {
-            state.account.administrator = true;
+        it("should render permissions correctly and check and uncheck permissions when clicked, administrator_role == full", async () => {
+            state.account.administrator_role = AdministratorRoles.FULL;
 
             renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
             await userEvent.click(screen.getByText("testName1"));
 
-            expect(screen.getByText("Permission1")).toBeInTheDocument();
-            expect(screen.getByText("Permission2")).toBeInTheDocument();
+            expect(screen.getByText("cancel_job")).toBeInTheDocument();
+            expect(screen.getByText("create_ref")).toBeInTheDocument();
 
-            const permission1 = screen.getAllByRole("checkbox", { name: "checkbox" })[0];
-            const permission3 = screen.getAllByRole("checkbox", { name: "checkbox" })[2];
+            const cancel_job = screen.getAllByRole("checkbox", { name: "checkbox" })[0];
+            const upload_file = screen.getAllByRole("checkbox", { name: "checkbox" })[2];
 
-            expect(permission1).toBeChecked();
-            expect(permission3).not.toBeChecked();
+            expect(cancel_job).toBeChecked();
+            expect(upload_file).not.toBeChecked();
 
-            await userEvent.click(permission1);
-            await userEvent.click(permission3);
+            await userEvent.click(cancel_job);
+            await userEvent.click(upload_file);
 
-            expect(permission1).not.toBeChecked();
-            expect(permission3).toBeChecked();
+            expect(cancel_job).not.toBeChecked();
+            expect(upload_file).toBeChecked();
         });
 
-        it("should not check and uncheck permissions when administrator = false", async () => {
+        it("should not check and uncheck permissions when administrator_role = base", async () => {
+            state.account.administrator_role = AdministratorRoles.BASE;
+
             renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
             await userEvent.click(screen.getByText("testName1"));
 
-            const permission1 = screen.getAllByRole("checkbox", { name: "checkbox" })[0];
-            const permission3 = screen.getAllByRole("checkbox", { name: "checkbox" })[2];
+            const cancel_job = screen.getAllByRole("checkbox", { name: "checkbox" })[0];
+            const create_ref = screen.getAllByRole("checkbox", { name: "checkbox" })[1];
+            const upload_file = screen.getAllByRole("checkbox", { name: "checkbox" })[2];
 
-            expect(permission1).toBeChecked();
-            expect(permission3).not.toBeChecked();
+            expect(cancel_job).toBeChecked();
+            expect(create_ref).toBeChecked();
+            expect(upload_file).not.toBeChecked();
 
-            await userEvent.click(permission1);
-            await userEvent.click(permission3);
+            await userEvent.click(cancel_job);
+            await userEvent.click(create_ref);
+            await userEvent.click(upload_file);
 
-            expect(permission1).toBeChecked();
-            expect(permission3).not.toBeChecked();
+            expect(cancel_job).not.toBeChecked();
+            expect(create_ref).not.toBeChecked();
+            expect(upload_file).not.toBeChecked();
+        });
+
+        it("should not check and uncheck permissions when administrator_role = null", async () => {
+            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+
+            await userEvent.click(screen.getByText("testName1"));
+
+            const cancel_job = screen.getAllByRole("checkbox", { name: "checkbox" })[0];
+            const upload_file = screen.getAllByRole("checkbox", { name: "checkbox" })[2];
+
+            expect(cancel_job).toBeChecked();
+            expect(upload_file).not.toBeChecked();
+
+            await userEvent.click(cancel_job);
+            await userEvent.click(upload_file);
+
+            expect(cancel_job).not.toBeChecked();
+            expect(upload_file).not.toBeChecked();
         });
     });
 });

@@ -1,10 +1,10 @@
+import { Field, Form, Formik } from "formik";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getInstanceMessage, setInstanceMessage } from "../../message/actions";
-import { Box, BoxTitle, Input, InputGroup, InputLabel, LoadingPlaceholder, SaveButton } from "../../base";
-import { Field, Form, Formik } from "formik";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
+import { Box, BoxTitle, Input, InputGroup, InputLabel, LoadingPlaceholder, SaveButton } from "../../base";
+import { getInstanceMessage, setInstanceMessage } from "../../message/actions";
 
 const InstanceMessageTitle = styled(BoxTitle)`
     font-size: ${getFontSize("lg")};
@@ -38,8 +38,8 @@ function InstanceMessage({ loaded, message, onLoad, onSet }) {
                 {() => (
                     <Form>
                         <InputGroup>
-                            <InputLabel>Message</InputLabel>
-                            <Field type="text" name="message" as={Input} />
+                            <InputLabel htmlFor="instanceMessage">Message</InputLabel>
+                            <Field id="instanceMessage" type="text" name="message" as={Input} />
                         </InputGroup>
                         <SaveButton />
                     </Form>

@@ -1,3 +1,4 @@
+import { AdministratorRoles } from "../../administration/types";
 import {
     CREATE_USER,
     EDIT_USER,
@@ -7,13 +8,12 @@ import {
     WS_REMOVE_USER,
     WS_UPDATE_USER
 } from "../../app/actionTypes";
-import { User } from "../models";
 import reducer, { initialState } from "../reducer";
 
 const defaultUser = {
     id: "bill",
     handle: "test_handle",
-    administrator: false,
+    administrator_role: null,
     groups: ["test"],
     primary_group: null,
     force_reset: false,
@@ -53,22 +53,25 @@ describe("Users Reducer", () => {
             payload: defaultUser
         };
         const result = reducer(state, action);
-        const expectedResult = { documents: [new User(action.payload)] };
+        const expectedResult = { documents: [action.payload] };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
     it("should handle WS_UPDATE_USER", () => {
         const state = {
-            documents: [new User({ ...defaultUser, id: "user_1" }), new User({ ...defaultUser, id: "user_2" })]
+            documents: [
+                { ...defaultUser, id: "user_1" },
+                { ...defaultUser, id: "user_2" }
+            ]
         };
         const action = {
             type: WS_UPDATE_USER,
-            payload: { ...defaultUser, id: "user_1", administrator: true }
+            payload: { ...defaultUser, id: "user_1", administrator_role: AdministratorRoles.FULL }
         };
         const result = reducer(state, action);
         const expectedResult = {
             documents: [
-                new User({ ...defaultUser, id: "user_1", administrator: true }),
-                new User({ ...defaultUser, id: "user_2" })
+                { ...defaultUser, id: "user_1", administrator_role: AdministratorRoles.FULL },
+                { ...defaultUser, id: "user_2" }
             ]
         };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
@@ -104,11 +107,11 @@ describe("Users Reducer", () => {
         const action = {
             type: FIND_USERS.SUCCEEDED,
             payload: {
-                documents: [defaultUser]
+                items: [defaultUser]
             }
         };
         const result = reducer({}, action);
-        const expectedResult = { documents: [new User(action.payload.documents[0])] };
+        const expectedResult = { documents: [action.payload.items[0]] };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
 

@@ -8,8 +8,7 @@ import {
     WS_REMOVE_USER,
     WS_UPDATE_USER
 } from "../app/actionTypes";
-import { insert, remove, update, updateModeledDocuments } from "../utils/reducers";
-import { User } from "./models";
+import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
 export const initialState = {
     documents: null,
@@ -23,10 +22,10 @@ export const initialState = {
 const reducer = createReducer(initialState, builder => {
     builder
         .addCase(WS_INSERT_USER, (state, action) => {
-            return insert(state, new User(action.payload), "handle");
+            return insert(state, action.payload, "handle");
         })
         .addCase(WS_UPDATE_USER, (state, action) => {
-            return update(state, new User(action.payload), "handle");
+            return update(state, action.payload, "handle");
         })
         .addCase(WS_REMOVE_USER, (state, action) => {
             return remove(state, action.payload);
@@ -35,7 +34,8 @@ const reducer = createReducer(initialState, builder => {
             state.term = action.payload.term;
         })
         .addCase(FIND_USERS.SUCCEEDED, (state, action) => {
-            return updateModeledDocuments(state, action.payload, User, "handle");
+            const { items, ...rest } = action.payload;
+            return updateDocuments(state, { ...rest, documents: items }, "handle");
         })
         .addCase(GET_USER.REQUESTED, state => {
             state.detail = null;

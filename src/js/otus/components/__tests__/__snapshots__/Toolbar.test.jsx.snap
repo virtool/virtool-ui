@@ -2,7 +2,7 @@
 
 exports[`<OTUToolbar /> > should render 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     placeholder="Name or abbreviation"
     value="foo"
@@ -35,7 +35,7 @@ exports[`<OTUToolbar /> > should render 1`] = `
 
 exports[`<OTUToolbar /> > should render when [verified=true] 1`] = `
 <Toolbar>
-  <InputSearch
+  <ForwardRef
     onChange={[Function]}
     placeholder="Name or abbreviation"
     value="foo"
