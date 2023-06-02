@@ -28,7 +28,6 @@ const LabelItemIcons = styled.div`
     top: 0;
     right: 0;
     bottom: 0;
-    z-index: 20;
 
     *:not(:first-child) {
         margin-left: 5px;

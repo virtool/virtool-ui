@@ -13,7 +13,7 @@ import {
     InputSimple,
     ProgressBarAffixed,
     SaveButton,
-    UploadBar
+    UploadBar,
 } from "../../base";
 
 const ImportReferenceUpload = styled.div`
@@ -38,10 +38,10 @@ interface ImportReferenceValues {
  * @param importFrom - the ID of the file to import from
  */
 function importReference({ name, description, importFrom }: ImportReferenceValues) {
-    return Request.post("/api/refs").send({
+    return Request.post("/refs").send({
         name,
         description,
-        import_from: importFrom
+        import_from: importFrom,
     });
 }
 
@@ -58,7 +58,7 @@ export function ImportReference() {
         const formData = new FormData();
         formData.append("file", file);
 
-        return Request.post("/api/uploads")
+        return Request.post("/uploads")
             .query({ name: file.name, type: "reference" })
             .send(formData)
             .on("progress", event => {
@@ -74,13 +74,13 @@ export function ImportReference() {
         control,
         formState: { errors },
         handleSubmit,
-        register
+        register,
     } = useForm({
         defaultValues: {
             name: "",
             description: "",
-            upload: ""
-        }
+            upload: "",
+        },
     });
 
     function handleDrop(acceptedFiles: File[]) {

@@ -19,7 +19,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
     const queryClient = useQueryClient();
 
     const mutation = useMutation(data => {
-        return Request.patch(`/api/labels/${id}`)
+        return Request.patch(`/labels/${id}`)
             .send(data)
             .then(response => {
                 return response.body;
@@ -31,7 +31,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
             onSuccess: () => {
                 setShow(false);
                 queryClient.invalidateQueries("labels");
-            }
+            },
         });
     };
 

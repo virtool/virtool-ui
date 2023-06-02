@@ -7,4 +7,4 @@ import { Request } from "../app/request";
  * @param cacheId {string} the id of the cache to get
  * @returns {promise}
  */
-export const get = ({ cacheId }) => Request.get(`/api/caches/${cacheId}`);
+export const get = ({ cacheId }) => Request.get(`/caches/${cacheId}`);

@@ -15,7 +15,7 @@ import {
     InputError,
     InputSimple,
     LoadingPlaceholder,
-    SectionHeader
+    SectionHeader,
 } from "../../../base";
 import { useGetReference, useUpdateReference, useUpdateSourceTypes } from "../../hooks";
 import { SourceTypeList } from "./SourceTypeList";
@@ -73,9 +73,9 @@ export function LocalSourceTypes() {
 
     const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
         "source_types",
-        `/api/refs/${refId}`,
+        `/refs/${refId}`,
         ["reference", refId],
-        sourceTypes
+        sourceTypes,
     );
 
     if (isLoading) {
