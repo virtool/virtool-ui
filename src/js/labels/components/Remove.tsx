@@ -28,14 +28,14 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
 
     const mutation = useMutation(
         () => {
-            return Request.delete(`/api/labels/${id}`);
+            return Request.delete(`/labels/${id}`);
         },
         {
             onSuccess: () => {
                 setOpen(false);
                 queryClient.invalidateQueries("labels");
-            }
-        }
+            },
+        },
     );
 
     return (

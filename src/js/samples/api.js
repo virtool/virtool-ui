@@ -1,8 +1,8 @@
 import { Request } from "../app/request";
 
 export const find = ({ term, labels, workflows, page = 1 }) => {
-    const request = Request.get("/api/samples").query({
-        page
+    const request = Request.get("/samples").query({
+        page,
     });
 
     if (term) {
@@ -22,13 +22,13 @@ export const find = ({ term, labels, workflows, page = 1 }) => {
     return request;
 };
 
-export const filter = ({ term }) => Request.get(`/api/samples?find=${term}`);
+export const filter = ({ term }) => Request.get(`/samples?find=${term}`);
 
-export const get = ({ sampleId }) => Request.get(`/api/samples/${sampleId}`);
+export const get = ({ sampleId }) => Request.get(`/samples/${sampleId}`);
 
 export const create = action => {
     const { name, isolate, host, locale, libraryType, subtractions, files, labels, group } = action;
-    return Request.post("/api/samples").send({
+    return Request.post("/samples").send({
         name,
         isolate,
         host,
@@ -37,12 +37,12 @@ export const create = action => {
         files,
         library_type: libraryType,
         labels,
-        group
+        group,
     });
 };
 
-export const update = ({ sampleId, update }) => Request.patch(`/api/samples/${sampleId}`).send(update);
+export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
 
-export const updateRights = ({ sampleId, update }) => Request.patch(`/api/samples/${sampleId}/rights`).send(update);
+export const updateRights = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}/rights`).send(update);
 
-export const remove = ({ sampleId }) => Request.delete(`/api/samples/${sampleId}`);
+export const remove = ({ sampleId }) => Request.delete(`/samples/${sampleId}`);

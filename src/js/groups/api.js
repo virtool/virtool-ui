@@ -1,22 +1,22 @@
 import { Request } from "../app/request";
 
-export const list = () => Request.get("/api/groups");
+export const list = () => Request.get("/groups");
 
-export const create = ({ name }) => Request.post("/api/groups").send({ name });
+export const create = ({ name }) => Request.post("/groups").send({ name });
 
 export function setName({ groupId, name }) {
-    return Request.patch(`/api/groups/${groupId}`).send({
-        name
+    return Request.patch(`/groups/${groupId}`).send({
+        name,
     });
 }
 
 export const setPermission = ({ groupId, permission, value }) =>
-    Request.patch(`/api/groups/${groupId}`).send({
+    Request.patch(`/groups/${groupId}`).send({
         permissions: {
-            [permission]: value
-        }
+            [permission]: value,
+        },
     });
 
-export const remove = ({ groupId }) => Request.delete(`/api/groups/${groupId}`);
+export const remove = ({ groupId }) => Request.delete(`/groups/${groupId}`);
 
-export const get = ({ groupId }) => Request.get(`/api/groups/${groupId}`);
+export const get = ({ groupId }) => Request.get(`/groups/${groupId}`);

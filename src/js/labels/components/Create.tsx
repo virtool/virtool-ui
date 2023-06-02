@@ -21,7 +21,7 @@ export function CreateLabel() {
 
     const mutation = useMutation(
         (newLabel: NewLabel) => {
-            return Request.post("/api/labels").send(newLabel);
+            return Request.post("/labels").send(newLabel);
         },
         {
             onSuccess: () => {
@@ -30,8 +30,8 @@ export function CreateLabel() {
             },
             onError: (error: ResponseError) => {
                 setError(error.response.body.message);
-            }
-        }
+            },
+        },
     );
 
     const handleSubmit = ({ color, name, description }: NewLabel) => {

@@ -8,7 +8,7 @@ import { Request } from "../app/request";
 import { Reference } from "./types";
 
 function getReference(refId: string): Reference {
-    return Request.get(`/api/refs/${refId}`).then(response => {
+    return Request.get(`/refs/${refId}`).then(response => {
         return new Reference(response.body);
     });
 }
@@ -22,13 +22,13 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
 
     const mutation = useMutation(
         (data: { restrict_source_types: boolean }) => {
-            return Request.patch(`/api/refs/${refId}`).send(data);
+            return Request.patch(`/refs/${refId}`).send(data);
         },
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(["reference", refId]).then(() => onSuccess && onSuccess());
-            }
-        }
+            },
+        },
     );
 
     return { mutation };
@@ -40,7 +40,7 @@ export function getValidationSchema(sourceTypes: string[]) {
             .lowercase()
             .notOneOf(sourceTypes, "Source type already exists")
             .test("containsNoSpaces", "Source types may not contain spaces", value => !value.includes(" "))
-            .trim()
+            .trim(),
     });
 }
 
@@ -49,10 +49,10 @@ export function useSourceTypesForm(sourceTypes: string[]) {
         formState: { errors },
         handleSubmit,
         register,
-        reset
+        reset,
     } = useForm({
         defaultValues: { sourceType: "" },
-        resolver: yupResolver(getValidationSchema(sourceTypes))
+        resolver: yupResolver(getValidationSchema(sourceTypes)),
     });
 
     return { errors, handleSubmit, register, reset };
@@ -62,7 +62,7 @@ export function useUpdateSourceTypes(
     key: "default_source_types" | "source_types",
     path: string,
     queryKey: string | string[],
-    sourceTypes: string[]
+    sourceTypes: string[],
 ) {
     const queryClient = useQueryClient();
 
@@ -83,8 +83,8 @@ export function useUpdateSourceTypes(
                 }
 
                 queryClient.invalidateQueries(queryKey);
-            }
-        }
+            },
+        },
     );
 
     const { errors, handleSubmit, register, reset } = useSourceTypesForm(sourceTypes);
@@ -95,7 +95,7 @@ export function useUpdateSourceTypes(
                 onSuccess: () => {
                     reset();
                     setLastRemoved("");
-                }
+                },
             });
         }
     }
@@ -106,8 +106,8 @@ export function useUpdateSourceTypes(
             {
                 onSuccess: () => {
                     setLastRemoved(sourceType);
-                }
-            }
+                },
+            },
         );
     }
 
@@ -116,7 +116,7 @@ export function useUpdateSourceTypes(
             mutation.mutate(union(sourceTypes, [lastRemoved]), {
                 onSuccess: () => {
                     setLastRemoved("");
-                }
+                },
             });
         }
     }
@@ -128,6 +128,6 @@ export function useUpdateSourceTypes(
         handleRemove,
         handleSubmit: handleSubmit(handleAdd),
         handleUndo,
-        register
+        register,
     };
 }
