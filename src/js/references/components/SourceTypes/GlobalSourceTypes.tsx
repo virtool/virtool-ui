@@ -12,7 +12,7 @@ import {
     InputLabel,
     InputLevel,
     InputSimple,
-    SectionHeader
+    SectionHeader,
 } from "../../../base";
 import { useUpdateSourceTypes } from "../../hooks";
 import { SourceTypeList } from "./SourceTypeList";
@@ -61,9 +61,9 @@ interface GlobalSourceTypesProps {
 export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
     const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
         "default_source_types",
-        "/api/settings",
+        "/settings",
         "settings",
-        sourceTypes
+        sourceTypes,
     );
 
     return (

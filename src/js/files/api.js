@@ -14,11 +14,11 @@ import { Request } from "../app/request";
  * @returns {promise}
  */
 export const list = ({ fileType, paginate, page }) =>
-    Request.get("/api/uploads").query({
+    Request.get("/uploads").query({
         upload_type: fileType,
         ready: true,
         paginate,
-        page
+        page,
     });
 
 /**
@@ -28,7 +28,7 @@ export const list = ({ fileType, paginate, page }) =>
  * @param fileId {string} the fileId to handleRemove
  * @returns {promise}
  */
-export const remove = ({ fileId }) => Request.delete(`/api/uploads/${fileId}`);
+export const remove = ({ fileId }) => Request.delete(`/uploads/${fileId}`);
 
 /**
  * Upload a ``file`` with the given ``fileType``. Pass progress events to ``onProgress``.
@@ -42,7 +42,7 @@ export const remove = ({ fileId }) => Request.delete(`/api/uploads/${fileId}`);
  * @returns {promise}
  */
 export function upload({ file, fileType, onProgress, onSuccess, onFailure }) {
-    return Request.post("/api/uploads")
+    return Request.post("/uploads")
         .query({ name: file.name, type: fileType })
         .attach("file", file)
         .on("progress", onProgress)

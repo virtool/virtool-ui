@@ -1,7 +1,7 @@
 import Superagent from "superagent";
 
-const createRequest = method => url => {
-    return Superagent[method](url).set("Accept", "application/json");
+const createRequest = method => slug => {
+    return Superagent[method](`/api${slug}`).set("Accept", "application/json");
 };
 
 export const Request = {
@@ -9,5 +9,5 @@ export const Request = {
     post: createRequest("post"),
     patch: createRequest("patch"),
     put: createRequest("put"),
-    delete: createRequest("delete")
+    delete: createRequest("delete"),
 };
