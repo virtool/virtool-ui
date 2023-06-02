@@ -2,14 +2,14 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Request } from "../app/request";
 import { AdministratorRoles } from "./types";
 
-const getAdministratorRoles = () => Request.get("/api/admin/roles").then(response => response.body);
+const getAdministratorRoles = () => Request.get("/admin/roles").then(response => response.body);
 
 export const useGetAdministratorRoles = () => {
     return useQuery("roles", getAdministratorRoles);
 };
 
 const getUsers = (page: number, per_page: number, term: string, administrator: boolean) =>
-    Request.get("/api/admin/users")
+    Request.get("/admin/users")
         .query({ page, per_page, term, administrator })
         .then(response => {
             return response.body;
@@ -22,7 +22,7 @@ export const useGetUsers = (page: number, per_page: number, term: string, admini
 };
 
 const setAdministratorRole = (role: string, user_id: string) => {
-    return Request.put(`/api/admin/users/${user_id}/role`).send({ role });
+    return Request.put(`/admin/users/${user_id}/role`).send({ role });
 };
 
 export const useSetAdministratorRole = () => {
