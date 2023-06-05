@@ -5,20 +5,19 @@ import {
     Button,
     Dropdown,
     DropdownButton,
-    DropdownMenuItem,
+    DropdownMenuDownload,
     DropdownMenuList,
     Icon,
     InputSearch,
-    Toolbar
+    Toolbar,
 } from "../../../base";
-import { followDownload } from "../../../utils/utils";
 import {
     setAnalysisSortKey,
     setSearchIds,
     toggleAnalysisSortDescending,
     toggleFilterIsolates,
     toggleFilterOTUs,
-    toggleShowPathoscopeReads
+    toggleShowPathoscopeReads,
 } from "../../actions";
 import { getFuse } from "../../selectors";
 import { AnalysisViewerSort } from "../Viewer/Sort";
@@ -42,13 +41,13 @@ export const PathoscopeToolbar = ({
     onToggleFilterIsolates,
     onToggleFilterOTUs,
     onToggleShowPathoscopeReads,
-    onToggleSortDescending
+    onToggleSortDescending,
 }) => {
     const handleChange = useCallback(
         e => {
             onSearch(e.target.value, fuse);
         },
-        [id]
+        [id],
     );
 
     return (
@@ -89,12 +88,12 @@ export const PathoscopeToolbar = ({
                     </span>
                 </DropdownButton>
                 <DropdownMenuList>
-                    <DropdownMenuItem onSelect={() => followDownload(`api/analyses/documents/${analysisId}.csv`)}>
+                    <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.csv`}>
                         <Icon name="file-csv" /> CSV
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => followDownload(`api/analyses/documents/${analysisId}.xlsx`)}>
+                    </DropdownMenuDownload>
+                    <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.xlsx`}>
                         <Icon name="file-excel" /> Excel
-                    </DropdownMenuItem>
+                    </DropdownMenuDownload>
                 </DropdownMenuList>
             </Dropdown>
         </StyledPathoscopeToolbar>
@@ -111,7 +110,7 @@ export const mapStateToProps = state => {
         fuse: getFuse(state),
         showPathoscopeReads,
         sortDescending,
-        sortKey
+        sortKey,
     };
 };
 
@@ -138,7 +137,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onToggleSortDescending: () => {
         dispatch(toggleAnalysisSortDescending());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PathoscopeToolbar);

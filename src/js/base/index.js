@@ -38,6 +38,7 @@ export { DividerHorizontal } from "./DividerHorizontal";
 export { DividerVertical } from "./DividerVertical";
 export { Dropdown } from "./Dropdown";
 export { DropdownButton } from "./DropdownButton";
+export { DropdownMenuDownload } from "./DropdownMenuDownload";
 export { DropdownMenuItem } from "./DropdownMenuItem";
 export { DropdownMenuLink } from "./DropdownMenuLink";
 export { DropdownMenuList } from "./DropdownMenuList";
