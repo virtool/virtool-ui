@@ -54,7 +54,7 @@ export function Login({ error, onLogin }: LoginProps) {
                             </WallSubheader>
                             <InputGroup>
                                 <InputLabel htmlFor="username">Username</InputLabel>
-                                <InputSimple id="username" {...register("username", { required: true })} />
+                                <InputSimple id="username" {...register("username", { required: true })} autoFocus />
                             </InputGroup>
                             <InputGroup>
                                 <InputLabel htmlFor="password">Password</InputLabel>
