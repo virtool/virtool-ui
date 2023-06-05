@@ -77,21 +77,6 @@ export function createFuse(collection, keys, id) {
 export const createRandomString = (length = 8) => sampleSize(alphanumeric, length).join("");
 
 /**
- * Download the file at the given {@link path}.
- *
- * @func
- * @param path {string}
- */
-export const followDownload = path => {
-    const a = document.createElement("A");
-    a.href = path;
-    a.download = path.substr(path.lastIndexOf("/") + 1);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-};
-
-/**
  * Download a file with the given ``filename`` with the given ``text`` content. This allows downloads of
  * dynamically generated files.
  *

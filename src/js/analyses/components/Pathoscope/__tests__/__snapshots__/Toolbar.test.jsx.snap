@@ -57,22 +57,22 @@ exports[`<Toolbar /> > should render 1`] = `
       </span>
     </DropdownButton>
     <DropdownMenuList>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.csv"
       >
         <Icon
           name="file-csv"
         />
          CSV
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      </DropdownMenuDownload>
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.xlsx"
       >
         <Icon
           name="file-excel"
         />
          Excel
-      </DropdownMenuItem>
+      </DropdownMenuDownload>
     </DropdownMenuList>
   </Dropdown>
 </Styled(Toolbar)>
@@ -135,22 +135,22 @@ exports[`<Toolbar /> > should render when [filterIsolates=false] 1`] = `
       </span>
     </DropdownButton>
     <DropdownMenuList>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.csv"
       >
         <Icon
           name="file-csv"
         />
          CSV
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      </DropdownMenuDownload>
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.xlsx"
       >
         <Icon
           name="file-excel"
         />
          Excel
-      </DropdownMenuItem>
+      </DropdownMenuDownload>
     </DropdownMenuList>
   </Dropdown>
 </Styled(Toolbar)>
@@ -213,22 +213,22 @@ exports[`<Toolbar /> > should render when [filterOTUs=false] 1`] = `
       </span>
     </DropdownButton>
     <DropdownMenuList>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.csv"
       >
         <Icon
           name="file-csv"
         />
          CSV
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      </DropdownMenuDownload>
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.xlsx"
       >
         <Icon
           name="file-excel"
         />
          Excel
-      </DropdownMenuItem>
+      </DropdownMenuDownload>
     </DropdownMenuList>
   </Dropdown>
 </Styled(Toolbar)>
@@ -291,22 +291,22 @@ exports[`<Toolbar /> > should render when [showPathoscopeReads=true] 1`] = `
       </span>
     </DropdownButton>
     <DropdownMenuList>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.csv"
       >
         <Icon
           name="file-csv"
         />
          CSV
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      </DropdownMenuDownload>
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.xlsx"
       >
         <Icon
           name="file-excel"
         />
          Excel
-      </DropdownMenuItem>
+      </DropdownMenuDownload>
     </DropdownMenuList>
   </Dropdown>
 </Styled(Toolbar)>
@@ -369,22 +369,22 @@ exports[`<Toolbar /> > should render when [sortDescending=false] 1`] = `
       </span>
     </DropdownButton>
     <DropdownMenuList>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.csv"
       >
         <Icon
           name="file-csv"
         />
          CSV
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      </DropdownMenuDownload>
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.xlsx"
       >
         <Icon
           name="file-excel"
         />
          Excel
-      </DropdownMenuItem>
+      </DropdownMenuDownload>
     </DropdownMenuList>
   </Dropdown>
 </Styled(Toolbar)>
@@ -447,22 +447,22 @@ exports[`<Toolbar /> > should render when [sortKey=%p] depth 1`] = `
       </span>
     </DropdownButton>
     <DropdownMenuList>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.csv"
       >
         <Icon
           name="file-csv"
         />
          CSV
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      </DropdownMenuDownload>
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.xlsx"
       >
         <Icon
           name="file-excel"
         />
          Excel
-      </DropdownMenuItem>
+      </DropdownMenuDownload>
     </DropdownMenuList>
   </Dropdown>
 </Styled(Toolbar)>
@@ -525,22 +525,22 @@ exports[`<Toolbar /> > should render when [sortKey=%p] weight 1`] = `
       </span>
     </DropdownButton>
     <DropdownMenuList>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.csv"
       >
         <Icon
           name="file-csv"
         />
          CSV
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        onSelect={[Function]}
+      </DropdownMenuDownload>
+      <DropdownMenuDownload
+        href="/api/analyses/documents/foo.xlsx"
       >
         <Icon
           name="file-excel"
         />
          Excel
-      </DropdownMenuItem>
+      </DropdownMenuDownload>
     </DropdownMenuList>
   </Dropdown>
 </Styled(Toolbar)>
