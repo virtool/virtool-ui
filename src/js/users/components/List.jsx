@@ -46,18 +46,20 @@ export class UsersList extends React.Component {
 export const mapStateToProps = state => {
     const { documents, page, page_count } = state.users;
 
+    console.log(documents);
+
     return {
         documents,
         term: getTerm(state),
         page,
-        page_count
+        page_count,
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (term, page) => {
         dispatch(findUsers(term, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersList);

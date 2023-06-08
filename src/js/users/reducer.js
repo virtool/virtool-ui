@@ -6,7 +6,7 @@ import {
     GET_USER,
     WS_INSERT_USER,
     WS_REMOVE_USER,
-    WS_UPDATE_USER
+    WS_UPDATE_USER,
 } from "../app/actionTypes";
 import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
@@ -16,7 +16,7 @@ export const initialState = {
     page: 1,
     detail: null,
     createPending: false,
-    passwordPending: false
+    passwordPending: false,
 };
 
 const reducer = createReducer(initialState, builder => {
@@ -34,8 +34,8 @@ const reducer = createReducer(initialState, builder => {
             state.term = action.payload.term;
         })
         .addCase(FIND_USERS.SUCCEEDED, (state, action) => {
-            const { items, ...rest } = action.payload;
-            return updateDocuments(state, { ...rest, documents: items }, "handle");
+            const { documents, ...rest } = action.payload;
+            return updateDocuments(state, { ...rest, documents }, "handle");
         })
         .addCase(GET_USER.REQUESTED, state => {
             state.detail = null;

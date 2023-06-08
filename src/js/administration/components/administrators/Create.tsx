@@ -6,6 +6,7 @@ import { AdministratorForm } from "./Form";
 
 export const CreateAdministrator = () => {
     const [open, setOpen] = useState(false);
+
     return (
         <Dialog open={open} onOpenChange={open => setOpen(open)}>
             <StyledButton as={DialogTrigger} color="blue" aria-label="create">
