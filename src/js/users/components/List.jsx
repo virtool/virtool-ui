@@ -46,8 +46,6 @@ export class UsersList extends React.Component {
 export const mapStateToProps = state => {
     const { documents, page, page_count } = state.users;
 
-    console.log(documents);
-
     return {
         documents,
         term: getTerm(state),
