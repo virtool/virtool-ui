@@ -50,14 +50,14 @@ export const mapStateToProps = state => {
         documents,
         term: getTerm(state),
         page,
-        page_count
+        page_count,
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (term, page) => {
         dispatch(findUsers(term, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersList);

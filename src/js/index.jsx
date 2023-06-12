@@ -16,7 +16,7 @@ if (window.virtool.sentryDsn !== "SENTRY_DSN") {
     Sentry.init({
         dsn: window.virtool.sentryDsn,
         integrations: [new Sentry.BrowserTracing()],
-        tracesSampleRate: 0.5
+        tracesSampleRate: 0.5,
     });
 } else {
     window.captureException = error => console.error(error);
@@ -27,7 +27,7 @@ const history = createBrowserHistory();
 window.b2c = { use: false };
 window.store = createAppStore(history);
 
-Request.get("/api").then(({ body }) => {
+Request.get("/").then(({ body }) => {
     window.store.dispatch(setInitialState(body));
 });
 
