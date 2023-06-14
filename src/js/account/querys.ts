@@ -4,9 +4,7 @@ import { Request } from "../app/request";
 const getAccount = () =>
     Request.get("/account")
         .query()
-        .then(response => {
-            return response.body;
-        });
+        .then(response => response.body);
 
 export const useGetAccount = () => {
     return useQuery("account", () => getAccount());

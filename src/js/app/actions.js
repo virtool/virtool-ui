@@ -1,10 +1,14 @@
-import { PUSH_STATE, SET_INITIAL_STATE } from "./actionTypes";
 import { createAction } from "@reduxjs/toolkit";
+import { GET_INITIAL_STATE, PUSH_STATE } from "./actionTypes";
 
 export const pushState = createAction(PUSH_STATE, state => ({
-    payload: { state }
+    payload: { state },
 }));
 
-export const setInitialState = createAction(SET_INITIAL_STATE, ({ dev, first_user }) => ({
-    payload: { dev, first: first_user }
-}));
+/**
+ * Returns action that can trigger an API calls to get the initial state of the application
+ *
+ * @func
+ * @returns {object}
+ */
+export const getInitialState = createAction(GET_INITIAL_STATE.REQUESTED);

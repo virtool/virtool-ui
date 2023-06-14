@@ -1,33 +1,63 @@
 import { getLocation, push } from "connected-react-router";
+import { get } from "lodash-es";
 import { all, put, select, takeLatest } from "redux-saga/effects";
+import { get as getAccountAPI } from "../account/api";
 import { watchAccount } from "../account/sagas";
 import { watchSettings } from "../administration/sagas";
 import { watchAnalyses } from "../analyses/sagas";
 import { watchCaches } from "../caches/sagas";
 import { watchDev } from "../dev/sagas";
 import { watchFiles } from "../files/sagas";
+import { watchForm } from "../forms/sagas";
 import { watchGroups } from "../groups/sagas";
 import { watchHmms } from "../hmm/sagas";
 import { watchIndexes } from "../indexes/sagas";
 import { watchJobs } from "../jobs/sagas";
+import { watchLabels } from "../labels/sagas";
+import { watchInstanceMessage } from "../message/sagas";
 import { watchOTUs } from "../otus/sagas";
 import { watchReferences } from "../references/sagas";
 import { watchSamples } from "../samples/sagas";
-import { watchLabels } from "../labels/sagas";
 import { watchSubtraction } from "../subtraction/sagas";
 import { watchTasks } from "../tasks/sagas";
 import { watchUsers } from "../users/sagas";
-import { watchForm } from "../forms/sagas";
-import { PUSH_STATE } from "./actionTypes";
-import { watchInstanceMessage } from "../message/sagas";
+import { callWithAuthentication } from "../utils/sagas";
+import { GET_INITIAL_STATE, PUSH_STATE } from "./actionTypes";
+import { root as rootAPI } from "./api";
 
 function* pushState(action) {
     const routerLocation = yield select(getLocation);
     yield put(push({ ...routerLocation, state: action.payload.state }));
 }
 
+function* getInitialState() {
+    let login = false;
+
+    try {
+        yield callWithAuthentication(getAccountAPI, {});
+    } catch (error) {
+        const statusCode = get(error, "response.statusCode");
+        if (statusCode === 401) {
+            login = true;
+        }
+    }
+
+    const rootResponse = yield callWithAuthentication(rootAPI, {});
+
+    if (rootResponse.ok) {
+        yield put({
+            type: GET_INITIAL_STATE.SUCCEEDED,
+            payload: {
+                ...rootResponse.body,
+                login,
+            },
+        });
+    }
+}
+
 export function* watchRouter() {
     yield takeLatest(PUSH_STATE, pushState);
+    yield takeLatest(GET_INITIAL_STATE.REQUESTED, getInitialState);
 }
 
 /**
@@ -56,7 +86,7 @@ function* rootSaga() {
         watchGroups(),
         watchUsers(),
         watchReferences(),
-        watchForm()
+        watchForm(),
     ]);
 }
 

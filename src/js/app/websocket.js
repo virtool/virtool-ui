@@ -11,7 +11,7 @@ import { wsUpdateStatus } from "../status/actions";
 import { wsInsertSubtraction, wsRemoveSubtraction, wsUpdateSubtraction } from "../subtraction/actions";
 import { wsInsertTask, wsUpdateTask } from "../tasks/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../users/actions";
-import { LOGOUT } from "./actionTypes";
+import { resetClient } from "../utils/utils";
 
 const actionCreatorWrapper = actionCreator => {
     return (state, message) => actionCreator(message.data);
@@ -35,7 +35,7 @@ const inserters = {
     subtraction: actionCreatorWrapper(wsInsertSubtraction),
     tasks: actionCreatorWrapper(wsInsertTask),
     uploads: actionCreatorWrapper(wsInsertFile),
-    users: actionCreatorWrapper(wsInsertUser)
+    users: actionCreatorWrapper(wsInsertUser),
 };
 
 const updaters = {
@@ -56,7 +56,7 @@ const updaters = {
     subtraction: actionCreatorWrapper(wsUpdateSubtraction),
     tasks: actionCreatorWrapper(wsUpdateTask),
     uploads: actionCreatorWrapper(wsUpdateFile),
-    users: actionCreatorWrapper(wsUpdateUser)
+    users: actionCreatorWrapper(wsUpdateUser),
 };
 
 const removers = {
@@ -68,13 +68,13 @@ const removers = {
     samples: actionCreatorWrapper(wsRemoveSample),
     subtraction: actionCreatorWrapper(wsRemoveSubtraction),
     uploads: actionCreatorWrapper(wsRemoveFile),
-    users: actionCreatorWrapper(wsRemoveUser)
+    users: actionCreatorWrapper(wsRemoveUser),
 };
 
 const modifiers = {
     insert: inserters,
     update: updaters,
-    delete: removers
+    delete: removers,
 };
 
 export const INITIALIZING = "initializing";
@@ -133,9 +133,7 @@ export default function WSConnection({ getState, dispatch }) {
             }
 
             if (e.code === 4000) {
-                this.dispatch({ type: LOGOUT.SUCCEEDED });
-                this.connectionStatus = ABANDONED;
-                return;
+                resetClient();
             }
 
             setTimeout(() => {
