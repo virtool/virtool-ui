@@ -1,10 +1,13 @@
 import { ConnectedRouter } from "connected-react-router";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { connect, Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
+import { LoadingPlaceholder } from "../base";
+import { resetClient } from "../utils/utils";
 import { WallContainer } from "../wall/Container";
 import Reset from "../wall/Reset";
+import { getInitialState } from "./actions";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
@@ -13,15 +16,32 @@ const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
 const LazyLogin = React.lazy(() => import("../wall/Login"));
 
 function mapStateToProps(state) {
-    const { first, login, reset } = state.app;
+    const { first, login, reset, ready } = state.app;
     return {
         first,
         login,
         reset,
+        ready,
     };
 }
 
-const ConnectedApp = connect(mapStateToProps)(({ first, login, reset }) => {
+function mapDispatchToProps(dispatch) {
+    return {
+        getInitialState: () => {
+            dispatch(getInitialState());
+        },
+    };
+}
+
+const ConnectedApp = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(({ first, login, reset, ready, getInitialState }) => {
+    useEffect(getInitialState, []);
+    if (!ready) {
+        return <LoadingPlaceholder />;
+    }
+
     if (first) {
         return (
             <Suspense fallback={<WallContainer />}>
@@ -50,7 +70,7 @@ const queryClient = new QueryClient({
         queries: {
             onError: error => {
                 if (error.response.status === 401) {
-                    window.location.reload();
+                    resetClient();
                 }
             },
             retry: (failureCount, error) => {

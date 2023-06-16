@@ -11,9 +11,10 @@ import {
     RESET_PASSWORD,
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
-    UPDATE_API_KEY
+    UPDATE_API_KEY,
 } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
+import { resetClient } from "../utils/utils";
 import * as accountAPI from "./api";
 
 export function* watchAccount() {
@@ -76,7 +77,11 @@ export function* login(action) {
 }
 
 export function* logout() {
-    yield apiCall(accountAPI.logout, {}, LOGOUT);
+    const response = yield apiCall(accountAPI.logout, {}, LOGOUT);
+
+    if (response.ok) {
+        resetClient();
+    }
 }
 
 export function* resetPassword(action) {

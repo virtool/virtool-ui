@@ -9,9 +9,8 @@ import {
     CREATE_API_KEY,
     GET_ACCOUNT,
     GET_API_KEYS,
-    LOGOUT,
     UPDATE_ACCOUNT,
-    UPDATE_ACCOUNT_SETTINGS
+    UPDATE_ACCOUNT_SETTINGS,
 } from "../app/actionTypes";
 
 /**
@@ -23,7 +22,7 @@ import {
 export const initialState = {
     apiKeys: null,
     newKey: null,
-    ready: false
+    ready: false,
 };
 
 /**
@@ -55,9 +54,6 @@ export const accountReducer = createReducer(initialState, builder => {
         })
         .addCase(UPDATE_ACCOUNT_SETTINGS.SUCCEEDED, (state, action) => {
             state.settings = action.payload;
-        })
-        .addCase(LOGOUT.SUCCEEDED, () => {
-            return { ...initialState };
         });
 });
 
