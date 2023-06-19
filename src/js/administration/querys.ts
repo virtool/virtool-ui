@@ -2,10 +2,22 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Request } from "../app/request";
 import { AdministratorRoles } from "./types";
 
+export const roleKeys = {
+    all: ["roles"] as const,
+};
+
 const getAdministratorRoles = () => Request.get("/admin/roles").then(response => response.body);
 
 export const useGetAdministratorRoles = () => {
     return useQuery("roles", getAdministratorRoles);
+};
+
+export const userKeys = {
+    all: ["users"] as const,
+    lists: () => [...userKeys.all, "list"] as const,
+    list: (filters: Array<string | number | boolean>) => [...userKeys.lists(), ...filters] as const,
+    details: () => [...userKeys.all, "details"] as const,
+    detail: (user_id: string) => [...userKeys.details(), user_id] as const,
 };
 
 const getUsers = (page: number, per_page: number, term: string, administrator: boolean) =>
@@ -16,7 +28,7 @@ const getUsers = (page: number, per_page: number, term: string, administrator: b
         });
 
 export const useGetUsers = (page: number, per_page: number, term: string, administrator: boolean) => {
-    return useQuery(["users", page, term, administrator], () => getUsers(page, per_page, term, administrator), {
+    return useQuery(userKeys.list([page, term, administrator]), () => getUsers(page, per_page, term, administrator), {
         keepPreviousData: true,
     });
 };
@@ -31,8 +43,7 @@ export const useSetAdministratorRole = () => {
         ({ role, user_id }: { role: AdministratorRoles; user_id: string }) => setAdministratorRole(role, user_id),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("users");
-                queryClient.invalidateQueries("detailed_user");
+                queryClient.invalidateQueries(userKeys.all);
             },
         },
     );

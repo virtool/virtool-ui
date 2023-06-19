@@ -1,6 +1,7 @@
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useQueryClient } from "react-query";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
@@ -9,12 +10,12 @@ import { getSettings } from "../administration/actions";
 import { Container, LoadingPlaceholder } from "../base";
 import DevDialog from "../dev/components/Dialog";
 import UploadOverlay from "../files/components/UploadOverlay";
+import MessageBanner from "../message/components/MessageBanner";
 import NavBar from "../nav/components/NavBar";
+import { NavContainer } from "../nav/components/NavContainer";
 import Sidebar from "../nav/components/Sidebar";
 import { listTasks } from "../tasks/actions";
 import WSConnection, { ABANDONED, INITIALIZING } from "./websocket";
-import { NavContainer } from "../nav/components/NavContainer";
-import MessageBanner from "../message/components/MessageBanner";
 
 const Administration = lazy(() => import("../administration/components/Settings"));
 const Account = lazy(() => import("../account/components/Account"));
@@ -24,9 +25,9 @@ const References = lazy(() => import("../references/components/References"));
 const Samples = lazy(() => import("../samples/components/Samples"));
 const Subtraction = lazy(() => import("../subtraction/components/Subtraction"));
 
-const setupWebSocket = () => {
+const setupWebSocket = queryClient => {
     if (!window.ws) {
-        window.ws = new WSConnection(window.store);
+        window.ws = new WSConnection(window.store, queryClient);
     }
     if (includes([ABANDONED, INITIALIZING], window.ws.connectionStatus)) {
         window.ws.establishConnection();
@@ -43,11 +44,12 @@ const MainContainer = styled.div`
 `;
 
 export const Main = ({ ready, onLoad }) => {
+    const queryClient = useQueryClient();
     useEffect(() => {
         if (!ready) onLoad();
     }, [ready]);
     useEffect(() => {
-        if (ready) setupWebSocket();
+        if (ready) setupWebSocket(queryClient);
     }, [ready]);
     if (ready) {
         return (
@@ -90,7 +92,7 @@ export const Main = ({ ready, onLoad }) => {
 
 export const mapStateToProps = state => {
     return {
-        ready: state.account.ready && Boolean(state.settings.data)
+        ready: state.account.ready && Boolean(state.settings.data),
     };
 };
 
@@ -99,7 +101,7 @@ export const mapDispatchToProps = dispatch => ({
         dispatch(getAccount());
         dispatch(getSettings());
         dispatch(listTasks());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

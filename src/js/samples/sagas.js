@@ -4,16 +4,14 @@ import { put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects
 import { pushState } from "../app/actions";
 import {
     CREATE_SAMPLE,
-    FIND_READ_FILES,
     FIND_SAMPLES,
     GET_SAMPLE,
     REMOVE_SAMPLE,
     UPDATE_SAMPLE,
     UPDATE_SAMPLE_RIGHTS,
     UPDATE_SEARCH,
-    WS_UPDATE_SAMPLE
+    WS_UPDATE_SAMPLE,
 } from "../app/actionTypes";
-import * as filesAPI from "../files/api";
 import { deletePersistentFormState } from "../forms/actions";
 import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
 import { getSampleSucceeded } from "./actions";
@@ -24,7 +22,6 @@ import { createFindURL } from "./utils";
 export function* watchSamples() {
     yield takeLatest(UPDATE_SEARCH, updateSearch);
     yield takeLatest(FIND_SAMPLES.REQUESTED, findSamples);
-    yield takeLatest(FIND_READ_FILES.REQUESTED, findReadFiles);
     yield takeLatest(GET_SAMPLE.REQUESTED, getSample);
     yield throttle(500, CREATE_SAMPLE.REQUESTED, createSample);
     yield takeEvery(UPDATE_SAMPLE.REQUESTED, updateSample);
@@ -55,7 +52,7 @@ export function* updateSearch(action) {
 
     const workflows = {
         ...workflowsFromURL,
-        ...action.payload.parameters.workflows
+        ...action.payload.parameters.workflows,
     };
 
     const { pathname, search } = createFindURL(term, labels, workflows);
@@ -73,20 +70,9 @@ export function* findSamples(action) {
         yield apiCall(
             samplesAPI.find,
             { term, labels, workflows: params.get("workflows"), page: action.payload.page },
-            FIND_SAMPLES
+            FIND_SAMPLES,
         );
     }
-}
-
-export function* findReadFiles() {
-    yield apiCall(
-        filesAPI.list,
-        {
-            fileType: "reads",
-            paginate: false
-        },
-        FIND_READ_FILES
-    );
 }
 
 export function* getSample(action) {

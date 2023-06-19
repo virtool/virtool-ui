@@ -16,14 +16,16 @@ import {
     LoadingPlaceholder,
     SaveButton,
     ViewHeader,
-    ViewHeaderTitle
+    ViewHeaderTitle,
 } from "../../../base";
 import { clearError } from "../../../errors/actions";
+import { useListFiles } from "../../../files/querys";
+import { FileType, UnpaginatedFileResponse } from "../../../files/types";
 import PersistForm from "../../../forms/components/PersistForm";
 import { listLabels } from "../../../labels/actions";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getSubtractionShortlist } from "../../../subtraction/selectors";
-import { createSample, findReadFiles } from "../../actions";
+import { createSample } from "../../actions";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import { Sidebar } from "./Sidebar";
@@ -46,7 +48,7 @@ const getFileNameFromId = (id, files) => {
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),
-    readFiles: Yup.array().min(1, "At least one read file must be attached to the sample")
+    readFiles: Yup.array().min(1, "At least one read file must be attached to the sample"),
 });
 
 const CreateSampleButtonArea = styled(Box)`
@@ -102,55 +104,55 @@ const AlertContainer = styled.div`
     grid-row: 1;
 `;
 
-const castValues = (readyReads, subtractions, allLabels) => values => {
-    const readFiles = intersectionWith(
-        values.readFiles,
-        readyReads,
-        (readFile, readyRead) => readFile === readyRead.id
-    );
+const castValues = (reads, subtractions, allLabels) => values => {
+    const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
     const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
     const subtractionIds = intersectionWith(
         values.sidebar.subtractionIds,
         subtractions,
-        (subtractionId, subtraction) => subtractionId === subtraction.id
+        (subtractionId, subtraction) => subtractionId === subtraction.id,
     );
     return { ...values, readFiles, sidebar: { labels, subtractionIds } };
 };
+
+const getInitialValues = forceGroupChoice => ({
+    name: "",
+    isolate: "",
+    host: "",
+    locale: "",
+    libraryType: "normal",
+    readFiles: [],
+    group: forceGroupChoice ? "none" : null,
+    sidebar: { labels: [], subtractionIds: [] },
+});
 
 export const CreateSample = ({
     error,
     forceGroupChoice,
     groups,
-    readyReads,
     subtractions,
     allLabels,
     onLoadSubtractionsAndFiles,
     onCreate,
     onClearError,
-    onListLabels
+    onListLabels,
 }) => {
     useEffect(() => {
         onLoadSubtractionsAndFiles();
         onListLabels();
     }, []);
 
-    const initialValues = {
-        name: "",
-        isolate: "",
-        host: "",
-        locale: "",
-        libraryType: "normal",
-        readFiles: [],
-        group: forceGroupChoice ? "none" : null,
-        sidebar: { labels: [], subtractionIds: [] }
-    };
+    const { data: readsResponse, isLoading: isReadsLoading }: { data: UnpaginatedFileResponse; isLoading: boolean } =
+        useListFiles(FileType.reads, false);
 
-    if (subtractions === null || readyReads === null || allLabels === null) {
+    if (subtractions === null || allLabels === null || isReadsLoading) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
+    const reads = filter(readsResponse.documents, { reserved: false });
+
     const autofill = (selected, setFieldValue) => {
-        const fileName = getFileNameFromId(selected[0], readyReads);
+        const fileName = getFileNameFromId(selected[0], reads);
         if (fileName) {
             setFieldValue("name", fileName);
         }
@@ -170,7 +172,7 @@ export const CreateSample = ({
                 subtractionIds,
                 readFiles,
                 labels,
-                group === "none" ? "" : group
+                group === "none" ? "" : group,
             );
         } else {
             onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
@@ -182,13 +184,17 @@ export const CreateSample = ({
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
                 <CreateSampleInputError>{error}</CreateSampleInputError>
             </ViewHeader>
-            <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
+            <Formik
+                onSubmit={handleSubmit}
+                initialValues={getInitialValues(forceGroupChoice)}
+                validationSchema={validationSchema}
+            >
                 {({ errors, setFieldValue, touched, values }) => (
                     <CreateSampleForm>
                         <AlertContainer>
                             <PersistForm
                                 formName="create-sample"
-                                castValues={castValues(readyReads, subtractions, allLabels)}
+                                castValues={castValues(reads, subtractions, allLabels)}
                             />
                         </AlertContainer>
                         <CreateSampleName>
@@ -247,7 +253,7 @@ export const CreateSample = ({
                             <Field
                                 name="readFiles"
                                 as={ReadSelector}
-                                files={readyReads}
+                                files={reads}
                                 selected={values.readFiles}
                                 onSelect={selection => setFieldValue("readFiles", selection)}
                                 error={touched.readFiles ? errors.readFiles : null}
@@ -277,15 +283,13 @@ export const mapStateToProps = state => ({
     error: get(state, "errors.CREATE_SAMPLE_ERROR.message", ""),
     forceGroupChoice: state.settings.data.sample_group === "force_choice",
     groups: state.account.groups,
-    readyReads: filter(state.samples.readFiles, { reserved: false }),
     subtractions: getSubtractionShortlist(state),
-    allLabels: state.labels.documents
+    allLabels: state.labels.documents,
 });
 
 export const mapDispatchToProps = dispatch => ({
     onLoadSubtractionsAndFiles: () => {
         dispatch(shortlistSubtractions());
-        dispatch(findReadFiles());
     },
 
     onCreate: (name, isolate, host, locale, libraryType, subtractionIds, files, labels, group) => {
@@ -302,7 +306,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onListLabels: () => {
         dispatch(listLabels());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSample);
