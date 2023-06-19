@@ -3,21 +3,21 @@
  *
  * @module account/actions
  */
+import { createAction } from "@reduxjs/toolkit";
 import {
-    GET_ACCOUNT,
-    UPDATE_ACCOUNT,
-    UPDATE_ACCOUNT_SETTINGS,
     CHANGE_ACCOUNT_PASSWORD,
-    GET_API_KEYS,
+    CLEAR_API_KEY,
     CREATE_API_KEY,
-    UPDATE_API_KEY,
-    REMOVE_API_KEY,
+    GET_ACCOUNT,
+    GET_API_KEYS,
     LOGIN,
     LOGOUT,
-    CLEAR_API_KEY,
-    RESET_PASSWORD
+    REMOVE_API_KEY,
+    RESET_PASSWORD,
+    UPDATE_ACCOUNT,
+    UPDATE_ACCOUNT_SETTINGS,
+    UPDATE_API_KEY,
 } from "../app/actionTypes";
-import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns action that can trigger an API call for getting the current account data.
@@ -35,7 +35,7 @@ export const getAccount = createAction(GET_ACCOUNT.REQUESTED);
  * @returns {object}
  */
 export const updateAccount = createAction(UPDATE_ACCOUNT.REQUESTED, update => ({
-    payload: { update }
+    payload: { update },
 }));
 
 /**
@@ -46,7 +46,7 @@ export const updateAccount = createAction(UPDATE_ACCOUNT.REQUESTED, update => ({
  * @returns {object}
  */
 export const updateAccountSettings = createAction(UPDATE_ACCOUNT_SETTINGS.REQUESTED, update => ({
-    payload: { update }
+    payload: { update },
 }));
 
 /**
@@ -58,7 +58,7 @@ export const updateAccountSettings = createAction(UPDATE_ACCOUNT_SETTINGS.REQUES
  * @returns {object}
  */
 export const changePassword = createAction(CHANGE_ACCOUNT_PASSWORD.REQUESTED, (oldPassword, newPassword) => ({
-    payload: { old_password: oldPassword, password: newPassword }
+    payload: { old_password: oldPassword, password: newPassword },
 }));
 
 /**
@@ -78,7 +78,7 @@ export const getAPIKeys = createAction(GET_API_KEYS.REQUESTED);
  * @returns {object}
  */
 export const createAPIKey = createAction(CREATE_API_KEY.REQUESTED, (name, permissions) => ({
-    payload: { name, permissions }
+    payload: { name, permissions },
 }));
 
 /**
@@ -98,7 +98,7 @@ export const clearAPIKey = createAction(CLEAR_API_KEY);
  * @returns {object}
  */
 export const updateAPIKey = createAction(UPDATE_API_KEY.REQUESTED, (keyId, permissions) => ({
-    payload: { keyId, permissions }
+    payload: { keyId, permissions },
 }));
 
 /**
@@ -109,7 +109,7 @@ export const updateAPIKey = createAction(UPDATE_API_KEY.REQUESTED, (keyId, permi
  * @returns {object}
  */
 export const removeAPIKey = createAction(REMOVE_API_KEY.REQUESTED, keyId => ({
-    payload: { keyId }
+    payload: { keyId },
 }));
 
 /**
@@ -119,7 +119,7 @@ export const removeAPIKey = createAction(REMOVE_API_KEY.REQUESTED, keyId => ({
  * @returns {object}
  */
 export const login = createAction(LOGIN.REQUESTED, (username, password, remember) => ({
-    payload: { username, password, remember }
+    payload: { username, password, remember },
 }));
 
 /**
@@ -130,8 +130,8 @@ export const login = createAction(LOGIN.REQUESTED, (username, password, remember
  */
 export const loginSucceeded = createAction(LOGIN.SUCCEEDED, () => ({
     payload: {
-        reset: false
-    }
+        reset: false,
+    },
 }));
 
 /**
@@ -150,5 +150,5 @@ export const logout = createAction(LOGOUT.REQUESTED);
  * @returns {object}
  */
 export const resetPassword = createAction(RESET_PASSWORD.REQUESTED, (password, resetCode) => ({
-    payload: { password, resetCode }
+    payload: { password, resetCode },
 }));

@@ -10,7 +10,7 @@ import { wsUpdateStatus } from "../status/actions";
 import { wsInsertSubtraction, wsRemoveSubtraction, wsUpdateSubtraction } from "../subtraction/actions";
 import { wsInsertTask, wsUpdateTask } from "../tasks/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../users/actions";
-import { LOGOUT } from "./actionTypes";
+import { resetClient } from "../utils/utils";
 
 import { QueryClient } from "react-query";
 import { accountKeys } from "../account/querys";
@@ -51,6 +51,10 @@ const inserters = {
     samples: actionCreatorWrapper(wsInsertSample),
     subtraction: actionCreatorWrapper(wsInsertSubtraction),
     tasks: actionCreatorWrapper(wsInsertTask),
+<<<<<<< HEAD:src/js/app/websocket.ts
+=======
+    uploads: actionCreatorWrapper(wsInsertFile),
+>>>>>>> main:src/js/app/websocket.js
     users: actionCreatorWrapper(wsInsertUser),
 };
 
@@ -71,6 +75,10 @@ const updaters = {
     status: actionCreatorWrapper(wsUpdateStatus),
     subtraction: actionCreatorWrapper(wsUpdateSubtraction),
     tasks: actionCreatorWrapper(wsUpdateTask),
+<<<<<<< HEAD:src/js/app/websocket.ts
+=======
+    uploads: actionCreatorWrapper(wsUpdateFile),
+>>>>>>> main:src/js/app/websocket.js
     users: actionCreatorWrapper(wsUpdateUser),
 };
 
@@ -82,6 +90,10 @@ const removers = {
     references: actionCreatorWrapper(wsRemoveReference),
     samples: actionCreatorWrapper(wsRemoveSample),
     subtraction: actionCreatorWrapper(wsRemoveSubtraction),
+<<<<<<< HEAD:src/js/app/websocket.ts
+=======
+    uploads: actionCreatorWrapper(wsRemoveFile),
+>>>>>>> main:src/js/app/websocket.js
     users: actionCreatorWrapper(wsRemoveUser),
 };
 
@@ -151,9 +163,7 @@ export default function WSConnection(store, queryClient) {
             }
 
             if (e.code === 4000) {
-                this.dispatch({ type: LOGOUT.SUCCEEDED });
-                this.connectionStatus = ABANDONED;
-                return;
+                resetClient();
             }
 
             setTimeout(() => {

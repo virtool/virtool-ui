@@ -19,7 +19,7 @@ const createRequestActionType = root => ({
 // App
 export const PUSH_STATE = "PUSH_STATE";
 export const UPDATE_SEARCH = "UPDATE_SEARCH";
-export const SET_INITIAL_STATE = "SET_INITIAL_STATE";
+export const GET_INITIAL_STATE = createRequestActionType("GET_INITIAL_STATE");
 
 // Dev
 export const POST_DEV_COMMAND = createRequestActionType("POST_DEV_COMMAND");

@@ -22,12 +22,14 @@ import samplesReducer from "../samples/reducer";
 import subtractionsReducer from "../subtraction/reducer";
 import tasksReducer from "../tasks/reducer";
 import usersReducer from "../users/reducer";
-import { CREATE_FIRST_USER, LOGIN, LOGOUT, RESET_PASSWORD, SET_INITIAL_STATE } from "./actionTypes";
+import { CREATE_FIRST_USER, GET_INITIAL_STATE, LOGIN, RESET_PASSWORD } from "./actionTypes";
 import rootSaga from "./sagas";
 
 const initialState = {
-    login: false,
-    reset: false
+    login: true,
+    reset: false,
+    ready: false,
+    first: false,
 };
 
 export const appReducer = createReducer(initialState, builder => {
@@ -42,9 +44,6 @@ export const appReducer = createReducer(initialState, builder => {
             }
         })
         .addCase(LOGIN.FAILED, state => {
-            state.login = true;
-        })
-        .addCase(LOGOUT.SUCCEEDED, state => {
             state.login = true;
         })
         .addCase(RESET_PASSWORD.SUCCEEDED, state => {
@@ -63,9 +62,11 @@ export const appReducer = createReducer(initialState, builder => {
             state.login = false;
             state.first = false;
         })
-        .addCase(SET_INITIAL_STATE, (state, action) => {
+        .addCase(GET_INITIAL_STATE.SUCCEEDED, (state, action) => {
             state.dev = action.payload.dev;
-            state.first = action.payload.first;
+            state.first = action.payload.first_user;
+            state.login = action.payload.login;
+            state.ready = true;
         });
 });
 
@@ -96,9 +97,9 @@ export const createAppStore = history => {
             settings: settingsReducer,
             subtraction: subtractionsReducer,
             tasks: tasksReducer,
-            users: usersReducer
+            users: usersReducer,
         }),
-        compose(applyMiddleware(sagaMiddleware, routerMiddleware(history)), sentryReduxEnhancer)
+        compose(applyMiddleware(sagaMiddleware, routerMiddleware(history)), sentryReduxEnhancer),
     );
 
     sagaMiddleware.run(rootSaga);

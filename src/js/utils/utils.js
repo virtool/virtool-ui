@@ -168,6 +168,19 @@ export const toScientificNotation = number => {
 };
 
 /**
+ *  Clears session storage and reloads the page.
+ *
+ *  This is used to clear the session storage when the user logs out or the token expires.
+ *
+ *  @func
+ *  @returns {undefined}
+ */
+export const resetClient = () => {
+    window.sessionStorage.clear();
+    window.location.reload();
+};
+
+/**
  * Stores the passed object in local storage at key given
  *
  * @func
