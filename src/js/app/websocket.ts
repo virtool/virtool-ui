@@ -51,10 +51,6 @@ const inserters = {
     samples: actionCreatorWrapper(wsInsertSample),
     subtraction: actionCreatorWrapper(wsInsertSubtraction),
     tasks: actionCreatorWrapper(wsInsertTask),
-<<<<<<< HEAD:src/js/app/websocket.ts
-=======
-    uploads: actionCreatorWrapper(wsInsertFile),
->>>>>>> main:src/js/app/websocket.js
     users: actionCreatorWrapper(wsInsertUser),
 };
 
@@ -75,10 +71,6 @@ const updaters = {
     status: actionCreatorWrapper(wsUpdateStatus),
     subtraction: actionCreatorWrapper(wsUpdateSubtraction),
     tasks: actionCreatorWrapper(wsUpdateTask),
-<<<<<<< HEAD:src/js/app/websocket.ts
-=======
-    uploads: actionCreatorWrapper(wsUpdateFile),
->>>>>>> main:src/js/app/websocket.js
     users: actionCreatorWrapper(wsUpdateUser),
 };
 
@@ -90,10 +82,6 @@ const removers = {
     references: actionCreatorWrapper(wsRemoveReference),
     samples: actionCreatorWrapper(wsRemoveSample),
     subtraction: actionCreatorWrapper(wsRemoveSubtraction),
-<<<<<<< HEAD:src/js/app/websocket.ts
-=======
-    uploads: actionCreatorWrapper(wsRemoveFile),
->>>>>>> main:src/js/app/websocket.js
     users: actionCreatorWrapper(wsRemoveUser),
 };
 
