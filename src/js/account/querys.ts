@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { Request } from "../app/request";
 
 export const accountKeys = {
-    all: ["account"],
+    all: () => ["account"],
 };
 
 const getAccount = () =>

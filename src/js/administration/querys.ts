@@ -3,7 +3,7 @@ import { Request } from "../app/request";
 import { AdministratorRoles } from "./types";
 
 export const roleKeys = {
-    all: ["roles"] as const,
+    all: () => ["roles"] as const,
 };
 
 const getAdministratorRoles = () => Request.get("/admin/roles").then(response => response.body);
@@ -13,11 +13,11 @@ export const useGetAdministratorRoles = () => {
 };
 
 export const userKeys = {
-    all: ["users"] as const,
-    lists: () => [...userKeys.all, "list"] as const,
-    list: (filters: Array<string | number | boolean>) => [...userKeys.lists(), ...filters] as const,
-    details: () => [...userKeys.all, "details"] as const,
-    detail: (user_id: string) => [...userKeys.details(), user_id] as const,
+    all: () => ["users"] as const,
+    lists: () => ["users", "list"] as const,
+    list: (filters: Array<string | number | boolean>) => ["users", "list", ...filters] as const,
+    details: () => ["users", "details"] as const,
+    detail: (user_id: string) => ["users", "details", user_id] as const,
 };
 
 const getUsers = (page: number, per_page: number, term: string, administrator: boolean) =>

@@ -3,9 +3,9 @@ import { Request } from "../app/request";
 import { FileType } from "./types";
 
 export const fileKeys = {
-    all: ["files"] as const,
-    lists: () => [...fileKeys.all, "list"] as const,
-    list: (type: string, filters: Array<string | number | boolean>) => [...fileKeys.lists(), type, ...filters] as const,
+    all: () => ["files"] as const,
+    lists: () => ["files", "list"] as const,
+    list: (type: string, filters: Array<string | number | boolean>) => ["files", "list", type, ...filters] as const,
 };
 
 const listFiles = (type: FileType, paginate: boolean, page: number) =>

@@ -24,15 +24,18 @@ const keyFactories = {
     uploads: fileKeys,
 };
 
-const reactQueryHandler = (queryClient: QueryClient) => (iface, operation) => {
-    const keyFactory = keyFactories[iface];
-    if (keyFactory === undefined) return;
-    queryClient.invalidateQueries(keyFactory.all);
-};
+function reactQueryHandler(queryClient: QueryClient) {
+    return function (iface, operation) {
+        const keyFactory = keyFactories[iface];
+        if (keyFactory) {
+            queryClient.invalidateQueries(keyFactory.all());
+        }
+    };
+}
 
-const actionCreatorWrapper = actionCreator => {
+function actionCreatorWrapper(actionCreator) {
     return (state, message) => actionCreator(message.data);
-};
+}
 
 const inserters = {
     analyses: (state, message) => {
