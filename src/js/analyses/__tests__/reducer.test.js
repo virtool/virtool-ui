@@ -19,9 +19,10 @@ import { formatData } from "../utils";
 
 vi.mock("../utils.js");
 
-formatData.mockImplementation(({ ready, workflow }) => ({
+formatData.mockImplementation(({ ready, workflow, results }) => ({
     ready,
     workflow,
+    results,
     foo: "bar",
 }));
 
@@ -211,13 +212,16 @@ describe("Analyses Reducer", () => {
             },
         };
         const result = reducer(state, action);
+
+        const detail = action.payload;
+
+        if (ready) {
+            detail.foo = "bar";
+        }
+
         expect(result).toEqual({
             activeId: null,
-            detail: {
-                workflow,
-                ready,
-                foo: "bar",
-            },
+            detail,
             filterIds: null,
             searchIds: null,
             sortKey: "length",
@@ -235,14 +239,17 @@ describe("Analyses Reducer", () => {
                 results: [],
             },
         };
+
+        const detail = action.payload;
+
+        if (ready) {
+            detail.foo = "bar";
+        }
+
         const result = reducer(state, action);
         expect(result).toEqual({
             activeId: null,
-            detail: {
-                workflow,
-                ready,
-                foo: "bar",
-            },
+            detail,
             filterIds: null,
             searchIds: null,
             sortKey: "coverage",
