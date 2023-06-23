@@ -90,6 +90,7 @@ const removers = {
 
 const modifiers = {
     insert: inserters,
+    create: inserters,
     update: updaters,
     delete: removers,
 };
