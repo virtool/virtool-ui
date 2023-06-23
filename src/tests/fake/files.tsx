@@ -19,7 +19,7 @@ type createFakeFileProps = {
     uploaded_at?: Date;
     user?: UserNested;
 };
-export const createFakeFile = (props?: createFakeFileProps): File => {
+export function createFakeFile(props?: createFakeFileProps): File {
     let { name, name_on_disk } = props || {};
     name = name === undefined ? `sample${faker.datatype.number()}.fastq.gz` : name;
     name_on_disk = name_on_disk === undefined ? `${faker.datatype.number()}-${name}` : name_on_disk;
@@ -40,9 +40,9 @@ export const createFakeFile = (props?: createFakeFileProps): File => {
     };
 
     return merge(defaultFile, props);
-};
+}
 
-export const mockListFilesAPI = (files: Array<File>, query?: boolean) => {
+export function mockListFilesAPI(files: Array<File>, query?: boolean) {
     return nock("http://localhost")
         .get("/api/uploads")
         .query(query || true)
@@ -54,20 +54,20 @@ export const mockListFilesAPI = (files: Array<File>, query?: boolean) => {
             total_count: files.length,
             items: files,
         });
-};
+}
 
-export const mockUnpaginatedListFilesAPI = (files: Array<File>, query?: boolean) => {
+export function mockUnpaginatedListFilesAPI(files: Array<File>, query?: boolean) {
     return nock("http://localhost")
         .get("/api/uploads")
         .query(query || true)
         .reply(200, {
             documents: files,
         });
-};
+}
 
 type mockDeleteFileProps = {
     fileId: string;
 };
-export const mockDeleteFileAPI = ({ fileId }: mockDeleteFileProps) => {
+export function mockDeleteFileAPI({ fileId }: mockDeleteFileProps) {
     return nock("http://localhost").delete(`/api/uploads/${fileId}`).reply(200);
-};
+}
