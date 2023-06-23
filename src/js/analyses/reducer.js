@@ -98,7 +98,7 @@ export const analysesReducer = createReducer(initialState, builder => {
             return {
                 ...state,
                 activeId: null,
-                detail: formatData(action.payload),
+                detail: action.payload.ready ? formatData(action.payload) : action.payload,
                 filterIds: null,
                 searchIds: null,
                 sortKey: getInitialSortKey(action),
