@@ -1,21 +1,20 @@
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { Provider } from "react-redux";
-import createSagaMiddleware from "redux-saga";
-import Groups from "../Groups";
 import { applyMiddleware, combineReducers, createStore } from "redux";
-import { screen } from "@testing-library/react";
+import createSagaMiddleware from "redux-saga";
+import { mockListGroupsAPI } from "../../../../tests/fake/groups";
 import { watchRouter } from "../../../app/sagas";
+import { Groups } from "../Groups";
 
 const createGenericReducer = initState => state => state || initState;
 
 const createAppStore = (state, history) => {
     const reducer = combineReducers({
         router: connectRouter(history),
-        groups: createGenericReducer(state.groups),
-        users: createGenericReducer(state.users)
     });
     const sagaMiddleware = createSagaMiddleware();
     const store = createStore(reducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
@@ -54,9 +53,9 @@ describe("Groups", () => {
                         modify_subtraction: false,
                         remove_file: true,
                         remove_job: true,
-                        upload_file: true
-                    }
-                }
+                        upload_file: true,
+                    },
+                },
             ],
             onShowCreateGroup: vi.fn(),
             activeGroup: {
@@ -70,58 +69,15 @@ describe("Groups", () => {
                     modify_subtraction: false,
                     remove_file: true,
                     remove_job: true,
-                    upload_file: true
-                }
+                    upload_file: true,
+                },
             },
-            onListGroups: vi.fn(),
-            onFindUsers: vi.fn()
         };
-        state = {
-            groups: {
-                documents: [
-                    {
-                        name: "testName",
-                        id: 1,
-                        permissions: {
-                            cancel_job: true,
-                            create_ref: false,
-                            create_sample: true,
-                            modify_hmm: true,
-                            modify_subtraction: false,
-                            remove_file: true,
-                            remove_job: true,
-                            upload_file: true
-                        }
-                    }
-                ],
-                activeGroup: {
-                    name: "testName",
-                    id: 1,
-                    permissions: {
-                        cancel_job: true,
-                        create_ref: false,
-                        create_sample: true,
-                        modify_hmm: true,
-                        modify_subtraction: false,
-                        remove_file: true,
-                        remove_job: true,
-                        upload_file: true
-                    }
-                }
-            },
-            users: {
-                documents: {
-                    handle: "testUser",
-                    permissions: { permission1: true, permission2: false, permission3: true }
-                }
-            }
-        };
+        state = {};
         history = createBrowserHistory();
     });
 
     it("should render correctly when loading = true", () => {
-        state.groups.documents = null;
-
         renderWithRouter(<Groups />, state, history);
 
         expect(screen.queryByText("No Groups Found")).not.toBeInTheDocument();
@@ -130,12 +86,11 @@ describe("Groups", () => {
         expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
     });
 
-    it("should render correctly when no groups exist", () => {
-        state.groups.documents = [];
-
+    it("should render correctly when no groups exist", async () => {
         renderWithRouter(<Groups />, state, history);
+        mockListGroupsAPI([]);
 
-        expect(screen.getByText("No Groups Found")).toBeInTheDocument();
+        expect(await screen.findByText("No Groups Found")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
         expect(screen.getByText("Create")).toBeInTheDocument();
     });
@@ -187,8 +142,8 @@ describe("Groups", () => {
                     modify_subtraction: false,
                     remove_file: true,
                     remove_job: true,
-                    upload_file: true
-                }
+                    upload_file: true,
+                },
             },
             {
                 name: "secondTestName",
@@ -201,9 +156,9 @@ describe("Groups", () => {
                     modify_subtraction: false,
                     remove_file: false,
                     remove_job: true,
-                    upload_file: false
-                }
-            }
+                    upload_file: false,
+                },
+            },
         ];
 
         renderWithRouter(<Groups {...props} />, state, history);
