@@ -36,7 +36,7 @@ export const UploadToolbar = ({ canUpload, onDrop, fileType, message, validation
 };
 
 export const mapStateToProps = state => ({
-    canUpload: checkAdminRoleOrPermission(state, "upload_file")
+    canUpload: checkAdminRoleOrPermission(state, "upload_file"),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -45,7 +45,7 @@ export const mapDispatchToProps = dispatch => ({
             const localId = createRandomString();
             dispatch(upload(localId, file, fileType));
         });
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UploadToolbar);

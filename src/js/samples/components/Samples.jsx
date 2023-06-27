@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Container, ContainerNarrow } from "../../base";
 
-import FileManager from "../../files/components/Manager";
+import { FileManager } from "../../files/components/Manager";
 import { Labels } from "../../labels/components/Labels";
 import CreateSample from "./Create/Create";
 import SampleDetail from "./Detail/Detail";

@@ -3,6 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { forEach } from "lodash-es";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeFile, mockListFilesAPI } from "../../../../tests/fake/files";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
 import { SubtractionFileManager } from "../FileManager";
@@ -30,25 +32,36 @@ describe("<SubtractionFileManager />", () => {
                     size: 1024,
                     type: "subtraction",
                     uploaded_at: "2022-04-13T20:22:25.000000Z",
-                    user: { handle: "test_handle", id: "n91xt5wq", administrator: true }
-                }
-            ]
+                    user: { handle: "test_handle", id: "n91xt5wq", administrator: true },
+                },
+            ],
         },
-        account: { administrator_role: AdministratorRoles.FULL }
+        account: { administrator_role: AdministratorRoles.FULL },
     };
 
-    it("should render", () => {
+    it("should render", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file]);
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
             </MemoryRouter>,
-            createAppStore(state)
+            createAppStore(state),
         );
-        expect(screen.getByText("Drag FASTA files here to upload")).toBeInTheDocument();
+        expect(await screen.findByText("Drag FASTA files here to upload")).toBeInTheDocument();
         expect(screen.getByText("Accepts files ending in fa, fasta, fa.gz, or fasta.gz.")).toBeInTheDocument();
     });
 
     it("should reject files not ending in fa, fasta, fa.gz, or fasta.gz.", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file]);
+
         const mockUploadRequested = vi.fn();
         const reducer = (state, action) => {
             if (action.type === UPLOAD.REQUESTED) mockUploadRequested(action.payload.file);
@@ -59,7 +72,7 @@ describe("<SubtractionFileManager />", () => {
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
             </MemoryRouter>,
-            createAppStore(state, reducer)
+            createAppStore(state, reducer),
         );
 
         const validFiles = createFiles(["test.fa", "test.fa.gz", "test.fasta", "test.fasta.gz"]);
@@ -70,10 +83,10 @@ describe("<SubtractionFileManager />", () => {
             "test.fagz",
             "testfasta",
             "testfasta.gz",
-            "test.fastagz"
+            "test.fastagz",
         ]);
 
-        await userEvent.upload(screen.getByLabelText("Upload file"), [...validFiles, ...invalidFiles]);
+        await userEvent.upload(await screen.findByLabelText("Upload file"), [...validFiles, ...invalidFiles]);
 
         await waitFor(() => {
             expect(mockUploadRequested).toHaveBeenCalledTimes(4);

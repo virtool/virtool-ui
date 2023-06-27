@@ -1,11 +1,27 @@
 import { faker } from "@faker-js/faker";
-import { times } from "lodash-es";
+import { merge, times } from "lodash-es";
 import nock from "nock";
 import { AdministratorRoles } from "../../js/administration/types";
 import { GroupMinimal } from "../../js/groups/types";
-import { Permissions, User } from "../../js/users/types";
+import { Permissions, User, UserNested } from "../../js/users/types";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
+
+type createFakeUserNestedProps = {
+    handle?: string;
+    id?: string;
+    administrator?: boolean;
+};
+
+export function createFakeUserNested(props?: createFakeUserNestedProps): UserNested {
+    let { handle, id, administrator } = props || {};
+
+    return {
+        id: id || faker.random.alphaNumeric(8),
+        administrator: administrator || false,
+        handle: handle || faker.internet.userName(),
+    };
+}
 
 type createFakeUserProps = {
     permissions?: Permissions;
@@ -16,21 +32,24 @@ type createFakeUserProps = {
 };
 
 export function createFakeUser(props?: createFakeUserProps): User {
-    let { permissions, groups, primary_group, handle, administrator_role } = props || {};
+    let { permissions, groups, primary_group, ...userProps } = props || {};
 
-    groups = groups || [createFakeGroupMinimal()];
-    return {
+    groups = groups === undefined ? [createFakeGroupMinimal()] : groups;
+    primary_group = primary_group === undefined ? groups[0] : primary_group;
+
+    const BaseUser = {
         id: faker.random.alphaNumeric(8),
-        administrator: administrator_role === AdministratorRoles.FULL,
-        handle: handle || faker.internet.userName(),
+        handle: faker.internet.userName(),
         active: true,
         force_reset: false,
         groups,
+        primary_group,
         last_password_change: faker.date.past(),
         permissions: createFakePermissions(permissions),
-        primary_group: primary_group || groups[0],
-        administrator_role: administrator_role || null,
+        administrator_role: null,
     };
+
+    return merge(BaseUser, userProps);
 }
 
 export function createFakeUsers(count: number): Array<User> {

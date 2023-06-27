@@ -6,31 +6,6 @@
 import { Request } from "../app/request";
 
 /**
- * Get files of the given ``fileType``. Get a specific page of results using the ``page`` argument.
- *
- * @func
- * @param fileType {string} the file type to get
- * @param page {number} the page of results to get
- * @returns {promise}
- */
-export const list = ({ fileType, paginate, page }) =>
-    Request.get("/uploads").query({
-        upload_type: fileType,
-        ready: true,
-        paginate,
-        page,
-    });
-
-/**
- * Remove the file with the given ``fileId``.
- *
- * @func
- * @param fileId {string} the fileId to handleRemove
- * @returns {promise}
- */
-export const remove = ({ fileId }) => Request.delete(`/uploads/${fileId}`);
-
-/**
  * Upload a ``file`` with the given ``fileType``. Pass progress events to ``onProgress``.
  *
  * @func

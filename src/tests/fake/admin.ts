@@ -30,14 +30,14 @@ export const administratorRoles = [
         name: "Base",
     },
 ];
-export const mockGetAdministratorRoles = () => {
+export function mockGetAdministratorRoles() {
     return nock("http://localhost").get("/api/admin/roles").reply(200, administratorRoles);
-};
+}
 
 type mockSetAdministratorRoleAPIProps = {
     user: User;
     new_role: AdministratorRoles;
 };
-export const mockSetAdministratorRoleAPI = ({ user, new_role }: mockSetAdministratorRoleAPIProps) => {
+export function mockSetAdministratorRoleAPI({ user, new_role }: mockSetAdministratorRoleAPIProps) {
     return nock("http://localhost").put(`/api/admin/users/${user.id}/role`, { role: new_role }).reply(200);
-};
+}

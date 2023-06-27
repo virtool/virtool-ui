@@ -1,13 +1,16 @@
 import { faker } from "@faker-js/faker";
+import { merge } from "lodash-es";
 import { GroupMinimal } from "../../js/groups/types";
 
 type createFakeGroupMinimalProps = {
+    id?: string;
     name?: string;
 };
 export function createFakeGroupMinimal(props?: createFakeGroupMinimalProps): GroupMinimal {
-    const { name } = props || {};
-    return {
+    const defaultGroupMinimal = {
         id: faker.random.alphaNumeric(8),
-        name: name || `${faker.random.word()}_group`,
+        name: `${faker.random.word()}_group`,
     };
+
+    return merge(defaultGroupMinimal, props);
 }
