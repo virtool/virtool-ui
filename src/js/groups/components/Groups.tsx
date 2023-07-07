@@ -48,7 +48,7 @@ export const Groups = () => {
 
     const { data: groups, isLoading: isLoadingGroups } = useListGroups({});
     const { data: selectedGroup }: { selectedGroup: Group } = useGetGroup(selectedGroupId, {
-        enabled: !!selectedGroupId,
+        enabled: Boolean(selectedGroupId),
         keepPreviousData: true,
     });
 
@@ -103,5 +103,3 @@ export const Groups = () => {
         </>
     );
 };
-
-export default Groups;

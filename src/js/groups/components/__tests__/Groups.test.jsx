@@ -10,8 +10,6 @@ import { createFakeGroup, mockGetGroupAPI, mockListGroupsAPI } from "../../../..
 import { watchRouter } from "../../../app/sagas";
 import { Groups } from "../Groups";
 
-const createGenericReducer = initState => state => state || initState;
-
 const createAppStore = (state, history) => {
     const reducer = combineReducers({
         router: connectRouter(history),

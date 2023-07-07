@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { merge } from "lodash-es";
 import nock from "nock";
-import { Group, GroupMinimal } from "../../js/groups/types";
-import { Permissions, UserNested } from "../../js/users/types";
+import { Group, GroupMinimal, Permissions } from "../../js/groups/types";
+import { UserNested } from "../../js/users/types";
 import { createFakePermissions } from "./permissions";
 
 type createFakeGroupMinimalProps = {

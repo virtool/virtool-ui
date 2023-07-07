@@ -1,4 +1,4 @@
-import { Permissions } from "../../js/users/types";
+import { Permissions } from "../../js/groups/types";
 
 const defaultPermissions = {
     cancel_job: false,

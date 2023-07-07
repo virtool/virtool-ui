@@ -37,7 +37,7 @@ export function setName({ id, name }: groupNameUpdate) {
 export function useSetName() {
     const queryClient = useQueryClient();
     return useMutation(setName, {
-        onSuccess: data => {
+        onSuccess: () => {
             queryClient.invalidateQueries(groupKeys.lists());
             queryClient.setQueryData(groupKeys.detail(data.id), data);
         },
@@ -77,7 +77,7 @@ export function useRemoveGroup() {
 }
 
 function createGroup({ name }) {
-    return Request.post(`/groups`)
+    return Request.post("/groups")
         .send({
             name,
         })
