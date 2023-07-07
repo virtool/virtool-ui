@@ -1,8 +1,8 @@
+import { createAction } from "@reduxjs/toolkit";
 import {
     CLEAR_SAMPLE_SELECTION,
     CREATE_SAMPLE,
     DESELECT_SAMPLES,
-    FIND_READ_FILES,
     FIND_SAMPLES,
     GET_SAMPLE,
     HIDE_SAMPLE_MODAL,
@@ -14,9 +14,8 @@ import {
     UPDATE_SEARCH,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
-    WS_UPDATE_SAMPLE
+    WS_UPDATE_SAMPLE,
 } from "../app/actionTypes";
-import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns an action that should be dispatched when a sample document is inserted via websocket.
@@ -53,11 +52,9 @@ export const findSamples = createAction(FIND_SAMPLES.REQUESTED, ({ labels, page,
         labels,
         term,
         page,
-        workflows
-    }
+        workflows,
+    },
 }));
-
-export const findReadFiles = createAction(FIND_READ_FILES.REQUESTED);
 
 /**
  * Returns action that can trigger an API call for getting a specific sample.
@@ -68,8 +65,8 @@ export const findReadFiles = createAction(FIND_READ_FILES.REQUESTED);
  */
 export const getSample = createAction(GET_SAMPLE.REQUESTED, sampleId => ({
     payload: {
-        sampleId
-    }
+        sampleId,
+    },
 }));
 
 /**
@@ -83,8 +80,8 @@ export const getSample = createAction(GET_SAMPLE.REQUESTED, sampleId => ({
 export const getSampleSucceeded = createAction(GET_SAMPLE.SUCCEEDED, (sample, canModify) => ({
     payload: {
         ...sample,
-        canModify
-    }
+        canModify,
+    },
 }));
 
 /**
@@ -115,9 +112,9 @@ export const createSample = createAction(
             subtractions,
             files,
             labels,
-            group
-        }
-    })
+            group,
+        },
+    }),
 );
 
 /**
@@ -129,7 +126,7 @@ export const createSample = createAction(
  * @returns {object}
  */
 export const editSample = createAction(UPDATE_SAMPLE.REQUESTED, (sampleId, update) => ({
-    payload: { sampleId, update }
+    payload: { sampleId, update },
 }));
 
 /**
@@ -141,7 +138,7 @@ export const editSample = createAction(UPDATE_SAMPLE.REQUESTED, (sampleId, updat
  * @returns {object}
  */
 export const updateSampleRights = createAction(UPDATE_SAMPLE_RIGHTS.REQUESTED, (sampleId, update) => ({
-    payload: { sampleId, update }
+    payload: { sampleId, update },
 }));
 
 /**

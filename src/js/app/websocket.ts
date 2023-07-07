@@ -1,6 +1,5 @@
 import { get } from "lodash-es";
 import { wsInsertAnalysis, wsRemoveAnalysis, wsUpdateAnalysis } from "../analyses/actions";
-import { wsInsertFile, wsRemoveFile, wsUpdateFile } from "../files/actions";
 import { wsInsertGroup, wsRemoveGroup, wsUpdateGroup } from "../groups/actions";
 import { wsInsertHistory, wsInsertIndex, wsUpdateIndex } from "../indexes/actions";
 import { wsInsertJob, wsRemoveJob, wsUpdateJob } from "../jobs/actions";
@@ -13,9 +12,30 @@ import { wsInsertTask, wsUpdateTask } from "../tasks/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../users/actions";
 import { resetClient } from "../utils/utils";
 
-const actionCreatorWrapper = actionCreator => {
-    return (state, message) => actionCreator(message.data);
+import { QueryClient } from "react-query";
+import { accountKeys } from "../account/querys";
+import { roleKeys, userKeys } from "../administration/querys";
+import { fileKeys } from "../files/querys";
+
+const keyFactories = {
+    account: accountKeys,
+    roles: roleKeys,
+    users: userKeys,
+    uploads: fileKeys,
 };
+
+function reactQueryHandler(queryClient: QueryClient) {
+    return function (iface, operation) {
+        const keyFactory = keyFactories[iface];
+        if (keyFactory) {
+            queryClient.invalidateQueries(keyFactory.all());
+        }
+    };
+}
+
+function actionCreatorWrapper(actionCreator) {
+    return (state, message) => actionCreator(message.data);
+}
 
 const inserters = {
     analyses: (state, message) => {
@@ -34,7 +54,6 @@ const inserters = {
     samples: actionCreatorWrapper(wsInsertSample),
     subtraction: actionCreatorWrapper(wsInsertSubtraction),
     tasks: actionCreatorWrapper(wsInsertTask),
-    uploads: actionCreatorWrapper(wsInsertFile),
     users: actionCreatorWrapper(wsInsertUser),
 };
 
@@ -55,7 +74,6 @@ const updaters = {
     status: actionCreatorWrapper(wsUpdateStatus),
     subtraction: actionCreatorWrapper(wsUpdateSubtraction),
     tasks: actionCreatorWrapper(wsUpdateTask),
-    uploads: actionCreatorWrapper(wsUpdateFile),
     users: actionCreatorWrapper(wsUpdateUser),
 };
 
@@ -67,12 +85,12 @@ const removers = {
     references: actionCreatorWrapper(wsRemoveReference),
     samples: actionCreatorWrapper(wsRemoveSample),
     subtraction: actionCreatorWrapper(wsRemoveSubtraction),
-    uploads: actionCreatorWrapper(wsRemoveFile),
     users: actionCreatorWrapper(wsRemoveUser),
 };
 
 const modifiers = {
     insert: inserters,
+    create: inserters,
     update: updaters,
     delete: removers,
 };
@@ -83,11 +101,13 @@ export const CONNECTED = "connected";
 export const ABANDONED = "abandoned";
 export const RECONNECTING = "reconnecting";
 
-export default function WSConnection({ getState, dispatch }) {
+export default function WSConnection(store, queryClient) {
     // The Redux store's dispatch method.
-    this.dispatch = dispatch;
+    this.dispatch = store.dispatch;
 
-    this.getState = getState;
+    this.getState = store.getState;
+
+    this.reactQueryHandler = reactQueryHandler(queryClient);
 
     // When a websocket message is received, this method is called with the message as the sole argument. Every message
     // has a property "operation" that tells the dispatcher what to do. Illegal operation names will throw an error.
@@ -98,13 +118,15 @@ export default function WSConnection({ getState, dispatch }) {
 
         window.console.log(`${iface}.${operation}`);
 
+        this.reactQueryHandler(iface, operation);
+
         const modifier = get(modifiers, [operation, iface]);
 
         if (modifier) {
-            const action = modifier(getState(), message);
+            const action = modifier(this.getState(), message);
 
             if (action) {
-                return dispatch(action);
+                return this.dispatch(action);
             }
         }
     };

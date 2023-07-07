@@ -4,18 +4,8 @@
  * @module files/reducer
  */
 import { createReducer } from "@reduxjs/toolkit";
-import { forEach, map, reject, sortBy } from "lodash-es";
-import {
-    FIND_FILES,
-    REMOVE_UPLOAD,
-    UPLOAD,
-    UPLOAD_FAILED,
-    UPLOAD_PROGRESS,
-    UPLOAD_SAMPLE_FILE,
-    WS_REFRESH_FILES,
-    WS_UPDATE_FILE
-} from "../app/actionTypes";
-import { update } from "../utils/reducers";
+import { forEach, map, reject } from "lodash-es";
+import { REMOVE_UPLOAD, UPLOAD, UPLOAD_FAILED, UPLOAD_PROGRESS, UPLOAD_SAMPLE_FILE } from "../app/actionTypes";
 
 /**
  * The initial state to give the reducer.
@@ -24,15 +14,7 @@ import { update } from "../utils/reducers";
  * @type {object}
  */
 export const initialState = {
-    items: null,
-    fileType: null,
-    paginate: false,
-    term: "",
-    found_count: 0,
-    page: 0,
-    total_count: 0,
     uploads: [],
-    stale: true
 };
 
 export const appendUpload = (state, action) => {
@@ -41,7 +23,7 @@ export const appendUpload = (state, action) => {
 
     return {
         ...state,
-        uploads: state.uploads.concat([{ localId, progress: 0, name, size, type: fileType, context, failed: false }])
+        uploads: state.uploads.concat([{ localId, progress: 0, name, size, type: fileType, context, failed: false }]),
     };
 };
 
@@ -58,7 +40,7 @@ export const updateProgress = (state, action) => {
                 ...upload,
                 progress: action.progress,
                 uploadSpeed: action.uploadSpeed,
-                remaining: action.remaining
+                remaining: action.remaining,
             };
         }
 
@@ -77,32 +59,6 @@ export const updateProgress = (state, action) => {
  */
 export const filesReducer = createReducer(initialState, builder => {
     builder
-        .addCase(WS_UPDATE_FILE, (state, action) => {
-            return update(state, action.payload, "uploaded_at", true);
-        })
-        .addCase(WS_REFRESH_FILES.SUCCEEDED, (state, action) => {
-            if (state.fileType === action.context.fileType) {
-                return {
-                    ...state,
-                    ...action.payload,
-                    items: sortBy(action.payload.items || action.payload.documents, "uploaded_at").reverse()
-                };
-            }
-            return state;
-        })
-        .addCase(FIND_FILES.REQUESTED, (state, action) => {
-            state.term = action.payload.term;
-            state.items = state.fileType === action.payload.fileType ? state.items : null;
-            state.paginate = action.payload.paginate;
-        })
-        .addCase(FIND_FILES.SUCCEEDED, (state, action) => {
-            return {
-                ...state,
-                ...action.payload,
-                items: sortBy(action.payload.items || action.payload.documents, "uploaded_at").reverse(),
-                fileType: action.context.fileType
-            };
-        })
         .addCase(UPLOAD.REQUESTED, (state, action) => {
             return appendUpload(state, action.payload);
         })

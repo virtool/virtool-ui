@@ -1,6 +1,5 @@
 import {
     DESELECT_SAMPLES,
-    FIND_READ_FILES,
     FIND_SAMPLES,
     GET_SAMPLE,
     REMOVE_SAMPLE,
@@ -9,7 +8,7 @@ import {
     UPDATE_SAMPLE_RIGHTS,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
-    WS_UPDATE_SAMPLE
+    WS_UPDATE_SAMPLE,
 } from "../../app/actionTypes";
 import reducer, { initialState } from "../reducer";
 
@@ -30,48 +29,48 @@ describe("Samples Reducer", () => {
             type: WS_INSERT_SAMPLE,
             payload: {
                 id: "foo",
-                name: "Foo"
-            }
+                name: "Foo",
+            },
         };
         const state = { documents: existing };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: [action.payload]
+            documents: [action.payload],
         });
     });
 
     it("should handle WS_UPDATE_SAMPLE", () => {
         const state = {
             ...initialState,
-            documents: [{ id: "foo", name: "Old" }]
+            documents: [{ id: "foo", name: "Old" }],
         };
         const action = {
             type: WS_UPDATE_SAMPLE,
             payload: {
                 id: "foo",
-                name: "New"
-            }
+                name: "New",
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            documents: [{ id: "foo", name: "New" }]
+            documents: [{ id: "foo", name: "New" }],
         });
     });
 
     it("should handle WS_REMOVE_SAMPLE", () => {
         const state = {
             ...initialState,
-            documents: [{ id: "foo", name: "test" }]
+            documents: [{ id: "foo", name: "test" }],
         };
         const action = {
             type: WS_REMOVE_SAMPLE,
-            payload: ["foo"]
+            payload: ["foo"],
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            documents: []
+            documents: [],
         });
     });
 
@@ -79,54 +78,35 @@ describe("Samples Reducer", () => {
         const term = "foo";
         const action = {
             type: FIND_SAMPLES.REQUESTED,
-            payload: { term, page: 5 }
+            payload: { term, page: 5 },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            term
+            term,
         });
     });
 
     it("should handle FIND_SAMPLES_SUCCEEDED", () => {
         const action = {
             type: FIND_SAMPLES.SUCCEEDED,
-            payload: { documents: [], page: 5 }
+            payload: { documents: [], page: 5 },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
             documents: [],
-            page: 5
-        });
-    });
-
-    it("should handle FIND_READ_FILES_SUCCEEDED", () => {
-        const action = {
-            type: FIND_READ_FILES.SUCCEEDED,
-            payload: {
-                documents: [],
-                found_count: 0,
-                page: 1,
-                page_count: 0,
-                per_page: 500,
-                total_count: 0
-            }
-        };
-        const result = reducer(initialState, action);
-        expect(result).toEqual({
-            ...initialState,
-            readFiles: action.payload.documents
+            page: 5,
         });
     });
 
     it("should handle GET_SAMPLE_REQUESTED", () => {
         const action = {
             type: GET_SAMPLE.REQUESTED,
-            sampleId: "test"
+            sampleId: "test",
         };
         const result = reducer(initialState, action);
         expect(result).toEqual({
             ...initialState,
-            detail: null
+            detail: null,
         });
     });
 
@@ -135,13 +115,13 @@ describe("Samples Reducer", () => {
             type: GET_SAMPLE.SUCCEEDED,
             payload: {
                 id: "123abc",
-                name: "test"
-            }
+                name: "test",
+            },
         };
         const result = reducer(initialState, action);
         expect(result).toEqual({
             ...initialState,
-            detail: action.payload
+            detail: action.payload,
         });
     });
 
@@ -150,13 +130,13 @@ describe("Samples Reducer", () => {
             type: UPDATE_SAMPLE.SUCCEEDED,
             payload: {
                 id: "123abc",
-                name: "test"
-            }
+                name: "test",
+            },
         };
         const result = reducer(initialState, action);
         expect(result).toEqual({
             ...initialState,
-            detail: action.payload
+            detail: action.payload,
         });
     });
 
@@ -164,22 +144,22 @@ describe("Samples Reducer", () => {
         const state = {};
         const action = {
             type: UPDATE_SAMPLE_RIGHTS.SUCCEEDED,
-            payload: { foo: "bar" }
+            payload: { foo: "bar" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            detail: action.payload
+            detail: action.payload,
         });
     });
 
     it("should handle REMOVE_SAMPLE_SUCCEEDED", () => {
         const action = {
-            type: REMOVE_SAMPLE.SUCCEEDED
+            type: REMOVE_SAMPLE.SUCCEEDED,
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            detail: null
+            detail: null,
         });
     });
 
@@ -188,7 +168,7 @@ describe("Samples Reducer", () => {
         const state = { selected: ["bar", "baz"] };
         const result = reducer(state, action);
         expect(result).toEqual({
-            selected: ["bar", "baz", "foo"]
+            selected: ["bar", "baz", "foo"],
         });
     });
 
@@ -197,7 +177,7 @@ describe("Samples Reducer", () => {
         const state = { selected: ["bar", "foo", "baz"] };
         const result = reducer(state, action);
         expect(result).toEqual({
-            selected: ["bar", "baz"]
+            selected: ["bar", "baz"],
         });
     });
 
@@ -206,7 +186,7 @@ describe("Samples Reducer", () => {
         const state = { selected: ["foo", "bar", "bad", "baz"] };
         const result = reducer(state, action);
         expect(result).toEqual({
-            selected: ["bar", "baz"]
+            selected: ["bar", "baz"],
         });
     });
 });

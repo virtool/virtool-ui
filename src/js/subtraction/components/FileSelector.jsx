@@ -1,6 +1,5 @@
-import { filter, map } from "lodash-es";
+import { map } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Attribution, BoxGroup, InputError, NoneFoundBox, SelectBoxGroupSection } from "../../base";
@@ -52,9 +51,3 @@ export const SubtractionFileSelector = ({ files, value, onClick, error }) => {
         </>
     );
 };
-
-const mapStateToProps = state => ({
-    files: filter(state.files.documents, { type: "subtraction" })
-});
-
-export default connect(mapStateToProps)(SubtractionFileSelector);

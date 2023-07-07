@@ -1,6 +1,5 @@
 import {
     CREATE_SAMPLE,
-    FIND_READ_FILES,
     FIND_SAMPLES,
     GET_SAMPLE,
     HIDE_SAMPLE_MODAL,
@@ -10,12 +9,11 @@ import {
     UPDATE_SAMPLE_RIGHTS,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
-    WS_UPDATE_SAMPLE
+    WS_UPDATE_SAMPLE,
 } from "../../app/actionTypes";
 import {
     createSample,
     editSample,
-    findReadFiles,
     findSamples,
     getSample,
     hideSampleModal,
@@ -24,7 +22,7 @@ import {
     updateSampleRights,
     wsInsertSample,
     wsRemoveSample,
-    wsUpdateSample
+    wsUpdateSample,
 } from "../actions";
 
 describe("Sample Action Creators:", () => {
@@ -33,24 +31,24 @@ describe("Sample Action Creators:", () => {
     it("wsInsertSample", () => {
         const data = {
             id: "abc123",
-            name: "test"
+            name: "test",
         };
         const result = wsInsertSample(data);
         expect(result).toEqual({
             type: WS_INSERT_SAMPLE,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
     it("wsUpdateSample", () => {
         const data = {
             id: "abc123",
-            name: "test-edited"
+            name: "test-edited",
         };
         const result = wsUpdateSample(data);
         expect(result).toEqual({
             type: WS_UPDATE_SAMPLE,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -59,7 +57,7 @@ describe("Sample Action Creators:", () => {
         const result = wsRemoveSample(data);
         expect(result).toEqual({
             type: WS_REMOVE_SAMPLE,
-            payload: data
+            payload: data,
         });
     });
 
@@ -73,13 +71,7 @@ describe("Sample Action Creators:", () => {
 
         expect(result).toEqual({
             type: FIND_SAMPLES.REQUESTED,
-            payload: { labels, term, page, workflows }
-        });
-    });
-
-    it("findReadFiles", () => {
-        expect(findReadFiles()).toEqual({
-            type: FIND_READ_FILES.REQUESTED
+            payload: { labels, term, page, workflows },
         });
     });
 
@@ -87,7 +79,7 @@ describe("Sample Action Creators:", () => {
         const result = getSample(sampleId);
         expect(result).toEqual({
             type: GET_SAMPLE.REQUESTED,
-            payload: { sampleId }
+            payload: { sampleId },
         });
     });
 
@@ -102,7 +94,7 @@ describe("Sample Action Creators:", () => {
         const result = createSample(name, isolate, host, locale, libraryType, subtractions, files);
         expect(result).toEqual({
             type: CREATE_SAMPLE.REQUESTED,
-            payload: { name, isolate, host, locale, libraryType, subtractions, files }
+            payload: { name, isolate, host, locale, libraryType, subtractions, files },
         });
     });
 
@@ -111,7 +103,7 @@ describe("Sample Action Creators:", () => {
         const result = editSample(sampleId, update);
         expect(result).toEqual({
             type: UPDATE_SAMPLE.REQUESTED,
-            payload: { sampleId, update }
+            payload: { sampleId, update },
         });
     });
 
@@ -120,7 +112,7 @@ describe("Sample Action Creators:", () => {
         const result = updateSampleRights(sampleId, update);
         expect(result).toEqual({
             type: UPDATE_SAMPLE_RIGHTS.REQUESTED,
-            payload: { sampleId, update }
+            payload: { sampleId, update },
         });
     });
 
@@ -128,19 +120,19 @@ describe("Sample Action Creators:", () => {
         const result = removeSample(sampleId);
         expect(result).toEqual({
             type: REMOVE_SAMPLE.REQUESTED,
-            payload: { sampleId }
+            payload: { sampleId },
         });
     });
 
     it("showRemoveSample", () => {
         expect(showRemoveSample()).toEqual({
-            type: SHOW_REMOVE_SAMPLE
+            type: SHOW_REMOVE_SAMPLE,
         });
     });
 
     it("hideSampleModal", () => {
         expect(hideSampleModal()).toEqual({
-            type: HIDE_SAMPLE_MODAL
+            type: HIDE_SAMPLE_MODAL,
         });
     });
 });

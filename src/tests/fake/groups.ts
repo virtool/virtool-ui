@@ -5,14 +5,16 @@ import { Permissions, UserNested } from "../../js/users/types";
 import { createFakePermissions } from "./permissions";
 
 type createFakeGroupMinimalProps = {
+    id?: string;
     name?: string;
 };
 export function createFakeGroupMinimal(props?: createFakeGroupMinimalProps): GroupMinimal {
-    const { name } = props || {};
-    return {
+    const defaultGroupMinimal = {
         id: faker.random.alphaNumeric(8),
-        name: name || `${faker.random.word()}_group`,
+        name: `${faker.random.word()}_group`,
     };
+
+    return merge(defaultGroupMinimal, props);
 }
 
 type createFakeGroupProps = {

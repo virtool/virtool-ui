@@ -1,11 +1,4 @@
-import {
-    FIND_FILES,
-    REMOVE_UPLOAD,
-    UPLOAD,
-    UPLOAD_FAILED,
-    UPLOAD_PROGRESS,
-    WS_UPDATE_FILE
-} from "../../app/actionTypes";
+import { REMOVE_UPLOAD, UPLOAD, UPLOAD_FAILED, UPLOAD_PROGRESS } from "../../app/actionTypes";
 import reducer, { initialState } from "../reducer";
 
 describe("filesReducer()", () => {
@@ -14,58 +7,17 @@ describe("filesReducer()", () => {
         expect(result).toEqual(initialState);
     });
 
-    it("should handle WS_UPDATE_FILE", () => {
-        const state = {
-            documents: [{ id: "test", foo: "bar" }]
-        };
-        const action = {
-            type: WS_UPDATE_FILE,
-            payload: { id: "test", foo: "not-bar" }
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({ ...state, documents: [action.payload] });
-    });
-
-    it("should handle LIST_FILES_REQUESTED", () => {
-        const state = { items: [], fileType: "test_filetype" };
-        const action = {
-            type: FIND_FILES.REQUESTED,
-            payload: { term: "foo", paginate: true, fileType: "test_filetype" }
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...state,
-            term: "foo",
-            paginate: true
-        });
-    });
-
-    it("should handle LIST_FILES_SUCCEEDED", () => {
-        const state = { items: [], page: 1 };
-        const action = {
-            type: FIND_FILES.SUCCEEDED,
-            payload: { items: [] },
-            context: { fileType: "test" }
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...state,
-            ...action.payload,
-            fileType: "test"
-        });
-    });
-
     it("should handle UPLOAD_REQUESTED", () => {
         const localId = "baz";
         const name = "test.fq.gz";
         const size = 100;
         const type = "foo";
         const context = {
-            foo: "bar"
+            foo: "bar",
         };
 
         const state = {
-            uploads: []
+            uploads: [],
         };
 
         const action = {
@@ -76,15 +28,15 @@ describe("filesReducer()", () => {
                 fileType: type,
                 file: {
                     name,
-                    size
-                }
-            }
+                    size,
+                },
+            },
         };
 
         const result = reducer(state, action);
 
         expect(result).toEqual({
-            uploads: [...state.uploads, { localId, name, context, size, type, progress: 0, failed: false }]
+            uploads: [...state.uploads, { localId, name, context, size, type, progress: 0, failed: false }],
         });
     });
 
@@ -96,8 +48,8 @@ describe("filesReducer()", () => {
                 uploads: [
                     { localId: "foo", progress: 50 },
                     { localId: "bar", progress: 0 },
-                    { localId: "baz", progress: 100 }
-                ]
+                    { localId: "baz", progress: 100 },
+                ],
             };
         });
 
@@ -105,55 +57,55 @@ describe("filesReducer()", () => {
             state.uploads = [];
             const action = {
                 type: UPLOAD_PROGRESS,
-                payload: { localId: "foo", progress: 5 }
+                payload: { localId: "foo", progress: 5 },
             };
             expect(reducer(state, action)).toEqual({
-                uploads: []
+                uploads: [],
             });
         });
 
         it("when a zero-progress upload is updated", () => {
             const action = {
                 type: UPLOAD_PROGRESS,
-                payload: { localId: "bar", progress: 22 }
+                payload: { localId: "bar", progress: 22 },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 uploads: [
                     { localId: "foo", progress: 50 },
                     { localId: "bar", progress: 22 },
-                    { localId: "baz", progress: 100 }
-                ]
+                    { localId: "baz", progress: 100 },
+                ],
             });
         });
 
         it("when a partial upload is updated", () => {
             const action = {
                 type: UPLOAD_PROGRESS,
-                payload: { localId: "foo", progress: 65 }
+                payload: { localId: "foo", progress: 65 },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 uploads: [
                     { localId: "foo", progress: 65 },
                     { localId: "bar", progress: 0 },
-                    { localId: "baz", progress: 100 }
-                ]
+                    { localId: "baz", progress: 100 },
+                ],
             });
         });
 
         it("when an update that brings a progress value to 100", () => {
             const action = {
                 type: UPLOAD_PROGRESS,
-                payload: { localId: "foo", progress: 100 }
+                payload: { localId: "foo", progress: 100 },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 uploads: [
                     { localId: "foo", progress: 100 },
                     { localId: "bar", progress: 0 },
-                    { localId: "baz", progress: 100 }
-                ]
+                    { localId: "baz", progress: 100 },
+                ],
             });
         });
     });
@@ -163,19 +115,19 @@ describe("filesReducer()", () => {
             uploads: [
                 { localId: "foo", progress: 50 },
                 { localId: "bar", progress: 0 },
-                { localId: "baz", progress: 100 }
-            ]
+                { localId: "baz", progress: 100 },
+            ],
         };
         const action = {
             type: UPLOAD.SUCCEEDED,
-            payload: { localId: "foo", progress: 100 }
+            payload: { localId: "foo", progress: 100 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             uploads: [
                 { localId: "bar", progress: 0 },
-                { localId: "baz", progress: 100 }
-            ]
+                { localId: "baz", progress: 100 },
+            ],
         });
     });
 
@@ -184,20 +136,20 @@ describe("filesReducer()", () => {
             uploads: [
                 { localId: "foo", progress: 50 },
                 { localId: "bar", progress: 0 },
-                { localId: "baz", progress: 100 }
-            ]
+                { localId: "baz", progress: 100 },
+            ],
         };
         const action = {
             type: UPLOAD_FAILED,
-            payload: { localId: "foo" }
+            payload: { localId: "foo" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             uploads: [
                 { localId: "foo", progress: 50, failed: true },
                 { localId: "bar", progress: 0 },
-                { localId: "baz", progress: 100 }
-            ]
+                { localId: "baz", progress: 100 },
+            ],
         });
     });
 
@@ -206,19 +158,19 @@ describe("filesReducer()", () => {
             uploads: [
                 { localId: "foo", progress: 50 },
                 { localId: "bar", progress: 0 },
-                { localId: "baz", progress: 100 }
-            ]
+                { localId: "baz", progress: 100 },
+            ],
         };
         const action = {
             type: REMOVE_UPLOAD,
-            payload: { localId: "foo" }
+            payload: { localId: "foo" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             uploads: [
                 { localId: "bar", progress: 0 },
-                { localId: "baz", progress: 100 }
-            ]
+                { localId: "baz", progress: 100 },
+            ],
         });
     });
 });

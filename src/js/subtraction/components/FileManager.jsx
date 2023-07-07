@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getColor, getFontSize, getFontWeight } from "../../app/theme";
-import FileManager from "../../files/components/Manager";
+import { FileManager } from "../../files/components/Manager";
 
 export const SubtractionFileManager = () => (
     <FileManager
