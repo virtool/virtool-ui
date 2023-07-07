@@ -46,14 +46,14 @@ export const Groups = () => {
 
     const [selectedGroupId, setSelectedGroupId] = useState(null);
 
-    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const { data: groups, isLoading: isLoadingGroups } = useListGroups({});
     const { data: selectedGroup }: { selectedGroup: Group } = useGetGroup(selectedGroupId, {
         enabled: !!selectedGroupId,
         keepPreviousData: true,
     });
 
     useEffect(() => {
-        if (!isLoadingGroups && groups && !find(groups, { id: selectedGroupId })) {
+        if (groups && !find(groups, { id: selectedGroup })) {
             setSelectedGroupId(groups[0]?.id);
         }
     }, [groups]);

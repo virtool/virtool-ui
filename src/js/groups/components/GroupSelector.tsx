@@ -29,7 +29,7 @@ type GroupSelectorProps = {
 };
 
 export const GroupSelector = ({ selectedGroup, setSelectedGroup, groups }: GroupSelectorProps) => {
-    const groupComponents = map(sortBy(groups, "id"), group => {
+    const groupComponents = map(sortBy(groups, "name"), group => {
         return (
             <GroupsSelectBoxGroupSection
                 selectable
