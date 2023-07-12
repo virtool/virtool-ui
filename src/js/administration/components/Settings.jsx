@@ -6,7 +6,7 @@ import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHea
 import { useGetAccount } from "../../account/querys";
 import Groups from "../../groups/components/Groups";
 import UserDetail from "../../users/components/Detail";
-import Users from "../../users/components/Users";
+import { ManageUsers } from "../../users/components/Users";
 import { mapSettingsStateToProps } from "../mappers";
 import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";
@@ -37,7 +37,7 @@ export const Settings = ({ loading }) => {
                         <Switch>
                             <Redirect from="/administration" to={`/administration/${redirect}`} exact />
                             <Route path="/administration/settings" component={ServerSettings} />
-                            <Route path="/administration/users" component={Users} exact />
+                            <Route path="/administration/users" component={ManageUsers} exact />
                             <Route path="/administration/users/:userId" component={UserDetail} />
                             <Route path="/administration/groups" component={Groups} />
                             <Route path="/administration/administrators" component={ManageAdministrators} />

@@ -1,5 +1,6 @@
 import { map } from "lodash-es";
 import React, { useEffect, useState } from "react";
+import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import styled from "styled-components";
 import { usePrevious } from "./hooks";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
@@ -59,3 +60,44 @@ export const ScrollList = ({ page, documents, pageCount, onLoadNextPage, renderR
 };
 
 StyledScrollList.displayName = "ScrollList";
+
+type StreamlinedScrollListProps = {
+    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    isFetchingNextPage: boolean;
+    isLoading: boolean;
+    items: unknown[];
+    renderRow: (item: unknown) => void;
+};
+export const StreamlinedScrollList = ({
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    items,
+    renderRow,
+}: StreamlinedScrollListProps) => {
+    useEffect(() => {
+        const onScroll = () => {
+            if (getScrollRatio() > 0.8 && !isFetchingNextPage) {
+                void fetchNextPage();
+            }
+        };
+
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [isFetchingNextPage, fetchNextPage]);
+
+    const entries = map(items, item => renderRow(item));
+
+    let loading;
+
+    if (isLoading) {
+        loading = <LoadingPlaceholder margin="20px" />;
+    }
+
+    return (
+        <StyledScrollList>
+            {entries}
+            {loading}
+        </StyledScrollList>
+    );
+};

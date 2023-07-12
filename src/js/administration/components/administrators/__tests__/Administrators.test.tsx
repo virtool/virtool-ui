@@ -4,7 +4,7 @@ import nock from "nock";
 import React from "react";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
 import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
-import { createFakeUser, createFakeUsers, mockGetUsersAPI } from "../../../../../tests/fake/user";
+import { createFakeUser, createFakeUsers, mockFindUsersAPI } from "../../../../../tests/fake/user";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 
 import { AdministratorRoles } from "../../../types";
@@ -18,7 +18,7 @@ describe("<Administrators>", () => {
         const users = createFakeUsers(2);
         users[0].administrator_role = AdministratorRoles.FULL;
         users[1].administrator_role = AdministratorRoles.BASE;
-        mockGetUsersAPI(users);
+        mockFindUsersAPI(users);
 
         mockGetAdministratorRoles();
 
@@ -43,7 +43,7 @@ describe("<Administrators>", () => {
         mockGetAccountAPI(account);
 
         const user = createFakeUser({ administrator_role: AdministratorRoles.FULL });
-        mockGetUsersAPI([user]);
+        mockFindUsersAPI([user]);
 
         mockGetAdministratorRoles();
 
@@ -63,7 +63,7 @@ describe("<Administrators>", () => {
         mockGetAccountAPI(account);
 
         const user = createFakeUser({ administrator_role: AdministratorRoles.FULL });
-        mockGetUsersAPI([user]);
+        mockFindUsersAPI([user]);
 
         mockGetAdministratorRoles();
 

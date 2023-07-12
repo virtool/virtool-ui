@@ -4,7 +4,7 @@ import { useGetAccount } from "../../../account/querys";
 import { Account } from "../../../account/types";
 import { InputSearch, LoadingPlaceholder, NoneFoundBox, Pagination, Toolbar } from "../../../base";
 import { UserResponse } from "../../../users/types";
-import { useGetAdministratorRoles, useGetUsers } from "../../querys";
+import { useFindUsers, useGetAdministratorRoles } from "../../querys";
 import { AdministratorRole } from "../../types";
 import { CreateAdministrator } from "./Create";
 import { AdministratorItem } from "./Item";
@@ -16,7 +16,7 @@ export const ManageAdministrators = () => {
 
     const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
-    const { data: users, isLoading: isLoadingUsers }: { data: UserResponse; isLoading: boolean } = useGetUsers(
+    const { data: users, isLoading: isLoadingUsers }: { data: UserResponse; isLoading: boolean } = useFindUsers(
         page,
         25,
         term,

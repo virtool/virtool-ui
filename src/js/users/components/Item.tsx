@@ -1,10 +1,8 @@
-import { get } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
-import { hasSufficientAdminRole } from "../../administration/utils";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { BoxSpaced, Icon, InitialIcon, Label } from "../../base";
 import { StyledButtonSmall } from "../../base/styled/StyledButtonSmall";
@@ -59,7 +57,11 @@ const EditButton = ({ id }) => (
     </StyledButtonSmall>
 );
 
-export const UserItem = ({ id, handle, administrator_role, canEdit }) => {
+export const UserItem = ({ id, handle, administrator_role }) => {
+    const { hasPermission: canEdit } = useCheckAdminRole(
+        administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+    );
+
     const edit = canEdit ? (
         <EditButton id={id} />
     ) : (
@@ -77,18 +79,3 @@ export const UserItem = ({ id, handle, administrator_role, canEdit }) => {
         </StyledUserItem>
     );
 };
-
-export const mapStateToProps = (state, ownProps) => {
-    const { id, handle, administrator_role } = get(state, `users.documents[${ownProps.index}]`, null);
-    const canEdit =
-        administrator_role === null ||
-        hasSufficientAdminRole(AdministratorRoles.FULL, get(state, "account.administrator_role"));
-    return {
-        id,
-        handle,
-        administrator_role,
-        canEdit
-    };
-};
-
-export default connect(mapStateToProps)(UserItem);

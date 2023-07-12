@@ -63,7 +63,7 @@ type Query = {
     administrator: boolean;
 };
 
-export function mockGetUsersAPI(users: Array<User>, query?: Query) {
+export function mockFindUsersAPI(users: Array<User>, query?: Query) {
     return nock("http://localhost")
         .get("/api/admin/users")
         .query(query || true)
