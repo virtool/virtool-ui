@@ -59,7 +59,6 @@ const initialValues = {
 
 const validationSchema = Yup.object().shape({
     workflows: Yup.array().min(1, "At least one workflow must be selected"),
-    subtractions: Yup.array().min(1, "At least one subtraction must be selected"),
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
