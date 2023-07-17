@@ -14,7 +14,7 @@ function listFiles(type: FileType, paginate: boolean, page: number) {
         .then(response => response.body);
 }
 
-export function useListFiles(type: FileType, paginate: boolean, page: number = 1) {
+export function useListFiles(type: FileType, paginate: boolean, page = 1) {
     return useQuery(fileKeys.list(type, [paginate, page]), () => listFiles(type, paginate, page), {
         keepPreviousData: true,
     });

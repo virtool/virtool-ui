@@ -27,7 +27,7 @@ jobs:
       - name: Install
         run: npm i
       - name: Run ESLint
-        run: eslint src/js
+        run: npm run eslint
   test:
     runs-on: ubuntu-22.04
     steps:
