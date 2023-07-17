@@ -22,7 +22,11 @@ export function* findHmms(action) {
 }
 
 export function* installHmms(action) {
-    yield apiCall(hmmsAPI.install, action, INSTALL_HMMS);
+    const resp = yield apiCall(hmmsAPI.install, action, INSTALL_HMMS);
+
+    if (resp.ok) {
+        yield apiCall(hmmsAPI.find, {}, FIND_HMMS);
+    }
 }
 
 export function* getHmm(action) {
