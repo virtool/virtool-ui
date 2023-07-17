@@ -1,42 +1,43 @@
+import { describe, expect, it } from "vitest";
 import {
-    WS_INSERT_REFERENCE,
-    WS_UPDATE_REFERENCE,
-    WS_REMOVE_REFERENCE,
-    EMPTY_REFERENCE,
-    EDIT_REFERENCE,
-    REMOVE_REFERENCE,
-    IMPORT_REFERENCE,
-    CLONE_REFERENCE,
-    REMOTE_REFERENCE,
-    ADD_REFERENCE_USER,
-    EDIT_REFERENCE_USER,
-    REMOVE_REFERENCE_USER,
     ADD_REFERENCE_GROUP,
-    EDIT_REFERENCE_GROUP,
-    REMOVE_REFERENCE_GROUP,
+    ADD_REFERENCE_USER,
     CHECK_REMOTE_UPDATES,
+    CLONE_REFERENCE,
+    EDIT_REFERENCE,
+    EDIT_REFERENCE_GROUP,
+    EDIT_REFERENCE_USER,
+    EMPTY_REFERENCE,
+    FIND_REFERENCES,
+    IMPORT_REFERENCE,
+    REMOTE_REFERENCE,
+    REMOVE_REFERENCE,
+    REMOVE_REFERENCE_GROUP,
+    REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
-    FIND_REFERENCES
+    WS_INSERT_REFERENCE,
+    WS_REMOVE_REFERENCE,
+    WS_UPDATE_REFERENCE,
 } from "../../app/actionTypes";
 import {
-    wsInsertReference,
-    wsUpdateReference,
-    wsRemoveReference,
-    emptyReference,
-    editReference,
-    importReference,
+    addReferenceGroup,
+    addReferenceUser,
+    checkUpdates,
     cloneReference,
+    editReference,
+    editReferenceGroup,
+    editReferenceUser,
+    emptyReference,
+    findReferences,
+    importReference,
     remoteReference,
     removeReference,
-    addReferenceUser,
-    editReferenceUser,
-    removeReferenceUser,
-    addReferenceGroup,
-    editReferenceGroup,
     removeReferenceGroup,
-    checkUpdates,
+    removeReferenceUser,
     updateRemoteReference,
-    findReferences
+    wsInsertReference,
+    wsRemoveReference,
+    wsUpdateReference,
 } from "../actions";
 
 describe("References Action Creators:", () => {
@@ -45,7 +46,7 @@ describe("References Action Creators:", () => {
         const result = wsInsertReference(payload);
         expect(result).toEqual({
             type: WS_INSERT_REFERENCE,
-            payload
+            payload,
         });
     });
 
@@ -54,7 +55,7 @@ describe("References Action Creators:", () => {
         const result = wsUpdateReference(payload);
         expect(result).toEqual({
             type: WS_UPDATE_REFERENCE,
-            payload
+            payload,
         });
     });
 
@@ -63,7 +64,7 @@ describe("References Action Creators:", () => {
         const result = wsRemoveReference(payload);
         expect(result).toEqual({
             type: WS_REMOVE_REFERENCE,
-            payload
+            payload,
         });
     });
 
@@ -73,7 +74,7 @@ describe("References Action Creators:", () => {
         const result = findReferences(term, page);
         expect(result).toEqual({
             type: FIND_REFERENCES.REQUESTED,
-            payload: { term, page }
+            payload: { term, page },
         });
     });
 
@@ -85,7 +86,7 @@ describe("References Action Creators:", () => {
         const result = emptyReference(name, description, dataType, organism);
         expect(result).toEqual({
             type: EMPTY_REFERENCE.REQUESTED,
-            payload: { name, description, dataType, organism }
+            payload: { name, description, dataType, organism },
         });
     });
 
@@ -95,7 +96,7 @@ describe("References Action Creators:", () => {
         const result = editReference(refId, update);
         expect(result).toEqual({
             type: EDIT_REFERENCE.REQUESTED,
-            payload: { refId, update }
+            payload: { refId, update },
         });
     });
 
@@ -106,7 +107,7 @@ describe("References Action Creators:", () => {
         const result = importReference(name, description, fileId);
         expect(result).toEqual({
             type: IMPORT_REFERENCE.REQUESTED,
-            payload: { name, description, fileId }
+            payload: { name, description, fileId },
         });
     });
 
@@ -118,7 +119,7 @@ describe("References Action Creators:", () => {
         const result = cloneReference(name, description, refId);
         expect(result).toEqual({
             type: CLONE_REFERENCE.REQUESTED,
-            payload: { name, description, refId }
+            payload: { name, description, refId },
         });
     });
 
@@ -131,7 +132,7 @@ describe("References Action Creators:", () => {
         const result = removeReference(refId);
         expect(result).toEqual({
             type: REMOVE_REFERENCE.REQUESTED,
-            payload: { refId }
+            payload: { refId },
         });
     });
 
@@ -141,7 +142,7 @@ describe("References Action Creators:", () => {
         const result = addReferenceUser(refId, user);
         expect(result).toEqual({
             type: ADD_REFERENCE_USER.REQUESTED,
-            payload: { refId, user }
+            payload: { refId, user },
         });
     });
 
@@ -152,7 +153,7 @@ describe("References Action Creators:", () => {
         const result = editReferenceUser(refId, userId, update);
         expect(result).toEqual({
             type: EDIT_REFERENCE_USER.REQUESTED,
-            payload: { refId, userId, update }
+            payload: { refId, userId, update },
         });
     });
 
@@ -162,7 +163,7 @@ describe("References Action Creators:", () => {
         const result = removeReferenceUser(refId, userId);
         expect(result).toEqual({
             type: REMOVE_REFERENCE_USER.REQUESTED,
-            payload: { refId, userId }
+            payload: { refId, userId },
         });
     });
 
@@ -172,7 +173,7 @@ describe("References Action Creators:", () => {
         const result = addReferenceGroup(refId, group);
         expect(result).toEqual({
             type: ADD_REFERENCE_GROUP.REQUESTED,
-            payload: { refId, group }
+            payload: { refId, group },
         });
     });
 
@@ -183,7 +184,7 @@ describe("References Action Creators:", () => {
         const result = editReferenceGroup(refId, groupId, update);
         expect(result).toEqual({
             type: EDIT_REFERENCE_GROUP.REQUESTED,
-            payload: { refId, groupId, update }
+            payload: { refId, groupId, update },
         });
     });
 
@@ -193,7 +194,7 @@ describe("References Action Creators:", () => {
         const result = removeReferenceGroup(refId, groupId);
         expect(result).toEqual({
             type: REMOVE_REFERENCE_GROUP.REQUESTED,
-            payload: { refId, groupId }
+            payload: { refId, groupId },
         });
     });
 
@@ -202,7 +203,7 @@ describe("References Action Creators:", () => {
         const result = checkUpdates(refId);
         expect(result).toEqual({
             type: CHECK_REMOTE_UPDATES.REQUESTED,
-            payload: { refId }
+            payload: { refId },
         });
     });
 
@@ -211,7 +212,7 @@ describe("References Action Creators:", () => {
         const result = updateRemoteReference(refId);
         expect(result).toEqual({
             type: UPDATE_REMOTE_REFERENCE.REQUESTED,
-            payload: { refId }
+            payload: { refId },
         });
     });
 });

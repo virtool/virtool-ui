@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { ThemeProvider } from "styled-components";
-import { vi } from "vitest";
+import { expect, vi } from "vitest";
 import { watchRouter } from "../js/app/sagas";
 import { theme } from "../js/app/theme";
 
@@ -29,7 +29,7 @@ setLogger({
     error: noop,
 });
 
-const wrapWithProviders = (ui, createAppStore) => {
+export function wrapWithProviders(ui, createAppStore) {
     const queryClient = new QueryClient();
 
     if (createAppStore) {
@@ -47,7 +47,7 @@ const wrapWithProviders = (ui, createAppStore) => {
             <ThemeProvider theme={theme}>{ui}</ThemeProvider>
         </QueryClientProvider>
     );
-};
+}
 
 export function renderWithProviders(ui, createAppStore) {
     const { rerender, ...rest } = rtlRender(wrapWithProviders(ui, createAppStore));
@@ -59,9 +59,11 @@ export function renderWithProviders(ui, createAppStore) {
     return { ...rest, rerender: rerenderWithProviders };
 }
 
-const createGenericReducer = initState => state => state || initState;
+export function createGenericReducer(initState) {
+    return state => state || initState;
+}
 
-const createAppStore = (state, history, createReducer) => {
+export function createAppStore(state, history, createReducer) {
     const reducer = createReducer
         ? createReducer(state, history)
         : combineReducers({
@@ -73,16 +75,16 @@ const createAppStore = (state, history, createReducer) => {
     sagaMiddleware.run(watchRouter);
 
     return store;
-};
+}
 
-const renderWithRouter = (ui, state, history, createReducer) => {
+export function renderWithRouter(ui, state, history, createReducer) {
     const wrappedUI = (
         <Provider store={createAppStore(state, history, createReducer)}>
             <ConnectedRouter history={history}> {ui} </ConnectedRouter>
         </Provider>
     );
     renderWithProviders(wrappedUI);
-};
+}
 
 //mocks HTML element prototypes that are not implemented in jsdom
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -95,9 +97,9 @@ class ResizeObserver {
     disconnect() {}
 }
 
-export const attachResizeObserver = () => {
+export function attachResizeObserver() {
     window.ResizeObserver = ResizeObserver;
-};
+}
 
 attachResizeObserver();
 

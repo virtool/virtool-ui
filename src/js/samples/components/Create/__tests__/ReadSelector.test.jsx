@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InputSearch } from "../../../../base";
 import ReadSelector, { ReadSelectorButton } from "../ReadSelector";
 
@@ -10,7 +13,7 @@ describe("<ReadSelector />", () => {
             error: "foo",
             selected: [21, 23],
             onSelect: vi.fn(),
-            handleSelect: vi.fn()
+            handleSelect: vi.fn(),
         };
     });
 
@@ -22,7 +25,7 @@ describe("<ReadSelector />", () => {
     it("should call onChange() on update if files change", () => {
         const wrapper = shallow(<ReadSelector {...props} />);
         wrapper.setProps({
-            files: [{ id: 21, size: 2048, name: "Bar" }]
+            files: [{ id: 21, size: 2048, name: "Bar" }],
         });
         expect(props.onSelect).toHaveBeenCalled();
     });
@@ -31,7 +34,7 @@ describe("<ReadSelector />", () => {
         const files = props.files;
         const wrapper = shallow(<ReadSelector {...props} />);
         wrapper.setProps({
-            files
+            files,
         });
         expect(props.onSelect).not.toHaveBeenCalled();
     });
@@ -40,8 +43,8 @@ describe("<ReadSelector />", () => {
         const wrapper = shallow(<ReadSelector {...props} />);
         const e = {
             target: {
-                value: "Baz"
-            }
+                value: "Baz",
+            },
         };
         wrapper.find(InputSearch).simulate("change", e);
         expect(wrapper.state()).toEqual({ filter: "Baz" });
@@ -50,7 +53,7 @@ describe("<ReadSelector />", () => {
     it("should call reset when reset Button is clicked", () => {
         const wrapper = shallow(<ReadSelector {...props} />);
         const e = {
-            preventDefault: vi.fn()
+            preventDefault: vi.fn(),
         };
         wrapper.find(ReadSelectorButton).at(0).simulate("click", e);
         expect(wrapper.state()).toEqual({ filter: "" });

@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { mapStateToProps, SampleDetailGeneral } from "../General";
 describe("<SampleDetailGeneral />", () => {
     let props;
@@ -17,10 +20,10 @@ describe("<SampleDetailGeneral />", () => {
             subtractions: [
                 {
                     id: "baz",
-                    name: "Arabidopsis thaliana"
-                }
+                    name: "Arabidopsis thaliana",
+                },
             ],
-            libraryType: ""
+            libraryType: "",
         };
     });
 
@@ -49,12 +52,12 @@ describe("mapStateToProps()", () => {
                         gc: 31.2452,
                         count: 13198329,
                         encoding: "Foo 1.2",
-                        length: [50, 100]
+                        length: [50, 100],
                     },
                     library_type: "normal",
-                    subtractions: [{ id: "baz", name: "Arabidopsis thaliana" }]
-                }
-            }
+                    subtractions: [{ id: "baz", name: "Arabidopsis thaliana" }],
+                },
+            },
         };
     });
 
@@ -71,14 +74,14 @@ describe("mapStateToProps()", () => {
             gc: "31.2 %",
             count: "13.2 m",
             lengthRange: "50 - 100",
-            libraryType: "Normal"
+            libraryType: "Normal",
         });
     });
 
     it.each([
         ["normal", "Normal"],
         ["srna", "sRNA"],
-        ["amplicon", "Amplicon"]
+        ["amplicon", "Amplicon"],
     ])("state.library_type(%s) should equal props.libraryType(%s)", (a, b) => {
         state.samples.detail.library_type = a;
         const result = mapStateToProps(state).libraryType;

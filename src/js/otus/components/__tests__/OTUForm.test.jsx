@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Input } from "../../../base";
 import { OTUForm } from "../Form";
 
@@ -10,7 +13,7 @@ describe("<OTUForm />", () => {
             onChange: vi.fn(),
             name: "test",
             abbreviation: "T",
-            error: ""
+            error: "",
         };
     });
 
@@ -30,8 +33,8 @@ describe("<OTUForm />", () => {
         const e = {
             target: {
                 name,
-                value: name === "name" ? "Foo" : "F"
-            }
+                value: name === "name" ? "Foo" : "F",
+            },
         };
         wrapper
             .find(Input)

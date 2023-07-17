@@ -1,20 +1,21 @@
+import { describe, expect, it } from "vitest";
 import {
-    WS_INSERT_GROUP,
-    WS_UPDATE_GROUP,
-    WS_REMOVE_GROUP,
-    LIST_GROUPS,
     CREATE_GROUP,
+    LIST_GROUPS,
+    REMOVE_GROUP,
     SET_GROUP_PERMISSION,
-    REMOVE_GROUP
+    WS_INSERT_GROUP,
+    WS_REMOVE_GROUP,
+    WS_UPDATE_GROUP,
 } from "../../app/actionTypes";
 import {
-    wsInsertGroup,
-    wsUpdateGroup,
-    wsRemoveGroup,
-    listGroups,
     createGroup,
+    listGroups,
+    removeGroup,
     setGroupPermission,
-    removeGroup
+    wsInsertGroup,
+    wsRemoveGroup,
+    wsUpdateGroup,
 } from "../actions";
 
 describe("Groups Action Creators:", () => {
@@ -23,7 +24,7 @@ describe("Groups Action Creators:", () => {
         const result = wsInsertGroup(data);
         expect(result).toEqual({
             type: WS_INSERT_GROUP,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -32,7 +33,7 @@ describe("Groups Action Creators:", () => {
         const result = wsUpdateGroup(data);
         expect(result).toEqual({
             type: WS_UPDATE_GROUP,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -41,14 +42,14 @@ describe("Groups Action Creators:", () => {
         const result = wsRemoveGroup(data);
         expect(result).toEqual({
             type: WS_REMOVE_GROUP,
-            payload: data
+            payload: data,
         });
     });
 
     it("listGroups: returns simple action", () => {
         const result = listGroups();
         expect(result).toEqual({
-            type: LIST_GROUPS.REQUESTED
+            type: LIST_GROUPS.REQUESTED,
         });
     });
 
@@ -57,7 +58,7 @@ describe("Groups Action Creators:", () => {
         const result = createGroup(name);
         expect(result).toEqual({
             type: CREATE_GROUP.REQUESTED,
-            payload: { name }
+            payload: { name },
         });
     });
 
@@ -68,7 +69,7 @@ describe("Groups Action Creators:", () => {
         const result = setGroupPermission(groupId, permission, value);
         expect(result).toEqual({
             type: SET_GROUP_PERMISSION.REQUESTED,
-            payload: { groupId, permission, value }
+            payload: { groupId, permission, value },
         });
     });
 
@@ -77,7 +78,7 @@ describe("Groups Action Creators:", () => {
         const result = removeGroup(groupId);
         expect(result).toEqual({
             type: REMOVE_GROUP.REQUESTED,
-            payload: { groupId }
+            payload: { groupId },
         });
     });
 });

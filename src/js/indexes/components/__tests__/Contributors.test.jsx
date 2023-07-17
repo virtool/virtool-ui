@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { Contributor, Contributors, mapStateToProps } from "../Contributors";
 
 describe("<Contributor />", () => {
@@ -7,7 +10,7 @@ describe("<Contributor />", () => {
         props = {
             id: "bob",
             handle: "bob",
-            count: 1
+            count: 1,
         };
     });
 
@@ -28,8 +31,8 @@ describe("<Contributors />", () => {
         const props = {
             contributors: [
                 { id: "bob", count: 5 },
-                { id: "fred", count: 12 }
-            ]
+                { id: "fred", count: 12 },
+            ],
         };
         const wrapper = shallow(<Contributors {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -40,14 +43,14 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const contributors = [
             { id: "bob", count: 5 },
-            { id: "fred", count: 12 }
+            { id: "fred", count: 12 },
         ];
         const state = {
             indexes: {
                 detail: {
-                    contributors
-                }
-            }
+                    contributors,
+                },
+            },
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({ contributors });

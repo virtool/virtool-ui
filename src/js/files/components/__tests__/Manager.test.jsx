@@ -1,7 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
 import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
@@ -24,7 +27,7 @@ describe("<FileManager>", () => {
             message: "",
             tip: "",
             validationRegex: "",
-            onLoadNextPage: vi.fn()
+            onLoadNextPage: vi.fn(),
         };
         state = {
             files: {
@@ -40,14 +43,14 @@ describe("<FileManager>", () => {
                         size: 1024,
                         type: "subtraction",
                         uploaded_at: "2022-04-13T20:22:25.000000Z",
-                        user: { handle: "test_handle", id: "n91xt5wq", administrator: true }
-                    }
-                ]
+                        user: { handle: "test_handle", id: "n91xt5wq", administrator: true },
+                    },
+                ],
             },
             account: {
                 permissions: { upload_file: false },
-                administrator_role: AdministratorRoles.FULL
-            }
+                administrator_role: AdministratorRoles.FULL,
+            },
         };
     });
 
@@ -57,7 +60,7 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            createAppStore(state)
+            createAppStore(state),
         );
         expect(screen.getByText("Drag file here to upload.")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
@@ -71,7 +74,7 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            createAppStore(state)
+            createAppStore(state),
         );
         expect(screen.getByText("You do not have permission to upload files.")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
@@ -84,7 +87,7 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            createAppStore(state)
+            createAppStore(state),
         );
         expect(screen.getByText("test_message")).toBeInTheDocument();
     });
@@ -101,7 +104,7 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            () => createStore(reducer, state)
+            () => createStore(reducer, state),
         );
         const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
@@ -137,11 +140,11 @@ describe("mapStateToProps()", () => {
                         size: 1024,
                         type: "subtraction",
                         uploaded_at: "2022-04-13T20:22:25.000000Z",
-                        user: { handle: "test_handle", id: "n91xt5wq", administrator: true }
-                    }
-                ]
+                        user: { handle: "test_handle", id: "n91xt5wq", administrator: true },
+                    },
+                ],
             },
-            account: { administrator: true }
+            account: { administrator: true },
         };
     });
 
@@ -155,7 +158,7 @@ describe("mapStateToProps()", () => {
             items: [1],
             URLPage: 1,
             stale: undefined,
-            loading: true
+            loading: true,
         };
         expect(mapStateToProps(state)).toEqual(expected);
     });
@@ -173,7 +176,7 @@ describe("mapDispatchToProps", () => {
         onLoadNextPage(fileType, term, page);
         expect(dispatch).toHaveBeenCalledWith({
             type: "FIND_FILES_REQUESTED",
-            payload
+            payload,
         });
     });
 });

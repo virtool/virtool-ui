@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { FIND_JOBS, GET_JOB } from "../../app/actionTypes";
 import reducer, { initialState as reducerInitialState } from "../reducer";
 
@@ -9,7 +10,7 @@ describe("Job Reducer", () => {
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const result = reducer(reducerInitialState, action);
         expect(result).toEqual(reducerInitialState);
@@ -20,11 +21,11 @@ describe("Job Reducer", () => {
         const documents = [{ id: "foo" }];
         const action = {
             type: FIND_JOBS.SUCCEEDED,
-            payload: { documents }
+            payload: { documents },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents
+            documents,
         });
     });
 
@@ -33,7 +34,7 @@ describe("Job Reducer", () => {
         const action = { type: GET_JOB.REQUESTED };
         const result = reducer(state, action);
         expect(result).toEqual({
-            detail: null
+            detail: null,
         });
     });
 
@@ -41,12 +42,12 @@ describe("Job Reducer", () => {
         const state = {};
         const action = {
             type: GET_JOB.SUCCEEDED,
-            payload: { id: "foo" }
+            payload: { id: "foo" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            detail: action.payload
+            detail: action.payload,
         });
     });
 });

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { WS_UPDATE_STATUS } from "../../app/actionTypes";
 import { wsUpdateStatus } from "../actions";
 
@@ -7,7 +8,7 @@ describe("Status Action Creators:", () => {
         const result = wsUpdateStatus(data);
         const expected = {
             type: WS_UPDATE_STATUS,
-            payload: { ...data }
+            payload: { ...data },
         };
 
         expect(result).toEqual(expected);

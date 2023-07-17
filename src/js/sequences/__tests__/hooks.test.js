@@ -1,4 +1,5 @@
 import { act, renderHook } from "@testing-library/react-hooks";
+import { describe, expect, it } from "vitest";
 import { useExpanded } from "../hooks";
 
 describe("useExpanded()", () => {

@@ -3,10 +3,11 @@ import userEvent from "@testing-library/user-event";
 import { Form, Formik } from "formik";
 import React from "react";
 import { ThemeProvider } from "styled-components";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { theme } from "../../../app/theme";
 import { ReferenceForm } from "../Form";
 
-const renderWithFormik = (renderer, ui, initialValues, onSubmit, mode) => {
+function renderWithFormik(renderer, ui, initialValues, onSubmit, mode) {
     const jsx = (
         <ThemeProvider theme={theme}>
             <Formik initialValues={initialValues} onSubmit={onSubmit}>
@@ -20,7 +21,7 @@ const renderWithFormik = (renderer, ui, initialValues, onSubmit, mode) => {
     );
 
     return renderer(jsx);
-};
+}
 
 describe("<ReferenceForm />", () => {
     let initialValues;
@@ -31,7 +32,7 @@ describe("<ReferenceForm />", () => {
         initialValues = {
             description: "Foo reference",
             name: "Foo",
-            organism: "Bar"
+            organism: "Bar",
         };
         onSubmit = vi.fn();
         mode = "clone";

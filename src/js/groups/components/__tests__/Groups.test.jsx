@@ -1,13 +1,15 @@
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { Provider } from "react-redux";
-import createSagaMiddleware from "redux-saga";
-import Groups from "../Groups";
 import { applyMiddleware, combineReducers, createStore } from "redux";
-import { screen } from "@testing-library/react";
+import createSagaMiddleware from "redux-saga";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { watchRouter } from "../../../app/sagas";
+import Groups from "../Groups";
 
 const createGenericReducer = initState => state => state || initState;
 
@@ -15,7 +17,7 @@ const createAppStore = (state, history) => {
     const reducer = combineReducers({
         router: connectRouter(history),
         groups: createGenericReducer(state.groups),
-        users: createGenericReducer(state.users)
+        users: createGenericReducer(state.users),
     });
     const sagaMiddleware = createSagaMiddleware();
     const store = createStore(reducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
@@ -54,9 +56,9 @@ describe("Groups", () => {
                         modify_subtraction: false,
                         remove_file: true,
                         remove_job: true,
-                        upload_file: true
-                    }
-                }
+                        upload_file: true,
+                    },
+                },
             ],
             onShowCreateGroup: vi.fn(),
             activeGroup: {
@@ -70,11 +72,11 @@ describe("Groups", () => {
                     modify_subtraction: false,
                     remove_file: true,
                     remove_job: true,
-                    upload_file: true
-                }
+                    upload_file: true,
+                },
             },
             onListGroups: vi.fn(),
-            onFindUsers: vi.fn()
+            onFindUsers: vi.fn(),
         };
         state = {
             groups: {
@@ -90,9 +92,9 @@ describe("Groups", () => {
                             modify_subtraction: false,
                             remove_file: true,
                             remove_job: true,
-                            upload_file: true
-                        }
-                    }
+                            upload_file: true,
+                        },
+                    },
                 ],
                 activeGroup: {
                     name: "testName",
@@ -105,16 +107,16 @@ describe("Groups", () => {
                         modify_subtraction: false,
                         remove_file: true,
                         remove_job: true,
-                        upload_file: true
-                    }
-                }
+                        upload_file: true,
+                    },
+                },
             },
             users: {
                 documents: {
                     handle: "testUser",
-                    permissions: { permission1: true, permission2: false, permission3: true }
-                }
-            }
+                    permissions: { permission1: true, permission2: false, permission3: true },
+                },
+            },
         };
         history = createBrowserHistory();
     });
@@ -187,8 +189,8 @@ describe("Groups", () => {
                     modify_subtraction: false,
                     remove_file: true,
                     remove_job: true,
-                    upload_file: true
-                }
+                    upload_file: true,
+                },
             },
             {
                 name: "secondTestName",
@@ -201,9 +203,9 @@ describe("Groups", () => {
                     modify_subtraction: false,
                     remove_file: false,
                     remove_job: true,
-                    upload_file: false
-                }
-            }
+                    upload_file: false,
+                },
+            },
         ];
 
         renderWithRouter(<Groups {...props} />, state, history);

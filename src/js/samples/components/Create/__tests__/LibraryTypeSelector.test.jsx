@@ -1,3 +1,8 @@
+import userEvent from "@testing-library/user-event";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { LibraryTypeSelector } from "../LibraryTypeSelector";
 
 describe("<LibraryTypeSelector>", () => {
@@ -5,7 +10,7 @@ describe("<LibraryTypeSelector>", () => {
     beforeEach(() => {
         props = {
             onSelect: vi.fn(),
-            libraryType: "normal"
+            libraryType: "normal",
         };
     });
 
@@ -28,17 +33,17 @@ describe("<LibraryTypeSelector>", () => {
 
     it("should call onSelect with libraryType normal when Normal type is clicked", () => {
         const { getByText } = renderWithProviders(<LibraryTypeSelector {...props} />);
-        fireEvent.click(getByText("Normal"));
+        userEvent.click(getByText("Normal"));
         expect(props.onSelect).toHaveBeenCalledWith("normal");
     });
     it("should call onSelect with libraryType srna when srna type is clicked", () => {
         const { getByText } = renderWithProviders(<LibraryTypeSelector {...props} />);
-        fireEvent.click(getByText("sRNA"));
+        userEvent.click(getByText("sRNA"));
         expect(props.onSelect).toHaveBeenCalledWith("srna");
     });
     it("should call onSelect with libraryType amplicon when amplicon type is clicked", () => {
         const { getByText } = renderWithProviders(<LibraryTypeSelector {...props} />);
-        fireEvent.click(getByText("Amplicon"));
+        userEvent.click(getByText("Amplicon"));
         expect(props.onSelect).toHaveBeenCalledWith("amplicon");
     });
 });

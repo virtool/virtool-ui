@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import {
     ADD_REFERENCE_GROUP,
     ADD_REFERENCE_USER,
@@ -13,7 +14,7 @@ import {
     UPLOAD,
     WS_INSERT_REFERENCE,
     WS_REMOVE_REFERENCE,
-    WS_UPDATE_REFERENCE
+    WS_UPDATE_REFERENCE,
 } from "../../app/actionTypes";
 import reducer, { initialState } from "../reducer";
 
@@ -25,7 +26,7 @@ describe("References Reducer", () => {
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const result = reducer(initialState, action);
         expect(result).toEqual(initialState);
@@ -44,16 +45,16 @@ describe("References Reducer", () => {
                 ...initialState,
                 documents: [],
                 page: 1,
-                fetched: true
+                fetched: true,
             };
             const action = {
                 type: WS_INSERT_REFERENCE,
-                payload: { id: "123abc", name: "testReference" }
+                payload: { id: "123abc", name: "testReference" },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 ...state,
-                documents: [{ ...action.payload }]
+                documents: [{ ...action.payload }],
             });
         });
     });
@@ -62,26 +63,26 @@ describe("References Reducer", () => {
         const state = { documents: [{ id: "123abc", name: "testReference" }] };
         const action = {
             type: WS_UPDATE_REFERENCE,
-            payload: { id: "123abc", name: "testReference-edited" }
+            payload: { id: "123abc", name: "testReference-edited" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            documents: [{ id: "123abc", name: "testReference-edited" }]
+            documents: [{ id: "123abc", name: "testReference-edited" }],
         });
     });
 
     it("should handle WS_REMOVE_REFERENCE", () => {
         const state = {
-            documents: [{ id: "123abc", name: "testReference" }]
+            documents: [{ id: "123abc", name: "testReference" }],
         };
         const action = {
             type: WS_REMOVE_REFERENCE,
-            payload: { "123abc": "123abc" }
+            payload: { "123abc": "123abc" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: []
+            documents: [],
         });
     });
 
@@ -89,7 +90,7 @@ describe("References Reducer", () => {
         const term = "foo";
         const action = {
             type: FIND_REFERENCES.REQUESTED,
-            payload: { term: "foo" }
+            payload: { term: "foo" },
         };
         const result = reducer({}, action);
         expect(result).toEqual({ term });
@@ -99,11 +100,11 @@ describe("References Reducer", () => {
         const state = { documents: null };
         const action = {
             type: FIND_REFERENCES.SUCCEEDED,
-            payload: { documents: [], page: 3, page_count: 5 }
+            payload: { documents: [], page: 3, page_count: 5 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            ...action.payload
+            ...action.payload,
         });
     });
 
@@ -117,7 +118,7 @@ describe("References Reducer", () => {
         const state = { detail: { foo: "bar" } };
         const action = {
             type: EDIT_REFERENCE.SUCCEEDED,
-            payload: { foo: "baz" }
+            payload: { foo: "baz" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({ detail: { foo: "baz" } });
@@ -128,11 +129,11 @@ describe("References Reducer", () => {
         const result = reducer({}, action);
         expect(result).toEqual({
             importFile: {
-                foo: "bar"
+                foo: "bar",
             },
             importUploadId: null,
             importUploadName: null,
-            importUploadProgress: 0
+            importUploadProgress: 0,
         });
     });
 
@@ -152,14 +153,14 @@ describe("References Reducer", () => {
         const state = { checking: true };
         const action = {
             type: CHECK_REMOTE_UPDATES.SUCCEEDED,
-            payload: { foo: "bar" }
+            payload: { foo: "bar" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             checking: false,
             detail: {
-                release: { foo: "bar" }
-            }
+                release: { foo: "bar" },
+            },
         });
     });
 
@@ -167,7 +168,7 @@ describe("References Reducer", () => {
         const state = { detail: {} };
         const action = {
             type: UPDATE_REMOTE_REFERENCE.SUCCEEDED,
-            payload: { foo: "bar" }
+            payload: { foo: "bar" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({ detail: { release: { foo: "bar" } } });
@@ -177,7 +178,7 @@ describe("References Reducer", () => {
         const state = { detail: { users: [] } };
         const action = {
             type: ADD_REFERENCE_USER.SUCCEEDED,
-            payload: { id: "test-user" }
+            payload: { id: "test-user" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({ detail: { users: [{ id: "test-user" }] } });
@@ -187,11 +188,11 @@ describe("References Reducer", () => {
         const state = { detail: { users: [{ id: "test-user", foo: "bar" }] } };
         const action = {
             type: EDIT_REFERENCE_USER.SUCCEEDED,
-            payload: { id: "test-user", foo: "baz" }
+            payload: { id: "test-user", foo: "baz" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            detail: { users: [{ id: "test-user", foo: "baz" }] }
+            detail: { users: [{ id: "test-user", foo: "baz" }] },
         });
     });
 
@@ -200,12 +201,12 @@ describe("References Reducer", () => {
             const state = { detail: { id: "foo" }, pendingRemoveUsers: ["fred"] };
             const action = {
                 type: REMOVE_REFERENCE_USER.REQUESTED,
-                payload: { refId: "foo", userId: "bob" }
+                payload: { refId: "foo", userId: "bob" },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 detail: { id: "foo" },
-                pendingRemoveUsers: ["fred", "bob"]
+                pendingRemoveUsers: ["fred", "bob"],
             });
         });
 
@@ -213,7 +214,7 @@ describe("References Reducer", () => {
             const state = { detail: { id: "foo" }, pendingRemoveUsers: ["fred"] };
             const action = {
                 type: REMOVE_REFERENCE_USER.REQUESTED,
-                payload: { refId: "bar", userId: "bob" }
+                payload: { refId: "bar", userId: "bob" },
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -230,16 +231,16 @@ describe("References Reducer", () => {
                 payload: {
                     context: {
                         refId: "foo",
-                        userId: "bar"
-                    }
-                }
+                        userId: "bar",
+                    },
+                },
             };
             state = {
                 detail: {
                     id: "foo",
-                    users: [{ id: "bar" }, { id: "bad" }]
+                    users: [{ id: "bar" }, { id: "bad" }],
                 },
-                pendingRemoveUsers: ["bar", "baz"]
+                pendingRemoveUsers: ["bar", "baz"],
             };
         });
 
@@ -247,7 +248,7 @@ describe("References Reducer", () => {
             const result = reducer(state, action);
             expect(result).toEqual({
                 detail: { ...state.detail, users: [{ id: "bad" }] },
-                pendingRemoveUsers: ["baz"]
+                pendingRemoveUsers: ["baz"],
             });
         });
 
@@ -262,29 +263,29 @@ describe("References Reducer", () => {
         const state = { detail: { groups: [] } };
         const action = {
             type: ADD_REFERENCE_GROUP.SUCCEEDED,
-            payload: { id: "test-group" }
+            payload: { id: "test-group" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            detail: { groups: [{ id: "test-group" }] }
+            detail: { groups: [{ id: "test-group" }] },
         });
     });
 
     it("should handle EDIT_REFERENCE_GROUP_SUCCEEDED", () => {
         const state = {
             detail: {
-                groups: [{ id: "foo", foo: "bar" }]
-            }
+                groups: [{ id: "foo", foo: "bar" }],
+            },
         };
         const action = {
             type: EDIT_REFERENCE_GROUP.SUCCEEDED,
-            payload: { id: "foo", foo: "baz" }
+            payload: { id: "foo", foo: "baz" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             detail: {
-                groups: [{ id: "foo", foo: "baz" }]
-            }
+                groups: [{ id: "foo", foo: "baz" }],
+            },
         });
     });
 
@@ -295,11 +296,11 @@ describe("References Reducer", () => {
         beforeEach(() => {
             action = {
                 type: REMOVE_REFERENCE_GROUP.REQUESTED,
-                payload: { refId: "foo", groupId: "baz" }
+                payload: { refId: "foo", groupId: "baz" },
             };
             state = {
                 detail: { id: "foo" },
-                pendingRemoveGroups: ["bar"]
+                pendingRemoveGroups: ["bar"],
             };
         });
 
@@ -307,7 +308,7 @@ describe("References Reducer", () => {
             const result = reducer(state, action);
             expect(result).toEqual({
                 detail: { id: "foo" },
-                pendingRemoveGroups: ["bar", "baz"]
+                pendingRemoveGroups: ["bar", "baz"],
             });
         });
 
@@ -327,16 +328,16 @@ describe("References Reducer", () => {
                 type: REMOVE_REFERENCE_GROUP.SUCCEEDED,
                 context: {
                     refId: "foobar",
-                    groupId: "bar"
-                }
+                    groupId: "bar",
+                },
             };
 
             state = {
                 detail: {
                     id: "foobar",
-                    groups: [{ id: "foo" }, { id: "bar" }]
+                    groups: [{ id: "foo" }, { id: "bar" }],
                 },
-                pendingRemoveGroups: ["bar", "baz"]
+                pendingRemoveGroups: ["bar", "baz"],
             };
         });
 
@@ -345,9 +346,9 @@ describe("References Reducer", () => {
             expect(result).toEqual({
                 detail: {
                     id: "foobar",
-                    groups: [{ id: "foo" }]
+                    groups: [{ id: "foo" }],
                 },
-                pendingRemoveGroups: ["baz"]
+                pendingRemoveGroups: ["baz"],
             });
         });
 

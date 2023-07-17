@@ -1,19 +1,20 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { shallow } from "enzyme";
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { LIST_LABELS } from "../../../../app/actionTypes";
 import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
-import { BrowserRouter } from "react-router-dom";
-
-const routerRenderWithProviders = (ui, store) => {
+function createAppStore(state) {
+    return () => createStore(state => state, state);
+}
+function routerRenderWithProviders(ui, store) {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
     return renderWithProviders(routerUi, store);
-};
-
-const createAppStore = state => {
-    return () => createStore(state => state, state);
-};
+}
 
 describe("<CreateSample>", () => {
     const readFileName = "large";
@@ -32,20 +33,20 @@ describe("<CreateSample>", () => {
                     id,
                     name: `${readFileName} ${id}`,
                     name_on_disk: `${id}-${readFileName}.fq.gz`,
-                    size: 0
+                    size: 0,
                 })),
             allLabels: [
                 { color: "#3B82F6", count: 0, description: "", id: 2, name: "testlabel1" },
-                { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" }
+                { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" },
             ],
             subtractions: [
                 { name: "Foo Subtraction", id: "foo_subtraction", ready: true },
-                { name: "Bar Subtraction", id: "bar_subtraction", ready: true }
+                { name: "Bar Subtraction", id: "bar_subtraction", ready: true },
             ],
             forceGroupChoice: false,
             onCreate: vi.fn(),
             onLoadSubtractionsAndFiles: vi.fn(),
-            onListLabels: vi.fn()
+            onListLabels: vi.fn(),
         };
 
         values = {
@@ -55,23 +56,23 @@ describe("<CreateSample>", () => {
             isolate: "Isolate",
             locale: "Timbuktu",
             subtractionId: "sub_bar",
-            libraryType: "sRNA"
+            libraryType: "sRNA",
         };
 
         state = {
             labels: {
                 documents: [
                     { color: "#3B82F6", count: 0, description: "", id: 2, name: "testlabel1" },
-                    { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" }
-                ]
+                    { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" },
+                ],
             },
             subtraction: {
                 shortlist: [
                     { name: "Foo Subtraction", id: "foo_subtraction", ready: true },
-                    { name: "Bar Subtraction", id: "bar_subtraction", ready: true }
-                ]
+                    { name: "Bar Subtraction", id: "bar_subtraction", ready: true },
+                ],
             },
-            forms: { formState: {} }
+            forms: { formState: {} },
         };
     });
 
@@ -146,7 +147,7 @@ describe("<CreateSample>", () => {
             libraryType.toLowerCase(),
             [state.subtraction.shortlist[0].id],
             [0, 1],
-            []
+            [],
         );
     });
 
@@ -176,7 +177,7 @@ describe("<CreateSample>", () => {
             libraryType.toLowerCase(),
             [state.subtraction.shortlist[0].id],
             [0, 1],
-            [state.labels.documents[0].id]
+            [state.labels.documents[0].id],
         );
     });
 
@@ -184,7 +185,7 @@ describe("<CreateSample>", () => {
         const { name, isolate, host, locale } = values;
         state.forms.formState["create-sample"] = {
             ...values,
-            sidebar: { labels: [state.labels.documents[0].id], subtractionIds: [state.subtraction.shortlist[0].id] }
+            sidebar: { labels: [state.labels.documents[0].id], subtractionIds: [state.subtraction.shortlist[0].id] },
         };
 
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
@@ -215,52 +216,52 @@ describe("mapStateToProps()", () => {
         const subtractions = [
             {
                 id: "foo_subtraction",
-                name: "Foo Subtraction"
+                name: "Foo Subtraction",
             },
             {
                 id: "bar_subtraction",
-                name: "Bar Subtraction"
-            }
+                name: "Bar Subtraction",
+            },
         ];
 
         const state = {
             router: { location: { stae: "foo" } },
             settings: {
                 data: {
-                    sample_group: "force_choice"
-                }
+                    sample_group: "force_choice",
+                },
             },
             account: { groups: "foo" },
             samples: {
                 readFiles: [
                     {
                         foo: "bar",
-                        reserved: true
+                        reserved: true,
                     },
                     {
                         Foo: "Bar",
-                        reserved: false
-                    }
-                ]
+                        reserved: false,
+                    },
+                ],
             },
             subtraction: {
                 shortlist: [
                     {
                         id: "foo_subtraction",
-                        name: "Foo Subtraction"
+                        name: "Foo Subtraction",
                     },
                     {
                         id: "bar_subtraction",
-                        name: "Bar Subtraction"
-                    }
-                ]
+                        name: "Bar Subtraction",
+                    },
+                ],
             },
             labels: {
                 documents: [
                     { color: "#3B82F6", count: 0, description: "", id: 2, name: "testlabel1" },
-                    { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" }
-                ]
-            }
+                    { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" },
+                ],
+            },
         };
 
         const props = mapStateToProps(state);
@@ -272,14 +273,14 @@ describe("mapStateToProps()", () => {
             readyReads: [
                 {
                     Foo: "Bar",
-                    reserved: false
-                }
+                    reserved: false,
+                },
             ],
             subtractions,
             allLabels: [
                 { color: "#3B82F6", count: 0, description: "", id: 2, name: "testlabel1" },
-                { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" }
-            ]
+                { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" },
+            ],
         });
     });
 });
@@ -304,8 +305,8 @@ describe("mapDispatchToProps()", () => {
                 locale: "locale",
                 libraryType: "libraryType",
                 subtractions: ["subtractions"],
-                files: "files"
-            }
+                files: "files",
+            },
         });
     });
 

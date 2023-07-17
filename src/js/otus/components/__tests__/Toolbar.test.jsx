@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
 import { InputSearch } from "../../../base";
 import { OTUToolbar } from "../Toolbar";
 
@@ -8,7 +11,7 @@ describe("<OTUToolbar />", () => {
         refId: "baz",
         term: "foo",
         verified: false,
-        onFind: vi.fn()
+        onFind: vi.fn(),
     };
 
     it("should render", () => {

@@ -1,4 +1,5 @@
-import { WS_UPDATE_STATUS, GET_HMM, FIND_HMMS } from "../../app/actionTypes";
+import { describe, expect, it } from "vitest";
+import { FIND_HMMS, GET_HMM, WS_UPDATE_STATUS } from "../../app/actionTypes";
 import reducer, { initialState as reducerInitialState } from "../reducer";
 
 describe("HMM Reducer", () => {
@@ -9,7 +10,7 @@ describe("HMM Reducer", () => {
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const result = reducer(reducerInitialState, action);
         expect(result).toEqual(reducerInitialState);
@@ -24,16 +25,16 @@ describe("HMM Reducer", () => {
                     id: "hmm",
                     installed: {},
                     task: {},
-                    release: {}
-                }
+                    release: {},
+                },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 status: {
                     installed: {},
                     task: {},
-                    release: {}
-                }
+                    release: {},
+                },
             });
         });
 
@@ -41,7 +42,7 @@ describe("HMM Reducer", () => {
             const state = {};
             const action = {
                 type: WS_UPDATE_STATUS,
-                payload: { id: "not_hmm" }
+                payload: { id: "not_hmm" },
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -53,7 +54,7 @@ describe("HMM Reducer", () => {
         const action = { type: FIND_HMMS.REQUESTED, payload: { term, page: 5 } };
         const result = reducer({}, action);
         expect(result).toEqual({
-            term
+            term,
         });
     });
 
@@ -61,34 +62,34 @@ describe("HMM Reducer", () => {
         const state = { documents: null, page: 0 };
         const action = {
             type: FIND_HMMS.SUCCEEDED,
-            payload: { documents: [{ id: "foo" }], page: 1 }
+            payload: { documents: [{ id: "foo" }], page: 1 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             documents: [{ id: "foo" }],
-            page: 1
+            page: 1,
         });
     });
 
     it("should handle GET_HMM_REQUESTED", () => {
         const state = {};
         const action = {
-            type: GET_HMM.REQUESTED
+            type: GET_HMM.REQUESTED,
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            detail: null
+            detail: null,
         });
     });
 
     it("should handle GET_HMM_SUCCEEDED", () => {
         const action = {
             type: GET_HMM.SUCCEEDED,
-            payload: {}
+            payload: {},
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            detail: action.payload
+            detail: action.payload,
         });
     });
 });

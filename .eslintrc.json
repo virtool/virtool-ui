@@ -53,8 +53,12 @@
     "curly": ["warn", "all"],
     "func-style": ["warn", "declaration", { "allowArrowFunctions": false }],
     "no-else-return": "warn",
+    "no-prototype-builtins": "warn",
     "prefer-arrow-callback": "warn",
     "prefer-const": "warn",
-    "react/react-in-jsx-scope": "warn"
+    "react/display-name": "warn",
+    "react/no-unescaped-entities": "warn",
+    "react/react-in-jsx-scope": "warn",
+    "@typescript-eslint/no-empty-function": "warn"
   }
 }

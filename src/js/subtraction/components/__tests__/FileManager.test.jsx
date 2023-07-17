@@ -1,19 +1,22 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { forEach } from "lodash-es";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
 import { SubtractionFileManager } from "../FileManager";
 
-const createAppStore = (state, reducer) => {
+function createAppStore(state, reducer) {
     return () => createStore(reducer ? reducer : state => state, state);
-};
+}
 
-const createFiles = fileNames => {
+function createFiles(fileNames) {
     return fileNames.map(fileName => new File(["test"], fileName, { type: "application/gzip" }));
-};
+}
 
 describe("<SubtractionFileManager />", () => {
     const state = {
@@ -30,11 +33,11 @@ describe("<SubtractionFileManager />", () => {
                     size: 1024,
                     type: "subtraction",
                     uploaded_at: "2022-04-13T20:22:25.000000Z",
-                    user: { handle: "test_handle", id: "n91xt5wq", administrator: true }
-                }
-            ]
+                    user: { handle: "test_handle", id: "n91xt5wq", administrator: true },
+                },
+            ],
         },
-        account: { administrator_role: AdministratorRoles.FULL }
+        account: { administrator_role: AdministratorRoles.FULL },
     };
 
     it("should render", () => {
@@ -42,7 +45,7 @@ describe("<SubtractionFileManager />", () => {
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
             </MemoryRouter>,
-            createAppStore(state)
+            createAppStore(state),
         );
         expect(screen.getByText("Drag FASTA files here to upload")).toBeInTheDocument();
         expect(screen.getByText("Accepts files ending in fa, fasta, fa.gz, or fasta.gz.")).toBeInTheDocument();
@@ -59,7 +62,7 @@ describe("<SubtractionFileManager />", () => {
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
             </MemoryRouter>,
-            createAppStore(state, reducer)
+            createAppStore(state, reducer),
         );
 
         const validFiles = createFiles(["test.fa", "test.fa.gz", "test.fasta", "test.fasta.gz"]);
@@ -70,7 +73,7 @@ describe("<SubtractionFileManager />", () => {
             "test.fagz",
             "testfasta",
             "testfasta.gz",
-            "test.fastagz"
+            "test.fastagz",
         ]);
 
         await userEvent.upload(screen.getByLabelText("Upload file"), [...validFiles, ...invalidFiles]);

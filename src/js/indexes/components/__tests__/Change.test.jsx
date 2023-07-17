@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { IndexChange, mapStateToProps } from "../Change";
 
 describe("<IndexChange />", () => {
@@ -6,7 +9,7 @@ describe("<IndexChange />", () => {
     beforeEach(() => {
         props = {
             description: "foo",
-            otuName: "bar"
+            otuName: "bar",
         };
     });
 
@@ -30,22 +33,22 @@ describe("mapStateToProps", () => {
                     documents: [
                         {
                             otu: {
-                                name: "Baz"
+                                name: "Baz",
                             },
-                            description: "Boom"
-                        }
-                    ]
-                }
-            }
+                            description: "Boom",
+                        },
+                    ],
+                },
+            },
         };
         const ownProps = {
-            index: 0
+            index: 0,
         };
         const props = mapStateToProps(state, ownProps);
 
         expect(props).toEqual({
             description: "Boom",
-            otuName: "Baz"
+            otuName: "Baz",
         });
     });
 });

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { GET_SETTINGS, UPDATE_SETTINGS } from "../../app/actionTypes";
 import reducer from "../reducer";
 
@@ -9,7 +10,7 @@ describe("Settings Reducer", () => {
 
     it("should not update state for unhandled action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const state = { foo: "bar" };
         const result = reducer(state, action);
@@ -19,13 +20,13 @@ describe("Settings Reducer", () => {
     it("should handle GET_SETTINGS_SUCCEEDED", () => {
         const action = {
             type: GET_SETTINGS.SUCCEEDED,
-            payload: { foo: "bar" }
+            payload: { foo: "bar" },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
             data: {
-                foo: "bar"
-            }
+                foo: "bar",
+            },
         });
     });
 
@@ -36,17 +37,17 @@ describe("Settings Reducer", () => {
             context: {
                 update: {
                     foo: "baz",
-                    bar: "baz"
-                }
-            }
+                    bar: "baz",
+                },
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             data: {
                 bar: "baz",
                 boo: 1,
-                foo: "baz"
-            }
+                foo: "baz",
+            },
         });
     });
 });

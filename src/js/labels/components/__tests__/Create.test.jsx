@@ -2,7 +2,8 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
-import { describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { CreateLabel } from "../Create";
 
 describe("<CreateLabel>", () => {
@@ -13,7 +14,7 @@ describe("<CreateLabel>", () => {
                 id: 1,
                 name: "Foo",
                 description: "This is a description",
-                color: "#6B7280"
+                color: "#6B7280",
             });
 
         renderWithProviders(<CreateLabel />);
@@ -42,7 +43,7 @@ describe("<CreateLabel>", () => {
                 id: 1,
                 name: "Foo",
                 description: "This is a description",
-                color: "#D1D5DB"
+                color: "#D1D5DB",
             });
 
         renderWithProviders(<CreateLabel />);
@@ -80,7 +81,7 @@ describe("<CreateLabel>", () => {
     it("errors with name conflict", async () => {
         const scope = nock("http://localhost").post("/api/labels").reply(400, {
             id: "bad_request",
-            message: "Label name already exists"
+            message: "Label name already exists",
         });
 
         renderWithProviders(<CreateLabel />);

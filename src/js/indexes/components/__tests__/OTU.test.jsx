@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { IndexOTU } from "../OTU";
 
 describe("<IndexOTU />", () => {
@@ -8,7 +11,7 @@ describe("<IndexOTU />", () => {
             refId: "foo",
             changeCount: 1,
             id: "bar",
-            name: "baz"
+            name: "baz",
         };
     });
 

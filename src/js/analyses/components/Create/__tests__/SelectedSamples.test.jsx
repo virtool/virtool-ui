@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { SelectedSamples } from "../SelectedSamples";
 
 describe("<SelectedSamples />", () => {
@@ -5,7 +8,7 @@ describe("<SelectedSamples />", () => {
 
     beforeEach(() => {
         props = {
-            samples: [{ id: "foo", name: "bar" }]
+            samples: [{ id: "foo", name: "bar" }],
         };
     });
 

@@ -4,17 +4,27 @@ import { AdministratorRoles } from "../administration/types";
 import { hasSufficientAdminRole } from "../administration/utils";
 import { getTermSelectorFactory } from "../utils/selectors";
 
-const getStateTerm = state => state.users.term;
-export const getUsers = state => state.users.documents;
-export const getTerm = getTermSelectorFactory(getStateTerm);
+export function getStateTerm(state) {
+    return state.users.term;
+}
 
-export const getUserDetailId = state => get(state, "users.detail.id");
+export function getUsers(state) {
+    return state.users.documents;
+}
+export function getTerm() {
+    return getTermSelectorFactory(getStateTerm);
+}
 
-export const getCanModifyUser = state => {
+export function getUserDetailId(state) {
+    return get(state, "users.detail.id");
+}
+
+export function getCanModifyUser(state) {
     const activeUserId = getAccountId(state);
+
     return (
         activeUserId &&
         hasSufficientAdminRole(AdministratorRoles.USERS, getAccountAdministratorRole(state)) &&
         activeUserId !== getUserDetailId(state)
     );
-};
+}

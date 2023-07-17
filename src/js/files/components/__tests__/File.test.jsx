@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { checkAdminRoleOrPermission } from "../../../administration/utils";
 import { REMOVE_FILE } from "../../../app/actionTypes";
 import { File, mapDispatchToProps, mapStateToProps } from "../File";
@@ -16,7 +19,7 @@ describe("<File />", () => {
             uploadedAt: "2018-02-14T17:12:00.000000Z",
             user: { id: "bill", handle: "bill" },
             ready: true,
-            onRemove: vi.fn()
+            onRemove: vi.fn(),
         };
     });
 
@@ -66,7 +69,7 @@ describe("mapStateToProps()", () => {
                         ready: true,
                         reserved: false,
                         size: 1024,
-                        uploaded_at: "time_1"
+                        uploaded_at: "time_1",
                     },
                     {
                         id: "bar",
@@ -75,10 +78,10 @@ describe("mapStateToProps()", () => {
                         ready: true,
                         reserved: false,
                         size: 2048,
-                        uploaded_at: "time_2"
-                    }
-                ]
-            }
+                        uploaded_at: "time_2",
+                    },
+                ],
+            },
         };
     });
 
@@ -94,7 +97,7 @@ describe("mapStateToProps()", () => {
             size: 1024,
             ready: true,
             uploadedAt: "time_1",
-            user: { id: "bob" }
+            user: { id: "bob" },
         });
         expect(checkAdminRoleOrPermission).toHaveBeenCalledWith(state, "remove_file");
     });
@@ -107,7 +110,7 @@ describe("mapDispatchToProps", () => {
         props.onRemove("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_FILE.REQUESTED,
-            payload: { fileId: "foo" }
+            payload: { fileId: "foo" },
         });
     });
 });

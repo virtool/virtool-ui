@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InputSelect } from "../../../../base";
 import { SampleUserGroup } from "../UserGroup";
 
@@ -7,7 +10,7 @@ describe("SampleUserGroup", () => {
         props = {
             groups: [{ name: "bar", id: "bar_id" }],
             onChange: vi.fn(),
-            selected: "bar"
+            selected: "bar",
         };
     });
 
@@ -17,7 +20,7 @@ describe("SampleUserGroup", () => {
     });
     it("should call onChange when InputError is changed", () => {
         const e = {
-            target: "foo"
+            target: "foo",
         };
         const wrapper = shallow(<SampleUserGroup {...props} />);
         wrapper.find(InputSelect).simulate("change", e);

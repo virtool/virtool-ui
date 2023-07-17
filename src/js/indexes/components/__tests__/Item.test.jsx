@@ -1,5 +1,8 @@
-import { IndexItemDescription, IndexItem, IndexItemIcon, mapStateToProps } from "../Item";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getActiveIndexId } from "../../selectors";
+import { IndexItem, IndexItemDescription, IndexItemIcon, mapStateToProps } from "../Item";
 
 vi.mock("../../selectors.js");
 
@@ -18,9 +21,9 @@ describe("<IndexItem />", () => {
                 modified_otu_count: 5,
                 user: {
                     id: "bob",
-                    handle: "bob"
-                }
-            }
+                    handle: "bob",
+                },
+            },
         };
     });
 
@@ -36,7 +39,7 @@ describe("<IndexItemChangeDescription />", () => {
     beforeEach(() => {
         props = {
             changeCount: 13,
-            modifiedCount: 3
+            modifiedCount: 3,
         };
     });
 
@@ -77,7 +80,7 @@ describe("<IndexItemIcon />", () => {
         props = {
             activeId: "foo",
             id: "foo",
-            ready: true
+            ready: true,
         };
     });
 
@@ -105,15 +108,15 @@ describe("mapStateToProps()", () => {
 
         const state = {
             indexes: {
-                documents: [{ id: "foo" }, { id: "bar" }]
+                documents: [{ id: "foo" }, { id: "bar" }],
             },
             references: {
-                detail: { id: "baz" }
-            }
+                detail: { id: "baz" },
+            },
         };
 
         const ownProps = {
-            index: 1
+            index: 1,
         };
 
         const result = mapStateToProps(state, ownProps);
@@ -121,7 +124,7 @@ describe("mapStateToProps()", () => {
         expect(result).toEqual({
             activeId: "bar",
             document: { id: "bar" },
-            refId: "baz"
+            refId: "baz",
         });
 
         expect(getActiveIndexId).toHaveBeenCalledWith(state);

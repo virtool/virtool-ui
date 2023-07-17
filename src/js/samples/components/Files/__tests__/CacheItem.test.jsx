@@ -1,4 +1,7 @@
-import { SampleCacheItem, mapStateToProps } from "../CacheItem";
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
+import { mapStateToProps, SampleCacheItem } from "../CacheItem";
 
 describe("<SampleCacheItem />", () => {
     it.each([false, true])("should render when [missing=%p]", missing => {
@@ -8,7 +11,7 @@ describe("<SampleCacheItem />", () => {
             hash: "abc123",
             id: "foo",
             sampleId: "bar",
-            missing
+            missing,
         };
         const wrapper = shallow(<SampleCacheItem {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -19,12 +22,12 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const state = {
             samples: {
-                detail: { id: "foo" }
-            }
+                detail: { id: "foo" },
+            },
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({
-            sampleId: "foo"
+            sampleId: "foo",
         });
     });
 });

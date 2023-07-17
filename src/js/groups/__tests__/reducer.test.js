@@ -1,9 +1,10 @@
+import { describe, expect, it } from "vitest";
 import {
     LIST_GROUPS,
     SET_GROUP_PERMISSION,
     WS_INSERT_GROUP,
     WS_REMOVE_GROUP,
-    WS_UPDATE_GROUP
+    WS_UPDATE_GROUP,
 } from "../../app/actionTypes";
 import reducer, { initialState as reducerInitialState, insertGroup, updateGroup } from "../reducer";
 
@@ -15,7 +16,7 @@ describe("Groups Reducer", () => {
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const result = reducer(reducerInitialState, action);
         expect(result).toEqual(reducerInitialState);
@@ -27,7 +28,7 @@ describe("Groups Reducer", () => {
             const action = { type: WS_INSERT_GROUP, payload: { id: "foo" } };
             const result = reducer(state, action);
             expect(result).toEqual({
-                documents: [{ id: "foo" }]
+                documents: [{ id: "foo" }],
             });
         });
 
@@ -35,7 +36,7 @@ describe("Groups Reducer", () => {
             const state = { documents: [] };
             const action = {
                 type: WS_INSERT_GROUP,
-                payload: { id: "test" }
+                payload: { id: "test" },
             };
             const result = reducer(state, action);
             expect(result).toEqual({ documents: [{ id: "test" }] });
@@ -46,7 +47,7 @@ describe("Groups Reducer", () => {
         const state = { documents: [{ id: "test", foo: "bar" }] };
         const action = {
             type: WS_UPDATE_GROUP,
-            payload: { id: "test", foo: "baz" }
+            payload: { id: "test", foo: "baz" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({ ...state, documents: [{ id: "test", foo: "baz" }] });
@@ -64,12 +65,12 @@ describe("Groups Reducer", () => {
         const payload = [{ id: "foo" }, { id: "bar" }];
         const action = {
             type: LIST_GROUPS.SUCCEEDED,
-            payload
+            payload,
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            documents: payload
+            documents: payload,
         });
     });
 
@@ -87,22 +88,22 @@ describe("Groups Reducer", () => {
                     {
                         id: "tester",
                         permissions: {
-                            test_permission: false
-                        }
+                            test_permission: false,
+                        },
                     },
                     {
                         id: "tester_two",
                         permissions: {
-                            test_permission: false
-                        }
-                    }
-                ]
+                            test_permission: false,
+                        },
+                    },
+                ],
             };
             const update = {
                 id: "tester",
                 permissions: {
-                    test_permission: true
-                }
+                    test_permission: true,
+                },
             };
             const result = updateGroup(state, update);
             expect(result).toEqual({
@@ -111,16 +112,16 @@ describe("Groups Reducer", () => {
                     {
                         id: "tester",
                         permissions: {
-                            test_permission: true
-                        }
+                            test_permission: true,
+                        },
                     },
                     {
                         id: "tester_two",
                         permissions: {
-                            test_permission: false
-                        }
-                    }
-                ]
+                            test_permission: false,
+                        },
+                    },
+                ],
             });
         });
 

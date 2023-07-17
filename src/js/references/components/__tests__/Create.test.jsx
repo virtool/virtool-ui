@@ -1,6 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { EmptyReference, mapDispatchToProps } from "../Empty";
 
 describe("<EmptyReference />", () => {
@@ -8,7 +10,7 @@ describe("<EmptyReference />", () => {
 
     beforeEach(() => {
         props = {
-            onSubmit: vi.fn()
+            onSubmit: vi.fn(),
         };
     });
 
@@ -67,7 +69,7 @@ describe("mapDispatchToProps()", () => {
         props.onSubmit("foo", "bar");
         expect(dispatch).toHaveBeenCalledWith({
             payload: { name: "foo", description: "bar" },
-            type: "EMPTY_REFERENCE_REQUESTED"
+            type: "EMPTY_REFERENCE_REQUESTED",
         });
     });
 });

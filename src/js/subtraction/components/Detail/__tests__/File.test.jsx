@@ -1,7 +1,9 @@
-import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import { File } from "../File";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { byteSize } from "../../../../utils/utils";
+import { File } from "../File";
 
 describe("<SubtractionFile />", () => {
     let props;
@@ -14,8 +16,8 @@ describe("<SubtractionFile />", () => {
                 name: "foo",
                 size: 36461731,
                 subtraction: "xl8faqqz",
-                type: "fasta"
-            }
+                type: "fasta",
+            },
         };
     });
 

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { CREATE_FIRST_USER, LOGIN, LOGOUT, RESET_PASSWORD } from "../actionTypes";
 import { appReducer } from "../reducer";
 
@@ -10,13 +11,13 @@ describe("App Reducer", () => {
             first: "bar",
             login: true,
             reset: false,
-            resetCode: true
+            resetCode: true,
         };
     });
 
     it("should return existing state for unhandled action", () => {
         const action = {
-            type: "UNHANDLED"
+            type: "UNHANDLED",
         };
         const result = appReducer(state, action);
         expect(result).toEqual(state);
@@ -25,9 +26,9 @@ describe("App Reducer", () => {
     it.each([
         [
             { type: LOGIN.SUCCEEDED, payload: { reset: true, reset_code: false } },
-            { dev: "foo", first: "bar", login: false, reset: true, resetCode: false }
+            { dev: "foo", first: "bar", login: false, reset: true, resetCode: false },
         ],
-        [{ type: LOGIN.FAILED }, { dev: "foo", first: "bar", reset: false, resetCode: true, login: true }]
+        [{ type: LOGIN.FAILED }, { dev: "foo", first: "bar", reset: false, resetCode: true, login: true }],
     ])(".match(%o, %o)", (action, expected) => {
         const result = appReducer(state, action);
         expect(result).toEqual(expected);
@@ -36,12 +37,12 @@ describe("App Reducer", () => {
     it("should return login false, reset true, resetCode false", () => {
         state.login = false;
         const action = {
-            type: LOGOUT.SUCCEEDED
+            type: LOGOUT.SUCCEEDED,
         };
         const result = appReducer(state, action);
         expect(result).toEqual({
             ...state,
-            login: true
+            login: true,
         });
     });
 
@@ -54,8 +55,8 @@ describe("App Reducer", () => {
                 login: false,
                 reset: false,
                 resetCode: null,
-                resetError: null
-            }
+                resetError: null,
+            },
         ],
         [
             RESET_PASSWORD.FAILED,
@@ -65,15 +66,15 @@ describe("App Reducer", () => {
                 login: false,
                 reset: true,
                 resetCode: true,
-                resetError: true
-            }
-        ]
+                resetError: true,
+            },
+        ],
     ])(".match(%o, %o)", (type, expected) => {
         const action = {
             type,
             resetCode: false,
             resetError: false,
-            payload: { reset_code: true, error: true }
+            payload: { reset_code: true, error: true },
         };
         const result = appReducer(state, action);
 
@@ -84,13 +85,13 @@ describe("App Reducer", () => {
         state.login = true;
         state.first = true;
         const action = {
-            type: CREATE_FIRST_USER.SUCCEEDED
+            type: CREATE_FIRST_USER.SUCCEEDED,
         };
         const result = appReducer(state, action);
         expect(result).toEqual({
             ...state,
             login: false,
-            first: false
+            first: false,
         });
     });
 });

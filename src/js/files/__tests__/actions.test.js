@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import {
     FIND_FILES,
     REMOVE_FILE,
@@ -7,7 +8,7 @@ import {
     UPLOAD_PROGRESS,
     WS_INSERT_FILE,
     WS_REMOVE_FILE,
-    WS_UPDATE_FILE
+    WS_UPDATE_FILE,
 } from "../../app/actionTypes";
 import {
     findFiles,
@@ -18,33 +19,33 @@ import {
     uploadProgress,
     wsInsertFile,
     wsRemoveFile,
-    wsUpdateFile
+    wsUpdateFile,
 } from "../actions";
 
 describe("Files Action Creators", () => {
     it("wsInsertFile: returns action with websocket file insert data", () => {
         const data = {
-            id: "foo"
+            id: "foo",
         };
 
         const result = wsInsertFile(data);
 
         expect(result).toEqual({
             type: WS_INSERT_FILE,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
     it("wsUpdateFile: returns action with websocket file update data", () => {
         const data = {
-            id: "foo"
+            id: "foo",
         };
 
         const result = wsUpdateFile(data);
 
         expect(result).toEqual({
             type: WS_UPDATE_FILE,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -54,7 +55,7 @@ describe("Files Action Creators", () => {
 
         expect(result).toEqual({
             type: WS_REMOVE_FILE,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -66,20 +67,20 @@ describe("Files Action Creators", () => {
         const result = findFiles(fileType, term, paginate, page);
         expect(result).toEqual({
             type: FIND_FILES.REQUESTED,
-            payload: { fileType, term, paginate, page }
+            payload: { fileType, term, paginate, page },
         });
     });
 
     it("upload: returns action with file upload to server", () => {
         const localId = "random_string";
         const file = {
-            id: "foo"
+            id: "foo",
         };
         const fileType = "reads";
         const result = upload(localId, file, fileType);
         expect(result).toEqual({
             type: UPLOAD.REQUESTED,
-            payload: { context: {}, localId, file, fileType }
+            payload: { context: {}, localId, file, fileType },
         });
     });
 
@@ -88,7 +89,7 @@ describe("Files Action Creators", () => {
         const result = removeFile(fileId);
         expect(result).toEqual({
             type: REMOVE_FILE.REQUESTED,
-            payload: { fileId }
+            payload: { fileId },
         });
     });
     it("uploadProgress: returns action with upload progress", () => {
@@ -97,7 +98,7 @@ describe("Files Action Creators", () => {
         const result = uploadProgress(localId, progress);
         expect(result).toEqual({
             type: UPLOAD_PROGRESS,
-            payload: { localId, progress }
+            payload: { localId, progress },
         });
     });
 
@@ -106,7 +107,7 @@ describe("Files Action Creators", () => {
         const result = uploadFailed(localId);
         expect(result).toEqual({
             type: UPLOAD_FAILED,
-            payload: { localId }
+            payload: { localId },
         });
     });
     it("removeUpload: returns Id of upload to be removed", () => {
@@ -114,7 +115,7 @@ describe("Files Action Creators", () => {
         const result = removeUpload(localId);
         expect(result).toEqual({
             type: REMOVE_UPLOAD,
-            payload: { localId }
+            payload: { localId },
         });
     });
 });

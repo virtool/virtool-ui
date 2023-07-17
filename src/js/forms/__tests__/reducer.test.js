@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { SET_REDUX_FORM_STATE } from "../../app/actionTypes";
 import { setSessionStorage } from "../../utils/utils";
 import { formsReducer } from "../reducer";
@@ -9,8 +10,8 @@ describe("formsReducers", () => {
         formState = {
             test: {
                 name: "test_name",
-                otherData: ["otherData_1", "otherData_2", "otherData_3"]
-            }
+                otherData: ["otherData_1", "otherData_2", "otherData_3"],
+            },
         };
         state = { formState };
         setSessionStorage("formState", formState);
@@ -25,12 +26,12 @@ describe("formsReducers", () => {
         const modFormState = {
             test: {
                 name: "mod_test_name",
-                otherData: ["mod_otherData_1", "mod_otherData_2"]
-            }
+                otherData: ["mod_otherData_1", "mod_otherData_2"],
+            },
         };
         const result = formsReducer(state, {
             type: SET_REDUX_FORM_STATE,
-            payload: { formState: modFormState }
+            payload: { formState: modFormState },
         });
         expect(result).toEqual({ formState: modFormState });
     });

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { excludePaths } from "../utils";
 
 describe("excludePaths()", () => {
@@ -9,7 +10,7 @@ describe("excludePaths()", () => {
         func = excludePaths(["/foo/files", "/foo/settings"]);
         match = "truthy";
         location = {
-            pathname: "/foo/bar"
+            pathname: "/foo/bar",
         };
     });
 

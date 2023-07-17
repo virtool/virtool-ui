@@ -1,23 +1,26 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { shallow } from "enzyme";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { CreateSubtraction } from "../Create";
 import { SubtractionFileItem } from "../FileSelector";
-
-const routerRenderWithProviders = (ui, store) => {
+function routerRenderWithProviders(ui, store) {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
     return renderWithProviders(routerUi, store);
-};
+}
 
-const createAppStore = state => {
+function createAppStore(state) {
     return () => {
         const mockReducer = state => {
             return state;
         };
         return createStore(mockReducer, state);
     };
-};
+}
 
 describe("<SubtractionFileItem />", () => {
     it.each([true, false])("should render when [active=%p]", active => {
@@ -25,7 +28,7 @@ describe("<SubtractionFileItem />", () => {
             active,
             name: "test",
             uploaded_at: "2018-02-14T17:12:00.000000Z",
-            user: { id: "test-user", handle: "test-user" }
+            user: { id: "test-user", handle: "test-user" },
         };
         const wrapper = shallow(<SubtractionFileItem {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -45,7 +48,7 @@ describe("<CreateSubtraction />", () => {
             onCreate: vi.fn(),
             onListFiles: vi.fn(),
             onHide: vi.fn(),
-            onClearError: vi.fn()
+            onClearError: vi.fn(),
         };
         state = {
             files: {
@@ -57,7 +60,7 @@ describe("<CreateSubtraction />", () => {
                         name: "testSubtraction1",
                         type: "subtraction",
                         user: "testUser",
-                        uploaded_at: "2021-10-14T20:57:36.558000Z"
+                        uploaded_at: "2021-10-14T20:57:36.558000Z",
                     },
                     {
                         count: 0,
@@ -66,11 +69,11 @@ describe("<CreateSubtraction />", () => {
                         name: "testSubtraction2",
                         type: "subtraction",
                         user: "testUser",
-                        uploaded_at: "2021-10-14T20:57:36.558000Z"
-                    }
-                ]
+                        uploaded_at: "2021-10-14T20:57:36.558000Z",
+                    },
+                ],
             },
-            forms: { formState: {} }
+            forms: { formState: {} },
         };
     });
 
@@ -85,7 +88,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction {...props} />
             </BrowserRouter>,
-            createAppStore(state)
+            createAppStore(state),
         );
 
         await userEvent.click(screen.getByText(/save/i));
@@ -99,7 +102,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction {...props} />
             </BrowserRouter>,
-            createAppStore(state)
+            createAppStore(state),
         );
 
         const name = "testSubtractionname";
@@ -125,7 +128,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction {...props} />
             </BrowserRouter>,
-            createAppStore(state)
+            createAppStore(state),
         );
 
         expect(screen.getByRole("textbox", { name: "name" })).toHaveValue(name);

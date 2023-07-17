@@ -1,9 +1,12 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { ProgressBar } from "../ProgressBar";
 import { ProgressBarAffixed } from "../ProgressBarAffixed";
 
 describe("<ProgressBar />", () => {
     const props = {
-        now: 32
+        now: 32,
     };
 
     it("should render", () => {
@@ -20,7 +23,7 @@ describe("<ProgressBar />", () => {
 
 describe("<AffixedProgressBar />", () => {
     const props = {
-        now: 68
+        now: 68,
     };
 
     it("should render", () => {
