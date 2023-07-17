@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { CREATE_FIRST_USER, LOGIN, LOGOUT, RESET_PASSWORD } from "../actionTypes";
+import { CREATE_FIRST_USER, LOGIN, RESET_PASSWORD } from "../actionTypes";
 import { appReducer } from "../reducer";
 
 describe("App Reducer", () => {
@@ -32,18 +32,6 @@ describe("App Reducer", () => {
     ])(".match(%o, %o)", (action, expected) => {
         const result = appReducer(state, action);
         expect(result).toEqual(expected);
-    });
-
-    it("should return login false, reset true, resetCode false", () => {
-        state.login = false;
-        const action = {
-            type: LOGOUT.SUCCEEDED,
-        };
-        const result = appReducer(state, action);
-        expect(result).toEqual({
-            ...state,
-            login: true,
-        });
     });
 
     it.each([

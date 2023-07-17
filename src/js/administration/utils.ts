@@ -6,7 +6,7 @@ enum AdministratorPermissionsLevel {
     settings,
     spaces,
     users,
-    base
+    base,
 }
 
 export const hasSufficientAdminRole = (requiredRole: AdministratorRoles, userRole: AdministratorRoles): boolean => {
@@ -21,9 +21,13 @@ export enum AdministratorPermissions {
     upload_file = AdministratorRoles.FULL,
     create_sample = AdministratorRoles.FULL,
     modify_subtraction = AdministratorRoles.FULL,
-    remove_file = AdministratorRoles.FULL
+    remove_file = AdministratorRoles.FULL,
 }
 
 export const checkAdminRoleOrPermission = (state, permission: string) =>
     hasSufficientAdminRole(AdministratorPermissions[permission], getAccountAdministratorRole(state)) ||
     state.account.permissions[permission];
+
+export const checkPermissionsFromAccount = (account, permission: string) =>
+    hasSufficientAdminRole(AdministratorPermissions[permission], account.administrator_role) ||
+    account.permissions[permission];

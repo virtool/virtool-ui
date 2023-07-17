@@ -1,59 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-    FIND_FILES,
-    REMOVE_UPLOAD,
-    UPLOAD,
-    UPLOAD_FAILED,
-    UPLOAD_PROGRESS,
-    WS_UPDATE_FILE,
-} from "../../app/actionTypes";
+import { REMOVE_UPLOAD, UPLOAD, UPLOAD_FAILED, UPLOAD_PROGRESS } from "../../app/actionTypes";
+
 import reducer, { initialState } from "../reducer";
 
 describe("filesReducer()", () => {
     it("should return the initial state on first pass", () => {
         const result = reducer(undefined, {});
         expect(result).toEqual(initialState);
-    });
-
-    it("should handle WS_UPDATE_FILE", () => {
-        const state = {
-            documents: [{ id: "test", foo: "bar" }],
-        };
-        const action = {
-            type: WS_UPDATE_FILE,
-            payload: { id: "test", foo: "not-bar" },
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({ ...state, documents: [action.payload] });
-    });
-
-    it("should handle LIST_FILES_REQUESTED", () => {
-        const state = { items: [], fileType: "test_filetype" };
-        const action = {
-            type: FIND_FILES.REQUESTED,
-            payload: { term: "foo", paginate: true, fileType: "test_filetype" },
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...state,
-            term: "foo",
-            paginate: true,
-        });
-    });
-
-    it("should handle LIST_FILES_SUCCEEDED", () => {
-        const state = { items: [], page: 1 };
-        const action = {
-            type: FIND_FILES.SUCCEEDED,
-            payload: { items: [] },
-            context: { fileType: "test" },
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...state,
-            ...action.payload,
-            fileType: "test",
-        });
     });
 
     it("should handle UPLOAD_REQUESTED", () => {

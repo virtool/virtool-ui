@@ -7,9 +7,8 @@ import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import { replace } from "connected-react-router";
 import { get, includes } from "lodash-es";
 import { put } from "redux-saga/effects";
-import { LOGOUT } from "../app/actionTypes";
 import { getProtectedResources } from "../app/authConfig";
-import { createFindURL } from "./utils";
+import { createFindURL, resetClient } from "./utils";
 
 /**
  * Gets access token for b2c authentication
@@ -21,7 +20,7 @@ export function getAccessToken() {
     return window.msalInstance
         .acquireTokenSilent({
             scopes: protectedResources.backendApi.scopes,
-            account
+            account,
         })
         .then(response => {
             return response.accessToken;
@@ -30,7 +29,7 @@ export function getAccessToken() {
             if (error instanceof InteractionRequiredAuthError) {
                 window.msalInstance
                     .acquireTokenPopup({
-                        scopes: protectedResources.backendApi.scopes
+                        scopes: protectedResources.backendApi.scopes,
                     })
                     .then(response => {
                         return response.accessToken;
@@ -77,10 +76,7 @@ export function* apiCall(apiMethod, action, actionType, context = {}) {
         const statusCode = get(error, "response.statusCode");
 
         if (statusCode === 401) {
-            yield put({
-                type: LOGOUT.SUCCEEDED
-            });
-            return error.response;
+            resetClient();
         }
 
         if (get(error, "response.body")) {
@@ -115,6 +111,6 @@ export function* putGenericError(actionType, error) {
     const message = body ? body.message : null;
     yield put({
         type: actionType.FAILED,
-        payload: { message, error, status }
+        payload: { message, error, status },
     });
 }

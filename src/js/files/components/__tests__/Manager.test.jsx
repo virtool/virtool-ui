@@ -4,10 +4,12 @@ import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeFile, mockListFilesAPI } from "../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
-import { FileManager, mapDispatchToProps, mapStateToProps } from "../Manager";
+import { FileManager } from "../Manager";
 
 const createAppStore = state => {
     return () => createStore(state => state, state);
@@ -29,32 +31,16 @@ describe("<FileManager>", () => {
             validationRegex: "",
             onLoadNextPage: vi.fn(),
         };
-        state = {
-            files: {
-                items: [
-                    {
-                        id: 1,
-                        name: "subtraction.fq.gz",
-                        name_on_disk: "1-subtraction.fq.gz",
-                        ready: true,
-                        removed: false,
-                        removed_at: null,
-                        reserved: false,
-                        size: 1024,
-                        type: "subtraction",
-                        uploaded_at: "2022-04-13T20:22:25.000000Z",
-                        user: { handle: "test_handle", id: "n91xt5wq", administrator: true },
-                    },
-                ],
-            },
-            account: {
-                permissions: { upload_file: false },
-                administrator_role: AdministratorRoles.FULL,
-            },
-        };
+        state = { account: { administrator_role: AdministratorRoles.FULL, permissions: { upload_file: false } } };
     });
 
-    it("should render", () => {
+    it("should render", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file], true);
+
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <FileManager {...props} />
@@ -62,13 +48,20 @@ describe("<FileManager>", () => {
 
             createAppStore(state),
         );
-        expect(screen.getByText("Drag file here to upload.")).toBeInTheDocument();
+        expect(await screen.findByText("Drag file here to upload.")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Browse Files" })).toBeInTheDocument();
     });
 
-    it("should remove upload bar if canUpload is false", () => {
+    it("should remove upload bar if canUpload is false", async () => {
         state.account.administrator_role = null;
+
+        const account = createFakeAccount({ administrator_role: null });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file], true);
+
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <FileManager {...props} />
@@ -76,11 +69,16 @@ describe("<FileManager>", () => {
 
             createAppStore(state),
         );
-        expect(screen.getByText("You do not have permission to upload files.")).toBeInTheDocument();
+        expect(await screen.findByText("You do not have permission to upload files.")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
     });
 
-    it("should change message if passed", () => {
+    it("should change message if passed", async () => {
+        const account = createFakeAccount({ administrator_role: null });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file], true);
         props.message = "test_message";
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
@@ -89,10 +87,16 @@ describe("<FileManager>", () => {
 
             createAppStore(state),
         );
-        expect(screen.getByText("test_message")).toBeInTheDocument();
+        expect(await screen.findByText("test_message")).toBeInTheDocument();
     });
 
     it("should filter files according to passed regex", async () => {
+        const account = createFakeAccount({ administrator_role: null });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file], true);
+
         props.validationRegex = /.(?:fa|fasta)(?:.gz|.gzip)?$/;
         const mockUpload = vi.fn();
         const reducer = (state, action) => {
@@ -108,75 +112,11 @@ describe("<FileManager>", () => {
         );
         const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
-        await userEvent.upload(screen.getByLabelText("Upload file"), [invalidFile, validFile]);
+
+        await userEvent.upload(await screen.findByLabelText("Upload file"), [invalidFile, validFile]);
         await waitFor(() => {
             expect(mockUpload).toHaveBeenCalledTimes(1);
             expect(mockUpload).toHaveBeenCalledWith(props.fileType, validFile);
-        });
-    });
-});
-
-describe("mapStateToProps()", () => {
-    let state;
-
-    beforeEach(() => {
-        state = {
-            files: {
-                found_count: 6,
-                per_page: 1,
-                page: 1,
-                page_count: 1,
-                total_count: 1,
-                fileType: "test_fileType",
-                items: [
-                    {
-                        id: 1,
-                        name: "subtraction.fq.gz",
-                        name_on_disk: "1-subtraction.fq.gz",
-                        ready: true,
-                        removed: false,
-                        removed_at: null,
-                        reserved: false,
-                        size: 1024,
-                        type: "subtraction",
-                        uploaded_at: "2022-04-13T20:22:25.000000Z",
-                        user: { handle: "test_handle", id: "n91xt5wq", administrator: true },
-                    },
-                ],
-            },
-            account: { administrator: true },
-        };
-    });
-
-    it("should return correct values", () => {
-        const expected = {
-            found_count: 6,
-            per_page: 1,
-            page: 1,
-            page_count: 1,
-            total_count: 1,
-            items: [1],
-            URLPage: 1,
-            stale: undefined,
-            loading: true,
-        };
-        expect(mapStateToProps(state)).toEqual(expected);
-    });
-});
-
-describe("mapDispatchToProps", () => {
-    let dispatch;
-    beforeEach(() => {
-        dispatch = vi.fn();
-    });
-    it("should return onLoadNextPage", () => {
-        const { onLoadNextPage } = mapDispatchToProps(dispatch);
-        const payload = { fileType: "test_fileType", term: "test", page: 2, paginate: true };
-        const { fileType, term, page } = payload;
-        onLoadNextPage(fileType, term, page);
-        expect(dispatch).toHaveBeenCalledWith({
-            type: "FIND_FILES_REQUESTED",
-            payload,
         });
     });
 });

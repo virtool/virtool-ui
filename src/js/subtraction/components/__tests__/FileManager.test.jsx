@@ -4,6 +4,8 @@ import { forEach } from "lodash-es";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeFile, mockListFilesAPI } from "../../../../tests/fake/files";
 import { describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
@@ -40,18 +42,29 @@ describe("<SubtractionFileManager />", () => {
         account: { administrator_role: AdministratorRoles.FULL },
     };
 
-    it("should render", () => {
+    it("should render", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file]);
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
             </MemoryRouter>,
             createAppStore(state),
         );
-        expect(screen.getByText("Drag FASTA files here to upload")).toBeInTheDocument();
+        expect(await screen.findByText("Drag FASTA files here to upload")).toBeInTheDocument();
         expect(screen.getByText("Accepts files ending in fa, fasta, fa.gz, or fasta.gz.")).toBeInTheDocument();
     });
 
     it("should reject files not ending in fa, fasta, fa.gz, or fasta.gz.", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockGetAccountAPI(account);
+
+        const file = createFakeFile({ name: "subtraction.fq.gz" });
+        mockListFilesAPI([file]);
+
         const mockUploadRequested = vi.fn();
         const reducer = (state, action) => {
             if (action.type === UPLOAD.REQUESTED) mockUploadRequested(action.payload.file);
@@ -76,7 +89,7 @@ describe("<SubtractionFileManager />", () => {
             "test.fastagz",
         ]);
 
-        await userEvent.upload(screen.getByLabelText("Upload file"), [...validFiles, ...invalidFiles]);
+        await userEvent.upload(await screen.findByLabelText("Upload file"), [...validFiles, ...invalidFiles]);
 
         await waitFor(() => {
             expect(mockUploadRequested).toHaveBeenCalledTimes(4);

@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
     CREATE_SAMPLE,
-    FIND_READ_FILES,
     FIND_SAMPLES,
     GET_SAMPLE,
     HIDE_SAMPLE_MODAL,
@@ -16,7 +15,6 @@ import {
 import {
     createSample,
     editSample,
-    findReadFiles,
     findSamples,
     getSample,
     hideSampleModal,
@@ -75,12 +73,6 @@ describe("Sample Action Creators:", () => {
         expect(result).toEqual({
             type: FIND_SAMPLES.REQUESTED,
             payload: { labels, term, page, workflows },
-        });
-    });
-
-    it("findReadFiles", () => {
-        expect(findReadFiles()).toEqual({
-            type: FIND_READ_FILES.REQUESTED,
         });
     });
 

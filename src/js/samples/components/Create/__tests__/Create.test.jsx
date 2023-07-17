@@ -1,10 +1,11 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { shallow } from "enzyme";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
+
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createFakeFile, mockUnpaginatedListFilesAPI } from "../../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { LIST_LABELS } from "../../../../app/actionTypes";
 import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
@@ -27,14 +28,6 @@ describe("<CreateSample>", () => {
 
         props = {
             error: "",
-            readyReads: Array(3)
-                .fill(0)
-                .map((_, id) => ({
-                    id,
-                    name: `${readFileName} ${id}`,
-                    name_on_disk: `${id}-${readFileName}.fq.gz`,
-                    size: 0,
-                })),
             allLabels: [
                 { color: "#3B82F6", count: 0, description: "", id: 2, name: "testlabel1" },
                 { color: "#3C8786", count: 0, description: "", id: 3, name: "testlabel2" },
@@ -78,32 +71,52 @@ describe("<CreateSample>", () => {
 
     const submitForm = () => userEvent.click(screen.getByRole("button", { name: /Create/i }));
 
-    async function inputFormRequirements(props, sampleName = "Name") {
-        await userEvent.type(screen.getByLabelText("Name"), sampleName);
-        await userEvent.click(screen.getByText(props.readyReads[0].name));
-        await userEvent.click(screen.getByText(props.readyReads[1].name));
+    async function inputFormRequirements(props, sampleName = "Name", files) {
+        await userEvent.type(await screen.findByLabelText("Name"), sampleName);
+        await userEvent.click(screen.getByText(files[0].name));
+        await userEvent.click(screen.getByText(files[1].name));
     }
 
-    it("should render", () => {
-        const wrapper = shallow(<CreateSample {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render", async () => {
+        const file = createFakeFile();
+        mockUnpaginatedListFilesAPI([file]);
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        expect(await screen.findByText("Create Sample")).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Locale" })).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Isolate" })).toBeInTheDocument();
+        expect(screen.getByRole("textbox", { name: "Host" })).toBeInTheDocument();
+
+        expect(screen.getByText("Library Type")).toBeInTheDocument();
+        expect(screen.getByText("Search against whole genome references using normal reads.")).toBeInTheDocument();
+        expect(screen.getByText("Search against whole genome references using sRNA reads")).toBeInTheDocument();
+        expect(screen.getByText("Search against barcode references using amplicon reads.")).toBeInTheDocument();
+
+        expect(screen.getByRole("heading", { name: "Labels" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Default Subtractions" })).toBeInTheDocument();
+
+        expect(screen.getByText(file.name)).toBeInTheDocument();
     });
 
-    it("should render LoadingPlaceholder when [props.subtractions=null]", () => {
+    it("should render LoadingPlaceholder when [props.subtractions=null]", async () => {
         props.subtractions = null;
-        const wrapper = shallow(<CreateSample {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        const file = createFakeFile();
+        mockUnpaginatedListFilesAPI([file]);
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        expect(await screen.findByLabelText("loading")).toBeInTheDocument();
     });
 
-    it("should render LoadingPlaceholder when [props.readyReads=null]", () => {
-        props.readyReads = null;
-        const wrapper = shallow(<CreateSample {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render LoadingPlaceholder when [props.readyReads=null]", async () => {
+        routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
+        expect(await screen.findByLabelText("loading")).toBeInTheDocument();
     });
 
     it("should fail to submit and show errors on empty submission", async () => {
+        const file = createFakeFile();
+        mockUnpaginatedListFilesAPI([file]);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
 
+        expect(await screen.findByText("Create Sample")).toBeInTheDocument();
         expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
         expect(screen.queryByText("At least one read file must be attached to the sample")).not.toBeInTheDocument();
 
@@ -115,22 +128,35 @@ describe("<CreateSample>", () => {
     });
 
     it("should submit when required fields are completed", async () => {
+        const files = [createFakeFile(), createFakeFile()];
+        mockUnpaginatedListFilesAPI(files);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
 
-        await inputFormRequirements(props, values.name);
+        await inputFormRequirements(props, values.name, files);
         await submitForm();
 
-        expect(props.onCreate).toHaveBeenCalledWith(values.name, "", "", "", "normal", [], [0, 1], []);
+        expect(props.onCreate).toHaveBeenCalledWith(
+            values.name,
+            "",
+            "",
+            "",
+            "normal",
+            [],
+            [files[0].id, files[1].id],
+            [],
+        );
     });
 
     it("should submit expected results when form is fully completed", async () => {
+        const files = [createFakeFile(), createFakeFile()];
+        mockUnpaginatedListFilesAPI(files);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
 
-        await inputFormRequirements(props, name);
+        await inputFormRequirements(props, name, files);
 
         // Fill out the rest of the form and submit
-        await userEvent.type(screen.getByLabelText("Isolate"), isolate);
+        await userEvent.type(await screen.findByLabelText("Isolate"), isolate);
         await userEvent.type(screen.getByLabelText("Host"), host);
         await userEvent.type(screen.getByLabelText("Locale"), locale);
         await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
@@ -146,16 +172,18 @@ describe("<CreateSample>", () => {
             locale,
             libraryType.toLowerCase(),
             [state.subtraction.shortlist[0].id],
-            [0, 1],
+            [files[0].id, files[1].id],
             [],
         );
     });
 
     it("should include labels when submitting a completed form", async () => {
+        const files = [createFakeFile(), createFakeFile()];
+        mockUnpaginatedListFilesAPI(files);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
 
-        await inputFormRequirements(props, name);
+        await inputFormRequirements(props, name, files);
 
         // Fill out the rest of the form and submit
         await userEvent.type(screen.getByLabelText("Isolate"), isolate);
@@ -176,12 +204,14 @@ describe("<CreateSample>", () => {
             locale,
             libraryType.toLowerCase(),
             [state.subtraction.shortlist[0].id],
-            [0, 1],
+            [files[0].id, files[1].id],
             [state.labels.documents[0].id],
         );
     });
 
-    it("should load form state from redux on first render", () => {
+    it("should load form state from redux on first render", async () => {
+        const files = [createFakeFile(), createFakeFile()];
+        mockUnpaginatedListFilesAPI(files);
         const { name, isolate, host, locale } = values;
         state.forms.formState["create-sample"] = {
             ...values,
@@ -190,7 +220,7 @@ describe("<CreateSample>", () => {
 
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
 
-        expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(name);
+        expect(await screen.findByRole("textbox", { name: "Name" })).toHaveValue(name);
         expect(screen.getByLabelText("Isolate")).toHaveValue(isolate);
         expect(screen.getByLabelText("Host")).toHaveValue(host);
         expect(screen.getByLabelText("Locale")).toHaveValue(locale);
@@ -199,13 +229,16 @@ describe("<CreateSample>", () => {
     });
 
     it("should update the sample name when the magic icon is pressed", async () => {
+        const file = createFakeFile({ name: "large.fastq.gz" });
+        mockUnpaginatedListFilesAPI([file]);
+
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
 
-        const field = screen.getByRole("textbox", { name: /Name/i });
+        const field = await screen.findByRole("textbox", { name: /Name/i });
 
         expect(field).toHaveValue("");
 
-        await userEvent.click(screen.getByText(props.readyReads[0].name));
+        await userEvent.click(screen.getByText(file.name));
         await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
         expect(field).toHaveValue(readFileName);
     });
@@ -270,12 +303,6 @@ describe("mapStateToProps()", () => {
             error: "",
             forceGroupChoice: true,
             groups: "foo",
-            readyReads: [
-                {
-                    Foo: "Bar",
-                    reserved: false,
-                },
-            ],
             subtractions,
             allLabels: [
                 { color: "#3B82F6", count: 0, description: "", id: 2, name: "testlabel1" },
@@ -290,7 +317,6 @@ describe("mapDispatchToProps()", () => {
 
     it("should return onLoadSubtractionsAndFiles() in props", () => {
         props.onLoadSubtractionsAndFiles();
-        expect(dispatch).toHaveBeenCalledWith({ type: "FIND_READ_FILES_REQUESTED" });
         expect(dispatch).toHaveBeenCalledWith({ type: "LIST_SUBTRACTION_IDS_REQUESTED" });
     });
 

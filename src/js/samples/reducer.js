@@ -3,7 +3,6 @@ import { set, xor } from "lodash-es";
 import {
     CLEAR_SAMPLE_SELECTION,
     DESELECT_SAMPLES,
-    FIND_READ_FILES,
     FIND_SAMPLES,
     GET_SAMPLE,
     REMOVE_SAMPLE,
@@ -12,7 +11,7 @@ import {
     UPDATE_SAMPLE_RIGHTS,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
-    WS_UPDATE_SAMPLE
+    WS_UPDATE_SAMPLE,
 } from "../app/actionTypes";
 import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
@@ -24,7 +23,7 @@ export const initialState = {
     editError: false,
     selected: [],
     pathoscopeCondition: [true, false, "ip"],
-    nuvsCondition: [true, false, "ip"]
+    nuvsCondition: [true, false, "ip"],
 };
 
 export const samplesReducer = createReducer(initialState, builder => {
@@ -46,9 +45,6 @@ export const samplesReducer = createReducer(initialState, builder => {
         })
         .addCase(FIND_SAMPLES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action.payload, "created_at", true);
-        })
-        .addCase(FIND_READ_FILES.SUCCEEDED, (state, action) => {
-            state.readFiles = action.payload.documents;
         })
         .addCase(GET_SAMPLE.REQUESTED, state => {
             state.detail = null;

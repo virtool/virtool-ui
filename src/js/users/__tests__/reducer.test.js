@@ -108,11 +108,11 @@ describe("Users Reducer", () => {
         const action = {
             type: FIND_USERS.SUCCEEDED,
             payload: {
-                items: [defaultUser],
+                documents: [defaultUser],
             },
         };
         const result = reducer({}, action);
-        const expectedResult = { documents: [action.payload.items[0]] };
+        const expectedResult = { documents: [action.payload.documents[0]] };
         expect(JSON.stringify(result)).toEqual(JSON.stringify(expectedResult));
     });
 

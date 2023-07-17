@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
     DESELECT_SAMPLES,
-    FIND_READ_FILES,
     FIND_SAMPLES,
     GET_SAMPLE,
     REMOVE_SAMPLE,
@@ -97,25 +96,6 @@ describe("Samples Reducer", () => {
         expect(result).toEqual({
             documents: [],
             page: 5,
-        });
-    });
-
-    it("should handle FIND_READ_FILES_SUCCEEDED", () => {
-        const action = {
-            type: FIND_READ_FILES.SUCCEEDED,
-            payload: {
-                documents: [],
-                found_count: 0,
-                page: 1,
-                page_count: 0,
-                per_page: 500,
-                total_count: 0,
-            },
-        };
-        const result = reducer(initialState, action);
-        expect(result).toEqual({
-            ...initialState,
-            readFiles: action.payload.documents,
         });
     });
 

@@ -13,13 +13,13 @@
 const createRequestActionType = root => ({
     REQUESTED: `${root}_REQUESTED`,
     SUCCEEDED: `${root}_SUCCEEDED`,
-    FAILED: `${root}_FAILED`
+    FAILED: `${root}_FAILED`,
 });
 
 // App
 export const PUSH_STATE = "PUSH_STATE";
 export const UPDATE_SEARCH = "UPDATE_SEARCH";
-export const SET_INITIAL_STATE = "SET_INITIAL_STATE";
+export const GET_INITIAL_STATE = createRequestActionType("GET_INITIAL_STATE");
 
 // Dev
 export const POST_DEV_COMMAND = createRequestActionType("POST_DEV_COMMAND");
@@ -70,12 +70,6 @@ export const GET_CACHE = createRequestActionType("GET_CACHE");
 export const CLEAR_ERROR = "CLEAR_ERROR";
 
 // Files
-export const WS_INSERT_FILE = "WS_INSERT_FILE";
-export const WS_UPDATE_FILE = "WS_UPDATE_FILE";
-export const WS_REMOVE_FILE = "WS_REMOVE_FILE";
-export const FIND_FILES = createRequestActionType("FIND_FILES");
-export const WS_REFRESH_FILES = createRequestActionType("WS_REFRESH_FILES");
-export const REMOVE_FILE = createRequestActionType("REMOVE_FILE");
 export const UPLOAD = createRequestActionType("UPLOAD");
 export const UPLOAD_SAMPLE_FILE = createRequestActionType("UPLOAD_SAMPLE_FILE");
 export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
@@ -193,7 +187,6 @@ export const WS_INSERT_SAMPLE = "WS_INSERT_SAMPLE";
 export const WS_UPDATE_SAMPLE = "WS_UPDATE_SAMPLE";
 export const WS_REMOVE_SAMPLE = "WS_REMOVE_SAMPLE";
 export const FIND_SAMPLES = createRequestActionType("FIND_SAMPLES");
-export const FIND_READ_FILES = createRequestActionType("FIND_READ_FILES");
 export const GET_SAMPLE = createRequestActionType("GET_SAMPLE");
 export const CREATE_SAMPLE = createRequestActionType("CREATE_SAMPLE");
 export const UPDATE_SAMPLE = createRequestActionType("UPDATE_SAMPLE");

@@ -6,10 +6,9 @@ import React from "react";
 import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount } from "../../../../tests/fake/account";
-import { renderWithRouter } from "../../../../tests/setupTests";
+import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../types";
 import { Settings } from "../Settings";
-import { createGenericReducer } from "./utils";
 
 const createReducer = (state, history) =>
     combineReducers({
