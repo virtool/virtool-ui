@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { FIND_HMMS, GET_HMM, INSTALL_HMMS, PURGE_HMMS, UPDATE_HMMS_STATUS } from "../app/actionTypes";
+import { FIND_HMMS, GET_HMM, INSTALL_HMMS, PURGE_HMMS } from "../app/actionTypes";
 
 export const findHmms = createAction(FIND_HMMS.REQUESTED, (term, page) => ({
     payload: { term, page },
@@ -30,14 +30,3 @@ export const installHMMs = createAction(INSTALL_HMMS.REQUESTED, releaseId => ({ 
  * @returns {object}
  */
 export const purgeHMMs = createAction(PURGE_HMMS.REQUESTED);
-
-/**
- * Returns action that triggers updating the local status of HMMs.
- *
- * @func
- * @param HMMStatus {object} updates to the local HMM status
- * @returns {object}
- */
-export const updateStatus = createAction(UPDATE_HMMS_STATUS, HMMStatus => ({
-    payload: HMMStatus,
-}));

@@ -2,7 +2,7 @@ import { getLocation, push } from "connected-react-router";
 import { put, select, takeLatest, throttle } from "redux-saga/effects";
 import { FIND_HMMS, GET_HMM, INSTALL_HMMS, PURGE_HMMS } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
-import * as hmmsAPI from "./api";
+import hmmsAPI from "./api";
 
 export function* watchHmms() {
     yield throttle(300, FIND_HMMS.REQUESTED, findHmms);

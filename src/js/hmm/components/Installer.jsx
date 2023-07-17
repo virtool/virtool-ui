@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Box, ExternalLink, Icon, ProgressBarAffixed } from "../../base";
-import { updateStatus } from "../actions";
+import { findHmms } from "../actions";
 import { getTask } from "../selectors";
 import InstallOption from "./InstallOption";
 
@@ -80,7 +80,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = dispatch => ({
     onComplete: () => {
-        dispatch(updateStatus({ installed: true }));
+        dispatch(findHmms("", 1));
     },
 });
 

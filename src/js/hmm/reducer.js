@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { set } from "lodash-es";
-import { FIND_HMMS, GET_HMM, UPDATE_HMMS_STATUS, WS_UPDATE_STATUS } from "../app/actionTypes";
+import { FIND_HMMS, GET_HMM, WS_UPDATE_STATUS } from "../app/actionTypes";
 import { updateDocuments } from "../utils/reducers";
 
 export const initialState = {
@@ -31,9 +31,6 @@ export const hmmsReducer = createReducer(initialState, builder => {
         })
         .addCase(GET_HMM.SUCCEEDED, (state, action) => {
             state.detail = action.payload;
-        })
-        .addCase(UPDATE_HMMS_STATUS, (state, action) => {
-            state.status = { ...state.status, ...action.payload };
         });
 });
 
