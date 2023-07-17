@@ -19,6 +19,15 @@ jobs:
           fetch-depth: 0
       - name: Lint
         uses: wagoid/commitlint-github-action@v4
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install
+        run: npm i
+      - name: Run ESLint
+        run: eslint src/js
   test:
     runs-on: ubuntu-22.04
     steps:
