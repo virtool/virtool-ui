@@ -1,22 +1,18 @@
-import { useQuery } from "react-query";
-import { useGetAccount } from "../account/querys";
-import { Account } from "../account/types";
-import { Request } from "../app/request";
-import { AdministratorRoles } from "./types";
+import { useFetchAccount } from "../account/querys";
+import { AdministratorRoles, permissionQueryResult } from "./types";
 import { hasSufficientAdminRole } from "./utils";
 
-function fetchSettings() {
-    return Request.get("/settings").then(response => {
-        return response.body;
-    });
-}
-
-export function useFetchSettings() {
-    return useQuery("settings", fetchSettings);
-}
-
-export function useCheckAdminRole(requiredRole: AdministratorRoles) {
-    const { data: account, isLoading }: { data: Account; isLoading: boolean } = useGetAccount();
+/**
+ * Checks if the user has a sufficient admin role
+ *
+ * Fetches the users admin role from the backend and checks if it meets or exceeds
+ * the role required to perform the action.
+ *
+ * @param {AdministratorRoles} requiredRole The required role to check against.
+ * @returns {permissionQueryResult} Whether the user has the required role.
+ */
+export function useCheckAdminRole(requiredRole: AdministratorRoles): permissionQueryResult {
+    const { data: account, isLoading } = useFetchAccount();
     return {
         hasPermission: account ? hasSufficientAdminRole(requiredRole, account.administrator_role) : null,
         isLoading,

@@ -1,15 +1,32 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
-import { Request } from "../app/request";
-import { AdministratorRoles } from "./types";
+import { UserResponse } from "../users/types";
+import { fetchAdministratorRoles, fetchSettings, findUsers, setAdministratorRole } from "./api";
+import { AdministratorRole, AdministratorRoles } from "./types";
+
+export const settingsKeys = {
+    all: () => ["settings"] as const,
+};
+
+/**
+ * Fetch the server wide settings from the backend
+ *
+ * @returns {UseQueryResult} Whether the user has the required role.
+ */
+export function useFetchSettings() {
+    return useQuery(settingsKeys.all(), fetchSettings);
+}
 
 export const roleKeys = {
     all: () => ["roles"] as const,
 };
 
-const getAdministratorRoles = () => Request.get("/admin/roles").then(response => response.body);
-
+/**
+ * Fetch a list of valid administrator roles from the backend
+ *
+ * @returns {UseQueryResult} result of the query
+ */
 export const useGetAdministratorRoles = () => {
-    return useQuery("roles", getAdministratorRoles);
+    return useQuery<AdministratorRole[]>(roleKeys.all(), fetchAdministratorRoles);
 };
 
 export const userKeys = {
@@ -22,27 +39,37 @@ export const userKeys = {
     detail: (user_id: string) => ["users", "details", user_id] as const,
 };
 
-const getUsers = (page: number, per_page: number, term: string, administrator: boolean) =>
-    Request.get("/admin/users")
-        .query({ page, per_page, term, administrator })
-        .then(response => {
-            return response.body;
-        });
-
+/**
+ * Fetch a list users from the backend
+ *
+ * @param {number} page The page to fetch
+ * @param {number} per_page The number of users to fetch per page
+ * @param {string} term The search term to filter users by
+ * @param {boolean} administrator filter the users by administrator status
+ * @returns {UseQueryResult} result of the query
+ */
 export const useFindUsers = (page: number, per_page: number, term: string, administrator?: boolean) => {
-    return useQuery(
+    return useQuery<UserResponse>(
         userKeys.list([page, per_page, term, administrator]),
-        () => getUsers(page, per_page, term, administrator),
+        () => findUsers(page, per_page, term, administrator),
         {
             keepPreviousData: true,
         },
     );
 };
 
+/**
+ * Fetch a list users from the backend
+ *
+ * @param {number} per_page The number of users to fetch per page
+ * @param {string} term The search term to filter users by
+ * @param {boolean} administrator filter the users by administrator status
+ * @returns {UseQueryResult} result of the query
+ */
 export const useInfiniteFindUsers = (per_page: number, term: string, administrator?: boolean) => {
-    return useInfiniteQuery(
+    return useInfiniteQuery<UserResponse>(
         userKeys.infiniteList([per_page, term, administrator]),
-        ({ pageParam }) => getUsers(pageParam, per_page, term, administrator),
+        ({ pageParam }) => findUsers(pageParam, per_page, term, administrator),
         {
             getNextPageParam: lastPage => {
                 if (lastPage.page >= lastPage.page_count) {
@@ -54,10 +81,11 @@ export const useInfiniteFindUsers = (per_page: number, term: string, administrat
     );
 };
 
-const setAdministratorRole = (role: string, user_id: string) => {
-    return Request.put(`/admin/users/${user_id}/role`).send({ role });
-};
-
+/**
+ * Set the administrator role of a user
+ *
+ * @returns {UseMutationResult} mutator for setting an administrator role
+ */
 export const useSetAdministratorRole = () => {
     const queryClient = useQueryClient();
     return useMutation(

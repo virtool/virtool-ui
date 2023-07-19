@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import { forEach } from "lodash-es";
 import { combineReducers } from "redux";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
-import { createFakeUsers, mockFindUsersAPI } from "../../../../tests/fake/user";
+import { createFakeUsers, mockFindUsersApi } from "../../../../tests/fake/user";
 import { AdministratorRoles } from "../../../administration/types";
 import { ManageUsers } from "../Users";
 
@@ -33,7 +33,7 @@ describe("<ManageUsers />", () => {
     it("should render correctly with 3 users", async () => {
         const users = createFakeUsers(3);
         users[0].administrator_role = AdministratorRoles.FULL;
-        await mockFindUsersAPI(users);
+        await mockFindUsersApi(users);
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockGetAccountAPI(account);
 
@@ -61,7 +61,7 @@ describe("<ManageUsers />", () => {
 
     it("should render correctly if account has insufficent permissions", async () => {
         const users = createFakeUsers(3);
-        mockFindUsersAPI(users);
+        mockFindUsersApi(users);
         const account = createFakeAccount({ administrator_role: null });
         mockGetAccountAPI(account);
 

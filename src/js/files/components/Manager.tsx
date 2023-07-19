@@ -1,7 +1,6 @@
 import { capitalize } from "lodash-es";
 import React from "react";
-import { useGetAccount } from "../../account/querys";
-import { Account } from "../../account/types";
+import { useFetchAccount } from "../../account/querys";
 import { checkPermissionsFromAccount } from "../../administration/utils";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useListFiles } from "../querys";
@@ -21,7 +20,7 @@ type FileManagerProps = {
 export const FileManager = ({ validationRegex, message, tip, fileType }: FileManagerProps) => {
     const URLPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
-    const { data: account, isLoading: isLoadingAccount }: { data: Account; isLoading: boolean } = useGetAccount();
+    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
     const { data: files, isLoading: isLoadingFiles }: { data: FileResponse; isLoading: boolean } = useListFiles(
         fileType,
         true,

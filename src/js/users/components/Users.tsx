@@ -7,36 +7,39 @@ import { UsersList } from "./List";
 
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
-    const { hasPermission, isLoading }: { hasPermission: boolean; isLoading: boolean } = useCheckAdminRole(
-        AdministratorRoles.USERS,
-    );
+    const { hasPermission, isLoading } = useCheckAdminRole(AdministratorRoles.USERS);
 
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    if (!hasPermission) {
+    if (hasPermission) {
         return (
-            <Alert color="orange" level>
-                <Icon name="exclamation-circle" />
-                <span>
-                    <strong>You do not have permission to manage users.</strong>
-                    <span> Contact an administrator.</span>
-                </span>
-            </Alert>
+            <>
+                <Toolbar>
+                    <InputSearch
+                        name="search"
+                        aria-label="search"
+                        value={term}
+                        onChange={e => setTerm(e.target.value)}
+                    />
+                    <LinkButton to={{ state: { createUser: true } }} icon="user-plus" tip="Create User" color="blue" />
+                </Toolbar>
+
+                <UsersList term={term} />
+
+                <CreateUser />
+            </>
         );
     }
 
     return (
-        <>
-            <Toolbar>
-                <InputSearch name="search" aria-label="search" value={term} onChange={e => setTerm(e.target.value)} />
-                <LinkButton to={{ state: { createUser: true } }} icon="user-plus" tip="Create User" color="blue" />
-            </Toolbar>
-
-            <UsersList term={term} />
-
-            <CreateUser />
-        </>
+        <Alert color="orange" level>
+            <Icon name="exclamation-circle" />
+            <span>
+                <strong>You do not have permission to manage users.</strong>
+                <span> Contact an administrator.</span>
+            </span>
+        </Alert>
     );
 }

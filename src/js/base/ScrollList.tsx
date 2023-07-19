@@ -68,6 +68,7 @@ type StreamlinedScrollListProps = {
     items: unknown[];
     renderRow: (item: unknown) => void;
 };
+
 export const StreamlinedScrollList = ({
     fetchNextPage,
     isFetchingNextPage,
@@ -88,16 +89,10 @@ export const StreamlinedScrollList = ({
 
     const entries = map(items, item => renderRow(item));
 
-    let loading;
-
-    if (isLoading) {
-        loading = <LoadingPlaceholder margin="20px" />;
-    }
-
     return (
         <StyledScrollList>
             {entries}
-            {loading}
+            {isLoading && <LoadingPlaceholder margin="20px" />}
         </StyledScrollList>
     );
 };

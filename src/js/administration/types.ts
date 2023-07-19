@@ -9,5 +9,10 @@ export enum AdministratorRoles {
     SETTINGS = "settings",
     SPACES = "spaces",
     USERS = "users",
-    BASE = "base"
+    BASE = "base",
 }
+
+export type permissionQueryResult = {
+    hasPermission: boolean | null;
+    isLoading: boolean;
+};

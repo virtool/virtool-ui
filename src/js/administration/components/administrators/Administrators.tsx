@@ -1,11 +1,8 @@
 import { filter } from "lodash-es";
 import React, { useState } from "react";
-import { useGetAccount } from "../../../account/querys";
-import { Account } from "../../../account/types";
+import { useFetchAccount } from "../../../account/querys";
 import { InputSearch, LoadingPlaceholder, NoneFoundBox, Pagination, Toolbar } from "../../../base";
-import { UserResponse } from "../../../users/types";
 import { useFindUsers, useGetAdministratorRoles } from "../../querys";
-import { AdministratorRole } from "../../types";
 import { CreateAdministrator } from "./Create";
 import { AdministratorItem } from "./Item";
 
@@ -16,16 +13,10 @@ export const ManageAdministrators = () => {
 
     const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
-    const { data: users, isLoading: isLoadingUsers }: { data: UserResponse; isLoading: boolean } = useFindUsers(
-        page,
-        25,
-        term,
-        true,
-    );
+    const { data: users, isLoading: isLoadingUsers } = useFindUsers(page, 25, term, true);
 
-    const { data: account, isLoading: isLoadingAccount }: { data: Account; isLoading: boolean } = useGetAccount();
-    const { data: roles, isLoading: isLoadingRoles }: { data: Array<AdministratorRole>; isLoading: boolean } =
-        useGetAdministratorRoles();
+    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
+    const { data: roles, isLoading: isLoadingRoles } = useGetAdministratorRoles();
 
     if (isLoadingUsers || isLoadingRoles || isLoadingAccount) {
         return <LoadingPlaceholder />;
