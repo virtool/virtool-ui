@@ -1,8 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Request } from "../app/request";
-import { groupNameUpdate } from "./types";
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
+import { createGroup, getGroup, listGroups, removeGroup, updateGroup } from "./api";
+import { Group, GroupMinimal, GroupUpdate } from "./types";
 
-export const groupKeys = {
+/**
+ * Factory for generating react-query keys for group-related queries.
+ */
+export const groupQueryKeys = {
     all: () => ["groups"] as const,
     lists: () => ["groups", "list"] as const,
     list: filters => ["groups", "list", ...filters] as const,
@@ -10,86 +13,66 @@ export const groupKeys = {
     detail: id => ["groups", "detail", id] as const,
 };
 
-function listGroups() {
-    return Request.get("/groups").then(response => response.body);
-}
-
+/**
+ * Gets a non-paginated list of all groups.
+ *
+ * @returns {UseQueryResult} The non-paginated list of groups.
+ */
 export function useListGroups() {
-    return useQuery(groupKeys.lists(), listGroups);
+    return useQuery<GroupMinimal[]>(groupQueryKeys.lists(), listGroups);
 }
 
-function getGroup(id) {
-    return Request.get(`/groups/${id}`).then(response => response.body);
+/**
+ * Fetches a single group.
+ *
+ *
+ * @param {string} id The id of the group to fetch.
+ * @param {UseQueryOptions} options The react-query options to use.
+ * @returns {UseQueryResult} The non-paginated list of groups.
+ */
+export function useFetchGroup(id: string, options: UseQueryOptions<Group>) {
+    return useQuery<Group>(groupQueryKeys.detail(id), () => getGroup(id), options);
 }
 
-export function useGetGroup(id, options) {
-    return useQuery(groupKeys.detail(id), () => getGroup(id), options);
-}
-
-export function setName({ id, name }: groupNameUpdate) {
-    return Request.patch(`/groups/${id}`)
-        .send({
-            name,
-        })
-        .then(response => response.body);
-}
-
-export function useSetName() {
+/**
+ * Initializes a mutator for updating a group.
+ *
+ * @returns {UseMutationResult} mutator for updating a group.
+ */
+export function useUpdateGroup() {
     const queryClient = useQueryClient();
-    return useMutation(setName, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(groupKeys.lists());
-            queryClient.setQueryData(groupKeys.detail(data.id), data);
-        },
-    });
-}
-
-function setPermission({ id, permission, value }) {
-    return Request.patch(`/groups/${id}`)
-        .send({
-            permissions: {
-                [permission]: value,
-            },
-        })
-        .then(response => response.body);
-}
-
-export function useSetPermission() {
-    const queryClient = useQueryClient();
-    return useMutation(setPermission, {
+    return useMutation<Group, unknown, GroupUpdate>(updateGroup, {
         onSuccess: data => {
-            queryClient.setQueryData(groupKeys.detail(data.id), data);
+            queryClient.invalidateQueries(groupQueryKeys.lists());
+            queryClient.setQueryData(groupQueryKeys.detail(data.id), data);
         },
     });
 }
 
-function removeGroup({ id }) {
-    return Request.delete(`/groups/${id}`);
-}
-
+/**
+ * Initializes a mutator for removing a group.
+ *
+ * @returns {UseMutationResult} mutator for removing a group
+ */
 export function useRemoveGroup() {
     const queryClient = useQueryClient();
     return useMutation(removeGroup, {
-        onSuccess: data => {
-            queryClient.invalidateQueries(groupKeys.all());
+        onSuccess: () => {
+            queryClient.invalidateQueries(groupQueryKeys.all());
         },
     });
 }
 
-function createGroup({ name }) {
-    return Request.post("/groups")
-        .send({
-            name,
-        })
-        .then(response => response.body);
-}
-
-export function useCreateGroup(options) {
+/**
+ * Initializes a mutator for creating a group
+ *
+ * @returns {UseMutationResult} mutator for creating a group
+ */
+export function useCreateGroup() {
     const queryClient = useQueryClient();
     return useMutation(createGroup, {
         onSuccess: () => {
-            queryClient.invalidateQueries(groupKeys.lists());
+            queryClient.invalidateQueries(groupQueryKeys.lists());
         },
-        ...options,
     });
 }

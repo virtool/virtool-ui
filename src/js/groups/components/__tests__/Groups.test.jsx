@@ -6,7 +6,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
-import { createFakeGroup, mockGetGroupAPI, mockListGroupsAPI } from "../../../../tests/fake/groups";
+import { createFakeGroup, mockApiGetGroup, mockApiListGroups } from "../../../../tests/fake/groups";
 import { watchRouter } from "../../../app/sagas";
 import { Groups } from "../Groups";
 
@@ -85,7 +85,7 @@ describe("Groups", () => {
     });
 
     it("should render correctly when no groups exist", async () => {
-        mockListGroupsAPI([]);
+        mockApiListGroups([]);
         renderWithRouter(<Groups />, state, history);
 
         expect(await screen.findByText("No Groups Found")).toBeInTheDocument();
@@ -95,8 +95,8 @@ describe("Groups", () => {
 
     it("should render correctly when one groups exists and group contains no members", async () => {
         const group = createFakeGroup();
-        mockListGroupsAPI([group]);
-        mockGetGroupAPI(group);
+        mockApiListGroups([group]);
+        mockApiGetGroup(group);
         renderWithRouter(<Groups />, state, history);
 
         expect(await screen.findByRole("button", { name: "Delete" })).toBeInTheDocument();
@@ -108,7 +108,7 @@ describe("Groups", () => {
     });
 
     it("should render create new group view correctly", async () => {
-        mockListGroupsAPI([]);
+        mockApiListGroups([]);
         renderWithRouter(<Groups />, state, history);
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
@@ -122,8 +122,8 @@ describe("Groups", () => {
 
     it("should render correctly when active group has a group member", async () => {
         const group = createFakeGroup({ users: [{ handle: "testUser1", administrator: false, id: "test_id" }] });
-        mockListGroupsAPI([group]);
-        mockGetGroupAPI(group);
+        mockApiListGroups([group]);
+        mockApiGetGroup(group);
 
         renderWithRouter(<Groups />, state, history);
 
@@ -144,8 +144,8 @@ describe("Groups", () => {
             name: "testName2",
         });
 
-        mockListGroupsAPI([group_1, group_2]);
-        mockGetGroupAPI(group_1);
+        mockApiListGroups([group_1, group_2]);
+        mockApiGetGroup(group_1);
 
         renderWithRouter(<Groups {...props} />, state, history);
 

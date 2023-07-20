@@ -16,7 +16,7 @@ describe("Groups Action Creators:", () => {
         const result = wsUpdateGroup(data);
         expect(result).toEqual({
             type: WS_UPDATE_GROUP,
-            payload: { ...data },
+            payload: data,
         });
     });
 

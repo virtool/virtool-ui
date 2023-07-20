@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { getColor } from "../../app/theme";
 import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "../../base";
 import { InputHeader } from "../../base/InputHeader";
-import { useGetGroup, useListGroups, useRemoveGroup, useSetName } from "../querys";
-import { Group } from "../types";
+import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../querys";
 import Create from "./Create";
 import { GroupSelector } from "./GroupSelector";
 import { Members } from "./Members";
@@ -41,13 +40,13 @@ export const NoneSelected = styled.div`
 `;
 
 export const Groups = () => {
-    const setNameMutation = useSetName();
+    const updateGroupMutation = useUpdateGroup();
     const removeMutation = useRemoveGroup();
 
     const [selectedGroupId, setSelectedGroupId] = useState(null);
 
-    const { data: groups, isLoading: isLoadingGroups } = useListGroups({});
-    const { data: selectedGroup }: { selectedGroup: Group } = useGetGroup(selectedGroupId, {
+    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const { data: selectedGroup } = useFetchGroup(selectedGroupId, {
         enabled: Boolean(selectedGroupId),
         keepPreviousData: true,
     });
@@ -82,7 +81,7 @@ export const Groups = () => {
                         <InputHeader
                             id="name"
                             value={selectedGroup.name}
-                            onSubmit={name => setNameMutation.mutate({ id: selectedGroup.id, name })}
+                            onSubmit={name => updateGroupMutation.mutate({ id: selectedGroup.id, name })}
                         />
                         <Permissions selectedGroup={selectedGroup} />
                         <Members members={selectedGroup.users} />
