@@ -1,8 +1,14 @@
+/**
+ * Sagas configuration and functions for connecting the HMM API to redux.
+ *
+ * @module hmm/sagas
+ */
+
 import { getLocation, push } from "connected-react-router";
 import { put, select, takeLatest, throttle } from "redux-saga/effects";
 import { FIND_HMMS, GET_HMM, INSTALL_HMMS, PURGE_HMMS } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
-import hmmsAPI from "./api";
+import * as hmmsApi from "./api";
 
 export function* watchHmms() {
     yield throttle(300, FIND_HMMS.REQUESTED, findHmms);
@@ -12,7 +18,7 @@ export function* watchHmms() {
 }
 
 export function* findHmms(action) {
-    yield apiCall(hmmsAPI.find, action.payload, FIND_HMMS);
+    yield apiCall(hmmsApi.find, action.payload, FIND_HMMS);
 
     const routerLocation = yield select(getLocation);
 
@@ -22,19 +28,19 @@ export function* findHmms(action) {
 }
 
 export function* installHmms(action) {
-    const resp = yield apiCall(hmmsAPI.install, action, INSTALL_HMMS);
+    const resp = yield apiCall(installHmms, action, INSTALL_HMMS);
 
     if (resp.ok) {
-        yield apiCall(hmmsAPI.find, {}, FIND_HMMS);
+        yield apiCall(hmmsApi.install, {}, FIND_HMMS);
     }
 }
 
 export function* getHmm(action) {
-    yield apiCall(hmmsAPI.get, action.payload, GET_HMM);
+    yield apiCall(hmmsApi.fetch, action.payload, GET_HMM);
 }
 
 export function* purgeHmms(action) {
-    const resp = yield apiCall(hmmsAPI.purge, action, PURGE_HMMS);
+    const resp = yield apiCall(hmmsApi.purge, action, PURGE_HMMS);
 
     if (resp.ok) {
         yield put(push("/hmm"));
