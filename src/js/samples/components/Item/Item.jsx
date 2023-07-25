@@ -140,11 +140,7 @@ class SampleItem extends React.Component {
                     </SampleItemLabels>
                 </SampleItemData>
                 <SampleItemWorkflows>
-                    <SampleItemWorkflowTags
-                        id={this.props.id}
-                        nuvs={this.props.nuvs}
-                        pathoscope={this.props.pathoscope}
-                    />
+                    <SampleItemWorkflowTags id={this.props.id} workflows={this.props.workflows} />
                 </SampleItemWorkflows>
                 <SampleItemIcon>{endIcon}</SampleItemIcon>
             </StyledSampleItem>
@@ -154,7 +150,7 @@ class SampleItem extends React.Component {
 
 export const mapStateToProps = (state, ownProps) => ({
     ...find(state.samples.documents, { id: ownProps.id }),
-    checked: getIsSelected(state, ownProps.id)
+    checked: getIsSelected(state, ownProps.id),
 });
 
 export const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -164,7 +160,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
     onQuickAnalyze: id => {
         dispatch(selectSample(id));
         dispatch(pushState({ quickAnalysis: true }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleItem);
