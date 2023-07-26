@@ -2,18 +2,24 @@ import { faker } from "@faker-js/faker";
 import { merge, times } from "lodash-es";
 import nock from "nock";
 import { AdministratorRoles } from "../../js/administration/types";
-import { GroupMinimal } from "../../js/groups/types";
-import { Permissions, User, UserNested } from "../../js/users/types";
+import { GroupMinimal, Permissions } from "../../js/groups/types";
+import { User, UserNested } from "../../js/users/types";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 
-type createFakeUserNestedProps = {
+type CreateFakeUserNestedProps = {
     handle?: string;
     id?: string;
     administrator?: boolean;
 };
 
-export function createFakeUserNested(props?: createFakeUserNestedProps): UserNested {
+/**
+ * Create a UserNested object with fake data
+ *
+ * @param {CreateFakeUserNestedProps} props values to override the default automatically generated values
+ * @returns {UserNested} a UserNested object with fake data
+ */
+export function createFakeUserNested(props?: CreateFakeUserNestedProps): UserNested {
     let { handle, id, administrator } = props || {};
 
     return {
@@ -23,7 +29,7 @@ export function createFakeUserNested(props?: createFakeUserNestedProps): UserNes
     };
 }
 
-type createFakeUserProps = {
+type CreateFakeUserProps = {
     permissions?: Permissions;
     groups?: Array<GroupMinimal>;
     primary_group?: GroupMinimal;
@@ -31,7 +37,13 @@ type createFakeUserProps = {
     administrator_role?: AdministratorRoles;
 };
 
-export function createFakeUser(props?: createFakeUserProps): User {
+/**
+ * Create User object with fake data
+ *
+ * @param {CreateFakeUserProps} props values to override the default automatically generated values
+ * @returns {User} a User object with fake data
+ */
+export function createFakeUser(props?: CreateFakeUserProps): User {
     let { permissions, groups, primary_group, ...userProps } = props || {};
 
     groups = groups === undefined ? [createFakeGroupMinimal()] : groups;
@@ -52,6 +64,12 @@ export function createFakeUser(props?: createFakeUserProps): User {
     return merge(BaseUser, userProps);
 }
 
+/**
+ * Create an array of user objects with fake data
+ *
+ * @param {number} count the number of users to create
+ * @returns {User[]} An array of User objects with fake data
+ */
 export function createFakeUsers(count: number): Array<User> {
     return times(count || 1, () => createFakeUser());
 }
@@ -63,7 +81,14 @@ type Query = {
     administrator: boolean;
 };
 
-export function mockGetUsersAPI(users: Array<User>, query?: Query) {
+/**
+ * Creates a mocked API call for getting a list of users
+ *
+ * @param {User[]} users an array of users to return
+ * @param {Query} query the query parameters to match
+ * @returns {nock.Scope} a nock scope that mocks the API call
+ */
+export function mockApiGetUsers(users: Array<User>, query?: Query) {
     return nock("http://localhost")
         .get("/api/admin/users")
         .query(query || true)

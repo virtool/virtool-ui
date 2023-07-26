@@ -1,4 +1,4 @@
-import { Permissions } from "../../js/users/types";
+import { Permissions } from "../../js/groups/types";
 
 const defaultPermissions = {
     cancel_job: false,
@@ -11,7 +11,7 @@ const defaultPermissions = {
     upload_file: false,
 };
 
-type createFakePermissionsProps = {
+type CreateFakePermissionsProps = {
     cancel_job?: boolean;
     create_ref?: boolean;
     create_sample?: boolean;
@@ -22,7 +22,13 @@ type createFakePermissionsProps = {
     upload_file?: boolean;
 };
 
-export function createFakePermissions(permissions?: createFakePermissionsProps): Permissions {
+/**
+ * Create permissions object with default false values
+ *
+ * @param {CreateFakePermissionsProps} permissions values to override the default automatically generated values
+ * @returns {Permissions} Permissions object with fake data
+ */
+export function createFakePermissions(permissions?: CreateFakePermissionsProps): Permissions {
     return {
         ...defaultPermissions,
         ...permissions,

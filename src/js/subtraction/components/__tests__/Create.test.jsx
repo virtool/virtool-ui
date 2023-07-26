@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
-import { createFakeFile, mockUnpaginatedListFilesAPI } from "../../../../tests/fake/files";
+import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../tests/fake/files";
 import { FileType } from "../../../files/types";
 import { CreateSubtraction } from "../Create";
 import { SubtractionFileItem } from "../FileSelector";
@@ -55,14 +55,14 @@ describe("<CreateSubtraction />", () => {
     });
 
     it("should render when no files available", async () => {
-        mockUnpaginatedListFilesAPI([], true);
+        mockApiUnpaginatedListFiles([], true);
         routerRenderWithProviders(<CreateSubtraction {...props} />, createAppStore(state));
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
     });
 
     it("should render error when submitted with no name or file entered", async () => {
         const file = createFakeFile({ name: "subtraction.fq.gz", type: FileType.subtraction });
-        mockUnpaginatedListFilesAPI([file], true);
+        mockApiUnpaginatedListFiles([file], true);
 
         routerRenderWithProviders(
             <BrowserRouter>
@@ -79,7 +79,7 @@ describe("<CreateSubtraction />", () => {
 
     it("should submit correct values when all fields selected", async () => {
         const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
-        mockUnpaginatedListFilesAPI([file], true);
+        mockApiUnpaginatedListFiles([file], true);
 
         routerRenderWithProviders(
             <BrowserRouter>
@@ -101,7 +101,7 @@ describe("<CreateSubtraction />", () => {
 
     it("should restore form with correct values", async () => {
         const file = createFakeFile({ name: "testsubtractionname", type: FileType.subtraction });
-        mockUnpaginatedListFilesAPI([file], true);
+        mockApiUnpaginatedListFiles([file], true);
 
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";
