@@ -1,11 +1,9 @@
 import { map, sortBy } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { getColor } from "../../app/theme";
 import { BoxGroup, SelectBoxGroupSection } from "../../base";
-import { getGroup } from "../actions";
-import { getActiveGroup, getGroups } from "../selectors";
+import { GroupMinimal } from "../types";
 
 export const GroupsSelectBoxGroupSection = styled(SelectBoxGroupSection)`
     outline: 1px solid ${props => getColor({ color: "greyLight", theme: props.theme })};
@@ -24,14 +22,20 @@ export const GroupComponentsContainer = styled(BoxGroup)`
     border-bottom: 1px solid ${props => getColor({ theme: props.theme, color: "greyLight" })};
 `;
 
-export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) => {
-    const groupComponents = map(sortBy(groups, "id"), group => {
+type GroupSelectorProps = {
+    selectedGroup?: string;
+    setSelectedGroup: (string) => void;
+    groups: Array<GroupMinimal>;
+};
+
+export const GroupSelector = ({ selectedGroup, setSelectedGroup, groups }: GroupSelectorProps) => {
+    const groupComponents = map(sortBy(groups, "name"), group => {
         return (
             <GroupsSelectBoxGroupSection
                 selectable
-                active={activeGroupId === group.id}
+                active={selectedGroup === group.id}
                 key={group.id}
-                onClick={() => onChangeActiveGroup(group.id)}
+                onClick={() => setSelectedGroup(group.id)}
             >
                 {group.name}
             </GroupsSelectBoxGroupSection>
@@ -40,16 +44,3 @@ export const GroupSelector = ({ activeGroupId, onChangeActiveGroup, groups }) =>
 
     return <GroupComponentsContainer>{groupComponents}</GroupComponentsContainer>;
 };
-
-const mapStateToProps = state => {
-    return {
-        groups: getGroups(state),
-        activeGroupId: getActiveGroup(state).id
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    onChangeActiveGroup: groupId => dispatch(getGroup(groupId))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(GroupSelector);

@@ -5,7 +5,7 @@ import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
-import { createFakeFile, mockListFilesAPI } from "../../../../tests/fake/files";
+import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
@@ -47,7 +47,7 @@ describe("<SubtractionFileManager />", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file]);
+        mockApiListFiles([file]);
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
@@ -63,7 +63,7 @@ describe("<SubtractionFileManager />", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file]);
+        mockApiListFiles([file]);
 
         const mockUploadRequested = vi.fn();
         const reducer = (state, action) => {

@@ -1,5 +1,5 @@
 import { AdministratorRoles } from "../administration/types";
-import { GroupMinimal } from "../groups/types";
+import { GroupMinimal, Permissions } from "../groups/types";
 
 type UserB2C = {
     display_name?: string;
@@ -39,15 +39,4 @@ export type UserNested = {
     administrator: boolean;
     id: string;
     handle: string;
-};
-
-export type Permissions = {
-    cancel_job: boolean;
-    create_ref: boolean;
-    create_sample: boolean;
-    modify_hmm: boolean;
-    modify_subtraction: boolean;
-    remove_file: boolean;
-    remove_job: boolean;
-    upload_file: boolean;
 };

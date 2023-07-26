@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { find } from "lodash-es";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getColor } from "../../app/theme";
 import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "../../base";
 import { InputHeader } from "../../base/InputHeader";
-import { findUsers } from "../../users/actions";
-import { listGroups, removeGroup, setGroupName } from "../actions";
-import { getActiveGroup, getGroups } from "../selectors";
+import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../querys";
 import Create from "./Create";
-import GroupSelector from "./GroupSelector";
-import Members from "./Members";
-import Permissions from "./Permissions";
+import { GroupSelector } from "./GroupSelector";
+import { Members } from "./Members";
+import { Permissions } from "./Permissions";
 
 const ManageGroupsContainer = styled.div`
     display: grid;
@@ -41,13 +39,25 @@ export const NoneSelected = styled.div`
     transform: translate(-50%, -50%);
 `;
 
-export const Groups = ({ activeGroup, groups, loading, onFindUsers, onListGroups, onRemove, onSetName }) => {
-    useEffect(() => {
-        onListGroups();
-        onFindUsers();
-    }, []);
+export const Groups = () => {
+    const updateGroupMutation = useUpdateGroup();
+    const removeMutation = useRemoveGroup();
 
-    if (loading) {
+    const [selectedGroupId, setSelectedGroupId] = useState(null);
+
+    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const { data: selectedGroup } = useFetchGroup(selectedGroupId, {
+        enabled: Boolean(selectedGroupId),
+        keepPreviousData: true,
+    });
+
+    useEffect(() => {
+        if (groups && !find(groups, { id: selectedGroup })) {
+            setSelectedGroupId(groups[0]?.id);
+        }
+    }, [groups]);
+
+    if (isLoadingGroups || (groups.length && !selectedGroup)) {
         return <LoadingPlaceholder margin="130px" />;
     }
 
@@ -62,19 +72,23 @@ export const Groups = ({ activeGroup, groups, loading, onFindUsers, onListGroups
 
             {groups.length ? (
                 <ManageGroupsContainer>
-                    <GroupSelector />
+                    <GroupSelector
+                        groups={groups}
+                        selectedGroup={selectedGroupId}
+                        setSelectedGroup={setSelectedGroupId}
+                    />
                     <div>
                         <InputHeader
                             id="name"
-                            value={activeGroup.name}
-                            onSubmit={name => onSetName(activeGroup.id, name)}
+                            value={selectedGroup.name}
+                            onSubmit={name => updateGroupMutation.mutate({ id: selectedGroup.id, name })}
                         />
-                        <Permissions />
-                        <Members />
+                        <Permissions selectedGroup={selectedGroup} />
+                        <Members members={selectedGroup.users} />
                         <RemoveBanner
                             message="Permanently delete this group."
                             buttonText="Delete"
-                            onClick={() => onRemove(activeGroup.id)}
+                            onClick={() => removeMutation.mutate({ id: selectedGroup.id })}
                         />
                     </div>
                 </ManageGroupsContainer>
@@ -88,30 +102,3 @@ export const Groups = ({ activeGroup, groups, loading, onFindUsers, onListGroups
         </>
     );
 };
-
-const mapStateToProps = state => {
-    const groups = getGroups(state);
-    const activeGroup = getActiveGroup(state);
-    return {
-        activeGroup: activeGroup || {},
-        groups,
-        loading: !groups || (!activeGroup && groups.length !== 0)
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    onFindUsers: () => {
-        dispatch(findUsers());
-    },
-    onListGroups: () => {
-        dispatch(listGroups());
-    },
-    onRemove: groupId => {
-        dispatch(removeGroup(groupId));
-    },
-    onSetName: (groupId, name) => {
-        dispatch(setGroupName(groupId, name));
-    }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Groups);

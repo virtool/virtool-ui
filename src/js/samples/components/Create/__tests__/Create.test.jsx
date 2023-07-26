@@ -3,9 +3,8 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
-
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeFile, mockUnpaginatedListFilesAPI } from "../../../../../tests/fake/files";
+import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { LIST_LABELS } from "../../../../app/actionTypes";
 import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
@@ -79,7 +78,7 @@ describe("<CreateSample>", () => {
 
     it("should render", async () => {
         const file = createFakeFile();
-        mockUnpaginatedListFilesAPI([file]);
+        mockApiUnpaginatedListFiles([file]);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
@@ -101,7 +100,7 @@ describe("<CreateSample>", () => {
     it("should render LoadingPlaceholder when [props.subtractions=null]", async () => {
         props.subtractions = null;
         const file = createFakeFile();
-        mockUnpaginatedListFilesAPI([file]);
+        mockApiUnpaginatedListFiles([file]);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         expect(await screen.findByLabelText("loading")).toBeInTheDocument();
     });
@@ -113,7 +112,7 @@ describe("<CreateSample>", () => {
 
     it("should fail to submit and show errors on empty submission", async () => {
         const file = createFakeFile();
-        mockUnpaginatedListFilesAPI([file]);
+        mockApiUnpaginatedListFiles([file]);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -129,7 +128,7 @@ describe("<CreateSample>", () => {
 
     it("should submit when required fields are completed", async () => {
         const files = [createFakeFile(), createFakeFile()];
-        mockUnpaginatedListFilesAPI(files);
+        mockApiUnpaginatedListFiles(files);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
 
         await inputFormRequirements(props, values.name, files);
@@ -149,7 +148,7 @@ describe("<CreateSample>", () => {
 
     it("should submit expected results when form is fully completed", async () => {
         const files = [createFakeFile(), createFakeFile()];
-        mockUnpaginatedListFilesAPI(files);
+        mockApiUnpaginatedListFiles(files);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
 
@@ -179,7 +178,7 @@ describe("<CreateSample>", () => {
 
     it("should include labels when submitting a completed form", async () => {
         const files = [createFakeFile(), createFakeFile()];
-        mockUnpaginatedListFilesAPI(files);
+        mockApiUnpaginatedListFiles(files);
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
         const { name, isolate, host, locale, libraryType } = values;
 
@@ -211,7 +210,7 @@ describe("<CreateSample>", () => {
 
     it("should load form state from redux on first render", async () => {
         const files = [createFakeFile(), createFakeFile()];
-        mockUnpaginatedListFilesAPI(files);
+        mockApiUnpaginatedListFiles(files);
         const { name, isolate, host, locale } = values;
         state.forms.formState["create-sample"] = {
             ...values,
@@ -230,7 +229,7 @@ describe("<CreateSample>", () => {
 
     it("should update the sample name when the magic icon is pressed", async () => {
         const file = createFakeFile({ name: "large.fastq.gz" });
-        mockUnpaginatedListFilesAPI([file]);
+        mockApiUnpaginatedListFiles([file]);
 
         routerRenderWithProviders(<CreateSample {...props} />, createAppStore(state));
 

@@ -4,7 +4,7 @@ import nock from "nock";
 import React from "react";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
 import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
-import { createFakeUsers, mockGetUsersAPI } from "../../../../../tests/fake/user";
+import { createFakeUsers, mockApiGetUsers } from "../../../../../tests/fake/user";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../types";
 import { CreateAdministrator } from "../Create";
@@ -15,7 +15,7 @@ describe("<CreateAdministrator>", () => {
         mockGetAccountAPI(account);
 
         const users = createFakeUsers(2);
-        mockGetUsersAPI(users);
+        mockApiGetUsers(users);
 
         mockGetAdministratorRoles();
 
@@ -42,7 +42,7 @@ describe("<CreateAdministrator>", () => {
 
         const users = createFakeUsers(2);
 
-        mockGetUsersAPI(users);
+        mockApiGetUsers(users);
 
         mockGetAdministratorRoles();
 
@@ -75,7 +75,7 @@ describe("<CreateAdministrator>", () => {
 
         const users = createFakeUsers(2);
 
-        mockGetUsersAPI(users);
+        mockApiGetUsers(users);
 
         mockGetAdministratorRoles();
 
@@ -86,7 +86,7 @@ describe("<CreateAdministrator>", () => {
         expect(await screen.findByRole("option", { name: users[0].handle })).toBeInTheDocument();
         expect(await screen.findByRole("option", { name: users[1].handle })).toBeInTheDocument();
 
-        const get_users_scope = mockGetUsersAPI([users[0]], {
+        const get_users_scope = mockApiGetUsers([users[0]], {
             page: 1,
             per_page: 25,
             term: users[0].handle,

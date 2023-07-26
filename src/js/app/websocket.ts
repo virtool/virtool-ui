@@ -15,13 +15,15 @@ import { resetClient } from "../utils/utils";
 import { QueryClient } from "react-query";
 import { accountKeys } from "../account/querys";
 import { roleKeys, userKeys } from "../administration/querys";
-import { fileKeys } from "../files/querys";
+import { fileQueryKeys } from "../files/querys";
+import { groupQueryKeys } from "../groups/querys";
 
 const keyFactories = {
     account: accountKeys,
+    groups: groupQueryKeys,
     roles: roleKeys,
+    uploads: fileQueryKeys,
     users: userKeys,
-    uploads: fileKeys,
 };
 
 function reactQueryHandler(queryClient: QueryClient) {

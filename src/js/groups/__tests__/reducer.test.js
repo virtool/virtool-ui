@@ -1,11 +1,4 @@
-import { describe, expect, it } from "vitest";
-import {
-    LIST_GROUPS,
-    SET_GROUP_PERMISSION,
-    WS_INSERT_GROUP,
-    WS_REMOVE_GROUP,
-    WS_UPDATE_GROUP,
-} from "../../app/actionTypes";
+import { LIST_GROUPS, WS_INSERT_GROUP, WS_REMOVE_GROUP, WS_UPDATE_GROUP } from "../../app/actionTypes";
 import reducer, { initialState as reducerInitialState, insertGroup, updateGroup } from "../reducer";
 
 describe("Groups Reducer", () => {
@@ -72,13 +65,6 @@ describe("Groups Reducer", () => {
             ...state,
             documents: payload,
         });
-    });
-
-    it("should handle SET_GROUP_PERMISSION_SUCCEEDED", () => {
-        const payload = { id: "testGroupId" };
-        const action = { type: SET_GROUP_PERMISSION.SUCCEEDED, payload };
-        const result = reducer({}, action);
-        expect(result).toEqual({ activeGroup: { ...payload } });
     });
 
     describe("Groups Reducer Helper Functions", () => {
