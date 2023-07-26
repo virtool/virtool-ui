@@ -1,6 +1,6 @@
 import "d3-transition";
-import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const StyledQualityChart = styled.div`
@@ -61,5 +61,5 @@ export const QualityChart = ({ createChart, data, width }) => {
 QualityChart.propTypes = {
     createChart: PropTypes.func.isRequired,
     data: PropTypes.array.isRequired,
-    width: PropTypes.number.isRequired
+    width: PropTypes.number.isRequired,
 };

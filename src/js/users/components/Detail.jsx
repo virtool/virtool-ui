@@ -97,7 +97,7 @@ export const UserDetail = ({ detail, error, match, onGetUser, onListGroups }) =>
 
 export const mapStateToProps = state => ({
     detail: state.users.detail,
-    error: get(state, "errors.GET_USER_ERROR.message", "")
+    error: get(state, "errors.GET_USER_ERROR.message", ""),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -107,7 +107,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onListGroups: () => {
         dispatch(listGroups());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetail);

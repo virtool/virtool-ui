@@ -6,7 +6,7 @@ import IsolateForm from "./Form";
 
 const getInitialState = props => ({
     sourceType: props.sourceType || (props.restrictSourceTypes ? "unknown" : ""),
-    sourceName: props.sourceName || ""
+    sourceName: props.sourceName || "",
 });
 
 class Edit extends React.Component {
@@ -44,7 +44,7 @@ class Edit extends React.Component {
 const mapStateToProps = state => ({
     show: state.otus.editIsolate,
     allowedSourceTypes: state.references.detail.source_types,
-    restrictSourceTypes: state.references.detail.restrict_source_types
+    restrictSourceTypes: state.references.detail.restrict_source_types,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -54,7 +54,7 @@ const mapDispatchToProps = dispatch => ({
 
     onSave: (otuId, isolateId, sourceType, sourceName) => {
         dispatch(editIsolate(otuId, isolateId, sourceType, sourceName));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Edit);

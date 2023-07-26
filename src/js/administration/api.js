@@ -1,5 +1,9 @@
 import { Request } from "../app/request";
 
-export const get = () => Request.get("/settings");
+export function get() {
+    return Request.get("/settings");
+}
 
-export const update = ({ update }) => Request.patch("/settings").send(update);
+export function update({ update }) {
+    return Request.patch("/settings").send(update);
+}

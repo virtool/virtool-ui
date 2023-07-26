@@ -73,13 +73,13 @@ export class HMMList extends React.Component {
 
 const mapStateToProps = state => ({
     ...state.hmms,
-    term: getTerm(state)
+    term: getTerm(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (term, page) => {
         dispatch(findHmms(term, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HMMList);

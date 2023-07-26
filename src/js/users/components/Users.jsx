@@ -16,7 +16,7 @@ export class ManageUsers extends React.Component {
         super(props);
 
         this.state = {
-            error: ""
+            error: "",
         };
     }
 
@@ -81,7 +81,7 @@ export const mapStateToProps = state => ({
     term: state.users.filter,
     groups: state.groups.list,
     groupsFetched: state.groups.fetched,
-    error: get(state, "errors.LIST_USERS_ERROR.message", "")
+    error: get(state, "errors.LIST_USERS_ERROR.message", ""),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -95,7 +95,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onListGroups: () => {
         dispatch(listGroups());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageUsers);

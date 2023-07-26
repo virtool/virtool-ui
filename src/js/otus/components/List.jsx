@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../app/actions";
-import { LoadingPlaceholder, ContainerNarrow, NoneFoundBox, ScrollList } from "../../base";
+import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, ScrollList } from "../../base";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
 import { findOTUs } from "../actions";
 import { getTerm } from "../selectors";
@@ -49,7 +49,7 @@ export const mapStateToProps = state => ({
     ...state.otus,
     term: getTerm(state),
     refId: state.references.detail.id,
-    verified: state.otus.verified
+    verified: state.otus.verified,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -59,7 +59,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onLoadNextPage: (refId, term, verified, page) => {
         dispatch(findOTUs(refId, term, verified, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OTUsList);

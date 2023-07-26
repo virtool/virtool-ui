@@ -1,5 +1,5 @@
-import { WS_UPDATE_STATUS } from "../app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
+import { WS_UPDATE_STATUS } from "../app/actionTypes";
 
 /**
  * Returns an action that should be dispatched when the status is updated via websocket.

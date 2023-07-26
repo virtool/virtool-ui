@@ -1,7 +1,7 @@
 import { get, pick } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { pushState } from "../../../app/actions";
+import { pushState } from "../../app/actions";
 import {
     Input,
     InputError,
@@ -12,10 +12,10 @@ import {
     ModalFooter,
     ModalHeader,
     SaveButton,
-    TextArea
-} from "../../../base";
-import { clearError } from "../../../errors/actions";
-import { editSample } from "../../actions";
+    TextArea,
+} from "../../base";
+import { clearError } from "../../errors/actions";
+import { editSample } from "../actions";
 
 const getInitialState = ({ name, isolate, host, locale, notes }) => ({
     name: name || "",
@@ -23,7 +23,7 @@ const getInitialState = ({ name, isolate, host, locale, notes }) => ({
     host: host || "",
     locale: locale || "",
     notes: notes || "",
-    error: ""
+    error: "",
 });
 
 class EditSample extends React.Component {
@@ -36,7 +36,7 @@ class EditSample extends React.Component {
         const { name, value } = e.target;
         this.setState({
             [name]: value,
-            error: ""
+            error: "",
         });
 
         if (this.props.error) {
@@ -59,7 +59,7 @@ class EditSample extends React.Component {
 
         if (!this.state.name) {
             return this.setState({
-                error: "Required Field"
+                error: "Required Field",
             });
         }
         this.props.onEdit(this.props.id, pick(this.state, ["name", "isolate", "host", "locale", "notes"]));
@@ -117,7 +117,7 @@ class EditSample extends React.Component {
 const mapStateToProps = state => ({
     ...state.samples.detail,
     show: get(state.router.location.state, "editSample", false),
-    error: get(state, "errors.UPDATE_SAMPLE_ERROR.message", "")
+    error: get(state, "errors.UPDATE_SAMPLE_ERROR.message", ""),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -131,7 +131,7 @@ const mapDispatchToProps = dispatch => ({
 
     onClearError: () => {
         dispatch(clearError("UPDATE_SAMPLE_ERROR"));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditSample);

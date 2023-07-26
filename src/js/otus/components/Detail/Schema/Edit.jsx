@@ -11,8 +11,8 @@ const getInitialState = props => ({
         molecule: props.curSeg.molecule,
         required: props.curSeg.required,
         showError: false,
-        nameTaken: false
-    }
+        nameTaken: false,
+    },
 });
 
 class EditSegment extends React.Component {
@@ -26,8 +26,8 @@ class EditSegment extends React.Component {
             newEntry: {
                 name: entry.name,
                 molecule: entry.molecule,
-                required: entry.required
-            }
+                required: entry.required,
+            },
         });
     };
 
@@ -42,7 +42,7 @@ class EditSegment extends React.Component {
 
         if (takenName && takenName.name !== this.props.curSeg.name) {
             this.setState({
-                newEntry: { ...this.state.newEntry, showError: false, nameTaken: true }
+                newEntry: { ...this.state.newEntry, showError: false, nameTaken: true },
             });
         } else if (this.state.newEntry.name) {
             const newArray = this.props.schema.slice();
@@ -52,13 +52,13 @@ class EditSegment extends React.Component {
             newArray[index] = this.state.newEntry;
 
             this.setState({
-                newEntry: { ...this.state.newEntry, showError: false, nameTaken: false }
+                newEntry: { ...this.state.newEntry, showError: false, nameTaken: false },
             });
 
             this.props.onSubmit(newArray);
         } else {
             this.setState({
-                newEntry: { ...this.state.newEntry, showError: true, nameTaken: false }
+                newEntry: { ...this.state.newEntry, showError: true, nameTaken: false },
             });
         }
     };
@@ -92,11 +92,11 @@ EditSegment.propTypes = {
     show: PropTypes.bool.isRequired,
     onHide: PropTypes.func,
     onSubmit: PropTypes.func,
-    curSeg: PropTypes.object.isRequired
+    curSeg: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
-    schema: state.otus.detail.schema
+    schema: state.otus.detail.schema,
 });
 
 export default connect(mapStateToProps)(EditSegment);

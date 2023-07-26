@@ -14,7 +14,7 @@ import {
     NotFound,
     Table,
     ViewHeader,
-    ViewHeaderTitle
+    ViewHeaderTitle,
 } from "../../base";
 import { getHmm } from "../actions";
 import { ClusterMember } from "./ClusterMember";
@@ -164,13 +164,13 @@ export class HMMDetail extends React.Component {
 
 export const mapStateToProps = state => ({
     error: get(state, "errors.GET_HMM_ERROR", null),
-    detail: state.hmms.detail
+    detail: state.hmms.detail,
 });
 
 export const mapDispatchToProps = dispatch => ({
     onGet: hmmId => {
         dispatch(getHmm(hmmId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HMMDetail);

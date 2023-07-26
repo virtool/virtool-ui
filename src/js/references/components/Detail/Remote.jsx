@@ -9,7 +9,7 @@ import {
     Icon,
     Loader,
     ProgressBarAffixed,
-    RelativeTime
+    RelativeTime,
 } from "../../../base";
 import { checkUpdates, updateRemoteReference } from "../../actions";
 import { checkReferenceRight, getProgress } from "../../selectors";
@@ -159,7 +159,7 @@ const mapStateToProps = state => ({
     detail: state.references.detail,
     checking: state.references.checking,
     canRemove: checkReferenceRight(state, "remove"),
-    progress: getProgress(state)
+    progress: getProgress(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -169,7 +169,7 @@ const mapDispatchToProps = dispatch => ({
 
     onUpdate: refId => {
         dispatch(updateRemoteReference(refId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Remote);

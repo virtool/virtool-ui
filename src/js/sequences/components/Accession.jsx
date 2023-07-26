@@ -11,7 +11,7 @@ export const Accession = ({ error }) => {
 
     const {
         values: { accession },
-        setFieldValue
+        setFieldValue,
     } = useFormikContext();
 
     const onAutofill = sequenceValues => {
@@ -32,7 +32,7 @@ export const Accession = ({ error }) => {
                         accession,
                         definition,
                         host,
-                        sequence
+                        sequence,
                     });
 
                     setPending(false);
@@ -45,7 +45,7 @@ export const Accession = ({ error }) => {
                     setNotFound(err.status === 404);
 
                     return err;
-                }
+                },
             );
         }
     }, [accession, pending, notFound, onAutofill]);

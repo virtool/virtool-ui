@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import { reject } from "lodash-es";
+import PropTypes from "prop-types";
+import React, { useCallback } from "react";
+import { connect } from "react-redux";
 import { RemoveModal } from "../../../../base";
 
 export const RemoveSegment = ({ activeName, schema, show, onHide, onSubmit }) => {
@@ -17,11 +17,11 @@ RemoveSegment.propTypes = {
     schema: PropTypes.arrayOf(PropTypes.object),
     show: PropTypes.bool.isRequired,
     onHide: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
 };
 
 export const mapStateToProps = state => ({
-    schema: state.otus.detail.schema
+    schema: state.otus.detail.schema,
 });
 
 export default connect(mapStateToProps)(RemoveSegment);

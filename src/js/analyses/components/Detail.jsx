@@ -8,7 +8,7 @@ import {
     RelativeTime,
     SubviewHeader,
     SubviewHeaderAttribution,
-    SubviewHeaderTitle
+    SubviewHeaderTitle,
 } from "../../base/index";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { getAnalysis } from "../actions";
@@ -73,7 +73,7 @@ export function mapStateToProps(state) {
     return {
         detail: state.analyses.detail,
         error: get(state, "errors.GET_ANALYSIS_ERROR", null),
-        sampleName: state.samples.detail.name
+        sampleName: state.samples.detail.name,
     };
 }
 
@@ -81,7 +81,7 @@ export function mapDispatchToProps(dispatch) {
     return {
         onGetAnalysis: analysisId => {
             dispatch(getAnalysis(analysisId));
-        }
+        },
     };
 }
 

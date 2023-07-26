@@ -53,13 +53,13 @@ export class SubtractionList extends React.Component {
 
 const mapStateToProps = state => ({
     ...state.subtraction,
-    canModify: checkAdminRoleOrPermission(state, "modify_subtraction")
+    canModify: checkAdminRoleOrPermission(state, "modify_subtraction"),
 });
 
 const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (term, page) => {
         dispatch(findSubtractions(term, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubtractionList);

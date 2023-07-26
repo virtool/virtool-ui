@@ -10,7 +10,7 @@ const series = [
     { label: "Guanine", color: theme.color.blue },
     { label: "Adenine", color: theme.color.red },
     { label: "Thymine", color: theme.color.green },
-    { label: "Cytosine", color: theme.color.greyDark }
+    { label: "Cytosine", color: theme.color.greyDark },
 ];
 
 export const drawNucleotidesChart = (element, data, baseWidth) => {

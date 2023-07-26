@@ -1,5 +1,5 @@
+import { addSeconds, formatDistanceStrict } from "date-fns";
 import React from "react";
-import { formatDistanceStrict, addSeconds } from "date-fns";
 import styled from "styled-components";
 import { Box, ExternalLink, Icon, Loader, RelativeTime } from "../../../base";
 

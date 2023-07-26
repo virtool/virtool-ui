@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { useElementSize } from "../../utils/hooks";
-import { QualityChart } from "./Chart";
 import { drawBasesChart } from "./Bases";
+import { QualityChart } from "./Chart";
 import { drawNucleotidesChart } from "./Nucleotides";
 import { drawSequencesChart } from "./Sequences";
 

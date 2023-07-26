@@ -1,3 +1,4 @@
+import { createAction } from "@reduxjs/toolkit";
 import { push } from "connected-react-router";
 import { all, put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
 import { pushState } from "../app/actions";
@@ -15,14 +16,13 @@ import {
     REMOVE_OTU,
     REMOVE_SEQUENCE,
     REVERT,
-    SET_ISOLATE_AS_DEFAULT
+    SET_ISOLATE_AS_DEFAULT,
 } from "../app/actionTypes";
 import { deletePersistentFormState } from "../forms/actions";
 import { apiCall, pushFindTerm, putGenericError } from "../utils/sagas";
-import * as otusAPI from "./api";
-import { createAction } from "@reduxjs/toolkit";
-const getCurrentOTUsPath = state => `/refs/${state.references.detail.id}/otus`;
 import { revertFailed, revertSucceeded } from "./actions";
+import * as otusAPI from "./api";
+const getCurrentOTUsPath = state => `/refs/${state.references.detail.id}/otus`;
 
 export function* updateAndGetOTU(apiMethod, action, actionType) {
     let response;
@@ -123,7 +123,7 @@ export function* revert(action) {
         } else {
             const [otuResponse, historyResponse] = yield all([
                 otusAPI.get(action.payload),
-                otusAPI.getHistory(action.payload)
+                otusAPI.getHistory(action.payload),
             ]);
             yield put(revertSucceeded(otuResponse.body, historyResponse.body));
         }

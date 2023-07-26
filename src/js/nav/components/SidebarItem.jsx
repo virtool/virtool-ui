@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
-import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Icon } from "../../base";
 
@@ -47,5 +47,5 @@ SidebarItem.propTypes = {
     exclude: PropTypes.arrayOf(PropTypes.string),
     icon: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
 };

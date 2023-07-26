@@ -121,14 +121,14 @@ export const mapStateToProps = state => ({
     ...state.account,
     dev: state.app.dev,
     pending: state.app.pending,
-    handle: getAccountHandle(state)
+    handle: getAccountHandle(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onLogout: () => {
         if (window.b2c.use && window.msalInstance.getActiveAccount()) window.msalInstance.logoutRedirect();
         else dispatch(logout());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Bar);

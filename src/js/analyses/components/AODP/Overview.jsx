@@ -23,7 +23,7 @@ export const AODPOverview = ({ joined, histogram, remainder }) => (
         <Bars
             items={[
                 { color: "green", count: joined, title: "Joined" },
-                { color: "orange", count: remainder, title: "Not Joined" }
+                { color: "orange", count: remainder, title: "Not Joined" },
             ]}
         />
 
@@ -37,7 +37,7 @@ const mapStateToProps = state => {
     return {
         joined: joined_pair_count,
         histogram: join_histogram,
-        remainder: remainder_pair_count
+        remainder: remainder_pair_count,
     };
 };
 

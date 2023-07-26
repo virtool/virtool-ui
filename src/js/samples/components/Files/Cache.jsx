@@ -26,7 +26,7 @@ export const SampleFilesCache = ({ caches }) => {
 };
 
 export const mapStateToProps = state => ({
-    caches: state.samples.detail.caches
+    caches: state.samples.detail.caches,
 });
 
 export default connect(mapStateToProps)(SampleFilesCache);

@@ -11,11 +11,11 @@ import { ReferenceForm } from "../Form";
 const getInitialValues = detail => ({
     name: detail.name,
     description: detail.description,
-    organism: detail.organism
+    organism: detail.organism,
 });
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Required Field")
+    name: Yup.string().required("Required Field"),
 });
 
 export const EditReference = ({ show, detail, onHide, onSubmit }) => {
@@ -49,7 +49,7 @@ export const EditReference = ({ show, detail, onHide, onSubmit }) => {
 
 const mapStateToProps = state => ({
     show: routerLocationHasState(state, "editReference"),
-    detail: state.references.detail
+    detail: state.references.detail,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -59,7 +59,7 @@ const mapDispatchToProps = dispatch => ({
 
     onHide: () => {
         dispatch(pushState({ editReference: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditReference);

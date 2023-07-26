@@ -70,7 +70,7 @@ export function SampleCacheItem({ createdAt, files, hash, id, missing, sampleId 
 
 export function mapStateToProps(state) {
     return {
-        sampleId: state.samples.detail.id
+        sampleId: state.samples.detail.id,
     };
 }
 

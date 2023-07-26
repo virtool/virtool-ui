@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import SampleRights from "../../administration/components/SampleRights";
 import { mapSettingsStateToProps } from "../../administration/mappers";
-import { LoadingPlaceholder, ContainerNarrow, ViewHeader, ViewHeaderTitle } from "../../base";
+import { ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 
 export const SamplesSettings = ({ loading }) => {
     if (loading) {

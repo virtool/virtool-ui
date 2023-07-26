@@ -6,12 +6,12 @@ import {
     RelativeTime,
     SubviewHeader,
     SubviewHeaderAttribution,
-    SubviewHeaderTitle
+    SubviewHeaderTitle,
 } from "../../base";
 import { getCache } from "../actions";
-import CacheQuality from "./Quality";
 import CacheGeneral from "./General";
 import CacheParameters from "./Parameters";
+import CacheQuality from "./Quality";
 
 const StyledCacheDetail = styled.div`
     overflow-x: hidden;
@@ -42,7 +42,7 @@ export const CacheDetail = ({ detail, match, sampleName, onGet }) => {
 export const mapStateToProps = state => {
     return {
         detail: state.caches.detail,
-        sampleName: state.samples.detail.name
+        sampleName: state.samples.detail.name,
     };
 };
 
@@ -50,7 +50,7 @@ export const mapDispatchToProps = dispatch => {
     return {
         onGet: cacheId => {
             dispatch(getCache(cacheId));
-        }
+        },
     };
 };
 

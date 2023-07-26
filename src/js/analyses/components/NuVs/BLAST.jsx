@@ -108,14 +108,14 @@ export const mapStateToProps = state => {
     return {
         analysisId: state.analyses.detail.id,
         blast,
-        sequenceIndex: index
+        sequenceIndex: index,
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onBlast: (analysisId, sequenceIndex) => {
         dispatch(blastNuvs(analysisId, sequenceIndex));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NuVsBLAST);

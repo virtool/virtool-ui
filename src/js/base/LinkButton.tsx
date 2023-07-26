@@ -1,8 +1,8 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { Icon } from "./Icon";
-import { Tooltip } from "./Tooltip";
-import React from "react";
 import { StyledButton } from "./styled/StyledButton";
+import { Tooltip } from "./Tooltip";
 
 interface LinkButtonProps {
     children?: React.ReactNode;
@@ -25,7 +25,7 @@ export const LinkButton = ({
     replace,
     tip,
     to,
-    onClick
+    onClick,
 }: LinkButtonProps) => {
     const button = (
         <StyledButton

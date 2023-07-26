@@ -35,7 +35,7 @@ export const mapStateToProps = state => {
     return {
         reads,
         id,
-        prefix: snakeCase(name)
+        prefix: snakeCase(name),
     };
 };
 

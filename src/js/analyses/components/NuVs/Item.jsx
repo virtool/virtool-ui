@@ -43,7 +43,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
     onSetActiveId: id => {
         dispatch(setActiveHitId(id));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NuVsItem);

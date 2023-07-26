@@ -1,7 +1,7 @@
-import React from "react";
 import { get } from "lodash-es";
-import styled from "styled-components";
+import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { BoxLink, Icon } from "../../base";
 
@@ -34,7 +34,7 @@ export const mapStateToProps = (state, props) => {
         id,
         name,
         verified,
-        refId: state.references.detail.id
+        refId: state.references.detail.id,
     };
 };
 

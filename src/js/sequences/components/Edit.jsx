@@ -10,7 +10,7 @@ export const EditSequence = ({ dataType }) =>
 
 export const mapStateToProps = state => ({
     dataType: getDataType(state),
-    show: routerLocationHasState(state, "editSequence")
+    show: routerLocationHasState(state, "editSequence"),
 });
 
 export default connect(mapStateToProps)(EditSequence);

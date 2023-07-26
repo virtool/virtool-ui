@@ -1,3 +1,5 @@
+export type IconColor = "blue" | "green" | "grey" | "red" | "orange" | "purple";
+
 export type JobState =
     | "complete"
     | "cancelled"
@@ -7,5 +9,3 @@ export type JobState =
     | "terminated"
     | "timeout"
     | "waiting";
-
-export type IconColor = "blue" | "green" | "grey" | "red" | "orange" | "purple";

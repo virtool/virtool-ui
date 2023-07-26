@@ -8,7 +8,7 @@ export const initialState = {
     task: null,
     documents: null,
     page: 0,
-    detail: null
+    detail: null,
 };
 
 export const hmmsReducer = createReducer(initialState, builder => {

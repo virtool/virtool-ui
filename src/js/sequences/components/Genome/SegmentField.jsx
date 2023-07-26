@@ -13,7 +13,7 @@ import {
     ListboxInput,
     ListboxList,
     ListboxOption,
-    ListboxPopover
+    ListboxPopover,
 } from "../../../base";
 import { getHasSchema, getOTUDetailId, getSchema } from "../../../otus/selectors";
 import { getReferenceDetailId } from "../../../references/selectors";
@@ -89,7 +89,7 @@ export const mapStateToProps = (state, ownProps) => ({
     otuId: getOTUDetailId(state),
     refId: getReferenceDetailId(state),
     segmentValue: find(getSchema(state), { name: ownProps.value }) || { name: "None" },
-    segments: getUnreferencedSegments(state)
+    segments: getUnreferencedSegments(state),
 });
 
 export default connect(mapStateToProps)(SequenceSegmentField);

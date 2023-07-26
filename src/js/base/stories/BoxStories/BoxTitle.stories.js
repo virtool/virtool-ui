@@ -4,7 +4,7 @@ import { BoxTitle } from "../../BoxTitle";
 
 export default {
     title: "base/Box/BoxTitle",
-    component: BoxTitle
+    component: BoxTitle,
 };
 
 const Template = args => (
@@ -21,5 +21,5 @@ const Template = args => (
 export const testBoxTitle = Template.bind({});
 
 testBoxTitle.args = {
-    children: "This is a BoxTitle!"
+    children: "This is a BoxTitle!",
 };

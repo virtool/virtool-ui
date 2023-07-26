@@ -28,7 +28,7 @@ export const ReferenceManage = ({
     id,
     latestBuild,
     organism,
-    remotesFrom
+    remotesFrom,
 }) => (
     <ContainerNarrow>
         <BoxGroup>
@@ -76,7 +76,7 @@ export const mapStateToProps = state => ({
     latestBuild: state.references.detail.latest_build,
     organism: state.references.detail.organism,
     remotesFrom: state.references.detail.remotes_from,
-    dataType: state.references.detail.data_type
+    dataType: state.references.detail.data_type,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -86,7 +86,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onUpdate: refId => {
         dispatch(updateRemoteReference(refId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceManage);

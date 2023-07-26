@@ -33,13 +33,13 @@ function mapStateToProps(state) {
     return {
         color: state.instanceMessage.color,
         loaded: state.instanceMessage.loaded,
-        message: state.instanceMessage.message
+        message: state.instanceMessage.message,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onLoad: () => dispatch(getInstanceMessage())
+        onLoad: () => dispatch(getInstanceMessage()),
     };
 }
 

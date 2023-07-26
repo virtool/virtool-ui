@@ -6,8 +6,8 @@ export default {
     title: "base/NoneFound/NoneFoundSection",
     component: NoneFoundSection,
     args: {
-        noun: "items"
-    }
+        noun: "items",
+    },
 };
 
 const Template = args => (
@@ -19,5 +19,5 @@ export const testNoneFoundSection = Template.bind({});
 export const NoneFoundSectionWithChild = Template.bind({});
 
 NoneFoundSectionWithChild.args = {
-    displayLink: true
+    displayLink: true,
 };

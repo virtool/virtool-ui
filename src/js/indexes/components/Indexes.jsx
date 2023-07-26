@@ -45,13 +45,13 @@ export class Indexes extends React.Component {
 
 const mapStateToProps = state => ({
     ...state.indexes,
-    refId: state.references.detail.id
+    refId: state.references.detail.id,
 });
 
 const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (refId, page) => {
         dispatch(findIndexes(refId, null, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Indexes);

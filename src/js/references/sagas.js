@@ -17,7 +17,7 @@ import {
     REMOVE_REFERENCE_GROUP,
     REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
-    WS_UPDATE_REFERENCE
+    WS_UPDATE_REFERENCE,
 } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as referenceAPI from "./api";
@@ -30,9 +30,9 @@ export function* afterReferenceCreation() {
             state: {
                 cloneReference: false,
                 emptyReference: false,
-                importReference: false
-            }
-        })
+                importReference: false,
+            },
+        }),
     );
 }
 
@@ -93,7 +93,7 @@ export function* remoteReference() {
     const resp = yield apiCall(
         referenceAPI.remoteReference,
         { remote_from: "virtool/ref-plant-viruses" },
-        REMOTE_REFERENCE
+        REMOTE_REFERENCE,
     );
 
     if (resp.ok) {
@@ -112,7 +112,7 @@ export function* editRefUser(action) {
 export function* removeRefUser(action) {
     yield apiCall(referenceAPI.removeUser, action.payload, REMOVE_REFERENCE_USER, {
         userId: action.payload.userId,
-        refId: action.payload.refId
+        refId: action.payload.refId,
     });
 }
 
@@ -127,7 +127,7 @@ export function* editRefGroup(action) {
 export function* removeRefGroup(action) {
     yield apiCall(referenceAPI.removeGroup, action.payload, REMOVE_REFERENCE_GROUP, {
         groupId: action.payload.groupId,
-        refId: action.payload.refId
+        refId: action.payload.refId,
     });
 }
 

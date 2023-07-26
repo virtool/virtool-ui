@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Alert, Icon } from "../../base";
 import { getColor } from "../../app/theme";
+import { Alert, Icon } from "../../base";
 
 const StyledRestoredAlert = styled(Alert)`
     display: flex;

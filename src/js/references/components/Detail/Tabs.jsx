@@ -17,7 +17,7 @@ export function ReferenceDetailTabs({ id, otuCount }) {
 
 export const mapStateToProps = state => ({
     id: state.references.detail.id,
-    otuCount: state.references.detail.otu_count
+    otuCount: state.references.detail.otu_count,
 });
 
 export default connect(mapStateToProps)(ReferenceDetailTabs);

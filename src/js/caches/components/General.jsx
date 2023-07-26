@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import { Table } from "../../base/Table";
 
 const CacheGeneral = ({ hash, program }) => (
@@ -19,7 +19,7 @@ const CacheGeneral = ({ hash, program }) => (
 
 CacheGeneral.propTypes = {
     hash: PropTypes.string.isRequired,
-    program: PropTypes.string.isRequired
+    program: PropTypes.string.isRequired,
 };
 
 export default CacheGeneral;

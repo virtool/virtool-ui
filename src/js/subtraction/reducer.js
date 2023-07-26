@@ -6,7 +6,7 @@ import {
     SHORTLIST_SUBTRACTIONS,
     WS_INSERT_SUBTRACTION,
     WS_REMOVE_SUBTRACTION,
-    WS_UPDATE_SUBTRACTION
+    WS_UPDATE_SUBTRACTION,
 } from "../app/actionTypes";
 import { insert, remove, update, updateDocuments } from "../utils/reducers";
 
@@ -15,7 +15,7 @@ export const initialState = {
     documents: null,
     shortlist: null,
     page: 0,
-    total_count: 0
+    total_count: 0,
 };
 
 export const subtractionsReducer = createReducer(initialState, builder => {

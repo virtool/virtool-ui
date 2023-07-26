@@ -47,11 +47,11 @@ export const SequenceButtons = ({ canModify, id, isolateId, otuId, onCollapse, o
 export const mapStateToProps = state => ({
     canModify: getCanModifyReferenceOTU(state),
     isolateId: getActiveIsolateId(state),
-    otuId: getOTUDetailId(state)
+    otuId: getOTUDetailId(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onRemoveSequence: id => dispatch(showRemoveSequence(id))
+    onRemoveSequence: id => dispatch(showRemoveSequence(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SequenceButtons);

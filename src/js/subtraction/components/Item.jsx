@@ -45,7 +45,7 @@ export const mapStateToProps = (state, props) => {
         user,
         created_at,
         name,
-        ready
+        ready,
     };
 };
 

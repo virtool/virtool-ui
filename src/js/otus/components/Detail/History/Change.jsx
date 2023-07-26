@@ -7,66 +7,66 @@ import { Attribution, BoxGroupSection, Icon, Label } from "../../../../base";
 const methodIconProps = {
     add_isolate: {
         name: "flask",
-        color: "blue"
+        color: "blue",
     },
     create: {
         name: "plus-square",
-        color: "blue"
+        color: "blue",
     },
     create_sequence: {
         name: "dna",
-        color: "blue"
+        color: "blue",
     },
     edit: {
         name: "pencil-alt",
-        color: "orange"
+        color: "orange",
     },
     edit_isolate: {
         name: "flask",
-        color: "orange"
+        color: "orange",
     },
     edit_sequence: {
         name: "dna",
-        color: "orange"
+        color: "orange",
     },
     clone: {
         name: "clone",
-        color: "blue"
+        color: "blue",
     },
     import: {
         name: "file-import",
-        color: "blue"
+        color: "blue",
     },
     remote: {
         name: "link",
-        color: "blue"
+        color: "blue",
     },
     remove: {
         name: "trash",
-        color: "red"
+        color: "red",
     },
     remove_isolate: {
         name: "flask",
-        color: "red"
+        color: "red",
     },
     remove_sequence: {
         name: "dna",
-        color: "red"
+        color: "red",
     },
     set_as_default: {
         name: "star",
-        color: "orange"
+        color: "orange",
     },
     update: {
         name: "arrow-alt-circle-up",
-        color: "orange"
-    }
+        color: "orange",
+    },
 };
 
 const getMethodIcon = methodName => {
     const props = get(methodIconProps, methodName, {
         name: "exclamation-triangle",
-        color: "red"
+        color: "red",
     });
 
     return <Icon {...props} />;

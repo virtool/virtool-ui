@@ -36,7 +36,7 @@ export const IsolateItem = props => {
 };
 
 export const mapStateToProps = state => ({
-    dataType: state.references.detail.data_type
+    dataType: state.references.detail.data_type,
 });
 
 export default connect(mapStateToProps)(IsolateItem);

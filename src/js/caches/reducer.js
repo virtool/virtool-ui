@@ -2,7 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 import { GET_CACHE } from "../app/actionTypes";
 
 const initialState = {
-    detail: null
+    detail: null,
 };
 
 export const cacheReducer = createReducer(initialState, builder => {

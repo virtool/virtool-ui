@@ -87,13 +87,13 @@ export const mapStateToProps = state => ({
     jobs: state.jobs.documents,
     noJobs: getJobCountsTotal(state) === 0,
     canCancel: checkAdminRoleOrPermission(state, "cancel_job"),
-    canArchive: checkAdminRoleOrPermission(state, "remove_job")
+    canArchive: checkAdminRoleOrPermission(state, "remove_job"),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (states, page) => {
         dispatch(findJobs(states, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobsList);

@@ -34,11 +34,11 @@ function createFakeHMMDetail(): HMMDetail {
         accession: faker.word.noun(),
         gi: faker.word.noun(),
         name: faker.word.noun(),
-        organism: faker.word.noun()
+        organism: faker.word.noun(),
     }));
 
     const names = times(5, (i: number) => ({
-        name: `name${i}`
+        name: `name${i}`,
     }));
 
     return {
@@ -47,17 +47,17 @@ function createFakeHMMDetail(): HMMDetail {
         entries,
         families: {
             family1: faker.datatype.number(),
-            family2: faker.datatype.number()
+            family2: faker.datatype.number(),
         },
         genera: {
             genera1: faker.datatype.number(),
-            genera2: faker.datatype.number()
+            genera2: faker.datatype.number(),
         },
         id: faker.random.alphaNumeric(9, { casing: "lower" }),
         length: faker.datatype.number(),
         mean_entropy: faker.datatype.number(),
         names,
-        total_entropy: faker.datatype.number()
+        total_entropy: faker.datatype.number(),
     };
 }
 
@@ -100,22 +100,22 @@ export function createFakeHMMData(): HMMData {
         count: faker.datatype.number(),
         families: {
             None: faker.datatype.number(),
-            Papillomaviridae: faker.datatype.number()
+            Papillomaviridae: faker.datatype.number(),
         },
         id: faker.random.alphaNumeric(9, { casing: "lower" }),
-        names: [faker.name.lastName()]
+        names: [faker.name.lastName()],
     }));
 
     const status = {
         errors: [toString(faker.internet.httpStatusCode())],
         installed: {
-            ready: faker.datatype.boolean()
+            ready: faker.datatype.boolean(),
         },
         user: {
             id: faker.random.alphaNumeric(9, { casing: "lower" }),
             administrator: faker.datatype.boolean(),
-            handle: faker.internet.userName()
-        }
+            handle: faker.internet.userName(),
+        },
     };
 
     return {
@@ -128,6 +128,6 @@ export function createFakeHMMData(): HMMData {
         status,
         task: faker.random.alphaNumeric(9, { casing: "lower" }),
         term: "",
-        total_count: faker.datatype.number()
+        total_count: faker.datatype.number(),
     };
 }

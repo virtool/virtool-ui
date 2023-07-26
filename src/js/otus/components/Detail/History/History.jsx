@@ -42,7 +42,7 @@ HistoryList.propTypes = {
     history: PropTypes.arrayOf(PropTypes.object),
     unbuilt: PropTypes.bool,
     revert: PropTypes.func,
-    canModify: PropTypes.bool
+    canModify: PropTypes.bool,
 };
 
 class OTUHistory extends React.Component {
@@ -56,7 +56,7 @@ class OTUHistory extends React.Component {
         }
 
         const changes = groupBy(this.props.history, change =>
-            change.index.version === "unbuilt" ? "unbuilt" : "built"
+            change.index.version === "unbuilt" ? "unbuilt" : "built",
         );
 
         let built;
@@ -89,7 +89,7 @@ class OTUHistory extends React.Component {
 const mapStateToProps = state => ({
     canModify: getCanModifyReferenceOTU(state),
     history: state.otus.detailHistory,
-    otuId: state.otus.detail.id
+    otuId: state.otus.detail.id,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -99,7 +99,7 @@ const mapDispatchToProps = dispatch => ({
 
     revert: (otuId, otuVersion, changeId) => {
         dispatch(revert(otuId, otuVersion, changeId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OTUHistory);

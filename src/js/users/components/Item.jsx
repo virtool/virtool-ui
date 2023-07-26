@@ -87,7 +87,7 @@ export const mapStateToProps = (state, ownProps) => {
         id,
         handle,
         administrator_role,
-        canEdit
+        canEdit,
     };
 };
 

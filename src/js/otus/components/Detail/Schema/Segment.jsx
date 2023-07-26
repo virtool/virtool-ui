@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-import { Icon, Label, BoxSpaced } from "../../../../base";
+import { BoxSpaced, Icon, Label } from "../../../../base";
 
 const StyledSegment = styled(BoxSpaced)`
     display: grid;
@@ -69,5 +69,5 @@ Segment.propTypes = {
     index: PropTypes.number.isRequired,
     seg: PropTypes.object.isRequired,
     onClick: PropTypes.func,
-    canModify: PropTypes.bool
+    canModify: PropTypes.bool,
 };

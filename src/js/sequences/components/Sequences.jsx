@@ -66,7 +66,7 @@ export const mapStateToProps = state => ({
     isolateName: formatIsolateName(getActiveIsolate(state)),
     sequences: getSequences(state),
     hasTargets: Boolean(getTargets(state)?.length),
-    referenceId: getReferenceDetailId(state)
+    referenceId: getReferenceDetailId(state),
 });
 
 export default connect(mapStateToProps)(IsolateSequences);

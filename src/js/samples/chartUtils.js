@@ -1,5 +1,5 @@
 import { select } from "d3-selection";
-import { map, keysIn } from "lodash-es";
+import { keysIn, map } from "lodash-es";
 
 const height = 300;
 
@@ -7,7 +7,7 @@ const margin = {
     top: 20,
     left: 60,
     bottom: 60,
-    right: 20
+    right: 20,
 };
 
 export const appendLegend = (svg, width, series, legendCircleRadius) => {

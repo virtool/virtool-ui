@@ -74,13 +74,13 @@ export const mapStateToProps = state => ({
     releaseId: get(state.hmms.status, "release.id"),
     installed: Boolean(state.hmms.status.installed),
     canInstall: checkAdminRoleOrPermission(state, "modify_hmm"),
-    task: getTask(state)
+    task: getTask(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onInstall: releaseId => {
         dispatch(installHMMs(releaseId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HMMInstaller);

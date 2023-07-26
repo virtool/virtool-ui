@@ -1,11 +1,11 @@
 import { xor } from "lodash-es";
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { SidebarHeader, SideBarSection } from "../../../base";
 import { updateSearch } from "../../actions";
 import { getLabelsFromURL } from "../../selectors";
 import { LabelFilterItem } from "./LabelFilterItem";
-import { SidebarHeader, SideBarSection } from "../../../base";
-import { Link } from "react-router-dom";
 
 export const LabelFilter = ({ initialLabels, labels, onFind }) => {
     const [selected, setSelected] = useState(initialLabels);
@@ -31,13 +31,13 @@ export const LabelFilter = ({ initialLabels, labels, onFind }) => {
 
 export const mapStateToProps = state => ({
     initialLabels: getLabelsFromURL(state),
-    labels: state.labels.documents
+    labels: state.labels.documents,
 });
 
 export const mapDispatchToProps = dispatch => ({
     onFind: labels => {
         dispatch(updateSearch({ labels }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LabelFilter);

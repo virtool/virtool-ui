@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Quality } from "../../quality/components/Quality";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
+import { Quality } from "../../quality/components/Quality";
 
 export const CacheQuality = props => (
     <BoxGroup>

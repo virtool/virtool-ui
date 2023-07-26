@@ -154,7 +154,7 @@ class SampleItem extends React.Component {
 
 export const mapStateToProps = (state, ownProps) => ({
     ...find(state.samples.documents, { id: ownProps.id }),
-    checked: getIsSelected(state, ownProps.id)
+    checked: getIsSelected(state, ownProps.id),
 });
 
 export const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -164,7 +164,7 @@ export const mapDispatchToProps = (dispatch, ownProps) => ({
     onQuickAnalyze: id => {
         dispatch(selectSample(id));
         dispatch(pushState({ quickAnalysis: true }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleItem);

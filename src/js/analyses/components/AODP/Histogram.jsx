@@ -17,7 +17,7 @@ const draw = (element, data, width) => {
         top: 10,
         left: 35,
         bottom: 50,
-        right: 10
+        right: 10,
     };
 
     svg.remove();

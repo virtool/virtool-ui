@@ -7,11 +7,11 @@ export const getMsalConfig = () => {
             authority: `https://${window.b2c.tenant}.b2clogin.com/TO9001.onmicrosoft.com/b2c_1_${window.b2c.userflow}`,
             knownAuthorities: [`${window.b2c.tenant}.b2clogin.com`],
             redirectUri: "/",
-            postLogoutRedirectUri: "/"
+            postLogoutRedirectUri: "/",
         },
         cache: {
             cacheLocation: "localStorage",
-            storeAuthStateInCookie: true
+            storeAuthStateInCookie: true,
         },
         system: {
             loggerOptions: {
@@ -35,21 +35,21 @@ export const getMsalConfig = () => {
                         default:
                             return;
                     }
-                }
-            }
-        }
+                },
+            },
+        },
     };
 };
 
 export const getProtectedResources = () => ({
     backendApi: {
-        scopes: [`https://${window.b2c.tenant}.onmicrosoft.com/${window.b2c.APIClientId}/${window.b2c.scope}`]
-    }
+        scopes: [`https://${window.b2c.tenant}.onmicrosoft.com/${window.b2c.APIClientId}/${window.b2c.scope}`],
+    },
 });
 
 export const getLoginRequest = () => {
     const protectedResources = getProtectedResources();
     return {
-        scopes: [...protectedResources.backendApi.scopes]
+        scopes: [...protectedResources.backendApi.scopes],
     };
 };

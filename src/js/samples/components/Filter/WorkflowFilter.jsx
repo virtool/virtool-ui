@@ -98,7 +98,7 @@ const WorkflowFilterControl = ({ workflow, states, onChange }) => {
 const WorkflowFilter = ({ workflows, onUpdate }) => {
     const handleClick = (workflow, state) => {
         onUpdate({
-            [workflow]: xor(workflows[workflow], [state])
+            [workflow]: xor(workflows[workflow], [state]),
         });
     };
 
@@ -115,13 +115,13 @@ const WorkflowFilter = ({ workflows, onUpdate }) => {
 };
 
 export const mapStateToProps = state => ({
-    workflows: getWorkflowsFromURL(state)
+    workflows: getWorkflowsFromURL(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onUpdate: update => {
         dispatch(updateSearch({ workflows: update, page: 1 }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkflowFilter);

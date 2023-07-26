@@ -93,5 +93,5 @@ export default function NuVsExportPreview({ mode }) {
 }
 
 NuVsExportPreview.propTypes = {
-    mode: PropTypes.string.isRequired
+    mode: PropTypes.string.isRequired,
 };

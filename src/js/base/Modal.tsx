@@ -1,8 +1,8 @@
 import "@reach/dialog/styles.css";
 import React from "react";
 import { ModalContent } from "./ModalContent";
-import { ModalOverlay } from "./ModalOverlay";
 import { ModalContext } from "./ModalContext";
+import { ModalOverlay } from "./ModalOverlay";
 
 type ModalProps = {
     children: React.ReactNode;
@@ -26,19 +26,19 @@ export class Modal extends React.Component<ModalProps, ModalState> {
 
         this.state = {
             open: false,
-            close: false
+            close: false,
         };
     }
 
     static defaultProps = {
-        size: "sm"
+        size: "sm",
     };
 
     static getDerivedStateFromProps(props) {
         if (props.show === true) {
             return {
                 open: true,
-                close: false
+                close: false,
             };
         }
         if (props.show === false) {
@@ -70,7 +70,7 @@ export class Modal extends React.Component<ModalProps, ModalState> {
     render() {
         const contextValue = {
             color: this.props.color,
-            onHide: this.props.onHide
+            onHide: this.props.onHide,
         };
 
         return (

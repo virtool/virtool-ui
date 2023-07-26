@@ -47,7 +47,7 @@ export default class ReadSelector extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            filter: ""
+            filter: "",
         };
     }
 
@@ -56,7 +56,7 @@ export default class ReadSelector extends React.PureComponent {
         error: PropTypes.string,
         selected: PropTypes.arrayOf(PropTypes.number),
         onSelect: PropTypes.func,
-        handleSelect: PropTypes.func
+        handleSelect: PropTypes.func,
     };
 
     componentDidUpdate(prevProps) {
@@ -95,7 +95,7 @@ export default class ReadSelector extends React.PureComponent {
 
         const files = filter(
             this.props.files,
-            file => !this.state.filter || includes(toLower(file.name), loweredFilter)
+            file => !this.state.filter || includes(toLower(file.name), loweredFilter),
         );
 
         let fileComponents = map(sortBy(files, "uploaded_at").reverse(), file => {

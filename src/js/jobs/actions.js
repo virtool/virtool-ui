@@ -6,7 +6,7 @@ import {
     GET_JOB,
     WS_INSERT_JOB,
     WS_REMOVE_JOB,
-    WS_UPDATE_JOB
+    WS_UPDATE_JOB,
 } from "../app/actionTypes";
 
 /**
@@ -44,7 +44,7 @@ export const wsRemoveJob = createAction(WS_REMOVE_JOB);
  */
 
 export const findJobs = createAction(FIND_JOBS.REQUESTED, (states, page = 1, archived = false) => ({
-    payload: { archived, states, page }
+    payload: { archived, states, page },
 }));
 
 /**

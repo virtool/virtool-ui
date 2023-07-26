@@ -12,7 +12,7 @@ const getInitialState = ({ name, description, length, required }) => ({
     description: description || "",
     length: length || 0,
     required: required || false,
-    errorName: ""
+    errorName: "",
 });
 
 export class EditTarget extends React.Component {
@@ -26,7 +26,7 @@ export class EditTarget extends React.Component {
 
         if (!this.state.name) {
             return this.setState({
-                errorName: "Required field"
+                errorName: "Required field",
             });
         }
 
@@ -37,7 +37,7 @@ export class EditTarget extends React.Component {
                     name: this.state.name,
                     description: this.state.description,
                     length: toNumber(this.state.length),
-                    required: this.state.required
+                    required: this.state.required,
                 };
             }
 
@@ -51,7 +51,7 @@ export class EditTarget extends React.Component {
     handleChange = e => {
         this.setState({
             [e.target.name]: e.target.value,
-            required: e.target.checked
+            required: e.target.checked,
         });
     };
 
@@ -103,7 +103,7 @@ export const mapStateToProps = state => {
         required,
         targets: state.references.detail.targets,
         refId: state.references.detail.id,
-        show: routerLocationHasState(state, "editTarget")
+        show: routerLocationHasState(state, "editTarget"),
     };
 };
 
@@ -114,7 +114,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onHide: () => {
         dispatch(pushState({ editTarget: "" }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditTarget);

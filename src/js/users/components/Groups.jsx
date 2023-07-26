@@ -47,13 +47,13 @@ export class UserGroups extends React.Component {
 export const mapStateToProps = state => ({
     documents: state.groups.documents,
     memberGroups: state.users.detail.groups,
-    userId: state.users.detail.id
+    userId: state.users.detail.id,
 });
 
 export const mapDispatchToProps = dispatch => ({
     onEditGroup: (userId, groups) => {
         dispatch(editUser(userId, { groups }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserGroups);

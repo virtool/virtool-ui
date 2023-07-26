@@ -1,5 +1,5 @@
-import { GET_TASK, LIST_TASKS, WS_INSERT_TASK, WS_UPDATE_TASK } from "../app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
+import { GET_TASK, LIST_TASKS, WS_INSERT_TASK, WS_UPDATE_TASK } from "../app/actionTypes";
 
 /**
  * Returns an action that should be dispatched when a task document is inserted via websocket.

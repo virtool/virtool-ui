@@ -12,7 +12,7 @@ import {
     REFRESH_OTUS,
     WS_INSERT_INDEX,
     WS_REMOVE_INDEX,
-    WS_UPDATE_INDEX
+    WS_UPDATE_INDEX,
 } from "../app/actionTypes";
 import * as otusAPI from "../otus/api";
 import * as refsAPI from "../references/api";
@@ -43,7 +43,7 @@ export function* wsChangeIndexes(action) {
         yield all([
             apiCall(refsAPI.get, { refId }, GET_REFERENCE),
             apiCall(indexesAPI.find, { refId }, FIND_INDEXES),
-            apiCall(otusAPI.find, { refId }, REFRESH_OTUS)
+            apiCall(otusAPI.find, { refId }, REFRESH_OTUS),
         ]);
     }
 }

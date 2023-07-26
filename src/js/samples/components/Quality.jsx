@@ -26,7 +26,7 @@ const mapStateToProps = state => {
     return {
         bases,
         composition,
-        sequences
+        sequences,
     };
 };
 

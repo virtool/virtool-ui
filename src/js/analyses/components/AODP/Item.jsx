@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import styled from "styled-components";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import { Badge } from "../../../base";
 
 import { setActiveHitId } from "../../actions";
@@ -35,7 +35,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
     onSetActiveId: id => {
         dispatch(setActiveHitId(id));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AODPItem);

@@ -14,6 +14,6 @@ function* getSettings(action) {
 
 function* updateSettings(action) {
     yield apiCall(settingsAPI.update, action.payload, UPDATE_SETTINGS, {
-        update: action.payload.update
+        update: action.payload.update,
     });
 }

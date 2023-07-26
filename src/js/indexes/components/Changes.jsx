@@ -30,13 +30,13 @@ class IndexChanges extends React.Component {
 
 const mapStateToProps = state => ({
     detail: state.indexes.detail,
-    history: state.indexes.history
+    history: state.indexes.history,
 });
 
 const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (indexId, page) => {
         dispatch(getIndexHistory(indexId, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndexChanges);

@@ -88,7 +88,7 @@ export const DeveloperDialog = ({ show, onCommand, onHide }) => (
 );
 
 export const mapStateToProps = state => ({
-    show: routerLocationHasState(state, "devCommands")
+    show: routerLocationHasState(state, "devCommands"),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -98,7 +98,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onHide: () => {
         dispatch(pushState({ devCommands: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeveloperDialog);
