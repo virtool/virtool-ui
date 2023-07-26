@@ -27,7 +27,7 @@ jobs:
       - name: Install
         run: npm i
       - name: Run ESLint
-        run: npm run eslint
+        run: npm run eslint --quiet
   test:
     runs-on: ubuntu-22.04
     steps:
