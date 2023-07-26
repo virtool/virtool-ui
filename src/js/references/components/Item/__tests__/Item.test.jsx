@@ -1,5 +1,8 @@
-import { ReferenceItem, mapStateToProps } from "../Item";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getReferenceItemProgress } from "../../../selectors";
+import { mapStateToProps, ReferenceItem } from "../Item";
 
 vi.mock("../../../selectors.js");
 
@@ -9,23 +12,23 @@ describe("<ReferenceItem />", () => {
     beforeEach(() => {
         props = {
             clonedFrom: {
-                id: "clonedFrom"
+                id: "clonedFrom",
             },
             createdAt: "2018-01-01T00:00:00.000000Z",
             id: "foo",
             importedFrom: {
-                id: "importedFrom"
+                id: "importedFrom",
             },
             latestBuild: {
-                id: "bar"
+                id: "bar",
             },
             name: "Foo",
             organism: "virus",
             progress: 32,
             remotesFrom: {
-                id: "remotesFrom"
+                id: "remotesFrom",
             },
-            userHandle: "bob"
+            userHandle: "bob",
         };
     });
 
@@ -54,58 +57,58 @@ describe("mapStateToProps()", () => {
             references: {
                 documents: [
                     {
-                        id: "bar"
+                        id: "bar",
                     },
                     {
                         id: "foo",
                         cloned_from: {
-                            id: "clonedFrom"
+                            id: "clonedFrom",
                         },
                         created_at: "2018-01-01T00:00:00.000000Z",
                         imported_from: {
-                            id: "importedFrom"
+                            id: "importedFrom",
                         },
                         latest_build: {
                             id: "baz",
-                            version: 2
+                            version: 2,
                         },
                         name: "Foo",
                         organism: "virus",
                         task: {
-                            id: "boo"
+                            id: "boo",
                         },
                         remotes_from: {
-                            id: "remotesFrom"
+                            id: "remotesFrom",
                         },
                         user: {
                             id: "bob",
-                            handle: "bob"
-                        }
-                    }
-                ]
-            }
+                            handle: "bob",
+                        },
+                    },
+                ],
+            },
         };
         const props = mapStateToProps(state, { index: 1 });
         expect(props).toEqual({
             clonedFrom: {
-                id: "clonedFrom"
+                id: "clonedFrom",
             },
             createdAt: "2018-01-01T00:00:00.000000Z",
             id: "foo",
             importedFrom: {
-                id: "importedFrom"
+                id: "importedFrom",
             },
             latestBuild: {
                 id: "baz",
-                version: 2
+                version: 2,
             },
             name: "Foo",
             organism: "virus",
             progress,
             remotesFrom: {
-                id: "remotesFrom"
+                id: "remotesFrom",
             },
-            userHandle: "bob"
+            userHandle: "bob",
         });
         expect(getReferenceItemProgress).toHaveBeenCalledWith(state, 1);
     });

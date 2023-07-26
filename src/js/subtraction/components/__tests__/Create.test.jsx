@@ -1,25 +1,28 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { shallow } from "enzyme";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
 import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../tests/fake/files";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { FileType } from "../../../files/types";
 import { CreateSubtraction } from "../Create";
 import { SubtractionFileItem } from "../FileSelector";
-
-const routerRenderWithProviders = (ui, store) => {
+function routerRenderWithProviders(ui, store) {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
     return renderWithProviders(routerUi, store);
-};
+}
 
-const createAppStore = state => {
+function createAppStore(state) {
     return () => {
         const mockReducer = state => {
             return state;
         };
         return createStore(mockReducer, state);
     };
-};
+}
 
 describe("<SubtractionFileItem />", () => {
     it.each([true, false])("should render when [active=%p]", active => {

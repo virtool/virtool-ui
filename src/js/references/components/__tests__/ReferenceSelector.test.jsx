@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ReferenceSelector } from "../ReferenceSelector";
 
 describe("<ReferenceSelector />", () => {
@@ -7,7 +10,7 @@ describe("<ReferenceSelector />", () => {
             references: [{ id: "foo", key: "bar" }],
             hasError: false,
             selected: true,
-            onSelect: vi.fn()
+            onSelect: vi.fn(),
         };
     });
 

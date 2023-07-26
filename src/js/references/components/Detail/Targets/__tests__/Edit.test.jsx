@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EditTarget, mapDispatchToProps, mapStateToProps } from "../Edit";
 import { TargetForm } from "../Form";
 
@@ -7,7 +10,7 @@ describe("<EditTarget />", () => {
 
     beforeEach(() => {
         e = {
-            preventDefault: vi.fn()
+            preventDefault: vi.fn(),
         };
 
         props = {
@@ -24,21 +27,21 @@ describe("<EditTarget />", () => {
                     name: "Foo",
                     description: "Foo description",
                     length: 540,
-                    required: true
+                    required: true,
                 },
                 {
                     name: "Bar",
                     description: "Bar description",
                     length: 490,
-                    required: true
+                    required: true,
                 },
                 {
                     name: "Baz",
                     description: "Baz description",
                     length: 490,
-                    required: true
-                }
-            ]
+                    required: true,
+                },
+            ],
         };
     });
 
@@ -53,7 +56,7 @@ describe("<EditTarget />", () => {
             name: "",
             description: "This is a test",
             length: 310,
-            required: false
+            required: false,
         });
         wrapper.find("form").simulate("submit", e);
         expect(props.onHide).not.toHaveBeenCalled();
@@ -67,7 +70,7 @@ describe("<EditTarget />", () => {
             name: "CPN60",
             description: "This is a test",
             length: 310,
-            required: false
+            required: false,
         });
         wrapper.find("form").simulate("submit", e);
         expect(props.onSubmit).toHaveBeenCalledWith("foo", {
@@ -76,21 +79,21 @@ describe("<EditTarget />", () => {
                     name: "Foo",
                     description: "Foo description",
                     length: 540,
-                    required: true
+                    required: true,
                 },
                 {
                     name: "CPN60",
                     description: "This is a test",
                     length: 310,
-                    required: false
+                    required: false,
                 },
                 {
                     name: "Baz",
                     description: "Baz description",
                     length: 490,
-                    required: true
-                }
-            ]
+                    required: true,
+                },
+            ],
         });
         expect(props.onHide).toHaveBeenCalledWith();
     });
@@ -99,7 +102,7 @@ describe("<EditTarget />", () => {
         e.target = {
             name: "name",
             value: "Foo",
-            checked: true
+            checked: true,
         };
         const wrapper = shallow(<EditTarget {...props} />);
         wrapper.find(TargetForm).prop("onChange")(e);
@@ -125,11 +128,11 @@ describe("mapStateToProps()", () => {
                     id: "baz",
                     targets: [
                         { name: "foo", description: "bar", length: 1, required: false },
-                        { name: "Foo", description: "Bar", length: 2, required: true }
-                    ]
-                }
+                        { name: "Foo", description: "Bar", length: 2, required: true },
+                    ],
+                },
             },
-            router: { location: { state: { editTarget: "foo" } } }
+            router: { location: { state: { editTarget: "foo" } } },
         };
     });
 
@@ -138,14 +141,14 @@ describe("mapStateToProps()", () => {
         expect(result).toEqual({
             targets: [
                 { name: "foo", description: "bar", length: 1, required: false },
-                { name: "Foo", description: "Bar", length: 2, required: true }
+                { name: "Foo", description: "Bar", length: 2, required: true },
             ],
             name: "foo",
             description: "bar",
             length: 1,
             required: false,
             refId: "baz",
-            show: true
+            show: true,
         });
     });
 
@@ -156,14 +159,14 @@ describe("mapStateToProps()", () => {
         expect(result).toEqual({
             targets: [
                 { name: "foo", description: "bar", length: 1, required: false },
-                { name: "Foo", description: "Bar", length: 2, required: true }
+                { name: "Foo", description: "Bar", length: 2, required: true },
             ],
             name: undefined,
             description: undefined,
             length: undefined,
             required: undefined,
             refId: "baz",
-            show: false
+            show: false,
         });
     });
 });
@@ -175,7 +178,7 @@ describe("mapDispatchToProps()", () => {
         props.onSubmit("foo", "bar");
         expect(dispatch).toHaveBeenCalledWith({
             payload: { refId: "foo", update: "bar" },
-            type: "EDIT_REFERENCE_REQUESTED"
+            type: "EDIT_REFERENCE_REQUESTED",
         });
     });
 });

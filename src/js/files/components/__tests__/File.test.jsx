@@ -1,6 +1,10 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import nock from "nock";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockApiDeleteFile } from "../../../../tests/fake/files";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { File } from "../File";
 
 vi.mock("../../../administration/utils.ts");

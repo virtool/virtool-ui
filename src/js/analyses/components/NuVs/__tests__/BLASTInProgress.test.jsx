@@ -1,9 +1,12 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { RIDTiming } from "../BLASTInProgress";
 
 describe("<RIDTiming>", () => {
     const props = {
         interval: 30,
-        lastCheckedAt: "2019-02-10T17:11:00.000000Z"
+        lastCheckedAt: "2019-02-10T17:11:00.000000Z",
     };
 
     const RealDate = Date;

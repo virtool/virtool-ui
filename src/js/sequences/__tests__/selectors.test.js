@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { getActiveSequence, getActiveSequenceId, getSequences, getUnreferencedSegments } from "../selectors";
 
 describe("getSequences()", () => {
@@ -13,13 +14,13 @@ describe("getSequences()", () => {
                             id: "foo",
                             sequences: [
                                 { id: 1, segment: "RNA B" },
-                                { id: 2, segment: "RNA A" }
-                            ]
-                        }
+                                { id: 2, segment: "RNA A" },
+                            ],
+                        },
                     ],
-                    schema: [{ name: "RNA A" }, { name: "RNA B" }]
-                }
-            }
+                    schema: [{ name: "RNA A" }, { name: "RNA B" }],
+                },
+            },
         };
     });
 
@@ -40,7 +41,7 @@ describe("getSequences()", () => {
         const sequences = getSequences(state);
         expect(sequences).toEqual([
             { id: 2, segment: "RNA A" },
-            { id: 1, segment: "RNA B" }
+            { id: 1, segment: "RNA B" },
         ]);
     });
 });
@@ -57,11 +58,11 @@ describe("getActiveSequence()", () => {
                     isolates: [
                         {
                             id: "foo",
-                            sequences: [{ id: "b", accession: "bar", definition: "Bar" }]
-                        }
-                    ]
-                }
-            }
+                            sequences: [{ id: "b", accession: "bar", definition: "Bar" }],
+                        },
+                    ],
+                },
+            },
         };
     });
 
@@ -88,10 +89,10 @@ describe("getActiveSequenceId()", () => {
             router: {
                 location: {
                     state: {
-                        editSequence: false
-                    }
-                }
-            }
+                        editSequence: false,
+                    },
+                },
+            },
         };
     });
 
@@ -119,9 +120,9 @@ describe("getUnreferencedSegments", () => {
                 activeIsolateId: "foo",
                 detail: {
                     schema: [{ name: "RNA A" }, { name: "RNA B" }, { name: "RNA C" }],
-                    isolates: [{ id: "foo", sequences: [{ segment: "RNA B" }] }]
-                }
-            }
+                    isolates: [{ id: "foo", sequences: [{ segment: "RNA B" }] }],
+                },
+            },
         };
     });
 

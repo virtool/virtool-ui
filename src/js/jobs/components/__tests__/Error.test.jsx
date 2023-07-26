@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import JobError from "../Error";
 
 describe("<JobError />", () => {
@@ -9,8 +12,8 @@ describe("<JobError />", () => {
             error: {
                 type: "TestErrorWithStackTrace",
                 traceback: ["line one", "line two", "line three"],
-                details: "test error details"
-            }
+                details: "test error details",
+            },
         };
         wrapper = shallow(<JobError {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -21,8 +24,8 @@ describe("<JobError />", () => {
             error: {
                 type: "TestErrorWithoutStackTrace",
                 traceback: [],
-                details: ""
-            }
+                details: "",
+            },
         };
         wrapper = shallow(<JobError {...props} />);
         expect(wrapper).toMatchSnapshot();

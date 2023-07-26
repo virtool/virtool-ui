@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { mapStateToProps, SampleFilesCache } from "../Cache";
 
 describe("<SampleFilesCache />", () => {
@@ -8,15 +11,15 @@ describe("<SampleFilesCache />", () => {
                 files: [{ name: "reads_1.fastq.gz", size: 136569053 }],
                 hash: "abc123",
                 id: "foo",
-                missing: false
+                missing: false,
             },
             {
                 created_at: "2018-02-01T00:00:00.000000Z",
                 files: [{ name: "reads_1.fastq.gz", size: 290100291 }],
                 hash: "xyz789",
                 id: "baz",
-                missing: true
-            }
+                missing: true,
+            },
         ];
         const wrapper = shallow(<SampleFilesCache caches={caches} />);
         expect(wrapper).toMatchSnapshot();
@@ -34,9 +37,9 @@ describe("mapStateToProps()", () => {
         const state = {
             samples: {
                 detail: {
-                    caches
-                }
-            }
+                    caches,
+                },
+            },
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({ caches });

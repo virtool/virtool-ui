@@ -1,4 +1,7 @@
-import { SubtractionItem, SubtractionItemIcon, mapStateToProps } from "../Item";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { mapStateToProps, SubtractionItem, SubtractionItemIcon } from "../Item";
 
 describe("<SubtractionItemIcon />", () => {
     it.each([true, false])("should render when [ready=%p]", ready => {
@@ -15,7 +18,7 @@ describe("<SubtractionItem />", () => {
             id: "foo",
             name: "Foo",
             user: { handle: "bar" },
-            ready: true
+            ready: true,
         };
     });
 
@@ -39,15 +42,15 @@ describe("mapStateToProps()", () => {
                 documents: [
                     { id: "foo", name: "Foo", ready: true },
                     { id: "bar", name: "Bar", ready: true },
-                    { id: "baz", name: "Baz", ready: true }
-                ]
-            }
+                    { id: "baz", name: "Baz", ready: true },
+                ],
+            },
         };
         const props = mapStateToProps(state, { index: 1 });
         expect(props).toEqual({
             id: "bar",
             name: "Bar",
-            ready: true
+            ready: true,
         });
     });
 });

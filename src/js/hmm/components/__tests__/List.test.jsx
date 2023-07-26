@@ -1,16 +1,20 @@
-import { HMMList } from "../List";
-import { createFakeHMMData } from "../../Classes";
-import { createBrowserHistory } from "history";
 import { connectRouter } from "connected-react-router";
+import { createBrowserHistory } from "history";
+import React from "react";
 import { combineReducers } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
+import { createFakeHMMData } from "../../Classes";
+import { HMMList } from "../List";
 
-const createReducer = (state, history) =>
-    combineReducers({
+function createReducer(state, history) {
+    return combineReducers({
         hmms: createGenericReducer(state.hmms),
         account: createGenericReducer(state.account),
         tasks: createGenericReducer(state.tasks),
-        router: connectRouter(history)
+        router: connectRouter(history),
     });
+}
 
 describe("<HMMList />", () => {
     let props;
@@ -24,23 +28,23 @@ describe("<HMMList />", () => {
             hmms: "HMMs",
             term: "",
             status: {
-                installed: true
+                installed: true,
             },
             documents: [],
-            onLoadNextPage: vi.fn()
+            onLoadNextPage: vi.fn(),
         };
         state = {
             hmms: fakeHMMData,
             account: {
                 permissions: {
-                    modify_hmm: true
-                }
+                    modify_hmm: true,
+                },
             },
             tasks: {
                 documents: [{ id: "foo", step: "step 1", progress: 45 }],
                 id: 1,
-                progress: 10
-            }
+                progress: 10,
+            },
         };
         history = createBrowserHistory();
     });
@@ -71,7 +75,7 @@ describe("<HMMList />", () => {
             cluster: 2,
             count: 216,
             families: { family1: 200, family2: 80, None: 10 },
-            names: ["Name1", "Name2", "Name3"]
+            names: ["Name1", "Name2", "Name3"],
         };
 
         renderWithRouter(<HMMList {...props} />, state, history, createReducer);
@@ -94,7 +98,7 @@ describe("<HMMList />", () => {
 
             expect(screen.getByText("No HMM data available.")).toBeInTheDocument();
             expect(
-                screen.getByText(/You can download and install the official HMM data automatically from our/)
+                screen.getByText(/You can download and install the official HMM data automatically from our/),
             ).toBeInTheDocument();
             expect(screen.getByText("GitHub repository")).toBeInTheDocument();
 
@@ -117,8 +121,8 @@ describe("<HMMList />", () => {
             props.status.installed = false;
             state.hmms.status = {
                 task: {
-                    id: "foo"
-                }
+                    id: "foo",
+                },
             };
 
             renderWithRouter(<HMMList {...props} />, state, history, createReducer);

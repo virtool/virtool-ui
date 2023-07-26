@@ -1,10 +1,13 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import {
     AnalysisRows,
     BuildIndexRows,
     CreateSampleRows,
     CreateSubtractionRows,
     JobArgsRows,
-    UpdateSampleRows
+    UpdateSampleRows,
 } from "../JobArgs";
 
 const workflows = [
@@ -14,14 +17,14 @@ const workflows = [
     "create_subtraction",
     "pathoscope_bowtie",
     "nuvs",
-    "update_sample"
+    "update_sample",
 ];
 
 describe("<JobArgs />", () => {
     it.each(workflows)("renders <JobArgsRows /> correctly when workflow is %p", workflow => {
         const args = {
             sample_id: "123abc",
-            analysis_id: "test-analysis"
+            analysis_id: "test-analysis",
         };
 
         const wrapper = shallow(<JobArgsRows workflow={workflow} args={args} />);

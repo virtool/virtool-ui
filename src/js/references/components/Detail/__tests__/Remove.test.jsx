@@ -1,4 +1,6 @@
+import { shallow } from "enzyme";
 import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { REMOVE_REFERENCE } from "../../../../app/actionTypes";
 import { RemoveBanner } from "../../../../base";
 import { checkReferenceRight } from "../../../selectors";
@@ -13,7 +15,7 @@ describe("<RemoveReference />", () => {
         props = {
             canRemove: true,
             id: "foo",
-            onConfirm: vi.fn()
+            onConfirm: vi.fn(),
         };
     });
 
@@ -42,14 +44,14 @@ describe("mapStateToProps()", () => {
         const state = {
             references: {
                 detail: {
-                    id: "bar"
-                }
-            }
+                    id: "bar",
+                },
+            },
         };
 
         expect(mapStateToProps(state)).toEqual({
             id: "bar",
-            canRemove
+            canRemove,
         });
 
         expect(checkReferenceRight).toHaveBeenCalledWith(state, "remove");
@@ -64,7 +66,7 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_REFERENCE.REQUESTED,
-            payload: { refId: "foo" }
+            payload: { refId: "foo" },
         });
     });
 });

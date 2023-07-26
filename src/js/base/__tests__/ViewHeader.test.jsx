@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { ViewHeader } from "../ViewHeader";
 
 describe("<ViewHeader />", () => {
@@ -17,7 +20,7 @@ describe("<ViewHeader />", () => {
         wrapper = shallow(
             <ViewHeader title="test-child">
                 <div>Hello world</div>
-            </ViewHeader>
+            </ViewHeader>,
         );
         expect(wrapper).toMatchSnapshot();
     });

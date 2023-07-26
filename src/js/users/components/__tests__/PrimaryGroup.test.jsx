@@ -1,4 +1,8 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { mapDispatchToProps, mapStateToProps, PrimaryGroup } from "../PrimaryGroup";
 
 describe("<PrimaryGroup />", () => {
@@ -9,11 +13,11 @@ describe("<PrimaryGroup />", () => {
             groups: [
                 { id: "1", name: "foo" },
                 { id: "2", name: "bar" },
-                { id: "3", name: "baz" }
+                { id: "3", name: "baz" },
             ],
             id: "bob",
             primaryGroup: { id: "2", name: "bar" },
-            onSetPrimaryGroup: vi.fn()
+            onSetPrimaryGroup: vi.fn(),
         };
     });
 
@@ -71,15 +75,15 @@ describe("mapStateToProps", () => {
     const groups = ["foo", "bar", "baz"];
     const state = {
         users: {
-            detail: { id: "bob", groups, primary_group: "bar" }
-        }
+            detail: { id: "bob", groups, primary_group: "bar" },
+        },
     };
     it("should return props", () => {
         const result = mapStateToProps(state);
         expect(result).toEqual({
             id: "bob",
             groups,
-            primaryGroup: "bar"
+            primaryGroup: "bar",
         });
     });
 });
@@ -95,10 +99,10 @@ describe("mapDispatchToProps", () => {
             type: "EDIT_USER_REQUESTED",
             payload: {
                 update: {
-                    primary_group: "bar"
+                    primary_group: "bar",
                 },
-                userId: "foo"
-            }
+                userId: "foo",
+            },
         });
     });
 });

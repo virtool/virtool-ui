@@ -46,7 +46,7 @@ const SampleToolbar = props => {
 const mapStateToProps = state => ({
     canCreate: checkAdminRoleOrPermission(state, "create_sample"),
     initialTerm: getTermFromURL(state),
-    selected: state.samples.selected
+    selected: state.samples.selected,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -63,8 +63,9 @@ const mapDispatchToProps = dispatch => ({
     },
 
     onSelect: sampleId => {
-        dispatch(toggleSelectSample(sampleId));
-    }
+        // There is something wrong with this...
+        // dispatch(toggleSelectSample(sampleId));
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleToolbar);

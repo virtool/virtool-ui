@@ -1,8 +1,11 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { SequenceForm, validationSchema } from "../Form";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { SaveButton } from "../../../base";
+import { SequenceForm, validationSchema } from "../Form";
 
 const initialValues = { accession: "", definition: "", host: "", sequence: "" };
 

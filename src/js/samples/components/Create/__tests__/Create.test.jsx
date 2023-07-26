@@ -3,18 +3,18 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../../tests/fake/files";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { LIST_LABELS } from "../../../../app/actionTypes";
 import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
-
-const routerRenderWithProviders = (ui, store) => {
+function createAppStore(state) {
+    return () => createStore(state => state, state);
+}
+function routerRenderWithProviders(ui, store) {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
     return renderWithProviders(routerUi, store);
-};
-
-const createAppStore = state => {
-    return () => createStore(state => state, state);
-};
+}
 
 describe("<CreateSample>", () => {
     const readFileName = "large";

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import {
     ADD_ISOLATE,
     ADD_SEQUENCE,
@@ -22,7 +23,7 @@ import {
     SHOW_REMOVE_SEQUENCE,
     WS_INSERT_OTU,
     WS_REMOVE_OTU,
-    WS_UPDATE_OTU
+    WS_UPDATE_OTU,
 } from "../../app/actionTypes";
 import {
     addIsolate,
@@ -48,7 +49,7 @@ import {
     showRemoveSequence,
     wsInsertOTU,
     wsRemoveOTU,
-    wsUpdateOTU
+    wsUpdateOTU,
 } from "../actions";
 
 describe("OTUs Action Creators", () => {
@@ -138,7 +139,7 @@ describe("OTUs Action Creators", () => {
         const result = editIsolate(otuId, isolateId, sourceType, sourceName);
         expect(result).toEqual({
             type: EDIT_ISOLATE.REQUESTED,
-            payload: { otuId, isolateId, sourceType, sourceName }
+            payload: { otuId, isolateId, sourceType, sourceName },
         });
     });
 
@@ -147,7 +148,7 @@ describe("OTUs Action Creators", () => {
         const result = removeIsolate(otuId, isolateId, nextIsolateId);
         expect(result).toEqual({
             type: REMOVE_ISOLATE.REQUESTED,
-            payload: { otuId, isolateId, nextIsolateId }
+            payload: { otuId, isolateId, nextIsolateId },
         });
     });
 
@@ -155,7 +156,7 @@ describe("OTUs Action Creators", () => {
         const result = addSequence({ otuId, isolateId, accession, definition, host, sequence, segment, target });
         expect(result).toEqual({
             type: ADD_SEQUENCE.REQUESTED,
-            payload: { otuId, isolateId, accession, definition, host, sequence, segment, target }
+            payload: { otuId, isolateId, accession, definition, host, sequence, segment, target },
         });
     });
 
@@ -169,11 +170,11 @@ describe("OTUs Action Creators", () => {
             host,
             sequence,
             segment,
-            target
+            target,
         });
         expect(result).toEqual({
             type: EDIT_SEQUENCE.REQUESTED,
-            payload: { otuId, isolateId, sequenceId, accession, definition, host, sequence, segment, target }
+            payload: { otuId, isolateId, sequenceId, accession, definition, host, sequence, segment, target },
         });
     });
 
@@ -181,7 +182,7 @@ describe("OTUs Action Creators", () => {
         const result = removeSequence(otuId, isolateId, sequenceId);
         expect(result).toEqual({
             type: REMOVE_SEQUENCE.REQUESTED,
-            payload: { otuId, isolateId, sequenceId }
+            payload: { otuId, isolateId, sequenceId },
         });
     });
 
@@ -209,7 +210,7 @@ describe("OTUs Action Creators", () => {
         const result = showEditIsolate(otuId, isolateId, sourceType, sourceName);
         expect(result).toEqual({
             type: SHOW_EDIT_ISOLATE,
-            payload: { otuId, isolateId, sourceType, sourceName }
+            payload: { otuId, isolateId, sourceType, sourceName },
         });
     });
 

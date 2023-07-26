@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { fillAlign, formatPathoscopeData, formatSequence, median, mergeCoverage } from "../utils";
 
 describe("fillAlign()", () => {
@@ -9,7 +10,7 @@ describe("fillAlign()", () => {
         [12, 5],
         [16, 2],
         [19, 2],
-        [20, 0]
+        [20, 0],
     ];
     const length = 20;
 
@@ -31,13 +32,13 @@ describe("formatSequence()", () => {
             [5, 3],
             [7, 3],
             [8, 5],
-            [10, 5]
+            [10, 5],
         ];
         const sequence = {
             align,
             foo: "bar",
             length: 11,
-            pi: 0.4
+            pi: 0.4,
         };
         const result = formatSequence(sequence, 3000);
         expect(result).toEqual({
@@ -46,7 +47,7 @@ describe("formatSequence()", () => {
             foo: "bar",
             length: 11,
             pi: 0.4,
-            reads: 1200
+            reads: 1200,
         });
     });
 });
@@ -56,8 +57,8 @@ describe("formatPathoscopeData()", () => {
         const detail = {
             foo: "bar",
             results: {
-                hits: []
-            }
+                hits: [],
+            },
         };
         const result = formatPathoscopeData(detail);
         expect(result).toEqual(detail);
@@ -91,7 +92,7 @@ describe("mergeCoverage()", () => {
         const coverages = [
             [1, 5, 5, 6, 6, 7, 9, 3, 2, 2, 1, 0, 0, 0, 1, 2, 1],
             [7, 5, 5, 1, 1, 2, 1, 5, 6, 2, 1, 0, 0, 0, 1, 3, 2],
-            [1, 1, 2, 3, 4, 4, 4, 4, 2, 2, 2, 3, 2, 1, 0, 1, 0]
+            [1, 1, 2, 3, 4, 4, 4, 4, 2, 2, 2, 3, 2, 1, 0, 1, 0],
         ];
         isolates = coverages.map(c => ({ filled: c }));
     });

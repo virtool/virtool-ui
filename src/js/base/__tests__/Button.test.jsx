@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "../Button";
 
 describe("<Button />", () => {
@@ -5,7 +8,7 @@ describe("<Button />", () => {
 
     beforeEach(() => {
         props = {
-            onClick: vi.fn()
+            onClick: vi.fn(),
         };
     });
 
@@ -24,7 +27,7 @@ describe("<Button />", () => {
         const wrapper = shallow(
             <Button {...props}>
                 <span>Test</span>
-            </Button>
+            </Button>,
         );
         expect(wrapper).toMatchSnapshot();
     });

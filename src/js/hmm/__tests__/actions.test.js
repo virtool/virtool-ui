@@ -1,5 +1,6 @@
+import { describe, expect, it } from "vitest";
 import { FIND_HMMS, GET_HMM, INSTALL_HMMS, PURGE_HMMS } from "../../app/actionTypes";
-import { getHmm, findHmms, installHMMs, purgeHMMs } from "../actions";
+import { findHmms, getHmm, installHMMs, purgeHMMs } from "../actions";
 
 describe("HMM Action Creators:", () => {
     it("findHmms: returns action for filtering results by search term", () => {
@@ -8,7 +9,7 @@ describe("HMM Action Creators:", () => {
         const result = findHmms(term, page);
         expect(result).toEqual({
             type: FIND_HMMS.REQUESTED,
-            payload: { term, page }
+            payload: { term, page },
         });
     });
 
@@ -17,7 +18,7 @@ describe("HMM Action Creators:", () => {
         const result = getHmm(hmmId);
         expect(result).toEqual({
             type: GET_HMM.REQUESTED,
-            payload: { hmmId }
+            payload: { hmmId },
         });
     });
 
@@ -26,7 +27,7 @@ describe("HMM Action Creators:", () => {
         const result = installHMMs(releaseId);
         expect(result).toEqual({
             type: INSTALL_HMMS.REQUESTED,
-            payload: { release_id: releaseId }
+            payload: { release_id: releaseId },
         });
     });
 

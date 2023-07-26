@@ -2,10 +2,12 @@ import { screen } from "@testing-library/react";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { times } from "lodash-es";
+import React from "react";
 import { combineReducers } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeGroupMinimal } from "../../../../tests/fake/groups";
 import { createFakeUser } from "../../../../tests/fake/user";
-import { attachResizeObserver } from "../../../../tests/setupTests";
+import { attachResizeObserver, createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { mapDispatchToProps, mapStateToProps, UserDetail } from "../Detail";
 

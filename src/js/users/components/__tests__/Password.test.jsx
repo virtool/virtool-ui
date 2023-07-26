@@ -1,5 +1,8 @@
 import { screen } from "@testing-library/react";
-import { attachResizeObserver } from "../../../../tests/setupTests";
+import userEvent from "@testing-library/user-event";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { attachResizeObserver, renderWithProviders } from "../../../../tests/setupTests";
 import { editUser } from "../../actions";
 import { mapDispatchToProps, mapStateToProps, Password } from "../Password";
 
@@ -15,7 +18,7 @@ describe("<Password />", () => {
             lastPasswordChange: "2018-02-14T17:12:00.000000Z",
             minimumPasswordLength: 8,
             onSetForceReset: vi.fn(),
-            onSubmit: vi.fn()
+            onSubmit: vi.fn(),
         };
     });
 
@@ -71,16 +74,16 @@ describe("mapStateToProps()", () => {
         const state = {
             settings: {
                 data: {
-                    minimum_password_length: 2
-                }
+                    minimum_password_length: 2,
+                },
             },
             users: {
                 detail: {
                     force_reset: true,
                     id: "foo",
-                    last_password_change: "bar"
-                }
-            }
+                    last_password_change: "bar",
+                },
+            },
         };
 
         let result = (id, forceReset, lastPasswordChange, minimumPasswordLength);
@@ -89,7 +92,7 @@ describe("mapStateToProps()", () => {
             id: "foo",
             forceReset: true,
             lastPasswordChange: "bar",
-            minimumPasswordLength: 2
+            minimumPasswordLength: 2,
         });
     });
 });

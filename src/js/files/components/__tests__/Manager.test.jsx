@@ -1,16 +1,19 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
 import { FileManager } from "../Manager";
 
-const createAppStore = state => {
+function createAppStore(state) {
     return () => createStore(state => state, state);
-};
+}
 
 describe("<FileManager>", () => {
     let props;

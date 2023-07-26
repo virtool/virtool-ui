@@ -1,9 +1,12 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { CacheQuality, mapStateToProps } from "../Quality";
 
 describe("<CacheQuality />", () => {
     it("should render", () => {
         const props = {
-            foo: "bar"
+            foo: "bar",
         };
         const wrapper = shallow(<CacheQuality {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -15,15 +18,15 @@ describe("mapStateToProps()", () => {
         const quality = {
             bases: "foo",
             composition: "bar",
-            sequences: "baz"
+            sequences: "baz",
         };
 
         const state = {
             caches: {
                 detail: {
-                    quality
-                }
-            }
+                    quality,
+                },
+            },
         };
 
         const props = mapStateToProps(state);

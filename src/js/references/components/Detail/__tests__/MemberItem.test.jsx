@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Icon } from "../../../../base";
 import MemberItem from "../MemberItem";
 
@@ -9,7 +12,7 @@ describe("<MemberItem />", () => {
             canModify: false,
             id: "bob",
             onEdit: vi.fn(),
-            onRemove: vi.fn()
+            onRemove: vi.fn(),
         };
     });
 

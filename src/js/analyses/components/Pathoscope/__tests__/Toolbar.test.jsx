@@ -1,8 +1,11 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
     SET_ANALYSIS_SORT_KEY,
     TOGGLE_ANALYSIS_SORT_DESCENDING,
     TOGGLE_FILTER_ISOLATES,
-    TOGGLE_FILTER_OTUS
+    TOGGLE_FILTER_OTUS,
 } from "../../../../app/actionTypes";
 import { Button } from "../../../../base";
 import { getFuse } from "../../../selectors";
@@ -27,7 +30,7 @@ describe("<Toolbar />", () => {
             onToggleFilterIsolates: vi.fn(),
             onSetSortKey: vi.fn(),
             onToggleSortDescending: vi.fn(),
-            onToggleShowPathoscopeReads: vi.fn()
+            onToggleShowPathoscopeReads: vi.fn(),
         };
     });
 
@@ -108,13 +111,13 @@ describe("mapStateToProps()", () => {
         const state = {
             analyses: {
                 detail: {
-                    id: "foo"
+                    id: "foo",
                 },
                 filterIsolates: false,
                 filterOTUs: false,
                 sortDescending: false,
-                sortKey: "pi"
-            }
+                sortKey: "pi",
+            },
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({
@@ -123,7 +126,7 @@ describe("mapStateToProps()", () => {
             filterOTUs: false,
             fuse: "fuse",
             sortDescending: false,
-            sortKey: "pi"
+            sortKey: "pi",
         });
         expect(getFuse).toHaveBeenCalledWith(state);
     });
@@ -141,14 +144,14 @@ describe("mapDispatchToProps()", () => {
     it("should return onToggleFilterOTUs() in props", () => {
         props.onToggleFilterOTUs();
         expect(dispatch).toHaveBeenCalledWith({
-            type: TOGGLE_FILTER_OTUS
+            type: TOGGLE_FILTER_OTUS,
         });
     });
 
     it("should return onToggleFilterIsolates() in props", () => {
         props.onToggleFilterIsolates();
         expect(dispatch).toHaveBeenCalledWith({
-            type: TOGGLE_FILTER_ISOLATES
+            type: TOGGLE_FILTER_ISOLATES,
         });
     });
 
@@ -156,14 +159,14 @@ describe("mapDispatchToProps()", () => {
         props.onSetSortKey("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: SET_ANALYSIS_SORT_KEY,
-            payload: { sortKey: "foo" }
+            payload: { sortKey: "foo" },
         });
     });
 
     it("should return onToggleSortDescending() in props", () => {
         props.onToggleSortDescending();
         expect(dispatch).toHaveBeenCalledWith({
-            type: TOGGLE_ANALYSIS_SORT_DESCENDING
+            type: TOGGLE_ANALYSIS_SORT_DESCENDING,
         });
     });
 });

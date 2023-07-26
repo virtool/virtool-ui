@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import OTUIssues from "../Issues";
 
 describe("<OTUIssues />", () => {
@@ -10,9 +13,9 @@ describe("<OTUIssues />", () => {
                 empty_otu: false,
                 isolate_inconsistency: false,
                 empty_isolate: false,
-                empty_sequence: false
+                empty_sequence: false,
             },
-            isolates: []
+            isolates: [],
         };
         wrapper = shallow(<OTUIssues {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -27,17 +30,17 @@ describe("<OTUIssues />", () => {
                 empty_sequence: [
                     {
                         _id: "test-sequence",
-                        isolate_id: "test-isolate"
-                    }
-                ]
+                        isolate_id: "test-isolate",
+                    },
+                ],
             },
             isolates: [
                 {
                     id: "test-isolate",
                     source_type: "isolate",
-                    source_name: "test"
-                }
-            ]
+                    source_name: "test",
+                },
+            ],
         };
         wrapper = shallow(<OTUIssues {...props} />);
         expect(wrapper).toMatchSnapshot();

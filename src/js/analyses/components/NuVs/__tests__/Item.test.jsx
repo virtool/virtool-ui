@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NuVsItem } from "../Item";
 
 describe("<NuVsItem />", () => {
@@ -11,14 +14,14 @@ describe("<NuVsItem />", () => {
             sequenceIndex: 4,
             orfs: [
                 {
-                    hits: [1, 2]
+                    hits: [1, 2],
                 },
                 {
-                    hits: [1]
-                }
+                    hits: [1],
+                },
             ],
             orfCount: 2,
-            onSetActiveId: vi.fn()
+            onSetActiveId: vi.fn(),
         };
     });
 

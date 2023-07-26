@@ -1,24 +1,25 @@
+import { describe, expect, it } from "vitest";
 import {
-    WS_INSERT_INDEX,
-    WS_UPDATE_INDEX,
-    GET_INDEX,
-    GET_UNBUILT,
     CREATE_INDEX,
+    FIND_INDEXES,
+    GET_INDEX,
     GET_INDEX_HISTORY,
+    GET_UNBUILT,
     LIST_READY_INDEXES,
     WS_INSERT_HISTORY,
-    FIND_INDEXES
+    WS_INSERT_INDEX,
+    WS_UPDATE_INDEX,
 } from "../../app/actionTypes";
 import {
+    createIndex,
+    findIndexes,
+    getIndex,
+    getIndexHistory,
+    getUnbuilt,
+    listReadyIndexes,
     wsInsertHistory,
     wsInsertIndex,
     wsUpdateIndex,
-    listReadyIndexes,
-    getIndex,
-    getUnbuilt,
-    createIndex,
-    getIndexHistory,
-    findIndexes
 } from "../actions";
 
 describe("Index Action Creators", () => {
@@ -27,7 +28,7 @@ describe("Index Action Creators", () => {
         const result = wsInsertHistory(data);
         expect(result).toEqual({
             type: WS_INSERT_HISTORY,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -36,7 +37,7 @@ describe("Index Action Creators", () => {
         const result = wsInsertIndex(data);
         expect(result).toEqual({
             type: WS_INSERT_INDEX,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -45,7 +46,7 @@ describe("Index Action Creators", () => {
         const result = wsUpdateIndex(data);
         expect(result).toEqual({
             type: WS_UPDATE_INDEX,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -56,7 +57,7 @@ describe("Index Action Creators", () => {
         const result = findIndexes(refId, term, page);
         expect(result).toEqual({
             type: FIND_INDEXES.REQUESTED,
-            payload: { refId, term, page }
+            payload: { refId, term, page },
         });
     });
 
@@ -70,7 +71,7 @@ describe("Index Action Creators", () => {
         const result = getIndex(indexId);
         expect(result).toEqual({
             type: GET_INDEX.REQUESTED,
-            payload: { indexId }
+            payload: { indexId },
         });
     });
 
@@ -79,7 +80,7 @@ describe("Index Action Creators", () => {
         const result = getUnbuilt(refId);
         expect(result).toEqual({
             type: GET_UNBUILT.REQUESTED,
-            payload: { refId }
+            payload: { refId },
         });
     });
 
@@ -88,7 +89,7 @@ describe("Index Action Creators", () => {
         const result = createIndex(refId);
         expect(result).toEqual({
             type: CREATE_INDEX.REQUESTED,
-            payload: { refId }
+            payload: { refId },
         });
     });
 
@@ -98,7 +99,7 @@ describe("Index Action Creators", () => {
         const result = getIndexHistory(indexId, page);
         expect(result).toEqual({
             type: GET_INDEX_HISTORY.REQUESTED,
-            payload: { indexId, page }
+            payload: { indexId, page },
         });
     });
 });
