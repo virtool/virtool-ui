@@ -1,7 +1,8 @@
 import { screen } from "@testing-library/react";
+import { shallow } from "enzyme";
 import nock from "nock";
 import React from "react";
-import { test } from "vitest";
+import { expect, it, test } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { References } from "../References";
 

@@ -5,7 +5,7 @@ import { File, FileType } from "../../js/files/types";
 import { UserNested } from "../../js/users/types";
 import { createFakeUserNested } from "./user";
 
-type createFakeFileProps = {
+type CreateFakeFileProps = {
     id?: string;
     created_at?: Date;
     name?: string;
@@ -19,7 +19,14 @@ type createFakeFileProps = {
     uploaded_at?: Date;
     user?: UserNested;
 };
-export function createFakeFile(props?: createFakeFileProps): File {
+
+/**
+ * Create a File object with fake data
+ *
+ * @param {CreateFakeFileProps} props values to override the default automatically generated values
+ * @returns {File} a File object with fake data
+ */
+export function createFakeFile(props?: CreateFakeFileProps): File {
     let { name, name_on_disk } = props || {};
     name = name === undefined ? `sample${faker.datatype.number()}.fastq.gz` : name;
     name_on_disk = name_on_disk === undefined ? `${faker.datatype.number()}-${name}` : name_on_disk;
@@ -42,7 +49,14 @@ export function createFakeFile(props?: createFakeFileProps): File {
     return merge(defaultFile, props);
 }
 
-export function mockListFilesAPI(files: Array<File>, query?: boolean) {
+/**
+ * Create a File object with fake data
+ *
+ * @param {File[]} files values to override the default automatically generated values
+ * @param {boolean} query whether to include query parameters in the request
+ * @returns {File} a File object with fake data
+ */
+export function mockApiListFiles(files: Array<File>, query?: boolean) {
     return nock("http://localhost")
         .get("/api/uploads")
         .query(query || true)
@@ -56,7 +70,13 @@ export function mockListFilesAPI(files: Array<File>, query?: boolean) {
         });
 }
 
-export function mockUnpaginatedListFilesAPI(files: Array<File>, query?: boolean) {
+/**
+ * Creates a mocked API call for getting an unpaginated list of files.
+ *
+ * @param {File[]} files files to be returned from the mocked API call
+ * @returns {nock.Scope} nock scope for the mocked API call
+ */
+export function mockApiUnpaginatedListFiles(files: File[], query?: boolean) {
     return nock("http://localhost")
         .get("/api/uploads")
         .query(query || true)
@@ -65,9 +85,12 @@ export function mockUnpaginatedListFilesAPI(files: Array<File>, query?: boolean)
         });
 }
 
-type mockDeleteFileProps = {
-    fileId: string;
-};
-export function mockDeleteFileAPI({ fileId }: mockDeleteFileProps) {
+/**
+ * Creates a mocked API call for deleting a file.
+ *
+ * @param {string} fileId id of the file that is expected to be deleted
+ * @returns {nock.Scope} nock scope for the mocked API call
+ */
+export function mockApiDeleteFile(fileId: string) {
     return nock("http://localhost").delete(`/api/uploads/${fileId}`).reply(200);
 }

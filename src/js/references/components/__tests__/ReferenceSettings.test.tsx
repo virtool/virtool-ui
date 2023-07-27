@@ -2,7 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
-import { test } from "vitest";
+import { expect, test } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { ReferenceSettings } from "../ReferenceSettings";
 
@@ -16,7 +16,7 @@ const settings = {
     sample_all_write: true,
     sample_group: null,
     sample_group_read: true,
-    sample_group_write: true
+    sample_group_write: true,
 };
 
 function createNockScope() {
@@ -41,7 +41,7 @@ test("GlobalSourceTypes", async () => {
     // Delete 'Clone'.
     scope.patch("/api/settings", { default_source_types: ["Genotype"] }).reply(200, {
         ...settings,
-        default_source_types: ["Genotype"]
+        default_source_types: ["Genotype"],
     });
 
     scope.get("/api/settings").reply(200, { ...settings, default_source_types: ["Genotype"] });

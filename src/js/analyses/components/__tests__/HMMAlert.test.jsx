@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { AnalysisHMMAlert, mapStateToProps } from "../HMMAlert";
 
 describe("<AnalysisHMMAlert />", () => {
@@ -5,7 +8,7 @@ describe("<AnalysisHMMAlert />", () => {
 
     beforeEach(() => {
         props = {
-            installed: true
+            installed: true,
         };
     });
 
@@ -27,20 +30,20 @@ describe("mapStateToProps", () => {
     beforeEach(() => {
         state = {
             hmms: {
-                status: {}
-            }
+                status: {},
+            },
         };
     });
 
     it("should return true when installed", () => {
         state.hmms.status.installed = {
-            foo: "bar"
+            foo: "bar",
         };
 
         const props = mapStateToProps(state);
 
         expect(props).toEqual({
-            installed: true
+            installed: true,
         });
     });
 
@@ -48,7 +51,7 @@ describe("mapStateToProps", () => {
         const props = mapStateToProps(state);
 
         expect(props).toEqual({
-            installed: false
+            installed: false,
         });
     });
 });

@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SubtractionDetail } from "../Detail";
 
 describe("<SubtractionDetail />", () => {
@@ -12,17 +15,17 @@ describe("<SubtractionDetail />", () => {
                 ready: true,
                 linked_samples: [
                     { id: "bar", name: "Bar" },
-                    { id: "baz", name: "Baz" }
+                    { id: "baz", name: "Baz" },
                 ],
                 file: { id: "123-Foo.fa.gz", name: "Foo.fa.gz" },
                 gc: { a: 0.2, t: 0.2, g: 0.2, c: 0.2, n: 0.2 },
-                nickname: "foo-nickname"
+                nickname: "foo-nickname",
             },
             canModify: true,
             error: "",
             onGet: vi.fn(),
             onShowRemove: vi.fn(),
-            files: []
+            files: [],
         };
     });
 

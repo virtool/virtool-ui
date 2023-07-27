@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { ReferenceItemOrigin } from "../Origin";
 
 describe("<ReferenceItemOrigin />", () => {
@@ -7,14 +10,14 @@ describe("<ReferenceItemOrigin />", () => {
         props = {
             clonedFrom: undefined,
             importedFrom: undefined,
-            remotesFrom: undefined
+            remotesFrom: undefined,
         };
     });
 
     it("should render for cloned references", () => {
         props.clonedFrom = {
             id: "foo",
-            name: "Foo"
+            name: "Foo",
         };
         const wrapper = shallow(<ReferenceItemOrigin {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -23,7 +26,7 @@ describe("<ReferenceItemOrigin />", () => {
     it("should render for imported references", () => {
         props.importedFrom = {
             id: "bar",
-            name: "Bar"
+            name: "Bar",
         };
         const wrapper = shallow(<ReferenceItemOrigin {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -32,7 +35,7 @@ describe("<ReferenceItemOrigin />", () => {
     it("should render for remoted references", () => {
         props.remotesFrom = {
             id: "baz",
-            name: "Baz"
+            name: "Baz",
         };
         const wrapper = shallow(<ReferenceItemOrigin {...props} />);
         expect(wrapper).toMatchSnapshot();

@@ -9,14 +9,14 @@ export class EditSubtraction extends React.Component {
         this.state = {
             error: "",
             name: props.name,
-            nickname: props.nickname
+            nickname: props.nickname,
         };
     }
 
     handleChange = e => {
         const { name, value } = e.target;
         this.setState({
-            [name]: value
+            [name]: value,
         });
     };
 
@@ -24,8 +24,8 @@ export class EditSubtraction extends React.Component {
         e.preventDefault();
 
         if (this.state.name === "") {
-            return setState({
-                error: "A name must be provided"
+            return this.setState({
+                error: "A name must be provided",
             });
         }
 
@@ -66,7 +66,7 @@ export const mapStateToProps = state => {
 export const mapDispatchToProps = dispatch => ({
     onUpdate: (id, name, nickname) => {
         dispatch(editSubtraction(id, name, nickname));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditSubtraction);

@@ -1,6 +1,10 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import nock from "nock";
-import { mockDeleteFileAPI } from "../../../../tests/fake/files";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mockApiDeleteFile } from "../../../../tests/fake/files";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { File } from "../File";
 
 vi.mock("../../../administration/utils.ts");
@@ -56,7 +60,7 @@ describe("<File />", () => {
 
     it("should have [props.onRemove] called when trash icon clicked", async () => {
         renderWithProviders(<File {...props} />);
-        const mockDeleteFileScope = mockDeleteFileAPI({ fileId: props.id });
+        const mockDeleteFileScope = mockApiDeleteFile(props.id);
         await userEvent.click(screen.getByRole("button", { name: "delete" }));
         mockDeleteFileScope.done();
         nock.cleanAll();

@@ -1,3 +1,5 @@
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
 import { NuVsExport } from "../Export";
 
 describe("<NuVsExport />", () => {
@@ -7,7 +9,7 @@ describe("<NuVsExport />", () => {
             sampleName: "test-sample",
             analysisId: "test-analysis",
             results: [],
-            onHide: vi.fn()
+            onHide: vi.fn(),
         };
         const wrapper = <NuVsExport {...props} />;
         expect(wrapper).toMatchSnapshot();

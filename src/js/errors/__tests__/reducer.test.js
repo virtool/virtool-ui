@@ -1,6 +1,6 @@
+import { describe, expect, it, vi } from "vitest";
 import { reportAPIError } from "../../utils/utils";
 import reducer, { checkActionFailed, getErrorName, resetErrorName } from "../reducer";
-import { vi } from "vitest";
 
 // Must mock target modules before imports to use in testing
 vi.mock("../../utils/utils.js");
@@ -13,7 +13,7 @@ describe("reducer()", () => {
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const result = reducer({}, action);
 
@@ -35,20 +35,20 @@ describe("reducer()", () => {
         "CHANGE_ACCOUNT_PASSWORD",
         "CREATE_USER",
         "EDIT_USER",
-        "CREATE_GROUP"
+        "CREATE_GROUP",
     ])("should handle %p_FAILED actions", actionTypePrefix => {
         const state = {};
         const action = {
             type: `${actionTypePrefix}_FAILED`,
-            payload: { status: 409, message: "There was an error" }
+            payload: { status: 409, message: "There was an error" },
         };
         const result = reducer(state, action);
 
         const expected = {
             [`${actionTypePrefix}_ERROR`]: {
                 status: 409,
-                message: "There was an error"
-            }
+                message: "There was an error",
+            },
         };
 
         expect(result).toEqual(expected);
@@ -58,7 +58,7 @@ describe("reducer()", () => {
         const state = {};
         const action = {
             type: "TEST_FAILED",
-            payload: { status: 400, message: "test action failed" }
+            payload: { status: 400, message: "test action failed" },
         };
         const result = reducer(state, action);
 
@@ -70,17 +70,17 @@ describe("reducer()", () => {
         const state = {
             CREATE_SAMPLE_ERROR: {
                 status: 409,
-                message: "test action failed previously"
-            }
+                message: "test action failed previously",
+            },
         };
         const action = {
             type: "CREATE_SAMPLE_REQUESTED",
-            payload: { status: 200, message: "requesting same action again" }
+            payload: { status: 200, message: "requesting same action again" },
         };
         const result = reducer(state, action);
 
         expect(result).toEqual({
-            CREATE_SAMPLE_ERROR: null
+            CREATE_SAMPLE_ERROR: null,
         });
         expect(reducer({}, action)).toEqual({});
     });
@@ -89,16 +89,16 @@ describe("reducer()", () => {
         const state = {
             CREATE_SAMPLE_ERROR: {
                 status: 409,
-                message: "test action failed previously"
-            }
+                message: "test action failed previously",
+            },
         };
         const action = {
             type: "CLEAR_ERROR",
-            payload: { error: "CREATE_SAMPLE_ERROR" }
+            payload: { error: "CREATE_SAMPLE_ERROR" },
         };
         const result = reducer(state, action);
         const expected = {
-            CREATE_SAMPLE_ERROR: null
+            CREATE_SAMPLE_ERROR: null,
         };
         expect(result).toEqual(expected);
         expect(reducer({}, action)).toEqual(expected);

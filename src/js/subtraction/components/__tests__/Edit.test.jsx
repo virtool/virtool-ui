@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Input, Modal } from "../../../base";
 import { EditSubtraction, mapDispatchToProps } from "../Edit";
 
@@ -9,8 +12,8 @@ describe("<EditSubtraction />", () => {
         e = {
             preventDefault: vi.fn(),
             target: {
-                value: "Foo"
-            }
+                value: "Foo",
+            },
         };
 
         props = {
@@ -19,7 +22,7 @@ describe("<EditSubtraction />", () => {
             nickname: "Peach",
             show: true,
             onHide: vi.fn(),
-            onUpdate: vi.fn()
+            onUpdate: vi.fn(),
         };
     });
 
@@ -66,7 +69,7 @@ describe("mapDispatchToProps()", () => {
         props.onUpdate("foo", "Foo", "Bar");
         expect(dispatch).toHaveBeenCalledWith({
             payload: { subtractionId: "foo", name: "Foo", nickname: "Bar" },
-            type: "UPDATE_SUBTRACTION_REQUESTED"
+            type: "UPDATE_SUBTRACTION_REQUESTED",
         });
     });
 });

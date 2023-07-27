@@ -1,6 +1,9 @@
-import { UploadItem } from "../UploadItem";
-import userEvent from "@testing-library/user-event";
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
+import { UploadItem } from "../UploadItem";
 
 describe("<UploadItem />", () => {
     let props;
@@ -12,7 +15,7 @@ describe("<UploadItem />", () => {
             size: 871290,
             onRemove: vi.fn(),
             localId: "foo_id",
-            failed: false
+            failed: false,
         };
     });
 

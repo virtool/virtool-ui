@@ -1,20 +1,18 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { NotFound } from "../NotFound";
 
 describe("<NotFound />", () => {
-    let wrapper;
-
     it("should render default", () => {
-        wrapper = shallow(<NotFound />);
-        expect(wrapper).toMatchSnapshot();
+        expect(shallow(<NotFound />)).toMatchSnapshot();
     });
 
     it("should render with status", () => {
-        const wrapper = shallow(<NotFound status={409} />);
-        expect(wrapper).toMatchSnapshot();
+        expect(shallow(<NotFound status={409} />)).toMatchSnapshot();
     });
 
     it("should render with message", () => {
-        wrapper = shallow(<NotFound message="Resource missing" />);
-        expect(wrapper).toMatchSnapshot();
+        expect(shallow(<NotFound message="Resource missing" />)).toMatchSnapshot();
     });
 });

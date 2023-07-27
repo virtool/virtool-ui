@@ -1,5 +1,8 @@
-import { CacheDetail, mapStateToProps, mapDispatchToProps } from "../Detail";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { GET_CACHE } from "../../../app/actionTypes";
+import { CacheDetail, mapDispatchToProps, mapStateToProps } from "../Detail";
 
 describe("<CacheDetail />", () => {
     let props;
@@ -11,16 +14,16 @@ describe("<CacheDetail />", () => {
                 program: "foo",
                 created_at: "2018-01-01T00:00:00.000000Z",
                 parameters: {
-                    foo: "bar"
-                }
+                    foo: "bar",
+                },
             },
             match: {
                 params: {
-                    cacheId: "baz"
-                }
+                    cacheId: "baz",
+                },
             },
             sampleName: "Foo",
-            onGet: vi.fn()
+            onGet: vi.fn(),
         };
     });
 
@@ -40,20 +43,20 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const state = {
             caches: {
-                detail: "foo"
+                detail: "foo",
             },
 
             samples: {
                 detail: {
-                    name: "bar"
-                }
-            }
+                    name: "bar",
+                },
+            },
         };
 
         const props = mapStateToProps(state);
         expect(props).toEqual({
             detail: "foo",
-            sampleName: "bar"
+            sampleName: "bar",
         });
     });
 });
@@ -66,7 +69,7 @@ describe("mapDispatchToProps", () => {
         props.onGet("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: GET_CACHE.REQUESTED,
-            payload: { cacheId: "foo" }
+            payload: { cacheId: "foo" },
         });
     });
 });

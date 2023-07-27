@@ -1,6 +1,8 @@
-import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import { SubtractionFiles, mapStateToProps } from "../Files";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
+import { mapStateToProps, SubtractionFiles } from "../Files";
 
 describe("<SubtractionFiles />", () => {
     let props;
@@ -14,7 +16,7 @@ describe("<SubtractionFiles />", () => {
                     name: "foo",
                     size: 36461731,
                     subtraction: "xl8faqqz",
-                    type: "fasta"
+                    type: "fasta",
                 },
                 {
                     download_url: "/api/subtractions/k66fpdyy/files/subtraction.3.bt2",
@@ -22,9 +24,9 @@ describe("<SubtractionFiles />", () => {
                     name: "bar",
                     size: 3257,
                     subtraction: "k66fpdyy",
-                    type: "bowtie2"
-                }
-            ]
+                    type: "bowtie2",
+                },
+            ],
         };
     });
 
@@ -48,8 +50,8 @@ describe("mapStateToProps()", () => {
         const detail = {
             files: [
                 { id: 1, name: "File 1" },
-                { id: 2, name: "File 2" }
-            ]
+                { id: 2, name: "File 2" },
+            ],
         };
         const state = { subtraction: { detail } };
         const props = mapStateToProps(state);

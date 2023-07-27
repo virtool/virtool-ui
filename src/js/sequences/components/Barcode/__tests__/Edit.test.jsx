@@ -1,6 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { castValues, EditBarcodeSequence } from "../Edit";
 
 const createAppStore = state => () => createStore(state => state, state);
@@ -22,7 +25,7 @@ describe("<EditBarcodeSequence>", () => {
             initialDefinition: "initialDefinition",
             initialHost: "initialHost",
             initialTargetName: "test_target_name",
-            initialSequence: "ATAG"
+            initialSequence: "ATAG",
         };
         state = {
             otus: {
@@ -42,12 +45,12 @@ describe("<EditBarcodeSequence>", () => {
                                         "GGGGCTGGGGCTTATTATTACCCCCAGCCCCGGAACGGGACATCACGTGTATTCTCTATAGTGGTGGGTCATATGTCCCGAGTTAGTGCGCCACGTAA",
                                     segment: "",
                                     id: "0r0vmzt4",
-                                    reference: { id: "85r8ucx8" }
-                                }
-                            ]
-                        }
-                    ]
-                }
+                                    reference: { id: "85r8ucx8" },
+                                },
+                            ],
+                        },
+                    ],
+                },
             },
             references: {
                 detail: {
@@ -56,17 +59,17 @@ describe("<EditBarcodeSequence>", () => {
                             description: "test_target_description",
                             length: 5,
                             name: "test_target_name",
-                            required: false
+                            required: false,
                         },
                         {
                             description: "test_target_description_2",
                             length: 5,
                             name: "test_target_name_2",
-                            required: false
-                        }
-                    ]
-                }
-            }
+                            required: false,
+                        },
+                    ],
+                },
+            },
         };
     });
 
@@ -113,7 +116,7 @@ describe("<EditBarcodeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "ACG",
-            "test_target_name_2"
+            "test_target_name_2",
         );
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
@@ -148,14 +151,14 @@ describe("castValues", () => {
             description: "test_target_description",
             length: 5,
             name: "test_target_name",
-            required: false
+            required: false,
         },
         {
             description: "test_target_description_2",
             length: 5,
             name: "test_target_name_2",
-            required: false
-        }
+            required: false,
+        },
     ];
 
     const values = { targetName: "test_target_name", otherData: {} };

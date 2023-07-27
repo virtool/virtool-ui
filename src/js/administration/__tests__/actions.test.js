@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { GET_SETTINGS, UPDATE_SETTINGS } from "../../app/actionTypes";
 import { getSettings, updateSetting, updateSettings } from "../actions";
 
@@ -13,7 +14,7 @@ describe("updateSetting()", () => {
         const result = updateSetting("foo", "bar");
         expect(result).toEqual({
             type: UPDATE_SETTINGS.REQUESTED,
-            payload: { update: { foo: "bar" } }
+            payload: { update: { foo: "bar" } },
         });
     });
 });
@@ -24,7 +25,7 @@ describe("updateSettings()", () => {
         const result = updateSettings(update);
         expect(result).toEqual({
             type: UPDATE_SETTINGS.REQUESTED,
-            payload: { update }
+            payload: { update },
         });
     });
 });

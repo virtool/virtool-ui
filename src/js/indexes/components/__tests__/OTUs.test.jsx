@@ -1,4 +1,6 @@
+import { shallow } from "enzyme";
 import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { IndexOTUs, mapStateToProps } from "../OTUs";
 
 describe("<IndexOTUs />", () => {
@@ -10,10 +12,10 @@ describe("<IndexOTUs />", () => {
                 {
                     id: "Foo",
                     name: "Bar",
-                    change_count: 1
-                }
+                    change_count: 1,
+                },
             ],
-            refId: "baz"
+            refId: "baz",
         };
     });
 
@@ -30,16 +32,16 @@ describe("mapStateToProps", () => {
                 detail: {
                     otus: { refId: "foo", change_count: 1, id: "Foo", name: "bar" },
                     reference: {
-                        id: "Bar"
-                    }
-                }
-            }
+                        id: "Bar",
+                    },
+                },
+            },
         };
         const props = mapStateToProps(state);
 
         expect(props).toEqual({
             refId: "Bar",
-            otus: { refId: "foo", change_count: 1, id: "Foo", name: "bar" }
+            otus: { refId: "foo", change_count: 1, id: "Foo", name: "bar" },
         });
     });
 });

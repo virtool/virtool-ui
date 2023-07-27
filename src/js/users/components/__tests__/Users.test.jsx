@@ -1,8 +1,11 @@
 import { screen } from "@testing-library/react";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
+import React from "react";
 import { combineReducers } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeUsers } from "../../../../tests/fake/user";
+import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { ManageUsers, mapDispatchToProps, mapStateToProps } from "../Users";
 
@@ -14,6 +17,7 @@ const createReducer = (state, history) =>
     });
 
 describe("<ManageUsers />", () => {
+    let history;
     let props;
     let state;
 

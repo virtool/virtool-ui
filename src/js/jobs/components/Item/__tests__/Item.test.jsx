@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { JobItem, mapDispatchToProps } from "../Item";
 
 describe("<JobItem />", () => {
@@ -11,12 +14,12 @@ describe("<JobItem />", () => {
             created_at: "Foo",
             user: {
                 id: "bob",
-                handle: "bob"
+                handle: "bob",
             },
             canCancel: true,
             canArchive: true,
             onCancel: vi.fn(),
-            onArchive: vi.fn()
+            onArchive: vi.fn(),
         };
     });
 
@@ -30,12 +33,12 @@ describe("<JobItem />", () => {
         [true, true],
         [true, false],
         [false, true],
-        [false, false]
+        [false, false],
     ])("should render when [canCancel=%p] and [canArchive=%p]", (canCancel, canArchive) => {
         props = {
             ...props,
             canCancel,
-            canArchive
+            canArchive,
         };
         const wrapper = shallow(<JobItem {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -51,7 +54,7 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: "CANCEL_JOB_REQUESTED",
-            payload: { jobId: "foo" }
+            payload: { jobId: "foo" },
         });
     });
     it("should return onArchive() in props", () => {
@@ -62,7 +65,7 @@ describe("mapDispatchToProps", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             payload: { jobId: "foo" },
-            type: "ARCHIVE_JOB_REQUESTED"
+            type: "ARCHIVE_JOB_REQUESTED",
         });
     });
 });

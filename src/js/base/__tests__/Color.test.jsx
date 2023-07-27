@@ -1,5 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../tests/setupTests";
 import { Color } from "../Color";
 
 describe("<Color />", () => {

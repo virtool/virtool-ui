@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import { Request } from "../app/request";
 import { FileType } from "./types";
 
-export const fileKeys = {
+export const fileQueryKeys = {
     all: () => ["files"] as const,
     lists: () => ["files", "list"] as const,
     list: (type: string, filters: Array<string | number | boolean>) => ["files", "list", type, ...filters] as const,
@@ -14,8 +14,8 @@ function listFiles(type: FileType, paginate: boolean, page: number) {
         .then(response => response.body);
 }
 
-export function useListFiles(type: FileType, paginate: boolean, page: number = 1) {
-    return useQuery(fileKeys.list(type, [paginate, page]), () => listFiles(type, paginate, page), {
+export function useListFiles(type: FileType, paginate: boolean, page = 1) {
+    return useQuery(fileQueryKeys.list(type, [paginate, page]), () => listFiles(type, paginate, page), {
         keepPreviousData: true,
     });
 }

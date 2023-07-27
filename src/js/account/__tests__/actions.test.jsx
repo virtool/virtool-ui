@@ -1,33 +1,34 @@
+import { describe, expect, it } from "vitest";
 import {
+    CHANGE_ACCOUNT_PASSWORD,
+    CLEAR_API_KEY,
+    CREATE_API_KEY,
     GET_ACCOUNT,
+    GET_API_KEYS,
+    LOGOUT,
+    REMOVE_API_KEY,
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
-    CHANGE_ACCOUNT_PASSWORD,
-    GET_API_KEYS,
-    CREATE_API_KEY,
     UPDATE_API_KEY,
-    REMOVE_API_KEY,
-    LOGOUT,
-    CLEAR_API_KEY
 } from "../../app/actionTypes";
 import {
+    changePassword,
+    clearAPIKey,
+    createAPIKey,
     getAccount,
+    getAPIKeys,
+    logout,
+    removeAPIKey,
     updateAccount,
     updateAccountSettings,
-    changePassword,
-    getAPIKeys,
-    createAPIKey,
-    clearAPIKey,
     updateAPIKey,
-    removeAPIKey,
-    logout
 } from "../actions";
 
 describe("Account Action Creators:", () => {
     it("getAccount: returns simple action", () => {
         const result = getAccount();
         const expected = {
-            type: GET_ACCOUNT.REQUESTED
+            type: GET_ACCOUNT.REQUESTED,
         };
 
         expect(result).toEqual(expected);
@@ -38,7 +39,7 @@ describe("Account Action Creators:", () => {
         const result = updateAccount(update);
         const expected = {
             type: UPDATE_ACCOUNT.REQUESTED,
-            payload: { update }
+            payload: { update },
         };
 
         expect(result).toEqual(expected);
@@ -46,12 +47,12 @@ describe("Account Action Creators:", () => {
 
     it("updateAccountSettings: returns action with settings update", () => {
         const update = {
-            quick_analyze_workflow: "pathoscope_bowtie"
+            quick_analyze_workflow: "pathoscope_bowtie",
         };
         const result = updateAccountSettings(update);
         const expected = {
             type: UPDATE_ACCOUNT_SETTINGS.REQUESTED,
-            payload: { update }
+            payload: { update },
         };
 
         expect(result).toEqual(expected);
@@ -63,7 +64,7 @@ describe("Account Action Creators:", () => {
         const result = changePassword(oldPassword, newPassword);
         const expected = {
             type: CHANGE_ACCOUNT_PASSWORD.REQUESTED,
-            payload: { old_password: oldPassword, password: newPassword }
+            payload: { old_password: oldPassword, password: newPassword },
         };
 
         expect(result).toEqual(expected);
@@ -72,7 +73,7 @@ describe("Account Action Creators:", () => {
     it("getAPIKeys: returns simple action", () => {
         const result = getAPIKeys();
         const expected = {
-            type: GET_API_KEYS.REQUESTED
+            type: GET_API_KEYS.REQUESTED,
         };
 
         expect(result).toEqual(expected);
@@ -84,7 +85,7 @@ describe("Account Action Creators:", () => {
         const result = createAPIKey(name, permissions);
         const expected = {
             type: CREATE_API_KEY.REQUESTED,
-            payload: { name, permissions }
+            payload: { name, permissions },
         };
 
         expect(result).toEqual(expected);
@@ -93,7 +94,7 @@ describe("Account Action Creators:", () => {
     it("clearAPIKey: returns simple action", () => {
         const result = clearAPIKey();
         const expected = {
-            type: CLEAR_API_KEY
+            type: CLEAR_API_KEY,
         };
 
         expect(result).toEqual(expected);
@@ -105,7 +106,7 @@ describe("Account Action Creators:", () => {
         const result = updateAPIKey(keyId, permissions);
         const expected = {
             type: UPDATE_API_KEY.REQUESTED,
-            payload: { keyId, permissions }
+            payload: { keyId, permissions },
         };
 
         expect(result).toEqual(expected);
@@ -116,7 +117,7 @@ describe("Account Action Creators:", () => {
         const result = removeAPIKey(keyId);
         const expected = {
             type: REMOVE_API_KEY.REQUESTED,
-            payload: { keyId }
+            payload: { keyId },
         };
 
         expect(result).toEqual(expected);
@@ -125,7 +126,7 @@ describe("Account Action Creators:", () => {
     it("logout: returns simple action", () => {
         const result = logout();
         const expected = {
-            type: LOGOUT.REQUESTED
+            type: LOGOUT.REQUESTED,
         };
 
         expect(result).toEqual(expected);

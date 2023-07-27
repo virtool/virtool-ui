@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { PathoscopeIsolate, PathoscopeIsolateWeight } from "../Isolate";
 
 describe("<PathoscopeIsolate />", () => {
@@ -11,10 +14,10 @@ describe("<PathoscopeIsolate />", () => {
             pi: 0.712,
             sequences: [
                 { filled: [1, 2, 3, 4, 5], length: 5, id: "foo", definition: "Foo Hit" },
-                { filled: [1, 2, 3, 4, 5, 4, 2, 3], length: 8, id: "bar", definition: "Bar Hit" }
+                { filled: [1, 2, 3, 4, 5, 4, 2, 3], length: 8, id: "bar", definition: "Bar Hit" },
             ],
             reads: 102,
-            showPathoscopeReads: false
+            showPathoscopeReads: false,
         };
     });
 

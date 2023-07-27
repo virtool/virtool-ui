@@ -1,3 +1,6 @@
+import { mount } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ScrollList } from "../ScrollList";
 
 describe("<ScrollList />", () => {
@@ -9,7 +12,7 @@ describe("<ScrollList />", () => {
             document: [{ foo: "bar" }],
             page: 1,
             pageCount: 2,
-            onLoadNextPage: vi.fn()
+            onLoadNextPage: vi.fn(),
         };
     });
 

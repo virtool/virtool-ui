@@ -1,5 +1,8 @@
-import { Api, mapStateToProps, mapDispatchToProps } from "../Api";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { UPDATE_SETTINGS } from "../../../app/actionTypes";
+import { Api, mapDispatchToProps, mapStateToProps } from "../Api";
 
 describe("<Api />", () => {
     let props;
@@ -7,7 +10,7 @@ describe("<Api />", () => {
     beforeEach(() => {
         props = {
             enabled: true,
-            onToggle: vi.fn()
+            onToggle: vi.fn(),
         };
     });
 
@@ -35,9 +38,9 @@ describe("mapStateToProps", () => {
         const state = {
             settings: {
                 data: {
-                    enable_api: true
-                }
-            }
+                    enable_api: true,
+                },
+            },
         };
         const props = mapStateToProps(state);
 
@@ -54,10 +57,10 @@ describe("mapDispatchToProps", () => {
         expect(dispatch).toHaveBeenCalledWith({
             payload: {
                 update: {
-                    enable_api: "foo"
-                }
+                    enable_api: "foo",
+                },
             },
-            type: UPDATE_SETTINGS.REQUESTED
+            type: UPDATE_SETTINGS.REQUESTED,
         });
     });
 });

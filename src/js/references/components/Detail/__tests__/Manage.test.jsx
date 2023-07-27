@@ -1,4 +1,7 @@
-import { ReferenceManage, mapStateToProps, mapDispatchToProps } from "../Manage";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mapDispatchToProps, mapStateToProps, ReferenceManage } from "../Manage";
 
 describe("<ReferenceManage />", () => {
     let props;
@@ -12,7 +15,7 @@ describe("<ReferenceManage />", () => {
             latestBuild: { Foo: "fee" },
             organism: "Bar",
             remotesFrom: "Boo",
-            dataType: "Boo"
+            dataType: "Boo",
         };
     });
 
@@ -41,9 +44,9 @@ describe("mapStateToProps()", () => {
                     latest_build: { Foo: "fee" },
                     organism: "Bar",
                     remotes_from: "Boo",
-                    data_type: "Boo"
-                }
-            }
+                    data_type: "Boo",
+                },
+            },
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({
@@ -54,7 +57,7 @@ describe("mapStateToProps()", () => {
             latestBuild: { Foo: "fee" },
             organism: "Bar",
             remotesFrom: "Boo",
-            dataType: "Boo"
+            dataType: "Boo",
         });
     });
 });
@@ -72,10 +75,10 @@ describe("mapDispatchToProps()", () => {
         const props = mapDispatchToProps(dispatch);
         props.onUpdate("bar");
         expect(dispatch).toHaveBeenCalledWith(
-            (1, { payload: { refId: "foo" }, type: "CHECK_REMOTE_UPDATES_REQUESTED" })
+            (1, { payload: { refId: "foo" }, type: "CHECK_REMOTE_UPDATES_REQUESTED" }),
         );
         expect(dispatch).toHaveBeenCalledWith(
-            (2, { payload: { refId: "bar" }, type: "UPDATE_REMOTE_REFERENCE_REQUESTED" })
+            (2, { payload: { refId: "bar" }, type: "UPDATE_REMOTE_REFERENCE_REQUESTED" }),
         );
     });
 });

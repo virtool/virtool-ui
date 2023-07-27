@@ -1,11 +1,14 @@
-import { ReadSelectorItem, ReadOrientation } from "../ReadSelectorItem";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ReadOrientation, ReadSelectorItem } from "../ReadSelectorItem";
 
 describe("<ReadOrientation />", () => {
     let props;
     beforeEach(() => {
         props = {
             index: 0,
-            selected: true
+            selected: true,
         };
     });
 
@@ -38,7 +41,7 @@ describe("<ReadSelectorItem />", () => {
             name: "bar",
             selected: true,
             size: 0,
-            onSelect: vi.fn()
+            onSelect: vi.fn(),
         };
     });
 

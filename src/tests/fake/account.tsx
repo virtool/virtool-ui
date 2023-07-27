@@ -2,8 +2,7 @@ import { faker } from "@faker-js/faker";
 import nock from "nock";
 import { Account, AccountSettings, QuickAnalyzeWorkflow } from "../../js/account/types";
 import { AdministratorRoles } from "../../js/administration/types";
-import { GroupMinimal } from "../../js/groups/types";
-import { Permissions } from "../../js/users/types";
+import { GroupMinimal, Permissions } from "../../js/groups/types";
 import { createFakeUser } from "./user";
 
 const defaultSettings = {

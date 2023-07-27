@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { TargetItem } from "../Item";
 
 describe("<TargetItem />", () => {
@@ -9,7 +12,7 @@ describe("<TargetItem />", () => {
             canModify: true,
             description: "bar",
             onEdit: vi.fn(),
-            onRemove: vi.fn()
+            onRemove: vi.fn(),
         };
     });
 

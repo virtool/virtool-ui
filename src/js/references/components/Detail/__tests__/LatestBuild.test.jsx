@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { LatestBuild } from "../LatestBuild";
 
 describe("<LatestBuild />", () => {
@@ -7,8 +10,8 @@ describe("<LatestBuild />", () => {
             id: "bar",
             version: "1.0",
             created_at: "2",
-            user: { id: "baz", handle: "baz_handle" }
-        }
+            user: { id: "baz", handle: "baz_handle" },
+        },
     };
 
     it("should render when [latestBuild!=null]", () => {

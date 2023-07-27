@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import RebuildHistory, { RebuildHistoryEllipsis, RebuildHistoryItem } from "../History";
 
 describe("<RebuildHistoryEllipsis />", () => {
@@ -8,8 +11,8 @@ describe("<RebuildHistoryEllipsis />", () => {
             unbuilt: {
                 page_count: 10,
                 per_page: 5,
-                total_count: 53
-            }
+                total_count: 53,
+            },
         };
     });
 
@@ -29,7 +32,7 @@ describe("<RebuildHistoryItem />", () => {
     it("should render with description", () => {
         const props = {
             description: "Removed OTU",
-            otuName: "Foobar Virus"
+            otuName: "Foobar Virus",
         };
         const wrapper = shallow(<RebuildHistoryItem {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -37,7 +40,7 @@ describe("<RebuildHistoryItem />", () => {
 
     it("should render without description", () => {
         const props = {
-            otuName: "Foobar Virus"
+            otuName: "Foobar Virus",
         };
         const wrapper = shallow(<RebuildHistoryItem {...props} />);
         expect(wrapper).toMatchSnapshot();
@@ -57,11 +60,11 @@ describe("<RebuildHistory />", () => {
                     {
                         id: "123abc",
                         otu: { name: "test-otu" },
-                        description: "test-description"
-                    }
-                ]
+                        description: "test-description",
+                    },
+                ],
             },
-            error: false
+            error: false,
         };
     });
 

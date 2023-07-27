@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
 import { SubtractionList } from "../List";
 
 describe("<SubtractionList />", () => {
@@ -18,7 +21,7 @@ describe("<SubtractionList />", () => {
             documents: ["one", "two", "three"],
             canModify: true,
             onFilter: vi.fn(),
-            loadNextPage: vi.fn()
+            loadNextPage: vi.fn(),
         };
         wrapper = shallow(<SubtractionList {...props} />);
         expect(wrapper).toMatchSnapshot();

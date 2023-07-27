@@ -1,15 +1,19 @@
 import { screen } from "@testing-library/react";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
-
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import * as utils from "../../../administration/utils";
 import { JobsList, mapDispatchToProps, mapStateToProps } from "../List";
 
-const createAppStore = state => () => createStore(state => state, state);
-const renderWithAllProviders = (ui, store) => {
+function createAppStore(state) {
+    return () => createStore(state => state, state);
+}
+function renderWithAllProviders(ui, store) {
     const wrappedUI = <BrowserRouter> {ui} </BrowserRouter>;
     renderWithProviders(wrappedUI, store);
-};
+}
 
 describe("<JobsList />", () => {
     let props;
@@ -27,27 +31,27 @@ describe("<JobsList />", () => {
                     user: {
                         id: "test_user_id",
                         handle: "user_handle",
-                        administrator: true
+                        administrator: true,
                     },
-                    workflow: "create_sample"
-                }
+                    workflow: "create_sample",
+                },
             ],
             onLoadNextPage: vi.fn(),
             canArchive: true,
-            canCancel: true
+            canCancel: true,
         };
 
         state = {
             jobs: {
                 counts: {
                     running: { pathoscope_bowtie: 1, nuvs: 1 },
-                    complete: { create_sample: 2, build_index: 2 }
-                }
+                    complete: { create_sample: 2, build_index: 2 },
+                },
             },
             account: {
-                administrator: true
+                administrator: true,
             },
-            router: { location: new window.URL("https://www.virtool.ca") }
+            router: { location: new window.URL("https://www.virtool.ca") },
         };
     });
 
@@ -83,16 +87,16 @@ describe("mapStateToProps", () => {
         vi.spyOn(utils, "checkAdminRoleOrPermission");
         const state = {
             jobs: {
-                term: "foo"
+                term: "foo",
             },
             account: {
                 administrator_role: null,
                 permissions: {
                     cancel_job: "fee",
-                    remove_job: "bee"
-                }
+                    remove_job: "bee",
+                },
             },
-            router: { location: new window.URL("https://www.virtool.ca") }
+            router: { location: new window.URL("https://www.virtool.ca") },
         };
 
         const result = mapStateToProps(state);
@@ -100,35 +104,35 @@ describe("mapStateToProps", () => {
             1,
             {
                 jobs: {
-                    term: "foo"
+                    term: "foo",
                 },
                 account: {
                     administrator_role: null,
                     permissions: {
                         cancel_job: "fee",
-                        remove_job: "bee"
-                    }
+                        remove_job: "bee",
+                    },
                 },
-                router: { location: new window.URL("https://www.virtool.ca") }
+                router: { location: new window.URL("https://www.virtool.ca") },
             },
-            "cancel_job"
+            "cancel_job",
         );
         expect(utils.checkAdminRoleOrPermission).toHaveBeenNthCalledWith(
             2,
             {
                 jobs: {
-                    term: "foo"
+                    term: "foo",
                 },
                 account: {
                     administrator_role: null,
                     permissions: {
                         cancel_job: "fee",
-                        remove_job: "bee"
-                    }
+                        remove_job: "bee",
+                    },
                 },
-                router: { location: new window.URL("https://www.virtool.ca") }
+                router: { location: new window.URL("https://www.virtool.ca") },
             },
-            "remove_job"
+            "remove_job",
         );
 
         expect(result.canCancel).toEqual("fee");
@@ -146,7 +150,7 @@ describe("mapDispatchToProps", () => {
         props.onLoadNextPage(states, 1);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { states, page: 1, archived: false },
-            type: "FIND_JOBS_REQUESTED"
+            type: "FIND_JOBS_REQUESTED",
         });
     });
 });
