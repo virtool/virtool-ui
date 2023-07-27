@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { FIND_HMMS, GET_HMM, INSTALL_HMMS, PURGE_HMMS } from "../app/actionTypes";
+import { FIND_HMMS, GET_HMM, INSTALL_HMMS } from "../app/actionTypes";
 
 export const findHmms = createAction(FIND_HMMS.REQUESTED, (term, page) => ({
     payload: { term, page },
@@ -21,12 +21,3 @@ export const getHmm = createAction(GET_HMM.REQUESTED, hmmId => ({ payload: { hmm
  * @returns {object}
  */
 export const installHMMs = createAction(INSTALL_HMMS.REQUESTED, releaseId => ({ payload: { release_id: releaseId } }));
-
-/**
- * Returns action that can trigger an API call for purging all HMMs. In other words, removing unreferenced HMM profiles
- * and deleting the profiles.hmm file.
- *
- * @func
- * @returns {object}
- */
-export const purgeHMMs = createAction(PURGE_HMMS.REQUESTED);

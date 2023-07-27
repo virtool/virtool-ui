@@ -4,8 +4,8 @@
  * @module hmm/sagas
  */
 
-import { getLocation, push } from "connected-react-router";
-import { put, select, takeLatest, throttle } from "redux-saga/effects";
+import { getLocation } from "connected-react-router";
+import { select, takeLatest, throttle } from "redux-saga/effects";
 import { FIND_HMMS, GET_HMM, INSTALL_HMMS, PURGE_HMMS } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as hmmsApi from "./api";
@@ -37,12 +37,4 @@ export function* installHmms(action) {
 
 export function* getHmm(action) {
     yield apiCall(hmmsApi.fetch, action.payload, GET_HMM);
-}
-
-export function* purgeHmms(action) {
-    const resp = yield apiCall(hmmsApi.purge, action, PURGE_HMMS);
-
-    if (resp.ok) {
-        yield put(push("/hmm"));
-    }
 }
