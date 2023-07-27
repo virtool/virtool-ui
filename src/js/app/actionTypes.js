@@ -97,7 +97,6 @@ export const REMOVE_GROUP = createRequestActionType("REMOVE_GROUP");
 export const FIND_HMMS = createRequestActionType("FIND_HMMS");
 export const GET_HMM = createRequestActionType("GET_HMM");
 export const INSTALL_HMMS = createRequestActionType("INSTALL_HMMS");
-export const PURGE_HMMS = createRequestActionType("PURGE_HMMS");
 
 // Indexes
 export const WS_INSERT_INDEX = "WS_INSERT_INDEX";
