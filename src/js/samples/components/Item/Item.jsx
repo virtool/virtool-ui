@@ -9,7 +9,7 @@ import { Attribution, Box, Checkbox, Icon, Loader } from "../../../base";
 import { selectSample } from "../../actions";
 import { getIsSelected } from "../../selectors";
 import { SampleLibraryTypeLabel, SmallSampleLabel } from "../Label";
-import { SampleItemWorkflowTags } from "./Tags";
+import { SampleItemWorkflowTags } from "../Tag/Tags";
 
 const SampleIconContainer = styled.div`
     align-items: center;
