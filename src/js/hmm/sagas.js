@@ -10,13 +10,13 @@ import { FIND_HMMS, GET_HMM, INSTALL_HMMS } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as hmmsApi from "./api";
 
-export function* watchHmms() {
+function* watchHmms() {
     yield throttle(300, FIND_HMMS.REQUESTED, findHmms);
     yield takeLatest(GET_HMM.REQUESTED, getHmm);
     yield throttle(500, INSTALL_HMMS.REQUESTED, installHmms);
 }
 
-export function* findHmms(action) {
+function* findHmms(action) {
     yield apiCall(hmmsApi.find, action.payload, FIND_HMMS);
 
     const routerLocation = yield select(getLocation);
@@ -26,7 +26,7 @@ export function* findHmms(action) {
     }
 }
 
-export function* installHmms(action) {
+function* installHmms(action) {
     const resp = yield apiCall(installHmms, action, INSTALL_HMMS);
 
     if (resp.ok) {
@@ -34,6 +34,6 @@ export function* installHmms(action) {
     }
 }
 
-export function* getHmm(action) {
+function* getHmm(action) {
     yield apiCall(hmmsApi.fetch, action.payload, GET_HMM);
 }
