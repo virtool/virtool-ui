@@ -3,9 +3,9 @@ import styled from "styled-components";
 /**
  * Styled component for the icon in a workflow tag.
  *
- *@Returns {StyledComponent}
+ * @returns The wrapper class for styling the icon in a workflow tag.
  */
-export const SampleItemLabelIcon = styled.span`
+export const WorkflowLabelIcon = styled.span`
     margin-right: 3px;
     width: 12px;
 `;

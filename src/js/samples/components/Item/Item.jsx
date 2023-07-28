@@ -9,7 +9,7 @@ import { Attribution, Box, Checkbox, Icon, Loader } from "../../../base";
 import { selectSample } from "../../actions";
 import { getIsSelected } from "../../selectors";
 import { SampleLibraryTypeLabel, SmallSampleLabel } from "../Label";
-import { SampleItemWorkflowTags } from "../Tag/Tags";
+import { WorkflowTags } from "../Tag/WorkflowTags";
 
 const SampleIconContainer = styled.div`
     align-items: center;
@@ -140,7 +140,7 @@ class SampleItem extends React.Component {
                     </SampleItemLabels>
                 </SampleItemData>
                 <SampleItemWorkflows>
-                    <SampleItemWorkflowTags id={this.props.id} workflows={this.props.workflows} />
+                    <WorkflowTags id={this.props.id} workflows={this.props.workflows} />
                 </SampleItemWorkflows>
                 <SampleItemIcon>{endIcon}</SampleItemIcon>
             </StyledSampleItem>

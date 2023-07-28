@@ -1,20 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { SampleItemTag } from "./Tag";
+import { BaseWorkflowTag } from "./BaseWorkflowTag";
 
-const StyledSampleItemWorkflowTagLink = styled(SampleItemTag)`
+const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`
     background-color: ${props => props.theme.color.purple};
     border: 1px solid ${props => props.theme.color.purple};
     border-left: none;
 `;
 
 /**
- * Renders a tag to link to the analyses page for a sample.
+ * Display a stylized link to the analyses page for a sample.
  *
- * @returns {React.FunctionComponent}
+ * @param id - the sample id
+ * @returns A stylized link to the analyses page for a sample.
  */
-export function SampleItemWorkflowTagLink({ id }: { id: string }) {
+export function WorkflowTagLink({ id }: { id: string }) {
     return (
         <StyledSampleItemWorkflowTagLink as={Link} to={`/samples/${id}/analyses`}>
             View

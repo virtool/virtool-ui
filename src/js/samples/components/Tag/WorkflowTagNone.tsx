@@ -1,26 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 import { Icon } from "../../../base";
-import { SampleItemLabelIcon } from "./Icon";
-import { SampleItemTag } from "./Tag";
+import { BaseWorkflowTag } from "./BaseWorkflowTag";
+import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 
-const StyledSampleItemWorkflowTagNone = styled(SampleItemTag)`
+const StyledSampleItemWorkflowTagNone = styled(BaseWorkflowTag)`
     background-color: ${props => props.theme.color.purpleLightest};
     border: 1px solid ${props => props.theme.color.purple};
     color: ${props => props.theme.color.purpleDarkest};
 `;
 
 /**
- * Renders a tag to indicate that a sample has no analyses.
+ * Display a "no analyses" tag.
  *
- * @returns {React.FunctionComponent}
+ * @returns A tag for a sample item with no analyses.
  */
-export function SampleItemWorkflowTagNone() {
+export function WorkflowTagNone() {
     return (
         <StyledSampleItemWorkflowTagNone>
-            <SampleItemLabelIcon>
+            <WorkflowLabelIcon>
                 <Icon name="times-circle" fixedWidth />
-            </SampleItemLabelIcon>
+            </WorkflowLabelIcon>
             <span>No Analyses</span>
         </StyledSampleItemWorkflowTagNone>
     );

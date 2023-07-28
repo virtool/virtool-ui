@@ -1,8 +1,8 @@
 import React from "react";
 import { Icon, Loader } from "../../../base";
 import { WorkflowState } from "../../types";
-import { SampleItemLabelIcon } from "./Icon";
-import { SampleItemTag } from "./Tag";
+import { BaseWorkflowTag } from "./BaseWorkflowTag";
+import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 
 type SampleItemWorkflowTagProps = {
     displayName: string;
@@ -10,22 +10,23 @@ type SampleItemWorkflowTagProps = {
 };
 
 /**
- * Renders a workflow tag for a sample item.
- * @param displayName {string} the display name of the workflow
- * @param workflowState {WorkflowState} current state of the workflow
- * @returns {React.FunctionComponent}
+ * Display a workflow tag
+ *
+ * @param displayName - the display name of the workflow
+ * @param workflowState - current state of the workflow
+ * @returns A workflow tag
  */
-export function SampleItemWorkflowTag({ displayName, workflowState }: SampleItemWorkflowTagProps) {
+export function WorkflowTag({ displayName, workflowState }: SampleItemWorkflowTagProps) {
     return (
-        <SampleItemTag>
-            <SampleItemLabelIcon>
+        <BaseWorkflowTag>
+            <WorkflowLabelIcon>
                 {workflowState === WorkflowState.PENDING ? (
                     <Loader size="10px" color="white" />
                 ) : (
                     <Icon name="check-circle" style={{ lineHeight: "inherit" }} fixedWidth />
                 )}
-            </SampleItemLabelIcon>
+            </WorkflowLabelIcon>
             <span>{displayName}</span>
-        </SampleItemTag>
+        </BaseWorkflowTag>
     );
 }

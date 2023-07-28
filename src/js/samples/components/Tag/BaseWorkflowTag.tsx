@@ -2,11 +2,11 @@ import styled from "styled-components";
 import { borderRadius, getFontSize } from "../../../app/theme";
 
 /**
- * Styled component for a workflow tag.
+ * Base workflow tag component.
  *
- * @returns {StyledComponent}
+ * @returns A base WorkflowTag component.
  */
-export const SampleItemTag = styled.div`
+export const BaseWorkflowTag = styled.div`
     align-items: center;
     background-color: ${props => props.theme.color.purpleDarkest};
     color: ${props => props.theme.color.white};
