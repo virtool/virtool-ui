@@ -3,10 +3,10 @@ import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { forEach } from "lodash-es";
 import { combineReducers } from "redux";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { createFakeUsers, mockFindUsersApi } from "../../../../tests/fake/user";
+import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeUsers, mockApiFindUsers } from "../../../../tests/fake/user";
+import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { ManageUsers } from "../Users";
 
@@ -36,7 +36,7 @@ describe("<ManageUsers />", () => {
     it("should render correctly with 3 users", async () => {
         const users = createFakeUsers(3);
         users[0].administrator_role = AdministratorRoles.FULL;
-        await mockFindUsersApi(users);
+        await mockApiFindUsers(users);
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockGetAccountAPI(account);
 
@@ -64,7 +64,7 @@ describe("<ManageUsers />", () => {
 
     it("should render correctly if account has insufficent permissions", async () => {
         const users = createFakeUsers(3);
-        mockFindUsersApi(users);
+        mockApiFindUsers(users);
         const account = createFakeAccount({ administrator_role: null });
         mockGetAccountAPI(account);
 
