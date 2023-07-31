@@ -9,7 +9,7 @@ export function* watchSettings() {
 }
 
 function* getSettings(action) {
-    yield apiCall(ApiFetchSettings(), action, GET_SETTINGS);
+    yield apiCall(ApiFetchSettings, action, GET_SETTINGS);
 }
 
 function* updateSettings(action) {

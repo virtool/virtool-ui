@@ -6,7 +6,7 @@ import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHea
 import { useFetchAccount } from "../../account/querys";
 import { Groups } from "../../groups/components/Groups";
 import UserDetail from "../../users/components/Detail";
-import { ManageUsers } from "../../users/components/Users";
+import { ManageUsers } from "../../users/components/ManageUsers";
 import { mapSettingsStateToProps } from "../mappers";
 import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";

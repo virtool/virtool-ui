@@ -109,3 +109,13 @@ export const logout = () => Request.get("/account/logout");
 
 export const resetPassword = ({ password, resetCode }) =>
     Request.post("/account/reset").send({ password, reset_code: resetCode });
+
+/**
+ * Fetches account data for the logged-in user
+ *
+ * @returns A Promise resolving to the account data
+ */
+export const FetchAccount = () =>
+    Request.get("/account")
+        .query()
+        .then(response => response.body);

@@ -1,9 +1,15 @@
+/**
+ * Full model of an administrator role
+ */
 export type AdministratorRole = {
     id: string;
     name: AdministratorRoles;
     description: string;
 };
 
+/**
+ * All administrator roles
+ */
 export enum AdministratorRoles {
     FULL = "full",
     SETTINGS = "settings",

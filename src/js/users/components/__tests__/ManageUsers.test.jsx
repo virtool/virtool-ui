@@ -8,7 +8,7 @@ import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/acc
 import { createFakeUsers, mockApiFindUsers } from "../../../../tests/fake/user";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
-import { ManageUsers } from "../Users";
+import { ManageUsers } from "../ManageUsers";
 
 const createReducer = (state, history) =>
     combineReducers({

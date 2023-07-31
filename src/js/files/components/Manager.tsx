@@ -1,7 +1,7 @@
 import { capitalize } from "lodash-es";
 import React from "react";
 import { useFetchAccount } from "../../account/querys";
-import { checkPermissionsFromAccount } from "../../administration/utils";
+import { checkAdminRoleOrPermissionsFromAccount } from "../../administration/utils";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useListFiles } from "../querys";
 import { File as fileTyping, FileResponse, FileType } from "../types";
@@ -31,7 +31,7 @@ export const FileManager = ({ validationRegex, message, tip, fileType }: FileMan
         return <LoadingPlaceholder />;
     }
 
-    const canRemoveFiles = checkPermissionsFromAccount(account, "remove_file");
+    const canRemoveFiles = checkAdminRoleOrPermissionsFromAccount(account, "remove_file");
 
     const noneFound = files.found_count === 0 && <NoneFoundBox noun="files" />;
 

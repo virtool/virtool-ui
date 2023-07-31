@@ -61,6 +61,15 @@ function EditButton({ id }) {
     );
 }
 
+/**
+ * A single user element for use in a list
+ *
+ * @param id - The user's id
+ * @param handle - The user's handle
+ * @param administrator_role - The user's administrator role
+ * @returns A single user element
+ */
+
 export function UserItem({ id, handle, administrator_role }) {
     const { hasPermission: canEdit } = useCheckAdminRole(
         administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,

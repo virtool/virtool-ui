@@ -1,21 +1,19 @@
 import { useQuery } from "react-query";
-import { Request } from "../app/request";
+import { FetchAccount } from "./api";
 import { Account } from "./types";
 
+/**
+ * Factory object for generating account query keys
+ */
 export const accountKeys = {
     all: () => ["account"],
 };
 
-const getAccount = () =>
-    Request.get("/account")
-        .query()
-        .then(response => response.body);
-
 /**
- * Asynchronously fetches account data
+ * Fetches account data for the logged-in user
  *
- * @returns {UseQueryResult<Account>}
+ * @returns UseQueryResult object containing the account data
  */
 export const useFetchAccount = () => {
-    return useQuery<Account>([accountKeys.all], () => getAccount());
+    return useQuery<Account>([accountKeys.all], () => FetchAccount());
 };

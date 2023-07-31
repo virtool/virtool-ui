@@ -3,14 +3,17 @@ import { UserResponse } from "../users/types";
 import { fetchAdministratorRoles, fetchSettings, findUsers, setAdministratorRole } from "./api";
 import { AdministratorRole, AdministratorRoles } from "./types";
 
+/**
+ * Factory object for generating settings query keys
+ */
 export const settingsKeys = {
     all: () => ["settings"] as const,
 };
 
 /**
- * Fetch the server wide settings from the backend
+ * Fetch the API settings.
  *
- * @returns {UseQueryResult} Whether the user has the required role.
+ * @returns The API settings.
  */
 export function useFetchSettings() {
     return useQuery(settingsKeys.all(), fetchSettings);
@@ -23,12 +26,15 @@ export const roleKeys = {
 /**
  * Fetch a list of valid administrator roles from the backend
  *
- * @returns {UseQueryResult} result of the query
+ * @returns A list of valid administrator roles
  */
 export const useGetAdministratorRoles = () => {
     return useQuery<AdministratorRole[]>(roleKeys.all(), fetchAdministratorRoles);
 };
 
+/**
+ * Factory object for generating user query keys
+ */
 export const userKeys = {
     all: () => ["users"] as const,
     lists: () => ["users", "list"] as const,
@@ -40,13 +46,13 @@ export const userKeys = {
 };
 
 /**
- * Fetch a list users from the backend
+ * Fetch a page of user search results from the API
  *
- * @param {number} page The page to fetch
- * @param {number} per_page The number of users to fetch per page
- * @param {string} term The search term to filter users by
- * @param {boolean} administrator filter the users by administrator status
- * @returns {UseQueryResult} result of the query
+ * @param page - The page to fetch
+ * @param per_page - The number of users to fetch per page
+ * @param term - The search term to filter users by
+ * @param administrator - filter the users by administrator status
+ * @returns A page of user search results
  */
 export const useFindUsers = (page: number, per_page: number, term: string, administrator?: boolean) => {
     return useQuery<UserResponse>(
@@ -59,12 +65,12 @@ export const useFindUsers = (page: number, per_page: number, term: string, admin
 };
 
 /**
- * Fetch a list users from the backend
+ * Setup query for fetching user search results for infinite scrolling view
  *
- * @param {number} per_page The number of users to fetch per page
- * @param {string} term The search term to filter users by
- * @param {boolean} administrator filter the users by administrator status
- * @returns {UseQueryResult} result of the query
+ * @param per_page - The number of users to fetch per page
+ * @param term - The search term to filter users by
+ * @param administrator - filter the users by administrator status
+ * @returns An UseInfiniteQueryResult object containing the user search results
  */
 export const useInfiniteFindUsers = (per_page: number, term: string, administrator?: boolean) => {
     return useInfiniteQuery<UserResponse>(
@@ -82,9 +88,9 @@ export const useInfiniteFindUsers = (per_page: number, term: string, administrat
 };
 
 /**
- * Set the administrator role of a user
+ * Set up a query for updating users administrator roles
  *
- * @returns {UseMutationResult} mutator for setting an administrator role
+ * @returns A mutator for updating a users administrator role
  */
 export const useSetAdministratorRole = () => {
     const queryClient = useQueryClient();

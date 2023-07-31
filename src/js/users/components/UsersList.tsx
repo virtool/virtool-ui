@@ -1,10 +1,10 @@
-import { reduce } from "lodash-es";
+import { flatMap } from "lodash-es";
 import React from "react";
 import { useInfiniteFindUsers } from "../../administration/querys";
 import { LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { StreamlinedScrollList } from "../../base/ScrollList";
 import { User } from "../types";
-import { UserItem } from "./Item";
+import { UserItem } from "./UserItem";
 
 function renderRow(item: User) {
     return <UserItem key={item.id} id={item.id} handle={item.handle} administrator_role={item.administrator_role} />;
@@ -14,6 +14,13 @@ type UsersListProps = {
     term: string;
 };
 
+/**
+ * An infinitely scrolling list of users
+ *
+ * @param term - the search term used for filtering users
+ * @returns An infinitely scrolling list of users
+ */
+
 export function UsersList({ term }: UsersListProps) {
     const { data, isLoading, fetchNextPage, isFetchingNextPage } = useInfiniteFindUsers(25, term);
 
@@ -21,7 +28,7 @@ export function UsersList({ term }: UsersListProps) {
         return <LoadingPlaceholder />;
     }
 
-    const items = reduce(data.pages, (acc, page) => [...acc, ...page.items], []);
+    const items = flatMap(data.pages, page => page.items);
 
     if (items.length) {
         return (

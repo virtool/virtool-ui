@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
-import { Pagination } from "../Pagination";
-import { useArgs } from "@storybook/client-api";
 import { faker } from "@faker-js/faker";
+import { useArgs } from "@storybook/client-api";
 import { map } from "lodash-es";
-import { UserItem } from "../../users/components/Item";
+import React, { useMemo } from "react";
 import { Box } from "../";
+import { UserItem } from "../../users/components/UserItem";
+import { Pagination } from "../Pagination";
 
 export default {
     title: "base/Pagination",
@@ -13,10 +13,10 @@ export default {
         docs: {
             description: {
                 component:
-                    "A pagination component useful for dividing large amounts of content into smaller sections across multiple pages."
-            }
-        }
-    }
+                    "A pagination component useful for dividing large amounts of content into smaller sections across multiple pages.",
+            },
+        },
+    },
 };
 
 const Template = args => {
@@ -38,7 +38,7 @@ export const ExamplePagination = Template.bind({});
 ExamplePagination.args = {
     pageCount: 10,
     currentPage: 1,
-    storedPage: 1
+    storedPage: 1,
 };
 
 const fakeUserListFactory = (seed, numItems) => {
@@ -50,5 +50,5 @@ const fakeUserListFactory = (seed, numItems) => {
 const fakeUserFactory = () => ({
     id: faker.random.alphaNumeric(6),
     handle: `${faker.name.firstName()}${faker.name.lastName()}`,
-    administrator: false
+    administrator: false,
 });
