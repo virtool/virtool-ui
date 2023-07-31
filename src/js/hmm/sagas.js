@@ -10,7 +10,7 @@ import { FIND_HMMS, GET_HMM, INSTALL_HMMS } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as hmmsApi from "./api";
 
-function* watchHmms() {
+export function* watchHmms() {
     yield throttle(300, FIND_HMMS.REQUESTED, findHmms);
     yield takeLatest(GET_HMM.REQUESTED, getHmm);
     yield throttle(500, INSTALL_HMMS.REQUESTED, installHmms);
