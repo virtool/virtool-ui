@@ -1,6 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { AddBarcodeSequence, castValues } from "../Add";
 
 const createAppStore = state => () => createStore(state => state, state);
@@ -17,7 +20,7 @@ describe("<AddBarcodeSequence>", () => {
             defaultTarget: "test_target_name",
             targets: [],
             onHide: vi.fn(),
-            onSave: vi.fn()
+            onSave: vi.fn(),
         };
         state = {
             otus: {
@@ -37,12 +40,12 @@ describe("<AddBarcodeSequence>", () => {
                                         "GGGGCTGGGGCTTATTATTACCCCCAGCCCCGGAACGGGACATCACGTGTATTCTCTATAGTGGTGGGTCATATGTCCCGAGTTAGTGCGCCACGTAA",
                                     segment: "",
                                     id: "0r0vmzt4",
-                                    reference: { id: "85r8ucx8" }
-                                }
-                            ]
-                        }
-                    ]
-                }
+                                    reference: { id: "85r8ucx8" },
+                                },
+                            ],
+                        },
+                    ],
+                },
             },
             references: {
                 detail: {
@@ -51,17 +54,17 @@ describe("<AddBarcodeSequence>", () => {
                             description: "test_target_description",
                             length: 5,
                             name: "test_target_name",
-                            required: false
+                            required: false,
                         },
                         {
                             description: "test_target_description_2",
                             length: 5,
                             name: "test_target_name_2",
-                            required: false
-                        }
-                    ]
-                }
-            }
+                            required: false,
+                        },
+                    ],
+                },
+            },
         };
     });
 
@@ -94,7 +97,7 @@ describe("<AddBarcodeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "ATG",
-            "test_target_name_2"
+            "test_target_name_2",
         );
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
@@ -126,14 +129,14 @@ describe("castValues", () => {
             description: "test_target_description",
             length: 5,
             name: "test_target_name",
-            required: false
+            required: false,
         },
         {
             description: "test_target_description_2",
             length: 5,
             name: "test_target_name_2",
-            required: false
-        }
+            required: false,
+        },
     ];
 
     const values = { targetName: "test_target_name", otherData: {} };

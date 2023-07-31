@@ -1,21 +1,24 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { forEach } from "lodash-es";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
-import { createFakeFile, mockListFilesAPI } from "../../../../tests/fake/files";
+import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
+import { describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
 import { SubtractionFileManager } from "../FileManager";
 
-const createAppStore = (state, reducer) => {
+function createAppStore(state, reducer) {
     return () => createStore(reducer ? reducer : state => state, state);
-};
+}
 
-const createFiles = fileNames => {
+function createFiles(fileNames) {
     return fileNames.map(fileName => new File(["test"], fileName, { type: "application/gzip" }));
-};
+}
 
 describe("<SubtractionFileManager />", () => {
     const state = {
@@ -44,7 +47,7 @@ describe("<SubtractionFileManager />", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file]);
+        mockApiListFiles([file]);
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
@@ -60,7 +63,7 @@ describe("<SubtractionFileManager />", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file]);
+        mockApiListFiles([file]);
 
         const mockUploadRequested = vi.fn();
         const reducer = (state, action) => {

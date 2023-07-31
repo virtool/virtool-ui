@@ -1,9 +1,12 @@
-vi.mock("../../../samples/selectors");
-
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FIND_ANALYSES, PUSH_STATE } from "../../../app/actionTypes";
 import { Button, InputSearch } from "../../../base";
 import { getCanModify } from "../../../samples/selectors";
 import { AnalysesToolbar, mapDispatchToProps, mapStateToProps } from "../Toolbar";
+
+vi.mock("../../../samples/selectors");
 
 describe("<AnalysesToolbar />", () => {
     let props;
@@ -15,7 +18,7 @@ describe("<AnalysesToolbar />", () => {
             sampleId: "foobar",
             term: "baz",
             onFind: vi.fn(),
-            onShowCreate: vi.fn()
+            onShowCreate: vi.fn(),
         };
     });
 
@@ -34,8 +37,8 @@ describe("<AnalysesToolbar />", () => {
         const wrapper = shallow(<AnalysesToolbar {...props} />);
         const event = {
             target: {
-                value: "hello"
-            }
+                value: "hello",
+            },
         };
         wrapper.find(InputSearch).simulate("change", event);
         expect(props.onFind).toHaveBeenCalledWith(props.sampleId, "hello", props.page);
@@ -56,19 +59,19 @@ describe("mapStateToProps", () => {
         state = {
             analyses: {
                 page: 2,
-                term: "baz"
+                term: "baz",
             },
             samples: {
                 detail: {
-                    id: "foo"
-                }
-            }
+                    id: "foo",
+                },
+            },
         };
         expected = {
             canModify: true,
             page: 2,
             sampleId: "foo",
-            term: "baz"
+            term: "baz",
         };
     });
 
@@ -105,9 +108,9 @@ describe("mapDispatchToProps", () => {
             type: PUSH_STATE,
             payload: {
                 state: {
-                    createAnalysis: "foobar"
-                }
-            }
+                    createAnalysis: "foobar",
+                },
+            },
         });
     });
 
@@ -120,7 +123,7 @@ describe("mapDispatchToProps", () => {
         props.onFind(sampleId, term, page);
         expect(dispatch).toHaveBeenCalledWith({
             type: FIND_ANALYSES.REQUESTED,
-            payload: { sampleId, term, page }
+            payload: { sampleId, term, page },
         });
     });
 });

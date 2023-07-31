@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mapDispatchToProps, mapStateToProps, ReferenceDetailHeader, ReferenceDetailHeaderIcon } from "../Header";
 
 describe("<ReferenceDetailHeaderIcon />", () => {
@@ -7,7 +10,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
         props = {
             canModify: true,
             isRemote: true,
-            onEdit: vi.fn()
+            onEdit: vi.fn(),
         };
     });
 
@@ -57,7 +60,7 @@ describe("<ReferenceDetailHeader/>", () => {
             showIcons: true,
             userId: 1,
             userHandle: 1,
-            onEdit: vi.fn()
+            onEdit: vi.fn(),
         };
     });
 
@@ -84,18 +87,18 @@ describe("mapStateToProps()", () => {
                     created_at: "Foo",
                     user: {
                         id: "Bar",
-                        handle: "Bar"
-                    }
-                }
+                        handle: "Bar",
+                    },
+                },
             },
             account: {
-                administrator: true
+                administrator: true,
             },
             router: {
                 location: {
-                    pathname: "Baz/manage"
-                }
-            }
+                    pathname: "Baz/manage",
+                },
+            },
         };
 
         const props = mapStateToProps(state);
@@ -105,7 +108,7 @@ describe("mapStateToProps()", () => {
             createdAt: "Foo",
             isRemote: true,
             showIcons: true,
-            userHandle: "Bar"
+            userHandle: "Bar",
         });
     });
 });

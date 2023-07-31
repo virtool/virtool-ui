@@ -1,10 +1,14 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
-import { attachResizeObserver } from "../../../../tests/setupTests";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { attachResizeObserver, renderWithRouter } from "../../../../tests/setupTests";
 import { PUSH_STATE } from "../../../app/actionTypes";
 import { CreateUser, mapDispatchToProps, mapStateToProps } from "../Create";
 
 describe("<CreateUser />", () => {
+    let history;
     let props;
     let state;
 
@@ -17,7 +21,7 @@ describe("<CreateUser />", () => {
             minimumPasswordLength: 8,
             onClearError: vi.fn(),
             onCreate: vi.fn(),
-            onHide: vi.fn()
+            onHide: vi.fn(),
         };
 
         state = {
@@ -25,8 +29,9 @@ describe("<CreateUser />", () => {
             errorHandle: "",
             forceReset: false,
             password: "",
-            handle: ""
+            handle: "",
         };
+
         history = createBrowserHistory();
     });
 
@@ -81,18 +86,18 @@ describe("mapStateToProps", () => {
         const state = {
             errors: {
                 CREATE_USER_ERROR: {
-                    message: "foo"
-                }
+                    message: "foo",
+                },
             },
             router: { location: "foo" },
             users: {
-                createPending: true
+                createPending: true,
             },
             settings: {
                 data: {
-                    minimum_password_length: 1
-                }
-            }
+                    minimum_password_length: 1,
+                },
+            },
         };
 
         const result = mapStateToProps(state);
@@ -100,7 +105,7 @@ describe("mapStateToProps", () => {
             show: false,
             pending: true,
             minimumPasswordLength: 1,
-            error: "foo"
+            error: "foo",
         });
     });
 });
@@ -120,7 +125,7 @@ describe("mapDispatchToProps", () => {
         result.onCreate(data);
         expect(dispatch).toHaveBeenCalledWith({
             payload: "foo",
-            type: "CREATE_USER_REQUESTED"
+            type: "CREATE_USER_REQUESTED",
         });
     });
     it("should return onHide() in props", () => {
@@ -132,7 +137,7 @@ describe("mapDispatchToProps", () => {
         result.onClearError();
         expect(dispatch).toHaveBeenCalledWith({
             payload: { error: "CREATE_USER_ERROR" },
-            type: "CLEAR_ERROR"
+            type: "CLEAR_ERROR",
         });
     });
 });

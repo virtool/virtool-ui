@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { ReferenceItemBuild } from "../Build";
 
 describe("<ReferenceItemBuild />", () => {
@@ -11,11 +14,11 @@ describe("<ReferenceItemBuild />", () => {
                 id: "bar",
                 user: {
                     id: "bob_id",
-                    handle: "bob"
+                    handle: "bob",
                 },
-                version: 3
+                version: 3,
             },
-            progress: 100
+            progress: 100,
         };
     });
 

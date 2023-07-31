@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { mapStateToProps, SampleFileSizeWarning } from "../FileSizeWarning";
 
 describe("<SampleFileSizeWarning />", () => {
@@ -6,7 +9,7 @@ describe("<SampleFileSizeWarning />", () => {
         props = {
             sampleId: "foo",
             show: true,
-            showLink: true
+            showLink: true,
         };
     });
 
@@ -32,14 +35,14 @@ describe("mapStateToProps", () => {
     const state = {
         router: {
             location: {
-                pathname: "/samples/foo"
-            }
+                pathname: "/samples/foo",
+            },
         },
         samples: {
             detail: {
-                files: [{ size: 10 }]
-            }
-        }
+                files: [{ size: 10 }],
+            },
+        },
     };
 
     it("should return show when [state.samples.detail.files.size<10000000]", () => {

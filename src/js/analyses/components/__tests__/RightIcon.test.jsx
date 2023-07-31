@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AnalysisItemRightIcon } from "../RightIcon";
 
 describe("<RightIcon />", () => {
@@ -7,7 +10,7 @@ describe("<RightIcon />", () => {
         props = {
             canModify: false,
             ready: true,
-            onRemove: vi.fn()
+            onRemove: vi.fn(),
         };
     });
 

@@ -1,5 +1,9 @@
-import { Files } from "../Files";
 import { screen } from "@testing-library/react";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
+import { Files } from "../Files";
 
 describe("<IndexDetail />", () => {
     let props;
@@ -9,8 +13,8 @@ describe("<IndexDetail />", () => {
             files: [
                 { id: "1", name: "foo", download_url: "/testUrl/foo", size: "1024" },
 
-                { id: "2", name: "bar", download_url: "/testUrl/bar", size: "2048" }
-            ]
+                { id: "2", name: "bar", download_url: "/testUrl/bar", size: "2048" },
+            ],
         };
     });
 

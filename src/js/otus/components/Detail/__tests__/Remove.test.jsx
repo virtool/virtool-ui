@@ -1,5 +1,8 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HIDE_OTU_MODAL, REMOVE_OTU } from "../../../../app/actionTypes";
-import { Remove, mapStateToProps, mapDispatchToProps } from "../Remove";
+import { mapDispatchToProps, mapStateToProps, Remove } from "../Remove";
 
 describe("<Remove />", () => {
     let props;
@@ -12,7 +15,7 @@ describe("<Remove />", () => {
             refId: "baz",
             show: true,
             onConfirm: vi.fn(),
-            onHide: vi.fn()
+            onHide: vi.fn(),
         };
     });
 
@@ -46,13 +49,13 @@ describe("mapStateToProps()", () => {
     beforeEach(() => {
         state = {
             otus: {
-                remove: false
+                remove: false,
             },
             references: {
                 detail: {
-                    id: "foo"
-                }
-            }
+                    id: "foo",
+                },
+            },
         };
     });
 
@@ -61,7 +64,7 @@ describe("mapStateToProps()", () => {
         const props = mapStateToProps(state);
         expect(props).toEqual({
             show,
-            refId: "foo"
+            refId: "foo",
         });
     });
 });
@@ -79,19 +82,19 @@ describe("mapDispatchToProps()", () => {
         const refId = "foo";
         const otuId = "baz";
         const history = {
-            id: "bar"
+            id: "bar",
         };
         props.onConfirm(refId, otuId, history);
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_OTU.REQUESTED,
-            payload: { history, otuId, refId }
+            payload: { history, otuId, refId },
         });
     });
 
     it("should return onHide() in props", () => {
         props.onHide();
         expect(dispatch).toHaveBeenCalledWith({
-            type: HIDE_OTU_MODAL
+            type: HIDE_OTU_MODAL,
         });
     });
 });

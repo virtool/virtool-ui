@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { RebuildIndexError } from "../RebuildError";
 
 describe("RebuildIndexError", () => {
@@ -5,7 +8,7 @@ describe("RebuildIndexError", () => {
 
     beforeEach(() => {
         props = {
-            error: null
+            error: null,
         };
     });
 

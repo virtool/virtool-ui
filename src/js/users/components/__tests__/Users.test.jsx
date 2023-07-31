@@ -3,8 +3,10 @@ import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { forEach } from "lodash-es";
 import { combineReducers } from "redux";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { createFakeUsers, mockFindUsersApi } from "../../../../tests/fake/user";
+import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { AdministratorRoles } from "../../../administration/types";
 import { ManageUsers } from "../Users";
 
@@ -16,6 +18,7 @@ const createReducer = (state, history) =>
     });
 
 describe("<ManageUsers />", () => {
+    let history;
     let state;
 
     beforeEach(() => {

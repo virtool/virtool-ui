@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { getTask } from "../selectors";
 
 describe("getTask()", () => {
@@ -5,9 +6,9 @@ describe("getTask()", () => {
     beforeEach(() => {
         state = {
             tasks: {
-                documents: [{ id: "foo" }]
+                documents: [{ id: "foo" }],
             },
-            hmms: { status: { task: { id: "foo" } } }
+            hmms: { status: { task: { id: "foo" } } },
         };
     });
     it("should return task when it exists", () => {

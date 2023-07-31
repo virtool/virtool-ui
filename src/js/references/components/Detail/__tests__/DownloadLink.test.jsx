@@ -1,4 +1,7 @@
 import { screen } from "@testing-library/react";
+import React from "react";
+import { describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { DownloadLink } from "../DownloadLink";
 
 describe("<DownloadLink />", () => {

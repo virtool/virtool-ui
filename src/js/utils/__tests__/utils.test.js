@@ -1,4 +1,5 @@
-import * as utils from "../utils";
+import { describe, expect, it } from "vitest";
+import { byteSize, createRandomString, formatIsolateName } from "../utils";
 
 describe("Utility constants and functions module", () => {
     let result;
@@ -6,36 +7,36 @@ describe("Utility constants and functions module", () => {
 
     it("byteSize(): converts number into closest whole units of B, KB, MB, GB ...", () => {
         let bytes = 1;
-        result = utils.byteSize(bytes);
+        result = byteSize(bytes);
         expected = "1.0B";
         expect(result).toEqual(expected);
 
         bytes = 1024;
-        result = utils.byteSize(bytes);
+        result = byteSize(bytes);
         expected = "1.0KB";
         expect(result).toEqual(expected);
 
         bytes = NaN;
-        result = utils.byteSize(bytes);
+        result = byteSize(bytes);
         expected = "0.0B";
         expect(result).toEqual(expected);
 
         bytes = 0;
-        result = utils.byteSize(bytes);
+        result = byteSize(bytes);
         expected = "0.0B";
         expect(result).toEqual(expected);
 
         bytes = null;
-        result = utils.byteSize(bytes);
+        result = byteSize(bytes);
         expected = "0.0B";
         expect(result).toEqual(expected);
     });
 
     it("createRandomString()", () => {
-        result = utils.createRandomString();
+        result = createRandomString();
         expect(result.length).toEqual(8);
 
-        result = utils.createRandomString(20);
+        result = createRandomString(20);
         expect(result.length).toEqual(20);
     });
 
@@ -44,17 +45,17 @@ describe("Utility constants and functions module", () => {
             id: "testid",
             sequences: [],
             source_name: "ABCD",
-            source_type: "isolate"
+            source_type: "isolate",
         };
-        result = utils.formatIsolateName(isolate);
+        result = formatIsolateName(isolate);
         expected = "Isolate ABCD";
         expect(result).toEqual(expected);
 
         isolate = {
             souce_name: "EFGH",
-            source_type: "unknown"
+            source_type: "unknown",
         };
-        result = utils.formatIsolateName(isolate);
+        result = formatIsolateName(isolate);
         expected = "Unnamed";
         expect(result).toEqual(expected);
     });

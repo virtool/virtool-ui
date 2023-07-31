@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { getCompatibleWorkflows } from "../WorkflowSelector";
 
 describe("getCompatibleWorkflows()", () => {
@@ -16,4 +17,3 @@ describe("getCompatibleWorkflows()", () => {
         expect(result).toEqual(["pathoscope_bowtie", "nuvs"]);
     });
 });
-

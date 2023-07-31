@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import SidebarItem from "../SidebarItem";
 
 describe("<SidebarItem />", () => {
@@ -8,7 +11,7 @@ describe("<SidebarItem />", () => {
             exclude: ["/foo/files", "/foo/settings"],
             icon: "fa-foo",
             link: "/foo/bar",
-            title: "Foobar"
+            title: "Foobar",
         };
     });
 

@@ -1,10 +1,13 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { mapStateToProps, ReferenceDetailTabs } from "../Tabs";
 
 describe("<ReferenceDetailTabs />", () => {
     it("should render", () => {
         const props = {
             id: "foo",
-            otuCount: 203
+            otuCount: 203,
         };
 
         const wrapper = shallow(<ReferenceDetailTabs {...props} />);
@@ -18,14 +21,14 @@ describe("mapStateToProps", () => {
             references: {
                 detail: {
                     id: "bar",
-                    otu_count: 321
-                }
-            }
+                    otu_count: 321,
+                },
+            },
         };
 
         expect(mapStateToProps(state)).toEqual({
             id: "bar",
-            otuCount: 321
+            otuCount: 321,
         });
     });
 });

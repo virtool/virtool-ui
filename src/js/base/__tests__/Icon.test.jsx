@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { Icon } from "../Icon";
 
 describe("<Icon />", () => {
@@ -5,7 +8,7 @@ describe("<Icon />", () => {
 
     beforeEach(() => {
         props = {
-            name: "test"
+            name: "test",
         };
     });
 

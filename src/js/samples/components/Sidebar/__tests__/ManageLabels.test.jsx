@@ -1,9 +1,12 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { shallow } from "enzyme";
 import React from "react";
-import { ManageLabels, mapDispatchToProps } from "../ManageLabels";
 import { BrowserRouter } from "react-router-dom";
-import { getSelectedSamples, getSelectedLabels, getPartiallySelectedLabels } from "../../../selectors";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
+import { getPartiallySelectedLabels, getSelectedLabels, getSelectedSamples } from "../../../selectors";
+import { ManageLabels, mapDispatchToProps } from "../ManageLabels";
 
 const routerRenderWithProviders = ui => {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
@@ -21,31 +24,31 @@ describe("<ManageLabels>", () => {
                     {
                         name: "Foo Sample",
                         id: "foo_sample",
-                        labels: [{ description: "", id: 1, name: "test", color: "#FCA5A5" }]
+                        labels: [{ description: "", id: 1, name: "test", color: "#FCA5A5" }],
                     },
                     {
                         name: "Bar Sample",
                         id: "bar_sample",
                         labels: [
                             { description: "", id: 1, name: "test", color: "#FCA5A5" },
-                            { description: "", id: 2, name: "test2", color: "#FCA5A5" }
-                        ]
-                    }
-                ]
-            }
+                            { description: "", id: 2, name: "test2", color: "#FCA5A5" },
+                        ],
+                    },
+                ],
+            },
         };
         props = {
             allLabels: [
                 { description: "", id: 1, name: "test", color: "#FCA5A5" },
                 { description: "", id: 2, name: "test2", color: "#FCA5A5" },
-                { description: "", id: 3, name: "test3", color: "#FCA5A5" }
+                { description: "", id: 3, name: "test3", color: "#FCA5A5" },
             ],
             selectedSamples: [
                 {
                     name: "Foo Sample",
                     id: "foo_sample",
-                    labels: [{ description: "", id: 1, name: "test", color: "#FCA5A5" }]
-                }
+                    labels: [{ description: "", id: 1, name: "test", color: "#FCA5A5" }],
+                },
             ],
             selectedLabels: {
                 1: {
@@ -53,11 +56,11 @@ describe("<ManageLabels>", () => {
                     id: 1,
                     name: "test",
                     color: "#FCA5A5",
-                    allLabeled: true
-                }
+                    allLabeled: true,
+                },
             },
             partiallySelectedLabels: [],
-            onLabelUpdate: vi.fn()
+            onLabelUpdate: vi.fn(),
         };
     });
 
@@ -65,7 +68,7 @@ describe("<ManageLabels>", () => {
         ...props,
         selectedSamples: getSelectedSamples(state),
         selectedLabels: getSelectedLabels(state),
-        partiallySelectedLabels: getPartiallySelectedLabels(state)
+        partiallySelectedLabels: getPartiallySelectedLabels(state),
     });
 
     it("should be disabled if no labels exist", () => {
@@ -107,16 +110,16 @@ describe("mapDispatchToProps", () => {
             {
                 name: "Foo Sample",
                 id: "foo_sample",
-                labels: [{ description: "", id: 1, name: "test", color: "#FCA5A5" }]
+                labels: [{ description: "", id: 1, name: "test", color: "#FCA5A5" }],
             },
             {
                 name: "Bar Sample",
                 id: "bar_sample",
                 labels: [
                     { description: "", id: 1, name: "test", color: "#FCA5A5" },
-                    { description: "", id: 2, name: "test2", color: "#FCA5A5" }
-                ]
-            }
+                    { description: "", id: 2, name: "test2", color: "#FCA5A5" },
+                ],
+            },
         ];
         selectedLabels = {
             1: {
@@ -124,9 +127,9 @@ describe("mapDispatchToProps", () => {
                 id: 1,
                 name: "test",
                 color: "#FCA5A5",
-                allLabeled: true
+                allLabeled: true,
             },
-            2: { description: "", id: 2, name: "test2", color: "#FCA5A5", allLabeled: false }
+            2: { description: "", id: 2, name: "test2", color: "#FCA5A5", allLabeled: false },
         };
         dispatch = vi.fn();
         onLabelUpdate = mapDispatchToProps(dispatch).onLabelUpdate;
@@ -137,11 +140,11 @@ describe("mapDispatchToProps", () => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { sampleId: "foo_sample", update: { labels: [1, 3] } },
-            type: "UPDATE_SAMPLE_REQUESTED"
+            type: "UPDATE_SAMPLE_REQUESTED",
         });
         expect(dispatch).toHaveBeenCalledWith({
             payload: { sampleId: "bar_sample", update: { labels: [1, 2, 3] } },
-            type: "UPDATE_SAMPLE_REQUESTED"
+            type: "UPDATE_SAMPLE_REQUESTED",
         });
     });
 
@@ -150,7 +153,7 @@ describe("mapDispatchToProps", () => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { sampleId: "foo_sample", update: { labels: [1, 2] } },
-            type: "UPDATE_SAMPLE_REQUESTED"
+            type: "UPDATE_SAMPLE_REQUESTED",
         });
     });
     it("remove label from all samples when it is selected for all", () => {
@@ -158,11 +161,11 @@ describe("mapDispatchToProps", () => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { sampleId: "foo_sample", update: { labels: [] } },
-            type: "UPDATE_SAMPLE_REQUESTED"
+            type: "UPDATE_SAMPLE_REQUESTED",
         });
         expect(dispatch).toHaveBeenCalledWith({
             payload: { sampleId: "bar_sample", update: { labels: [2] } },
-            type: "UPDATE_SAMPLE_REQUESTED"
+            type: "UPDATE_SAMPLE_REQUESTED",
         });
     });
 });

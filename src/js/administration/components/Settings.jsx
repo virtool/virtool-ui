@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 
 import { useFetchAccount } from "../../account/querys";
-import Groups from "../../groups/components/Groups";
+import { Groups } from "../../groups/components/Groups";
 import UserDetail from "../../users/components/Detail";
 import { ManageUsers } from "../../users/components/Users";
 import { mapSettingsStateToProps } from "../mappers";

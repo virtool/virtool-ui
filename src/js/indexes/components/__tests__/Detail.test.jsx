@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { GET_INDEX, GET_INDEX_HISTORY } from "../../../app/actionTypes";
 import { IndexDetail, mapDispatchToProps, mapStateToProps } from "../Detail";
 
@@ -10,20 +13,20 @@ describe("<IndexDetail />", () => {
                 id: "baz",
                 version: 3,
                 created_at: "2018-02-14T17:12:00.000000Z",
-                user: "bob"
+                user: "bob",
             },
             match: {
                 params: {
                     indexId: "baz",
-                    refId: "foo"
-                }
+                    refId: "foo",
+                },
             },
             refDetail: {
                 id: "foo",
-                name: "Foo"
+                name: "Foo",
             },
             onGetIndex: vi.fn(),
-            onGetChanges: vi.fn()
+            onGetChanges: vi.fn(),
         };
     });
 
@@ -59,21 +62,21 @@ describe("mapStateToProps()", () => {
         state = {
             errors: {
                 GET_OTU_ERROR: {
-                    status: 400
-                }
+                    status: 400,
+                },
             },
             indexes: {
                 detail: {
                     id: "bar",
-                    version: 2
-                }
+                    version: 2,
+                },
             },
             references: {
                 detail: {
                     id: "foo",
-                    name: "Foo"
-                }
-            }
+                    name: "Foo",
+                },
+            },
         };
     });
 
@@ -82,19 +85,19 @@ describe("mapStateToProps()", () => {
         expect(result).toEqual({
             error: null,
             detail: state.indexes.detail,
-            refDetail: state.references.detail
+            refDetail: state.references.detail,
         });
     });
 
     it("should return props from state with error", () => {
         state.errors.GET_INDEX_ERROR = {
-            status: 404
+            status: 404,
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({
             error: { status: 404 },
             detail: state.indexes.detail,
-            refDetail: state.references.detail
+            refDetail: state.references.detail,
         });
     });
 });
@@ -112,7 +115,7 @@ describe("mapDispatchToProps()", () => {
         result.onGetIndex(indexId);
         expect(dispatch).toHaveBeenCalledWith({
             type: GET_INDEX.REQUESTED,
-            payload: { indexId }
+            payload: { indexId },
         });
     });
 
@@ -122,7 +125,7 @@ describe("mapDispatchToProps()", () => {
         result.onGetChanges(indexId, 3);
         expect(dispatch).toHaveBeenCalledWith({
             type: GET_INDEX_HISTORY.REQUESTED,
-            payload: { indexId, page: 3 }
+            payload: { indexId, page: 3 },
         });
     });
 });

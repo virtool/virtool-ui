@@ -1,4 +1,5 @@
-import { getIndexes, getActiveIndexId } from "../selectors";
+import { beforeEach, describe, expect, it } from "vitest";
+import { getActiveIndexId, getIndexes } from "../selectors";
 
 describe("getIndexes()", () => {
     let state;
@@ -8,10 +9,10 @@ describe("getIndexes()", () => {
             indexes: {
                 documents: [
                     {
-                        id: "foo"
-                    }
-                ]
-            }
+                        id: "foo",
+                    },
+                ],
+            },
         };
     });
 
@@ -43,25 +44,25 @@ describe("getActiveIndexId()", () => {
                     {
                         id: "foo",
                         ready: true,
-                        has_files: true
+                        has_files: true,
                     },
                     {
                         id: "bar",
                         ready: true,
-                        has_files: false
+                        has_files: false,
                     },
                     {
                         id: "baz",
                         ready: false,
-                        has_files: true
+                        has_files: true,
                     },
                     {
                         id: "pop",
                         ready: false,
-                        has_files: false
-                    }
-                ]
-            }
+                        has_files: false,
+                    },
+                ],
+            },
         };
     });
 

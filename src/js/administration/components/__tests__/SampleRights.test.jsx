@@ -1,7 +1,11 @@
+import { screen } from "@testing-library/react";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { UPDATE_SETTINGS } from "../../../app/actionTypes";
 import { InputSelect } from "../../../base";
 import { mapDispatchToProps, mapStateToProps, SampleRights } from "../SampleRights";
-import { screen } from "@testing-library/react";
 
 describe("<SampleRights />", () => {
     let props;
@@ -12,7 +16,7 @@ describe("<SampleRights />", () => {
             group: "rw",
             all: "rw",
             onChangeSampleGroup: vi.fn(),
-            onChangeRights: vi.fn()
+            onChangeRights: vi.fn(),
         };
     });
 
@@ -44,8 +48,8 @@ describe("<SampleRights />", () => {
         const wrapper = shallow(<SampleRights {...props} />);
         const e = {
             target: {
-                value: "r"
-            }
+                value: "r",
+            },
         };
         wrapper
             .find(InputSelect)
@@ -67,9 +71,9 @@ describe("mapStateToProps", () => {
                     sample_group_read: false,
                     sample_group_write: false,
                     sample_all_read: false,
-                    sample_all_write: false
-                }
-            }
+                    sample_all_write: false,
+                },
+            },
         };
         expected = { group: "", all: "", sampleGroup: "force_choice" };
     });
@@ -82,13 +86,13 @@ describe("mapStateToProps", () => {
         ["all", true, true, "rw"],
         ["all", true, false, "r"],
         ["all", false, true, "w"],
-        ["all", false, false, ""]
+        ["all", false, false, ""],
     ])("should return props when %p rw rights are (%p, %p)", (scope, read, write, result) => {
         state.settings.data[`sample_${scope}_read`] = read;
         state.settings.data[`sample_${scope}_write`] = write;
         expect(mapStateToProps(state)).toEqual({
             ...expected,
-            [scope]: result
+            [scope]: result,
         });
     });
 
@@ -108,7 +112,7 @@ describe("mapDispatchToProps()", () => {
         props.onChangeSampleGroup("force_choice");
         expect(dispatch).toHaveBeenCalledWith({
             type: UPDATE_SETTINGS.REQUESTED,
-            payload: { update: { sample_group: "force_choice" } }
+            payload: { update: { sample_group: "force_choice" } },
         });
     });
 
@@ -120,7 +124,7 @@ describe("mapDispatchToProps()", () => {
         ["all", "rw", true, true],
         ["all", "r", true, false],
         ["all", "w", false, true],
-        ["all", "", false, false]
+        ["all", "", false, false],
     ])("should return onChangeRights in props that works when %s right string is %p", (scope, str, read, write) => {
         props.onChangeRights(scope, str);
         expect(dispatch).toHaveBeenCalledWith({
@@ -128,9 +132,9 @@ describe("mapDispatchToProps()", () => {
             payload: {
                 update: {
                     [`sample_${scope}_read`]: read,
-                    [`sample_${scope}_write`]: write
-                }
-            }
+                    [`sample_${scope}_write`]: write,
+                },
+            },
         });
     });
 });

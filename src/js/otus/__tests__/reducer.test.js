@@ -1,4 +1,5 @@
 import { forEach } from "lodash-es";
+import { describe, expect, it } from "vitest";
 import {
     ADD_ISOLATE,
     ADD_SEQUENCE,
@@ -24,7 +25,7 @@ import {
     WS_INSERT_OTU,
     WS_REMOVE_OTU,
     WS_UPDATE_OTU,
-    WS_UPDATE_STATUS
+    WS_UPDATE_STATUS,
 } from "../../app/actionTypes";
 import reducer, { getActiveIsolate, hideOTUModal, initialState as reducerInitialState, receiveOTU } from "../reducer";
 
@@ -61,7 +62,7 @@ describe("OTUs Reducer:", () => {
             const state = { refId: "foo" };
             const action = {
                 type: WS_INSERT_OTU,
-                payload: { id: "test", reference: { id: "bar" } }
+                payload: { id: "test", reference: { id: "bar" } },
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -73,11 +74,11 @@ describe("OTUs Reducer:", () => {
                 refId: "123abc",
                 documents: [],
                 page: 0,
-                per_page: 3
+                per_page: 3,
             };
             const action = {
                 type: WS_INSERT_OTU,
-                payload: { id: "test", reference: { id: "123abc" } }
+                payload: { id: "test", reference: { id: "123abc" } },
             };
             const result = reducer(state, action);
             expect(result).toEqual({ ...state, documents: [action.payload] });
@@ -89,7 +90,7 @@ describe("OTUs Reducer:", () => {
             const state = { refId: "foo" };
             const action = {
                 type: WS_UPDATE_OTU,
-                payload: { id: "test", reference: { id: "bar" } }
+                payload: { id: "test", reference: { id: "bar" } },
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -99,16 +100,16 @@ describe("OTUs Reducer:", () => {
             const refId = "baz";
             const state = {
                 refId,
-                documents: [{ id: "test-otu", foo: "bar", reference: { id: refId } }]
+                documents: [{ id: "test-otu", foo: "bar", reference: { id: refId } }],
             };
             const action = {
                 type: WS_UPDATE_OTU,
-                payload: { id: "test-otu", foo: "baz", reference: { id: refId } }
+                payload: { id: "test-otu", foo: "baz", reference: { id: refId } },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 refId,
-                documents: [{ id: "test-otu", foo: "baz", reference: { id: refId } }]
+                documents: [{ id: "test-otu", foo: "baz", reference: { id: refId } }],
             });
         });
     });
@@ -116,11 +117,11 @@ describe("OTUs Reducer:", () => {
     describe("should handle WS_REMOVE_OTU", () => {
         it("no result if otu not found", () => {
             const state = {
-                documents: [{ id: "foo" }]
+                documents: [{ id: "foo" }],
             };
             const action = {
                 type: WS_REMOVE_OTU,
-                data: ["bar"]
+                data: ["bar"],
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -128,11 +129,11 @@ describe("OTUs Reducer:", () => {
 
         it("otherwise remove matching otu", () => {
             const state = {
-                documents: [{ id: "foo" }]
+                documents: [{ id: "foo" }],
             };
             const action = {
                 type: WS_REMOVE_OTU,
-                payload: ["foo"]
+                payload: ["foo"],
             };
             const result = reducer(state, action);
             expect(result).toEqual({ documents: [] });
@@ -159,11 +160,11 @@ describe("OTUs Reducer:", () => {
         const state = { documents: [], page: 1 };
         const action = {
             type: FIND_OTUS.SUCCEEDED,
-            payload: { documents: [{ id: "test" }], page: 2 }
+            payload: { documents: [{ id: "test" }], page: 2 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            ...action.payload
+            ...action.payload,
         });
     });
 
@@ -181,7 +182,7 @@ describe("OTUs Reducer:", () => {
         expect(result).toEqual({
             ...hideOTUModal(state),
             detail: null,
-            activeIsolateId: null
+            activeIsolateId: null,
         });
     });
 
@@ -192,7 +193,7 @@ describe("OTUs Reducer:", () => {
         expect(result).toEqual({
             ...hideOTUModal(state),
             detail: null,
-            activeIsolateId: null
+            activeIsolateId: null,
         });
     });
 
@@ -206,21 +207,21 @@ describe("OTUs Reducer:", () => {
             REMOVE_SEQUENCE.SUCCEEDED,
             SET_ISOLATE_AS_DEFAULT.SUCCEEDED,
             ADD_ISOLATE.SUCCEEDED,
-            REMOVE_ISOLATE.SUCCEEDED
+            REMOVE_ISOLATE.SUCCEEDED,
         ];
 
         forEach(actionList, actionType => {
             it(`should handle ${actionType}`, () => {
                 const action = {
                     type: actionType,
-                    payload: { id: "test-otu", isolates: [] }
+                    payload: { id: "test-otu", isolates: [] },
                 };
                 const result = reducer({}, action);
                 expect(result).toEqual({
                     detail: action.payload,
                     ...hideOTUModal({}),
                     activeIsolate: null,
-                    activeIsolateId: null
+                    activeIsolateId: null,
                 });
             });
         });
@@ -235,7 +236,7 @@ describe("OTUs Reducer:", () => {
     it("should handle GET_OTU_HISTORY_SUCCEEDED", () => {
         const action = {
             type: GET_OTU_HISTORY.SUCCEEDED,
-            payload: { foo: "bar" }
+            payload: { foo: "bar" },
         };
         const result = reducer({}, action);
         expect(result).toEqual({ detailHistory: { foo: "bar" } });
@@ -244,21 +245,21 @@ describe("OTUs Reducer:", () => {
     it("should handle REVERT_SUCCEEDED", () => {
         const action = {
             type: REVERT.SUCCEEDED,
-            payload: { otu: { isolates: [] }, history: {} }
+            payload: { otu: { isolates: [] }, history: {} },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
             detail: { isolates: [] },
             detailHistory: {},
             activeIsolate: null,
-            activeIsolateId: null
+            activeIsolateId: null,
         });
     });
 
     it("should handle UPLOAD_IMPORT.SUCCEEDED", () => {
         const action = {
             type: UPLOAD_IMPORT.SUCCEEDED,
-            payload: { foo: "bar" }
+            payload: { foo: "bar" },
         };
         const result = reducer({}, action);
         expect(result).toEqual({ importData: { foo: "bar", inProgress: false } });
@@ -268,13 +269,13 @@ describe("OTUs Reducer:", () => {
         const state = { detail: { isolates: [{ id: "test-isolate" }] } };
         const action = {
             type: SELECT_ISOLATE,
-            payload: { isolateId: "test-isolate" }
+            payload: { isolateId: "test-isolate" },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
             activeIsolate: { id: "test-isolate" },
-            activeIsolateId: "test-isolate"
+            activeIsolateId: "test-isolate",
         });
     });
 
@@ -314,7 +315,7 @@ describe("OTUs Reducer:", () => {
             editIsolate: true,
             remove: false,
             removeIsolate: false,
-            removeSequence: "foo"
+            removeSequence: "foo",
         };
         const action = { type: HIDE_OTU_MODAL };
         const result = reducer(state, action);
@@ -323,7 +324,7 @@ describe("OTUs Reducer:", () => {
             editIsolate: false,
             remove: false,
             removeIsolate: false,
-            removeSequence: false
+            removeSequence: false,
         });
     });
 });
@@ -336,7 +337,7 @@ describe("Helper functions:", () => {
             expect(result).toEqual({
                 ...state,
                 activeIsolate: null,
-                activeIsolateId: null
+                activeIsolateId: null,
             });
         });
 
@@ -346,14 +347,14 @@ describe("Helper functions:", () => {
             expect(result).toEqual({
                 ...state,
                 activeIsolate: { id: "isolate" },
-                activeIsolateId: "isolate"
+                activeIsolateId: "isolate",
             });
         });
     });
 
     it("receiveOTU(): replace state.detail with action data and reformat isolates", () => {
         const action = {
-            isolates: [{ id: "123abc", sourceType: "isolate", sourceName: "tester" }]
+            isolates: [{ id: "123abc", sourceType: "isolate", sourceName: "tester" }],
         };
         const result = receiveOTU({}, action);
         expect(result).toEqual({
@@ -361,12 +362,12 @@ describe("Helper functions:", () => {
                 id: "123abc",
                 sourceType: "isolate",
                 sourceName: "tester",
-                name: "Isolate tester"
+                name: "Isolate tester",
             },
             activeIsolateId: "123abc",
             detail: {
-                isolates: [{ ...action.isolates[0], name: "Isolate tester" }]
-            }
+                isolates: [{ ...action.isolates[0], name: "Isolate tester" }],
+            },
         });
     });
 });

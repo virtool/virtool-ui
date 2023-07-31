@@ -1,15 +1,18 @@
+import userEvent from "@testing-library/user-event";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
+import React from "react";
 import { combineReducers } from "redux";
-import { attachResizeObserver } from "../../../../../tests/setupTests";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { attachResizeObserver, createGenericReducer, renderWithRouter } from "../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../administration/types";
 import { APIKeys } from "../API";
-
-const createReducer = (state, history) =>
-    combineReducers({
+function createReducer(state, history) {
+    return combineReducers({
         account: createGenericReducer(state.account),
         router: connectRouter(history),
     });
+}
 
 describe("<API />", () => {
     let props;

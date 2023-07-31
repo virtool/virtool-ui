@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<IndexDetail /> > should render <LoadingPlaceholder /> when index or reference detail is null 1`] = `<LoadingPlaceholder />`;
 

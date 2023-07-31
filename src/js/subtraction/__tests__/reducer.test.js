@@ -1,10 +1,11 @@
+import { describe, expect, it } from "vitest";
 import {
-    WS_INSERT_SUBTRACTION,
-    WS_UPDATE_SUBTRACTION,
-    WS_REMOVE_SUBTRACTION,
+    EDIT_SUBTRACTION,
     FIND_SUBTRACTIONS,
     GET_SUBTRACTION,
-    EDIT_SUBTRACTION
+    WS_INSERT_SUBTRACTION,
+    WS_REMOVE_SUBTRACTION,
+    WS_UPDATE_SUBTRACTION,
 } from "../../app/actionTypes";
 import reducer, { initialState } from "../reducer";
 
@@ -16,7 +17,7 @@ describe("Subtraction Reducer", () => {
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const result = reducer(initialState, action);
         expect(result).toEqual(initialState);
@@ -26,25 +27,25 @@ describe("Subtraction Reducer", () => {
         const action = {
             type: WS_INSERT_SUBTRACTION,
             payload: {
-                id: "foo"
-            }
+                id: "foo",
+            },
         };
 
         it("inserts document if documents empty", () => {
             const state = { documents: null };
             const result = reducer(state, action);
             expect(result).toEqual({
-                documents: [{ id: "foo" }]
+                documents: [{ id: "foo" }],
             });
         });
 
         it("inserts document if documents not empty", () => {
             const state = {
-                documents: [{ id: "bar" }]
+                documents: [{ id: "bar" }],
             };
             const result = reducer(state, action);
             expect(result).toEqual({
-                documents: [{ id: "bar" }, { id: "foo" }]
+                documents: [{ id: "bar" }, { id: "foo" }],
             });
         });
     });
@@ -54,16 +55,16 @@ describe("Subtraction Reducer", () => {
             documents: [
                 {
                     id: "foo",
-                    ready: false
-                }
-            ]
+                    ready: false,
+                },
+            ],
         };
         const action = {
             type: WS_UPDATE_SUBTRACTION,
             payload: {
                 id: "foo",
-                ready: true
-            }
+                ready: true,
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({ documents: [{ ...action.payload }] });
@@ -73,28 +74,28 @@ describe("Subtraction Reducer", () => {
         const state = {
             documents: [
                 {
-                    id: "foo"
-                }
-            ]
+                    id: "foo",
+                },
+            ],
         };
         const action = {
             type: WS_REMOVE_SUBTRACTION,
-            payload: ["foo"]
+            payload: ["foo"],
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            documents: []
+            documents: [],
         });
     });
 
     it("should handle FIND_SUBTRACTIONS_REQUESTED", () => {
         const action = {
             type: FIND_SUBTRACTIONS.REQUESTED,
-            payload: { term: "foo", page: 5 }
+            payload: { term: "foo", page: 5 },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            term: action.payload.term
+            term: action.payload.term,
         });
     });
 
@@ -104,25 +105,25 @@ describe("Subtraction Reducer", () => {
             payload: {
                 documents: [],
                 page: 1,
-                page_count: 1
-            }
+                page_count: 1,
+            },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
             documents: [],
             page: 1,
-            page_count: 1
+            page_count: 1,
         });
     });
 
     it("should handle GET_SUBTRACTION_REQUESTED", () => {
         const action = {
             type: GET_SUBTRACTION.REQUESTED,
-            payload: { subtractionId: "foo" }
+            payload: { subtractionId: "foo" },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            detail: null
+            detail: null,
         });
     });
 
@@ -130,21 +131,21 @@ describe("Subtraction Reducer", () => {
         const action = {
             type: GET_SUBTRACTION.SUCCEEDED,
             payload: {
-                id: "foo"
-            }
+                id: "foo",
+            },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
             detail: {
-                id: "foo"
-            }
+                id: "foo",
+            },
         });
     });
 
     it("should handle UPDATE_SUBTRACTION_SUCCEEDED", () => {
         const action = {
             type: EDIT_SUBTRACTION.SUCCEEDED,
-            payload: { foo: "bar" }
+            payload: { foo: "bar" },
         };
         const result = reducer({}, action);
         expect(result).toEqual({ detail: action.payload });
