@@ -24,7 +24,7 @@ const ProgressTag = styled.span`
     display: flex;
     align-items: center;
     svg {
-        margin-left: 5px;
+        margin-right: 5px;
     }
 `;
 
