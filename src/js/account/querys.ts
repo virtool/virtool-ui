@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { FetchAccount } from "./api";
+import { fetchAccount } from "./api";
 import { Account } from "./types";
 
 /**
@@ -15,5 +15,5 @@ export const accountKeys = {
  * @returns UseQueryResult object containing the account data
  */
 export const useFetchAccount = () => {
-    return useQuery<Account>([accountKeys.all], () => FetchAccount());
+    return useQuery<Account>([accountKeys.all], () => fetchAccount());
 };
