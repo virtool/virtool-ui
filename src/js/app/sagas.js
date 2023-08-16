@@ -5,7 +5,6 @@ import { get as getAccountAPI } from "../account/api";
 import { watchAccount } from "../account/sagas";
 import { watchSettings } from "../administration/sagas";
 import { watchAnalyses } from "../analyses/sagas";
-import { watchCaches } from "../caches/sagas";
 import { watchDev } from "../dev/sagas";
 import { watchFiles } from "../files/sagas";
 import { watchForm } from "../forms/sagas";
@@ -61,7 +60,7 @@ export function* watchRouter() {
 }
 
 /**
- * Yields all of the sagas in the application. Intended for use with the ``react-saga`` middleware.
+ * Yields all the sagas in the application. Intended for use with the ``react-saga`` middleware.
  *
  * @generator
  */
@@ -69,7 +68,6 @@ function* rootSaga() {
     yield all([
         watchAccount(),
         watchAnalyses(),
-        watchCaches(),
         watchDev(),
         watchFiles(),
         watchSubtraction(),
