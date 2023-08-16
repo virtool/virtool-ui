@@ -1,13 +1,20 @@
 import { get } from "lodash-es";
 import { DefaultTheme } from "styled-components";
 
-export const colors = ["blue", "green", "grey", "orange", "purple", "red"];
+export enum sizes {
+    xs = "xs",
+    sm = "sm",
+    md = "md",
+    lg = "lg",
+    xl = "xl",
+    xxl = "xxl",
+}
 
 export const theme: DefaultTheme = {
     borderRadius: {
         sm: "3px",
         md: "6px",
-        lg: "10px"
+        lg: "10px",
     },
     boxShadow: {
         xs: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
@@ -15,7 +22,7 @@ export const theme: DefaultTheme = {
         md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
         lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
         input: "inset 0 1px 1px rgba(0, 0, 0, 0.075);",
-        inset: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)"
+        inset: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
     },
     color: {
         black: "#000000",
@@ -60,10 +67,10 @@ export const theme: DefaultTheme = {
         yellowLight: "#FFF082",
         yellowLightest: "#FFFBD5",
         yellowDark: "#DBBC23",
-        yellowDarkest: "#B79A18"
+        yellowDarkest: "#B79A18",
     },
     fontFamily: {
-        monospace: "ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace"
+        monospace: "ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace",
     },
     fontSize: {
         xs: "10px",
@@ -71,31 +78,34 @@ export const theme: DefaultTheme = {
         md: "14px",
         lg: "16px",
         xl: "24px",
-        xxl: "32px"
+        xxl: "32px",
     },
     fontWeight: {
         normal: 400,
         thick: 500,
-        bold: 700
+        bold: 700,
     },
     gap: {
         column: "15px",
-        text: "5px"
+        text: "5px",
     },
     ring: {
         sm: "0 0 0 2px",
-        md: "0 0 0 5px"
-    }
+        md: "0 0 0 5px",
+    },
 };
 
-export const getRing =
-    color =>
-    ({ theme }) =>
-        `${theme.ring.sm} ${theme.color[color]}`;
+export function getRing(color) {
+    return ({ theme }) => `${theme.ring.sm} ${theme.color[color]}`;
+}
 
-export const getActiveShadow = ({ active, theme }) => (active ? `inset 3px 0 0 ${theme.color.primary}` : "none");
+export function getActiveShadow({ active, theme }) {
+    return active ? `inset 3px 0 0 ${theme.color.primary}` : "none";
+}
 
-export const getBorder = ({ theme }) => `1px solid ${theme.color.greyLight}`;
+export function getBorder({ theme }) {
+    return `1px solid ${theme.color.greyLight}`;
+}
 
 export type getColorProps = {
     color?: string;
@@ -106,22 +116,20 @@ export function getColor({ color, theme }: getColorProps) {
     return get(theme, ["color", color], "inherit");
 }
 
-export const getFontSize =
-    size =>
-    ({ theme }) =>
-        theme.fontSize[size];
+export function getFontSize(size) {
+    return ({ theme }) => theme.fontSize[size];
+}
 
-export const getFontWeight =
-    weight =>
-    ({ theme }) =>
-        theme.fontWeight[weight];
+export function getFontWeight(weight) {
+    return ({ theme }) => theme.fontWeight[weight];
+}
 
 export const border = getBorder;
 
 export const borderRadius = {
     sm: ({ theme }) => theme.borderRadius.sm,
     md: ({ theme }) => theme.borderRadius.md,
-    lg: ({ theme }) => theme.borderRadius.lg
+    lg: ({ theme }) => theme.borderRadius.lg,
 };
 
 export const boxShadow = {
@@ -130,11 +138,11 @@ export const boxShadow = {
     md: ({ theme }) => theme.boxShadow.md,
     lg: ({ theme }) => theme.boxShadow.lg,
     input: ({ theme }) => theme.boxShadow.input,
-    inset: ({ theme }) => theme.boxShadow.inset
+    inset: ({ theme }) => theme.boxShadow.inset,
 };
 
 export const fontWeight = {
     normal: ({ theme }) => theme.fontWeight.normal,
     thick: ({ theme }) => theme.fontWeight.thick,
-    bold: ({ theme }) => theme.fontWeight.bold
+    bold: ({ theme }) => theme.fontWeight.bold,
 };

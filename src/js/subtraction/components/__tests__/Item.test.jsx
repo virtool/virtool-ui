@@ -1,14 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { mapStateToProps, SubtractionItem, SubtractionItemIcon } from "../Item";
-
-describe("<SubtractionItemIcon />", () => {
-    it.each([true, false])("should render when [ready=%p]", ready => {
-        const wrapper = shallow(<SubtractionItemIcon ready={ready} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
+import { mapStateToProps, SubtractionItem } from "../Item";
 
 describe("<SubtractionItem />", () => {
     let props;

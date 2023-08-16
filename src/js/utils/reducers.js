@@ -1,4 +1,4 @@
-import { includes, map, reject, sortBy, unionBy } from "lodash-es";
+import { forEach, includes, map, reject, sortBy, unionBy } from "lodash-es";
 
 export const updateDocuments = (state, payload, sortKey, sortReverse) => {
     const existing = payload.page === 1 ? [] : state.documents || [];
@@ -68,3 +68,25 @@ export const remove = (state, payload) => {
         documents: reject(state.documents, ({ id }) => includes(payload, id)),
     };
 };
+
+/**
+ * Update the job fields of documents in state with matching job ids.
+ *
+ * @param state {object} the current reducer state
+ * @param payload {object} the job data to update
+ * @returns {object} the updated reducer state
+ */
+export function updateJobs(state, payload) {
+    if (!state.documents) {
+        return state;
+    }
+
+    forEach(state.documents, document => {
+        if (document.job.id === payload.id) {
+            document.job = {
+                ...document.job,
+                ...payload,
+            };
+        }
+    });
+}
