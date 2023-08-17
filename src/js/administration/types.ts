@@ -18,7 +18,7 @@ export enum AdministratorRoles {
     BASE = "base",
 }
 
-export type permissionQueryResult = {
+export type PermissionQueryResult = {
     hasPermission: boolean | null;
     isLoading: boolean;
 };

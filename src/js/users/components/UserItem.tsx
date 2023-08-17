@@ -43,11 +43,11 @@ const AdminTagContainer = styled(UserContainer)`
     text-transform: capitalize;
 `;
 
-function AdminTag({ administrator_role }) {
+function AdminTag({ administratorRole }) {
     return (
         <AdminTagContainer>
             <Label color="purple">
-                <Icon name="user-shield" /> {administrator_role} Administrator
+                <Icon name="user-shield" /> {administratorRole} Administrator
             </Label>
         </AdminTagContainer>
     );
@@ -66,13 +66,13 @@ function EditButton({ id }) {
  *
  * @param id - The user's id
  * @param handle - The user's handle
- * @param administrator_role - The user's administrator role
+ * @param administratorRole - The user's administrator role
  * @returns A single user element
  */
 
-export function UserItem({ id, handle, administrator_role }) {
+export function UserItem({ id, handle, administratorRole }) {
     const { hasPermission: canEdit } = useCheckAdminRole(
-        administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+        administratorRole === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
 
     const edit = canEdit ? (
@@ -87,7 +87,7 @@ export function UserItem({ id, handle, administrator_role }) {
                 <InitialIcon size="lg" handle={handle} />
                 <strong>{handle}</strong>
             </UserContainer>
-            {administrator_role && <AdminTag administrator_role={administrator_role} />}
+            {administratorRole && <AdminTag administratorRole={administratorRole} />}
             {edit}
         </StyledUserItem>
     );

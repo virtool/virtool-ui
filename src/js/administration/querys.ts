@@ -6,7 +6,7 @@ import { AdministratorRole, AdministratorRoles } from "./types";
 /**
  * Factory object for generating settings query keys
  */
-export const settingsKeys = {
+export const settingsQueryKeys = {
     all: () => ["settings"] as const,
 };
 
@@ -16,10 +16,10 @@ export const settingsKeys = {
  * @returns The API settings.
  */
 export function useFetchSettings() {
-    return useQuery(settingsKeys.all(), fetchSettings);
+    return useQuery(settingsQueryKeys.all(), fetchSettings);
 }
 
-export const roleKeys = {
+export const roleQueryKeys = {
     all: () => ["roles"] as const,
 };
 
@@ -29,13 +29,13 @@ export const roleKeys = {
  * @returns A list of valid administrator roles
  */
 export const useGetAdministratorRoles = () => {
-    return useQuery<AdministratorRole[]>(roleKeys.all(), fetchAdministratorRoles);
+    return useQuery<AdministratorRole[]>(roleQueryKeys.all(), fetchAdministratorRoles);
 };
 
 /**
  * Factory object for generating user query keys
  */
-export const userKeys = {
+export const userQueryKeys = {
     all: () => ["users"] as const,
     lists: () => ["users", "list"] as const,
     list: (filters: Array<string | number | boolean>) => ["users", "list", ...filters] as const,
@@ -56,7 +56,7 @@ export const userKeys = {
  */
 export const useFindUsers = (page: number, per_page: number, term: string, administrator?: boolean) => {
     return useQuery<UserResponse>(
-        userKeys.list([page, per_page, term, administrator]),
+        userQueryKeys.list([page, per_page, term, administrator]),
         () => findUsers(page, per_page, term, administrator),
         {
             keepPreviousData: true,
@@ -74,7 +74,7 @@ export const useFindUsers = (page: number, per_page: number, term: string, admin
  */
 export const useInfiniteFindUsers = (per_page: number, term: string, administrator?: boolean) => {
     return useInfiniteQuery<UserResponse>(
-        userKeys.infiniteList([per_page, term, administrator]),
+        userQueryKeys.infiniteList([per_page, term, administrator]),
         ({ pageParam }) => findUsers(pageParam, per_page, term, administrator),
         {
             getNextPageParam: lastPage => {
@@ -98,7 +98,7 @@ export const useSetAdministratorRole = () => {
         ({ role, user_id }: { role: AdministratorRoles; user_id: string }) => setAdministratorRole(role, user_id),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(userKeys.all);
+                queryClient.invalidateQueries(userQueryKeys.all);
             },
         },
     );

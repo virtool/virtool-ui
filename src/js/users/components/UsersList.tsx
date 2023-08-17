@@ -7,7 +7,7 @@ import { User } from "../types";
 import { UserItem } from "./UserItem";
 
 function renderRow(item: User) {
-    return <UserItem key={item.id} id={item.id} handle={item.handle} administrator_role={item.administrator_role} />;
+    return <UserItem key={item.id} id={item.id} handle={item.handle} administratorRole={item.administrator_role} />;
 }
 
 type UsersListProps = {

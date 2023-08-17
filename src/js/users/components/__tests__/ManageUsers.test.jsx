@@ -10,12 +10,13 @@ import { createGenericReducer, renderWithRouter } from "../../../../tests/setupT
 import { AdministratorRoles } from "../../../administration/types";
 import { ManageUsers } from "../ManageUsers";
 
-const createReducer = (state, history) =>
-    combineReducers({
+function createReducer(state, history) {
+    return combineReducers({
         router: connectRouter(history),
         users: createGenericReducer(state.users),
         settings: createGenericReducer(state.settings),
     });
+}
 
 describe("<ManageUsers />", () => {
     let history;

@@ -1,5 +1,5 @@
 import { useFetchAccount } from "../account/querys";
-import { AdministratorRoles, permissionQueryResult } from "./types";
+import { AdministratorRoles, PermissionQueryResult } from "./types";
 import { hasSufficientAdminRole } from "./utils";
 
 /**
@@ -8,7 +8,7 @@ import { hasSufficientAdminRole } from "./utils";
  * @param requiredRole - The required role to check against.
  * @returns Whether the user has the required role.
  */
-export function useCheckAdminRole(requiredRole: AdministratorRoles): permissionQueryResult {
+export function useCheckAdminRole(requiredRole: AdministratorRoles): PermissionQueryResult {
     const { data: account, isLoading } = useFetchAccount();
     return {
         hasPermission: account ? hasSufficientAdminRole(requiredRole, account.administrator_role) : null,
