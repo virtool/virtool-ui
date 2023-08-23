@@ -24,7 +24,10 @@ type SampleItemWorkflowTagsProps = {
 };
 
 /**
- * Display workflow tags for a sample
+ * Workflow tags for a sample item
+ *
+ * The tags show the state of every analysis workflow associated with the sample.
+ *
  *
  * @param id - the sample's id
  * @param workflows - the workflows object for the sample

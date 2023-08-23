@@ -11,9 +11,9 @@ const StyledSampleItemWorkflowTagNone = styled(BaseWorkflowTag)`
 `;
 
 /**
- * Display a "no analyses" tag.
+ * A workflow tag for showing that a sample item has no analyses.
  *
- * @returns A tag for a sample item with no analyses.
+ * @returns A workflow tag for a sample item with no analyses.
  */
 export function WorkflowTagNone() {
     return (

@@ -10,11 +10,11 @@ type SampleItemWorkflowTagProps = {
 };
 
 /**
- * Display a workflow tag
+ * An inline tag for displaying the current state of a workflow.
  *
  * @param displayName - the display name of the workflow
  * @param workflowState - current state of the workflow
- * @returns A workflow tag
+ * @returns A tag displaying the state of a workflow
  */
 export function WorkflowTag({ displayName, workflowState }: SampleItemWorkflowTagProps) {
     return (

@@ -7,7 +7,7 @@
  */
 
 /**
- * Collection of all workflow states that can be associated with a sample.
+ * All workflow states.
  */
 export enum WorkflowState {
     COMPLETE = "complete",
@@ -17,7 +17,7 @@ export enum WorkflowState {
 }
 
 /**
- * Collection of all types of workflows and their state associated with a sample
+ * All workflow states for a sample.
  */
 export type SampleWorkflows = {
     aodp: WorkflowState;

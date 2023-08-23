@@ -10,7 +10,7 @@ const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`
 `;
 
 /**
- * Display a stylized link to the analyses page for a sample.
+ * A link to the analyses page which is visually consistent with workflow tags.
  *
  * @param id - the sample id
  * @returns A stylized link to the analyses page for a sample.
