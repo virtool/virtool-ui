@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 import { UserResponse } from "../users/types";
 import { fetchAdministratorRoles, fetchSettings, findUsers, setAdministratorRole } from "./api";
-import { AdministratorRole, AdministratorRoles } from "./types";
+import { AdministratorRole, AdministratorRoles, Settings } from "./types";
 
 /**
  * Factory object for generating settings query keys
@@ -16,7 +16,7 @@ export const settingsQueryKeys = {
  * @returns The API settings.
  */
 export function useFetchSettings() {
-    return useQuery(settingsQueryKeys.all(), fetchSettings);
+    return useQuery<Settings>(settingsQueryKeys.all(), fetchSettings);
 }
 
 export const roleQueryKeys = {

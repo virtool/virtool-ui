@@ -6,8 +6,9 @@ import CreateUser from "./Create";
 import { UsersList } from "./UsersList";
 
 /**
- * The base user management view
- * @returns - User management view component
+ * User management view. A list of editable users and tools for sorting through and creating users.
+ *
+ * @returns The user management view
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");

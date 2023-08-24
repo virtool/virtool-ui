@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { getFontWeight } from "../../app/theme";
-import { Box, ContainerNarrow, LoadingPlaceholder, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Box, ContainerNarrow, LegacyScrollList, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findJobs } from "../actions";
 import { getJobCountsTotal } from "../selectors";
 import { JobFilters } from "./Filters/Filters";
@@ -54,7 +54,7 @@ export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, 
         );
     } else {
         inner = (
-            <ScrollList
+            <LegacyScrollList
                 documents={jobs}
                 page={page}
                 pageCount={page_count}
@@ -87,13 +87,13 @@ export const mapStateToProps = state => ({
     jobs: state.jobs.documents,
     noJobs: getJobCountsTotal(state) === 0,
     canCancel: checkAdminRoleOrPermission(state, "cancel_job"),
-    canArchive: checkAdminRoleOrPermission(state, "remove_job")
+    canArchive: checkAdminRoleOrPermission(state, "remove_job"),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (states, page) => {
         dispatch(findJobs(states, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobsList);

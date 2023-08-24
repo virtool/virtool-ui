@@ -19,9 +19,9 @@ enum AdministratorPermissionsLevel {
  * @param userRole - The administrator role of the user
  */
 
-export const hasSufficientAdminRole = (requiredRole: AdministratorRoles, userRole: AdministratorRoles): boolean => {
+export function hasSufficientAdminRole(requiredRole: AdministratorRoles, userRole: AdministratorRoles): boolean {
     return AdministratorPermissionsLevel[userRole] <= AdministratorPermissionsLevel[requiredRole];
-};
+}
 
 /**
  * Permissions granted to each administrator role

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Badge, LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, LegacyScrollList, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findHmms } from "../actions";
 import { getTerm } from "../selectors";
 import HMMInstaller from "./HMMInstaller";
@@ -33,7 +33,7 @@ export class HMMList extends React.Component {
 
             if (this.props.documents.length) {
                 list = (
-                    <ScrollList
+                    <LegacyScrollList
                         documents={this.props.documents}
                         onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
                         page={this.props.page}

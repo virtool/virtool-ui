@@ -1,5 +1,5 @@
 /**
- * Defines methods used for calling account API endpoints.
+ * Functions for requesting account data for the current user from backend
  *
  * @module account/api
  */
@@ -7,9 +7,10 @@
 import { Response } from "superagent";
 import { Request } from "../app/request";
 import { Permissions } from "../groups/types";
+import { Account } from "./types";
 
 /**
- * Gets the complete data for the current account.
+ * Gets complete account data for the current user.
  *
  * @returns A promise resolving to a response containing the
  * current user's account data.
@@ -121,8 +122,18 @@ export function removeAPIKey({ keyId }: { keyId: string }): Promise<Response> {
  * @param password - The password to log in with
  * @param remember - Whether the sessions should be remembered for a
  * longer period of time
+ * @returns A promise which resolves to a response indicating if the users
+ * password must be reset and required information if it needs to be.
  */
-export function login({ username, password, remember }: { username: string; password: string; remember: boolean }) {
+export function login({
+    username,
+    password,
+    remember,
+}: {
+    username: string;
+    password: string;
+    remember: boolean;
+}): Promise<Response> {
     return Request.post("/account/login").send({ username, password, remember });
 }
 
@@ -153,7 +164,7 @@ export function resetPassword({ password, resetCode }: { password: string; reset
  *
  * @returns A Promise resolving to the current user's account data
  */
-export function fetchAccount() {
+export function fetchAccount(): Promise<Account> {
     return Request.get("/account")
         .query()
         .then(response => response.body);

@@ -43,7 +43,17 @@ const AdminTagContainer = styled(UserContainer)`
     text-transform: capitalize;
 `;
 
-function AdminTag({ administratorRole }) {
+type AdministratorTagProps = {
+    administratorRole: AdministratorRoles;
+};
+
+/**
+ * An inline tag indicating a user's administrator role
+ *
+ * @param administratorRole - The user's administrator role
+ * @returns An inline tag indicating a user's administrator role
+ */
+function AdministratorTag({ administratorRole }: AdministratorTagProps) {
     return (
         <AdminTagContainer>
             <Label color="purple">
@@ -53,13 +63,25 @@ function AdminTag({ administratorRole }) {
     );
 }
 
-function EditButton({ id }) {
+/**
+ * An inline button linking to a user's detailed view
+ *
+ * @param id - The user's id
+ * @returns An button linking to a user's detailed view
+ */
+function EditButton({ id }: { id: string }): JSX.Element {
     return (
         <StyledButtonSmall color="grey" as={Link} to={`users/${id}`}>
             <Icon name="pen" /> <span>Edit</span>
         </StyledButtonSmall>
     );
 }
+
+type UserItemProps = {
+    id: string;
+    handle: string;
+    administratorRole: AdministratorRoles;
+};
 
 /**
  * A single user element for use in a list
@@ -69,8 +91,7 @@ function EditButton({ id }) {
  * @param administratorRole - The user's administrator role
  * @returns A single user element
  */
-
-export function UserItem({ id, handle, administratorRole }) {
+export function UserItem({ id, handle, administratorRole }: UserItemProps): JSX.Element {
     const { hasPermission: canEdit } = useCheckAdminRole(
         administratorRole === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
@@ -87,7 +108,7 @@ export function UserItem({ id, handle, administratorRole }) {
                 <InitialIcon size="lg" handle={handle} />
                 <strong>{handle}</strong>
             </UserContainer>
-            {administratorRole && <AdminTag administratorRole={administratorRole} />}
+            {administratorRole && <AdministratorTag administratorRole={administratorRole} />}
             {edit}
         </StyledUserItem>
     );

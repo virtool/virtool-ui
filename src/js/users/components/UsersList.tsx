@@ -2,7 +2,7 @@ import { flatMap } from "lodash-es";
 import React from "react";
 import { useInfiniteFindUsers } from "../../administration/querys";
 import { LoadingPlaceholder, NoneFoundBox } from "../../base";
-import { StreamlinedScrollList } from "../../base/ScrollList";
+import { ScrollList } from "../../base/ScrollList";
 import { User } from "../types";
 import { UserItem } from "./UserItem";
 
@@ -32,7 +32,7 @@ export function UsersList({ term }: UsersListProps) {
 
     if (items.length) {
         return (
-            <StreamlinedScrollList
+            <ScrollList
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}

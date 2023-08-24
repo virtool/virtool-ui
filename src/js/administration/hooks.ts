@@ -1,6 +1,11 @@
 import { useFetchAccount } from "../account/querys";
-import { AdministratorRoles, PermissionQueryResult } from "./types";
+import { AdministratorRoles } from "./types";
 import { hasSufficientAdminRole } from "./utils";
+
+export type PermissionQueryResult = {
+    hasPermission: boolean | null;
+    isLoading: boolean;
+};
 
 /**
  * Check the logged-in user has sufficient admin role
