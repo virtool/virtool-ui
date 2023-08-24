@@ -1,11 +1,11 @@
-import { get } from "lodash-es";
-import { DefaultTheme } from "styled-components";
-
 /**
- * The default theme and supporting functions
+ * Provides the default theme for the UI and supporting functions
  *
  * @module app/theme
  */
+
+import { get } from "lodash-es";
+import { DefaultTheme } from "styled-components";
 
 /**
  * The default named sizes for theme elements
