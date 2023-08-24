@@ -1,6 +1,15 @@
 import { get } from "lodash-es";
 import { DefaultTheme } from "styled-components";
 
+/**
+ * The default theme and supporting functions
+ *
+ * @module app/theme
+ */
+
+/**
+ * The default named sizes for theme elements
+ */
 export enum sizes {
     xs = "xs",
     sm = "sm",
@@ -10,6 +19,9 @@ export enum sizes {
     xxl = "xxl",
 }
 
+/**
+ * The default theme for the UI
+ */
 export const theme: DefaultTheme = {
     borderRadius: {
         sm: "3px",
@@ -95,14 +107,33 @@ export const theme: DefaultTheme = {
     },
 };
 
-export function getRing(color) {
-    return ({ theme }) => `${theme.ring.sm} ${theme.color[color]}`;
+/**
+ * CSS for rendering a solid ring around an element
+ *
+ * @param color - the color of the ring
+ * @returns a callable for formatting a solid ring of the correct color
+ */
+export function getRing(color: string) {
+    return ({ theme }: { theme: DefaultTheme }) => `${theme.ring.sm} ${theme.color[color]}`;
 }
 
-export function getActiveShadow({ active, theme }) {
+/**
+ * Drop shadow that only displays when an element is active
+ *
+ * @param active - whether the element is active
+ * @param theme - the theme to use
+ * @returns css for rendering a dropshadow when active
+ */
+export function getActiveShadow({ active, theme }: { active: boolean; theme: DefaultTheme }) {
     return active ? `inset 3px 0 0 ${theme.color.primary}` : "none";
 }
 
+/**
+ * The default border that should be used for most elements
+ *
+ * @param theme - the theme to use
+ * @returns css for rendering the default border
+ */
 export function getBorder({ theme }) {
     return `1px solid ${theme.color.greyLight}`;
 }
@@ -112,14 +143,33 @@ export type getColorProps = {
     theme: DefaultTheme;
 };
 
+/**
+ * Get a named color from the theme
+ *
+ * @param color - the name of the color to get
+ * @param theme - the theme to use
+ * @returns the color from the theme, or "inherit" if not found
+ */
 export function getColor({ color, theme }: getColorProps) {
     return get(theme, ["color", color], "inherit");
 }
 
+/**
+ * Get a named font size from the theme
+ *
+ * @param size - the name of the font size to get
+ * @returns a callable for getting the named size from the current theme
+ */
 export function getFontSize(size) {
     return ({ theme }) => theme.fontSize[size];
 }
 
+/**
+ * Get a named font weight from the theme
+ *
+ * @param weight - the name of the font weight to get
+ * @returns a callable for getting the named size from the current theme
+ */
 export function getFontWeight(weight) {
     return ({ theme }) => theme.fontWeight[weight];
 }

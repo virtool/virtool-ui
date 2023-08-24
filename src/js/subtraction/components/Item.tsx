@@ -46,7 +46,6 @@ type SubtractionItemProps = {
  * @param job - The job associated with the subtraction
  * @returns A condensed subtraction item
  */
-
 export function SubtractionItem({ id, user, name, created_at, job }: SubtractionItemProps) {
     return (
         <BoxLink key={id} to={`/subtractions/${id}`}>
@@ -54,9 +53,11 @@ export function SubtractionItem({ id, user, name, created_at, job }: Subtraction
                 <span>{name}</span>
                 <ProgressTag>
                     {job.state === "complete" || (
-                        <ProgressCircle size={sizes.md} progress={job.progress} state={job.state} />
+                        <>
+                            <ProgressCircle size={sizes.md} progress={job.progress} state={job.state} />
+                            {getStateTitle(job.state)}
+                        </>
                     )}
-                    {job.state === "complete" ? "Ready" : getStateTitle(job.state)}
                 </ProgressTag>
             </StyledSubtractionItemHeader>
             <SubtractionAttribution handle={user.handle} time={created_at} />
