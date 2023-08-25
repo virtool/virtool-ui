@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { LoadingPlaceholder, NoneFoundBox, ScrollList } from "../../base";
+import { LegacyScrollList, LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { findIndexes } from "../actions";
 import IndexItem from "./Item";
 import RebuildIndex from "./Rebuild";
@@ -31,7 +31,7 @@ export class Indexes extends React.Component {
 
                 {noIndexes}
 
-                <ScrollList
+                <LegacyScrollList
                     documents={this.props.documents}
                     onLoadNextPage={page => this.props.onLoadNextPage(this.props.refId, page)}
                     page={this.props.page}
@@ -45,13 +45,13 @@ export class Indexes extends React.Component {
 
 const mapStateToProps = state => ({
     ...state.indexes,
-    refId: state.references.detail.id
+    refId: state.references.detail.id,
 });
 
 const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (refId, page) => {
         dispatch(findIndexes(refId, null, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Indexes);

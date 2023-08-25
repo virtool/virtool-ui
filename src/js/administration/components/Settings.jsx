@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 
-import { useGetAccount } from "../../account/querys";
+import { useFetchAccount } from "../../account/querys";
 import { Groups } from "../../groups/components/Groups";
 import UserDetail from "../../users/components/Detail";
-import Users from "../../users/components/Users";
+import { ManageUsers } from "../../users/components/ManageUsers";
 import { mapSettingsStateToProps } from "../mappers";
 import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";
@@ -14,8 +14,7 @@ import { ManageAdministrators } from "./administrators/Administrators";
 import { AdministratorTabs } from "./AdministratorTabs";
 import { ServerSettings } from "./Server";
 export const Settings = ({ loading }) => {
-    const { data: account, isLoading } = useGetAccount();
-
+    const { data: account, isLoading } = useFetchAccount();
     loading = loading || isLoading;
 
     const redirect = hasSufficientAdminRole(AdministratorRoles.SETTINGS, account?.administrator_role)
@@ -37,7 +36,7 @@ export const Settings = ({ loading }) => {
                         <Switch>
                             <Redirect from="/administration" to={`/administration/${redirect}`} exact />
                             <Route path="/administration/settings" component={ServerSettings} />
-                            <Route path="/administration/users" component={Users} exact />
+                            <Route path="/administration/users" component={ManageUsers} exact />
                             <Route path="/administration/users/:userId" component={UserDetail} />
                             <Route path="/administration/groups" component={Groups} />
                             <Route path="/administration/administrators" component={ManageAdministrators} />
