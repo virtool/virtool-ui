@@ -95,29 +95,23 @@ class SampleItem extends React.Component {
     };
 
     render() {
-        let endIcon;
-
-        if (this.props.ready) {
-            endIcon = (
-                <SampleIconContainer>
-                    <Icon
-                        color="green"
-                        name="chart-area"
-                        style={{ fontSize: "17px" }}
-                        tip="Quick Analyze"
-                        tipPlacement="left"
-                        onClick={this.handleQuickAnalyze}
-                    />
-                </SampleIconContainer>
-            );
-        } else {
-            endIcon = (
-                <SampleIconContainer>
-                    <Loader size="14px" color="primary" />
-                    <strong>Creating</strong>
-                </SampleIconContainer>
-            );
-        }
+        const endIcon = this.props.ready ? (
+            <SampleIconContainer>
+                <Icon
+                    color="green"
+                    name="chart-area"
+                    style={{ fontSize: "17px" }}
+                    tip="Quick Analyze"
+                    tipPlacement="left"
+                    onClick={this.handleQuickAnalyze}
+                />
+            </SampleIconContainer>
+        ) : (
+            <SampleIconContainer>
+                <Loader size="14px" color="primary" />
+                <strong>Creating</strong>
+            </SampleIconContainer>
+        );
 
         return (
             <StyledSampleItem>
