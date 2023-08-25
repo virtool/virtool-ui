@@ -1,4 +1,7 @@
-import { HMMDetail, mapStateToProps, mapDispatchToProps } from "../Detail";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
+import { HMMDetail, mapDispatchToProps, mapStateToProps } from "../Detail";
 
 describe("<HMMDetail />", () => {
     let props;
@@ -15,13 +18,13 @@ describe("<HMMDetail />", () => {
                 total_entropy: 132.7,
                 entries: ["Foo"],
                 families: "Bar",
-                genera: "Baz"
+                genera: "Baz",
             },
             match: {
                 params: {
-                    hmmId: "bar"
-                }
-            }
+                    hmmId: "bar",
+                },
+            },
         };
     });
 
@@ -65,7 +68,7 @@ describe("<HMMDetail />", () => {
         props.detail.entries = [
             { accession: "NP_111111", gi: "7777777", name: "testName1", organism: "testOrganism1" },
             { accession: "NP_222222", gi: "8888888", name: "testName2", organism: "testOrganism2" },
-            { accession: "NP_333333", gi: "9999999", name: "testName3", organism: "testOrganism3" }
+            { accession: "NP_333333", gi: "9999999", name: "testName3", organism: "testOrganism3" },
         ];
 
         renderWithProviders(<HMMDetail {...props} />);
@@ -90,7 +93,7 @@ describe("<HMMDetail />", () => {
         it("should render Families correctly", () => {
             props.detail.families = {
                 family1: 106,
-                family2: 206
+                family2: 206,
             };
 
             renderWithProviders(<HMMDetail {...props} />);
@@ -106,7 +109,7 @@ describe("<HMMDetail />", () => {
         it("should render Genera correctly", () => {
             props.detail.genera = {
                 genera1: 900,
-                genera2: 981
+                genera2: 981,
             };
 
             renderWithProviders(<HMMDetail {...props} />);
@@ -124,17 +127,17 @@ describe("<HMMDetail />", () => {
 describe("mapStateToProps()", () => {
     const state = {
         errors: {
-            GET_HMM_ERROR: true
+            GET_HMM_ERROR: true,
         },
         hmms: {
-            detail: "foo"
-        }
+            detail: "foo",
+        },
     };
     it("should return props", () => {
         const props = mapStateToProps(state);
         expect(props).toEqual({
             error: true,
-            detail: "foo"
+            detail: "foo",
         });
     });
 });

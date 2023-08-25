@@ -1,5 +1,4 @@
 import { Field, Form, Formik } from "formik";
-import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import * as Yup from "yup";
@@ -14,18 +13,28 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-    SaveButton
+    SaveButton,
 } from "../../base";
-import { createGroup, getGroup } from "../actions";
+import { useCreateGroup } from "../querys";
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Provide a name for the group")
+    name: Yup.string().required("Provide a name for the group"),
 });
 
-export const Create = ({ error, show, onCreate, onHide }) => {
+export const Create = ({ show, onHide }) => {
+    const createGroupMutation = useCreateGroup();
+
     const handleSubmit = values => {
-        onCreate(values.name);
+        createGroupMutation.mutate(
+            { name: values.name },
+            {
+                onSuccess: () => {
+                    onHide();
+                },
+            },
+        );
     };
+
     return (
         <Modal label="Create" onHide={onHide} show={show} size="sm">
             <ModalHeader>Create Group</ModalHeader>
@@ -36,7 +45,9 @@ export const Create = ({ error, show, onCreate, onHide }) => {
                             <InputGroup>
                                 <InputLabel>Name</InputLabel>
                                 <Field name="name" id="name" as={Input} />
-                                <InputError>{touched.name && (error || errors.name)}</InputError>
+                                <InputError>
+                                    {touched.name && (createGroupMutation.error?.response.body.message || errors.name)}
+                                </InputError>
                             </InputGroup>
                         </ModalBody>
                         <ModalFooter>
@@ -51,19 +62,12 @@ export const Create = ({ error, show, onCreate, onHide }) => {
 
 const mapStateToProps = state => ({
     show: Boolean(getRouterLocationStateValue(state, "createGroup")),
-    error: get(state, "errors.CREATE_GROUP_ERROR.message", "")
 });
 
 const mapDispatchToProps = dispatch => ({
-    onChangeActiveGroup: groupId => {
-        dispatch(getGroup(groupId));
-    },
-    onCreate: name => {
-        dispatch(createGroup(name));
-    },
     onHide: () => {
         dispatch(pushState({ createGroup: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create);

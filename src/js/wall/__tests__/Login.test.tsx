@@ -2,14 +2,14 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { createStore } from "redux";
-import { vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { attachResizeObserver, renderWithProviders } from "../../../tests/setupTests";
 import { LOGIN } from "../../app/actionTypes";
 import { Login, mapDispatchToProps, mapStateToProps } from "../Login";
 
-const createAppStore = state => {
+function createAppStore(state) {
     return () => createStore(state => state, state);
-};
+}
 
 describe("<Login />", () => {
     attachResizeObserver();
@@ -59,7 +59,7 @@ describe("mapDispatchToProps()", () => {
         const dispatch = vi.fn();
         const props = mapDispatchToProps(dispatch);
 
-        props.onLogin("bob", "foobar", false, "baz");
+        props.onLogin("bob", "foobar", false);
 
         expect(dispatch).toHaveBeenCalledWith({
             type: LOGIN.REQUESTED,

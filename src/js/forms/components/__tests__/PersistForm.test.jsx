@@ -1,10 +1,14 @@
 import { render, waitFor } from "@testing-library/react";
 import { FormikContext } from "formik";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { wrapWithProviders } from "../../../../tests/setupTests";
 import { SET_PERSISTENT_FORM_STATE } from "../../../app/actionTypes";
 import { mapDispatchToProps, mapStateToProps, PersistForm } from "../PersistForm";
 
-const wrapWithContext = (ui, contextValues) =>
-    wrapWithProviders(<FormikContext.Provider value={contextValues}> {ui} </FormikContext.Provider>);
+function wrapWithContext(ui, contextValues) {
+    return wrapWithProviders(<FormikContext.Provider value={contextValues}> {ui} </FormikContext.Provider>);
+}
 
 describe("<PersistForm />", () => {
     let props;
@@ -13,11 +17,11 @@ describe("<PersistForm />", () => {
         props = {
             formName: "test",
             formValues: { name: "test_name", otherData: ["otherData_1", "otherData_2", "otherData_3"] },
-            onSetPersistentFormState: vi.fn()
+            onSetPersistentFormState: vi.fn(),
         };
         contextValues = {
             values: {},
-            setValues: vi.fn()
+            setValues: vi.fn(),
         };
     });
 
@@ -26,8 +30,8 @@ describe("<PersistForm />", () => {
         await waitFor(() =>
             expect(contextValues.setValues).toHaveBeenCalledWith({
                 name: "test_name",
-                otherData: ["otherData_1", "otherData_2", "otherData_3"]
-            })
+                otherData: ["otherData_1", "otherData_2", "otherData_3"],
+            }),
         );
     });
 
@@ -39,8 +43,8 @@ describe("<PersistForm />", () => {
         await waitFor(() =>
             expect(contextValues.setValues).toHaveBeenCalledWith({
                 name: "cast_name",
-                otherData: ["otherData_1", "otherData_2"]
-            })
+                otherData: ["otherData_1", "otherData_2"],
+            }),
         );
     });
 
@@ -51,8 +55,8 @@ describe("<PersistForm />", () => {
         await waitFor(() =>
             expect(props.onSetPersistentFormState).toHaveBeenCalledWith("test", {
                 name: "test_name",
-                otherData: ["otherData_1", "otherData_2", "otherData_3"]
-            })
+                otherData: ["otherData_1", "otherData_2", "otherData_3"],
+            }),
         );
     });
 });
@@ -63,10 +67,10 @@ describe("mapStateToProps", () => {
             formState: {
                 test: {
                     name: "test_name",
-                    otherData: ["otherData_1", "otherData_2", "otherData_3"]
-                }
-            }
-        }
+                    otherData: ["otherData_1", "otherData_2", "otherData_3"],
+                },
+            },
+        },
     };
     const ownProps = { formName: "test" };
 
@@ -74,8 +78,8 @@ describe("mapStateToProps", () => {
         expect(mapStateToProps(state, ownProps)).toEqual({
             formValues: {
                 name: "test_name",
-                otherData: ["otherData_1", "otherData_2", "otherData_3"]
-            }
+                otherData: ["otherData_1", "otherData_2", "otherData_3"],
+            },
         });
     });
 });
@@ -87,7 +91,7 @@ describe("mapDispatchToProps", () => {
         onSetPersistentFormState("test", { test_val: "test_value" });
         expect(dispatch).toHaveBeenCalledWith({
             type: SET_PERSISTENT_FORM_STATE,
-            payload: { formName: "test", formValues: { test_val: "test_value" } }
+            payload: { formName: "test", formValues: { test_val: "test_value" } },
         });
     });
 });

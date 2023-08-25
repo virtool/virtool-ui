@@ -1,5 +1,8 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PUSH_STATE } from "../../../app/actionTypes";
-import { mapStateToProps, mapDispatchToProps, OTUsList } from "../List";
+import { mapDispatchToProps, mapStateToProps, OTUsList } from "../List";
 
 describe("<OTUsList />", () => {
     let props;
@@ -16,7 +19,7 @@ describe("<OTUsList />", () => {
             renderRow: true,
 
             references: { detail: { id: 1 } },
-            otus: { verified: true }
+            otus: { verified: true },
         };
     });
 
@@ -42,13 +45,13 @@ describe("mapStateToProps()", () => {
     it("should return props", () => {
         const state = {
             otus: { verified: true },
-            references: { detail: { id: "bar" } }
+            references: { detail: { id: "bar" } },
         };
         const result = mapStateToProps(state);
 
         expect(result).toEqual({
             refId: "bar",
-            verified: true
+            verified: true,
         });
     });
 });
@@ -63,9 +66,9 @@ describe("mapDispatchToProps()", () => {
             type: PUSH_STATE,
             payload: {
                 state: {
-                    createOTU: false
-                }
-            }
+                    createOTU: false,
+                },
+            },
         });
     });
 
@@ -73,7 +76,7 @@ describe("mapDispatchToProps()", () => {
         props.onLoadNextPage("foo", "bar", true, 1);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { refId: "foo", term: "bar", verified: true, page: 1 },
-            type: "FIND_OTUS_REQUESTED"
+            type: "FIND_OTUS_REQUESTED",
         });
     });
 });

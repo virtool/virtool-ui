@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MemberRight, MemberRightCheckbox } from "../MemberRight";
 
 describe("<MemberRight />", () => {
@@ -7,7 +10,7 @@ describe("<MemberRight />", () => {
         props = {
             right: "build",
             enabled: true,
-            onToggle: vi.fn()
+            onToggle: vi.fn(),
         };
     });
 

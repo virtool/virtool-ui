@@ -1,5 +1,7 @@
 import { screen } from "@testing-library/react";
 import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { JobStep } from "../Step";
 
 describe("<JobStep />", () => {
@@ -13,17 +15,17 @@ describe("<JobStep />", () => {
                 step_name: null,
                 step_description: null,
                 error: null,
-                timestamp: "2022-05-19T17:48:05.995000Z"
-            }
+                timestamp: "2022-05-19T17:48:05.995000Z",
+            },
         };
     });
 
-    test("should render correctly when step_name and step_description sent from server", () => {
+    it("should render correctly when step_name and step_description sent from server", () => {
         const step = {
             ...props.step,
             state: "running",
             step_description: "Do something complex to the data.",
-            step_name: "Reticulate Splines"
+            step_name: "Reticulate Splines",
         };
 
         renderWithProviders(<JobStep {...props} step={step} />);
@@ -32,7 +34,7 @@ describe("<JobStep />", () => {
         expect(screen.getByText(step.step_name)).toBeInTheDocument();
     });
 
-    test.each(["timeout", "terminated", "complete", "error", "preparing", "waiting", "timeout"])(
+    it.each(["timeout", "terminated", "complete", "error", "preparing", "waiting", "timeout"])(
         "should render text and icon when state is special case",
         state => {
             props.step.state = state;
@@ -41,6 +43,6 @@ describe("<JobStep />", () => {
 
             expect(screen.getByTitle(state)).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
-        }
+        },
     );
 });

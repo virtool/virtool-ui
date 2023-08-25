@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { GET_TASK, LIST_TASKS, WS_INSERT_TASK, WS_UPDATE_TASK } from "../../app/actionTypes";
 import tasksReducer from "../reducer";
 
@@ -32,7 +33,7 @@ describe("tasksReducer()", () => {
         const state = { documents: [] };
         const action = {
             type: LIST_TASKS.SUCCEEDED,
-            payload: [{ id: "test1" }, { id: "test2" }, { id: "test3" }]
+            payload: [{ id: "test1" }, { id: "test2" }, { id: "test3" }],
         };
         const result = tasksReducer(state, action);
         expect(result).toEqual({ documents: [...action.payload] });

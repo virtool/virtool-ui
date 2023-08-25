@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`RebuildIndexError > should render extra text when error is 'There are unverified OTUs' 1`] = `
 <Alert

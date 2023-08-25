@@ -1,6 +1,9 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { Button } from "../Button";
 import { Modal } from "../Modal";
 import { RemoveModal } from "../RemoveModal";
-import { Button } from "../Button";
 
 describe("<RemoveModal />", () => {
     let props;
@@ -11,7 +14,7 @@ describe("<RemoveModal />", () => {
             noun: "bar",
             show: true,
             onConfirm: vi.fn(),
-            onHide: vi.fn()
+            onHide: vi.fn(),
         };
     });
 

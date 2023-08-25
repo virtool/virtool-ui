@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { JobAction } from "../Action";
 
 describe("<JobActionIcon />", () => {
@@ -9,7 +12,7 @@ describe("<JobActionIcon />", () => {
             canCancel: true,
             canArchive: true,
             onCancel: vi.fn(),
-            onArchive: vi.fn()
+            onArchive: vi.fn(),
         };
     });
 

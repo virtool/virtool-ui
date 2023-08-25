@@ -1,4 +1,7 @@
-import { RebuildAlert, mapStateToProps } from "../RebuildAlert";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { mapStateToProps, RebuildAlert } from "../RebuildAlert";
 
 describe("<RebuildAlert />", () => {
     let props;
@@ -7,7 +10,7 @@ describe("<RebuildAlert />", () => {
         props = {
             refId: "foo",
             showCountAlert: 0,
-            showIndexAlert: true
+            showIndexAlert: true,
         };
     });
 
@@ -33,26 +36,26 @@ describe("mapStateToProps()", () => {
         const state = {
             references: {
                 detail: {
-                    id: "foo"
-                }
+                    id: "foo",
+                },
             },
             indexes: {
                 modified_otu_count: 1,
-                total_otu_count: 1
+                total_otu_count: 1,
             },
             otus: {
                 modified_count: 1,
-                total_count: 1
+                total_count: 1,
             },
             account: {
-                administrator: true
-            }
+                administrator: true,
+            },
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({
             refId: "foo",
             showIndexAlert: 1,
-            showCountAlert: 1
+            showCountAlert: 1,
         });
     });
 });

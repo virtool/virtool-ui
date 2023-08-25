@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Badge, LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, LegacyScrollList, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findHmms } from "../actions";
 import { getTerm } from "../selectors";
-import HMMInstaller from "./Installer";
+import HMMInstaller from "./HMMInstaller";
 import HMMItem from "./Item";
 import HMMToolbar from "./Toolbar";
 
@@ -33,7 +33,7 @@ export class HMMList extends React.Component {
 
             if (this.props.documents.length) {
                 list = (
-                    <ScrollList
+                    <LegacyScrollList
                         documents={this.props.documents}
                         onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
                         page={this.props.page}
@@ -73,13 +73,13 @@ export class HMMList extends React.Component {
 
 const mapStateToProps = state => ({
     ...state.hmms,
-    term: getTerm(state)
+    term: getTerm(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     onLoadNextPage: (term, page) => {
         dispatch(findHmms(term, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HMMList);

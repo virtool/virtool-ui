@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { expect, it, vi } from "vitest";
 import {
     ANALYZE,
     BLAST_NUVS,
@@ -12,7 +12,7 @@ import {
     TOGGLE_SHOW_PATHOSCOPE_READS,
     WS_INSERT_ANALYSIS,
     WS_REMOVE_ANALYSIS,
-    WS_UPDATE_ANALYSIS
+    WS_UPDATE_ANALYSIS,
 } from "../../app/actionTypes";
 import {
     analyze,
@@ -27,14 +27,14 @@ import {
     toggleShowPathoscopeReads,
     wsInsertAnalysis,
     wsRemoveAnalysis,
-    wsUpdateAnalysis
+    wsUpdateAnalysis,
 } from "../actions";
 
 it("wsInsertAnalysis should return action to insert analysis via websocket", () => {
     const data = { id: "foo" };
     expect(wsInsertAnalysis(data)).toEqual({
         type: WS_INSERT_ANALYSIS,
-        payload: data
+        payload: data,
     });
 });
 
@@ -43,7 +43,7 @@ it("wsUpdateAnalysis() should return action to update analysis via websocket", (
     const result = wsUpdateAnalysis(data);
     expect(result).toEqual({
         type: WS_UPDATE_ANALYSIS,
-        payload: data
+        payload: data,
     });
 });
 
@@ -52,7 +52,7 @@ it("wsRemoveAnalysis() should return action to remove analysis via websocket", (
     const result = wsRemoveAnalysis(data);
     expect(result).toEqual({
         type: WS_REMOVE_ANALYSIS,
-        payload: data
+        payload: data,
     });
 });
 
@@ -60,7 +60,7 @@ it("setAnalysisSortKey() should return action to set sort key", () => {
     const sortKey = "foo";
     expect(setAnalysisSortKey(sortKey)).toEqual({
         type: SET_ANALYSIS_SORT_KEY,
-        payload: { sortKey }
+        payload: { sortKey },
     });
 });
 
@@ -87,7 +87,7 @@ it("findAnalyses() should return action to find analyses", () => {
     const result = findAnalyses(sampleId, term, page);
     expect(result).toEqual({
         type: FIND_ANALYSES.REQUESTED,
-        payload: { sampleId, term, page }
+        payload: { sampleId, term, page },
     });
 });
 
@@ -96,7 +96,7 @@ it("get() should return action to get a specific analysis", () => {
     const result = getAnalysis(analysisId);
     expect(result).toEqual({
         type: GET_ANALYSIS.REQUESTED,
-        payload: { analysisId }
+        payload: { analysisId },
     });
 });
 
@@ -114,7 +114,7 @@ it("analyze() should return action to analyze sample", () => {
 
     expect(result).toEqual({
         type: ANALYZE.REQUESTED,
-        payload: { userId, refId, sampleId, subtractionIds, workflow }
+        payload: { userId, refId, sampleId, subtractionIds, workflow },
     });
 
     global.Date = originalDate;
@@ -126,7 +126,7 @@ it("blastNuvs() should return action to start BLAST analysis", () => {
     const result = blastNuvs(analysisId, sequenceIndex);
     expect(result).toEqual({
         type: BLAST_NUVS.REQUESTED,
-        payload: { analysisId, sequenceIndex }
+        payload: { analysisId, sequenceIndex },
     });
 });
 
@@ -135,6 +135,6 @@ it("removeAnalysis() should return action to remove analysis", () => {
     const result = removeAnalysis(analysisId);
     expect(result).toEqual({
         type: REMOVE_ANALYSIS.REQUESTED,
-        payload: { analysisId }
+        payload: { analysisId },
     });
 });

@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { checkAdminRoleOrPermission } from "../../../administration/utils";
 import { FIND_SUBTRACTIONS } from "../../../app/actionTypes";
 import { InputSearch } from "../../../base";
@@ -12,7 +15,7 @@ describe("<SubtractionToolbar />", () => {
         props = {
             canModify: true,
             term: "foo",
-            onFind: vi.fn()
+            onFind: vi.fn(),
         };
     });
 
@@ -31,8 +34,8 @@ describe("<SubtractionToolbar />", () => {
         const wrapper = shallow(<SubtractionToolbar {...props} />);
         const e = {
             target: {
-                value: "Foo"
-            }
+                value: "Foo",
+            },
         };
         wrapper.find(InputSearch).simulate("change", e);
         expect(props.onFind).toHaveBeenCalledWith(e);
@@ -45,8 +48,8 @@ describe("mapStateToProps()", () => {
     beforeEach(() => {
         state = {
             subtraction: {
-                term: "Foo"
-            }
+                term: "Foo",
+            },
         };
     });
 
@@ -56,7 +59,7 @@ describe("mapStateToProps()", () => {
         const props = mapStateToProps(state);
         expect(props).toEqual({
             term: "Foo",
-            canModify
+            canModify,
         });
     });
 
@@ -67,7 +70,7 @@ describe("mapStateToProps()", () => {
         const props = mapStateToProps(state);
         expect(props).toEqual({
             term: "",
-            canModify: true
+            canModify: true,
         });
     });
 });
@@ -81,7 +84,7 @@ describe("mapDispatchToProps()", () => {
 
         expect(dispatch).toHaveBeenCalledWith({
             type: FIND_SUBTRACTIONS.REQUESTED,
-            payload: { term: value === "Foo" ? "Foo" : null, page: 1 }
+            payload: { term: value === "Foo" ? "Foo" : null, page: 1 },
         });
     });
 });

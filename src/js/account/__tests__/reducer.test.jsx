@@ -1,10 +1,11 @@
+import { describe, expect, it } from "vitest";
 import {
     CLEAR_API_KEY,
     CREATE_API_KEY,
     GET_ACCOUNT,
     GET_API_KEYS,
     UPDATE_ACCOUNT,
-    UPDATE_ACCOUNT_SETTINGS
+    UPDATE_ACCOUNT_SETTINGS,
 } from "../../app/actionTypes";
 import reducer from "../reducer";
 
@@ -14,13 +15,13 @@ describe("Account Reducer", () => {
         expect(result).toEqual({
             apiKeys: null,
             newKey: null,
-            ready: false
+            ready: false,
         });
     });
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const state = { foo: "bar" };
         const result = reducer(state, action);
@@ -31,25 +32,25 @@ describe("Account Reducer", () => {
         const action = {
             type: GET_ACCOUNT.SUCCEEDED,
             payload: {
-                foo: "bar"
-            }
+                foo: "bar",
+            },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
             foo: "bar",
-            ready: true
+            ready: true,
         });
     });
 
     it("should handle UPDATE_ACCOUNT_SUCCEEDED", () => {
         const state = {
-            apiKeys: []
+            apiKeys: [],
         };
         const action = {
             type: UPDATE_ACCOUNT.SUCCEEDED,
             payload: {
-                foo: "bar"
-            }
+                foo: "bar",
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({ apiKeys: [], foo: "bar" });
@@ -59,7 +60,7 @@ describe("Account Reducer", () => {
         const keys = [{ id: "foo" }, { id: "bar" }];
         const action = {
             type: GET_API_KEYS.SUCCEEDED,
-            payload: keys
+            payload: keys,
         };
         const result = reducer({}, action);
         expect(result).toEqual({ apiKeys: keys });
@@ -67,14 +68,14 @@ describe("Account Reducer", () => {
 
     it("should handle CREATE_API_KEY_REQUESTED", () => {
         const state = {
-            key: "foo"
+            key: "foo",
         };
         const action = {
-            type: CREATE_API_KEY.REQUESTED
+            type: CREATE_API_KEY.REQUESTED,
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            key: null
+            key: null,
         });
     });
 
@@ -83,23 +84,23 @@ describe("Account Reducer", () => {
             type: CREATE_API_KEY.SUCCEEDED,
             payload: {
                 key: {
-                    id: "foo"
-                }
-            }
+                    id: "foo",
+                },
+            },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            newKey: { id: "foo" }
+            newKey: { id: "foo" },
         });
     });
 
     it("should handle CLEAR_API_KEY", () => {
         const action = {
-            type: CLEAR_API_KEY
+            type: CLEAR_API_KEY,
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            newKey: null
+            newKey: null,
         });
     });
 
@@ -107,12 +108,12 @@ describe("Account Reducer", () => {
         const action = {
             type: UPDATE_ACCOUNT_SETTINGS.SUCCEEDED,
             payload: {
-                foo: "bar"
-            }
+                foo: "bar",
+            },
         };
         const result = reducer({}, action);
         expect(result).toEqual({
-            settings: action.payload
+            settings: action.payload,
         });
     });
 });

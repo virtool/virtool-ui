@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PUSH_STATE, REMOVE_SUBTRACTION } from "../../../app/actionTypes";
 import { routerLocationHasState } from "../../../utils/utils";
 import { mapDispatchToProps, mapStateToProps, RemoveSubtraction } from "../Remove";
@@ -13,7 +16,7 @@ describe("<RemoveSubtraction />", () => {
             id: "foo",
             name: "Foo",
             onHide: vi.fn(),
-            onConfirm: vi.fn()
+            onConfirm: vi.fn(),
         };
     });
 
@@ -40,13 +43,13 @@ describe("mapStateToProps()", () => {
     it.each([true, false])("should return props when routerLocationHasState() returns %p", show => {
         routerLocationHasState.mockReturnValue(show);
         const state = {
-            subtraction: { detail: { id: "foo", name: "Foo" } }
+            subtraction: { detail: { id: "foo", name: "Foo" } },
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({
             show,
             id: "foo",
-            name: "Foo"
+            name: "Foo",
         });
     });
 });
@@ -64,7 +67,7 @@ describe("mapDispatchToProps", () => {
         props.onHide();
         expect(dispatch).toHaveBeenCalledWith({
             type: PUSH_STATE,
-            payload: { state: { removeSubtraction: false } }
+            payload: { state: { removeSubtraction: false } },
         });
     });
 
@@ -72,7 +75,7 @@ describe("mapDispatchToProps", () => {
         props.onConfirm("foo");
         expect(dispatch).toHaveBeenCalledWith({
             type: REMOVE_SUBTRACTION.REQUESTED,
-            payload: { subtractionId: "foo" }
+            payload: { subtractionId: "foo" },
         });
     });
 });

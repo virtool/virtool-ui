@@ -1,16 +1,19 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
-import { createFakeFile, mockListFilesAPI } from "../../../../tests/fake/files";
+import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
 import { FileManager } from "../Manager";
 
-const createAppStore = state => {
+function createAppStore(state) {
     return () => createStore(state => state, state);
-};
+}
 
 describe("<FileManager>", () => {
     let props;
@@ -36,7 +39,7 @@ describe("<FileManager>", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file], true);
+        mockApiListFiles([file], true);
 
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
@@ -57,7 +60,7 @@ describe("<FileManager>", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file], true);
+        mockApiListFiles([file], true);
 
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
@@ -75,7 +78,7 @@ describe("<FileManager>", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file], true);
+        mockApiListFiles([file], true);
         props.message = "test_message";
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
@@ -92,7 +95,7 @@ describe("<FileManager>", () => {
         mockGetAccountAPI(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
-        mockListFilesAPI([file], true);
+        mockApiListFiles([file], true);
 
         props.validationRegex = /.(?:fa|fasta)(?:.gz|.gzip)?$/;
         const mockUpload = vi.fn();

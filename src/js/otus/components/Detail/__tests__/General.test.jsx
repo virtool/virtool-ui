@@ -1,4 +1,7 @@
-import { OTUGeneral, mapStateToProps } from "../General";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { mapStateToProps, OTUGeneral } from "../General";
 
 describe("<OTUGeneral />", () => {
     let props;
@@ -10,11 +13,11 @@ describe("<OTUGeneral />", () => {
                 empty_otu: false,
                 empty_isolate: ["456def"],
                 empty_sequence: false,
-                isolate_inconsistency: false
+                isolate_inconsistency: false,
             },
             isolates: [{ id: "baz" }],
             name: "Foo Bar",
-            version: 3
+            version: 3,
         };
     });
 
@@ -36,7 +39,7 @@ describe("mapStateToProps()", () => {
             empty_otu: false,
             empty_isolate: ["456def"],
             empty_sequence: false,
-            isolate_inconsistency: false
+            isolate_inconsistency: false,
         };
         const isolates = [{ id: "baz" }];
         const state = {
@@ -46,14 +49,14 @@ describe("mapStateToProps()", () => {
                     issues,
                     isolates,
                     name: "Foo Bar",
-                    version: 3
-                }
-            }
+                    version: 3,
+                },
+            },
         };
         const props = mapStateToProps(state);
         expect(props).toEqual({
             issues,
-            isolates
+            isolates,
         });
     });
 });

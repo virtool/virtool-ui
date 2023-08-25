@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { AdministratorRoles } from "../../administration/types";
 import {
     getCanModify,
@@ -5,7 +6,7 @@ import {
     getFilesUndersized,
     getSampleDetail,
     getSampleDetailId,
-    getSampleLibraryType
+    getSampleLibraryType,
 } from "../selectors";
 
 describe("getCanModify()", () => {
@@ -16,7 +17,7 @@ describe("getCanModify()", () => {
             account: {
                 id: "fred",
                 groups: ["foo"],
-                administrator_role: null
+                administrator_role: null,
             },
             samples: {
                 detail: {
@@ -24,10 +25,10 @@ describe("getCanModify()", () => {
                     group_write: false,
                     group: "bar",
                     user: {
-                        id: "bob"
-                    }
-                }
-            }
+                        id: "bob",
+                    },
+                },
+            },
         };
     });
 
@@ -65,7 +66,7 @@ describe("getCanModify()", () => {
         state.account = {
             id: "fred",
             administrator_role: AdministratorRoles.FULL,
-            groups: []
+            groups: [],
         };
         expect(getCanModify(state)).toBe(true);
     });
@@ -84,13 +85,13 @@ describe("getSampleDetail()", () => {
         const state = {
             samples: {
                 detail: {
-                    id: "foo"
-                }
-            }
+                    id: "foo",
+                },
+            },
         };
         const detail = getSampleDetail(state);
         expect(detail).toEqual({
-            id: "foo"
+            id: "foo",
         });
     });
 });
@@ -100,9 +101,9 @@ describe("getSampleDetailId()", () => {
         const state = {
             samples: {
                 detail: {
-                    id: "foo"
-                }
-            }
+                    id: "foo",
+                },
+            },
         };
         const id = getSampleDetailId(state);
         expect(id).toBe("foo");
@@ -111,8 +112,8 @@ describe("getSampleDetailId()", () => {
     it("should return undefined when detail not loaded", () => {
         const state = {
             samples: {
-                detail: null
-            }
+                detail: null,
+            },
         };
         const id = getSampleDetailId(state);
         expect(id).toBe(undefined);
@@ -125,9 +126,9 @@ describe("getSampleLibraryType()", () => {
             samples: {
                 detail: {
                     id: "foo",
-                    library_type: "amplicon"
-                }
-            }
+                    library_type: "amplicon",
+                },
+            },
         };
         const libraryType = getSampleLibraryType(state);
         expect(libraryType).toBe("amplicon");
@@ -136,8 +137,8 @@ describe("getSampleLibraryType()", () => {
     it("should return undefined when detail not loaded", () => {
         const state = {
             samples: {
-                detail: null
-            }
+                detail: null,
+            },
         };
         const libraryType = getSampleLibraryType(state);
         expect(libraryType).toBeUndefined();
@@ -153,10 +154,10 @@ describe("getFilesUndersized()", () => {
                 detail: {
                     files: [
                         { id: "foo1", size: 500000000 },
-                        { id: "foo2", size: 500000000 }
-                    ]
-                }
-            }
+                        { id: "foo2", size: 500000000 },
+                    ],
+                },
+            },
         };
     });
 

@@ -1,31 +1,37 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../tests/setupTests";
 import { LOGIN } from "../../app/actionTypes";
 import { B2CLogin, mapDispatchToProps } from "../B2CLogin";
-import { vi } from "vitest";
 
 describe("<B2CLogin />", () => {
     let props;
     let myFunc;
+
     beforeEach(() => {
         props = {
-            onSetLogin: vi.fn()
+            onSetLogin: vi.fn(),
         };
+
         window.b2c = {
             use: true,
             userflow: "test_userflow",
             tenant: "test_tenant",
             clientId: "test_clientId",
             scope: "test_scope",
-            APIClientId: "test_APIClientId"
+            APIClientId: "test_APIClientId",
         };
+
         myFunc = vi.fn();
+
         window.msalInstance = {
             loginPopup: async LoginRequestInfo => {
                 myFunc(LoginRequestInfo);
                 return { account: "test_account" };
             },
-            setActiveAccount: vi.fn()
+            setActiveAccount: vi.fn(),
         };
     });
 
@@ -39,7 +45,7 @@ describe("<B2CLogin />", () => {
         await userEvent.click(screen.getByRole("button", { name: "Sign in" }));
         await waitFor(() => {
             expect(myFunc).toHaveBeenCalledWith({
-                scopes: ["https://test_tenant.onmicrosoft.com/test_APIClientId/test_scope"]
+                scopes: ["https://test_tenant.onmicrosoft.com/test_APIClientId/test_scope"],
             });
             expect(props.onSetLogin).toHaveBeenCalled();
             expect(window.msalInstance.setActiveAccount).toHaveBeenCalledWith("test_account");
@@ -54,7 +60,7 @@ describe("mapDispatchToProps()", () => {
         onSetLogin();
         expect(dispatch).toHaveBeenCalledWith({
             type: LOGIN.SUCCEEDED,
-            payload: { reset: false }
+            payload: { reset: false },
         });
     });
 });

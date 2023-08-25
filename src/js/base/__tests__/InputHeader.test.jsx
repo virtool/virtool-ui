@@ -1,9 +1,10 @@
-import React from "react";
-
 import userEvent from "@testing-library/user-event";
+import React from "react";
+import { expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../tests/setupTests";
 import { InputHeader } from "../InputHeader";
 
-test("<InputHeader />", async () => {
+it("<InputHeader />", async () => {
     const value = "Hello";
     const onSubmit = vi.fn();
 

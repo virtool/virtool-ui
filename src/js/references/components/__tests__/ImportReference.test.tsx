@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
-import { it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { ImportReference } from "../ImportReference";
 
@@ -18,7 +18,7 @@ describe("<ImportReference />", () => {
             .post("/api/refs", {
                 name: "External",
                 description: "External reference",
-                import_from: "12-external.json.gz"
+                import_from: "12-external.json.gz",
             })
             .reply(201, { id: "foo", name: "External", description: "External reference" });
 
@@ -26,7 +26,7 @@ describe("<ImportReference />", () => {
 
         await userEvent.upload(
             screen.getByLabelText("Upload file"),
-            new File(['{"test": true}'], "external.json.gz", { type: "application/gzip" })
+            new File(['{"test": true}'], "external.json.gz", { type: "application/gzip" }),
         );
         await userEvent.type(screen.getByLabelText("Name"), "External");
         await userEvent.type(screen.getByLabelText("Description"), "External reference");

@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
 import { logout } from "../../../account/actions";
 import { AdministratorRoles } from "../../../administration/types";
 import { Bar, mapDispatchToProps, mapStateToProps } from "../NavBar";
@@ -7,7 +10,7 @@ describe("<Bar />", () => {
         administrator_role: AdministratorRoles.FULL,
         id: "foo",
         pending: false,
-        onLogout: vi.fn()
+        onLogout: vi.fn(),
     };
     it("should render", () => {
         const wrapper = shallow(<Bar {...props} />);
@@ -19,14 +22,14 @@ describe("mapStateToProps", () => {
     const state = {
         account: { foo: "bar" },
         app: {
-            pending: false
-        }
+            pending: false,
+        },
     };
     it("should return props", () => {
         const result = mapStateToProps(state);
         expect(result).toEqual({
             foo: "bar",
-            pending: false
+            pending: false,
         });
     });
 });
@@ -35,7 +38,7 @@ describe("mapDispatchToProps", () => {
     const dispatch = vi.fn();
 
     window.b2c = {
-        use: false
+        use: false,
     };
 
     it("should return onLogout in props", () => {

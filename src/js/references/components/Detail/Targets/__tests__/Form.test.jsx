@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
 import { Checkbox } from "../../../../../base";
 import { TargetForm } from "../Form";
 
@@ -9,7 +12,7 @@ describe("<TargetForm />", () => {
         name: "foo",
         required: false,
         onChange: vi.fn(),
-        onClick: vi.fn()
+        onClick: vi.fn(),
     };
 
     it("should render", () => {

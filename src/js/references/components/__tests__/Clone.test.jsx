@@ -1,7 +1,9 @@
-import React from "react";
-import { CloneReference, mapDispatchToProps, mapStateToProps } from "../Clone";
-import userEvent from "@testing-library/user-event";
 import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
+import { CloneReference, mapDispatchToProps, mapStateToProps } from "../Clone";
 
 describe("<CloneReference />", () => {
     const props = {
@@ -14,12 +16,12 @@ describe("<CloneReference />", () => {
                 name: "foo_name",
                 otu_count: 5,
                 user: { id: "foo_user_id", handle: "foo_user_handle" },
-                created_at: "2019-02-10T17:11:00.000000Z"
-            }
+                created_at: new Date().setFullYear(new Date().getFullYear() - 1),
+            },
         ],
         show: true,
         onSubmit: vi.fn(),
-        onHide: vi.fn()
+        onHide: vi.fn(),
     };
 
     it("should render", () => {
@@ -29,7 +31,7 @@ describe("<CloneReference />", () => {
         expect(screen.getByText("5 OTUs")).toBeInTheDocument();
         expect(screen.getByText("foo_name")).toBeInTheDocument();
         expect(screen.getByText(/foo_user_handle.+created/)).toBeInTheDocument();
-        expect(screen.getByText("4 years ago")).toBeInTheDocument();
+        expect(screen.getByText("1 year ago")).toBeInTheDocument();
         expect(screen.getByRole("textbox")).toHaveValue("Clone of foo_name");
         expect(screen.getByRole("button", { name: "Clone" })).toBeInTheDocument();
     });
@@ -62,7 +64,7 @@ describe("<CloneReference />", () => {
         expect(props.onSubmit).toBeCalledWith(
             `Clone of ${reference.name}`,
             `Cloned from ${reference.name}`,
-            reference.id
+            reference.id,
         );
     });
 
@@ -88,17 +90,17 @@ describe("mapStateToProps()", () => {
                 location: {
                     state: {
                         id: "foo",
-                        cloneReference: true
-                    }
-                }
+                        cloneReference: true,
+                    },
+                },
             },
-            references: { documents: "bar" }
+            references: { documents: "bar" },
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({
             refId: "foo",
             refDocuments: "bar",
-            show: true
+            show: true,
         });
     });
 });
@@ -111,7 +113,7 @@ describe("mapDispatchToProps()", () => {
         props.onSubmit("foo", "bar", "boo");
         expect(dispatch).toHaveBeenCalledWith({
             payload: { name: "foo", description: "bar", refId: "boo" },
-            type: "CLONE_REFERENCE_REQUESTED"
+            type: "CLONE_REFERENCE_REQUESTED",
         });
     });
     it("should return onHide in props", () => {

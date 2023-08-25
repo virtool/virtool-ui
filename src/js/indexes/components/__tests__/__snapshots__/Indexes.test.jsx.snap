@@ -1,10 +1,10 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<Indexes /> > should render 1`] = `
 <Fragment>
   <Connect(RebuildAlert) />
   <Connect(RebuildIndex) />
-  <ScrollList
+  <LegacyScrollList
     documents={
       [
         {
@@ -30,7 +30,7 @@ exports[`<Indexes /> > should render with empty documents array 1`] = `
   <NoneFoundBox
     noun="indexes"
   />
-  <ScrollList
+  <LegacyScrollList
     documents={[]}
     onLoadNextPage={[Function]}
     renderRow={[Function]}

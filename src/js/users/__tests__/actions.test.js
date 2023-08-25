@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import {
     CREATE_USER,
     EDIT_USER,
@@ -5,7 +6,7 @@ import {
     GET_USER,
     WS_INSERT_USER,
     WS_REMOVE_USER,
-    WS_UPDATE_USER
+    WS_UPDATE_USER,
 } from "../../app/actionTypes";
 import { createUser, editUser, findUsers, getUser, wsInsertUser, wsRemoveUser, wsUpdateUser } from "../actions";
 
@@ -17,7 +18,7 @@ describe("Users Action Creators", () => {
         const result = wsInsertUser(payload);
         expect(result).toEqual({
             type: WS_INSERT_USER,
-            payload
+            payload,
         });
     });
 
@@ -26,7 +27,7 @@ describe("Users Action Creators", () => {
         const result = wsUpdateUser(payload);
         expect(result).toEqual({
             type: WS_UPDATE_USER,
-            payload
+            payload,
         });
     });
 
@@ -35,7 +36,7 @@ describe("Users Action Creators", () => {
         const result = wsRemoveUser(payload);
         expect(result).toEqual({
             type: WS_REMOVE_USER,
-            payload
+            payload,
         });
     });
 
@@ -45,7 +46,7 @@ describe("Users Action Creators", () => {
         const result = findUsers(term, page);
         expect(result).toEqual({
             type: FIND_USERS.REQUESTED,
-            payload: { term, page }
+            payload: { term, page },
         });
     });
 
@@ -53,7 +54,7 @@ describe("Users Action Creators", () => {
         const result = getUser(userId);
         expect(result).toEqual({
             type: GET_USER.REQUESTED,
-            payload: { userId }
+            payload: { userId },
         });
     });
 
@@ -62,7 +63,7 @@ describe("Users Action Creators", () => {
         const result = createUser(payload);
         expect(result).toEqual({
             type: CREATE_USER.REQUESTED,
-            payload
+            payload,
         });
     });
 
@@ -71,7 +72,7 @@ describe("Users Action Creators", () => {
         const result = editUser(userId, update);
         expect(result).toEqual({
             type: EDIT_USER.REQUESTED,
-            payload: { userId, update }
+            payload: { userId, update },
         });
     });
 });

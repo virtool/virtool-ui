@@ -1,4 +1,7 @@
 import { screen } from "@testing-library/react";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { getCanModifyUser } from "../../selectors";
 import { mapStateToProps, UserRole } from "../Role";
 
@@ -12,7 +15,7 @@ describe("<UserRole />", () => {
             canModifyUser: true,
             id: "bob",
             role: "administrator",
-            onSetUserRole: vi.fn()
+            onSetUserRole: vi.fn(),
         };
     });
 
@@ -57,9 +60,9 @@ describe("mapStateToProps()", () => {
             users: {
                 detail: {
                     administrator: true,
-                    id: "bob"
-                }
-            }
+                    id: "bob",
+                },
+            },
         };
     });
 
@@ -70,7 +73,7 @@ describe("mapStateToProps()", () => {
         expect(props).toEqual({
             canModifyUser: true,
             id: "bob",
-            role: administrator ? "administrator" : "limited"
+            role: administrator ? "administrator" : "limited",
         });
     });
 
@@ -80,7 +83,7 @@ describe("mapStateToProps()", () => {
         expect(props).toEqual({
             canModifyUser,
             id: "bob",
-            role: "administrator"
+            role: "administrator",
         });
     });
 });

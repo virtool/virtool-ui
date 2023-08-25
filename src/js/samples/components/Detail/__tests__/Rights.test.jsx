@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InputSelect } from "../../../../base";
 import { getCanModifyRights } from "../../../selectors";
 import { mapDispatchToProps, mapStateToProps, SampleRights } from "../Rights";
@@ -8,8 +11,8 @@ describe("<SampleRights />", () => {
     let props;
     const e = {
         target: {
-            value: "bar"
-        }
+            value: "bar",
+        },
     };
 
     beforeEach(() => {
@@ -23,7 +26,7 @@ describe("<SampleRights />", () => {
             group_read: true,
             group_write: true,
             all_read: true,
-            all_write: true
+            all_write: true,
         };
     });
 
@@ -72,11 +75,11 @@ describe("mapStateToProps()", () => {
                 group_read: true,
                 group_write: false,
                 user: { id: "Baz" },
-                id: "Boo"
-            }
+                id: "Boo",
+            },
         },
         account: { id: "foo", administrator: true },
-        groups: { documents: "bar" }
+        groups: { documents: "bar" },
     };
 
     it("should return props when getCanModifyRights returns false", () => {
@@ -93,7 +96,7 @@ describe("mapStateToProps()", () => {
             group_write: false,
             groups: "bar",
             ownerId: "Baz",
-            sampleId: "Boo"
+            sampleId: "Boo",
         });
     });
 
@@ -111,7 +114,7 @@ describe("mapStateToProps()", () => {
             group_write: false,
             groups: "bar",
             ownerId: "Baz",
-            sampleId: "Boo"
+            sampleId: "Boo",
         });
     });
 });
@@ -123,7 +126,7 @@ describe("mapDispatchToProps()", () => {
         const props = mapDispatchToProps(dispatch);
         props.onListGroups();
         expect(dispatch).toHaveBeenCalledWith({
-            type: "LIST_GROUPS_REQUESTED"
+            type: "LIST_GROUPS_REQUESTED",
         });
     });
 
@@ -133,7 +136,7 @@ describe("mapDispatchToProps()", () => {
         expect(dispatch).toHaveBeenNthCalledWith(1, { type: "LIST_GROUPS_REQUESTED" });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
             payload: { sampleId: "foo", update: { group: "bar" } },
-            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED"
+            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
         });
     });
 
@@ -143,7 +146,7 @@ describe("mapDispatchToProps()", () => {
         expect(dispatch).toHaveBeenNthCalledWith(1, { type: "LIST_GROUPS_REQUESTED" });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
             payload: { sampleId: "foo", update: { group: "bar" } },
-            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED"
+            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
         });
         expect(dispatch).toHaveBeenNthCalledWith(3, {
             type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
@@ -151,9 +154,9 @@ describe("mapDispatchToProps()", () => {
                 sampleId: "foo",
                 update: {
                     group_read: true,
-                    group_write: false
-                }
-            }
+                    group_write: false,
+                },
+            },
         });
     });
 });

@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InputSearch } from "../../../base";
 import { SampleSearchToolbar } from "../Toolbar";
 
@@ -8,7 +11,7 @@ describe("<SampleSearchToolbar />", () => {
         props = {
             canCreate: true,
             initialTerm: "foo",
-            onFind: vi.fn()
+            onFind: vi.fn(),
         };
     });
 

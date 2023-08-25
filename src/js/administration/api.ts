@@ -1,0 +1,89 @@
+/**
+ * Functions for requesting data required for managing virtool.
+ *
+ * @module account/api
+ */
+import { Response } from "superagent";
+import { Request } from "../app/request";
+import { UserResponse } from "../users/types";
+import { AdministratorRoles, Settings } from "./types";
+
+/**
+ * Fetch the current settings from the server.
+ *
+ * @returns - A promise resolving to the current server settings.
+ */
+export function fetchSettings(): Promise<Settings> {
+    return Request.get("/settings").then(response => {
+        return response.body;
+    });
+}
+
+/**
+ * Fetch the current settings from the server.
+ *
+ * @returns - A promise resolving to the complete response, including the servers settings.
+ */
+export function legacyFetchSettings(): Promise<Response> {
+    return Request.get("/settings");
+}
+
+export type SettingsUpdate = {
+    default_source_types?: string[];
+    enable_api?: boolean;
+    enable_sentry?: boolean;
+    hmm_slug?: string;
+    minimum_password_length?: number;
+    sample_all_read?: boolean;
+    sample_all_write?: boolean;
+    sample_group?: string;
+    sample_group_read?: boolean;
+    sample_group_write?: boolean;
+    sample_unique_names?: boolean;
+};
+
+/**
+ * Update the current settings on the server.
+ *
+ * @returns - A promise resolving to the complete response containing the updated settings.
+ */
+export function updateSettings(update: SettingsUpdate): Promise<Response> {
+    return Request.patch("/settings").send(update);
+}
+
+/**
+ * Fetch a list of valid administrator roles
+ *
+ * @returns - A promise resolving to the list of known administrator roles
+ */
+export function fetchAdministratorRoles(): Promise<AdministratorRoles[]> {
+    return Request.get("/admin/roles").then(response => response.body);
+}
+
+/**
+ * Fetch a page of users search results
+ *
+ * @param page - The page to fetch
+ * @param per_page - The number of users to fetch per page
+ * @param term - The search term to filter users by
+ * @param administrator - Filter the users by administrator status
+ * @returns A promise resolving to a page of user search results
+ */
+export function findUsers(page: number, per_page: number, term: string, administrator: boolean): Promise<UserResponse> {
+    return Request.get("/admin/users")
+        .query({ page, per_page, term, administrator })
+        .then(response => {
+            return response.body;
+        });
+}
+
+/**
+ * Update the administrator role of a user
+ *
+ * @param role - The AdministratorRole to assign the user
+ * @param user_id - The id of the user to update
+ * @returns A promise resolving to the complete response containing the updated user
+ */
+export function setAdministratorRole(role: string, user_id: string): Promise<Response> {
+    return Request.put(`/admin/users/${user_id}/role`).send({ role });
+}

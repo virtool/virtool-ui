@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Input, InputSelect } from "../../../../base";
 import { SourceType } from "../SourceType";
 
@@ -9,7 +12,7 @@ describe("<SourceType />", () => {
             restrictSourceTypes: true,
             allowedSourceTypes: ["foo", "bar"],
             value: "bar",
-            onChange: vi.fn()
+            onChange: vi.fn(),
         };
     });
 
@@ -29,8 +32,8 @@ describe("<SourceType />", () => {
         const wrapper = shallow(<SourceType {...props} />);
         const e = {
             target: {
-                value: "Foo"
-            }
+                value: "Foo",
+            },
         };
         wrapper.find(Input).simulate("change", e);
         expect(props.onChange).toHaveBeenCalledWith(e);
@@ -40,8 +43,8 @@ describe("<SourceType />", () => {
         const wrapper = shallow(<SourceType {...props} />);
         const e = {
             target: {
-                value: "Foo"
-            }
+                value: "Foo",
+            },
         };
         wrapper.find(InputSelect).simulate("change", e);
         expect(props.onChange).toHaveBeenCalledWith(e);

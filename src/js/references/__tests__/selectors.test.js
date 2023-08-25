@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { checkReferenceRight, getCanModifyReferenceOTU } from "../selectors";
 
 const rights = ["build", "modify", "modify_otu", "remove"];
@@ -10,14 +11,14 @@ describe("checkReferenceRight()", () => {
             account: {
                 administrator: false,
                 groups: ["leads"],
-                id: "bob"
+                id: "bob",
             },
             references: {
                 detail: {
                     users: [{ id: "fred", build: false, modify: false, modify_otu: false, remove: false }],
-                    groups: [{ id: "techs", build: false, modify: false, modify_otu: false, remove: false }]
-                }
-            }
+                    groups: [{ id: "techs", build: false, modify: false, modify_otu: false, remove: false }],
+                },
+            },
         };
     });
 
@@ -35,7 +36,7 @@ describe("checkReferenceRight()", () => {
             modify: true,
             modify_otu: true,
             remove: true,
-            [right]: false
+            [right]: false,
         });
 
         rights.forEach(rightToCheck => {
@@ -50,7 +51,7 @@ describe("checkReferenceRight()", () => {
             modify: false,
             modify_otu: false,
             remove: false,
-            [right]: true
+            [right]: true,
         });
 
         rights.forEach(rightToCheck => {
@@ -65,7 +66,7 @@ describe("checkReferenceRight()", () => {
             modify: false,
             modify_otu: false,
             remove: false,
-            [right]: true
+            [right]: true,
         });
 
         rights.forEach(rightToCheck => {
@@ -82,20 +83,20 @@ describe("getCanModifyReferenceOTU()", () => {
             account: {
                 administrator: false,
                 groups: ["leads"],
-                id: "bob"
+                id: "bob",
             },
             references: {
                 detail: {
                     users: [{ id: "fred", modify_otu: true }],
-                    groups: [{ id: "techs", modify_otu: true }]
-                }
-            }
+                    groups: [{ id: "techs", modify_otu: true }],
+                },
+            },
         };
     });
 
     it("should return false when reference is remote", () => {
         state.references.detail.remotes_from = {
-            slug: "virtool/ref-plant-viruses"
+            slug: "virtool/ref-plant-viruses",
         };
         expect(getCanModifyReferenceOTU(state)).toBe(false);
     });

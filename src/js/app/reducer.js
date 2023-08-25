@@ -6,7 +6,6 @@ import createSagaMiddleware from "redux-saga";
 import accountReducer from "../account/reducer";
 import settingsReducer from "../administration/reducer";
 import analysesReducer from "../analyses/reducer";
-import cacheReducer from "../caches/reducer";
 import errorsReducer from "../errors/reducer";
 import filesReducer from "../files/reducer";
 import { formsReducer } from "../forms/reducer";
@@ -72,7 +71,7 @@ export const appReducer = createReducer(initialState, builder => {
 
 const sentryReduxEnhancer = createReduxEnhancer();
 
-export const createAppStore = history => {
+export function createAppStore(history) {
     const sagaMiddleware = createSagaMiddleware();
 
     const store = createStore(
@@ -80,7 +79,6 @@ export const createAppStore = history => {
             account: accountReducer,
             analyses: analysesReducer,
             app: appReducer,
-            caches: cacheReducer,
             errors: errorsReducer,
             files: filesReducer,
             forms: formsReducer,
@@ -105,4 +103,4 @@ export const createAppStore = history => {
     sagaMiddleware.run(rootSaga);
 
     return store;
-};
+}
