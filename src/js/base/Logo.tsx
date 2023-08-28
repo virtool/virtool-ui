@@ -61,6 +61,14 @@ interface LogoProps {
     color?: string;
 }
 
+/**
+ * Virtool's logo
+ *
+ * @param className - the class name to apply to the logo
+ * @param height - the height of the logo
+ * @param color - the color of the logo
+ * @returns Virtool's logo
+ */
 export function Logo({ className, height = 30, color }: LogoProps) {
     return (
         <StyledLogo className={className} color={color}>
