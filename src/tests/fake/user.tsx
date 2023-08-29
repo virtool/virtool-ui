@@ -14,10 +14,10 @@ type CreateFakeUserNestedProps = {
 };
 
 /**
- * Create a UserNested object with fake data
+ * Returns a UserNested object populated with fake data
  *
- * @param {CreateFakeUserNestedProps} props values to override the default automatically generated values
- * @returns {UserNested} a UserNested object with fake data
+ * @param props - values to override automatically generated values
+ * @returns a UserNested object with fake data
  */
 export function createFakeUserNested(props?: CreateFakeUserNestedProps): UserNested {
     let { handle, id, administrator } = props || {};
@@ -38,7 +38,7 @@ type CreateFakeUserProps = {
 };
 
 /**
- * Create User object with fake data
+ * Returns a User object populated with fake data
  *
  * @param {CreateFakeUserProps} props values to override the default automatically generated values
  * @returns {User} a User object with fake data
@@ -65,10 +65,10 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
 }
 
 /**
- * Create an array of user objects with fake data
+ * Returns an array of User objects populated with fake data
  *
- * @param {number} count the number of users to create
- * @returns {User[]} An array of User objects with fake data
+ * @param count - the number of users to create
+ * @returns An array of User objects populated with fake data
  */
 export function createFakeUsers(count: number): Array<User> {
     return times(count || 1, () => createFakeUser());
@@ -82,13 +82,13 @@ type Query = {
 };
 
 /**
- * Creates a mocked API call for getting a list of users
+ * Mocks an API call for getting page of userSearchResults
  *
- * @param {User[]} users an array of users to return
- * @param {Query} query the query parameters to match
- * @returns {nock.Scope} a nock scope that mocks the API call
+ * @param users - an array of users to return
+ * @param query - the query parameters to match
+ * @returns - a nock Scope for the mocked API call
  */
-export function mockApiGetUsers(users: Array<User>, query?: Query) {
+export function mockApiFindUsers(users: Array<User>, query?: Query) {
     return nock("http://localhost")
         .get("/api/admin/users")
         .query(query || true)
