@@ -1,4 +1,4 @@
-import { forEach, includes, map, reject, sortBy, unionBy } from "lodash-es";
+import { includes, map, reject, sortBy, unionBy } from "lodash-es";
 
 export const updateDocuments = (state, payload, sortKey, sortReverse) => {
     const existing = payload.page === 1 ? [] : state.documents || [];
@@ -81,12 +81,19 @@ export function updateJobs(state, payload) {
         return state;
     }
 
-    forEach(state.documents, document => {
-        if (document.job.id === payload.id) {
-            document.job = {
-                ...document.job,
-                ...payload,
-            };
-        }
-    });
+    return {
+        ...state,
+        documents: map(state.documents, document => {
+            if (document.job.id === payload.id) {
+                document = {
+                    ...document,
+                    job: {
+                        ...document.job,
+                        ...payload,
+                    },
+                };
+            }
+            return document;
+        }),
+    };
 }
