@@ -1,21 +1,12 @@
 # virtool-ui
 
-The browser frontend for Virtool
-
-## What's Included
-
-- Frontend code based in React
-- A Express server that serves frontend resources, CSP headers, and nonces.
-- Dockerfile
+The web-app frontend for Virtool
 
 ## Using in Production
 
-The default CSP configuration expects API requests to be made to the same domain as the client is served from.
-
-| Path | Description                | Example                        |
-| ---- | -------------------------- | ------------------------------ |
-| /api | Should route to API server | https://app.virtool.ca/api     |
-| /    | Should route to UI server  | https://app.virtool.ca/samples |
+The default CSP configuration expects API requests to be made to the same domain as the
+client is served from. The UI server and API server should be served from behind the same 
+reverse proxy.
 
 ## Configuration
 
@@ -23,86 +14,40 @@ The default CSP configuration expects API requests to be made to the same domain
 | ------------------- | ------------------ | ---------------------------------------------- |
 | `-p`, `--port`      | `VT_UI_PORT`       | The port the UI server should listen on        |
 | `-H`, `--host`      | `VT_UI_HOST`       | The host the UI server should listen on        |
-| `-a`, `--api-url`   | `VT_UI_API_URL`    | The URL API requests should be made to         |
-| `-P`, `--use-proxy` | `VT_UI_USE_PROXY`  | Proxy API requests through the UI server       |
 | `--sentry-dsn`      | `VT_UI_SENTRY_DSN` | The DSN that sentry will send logged errors to |
-
-### API Proxy
-
-Use the API proxy during development to avoid CORS and CSP issues due to server the UI and API servers at two different addresses.
-
-The proxy works by proxying requests from the client to `/api` routes to the provided `--api-url`. This satisfies the CSP because all requests are sent to the UI server address (usually `http://localhost:9900`)
-
-**In production, use a reverse proxy like NGINX or similar solution to route requests to the appropriate service** The API proxy is not suitable for production.
 
 ## Development
 
-### Dependencies
-
-- Docker
-- Node.js
-- `git`
-
 ### Working on `virtool-ui`
 
-Use this guide when you are contributing to `virtool/ui`.
+Use this guide to create your environment when you are contributing to `virtool/ui`.
 
-1. Clone the repository onto your local machine
+1. Follow the instructions in the [`dev`](https://github.com/virtool/dev) repository's README to set up a local kubernetes cluster.
+
+2. Clone this repository onto your local machine into the same parent folder as `dev`
 
    ```
    git clone https://github.com/virtool/virtool-ui.git
    ```
-
-2. Install packages
-
-   ```
-   npm i
-   ```
-
-3. Start backend services:
+   
+3. Start tilt with frontend editing enabled
 
    ```
-   docker-compose up -d
+    tilt up -- --to-edit ui
    ```
 
-4. Start either the development server:
-   ```
-   npm run startDev
-   ```
+### Storybook
 
-### Working with `virtool/ui` image
+Storybook is used to develop and test UI components in isolation. It is also used to
+document components and their use cases.
 
-Use this guide when you are contributing to another Virtool service and need to stand up the UI server.
 
-In this example, we are working on `virtool/virtool` on `localhost` and want to deploy `ui` in Docker Compose. We want `ui` to proxy
-API requests to `virtool/virtool`.
-
-Use `docker-compose` to configure a `ui` service and any other services you need (eg. workflows, databases):
-
-```yaml
-ui:
-  image: virtool/ui:latest
-   ports:
-     - "9900:9900"
-   environment:
-     VT_UI_HOST: "0.0.0.0"
-     VT_UI_PORT: 9900 # Default port
-     VT_UI_API_URL: http://host.docker.internal:9950
-     VT_UI_USE_PROXY: true
-   extra_hosts:
-     - "host.docker.internal:host-gateway"
-```
-
-**The service (eg. Virtool API server) running on localhost must listen on `0.0.0.0` for this to work**.
-
-## Storybook
-
-Instructions for running storybook during development
-
-1. Start storybook locally
+1. Start storybook
 
    ```
    npm run storybook
    ```
 
-2. Depending on system configuration the address will either open automatically or the address must be manually entered by the user.
+2. Depending on system configuration the address will either open automatically or the
+   address must be manually entered by the user.
+
