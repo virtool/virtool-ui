@@ -10,6 +10,7 @@ import { TargetForm } from "./Form";
 const getInitialState = () => ({
     name: "",
     description: "",
+    length: 0,
     required: false,
     errorName: "",
 });
