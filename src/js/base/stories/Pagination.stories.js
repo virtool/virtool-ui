@@ -3,7 +3,7 @@ import { useArgs } from "@storybook/client-api";
 import { map } from "lodash-es";
 import React, { useMemo } from "react";
 import { Box } from "../";
-import { UserItem } from "../../users/components/Item";
+import { UserItem } from "../../users/components/UserItem";
 import { Pagination } from "../Pagination";
 
 export default {

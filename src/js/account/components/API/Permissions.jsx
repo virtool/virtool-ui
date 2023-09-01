@@ -6,7 +6,7 @@ import { AdministratorPermissions, hasSufficientAdminRole } from "../../../admin
 import { BoxGroup, Checkbox, SelectBoxGroupSection } from "../../../base";
 import { getAccountAdministratorRole } from "../../selectors";
 
-export const APIPermissions = ({ administrator_role, className, userPermissions, keyPermissions, onChange }) => {
+export const APIPermissions = ({ administratorRole, className, userPermissions, keyPermissions, onChange }) => {
     const permissions = map(keyPermissions, (value, key) => ({
         name: key,
         allowed: value,
@@ -14,7 +14,7 @@ export const APIPermissions = ({ administrator_role, className, userPermissions,
 
     const rowComponents = map(sortBy(permissions, "name"), permission => {
         const disabled =
-            !hasSufficientAdminRole(AdministratorPermissions[permission.name], administrator_role) &&
+            !hasSufficientAdminRole(AdministratorPermissions[permission.name], administratorRole) &&
             !userPermissions[permission.name];
 
         return (
@@ -34,7 +34,7 @@ export const APIPermissions = ({ administrator_role, className, userPermissions,
 };
 
 APIPermissions.propTypes = {
-    administrator_role: PropTypes.string,
+    administratorRole: PropTypes.string,
     userPermissions: PropTypes.object.isRequired,
     keyPermissions: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -42,7 +42,7 @@ APIPermissions.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    administrator_role: getAccountAdministratorRole(state),
+    administratorRole: getAccountAdministratorRole(state),
     userPermissions: state.account.permissions,
 });
 

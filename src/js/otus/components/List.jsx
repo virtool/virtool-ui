@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../app/actions";
-import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, ScrollList } from "../../base";
+import { ContainerNarrow, LegacyScrollList, LoadingPlaceholder, NoneFoundBox } from "../../base";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
 import { findOTUs } from "../actions";
 import { getTerm } from "../selectors";
@@ -34,7 +34,7 @@ export const OTUsList = props => {
 
             {noneFound}
 
-            <ScrollList
+            <LegacyScrollList
                 documents={props.documents}
                 onLoadNextPage={page => props.onLoadNextPage(props.refId, props.term, props.verified, page)}
                 page={props.page}

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { getAccountId } from "../../account/selectors";
 import QuickAnalysis from "../../analyses/components/Create/Quick";
-import { Badge, LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, LegacyScrollList, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findHmms } from "../../hmm/actions";
 import { listReadyIndexes } from "../../indexes/actions";
 import { listLabels } from "../../labels/actions";
@@ -70,7 +70,7 @@ export const SamplesList = ({
                 </SamplesListHeader>
                 <SamplesListContent>
                     {noneFound || (
-                        <ScrollList
+                        <LegacyScrollList
                             documents={documents}
                             page={page}
                             pageCount={pageCount}

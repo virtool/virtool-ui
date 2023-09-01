@@ -6,9 +6,10 @@ import {
     SHORTLIST_SUBTRACTIONS,
     WS_INSERT_SUBTRACTION,
     WS_REMOVE_SUBTRACTION,
+    WS_UPDATE_JOB,
     WS_UPDATE_SUBTRACTION,
 } from "../app/actionTypes";
-import { insert, remove, update, updateDocuments } from "../utils/reducers";
+import { insert, remove, update, updateDocuments, updateJobs } from "../utils/reducers";
 
 export const initialState = {
     detail: null,
@@ -28,6 +29,9 @@ export const subtractionsReducer = createReducer(initialState, builder => {
         })
         .addCase(WS_REMOVE_SUBTRACTION, (state, action) => {
             return remove(state, action.payload);
+        })
+        .addCase(WS_UPDATE_JOB, (state, action) => {
+            return updateJobs(state, action.payload);
         })
         .addCase(FIND_SUBTRACTIONS.REQUESTED, (state, action) => {
             state.term = action.payload.term;

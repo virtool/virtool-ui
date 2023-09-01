@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { getFontWeight } from "../../app/theme";
-import { Box, ContainerNarrow, LoadingPlaceholder, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Box, ContainerNarrow, LegacyScrollList, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findJobs } from "../actions";
 import { getJobCountsTotal } from "../selectors";
 import { JobFilters } from "./Filters/Filters";
@@ -54,7 +54,7 @@ export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, 
         );
     } else {
         inner = (
-            <ScrollList
+            <LegacyScrollList
                 documents={jobs}
                 page={page}
                 pageCount={page_count}

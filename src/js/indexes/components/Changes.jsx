@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { LoadingPlaceholder, ScrollList } from "../../base";
+import { LegacyScrollList, LoadingPlaceholder } from "../../base";
 import { getIndexHistory } from "../actions";
 import IndexChange from "./Change";
 
@@ -17,7 +17,7 @@ class IndexChanges extends React.Component {
         }
 
         return (
-            <ScrollList
+            <LegacyScrollList
                 documents={this.props.history.documents}
                 onLoadNextPage={page => this.props.onLoadNextPage(this.props.detail.id, page)}
                 page={this.props.history.page}

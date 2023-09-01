@@ -91,7 +91,7 @@ export { RelativeTime } from "./RelativeTime";
 export { RemoveBanner } from "./RemoveBanner";
 export { RemoveModal } from "./RemoveModal";
 export { SaveButton } from "./SaveButton";
-export { ScrollList } from "./ScrollList";
+export { LegacyScrollList } from "./ScrollList";
 export { SectionHeader } from "./SectionHeader";
 export { Select } from "./select/Select";
 export { SelectButton } from "./select/SelectButton";

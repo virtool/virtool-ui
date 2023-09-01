@@ -14,7 +14,7 @@ const SampleReadsTitle = styled.h2`
     }
 `;
 
-export const SampleReads = ({ reads, prefix }) => {
+function SampleReads({ reads, prefix }) {
     const fileComponents = map(reads, (file, index) => (
         <ReadItem key={file.name} {...file} prefix={prefix} suffix={index + 1} />
     ));
@@ -28,15 +28,16 @@ export const SampleReads = ({ reads, prefix }) => {
             {fileComponents}
         </BoxGroup>
     );
-};
+}
 
-export const mapStateToProps = state => {
+function mapStateToProps(state) {
     const { id, reads, name } = state.samples.detail;
+
     return {
         reads,
         id,
         prefix: snakeCase(name),
     };
-};
+}
 
 export default connect(mapStateToProps)(SampleReads);

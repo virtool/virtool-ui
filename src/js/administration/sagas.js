@@ -1,7 +1,7 @@
 import { takeEvery, takeLatest } from "redux-saga/effects";
 import { GET_SETTINGS, UPDATE_SETTINGS } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
-import * as settingsAPI from "./api";
+import { legacyFetchSettings as apiFetchSettings, updateSettings as apiUpdateSettings } from "./api";
 
 export function* watchSettings() {
     yield takeLatest(GET_SETTINGS.REQUESTED, getSettings);
@@ -9,11 +9,11 @@ export function* watchSettings() {
 }
 
 function* getSettings(action) {
-    yield apiCall(settingsAPI.get, action, GET_SETTINGS);
+    yield apiCall(apiFetchSettings, action, GET_SETTINGS);
 }
 
 function* updateSettings(action) {
-    yield apiCall(settingsAPI.update, action.payload, UPDATE_SETTINGS, {
+    yield apiCall(apiUpdateSettings, action.payload, UPDATE_SETTINGS, {
         update: action.payload.update,
     });
 }

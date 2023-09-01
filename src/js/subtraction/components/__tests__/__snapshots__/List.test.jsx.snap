@@ -13,7 +13,7 @@ exports[`<SubtractionList /> > renders correctly 1`] = `
     </ViewHeaderTitle>
   </ViewHeader>
   <Connect(SubtractionToolbar) />
-  <ScrollList
+  <LegacyScrollList
     documents={
       [
         "one",

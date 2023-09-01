@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Badge, ContainerNarrow, LoadingPlaceholder, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, ContainerNarrow, LegacyScrollList, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findReferences, remoteReference } from "../actions";
 import { getTerm } from "../selectors";
 import Clone from "./Clone";
@@ -31,7 +31,7 @@ const ReferenceList = ({ term, documents, totalCount, onLoadNextPage, page, page
                 <ReferenceToolbar />
                 <ReferenceOfficial />
 
-                <ScrollList
+                <LegacyScrollList
                     documents={documents}
                     onLoadNextPage={page => onLoadNextPage(term, page)}
                     page={page}

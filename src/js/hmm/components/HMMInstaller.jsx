@@ -1,10 +1,9 @@
-import { get, replace } from "lodash-es";
+import { replace } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { Box, ExternalLink, Icon, ProgressBarAffixed } from "../../base";
-import { installHMMs } from "../actions";
+import { findHmms } from "../actions";
 import { getTask } from "../selectors";
 import InstallOption from "./InstallOption";
 
@@ -39,10 +38,14 @@ const StyledHMMInstaller = styled(Box)`
     }
 `;
 
-export const HMMInstaller = ({ installed, task }) => {
+export const HMMInstaller = ({ installed, task, onComplete }) => {
     if (task && !installed) {
         const progress = task.progress;
         const step = replace(task.step, "_", " ");
+
+        if (task.complete) {
+            onComplete();
+        }
 
         return (
             <HMMInstalling>
@@ -71,15 +74,13 @@ export const HMMInstaller = ({ installed, task }) => {
 };
 
 export const mapStateToProps = state => ({
-    releaseId: get(state.hmms.status, "release.id"),
     installed: Boolean(state.hmms.status.installed),
-    canInstall: checkAdminRoleOrPermission(state, "modify_hmm"),
     task: getTask(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
-    onInstall: releaseId => {
-        dispatch(installHMMs(releaseId));
+    onComplete: () => {
+        dispatch(findHmms("", 1));
     },
 });
 

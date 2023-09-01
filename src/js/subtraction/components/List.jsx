@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
-import { Badge, LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, LegacyScrollList, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findSubtractions } from "../actions";
 import SubtractionItem from "./Item";
 import SubtractionToolbar from "./Toolbar";
@@ -23,7 +23,7 @@ export class SubtractionList extends React.Component {
 
         if (this.props.documents.length) {
             subtractionComponents = (
-                <ScrollList
+                <LegacyScrollList
                     documents={this.props.documents}
                     onLoadNextPage={page => this.props.onLoadNextPage(this.props.term, page)}
                     page={this.props.page}
