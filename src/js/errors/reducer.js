@@ -35,7 +35,7 @@ import {
     UPDATE_ACCOUNT,
     UPDATE_SAMPLE,
     UPDATE_SETTINGS,
-    UPLOAD
+    UPLOAD,
 } from "../app/actionTypes";
 import { reportAPIError } from "../utils/utils";
 
@@ -94,7 +94,7 @@ export const errorsReducer = createReducer({}, builder => {
 
                 const errorPayload = {
                     status: action.payload.status,
-                    message: action.payload.message
+                    message: action.payload.message,
                 };
                 switch (action.type) {
                     case CREATE_SAMPLE.FAILED:
@@ -135,7 +135,7 @@ export const errorsReducer = createReducer({}, builder => {
                         // Report uncaught errors to Sentry
                         reportAPIError(action);
                 }
-            }
+            },
         )
         .addDefaultCase((state, action) => {
             // Ignore requests until an error has occurred

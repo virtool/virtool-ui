@@ -12,7 +12,7 @@ export const RemoveSubtraction = ({ id, name, show, onConfirm, onHide }) => (
 export const mapStateToProps = state => ({
     id: state.subtraction.detail.id,
     name: state.subtraction.detail.name,
-    show: routerLocationHasState(state, "removeSubtraction", true)
+    show: routerLocationHasState(state, "removeSubtraction", true),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -22,7 +22,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onConfirm: subtractionId => {
         dispatch(removeSubtraction(subtractionId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RemoveSubtraction);

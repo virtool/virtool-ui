@@ -28,6 +28,15 @@ jobs:
         run: npm i
       - name: Run ESLint
         run: npx eslint --quiet src/js
+  prettier:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install
+        run: npm i
+      - name: Run Prettier
+        run: npx prettier -l src/js
   test:
     runs-on: ubuntu-22.04
     steps:

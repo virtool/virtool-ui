@@ -1,6 +1,6 @@
+import { useArgs } from "@storybook/client-api";
 import React from "react";
 import { Checkbox } from "../Checkbox";
-import { useArgs } from "@storybook/client-api";
 
 export default {
     title: "base/Checkbox",
@@ -8,8 +8,8 @@ export default {
     argTypes: {
         checked: { control: "boolean" },
         disabled: { control: "boolean" },
-        label: { control: "text" }
-    }
+        label: { control: "text" },
+    },
 };
 
 const Template = args => {
@@ -22,5 +22,5 @@ export const SampleCheckbox = Template.bind({});
 SampleCheckbox.args = {
     checked: false,
     disabled: false,
-    label: "Checkbox"
+    label: "Checkbox",
 };

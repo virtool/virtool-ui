@@ -37,7 +37,7 @@ export const SampleSidebarSelector = ({
     sampleId,
     onUpdate,
     selectionType,
-    manageLink
+    manageLink,
 }) => {
     const [results, term, setTerm] = useFuse(sampleItems, ["name"], [sampleId]);
     const [attributes, show, styles, setPopperElement, setReferenceElement, setShow] = usePopover();

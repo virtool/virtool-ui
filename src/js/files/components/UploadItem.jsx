@@ -69,7 +69,7 @@ export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) 
 const mapDispatchToProps = dispatch => ({
     onRemove: localId => {
         dispatch(removeUpload(localId));
-    }
+    },
 });
 
 export default connect(null, mapDispatchToProps)(UploadItem);

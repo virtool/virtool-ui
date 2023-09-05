@@ -3,7 +3,7 @@ import { JobStep } from "../components/Step";
 
 export default {
     title: "jobs/Step",
-    component: JobStep
+    component: JobStep,
 };
 
 export const Running = () => {
@@ -14,32 +14,32 @@ export const Running = () => {
             state: "running",
             step_description: "Doing something complex with numbers.",
             step_name: "Reticulate splines",
-            timestamp: Date.now()
+            timestamp: Date.now(),
         },
         {
             state: "timeout",
             step_description: null,
             step_name: null,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         },
         {
             state: "cancelled",
             step_description: null,
             step_name: null,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         },
         {
             state: "error",
             step_description: null,
             step_name: null,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         },
         {
             state: "terminated",
             step_description: null,
             step_name: null,
-            timestamp: Date.now()
-        }
+            timestamp: Date.now(),
+        },
     ];
 
     return (

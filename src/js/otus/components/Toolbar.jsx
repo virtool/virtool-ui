@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Icon, LinkButton, InputSearch, Toolbar } from "../../base";
+import { Button, Icon, InputSearch, LinkButton, Toolbar } from "../../base";
 import { getCanModifyReferenceOTU } from "../../references/selectors";
 import { findOTUs } from "../actions";
 
@@ -45,14 +45,14 @@ const mapStateToProps = state => {
         refId: state.references.detail.id,
         page,
         term,
-        verified
+        verified,
     };
 };
 
 const mapDispatchToProps = dispatch => ({
     onFind: (refId, term, verified) => {
         dispatch(findOTUs(refId, term, verified, 1));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OTUToolbar);

@@ -8,7 +8,7 @@ import {
     NoneFoundSection,
     ViewHeader,
     ViewHeaderSubtitle,
-    ViewHeaderTitle
+    ViewHeaderTitle,
 } from "../../base";
 import { useFetchLabels } from "../hooks";
 import { CreateLabel } from "./Create";

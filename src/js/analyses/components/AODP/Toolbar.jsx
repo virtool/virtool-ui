@@ -18,7 +18,7 @@ export const AODPToolBar = ({ filterAODP, fuse, id, sortKey, onSearch, onSelect,
         e => {
             onSearch(e.target.value, fuse);
         },
-        [id]
+        [id],
     );
 
     const handleChangeFilter = e => {
@@ -46,7 +46,7 @@ const mapStateToProps = state => ({
     filterAODP: state.analyses.filterAODP,
     fuse: getFuse(state),
     id: state.analyses.detail.id,
-    sortKey: state.analyses.sortKey
+    sortKey: state.analyses.sortKey,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -60,7 +60,7 @@ const mapDispatchToProps = dispatch => ({
 
     onSetFilter: identity => {
         dispatch(setAODPFilter(identity));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AODPToolBar);

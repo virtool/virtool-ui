@@ -3,6 +3,6 @@ import { GET_INSTANCE_MESSAGE, SET_INSTANCE_MESSAGE, UPDATE_INSTANCE_MESSAGE } f
 
 export const getInstanceMessage = createAction(GET_INSTANCE_MESSAGE.REQUESTED);
 export const setInstanceMessage = createAction(SET_INSTANCE_MESSAGE.REQUESTED, message => ({
-    payload: { message }
+    payload: { message },
 }));
 export const updateInstanceMessage = createAction(UPDATE_INSTANCE_MESSAGE.REQUESTED);

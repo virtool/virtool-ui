@@ -1,7 +1,7 @@
 import React from "react";
 import { BoxGroup } from "../../BoxGroup";
-import { BoxGroupSection } from "../../BoxGroupSection";
 import { BoxGroupHeader } from "../../BoxGroupHeader";
+import { BoxGroupSection } from "../../BoxGroupSection";
 
 export default {
     title: "base/Box/BoxGroupSection",
@@ -10,10 +10,10 @@ export default {
         docs: {
             description: {
                 component:
-                    "A wrapper for elements contained inside a box or boxgroup. Helps to ensure visual consistency and prevents double borders from occuring."
-            }
-        }
-    }
+                    "A wrapper for elements contained inside a box or boxgroup. Helps to ensure visual consistency and prevents double borders from occuring.",
+            },
+        },
+    },
 };
 
 const Template = args => (
@@ -37,11 +37,11 @@ const clickableTemplate = args => (
 export const testBoxGroupSection = Template.bind({});
 
 testBoxGroupSection.args = {
-    children: "First BoxGroupSection"
+    children: "First BoxGroupSection",
 };
 
 export const clickableBoxGroupSection = clickableTemplate.bind({});
 
 clickableBoxGroupSection.args = {
-    onClick: () => console.log("Click Here!")
+    onClick: () => console.log("Click Here!"),
 };

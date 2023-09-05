@@ -2,8 +2,8 @@ import { put, takeEvery, takeLatest, throttle } from "redux-saga/effects";
 import { pushState } from "../app/actions";
 import { CREATE_LABEL, LIST_LABELS, REMOVE_LABEL, UPDATE_LABEL } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
-import * as labelsAPI from "./api";
 import { listLabels as listLabelsAction } from "./actions";
+import * as labelsAPI from "./api";
 
 export function* watchLabels() {
     yield takeLatest(LIST_LABELS.REQUESTED, listLabels);

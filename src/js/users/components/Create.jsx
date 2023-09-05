@@ -8,12 +8,12 @@ import {
     InputError,
     InputGroup,
     InputLabel,
+    InputPassword,
     Modal,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    InputPassword,
-    SaveButton
+    SaveButton,
 } from "../../base";
 import { clearError } from "../../errors/actions";
 import { getTargetChange, routerLocationHasState } from "../../utils/utils";
@@ -24,7 +24,7 @@ const getInitialState = () => ({
     password: "",
     forceReset: false,
     errorHandle: "",
-    errorPassword: ""
+    errorPassword: "",
 });
 
 export class CreateUser extends React.PureComponent {
@@ -59,7 +59,7 @@ export class CreateUser extends React.PureComponent {
 
     handleToggleForceReset = () => {
         this.setState({
-            forceReset: !this.state.forceReset
+            forceReset: !this.state.forceReset,
         });
     };
 
@@ -76,7 +76,7 @@ export class CreateUser extends React.PureComponent {
         if (this.state.password.length < this.props.minimumPasswordLength) {
             hasError = true;
             this.setState({
-                errorPassword: `Passwords must contain at least ${this.props.minimumPasswordLength} characters`
+                errorPassword: `Passwords must contain at least ${this.props.minimumPasswordLength} characters`,
             });
         }
 
@@ -137,7 +137,7 @@ export const mapStateToProps = state => ({
     show: routerLocationHasState(state, "createUser"),
     pending: state.users.createPending,
     minimumPasswordLength: state.settings.data.minimum_password_length,
-    error: get(state, "errors.CREATE_USER_ERROR.message", "")
+    error: get(state, "errors.CREATE_USER_ERROR.message", ""),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -151,7 +151,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onClearError: () => {
         dispatch(clearError("CREATE_USER_ERROR"));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateUser);

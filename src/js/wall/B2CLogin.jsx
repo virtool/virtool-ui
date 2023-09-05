@@ -43,7 +43,7 @@ export const B2CLogin = ({ onSetLogin }) => {
 export const mapDispatchToProps = dispatch => ({
     onSetLogin: () => {
         dispatch(loginSucceeded());
-    }
+    },
 });
 
 export default connect(null, mapDispatchToProps)(B2CLogin);

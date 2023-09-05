@@ -12,7 +12,7 @@ import {
     ListboxInput,
     ListboxList,
     ListboxOption,
-    ListboxPopover
+    ListboxPopover,
 } from "../../../base";
 import { getTargets } from "../../../otus/selectors";
 import { getUnreferencedTargets } from "../../selectors";
@@ -77,7 +77,7 @@ export const TargetField = ({ targets, targetValue, onChange }) => {
 
 export const mapStateToProps = (state, props) => ({
     targets: getUnreferencedTargets(state),
-    targetValue: find(getTargets(state), { name: props.value })
+    targetValue: find(getTargets(state), { name: props.value }),
 });
 
 export default connect(mapStateToProps)(TargetField);

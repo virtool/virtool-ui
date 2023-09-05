@@ -83,7 +83,7 @@ function mapStateToProps(state) {
     return {
         administratorRole: getAccountAdministratorRole(state),
         groups: state.account.groups,
-        handle: getAccountHandle(state)
+        handle: getAccountHandle(state),
     };
 }
 

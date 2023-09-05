@@ -3,13 +3,13 @@ import { JobItem } from "../components/Item/Item";
 
 export default {
     title: "jobs/Item",
-    component: JobItem
+    component: JobItem,
 };
 
 const user = {
     administrator: false,
     id: "foo",
-    handle: "Foo Bar"
+    handle: "Foo Bar",
 };
 
 export const Cancellable = () => (

@@ -38,7 +38,7 @@ export const APIKeyAdministratorInfo = ({ administrator }) => {
 };
 
 export const mapStateToProps = state => ({
-    administrator: getAccountAdministratorRole(state) !== null
+    administrator: getAccountAdministratorRole(state) !== null,
 });
 
 export default connect(mapStateToProps)(APIKeyAdministratorInfo);

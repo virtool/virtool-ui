@@ -27,7 +27,7 @@ const OTUIssues = props => {
     // The OTU has an inconsistent number of sequences between isolates.
     if (props.issues.isolate_inconsistency) {
         errors.push(
-            <li key="isolateInconsistency">Some isolates have different numbers of sequences than other isolates</li>
+            <li key="isolateInconsistency">Some isolates have different numbers of sequences than other isolates</li>,
         );
     }
 
@@ -45,7 +45,7 @@ const OTUIssues = props => {
             <li key="emptyIsolate">
                 There are no sequences associated with the following isolates:
                 <ul>{emptyIsolates}</ul>
-            </li>
+            </li>,
         );
     }
 
@@ -68,7 +68,7 @@ const OTUIssues = props => {
             <li key="emptySequence">
                 There are sequence records with undefined <code>sequence</code> fields:
                 <ul>{emptySequences}</ul>
-            </li>
+            </li>,
         );
     }
 
@@ -82,7 +82,7 @@ const OTUIssues = props => {
 
 OTUIssues.propTypes = {
     issues: PropTypes.object,
-    isolates: PropTypes.arrayOf(PropTypes.object)
+    isolates: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default OTUIssues;

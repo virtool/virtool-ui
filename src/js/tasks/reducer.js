@@ -4,7 +4,7 @@ import { insert, update } from "../utils/reducers";
 
 export const initialState = {
     documents: [],
-    detail: null
+    detail: null,
 };
 
 export const tasksReducer = createReducer(initialState, builder => {

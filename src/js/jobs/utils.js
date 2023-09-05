@@ -44,12 +44,12 @@ export function getStepDescription({ state, step_name, step_description }) {
     if (step_name && step_description) {
         return {
             title: step_name,
-            description: step_description
+            description: step_description,
         };
     }
 
     return {
         title: getStateTitle(state),
-        description: getStateDescription(state)
+        description: getStateDescription(state),
     };
 }

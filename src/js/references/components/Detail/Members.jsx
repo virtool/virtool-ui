@@ -10,7 +10,7 @@ import {
     editReferenceGroup,
     editReferenceUser,
     removeReferenceGroup,
-    removeReferenceUser
+    removeReferenceUser,
 } from "../../actions";
 import { checkReferenceRight } from "../../selectors";
 import AddReferenceMember from "./AddMember";
@@ -19,7 +19,7 @@ import MemberItem from "./MemberItem";
 
 const getInitialState = () => ({
     showAdd: false,
-    showEdit: false
+    showEdit: false,
 });
 
 const NewMemberLink = styled.a`
@@ -58,7 +58,7 @@ class ReferenceMembers extends React.Component {
         onAdd: PropTypes.func.isRequired,
         onEdit: PropTypes.func.isRequired,
         onRemove: PropTypes.func.isRequired,
-        refId: PropTypes.string.isRequired
+        refId: PropTypes.string.isRequired,
     };
 
     add = () => {
@@ -132,7 +132,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         refId: state.references.detail.id,
         members: sortBy(noun === "user" ? state.references.detail.users : state.references.detail.groups, "id"),
-        canModify: checkReferenceRight(state, "modify")
+        canModify: checkReferenceRight(state, "modify"),
     };
 };
 
@@ -150,7 +150,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     onRemove: (refId, id) => {
         const actionCreator = ownProps.noun === "user" ? removeReferenceUser : removeReferenceGroup;
         dispatch(actionCreator(refId, id));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceMembers);

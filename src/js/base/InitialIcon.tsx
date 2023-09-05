@@ -9,7 +9,7 @@ const iconSize = {
     md: "20px",
     lg: "28px",
     xl: "44px",
-    xxl: "60px"
+    xxl: "60px",
 };
 
 const fontSize = {
@@ -18,7 +18,7 @@ const fontSize = {
     md: "10px",
     lg: "14px",
     xl: "22px",
-    xxl: "30px"
+    xxl: "30px",
 };
 
 function getIconSize(size: string): string {

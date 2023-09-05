@@ -11,14 +11,16 @@ import EditSubtraction from "../Edit";
 import RemoveSubtraction from "../Remove";
 import SubtractionFiles from "./Files";
 
-const calculateGC = nucleotides => numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
+function calculateGc(nucleotides) {
+    return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
+}
 
 export class SubtractionDetail extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            showEdit: false
+            showEdit: false,
         };
     }
 
@@ -80,7 +82,7 @@ export class SubtractionDetail extends React.Component {
                         </tr>
                         <tr>
                             <th>GC Estimate</th>
-                            <td>{calculateGC(detail.gc)}</td>
+                            <td>{calculateGc(detail.gc)}</td>
                         </tr>
                         <tr>
                             <th>Linked Samples</th>
@@ -99,7 +101,7 @@ export class SubtractionDetail extends React.Component {
 const mapStateToProps = state => ({
     error: get(state, "errors.GET_SUBTRACTION_ERROR"),
     canModify: checkAdminRoleOrPermission(state, "modify_subtraction"),
-    detail: state.subtraction.detail
+    detail: state.subtraction.detail,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -109,7 +111,7 @@ const mapDispatchToProps = dispatch => ({
 
     onShowRemove: () => {
         dispatch(pushState({ removeSubtraction: true }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubtractionDetail);

@@ -8,7 +8,7 @@ import { updateSetting, updateSettings } from "../actions";
 const rights = [
     { label: "None", value: "" },
     { label: "Read", value: "r" },
-    { label: "Read & write", value: "rw" }
+    { label: "Read & write", value: "rw" },
 ];
 
 export const SampleRightsGroup = styled.div`
@@ -89,7 +89,7 @@ export const mapStateToProps = state => {
     return {
         sampleGroup: settings.sample_group,
         group: (settings.sample_group_read ? "r" : "") + (settings.sample_group_write ? "w" : ""),
-        all: (settings.sample_all_read ? "r" : "") + (settings.sample_all_write ? "w" : "")
+        all: (settings.sample_all_read ? "r" : "") + (settings.sample_all_write ? "w" : ""),
     };
 };
 
@@ -102,10 +102,10 @@ export const mapDispatchToProps = dispatch => ({
         dispatch(
             updateSettings({
                 [`sample_${scope}_read`]: includes(value, "r"),
-                [`sample_${scope}_write`]: includes(value, "w")
-            })
+                [`sample_${scope}_write`]: includes(value, "w"),
+            }),
         );
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleRights);

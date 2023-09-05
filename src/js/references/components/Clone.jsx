@@ -16,13 +16,13 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-    SaveButton
+    SaveButton,
 } from "../../base";
 import { routerLocationHasState } from "../../utils/utils";
 import { cloneReference } from "../actions";
 
 const getInitialValues = originalRef => ({
-    name: originalRef ? `Clone of ${originalRef.name}` : ""
+    name: originalRef ? `Clone of ${originalRef.name}` : "",
 });
 
 const ReferenceBox = styled(Box)`
@@ -39,7 +39,7 @@ const ReferenceBox = styled(Box)`
 `;
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Required Field")
+    name: Yup.string().required("Required Field"),
 });
 
 export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) => {
@@ -86,7 +86,7 @@ export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) 
 export const mapStateToProps = state => ({
     refId: routerLocationHasState(state, "id") ? state.router.location.state.id : "",
     refDocuments: state.references.documents,
-    show: routerLocationHasState(state, "cloneReference")
+    show: routerLocationHasState(state, "cloneReference"),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -95,7 +95,7 @@ export const mapDispatchToProps = dispatch => ({
     },
     onHide: () => {
         dispatch(pushState({ cloneReference: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CloneReference);

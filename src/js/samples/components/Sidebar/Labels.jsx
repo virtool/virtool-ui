@@ -1,13 +1,13 @@
+import { xor } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { SidebarHeader, SideBarSection } from "../../../base";
 import { SmallSampleLabel } from "../Label";
 import { SampleSidebarList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { getFontSize, fontWeight, getColor } from "../../../app/theme";
-import { xor } from "lodash-es";
 
 export const SampleLabelInner = ({ name, color, description }) => (
     <div>
@@ -58,7 +58,7 @@ export const SampleLabels = ({ allLabels, sampleLabels, onUpdate }) => (
 );
 
 export const mapStateToProps = state => ({
-    allLabels: state.labels.documents
+    allLabels: state.labels.documents,
 });
 
 export default connect(mapStateToProps)(SampleLabels);

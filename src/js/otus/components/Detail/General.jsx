@@ -14,7 +14,7 @@ export const mapStateToProps = state => {
     const { issues, isolates } = state.otus.detail;
     return {
         issues,
-        isolates
+        isolates,
     };
 };
 

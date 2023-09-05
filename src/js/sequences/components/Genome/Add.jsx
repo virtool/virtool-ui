@@ -55,7 +55,7 @@ export const mapStateToProps = state => ({
     isolateId: getActiveIsolateId(state),
     otuId: getOTUDetailId(state),
     show: routerLocationHasState(state, "addSequence"),
-    segments: getUnreferencedSegments(state)
+    segments: getUnreferencedSegments(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -71,10 +71,10 @@ export const mapDispatchToProps = dispatch => ({
                 definition,
                 host,
                 sequence,
-                segment
-            })
+                segment,
+            }),
         );
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddGenomeSequence);

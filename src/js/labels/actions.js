@@ -1,5 +1,5 @@
-import { LIST_LABELS, CREATE_LABEL, REMOVE_LABEL, UPDATE_LABEL } from "../app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
+import { CREATE_LABEL, LIST_LABELS, REMOVE_LABEL, UPDATE_LABEL } from "../app/actionTypes";
 
 /**
  * Returns action that can trigger an API call to get sample labels.
@@ -28,7 +28,7 @@ export const removeLabel = createAction(REMOVE_LABEL.REQUESTED, labelId => ({ pa
  * @return {object}
  */
 export const createLabel = createAction(CREATE_LABEL.REQUESTED, (name, description, color) => ({
-    payload: { name, description, color }
+    payload: { name, description, color },
 }));
 
 /**
@@ -46,6 +46,6 @@ export const updateLabel = createAction(UPDATE_LABEL.REQUESTED, (labelId, name, 
         labelId,
         name,
         description,
-        color
-    }
+        color,
+    },
 }));

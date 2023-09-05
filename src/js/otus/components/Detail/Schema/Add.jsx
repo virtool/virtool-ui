@@ -11,8 +11,8 @@ const getInitialState = () => ({
         molecule: "",
         required: true,
         showError: false,
-        nameTaken: false
-    }
+        nameTaken: false,
+    },
 });
 
 class Add extends React.Component {
@@ -26,8 +26,8 @@ class Add extends React.Component {
             newEntry: {
                 name: entry.name,
                 molecule: entry.molecule,
-                required: entry.required
-            }
+                required: entry.required,
+            },
         });
     };
 
@@ -43,7 +43,7 @@ class Add extends React.Component {
             this.props.onSubmit([...this.props.schema, this.state.newEntry]);
         } else {
             this.setState({
-                newEntry: { ...this.state.newEntry, showError: true, nameTaken: false }
+                newEntry: { ...this.state.newEntry, showError: true, nameTaken: false },
             });
         }
     };
@@ -73,11 +73,11 @@ Add.propTypes = {
     schema: PropTypes.arrayOf(PropTypes.object),
     show: PropTypes.bool.isRequired,
     onHide: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
-    schema: state.otus.detail.schema ? state.otus.detail.schema : []
+    schema: state.otus.detail.schema ? state.otus.detail.schema : [],
 });
 
 export default connect(mapStateToProps)(Add);

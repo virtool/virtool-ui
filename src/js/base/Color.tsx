@@ -43,7 +43,7 @@ const colors: string[] = [
     // Pink
     "FBCFE8",
     "F472B6",
-    "EC4899"
+    "EC4899",
 ];
 
 const StyledColor = styled(Box)`

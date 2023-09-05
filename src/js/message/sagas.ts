@@ -9,7 +9,7 @@ function* getInstanceMessage(action) {
 
 function* setInstanceMessage(action) {
     yield apiCall(instanceMessageApi.set, action.payload, SET_INSTANCE_MESSAGE, {
-        message: action.payload.message
+        message: action.payload.message,
     });
 }
 

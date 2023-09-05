@@ -5,7 +5,7 @@ import {
     FIND_ANALYSES,
     GET_ANALYSIS,
     REMOVE_ANALYSIS,
-    WS_UPDATE_ANALYSIS
+    WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
 import * as analysesAPI from "./api";
@@ -44,7 +44,7 @@ export function* analyze(action) {
 export function* blastNuvs(action) {
     yield apiCall(analysesAPI.blastNuvs, action.payload, BLAST_NUVS, {
         analysisId: action.payload.analysisId,
-        sequenceIndex: action.payload.sequenceIndex
+        sequenceIndex: action.payload.sequenceIndex,
     });
 }
 

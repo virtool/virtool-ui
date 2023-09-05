@@ -1,7 +1,7 @@
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { LoadingPlaceholder, BoxGroupSection, BoxGroupHeader, BoxGroup } from "../../base";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, LoadingPlaceholder } from "../../base";
 
 const HistoryItem = styled(BoxGroupSection)`
     display: grid;

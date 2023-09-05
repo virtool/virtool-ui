@@ -5,7 +5,7 @@ export default {
     title: "base/InputHeader",
     component: InputHeader,
     parameters: {},
-    argTypes: {}
+    argTypes: {},
 };
 
 const Template = args => {

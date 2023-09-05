@@ -8,7 +8,7 @@ import IsolateForm from "./Form";
 
 const getInitialState = props => ({
     sourceType: props.restrictSourceTypes ? "unknown" : "",
-    sourceName: ""
+    sourceName: "",
 });
 
 class Add extends React.Component {
@@ -60,7 +60,7 @@ const mapStateToProps = state => ({
     show: routerLocationHasState(state, "addIsolate"),
     otuId: state.otus.detail.id,
     allowedSourceTypes: state.references.detail.source_types,
-    restrictSourceTypes: state.references.detail.restrict_source_types
+    restrictSourceTypes: state.references.detail.restrict_source_types,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -70,7 +70,7 @@ const mapDispatchToProps = dispatch => ({
 
     onSave: (otuId, sourceType, sourceName) => {
         dispatch(addIsolate(otuId, sourceType, sourceName));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Add);

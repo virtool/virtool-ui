@@ -19,7 +19,7 @@ export const mapStateToProps = (state, ownProps) => {
     const { otu, description } = state.indexes.history.documents[ownProps.index];
     return {
         description,
-        otuName: otu.name
+        otuName: otu.name,
     };
 };
 

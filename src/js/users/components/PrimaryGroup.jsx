@@ -12,7 +12,7 @@ export const PrimaryGroupOption = styled.option`
 export const PrimaryGroup = ({ groups, id, primaryGroup, onSetPrimaryGroup }) => {
     const handleSetPrimaryGroup = useCallback(
         e => onSetPrimaryGroup(id, e.target.value === "none" ? null : e.target.value),
-        [id, primaryGroup]
+        [id, primaryGroup],
     );
 
     const groupOptions = map(groups, ({ id, name }) => (
@@ -40,14 +40,14 @@ export const mapStateToProps = state => {
     return {
         groups,
         id,
-        primaryGroup: primary_group
+        primaryGroup: primary_group,
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onSetPrimaryGroup: (userId, groupId) => {
         dispatch(editUser(userId, { primary_group: groupId }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PrimaryGroup);

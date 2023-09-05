@@ -67,7 +67,7 @@ export const AnalysisMapping = ({ index, reference, subtraction, toReference, to
                 empty={total - totalMapped}
                 items={[
                     { color: "blue", count: toReference, title: referenceTitle },
-                    { color: "orange", count: toSubtraction, title: subtractionTitle }
+                    { color: "orange", count: toSubtraction, title: subtractionTitle },
                 ]}
             />
         </StyledAnalysisMapping>
@@ -83,7 +83,7 @@ export const mapStateToProps = state => {
         subtraction: subtractions[0],
         toReference: getReadCount(state),
         toSubtraction: getSubtractedCount(state),
-        total: state.samples.detail.quality.count
+        total: state.samples.detail.quality.count,
     };
 };
 

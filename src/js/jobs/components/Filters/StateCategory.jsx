@@ -72,5 +72,5 @@ export const StateCategory = ({ states, label, onClick }) => (
 StateCategory.propTypes = {
     states: PropTypes.arrayOf(PropTypes.object).isRequired,
     label: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
 };

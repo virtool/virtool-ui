@@ -29,7 +29,7 @@ const mapStateToProps = state => {
     const hasRawFilesOnly = getHasRawFilesOnly(state);
 
     return {
-        showLegacy: !hasRawFilesOnly
+        showLegacy: !hasRawFilesOnly,
     };
 };
 

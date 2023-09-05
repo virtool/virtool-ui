@@ -13,7 +13,7 @@ import {
     GET_USER,
     WS_INSERT_USER,
     WS_REMOVE_USER,
-    WS_UPDATE_USER
+    WS_UPDATE_USER,
 } from "../app/actionTypes";
 
 /**
@@ -50,7 +50,7 @@ export const wsRemoveUser = createAction(WS_REMOVE_USER);
  * @returns {object}
  */
 export const findUsers = createAction(FIND_USERS.REQUESTED, (term, page) => ({
-    payload: { term, page }
+    payload: { term, page },
 }));
 
 export const getUser = createAction(GET_USER.REQUESTED, userId => ({ payload: { userId } }));
@@ -65,7 +65,7 @@ export const getUser = createAction(GET_USER.REQUESTED, userId => ({ payload: { 
 export const createUser = createAction(CREATE_USER.REQUESTED);
 
 export const createFirstUser = createAction(CREATE_FIRST_USER.REQUESTED, (handle, password) => ({
-    payload: { handle, password }
+    payload: { handle, password },
 }));
 
 /**
@@ -77,5 +77,5 @@ export const createFirstUser = createAction(CREATE_FIRST_USER.REQUESTED, (handle
  * @returns {object}
  */
 export const editUser = createAction(EDIT_USER.REQUESTED, (userId, update) => ({
-    payload: { userId, update }
+    payload: { userId, update },
 }));

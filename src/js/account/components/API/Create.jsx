@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { pushState } from "../../../app/actions";
 
+import { Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import { getFontSize } from "../../../app/theme";
 import {
     Icon,
     Input,
@@ -17,23 +20,20 @@ import {
     ModalBody,
     ModalFooter,
     ModalHeader,
-    SaveButton
+    SaveButton,
 } from "../../../base";
 import { routerLocationHasState } from "../../../utils/utils";
 import { clearAPIKey, createAPIKey } from "../../actions";
 import CreateAPIKeyInfo from "./CreateInfo";
 import APIPermissions from "./Permissions";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { getFontSize } from "../../../app/theme";
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Provide a name for the key")
+    name: Yup.string().required("Provide a name for the key"),
 });
 
 const getInitialFormValues = permissions => ({
     name: "",
-    permissions: mapValues(permissions, () => false)
+    permissions: mapValues(permissions, () => false),
 });
 
 const CreateAPIKeyCopied = styled.p`
@@ -142,7 +142,7 @@ function mapStateToProps(state) {
     return {
         show: routerLocationHasState(state, "createAPIKey"),
         newKey: state.account.newKey,
-        permissions: state.account.permissions
+        permissions: state.account.permissions,
     };
 }
 
@@ -155,7 +155,7 @@ function mapDispatchToProps(dispatch) {
         onHide: () => {
             dispatch(pushState({ createAPIKey: false }));
             dispatch(clearAPIKey());
-        }
+        },
     };
 }
 

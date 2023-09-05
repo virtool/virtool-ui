@@ -65,7 +65,7 @@ export const ReadSelectorItem = ({ id, index, name, selected, size, onSelect }) 
 };
 
 ReadSelectorItem.defaultProps = {
-    selected: false
+    selected: false,
 };
 
 ReadSelectorItem.propTypes = {
@@ -74,7 +74,7 @@ ReadSelectorItem.propTypes = {
     index: PropTypes.number.isRequired,
     size: PropTypes.number.isRequired,
     onSelect: PropTypes.func.isRequired,
-    selected: PropTypes.bool
+    selected: PropTypes.bool,
 };
 
 export default ReadSelectorItem;

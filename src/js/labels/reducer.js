@@ -3,7 +3,7 @@ import { CREATE_LABEL, LIST_LABELS, REMOVE_LABEL, UPDATE_LABEL } from "../app/ac
 import { insert, remove, update } from "../utils/reducers";
 
 export const initialState = {
-    documents: null
+    documents: null,
 };
 
 export const labelsReducer = createReducer(initialState, builder => {

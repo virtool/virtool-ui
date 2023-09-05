@@ -38,7 +38,7 @@ export const ReferenceItem = ({
     otuCount,
     progress,
     remotesFrom,
-    userHandle
+    userHandle,
 }) => {
     return (
         <StyledReferenceItem>
@@ -72,7 +72,7 @@ export const mapStateToProps = (state, ownProps) => {
         organism,
         otu_count,
         remotes_from,
-        user
+        user,
     } = state.references.documents[ownProps.index];
 
     const progress = getReferenceItemProgress(state, ownProps.index);
@@ -89,7 +89,7 @@ export const mapStateToProps = (state, ownProps) => {
         latestBuild: latest_build,
         otuCount: otu_count,
         remotesFrom: remotes_from,
-        userHandle: user.handle
+        userHandle: user.handle,
     };
 };
 

@@ -11,7 +11,7 @@ import {
     reject,
     sortBy,
     toNumber,
-    toString
+    toString,
 } from "lodash-es";
 import { createSelector } from "reselect";
 import { getRouterLocationState } from "../app/selectors";
@@ -19,7 +19,7 @@ import {
     getDefaultSubtractions,
     getMaxReadLength,
     getSampleLibraryType,
-    getSelectedSamples
+    getSelectedSamples,
 } from "../samples/selectors";
 import { getReadySubtractionShortlist } from "../subtraction/selectors";
 import { createFuse } from "../utils/utils";
@@ -44,7 +44,7 @@ export const getWorkflow = state => state.analyses.detail.workflow;
  *
  */
 export const getFuse = createSelector([getWorkflow, getHits], (workflow, hits) =>
-    createFuse(hits, fuseSearchKeys[workflow], "id")
+    createFuse(hits, fuseSearchKeys[workflow], "id"),
 );
 
 export const getFilterIds = createSelector(
@@ -74,17 +74,17 @@ export const getFilterIds = createSelector(
         }
 
         return map(hits, "id");
-    }
+    },
 );
 
 export const getQuickAnalysisGroups = createSelector([getSelectedSamples], documents => {
     const { barcode, genome } = groupBy(documents, document =>
-        document.library_type === "amplicon" ? "barcode" : "genome"
+        document.library_type === "amplicon" ? "barcode" : "genome",
     );
 
     return {
         barcode: barcode || [],
-        genome: genome || []
+        genome: genome || [],
     };
 });
 
@@ -102,7 +102,7 @@ export const getQuickAnalysisMode = createSelector(
         }
 
         return false;
-    }
+    },
 );
 
 export const getAnalysesSubtractions = createSelector(
@@ -112,12 +112,12 @@ export const getAnalysesSubtractions = createSelector(
         const formattedSubtractions = map(keysIn(subtractions), key => {
             return {
                 ...subtractions[key],
-                isDefault: includes(defaultSubtractionIds, subtractions[key].id) ? true : false
+                isDefault: includes(defaultSubtractionIds, subtractions[key].id) ? true : false,
             };
         });
 
         return filter(formattedSubtractions, { ready: true });
-    }
+    },
 );
 
 const getReadyIndexes = state => state.analyses.readyIndexes;
@@ -126,7 +126,7 @@ export const getCompatibleIndexesWithDataType = createSelector(
     [getQuickAnalysisMode, getReadyIndexes],
     (mode, indexes) => {
         return filter(indexes, ["reference.data_type", mode]);
-    }
+    },
 );
 
 export const getCompatibleIndexesWithLibraryType = createSelector(
@@ -138,7 +138,7 @@ export const getCompatibleIndexesWithLibraryType = createSelector(
             }
 
             return libraryType === "normal" || libraryType === "srna";
-        })
+        }),
 );
 
 export const getCompatibleSamples = createSelector([getQuickAnalysisMode, getSelectedSamples], (mode, samples) => {
@@ -193,7 +193,7 @@ export const getMatches = createSelector(
         const keyed = keyBy(hits, "id");
 
         return map(matchIds, id => keyed[id]);
-    }
+    },
 );
 
 export const getActiveHit = createSelector([getWorkflow, getMatches, getActiveId], (workflow, matches, activeId) => {

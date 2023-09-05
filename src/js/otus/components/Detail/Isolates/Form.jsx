@@ -2,7 +2,7 @@ import { toLower } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-import { ModalBody, ModalFooter, Input, InputGroup, InputLabel, SaveButton } from "../../../../base";
+import { Input, InputGroup, InputLabel, ModalBody, ModalFooter, SaveButton } from "../../../../base";
 
 import { formatIsolateName } from "../../../../utils/utils";
 import { SourceType } from "../SourceType";
@@ -20,20 +20,20 @@ export class IsolateForm extends React.Component {
         allowedSourceTypes: PropTypes.arrayOf(PropTypes.string),
         restrictSourceTypes: PropTypes.bool,
         onChange: PropTypes.func,
-        onSubmit: PropTypes.func
+        onSubmit: PropTypes.func,
     };
 
     handleChangeSourceType = e => {
         this.props.onChange({
             sourceType: toLower(e.target.value),
-            sourceName: e.target.value === "unknown" ? "" : this.props.sourceName
+            sourceName: e.target.value === "unknown" ? "" : this.props.sourceName,
         });
     };
 
     handleChangeSourceName = e => {
         this.props.onChange({
             sourceName: e.target.value,
-            sourceType: this.props.sourceType
+            sourceType: this.props.sourceType,
         });
     };
 

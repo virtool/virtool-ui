@@ -10,7 +10,7 @@ import {
     InputError,
     InputGroup,
     InputLabel,
-    SaveButton
+    SaveButton,
 } from "../../base";
 import { updateAccount } from "../actions";
 
@@ -30,14 +30,14 @@ class Email extends React.Component {
         super(props);
         this.state = {
             email: this.props.email || "",
-            error: ""
+            error: "",
         };
     }
 
     handleChange = e => {
         this.setState({
             email: e.target.value,
-            error: ""
+            error: "",
         });
     };
 
@@ -45,7 +45,7 @@ class Email extends React.Component {
         if (!e.relatedTarget) {
             this.setState({
                 email: this.props.email,
-                error: ""
+                error: "",
             });
         }
     };
@@ -88,7 +88,7 @@ class Email extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        email: state.account.email
+        email: state.account.email,
     };
 }
 
@@ -96,7 +96,7 @@ function mapDispatchToProps(dispatch) {
     return {
         onUpdateEmail: email => {
             dispatch(updateAccount(email));
-        }
+        },
     };
 }
 
