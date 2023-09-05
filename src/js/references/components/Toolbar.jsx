@@ -29,13 +29,13 @@ export const ReferenceToolbar = ({ term, onFind, canCreate }) => {
 
 const mapStateToProps = state => ({
     canCreate: checkAdminRoleOrPermission(state, "create_ref"),
-    term: state.references.term
+    term: state.references.term,
 });
 
 const mapDispatchToProps = dispatch => ({
     onFind: e => {
         dispatch(findReferences(e.target.value));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceToolbar);

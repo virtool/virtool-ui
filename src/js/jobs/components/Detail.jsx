@@ -12,7 +12,7 @@ import {
     ViewHeader,
     ViewHeaderAttribution,
     ViewHeaderIcons,
-    ViewHeaderTitle
+    ViewHeaderTitle,
 } from "../../base";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { archiveJob, cancelJob, getJob } from "../actions";
@@ -90,7 +90,7 @@ const mapStateToProps = state => ({
     error: get(state, "errors.GET_JOB_ERROR", null),
     detail: state.jobs.detail,
     canCancel: checkAdminRoleOrPermission(state, "cancel_job"),
-    canArchive: checkAdminRoleOrPermission(state, "remove_job")
+    canArchive: checkAdminRoleOrPermission(state, "remove_job"),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -103,7 +103,7 @@ const mapDispatchToProps = dispatch => ({
     onArchive: jobId => {
         dispatch(archiveJob(jobId));
         dispatch(push("/jobs"));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobDetail);

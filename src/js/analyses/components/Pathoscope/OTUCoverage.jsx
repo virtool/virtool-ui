@@ -12,7 +12,7 @@ const draw = (element, data, width) => {
         top: 10,
         left: 15,
         bottom: 10,
-        right: 15
+        right: 15,
     };
 
     const yMax = max(data);
@@ -58,5 +58,5 @@ export function OTUCoverage({ filled }) {
 }
 
 OTUCoverage.propTypes = {
-    filled: PropTypes.arrayOf(PropTypes.number).isRequired
+    filled: PropTypes.arrayOf(PropTypes.number).isRequired,
 };

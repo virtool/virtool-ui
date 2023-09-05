@@ -47,7 +47,7 @@ export const Contributors = ({ contributors }) => {
 };
 
 export const mapStateToProps = state => ({
-    contributors: state.indexes.detail.contributors
+    contributors: state.indexes.detail.contributors,
 });
 
 export default connect(mapStateToProps)(Contributors);

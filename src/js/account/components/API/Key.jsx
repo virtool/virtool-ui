@@ -2,14 +2,14 @@ import { isEqual, reduce } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Attribution, Button, ButtonToolbar, Icon, BoxSpaced } from "../../../base/index";
+import { Attribution, BoxSpaced, Button, ButtonToolbar, Icon } from "../../../base/index";
 import { removeAPIKey, updateAPIKey } from "../../actions";
 import APIPermissions from "./Permissions";
 
 export const getInitialState = ({ apiKey }) => ({
     in: false,
     changed: false,
-    permissions: apiKey.permissions
+    permissions: apiKey.permissions,
 });
 
 const APIKeyCloseContainer = styled.div`
@@ -37,7 +37,7 @@ export class APIKey extends React.Component {
 
     toggleIn = () => {
         const state = {
-            in: !this.state.in
+            in: !this.state.in,
         };
 
         if (this.state.in) {
@@ -52,7 +52,7 @@ export class APIKey extends React.Component {
 
         this.setState({
             changed: !isEqual(permissions, this.props.apiKey.permissions),
-            permissions
+            permissions,
         });
     };
 
@@ -100,7 +100,7 @@ export class APIKey extends React.Component {
 }
 
 export const mapStateToProps = state => ({
-    permissions: state.account.permissions
+    permissions: state.account.permissions,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -110,7 +110,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onRemove: keyId => {
         dispatch(removeAPIKey(keyId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(APIKey);

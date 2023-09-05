@@ -17,7 +17,7 @@ import {
     UPLOAD_PROGRESS,
     WS_INSERT_REFERENCE,
     WS_REMOVE_REFERENCE,
-    WS_UPDATE_REFERENCE
+    WS_UPDATE_REFERENCE,
 } from "../app/actionTypes";
 import { insert, remove, update, updateDocuments, updateMember } from "../utils/reducers";
 
@@ -34,7 +34,7 @@ export const initialState = {
     importUploadId: null,
     importUploadProgress: 0,
     pendingRemoveGroups: [],
-    pendingRemoveUsers: []
+    pendingRemoveUsers: [],
 };
 
 export const referenceReducer = createReducer(initialState, builder => {
@@ -42,7 +42,7 @@ export const referenceReducer = createReducer(initialState, builder => {
         .addCase(WS_INSERT_REFERENCE, (state, action) => {
             const updated = insert(state, action.payload, "name");
             return {
-                ...updated
+                ...updated,
             };
         })
         .addCase(WS_UPDATE_REFERENCE, (state, action) => {

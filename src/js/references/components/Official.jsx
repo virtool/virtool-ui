@@ -47,13 +47,13 @@ export const ReferenceOfficial = ({ show, onRemote }) => {
 };
 
 const mapStateToProps = state => ({
-    show: !state.references.official_installed && checkAdminRoleOrPermission(state, "create_ref")
+    show: !state.references.official_installed && checkAdminRoleOrPermission(state, "create_ref"),
 });
 
 const mapDispatchToProps = dispatch => ({
     onRemote: () => {
         dispatch(remoteReference());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceOfficial);

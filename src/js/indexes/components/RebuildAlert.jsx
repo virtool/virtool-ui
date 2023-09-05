@@ -17,7 +17,7 @@ export const RebuildAlert = ({ refId, showCountAlert, showIndexAlert }) => {
     if (showIndexAlert) {
         const to = {
             pathname: `/refs/${refId}/indexes`,
-            state: { rebuild: true }
+            state: { rebuild: true },
         };
 
         return (
@@ -38,7 +38,7 @@ export const RebuildAlert = ({ refId, showCountAlert, showIndexAlert }) => {
 export const mapStateToProps = state => ({
     refId: state.references.detail.id,
     showIndexAlert: state.indexes.modified_otu_count || state.otus.modified_count,
-    showCountAlert: checkReferenceRight(state, "build") && (state.indexes.total_otu_count || state.otus.total_count)
+    showCountAlert: checkReferenceRight(state, "build") && (state.indexes.total_otu_count || state.otus.total_count),
 });
 
 export default connect(mapStateToProps)(RebuildAlert);

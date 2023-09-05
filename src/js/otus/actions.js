@@ -23,7 +23,7 @@ import {
     SHOW_REMOVE_SEQUENCE,
     WS_INSERT_OTU,
     WS_REMOVE_OTU,
-    WS_UPDATE_OTU
+    WS_UPDATE_OTU,
 } from "../app/actionTypes";
 
 /**
@@ -58,8 +58,8 @@ export const findOTUs = createAction(FIND_OTUS.REQUESTED, (refId, term, verified
         refId,
         term,
         verified,
-        page
-    }
+        page,
+    },
 }));
 
 /**
@@ -89,7 +89,7 @@ export const getOTUHistory = createAction(GET_OTU_HISTORY.REQUESTED, otuId => ({
  * @returns {object}
  */
 export const createOTU = createAction(CREATE_OTU.REQUESTED, (refId, name, abbreviation) => ({
-    payload: { refId, name, abbreviation }
+    payload: { refId, name, abbreviation },
 }));
 
 /**
@@ -107,8 +107,8 @@ export const editOTU = createAction(EDIT_OTU.REQUESTED, (otuId, name, abbreviati
         otuId,
         name,
         abbreviation,
-        schema
-    }
+        schema,
+    },
 }));
 
 /**
@@ -120,7 +120,7 @@ export const editOTU = createAction(EDIT_OTU.REQUESTED, (otuId, name, abbreviati
  * @returns {object}
  */
 export const removeOTU = createAction(REMOVE_OTU.REQUESTED, (refId, otuId, history) => ({
-    payload: { refId, otuId, history }
+    payload: { refId, otuId, history },
 }));
 
 /**
@@ -133,7 +133,7 @@ export const removeOTU = createAction(REMOVE_OTU.REQUESTED, (refId, otuId, histo
  * @returns {object}
  */
 export const addIsolate = createAction(ADD_ISOLATE.REQUESTED, (otuId, sourceType, sourceName) => ({
-    payload: { otuId, sourceType, sourceName }
+    payload: { otuId, sourceType, sourceName },
 }));
 
 /**
@@ -145,7 +145,7 @@ export const addIsolate = createAction(ADD_ISOLATE.REQUESTED, (otuId, sourceType
  * @returns {object}
  */
 export const setIsolateAsDefault = createAction(SET_ISOLATE_AS_DEFAULT.REQUESTED, (otuId, isolateId) => ({
-    payload: { otuId, isolateId }
+    payload: { otuId, isolateId },
 }));
 
 /**
@@ -163,8 +163,8 @@ export const editIsolate = createAction(EDIT_ISOLATE.REQUESTED, (otuId, isolateI
         otuId,
         isolateId,
         sourceType,
-        sourceName
-    }
+        sourceName,
+    },
 }));
 
 /**
@@ -178,7 +178,7 @@ export const editIsolate = createAction(EDIT_ISOLATE.REQUESTED, (otuId, isolateI
  * @returns {object}
  */
 export const removeIsolate = createAction(REMOVE_ISOLATE.REQUESTED, (otuId, isolateId, nextIsolateId) => ({
-    payload: { otuId, isolateId, nextIsolateId }
+    payload: { otuId, isolateId, nextIsolateId },
 }));
 
 /**
@@ -206,9 +206,9 @@ export const addSequence = createAction(
             otuId,
             segment,
             sequence,
-            target
-        }
-    })
+            target,
+        },
+    }),
 );
 
 /**
@@ -238,9 +238,9 @@ export const editSequence = createAction(
             host,
             sequence,
             segment,
-            target
-        }
-    })
+            target,
+        },
+    }),
 );
 
 /**
@@ -253,7 +253,7 @@ export const editSequence = createAction(
  * @returns {object}
  */
 export const removeSequence = createAction(REMOVE_SEQUENCE.REQUESTED, (otuId, isolateId, sequenceId) => ({
-    payload: { otuId, isolateId, sequenceId }
+    payload: { otuId, isolateId, sequenceId },
 }));
 
 /**
@@ -268,8 +268,8 @@ export const revert = createAction(REVERT.REQUESTED, (otuId, otuVersion, changeI
     payload: {
         otuId,
         otuVersion,
-        change_id: changeId
-    }
+        change_id: changeId,
+    },
 }));
 
 /**
@@ -290,7 +290,7 @@ export const revertFailed = createAction(REVERT.FAILED, error => ({ payload: { e
  * @returns {object}
  */
 export const revertSucceeded = createAction(REVERT.SUCCEEDED, (otu, history) => ({
-    payload: { otu, history }
+    payload: { otu, history },
 }));
 
 /**
@@ -333,8 +333,8 @@ export const showEditIsolate = createAction(SHOW_EDIT_ISOLATE, (otuId, isolateId
         otuId,
         isolateId,
         sourceType,
-        sourceName
-    }
+        sourceName,
+    },
 }));
 
 /**

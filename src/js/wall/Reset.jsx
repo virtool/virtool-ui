@@ -10,7 +10,7 @@ export class Reset extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            password: ""
+            password: "",
         };
     }
 
@@ -57,13 +57,13 @@ export class Reset extends React.Component {
 
 export const mapStateToProps = state => ({
     error: get(state, "errors.RESET_ERROR.message"),
-    resetCode: get(state, "app.resetCode")
+    resetCode: get(state, "app.resetCode"),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onReset: (password, resetCode) => {
         dispatch(resetPassword(password, resetCode));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reset);

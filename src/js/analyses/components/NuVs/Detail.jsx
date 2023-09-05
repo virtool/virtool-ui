@@ -6,11 +6,11 @@ import { getBorder } from "../../../app/theme";
 import { Badge, Box } from "../../../base";
 import { useElementSize } from "../../../utils/hooks";
 import { getActiveHit, getMaxSequenceLength } from "../../selectors";
+import { calculateAnnotatedOrfCount } from "../../utils";
 import NuVsBLAST from "./BLAST";
 import { NuVsORF } from "./ORF";
 import { NuVsSequence } from "./Sequence";
 import { NuVsValues } from "./Values";
-import { calculateAnnotatedOrfCount } from "../../utils";
 
 const StyledNuVsFamilies = styled.div`
     border: ${getBorder};
@@ -120,7 +120,7 @@ export const NuVsDetail = ({ filterORFs, hit, maxSequenceLength }) => {
 const mapStateToProps = state => ({
     filterORFs: state.analyses.filterORFs,
     maxSequenceLength: getMaxSequenceLength(state),
-    hit: getActiveHit(state)
+    hit: getActiveHit(state),
 });
 
 export default connect(mapStateToProps)(NuVsDetail);

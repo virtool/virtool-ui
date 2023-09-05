@@ -21,13 +21,13 @@ export const SubtractionToolbar = ({ term, onFind, canModify }) => {
 
 export const mapStateToProps = state => ({
     term: state.subtraction.term || "",
-    canModify: checkAdminRoleOrPermission(state, "modify_subtraction")
+    canModify: checkAdminRoleOrPermission(state, "modify_subtraction"),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onFind: e => {
         dispatch(findSubtractions(e.target.value || null, 1));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubtractionToolbar);

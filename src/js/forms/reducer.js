@@ -3,7 +3,7 @@ import { SET_REDUX_FORM_STATE } from "../app/actionTypes";
 import { getSessionStorage } from "../utils/utils";
 
 const initialState = () => ({
-    formState: getSessionStorage("formState") || {}
+    formState: getSessionStorage("formState") || {},
 });
 
 export const formsReducer = createReducer(initialState, builder => {

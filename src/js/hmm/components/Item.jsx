@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { Label, BoxLink } from "../../base";
+import { BoxLink, Label } from "../../base";
 
 const StyledHMMItem = styled(BoxLink)`
     display: flex;
@@ -50,5 +50,5 @@ HMMItem.propTypes = {
     cluster: PropTypes.number,
     families: PropTypes.object,
     id: PropTypes.string,
-    names: PropTypes.array
+    names: PropTypes.array,
 };

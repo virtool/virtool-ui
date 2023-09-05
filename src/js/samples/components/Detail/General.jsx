@@ -2,9 +2,9 @@ import numbro from "numbro";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, Markdown, ContainerNarrow, ContainerSide, Table } from "../../../base";
+import { BoxGroup, BoxGroupHeader, ContainerNarrow, ContainerSide, Markdown, Table } from "../../../base";
 import { getLibraryTypeDisplayName } from "../../utils";
-import EditSample from "../Edit/Edit";
+import EditSample from "../Edit";
 import SampleFileSizeWarning from "./FileSizeWarning";
 import Sidebar from "./Sidebar";
 
@@ -32,7 +32,7 @@ export const SampleDetailGeneral = ({
     locale,
     name,
     notes,
-    paired
+    paired,
 }) => (
     <StyledSampleDetailGeneral>
         <ContainerNarrow>
@@ -131,7 +131,7 @@ export const mapStateToProps = state => {
         count: numbro(count).format("0.0 a"),
         gc: numbro(gc / 100).format("0.0 %"),
         libraryType: getLibraryTypeDisplayName(library_type),
-        lengthRange: length.join(" - ")
+        lengthRange: length.join(" - "),
     };
 };
 

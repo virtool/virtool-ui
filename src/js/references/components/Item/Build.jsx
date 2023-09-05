@@ -21,8 +21,8 @@ export const ReferenceItemBuild = ({ id, latestBuild, progress }) => {
     const to = {
         pathname: `/refs/${id}/indexes`,
         state: {
-            rebuild: true
-        }
+            rebuild: true,
+        },
     };
 
     return (

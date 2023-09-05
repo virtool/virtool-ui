@@ -9,7 +9,7 @@ import { ReferenceForm } from "./Form";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),
-    dataType: Yup.string().required("Required Field")
+    dataType: Yup.string().required("Required Field"),
 });
 
 const getInitialState = () => ({
@@ -17,7 +17,7 @@ const getInitialState = () => ({
     description: "",
     dataType: "genome",
     organism: "",
-    mode: "empty"
+    mode: "empty",
 });
 
 export const EmptyReference = ({ onSubmit }) => {
@@ -49,7 +49,7 @@ export const EmptyReference = ({ onSubmit }) => {
 export const mapDispatchToProps = dispatch => ({
     onSubmit: (name, description, dataType, organism) => {
         dispatch(emptyReference(name, description, dataType, organism));
-    }
+    },
 });
 
 export default connect(null, mapDispatchToProps)(EmptyReference);

@@ -9,7 +9,7 @@ import { WallTitle } from "./WallTitle";
 
 const initialValues = {
     username: "",
-    password: ""
+    password: "",
 };
 
 export const FirstUser = ({ onSubmit, errors }) => {
@@ -59,15 +59,15 @@ export const FirstUser = ({ onSubmit, errors }) => {
 export const mapDispatchToProps = dispatch => ({
     onSubmit: (username, password) => {
         dispatch(createFirstUser(username, password));
-    }
+    },
 });
 
 export const mapStateToProps = state => ({
     errors: {
         generalError: get(state, "errors.CREATE_FIRST_USER_ERROR.message", ""),
         usernameErrors: get(state, "errors.CREATE_FIRST_USER_ERROR.errors.user_id", [""]),
-        passwordErrors: get(state, "errors.CREATE_FIRST_USER_ERROR.errors.password", [""])
-    }
+        passwordErrors: get(state, "errors.CREATE_FIRST_USER_ERROR.errors.password", [""]),
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FirstUser);

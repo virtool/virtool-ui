@@ -50,13 +50,13 @@ export function APIKeys({ keys, onGet }) {
 }
 
 const mapStateToProps = state => ({
-    keys: state.account.apiKeys
+    keys: state.account.apiKeys,
 });
 
 const mapDispatchToProps = dispatch => ({
     onGet: () => {
         dispatch(getAPIKeys());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(APIKeys);

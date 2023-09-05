@@ -29,7 +29,7 @@ const GenomeSequence = ({ accession, definition, host, id, segment, sequence }) 
 
 export const mapStateToProps = state => ({
     dataType: state.references.detail.data_type,
-    targets: state.references.detail.targets
+    targets: state.references.detail.targets,
 });
 
 export default connect(mapStateToProps)(GenomeSequence);

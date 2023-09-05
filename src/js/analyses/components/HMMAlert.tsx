@@ -28,7 +28,7 @@ export function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
 
 export function mapStateToProps(state) {
     return {
-        installed: Boolean(get(state, "hmms.status.installed"))
+        installed: Boolean(get(state, "hmms.status.installed")),
     };
 }
 

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { fontWeight } from "../../../app/theme";
 import { BoxGroupSection } from "../../../base";
 import { byteSize } from "../../../utils/utils";
-import { fontWeight } from "../../../app/theme";
 
 const StyledSubtractionFile = styled(BoxGroupSection)`
     align-items: center;

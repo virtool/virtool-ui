@@ -42,7 +42,7 @@ export function JobItem({
     canCancel,
     canArchive,
     onCancel,
-    onArchive
+    onArchive,
 }) {
     const handleCancel = useCallback(() => onCancel(id), [id, onCancel]);
     const handleArchive = useCallback(() => onArchive(id), [id, onArchive]);
@@ -86,7 +86,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onArchive: jobId => {
         dispatch(archiveJob(jobId));
-    }
+    },
 });
 
 export default connect(null, mapDispatchToProps)(JobItem);

@@ -12,7 +12,7 @@ import {
     TabsLink,
     ViewHeader,
     ViewHeaderIcons,
-    ViewHeaderTitle
+    ViewHeaderTitle,
 } from "../../../base";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
 import { getOTU, showEditOTU, showRemoveOTU } from "../../actions";
@@ -157,7 +157,7 @@ const mapStateToProps = state => {
         detail: state.otus.detail,
         refName: state.references.detail.name,
         canModify: getCanModifyReferenceOTU(state),
-        dataType: state.references.detail.data_type
+        dataType: state.references.detail.data_type,
     };
 };
 
@@ -172,7 +172,7 @@ const mapDispatchToProps = dispatch => ({
 
     showRemove: () => {
         dispatch(showRemoveOTU());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OTUDetail);

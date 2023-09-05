@@ -27,7 +27,7 @@ import {
     WS_INSERT_OTU,
     WS_REMOVE_OTU,
     WS_UPDATE_OTU,
-    WS_UPDATE_STATUS
+    WS_UPDATE_STATUS,
 } from "../app/actionTypes";
 import { insert, remove, update, updateDocuments } from "../utils/reducers";
 import { formatIsolateName } from "../utils/utils";
@@ -47,7 +47,7 @@ export const initialState = {
     removeSequence: false,
     activeIsolateId: null,
     importData: null,
-    verified: false
+    verified: false,
 };
 
 export const hideOTUModal = state => ({
@@ -57,7 +57,7 @@ export const hideOTUModal = state => ({
     addIsolate: false,
     editIsolate: false,
     removeIsolate: false,
-    removeSequence: false
+    removeSequence: false,
 });
 
 export const getActiveIsolate = state => {
@@ -69,14 +69,14 @@ export const getActiveIsolate = state => {
         return {
             ...state,
             activeIsolate,
-            activeIsolateId: activeIsolate.id
+            activeIsolateId: activeIsolate.id,
         };
     }
 
     return {
         ...state,
         activeIsolate: null,
-        activeIsolateId: null
+        activeIsolateId: null,
     };
 };
 
@@ -85,8 +85,8 @@ export const receiveOTU = (state, action) => {
         ...action,
         isolates: map(action.isolates, isolate => ({
             ...isolate,
-            name: formatIsolateName(isolate)
-        }))
+            name: formatIsolateName(isolate),
+        })),
     };
 
     return getActiveIsolate({ ...state, detail });
@@ -189,13 +189,13 @@ export const OTUsReducer = createReducer(initialState, builder => {
                     [REMOVE_SEQUENCE.SUCCEEDED]: true,
                     [SET_ISOLATE_AS_DEFAULT.SUCCEEDED]: true,
                     [ADD_ISOLATE.SUCCEEDED]: true,
-                    [REMOVE_ISOLATE.SUCCEEDED]: true
+                    [REMOVE_ISOLATE.SUCCEEDED]: true,
                 };
                 return hasIn(matches, action.type);
             },
             (state, action) => {
                 return hideOTUModal(receiveOTU(state, action.payload));
-            }
+            },
         );
 });
 

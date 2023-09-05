@@ -18,7 +18,7 @@ export const mapStateToProps = state => {
     const { status, workflow } = state.jobs.detail;
     return {
         status,
-        workflow
+        workflow,
     };
 };
 

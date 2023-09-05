@@ -9,7 +9,7 @@ const getInitialState = () => ({
     build: false,
     modify: false,
     modify_otu: false,
-    remove: false
+    remove: false,
 });
 
 const rights = ["modify_otu", "build", "modify", "remove"];
@@ -28,7 +28,7 @@ export class EditReferenceMember extends React.Component {
             build,
             modify,
             remove,
-            [key]: enabled
+            [key]: enabled,
         };
 
         this.props.onEdit(this.props.refId, this.props.show, update);
@@ -40,7 +40,7 @@ export class EditReferenceMember extends React.Component {
             build,
             modify,
             modify_otu,
-            remove
+            remove,
         });
     };
 
@@ -74,7 +74,7 @@ const mapStateToProps = (state, ownProps) => {
     const members = noun === "user" ? state.references.detail.users : state.references.detail.groups;
     return {
         refId: state.references.detail.id,
-        ...find(members, { id: ownProps.show })
+        ...find(members, { id: ownProps.show }),
     };
 };
 
@@ -82,7 +82,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     onEdit: (refId, id, update) => {
         const actionCreator = ownProps.noun === "user" ? editReferenceUser : editReferenceGroup;
         dispatch(actionCreator(refId, id, update));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditReferenceMember);

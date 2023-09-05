@@ -20,7 +20,7 @@ const StyledHMMTaxonomy = styled(BoxGroupSection)`
 export const HMMTaxonomy = ({ counts, title }) => {
     const sorted = sortBy(
         map(counts, (count, name) => ({ name, count })),
-        "name"
+        "name",
     );
 
     const components = map(sorted, ({ name, count }) => (

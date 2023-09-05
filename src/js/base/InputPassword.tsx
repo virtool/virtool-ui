@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { InputIcon } from "./InputIcon";
 import { Input } from "./Input";
 import { InputContainer } from "./InputContainer";
+import { InputIcon } from "./InputIcon";
 
 export const InputPassword = props => {
     const [show, setShow] = useState(false);

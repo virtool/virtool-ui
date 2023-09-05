@@ -2,7 +2,7 @@ import { get } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { LoadingPlaceholder, ContainerNarrow, NotFound } from "../../../base";
+import { ContainerNarrow, LoadingPlaceholder, NotFound } from "../../../base";
 import IndexDetail from "../../../indexes/components/Detail";
 import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/Detail";
@@ -59,13 +59,13 @@ const mapStateToProps = state => ({
     canModify: checkReferenceRight(state, "modify"),
     error: get(state, "errors.GET_REFERENCE_ERROR", null),
     id: get(state, "references.detail.id"),
-    pathname: state.router.location.pathname
+    pathname: state.router.location.pathname,
 });
 
 const mapDispatchToProps = dispatch => ({
     onGetReference: refId => {
         dispatch(getReference(refId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceDetail);

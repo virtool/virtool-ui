@@ -15,7 +15,7 @@ export const AddSequence = ({ dataType, show }) => {
 
 export const mapStateToProps = state => ({
     dataType: getDataType(state),
-    show: routerLocationHasState(state, "addSequence")
+    show: routerLocationHasState(state, "addSequence"),
 });
 
 export default connect(mapStateToProps)(AddSequence);

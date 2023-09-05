@@ -9,7 +9,7 @@ import {
     GET_LINKED_JOB,
     WS_INSERT_JOB,
     WS_REMOVE_JOB,
-    WS_UPDATE_JOB
+    WS_UPDATE_JOB,
 } from "../app/actionTypes";
 import { apiCall } from "../utils/sagas";
 import * as jobsAPI from "./api";

@@ -35,7 +35,7 @@ function Account({ userId, onGet }) {
 
 function mapStateToProps(state) {
     return {
-        userId: getAccountId(state)
+        userId: getAccountId(state),
     };
 }
 
@@ -43,7 +43,7 @@ function mapDispatchToProps(dispatch) {
     return {
         onGet: () => {
             dispatch(getAccount());
-        }
+        },
     };
 }
 

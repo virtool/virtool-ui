@@ -4,7 +4,7 @@ import React from "react";
 import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { createFakeHMMData } from "../../Classes";
+import { createFakeHMMData } from "../../classes";
 import { HMMList } from "../List";
 
 function createReducer(state, history) {

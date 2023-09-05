@@ -7,15 +7,15 @@ export default {
     component: BoxGroupHeader,
     parameters: {
         controls: {
-            hideNoControlsWarning: true
-        }
+            hideNoControlsWarning: true,
+        },
     },
     argTypes: {
         children: {
             type: "string",
-            defaultValue: "This is a BoxGroupHeader!"
-        }
-    }
+            defaultValue: "This is a BoxGroupHeader!",
+        },
+    },
 };
 
 const Template = args => (

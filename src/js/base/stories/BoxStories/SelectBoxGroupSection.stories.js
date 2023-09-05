@@ -1,23 +1,23 @@
-import React from "react";
-import { Checkbox } from "../../Checkbox";
 import { useArgs } from "@storybook/client-api";
+import React from "react";
 import { BoxGroup } from "../../BoxGroup";
 import { SelectBoxGroupSection } from "../../BoxGroupSectionSelect";
+import { Checkbox } from "../../Checkbox";
 
 export default {
     title: "base/Box/SelectBoxGroupSection",
     component: SelectBoxGroupSection,
     args: {
-        active: false
+        active: false,
     },
     parameters: {
         docs: {
             description: {
                 component:
-                    "Similar to a BoxGroupSection but contains additional styling for handling select functionality. Usually accompanied by a checkbox."
-            }
-        }
-    }
+                    "Similar to a BoxGroupSection but contains additional styling for handling select functionality. Usually accompanied by a checkbox.",
+            },
+        },
+    },
 };
 
 const Template = args => {
@@ -32,7 +32,7 @@ const Template = args => {
 export const testSelectBoxGroupSection = Template.bind({});
 
 testSelectBoxGroupSection.args = {
-    children: "This is a SelectBoxGroupSection!"
+    children: "This is a SelectBoxGroupSection!",
 };
 
 const Template2 = args => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { BoxGroupSearch } from "../BoxGroupSearch";
 import { BoxGroup } from "../BoxGroup";
 import { BoxGroupHeader } from "../BoxGroupHeader";
+import { BoxGroupSearch } from "../BoxGroupSearch";
 
 export default {
     title: "base/BoxGroupSearch",
@@ -10,10 +10,10 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: "A search bar component useful for filtering or searching for items."
-            }
-        }
-    }
+                component: "A search bar component useful for filtering or searching for items.",
+            },
+        },
+    },
 };
 
 const Template = args => {
@@ -30,5 +30,5 @@ export const sampleBoxGroupSearch = Template.bind({});
 
 sampleBoxGroupSearch.args = {
     placeholder: "Filter Samples",
-    autoFocus: false
+    autoFocus: false,
 };

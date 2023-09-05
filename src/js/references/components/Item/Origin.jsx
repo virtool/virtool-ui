@@ -53,5 +53,5 @@ export const ReferenceItemOrigin = ({ clonedFrom, importedFrom, remotesFrom }) =
 ReferenceItemOrigin.propTypes = {
     clonedFrom: PropTypes.object,
     importedFrom: PropTypes.object,
-    remotesFrom: PropTypes.object
+    remotesFrom: PropTypes.object,
 };

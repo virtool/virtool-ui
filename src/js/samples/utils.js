@@ -3,7 +3,7 @@ import { forEach } from "lodash-es";
 export const workflowStates = {
     NONE: "none",
     PENDING: "pending",
-    READY: "ready"
+    READY: "ready",
 };
 
 export const getDataTypeFromLibraryType = libraryType => {
@@ -17,7 +17,7 @@ export const getDataTypeFromLibraryType = libraryType => {
 const libraryTypes = {
     normal: "Normal",
     srna: "sRNA",
-    amplicon: "Amplicon"
+    amplicon: "Amplicon",
 };
 
 export const getLibraryTypeDisplayName = libraryType => libraryTypes[libraryType];

@@ -8,10 +8,10 @@ export default {
         docs: {
             description: {
                 component:
-                    "A box wrapper element that is useful for building custom wrapping elements or when a simple box is needed."
-            }
-        }
-    }
+                    "A box wrapper element that is useful for building custom wrapping elements or when a simple box is needed.",
+            },
+        },
+    },
 };
 
 const Template = args => <Box {...args} />;
@@ -19,12 +19,12 @@ const Template = args => <Box {...args} />;
 export const sampleBox = Template.bind({});
 
 sampleBox.args = {
-    children: "This is a Box!"
+    children: "This is a Box!",
 };
 
 export const clickableBox = Template.bind({});
 
 clickableBox.args = {
     children: "This is a clickable Box!",
-    onClick: () => console.log("clicked")
+    onClick: () => console.log("clicked"),
 };

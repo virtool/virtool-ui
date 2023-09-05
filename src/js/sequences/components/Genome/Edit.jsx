@@ -18,7 +18,7 @@ const getInitialValues = ({ initialSegment, initialAccession, initialDefinition,
     accession: initialAccession || "",
     definition: initialDefinition || "",
     host: initialHost || "",
-    sequence: initialSequence || ""
+    sequence: initialSequence || "",
 });
 
 export const castValues = segments => values => {
@@ -38,7 +38,7 @@ export const EditGenomeSequence = ({
     otuId,
     show,
     onHide,
-    onSave
+    onSave,
 }) => {
     const title = "Edit Sequence";
 
@@ -51,7 +51,7 @@ export const EditGenomeSequence = ({
         initialAccession,
         initialDefinition,
         initialHost,
-        initialSequence
+        initialSequence,
     });
     return (
         <Modal label={title} show={show} size="lg" onHide={onHide}>
@@ -94,7 +94,7 @@ export const mapStateToProps = state => {
         isolateId: getActiveIsolateId(state),
         otuId: getOTUDetailId(state),
         error: getError(state, "EDIT_SEQUENCE_ERROR"),
-        show: routerLocationHasState(state, "editSequence")
+        show: routerLocationHasState(state, "editSequence"),
     };
 };
 
@@ -105,7 +105,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onSave: (otuId, isolateId, sequenceId, accession, definition, host, segment, sequence) => {
         dispatch(editSequence({ otuId, isolateId, sequenceId, accession, definition, host, sequence, segment }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditGenomeSequence);

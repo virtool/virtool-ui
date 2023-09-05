@@ -91,13 +91,13 @@ const mapStateToProps = state => ({
     isolates: state.otus.detail.isolates,
     activeIsolateId: state.otus.activeIsolateId,
     isRemote: state.references.detail.remotes_from,
-    canModify: getCanModifyReferenceOTU(state)
+    canModify: getCanModifyReferenceOTU(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     onSelectIsolate: isolateId => {
         dispatch(selectIsolate(isolateId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IsolateEditor);

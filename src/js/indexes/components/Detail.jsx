@@ -9,7 +9,7 @@ import {
     RelativeTime,
     SubviewHeader,
     SubviewHeaderAttribution,
-    SubviewHeaderTitle
+    SubviewHeaderTitle,
 } from "../../base";
 import { DownloadLink } from "../../references/components/Detail/DownloadLink";
 import { getIndex, getIndexHistory } from "../actions";
@@ -69,7 +69,7 @@ export class IndexDetail extends React.Component {
 export const mapStateToProps = state => ({
     error: get(state, "errors.GET_INDEX_ERROR", null),
     detail: state.indexes.detail,
-    refDetail: state.references.detail
+    refDetail: state.references.detail,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -79,7 +79,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onGetChanges: (indexId, page) => {
         dispatch(getIndexHistory(indexId, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndexDetail);

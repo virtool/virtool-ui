@@ -41,7 +41,7 @@ export const mapStateToProps = state => ({
     canModify: getCanModifyReferenceOTU(state),
     dataType: getDataType(state),
     hasUnreferencedTargets: Boolean(getUnreferencedTargets(state)?.length),
-    hasTargets: Boolean(getTargets(state)?.length)
+    hasTargets: Boolean(getTargets(state)?.length),
 });
 
 export default connect(mapStateToProps)(AddSequenceLink);

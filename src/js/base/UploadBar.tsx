@@ -74,19 +74,19 @@ export const UploadBar = ({
     multiple = true,
     onBlur,
     onDrop,
-    validator
+    validator,
 }: UploadBarProps) => {
     const handleDrop = useCallback(
         acceptedFiles => {
             onDrop(acceptedFiles);
         },
-        [onDrop]
+        [onDrop],
     );
 
     const { getRootProps, getInputProps, isDragAccept, open } = useDropzone({ onDrop: handleDrop, validator });
 
     const rootProps = getRootProps({
-        onClick: e => e.stopPropagation()
+        onClick: e => e.stopPropagation(),
     });
 
     return (

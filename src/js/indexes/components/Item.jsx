@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { fontWeight, getFontSize } from "../../app/theme";
-import { Attribution, Icon, BoxLink, Loader } from "../../base";
+import { Attribution, BoxLink, Icon, Loader } from "../../base";
 import { getActiveIndexId } from "../selectors";
 
 const StyledIndexItemDescription = styled.span`
@@ -80,7 +80,7 @@ export const IndexItem = ({ activeId, document, refId }) => (
 export const mapStateToProps = (state, props) => ({
     document: state.indexes.documents[props.index],
     activeId: getActiveIndexId(state),
-    refId: state.references.detail.id
+    refId: state.references.detail.id,
 });
 
 export default connect(mapStateToProps)(IndexItem);

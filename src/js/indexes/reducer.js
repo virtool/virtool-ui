@@ -6,7 +6,7 @@ import {
     GET_UNBUILT,
     WS_INSERT_HISTORY,
     WS_INSERT_INDEX,
-    WS_UPDATE_INDEX
+    WS_UPDATE_INDEX,
 } from "../app/actionTypes";
 import { insert, update, updateDocuments } from "../utils/reducers";
 
@@ -18,7 +18,7 @@ export const initialState = {
     detail: null,
     history: null,
     unbuilt: null,
-    showRebuild: false
+    showRebuild: false,
 };
 
 export const indexesReducer = createReducer(initialState, builder => {
@@ -61,8 +61,8 @@ export const indexesReducer = createReducer(initialState, builder => {
             return {
                 ...state,
                 history: {
-                    ...updateDocuments(state.history, action.payload, "otu.name")
-                }
+                    ...updateDocuments(state.history, action.payload, "otu.name"),
+                },
             };
         });
 });

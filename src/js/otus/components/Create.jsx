@@ -8,11 +8,13 @@ import { getTargetChange, routerLocationHasState } from "../../utils/utils";
 import { createOTU } from "../actions";
 import { OTUForm } from "./Form";
 
-const getInitialState = () => ({
-    name: "",
-    abbreviation: "",
-    error: ""
-});
+function getInitialState() {
+    return {
+        name: "",
+        abbreviation: "",
+        error: "",
+    };
+}
 
 class CreateOTU extends React.Component {
     constructor(props) {
@@ -43,7 +45,7 @@ class CreateOTU extends React.Component {
 
         if (!this.state.name) {
             return this.setState({
-                error: "Name required"
+                error: "Name required",
             });
         }
 
@@ -79,7 +81,7 @@ const mapStateToProps = state => ({
     error: get(state, "errors.CREATE_OTU_ERROR.message", ""),
     pending: state.otus.createPending,
     refId: state.references.detail.id,
-    show: routerLocationHasState(state, "createOTU")
+    show: routerLocationHasState(state, "createOTU"),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -93,7 +95,7 @@ const mapDispatchToProps = dispatch => ({
 
     onClearError: () => {
         dispatch(clearError("CREATE_OTU_ERROR"));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateOTU);

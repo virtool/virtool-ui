@@ -1,5 +1,5 @@
 import React from "react";
-import { SequenceTable } from "../Table/Table";
+import { SequenceTable } from "../Table";
 
 export const BarcodeSequenceTable = ({ definition, host, sequence, target }) => (
     <SequenceTable definition={definition} host={host} sequence={sequence}>

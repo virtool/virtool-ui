@@ -19,5 +19,5 @@ export const InputContainer = styled.div<InputContainerProps>`
 `;
 
 InputContainer.defaultProps = {
-    align: "left"
+    align: "left",
 };

@@ -14,7 +14,7 @@ import {
     InputPassword,
     LoadingPlaceholder,
     RelativeTime,
-    SaveButton
+    SaveButton,
 } from "../../base";
 import { clearError } from "../../errors/actions";
 import { getTargetChange } from "../../utils/utils";
@@ -25,7 +25,7 @@ const getInitialState = props => ({
     newPassword: "",
     errorOldPassword: "",
     errorNewPassword: "",
-    error: props.error
+    error: props.error,
 });
 
 const ChangePasswordFooter = styled.div`
@@ -49,7 +49,7 @@ const collectErrors = (props, state) => {
         return {
             ...state,
             errorOldPassword: message,
-            error: props.error
+            error: props.error,
         };
     }
 
@@ -86,7 +86,7 @@ class ChangePassword extends React.Component {
         if (this.state.newPassword.length < minimumLength) {
             hasError = true;
             this.setState({
-                errorNewPassword: `Passwords must contain at least ${minimumLength} characters`
+                errorNewPassword: `Passwords must contain at least ${minimumLength} characters`,
             });
         }
 
@@ -149,7 +149,7 @@ function mapStateToProps(state) {
         lastPasswordChange: state.account.last_password_change,
         minimumLength: get(state, "settings.data.minimum_password_length"),
         ready: Boolean(state.settings.data),
-        error: get(state, "errors.CHANGE_ACCOUNT_PASSWORD_ERROR", "")
+        error: get(state, "errors.CHANGE_ACCOUNT_PASSWORD_ERROR", ""),
     };
 }
 
@@ -161,7 +161,7 @@ function mapDispatchToProps(dispatch) {
 
         onClearError: () => {
             dispatch(clearError("CHANGE_ACCOUNT_PASSWORD_ERROR"));
-        }
+        },
     };
 }
 

@@ -22,7 +22,7 @@ IndexOTU.propTypes = {
     refId: PropTypes.string.isRequired,
     changeCount: PropTypes.number.isRequired,
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
 };
 
 export default IndexOTU;

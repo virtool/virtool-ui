@@ -65,5 +65,5 @@ ReferenceItemHeader.propTypes = {
     name: PropTypes.string.isRequired,
     organism: PropTypes.string,
     otuCount: PropTypes.number,
-    userHandle: PropTypes.string
+    userHandle: PropTypes.string,
 };

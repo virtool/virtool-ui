@@ -77,7 +77,7 @@ export const checkReferenceRight = createCachedSelector(
         }
 
         return some(groups, { [right]: true });
-    }
+    },
 )((state, right) => right);
 
 /**
@@ -92,7 +92,7 @@ export const checkReferenceRight = createCachedSelector(
  */
 export const getCanModifyReferenceOTU = createSelector(
     [getReferenceDetail, state => checkReferenceRight(state, "modify_otu")],
-    (detail, modifyOTU) => !detail.remotes_from && modifyOTU
+    (detail, modifyOTU) => !detail.remotes_from && modifyOTU,
 );
 
 export const getImportData = state => {
@@ -104,7 +104,7 @@ export const getImportData = state => {
             id,
             name,
             progress: 100,
-            ready: true
+            ready: true,
         };
     }
 
@@ -112,7 +112,7 @@ export const getImportData = state => {
         return {
             name: get(state, "references.importUploadName"),
             progress: get(state, "references.importUploadProgress"),
-            ready: false
+            ready: false,
         };
     }
 

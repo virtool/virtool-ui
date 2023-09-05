@@ -1,6 +1,6 @@
-import { line } from "d3-shape";
-import { scaleLinear } from "d3-scale";
 import { axisBottom, axisLeft } from "d3-axis";
+import { scaleLinear } from "d3-scale";
+import { line } from "d3-shape";
 import { max } from "lodash-es";
 import { theme } from "../../app/theme";
 import { createSVG } from "../../samples/chartUtils";

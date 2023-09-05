@@ -4,7 +4,7 @@ import { GET_INSTANCE_MESSAGE, SET_INSTANCE_MESSAGE } from "../app/actionTypes";
 export const initialState = {
     color: null,
     loaded: false,
-    message: null
+    message: null,
 };
 
 export const instanceMessageReducer = createReducer(initialState, builder => {

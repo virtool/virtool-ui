@@ -16,21 +16,21 @@ export default {
     parameters: {
         docs: {
             description: {
-                component: "Useful for highlighting the status or quantity of an item."
-            }
-        }
+                component: "Useful for highlighting the status or quantity of an item.",
+            },
+        },
     },
     argTypes: {
         color: {
             options: ["greyDark", "blue", "orange", "purple", "red"],
             control: { type: "radio" },
-            defaultValue: "greyDark"
+            defaultValue: "greyDark",
         },
         children: {
             type: "number",
-            defaultValue: 10
-        }
-    }
+            defaultValue: 10,
+        },
+    },
 };
 
 const Template = args => (

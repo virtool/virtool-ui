@@ -20,7 +20,7 @@ class SegmentForm extends React.Component {
         this.state = {
             isChecked: true,
             showError: this.props.newEntry.showError,
-            error: ""
+            error: "",
         };
     }
 
@@ -37,14 +37,14 @@ class SegmentForm extends React.Component {
         return {
             isChecked: nextProps.newEntry.required,
             showError: nextProps.newEntry.showError,
-            error
+            error,
         };
     }
 
     handleChangeName = e => {
         this.props.onChange({
             ...this.props.newEntry,
-            name: e.target.value
+            name: e.target.value,
         });
         this.setState({ error: "" });
     };
@@ -52,7 +52,7 @@ class SegmentForm extends React.Component {
     handleChangeMolecule = e => {
         this.props.onChange({
             ...this.props.newEntry,
-            molecule: e.target.value
+            molecule: e.target.value,
         });
         this.setState({ error: "" });
     };
@@ -60,7 +60,7 @@ class SegmentForm extends React.Component {
     toggleRequired = () => {
         this.props.onChange({
             ...this.props.newEntry,
-            required: !this.state.isChecked
+            required: !this.state.isChecked,
         });
         this.setState({ isChecked: !this.state.isChecked, error: "" });
     };
@@ -98,11 +98,11 @@ class SegmentForm extends React.Component {
 SegmentForm.propTypes = {
     onChange: PropTypes.func.isRequired,
     newEntry: PropTypes.object.isRequired,
-    errors: PropTypes.object
+    errors: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
-    errors: state.errors
+    errors: state.errors,
 });
 
 export default connect(mapStateToProps, null)(SegmentForm);

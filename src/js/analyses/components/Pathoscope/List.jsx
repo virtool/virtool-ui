@@ -49,7 +49,7 @@ export function mapStateToProps(state) {
         nextId,
         nextIndex,
         previousId,
-        previousIndex
+        previousIndex,
     };
 }
 
@@ -57,7 +57,7 @@ export function mapDispatchToProps(dispatch) {
     return {
         onSetActiveId: index => {
             dispatch(setActiveHitId(index));
-        }
+        },
     };
 }
 

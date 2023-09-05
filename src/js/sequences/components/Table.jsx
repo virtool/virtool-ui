@@ -1,7 +1,7 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import styled from "styled-components";
-import { Badge, Table } from "../../../base";
+import { Badge, Table } from "../../base";
 
 const SequenceCell = styled.td`
     padding: 0 !important;
@@ -52,5 +52,5 @@ SequenceTable.propTypes = {
     children: PropTypes.node.isRequired,
     definition: PropTypes.string.isRequired,
     host: PropTypes.string.isRequired,
-    sequence: PropTypes.string.isRequired
+    sequence: PropTypes.string.isRequired,
 };

@@ -17,7 +17,7 @@ import {
     TOGGLE_SHOW_PATHOSCOPE_READS,
     WS_INSERT_ANALYSIS,
     WS_REMOVE_ANALYSIS,
-    WS_UPDATE_ANALYSIS
+    WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
 
 /**
@@ -49,19 +49,19 @@ export const wsUpdateAnalysis = createAction(WS_UPDATE_ANALYSIS);
 export const wsRemoveAnalysis = createAction(WS_REMOVE_ANALYSIS);
 
 export const setActiveHitId = createAction(SET_ANALYSIS_ACTIVE_ID, id => ({
-    payload: { id }
+    payload: { id },
 }));
 
 export const setSearchIds = createAction(SET_SEARCH_IDS, ids => ({
-    payload: { ids }
+    payload: { ids },
 }));
 
 export const setAODPFilter = createAction(SET_AODP_FILTER, filterMin => ({
-    payload: { filterMin }
+    payload: { filterMin },
 }));
 
 export const setAnalysisSortKey = createAction(SET_ANALYSIS_SORT_KEY, sortKey => ({
-    payload: { sortKey }
+    payload: { sortKey },
 }));
 
 export const toggleFilterOTUs = createAction(TOGGLE_FILTER_OTUS);
@@ -72,7 +72,7 @@ export const toggleAnalysisSortDescending = createAction(TOGGLE_ANALYSIS_SORT_DE
 export const toggleShowPathoscopeReads = createAction(TOGGLE_SHOW_PATHOSCOPE_READS);
 
 export const findAnalyses = createAction(FIND_ANALYSES.REQUESTED, (sampleId, term, page) => ({
-    payload: { sampleId, term, page }
+    payload: { sampleId, term, page },
 }));
 
 /**
@@ -83,7 +83,7 @@ export const findAnalyses = createAction(FIND_ANALYSES.REQUESTED, (sampleId, ter
  * @returns {object}
  */
 export const getAnalysis = createAction(GET_ANALYSIS.REQUESTED, analysisId => ({
-    payload: { analysisId }
+    payload: { analysisId },
 }));
 
 /**
@@ -103,8 +103,8 @@ export const analyze = createAction(ANALYZE.REQUESTED, (sampleId, refId, subtrac
         sampleId,
         subtractionIds,
         userId,
-        workflow
-    }
+        workflow,
+    },
 }));
 
 /**
@@ -116,7 +116,7 @@ export const analyze = createAction(ANALYZE.REQUESTED, (sampleId, refId, subtrac
  * @returns {object}
  */
 export const blastNuvs = createAction(BLAST_NUVS.REQUESTED, (analysisId, sequenceIndex) => ({
-    payload: { analysisId, sequenceIndex }
+    payload: { analysisId, sequenceIndex },
 }));
 
 /**
@@ -127,5 +127,5 @@ export const blastNuvs = createAction(BLAST_NUVS.REQUESTED, (analysisId, sequenc
  * @returns {object}
  */
 export const removeAnalysis = createAction(REMOVE_ANALYSIS.REQUESTED, analysisId => ({
-    payload: { analysisId }
+    payload: { analysisId },
 }));

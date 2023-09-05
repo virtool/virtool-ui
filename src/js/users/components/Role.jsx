@@ -27,13 +27,13 @@ export const UserRole = ({ canModifyUser, id, role, onSetUserRole }) => {
 export const mapStateToProps = state => ({
     canModifyUser: getCanModifyUser(state),
     id: state.users.detail.id,
-    role: state.users.detail.administrator ? "administrator" : "limited"
+    role: state.users.detail.administrator ? "administrator" : "limited",
 });
 
 export const mapDispatchToProps = dispatch => ({
     onSetUserRole: (userId, value) => {
         dispatch(editUser(userId, { administrator: value === "administrator" }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRole);

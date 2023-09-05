@@ -1,7 +1,7 @@
 import React from "react";
 import Contributors from "./Contributors";
-import IndexOTUs from "./OTUs";
 import Files from "./Files";
+import IndexOTUs from "./OTUs";
 
 export const IndexGeneral = () => (
     <>

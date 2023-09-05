@@ -26,7 +26,7 @@ export function ReferenceSettings({ isRemote }) {
 
 export function mapStateToProps(state) {
     return {
-        isRemote: Boolean(state.references.detail.remotes_from)
+        isRemote: Boolean(state.references.detail.remotes_from),
     };
 }
 

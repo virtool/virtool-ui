@@ -33,7 +33,7 @@ const StyledStatusFilter = styled(SideBarSection)`
 export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
     const handleClick = value =>
         onUpdateJobStateFilter(
-            value === "active" || value === "inactive" ? filterStatesByCategory(value, states) : xor(states, [value])
+            value === "active" || value === "inactive" ? filterStatesByCategory(value, states) : xor(states, [value]),
         );
 
     return (
@@ -47,22 +47,22 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                         color: "grey",
                         count: counts.waiting,
                         state: "waiting",
-                        label: "waiting"
+                        label: "waiting",
                     },
                     {
                         active: states.includes("preparing"),
                         count: counts.preparing,
                         state: "preparing",
                         label: "preparing",
-                        color: "grey"
+                        color: "grey",
                     },
                     {
                         active: states.includes("running"),
                         count: counts.running,
                         state: "running",
                         label: "running",
-                        color: "blue"
-                    }
+                        color: "blue",
+                    },
                 ]}
                 onClick={handleClick}
             />
@@ -74,36 +74,36 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                         count: counts.complete,
                         state: "complete",
                         label: "complete",
-                        color: "green"
+                        color: "green",
                     },
                     {
                         active: states.includes("cancelled"),
                         count: counts.cancelled,
                         state: "cancelled",
                         label: "cancelled",
-                        color: "red"
+                        color: "red",
                     },
                     {
                         active: states.includes("error"),
                         count: counts.error,
                         state: "error",
                         label: "errored",
-                        color: "red"
+                        color: "red",
                     },
                     {
                         active: states.includes("terminated"),
                         count: counts.terminated,
                         state: "terminated",
                         label: "terminated",
-                        color: "red"
+                        color: "red",
                     },
                     {
                         active: states.includes("timeout"),
                         count: counts.timeout,
                         state: "timeout",
                         label: "timed out",
-                        color: "red"
-                    }
+                        color: "red",
+                    },
                 ]}
                 onClick={handleClick}
             />
@@ -113,13 +113,13 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
 
 export const mapStateToProps = state => ({
     counts: getJobCountsByState(state),
-    states: getStatesFromURL(state)
+    states: getStatesFromURL(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onUpdateJobStateFilter: states => {
         dispatch(findJobs(states));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StateFilter);

@@ -7,7 +7,7 @@ import {
     FIND_SUBTRACTIONS,
     GET_SUBTRACTION,
     REMOVE_SUBTRACTION,
-    SHORTLIST_SUBTRACTIONS
+    SHORTLIST_SUBTRACTIONS,
 } from "../app/actionTypes";
 import { deletePersistentFormState } from "../forms/actions";
 import { apiCall, pushFindTerm } from "../utils/sagas";
