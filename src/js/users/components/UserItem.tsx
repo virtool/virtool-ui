@@ -103,7 +103,7 @@ export function UserItem({ id, handle, administratorRole }: UserItemProps): JSX.
     );
 
     return (
-        <StyledUserItem to={`/administration/users/${id}`}>
+        <StyledUserItem>
             <UserContainer>
                 <InitialIcon size="lg" handle={handle} />
                 <strong>{handle}</strong>

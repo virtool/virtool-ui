@@ -15,7 +15,7 @@ describe("<B2CLogin />", () => {
             onSetLogin: vi.fn(),
         };
 
-        window.b2c = {
+        window.virtool.b2c = {
             use: true,
             userflow: "test_userflow",
             tenant: "test_tenant",

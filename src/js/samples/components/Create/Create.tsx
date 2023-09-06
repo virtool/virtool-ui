@@ -1,4 +1,4 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { filter, find, get, intersectionWith } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
@@ -115,6 +115,17 @@ const castValues = (reads, subtractions, allLabels) => values => {
     return { ...values, readFiles, sidebar: { labels, subtractionIds } };
 };
 
+type formValues = {
+    name: string;
+    isolate: string;
+    host: string;
+    locale: string;
+    libraryType: string;
+    readFiles: string[];
+    group: string;
+    sidebar: { labels: string[]; subtractionIds: string[] };
+};
+
 const getInitialValues = forceGroupChoice => ({
     name: "",
     isolate: "",
@@ -189,7 +200,17 @@ export const CreateSample = ({
                 initialValues={getInitialValues(forceGroupChoice)}
                 validationSchema={validationSchema}
             >
-                {({ errors, setFieldValue, touched, values }) => (
+                {({
+                    errors,
+                    setFieldValue,
+                    touched,
+                    values,
+                }: {
+                    errors: FormikErrors<formValues>;
+                    setFieldValue: Function;
+                    touched: FormikTouched<formValues>;
+                    values: formValues;
+                }) => (
                     <CreateSampleForm>
                         <AlertContainer>
                             <PersistForm
@@ -208,12 +229,13 @@ export const CreateSample = ({
                                     autocomplete={false}
                                     error={touched.name ? errors.name : null}
                                 />
-                                <InputIcon
-                                    name="magic"
-                                    aria-label="Auto Fill"
-                                    onClick={e => autofill(values.readFiles, setFieldValue, e)}
-                                    disabled={!values.readFiles.length}
-                                />
+                                {Boolean(values.readFiles.length) && (
+                                    <InputIcon
+                                        name="magic"
+                                        aria-label="Auto Fill"
+                                        onClick={() => autofill(values.readFiles, setFieldValue)}
+                                    />
+                                )}
                             </InputContainer>
                             {touched.name && <InputError>{errors.name}</InputError>}
                         </CreateSampleName>

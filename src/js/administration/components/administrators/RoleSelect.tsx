@@ -1,10 +1,10 @@
 import { map } from "lodash-es";
 import React from "react";
 import { Select, SelectButton, SelectContent, SelectItem } from "../../../base";
-import { AdministratorRole } from "../../types";
+import { AdministratorRoles } from "../../types";
 
 type RoleSelectProps = {
-    roles: Array<AdministratorRole>;
+    roles: Array<AdministratorRoles>;
     value: string;
     onChange: (value: string) => void;
     className?: string;

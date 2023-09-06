@@ -4,7 +4,7 @@ import { getFontSize, getFontWeight } from "../../../app/theme";
 import { BoxSpaced, Icon, InitialIcon } from "../../../base";
 import { User } from "../../../users/types";
 import { useSetAdministratorRole } from "../../querys";
-import { AdministratorRole, AdministratorRoles } from "../../types";
+import { AdministratorRoles } from "../../types";
 import { RoleSelect } from "./RoleSelect";
 
 const StyledAdministrator = styled(BoxSpaced)`
@@ -35,7 +35,7 @@ const InlineRoleSelect = styled(RoleSelect)`
 
 type AdministratorItemProps = {
     user: User;
-    roles: Array<AdministratorRole>;
+    roles: Array<AdministratorRoles>;
 };
 
 export const AdministratorItem = ({ user, roles }: AdministratorItemProps) => {

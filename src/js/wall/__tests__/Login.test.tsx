@@ -19,7 +19,7 @@ describe("<Login />", () => {
         props = {
             onLogin: vi.fn(),
         };
-        window.b2c = {
+        window.virtool.b2c = {
             use: false,
         };
     });

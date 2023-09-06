@@ -12,7 +12,14 @@ const StyledSidebar = styled(ContainerSide)`
     z-index: 1;
 `;
 
-export const Sidebar = ({ className, sampleLabels, defaultSubtractions, onUpdate }) => (
+type sidebarProps = {
+    className?: string;
+    sampleLabels: any;
+    defaultSubtractions: ();
+
+};
+
+export const Sidebar = ({ className, sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) => (
     <StyledSidebar className={className}>
         <SampleLabels onUpdate={selection => onUpdate("labels", selection)} sampleLabels={sampleLabels} />
         <DefaultSubtractions
