@@ -17,6 +17,7 @@ describe("<SubtractionItem />", () => {
             user: { handle: "user_handle" },
             job: { progress: 50, state: "running" },
             created_at: new Date().setFullYear(new Date().getFullYear() - 1),
+            ready: false,
         };
         history = createBrowserHistory();
     });
@@ -36,11 +37,16 @@ describe("<SubtractionItem />", () => {
         expect(screen.getByText(getStateTitle(state))).toBeInTheDocument();
     });
 
-    it("should not render progress bar if job is complete", () => {
-        props.job.state = "complete";
+    it("should not render progress bar if job is ready", () => {
+        props.ready = true;
         renderWithRouter(<SubtractionItem {...props} />, {}, history);
         expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
         expect(screen.queryByText("Complete")).not.toBeInTheDocument();
+    });
+    it("should correctly render subtractions where jobs=null", () => {
+        props.job = null;
+        props.ready = false;
+        renderWithRouter(<SubtractionItem {...props} />, {}, history);
     });
 });
 
@@ -79,6 +85,7 @@ describe("mapStateToProps()", () => {
             name: "Bar",
             job: { id: "job_id_2", progress: 50, state: "failed" },
             user: { id: "user_id_2", handle: "user_handle_2" },
+            ready: true,
         });
     });
 });
