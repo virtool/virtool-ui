@@ -17,7 +17,7 @@ type FileManagerProps = {
     validationRegex?: RegExp;
 };
 
-export const FileManager = ({ validationRegex, message, tip, fileType }: FileManagerProps) => {
+export function FileManager({ validationRegex, message, tip, fileType }: FileManagerProps) {
     const URLPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
     const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
@@ -55,4 +55,4 @@ export const FileManager = ({ validationRegex, message, tip, fileType }: FileMan
             />
         </>
     );
-};
+}

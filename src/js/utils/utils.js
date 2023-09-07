@@ -20,7 +20,7 @@ export const alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
  * @param bytes {number}
  * @returns {string}
  */
-export const byteSize = (bytes, spaceSeparated) => {
+export function byteSize(bytes, spaceSeparated = false) {
     if (bytes) {
         return numbro(bytes).format({
             output: "byte",
@@ -31,7 +31,7 @@ export const byteSize = (bytes, spaceSeparated) => {
     }
 
     return "0.0B";
-};
+}
 
 /**
  * Create a URL object given a find term or a page number. Both parameters are optional.
@@ -40,7 +40,7 @@ export const byteSize = (bytes, spaceSeparated) => {
  * @param term {string} a search string to place in the URL
  * @returns {URL}
  */
-export const createFindURL = term => {
+export function createFindURL(term) {
     const url = new window.URL(window.location);
 
     if (term !== undefined) {
@@ -52,7 +52,7 @@ export const createFindURL = term => {
     }
 
     return url;
-};
+}
 
 /**
  * Create a Fuse object.
@@ -74,7 +74,9 @@ export function createFuse(collection, keys, id) {
  * @func
  * @param length {number} the length of string to return
  */
-export const createRandomString = (length = 8) => sampleSize(alphanumeric, length).join("");
+export function createRandomString(length = 8) {
+    return sampleSize(alphanumeric, length).join("");
+}
 
 /**
  * Download a file with the given ``filename`` with the given ``text`` content. This allows downloads of
@@ -84,7 +86,7 @@ export const createRandomString = (length = 8) => sampleSize(alphanumeric, lengt
  * @param filename
  * @param text
  */
-export const followDynamicDownload = (filename, text) => {
+export function followDynamicDownload(filename, text) {
     const a = document.createElement("a");
     a.href = `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`;
     a.download = filename;
@@ -95,7 +97,7 @@ export const followDynamicDownload = (filename, text) => {
     a.click();
 
     document.body.removeChild(a);
-};
+}
 
 /**
  * Return a formatted isolate name given an ``isolate`` object.
@@ -104,12 +106,12 @@ export const followDynamicDownload = (filename, text) => {
  * @param isolate {object}
  * @returns {string}
  */
-export const formatIsolateName = isolate => {
+export function formatIsolateName(isolate) {
     const sourceType = get(isolate, "source_type") || get(isolate, "sourceType");
     const sourceName = get(isolate, "source_name") || get(isolate, "sourceName");
 
     return sourceType === "unknown" ? "Unnamed" : `${capitalize(sourceType)} ${sourceName}`;
-};
+}
 
 /**
  * Transforms a plain workflow ID (eg. pathoscope_bowtie) to a human-readable name (eg. PathoscopeBowtie).
@@ -122,17 +124,30 @@ export function getWorkflowDisplayName(workflow) {
     return get(workflowDisplayNames, workflow, startCase(workflow));
 }
 
-export const reportAPIError = action => window.captureException(action.payload.error);
+/**
+ * Report a captured error to Sentry for logging.
+ *
+ * @param action - Redux action that contains the error
+ */
 
-export const routerLocationHasState = (state, key, value) =>
-    Boolean(state.router.location.state) &&
-    (value ? state.router.location.state[key] === value : Boolean(state.router.location.state[key]));
+export function reportAPIError(action) {
+    window.captureException(action.payload.error);
+}
 
-export const getTargetChange = target => ({
-    name: target.name,
-    value: target.value,
-    error: `error${upperFirst(target.name)}`,
-});
+export function routerLocationHasState(state, key, value) {
+    return (
+        Boolean(state.router.location.state) &&
+        (value ? state.router.location.state[key] === value : Boolean(state.router.location.state[key]))
+    );
+}
+
+export function getTargetChange(target) {
+    return {
+        name: target.name,
+        value: target.value,
+        error: `error${upperFirst(target.name)}`,
+    };
+}
 
 /**
  * Object that maps workflow IDs to human-readable names.
@@ -149,7 +164,9 @@ export const workflowDisplayNames = {
     build_index: "Build Index",
 };
 
-export const toThousand = number => numbro(number).format({ thousandSeparated: true });
+export function toThousand(number) {
+    return numbro(number).format({ thousandSeparated: true });
+}
 
 /**
  * Converts a ``number`` to a scientific notation string.
@@ -158,14 +175,14 @@ export const toThousand = number => numbro(number).format({ thousandSeparated: t
  * @param {number} number
  * @returns {string}
  */
-export const toScientificNotation = number => {
+export function toScientificNotation(number) {
     if (number < 0.01 || number > 1000) {
         const [coefficient, exponent] = split(number.toExponential(), "e");
         return `${numbro(coefficient).format("0.00")}E${replace(exponent, "+", "")}`;
     }
 
     return numbro(number).format("0.000");
-};
+}
 
 /**
  *  Clears session storage and reloads the page.
@@ -175,10 +192,10 @@ export const toScientificNotation = number => {
  *  @func
  *  @returns {undefined}
  */
-export const resetClient = () => {
+export function resetClient() {
     window.sessionStorage.clear();
     window.location.reload();
-};
+}
 
 /**
  * Stores the passed object in local storage at key given
@@ -188,13 +205,13 @@ export const resetClient = () => {
  * @param {data} object
  * @returns {undefined}
  */
-export const setSessionStorage = (key, data) => {
+export function setSessionStorage(key, data) {
     try {
         window.sessionStorage.setItem(key, JSON.stringify(data));
     } catch (e) {
         //continue running regardless of error
     }
-};
+}
 
 /**
  * Return the object stored in session storage at the given key
@@ -203,13 +220,13 @@ export const setSessionStorage = (key, data) => {
  * @param {string} key
  * @returns {object}
  */
-export const getSessionStorage = key => {
+export function getSessionStorage(key) {
     try {
         return JSON.parse(window.sessionStorage.getItem(key));
     } catch (e) {
         return null;
     }
-};
+}
 
 /**
  * Return a search string with specified passed parameters updated
@@ -219,7 +236,7 @@ export const getSessionStorage = key => {
  * @param {object} params
  * @returns {string}
  */
-export const updateSearchString = (search, params) => {
+export function updateSearchString(search, params) {
     const searchParams = new URLSearchParams(search);
 
     forEach(params, (value, key) => {
@@ -227,4 +244,4 @@ export const updateSearchString = (search, params) => {
     });
 
     return searchParams.toString();
-};
+}

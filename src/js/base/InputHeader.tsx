@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useRef } from "react";
+import React, { MutableRefObject, useRef } from "react";
 import styled from "styled-components";
 import { borderRadius, getFontSize, getFontWeight } from "../app/theme";
 
@@ -20,7 +20,11 @@ const InputHeaderContainer = styled.form`
     }
 `;
 
-const InputHeaderControl = styled.input`
+type InputHeaderControlProps = {
+    ref: MutableRefObject<HTMLInputElement>;
+};
+
+const InputHeaderControl = styled.input<InputHeaderControlProps>`
     background-color: transparent;
     border: none;
     border-radius: 5px;
@@ -38,7 +42,7 @@ type InputHeaderProps = {
 };
 
 export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
-    const inputElement = useRef<HTMLDivElement>();
+    const inputElement = useRef<HTMLInputElement>();
 
     const formik = useFormik({
         enableReinitialize: true,

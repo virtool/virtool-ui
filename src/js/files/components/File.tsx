@@ -27,7 +27,7 @@ type FileProps = FileData & {
     canRemove: boolean;
 };
 
-export const File = ({ canRemove, id, name, ready, size, uploaded_at, user }: FileProps) => {
+export function File({ canRemove, id, name, ready, size, uploaded_at, user }: FileProps) {
     const { mutate: handleRemove } = useDeleteFile();
 
     const attribution =
@@ -70,4 +70,4 @@ export const File = ({ canRemove, id, name, ready, size, uploaded_at, user }: Fi
             {attribution}
         </BoxSpaced>
     );
-};
+}

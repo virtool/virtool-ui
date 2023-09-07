@@ -123,7 +123,7 @@ type formValues = {
     libraryType: string;
     readFiles: string[];
     group: string;
-    sidebar: { labels: string[]; subtractionIds: string[] };
+    sidebar: { labels: number[]; subtractionIds: string[] };
 };
 
 const getInitialValues = forceGroupChoice => ({
@@ -137,7 +137,7 @@ const getInitialValues = forceGroupChoice => ({
     sidebar: { labels: [], subtractionIds: [] },
 });
 
-export const CreateSample = ({
+export function CreateSample({
     error,
     forceGroupChoice,
     groups,
@@ -147,7 +147,7 @@ export const CreateSample = ({
     onCreate,
     onClearError,
     onListLabels,
-}) => {
+}) {
     useEffect(() => {
         onLoadSubtractionsAndFiles();
         onListLabels();
@@ -299,7 +299,7 @@ export const CreateSample = ({
             </Formik>
         </>
     );
-};
+}
 
 export const mapStateToProps = state => ({
     error: get(state, "errors.CREATE_SAMPLE_ERROR.message", ""),

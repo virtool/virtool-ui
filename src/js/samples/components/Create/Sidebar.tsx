@@ -14,17 +14,19 @@ const StyledSidebar = styled(ContainerSide)`
 
 type sidebarProps = {
     className?: string;
-    sampleLabels: any;
-    defaultSubtractions: ();
-
+    sampleLabels: number[];
+    defaultSubtractions: string[];
+    onUpdate: (key: string, value: any) => void;
 };
 
-export const Sidebar = ({ className, sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) => (
-    <StyledSidebar className={className}>
-        <SampleLabels onUpdate={selection => onUpdate("labels", selection)} sampleLabels={sampleLabels} />
-        <DefaultSubtractions
-            onUpdate={selection => onUpdate("subtractionIds", selection)}
-            defaultSubtractions={defaultSubtractions}
-        />
-    </StyledSidebar>
-);
+export function Sidebar({ className, sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) {
+    return (
+        <StyledSidebar className={className}>
+            <SampleLabels onUpdate={selection => onUpdate("labels", selection)} sampleLabels={sampleLabels} />
+            <DefaultSubtractions
+                onUpdate={selection => onUpdate("subtractionIds", selection)}
+                defaultSubtractions={defaultSubtractions}
+            />
+        </StyledSidebar>
+    );
+}
