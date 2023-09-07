@@ -1,5 +1,5 @@
 import React from "react";
-import { SequenceTable } from "../Table/Table";
+import { SequenceTable } from "../Table";
 
 export const GenomeSequenceTable = ({ definition, host, segment, sequence }) => (
     <SequenceTable definition={definition} host={host} sequence={sequence}>

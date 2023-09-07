@@ -25,7 +25,7 @@ export const getSequences = createSelector([getActiveIsolate, getSchema], (isola
                 }
 
                 return segmentNames.length;
-            }
+            },
         ]);
     }
 
@@ -68,7 +68,7 @@ export const getActiveSequence = createSelector([getActiveSequenceId, getSequenc
  * @returns {Object[]} All inactive sequences for the active isolate
  */
 export const getInactiveSequences = createSelector([getActiveSequenceId, getSequences], (activeSequenceId, sequences) =>
-    reject(sequences, { id: activeSequenceId })
+    reject(sequences, { id: activeSequenceId }),
 );
 
 /**
@@ -81,7 +81,7 @@ export const getUnreferencedTargets = createSelector(
     (inactiveSequences, targets) => {
         const referencedTargetNames = map(inactiveSequences, sequence => sequence.target);
         return filter(targets, target => !referencedTargetNames.includes(target.name));
-    }
+    },
 );
 
 export const getDefaultTargetName = state => get(getUnreferencedTargets(state), "0.name");
@@ -98,5 +98,5 @@ export const getUnreferencedSegments = createSelector(
     (inactiveSequences, schema) => {
         const referencedSegmentNames = compact(map(inactiveSequences, "segment"));
         return schema.filter(segment => !referencedSegmentNames.includes(segment.name));
-    }
+    },
 );

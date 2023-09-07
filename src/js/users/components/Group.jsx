@@ -13,7 +13,7 @@ export class UserGroup extends React.Component {
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         toggled: PropTypes.bool.isRequired,
-        onClick: PropTypes.func.isRequired
+        onClick: PropTypes.func.isRequired,
     };
 
     handleClick = () => {

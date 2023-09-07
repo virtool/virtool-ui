@@ -40,7 +40,7 @@ function Analyses({ loading, onFindAnalyses, onFindHmms, onListReadyIndexes }: A
 function mapStateToProps(state) {
     return {
         loading:
-            state.analyses.documents === null || state.hmms.documents === null || state.analyses.readyIndexes === null
+            state.analyses.documents === null || state.hmms.documents === null || state.analyses.readyIndexes === null,
     };
 }
 
@@ -54,7 +54,7 @@ function mapDispatchToProps(dispatch) {
         },
         onListReadyIndexes: () => {
             dispatch(listReadyIndexes());
-        }
+        },
     };
 }
 

@@ -28,7 +28,7 @@ export function LabelForm({ color = "#D1D5DB", description = "", error = "", nam
         formState: { errors },
         register,
         handleSubmit,
-        watch
+        watch,
     } = useForm({ defaultValues: { color, description, name } });
 
     return (

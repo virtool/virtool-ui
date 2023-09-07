@@ -26,5 +26,5 @@ export function NoneFoundSection({ children, noun }) {
 
 NoneFoundSection.propTypes = {
     children: PropTypes.node,
-    noun: PropTypes.string.isRequired
+    noun: PropTypes.string.isRequired,
 };

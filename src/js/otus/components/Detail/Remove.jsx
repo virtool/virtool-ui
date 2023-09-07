@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
 import PropTypes from "prop-types";
+import React, { useCallback } from "react";
 import { connect } from "react-redux";
-import { removeOTU, hideOTUModal } from "../../actions";
 import { RemoveModal } from "../../../base";
+import { hideOTUModal, removeOTU } from "../../actions";
 
 export const Remove = ({ history, id, name, refId, show, onConfirm, onHide }) => {
     const handleConfirm = useCallback(() => {
@@ -19,12 +19,12 @@ Remove.propTypes = {
     refId: PropTypes.string,
     show: PropTypes.bool,
     onConfirm: PropTypes.func,
-    onHide: PropTypes.func
+    onHide: PropTypes.func,
 };
 
 export const mapStateToProps = state => ({
     show: state.otus.remove,
-    refId: state.references.detail.id
+    refId: state.references.detail.id,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -34,7 +34,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onHide: () => {
         dispatch(hideOTUModal());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Remove);

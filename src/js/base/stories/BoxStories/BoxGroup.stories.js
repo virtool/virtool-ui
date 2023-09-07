@@ -17,11 +17,11 @@ export default {
         docs: {
             description: {
                 component:
-                    "Similar to a box but adds additional styling for visual consistency. This styling targets children and prevents double borders from occuring at the top."
-            }
+                    "Similar to a box but adds additional styling for visual consistency. This styling targets children and prevents double borders from occuring at the top.",
+            },
         },
-        controls: { hideNoControlsWarning: true }
-    }
+        controls: { hideNoControlsWarning: true },
+    },
 };
 
 const Template = args => (
@@ -41,7 +41,7 @@ const Template = args => (
 export const exampleBoxGroup = Template.bind({});
 
 exampleBoxGroup.args = {
-    children: "This is a BoxGroup"
+    children: "This is a BoxGroup",
 };
 
 const BoxWithElementsTemplate = args => (

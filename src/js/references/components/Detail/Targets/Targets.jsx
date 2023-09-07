@@ -26,7 +26,7 @@ export class Targets extends React.Component {
 
     handleRemove = name => {
         this.props.onRemove(this.props.refId, {
-            targets: reject(this.props.targets, { name })
+            targets: reject(this.props.targets, { name }),
         });
     };
 
@@ -87,7 +87,7 @@ export const mapStateToProps = state => ({
     canModify: checkReferenceRight(state, "modify"),
     dataType: state.references.detail.data_type,
     refId: state.references.detail.id,
-    targets: state.references.detail.targets
+    targets: state.references.detail.targets,
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -96,6 +96,6 @@ export const mapDispatchToProps = dispatch => ({
     },
     onShowEdit: name => {
         dispatch(pushState({ editTarget: name }));
-    }
+    },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Targets);

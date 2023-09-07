@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InputSearch } from "../../../base";
 import { ReferenceToolbar } from "../Toolbar";
 
@@ -8,7 +11,7 @@ describe("<ReferenceToolbar />", () => {
         props = {
             canCreate: true,
             term: "",
-            onFind: vi.fn()
+            onFind: vi.fn(),
         };
     });
 

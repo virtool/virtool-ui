@@ -1,25 +1,28 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { shallow } from "enzyme";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createStore } from "redux";
-import { createFakeFile, mockUnpaginatedListFilesAPI } from "../../../../tests/fake/files";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../tests/fake/files";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { FileType } from "../../../files/types";
 import { CreateSubtraction } from "../Create";
 import { SubtractionFileItem } from "../FileSelector";
-
-const routerRenderWithProviders = (ui, store) => {
+function routerRenderWithProviders(ui, store) {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
     return renderWithProviders(routerUi, store);
-};
+}
 
-const createAppStore = state => {
+function createAppStore(state) {
     return () => {
         const mockReducer = state => {
             return state;
         };
         return createStore(mockReducer, state);
     };
-};
+}
 
 describe("<SubtractionFileItem />", () => {
     it.each([true, false])("should render when [active=%p]", active => {
@@ -55,14 +58,14 @@ describe("<CreateSubtraction />", () => {
     });
 
     it("should render when no files available", async () => {
-        mockUnpaginatedListFilesAPI([], true);
+        mockApiUnpaginatedListFiles([], true);
         routerRenderWithProviders(<CreateSubtraction {...props} />, createAppStore(state));
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
     });
 
     it("should render error when submitted with no name or file entered", async () => {
         const file = createFakeFile({ name: "subtraction.fq.gz", type: FileType.subtraction });
-        mockUnpaginatedListFilesAPI([file], true);
+        mockApiUnpaginatedListFiles([file], true);
 
         routerRenderWithProviders(
             <BrowserRouter>
@@ -79,7 +82,7 @@ describe("<CreateSubtraction />", () => {
 
     it("should submit correct values when all fields selected", async () => {
         const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
-        mockUnpaginatedListFilesAPI([file], true);
+        mockApiUnpaginatedListFiles([file], true);
 
         routerRenderWithProviders(
             <BrowserRouter>
@@ -101,7 +104,7 @@ describe("<CreateSubtraction />", () => {
 
     it("should restore form with correct values", async () => {
         const file = createFakeFile({ name: "testsubtractionname", type: FileType.subtraction });
-        mockUnpaginatedListFilesAPI([file], true);
+        mockApiUnpaginatedListFiles([file], true);
 
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";

@@ -2,7 +2,7 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../app/actions";
-import { Button, ModalBody, ModalFooter, Modal, ModalHeader } from "../../base";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../base";
 import { clearError } from "../../errors/actions";
 import { routerLocationHasState } from "../../utils/utils";
 import { createIndex, getUnbuilt } from "../actions";
@@ -63,7 +63,7 @@ const mapStateToProps = state => ({
     show: routerLocationHasState(state, "rebuild", true),
     unbuilt: state.indexes.unbuilt,
     error: get(state, "errors.CREATE_INDEX_ERROR.message", ""),
-    refId: state.references.detail.id
+    refId: state.references.detail.id,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -81,7 +81,7 @@ const mapDispatchToProps = dispatch => ({
 
     onClearError: () => {
         dispatch(clearError("CREATE_INDEX_ERROR"));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RebuildIndex);

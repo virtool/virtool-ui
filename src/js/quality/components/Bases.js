@@ -9,30 +9,17 @@ const series = [
     { label: "Mean", color: theme.color.red },
     { label: "Median", color: theme.color.blue },
     { label: "Quartile", color: theme.color.green },
-    { label: "Decile", color: theme.color.yellow }
+    { label: "Decile", color: theme.color.yellow },
 ];
 
-/**
- * @func
- * @param name
- * @param areaX
- * @param y
- * @param a
- * @param b
- */
 const getArea = (name, areaX, y, a, b) => ({
     name,
     func: area()
         .x(areaX)
         .y0(d => y(d[a]))
-        .y1(d => y(d[b]))
+        .y1(d => y(d[b])),
 });
 
-/**
- * @func
- * @param data
- * @returns {*}
- */
 const getMinQuality = data => min(map(data, document => min(values(document))));
 
 /**
@@ -47,7 +34,7 @@ const getMinQuality = data => min(map(data, document => min(values(document))));
 const lineDrawer = (data, key, x, y) => {
     const column = {
         mean: 0,
-        median: 1
+        median: 1,
     }[key];
 
     const generator = line()
@@ -75,7 +62,7 @@ export const drawBasesChart = (element, data, baseWidth) => {
     const areas = [
         getArea("upper", areaX, y, 3, 5),
         getArea("lower", areaX, y, 2, 4),
-        getArea("quartile", areaX, y, 2, 3)
+        getArea("quartile", areaX, y, 2, 3),
     ];
 
     // Append the areas to the chart.
@@ -92,7 +79,6 @@ export const drawBasesChart = (element, data, baseWidth) => {
     // Append the median line to the chart. Color is red.
     svg.append("path").attr("d", lineDrawer(data, "mean", x, y)).attr("class", "graph-line graph-line-red");
 
-    // Append the x-axis to the chart.
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", `translate(0, ${svg.height})`)

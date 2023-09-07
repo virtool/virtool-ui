@@ -16,7 +16,7 @@ const getInitialValues = defaultTarget => ({
     accession: "",
     definition: "",
     host: "",
-    sequence: ""
+    sequence: "",
 });
 
 export const castValues = (targets, defaultTarget) => values => {
@@ -65,7 +65,7 @@ export const mapStateToProps = state => ({
     defaultTarget: getDefaultTargetName(state),
     isolateId: getActiveIsolateId(state),
     otuId: getOTUDetailId(state),
-    targets: getUnreferencedTargets(state)
+    targets: getUnreferencedTargets(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -75,7 +75,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onSave: (otuId, isolateId, accession, definition, host, sequence, target) => {
         dispatch(addSequence({ otuId, isolateId, accession, definition, host, sequence, target }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddBarcodeSequence);

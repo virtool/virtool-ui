@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { getAccountId } from "../../account/selectors";
 import QuickAnalysis from "../../analyses/components/Create/Quick";
-import { Badge, LoadingPlaceholder, NoneFoundBox, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, LegacyScrollList, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findHmms } from "../../hmm/actions";
 import { listReadyIndexes } from "../../indexes/actions";
 import { listLabels } from "../../labels/actions";
 import { findSamples } from "../actions";
 import { SampleFilters } from "./Filter/Filters";
 import SampleItem from "./Item/Item";
-import SampleToolbar from "./Toolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
-import { useLocation } from "react-router-dom";
+import SampleToolbar from "./Toolbar";
 
 const SamplesListHeader = styled.div`
     grid-column: 1;
@@ -37,7 +37,7 @@ export const SamplesList = ({
     totalCount,
     onFindSamples,
     onFindOther,
-    selected
+    selected,
 }) => {
     useEffect(onFindOther, [null]);
 
@@ -70,7 +70,7 @@ export const SamplesList = ({
                 </SamplesListHeader>
                 <SamplesListContent>
                     {noneFound || (
-                        <ScrollList
+                        <LegacyScrollList
                             documents={documents}
                             page={page}
                             pageCount={pageCount}
@@ -101,7 +101,7 @@ export const mapStateToProps = state => {
         page,
         pageCount: page_count,
         selected,
-        totalCount: total_count
+        totalCount: total_count,
     };
 };
 
@@ -114,7 +114,7 @@ export const mapDispatchToProps = dispatch => ({
         dispatch(findHmms("", 1));
         dispatch(listLabels());
         dispatch(listReadyIndexes());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SamplesList);

@@ -10,7 +10,7 @@ import { OTUForm } from "../Form";
 const getInitialState = ({ name = "", abbreviation = "" }) => ({
     name,
     abbreviation,
-    error: ""
+    error: "",
 });
 
 class Edit extends React.Component {
@@ -24,7 +24,7 @@ class Edit extends React.Component {
 
         this.setState({
             [name]: value,
-            [error]: ""
+            [error]: "",
         });
 
         if (this.props.error) {
@@ -47,7 +47,7 @@ class Edit extends React.Component {
 
         if (!this.state.name) {
             return this.setState({
-                errorName: "Required Field"
+                errorName: "Required Field",
             });
         }
 
@@ -82,7 +82,7 @@ class Edit extends React.Component {
 
 const mapStateToProps = state => ({
     show: state.otus.edit,
-    error: get(state, "errors.EDIT_OTU_ERROR.message", "")
+    error: get(state, "errors.EDIT_OTU_ERROR.message", ""),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -96,7 +96,7 @@ const mapDispatchToProps = dispatch => ({
 
     onClearError: () => {
         dispatch(clearError("EDIT_OTU_ERROR"));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Edit);

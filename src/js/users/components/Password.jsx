@@ -11,7 +11,7 @@ import {
     InputGroup,
     InputPassword,
     RelativeTime,
-    SaveButton
+    SaveButton,
 } from "../../base";
 import { editUser } from "../actions";
 
@@ -29,7 +29,7 @@ export class Password extends React.Component {
         super(props);
         this.state = {
             password: "",
-            error: ""
+            error: "",
         };
         this.inputRef = React.createRef();
     }
@@ -39,7 +39,7 @@ export class Password extends React.Component {
 
         this.setState({
             [name]: value,
-            error: ""
+            error: "",
         });
     };
 
@@ -52,7 +52,7 @@ export class Password extends React.Component {
 
         const update = {
             password: "",
-            error: ""
+            error: "",
         };
 
         if (this.state.password.length < this.props.minimumPasswordLength) {
@@ -109,7 +109,7 @@ export const mapStateToProps = state => {
         id,
         forceReset: force_reset,
         lastPasswordChange: last_password_change,
-        minimumPasswordLength: state.settings.data.minimum_password_length
+        minimumPasswordLength: state.settings.data.minimum_password_length,
     };
 };
 
@@ -120,7 +120,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onSetForceReset: (userId, enabled) => {
         dispatch(editUser(userId, { force_reset: enabled }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Password);

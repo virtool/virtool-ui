@@ -21,7 +21,7 @@ const getInitialState = props => ({
     showAdd: false,
     showRemove: false,
     showEdit: false,
-    selected: {}
+    selected: {},
 });
 
 const reorder = (list, startIndex, endIndex) => {
@@ -36,7 +36,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     backgroundColor: "white",
     userSelect: "none",
     margin: "0 0 10px 0",
-    ...draggableStyle
+    ...draggableStyle,
 });
 
 class Schema extends React.Component {
@@ -70,7 +70,7 @@ class Schema extends React.Component {
             segArray: newArray,
             showAdd: false,
             showRemove: false,
-            showEdit: false
+            showEdit: false,
         });
 
         this.props.onSave(this.props.otuId, this.props.detail.name, this.props.detail.abbreviation, newArray);
@@ -80,7 +80,7 @@ class Schema extends React.Component {
         this.setState({
             showAdd: false,
             showRemove: false,
-            showEdit: false
+            showEdit: false,
         });
     };
 
@@ -172,13 +172,13 @@ const mapStateToProps = state => ({
     schema: state.otus.detail.schema,
     detail: state.otus.detail,
     otuId: state.otus.detail.id,
-    canModify: getCanModifyReferenceOTU(state)
+    canModify: getCanModifyReferenceOTU(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     onSave: (otuId, name, abbreviation, schema) => {
         dispatch(editOTU(otuId, name, abbreviation, schema));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Schema);

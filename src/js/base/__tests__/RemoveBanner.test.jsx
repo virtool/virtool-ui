@@ -1,5 +1,8 @@
-import { RemoveBanner } from "../RemoveBanner";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Button } from "../Button";
+import { RemoveBanner } from "../RemoveBanner";
 
 describe("<RemoveBanner />", () => {
     let props;
@@ -9,7 +12,7 @@ describe("<RemoveBanner />", () => {
         props = {
             message: "test",
             buttonText: "Delete",
-            onClick: vi.fn()
+            onClick: vi.fn(),
         };
         wrapper = shallow(<RemoveBanner {...props} />);
     });

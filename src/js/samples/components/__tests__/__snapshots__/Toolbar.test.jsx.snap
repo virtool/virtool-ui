@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<SampleSearchToolbar /> > should render when [canCreate=%p] false 1`] = `
 <Toolbar>

@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Indexes } from "../Indexes";
 
 describe("<Indexes />", () => {
@@ -7,7 +10,7 @@ describe("<Indexes />", () => {
         props = {
             documents: [{ id: "foo" }, { id: "bar" }],
             onLoadNextPage: vi.fn(),
-            refId: "baz"
+            refId: "baz",
         };
     });
 

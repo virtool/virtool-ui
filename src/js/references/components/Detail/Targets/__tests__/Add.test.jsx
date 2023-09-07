@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AddTarget, mapDispatchToProps, mapStateToProps } from "../Add";
 import { TargetForm } from "../Form";
 
@@ -8,7 +11,7 @@ describe("<AddTarget />", () => {
 
     beforeEach(() => {
         e = {
-            preventDefault: vi.fn()
+            preventDefault: vi.fn(),
         };
 
         props = {
@@ -17,7 +20,7 @@ describe("<AddTarget />", () => {
             refId: "baz",
             onHide: vi.fn(),
             show: true,
-            handleChange: vi.fn()
+            handleChange: vi.fn(),
         };
 
         state = {
@@ -25,7 +28,7 @@ describe("<AddTarget />", () => {
             description: "",
             length: 0,
             required: false,
-            errorName: ""
+            errorName: "",
         };
     });
 
@@ -53,7 +56,7 @@ describe("<AddTarget />", () => {
             name: "Foo",
             description: "Foo description",
             length: 10,
-            required: true
+            required: true,
         });
         wrapper.find("form").simulate("submit", e);
         expect(e.preventDefault).toHaveBeenCalledWith();
@@ -63,15 +66,15 @@ describe("<AddTarget />", () => {
                     description: "bar",
                     length: 1,
                     name: "foo",
-                    required: true
+                    required: true,
                 },
                 {
                     description: "Foo description",
                     length: 10,
                     name: "Foo",
-                    required: true
-                }
-            ]
+                    required: true,
+                },
+            ],
         });
         expect(props.onHide).toHaveBeenCalledWith();
     });
@@ -82,7 +85,7 @@ describe("<AddTarget />", () => {
             name: "Foo",
             description: "Foo description",
             length: 10,
-            required: true
+            required: true,
         });
         wrapper.setProps({ show: false });
         setTimeout(() => expect(wrapper.state()).toEqual({ ...state }), 500);
@@ -99,10 +102,10 @@ describe("mapStateToProps()", () => {
                     data_type: "bar",
 
                     id: "boo",
-                    targets: [{ Foo: "Bar" }]
-                }
+                    targets: [{ Foo: "Bar" }],
+                },
             },
-            router: { location: { state: { addTarget: true } } }
+            router: { location: { state: { addTarget: true } } },
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({
@@ -111,7 +114,7 @@ describe("mapStateToProps()", () => {
             documents: "baz",
             refId: "boo",
             targets: [{ Foo: "Bar" }],
-            show: true
+            show: true,
         });
     });
 });
@@ -123,7 +126,7 @@ describe("mapDispatchToProps()", () => {
         props.onSubmit("foo", "bar");
         expect(dispatch).toHaveBeenCalledWith({
             payload: { refId: "foo", update: "bar" },
-            type: "EDIT_REFERENCE_REQUESTED"
+            type: "EDIT_REFERENCE_REQUESTED",
         });
     });
 });

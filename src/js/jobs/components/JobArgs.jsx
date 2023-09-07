@@ -87,5 +87,5 @@ export const JobArgs = props => (
 
 JobArgs.propTypes = {
     workflow: PropTypes.string.isRequired,
-    args: PropTypes.object.isRequired
+    args: PropTypes.object.isRequired,
 };

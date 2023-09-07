@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Badge, LoadingPlaceholder, ContainerNarrow, ScrollList, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, ContainerNarrow, LegacyScrollList, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { findReferences, remoteReference } from "../actions";
 import { getTerm } from "../selectors";
 import Clone from "./Clone";
@@ -31,7 +31,7 @@ const ReferenceList = ({ term, documents, totalCount, onLoadNextPage, page, page
                 <ReferenceToolbar />
                 <ReferenceOfficial />
 
-                <ScrollList
+                <LegacyScrollList
                     documents={documents}
                     onLoadNextPage={page => onLoadNextPage(term, page)}
                     page={page}
@@ -49,7 +49,7 @@ const mapStateToProps = state => ({
     totalCount: state.references.total_count,
     page: state.references.page,
     pageCount: state.references.page_count,
-    term: getTerm(state)
+    term: getTerm(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -58,7 +58,7 @@ const mapDispatchToProps = dispatch => ({
     },
     onLoadNextPage: (term, page) => {
         dispatch(findReferences(term, page));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceList);

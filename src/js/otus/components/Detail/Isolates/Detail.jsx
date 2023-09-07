@@ -2,12 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Box, Icon, Label } from "../../../../base";
+import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
 import { getCanModifyReferenceOTU, getReferenceDetailId } from "../../../../references/selectors";
 import IsolateSequences from "../../../../sequences/components/Sequences";
 import { setIsolateAsDefault, showEditIsolate, showRemoveIsolate } from "../../../actions";
 import EditIsolate from "./Edit";
 import RemoveIsolate from "./Remove";
-import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
 
 const IsolateDetailHeader = styled(Box)`
     align-items: center;
@@ -121,7 +121,7 @@ const mapStateToProps = state => ({
     allowedSourceTypes: state.settings.data.allowed_source_types,
     restrictSourceTypes: state.settings.data.restrict_source_types,
     canModify: getCanModifyReferenceOTU(state),
-    dataType: state.references.detail.data_type
+    dataType: state.references.detail.data_type,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -135,7 +135,7 @@ const mapDispatchToProps = dispatch => ({
 
     showRemoveIsolate: () => {
         dispatch(showRemoveIsolate());
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Detail);

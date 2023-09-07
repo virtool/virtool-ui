@@ -46,7 +46,7 @@ export function Login({ error, onLogin }: LoginProps) {
                         {window.b2c.use && <B2cLogin />}
                         <form
                             onSubmit={handleSubmit(({ username, password, remember }) =>
-                                onLogin(username, password, remember)
+                                onLogin(username, password, remember),
                             )}
                         >
                             <WallSubheader>
@@ -92,7 +92,7 @@ export function Login({ error, onLogin }: LoginProps) {
 
 export function mapStateToProps(state) {
     return {
-        error: get(state, "errors.LOGIN_ERROR.message")
+        error: get(state, "errors.LOGIN_ERROR.message"),
     };
 }
 
@@ -103,7 +103,7 @@ export function mapDispatchToProps(dispatch) {
         },
         onLogin: (username, password, remember) => {
             dispatch(login(username, password, remember));
-        }
+        },
     };
 }
 

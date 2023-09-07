@@ -1,15 +1,15 @@
+import { createAction } from "@reduxjs/toolkit";
 import {
-    WS_INSERT_INDEX,
-    WS_UPDATE_INDEX,
+    CREATE_INDEX,
     FIND_INDEXES,
     GET_INDEX,
-    GET_UNBUILT,
-    CREATE_INDEX,
     GET_INDEX_HISTORY,
+    GET_UNBUILT,
     LIST_READY_INDEXES,
-    WS_INSERT_HISTORY
+    WS_INSERT_HISTORY,
+    WS_INSERT_INDEX,
+    WS_UPDATE_INDEX,
 } from "../app/actionTypes";
-import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns an action that should be dispatched when a history document is inserted via websocket.
@@ -45,7 +45,7 @@ export const wsUpdateIndex = createAction(WS_UPDATE_INDEX);
  * @returns {object}
  */
 export const findIndexes = createAction(FIND_INDEXES.REQUESTED, (refId, term, page) => ({
-    payload: { refId, term, page }
+    payload: { refId, term, page },
 }));
 
 /**
@@ -90,5 +90,5 @@ export const createIndex = createAction(CREATE_INDEX.REQUESTED, refId => ({ payl
  * @returns {object}
  */
 export const getIndexHistory = createAction(GET_INDEX_HISTORY.REQUESTED, (indexId, page) => ({
-    payload: { indexId, page }
+    payload: { indexId, page },
 }));

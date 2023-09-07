@@ -1,22 +1,23 @@
+import { describe, expect, it } from "vitest";
 import {
-    WS_INSERT_SUBTRACTION,
-    WS_UPDATE_SUBTRACTION,
-    WS_REMOVE_SUBTRACTION,
-    GET_SUBTRACTION,
-    EDIT_SUBTRACTION,
     CREATE_SUBTRACTION,
+    EDIT_SUBTRACTION,
+    FIND_SUBTRACTIONS,
+    GET_SUBTRACTION,
     REMOVE_SUBTRACTION,
-    FIND_SUBTRACTIONS
+    WS_INSERT_SUBTRACTION,
+    WS_REMOVE_SUBTRACTION,
+    WS_UPDATE_SUBTRACTION,
 } from "../../app/actionTypes";
 import {
-    wsInsertSubtraction,
-    wsUpdateSubtraction,
-    wsRemoveSubtraction,
-    getSubtraction,
     createSubtraction,
     editSubtraction,
+    findSubtractions,
+    getSubtraction,
     removeSubtraction,
-    findSubtractions
+    wsInsertSubtraction,
+    wsRemoveSubtraction,
+    wsUpdateSubtraction,
 } from "../actions";
 
 describe("Subtraction Action Creators:", () => {
@@ -26,16 +27,16 @@ describe("Subtraction Action Creators:", () => {
         const data = {
             file: {
                 id: "abc123-test.171",
-                name: "test.171"
+                name: "test.171",
             },
             id: "testSubtraction",
             job: { id: "jobId" },
-            ready: false
+            ready: false,
         };
         const result = wsInsertSubtraction(data);
         expect(result).toEqual({
             type: WS_INSERT_SUBTRACTION,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -43,16 +44,16 @@ describe("Subtraction Action Creators:", () => {
         const data = {
             file: {
                 id: "abc123-test.171",
-                name: "test.171"
+                name: "test.171",
             },
             id: "testSubtraction",
             job: { id: "jobId" },
-            ready: true
+            ready: true,
         };
         const result = wsUpdateSubtraction(data);
         expect(result).toEqual({
             type: WS_UPDATE_SUBTRACTION,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -61,7 +62,7 @@ describe("Subtraction Action Creators:", () => {
         const result = wsRemoveSubtraction(data);
         expect(result).toEqual({
             type: WS_REMOVE_SUBTRACTION,
-            payload: data
+            payload: data,
         });
     });
 
@@ -71,7 +72,7 @@ describe("Subtraction Action Creators:", () => {
         const result = findSubtractions(term, page);
         expect(result).toEqual({
             type: FIND_SUBTRACTIONS.REQUESTED,
-            payload: { term, page }
+            payload: { term, page },
         });
     });
 
@@ -79,7 +80,7 @@ describe("Subtraction Action Creators:", () => {
         const result = getSubtraction(subtractionId);
         expect(result).toEqual({
             type: GET_SUBTRACTION.REQUESTED,
-            payload: { subtractionId }
+            payload: { subtractionId },
         });
     });
 
@@ -91,7 +92,7 @@ describe("Subtraction Action Creators:", () => {
 
         expect(result).toEqual({
             type: CREATE_SUBTRACTION.REQUESTED,
-            payload: { uploadId, name, nickname }
+            payload: { uploadId, name, nickname },
         });
     });
 
@@ -101,7 +102,7 @@ describe("Subtraction Action Creators:", () => {
         const result = editSubtraction(subtractionId, name, nickname);
         expect(result).toEqual({
             type: EDIT_SUBTRACTION.REQUESTED,
-            payload: { subtractionId, name, nickname }
+            payload: { subtractionId, name, nickname },
         });
     });
 
@@ -109,7 +110,7 @@ describe("Subtraction Action Creators:", () => {
         const result = removeSubtraction(subtractionId);
         expect(result).toEqual({
             type: REMOVE_SUBTRACTION.REQUESTED,
-            payload: { subtractionId }
+            payload: { subtractionId },
         });
     });
 });

@@ -1,6 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { AddGenomeSequence, castValues } from "../Add";
 
 const createAppStore = state => () => createStore(state => state, state);
@@ -16,7 +19,7 @@ describe("<AddGenomeSequence>", () => {
             show: true,
             segments: [],
             onHide: vi.fn(),
-            onSave: vi.fn()
+            onSave: vi.fn(),
         };
         state = {
             otus: {
@@ -37,13 +40,13 @@ describe("<AddGenomeSequence>", () => {
                                         "GGGGCTGGGGCTTATTATTACCCCCAGCCCCGGAACGGGACATCACGTGTATTCTCTATAGTGGTGGGTCATATGTCCCGAGTTAGTGCGCCACGTAA",
                                     segment: "",
                                     id: "0r0vmzt4",
-                                    reference: { id: "85r8ucx8" }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
+                                    reference: { id: "85r8ucx8" },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
         };
     });
 
@@ -72,7 +75,7 @@ describe("<AddGenomeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "test_segment",
-            "ATG"
+            "ATG",
         );
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
@@ -103,7 +106,7 @@ describe("<AddGenomeSequence>", () => {
 describe("castValues", () => {
     const segments = [
         { name: "test_1", molecule: "", required: true },
-        { name: "test_2", molecule: "", required: true }
+        { name: "test_2", molecule: "", required: true },
     ];
 
     const values = { segment: "test_1", otherData: {} };

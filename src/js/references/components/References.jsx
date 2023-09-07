@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { useFetchSettings } from "../../administration/hooks";
+import { useFetchSettings } from "../../administration/querys";
 import { Container, LoadingPlaceholder } from "../../base";
 import { CreateReference } from "./Create";
 import ReferenceDetail from "./Detail/Detail";

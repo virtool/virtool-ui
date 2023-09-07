@@ -60,7 +60,7 @@ export const Sidebar = ({ fullAdministrator }) => (
 );
 
 const mapStateToProps = state => ({
-    fullAdministrator: hasSufficientAdminRole(AdministratorRoles.FULL, getAccountAdministratorRole(state))
+    fullAdministrator: hasSufficientAdminRole(AdministratorRoles.FULL, getAccountAdministratorRole(state)),
 });
 
 export default connect(mapStateToProps, null)(Sidebar);

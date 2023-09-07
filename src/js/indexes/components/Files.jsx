@@ -21,7 +21,7 @@ export const Files = ({ files }) => {
 };
 
 const mapStateToProps = state => ({
-    files: state.indexes.detail.files
+    files: state.indexes.detail.files,
 });
 
 export default connect(mapStateToProps)(Files);

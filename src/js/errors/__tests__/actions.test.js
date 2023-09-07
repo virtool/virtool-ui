@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { CLEAR_ERROR } from "../../app/actionTypes";
 import { clearError } from "../actions";
 
@@ -7,7 +8,7 @@ describe("Errors Action Creators:", () => {
         const result = clearError(error);
         const expected = {
             type: CLEAR_ERROR,
-            payload: { error }
+            payload: { error },
         };
 
         expect(result).toEqual(expected);

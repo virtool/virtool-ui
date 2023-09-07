@@ -1,11 +1,12 @@
+import { describe, expect, it } from "vitest";
 import {
-    WS_INSERT_INDEX,
-    WS_INSERT_HISTORY,
-    WS_UPDATE_INDEX,
+    FIND_INDEXES,
     GET_INDEX,
-    GET_UNBUILT,
     GET_INDEX_HISTORY,
-    FIND_INDEXES
+    GET_UNBUILT,
+    WS_INSERT_HISTORY,
+    WS_INSERT_INDEX,
+    WS_UPDATE_INDEX,
 } from "../../app/actionTypes";
 import reducer, { initialState as reducerInitialState } from "../reducer";
 
@@ -17,7 +18,7 @@ describe("Indexes Reducer", () => {
 
     it("should return the given state on other action types", () => {
         const action = {
-            type: "UNHANDLED_ACTION"
+            type: "UNHANDLED_ACTION",
         };
         const result = reducer(reducerInitialState, action);
         expect(result).toEqual(reducerInitialState);
@@ -28,7 +29,7 @@ describe("Indexes Reducer", () => {
             const state = { refId: "foo", modified_otu_count: 3 };
             const action = {
                 type: WS_INSERT_HISTORY,
-                payload: { reference: { id: "foo" } }
+                payload: { reference: { id: "foo" } },
             };
             const result = reducer(state, action);
             expect(result).toEqual({ ...state, modified_otu_count: 4 });
@@ -38,7 +39,7 @@ describe("Indexes Reducer", () => {
             const state = { refId: "foo" };
             const action = {
                 type: WS_INSERT_HISTORY,
-                payload: { reference: { id: "bar" } }
+                payload: { reference: { id: "bar" } },
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -51,8 +52,8 @@ describe("Indexes Reducer", () => {
             const action = {
                 type: WS_INSERT_INDEX,
                 payload: {
-                    reference: { id: "bar" }
-                }
+                    reference: { id: "bar" },
+                },
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -62,19 +63,19 @@ describe("Indexes Reducer", () => {
             const state = {
                 refId: "foo",
                 documents: [],
-                page: 1
+                page: 1,
             };
             const action = {
                 type: WS_INSERT_INDEX,
                 payload: {
                     reference: { id: "foo" },
-                    version: 0
-                }
+                    version: 0,
+                },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 ...state,
-                documents: [{ ...action.payload }]
+                documents: [{ ...action.payload }],
             });
         });
     });
@@ -84,7 +85,7 @@ describe("Indexes Reducer", () => {
             const state = { refId: "foo" };
             const action = {
                 type: WS_UPDATE_INDEX,
-                payload: { reference: { id: "bar" } }
+                payload: { reference: { id: "bar" } },
             };
             const result = reducer(state, action);
             expect(result).toEqual(state);
@@ -93,20 +94,20 @@ describe("Indexes Reducer", () => {
         it("if update is for current reference, update corresponding entry", () => {
             const state = {
                 documents: [{ id: "test", reference: { id: "foo" }, version: 0 }],
-                refId: "foo"
+                refId: "foo",
             };
             const action = {
                 type: WS_UPDATE_INDEX,
                 payload: {
                     id: "test",
                     reference: { id: "foo" },
-                    version: 1
-                }
+                    version: 1,
+                },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
                 ...state,
-                documents: [{ id: "test", reference: { id: "foo" }, version: 1 }]
+                documents: [{ id: "test", reference: { id: "foo" }, version: 1 }],
             });
         });
     });
@@ -117,12 +118,12 @@ describe("Indexes Reducer", () => {
         const refId = "foo";
         const action = {
             type: FIND_INDEXES.REQUESTED,
-            payload: { refId, term, page: 4 }
+            payload: { refId, term, page: 4 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             term,
-            refId
+            refId,
         });
     });
 
@@ -132,32 +133,32 @@ describe("Indexes Reducer", () => {
         const refId = "foo";
         const action = {
             type: FIND_INDEXES.REQUESTED,
-            payload: { refId, term, page: 4 }
+            payload: { refId, term, page: 4 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             documents: null,
             term,
-            refId
+            refId,
         });
     });
 
     it("should handle FIND_INDEXES_SUCCEEDED", () => {
         const state = {
             documents: null,
-            page: 1
+            page: 1,
         };
         const action = {
             type: FIND_INDEXES.SUCCEEDED,
             payload: {
                 documents: [{ id: "1" }],
-                page: 2
-            }
+                page: 2,
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             documents: [{ id: "1" }],
-            page: 2
+            page: 2,
         });
     });
 
@@ -165,12 +166,12 @@ describe("Indexes Reducer", () => {
         const state = { detail: null };
         const action = {
             type: GET_INDEX.SUCCEEDED,
-            payload: { id: "foo", version: 3 }
+            payload: { id: "foo", version: 3 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
-            detail: action.payload
+            detail: action.payload,
         });
     });
 
@@ -178,11 +179,11 @@ describe("Indexes Reducer", () => {
         const state = {};
         const action = {
             type: GET_UNBUILT.SUCCEEDED,
-            payload: {}
+            payload: {},
         };
         const result = reducer(state, action);
         expect(result).toEqual({
-            unbuilt: action.payload
+            unbuilt: action.payload,
         });
     });
 
@@ -190,14 +191,14 @@ describe("Indexes Reducer", () => {
         const state = { history: { documents: null } };
         const action = {
             type: GET_INDEX_HISTORY.SUCCEEDED,
-            payload: { documents: [{ foo: "bar" }], page: 1, per_page: 3 }
+            payload: { documents: [{ foo: "bar" }], page: 1, per_page: 3 },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
             ...state,
             history: {
-                ...action.payload
-            }
+                ...action.payload,
+            },
         });
     });
 });

@@ -13,7 +13,7 @@ import {
     Modal,
     ModalBody,
     ModalHeader,
-    NoneFoundSection
+    NoneFoundSection,
 } from "../../../base";
 import { listGroups } from "../../../groups/actions";
 import { findUsers } from "../../../users/actions";
@@ -33,7 +33,7 @@ const getInitialState = () => ({
     build: false,
     modify: false,
     modify_otu: false,
-    remove: false
+    remove: false,
 });
 
 const StyledAddMemberItem = styled(BoxGroupSection)`
@@ -129,7 +129,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         term: state.users.term,
         refId: state.references.detail.id,
-        documents: filter(documents, document => !includes(memberIds, document.id))
+        documents: filter(documents, document => !includes(memberIds, document.id)),
     };
 };
 
@@ -149,7 +149,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
     onChange: term => {
         dispatch(findUsers(term, 1));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddReferenceMember);

@@ -23,7 +23,7 @@ export const IndexOTUs = ({ otus, refId }) => {
 
 export const mapStateToProps = state => ({
     refId: state.indexes.detail.reference.id,
-    otus: state.indexes.detail.otus
+    otus: state.indexes.detail.otus,
 });
 
 export default connect(mapStateToProps)(IndexOTUs);

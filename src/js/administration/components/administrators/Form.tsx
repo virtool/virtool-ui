@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { InputError, InputGroup, InputLabel, SaveButton } from "../../../base";
 import { User } from "../../../users/types";
-import { useGetAdministratorRoles, useGetUsers, useSetAdministratorRole } from "../../querys";
+import { useFindUsers, useGetAdministratorRoles, useSetAdministratorRole } from "../../querys";
 import { AdministratorRoles } from "../../types";
 import { RoleSelect } from "./RoleSelect";
 import { UserSelect } from "./UserSelect";
@@ -45,7 +45,7 @@ export function AdministratorForm({ onClose }: AdministratorFormProps): JSX.Elem
 
     const [userSearchTerm, setUserSearchTerm] = React.useState("");
 
-    const { data: users } = useGetUsers(1, 25, userSearchTerm, false);
+    const { data: users } = useFindUsers(1, 25, userSearchTerm, false);
 
     const { data: roles } = useGetAdministratorRoles();
 

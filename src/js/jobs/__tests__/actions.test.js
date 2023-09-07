@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import {
     ARCHIVE_JOB,
     CANCEL_JOB,
@@ -5,7 +6,7 @@ import {
     GET_JOB,
     WS_INSERT_JOB,
     WS_REMOVE_JOB,
-    WS_UPDATE_JOB
+    WS_UPDATE_JOB,
 } from "../../app/actionTypes";
 import { archiveJob, cancelJob, findJobs, getJob, wsInsertJob, wsRemoveJob, wsUpdateJob } from "../actions";
 
@@ -15,7 +16,7 @@ describe("Jobs Action Creators:", () => {
         const result = wsInsertJob(data);
         expect(result).toEqual({
             type: WS_INSERT_JOB,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -24,7 +25,7 @@ describe("Jobs Action Creators:", () => {
         const result = wsUpdateJob(data);
         expect(result).toEqual({
             type: WS_UPDATE_JOB,
-            payload: { ...data }
+            payload: { ...data },
         });
     });
 
@@ -33,7 +34,7 @@ describe("Jobs Action Creators:", () => {
         const result = wsRemoveJob(data);
         expect(result).toEqual({
             type: WS_REMOVE_JOB,
-            payload: data
+            payload: data,
         });
     });
 
@@ -42,7 +43,7 @@ describe("Jobs Action Creators:", () => {
         const result = findJobs(states, 1, true);
         expect(result).toEqual({
             payload: { states, page: 1, archived: true },
-            type: FIND_JOBS.REQUESTED
+            type: FIND_JOBS.REQUESTED,
         });
     });
 
@@ -51,7 +52,7 @@ describe("Jobs Action Creators:", () => {
         const result = getJob(jobId);
         expect(result).toEqual({
             type: GET_JOB.REQUESTED,
-            payload: { jobId }
+            payload: { jobId },
         });
     });
 
@@ -60,7 +61,7 @@ describe("Jobs Action Creators:", () => {
         const result = cancelJob(jobId);
         expect(result).toEqual({
             type: CANCEL_JOB.REQUESTED,
-            payload: { jobId }
+            payload: { jobId },
         });
     });
 
@@ -69,7 +70,7 @@ describe("Jobs Action Creators:", () => {
         const result = archiveJob(jobId);
         expect(result).toEqual({
             type: ARCHIVE_JOB.REQUESTED,
-            payload: { jobId }
+            payload: { jobId },
         });
     });
 });

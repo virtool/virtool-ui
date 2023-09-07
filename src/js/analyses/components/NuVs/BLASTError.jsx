@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Box, Icon, Button } from "../../../base";
+import { Box, Button, Icon } from "../../../base";
 
 const StyledBLASTError = styled(Box)`
     align-items: center;

@@ -1,9 +1,12 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { shallow } from "enzyme";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { Router } from "react-router-dom";
 import { createStore } from "redux";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../../../../tests/setupTests";
 import { checkReferenceRight } from "../../../../selectors";
 import { mapDispatchToProps, mapStateToProps, Targets } from "../Targets";
 
@@ -26,15 +29,15 @@ describe("<Targets />", () => {
             targets: [{ name: "foo" }],
             onRemove: vi.fn(),
             refId: "bar",
-            onShowEdit: vi.fn()
+            onShowEdit: vi.fn(),
         };
         state = {
             references: {
-                detail: {}
+                detail: {},
             },
             router: {
-                location: {}
-            }
+                location: {},
+            },
         };
         history = createBrowserHistory();
     });
@@ -82,10 +85,10 @@ describe("mapStateToProps()", () => {
                 id: "baz",
                 targets: [
                     { name: "foo", description: "bar", required: false },
-                    { name: "Foo", description: "Bar", required: true }
-                ]
-            }
-        }
+                    { name: "Foo", description: "Bar", required: true },
+                ],
+            },
+        },
     };
 
     it("should return props when user can modify ref", () => {
@@ -98,8 +101,8 @@ describe("mapStateToProps()", () => {
             refId: "baz",
             targets: [
                 { name: "foo", description: "bar", required: false },
-                { name: "Foo", description: "Bar", required: true }
-            ]
+                { name: "Foo", description: "Bar", required: true },
+            ],
         });
     });
 
@@ -113,8 +116,8 @@ describe("mapStateToProps()", () => {
             refId: "baz",
             targets: [
                 { name: "foo", description: "bar", required: false },
-                { name: "Foo", description: "Bar", required: true }
-            ]
+                { name: "Foo", description: "Bar", required: true },
+            ],
         });
     });
 });
@@ -126,7 +129,7 @@ describe("mapDispatchToProps()", () => {
         props.onRemove("foo", "bar");
         expect(dispatch).toHaveBeenCalledWith({
             payload: { refId: "foo", update: "bar" },
-            type: "EDIT_REFERENCE_REQUESTED"
+            type: "EDIT_REFERENCE_REQUESTED",
         });
     });
 });

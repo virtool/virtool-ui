@@ -6,16 +6,16 @@ export default {
     component: Alert,
     parameters: {
         controls: {
-            exclude: "level"
-        }
+            exclude: "level",
+        },
     },
     argTypes: {
         color: {
             options: ["red", "orange", "purple", "blue", "black"],
             control: { type: "radio" },
-            defaultValue: "red"
-        }
-    }
+            defaultValue: "red",
+        },
+    },
 };
 
 const Template = args => <Alert {...args} />;
@@ -24,5 +24,5 @@ export const greenAlert = Template.bind({});
 
 greenAlert.args = {
     children: "This is an example Alert!",
-    level: true
+    level: true,
 };

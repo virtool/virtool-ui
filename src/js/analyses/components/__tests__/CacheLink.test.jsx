@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { AnalysisCacheLink } from "../CacheLink";
 
 describe("<AnalysisCacheLink />", () => {
@@ -6,7 +9,7 @@ describe("<AnalysisCacheLink />", () => {
     beforeEach(() => {
         props = {
             id: "bar",
-            sampleId: "foo"
+            sampleId: "foo",
         };
     });
 

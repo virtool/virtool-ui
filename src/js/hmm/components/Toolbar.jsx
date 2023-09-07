@@ -11,13 +11,13 @@ export const HMMToolbar = ({ onFind, term }) => (
 );
 
 export const mapStateToProps = state => ({
-    term: getStateTerm(state)
+    term: getStateTerm(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onFind: e => {
         dispatch(findHmms(e.target.value, 1));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HMMToolbar);

@@ -1,5 +1,6 @@
-import { useFuse } from "../hooks";
 import { act, renderHook } from "@testing-library/react-hooks";
+import { beforeEach, describe, expect, it } from "vitest";
+import { useFuse } from "../hooks";
 
 describe("useFuseHook", () => {
     let collection;

@@ -1,6 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { EditLabel } from "../Edit";
 
 describe("<EditLabel>", () => {
@@ -11,7 +14,7 @@ describe("<EditLabel>", () => {
             id: 1,
             name: "Foo",
             description: "This is a description",
-            color: "#1DAD57"
+            color: "#1DAD57",
         };
     });
 

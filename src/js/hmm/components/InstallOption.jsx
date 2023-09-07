@@ -30,13 +30,13 @@ export const InstallOption = ({ canInstall, onInstall, releaseId }) => {
 
 export const mapStateToProps = state => ({
     canInstall: checkAdminRoleOrPermission(state, "modify_hmm"),
-    releaseId: get(state.hmms.status, "release.id")
+    releaseId: get(state.hmms.status, "release.id"),
 });
 
 export const mapDispatchToProps = dispatch => ({
     onInstall: releaseId => {
         dispatch(installHMMs(releaseId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(InstallOption);

@@ -3,7 +3,7 @@ import { assign } from "lodash-es";
 import { GET_SETTINGS, UPDATE_SETTINGS } from "../app/actionTypes";
 
 export const initialState = {
-    data: null
+    data: null,
 };
 
 export const settingsReducer = createReducer(initialState, builder => {

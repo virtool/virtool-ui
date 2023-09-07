@@ -17,13 +17,13 @@ const getInitialValues = ({
     initialAccession,
     initialDefinition,
     initialHost,
-    initialSequence
+    initialSequence,
 }) => ({
     targetName: initialTargetName || null,
     accession: initialAccession || "",
     definition: initialDefinition || "",
     host: initialHost || "",
-    sequence: initialSequence || ""
+    sequence: initialSequence || "",
 });
 
 export const castValues = (targets, initialTargetName) => values => {
@@ -43,7 +43,7 @@ export const EditBarcodeSequence = ({
     otuId,
     show,
     onHide,
-    onSave
+    onSave,
 }) => {
     const title = "Edit Sequence";
 
@@ -56,7 +56,7 @@ export const EditBarcodeSequence = ({
         initialAccession,
         initialDefinition,
         initialHost,
-        initialSequence
+        initialSequence,
     });
 
     return (
@@ -100,7 +100,7 @@ export const mapStateToProps = state => {
         targets: getUnreferencedTargets(state),
         isolateId: getActiveIsolateId(state),
         otuId: getOTUDetailId(state),
-        show: routerLocationHasState(state, "editSequence")
+        show: routerLocationHasState(state, "editSequence"),
     };
 };
 
@@ -111,7 +111,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onHide: () => {
         dispatch(pushState({ editSequence: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditBarcodeSequence);

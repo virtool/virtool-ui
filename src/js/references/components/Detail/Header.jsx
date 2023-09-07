@@ -47,14 +47,14 @@ export const mapStateToProps = state => {
         createdAt: created_at,
         isRemote: Boolean(remotes_from),
         showIcons: endsWith(state.router.location.pathname, "/manage"),
-        userHandle: user.handle
+        userHandle: user.handle,
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onEdit: () => {
         dispatch(pushState({ editReference: true }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceDetailHeader);

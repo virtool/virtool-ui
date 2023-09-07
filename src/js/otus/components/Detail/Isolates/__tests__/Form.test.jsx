@@ -1,6 +1,9 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Input } from "../../../../../base";
-import { IsolateForm } from "../Form";
 import { SourceType } from "../../SourceType";
+import { IsolateForm } from "../Form";
 
 describe("<IsolateForm />", () => {
     let props;
@@ -12,7 +15,7 @@ describe("<IsolateForm />", () => {
             allowedSourceTypes: ["isolate", "genotype"],
             restrictSourceTypes: true,
             onChange: vi.fn(),
-            onSubmit: vi.fn()
+            onSubmit: vi.fn(),
         };
     });
 
@@ -29,32 +32,32 @@ describe("<IsolateForm />", () => {
 
     it.each([
         ["genotype", "genotype", "A"],
-        ["unknown", "unknown", ""]
+        ["unknown", "unknown", ""],
     ])("should call onChange() when source type changes to %p", (value, sourceType, sourceName) => {
         const e = {
             target: {
-                value
-            }
+                value,
+            },
         };
         const wrapper = shallow(<IsolateForm {...props} />);
         wrapper.find(SourceType).simulate("change", e);
         expect(props.onChange).toHaveBeenCalledWith({
             sourceName,
-            sourceType
+            sourceType,
         });
     });
 
     it("should call onChange() when source name changes", () => {
         const e = {
             target: {
-                value: "B"
-            }
+                value: "B",
+            },
         };
         const wrapper = shallow(<IsolateForm {...props} />);
         wrapper.find(Input).at(0).simulate("change", e);
         expect(props.onChange).toHaveBeenCalledWith({
             sourceName: "B",
-            sourceType: "isolate"
+            sourceType: "isolate",
         });
     });
 });

@@ -1,7 +1,7 @@
-import { connect } from "react-redux";
 import { transform } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { BoxGroup } from "../../base";
@@ -21,7 +21,7 @@ export const UserPermissions = ({ permissions }) => {
     const permissionComponents = transform(
         permissions,
         (acc, value, permission) => acc.push(<PermissionItem key={permission} permission={permission} value={value} />),
-        []
+        [],
     );
 
     return (
@@ -36,9 +36,9 @@ export const UserPermissions = ({ permissions }) => {
 };
 
 UserPermissions.propTypes = {
-    permissions: PropTypes.object
+    permissions: PropTypes.object,
 };
 export const mapStateToProps = state => ({
-    permissions: state.users.detail.permissions
+    permissions: state.users.detail.permissions,
 });
 export default connect(mapStateToProps)(UserPermissions);

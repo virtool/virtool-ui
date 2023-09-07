@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Icon } from "./Icon";
-import { Tooltip } from "./Tooltip";
 import { StyledButton } from "./styled/StyledButton";
+import { Tooltip } from "./Tooltip";
 
 type ButtonProps = {
     active?: boolean;
@@ -26,7 +26,7 @@ export function Button({
     tip,
     type = "button",
     onBlur,
-    onClick
+    onClick,
 }: ButtonProps) {
     const button = (
         <StyledButton

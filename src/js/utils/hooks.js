@@ -12,7 +12,7 @@ export const useStateWithReset = initialValue => {
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
-    width: ref.current ? ref.current.offsetWidth : 0
+    width: ref.current ? ref.current.offsetWidth : 0,
 });
 
 export const useElementSize = () => {

@@ -19,7 +19,7 @@ export const mapStateToProps = state => {
         name,
         nextId: get(state, ["otus", "detail", "isolates", 0, "id"], null),
         otuId: state.otus.detail.id,
-        show: state.otus.removeIsolate
+        show: state.otus.removeIsolate,
     };
 };
 
@@ -30,7 +30,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onConfirm: (otuId, isolateId, nextIsolateId) => {
         dispatch(removeIsolate(otuId, isolateId, nextIsolateId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Remove);

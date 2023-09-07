@@ -1,13 +1,13 @@
 import {
-    WS_INSERT_SUBTRACTION,
-    WS_UPDATE_SUBTRACTION,
-    WS_REMOVE_SUBTRACTION,
-    GET_SUBTRACTION,
-    EDIT_SUBTRACTION,
     CREATE_SUBTRACTION,
-    REMOVE_SUBTRACTION,
+    EDIT_SUBTRACTION,
     FIND_SUBTRACTIONS,
-    SHORTLIST_SUBTRACTIONS
+    GET_SUBTRACTION,
+    REMOVE_SUBTRACTION,
+    SHORTLIST_SUBTRACTIONS,
+    WS_INSERT_SUBTRACTION,
+    WS_REMOVE_SUBTRACTION,
+    WS_UPDATE_SUBTRACTION,
 } from "../app/actionTypes";
 
 import { createAction } from "@reduxjs/toolkit";
@@ -38,7 +38,7 @@ export const wsUpdateSubtraction = createAction(WS_UPDATE_SUBTRACTION);
 export const wsRemoveSubtraction = createAction(WS_REMOVE_SUBTRACTION);
 
 export const findSubtractions = createAction(FIND_SUBTRACTIONS.REQUESTED, (term, page) => ({
-    payload: { term, page }
+    payload: { term, page },
 }));
 
 export const shortlistSubtractions = createAction(SHORTLIST_SUBTRACTIONS.REQUESTED);
@@ -51,7 +51,7 @@ export const shortlistSubtractions = createAction(SHORTLIST_SUBTRACTIONS.REQUEST
  * @returns {object}
  */
 export const getSubtraction = createAction(GET_SUBTRACTION.REQUESTED, subtractionId => ({
-    payload: { subtractionId }
+    payload: { subtractionId },
 }));
 
 /**
@@ -64,7 +64,7 @@ export const getSubtraction = createAction(GET_SUBTRACTION.REQUESTED, subtractio
  * @returns {object}
  */
 export const createSubtraction = createAction(CREATE_SUBTRACTION.REQUESTED, (uploadId, name, nickname) => ({
-    payload: { name, nickname, uploadId }
+    payload: { name, nickname, uploadId },
 }));
 
 /**
@@ -77,7 +77,7 @@ export const createSubtraction = createAction(CREATE_SUBTRACTION.REQUESTED, (upl
  * @returns {object}
  */
 export const editSubtraction = createAction(EDIT_SUBTRACTION.REQUESTED, (subtractionId, name, nickname) => ({
-    payload: { subtractionId, name, nickname }
+    payload: { subtractionId, name, nickname },
 }));
 
 /**
@@ -88,5 +88,5 @@ export const editSubtraction = createAction(EDIT_SUBTRACTION.REQUESTED, (subtrac
  * @returns {object}
  */
 export const removeSubtraction = createAction(REMOVE_SUBTRACTION.REQUESTED, subtractionId => ({
-    payload: { subtractionId }
+    payload: { subtractionId },
 }));

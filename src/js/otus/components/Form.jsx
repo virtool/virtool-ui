@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ModalBody, ModalFooter, Input, InputError, InputGroup, InputLabel, SaveButton } from "../../base";
+import { Input, InputError, InputGroup, InputLabel, ModalBody, ModalFooter, SaveButton } from "../../base";
 
 const OTUFormBody = styled(ModalBody)`
     display: grid;

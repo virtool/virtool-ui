@@ -62,7 +62,7 @@ MemberItem.propTypes = {
     id: PropTypes.string.isRequired,
     handle: PropTypes.string,
     onEdit: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired
+    onRemove: PropTypes.func.isRequired,
 };
 
 export default MemberItem;

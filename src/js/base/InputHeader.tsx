@@ -50,7 +50,7 @@ export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
             if (inputElement.current && inputElement.current.hasOwnProperty("blur")) {
                 inputElement.current.blur();
             }
-        }
+        },
     });
 
     return (

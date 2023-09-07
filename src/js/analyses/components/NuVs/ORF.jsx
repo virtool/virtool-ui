@@ -1,7 +1,7 @@
+import { scaleLinear } from "d3-scale";
+import { select } from "d3-selection";
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { select } from "d3-selection";
-import { scaleLinear } from "d3-scale";
 import { NuVsORFLabel } from "./ORFLabel";
 
 const HEIGHT = 8;
@@ -34,7 +34,7 @@ const draw = (element, maxLength, pos, strand) => {
         `L${x2},${yBase + 2}`,
         `L${x1},${yBase}`,
         `L${x2},${yBase - 2}`,
-        `L${x0},${yBase - 2}`
+        `L${x0},${yBase - 2}`,
     ].join(" ");
 
     group.append("path").attr("d", d).attr("stroke-width", 1);

@@ -9,7 +9,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { pushState } from "../../../app/actions";
-import { Button, ButtonGroup, ModalBody, Modal, ModalFooter, ModalHeader } from "../../../base/";
+import { Button, ButtonGroup, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../base/";
 import { followDynamicDownload, routerLocationHasState } from "../../../utils/utils";
 import { getResults } from "../../selectors";
 import NuVsExportPreview from "./ExportPreview";
@@ -19,7 +19,7 @@ const getInitialState = () => ({
     evalue: false,
     orfs: false,
     pos: false,
-    family: false
+    family: false,
 });
 
 const getBestHit = items =>
@@ -33,7 +33,7 @@ const getBestHit = items =>
 
             return best;
         },
-        { name: null, e: 10 }
+        { name: null, e: 10 },
     );
 
 const exportContigData = (hits, sampleName) =>
@@ -52,7 +52,7 @@ const exportContigData = (hits, sampleName) =>
 
                 return names;
             },
-            []
+            [],
         );
         return `>sequence_${result.index}|${sampleName}|${orfNames.join("|")}\n${result.sequence}`;
     });
@@ -74,7 +74,7 @@ const exportORFData = (hits, sampleName) =>
 
             return lines;
         },
-        []
+        [],
     );
 
 const downloadData = (analysisId, content, sampleName, suffix) =>
@@ -100,7 +100,7 @@ export class NuVsExport extends React.Component {
         const {
             sampleName,
             analysisId,
-            results: { hits }
+            results: { hits },
         } = this.props;
 
         let content;
@@ -162,13 +162,13 @@ const mapStateToProps = state => ({
     results: getResults(state),
     show: routerLocationHasState(state, "export"),
     sampleName: state.samples.detail.name,
-    analysisId: state.analyses.detail.id
+    analysisId: state.analyses.detail.id,
 });
 
 const mapDispatchToProps = dispatch => ({
     onHide: () => {
         dispatch(pushState({ export: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NuVsExport);

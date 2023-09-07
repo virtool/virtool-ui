@@ -15,7 +15,6 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "../../../base";
-import Cache from "../../../caches/components/Detail";
 import { getError } from "../../../errors/selectors";
 import { listLabels } from "../../../labels/actions";
 import { shortlistSubtractions } from "../../../subtraction/actions";
@@ -61,7 +60,6 @@ function SampleDetail({
 
     let editIcon;
     let removeIcon;
-    let labelIcon;
     let rightsTabLink;
 
     if (canModify) {
@@ -92,7 +90,6 @@ function SampleDetail({
                     {detail.name}
                     <ViewHeaderIcons>
                         {editIcon}
-                        {labelIcon}
                         {removeIcon}
                     </ViewHeaderIcons>
                 </ViewHeaderTitle>
@@ -111,7 +108,6 @@ function SampleDetail({
                 <Redirect from="/samples/:sampleId" to={`/samples/${sampleId}/general`} exact />
                 <Route path="/samples/:sampleId/general" component={General} />
                 <Route path="/samples/:sampleId/files" component={SampleDetailFiles} exact />
-                <Route path="/samples/:sampleId/files/:cacheId" component={Cache} />
                 <Route path="/samples/:sampleId/quality" component={Quality} />
                 <Route path="/samples/:sampleId/analyses" component={Analyses} />
                 <Route path="/samples/:sampleId/rights" component={Rights} />
@@ -122,24 +118,28 @@ function SampleDetail({
     );
 }
 
-export const mapStateToProps = state => ({
-    canModify: getCanModify(state),
-    detail: state.samples.detail,
-    error: getError("GET_SAMPLE_ERROR"),
-    labels: get(state, "labels.documents"),
-    subtractionOptions: get(state, "subtraction.shortlist", ""),
-});
+export function mapStateToProps(state) {
+    return {
+        canModify: getCanModify(state),
+        detail: state.samples.detail,
+        error: getError("GET_SAMPLE_ERROR"),
+        labels: get(state, "labels.documents"),
+        subtractionOptions: get(state, "subtraction.shortlist", ""),
+    };
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onGetSample: sampleId => {
-        dispatch(getSample(sampleId));
-    },
-    onShortlistSubtractions: () => {
-        dispatch(shortlistSubtractions());
-    },
-    onListLabels: () => {
-        dispatch(listLabels());
-    },
-});
+export function mapDispatchToProps(dispatch) {
+    return {
+        onGetSample: sampleId => {
+            dispatch(getSample(sampleId));
+        },
+        onShortlistSubtractions: () => {
+            dispatch(shortlistSubtractions());
+        },
+        onListLabels: () => {
+            dispatch(listLabels());
+        },
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleDetail);

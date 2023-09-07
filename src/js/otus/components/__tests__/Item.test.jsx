@@ -1,4 +1,7 @@
-import { OTUItem, mapStateToProps } from "../Item";
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { mapStateToProps, OTUItem } from "../Item";
 
 describe("<OTUItem />", () => {
     let props;
@@ -9,7 +12,7 @@ describe("<OTUItem />", () => {
             id: "foo",
             name: "Foo",
             verified: true,
-            refId: "baz"
+            refId: "baz",
         };
     });
 
@@ -32,14 +35,14 @@ describe("mapStateToProps()", () => {
                 documents: [
                     { id: "foo", name: "Foo", abbreviation: "FO", verified: true },
                     { id: "bar", name: "Bar", abbreviation: "BR", verified: true },
-                    { id: "baz", name: "Baz", abbreviation: "BZ", verified: true }
-                ]
+                    { id: "baz", name: "Baz", abbreviation: "BZ", verified: true },
+                ],
             },
             references: {
                 detail: {
-                    id: "ref"
-                }
-            }
+                    id: "ref",
+                },
+            },
         };
         const result = mapStateToProps(state, { index: 1 });
         expect(result).toEqual({
@@ -47,7 +50,7 @@ describe("mapStateToProps()", () => {
             name: "Bar",
             abbreviation: "BR",
             verified: true,
-            refId: "ref"
+            refId: "ref",
         });
     });
 });

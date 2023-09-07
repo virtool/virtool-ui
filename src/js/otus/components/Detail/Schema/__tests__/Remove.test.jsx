@@ -1,4 +1,7 @@
-import { RemoveSegment, mapStateToProps } from "../Remove";
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
+import { mapStateToProps, RemoveSegment } from "../Remove";
 
 describe("<RemoveSegment />", () => {
     const props = {
@@ -6,7 +9,7 @@ describe("<RemoveSegment />", () => {
         show: true,
         onHide: vi.fn(),
         onSubmit: vi.fn(),
-        schema: [{ name: "foo" }, { name: "bar" }, { name: "baz" }]
+        schema: [{ name: "foo" }, { name: "bar" }, { name: "baz" }],
     };
 
     it("should render when [show=true]", () => {
@@ -39,9 +42,9 @@ describe("mapStateToProps()", () => {
         const state = {
             otus: {
                 detail: {
-                    schema
-                }
-            }
+                    schema,
+                },
+            },
         };
         const result = mapStateToProps(state);
         expect(result).toEqual({ schema });

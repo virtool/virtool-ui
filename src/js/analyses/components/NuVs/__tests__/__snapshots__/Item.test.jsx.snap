@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<NuVsItem /> > should render when active 1`] = `
 <Styled(Styled(Box))

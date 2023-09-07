@@ -1,8 +1,8 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import { connect } from "react-redux";
-import { removeSequence, hideOTUModal } from "../../otus/actions";
 import { RemoveModal } from "../../base";
+import { hideOTUModal, removeSequence } from "../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../otus/selectors";
 
 export class RemoveSequence extends React.Component {
@@ -38,13 +38,13 @@ RemoveSequence.propTypes = {
     isolateName: PropTypes.string,
     sequenceId: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     onHide: PropTypes.func,
-    onConfirm: PropTypes.func
+    onConfirm: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
     isolateId: getActiveIsolateId(state),
     otuId: getOTUDetailId(state),
-    sequenceId: state.otus.removeSequence
+    sequenceId: state.otus.removeSequence,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -54,7 +54,7 @@ const mapDispatchToProps = dispatch => ({
 
     onConfirm: (otuId, isolateId, sequenceId) => {
         dispatch(removeSequence(otuId, isolateId, sequenceId));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RemoveSequence);

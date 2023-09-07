@@ -84,7 +84,7 @@ function AnalysisItem({ canModify, created_at, id, index, ready, reference, subt
 
 export function mapStateToProps(state) {
     return {
-        canModify: getCanModify(state)
+        canModify: getCanModify(state),
     };
 }
 
@@ -92,7 +92,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     return {
         onRemove: () => {
             dispatch(removeAnalysis(ownProps.id));
-        }
+        },
     };
 }
 

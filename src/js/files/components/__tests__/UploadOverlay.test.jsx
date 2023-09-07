@@ -1,5 +1,8 @@
-import { UploadOverlay, mapStateToProps } from "../UploadOverlay";
 import { screen } from "@testing-library/react";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
+import { mapStateToProps, UploadOverlay } from "../UploadOverlay";
 
 describe("<UploadOverlay />", () => {
     let props;
@@ -12,23 +15,23 @@ describe("<UploadOverlay />", () => {
                     localId: "123abc",
                     name: "test_reads.fastq.gz",
                     progress: 95,
-                    size: 1024
+                    size: 1024,
                 },
                 {
                     fileType: "reads",
                     localId: "456def",
                     name: "test_reads.fastq.gz2",
                     progress: 0,
-                    size: 2025
+                    size: 2025,
                 },
                 {
                     fileType: "reads",
                     localId: "789ghi",
                     name: "test_reads.fastq.gz3",
                     progress: 50,
-                    size: 871290
-                }
-            ]
+                    size: 871290,
+                },
+            ],
         };
     });
 
@@ -39,8 +42,8 @@ describe("<UploadOverlay />", () => {
                 localId: "123abc",
                 name: "test_reads.fastq.gz",
                 progress: 99,
-                size: 871290
-            }
+                size: 871290,
+            },
         ];
         renderWithProviders(<UploadOverlay {...props} />);
         expect(screen.getByText("Uploads")).toBeInTheDocument();
@@ -80,15 +83,15 @@ describe("<UploadOverlay />", () => {
                 localId: "123abc",
                 name: "test_reads.fastq.gz",
                 progress: 100,
-                size: 1024
+                size: 1024,
             },
             {
                 fileType: "reads",
                 localId: "456def",
                 name: "test_reads.fastq.gz2",
                 progress: 100,
-                size: 2025
-            }
+                size: 2025,
+            },
         ];
         renderWithProviders(<UploadOverlay {...props} />);
         expect(screen.getByText("Finishing uploads")).toBeInTheDocument();
@@ -106,9 +109,9 @@ describe("mapStateToProps", () => {
                 uploads: [
                     { localId: "foo", progress: 0 },
                     { localId: "bar", progress: 12 },
-                    { localId: "baz", progress: 37 }
-                ]
-            }
+                    { localId: "baz", progress: 37 },
+                ],
+            },
         };
     });
 
@@ -117,7 +120,7 @@ describe("mapStateToProps", () => {
         const [baz, bar, foo] = props.uploads;
 
         expect(props).toEqual({
-            uploads: [baz, bar, foo]
+            uploads: [baz, bar, foo],
         });
     });
 
@@ -126,7 +129,7 @@ describe("mapStateToProps", () => {
         const props = mapStateToProps(state);
         const [foo, baz] = props.uploads;
         expect(props).toEqual({
-            uploads: [foo, baz]
+            uploads: [foo, baz],
         });
     });
 });

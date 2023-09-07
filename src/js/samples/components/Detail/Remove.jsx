@@ -14,7 +14,7 @@ const mapStateToProps = state => {
     return {
         show: routerLocationHasState(state, "removeSample"),
         id,
-        name
+        name,
     };
 };
 
@@ -24,7 +24,7 @@ const mapDispatchToProps = dispatch => ({
     },
     onHide: () => {
         dispatch(pushState({ removeSample: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RemoveSample);

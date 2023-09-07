@@ -2,11 +2,11 @@ import { useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
+import { isEqual } from "lodash-es";
 import { useDidUpdateEffect } from "../../utils/hooks";
 import { setPersistentFormState } from "../actions";
 import { getSingleFormValues } from "../selectors";
 import { RestoredAlert } from "./Alert";
-import { isEqual } from "lodash-es";
 
 export const PersistForm = ({ formName, castValues, onSetPersistentFormState, formValues }) => {
     const { setValues, values, initialValues, resetForm } = useFormikContext();
@@ -28,14 +28,14 @@ export const PersistForm = ({ formName, castValues, onSetPersistentFormState, fo
 
 export const mapStateToProps = (state, ownProps) => {
     return {
-        formValues: getSingleFormValues(state, ownProps.formName)
+        formValues: getSingleFormValues(state, ownProps.formName),
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onSetPersistentFormState: (formName, formValues) => {
         dispatch(setPersistentFormState(formName, formValues));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersistForm);

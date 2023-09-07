@@ -1,11 +1,11 @@
+import { map } from "lodash-es";
 import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Button, LinkButton, InputSearch, Toolbar } from "../../../base";
+import { Button, InputSearch, LinkButton, Toolbar } from "../../../base";
 import { setAnalysisSortKey, setSearchIds, toggleFilterORFs, toggleFilterSequences } from "../../actions";
 import { getFuse, getResults } from "../../selectors";
 import { AnalysisViewerSort } from "../Viewer/Sort";
-import { map } from "lodash-es";
 
 const StyledNuVsToolbar = styled(Toolbar)`
     margin-bottom: 10px;
@@ -20,13 +20,13 @@ const NuVsToolbar = ({
     onFilterSequences,
     onFilterORFs,
     onSearch,
-    onSelect
+    onSelect,
 }) => {
     const handleChange = useCallback(
         e => {
             onSearch(e.target.value, fuse);
         },
-        [id]
+        [id],
     );
 
     return (
@@ -60,7 +60,7 @@ const mapStateToProps = state => {
         results: getResults(state),
         filterORFs,
         filterSequences,
-        sortKey
+        sortKey,
     };
 };
 
@@ -77,7 +77,7 @@ const mapDispatchToProps = dispatch => ({
     },
     onSelect: sortKey => {
         dispatch(setAnalysisSortKey(sortKey));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NuVsToolbar);

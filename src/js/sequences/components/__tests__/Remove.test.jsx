@@ -1,3 +1,6 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RemoveModal } from "../../../base";
 import { RemoveSequence } from "../Remove";
 
@@ -11,7 +14,7 @@ describe("<RemoveSequence />", () => {
             isolateName: "baz",
             sequenceId: "test",
             onHide: vi.fn(),
-            onConfirm: vi.fn()
+            onConfirm: vi.fn(),
         };
     });
 

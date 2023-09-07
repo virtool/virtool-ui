@@ -1,6 +1,9 @@
-import { Pagination } from "../Pagination";
 import { screen } from "@testing-library/react";
+import React from "react";
 import { MemoryRouter } from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithProviders } from "../../../tests/setupTests";
+import { Pagination } from "../Pagination";
 
 describe("<Pagination />", () => {
     let props;
@@ -10,7 +13,7 @@ describe("<Pagination />", () => {
             pageCount: 6,
             currentPage: 1,
             storedPage: 1,
-            onLoadNextPage: vi.fn()
+            onLoadNextPage: vi.fn(),
         };
     });
 
@@ -18,7 +21,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.getByRole("link", { name: "Previous" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();
@@ -33,7 +36,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.getByRole("link", { name: "Previous" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();
@@ -49,7 +52,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.queryByRole("link", { name: "Previous" })).not.toBeInTheDocument();
         expect(screen.queryByRole("link", { name: "Next" })).not.toBeInTheDocument();
@@ -62,7 +65,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.getByRole("link", { name: "Previous" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();

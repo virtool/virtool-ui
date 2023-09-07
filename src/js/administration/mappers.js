@@ -1,3 +1,3 @@
 export const mapSettingsStateToProps = state => ({
-    loading: state.settings.data === null
+    loading: state.settings.data === null,
 });

@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<JobStep /> > should render text and icon when state is special case 1`] = `
 <DocumentFragment>

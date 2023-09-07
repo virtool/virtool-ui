@@ -8,7 +8,7 @@ type SelectBoxProps = {
 
 export const SelectBox = styled(Box).attrs(() => ({
     type: "button",
-    as: "button"
+    as: "button",
 }))<SelectBoxProps>`
     border: 1px ${props => (props.active ? props.theme.color.blue : props.theme.color.greyLight)} solid;
     border-radius: ${props => props.theme.borderRadius.sm};

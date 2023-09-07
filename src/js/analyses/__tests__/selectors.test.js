@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from "vitest";
 import { getFilterIds, getMatches, getResults, getSortIds } from "../selectors";
 
 describe("getResults()", () => {
@@ -5,15 +6,15 @@ describe("getResults()", () => {
         const results = [
             {
                 id: 2,
-                name: "foo"
-            }
+                name: "foo",
+            },
         ];
         const state = {
             analyses: {
                 detail: {
-                    results
-                }
-            }
+                    results,
+                },
+            },
         };
         expect(getResults(state)).toEqual(results);
     });
@@ -29,18 +30,18 @@ describe("getFilterIds()", () => {
             {
                 e: 0.000005,
                 id: 2,
-                name: "foo"
+                name: "foo",
             },
             {
                 e: undefined,
                 id: 5,
-                name: "bar"
+                name: "bar",
             },
             {
                 e: 0.00012,
                 id: 1,
-                name: "baz"
-            }
+                name: "baz",
+            },
         ];
     });
 
@@ -69,30 +70,30 @@ describe("getSortIds()", () => {
                                 id: 0,
                                 e: 0.01,
                                 annotatedOrfCount: 3,
-                                sequence: "ATAATAGGGACACATAA"
+                                sequence: "ATAATAGGGACACATAA",
                             },
                             {
                                 id: 1,
                                 e: 3e-22,
                                 annotatedOrfCount: 1,
-                                sequence: "ATAGATAGGGACACATAGGACACATA"
+                                sequence: "ATAGATAGGGACACATAGGACACATA",
                             },
                             {
                                 id: 2,
                                 e: 5e-112,
                                 annotatedOrfCount: 2,
-                                sequence: "ATAGGATAGGGACACATAATAGGGACACATAGACACATA"
+                                sequence: "ATAGGATAGGGACACATAATAGGGACACATAGACACATA",
                             },
                             {
                                 id: 3,
                                 e: 4e-12,
                                 annotatedOrfCount: 5,
-                                sequence: "ATAGGGACACATA"
-                            }
-                        ]
-                    }
-                }
-            }
+                                sequence: "ATAGGGACACATA",
+                            },
+                        ],
+                    },
+                },
+            },
         };
     });
 
@@ -129,33 +130,33 @@ describe("getMatches()", () => {
                 id: 0,
                 e: 0.01,
                 annotatedOrfCount: 3,
-                sequence: "ATAATAGGGACACATAA"
+                sequence: "ATAATAGGGACACATAA",
             },
             {
                 id: 1,
                 e: 3e-22,
                 annotatedOrfCount: 1,
-                sequence: "ATAGATAGGGACACATAGGACACATA"
+                sequence: "ATAGATAGGGACACATAGGACACATA",
             },
             {
                 id: 2,
                 e: 5e-112,
                 annotatedOrfCount: 2,
-                sequence: "ATAGGATAGGGACACATAATAGGGACACATAGACACATA"
+                sequence: "ATAGGATAGGGACACATAATAGGGACACATAGACACATA",
             },
             {
                 id: 3,
                 e: 4e-12,
                 annotatedOrfCount: 5,
-                sequence: "ATAGGGACACATA"
-            }
+                sequence: "ATAGGGACACATA",
+            },
         ];
     });
 
     it("should return ids when restricted by filter", () => {
         expect(getMatches.resultFunc(workflow, results, filterIds, searchIds, sortIds)).toEqual([
             results[2],
-            results[0]
+            results[0],
         ]);
     });
 
@@ -164,7 +165,7 @@ describe("getMatches()", () => {
         filterIds = [0, 3, 2];
         expect(getMatches.resultFunc(workflow, results, filterIds, searchIds, sortIds)).toEqual([
             results[3],
-            results[0]
+            results[0],
         ]);
     });
 
@@ -174,7 +175,7 @@ describe("getMatches()", () => {
         expect(getMatches.resultFunc(workflow, results, filterIds, searchIds, sortIds)).toEqual([
             results[2],
             results[3],
-            results[0]
+            results[0],
         ]);
     });
 
@@ -186,7 +187,7 @@ describe("getMatches()", () => {
             results[3],
             results[1],
             results[2],
-            results[0]
+            results[0],
         ]);
     });
 });

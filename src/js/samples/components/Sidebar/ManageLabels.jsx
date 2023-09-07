@@ -1,15 +1,15 @@
+import { forEach, map, reject, union } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { SidebarHeader, SideBarSection } from "../../../base";
+import { editSample } from "../../actions";
+import { getPartiallySelectedLabels, getSelectedLabels, getSelectedSamples } from "../../selectors";
 import { SampleLabelInner } from "./Labels";
 import { SampleSidebarMultiselectList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { getFontSize, fontWeight, getColor } from "../../../app/theme";
-import { map, forEach, union, reject } from "lodash-es";
-import { editSample } from "../../actions";
-import { getSelectedSamples, getSelectedLabels, getPartiallySelectedLabels } from "../../selectors";
 
 const SampleLabelsFooter = styled.div`
     display: flex;
@@ -31,7 +31,7 @@ export const ManageLabels = ({
     selectedSamples,
     selectedLabels,
     onLabelUpdate,
-    partiallySelectedLabels
+    partiallySelectedLabels,
 }) => {
     const onUpdate = label => onLabelUpdate(selectedSamples, selectedLabels, label);
     return (
@@ -64,7 +64,7 @@ export const mapStateToProps = state => ({
     allLabels: state.labels.documents,
     selectedSamples: getSelectedSamples(state),
     selectedLabels: getSelectedLabels(state),
-    partiallySelectedLabels: getPartiallySelectedLabels(state)
+    partiallySelectedLabels: getPartiallySelectedLabels(state),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -77,7 +77,7 @@ export const mapDispatchToProps = dispatch => ({
                 dispatch(editSample(sample.id, { labels: reject(sampleLabelIds, id => label === id) }));
             }
         });
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageLabels);

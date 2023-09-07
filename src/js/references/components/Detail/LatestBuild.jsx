@@ -1,7 +1,7 @@
-import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { BoxGroupSection, NoneFoundSection, RelativeTime } from "../../../base";
 import { DownloadLink } from "./DownloadLink";
 
@@ -36,5 +36,5 @@ export const LatestBuild = ({ id, latestBuild }) => {
 
 LatestBuild.propTypes = {
     id: PropTypes.string,
-    latestBuild: PropTypes.object
+    latestBuild: PropTypes.object,
 };

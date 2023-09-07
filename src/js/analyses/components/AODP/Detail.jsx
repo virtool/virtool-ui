@@ -76,7 +76,7 @@ export const AODPDetail = ({ hit }) => {
 };
 
 const mapStateToProps = state => ({
-    hit: getActiveHit(state)
+    hit: getActiveHit(state),
 });
 
 export default connect(mapStateToProps)(AODPDetail);

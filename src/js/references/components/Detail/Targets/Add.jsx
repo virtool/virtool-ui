@@ -12,7 +12,7 @@ const getInitialState = () => ({
     description: "",
     length: 0,
     required: false,
-    errorName: ""
+    errorName: "",
 });
 
 export class AddTarget extends React.Component {
@@ -34,8 +34,8 @@ export class AddTarget extends React.Component {
                 name: this.state.name,
                 description: this.state.description,
                 length: toNumber(this.state.length),
-                required: this.state.required
-            }
+                required: this.state.required,
+            },
         ];
 
         this.props.onSubmit(this.props.refId, { targets });
@@ -44,13 +44,13 @@ export class AddTarget extends React.Component {
 
     handleChange = e => {
         this.setState({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
         });
     };
 
     handleClick = () => {
         this.setState({
-            required: !this.state.required
+            required: !this.state.required,
         });
     };
 
@@ -97,7 +97,7 @@ export const mapStateToProps = state => ({
     documents: state.references.documents,
     refId: state.references.detail.id,
     targets: state.references.detail.targets,
-    show: routerLocationHasState(state, "addTarget")
+    show: routerLocationHasState(state, "addTarget"),
 });
 
 export const mapDispatchToProps = dispatch => ({
@@ -107,7 +107,7 @@ export const mapDispatchToProps = dispatch => ({
 
     onHide: () => {
         dispatch(pushState({ addTarget: false }));
-    }
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTarget);

@@ -1,11 +1,11 @@
+import { formatDuration, intervalToDuration } from "date-fns";
+import { every, map, reject, reverse, sumBy } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
-import { map, reject, reverse, every, sumBy } from "lodash-es";
 import { connect } from "react-redux";
+import styled from "styled-components";
+import { getFontSize, getFontWeight } from "../../app/theme";
 import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
 import { UploadItem } from "./UploadItem";
-import { getFontWeight, getFontSize } from "../../app/theme";
-import { intervalToDuration, formatDuration } from "date-fns";
 
 const StyledUploadOverlay = styled.div`
     bottom: 0;
@@ -70,12 +70,12 @@ const UploadTiming = ({ remaining, uploadSpeed }) => {
             {
                 hours: timeRemainingInterval.hours,
                 minutes: timeRemainingInterval.minutes,
-                seconds: timeRemainingInterval.seconds
+                seconds: timeRemainingInterval.seconds,
             },
 
             {
-                format: [getFormat(timeRemainingInterval)]
-            }
+                format: [getFormat(timeRemainingInterval)],
+            },
         );
         formattedTimeRemaining = formattedTimeRemaining.length
             ? `${formattedTimeRemaining} remaining`

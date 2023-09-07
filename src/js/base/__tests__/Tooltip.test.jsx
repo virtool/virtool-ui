@@ -1,9 +1,12 @@
+import { shallow } from "enzyme";
+import React from "react";
+import { describe, expect, it } from "vitest";
 import { Tooltip } from "../Tooltip";
 
 describe("<Tooltip />", () => {
     const props = {
         tip: "Tip",
-        position: "left"
+        position: "left",
     };
 
     it("should render", () => {
