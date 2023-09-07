@@ -33,29 +33,35 @@ type SubtractionItemProps = {
     user: UserNested;
     name: string;
     created_at: string;
-    job: JobMinimal;
+    job?: JobMinimal;
+    ready: boolean;
 };
 
 /**
  * Condensed subtraction item for use in a list of subtractions
  *
- * @param id - The unique subtraction id
- * @param user - The user who created the subtraction
- * @param name - The name of the subtraction
  * @param created_at - The date the subtraction was created
+ * @param id - The unique subtraction id
  * @param job - The job associated with the subtraction
+ * @param name - The name of the subtraction
+ * @param ready - Whether the associated job is complete
+ * @param user - The user who created the subtraction
  * @returns A condensed subtraction item
  */
-export function SubtractionItem({ id, user, name, created_at, job }: SubtractionItemProps) {
+export function SubtractionItem({ created_at, id, job, name, ready, user }: SubtractionItemProps) {
     return (
         <BoxLink key={id} to={`/subtractions/${id}`}>
             <StyledSubtractionItemHeader>
                 <span>{name}</span>
                 <ProgressTag>
-                    {job.state === "complete" || (
+                    {ready || (
                         <>
-                            <ProgressCircle size={sizes.md} progress={job.progress} state={job.state} />
-                            {getStateTitle(job.state)}
+                            <ProgressCircle
+                                size={sizes.md}
+                                progress={job?.progress ?? 0}
+                                state={job?.state ?? "waiting"}
+                            />
+                            {getStateTitle(job?.state)}
                         </>
                     )}
                 </ProgressTag>
@@ -73,13 +79,14 @@ export function SubtractionItem({ id, user, name, created_at, job }: Subtraction
  * @returns The props derived from redux state
  */
 export function mapStateToProps(state, props) {
-    const { id, user, name, created_at, job } = state.subtraction.documents[props.index];
+    const { id, user, name, created_at, job, ready } = state.subtraction.documents[props.index];
     return {
         id,
         user,
         created_at,
         name,
         job,
+        ready,
     };
 }
 
