@@ -207,7 +207,7 @@ export function CreateSample({
                     values,
                 }: {
                     errors: FormikErrors<formValues>;
-                    setFieldValue: Function;
+                    setFieldValue: (field: string, value: string) => void;
                     touched: FormikTouched<formValues>;
                     values: formValues;
                 }) => (
