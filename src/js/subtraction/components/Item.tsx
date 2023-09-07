@@ -40,15 +40,15 @@ type SubtractionItemProps = {
 /**
  * Condensed subtraction item for use in a list of subtractions
  *
- * @param id - The unique subtraction id
- * @param user - The user who created the subtraction
- * @param name - The name of the subtraction
  * @param created_at - The date the subtraction was created
+ * @param id - The unique subtraction id
  * @param job - The job associated with the subtraction
+ * @param name - The name of the subtraction
  * @param ready - Whether the associated job is complete
+ * @param user - The user who created the subtraction
  * @returns A condensed subtraction item
  */
-export function SubtractionItem({ created_at, id, job, user, name, ready }: SubtractionItemProps) {
+export function SubtractionItem({ created_at, id, job, name, ready, user }: SubtractionItemProps) {
     return (
         <BoxLink key={id} to={`/subtractions/${id}`}>
             <StyledSubtractionItemHeader>
