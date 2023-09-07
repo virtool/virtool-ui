@@ -24,9 +24,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install
+        run: npm i
       - name: tsc
         run: npx tsc --noEmit
-
   eslint:
     runs-on: ubuntu-latest
     steps:
