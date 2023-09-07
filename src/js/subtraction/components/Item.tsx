@@ -33,7 +33,7 @@ type SubtractionItemProps = {
     user: UserNested;
     name: string;
     created_at: string;
-    job: JobMinimal;
+    job?: JobMinimal;
     ready: boolean;
 };
 
@@ -58,8 +58,8 @@ export function SubtractionItem({ created_at, id, job, name, ready, user }: Subt
                         <>
                             <ProgressCircle
                                 size={sizes.md}
-                                progress={job?.progress || 0}
-                                state={job?.state || "waiting"}
+                                progress={job?.progress ?? 0}
+                                state={job?.state ?? "waiting"}
                             />
                             {getStateTitle(job?.state)}
                         </>
