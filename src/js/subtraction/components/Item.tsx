@@ -34,6 +34,7 @@ type SubtractionItemProps = {
     name: string;
     created_at: string;
     job: JobMinimal;
+    ready: boolean;
 };
 
 /**
@@ -44,18 +45,23 @@ type SubtractionItemProps = {
  * @param name - The name of the subtraction
  * @param created_at - The date the subtraction was created
  * @param job - The job associated with the subtraction
+ * @param ready - Whether the associated job is complete
  * @returns A condensed subtraction item
  */
-export function SubtractionItem({ id, user, name, created_at, job }: SubtractionItemProps) {
+export function SubtractionItem({ created_at, id, job, user, name, ready }: SubtractionItemProps) {
     return (
         <BoxLink key={id} to={`/subtractions/${id}`}>
             <StyledSubtractionItemHeader>
                 <span>{name}</span>
                 <ProgressTag>
-                    {job.state === "complete" || (
+                    {ready || (
                         <>
-                            <ProgressCircle size={sizes.md} progress={job.progress} state={job.state} />
-                            {getStateTitle(job.state)}
+                            <ProgressCircle
+                                size={sizes.md}
+                                progress={job?.progress || 0}
+                                state={job?.state || "waiting"}
+                            />
+                            {getStateTitle(job?.state)}
                         </>
                     )}
                 </ProgressTag>
@@ -73,13 +79,14 @@ export function SubtractionItem({ id, user, name, created_at, job }: Subtraction
  * @returns The props derived from redux state
  */
 export function mapStateToProps(state, props) {
-    const { id, user, name, created_at, job } = state.subtraction.documents[props.index];
+    const { id, user, name, created_at, job, ready } = state.subtraction.documents[props.index];
     return {
         id,
         user,
         created_at,
         name,
         job,
+        ready,
     };
 }
 
