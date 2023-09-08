@@ -1,3 +1,4 @@
+import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
 import { connect } from "react-redux";
@@ -24,9 +25,14 @@ export const AnalysisMappingReferenceTitle = ({ index, reference }) => (
     </StyledAnalysisMappingReferenceTitle>
 );
 
-export const AnalysisMappingSubtractionTitle = ({ subtraction }) => (
-    <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
-);
+export function AnalysisMappingSubtractionTitle({ subtractions }) {
+    return map(subtractions, (subtraction, index) => (
+        <>
+            <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+            {index !== subtractions.length - 1 ? ", " : ""}
+        </>
+    ));
+}
 
 const StyledAnalysisMapping = styled(Box)`
     margin-bottom: 30px;
@@ -47,12 +53,25 @@ const StyledAnalysisMapping = styled(Box)`
     }
 `;
 
-export const AnalysisMapping = ({ index, reference, subtraction, toReference, total, toSubtraction = 0 }) => {
+export const AnalysisMapping = ({ index, reference, subtractions, toReference, total, toSubtraction = 0 }) => {
     const totalMapped = toReference + toSubtraction;
     const sumPercent = toReference / total;
 
-    const referenceTitle = <AnalysisMappingReferenceTitle index={index} reference={reference} />;
-    const subtractionTitle = <AnalysisMappingSubtractionTitle subtraction={subtraction} />;
+    const legend = [
+        {
+            color: "blue",
+            count: toReference,
+            title: <AnalysisMappingReferenceTitle index={index} reference={reference} />,
+        },
+    ];
+
+    if (subtractions.length > 0) {
+        legend.push({
+            color: "orange",
+            count: toSubtraction,
+            title: <AnalysisMappingSubtractionTitle subtractions={subtractions} />,
+        });
+    }
 
     return (
         <StyledAnalysisMapping>
@@ -63,13 +82,7 @@ export const AnalysisMapping = ({ index, reference, subtraction, toReference, to
                 </small>
             </h3>
 
-            <Bars
-                empty={total - totalMapped}
-                items={[
-                    { color: "blue", count: toReference, title: referenceTitle },
-                    { color: "orange", count: toSubtraction, title: subtractionTitle },
-                ]}
-            />
+            <Bars empty={total - totalMapped} items={legend} />
         </StyledAnalysisMapping>
     );
 };
@@ -80,7 +93,7 @@ export const mapStateToProps = state => {
     return {
         index,
         reference,
-        subtraction: subtractions[0],
+        subtractions: subtractions,
         toReference: getReadCount(state),
         toSubtraction: getSubtractedCount(state),
         total: state.samples.detail.quality.count,
