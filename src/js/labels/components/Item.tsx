@@ -8,6 +8,7 @@ import { RemoveLabel } from "./Remove";
 const LabelItemBox = styled(BoxGroupSection)`
     align-items: center;
     display: flex;
+    bottom: -1px;
 `;
 
 const LabelItemContainer = styled.div`
