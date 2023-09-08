@@ -47,7 +47,7 @@ export function getAccessToken() {
  * @param action {object} an action to pass to ``apiMethod``
  */
 export function* callWithAuthentication(apiMethod, action) {
-    if (window.b2c.use && window.msalInstance.getActiveAccount()) {
+    if (window.virtool.b2c.enabled && window.msalInstance.getActiveAccount()) {
         const accessToken = yield getAccessToken();
         return yield apiMethod(action).set("Bearer", accessToken);
     }

@@ -37,8 +37,10 @@ describe("mapStateToProps", () => {
 describe("mapDispatchToProps", () => {
     const dispatch = vi.fn();
 
-    window.b2c = {
-        use: false,
+    window.virtool = {
+        b2c: {
+            enabled: false,
+        },
     };
 
     it("should return onLogout in props", () => {

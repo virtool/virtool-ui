@@ -15,13 +15,15 @@ describe("<B2CLogin />", () => {
             onSetLogin: vi.fn(),
         };
 
-        window.b2c = {
-            use: true,
-            userflow: "test_userflow",
-            tenant: "test_tenant",
-            clientId: "test_clientId",
-            scope: "test_scope",
-            APIClientId: "test_APIClientId",
+        window.virtool = {
+            b2c: {
+                use: true,
+                userflow: "test_userflow",
+                tenant: "test_tenant",
+                clientId: "test_clientId",
+                scope: "test_scope",
+                APIClientId: "test_APIClientId",
+            },
         };
 
         myFunc = vi.fn();

@@ -43,14 +43,14 @@ export function Login({ error, onLogin }: LoginProps) {
                     <BoxGroupSection>
                         <WallTitle />
                         <WallHeader>Login</WallHeader>
-                        {window.b2c.use && <B2cLogin />}
+                        {window.virtool.b2c.enabled && <B2cLogin />}
                         <form
                             onSubmit={handleSubmit(({ username, password, remember }) =>
                                 onLogin(username, password, remember),
                             )}
                         >
                             <WallSubheader>
-                                Sign in with your {window.b2c.use && "legacy"} Virtool account
+                                Sign in with your {window.virtool.b2c.enabled && "legacy"} Virtool account
                             </WallSubheader>
                             <InputGroup>
                                 <InputLabel htmlFor="username">Username</InputLabel>

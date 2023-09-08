@@ -109,7 +109,11 @@ type ColorProps = {
 export function Color({ id, value, onChange }: ColorProps) {
     return (
         <StyledColor>
-            <Input id={id} value={value} onChange={e => onChange(e.target.value)} />
+            <Input
+                id={id}
+                value={value}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+            />
             <ColorGrid>
                 {colors.map(color => (
                     <ColorSquare key={color} color={`#${color}`} onClick={onChange} />

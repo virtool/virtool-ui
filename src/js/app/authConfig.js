@@ -3,9 +3,9 @@ import { LogLevel } from "@azure/msal-browser";
 export const getMsalConfig = () => {
     return {
         auth: {
-            clientId: window.b2c.clientId,
-            authority: `https://${window.b2c.tenant}.b2clogin.com/TO9001.onmicrosoft.com/b2c_1_${window.b2c.userflow}`,
-            knownAuthorities: [`${window.b2c.tenant}.b2clogin.com`],
+            clientId: window.virtool.b2c.clientId,
+            authority: `https://${window.virtool.b2c.tenant}.b2clogin.com/TO9001.onmicrosoft.com/b2c_1_${window.virtool.b2c.userflow}`,
+            knownAuthorities: [`${window.virtool.b2c.tenant}.b2clogin.com`],
             redirectUri: "/",
             postLogoutRedirectUri: "/",
         },
@@ -43,7 +43,9 @@ export const getMsalConfig = () => {
 
 export const getProtectedResources = () => ({
     backendApi: {
-        scopes: [`https://${window.b2c.tenant}.onmicrosoft.com/${window.b2c.APIClientId}/${window.b2c.scope}`],
+        scopes: [
+            `https://${window.virtool.b2c.tenant}.onmicrosoft.com/${window.virtool.b2c.APIClientId}/${window.virtool.b2c.scope}`,
+        ],
     },
 });
 

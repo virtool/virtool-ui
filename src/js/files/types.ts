@@ -22,15 +22,15 @@ export type UnpaginatedFileResponse = {
 
 export type File = {
     id: string;
-    created_at: Date;
+    created_at: string;
     name: string;
     name_on_disk: string;
     ready: boolean;
     removed: boolean;
-    removed_at?: Date;
+    removed_at?: string;
     reserved: boolean;
     size: number;
     type: string;
-    uploaded_at: Date;
+    uploaded_at: string;
     user: UserNested;
 };

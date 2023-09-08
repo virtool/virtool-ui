@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 import { UserResponse } from "../users/types";
 import { fetchAdministratorRoles, fetchSettings, findUsers, setAdministratorRole } from "./api";
-import { AdministratorRole, AdministratorRoles, Settings } from "./types";
+import { AdministratorRoles, Settings } from "./types";
 
 /**
  * Factory object for generating settings query keys
@@ -29,7 +29,7 @@ export const roleQueryKeys = {
  * @returns A list of valid administrator roles
  */
 export const useGetAdministratorRoles = () => {
-    return useQuery<AdministratorRole[]>(roleQueryKeys.all(), fetchAdministratorRoles);
+    return useQuery<AdministratorRoles[]>(roleQueryKeys.all(), fetchAdministratorRoles);
 };
 
 /**
@@ -98,7 +98,7 @@ export const useSetAdministratorRole = () => {
         ({ role, user_id }: { role: AdministratorRoles; user_id: string }) => setAdministratorRole(role, user_id),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(userQueryKeys.all);
+                queryClient.invalidateQueries(userQueryKeys.all());
             },
         },
     );

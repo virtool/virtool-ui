@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { getFontWeight } from "../app/theme";
 
-export const InputError = styled.p`
+type InputErrorProps = {
+    children: string | string[];
+};
+
+export const InputError = styled.p<InputErrorProps>`
     color: ${props => props.theme.color.red};
     font-size: ${props => props.theme.fontSize.sm};
     font-weight: ${getFontWeight("thick")};

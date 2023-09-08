@@ -11,3 +11,17 @@ export class Settings {
     sample_group_write: boolean;
     sample_unique_names: boolean;
 }
+
+export type virtoolState = {
+    b2c: B2CSettings;
+    sentryDsn: string;
+};
+
+export type B2CSettings = {
+    apiClientId: string;
+    clientId: string;
+    enabled: boolean;
+    tenant: string;
+    userFlow: string;
+    version: string;
+};

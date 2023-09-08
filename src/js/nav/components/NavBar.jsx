@@ -126,7 +126,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = dispatch => ({
     onLogout: () => {
-        if (window.b2c.use && window.msalInstance.getActiveAccount()) window.msalInstance.logoutRedirect();
+        if (window.virtool.b2c.enabled && window.msalInstance.getActiveAccount()) window.msalInstance.logoutRedirect();
         else dispatch(logout());
     },
 });

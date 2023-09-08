@@ -33,7 +33,7 @@ export function BoxGroupSearch({ label, placeholder = "", value, onChange, autoF
                 value={value}
                 placeholder={placeholder}
                 aria-label={label}
-                onChange={e => onChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
                 autoFocus={autoFocus}
             />
             <BoxGroupSearchIconContainer>

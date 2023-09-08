@@ -10,7 +10,7 @@ const StyledViewHeader = styled.header`
 StyledViewHeader.displayName = "StyledViewHeader";
 
 type ViewHeaderProps = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     className?: string;
     title: string;
 };
