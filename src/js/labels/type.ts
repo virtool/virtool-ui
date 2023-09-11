@@ -1,22 +1,17 @@
-/**
- * LabelNested
- * @prop color - the color of the label
- * @prop description - the description of the label
- * @prop id - the unique identifier of the label
- * @prop name - the name of the label
- */
+/* Smaller label object for representing labels in a list */
 export type LabelNested = {
+    /* A hex encoded color */
     color: string;
+    /* A detailed description */
     description: string;
+    /* A unique identifier */
     id: number;
+    /* A name for the label */
     name: string;
 };
 
-/**
- * Label
- * @extends LabelNested
- * @prop count - the count associated with the label
- */
+/* A label object that extends LabelNested */
 export type Label = LabelNested & {
+    /* The count associated with the label */
     count: number;
 };
