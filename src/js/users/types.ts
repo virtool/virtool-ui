@@ -8,24 +8,6 @@ type UserB2C = {
     oid: string;
 };
 
-export type User = {
-    id: string;
-    administrator: boolean;
-    handle: string;
-    active: boolean;
-    b2c?: UserB2C;
-    b2c_display_name?: string;
-    b2c_family_name?: string;
-    b2c_given_name?: string;
-    b2c_oid?: string;
-    force_reset: boolean;
-    groups: Array<GroupMinimal>;
-    last_password_change: Date;
-    permissions: Permissions;
-    primary_group: GroupMinimal;
-    administrator_role: AdministratorRoles;
-};
-
 export type UserResponse = {
     items: Array<User>;
     found_count: number;
@@ -39,4 +21,19 @@ export type UserNested = {
     administrator: boolean;
     id: string;
     handle: string;
+};
+
+export type User = UserNested & {
+    active: boolean;
+    b2c?: UserB2C;
+    b2c_display_name?: string;
+    b2c_family_name?: string;
+    b2c_given_name?: string;
+    b2c_oid?: string;
+    force_reset: boolean;
+    groups: Array<GroupMinimal>;
+    last_password_change: Date;
+    permissions: Permissions;
+    primary_group: GroupMinimal;
+    administrator_role: AdministratorRoles;
 };
