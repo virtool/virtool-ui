@@ -18,12 +18,14 @@ const StyledAnalysisMappingReferenceTitle = styled.div`
     }
 `;
 
-export const AnalysisMappingReferenceTitle = ({ index, reference }) => (
-    <StyledAnalysisMappingReferenceTitle>
-        <Link to={`/refs/${reference.id}`}>{reference.name}</Link>
-        <Label>{index.version}</Label>
-    </StyledAnalysisMappingReferenceTitle>
-);
+export function AnalysisMappingReferenceTitle({ index, reference }) {
+    return (
+        <StyledAnalysisMappingReferenceTitle>
+            <Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+            <Label>{index.version}</Label>
+        </StyledAnalysisMappingReferenceTitle>
+    );
+}
 
 export function AnalysisMappingSubtractionTitle({ subtractions }) {
     return map(subtractions, (subtraction, index) => (
@@ -53,7 +55,7 @@ const StyledAnalysisMapping = styled(Box)`
     }
 `;
 
-export const AnalysisMapping = ({ index, reference, subtractions, toReference, total, toSubtraction = 0 }) => {
+export function AnalysisMapping({ index, reference, subtractions, toReference, total, toSubtraction = 0 }) {
     const totalMapped = toReference + toSubtraction;
     const sumPercent = toReference / total;
 
@@ -85,19 +87,19 @@ export const AnalysisMapping = ({ index, reference, subtractions, toReference, t
             <Bars empty={total - totalMapped} items={legend} />
         </StyledAnalysisMapping>
     );
-};
+}
 
-export const mapStateToProps = state => {
+export function mapStateToProps(state) {
     const { index, reference, subtractions } = state.analyses.detail;
 
     return {
         index,
         reference,
-        subtractions: subtractions,
+        subtractions,
         toReference: getReadCount(state),
         toSubtraction: getSubtractedCount(state),
         total: state.samples.detail.quality.count,
     };
-};
+}
 
 export default connect(mapStateToProps)(AnalysisMapping);
