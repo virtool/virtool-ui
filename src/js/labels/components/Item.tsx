@@ -10,15 +10,11 @@ const LabelItemBox = styled(BoxGroupSection)`
     display: flex;
 `;
 
-const LabelItemContainer = styled.div`
-    position: relative;
-`;
-
 const LabelItemExampleContainer = styled.div`
     min-width: 30%;
 `;
 
-const LabelItemIcons = styled.div`
+const LabelItemButtons = styled.div`
     align-items: center;
     background-color: transparent;
     display: flex;
@@ -43,17 +39,15 @@ interface ItemProps {
 
 export function Item({ name, color, description, id }: ItemProps) {
     return (
-        <LabelItemContainer>
-            <LabelItemBox>
-                <LabelItemExampleContainer>
-                    <SampleLabel name={name} color={color} />
-                </LabelItemExampleContainer>
-                {description}
-            </LabelItemBox>
-            <LabelItemIcons>
+        <LabelItemBox>
+            <LabelItemExampleContainer>
+                <SampleLabel name={name} color={color} />
+            </LabelItemExampleContainer>
+            {description}
+            <LabelItemButtons>
                 <EditLabel id={id} color={color} description={description} name={name} />
                 <RemoveLabel id={id} name={name} />
-            </LabelItemIcons>
-        </LabelItemContainer>
+            </LabelItemButtons>
+        </LabelItemBox>
     );
 }
