@@ -11,5 +11,6 @@ export type LabelNested = {
 
 /* A sample label */
 export type Label = LabelNested & {
+    /* The number of samples the label is associated with */
     count: number;
 };
