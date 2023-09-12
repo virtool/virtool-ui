@@ -8,11 +8,6 @@ import { RemoveLabel } from "./Remove";
 const LabelItemBox = styled(BoxGroupSection)`
     align-items: center;
     display: flex;
-    bottom: -1px;
-`;
-
-const LabelItemContainer = styled.div`
-    position: relative;
 `;
 
 const LabelItemExampleContainer = styled.div`
@@ -44,17 +39,15 @@ interface ItemProps {
 
 export function Item({ name, color, description, id }: ItemProps) {
     return (
-        <LabelItemContainer>
-            <LabelItemBox>
-                <LabelItemExampleContainer>
-                    <SampleLabel name={name} color={color} />
-                </LabelItemExampleContainer>
-                {description}
-            </LabelItemBox>
+        <LabelItemBox>
+            <LabelItemExampleContainer>
+                <SampleLabel name={name} color={color} />
+            </LabelItemExampleContainer>
+            {description}
             <LabelItemIcons>
                 <EditLabel id={id} color={color} description={description} name={name} />
                 <RemoveLabel id={id} name={name} />
             </LabelItemIcons>
-        </LabelItemContainer>
+        </LabelItemBox>
     );
 }
