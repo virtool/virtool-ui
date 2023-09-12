@@ -1,17 +1,15 @@
-/* Smaller label object for representing labels in a list */
+/* A partial label including essentials for rendering a list of labels */
 export type LabelNested = {
-    /* A hex encoded color */
+    /* The hex encoded color */
     color: string;
-    /* A detailed description */
+    /* The detailed description */
     description: string;
-    /* A unique identifier */
+    /* The unique identifier */
     id: number;
-    /* A name for the label */
     name: string;
 };
 
-/* A label object that extends LabelNested */
+/* A sample label */
 export type Label = LabelNested & {
-    /* The count associated with the label */
     count: number;
 };

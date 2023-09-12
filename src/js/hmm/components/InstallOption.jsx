@@ -35,6 +35,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = dispatch => ({
     onInstall: releaseId => {
+        // alert(installHMMs(releaseId));
         dispatch(installHMMs(releaseId));
     },
 });
