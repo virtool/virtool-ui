@@ -14,7 +14,7 @@ const LabelItemExampleContainer = styled.div`
     min-width: 30%;
 `;
 
-const LabelItemIcons = styled.div`
+const LabelItemButtons = styled.div`
     align-items: center;
     background-color: transparent;
     display: flex;
@@ -44,10 +44,10 @@ export function Item({ name, color, description, id }: ItemProps) {
                 <SampleLabel name={name} color={color} />
             </LabelItemExampleContainer>
             {description}
-            <LabelItemIcons>
+            <LabelItemButtons>
                 <EditLabel id={id} color={color} description={description} name={name} />
                 <RemoveLabel id={id} name={name} />
-            </LabelItemIcons>
+            </LabelItemButtons>
         </LabelItemBox>
     );
 }
