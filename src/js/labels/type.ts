@@ -6,6 +6,7 @@ export type LabelNested = {
     description: string;
     /* The unique identifier */
     id: number;
+    /* The display name */
     name: string;
 };
 
