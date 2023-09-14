@@ -41,7 +41,7 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
         <>
             <ViewHeader title={title} />
             <ViewHeaderTitle>
-                {title} <Badge>{files.total_count}</Badge>
+                {title} <Badge>{files.found_count}</Badge>
             </ViewHeaderTitle>
             <UploadToolbar fileType={fileType} message={message} validationRegex={validationRegex} tip={tip} />
             {noneFound}
