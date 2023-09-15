@@ -24,7 +24,7 @@ const SelectedContainer = styled(BoxGroup)<SelectedContainer>`
 
 const SelectedItemsContainer = styled.div`
     background-color: white;
-    outline-color: 1px solid ${props => props.theme.color.greyLight};
+    outline: 1px solid ${props => props.theme.color.greyLight};
 `;
 
 const StyledCreateAnalysisSelected = styled.div`
