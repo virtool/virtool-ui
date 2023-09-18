@@ -1,13 +1,13 @@
 import { AdministratorRoles } from "../administration/types";
 import { GroupMinimal, Permissions } from "../groups/types";
 
-/* Business to consumer specific details */
+/* Business to consumer provided user details */
 type UserB2C = {
-    /* The display name (optional) */
+    /* The display name */
     display_name?: string;
-    /* The family name (optional) */
+    /* The family name */
     family_name?: string;
-    /* The given name (optional) */
+    /* The given name */
     given_name?: string;
     /* The object ID */
     oid: string;
@@ -23,37 +23,37 @@ export type UserNested = {
     handle: string;
 };
 
-/* A sample user */
+/* A Virtool user */
 export type User = UserNested & {
     /* Indicates if user is active */
     active: boolean;
-    /* The B2C user information (optional) */
+    /* Their B2C specific information */
     b2c?: UserB2C;
-    /* The user's display name (optional) */
+    /* Their display name */
     b2c_display_name?: string;
-    /* The user's family name (optional) */
+    /* Their family name */
     b2c_family_name?: string;
-    /* The user's given name (optional) */
+    /* Their given name */
     b2c_given_name?: string;
-    /* The user's object ID (optional) */
+    /* Their B2C object ID */
     b2c_oid?: string;
-    /* Indicates if the user is required to reset password */
+    /* Whether the user will be forced to reset their password on next login */
     force_reset: boolean;
-    /*  */
+    /* A list of their groups */
     groups: Array<GroupMinimal>;
-    /* The date of the user's last password change */
+    /* The date of their last password change */
     last_password_change: Date;
-    /* The user's permissions */
+    /* Their permissions */
     permissions: Permissions;
-    /* The user's primary group */
+    /* Their primary group */
     primary_group: GroupMinimal;
-    /* THe role of the administrator user */
+    /* Their administrator role defining what resources they can modify */
     administrator_role: AdministratorRoles;
 };
 
-/* A response containing a list of users */
+/* User search results from the API */
 export type UserResponse = {
-    /* The array of user objects */
+    /* The page of users */
     items: Array<User>;
     /* The number of users found */
     found_count: number;
