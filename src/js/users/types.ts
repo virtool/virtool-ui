@@ -1,5 +1,6 @@
 import { AdministratorRoles } from "../administration/types";
 import { GroupMinimal, Permissions } from "../groups/types";
+import { SearchResult } from "../utils/types";
 
 /* Business to consumer provided user details */
 type UserB2C = {
@@ -52,17 +53,7 @@ export type User = UserNested & {
 };
 
 /* User search results from the API */
-export type UserResponse = {
+export type UserResponse = SearchResult & {
     /* The page of users */
     items: Array<User>;
-    /* The number of users found */
-    found_count: number;
-    /* The current page number */
-    page: number;
-    /* The total number of pages */
-    page_count: number;
-    /* The number of items per page */
-    per_page: number;
-    /* The total number of users */
-    total_count: number;
 };
