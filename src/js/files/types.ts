@@ -1,4 +1,5 @@
 import { UserNested } from "../users/types";
+import { SearchResult } from "../utils/types";
 
 export enum FileType {
     hmm = "hmm",
@@ -7,12 +8,7 @@ export enum FileType {
     subtraction = "subtraction",
 }
 
-export type FileResponse = {
-    found_count: number;
-    page: number;
-    page_count: number;
-    per_page: number;
-    total_count: number;
+export type FileResponse = SearchResult & {
     items: Array<File>;
 };
 
