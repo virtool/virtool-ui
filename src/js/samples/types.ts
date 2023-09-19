@@ -24,3 +24,11 @@ export type SampleWorkflows = {
     nuvs: WorkflowState;
     pathoscope: WorkflowState;
 };
+
+export type SampleID = {
+    id: string;
+};
+
+export type SampleNested = SampleID & {
+    name: string;
+};
