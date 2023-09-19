@@ -8,7 +8,7 @@ import SubtractionToolbar from "./Toolbar";
 
 const renderRow = index => <SubtractionItem key={index} index={index} />;
 
-export function SubtractionList(documents, fetched, onLoadNextPage, term, page, page_count, total_count) {
+export function SubtractionList({ onLoadNextPage, documents, page, page_count, total_count, fetched, term }) {
     useEffect(() => {
         if (!fetched) {
             onLoadNextPage(term, 1);
