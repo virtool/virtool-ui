@@ -141,7 +141,7 @@ describe("<EditBarcodeSequence>", () => {
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
+        expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
 });
 

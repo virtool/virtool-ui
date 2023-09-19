@@ -99,7 +99,7 @@ describe("<AddGenomeSequence>", () => {
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(field).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
+        expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
 });
 
