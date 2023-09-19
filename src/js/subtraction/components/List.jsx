@@ -6,33 +6,30 @@ import { findSubtractions } from "../actions";
 import SubtractionItem from "./Item";
 import SubtractionToolbar from "./Toolbar";
 
-export const SubtractionList = ({ onLoadNextPage, documents, page, page_count, total_count, fetched, term }) => {
+const renderRow = index => <SubtractionItem key={index} index={index} />;
+
+export function SubtractionList(documents, fetched, onLoadNextPage, term, page, page_count, total_count) {
     useEffect(() => {
         if (!fetched) {
             onLoadNextPage(term, 1);
         }
     }, []);
 
-    const renderRow = index => <SubtractionItem key={index} index={index} />;
-    let subtractionComponents;
-
     if (documents === null) {
         return <LoadingPlaceholder />;
     }
 
-    if (documents.length) {
-        subtractionComponents = (
-            <LegacyScrollList
-                documents={documents}
-                onLoadNextPage={page => onLoadNextPage(term, page)}
-                page={page}
-                pageCount={page_count}
-                renderRow={renderRow}
-            />
-        );
-    } else {
-        subtractionComponents = <NoneFoundBox noun="subtractions" />;
-    }
+    const subtractionComponents = documents.length ? (
+        <LegacyScrollList
+            documents={documents}
+            onLoadNextPage={page => onLoadNextPage(term, page)}
+            page={page}
+            pageCount={page_count}
+            renderRow={renderRow}
+        />
+    ) : (
+        <NoneFoundBox noun="subtractions" />
+    );
 
     return (
         <>
@@ -47,10 +44,9 @@ export const SubtractionList = ({ onLoadNextPage, documents, page, page_count, t
             {subtractionComponents}
         </>
     );
-};
+}
 
 const mapStateToProps = state => ({
-    ...state.subtraction,
     fetched: state.subtraction.fetched,
     documents: state.subtraction.documents,
     page: state.subtraction.page,
