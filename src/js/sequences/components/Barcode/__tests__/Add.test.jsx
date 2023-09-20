@@ -86,7 +86,7 @@ describe("<AddBarcodeSequence>", () => {
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
         await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
-        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "ATG");
+        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "ATGRYK");
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -96,7 +96,7 @@ describe("<AddBarcodeSequence>", () => {
             "user_typed_accession",
             "user_typed_definition",
             "user_typed_host",
-            "ATG",
+            "ATGRYK",
             "test_target_name_2",
         );
     });
@@ -112,7 +112,7 @@ describe("<AddBarcodeSequence>", () => {
         expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
-    it("should display specific error when sequence contains chars !== ATCGN", async () => {
+    it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
         renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
 
         await userEvent.type(screen.getByRole("textbox", { name: /Sequence/ }), "atbcq");
