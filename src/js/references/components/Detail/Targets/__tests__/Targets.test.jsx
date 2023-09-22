@@ -12,11 +12,13 @@ import { mapDispatchToProps, mapStateToProps, Targets } from "../Targets";
 
 vi.mock("../../../../selectors.js");
 
-const createAppStore = state => () =>
-    configureStore({
-        reducer: state => state,
-        preloadedState: state,
-    });
+function createAppStore(state) {
+    return () =>
+        configureStore({
+            reducer: state => state,
+            preloadedState: state,
+        });
+}
 
 const renderWithRouter = (ui, state, history) => {
     return renderWithProviders(<Router history={history}>{ui}</Router>, createAppStore(state));

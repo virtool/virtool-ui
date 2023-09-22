@@ -6,11 +6,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { castValues, EditGenomeSequence } from "../Edit";
 
-const createAppStore = state => () =>
-    configureStore({
-        reducer: state => state,
-        preloadedState: state,
-    });
+function createAppStore(state) {
+    return () =>
+        configureStore({
+            reducer: state => state,
+            preloadedState: state,
+        });
+}
 
 describe("<EditGenomeSequence>", () => {
     let props;
