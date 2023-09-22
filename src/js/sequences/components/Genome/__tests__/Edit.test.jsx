@@ -1,12 +1,16 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { castValues, EditGenomeSequence } from "../Edit";
 
-const createAppStore = state => () => createStore(state => state, state);
+const createAppStore = state => () =>
+    configureStore({
+        reducer: state => state,
+        preloadedState: state,
+    });
 
 describe("<EditGenomeSequence>", () => {
     let props;

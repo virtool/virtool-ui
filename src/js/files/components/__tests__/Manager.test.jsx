@@ -1,3 +1,4 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
@@ -12,7 +13,11 @@ import { UPLOAD } from "../../../app/actionTypes";
 import { FileManager } from "../Manager";
 
 function createAppStore(state) {
-    return () => createStore(state => state, state);
+    return () =>
+        configureStore({
+            reducer: state => state,
+            preloadedState: state,
+        });
 }
 
 describe("<FileManager>", () => {

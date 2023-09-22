@@ -1,3 +1,4 @@
+import { configureStore } from "@reduxjs/toolkit";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -9,7 +10,7 @@ import { noop } from "lodash-es";
 import React from "react";
 import { QueryClient, QueryClientProvider, setLogger } from "react-query";
 import { Provider } from "react-redux";
-import { applyMiddleware, combineReducers, createStore } from "redux";
+import { combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { ThemeProvider } from "styled-components";
 import { expect, vi } from "vitest";
@@ -70,7 +71,10 @@ export function createAppStore(state, history, createReducer) {
               router: connectRouter(history),
           });
     const sagaMiddleware = createSagaMiddleware();
-    const store = createStore(reducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
+    const store = configureStore({
+        reducer: reducer,
+        middleware: [sagaMiddleware, routerMiddleware(history)],
+    });
 
     sagaMiddleware.run(watchRouter);
 
