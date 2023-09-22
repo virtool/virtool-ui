@@ -3,7 +3,6 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
@@ -113,7 +112,11 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            () => createStore(reducer, state),
+            () =>
+                configureStore({
+                    reducer: reducer,
+                    preloadedState: state,
+                }),
         );
         const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
