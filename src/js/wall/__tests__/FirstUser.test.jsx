@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../tests/setupTests";
-import { FirstUser, mapDispatchToProps } from "../FirstUser";
+import { FirstUser } from "../FirstUser";
 
 describe("<FirstUser />", () => {
     let props;
@@ -52,16 +52,16 @@ describe("<FirstUser />", () => {
     });
 });
 
-describe("mapDispatchToProps", () => {
-    it("should return onSubmit() on props", () => {
-        const dispatch = vi.fn();
-        const props = mapDispatchToProps(dispatch);
-
-        props.onSubmit("foo", "bar");
-
-        expect(dispatch).toHaveBeenCalledWith({
-            payload: { handle: "foo", password: "bar" },
-            type: "CREATE_FIRST_USER_REQUESTED",
-        });
-    });
-});
+// describe("mapDispatchToProps", () => {
+//     it("should return onSubmit() on props", () => {
+//         const dispatch = vi.fn();
+//         const props = mapDispatchToProps(dispatch);
+//
+//         props.onSubmit("foo", "bar");
+//
+//         expect(dispatch).toHaveBeenCalledWith({
+//             payload: { handle: "foo", password: "bar" },
+//             type: "CREATE_FIRST_USER_REQUESTED",
+//         });
+//     });
+// });

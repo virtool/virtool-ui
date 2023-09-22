@@ -10,7 +10,6 @@ import {
     ADD_SEQUENCE,
     CHANGE_ACCOUNT_PASSWORD,
     CLEAR_ERROR,
-    CREATE_FIRST_USER,
     CREATE_GROUP,
     CREATE_INDEX,
     CREATE_OTU,
@@ -126,9 +125,6 @@ export const errorsReducer = createReducer({}, builder => {
                     case LOGIN.FAILED:
                     case UPLOAD.FAILED:
                         state[errorName] = errorPayload;
-                        break;
-                    case CREATE_FIRST_USER.FAILED:
-                        state[errorName] = action.payload.error.response.body;
                         break;
 
                     default:
