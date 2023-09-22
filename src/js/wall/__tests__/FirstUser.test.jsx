@@ -1,38 +1,26 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import nock from "nock";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { renderWithProviders } from "../../../tests/setupTests";
-import { FirstUser } from "../FirstUser";
+import FirstUser from "../FirstUser";
 
 describe("<FirstUser />", () => {
-    let props;
-    let errorMessages;
-
-    beforeEach(() => {
-        errorMessages = {
-            errors: {
-                generalError: "General Error",
-                usernameErrors: ["Password Error 1", "Password Error 2"],
-                passwordErrors: ["Username Error 1", "Username Error 2"],
-            },
-        };
-        props = {
-            onSubmit: vi.fn(),
-            ...errorMessages,
-        };
-    });
-
-    it("should call onSubmit when form is submitted", async () => {
-        props = {
-            onSubmit: vi.fn(),
-            ...errorMessages,
-        };
-
+    it("creates first user once form is submitted", async () => {
         const usernameInput = "Username";
         const passwordInput = "Password";
+        const scope = nock("http://localhost")
+            .post("/api/users/first", {
+                handle: usernameInput,
+                password: passwordInput,
+            })
+            .reply(201, {
+                handle: usernameInput,
+                password: passwordInput,
+            });
 
-        renderWithProviders(<FirstUser {...props} />);
+        renderWithProviders(<FirstUser />);
 
         const usernameField = screen.getByRole("textbox", /username/i);
         const passwordField = screen.getByLabelText("Password");
@@ -48,20 +36,6 @@ describe("<FirstUser />", () => {
 
         await userEvent.click(screen.getByRole("button", { name: /Create User/i }));
 
-        expect(props.onSubmit).toHaveBeenCalledWith("Username", "Password");
+        scope.isDone();
     });
 });
-
-// describe("mapDispatchToProps", () => {
-//     it("should return onSubmit() on props", () => {
-//         const dispatch = vi.fn();
-//         const props = mapDispatchToProps(dispatch);
-//
-//         props.onSubmit("foo", "bar");
-//
-//         expect(dispatch).toHaveBeenCalledWith({
-//             payload: { handle: "foo", password: "bar" },
-//             type: "CREATE_FIRST_USER_REQUESTED",
-//         });
-//     });
-// });
