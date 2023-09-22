@@ -87,7 +87,7 @@ describe("<EditGenomeSequence>", () => {
 
         const sequenceField = screen.getByRole("textbox", { name: "Sequence 4" });
         await userEvent.clear(sequenceField);
-        await userEvent.type(sequenceField, "ACG");
+        await userEvent.type(sequenceField, "ACGRYKM");
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -99,7 +99,7 @@ describe("<EditGenomeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             null,
-            "ACG",
+            "ACGRYKM",
         );
     });
 
@@ -118,14 +118,14 @@ describe("<EditGenomeSequence>", () => {
         expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
-    it("should display specific error when sequence contains chars !== ATCGN", async () => {
+    it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
         renderWithProviders(<EditGenomeSequence {...props} />, createAppStore(state));
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
+        expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
 });
 

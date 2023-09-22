@@ -65,7 +65,7 @@ describe("<AddGenomeSequence>", () => {
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
         await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
-        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "ATG");
+        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "ATGRYKM");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(props.onSave).toHaveBeenCalledWith(
@@ -75,7 +75,7 @@ describe("<AddGenomeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "test_segment",
-            "ATG",
+            "ATGRYKM",
         );
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
@@ -90,7 +90,7 @@ describe("<AddGenomeSequence>", () => {
         expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
-    it("should display specific error when sequence contains chars !== ATCGN", async () => {
+    it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
         renderWithProviders(<AddGenomeSequence {...props} />, createAppStore(state));
 
         const field = screen.getByRole("textbox", { name: /Sequence/ });
@@ -99,7 +99,7 @@ describe("<AddGenomeSequence>", () => {
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(field).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
+        expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
 });
 

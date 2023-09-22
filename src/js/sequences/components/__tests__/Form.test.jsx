@@ -49,13 +49,13 @@ describe("<SequenceForm />", () => {
         expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
-    it("should display specific error when sequence contains chars !== ATCG", async () => {
+    it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
         renderWithProviders(FormikWrapper(SequenceForm, onSubmit));
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "atbcq");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
+        expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
 });
