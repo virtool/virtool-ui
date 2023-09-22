@@ -29,7 +29,7 @@ const initialState = {
     ready: false,
     first: false,
 };
-// createStore
+
 export const appReducer = createReducer(initialState, builder => {
     builder
         .addCase(LOGIN.SUCCEEDED, (state, action) => {
