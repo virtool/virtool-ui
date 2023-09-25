@@ -10,7 +10,7 @@ import { renderWithProviders } from "../../../../../../tests/setupTests";
 import { checkReferenceRight } from "../../../../selectors";
 import { mapDispatchToProps, mapStateToProps, Targets } from "../Targets";
 
-vi.mock("../../../../selectors.js");
+vi.mock("../../../../selectors.ts");
 
 function createAppStore(state) {
     return () =>
