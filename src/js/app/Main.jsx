@@ -24,6 +24,7 @@ const Jobs = lazy(() => import("../jobs/components/Jobs"));
 const References = lazy(() => import("../references/components/References"));
 const Samples = lazy(() => import("../samples/components/Samples"));
 const Subtraction = lazy(() => import("../subtraction/components/Subtraction"));
+const ML = lazy(() => import("../ml/components/ML"));
 
 const setupWebSocket = queryClient => {
     if (!window.ws) {
@@ -75,6 +76,7 @@ export const Main = ({ ready, onLoad }) => {
                             <Route path="/subtractions" component={Subtraction} />
                             <Route path="/administration" component={Administration} />
                             <Route path="/account" component={Account} />
+                            <Route path="/ml" component={ML} />
                         </Switch>
                     </Suspense>
                 </MainContainer>

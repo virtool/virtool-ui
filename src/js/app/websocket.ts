@@ -17,6 +17,7 @@ import { accountKeys } from "../account/querys";
 import { roleQueryKeys, userQueryKeys } from "../administration/querys";
 import { fileQueryKeys } from "../files/querys";
 import { groupQueryKeys } from "../groups/querys";
+import { modelQueryKeys } from "../ml/queries";
 
 const keyFactories = {
     account: accountKeys,
@@ -24,6 +25,7 @@ const keyFactories = {
     roles: roleQueryKeys,
     uploads: fileQueryKeys,
     users: userQueryKeys,
+    models: modelQueryKeys,
 };
 
 function reactQueryHandler(queryClient: QueryClient) {
