@@ -1,14 +1,18 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import * as utils from "../../../administration/utils";
 import { JobsList, mapDispatchToProps, mapStateToProps } from "../List";
 
 function createAppStore(state) {
-    return () => createStore(state => state, state);
+    return () =>
+        configureStore({
+            reducer: state => state,
+            preloadedState: state,
+        });
 }
 function renderWithAllProviders(ui, store) {
     const wrappedUI = <BrowserRouter> {ui} </BrowserRouter>;

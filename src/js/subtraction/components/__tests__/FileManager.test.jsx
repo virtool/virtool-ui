@@ -1,9 +1,9 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { forEach } from "lodash-es";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { createStore } from "redux";
 import { describe, expect, it, vi } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
@@ -13,7 +13,11 @@ import { UPLOAD } from "../../../app/actionTypes";
 import { SubtractionFileManager } from "../FileManager";
 
 function createAppStore(state, reducer) {
-    return () => createStore(reducer ? reducer : state => state, state);
+    return () =>
+        configureStore({
+            reducer: reducer ? reducer : state => state,
+            preloadedState: state,
+        });
 }
 
 function createFiles(fileNames) {
