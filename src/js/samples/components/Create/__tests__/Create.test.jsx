@@ -1,15 +1,19 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { LIST_LABELS } from "../../../../app/actionTypes";
 import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
 function createAppStore(state) {
-    return () => createStore(state => state, state);
+    return () =>
+        configureStore({
+            reducer: state => state,
+            preloadedState: state,
+        });
 }
 function routerRenderWithProviders(ui, store) {
     const routerUi = <BrowserRouter> {ui} </BrowserRouter>;

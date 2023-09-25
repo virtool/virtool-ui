@@ -1,10 +1,10 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { shallow } from "enzyme";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { Router } from "react-router-dom";
-import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../../tests/setupTests";
 import { checkReferenceRight } from "../../../../selectors";
@@ -12,7 +12,13 @@ import { mapDispatchToProps, mapStateToProps, Targets } from "../Targets";
 
 vi.mock("../../../../selectors.js");
 
-const createAppStore = state => () => createStore(state => state, state);
+function createAppStore(state) {
+    return () =>
+        configureStore({
+            reducer: state => state,
+            preloadedState: state,
+        });
+}
 
 const renderWithRouter = (ui, state, history) => {
     return renderWithProviders(<Router history={history}>{ui}</Router>, createAppStore(state));

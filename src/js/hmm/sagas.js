@@ -27,10 +27,10 @@ function* findHmms(action) {
 }
 
 function* installHmms(action) {
-    const resp = yield apiCall(installHmms, action, INSTALL_HMMS);
+    const resp = yield apiCall(hmmsApi.install, action, INSTALL_HMMS);
 
     if (resp.ok) {
-        yield apiCall(hmmsApi.install, {}, FIND_HMMS);
+        yield apiCall(hmmsApi.find, {}, FIND_HMMS);
     }
 }
 

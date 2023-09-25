@@ -1,7 +1,6 @@
-import { compose, createReducer } from "@reduxjs/toolkit";
+import { configureStore, createReducer } from "@reduxjs/toolkit";
 import { createReduxEnhancer } from "@sentry/react";
 import { connectRouter, routerMiddleware } from "connected-react-router";
-import { applyMiddleware, combineReducers, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
 import accountReducer from "../account/reducer";
 import settingsReducer from "../administration/reducer";
@@ -74,8 +73,8 @@ const sentryReduxEnhancer = createReduxEnhancer();
 export function createAppStore(history) {
     const sagaMiddleware = createSagaMiddleware();
 
-    const store = createStore(
-        combineReducers({
+    const store = configureStore({
+        reducer: {
             account: accountReducer,
             analyses: analysesReducer,
             app: appReducer,
@@ -96,9 +95,10 @@ export function createAppStore(history) {
             subtraction: subtractionsReducer,
             tasks: tasksReducer,
             users: usersReducer,
-        }),
-        compose(applyMiddleware(sagaMiddleware, routerMiddleware(history)), sentryReduxEnhancer),
-    );
+        },
+        middleware: [sagaMiddleware, routerMiddleware(history)],
+        enhancers: [sentryReduxEnhancer],
+    });
 
     sagaMiddleware.run(rootSaga);
 

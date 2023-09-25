@@ -24,10 +24,10 @@ export type SampleWorkflows = {
     pathoscope: WorkflowState;
 };
 
-/** Basic data for nested representations */
-export type SampleNested = {
-    /** The unique identifier */
+export type SampleID = {
     id: string;
-    /** The user defined name */
+};
+
+export type SampleNested = SampleID & {
     name: string;
 };

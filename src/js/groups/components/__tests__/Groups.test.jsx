@@ -1,10 +1,11 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { Provider } from "react-redux";
-import { applyMiddleware, combineReducers, createStore } from "redux";
+import { combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeGroup, mockApiGetGroup, mockApiListGroups } from "../../../../tests/fake/groups";
@@ -17,8 +18,10 @@ const createAppStore = (state, history) => {
         router: connectRouter(history),
     });
     const sagaMiddleware = createSagaMiddleware();
-    const store = createStore(reducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
-
+    const store = configureStore({
+        reducer: reducer,
+        middleware: [sagaMiddleware, routerMiddleware(history)],
+    });
     sagaMiddleware.run(watchRouter);
 
     return store;

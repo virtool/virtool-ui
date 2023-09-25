@@ -1,12 +1,18 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { castValues, EditBarcodeSequence } from "../Edit";
 
-const createAppStore = state => () => createStore(state => state, state);
+function createAppStore(state) {
+    return () =>
+        configureStore({
+            reducer: state => state,
+            preloadedState: state,
+        });
+}
 
 describe("<EditBarcodeSequence>", () => {
     let props;
@@ -104,7 +110,7 @@ describe("<EditBarcodeSequence>", () => {
 
         const sequenceField = screen.getByRole("textbox", { name: "Sequence 4" });
         await userEvent.clear(sequenceField);
-        await userEvent.type(sequenceField, "ACG");
+        await userEvent.type(sequenceField, "ACGRM");
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -115,7 +121,7 @@ describe("<EditBarcodeSequence>", () => {
             "user_typed_accession",
             "user_typed_definition",
             "user_typed_host",
-            "ACG",
+            "ACGRM",
             "test_target_name_2",
         );
     });
@@ -134,14 +140,14 @@ describe("<EditBarcodeSequence>", () => {
         expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
-    it("should display specific error when sequence contains chars !== ATCGN", async () => {
+    it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
         renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByText("Sequence should only contain the characters: ATCGN")).toBeInTheDocument();
+        expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
 });
 

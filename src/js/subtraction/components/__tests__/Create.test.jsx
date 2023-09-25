@@ -1,9 +1,9 @@
+import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { shallow } from "enzyme";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { createStore } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../tests/setupTests";
@@ -20,7 +20,10 @@ function createAppStore(state) {
         const mockReducer = state => {
             return state;
         };
-        return createStore(mockReducer, state);
+        return configureStore({
+            reducer: mockReducer,
+            preloadedState: state,
+        });
     };
 }
 

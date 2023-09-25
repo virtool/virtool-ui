@@ -12,7 +12,7 @@ export const validationSchema = Yup.object().shape({
     sequence: Yup.string()
         .uppercase()
         .required("Required Field")
-        .matches(/^[:?ATCGN]+$/, "Sequence should only contain the characters: ATCGN"),
+        .matches(/^[:?ATCGNRYKM]+$/, "Sequence should only contain the characters: ATCGNRYKM"),
 });
 
 export const SequenceForm = ({ errors, touched }) => (
