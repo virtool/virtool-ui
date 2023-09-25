@@ -77,3 +77,17 @@ export const removeSequence = ({ otuId, isolateId, sequenceId }) =>
     Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`);
 
 export const revert = ({ change_id }) => Request.delete(`/history/${change_id}`);
+
+/**
+ * Find a list of OTUs.
+ *
+ * @param refId - the unique identifier of the reference to search
+ * @param term - The search term to filter OTUs by name or abbreviation
+ * @param verified - Whether OTUs should be filtered by verified status
+ * @param page - The page of results to fetch
+ * @returns A Promise resolving to a page of OTUs
+ */
+export const findOTUs = ({ refId, term, verified, page }) =>
+    Request.get(`/refs/${refId}/otus`)
+        .query({ find: term, page, verified: verified || undefined })
+        .then(response => response.body);

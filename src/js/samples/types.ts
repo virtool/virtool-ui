@@ -6,9 +6,7 @@
  * with sample data.
  */
 
-/**
- * All workflow states.
- */
+/** All workflow states. */
 export enum WorkflowState {
     COMPLETE = "complete",
     PENDING = "pending",
@@ -16,11 +14,20 @@ export enum WorkflowState {
     INCOMPATIBLE = "incompatible",
 }
 
-/**
- * All workflow states for a sample.
- */
+/** All workflow states for a sample. */
 export type SampleWorkflows = {
+    /** The state of AODP workflows */
     aodp: WorkflowState;
+    /** The state of NuVs workflows */
     nuvs: WorkflowState;
+    /** The state of Pathoscope workflows */
     pathoscope: WorkflowState;
+};
+
+/** Basic data for nested representations */
+export type SampleNested = {
+    /** The unique identifier */
+    id: string;
+    /** The user defined name */
+    name: string;
 };

@@ -18,7 +18,8 @@ export type JobNested = {
 
 export type JobMinimal = JobNested & {
     archived: boolean;
-    created_at: Date;
+    /** The iso formatted date of creation */
+    created_at: string;
     progress: number;
     stage?: string;
     state: JobState;

@@ -3,9 +3,17 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Alert, Icon } from "../../base";
 import { checkReferenceRight } from "../../references/selectors";
+import { useInfiniteFindIndexes } from "../querys";
 
-export const RebuildAlert = ({ refId, showCountAlert, showIndexAlert }) => {
-    if (showCountAlert === 0) {
+export function RebuildAlert({ refId, hasRights }) {
+    const { data, isLoading } = useInfiniteFindIndexes(refId);
+    if (isLoading) {
+        return null;
+    }
+
+    const indexes = data.pages[0];
+
+    if (indexes.total_otu_count === 0 && hasRights) {
         return (
             <Alert color="orange" level>
                 <Icon name="exclamation-circle" />
@@ -14,7 +22,7 @@ export const RebuildAlert = ({ refId, showCountAlert, showIndexAlert }) => {
         );
     }
 
-    if (showIndexAlert) {
+    if (indexes.change_count && hasRights) {
         const to = {
             pathname: `/refs/${refId}/indexes`,
             state: { rebuild: true },
@@ -33,12 +41,11 @@ export const RebuildAlert = ({ refId, showCountAlert, showIndexAlert }) => {
     }
 
     return null;
-};
+}
 
 export const mapStateToProps = state => ({
     refId: state.references.detail.id,
-    showIndexAlert: state.indexes.modified_otu_count || state.otus.modified_count,
-    showCountAlert: checkReferenceRight(state, "build") && (state.indexes.total_otu_count || state.otus.total_count),
+    hasRights: checkReferenceRight(state, "build"),
 });
 
 export default connect(mapStateToProps)(RebuildAlert);
