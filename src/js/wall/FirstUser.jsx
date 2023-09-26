@@ -1,8 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { useMutation } from "react-query";
-import { useDispatch } from "react-redux";
-import { getInitialState } from "../app/actions";
+import { useMutation, useQueryClient } from "react-query";
 import { Input, InputError, InputGroup, InputLabel, InputPassword } from "../base";
 import { createFirst } from "../users/api";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
@@ -14,20 +12,17 @@ const initialValues = {
 };
 
 export default function FirstUser() {
-    const dispatch = useDispatch();
     const [error, setError] = useState("");
+    const queryClient = useQueryClient();
 
     const mutation = useMutation(createFirst, {
         onSuccess: () => {
-            // alert("success");
-            dispatch(getInitialState());
+            queryClient.invalidateQueries("first_user");
         },
         onError: error => {
             setError(error.response.body.message);
         },
     });
-    // alert(JSON.stringify(mutation.error.response.text));
-    // alert(JSON.stringify(mutation));
 
     const handleSubmit = values => {
         mutation.mutate({
