@@ -1,6 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { Input, InputError, InputGroup, InputLabel, InputPassword } from "../base";
 import { createFirst } from "../users/api";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
@@ -13,11 +13,10 @@ const initialValues = {
 
 export default function FirstUser() {
     const [error, setError] = useState("");
-    const queryClient = useQueryClient();
 
     const mutation = useMutation(createFirst, {
         onSuccess: () => {
-            queryClient.invalidateQueries("first_user");
+            window.location.reload();
         },
         onError: error => {
             setError(error.response.body.message);
