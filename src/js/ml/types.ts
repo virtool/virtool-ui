@@ -28,11 +28,11 @@ export type MLModelMinimal = {
 };
 
 /** A machine learning model*/
-type MLModel = MLModelMinimal & {
+export type MLModel = MLModelMinimal & {
     releases: MLModelRelease[];
 };
 
-/* Machine Learning model search results from the API */
+/** Machine Learning model search results from the API */
 export type MLModelSearchResult = {
     items: MLModelMinimal[];
     /** iso formatted datestring of when the models were last synced with virtool.ca */

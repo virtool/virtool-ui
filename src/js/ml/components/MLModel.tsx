@@ -35,8 +35,6 @@ type MLModelProps = {
  * @returns A condensed MLModel
  */
 export function MLModel({ created_at, latest_release, name }: MLModelProps) {
-    latest_release = { name: "1.1.1.2", github_url: "https://github.com" };
-
     const version = latest_release ? (
         <ModelVersion name={latest_release.name} github_url={latest_release.github_url} />
     ) : (
@@ -65,7 +63,7 @@ export function MLModel({ created_at, latest_release, name }: MLModelProps) {
 function ModelVersion({ name, github_url }: { name: string; github_url: string }) {
     return (
         <div>
-            Version: <a href={github_url}> {name} </a>
+            <a href={github_url}> v{name} </a>
         </div>
     );
 }
