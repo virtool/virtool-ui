@@ -6,7 +6,7 @@ import { LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useInfiniteFindIndexes } from "../querys";
 import { IndexMinimal } from "../types";
-import { IndexItem } from "./Item";
+import { IndexItem } from "./Item/IndexItem";
 import RebuildIndex from "./Rebuild";
 import RebuildAlert from "./RebuildAlert";
 
@@ -46,8 +46,10 @@ export function Indexes({ refId }: { refId: string }) {
     );
 }
 
-const mapStateToProps = state => ({
-    refId: state.references.detail.id,
-});
+function mapStateToProps(state) {
+    return {
+        refId: state.references.detail.id,
+    };
+}
 
 export default connect(mapStateToProps)(Indexes);

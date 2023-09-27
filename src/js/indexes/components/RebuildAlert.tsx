@@ -5,7 +5,19 @@ import { Alert, Icon } from "../../base";
 import { checkReferenceRight } from "../../references/selectors";
 import { useInfiniteFindIndexes } from "../querys";
 
-export function RebuildAlert({ refId, hasRights }) {
+type RebuildAlertProps = {
+    refId: string;
+    hasRights: boolean;
+};
+
+/**
+ * An alert that appears when the reference has unbuilt changes.
+ *
+ * @param refId - the unique identifier of the parent reference
+ * @param hasRights - whether the user has sufficient permission to rebuild the index
+ * @returns An rebuild alert
+ */
+export function RebuildAlert({ refId, hasRights }: RebuildAlertProps) {
     const { data, isLoading } = useInfiniteFindIndexes(refId);
     if (isLoading) {
         return null;
@@ -43,9 +55,11 @@ export function RebuildAlert({ refId, hasRights }) {
     return null;
 }
 
-export const mapStateToProps = state => ({
-    refId: state.references.detail.id,
-    hasRights: checkReferenceRight(state, "build"),
-});
+export function mapStateToProps(state) {
+    return {
+        refId: state.references.detail.id,
+        hasRights: checkReferenceRight(state, "build"),
+    };
+}
 
 export default connect(mapStateToProps)(RebuildAlert);

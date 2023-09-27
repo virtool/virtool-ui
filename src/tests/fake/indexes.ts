@@ -8,7 +8,7 @@ import { UserNested } from "../../js/users/types";
 import { createFakeJobMinimal } from "./jobs";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
-import { FakeSearchResults } from "./utils";
+import { BaseFakeSearchResultOptions } from "./utils";
 
 type CreateFakeIndexNestedProps = {
     id?: string;
@@ -24,7 +24,7 @@ export function createFakeIndexNested(props?: CreateFakeIndexNestedProps): Index
     return merge(defaultIndexNested, props);
 }
 
-type createFakeIndexMinimalProps = CreateFakeIndexNestedProps & {
+type CreateFakeIndexMinimalProps = CreateFakeIndexNestedProps & {
     change_count?: number;
     created_at?: string;
     has_files?: boolean;
@@ -35,7 +35,7 @@ type createFakeIndexMinimalProps = CreateFakeIndexNestedProps & {
     ready?: boolean;
 };
 
-export function createFakeIndexMinimal(props: createFakeIndexMinimalProps): IndexMinimal {
+export function createFakeIndexMinimal(props: CreateFakeIndexMinimalProps): IndexMinimal {
     const defaultIndexMinimal = {
         ...createFakeIndexNested(),
         change_count: faker.datatype.number({ min: 2, max: 10 }),
@@ -51,7 +51,7 @@ export function createFakeIndexMinimal(props: createFakeIndexMinimalProps): Inde
     return merge(defaultIndexMinimal, props);
 }
 
-type IndexSearchResults = FakeSearchResults & {
+type IndexSearchResults = BaseFakeSearchResultOptions & {
     documents: IndexMinimal[];
     modified_otu_count?: number;
     total_otu_count?: number;

@@ -12,7 +12,7 @@ export function createFakeJobNested(props?: CreateJobNestedProps) {
     return { id: props.id || faker.random.alphaNumeric(8) };
 }
 
-type createJobMinimalProps = {
+type CreateJobMinimalProps = {
     archived?: boolean;
     created_at?: string;
     progress?: number;
@@ -22,7 +22,7 @@ type createJobMinimalProps = {
     workflow?: string;
 };
 
-export function createFakeJobMinimal(props?: createJobMinimalProps) {
+export function createFakeJobMinimal(props?: CreateJobMinimalProps) {
     const defaultJobMinimal = {
         archived: false,
         created_at: faker.date.past().toISOString(),

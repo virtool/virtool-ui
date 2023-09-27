@@ -19,13 +19,13 @@ import { fileQueryKeys } from "../files/querys";
 import { groupQueryKeys } from "../groups/querys";
 import { indexQueryKeys } from "../indexes/querys";
 
-/** Get effected resource query keys from job name  */
+/** Get affected resource query keys by workflow name  */
 const workflowQueries = {
     build_index: [indexQueryKeys.lists()],
 };
 
 /**
- * Invalidate queries that are effected by a job update
+ * Invalidate queries that are affected by a job update
  *
  * @param queryClient - The react-query client
  * @param message - The websocket message
@@ -42,10 +42,10 @@ function jobUpdater(queryClient, data) {
 const keyFactories = {
     account: accountKeys,
     groups: groupQueryKeys,
+    indexes: indexQueryKeys,
     roles: roleQueryKeys,
     uploads: fileQueryKeys,
     users: userQueryKeys,
-    indexes: indexQueryKeys,
 };
 
 /**
