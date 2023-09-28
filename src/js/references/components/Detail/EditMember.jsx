@@ -53,7 +53,7 @@ export class EditReferenceMember extends React.Component {
             <MemberRight key={right} right={right} enabled={this.props[right]} onToggle={this.handleChange} />
         ));
 
-        const title = `Modify Rights for ${this.props.id}`;
+        const title = `Modify Rights for ${this.props.handle}`;
 
         return (
             <Modal

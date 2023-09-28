@@ -105,7 +105,7 @@ class ChangePassword extends React.Component {
         return (
             <BoxGroup>
                 <BoxGroupHeader>
-                    <h2>Password - minimum = {this.props.minimumLength}</h2>
+                    <h2>Password</h2>
                 </BoxGroupHeader>
                 <BoxGroupSection as="form" onSubmit={this.onSubmit}>
                     <InputGroup>

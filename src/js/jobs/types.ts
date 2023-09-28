@@ -21,7 +21,8 @@ export type JobNested = {
 /* Minimal Job used for websocket messages and resource listings */
 export type JobMinimal = JobNested & {
     archived: boolean;
-    created_at: Date;
+    /** The iso formatted date of creation */
+    created_at: string;
     progress: number;
     stage?: string;
     state: JobState;
