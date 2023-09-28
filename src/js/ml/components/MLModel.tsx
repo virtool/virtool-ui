@@ -35,11 +35,7 @@ type MLModelProps = {
  * @returns A condensed MLModel
  */
 export function MLModel({ created_at, latest_release, name }: MLModelProps) {
-    const version = latest_release ? (
-        <ModelVersion name={latest_release.name} github_url={latest_release.github_url} />
-    ) : (
-        "No releases"
-    );
+    const version = latest_release ? <a href={latest_release.github_url}> {latest_release.name} </a> : "No releases";
 
     return (
         <StyledMLModel>
@@ -49,21 +45,5 @@ export function MLModel({ created_at, latest_release, name }: MLModelProps) {
             </MLModelHeader>
             <Attribution time={created_at} />
         </StyledMLModel>
-    );
-}
-
-/**
- * Version tag for a MLModel
- *
- * @param name - The name of the version
- * @param github_url - URL to the model on github
- * @returns A version tag
- */
-
-function ModelVersion({ name, github_url }: { name: string; github_url: string }) {
-    return (
-        <div>
-            <a href={github_url}> v{name} </a>
-        </div>
     );
 }

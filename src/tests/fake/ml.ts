@@ -3,7 +3,7 @@ import { merge } from "lodash";
 import nock from "nock";
 import { MLModel, MLModelMinimal, MLModelRelease } from "../../js/ml/types";
 
-type CreateFakeMLModelReleaseProps = {
+type CreateFakeMLModelReleaseOverrides = {
     id?: number;
     created_at?: string;
     download_url?: string;
@@ -17,10 +17,10 @@ type CreateFakeMLModelReleaseProps = {
 /**
  * Create a fake ML model release object
  *
- * @param props - optional properties for creating a fake ML models with specific values
+ * @param overrides - optional properties for creating a fake ML models with specific values
  */
-export function createFakeMLModelRelease(props?: CreateFakeMLModelReleaseProps): MLModelRelease {
-    const id = props?.id ?? faker.datatype.number(100);
+export function createFakeMLModelRelease(overrides?: CreateFakeMLModelReleaseOverrides): MLModelRelease {
+    const id = overrides?.id ?? faker.datatype.number(100);
     const defaultRelease = {
         id,
         created_at: faker.date.past().toISOString(),
@@ -32,10 +32,10 @@ export function createFakeMLModelRelease(props?: CreateFakeMLModelReleaseProps):
         size: faker.datatype.number(100000),
     };
 
-    return merge(defaultRelease, props);
+    return merge(defaultRelease, overrides);
 }
 
-type CreateFakeMLModelMinimalProps = {
+type CreateFakeMLModelMinimalOverrides = {
     id?: number;
     created_at?: string;
     description?: string;
@@ -47,46 +47,48 @@ type CreateFakeMLModelMinimalProps = {
 /**
  * Create a fake minimal ML model
  *
- * @param props - optional properties for creating a fake ML models with specific values
+ * @param overrides - optional properties for creating a fake ML models with specific values
  */
-export function createFakeMLModelMinimal(props?: CreateFakeMLModelMinimalProps): MLModelMinimal {
+export function createFakeMLModelMinimal(overrides?: CreateFakeMLModelMinimalOverrides): MLModelMinimal {
     const defaultMinimal = {
         id: faker.datatype.number(100),
         created_at: faker.date.past().toISOString(),
         description: faker.lorem.sentence(),
-        latest_release: createFakeMLModelRelease(props?.latest_release),
+        latest_release: createFakeMLModelRelease(overrides?.latest_release),
         name: `model-${faker.lorem.word()}`,
         release_count: faker.datatype.number(10),
     };
 
-    return merge(defaultMinimal, props);
+    return merge(defaultMinimal, overrides);
 }
 
-type CreateFakeMLModelProps = CreateFakeMLModelMinimalProps & {
+type CreateFakeMLModelOverrides = CreateFakeMLModelMinimalOverrides & {
     releases?: MLModelRelease[];
 };
 
 /**
  * Create a fake complete ML model
  *
- * @param props - optional properties for creating a fake ML models with specific values
+ * @param overrides - optional properties for creating a fake ML models with specific values
  */
-export function createFakeMLModel(props?: CreateFakeMLModelProps): MLModel {
-    const releases = props?.releases ?? [createFakeMLModelRelease()];
+export function createFakeMLModel(overrides?: CreateFakeMLModelOverrides): MLModel {
+    const releases = overrides?.releases ?? [createFakeMLModelRelease()];
 
     const defaultModel = {
-        ...createFakeMLModelMinimal(props),
+        ...createFakeMLModelMinimal(overrides),
         latest_release: releases[0],
         releases,
     };
 
-    return merge(defaultModel, props);
+    return merge(defaultModel, overrides);
 }
 
 /**
- * Create a fake complete ML model
+ * Sets up a mocked API route for fetching a list of ML models
  *
- * @param props - optional properties for creating a fake ML models with specific values
+ * @param MLModels - The list of ML models to be returned from the mocked API call
+ * @param last_synced_at - The date the models were last synced with virtool.ca
+ * @returns The nock scope for the mocked API call
  */
 export function mockApiGetModels(MLModels: MLModelMinimal[], last_synced_at?: string) {
     return nock("http://localhost").get("/api/ml").reply(200, { items: MLModels, last_synced_at });

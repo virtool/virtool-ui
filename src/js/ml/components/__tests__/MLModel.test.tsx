@@ -18,7 +18,7 @@ describe("<MLModels/>", () => {
         renderWithProviders(<MLModels />);
 
         expect(await screen.findByText(mlModel.name)).toBeInTheDocument();
-        expect(await screen.findByRole("link", { name: `v${mlModel.latest_release.name}` })).toHaveAttribute(
+        expect(await screen.findByRole("link", { name: `${mlModel.latest_release.name}` })).toHaveAttribute(
             "href",
             mlModel.latest_release.github_url,
         );

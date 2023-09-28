@@ -22,10 +22,10 @@ import { modelQueryKeys } from "../ml/queries";
 const keyFactories = {
     account: accountKeys,
     groups: groupQueryKeys,
+    models: modelQueryKeys,
     roles: roleQueryKeys,
     uploads: fileQueryKeys,
     users: userQueryKeys,
-    models: modelQueryKeys,
 };
 
 function reactQueryHandler(queryClient: QueryClient) {
