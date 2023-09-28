@@ -14,7 +14,6 @@ describe("<SubtractionToolbar />", () => {
     beforeEach(() => {
         props = {
             canModify: true,
-            term: "foo",
             onFind: vi.fn(),
         };
     });
@@ -32,45 +31,25 @@ describe("<SubtractionToolbar />", () => {
 
     it("should call onFind() when SearchInput changes", () => {
         const wrapper = shallow(<SubtractionToolbar {...props} />);
-        const e = {
+        const term = {
             target: {
                 value: "Foo",
             },
         };
-        wrapper.find(InputSearch).simulate("change", e);
-        expect(props.onFind).toHaveBeenCalledWith(e);
+        wrapper.find(InputSearch).simulate("change", term);
+        expect(props.onFind).toHaveBeenCalledWith("Foo");
     });
 });
 
 describe("mapStateToProps()", () => {
     let state;
 
-    beforeEach(() => {
-        state = {
-            subtraction: {
-                term: "Foo",
-            },
-        };
-    });
-
     it.each([true, false])("should return props when [canModify=%p]", canModify => {
         checkAdminRoleOrPermission.mockReturnValue(canModify);
 
         const props = mapStateToProps(state);
         expect(props).toEqual({
-            term: "Foo",
             canModify,
-        });
-    });
-
-    it("should return props when term in state is null", () => {
-        checkAdminRoleOrPermission.mockReturnValue(true);
-        state.subtraction.term = null;
-
-        const props = mapStateToProps(state);
-        expect(props).toEqual({
-            term: "",
-            canModify: true,
         });
     });
 });
@@ -79,12 +58,12 @@ describe("mapDispatchToProps()", () => {
     it.each(["Foo", ""])("should return onFind() in props that takes [value=%p]", value => {
         const dispatch = vi.fn();
         const props = mapDispatchToProps(dispatch);
-        const e = { target: { value } };
-        props.onFind(e);
+        const term = { target: { value } };
+        props.onFind(term);
 
         expect(dispatch).toHaveBeenCalledWith({
             type: FIND_SUBTRACTIONS.REQUESTED,
-            payload: { term: value === "Foo" ? "Foo" : null, page: 1 },
+            payload: { term },
         });
     });
 });

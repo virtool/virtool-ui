@@ -3,9 +3,9 @@
 exports[`<SubtractionToolbar /> > should not render create button when [canModify=false] 1`] = `
 <Toolbar>
   <ForwardRef
-    onChange={[MockFunction spy]}
+    onChange={[Function]}
     placeholder="Name"
-    value="foo"
+    value=""
   />
 </Toolbar>
 `;
@@ -13,9 +13,9 @@ exports[`<SubtractionToolbar /> > should not render create button when [canModif
 exports[`<SubtractionToolbar /> > should render create button when [canModify=true] 1`] = `
 <Toolbar>
   <ForwardRef
-    onChange={[MockFunction spy]}
+    onChange={[Function]}
     placeholder="Name"
-    value="foo"
+    value=""
   />
   <LinkButton
     color="blue"
