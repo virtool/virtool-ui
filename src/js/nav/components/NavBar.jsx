@@ -69,7 +69,7 @@ const StyledNavBar = styled.div`
 
 StyledNavBar.displayName = "NavBar";
 
-export const Bar = ({ administrator_role, dev, userId, onLogout, handle }) => (
+export const Bar = ({ administrator_role, dev, handle, userId, onLogout }) => (
     <StyledNavBar>
         <NavBarLeft>
             <NavBarLogo color="white" />
