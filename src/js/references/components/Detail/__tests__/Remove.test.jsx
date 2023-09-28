@@ -6,7 +6,7 @@ import { RemoveBanner } from "../../../../base";
 import { checkReferenceRight } from "../../../selectors";
 import { mapDispatchToProps, mapStateToProps, RemoveReference } from "../Remove";
 
-vi.mock("../../../selectors.js");
+vi.mock("../../../selectors.ts");
 
 describe("<RemoveReference />", () => {
     let props;

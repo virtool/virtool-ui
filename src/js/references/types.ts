@@ -71,6 +71,16 @@ export type ReferenceUser = UserNested & {
     remove: boolean;
 };
 
+/** Basic reference data for nested representation */
+export type ReferenceNested = {
+    /** The unique identifier */
+    id: string;
+    /** The build style dictating workflow compatibility */
+    data_type: ReferenceDataType;
+    /** The user defined name */
+    name: string;
+};
+
 export class Reference {
     clonedFrom: ReferenceClonedFrom | null;
     contributors: ReferenceContributor[];
