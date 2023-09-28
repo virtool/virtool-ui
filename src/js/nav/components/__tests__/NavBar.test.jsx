@@ -1,6 +1,8 @@
+import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import { logout } from "../../../account/actions";
 import { AdministratorRoles } from "../../../administration/types";
 import { Bar, mapDispatchToProps, mapStateToProps } from "../NavBar";
