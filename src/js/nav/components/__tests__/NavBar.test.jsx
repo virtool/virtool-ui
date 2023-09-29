@@ -1,6 +1,8 @@
-import { shallow } from "enzyme";
+import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import { logout } from "../../../account/actions";
 import { AdministratorRoles } from "../../../administration/types";
 import { Bar, mapDispatchToProps, mapStateToProps } from "../NavBar";
@@ -8,13 +10,27 @@ import { Bar, mapDispatchToProps, mapStateToProps } from "../NavBar";
 describe("<Bar />", () => {
     const props = {
         administrator_role: AdministratorRoles.FULL,
-        id: "foo",
-        pending: false,
+        dev: false,
+        handle: "Bob",
         onLogout: vi.fn(),
+        userId: "user_id_bob",
     };
-    it("should render", () => {
-        const wrapper = shallow(<Bar {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render", async () => {
+        renderWithRouter(<Bar {...props} />, {}, createBrowserHistory());
+        expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "Samples" })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "References" })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "HMM" })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "Subtractions" })).toBeInTheDocument();
+        expect(screen.getByRole("link", { name: "ML" })).toBeInTheDocument();
+
+        await userEvent.click(screen.getByRole("button"));
+
+        expect(screen.getByRole("menuitem", { name: "Signed in as Bob" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Account" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Administration" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Documentation" })).toBeInTheDocument();
+        expect(screen.getByRole("menuitem", { name: "Logout" })).toBeInTheDocument();
     });
 });
 

@@ -56,6 +56,11 @@ export const Sidebar = ({ fullAdministrator }) => (
                 <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
             </StyledSidebar>
         </Route>
+        <Route path="/ml">
+            <StyledSidebar>
+                <SidebarItem title="Browse" link="/ml" icon="th-list" />
+            </StyledSidebar>
+        </Route>
     </Switch>
 );
 

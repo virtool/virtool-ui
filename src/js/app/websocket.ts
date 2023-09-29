@@ -18,6 +18,7 @@ import { roleQueryKeys, userQueryKeys } from "../administration/querys";
 import { fileQueryKeys } from "../files/querys";
 import { groupQueryKeys } from "../groups/querys";
 import { indexQueryKeys } from "../indexes/querys";
+import { modelQueryKeys } from "../ml/queries";
 
 /** Get affected resource query keys by workflow name  */
 const workflowQueries = {
@@ -43,6 +44,7 @@ const keyFactories = {
     account: accountKeys,
     groups: groupQueryKeys,
     indexes: indexQueryKeys,
+    models: modelQueryKeys,
     roles: roleQueryKeys,
     uploads: fileQueryKeys,
     users: userQueryKeys,
