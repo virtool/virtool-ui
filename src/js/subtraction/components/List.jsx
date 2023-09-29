@@ -9,6 +9,17 @@ import SubtractionToolbar from "./Toolbar";
 
 const renderRow = index => <SubtractionItem key={index} index={index} />;
 
+/**
+ * Display and filter a list of subtractions
+ *
+ * @param onLoadNextPage - Function to load the next page of subtraction operations
+ * @param documents - List of subtraction documents to display
+ * @param page - The current page of list
+ * @param page_count - The total number of pages
+ * @param total_count - The total number of subtractions
+ * @param fetched - Indicates whether subtraction data has been fetched
+ * @returns SubtractionList - A list of subtractions
+ */
 export function SubtractionList({ onLoadNextPage, documents, page, page_count, total_count, fetched }) {
     const { value: term } = useUrlSearchParams({
         key: "find",

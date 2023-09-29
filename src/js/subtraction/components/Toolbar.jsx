@@ -5,6 +5,13 @@ import { InputSearch, LinkButton, Toolbar } from "../../base";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { findSubtractions } from "../actions";
 
+/**
+ * Managing the toolbar search filtering
+ *
+ * @param onFind - The dispatch action to update the search filtering results
+ * @param canModify - The user's permissions to modify
+ * @returns Toolbar - A search filtering toolbar
+ */
 export const SubtractionToolbar = ({ onFind, canModify }) => {
     const { value: term, setValue: setTerm } = useUrlSearchParams({
         key: "find",
@@ -16,7 +23,9 @@ export const SubtractionToolbar = ({ onFind, canModify }) => {
     };
     let createButton;
     if (canModify) {
-        createButton = <LinkButton color="blue" to="subtractions/create" icon="plus-square" tip="Create" />;
+        createButton = (
+            <LinkButton color="blue" to="subtractions/create" icon="plus-square" tip="Create" aria-label="create" />
+        );
     }
 
     return (
@@ -33,7 +42,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = dispatch => ({
     onFind: term => {
-        dispatch(findSubtractions(term));
+        dispatch(findSubtractions(term, 1));
     },
 });
 
