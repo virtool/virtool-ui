@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { useMutation } from "react-query";
 import { Input, InputError, InputGroup, InputLabel, InputPassword } from "../base";
 import { createFirst } from "../users/api";
@@ -11,15 +11,13 @@ const initialValues = {
     password: "",
 };
 
+/**
+ * Responsible for creating the first Virtool user
+ */
 export default function FirstUser() {
-    const [error, setError] = useState("");
-
     const mutation = useMutation(createFirst, {
         onSuccess: () => {
             window.location.reload();
-        },
-        onError: error => {
-            setError(error.response.body.message);
         },
     });
 
@@ -54,7 +52,7 @@ export default function FirstUser() {
                             <WallButton type="submit" icon="user-plus" color="blue">
                                 Create User
                             </WallButton>
-                            <InputError>{error}</InputError>
+                            <InputError>{mutation.isError ? mutation.error.response.body.message : null}</InputError>
                         </Form>
                     </Formik>
                 </WallLoginContainer>
