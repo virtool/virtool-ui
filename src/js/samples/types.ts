@@ -19,7 +19,6 @@ export enum WorkflowState {
     INCOMPATIBLE = "incompatible",
 }
 
-
 /* All Library types */
 export enum LibraryType {
     amplicon = "amplicon",
