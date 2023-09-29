@@ -47,7 +47,7 @@ export const getReferenceItemProgress = createSelector([getReferenceItemTaskId, 
  *
  * @param {object} The application state
  * @param {string} The right to check for (eg. modify_otu)
- * @returns {boolean} Whether the right is possessed the the account
+ * @returns {boolean} Whether the right is possessed by the account
  */
 export const checkReferenceRight = createCachedSelector(
     [getAccount, getReferenceDetail, (state, right) => right],

@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getReferenceItemProgress } from "../../../selectors";
 import { mapStateToProps, ReferenceItem } from "../Item";
 
-vi.mock("../../../selectors.js");
+vi.mock("../../../selectors.ts");
 
 describe("<ReferenceItem />", () => {
     let props;
