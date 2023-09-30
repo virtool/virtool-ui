@@ -27,7 +27,7 @@ export default function FirstUser() {
             password: values.password,
         });
     };
-
+    // alert(JSON.stringify(mutation.error.response.body.message));
     return (
         <WallContainer>
             <WallDialog>
@@ -52,7 +52,9 @@ export default function FirstUser() {
                             <WallButton type="submit" icon="user-plus" color="blue">
                                 Create User
                             </WallButton>
-                            <InputError>{mutation.isError ? mutation.error.response.body.message : null}</InputError>
+                            {mutation.isError && mutation.error.response ? (
+                                <InputError>{mutation.error.response.body.message}</InputError>
+                            ) : null}
                         </Form>
                     </Formik>
                 </WallLoginContainer>
