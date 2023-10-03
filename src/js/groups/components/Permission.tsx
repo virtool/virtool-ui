@@ -19,7 +19,7 @@ type GroupPermissionTypes = {
  * @param active - Indicates whether the permission is currently active.
  * @param permission - The name of permissions
  * @param onClick - Handles click event when permission is clicked
- * @returns A list of permissions for a group
+ * @returns A list of permissions corresponding to a group
  */
 export function GroupPermission({ active, permission, onClick }: GroupPermissionTypes) {
     return (
