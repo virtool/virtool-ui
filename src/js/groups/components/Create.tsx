@@ -21,19 +21,19 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the group"),
 });
 
-type CreateProps = {
+type CreateGroupProps = {
     show: boolean;
     onHide: () => void;
 };
 
 /**
- * Creation of a new Group
+ * A dialog for creating a new group
  *
- * @param show - Gets the status of createGroup
- * @param onHide - Hides the create group form on success
- * @returns A newly created Group
+ * @param show - Indicates whether the modal for creating a group is visible
+ * @param onHide - A callback to hide the dialog
+ * @returns A dialog for creating a new group
  */
-export function Create({ show, onHide }: CreateProps) {
+export function CreateGroup({ show, onHide }: CreateGroupProps) {
     const createGroupMutation = useCreateGroup();
 
     const handleSubmit = (values: { name: string }) => {
@@ -84,4 +84,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Create);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateGroup);
