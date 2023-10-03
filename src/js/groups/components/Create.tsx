@@ -57,9 +57,7 @@ export function Create({ show, onHide }: CreateProps) {
                             <InputGroup>
                                 <InputLabel>Name</InputLabel>
                                 <Field name="name" id="name" as={Input} />
-                                <InputError>
-                                    {touched.name && (createGroupMutation.error?.response.body.message || errors.name)}
-                                </InputError>
+                                <InputError>{touched.name && errors.name}</InputError>
                             </InputGroup>
                         </ModalBody>
                         <ModalFooter>
