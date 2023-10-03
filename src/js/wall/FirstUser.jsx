@@ -12,7 +12,7 @@ const initialValues = {
 };
 
 /**
- * Responsible for creating the first Virtool user
+ * A form for creating the first instance user.
  */
 export default function FirstUser() {
     const mutation = useMutation(createFirst, {
@@ -27,7 +27,7 @@ export default function FirstUser() {
             password: values.password,
         });
     };
-    // alert(JSON.stringify(mutation.error.response.body.message));
+
     return (
         <WallContainer>
             <WallDialog>
@@ -52,9 +52,7 @@ export default function FirstUser() {
                             <WallButton type="submit" icon="user-plus" color="blue">
                                 Create User
                             </WallButton>
-                            {mutation.isError && mutation.error.response ? (
-                                <InputError>{mutation.error.response.body.message}</InputError>
-                            ) : null}
+                            {mutation.isError ? <InputError>{mutation.error.response?.body.message}</InputError> : null}
                         </Form>
                     </Formik>
                 </WallLoginContainer>
