@@ -12,7 +12,9 @@ const initialValues = {
 };
 
 /**
- * A form for creating the first instance user.
+ * A form for creating the first instance user
+ *
+ * @returns A form for creating the first instance user
  */
 export default function FirstUser() {
     const mutation = useMutation(createFirst, {
