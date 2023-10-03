@@ -21,10 +21,22 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the group"),
 });
 
-export const Create = ({ show, onHide }) => {
+type CreateProps = {
+    show: boolean;
+    onHide: () => void;
+};
+
+/**
+ * Creation of a new Group
+ *
+ * @param show - Gets the status of createGroup
+ * @param onHide - Hides the create group form on success
+ * @returns A newly created Group
+ */
+export function Create({ show, onHide }: CreateProps) {
     const createGroupMutation = useCreateGroup();
 
-    const handleSubmit = values => {
+    const handleSubmit = (values: { name: string }) => {
         createGroupMutation.mutate(
             { name: values.name },
             {
@@ -58,16 +70,20 @@ export const Create = ({ show, onHide }) => {
             </Formik>
         </Modal>
     );
-};
+}
 
-const mapStateToProps = state => ({
-    show: Boolean(getRouterLocationStateValue(state, "createGroup")),
-});
+function mapStateToProps(state) {
+    return {
+        show: Boolean(getRouterLocationStateValue(state, "createGroup")),
+    };
+}
 
-const mapDispatchToProps = dispatch => ({
-    onHide: () => {
-        dispatch(pushState({ createGroup: false }));
-    },
-});
+function mapDispatchToProps(dispatch) {
+    return {
+        onHide: () => {
+            dispatch(pushState({ createGroup: false }));
+        },
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Create);
