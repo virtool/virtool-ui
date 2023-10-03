@@ -30,7 +30,7 @@ export function useListGroups() {
  * @param {UseQueryOptions} options The react-query options to use.
  * @returns {UseQueryResult} The non-paginated list of groups.
  */
-export function useFetchGroup(id: string, options: UseQueryOptions<Group>) {
+export function useFetchGroup(id: string | number, options: UseQueryOptions<Group>) {
     return useQuery<Group>(groupQueryKeys.detail(id), () => getGroup(id), options);
 }
 

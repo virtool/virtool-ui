@@ -1,6 +1,6 @@
 import { UserNested } from "../users/types";
 
-export type GroupMinimal = { id: string; name?: string };
+export type GroupMinimal = { id: string | number; name?: string };
 
 export type Group = GroupMinimal & {
     permissions: Permissions;
@@ -41,7 +41,7 @@ type PermissionsUpdate = {
 };
 
 export type GroupUpdate = {
-    id: string;
+    id: string | number;
     name?: string;
     permissions?: PermissionsUpdate;
 };
