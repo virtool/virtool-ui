@@ -93,6 +93,23 @@ type SampleItemProps = {
     onQuickAnalyze: (id: string) => void;
 };
 
+/**
+ * A condensed sample item for use in a list of samples
+ *
+ * @param id - The unique identifier of the sample
+ * @param index - Index of the sample
+ * @param checked - Whether the sample is selected
+ * @param handle - The user who created the sample
+ * @param created_at - The date the sample was created
+ * @param name - Name of the sample
+ * @param library_type - Library type associated with the sample
+ * @param ready - Whether the sample is ready
+ * @param workflows - Workflows associated with the sample
+ * @param labels - Labels associated with the sample
+ * @param job - Information about the job associated with the sample
+ * @param onSelect - Callback to handle sample selection
+ * @param onQuickAnalyze - Callback to trigger quick analysis
+ */
 export function SampleItem({
     id,
     index,

@@ -16,6 +16,13 @@ const SampleIconContainer = styled.div`
     }
 `;
 
+/**
+ * Icon indicating the status of sample
+ *
+ * @param ready - Whether the sample is ready
+ * @param job - The related job object
+ * @param onClick - Callback to handle click event
+ */
 export function EndIcon({ ready, job, onClick }) {
     if (ready) {
         return (
