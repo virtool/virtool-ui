@@ -121,7 +121,6 @@ export function SampleItem({
     ready,
     workflows,
     labels,
-    job,
     onSelect,
     onQuickAnalyze,
 }: SampleItemProps) {
@@ -157,14 +156,14 @@ export function SampleItem({
                 <WorkflowTags id={id} workflows={workflows} />
             </SampleItemWorkflows>
             <SampleItemIcon>
-                <EndIcon ready={ready} job={job} onClick={handleQuickAnalyze} />
+                <EndIcon ready={ready} onClick={handleQuickAnalyze} />
             </SampleItemIcon>
         </StyledSampleItem>
     );
 }
 
 export function mapStateToProps(state, ownProps) {
-    const { id, ready, index, user, created_at, name, library_type, workflows, labels, job } = find(
+    const { id, ready, index, user, created_at, name, library_type, workflows, labels } = find(
         state.samples.documents,
         {
             id: ownProps.id,
@@ -184,7 +183,6 @@ export function mapStateToProps(state, ownProps) {
         workflows,
         labels,
         checked,
-        job,
     };
 }
 
