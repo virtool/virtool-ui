@@ -48,7 +48,7 @@ const AnalysisItemTop = styled.div`
 `;
 
 /**
- * Condensed analysis item for user in a list of analyses
+ * Condensed analysis item for use in a list of analyses
  *
  * @param created_at - The date the analysis was created
  * @param id - The unique identifier of the analysis
@@ -58,7 +58,7 @@ const AnalysisItemTop = styled.div`
  * @param subtractions - Subtraction associated with the analysis
  * @param user - User who created the analysis
  * @param workflow - Workflow associated with the analysis
- * @param job - Job associated with the sample
+ * @param job - Job associated with the analysis
  * @param canModify - Whether the user can modify the analysis
  */
 function AnalysisItem({
