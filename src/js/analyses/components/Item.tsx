@@ -74,7 +74,6 @@ function AnalysisItem({
     canModify,
 }: AnalysisMinimal) {
     const sampleId = useRouteMatch().params.sampleId;
-    // alert(workflow);
 
     const mutation = useRemoveAnalysis();
 
