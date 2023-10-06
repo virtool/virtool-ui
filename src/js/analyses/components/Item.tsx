@@ -1,11 +1,11 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
+import { useCheckAdminRole } from "../../administration/hooks";
+import { AdministratorRoles } from "../../administration/types";
 import { getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { Attribution, BoxSpaced, Icon, SlashList } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
-import { getCanModify } from "../../samples/selectors";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { useRemoveAnalysis } from "../querys";
 import { AnalysisMinimal } from "../types";
@@ -53,28 +53,26 @@ const AnalysisItemTop = styled.div`
  * @param created_at - The date the analysis was created
  * @param id - The unique identifier of the analysis
  * @param index - Index associated with the analysis
+ * @param job - Job associated with the analysis
  * @param ready - Whether the analysis is ready
  * @param reference - Reference associated with the analysis
  * @param subtractions - Subtraction associated with the analysis
  * @param user - User who created the analysis
  * @param workflow - Workflow associated with the analysis
- * @param job - Job associated with the analysis
- * @param canModify - Whether the user can modify the analysis
  */
-function AnalysisItem({
+export default function AnalysisItem({
     created_at,
     id,
     index,
+    job,
     ready,
     reference,
     subtractions,
     user,
     workflow,
-    job,
-    canModify,
 }: AnalysisMinimal) {
     const sampleId = useRouteMatch().params.sampleId;
-
+    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
     const mutation = useRemoveAnalysis();
 
     const onRemove = () => {
@@ -114,11 +112,3 @@ function AnalysisItem({
         </StyledAnalysisItem>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        canModify: getCanModify(state),
-    };
-}
-
-export default connect(mapStateToProps)(AnalysisItem);

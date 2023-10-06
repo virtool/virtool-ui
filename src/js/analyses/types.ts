@@ -30,7 +30,6 @@ export type AnalysisMinimal = {
     user: UserNested;
     /** Workflow associated with the analysis */
     workflow: string;
-    canModify: boolean;
 };
 
 /** An analysis file */
