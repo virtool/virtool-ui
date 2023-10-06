@@ -78,59 +78,58 @@ const StyledSampleItem = styled(Box)`
 `;
 
 type SampleItemProps = {
-    id: string;
-    index: number;
+    /** Whether the sample is selected */
     checked: boolean;
-    ready: boolean;
-    name: string;
+    /** The date the sample was created */
     created_at: string;
+    /** The user who created the sample */
     handle: string;
+    /** The unique identifier of the sample */
+    id: string;
+    /** Index of the sample */
+    index: number;
+    /** Information about the job associated with the sample */
     job?: JobMinimal;
-    library_type: LibraryType;
+    /** Labels associated with the sample */
     labels: Array<LabelNested>;
-    workflows: SampleWorkflows;
-    onSelect: (id: string, index: number, shiftKey: boolean) => void;
+    /** Library type associated with the sample */
+    library_type: LibraryType;
+    /** Name of the sample */
+    name: string;
+    /** Callback to trigger quick analysis */
     onQuickAnalyze: (id: string) => void;
+    /** Callback to handle sample selection */
+    onSelect: (id: string, index: number, shiftKey: boolean) => void;
+    /** Whether the sample is ready */
+    ready: boolean;
+    /** Workflows associated with the sample */
+    workflows: SampleWorkflows;
 };
 
 /**
  * A condensed sample item for use in a list of samples
- *
- * @param id - The unique identifier of the sample
- * @param index - Index of the sample
- * @param checked - Whether the sample is selected
- * @param handle - The user who created the sample
- * @param created_at - The date the sample was created
- * @param name - Name of the sample
- * @param library_type - Library type associated with the sample
- * @param ready - Whether the sample is ready
- * @param workflows - Workflows associated with the sample
- * @param labels - Labels associated with the sample
- * @param job - Information about the job associated with the sample
- * @param onSelect - Callback to handle sample selection
- * @param onQuickAnalyze - Callback to trigger quick analysis
  */
-export function SampleItem({
+function SampleItem({
+    checked,
+    created_at,
+    handle,
     id,
     index,
-    checked,
-    handle,
-    created_at,
-    name,
+    labels,
     library_type,
+    name,
+    onQuickAnalyze,
+    onSelect,
     ready,
     workflows,
-    labels,
-    onSelect,
-    onQuickAnalyze,
 }: SampleItemProps) {
-    const handleCheck = e => {
+    function handleCheck(e) {
         onSelect(id, index, e.shiftKey);
-    };
+    }
 
-    const handleQuickAnalyze = () => {
+    function handleQuickAnalyze() {
         onQuickAnalyze(id);
-    };
+    }
 
     return (
         <StyledSampleItem>
@@ -162,15 +161,13 @@ export function SampleItem({
     );
 }
 
-export function mapStateToProps(state, ownProps) {
+function mapStateToProps(state, ownProps) {
     const { id, ready, index, user, created_at, name, library_type, workflows, labels } = find(
         state.samples.documents,
         {
             id: ownProps.id,
         },
     );
-
-    const checked = getIsSelected(state, ownProps.id);
 
     return {
         id,
@@ -182,11 +179,11 @@ export function mapStateToProps(state, ownProps) {
         library_type,
         workflows,
         labels,
-        checked,
+        checked: getIsSelected(state, ownProps.id),
     };
 }
 
-export function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {
         onSelect: () => {
             dispatch(selectSample(ownProps.id));
