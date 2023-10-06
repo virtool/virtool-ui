@@ -1,9 +1,8 @@
 import { Field, Form, Formik } from "formik";
-import { get } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
+import { useMutation } from "react-query";
 import { Input, InputError, InputGroup, InputLabel, InputPassword } from "../base";
-import { createFirstUser } from "../users/actions";
+import { createFirst } from "../users/api";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
 
@@ -12,9 +11,23 @@ const initialValues = {
     password: "",
 };
 
-export const FirstUser = ({ onSubmit, errors }) => {
+/**
+ * A form for creating the first instance user
+ *
+ * @returns A form for creating the first instance user
+ */
+export default function FirstUser() {
+    const mutation = useMutation(createFirst, {
+        onSuccess: () => {
+            window.location.reload();
+        },
+    });
+
     const handleSubmit = values => {
-        onSubmit(values.username, values.password);
+        mutation.mutate({
+            handle: values.username,
+            password: values.password,
+        });
     };
 
     return (
@@ -32,42 +45,20 @@ export const FirstUser = ({ onSubmit, errors }) => {
                             <InputGroup>
                                 <InputLabel>Username</InputLabel>
                                 <Field type="text" name="username" as={Input} autoFocus />
-                                {errors.usernameErrors.map(error => (
-                                    <InputError key={error}>{error}</InputError>
-                                ))}
                             </InputGroup>
                             <InputGroup>
                                 <InputLabel htmlFor="password">Password</InputLabel>
                                 <Field id="password" name="password" as={InputPassword} />
-                                {errors.passwordErrors.map(error => (
-                                    <InputError key={error}>{error}</InputError>
-                                ))}
                             </InputGroup>
 
                             <WallButton type="submit" icon="user-plus" color="blue">
                                 Create User
                             </WallButton>
-                            <InputError>{errors.generalError}</InputError>
+                            {mutation.isError ? <InputError>{mutation.error.response?.body.message}</InputError> : null}
                         </Form>
                     </Formik>
                 </WallLoginContainer>
             </WallDialog>
         </WallContainer>
     );
-};
-
-export const mapDispatchToProps = dispatch => ({
-    onSubmit: (username, password) => {
-        dispatch(createFirstUser(username, password));
-    },
-});
-
-export const mapStateToProps = state => ({
-    errors: {
-        generalError: get(state, "errors.CREATE_FIRST_USER_ERROR.message", ""),
-        usernameErrors: get(state, "errors.CREATE_FIRST_USER_ERROR.errors.user_id", [""]),
-        passwordErrors: get(state, "errors.CREATE_FIRST_USER_ERROR.errors.password", [""]),
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FirstUser);
+}
