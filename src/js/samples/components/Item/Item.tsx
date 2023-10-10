@@ -162,7 +162,7 @@ function SampleItem({
 }
 
 function mapStateToProps(state, ownProps) {
-    const { id, ready, index, user, created_at, name, library_type, workflows, labels } = find(
+    const { created_at, id, index, labels, library_type, name, ready, user, workflows } = find(
         state.samples.documents,
         {
             id: ownProps.id,
@@ -170,16 +170,16 @@ function mapStateToProps(state, ownProps) {
     );
 
     return {
-        id,
-        ready,
-        index,
-        handle: user.handle,
-        created_at,
-        name,
-        library_type,
-        workflows,
-        labels,
         checked: getIsSelected(state, ownProps.id),
+        created_at,
+        handle: user.handle,
+        id,
+        index,
+        labels,
+        library_type,
+        name,
+        ready,
+        workflows,
     };
 }
 
