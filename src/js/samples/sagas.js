@@ -1,18 +1,23 @@
 import { getLocation, push } from "connected-react-router";
-import { includes } from "lodash-es";
+import { has, includes } from "lodash-es";
 import { put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
 import { pushState } from "../app/actions";
 import {
     CREATE_SAMPLE,
     FIND_SAMPLES,
+    GET_JOB,
+    GET_LINKED_JOB,
     GET_SAMPLE,
     REMOVE_SAMPLE,
     UPDATE_SAMPLE,
     UPDATE_SAMPLE_RIGHTS,
     UPDATE_SEARCH,
+    WS_UPDATE_JOB,
     WS_UPDATE_SAMPLE,
 } from "../app/actionTypes";
 import { deletePersistentFormState } from "../forms/actions";
+import * as jobsAPI from "../jobs/api";
+import { getJobDetailId, getLinkedJobs } from "../jobs/selectors";
 import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
 import { getSampleSucceeded } from "./actions";
 import * as samplesAPI from "./api";
@@ -28,6 +33,23 @@ export function* watchSamples() {
     yield takeEvery(UPDATE_SAMPLE_RIGHTS.REQUESTED, updateSampleRights);
     yield throttle(300, REMOVE_SAMPLE.REQUESTED, removeSample);
     yield takeEvery(WS_UPDATE_SAMPLE, wsUpdateSample);
+    yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
+    yield takeLatest([WS_UPDATE_JOB], findSamples);
+}
+
+export function* wsUpdateJob(action) {
+    const jobId = action.payload.id;
+    const jobDetailId = yield select(getJobDetailId);
+
+    if (jobId === jobDetailId) {
+        yield apiCall(jobsAPI.get, { jobId }, GET_JOB);
+    }
+
+    const linkedJobs = yield select(getLinkedJobs);
+
+    if (has(linkedJobs, jobId)) {
+        yield apiCall(jobsAPI.get, { jobId }, GET_LINKED_JOB);
+    }
 }
 
 export function* wsUpdateSample(action) {

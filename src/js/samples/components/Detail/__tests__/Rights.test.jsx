@@ -5,7 +5,7 @@ import { InputSelect } from "../../../../base";
 import { getCanModifyRights } from "../../../selectors";
 import { mapDispatchToProps, mapStateToProps, SampleRights } from "../Rights";
 
-vi.mock("../../../selectors.js");
+vi.mock("../../../selectors.ts");
 
 describe("<SampleRights />", () => {
     let props;
