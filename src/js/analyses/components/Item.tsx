@@ -1,20 +1,18 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
+import { useCheckAdminRole } from "../../administration/hooks";
+import { AdministratorRoles } from "../../administration/types";
+import { getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { Attribution, BoxSpaced, Icon, SlashList } from "../../base";
-import { getCanModify } from "../../samples/selectors";
+import { ProgressCircle } from "../../base/ProgressCircle";
 import { getWorkflowDisplayName } from "../../utils/utils";
-import { removeAnalysis } from "../actions";
+import { useRemoveAnalysis } from "../querys";
+import { AnalysisMinimal } from "../types";
 import { AnalysisItemRightIcon } from "./RightIcon";
 
 const StyledAnalysisItem = styled(BoxSpaced)`
     color: ${props => props.theme.color.greyDarkest};
-
-    &:hover {
-        ${props => (props.ready ? "background-color: lightgrey;" : "")};
-    }
 `;
 
 const AnalysisItemTag = styled.span`
@@ -49,14 +47,33 @@ const AnalysisItemTop = styled.div`
     }
 `;
 
-function AnalysisItem({ canModify, created_at, id, index, ready, reference, subtractions, user, workflow, onRemove }) {
+/**
+ * Condensed analysis item for use in a list of analyses
+ */
+export default function AnalysisItem({
+    created_at,
+    id,
+    index,
+    job,
+    ready,
+    reference,
+    subtractions,
+    user,
+    workflow,
+}: AnalysisMinimal) {
     const sampleId = useRouteMatch().params.sampleId;
+    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
+    const onRemove = useRemoveAnalysis(id);
 
     return (
         <StyledAnalysisItem>
             <AnalysisItemTop>
                 <Link to={`/samples/${sampleId}/analyses/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
-                <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} ready={ready} />
+                {ready ? (
+                    <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} ready={ready} />
+                ) : (
+                    <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} size={sizes.md} />
+                )}
             </AnalysisItemTop>
             <Attribution user={user.handle} time={created_at} />
             <AnalysisItemTags>
@@ -81,19 +98,3 @@ function AnalysisItem({ canModify, created_at, id, index, ready, reference, subt
         </StyledAnalysisItem>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        canModify: getCanModify(state),
-    };
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-    return {
-        onRemove: () => {
-            dispatch(removeAnalysis(ownProps.id));
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AnalysisItem);
