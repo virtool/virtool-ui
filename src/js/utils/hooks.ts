@@ -43,40 +43,30 @@ export const useDidUpdateEffect = (onUpdate, deps) => {
     }, deps);
 };
 
-export function getUrlSearchParams(key) {
+function updateUrlSearchParams(value, key) {
     const params = new URLSearchParams(window.location.search);
-    return params.get(key) || "";
-}
-
-export function updateUrlSearchParams(newTerm, key) {
-    const search = new URLSearchParams(window.location.search);
-    search.set(key, newTerm);
-    const newUrl = `${window.location.pathname}?${search.toString()}`;
-    window.history.replaceState({}, "", newUrl);
+    params.set(key, value);
+    window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
 }
 
 /**
  * Hook for managing and synchronizing URL search parameters with a component's state
  *
  * @param key - The search parameter key to be managed
- * @param defaultValue - The default value to use when the search parameter is not present in the URL
+ * @param defaultValue - The default value to use when the search parameter key is not present in the URL
  * @returns Object - An object containing the current value and a function to set the URL search parameter
  */
 export function useUrlSearchParams({ key, defaultValue }) {
-    const searchTerm = getUrlSearchParams(key);
+    const params = new URLSearchParams(window.location.search);
+    const searchValue = params.get(key);
 
     useEffect(() => {
-        if (!searchTerm && defaultValue) {
+        if (!searchValue && defaultValue) {
             updateUrlSearchParams(defaultValue, key);
         }
-    }, [key, defaultValue, searchTerm]);
-
-    const setUrlValue = newValue => {
-        updateUrlSearchParams(newValue, key);
-    };
+    }, [key, defaultValue]);
 
     return {
-        value: searchTerm || defaultValue,
-        setValue: setUrlValue,
+        value: searchValue || defaultValue,
     };
 }
