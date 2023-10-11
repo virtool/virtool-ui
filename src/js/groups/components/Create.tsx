@@ -22,21 +22,19 @@ const validationSchema = Yup.object().shape({
 });
 
 type CreateGroupProps = {
+    /** Indicates whether the modal for creating a group is visible */
     show: boolean;
+    /** A callback to hide the dialog */
     onHide: () => void;
 };
 
 /**
  * A dialog for creating a new group
- *
- * @param show - Indicates whether the modal for creating a group is visible
- * @param onHide - A callback to hide the dialog
- * @returns A dialog for creating a new group
  */
 export function CreateGroup({ show, onHide }: CreateGroupProps) {
     const createGroupMutation = useCreateGroup();
 
-    const handleSubmit = (values: { name: string }) => {
+    function handleSubmit(values: { name: string }) {
         createGroupMutation.mutate(
             { name: values.name },
             {
@@ -45,7 +43,7 @@ export function CreateGroup({ show, onHide }: CreateGroupProps) {
                 },
             },
         );
-    };
+    }
 
     return (
         <Modal label="Create" onHide={onHide} show={show} size="sm">

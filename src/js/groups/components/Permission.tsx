@@ -8,18 +8,16 @@ const StyledGroupPermission = styled(SelectBoxGroupSection)`
 `;
 
 type GroupPermissionProps = {
+    /** Whether the permission is currently active */
     active: boolean;
+    /** The name of the permission */
     permission: string;
+    /** Handles click event when permission is clicked */
     onClick: () => void;
 };
 
 /**
  * Group permission checkbox
- *
- * @param active - Whether the permission is currently active
- * @param permission - The name of the permission
- * @param onClick - Handles click event when permission is clicked
- * @returns A list of permissions corresponding to a group
  */
 export function GroupPermission({ active, permission, onClick }: GroupPermissionProps) {
     return (
