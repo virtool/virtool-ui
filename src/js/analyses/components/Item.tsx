@@ -49,16 +49,6 @@ const AnalysisItemTop = styled.div`
 
 /**
  * Condensed analysis item for use in a list of analyses
- *
- * @param created_at - The date the analysis was created
- * @param id - The unique identifier of the analysis
- * @param index - Index associated with the analysis
- * @param job - Job associated with the analysis
- * @param ready - Whether the analysis is ready
- * @param reference - Reference associated with the analysis
- * @param subtractions - Subtraction associated with the analysis
- * @param user - User who created the analysis
- * @param workflow - Workflow associated with the analysis
  */
 export default function AnalysisItem({
     created_at,
@@ -73,11 +63,7 @@ export default function AnalysisItem({
 }: AnalysisMinimal) {
     const sampleId = useRouteMatch().params.sampleId;
     const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
-    const mutation = useRemoveAnalysis();
-
-    const onRemove = () => {
-        mutation.mutate({ analysisId: id });
-    };
+    const onRemove = useRemoveAnalysis(id);
 
     return (
         <StyledAnalysisItem>

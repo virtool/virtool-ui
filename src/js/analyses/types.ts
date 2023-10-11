@@ -12,42 +12,55 @@ export type AnalysisSample = {
 
 /** Minimal Analysis used for websocket messages and resource listings */
 export type AnalysisMinimal = {
+    /** When the analysis was created */
     created_at: string;
     /** The unique identifier for the analysis */
     id: string;
-    /** Index associated with the analysis */
+    /** The reference index used in the analysis */
     index: IndexNested;
-    /** Information about the job associated with the analysis */
+    /** The job that ran the analysis workflow */
     job?: JobMinimal;
+    /** Whether the analysis is complete and ready to view */
     ready: boolean;
-    /** Reference associated with the analysis */
+    /** The reference used for the analysis */
     reference: ReferenceNested;
+    /** The parent sample for the analysis */
     sample: AnalysisSample;
-    /** Subtractions associated with the analysis */
+    /** Subtractions used in the analysis */
     subtractions: Array<SubtractionNested>;
+    /** When the analysis was last updated */
     updated_at: Date;
     /** The user who created the analysis */
     user: UserNested;
-    /** Workflow associated with the analysis */
+    /** Workflow used to generate the analysis */
     workflow: string;
 };
 
 /** An analysis file */
 export type AnalysisFile = {
+    /** The analysis ID */
     analysis: string;
+    /** The file description */
     description?: string | null;
+    /** The format of the file */
     format: string;
+    /** The unique identifier */
     id: number;
+    /** The file name */
     name: string;
+    /** The disk name of the file */
     name_on_disk: string;
     /** The size of the file in bytes */
     size?: number;
+    /** When the analysis file was uploaded */
     uploaded_at?: Date;
 };
 
 /** A complete Analysis */
 export type Analysis = AnalysisMinimal & {
+    /** Files generated during the analysis that are available for download */
     files: Array<AnalysisFile>;
+    /** The results of the analysis that will be presented to the user */
     results?: { [key: string]: any };
 };
 
