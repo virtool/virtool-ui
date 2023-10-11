@@ -21,10 +21,20 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the group"),
 });
 
-export const Create = ({ show, onHide }) => {
+type CreateGroupProps = {
+    /** Indicates whether the modal for creating a group is visible */
+    show: boolean;
+    /** A callback to hide the dialog */
+    onHide: () => void;
+};
+
+/**
+ * A dialog for creating a new group
+ */
+export function CreateGroup({ show, onHide }: CreateGroupProps) {
     const createGroupMutation = useCreateGroup();
 
-    const handleSubmit = values => {
+    function handleSubmit(values: { name: string }) {
         createGroupMutation.mutate(
             { name: values.name },
             {
@@ -33,7 +43,7 @@ export const Create = ({ show, onHide }) => {
                 },
             },
         );
-    };
+    }
 
     return (
         <Modal label="Create" onHide={onHide} show={show} size="sm">
@@ -45,9 +55,7 @@ export const Create = ({ show, onHide }) => {
                             <InputGroup>
                                 <InputLabel>Name</InputLabel>
                                 <Field name="name" id="name" as={Input} />
-                                <InputError>
-                                    {touched.name && (createGroupMutation.error?.response.body.message || errors.name)}
-                                </InputError>
+                                <InputError>{touched.name && errors.name}</InputError>
                             </InputGroup>
                         </ModalBody>
                         <ModalFooter>
@@ -58,16 +66,20 @@ export const Create = ({ show, onHide }) => {
             </Formik>
         </Modal>
     );
-};
+}
 
-const mapStateToProps = state => ({
-    show: Boolean(getRouterLocationStateValue(state, "createGroup")),
-});
+function mapStateToProps(state) {
+    return {
+        show: Boolean(getRouterLocationStateValue(state, "createGroup")),
+    };
+}
 
-const mapDispatchToProps = dispatch => ({
-    onHide: () => {
-        dispatch(pushState({ createGroup: false }));
-    },
-});
+function mapDispatchToProps(dispatch) {
+    return {
+        onHide: () => {
+            dispatch(pushState({ createGroup: false }));
+        },
+    };
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Create);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateGroup);
