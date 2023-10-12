@@ -58,15 +58,15 @@ function updateUrlSearchParams(value, key) {
  */
 export function useUrlSearchParams({ key, defaultValue }) {
     const params = new URLSearchParams(window.location.search);
-    const searchValue = params.get(key);
+    const value = params.get(key) || "";
 
     useEffect(() => {
-        if (!searchValue && defaultValue) {
+        if (!value && defaultValue) {
             updateUrlSearchParams(defaultValue, key);
         }
     }, [key, defaultValue]);
 
     return {
-        value: searchValue || defaultValue,
+        value: value || defaultValue,
     };
 }
