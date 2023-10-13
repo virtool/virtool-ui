@@ -1,4 +1,4 @@
-import { find } from "lodash-es";
+import { find, sortBy } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getColor } from "../../app/theme";
@@ -52,10 +52,10 @@ export const Groups = () => {
     });
 
     useEffect(() => {
-        if (groups && !find(groups, { id: selectedGroup })) {
-            setSelectedGroupId(groups[0]?.id);
+        if (groups && !find(groups, { id: selectedGroupId })) {
+            setSelectedGroupId(sortBy(groups, "name")[0]?.id);
         }
-    }, [groups]);
+    }, [groups, selectedGroupId]);
 
     if (isLoadingGroups || (groups.length && !selectedGroup)) {
         return <LoadingPlaceholder margin="130px" />;
