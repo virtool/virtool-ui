@@ -66,7 +66,12 @@ export function useUrlSearchParams({ key, defaultValue }) {
         }
     }, [key, defaultValue]);
 
+    function setValue(newValue) {
+        updateUrlSearchParams(newValue, key);
+    }
+
     return {
         value: value || defaultValue,
+        setValue,
     };
 }
