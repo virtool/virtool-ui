@@ -13,15 +13,14 @@ import { findSubtractions } from "../actions";
  * @returns Toolbar - A search filtering toolbar
  */
 export const SubtractionToolbar = ({ onFind, canModify }) => {
-    const { value: urlTerm } = useUrlSearchParams({
-        key: "find",
-    });
-    const [term, setTerm] = useState(urlTerm);
+    const [value, setValue] = useUrlSearchParams("find");
+    const [term, setTerm] = useState(value);
 
     const handleSubmit = e => {
-        const value = e.target.value;
-        setTerm(value);
-        onFind(value);
+        const searchValue = e.target.value;
+        setTerm(searchValue);
+        setValue(searchValue);
+        onFind(searchValue);
     };
 
     let createButton;

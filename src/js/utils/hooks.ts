@@ -43,10 +43,22 @@ export const useDidUpdateEffect = (onUpdate, deps) => {
     }, deps);
 };
 
-function updateUrlSearchParams(value, key) {
+/**
+ * Updates the URL search parameters by either setting a new value for a given key or removing the key-value pair
+ *
+ * @param value - The value to be used in the search parameter
+ * @param key - The search parameter key to be managed
+ */
+function updateUrlSearchParams(value: string, key: string) {
     const params = new URLSearchParams(window.location.search);
-    params.set(key, value);
-    window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
+
+    if (value) {
+        params.set(key, value);
+        window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
+    } else {
+        params.delete(key);
+        window.history.replaceState({}, "", window.location.pathname);
+    }
 }
 
 /**
@@ -56,7 +68,7 @@ function updateUrlSearchParams(value, key) {
  * @param defaultValue - The default value to use when the search parameter key is not present in the URL
  * @returns Object - An object containing the current value and a function to set the URL search parameter
  */
-export function useUrlSearchParams({ key, defaultValue }) {
+export function useUrlSearchParams(key: string, defaultValue: string) {
     const params = new URLSearchParams(window.location.search);
     const value = params.get(key) || "";
 
@@ -70,8 +82,5 @@ export function useUrlSearchParams({ key, defaultValue }) {
         updateUrlSearchParams(newValue, key);
     }
 
-    return {
-        value: value || defaultValue,
-        setValue,
-    };
+    return [value || defaultValue, setValue];
 }
