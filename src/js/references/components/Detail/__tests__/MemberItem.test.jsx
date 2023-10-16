@@ -10,7 +10,7 @@ describe("<MemberItem />", () => {
     beforeEach(() => {
         props = {
             canModify: false,
-            id: "bob",
+            handle: "bob",
             onEdit: vi.fn(),
             onRemove: vi.fn(),
         };

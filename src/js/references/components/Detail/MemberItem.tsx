@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { BoxGroupSection, Icon, InitialIcon } from "../../../base";
@@ -32,8 +31,28 @@ const StyledMemberItem = styled(BoxGroupSection)`
     display: flex;
 `;
 
-function MemberItem({ canModify, id, handle, onEdit, onRemove }) {
-    const displayName = handle || id;
+type MemberItemProps = {
+    canModify: boolean;
+    id: number | string;
+    name?: string;
+    handle?: string;
+    onEdit: (id: number | string) => void;
+    onRemove: (id: number | string) => void;
+};
+
+/**
+ * A user or group for display in the reference members list.
+ *
+ * @param canModify - Whether the current user can modify members in the list.
+ * @param id - The unique identifier for the member.
+ * @param name - The name of the member.
+ * @param handle - The handle of the member.
+ * @param onEdit - Callback to initiate editing the member.
+ * @param onRemove - Callback to initiate removing the member.
+ * @returns A condensed member item.
+ */
+function MemberItem({ canModify, id, name, handle, onEdit, onRemove }: MemberItemProps) {
+    const displayName = handle || name || "";
     const handleEdit = useCallback(() => onEdit(id), [id]);
     const handleRemove = useCallback(() => onRemove(id), [id]);
 
@@ -56,13 +75,5 @@ function MemberItem({ canModify, id, handle, onEdit, onRemove }) {
         </StyledMemberItem>
     );
 }
-
-MemberItem.propTypes = {
-    canModify: PropTypes.bool.isRequired,
-    id: PropTypes.string.isRequired,
-    handle: PropTypes.string,
-    onEdit: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired,
-};
 
 export default MemberItem;
