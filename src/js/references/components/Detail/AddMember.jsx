@@ -88,7 +88,7 @@ export class AddReferenceMember extends React.Component {
             addMemberComponents = map(this.props.documents, document => (
                 <AddMemberItem
                     key={document.id}
-                    handle={document.handle || document.id}
+                    handle={document.handle || document.name}
                     onClick={() => this.handleAdd(document.id)}
                 />
             ));
