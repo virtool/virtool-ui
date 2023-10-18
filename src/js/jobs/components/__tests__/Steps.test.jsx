@@ -1,4 +1,3 @@
-import { shallow } from "enzyme";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { JobSteps, mapStateToProps } from "../Steps";
@@ -6,11 +5,15 @@ import { JobSteps, mapStateToProps } from "../Steps";
 describe("<JobSteps />", () => {
     it("should render", () => {
         const props = {
-            status: [{ state: "waiting" }, { state: "running" }],
-            workflow: "bowtie_build",
+            status: [
+                { state: "waiting", timestamp: Date.now() },
+                { state: "running", timestamp: Date.now() },
+            ],
         };
-        const wrapper = shallow(<JobSteps {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<JobSteps {...props} />);
+        expect(screen.getByText("Waiting")).toBeInTheDocument();
+        expect(screen.getByText("Waiting for resources to become available.")).toBeInTheDocument();
+        expect(screen.getByText("Running")).toBeInTheDocument();
     });
 });
 
@@ -18,20 +21,16 @@ describe("mapStateToProps", () => {
     it("should map state to props correctly", () => {
         const status = [{ state: "waiting" }, { state: "running" }];
 
-        const workflow = "bowtie_build";
-
         const props = mapStateToProps({
             jobs: {
                 detail: {
                     status,
-                    workflow,
                 },
             },
         });
 
         expect(props).toEqual({
             status,
-            workflow,
         });
     });
 });
