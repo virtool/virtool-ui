@@ -5,6 +5,7 @@ import {
     flatMap,
     fromPairs,
     has,
+    includes,
     keys,
     map,
     max,
@@ -279,3 +280,8 @@ export const formatData = detail => {
         return formatAODPData(detail);
     }
 };
+
+export function checkSupportedWorkflow(workflow) {
+    const supportedWorkflows = ["pathoscope_bowtiee", "nuvs", "aodp"];
+    return includes(supportedWorkflows, workflow);
+}
