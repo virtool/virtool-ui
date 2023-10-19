@@ -72,11 +72,7 @@ export function useUrlSearchParams(key: string, defaultValue?: string): [string,
     const params = new URLSearchParams(window.location.search);
     const refValue = useRef(params.get(key) || defaultValue);
 
-    useEffect(() => {
-        if (defaultValue) {
-            updateUrlSearchParams(refValue.current, key);
-        }
-    }, []);
+    updateUrlSearchParams(refValue.current, key);
 
     function setValue(newValue: string) {
         refValue.current = newValue;
