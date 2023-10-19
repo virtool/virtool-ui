@@ -52,13 +52,13 @@ export const useDidUpdateEffect = (onUpdate, deps) => {
 function updateUrlSearchParams(value: string, key: string) {
     const params = new URLSearchParams(window.location.search);
 
-    if (value) {
-        params.set(key, value);
-        window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
-    } else {
-        params.delete(key);
-        window.history.replaceState({}, "", window.location.pathname);
-    }
+    value ? params.set(key, value) : params.delete(key);
+
+    window.history.replaceState(
+        {},
+        "",
+        params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname,
+    );
 }
 
 /**
@@ -68,19 +68,20 @@ function updateUrlSearchParams(value: string, key: string) {
  * @param defaultValue - The default value to use when the search parameter key is not present in the URL
  * @returns Object - An object containing the current value and a function to set the URL search parameter
  */
-export function useUrlSearchParams(key: string, defaultValue: string) {
+export function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
     const params = new URLSearchParams(window.location.search);
-    const value = params.get(key) || "";
+    const refValue = useRef(params.get(key) || defaultValue);
 
     useEffect(() => {
-        if (!value && defaultValue) {
-            updateUrlSearchParams(defaultValue, key);
+        if (defaultValue) {
+            updateUrlSearchParams(refValue.current, key);
         }
-    }, [key, defaultValue]);
+    }, []);
 
-    function setValue(newValue) {
+    function setValue(newValue: string) {
+        refValue.current = newValue;
         updateUrlSearchParams(newValue, key);
     }
 
-    return [value || defaultValue, setValue];
+    return [refValue.current, setValue];
 }
