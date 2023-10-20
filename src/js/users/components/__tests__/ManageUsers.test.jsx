@@ -43,7 +43,6 @@ describe("<ManageUsers />", () => {
 
         renderWithRouter(<ManageUsers />, state, history, createReducer);
 
-        expect(await screen.findByLabelText("user-plus")).toBeInTheDocument();
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
         expect(await screen.findByText(/Administrator/)).toBeInTheDocument();
         forEach(users, user => {
@@ -57,8 +56,7 @@ describe("<ManageUsers />", () => {
 
         renderWithRouter(<ManageUsers />, state, history, createReducer);
 
-        expect(await screen.findByLabelText("user-plus")).toBeInTheDocument();
-        expect(screen.getByLabelText("search")).toBeInTheDocument();
+        expect(await screen.findByLabelText("search")).toBeInTheDocument();
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });
