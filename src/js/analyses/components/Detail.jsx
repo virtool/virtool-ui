@@ -65,7 +65,7 @@ export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis
             <>
                 <UnsupportedAnalysis>
                     <Icon name={"info-circle"} />
-                    Detailed view of {lowerCase(detail.workflow)} analyses is not yet supported.
+                    Visualisation of {lowerCase(detail.workflow)} analyses is not yet supported.
                 </UnsupportedAnalysis>
             </>
         );

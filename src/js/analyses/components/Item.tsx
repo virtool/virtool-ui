@@ -84,7 +84,7 @@ export default function AnalysisItem({
     ) : (
         <UnsupportedAnalysisTitle>
             {getWorkflowDisplayName(workflow)}
-            <span>Detailed view unavailable</span>
+            <span>Visualization unavailable</span>
         </UnsupportedAnalysisTitle>
     );
 
