@@ -39,6 +39,7 @@ describe("<CreateUser />", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(screen.getByText("Please specify a username.")).toBeInTheDocument();
+        expect(screen.getByText("Please specify a username")).toBeInTheDocument();
+        expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument();
     });
 });

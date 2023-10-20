@@ -43,7 +43,7 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
             <ModalBody>
                 <InputGroup>
                     <InputLabel htmlFor="handle">Username</InputLabel>
-                    <InputSimple id="handle" {...register("handle", { required: "Please specify a username." })} />
+                    <InputSimple id="handle" {...register("handle", { required: "Please specify a username" })} />
                     <InputError>{errors.handle?.message}</InputError>
                 </InputGroup>
                 <InputGroup>
@@ -51,9 +51,9 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
                     <InputSimple
                         id="password"
                         type="password"
-                        {...register("password", { required: "Please specify a password." })}
+                        {...register("password", { required: "Password does not meet minimum length requirement (8)" })}
                     />
-                    <InputError>{error}</InputError>
+                    <InputError>{errors.password?.message || error}</InputError>
                 </InputGroup>
 
                 <Checkbox
