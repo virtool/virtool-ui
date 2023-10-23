@@ -31,7 +31,7 @@ export default function CreateUser() {
 
     function handleChange() {
         mutation.reset();
-        history.replaceState({ state: !history.state.state }, "");
+        history.replaceState({ state: !history.state?.state }, "");
     }
 
     return (
@@ -45,7 +45,7 @@ export default function CreateUser() {
                     <DialogTitle>Create User</DialogTitle>
                     <CreateUserForm
                         onSubmit={handleSubmit}
-                        error={mutation.isError && mutation.error["response"].body.message}
+                        error={mutation.isError && mutation.error["response"]?.body.message}
                     />
                 </DialogContent>
             </DialogPortal>
