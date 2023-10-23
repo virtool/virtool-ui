@@ -20,13 +20,9 @@ type NewUserProps = {
  */
 export default function CreateUser() {
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState("");
     const mutation = useMutation(create, {
         onSuccess: () => {
             setOpen(false);
-        },
-        onError: error => {
-            setError(error["response"].body.message);
         },
     });
 
@@ -36,7 +32,7 @@ export default function CreateUser() {
 
     function handleChange(open: boolean) {
         setOpen(open);
-        setError("");
+        mutation.reset();
     }
 
     return (
@@ -48,7 +44,10 @@ export default function CreateUser() {
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Create User</DialogTitle>
-                    <CreateUserForm onSubmit={handleSubmit} error={error} />
+                    <CreateUserForm
+                        onSubmit={handleSubmit}
+                        error={mutation.isError && mutation.error["response"].body.message}
+                    />
                 </DialogContent>
             </DialogPortal>
         </Dialog>

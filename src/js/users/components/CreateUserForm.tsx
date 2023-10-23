@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
     Checkbox,
     InputError,
@@ -26,20 +26,15 @@ interface CreateUserFormProps {
  * A form component for creating a new user
  */
 export function CreateUserForm({ handle = "", password = "", error, onSubmit }: CreateUserFormProps) {
-    const [forceReset, setForceReset] = useState(false);
-
     const {
         formState: { errors },
         register,
         handleSubmit,
-    } = useForm({ defaultValues: { handle, password, forceReset } });
-
-    function handleForceReset() {
-        forceReset ? setForceReset(false) : setForceReset(true);
-    }
+        control,
+    } = useForm({ defaultValues: { handle, password, forceReset: false } });
 
     return (
-        <form onSubmit={handleSubmit(values => onSubmit({ ...values, forceReset: forceReset || false }))}>
+        <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
             <ModalBody>
                 <InputGroup>
                     <InputLabel htmlFor="handle">Username</InputLabel>
@@ -56,10 +51,16 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
                     <InputError>{errors.password?.message || error}</InputError>
                 </InputGroup>
 
-                <Checkbox
-                    label="Force user to reset password on login"
-                    checked={forceReset}
-                    onClick={handleForceReset}
+                <Controller
+                    name="forceReset"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                        <Checkbox
+                            label="Force user to reset password on login"
+                            checked={value}
+                            onClick={() => onChange(!value)}
+                        />
+                    )}
                 />
             </ModalBody>
 
