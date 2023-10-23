@@ -35,7 +35,7 @@ export default function CreateUser() {
     }
 
     return (
-        <Dialog open={history.state.state} onOpenChange={() => handleChange()}>
+        <Dialog open={history.state?.state} onOpenChange={() => handleChange()}>
             <StyledButton as={DialogTrigger} color="blue">
                 <Icon name="user-plus" />
             </StyledButton>
