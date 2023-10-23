@@ -1,5 +1,5 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import React, { useState } from "react";
+import React from "react";
 import { useMutation } from "react-query";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { StyledButton } from "../../base/styled/StyledButton";
@@ -19,10 +19,9 @@ type NewUserProps = {
  * A dialog for creating a new user
  */
 export default function CreateUser() {
-    const [open, setOpen] = useState(false);
     const mutation = useMutation(create, {
         onSuccess: () => {
-            setOpen(false);
+            history.replaceState({ state: !history.state.state }, "");
         },
     });
 
@@ -30,13 +29,13 @@ export default function CreateUser() {
         mutation.mutate({ handle, password, forceReset });
     }
 
-    function handleChange(open: boolean) {
-        setOpen(open);
+    function handleChange() {
         mutation.reset();
+        history.replaceState({ state: !history.state.state }, "");
     }
 
     return (
-        <Dialog open={open} onOpenChange={open => handleChange(open)}>
+        <Dialog open={history.state.state} onOpenChange={() => handleChange()}>
             <StyledButton as={DialogTrigger} color="blue">
                 <Icon name="user-plus" />
             </StyledButton>
