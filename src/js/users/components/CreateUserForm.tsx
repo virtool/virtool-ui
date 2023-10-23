@@ -46,7 +46,13 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
                     <InputSimple
                         id="password"
                         type="password"
-                        {...register("password", { required: "Password does not meet minimum length requirement (8)" })}
+                        {...register("password", {
+                            required: "Password does not meet minimum length requirement (8)",
+                            minLength: {
+                                value: 8,
+                                message: "Password does not meet minimum length requirement (8)",
+                            },
+                        })}
                     />
                     <InputError>{errors.password?.message || error}</InputError>
                 </InputGroup>
