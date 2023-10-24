@@ -19,8 +19,9 @@ import {
     ViewHeaderTitle,
 } from "../../../base";
 import { clearError } from "../../../errors/actions";
+import { File } from "../../../files/components/File";
 import { useListFiles } from "../../../files/querys";
-import { FileType, UnpaginatedFileResponse } from "../../../files/types";
+import { File as fileTyping, FileResponse, FileType } from "../../../files/types";
 import PersistForm from "../../../forms/components/PersistForm";
 import { listLabels } from "../../../labels/actions";
 import { shortlistSubtractions } from "../../../subtraction/actions";
@@ -137,6 +138,9 @@ const getInitialValues = forceGroupChoice => ({
     sidebar: { labels: [], subtractionIds: [] },
 });
 
+const renderRow = (canRemoveFiles: boolean) => (item: fileTyping) =>
+    <File {...item} canRemove={canRemoveFiles} key={item.id} />;
+
 export function CreateSample({
     error,
     forceGroupChoice,
@@ -153,14 +157,18 @@ export function CreateSample({
         onListLabels();
     }, []);
 
-    const { data: readsResponse, isLoading: isReadsLoading }: { data: UnpaginatedFileResponse; isLoading: boolean } =
-        useListFiles(FileType.reads, false);
+    const URLPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
+    const { data: readsResponse, isLoading: isReadsLoading }: { data: FileResponse; isLoading: boolean } = useListFiles(
+        FileType.reads,
+        true,
+        URLPage,
+    );
 
     if (subtractions === null || allLabels === null || isReadsLoading) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    const reads = filter(readsResponse.documents, { reserved: false });
+    const reads = filter(readsResponse.items, { reserved: false });
 
     const autofill = (selected, setFieldValue) => {
         const fileName = getFileNameFromId(selected[0], reads);
@@ -275,7 +283,7 @@ export function CreateSample({
                             <Field
                                 name="readFiles"
                                 as={ReadSelector}
-                                files={reads}
+                                files={readsResponse}
                                 selected={values.readFiles}
                                 onSelect={selection => setFieldValue("readFiles", selection)}
                                 error={touched.readFiles ? errors.readFiles : null}
