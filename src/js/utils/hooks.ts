@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { RouteComponentProps, useHistory } from "react-router-dom";
+
+export type HistoryType = RouteComponentProps["history"];
 
 export const useStateWithReset = initialValue => {
     const [state, setState] = useState(initialValue);
@@ -48,17 +51,12 @@ export const useDidUpdateEffect = (onUpdate, deps) => {
  *
  * @param value - The value to be used in the search parameter
  * @param key - The search parameter key to be managed
+ * @param history - The history object
  */
-function updateUrlSearchParams(value: string, key: string) {
+function updateUrlSearchParams(value: string, key: string, history: HistoryType) {
     const params = new URLSearchParams(window.location.search);
-
-    value ? params.set(key, value) : params.delete(key);
-
-    window.history.replaceState(
-        {},
-        "",
-        params.toString() ? `${window.location.pathname}?${params.toString()}` : window.location.pathname,
-    );
+    params.set(key, value);
+    history.replace({ pathname: window.location.pathname, search: params.toString() ? `?${params.toString()}` : null });
 }
 
 /**
@@ -69,15 +67,16 @@ function updateUrlSearchParams(value: string, key: string) {
  * @returns Object - An object containing the current value and a function to set the URL search parameter
  */
 export function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
+    const history = useHistory();
+    const firstRender = useRef(true);
+
     const params = new URLSearchParams(window.location.search);
-    const refValue = useRef(params.get(key) || defaultValue);
 
-    updateUrlSearchParams(refValue.current, key);
-
-    function setValue(newValue: string) {
-        refValue.current = newValue;
-        updateUrlSearchParams(newValue, key);
+    if (firstRender.current && defaultValue && !params.get(key)) {
+        updateUrlSearchParams(defaultValue, key, history);
     }
 
-    return [refValue.current, setValue];
+    firstRender.current = false;
+
+    return [params.get(key), (value: string) => updateUrlSearchParams(value, key, history)];
 }

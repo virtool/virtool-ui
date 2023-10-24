@@ -16,7 +16,7 @@ export const SubtractionToolbar = ({ onFind, canModify }) => {
     const [value, setValue] = useUrlSearchParams("find");
     const [term, setTerm] = useState(value);
 
-    const handleSubmit = e => {
+    const onChange = e => {
         const searchValue = e.target.value;
         setTerm(searchValue);
         setValue(searchValue);
@@ -32,7 +32,7 @@ export const SubtractionToolbar = ({ onFind, canModify }) => {
 
     return (
         <Toolbar>
-            <InputSearch value={term} onChange={handleSubmit} placeholder="Name" />
+            <InputSearch value={term} onChange={onChange} placeholder="Name" />
             {createButton}
         </Toolbar>
     );
