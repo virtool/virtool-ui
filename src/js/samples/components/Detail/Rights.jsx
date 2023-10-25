@@ -1,4 +1,4 @@
-import { capitalize, includes, map } from "lodash-es";
+import { capitalize, find, includes, map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { getAccountId } from "../../../account/selectors";
@@ -48,9 +48,14 @@ export class SampleRights extends React.Component {
 
         const groupOptionComponents = map(this.props.groups, group => (
             <option key={group.id} value={group.id}>
-                {capitalize(group.id)}
+                {capitalize(group.name)}
             </option>
         ));
+
+        const selectedGroup =
+            typeof this.props.group === "number"
+                ? this.props.group
+                : find(this.props.groups, { name: this.props.group }).id;
 
         return (
             <ContainerNarrow>
@@ -62,7 +67,7 @@ export class SampleRights extends React.Component {
                     <BoxGroupSection>
                         <InputGroup>
                             <InputLabel>Group</InputLabel>
-                            <InputSelect value={this.props.group} onChange={this.handleChangeGroup}>
+                            <InputSelect value={selectedGroup} onChange={this.handleChangeGroup}>
                                 <option value="none">None</option>
                                 {groupOptionComponents}
                             </InputSelect>
