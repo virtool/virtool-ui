@@ -281,7 +281,8 @@ export const formatData = detail => {
     }
 };
 
+const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "aodp"];
+
 export function checkSupportedWorkflow(workflow) {
-    const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "aodp"];
     return includes(supportedWorkflows, workflow);
 }

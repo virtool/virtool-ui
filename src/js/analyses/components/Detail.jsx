@@ -1,4 +1,4 @@
-import { get, lowerCase } from "lodash-es";
+import { get } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -65,7 +65,7 @@ export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis
             <>
                 <UnsupportedAnalysis>
                     <Icon name={"info-circle"} />
-                    Visualisation of {lowerCase(detail.workflow)} analyses is not yet supported.
+                    Workflow not yet supported.
                 </UnsupportedAnalysis>
             </>
         );

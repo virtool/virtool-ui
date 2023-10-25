@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { Attribution, BoxSpaced, Icon, SlashList } from "../../base";
+import { Attribution, Box, Icon, SlashList } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { useRemoveAnalysis } from "../querys";
@@ -12,8 +12,9 @@ import { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
 import { AnalysisItemRightIcon } from "./RightIcon";
 
-const StyledAnalysisItem = styled(BoxSpaced)`
+const StyledAnalysisItem = styled(Box)`
     color: ${props => props.theme.color.greyDarkest};
+    margin-bottom: 10px;
 `;
 
 const AnalysisItemTag = styled.span`
@@ -84,7 +85,7 @@ export default function AnalysisItem({
     ) : (
         <UnsupportedAnalysisTitle>
             {getWorkflowDisplayName(workflow)}
-            <span>Visualization unavailable</span>
+            <span>Workflow unavailable</span>
         </UnsupportedAnalysisTitle>
     );
 
