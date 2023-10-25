@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
@@ -45,7 +44,16 @@ const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
     user-select: none;
 `;
 
-export const ReadSelectorItem = ({ id, index, name, selected, size, onSelect }) => {
+type ReadSelectorItemProps = {
+    id: number;
+    name: string;
+    index: number;
+    size: number;
+    selected?: boolean;
+    onSelect: (id: number) => void;
+};
+
+export const ReadSelectorItem = ({ id, index, name, selected, size, onSelect }: ReadSelectorItemProps) => {
     const select = useCallback(() => onSelect(id), []);
 
     return (
@@ -66,15 +74,6 @@ export const ReadSelectorItem = ({ id, index, name, selected, size, onSelect }) 
 
 ReadSelectorItem.defaultProps = {
     selected: false,
-};
-
-ReadSelectorItem.propTypes = {
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-    size: PropTypes.number.isRequired,
-    onSelect: PropTypes.func.isRequired,
-    selected: PropTypes.bool,
 };
 
 export default ReadSelectorItem;

@@ -20,8 +20,8 @@ import {
 } from "../../../base";
 import { clearError } from "../../../errors/actions";
 import { File } from "../../../files/components/File";
-import { useListFiles } from "../../../files/querys";
-import { File as fileTyping, FileResponse, FileType } from "../../../files/types";
+import { useInfiniteFindFiles } from "../../../files/querys";
+import { File as fileTyping, FileType } from "../../../files/types";
 import PersistForm from "../../../forms/components/PersistForm";
 import { listLabels } from "../../../labels/actions";
 import { shortlistSubtractions } from "../../../subtraction/actions";
@@ -157,18 +157,18 @@ export function CreateSample({
         onListLabels();
     }, []);
 
-    const URLPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
-    const { data: readsResponse, isLoading: isReadsLoading }: { data: FileResponse; isLoading: boolean } = useListFiles(
-        FileType.reads,
-        true,
-        URLPage,
-    );
+    const {
+        data: readsResponse,
+        isLoading: isReadsLoading,
+        isFetchingNextPage,
+        fetchNextPage,
+    } = useInfiniteFindFiles(FileType.reads, 10);
 
     if (subtractions === null || allLabels === null || isReadsLoading) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    const reads = filter(readsResponse.items, { reserved: false });
+    const reads = filter(readsResponse.pages[0].items, { reserved: false });
 
     const autofill = (selected, setFieldValue) => {
         const fileName = getFileNameFromId(selected[0], reads);
@@ -283,7 +283,10 @@ export function CreateSample({
                             <Field
                                 name="readFiles"
                                 as={ReadSelector}
-                                files={readsResponse}
+                                data={readsResponse}
+                                isFetchingNextPage={isFetchingNextPage}
+                                fetchNextPage={fetchNextPage}
+                                isLoading={isReadsLoading}
                                 selected={values.readFiles}
                                 onSelect={selection => setFieldValue("readFiles", selection)}
                                 error={touched.readFiles ? errors.readFiles : null}

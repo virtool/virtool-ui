@@ -1,9 +1,10 @@
-import { filter, includes, indexOf, toLower, without } from "lodash-es";
-import React, { useRef, useState } from "react";
+import { flatMap, includes, indexOf, toLower, without } from "lodash-es";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontWeight } from "../../../app/theme";
-import { Box, Button, InputError, InputSearch, NoneFoundSection, Pagination, Toolbar } from "../../../base";
+import { Box, Button, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
+import { ScrollList } from "../../../base/ScrollList";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 const ReadSelectorBox = styled(Box)`
@@ -33,35 +34,14 @@ const ReadSelectorHeader = styled.label`
     }
 `;
 
-// static propTypes = {
-//     files: PropTypes.arrayOf(PropTypes.object),
-//     error: PropTypes.string,
-//     selected: PropTypes.arrayOf(PropTypes.number),
-//     onSelect: PropTypes.func,
-//     handleSelect: PropTypes.func,
-// };
-
 export default function ReadSelector(props) {
     const [term, setTerm] = useState("");
-    const prevProps = useRef(props);
-
-    // useEffect(() => {
-    //     if (!isEqual(props.files, prevProps.current.files)) {
-    //         props.onSelect(intersection(props.selected, map(props.files, "id")));
-    //     }
-    //     prevProps.current = props;
-    // }, [props.files, props.selected, props.onSelect]);
-
-    // componentDidUpdate(prevProps) {
-    //     if (!isEqual(props.files, prevProps.files)) {
-    //         prevProps.onSelect(intersection(prevProps.selected, map(props.files, "id")));
-    //     }
-    // }
 
     function handleSelect(selectedId) {
         let selected;
 
         if (includes(props.selected, selectedId)) {
+            alert("hi");
             selected = without(props.selected, selectedId);
         } else {
             selected = props.selected.concat([selectedId]);
@@ -70,47 +50,35 @@ export default function ReadSelector(props) {
                 selected.shift();
             }
         }
+        alert(props.selected);
 
         props.onSelect(selected);
     }
 
     function swap() {
-        alert(JSON.stringify(props));
         props.onSelect(props.selected.slice().reverse());
     }
 
-    function reset(e) {
-        e.preventDefault();
+    function reset() {
         setTerm("");
         props.onSelect([]);
     }
 
     const loweredFilter = toLower(term);
 
-    let files = filter(props.files.items, file => !term || includes(toLower(file.name), loweredFilter));
+    const items = flatMap(props.data.pages, page => page.items);
+    const data = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
 
-    function renderRow() {
-        return function renderRowComponent(file) {
-            const index = indexOf(props.selected, file.id);
-
-            return (
-                <ReadSelectorItem {...file} key={file.id} index={index} selected={index > -1} onSelect={handleSelect} />
-            );
-        };
+    function renderRow(file) {
+        const index = indexOf(props.selected, file.id);
+        return <ReadSelectorItem {...file} key={file.id} index={index} selected={index > -1} onSelect={handleSelect} />;
     }
-    // const renderRow = () => file => {
-    //     const index = indexOf(props.selected, file.id);
-    //
-    //     return <ReadSelectorItem {...file} key={file.id} index={index} selected={index > -1} onSelect={handleSelect} />;
-    // };
 
-    if (!props.files.items.length) {
-        files = (
-            <NoneFoundSection noun="files">
-                <Link to="/samples/files">Upload some</Link>
-            </NoneFoundSection>
-        );
-    }
+    const noneFound = props.data.pages[0].total_count === 0 && (
+        <NoneFoundSection noun="data">
+            <Link to="/samples/data">Upload some</Link>
+        </NoneFoundSection>
+    );
 
     let pairedness;
 
@@ -122,31 +90,30 @@ export default function ReadSelector(props) {
         pairedness = <span>Paired | </span>;
     }
 
-    const URLPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
-
     return (
         <div>
             <ReadSelectorHeader>
-                <label>Read Files</label>
+                <label>Read data</label>
                 <span>
                     {pairedness}
-                    {props.selected.length} of {props.files.total_count || 0} selected
+                    {props.selected.length} of {props.data.pages[0].total_count || 0} selected
                 </span>
             </ReadSelectorHeader>
 
             <ReadSelectorBox onError={props.error}>
                 <Toolbar>
                     <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
-                    <ReadSelectorButton type="button" icon="undo" tip="Clear" onClick={() => reset} />
+                    <ReadSelectorButton type="button" icon="undo" tip="Clear" onClick={reset} />
                     <ReadSelectorButton type="button" icon="retweet" tip="Swap Orientations" onClick={swap} />
                 </Toolbar>
+                {noneFound}
 
-                <Pagination
-                    items={files}
-                    renderRow={renderRow()}
-                    storedPage={props.files.page}
-                    currentPage={URLPage}
-                    pageCount={props.files.page_count}
+                <ScrollList
+                    fetchNextPage={props.fetchNextPage}
+                    isFetchingNextPage={props.isFetchingNextPage}
+                    isLoading={props.isReadsLoading}
+                    items={data}
+                    renderRow={renderRow}
                 />
 
                 <ReadSelectorError>{props.error}</ReadSelectorError>
