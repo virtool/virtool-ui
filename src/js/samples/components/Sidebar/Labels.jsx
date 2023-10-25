@@ -33,9 +33,11 @@ const StyledParagraph = styled.div`
 
 export default function SampleLabels({ sampleLabels, onUpdate }) {
     const { data, isLoading } = useFetchLabels();
+
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
+
     return (
         <SideBarSection>
             <SidebarHeader>

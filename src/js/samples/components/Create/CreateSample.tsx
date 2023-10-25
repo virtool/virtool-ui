@@ -147,6 +147,12 @@ export default function CreateSample() {
     const { data: groups } = useListGroups();
     const { data: subtractions, isLoading: subtractionsLoading } = useSubtractionsShortlist();
     const { data: settings, isLoading: settingsLoading } = useFetchSettings();
+    const {
+        data: readsResponse,
+        isLoading: isReadsLoading,
+        isFetchingNextPage,
+        fetchNextPage,
+    } = useInfiniteFindFiles(FileType.reads, 10);
 
     const history = useHistory();
     const samplesMutation = useMutation(createSample, {
@@ -154,6 +160,10 @@ export default function CreateSample() {
             history.push("/samples");
         },
     });
+
+    if (isReadsLoading || labelsLoading || subtractionsLoading || settingsLoading) {
+        return <LoadingPlaceholder margin="36px" />;
+    }
 
     function onCreate(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group?) {
         samplesMutation.mutate({
@@ -167,17 +177,6 @@ export default function CreateSample() {
             labels,
             group,
         });
-    }
-
-    const {
-        data: readsResponse,
-        isLoading: isReadsLoading,
-        isFetchingNextPage,
-        fetchNextPage,
-    } = useInfiniteFindFiles(FileType.reads, 10);
-
-    if (isReadsLoading || labelsLoading || subtractionsLoading || settingsLoading) {
-        return <LoadingPlaceholder margin="36px" />;
     }
 
     const forceGroupChoice = settings.sample_group === "force_choice";
