@@ -42,10 +42,10 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  * @param {Array} files - all available read files
  * @returns {*|string} the filename without its extension
  */
-const getFileNameFromId = (id, files) => {
+function getFileNameFromId(id, files) {
     const file = find(files, file => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
-};
+}
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),
@@ -105,16 +105,18 @@ const AlertContainer = styled.div`
     grid-row: 1;
 `;
 
-const castValues = (reads, subtractions, allLabels) => values => {
-    const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
-    const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
-    const subtractionIds = intersectionWith(
-        values.sidebar.subtractionIds,
-        subtractions,
-        (subtractionId, subtraction) => subtractionId === subtraction.id,
-    );
-    return { ...values, readFiles, sidebar: { labels, subtractionIds } };
-};
+function castValues(reads, subtractions, allLabels) {
+    return function (values) {
+        const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
+        const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
+        const subtractionIds = intersectionWith(
+            values.sidebar.subtractionIds,
+            subtractions,
+            (subtractionId, subtraction) => subtractionId === subtraction.id,
+        );
+        return { ...values, readFiles, sidebar: { labels, subtractionIds } };
+    };
+}
 
 type formValues = {
     name: string;
@@ -127,16 +129,18 @@ type formValues = {
     sidebar: { labels: number[]; subtractionIds: string[] };
 };
 
-const getInitialValues = forceGroupChoice => ({
-    name: "",
-    isolate: "",
-    host: "",
-    locale: "",
-    libraryType: "normal",
-    readFiles: [],
-    group: forceGroupChoice ? "none" : null,
-    sidebar: { labels: [], subtractionIds: [] },
-});
+function getInitialValues(forceGroupChoice) {
+    return {
+        name: "",
+        isolate: "",
+        host: "",
+        locale: "",
+        libraryType: "normal",
+        readFiles: [],
+        group: forceGroupChoice ? "none" : null,
+        sidebar: { labels: [], subtractionIds: [] },
+    };
+}
 
 export default function CreateSample() {
     const { data: allLabels, isLoading: labelsLoading } = useFetchLabels();
@@ -180,14 +184,14 @@ export default function CreateSample() {
 
     const reads = filter(readsResponse.pages[0].items, { reserved: false });
 
-    const autofill = (selected, setFieldValue) => {
+    function autofill(selected, setFieldValue) {
         const fileName = getFileNameFromId(selected[0], reads);
         if (fileName) {
             setFieldValue("name", fileName);
         }
-    };
+    }
 
-    const handleSubmit = values => {
+    function handleSubmit(values) {
         const { name, isolate, host, locale, libraryType, readFiles, group, sidebar } = values;
         const { subtractionIds, labels } = sidebar;
         // Only send the group if forceGroupChoice is true
@@ -206,7 +210,7 @@ export default function CreateSample() {
         } else {
             onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
         }
-    };
+    }
     return (
         <>
             <ViewHeader title="Create Sample">
