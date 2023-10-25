@@ -18,7 +18,10 @@ describe("<SampleRights />", () => {
     beforeEach(() => {
         props = {
             canModifyRights: true,
-            groups: [{ id: "managers" }, { id: "technicians" }],
+            groups: [
+                { id: 1, legacy_id: "managers", name: "Managers" },
+                { id: 2, legacy_id: "none", name: "Technicians" },
+            ],
             sampleId: "foo",
             onListGroups: vi.fn(),
             onChangeRights: vi.fn(),

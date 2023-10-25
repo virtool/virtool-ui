@@ -145,7 +145,13 @@ describe("Samples Reducer", () => {
         const state = {};
         const action = {
             type: UPDATE_SAMPLE_RIGHTS.SUCCEEDED,
-            payload: { foo: "bar" },
+            payload: {
+                all_read: true,
+                all_write: true,
+                group: 1,
+                group_read: true,
+                group_write: false,
+            },
         };
         const result = reducer(state, action);
         expect(result).toEqual({
