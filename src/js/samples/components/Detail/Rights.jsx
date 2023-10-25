@@ -48,7 +48,7 @@ export class SampleRights extends React.Component {
 
         const groupOptionComponents = map(this.props.groups, group => (
             <option key={group.id} value={group.id}>
-                {capitalize(group.name)}
+                {group.name}
             </option>
         ));
 
