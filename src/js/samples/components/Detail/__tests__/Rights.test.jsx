@@ -19,8 +19,8 @@ describe("<SampleRights />", () => {
         props = {
             canModifyRights: true,
             groups: [
-                { id: 1, legacy_id: "managers", name: "managers" },
-                { id: 2, legacy_id: "none", name: "technicians" },
+                { id: 1, legacy_id: "managers", name: "Managers" },
+                { id: 2, legacy_id: "none", name: "Technicians" },
             ],
             sampleId: "foo",
             onListGroups: vi.fn(),
