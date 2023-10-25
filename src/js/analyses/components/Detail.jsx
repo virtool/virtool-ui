@@ -1,8 +1,10 @@
 import { get } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import {
     Box,
+    Icon,
     LoadingPlaceholder,
     NotFound,
     RelativeTime,
@@ -16,6 +18,16 @@ import AODPViewer from "./AODP/Viewer";
 import AnalysisCache from "./CacheLink";
 import NuVsViewer from "./NuVs/Viewer";
 import { PathoscopeViewer } from "./Pathoscope/Viewer";
+
+const UnsupportedAnalysis = styled(Box)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i.fas {
+        margin-right: 5px;
+    }
+`;
 
 export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis }) {
     const analysisId = match.params.analysisId;
@@ -49,7 +61,14 @@ export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis
     } else if (detail.workflow === "aodp") {
         content = <AODPViewer />;
     } else {
-        return <div>Invalid analysis content</div>;
+        return (
+            <>
+                <UnsupportedAnalysis>
+                    <Icon name={"info-circle"} />
+                    Workflow not yet supported.
+                </UnsupportedAnalysis>
+            </>
+        );
     }
 
     return (
