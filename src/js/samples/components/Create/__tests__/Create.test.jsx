@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeFile, mockApiUnpaginatedListFiles } from "../../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { LIST_LABELS } from "../../../../app/actionTypes";
-import { CreateSample, mapDispatchToProps, mapStateToProps } from "../Create";
+import { CreateSample, mapDispatchToProps, mapStateToProps } from "../CreateSample";
 function createAppStore(state) {
     return () =>
         configureStore({

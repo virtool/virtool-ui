@@ -50,7 +50,7 @@ export default function ReadSelector(props) {
                 selected.shift();
             }
         }
-        alert(props.selected);
+        // alert(props.selected);
 
         props.onSelect(selected);
     }

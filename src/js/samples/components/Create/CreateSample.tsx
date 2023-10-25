@@ -1,9 +1,11 @@
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { filter, find, get, intersectionWith } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { filter, find, intersectionWith } from "lodash-es";
+import React from "react";
+import { useMutation } from "react-query";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
+import { useFetchSettings } from "../../../administration/querys";
 import {
     Box,
     Icon,
@@ -18,15 +20,13 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "../../../base";
-import { clearError } from "../../../errors/actions";
-import { File } from "../../../files/components/File";
 import { useInfiniteFindFiles } from "../../../files/querys";
-import { File as fileTyping, FileType } from "../../../files/types";
+import { FileType } from "../../../files/types";
 import PersistForm from "../../../forms/components/PersistForm";
-import { listLabels } from "../../../labels/actions";
-import { shortlistSubtractions } from "../../../subtraction/actions";
-import { getSubtractionShortlist } from "../../../subtraction/selectors";
-import { createSample } from "../../actions";
+import { useListGroups } from "../../../groups/querys";
+import { useFetchLabels } from "../../../labels/hooks";
+import { useSubtractionsShortlist } from "../../../subtraction/querys";
+import { createSample } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import { Sidebar } from "./Sidebar";
@@ -138,24 +138,32 @@ const getInitialValues = forceGroupChoice => ({
     sidebar: { labels: [], subtractionIds: [] },
 });
 
-const renderRow = (canRemoveFiles: boolean) => (item: fileTyping) =>
-    <File {...item} canRemove={canRemoveFiles} key={item.id} />;
+export default function CreateSample() {
+    const { data: allLabels, isLoading: labelsLoading } = useFetchLabels();
+    const { data: groups } = useListGroups();
+    const { data: subtractions, isLoading: subtractionsLoading } = useSubtractionsShortlist();
+    const { data: settings, isLoading: settingsLoading } = useFetchSettings();
 
-export function CreateSample({
-    error,
-    forceGroupChoice,
-    groups,
-    subtractions,
-    allLabels,
-    onLoadSubtractionsAndFiles,
-    onCreate,
-    onClearError,
-    onListLabels,
-}) {
-    useEffect(() => {
-        onLoadSubtractionsAndFiles();
-        onListLabels();
-    }, []);
+    const history = useHistory();
+    const samplesMutation = useMutation(createSample, {
+        onSuccess: () => {
+            history.push("/samples");
+        },
+    });
+
+    function onCreate(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group?) {
+        samplesMutation.mutate({
+            name,
+            isolate,
+            host,
+            locale,
+            libraryType,
+            subtractions: subtractionIds,
+            files,
+            labels,
+            group,
+        });
+    }
 
     const {
         data: readsResponse,
@@ -164,9 +172,11 @@ export function CreateSample({
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.reads, 10);
 
-    if (subtractions === null || allLabels === null || isReadsLoading) {
+    if (isReadsLoading || labelsLoading || subtractionsLoading || settingsLoading) {
         return <LoadingPlaceholder margin="36px" />;
     }
+
+    const forceGroupChoice = settings.sample_group === "force_choice";
 
     const reads = filter(readsResponse.pages[0].items, { reserved: false });
 
@@ -201,7 +211,9 @@ export function CreateSample({
         <>
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
-                <CreateSampleInputError>{error}</CreateSampleInputError>
+                <CreateSampleInputError>
+                    {samplesMutation.isError && samplesMutation.error["response"].body.message}
+                </CreateSampleInputError>
             </ViewHeader>
             <Formik
                 onSubmit={handleSubmit}
@@ -223,7 +235,7 @@ export function CreateSample({
                         <AlertContainer>
                             <PersistForm
                                 formName="create-sample"
-                                castValues={castValues(reads, subtractions, allLabels)}
+                                castValues={castValues(reads, subtractions.body, allLabels)}
                             />
                         </AlertContainer>
                         <CreateSampleName>
@@ -311,35 +323,3 @@ export function CreateSample({
         </>
     );
 }
-
-export const mapStateToProps = state => ({
-    error: get(state, "errors.CREATE_SAMPLE_ERROR.message", ""),
-    forceGroupChoice: state.settings.data.sample_group === "force_choice",
-    groups: state.account.groups,
-    subtractions: getSubtractionShortlist(state),
-    allLabels: state.labels.documents,
-});
-
-export const mapDispatchToProps = dispatch => ({
-    onLoadSubtractionsAndFiles: () => {
-        dispatch(shortlistSubtractions());
-    },
-
-    onCreate: (name, isolate, host, locale, libraryType, subtractionIds, files, labels, group) => {
-        if (group === null) {
-            dispatch(createSample(name, isolate, host, locale, libraryType, subtractionIds, files, labels));
-        } else {
-            dispatch(createSample(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group));
-        }
-    },
-
-    onClearError: () => {
-        dispatch(clearError("CREATE_SAMPLE_ERROR"));
-    },
-
-    onListLabels: () => {
-        dispatch(listLabels());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateSample);
