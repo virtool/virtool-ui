@@ -1,12 +1,20 @@
 import { map } from "lodash";
-import { startCase } from "lodash-es";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, Table } from "../../base";
 
-function JobArgsRow({ children, title }) {
+/**
+ * A single row of the job arguments table.
+ *
+ * @param children - What to display as the value of the argument
+ * @param title - The name of the job argument
+ * @param className - An optional class name to apply to the row
+ * @returns A table row containing the argument name and value
+ */
+function JobArgsRow({ children, title, className }: { children: ReactNode; title: string; className?: string }) {
     return (
-        <tr>
+        <tr className={className}>
             <th>{title}</th>
             <td>{children}</td>
         </tr>
@@ -93,6 +101,13 @@ export function UpdateSampleRows({ sample_id }: { sample_id: string }) {
     );
 }
 
+const UnsupportedJobArgsRow = styled(JobArgsRow)`
+    th {
+        font-weight: normal;
+        font-family: monospace;
+    }
+`;
+
 /**
  * Generic rows displaying the arguments passed to the job when the workflow type is not know.
  *
@@ -105,9 +120,9 @@ function GenericJobArgsRows({ args }: { args: { [key: string]: any } }) {
             {map(args, (value, key) => {
                 if (typeof value === "string" || typeof value === "number") {
                     return (
-                        <JobArgsRow key={key} title={startCase(key)}>
+                        <UnsupportedJobArgsRow key={key} title={key}>
                             {value}
-                        </JobArgsRow>
+                        </UnsupportedJobArgsRow>
                     );
                 }
             })}
