@@ -27,15 +27,11 @@ exports[`<SampleRights /> > should render 1`] = `
           <option
             key="managers"
             value="managers"
-          >
-            Managers
-          </option>
+          />
           <option
             key="technicians"
             value="technicians"
-          >
-            Technicians
-          </option>
+          />
         </InputSelect>
       </InputGroup>
       <InputGroup>

@@ -55,7 +55,7 @@ export class SampleRights extends React.Component {
         const selectedGroup =
             typeof this.props.group === "number"
                 ? this.props.group
-                : find(this.props.groups, { name: this.props.group }).id;
+                : find(this.props.groups, { legacy_id: this.props.group })?.id;
 
         return (
             <ContainerNarrow>
