@@ -1,5 +1,6 @@
 import React from "react";
 import { describe, expect, it } from "vitest";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { JobSteps, mapStateToProps } from "../Steps";
 
 describe("<JobSteps />", () => {

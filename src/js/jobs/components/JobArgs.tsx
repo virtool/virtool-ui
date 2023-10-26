@@ -114,10 +114,10 @@ const UnsupportedJobArgsRow = styled(JobArgsRow)`
  * @param args - The complete list of arguments used to run the job
  * @returns Table rows containing the arguments of the job
  */
-function GenericJobArgsRows({ args }: { args: { [key: string]: any } }) {
+function GenericJobArgsRows({ args }: { args: object }) {
     return (
         <>
-            {map(args, (value, key) => {
+            {map(args, (value, key): ReactNode => {
                 if (typeof value === "string" || typeof value === "number") {
                     return (
                         <UnsupportedJobArgsRow key={key} title={key}>
@@ -125,6 +125,7 @@ function GenericJobArgsRows({ args }: { args: { [key: string]: any } }) {
                         </UnsupportedJobArgsRow>
                     );
                 }
+                return null;
             })}
         </>
     );
@@ -163,7 +164,7 @@ export function JobArgsRows({ workflow, args }) {
 
 type JobArgsProps = {
     workflow: string;
-    args: { [key: string]: any };
+    args: object;
 };
 
 /**
