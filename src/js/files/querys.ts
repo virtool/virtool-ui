@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { Request } from "../app/request";
-import { FileType } from "./types";
+import { FileResponse, FileType } from "./types";
 
 export const fileQueryKeys = {
     all: () => ["files"] as const,
@@ -29,7 +29,7 @@ function findFiles(type: FileType, page: number, per_page: number, term?: string
 }
 
 export function useInfiniteFindFiles(type: FileType, per_page: number, term?: string) {
-    return useInfiniteQuery(
+    return useInfiniteQuery<FileResponse>(
         fileQueryKeys.infiniteList(type, [per_page]),
         ({ pageParam }) => findFiles(type, pageParam, per_page, term),
         {

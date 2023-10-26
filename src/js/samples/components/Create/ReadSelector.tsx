@@ -1,14 +1,16 @@
 import { flatMap, includes, indexOf, toLower, without } from "lodash-es";
-import React, { useState } from "react";
+import React, { ReactEventHandler, useState } from "react";
+import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontWeight } from "../../../app/theme";
+import { getFontWeight, theme } from "../../../app/theme";
 import { Box, Button, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
 import { ScrollList } from "../../../base/ScrollList";
+import { FileResponse } from "../../../files/types";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 const ReadSelectorBox = styled(Box)`
-    ${props => (props.onError ? `border-color: ${props.theme.color.red};` : "")};
+    ${props => (props.onError ? `border-color: ${theme.color.red};` : "")};
 `;
 
 export const ReadSelectorButton = styled(Button)`
@@ -34,47 +36,64 @@ const ReadSelectorHeader = styled.label`
     }
 `;
 
-export default function ReadSelector(props) {
+type ReadSelectorProps = {
+    data: InfiniteData<FileResponse>;
+    isFetchingNextPage: boolean;
+    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    isLoading: boolean;
+    onSelect: (selected: number[]) => void;
+    error: string;
+    selected: number[];
+};
+
+export default function ReadSelector({
+    data,
+    isFetchingNextPage,
+    fetchNextPage,
+    isLoading,
+    onSelect,
+    error,
+    selected,
+}: ReadSelectorProps) {
     const [term, setTerm] = useState("");
 
     function handleSelect(selectedId) {
-        let selected;
+        let selectedTemp;
 
-        if (includes(props.selected, selectedId)) {
+        if (includes(selected, selectedId)) {
             alert("hi");
-            selected = without(props.selected, selectedId);
+            selectedTemp = without(selected, selectedId);
         } else {
-            selected = props.selected.concat([selectedId]);
+            selectedTemp = selected.concat([selectedId]);
 
-            if (selected.length === 3) {
-                selected.shift();
+            if (selectedTemp.length === 3) {
+                selectedTemp.shift();
             }
         }
-        // alert(props.selected);
 
-        props.onSelect(selected);
+        onSelect(selectedTemp);
     }
 
     function swap() {
-        props.onSelect(props.selected.slice().reverse());
+        onSelect(selected.slice().reverse());
     }
 
     function reset() {
         setTerm("");
-        props.onSelect([]);
+        onSelect([]);
     }
 
     const loweredFilter = toLower(term);
 
-    const items = flatMap(props.data.pages, page => page.items);
-    const data = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
+    const items = flatMap(data?.pages, page => page.items);
+    const files = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
 
     function renderRow(file) {
-        const index = indexOf(props.selected, file.id);
+        const index = indexOf(selected, file.id);
         return <ReadSelectorItem {...file} key={file.id} index={index} selected={index > -1} onSelect={handleSelect} />;
     }
 
-    const noneFound = props.data.pages[0].total_count === 0 && (
+    const noneFound = data?.pages[0].total_count === 0 && (
         <NoneFoundSection noun="data">
             <Link to="/samples/data">Upload some</Link>
         </NoneFoundSection>
@@ -82,25 +101,25 @@ export default function ReadSelector(props) {
 
     let pairedness;
 
-    if (props.selected.length == 1) {
+    if (selected.length == 1) {
         pairedness = <span>Unpaired | </span>;
     }
 
-    if (props.selected.length == 2) {
+    if (selected.length == 2) {
         pairedness = <span>Paired | </span>;
     }
 
     return (
         <div>
             <ReadSelectorHeader>
-                <label>Read data</label>
+                <label>Read files</label>
                 <span>
                     {pairedness}
-                    {props.selected.length} of {props.data.pages[0].total_count || 0} selected
+                    {selected.length} of {data?.pages[0].total_count || 0} selected
                 </span>
             </ReadSelectorHeader>
 
-            <ReadSelectorBox onError={props.error}>
+            <ReadSelectorBox onError={error as unknown as ReactEventHandler}>
                 <Toolbar>
                     <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
                     <ReadSelectorButton type="button" icon="undo" tip="Clear" onClick={reset} />
@@ -109,14 +128,14 @@ export default function ReadSelector(props) {
                 {noneFound}
 
                 <ScrollList
-                    fetchNextPage={props.fetchNextPage}
-                    isFetchingNextPage={props.isFetchingNextPage}
-                    isLoading={props.isReadsLoading}
-                    items={data}
+                    fetchNextPage={fetchNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    isLoading={isLoading}
+                    items={files}
                     renderRow={renderRow}
                 />
 
-                <ReadSelectorError>{props.error}</ReadSelectorError>
+                <ReadSelectorError>{error}</ReadSelectorError>
             </ReadSelectorBox>
         </div>
     );
