@@ -1,5 +1,5 @@
 import { flatMap, includes, indexOf, toLower, without } from "lodash-es";
-import React, { ReactEventHandler, useState } from "react";
+import React, { ReactEventHandler, useEffect, useState } from "react";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -46,6 +46,8 @@ type ReadSelectorProps = {
     selected: number[];
 };
 
+let selectedFiles = [];
+
 export default function ReadSelector({
     data,
     isFetchingNextPage,
@@ -56,22 +58,24 @@ export default function ReadSelector({
     selected,
 }: ReadSelectorProps) {
     const [term, setTerm] = useState("");
+    useEffect(() => {
+        alert(selected);
+    }, []);
 
     function handleSelect(selectedId) {
-        let selectedTemp;
-
-        if (includes(selected, selectedId)) {
-            alert("hi");
-            selectedTemp = without(selected, selectedId);
+        if (includes(selectedFiles, selectedId)) {
+            selectedFiles = without(selectedFiles, selectedId);
+            selected = without(selected, selectedId);
         } else {
-            selectedTemp = selected.concat([selectedId]);
-
-            if (selectedTemp.length === 3) {
-                selectedTemp.shift();
+            selected = [...selected, selectedId];
+            selectedFiles = [...selectedFiles, selectedId];
+            if (selectedFiles.length === 3) {
+                selectedFiles.shift();
+                selected.shift();
             }
         }
-
-        onSelect(selectedTemp);
+        alert(selectedFiles);
+        onSelect(selectedFiles);
     }
 
     function swap() {
@@ -80,6 +84,7 @@ export default function ReadSelector({
 
     function reset() {
         setTerm("");
+        selectedFiles = [];
         onSelect([]);
     }
 
@@ -90,7 +95,16 @@ export default function ReadSelector({
 
     function renderRow(file) {
         const index = indexOf(selected, file.id);
-        return <ReadSelectorItem {...file} key={file.id} index={index} selected={index > -1} onSelect={handleSelect} />;
+        return (
+            <ReadSelectorItem
+                {...file}
+                key={file.id}
+                index={index}
+                selected={index > -1}
+                selectedFiles={selectedFiles}
+                onSelect={handleSelect}
+            />
+        );
     }
 
     const noneFound = data?.pages[0].total_count === 0 && (

@@ -54,7 +54,10 @@ type ReadSelectorItemProps = {
 };
 
 export default function ReadSelectorItem({ id, index, name, selected, size, onSelect }: ReadSelectorItemProps) {
-    const select = useCallback(() => onSelect(id), []);
+    const select = useCallback(() => {
+        // alert(id);
+        onSelect(id);
+    }, []);
 
     return (
         <StyledReadSelectorItem onClick={select} active={selected}>

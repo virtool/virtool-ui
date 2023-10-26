@@ -114,6 +114,8 @@ function castValues(reads, subtractions, allLabels) {
             subtractions,
             (subtractionId, subtraction) => subtractionId === subtraction.id,
         );
+        // alert(JSON.stringify(reads.length));
+        // alert(JSON.stringify(values));
         return { ...values, readFiles, sidebar: { labels, subtractionIds } };
     };
 }
@@ -180,8 +182,9 @@ export default function CreateSample() {
     }
 
     const forceGroupChoice = settings.sample_group === "force_choice";
-
+    // alert(JSON.stringify(readsResponse));
     const reads = filter(readsResponse.pages[0].items, { reserved: false });
+    // alert(JSON.stringify(readsResponse.pages[0].items.length));
 
     function autofill(selected, setFieldValue) {
         const fileName = getFileNameFromId(selected[0], reads);
@@ -210,6 +213,7 @@ export default function CreateSample() {
             onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
         }
     }
+    let selectedFiles = [];
     return (
         <>
             <ViewHeader title="Create Sample">
