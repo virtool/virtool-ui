@@ -1,5 +1,5 @@
 import { flatMap, includes, indexOf, toLower, without } from "lodash-es";
-import React, { ReactEventHandler, useEffect, useState } from "react";
+import React, { ReactEventHandler, useState } from "react";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -58,10 +58,8 @@ export default function ReadSelector({
     selected,
 }: ReadSelectorProps) {
     const [term, setTerm] = useState("");
-    useEffect(() => {
-        alert(selected);
-    }, []);
 
+    selectedFiles = selected;
     function handleSelect(selectedId) {
         if (includes(selectedFiles, selectedId)) {
             selectedFiles = without(selectedFiles, selectedId);
