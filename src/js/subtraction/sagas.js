@@ -10,12 +10,11 @@ import {
     SHORTLIST_SUBTRACTIONS,
 } from "../app/actionTypes";
 import { deletePersistentFormState } from "../forms/actions";
-import { apiCall, pushFindTerm } from "../utils/sagas";
+import { apiCall } from "../utils/sagas";
 import * as subtractionAPI from "./api";
 
 export function* findSubtractions(action) {
     yield apiCall(subtractionAPI.find, action.payload, FIND_SUBTRACTIONS);
-    yield pushFindTerm(action.payload.term);
 }
 
 export function* getSubtraction(action) {

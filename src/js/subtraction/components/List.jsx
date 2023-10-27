@@ -26,7 +26,7 @@ export function SubtractionList({ onLoadNextPage, documents, page, page_count, t
         if (!fetched) {
             onLoadNextPage(term, 1);
         }
-    }, [fetched, onLoadNextPage, term]);
+    }, []);
     if (documents === null) {
         return <LoadingPlaceholder />;
     }
