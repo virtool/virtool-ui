@@ -21,12 +21,12 @@ const renderRow = index => <SubtractionItem key={index} index={index} />;
  * @returns SubtractionList - A list of subtractions
  */
 export function SubtractionList({ onLoadNextPage, documents, page, page_count, total_count, fetched }) {
-    const [term] = useUrlSearchParams("find");
+    const [term] = useUrlSearchParams("find", "foo");
     useEffect(() => {
         if (!fetched) {
             onLoadNextPage(term, 1);
         }
-    }, []);
+    }, [term]);
     if (documents === null) {
         return <LoadingPlaceholder />;
     }

@@ -79,10 +79,9 @@ export function useUrlSearchParams(key: string, defaultValue?: string): [string,
     const history = useHistory();
     const firstRender = useRef(true);
 
-    const params = new URLSearchParams(window.location.search);
-    let value = params.get(key);
+    let value = new URLSearchParams(window.location.search).get(key);
 
-    if (firstRender.current && defaultValue && !params.get(key)) {
+    if (firstRender.current && defaultValue && !value) {
         value = defaultValue;
         updateUrlSearchParams(defaultValue, key, history);
     }

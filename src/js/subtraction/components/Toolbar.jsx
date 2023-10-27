@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
@@ -13,11 +13,13 @@ import { findSubtractions } from "../actions";
  * @returns Toolbar - A search filtering toolbar
  */
 export const SubtractionToolbar = ({ onFind, canModify }) => {
-    const [term, setTerm] = useUrlSearchParams("find");
+    const [value, setValue] = useUrlSearchParams("find");
+    const [term, setTerm] = useState(value);
 
     const onChange = e => {
         const searchValue = e.target.value;
         setTerm(searchValue);
+        setValue(searchValue);
         onFind(searchValue);
     };
 
