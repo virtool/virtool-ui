@@ -55,8 +55,17 @@ export const useDidUpdateEffect = (onUpdate, deps) => {
  */
 function updateUrlSearchParams(value: string, key: string, history: HistoryType) {
     const params = new URLSearchParams(window.location.search);
-    params.set(key, value);
-    history.replace({ pathname: window.location.pathname, search: params.toString() ? `?${params.toString()}` : null });
+
+    if (value) {
+        params.set(key, value);
+    } else {
+        params.delete(key);
+    }
+
+    history?.replace({
+        pathname: window.location.pathname,
+        search: params.toString() ? `?${params.toString()}` : null,
+    });
 }
 
 /**
@@ -71,12 +80,14 @@ export function useUrlSearchParams(key: string, defaultValue?: string): [string,
     const firstRender = useRef(true);
 
     const params = new URLSearchParams(window.location.search);
+    let value = params.get(key);
 
     if (firstRender.current && defaultValue && !params.get(key)) {
+        value = defaultValue;
         updateUrlSearchParams(defaultValue, key, history);
     }
 
     firstRender.current = false;
 
-    return [params.get(key), (value: string) => updateUrlSearchParams(value, key, history)];
+    return [value, (value: string) => updateUrlSearchParams(value, key, history)];
 }
