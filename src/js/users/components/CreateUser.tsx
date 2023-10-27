@@ -6,7 +6,7 @@ import { StyledButton } from "../../base/styled/StyledButton";
 import { create } from "../api";
 import { CreateUserForm } from "./CreateUserForm";
 
-type NewUserProps = {
+type NewUser = {
     /** The user's handle or username */
     handle: string;
     /** The user's password */
@@ -21,21 +21,21 @@ type NewUserProps = {
 export default function CreateUser() {
     const mutation = useMutation(create, {
         onSuccess: () => {
-            history.replaceState({ state: !history.state.state }, "");
+            history.replaceState({ createUser: false }, "");
         },
     });
 
-    function handleSubmit({ handle, password, forceReset }: NewUserProps) {
+    function handleSubmit({ handle, password, forceReset }: NewUser) {
         mutation.mutate({ handle, password, forceReset });
     }
 
-    function handleChange() {
+    function onOpenChange() {
         mutation.reset();
-        history.replaceState({ state: !history.state?.state }, "");
+        history.replaceState({ createUser: !history.state?.createUser }, "");
     }
 
     return (
-        <Dialog open={history.state?.state} onOpenChange={() => handleChange()}>
+        <Dialog open={history.state?.createUser} onOpenChange={onOpenChange}>
             <StyledButton as={DialogTrigger} color="blue">
                 <Icon name="user-plus" />
             </StyledButton>
