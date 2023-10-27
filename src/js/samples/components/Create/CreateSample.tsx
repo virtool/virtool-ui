@@ -1,5 +1,5 @@
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { filter, find, intersectionWith } from "lodash-es";
+import { find, intersectionWith } from "lodash-es";
 import React from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
@@ -107,6 +107,7 @@ const AlertContainer = styled.div`
 
 function castValues(reads, subtractions, allLabels) {
     return function (values) {
+        alert(reads.length);
         const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
         const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
         const subtractionIds = intersectionWith(
@@ -114,8 +115,6 @@ function castValues(reads, subtractions, allLabels) {
             subtractions,
             (subtractionId, subtraction) => subtractionId === subtraction.id,
         );
-        // alert(JSON.stringify(reads.length));
-        // alert(JSON.stringify(values));
         return { ...values, readFiles, sidebar: { labels, subtractionIds } };
     };
 }
@@ -182,9 +181,11 @@ export default function CreateSample() {
     }
 
     const forceGroupChoice = settings.sample_group === "force_choice";
-    // alert(JSON.stringify(readsResponse));
-    const reads = filter(readsResponse.pages[0].items, { reserved: false });
-    // alert(JSON.stringify(readsResponse.pages[0].items.length));
+
+    const reads = readsResponse.pages.flatMap(page => page.items);
+    // alert(items);
+
+    // const reads = filter(readsResponse.pages[0].items, { reserved: false });
 
     function autofill(selected, setFieldValue) {
         const fileName = getFileNameFromId(selected[0], reads);
@@ -213,7 +214,7 @@ export default function CreateSample() {
             onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
         }
     }
-    let selectedFiles = [];
+
     return (
         <>
             <ViewHeader title="Create Sample">
