@@ -12,7 +12,10 @@ exports[`<SubtractionList /> > renders correctly 1`] = `
       </Badge>
     </ViewHeaderTitle>
   </ViewHeader>
-  <Connect(SubtractionToolbar) />
+  <Connect(SubtractionToolbar)
+    onChange={[Function]}
+    term={null}
+  />
   <LegacyScrollList
     documents={
       [
