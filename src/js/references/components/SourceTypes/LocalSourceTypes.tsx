@@ -60,8 +60,13 @@ const SourceTypesUndo = styled(BoxGroupSection)`
     }
 `;
 
+interface MatchTypes {
+    /** The reference id */
+    refId: string;
+}
+
 export function LocalSourceTypes() {
-    const match = useRouteMatch();
+    const match = useRouteMatch<MatchTypes>();
     const refId = match.params.refId;
 
     const { data, isLoading } = useGetReference(refId);

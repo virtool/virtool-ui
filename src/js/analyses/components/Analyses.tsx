@@ -16,8 +16,13 @@ interface AnalysesProps {
     onListReadyIndexes: () => void;
 }
 
+interface MatchTypes {
+    /** The sample id */
+    sampleId: string;
+}
+
 function Analyses({ loading, onFindAnalyses, onFindHmms, onListReadyIndexes }: AnalysesProps) {
-    const sampleId = useRouteMatch().params.sampleId;
+    const sampleId = useRouteMatch<MatchTypes>().params.sampleId;
 
     useEffect(() => {
         onFindAnalyses(sampleId);

@@ -5,7 +5,7 @@ import { StyledButton } from "./styled/StyledButton";
 import { Tooltip } from "./Tooltip";
 
 interface LinkButtonProps {
-    children?: React.ReactNode;
+    children?: string;
     color?: string;
     className?: string;
     disabled?: boolean;
