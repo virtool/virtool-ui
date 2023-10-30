@@ -11,7 +11,7 @@ import { LabelNested } from "../labels/types";
 import { UserNested } from "../users/types";
 import { SearchResult } from "../utils/types";
 
-/* All workflow states */
+/** All workflow states */
 export enum WorkflowState {
     COMPLETE = "complete",
     PENDING = "pending",
@@ -19,7 +19,7 @@ export enum WorkflowState {
     INCOMPATIBLE = "incompatible",
 }
 
-/* All Library types */
+/** All Library types */
 export enum LibraryType {
     amplicon = "amplicon",
     srna = "srna",
@@ -27,7 +27,7 @@ export enum LibraryType {
     normal = "normal",
 }
 
-/* All workflow states for a sample */
+/** All workflow states for a sample */
 export type SampleWorkflows = {
     /** The state of AODP workflows */
     aodp: WorkflowState;
@@ -37,53 +37,54 @@ export type SampleWorkflows = {
     pathoscope: WorkflowState;
 };
 
-/* A Sample ID */
+/** A Sample ID */
 export type SampleID = {
     id: string;
 };
 
-/* A Sample with essential information */
+/** A Sample with essential information */
 export type SampleNested = SampleID & {
     name: string;
 };
 
-/* Minimal Sample used for websocket messages and resource listings */
+/** Minimal Sample used for websocket messages and resource listings */
 export type SampleMinimal = SampleNested & {
-    created_at: Date;
+    /** The iso formatted date of creation */
+    created_at: string;
     host: string;
     isolate: string;
-    /* Information about the job associated with the sample */
+    /** Information about the job associated with the sample */
     job?: JobMinimal;
-    /* Labels associated with the sample */
+    /** Labels associated with the sample */
     labels: Array<LabelNested>;
     library_type: LibraryType;
     notes: string;
     nuvs: boolean | string;
     pathoscope: boolean | string;
     ready: boolean;
-    /* The user who created the sample */
+    /** The user who created the sample */
     user: UserNested;
     workflows: SampleWorkflows;
 };
 
-/* The quality charts associated with the sample */
+/** The quality charts associated with the sample */
 export type Quality = {
-    /* Data for bases chart  */
+    /** Data for bases chart  */
     bases: Array<Array<number>>;
-    /* Data for composition chart */
+    /** Data for composition chart */
     composition: Array<Array<number>>;
-    /* The read count of the sample */
+    /** The read count of the sample */
     count: number;
     encoding: string;
-    /* The GC content of the sample (percentage) */
+    /** The GC content of the sample (percentage) */
     gc: number;
-    /* The length range */
+    /** The length range */
     length: Array<number>;
-    /* Data for sequences chart */
+    /** Data for sequences chart */
     sequences: Array<number>;
 };
 
-/* The read file used to create the sample */
+/** The read file used to create the sample */
 export type Read = {
     download_url: string;
     id: number;
@@ -92,10 +93,11 @@ export type Read = {
     sample: string;
     size: number;
     upload?: File;
-    uploaded_at: Date;
+    /** The iso formatted date of upload */
+    uploaded_at: string;
 };
 
-/* Sample search results from the API */
+/** Sample search results from the API */
 export type SampleSearchResult = SearchResult & {
     documents: Array<SampleMinimal>;
 };

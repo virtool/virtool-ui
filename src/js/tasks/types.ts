@@ -1,6 +1,7 @@
 export type Task = {
     complete: boolean;
-    created_at: Date;
+    /** The iso formatted date of creation */
+    created_at: string;
     error: string | null;
     id: number;
     progress: number;

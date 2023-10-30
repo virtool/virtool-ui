@@ -12,7 +12,7 @@ export type AnalysisSample = {
 
 /** Minimal Analysis used for websocket messages and resource listings */
 export type AnalysisMinimal = {
-    /** When the analysis was created */
+    /** The iso formatted date of creation */
     created_at: string;
     /** The unique identifier for the analysis */
     id: string;
@@ -28,8 +28,8 @@ export type AnalysisMinimal = {
     sample: AnalysisSample;
     /** Subtractions used in the analysis */
     subtractions: Array<SubtractionNested>;
-    /** When the analysis was last updated */
-    updated_at: Date;
+    /** The iso formatted date of when the analysis was last updated */
+    updated_at: string;
     /** The user who created the analysis */
     user: UserNested;
     /** Workflow used to generate the analysis */
@@ -52,8 +52,8 @@ export type AnalysisFile = {
     name_on_disk: string;
     /** The size of the file in bytes */
     size?: number;
-    /** When the analysis file was uploaded */
-    uploaded_at?: Date;
+    /** The iso formatted date of when the analysis file was uploaded */
+    uploaded_at?: string;
 };
 
 /** A complete Analysis */

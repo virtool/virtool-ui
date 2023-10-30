@@ -18,6 +18,7 @@ export type UnpaginatedFileResponse = {
 
 export type File = {
     id: string;
+    /** The iso formatted date of creation */
     created_at: string;
     name: string;
     name_on_disk: string;
