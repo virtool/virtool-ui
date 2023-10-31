@@ -5,7 +5,8 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { checkAdminRoleOrPermission } from "../../../administration/utils";
-import { mapStateToProps, SubtractionToolbar } from "../Toolbar";
+import { FIND_SUBTRACTIONS } from "../../../app/actionTypes";
+import { mapDispatchToProps, mapStateToProps, SubtractionToolbar } from "../Toolbar";
 
 vi.mock("../../../administration/utils.ts");
 
@@ -61,6 +62,20 @@ describe("mapStateToProps()", () => {
         const props = mapStateToProps(state);
         expect(props).toEqual({
             canModify,
+        });
+    });
+});
+
+describe("mapDispatchToProps()", () => {
+    it.each(["Foo", ""])("should return onFind() in props that takes [value=%p]", value => {
+        const dispatch = vi.fn();
+        const props = mapDispatchToProps(dispatch);
+        const term = { target: { value } };
+        props.onFind(term);
+
+        expect(dispatch).toHaveBeenCalledWith({
+            type: FIND_SUBTRACTIONS.REQUESTED,
+            payload: { term, page: 1 },
         });
     });
 });

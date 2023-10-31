@@ -1,12 +1,13 @@
 import { shallow } from "enzyme";
 import React from "react";
+import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { SubtractionList } from "../List";
 
 describe("<SubtractionList />", () => {
     let props;
     let wrapper;
-
+    //
     it("renders correctly", () => {
         props = {
             filter: "test",
@@ -23,7 +24,11 @@ describe("<SubtractionList />", () => {
             onFilter: vi.fn(),
             loadNextPage: vi.fn(),
         };
-        wrapper = shallow(<SubtractionList {...props} />);
+        wrapper = shallow(
+            <MemoryRouter initialEntries={[{ key: "test", pathname: "/subtractions" }]}>
+                <SubtractionList {...props} />
+            </MemoryRouter>,
+        );
         expect(wrapper).toMatchSnapshot();
     });
 });

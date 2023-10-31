@@ -5,7 +5,7 @@ import { StyledButton } from "./styled/StyledButton";
 import { Tooltip } from "./Tooltip";
 
 interface LinkButtonProps {
-    children?: string;
+    children?: React.ReactNode;
     color?: string;
     className?: string;
     disabled?: boolean;
@@ -30,7 +30,7 @@ export const LinkButton = ({
     const button = (
         <StyledButton
             as={NavLink}
-            aria-label={children || icon}
+            aria-label={icon}
             className={className}
             color={color}
             replace={replace}

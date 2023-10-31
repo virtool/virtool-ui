@@ -1,22 +1,40 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`<SubtractionList /> > renders correctly 1`] = `
-<Fragment>
-  <ViewHeader
-    title="Subtractions"
-  >
-    <ViewHeaderTitle>
-      Subtractions 
-      <Badge>
-        1
-      </Badge>
-    </ViewHeaderTitle>
-  </ViewHeader>
-  <Connect(SubtractionToolbar)
-    onChange={[Function]}
-    term={null}
-  />
-  <LegacyScrollList
+<Router
+  history={
+    {
+      "action": "POP",
+      "block": [Function],
+      "canGo": [Function],
+      "createHref": [Function],
+      "entries": [
+        {
+          "hash": "",
+          "key": "test",
+          "pathname": "/subtractions",
+          "search": "",
+        },
+      ],
+      "go": [Function],
+      "goBack": [Function],
+      "goForward": [Function],
+      "index": 0,
+      "length": 1,
+      "listen": [Function],
+      "location": {
+        "hash": "",
+        "key": "test",
+        "pathname": "/subtractions",
+        "search": "",
+      },
+      "push": [Function],
+      "replace": [Function],
+    }
+  }
+>
+  <SubtractionList
+    canModify={true}
     documents={
       [
         "one",
@@ -24,10 +42,17 @@ exports[`<SubtractionList /> > renders correctly 1`] = `
         "three",
       ]
     }
-    onLoadNextPage={[Function]}
+    errorLoad={false}
+    fetched={true}
+    filter="test"
+    isLoading={false}
+    loadNextPage={[MockFunction spy]}
+    onFilter={[MockFunction spy]}
     page={1}
-    pageCount={1}
-    renderRow={[Function]}
+    page_count={1}
+    ready_host_count={1}
+    refetchPage={false}
+    total_count={1}
   />
-</Fragment>
+</Router>
 `;

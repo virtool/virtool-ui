@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { RouteComponentProps, useHistory } from "react-router-dom";
+import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 export type HistoryType = RouteComponentProps["history"];
 
@@ -77,9 +77,10 @@ function updateUrlSearchParams(value: string, key: string, history: HistoryType)
  */
 export function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
     const history = useHistory();
+    const location = useLocation();
     const firstRender = useRef(true);
 
-    let value = new URLSearchParams(window.location.search).get(key);
+    let value = new URLSearchParams(location.search).get(key);
 
     if (firstRender.current && defaultValue && !value) {
         value = defaultValue;
