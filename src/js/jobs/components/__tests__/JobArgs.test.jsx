@@ -1,16 +1,9 @@
-import { shallow } from "enzyme";
 import CreateBrowserHistory from "history/es/createBrowserHistory";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import {
-    AnalysisRows,
-    BuildIndexRows,
-    CreateSampleRows,
-    CreateSubtractionRows,
-    JobArgs,
-    UpdateSampleRows,
-} from "../JobArgs";
+import { renderWithRouter } from "../../../../tests/setupTests";
+import { JobArgs } from "../JobArgs";
 
 const sample_id = "test_sample_id";
 const analysis_id = "test_analysis-id";
@@ -71,40 +64,5 @@ describe("<JobArgs />", () => {
         expect(screen.getByText("test_sample_id")).toBeInTheDocument();
         expect(screen.queryByText("extra_param")).toBeInTheDocument();
         expect(screen.queryByText("extra_param_id")).toBeInTheDocument();
-    });
-});
-
-describe("<AnalysisRows />", () => {
-    it("renders correctly", () => {
-        const wrapper = shallow(<AnalysisRows analysis_id="foo" sample_id="bar" />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
-
-describe("<BuildIndexRows />", () => {
-    it("renders correctly", () => {
-        const wrapper = shallow(<BuildIndexRows ref_id="foo" index_id="bar" />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
-
-describe("<CreateSampleRows />", () => {
-    it("renders correctly", () => {
-        const wrapper = shallow(<CreateSampleRows sample_id="foo" />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
-
-describe("<CreateSubtractionRows />", () => {
-    it("renders correctly", () => {
-        const wrapper = shallow(<CreateSubtractionRows subtraction_id="foo" />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
-
-describe("<UpdateSampleRows />", () => {
-    it("renders correctly", () => {
-        const wrapper = shallow(<UpdateSampleRows sample_id="foo" />);
-        expect(wrapper).toMatchSnapshot();
     });
 });
