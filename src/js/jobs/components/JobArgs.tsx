@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, Table } from "../../base";
+import { workflows } from "../types";
 
 type JobArgsRowProps = {
     /** What to display as the value of the argument */
@@ -31,7 +32,7 @@ type AnalysisRowsProps = {
 };
 
 /** Rows showing important arguments when running a sample analysis workflow */
-export function AnalysisRows({ sample_id, analysis_id }: AnalysisRowsProps) {
+function AnalysisRows({ sample_id, analysis_id }: AnalysisRowsProps) {
     return (
         <>
             <JobArgsRow title="Sample">
@@ -52,7 +53,7 @@ type BuildIndexRowsProps = {
 };
 
 /** Rows showing important arguments when running an "build_index" workflow. */
-export function BuildIndexRows({ index_id, ref_id }: BuildIndexRowsProps) {
+function BuildIndexRows({ index_id, ref_id }: BuildIndexRowsProps) {
     return (
         <>
             <JobArgsRow title="Reference">
@@ -71,7 +72,7 @@ type CreateSampleRowsProps = {
 };
 
 /** Rows showing important arguments when running an "create_sample" workflow. */
-export function CreateSampleRows({ sample_id }: CreateSampleRowsProps) {
+function CreateSampleRows({ sample_id }: CreateSampleRowsProps) {
     return (
         <JobArgsRow title="Sample">
             <Link to={`/samples/${sample_id}`}>{sample_id}</Link>
@@ -85,7 +86,7 @@ type CreateSubtractionRowsProps = {
 };
 
 /** Rows showing important arguments when running a "create_subtraction" workflow. */
-export function CreateSubtractionRows({ subtraction_id }: CreateSubtractionRowsProps) {
+function CreateSubtractionRows({ subtraction_id }: CreateSubtractionRowsProps) {
     return (
         <JobArgsRow title="Subtraction">
             <Link to={`/subtractions/${subtraction_id}`}>{subtraction_id}</Link>
@@ -105,12 +106,7 @@ type UnknownJobRows = {
     args: object;
 };
 
-/**
- * Generic rows displaying the arguments passed to the job when the workflow type is not known.
- *
- * @param args - The  list of arguments used to run the job
- * @returns Table rows containing the arguments of the job
- */
+/** Generic rows displaying the arguments passed to the job when the workflow type is not known. */
 function UnknownJobRows({ args }: UnknownJobRows) {
     return (
         <>
@@ -128,33 +124,32 @@ function UnknownJobRows({ args }: UnknownJobRows) {
     );
 }
 
-type GenericArgs = AnalysisRowsProps & BuildIndexRowsProps & CreateSampleRowsProps & CreateSubtractionRowsProps;
-
-type JobArgsRowsProps = {
-    /** The workflow name */
-    workflow: string;
-    /** The complete list of arguments used to run the job */
-    args: GenericArgs;
+type GenericJobArgsProps<workflowType, argsType> = {
+    workflow: workflowType;
+    args: argsType;
 };
 
-/**  The table rows containing arguments used to run a job.
- *
- * @param workflow - The workflow name
- */
-export function JobArgsRows({ workflow, args }: JobArgsRowsProps) {
+type JobArgsRowsProps =
+    | GenericJobArgsProps<workflows.pathoscope_bowtie | workflows.nuvs | workflows.aodp, AnalysisRowsProps>
+    | GenericJobArgsProps<workflows.build_index, BuildIndexRowsProps>
+    | GenericJobArgsProps<workflows.create_sample, CreateSampleRowsProps>
+    | GenericJobArgsProps<workflows.create_subtraction, CreateSubtractionRowsProps>;
+
+/**  The table rows containing arguments used to run a job. */
+function JobArgsRows({ workflow, args }: JobArgsRowsProps) {
     switch (workflow) {
-        case "build_index":
+        case workflows.build_index:
             return <BuildIndexRows {...args} />;
 
-        case "create_sample":
+        case workflows.create_sample:
             return <CreateSampleRows {...args} />;
 
-        case "create_subtraction":
+        case workflows.create_subtraction:
             return <CreateSubtractionRows {...args} />;
 
-        case "aodp":
-        case "nuvs":
-        case "pathoscope_bowtie":
+        case workflows.aodp:
+        case workflows.nuvs:
+        case workflows.pathoscope_bowtie:
             return <AnalysisRows {...args} />;
 
         default:
@@ -162,15 +157,8 @@ export function JobArgsRows({ workflow, args }: JobArgsRowsProps) {
     }
 }
 
-type JobArgsProps = {
-    /** The workflow name */
-    workflow: string;
-    /** The complete list of arguments used to run the job */
-    args: GenericArgs;
-};
-
 /** A table of arguments used to run a job. */
-export function JobArgs({ workflow, args }: JobArgsProps) {
+export function JobArgs({ workflow, args }) {
     return (
         <BoxGroup>
             <BoxGroupHeader>
