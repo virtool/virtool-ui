@@ -62,6 +62,11 @@ const UnsupportedAnalysisTitle = styled.div`
     }
 `;
 
+interface MatchTypes {
+    /** The sample id */
+    sampleId: string;
+}
+
 /**
  * Condensed analysis item for use in a list of analyses
  */
@@ -76,7 +81,7 @@ export default function AnalysisItem({
     user,
     workflow,
 }: AnalysisMinimal) {
-    const sampleId = useRouteMatch().params.sampleId;
+    const sampleId = useRouteMatch<MatchTypes>().params.sampleId;
     const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
     const onRemove = useRemoveAnalysis(id);
 

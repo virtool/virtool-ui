@@ -30,7 +30,7 @@ export const LinkButton = ({
     const button = (
         <StyledButton
             as={NavLink}
-            aria-label={children || icon}
+            aria-label={icon}
             className={className}
             color={color}
             replace={replace}

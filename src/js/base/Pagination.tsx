@@ -18,7 +18,12 @@ const PaginationContainer = styled.div`
     padding-bottom: 5px;
 `;
 
-const PaginationLink = styled(Link)`
+type PaginationLinkProps = {
+    $active?: boolean;
+    disabled?: boolean;
+};
+
+const PaginationLink = styled(Link)<PaginationLinkProps>`
     color: ${props => getColor({ color: props.$active ? "blue" : "blueDarkest", theme: props.theme })};
     font-size: ${getFontSize("lg")};
     margin: 5px;
