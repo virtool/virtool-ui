@@ -1,4 +1,3 @@
-import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import {
@@ -40,7 +39,7 @@ export function Labels() {
 
             <BoxGroup>
                 {data.length ? (
-                    map(sortBy(data, "name"), label => (
+                    data.map(label => (
                         <Item
                             key={label.id}
                             name={label.name}
