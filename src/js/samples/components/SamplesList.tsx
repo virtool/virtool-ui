@@ -25,11 +25,14 @@ const StyledSamplesList = styled.div`
     grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
 `;
 
+/**
+ * A list of samples with filtering
+ */
 export default function SamplesList() {
     const location = useLocation();
-    const URLPage = parseInt(new URLSearchParams(location.search).get("page")) || 1;
     const [term, setTerm] = useUrlSearchParams("find");
-    const { data, isLoading } = useFindSamples(URLPage, 4, term);
+    const URLPage = parseInt(new URLSearchParams(location.search).get("page")) || 1;
+    const { data, isLoading } = useFindSamples(URLPage, 2, term as unknown as string);
     const [selected, setSelected] = useState([]);
 
     if (isLoading) {
@@ -61,19 +64,16 @@ export default function SamplesList() {
                 {...document}
                 key={document.id}
                 id={document.id}
-                index={document.id}
+                checked={selected.some(item => item.id === document.id)}
                 created_at={document.created_at}
+                handle={document.user.handle}
                 labels={document.labels}
                 library_type={document.library_type}
                 name={document.name}
-                ready={document.ready}
-                workflows={document.workflows}
-                handle={document.user.handle}
-                checked={selected.some(item => item.id === document.id)}
-                selected={selected}
                 onSelect={handleSelect}
+                ready={document.ready}
                 select={select}
-                document={document}
+                workflows={document.workflows}
             />
         );
     }

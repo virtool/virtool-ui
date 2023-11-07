@@ -42,9 +42,6 @@ export function ManageLabels({ selectedSamples, partiallySelectedLabels, documen
     }
 
     function getSelectedLabels() {
-        if (!document || !Array.isArray(document)) {
-            return [];
-        }
         const selectedLabelsCount = document.reduce((result, sample) => {
             sample.labels.forEach(label => {
                 if (result[label.id]) {

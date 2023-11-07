@@ -81,8 +81,6 @@ type SampleItemProps = {
     handle: string;
     /** The unique identifier of the sample */
     id: string;
-    /** Index of the sample */
-    index: number;
     /** Information about the job associated with the sample */
     job?: JobMinimal;
     /** Labels associated with the sample */
@@ -91,34 +89,31 @@ type SampleItemProps = {
     library_type: LibraryType;
     /** Name of the sample */
     name: string;
-    /** Callback to trigger quick analysis */
-    onQuickAnalyze: (id: string) => void;
     /** Callback to handle sample selection */
     onSelect: () => void;
     /** Whether the sample is ready */
     ready: boolean;
+    /** Callback to handle sample selection on end icon quick analysis */
+    select: () => void;
     /** Workflows associated with the sample */
     workflows: SampleWorkflows;
-    selected: string[];
-    select: any;
-    document: any;
 };
 
 /**
  * A condensed sample item for use in a list of samples
  */
 export default function SampleItem({
-    id,
+    checked,
     created_at,
+    handle,
+    id,
     labels,
     library_type,
     name,
-    ready,
-    workflows,
-    handle,
     onSelect,
+    ready,
     select,
-    checked,
+    workflows,
 }: SampleItemProps) {
     const history = useHistory();
 

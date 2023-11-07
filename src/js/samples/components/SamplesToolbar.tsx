@@ -26,12 +26,12 @@ export function SampleSearchToolbar({ onChange, term }) {
     );
 }
 
-function SampleToolbar(props) {
-    if (props.selected?.length) {
-        return <SampleSelectionToolbar {...props} />;
+function SampleToolbar({ selected, onQuickAnalyze, onClear, onChange, term }) {
+    if (selected?.length) {
+        return <SampleSelectionToolbar selected={selected} onQuickAnalyze={onQuickAnalyze} onClear={onClear} />;
     }
 
-    return <SampleSearchToolbar {...props} />;
+    return <SampleSearchToolbar onChange={onChange} term={term} />;
 }
 
 const mapDispatchToProps = dispatch => ({

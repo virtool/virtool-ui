@@ -80,13 +80,14 @@ export function getCompatibleSamples(mode, samples) {
 }
 
 export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtractions, onClear }) {
-    const mode = useQuickAnalysisMode(samples.library_type);
-    const compatibleSamples = getCompatibleSamples(mode, samples);
-    const { data: hasHmm } = useFindHmms();
-    const mutation = useMutation(analyze);
-    const show = Boolean(mode);
     const history = useHistory();
+    const mode = useQuickAnalysisMode(samples.library_type);
+    const show = Boolean(mode);
+    const compatibleSamples = getCompatibleSamples(mode, samples);
+
+    const { data: hasHmm } = useFindHmms();
     const { data: indexes } = useListReadyIndexes();
+    const mutation = useMutation(analyze);
 
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
     const genome = samples.filter(sample => sample.library_type !== "amplicon");

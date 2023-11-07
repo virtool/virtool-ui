@@ -17,6 +17,8 @@ describe("<SamplesList />", () => {
     const props = {
         onChange: vi.fn(),
         term: "",
+        selected: [],
+        onClear: vi.fn(),
     };
 
     beforeEach(() => {
