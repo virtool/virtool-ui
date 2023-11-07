@@ -41,24 +41,26 @@ export const SampleSidebarSelector = ({
 }) => {
     const [results, term, setTerm] = useFuse(sampleItems, ["name"], [sampleId]);
     const [attributes, show, styles, setPopperElement, setReferenceElement, setShow] = usePopover();
-    const sampleItemComponents = results.map(item => {
-        const result = item.id ? item : item.item;
-        return (
-            <SampleSidebarSelectorItem
-                key={result.id}
-                selected={selectedItems.includes(result.id)}
-                partiallySelected={partiallySelectedItems.includes(result.id)}
-                {...result}
-                onClick={onUpdate}
-            >
-                {render(result)}
-            </SampleSidebarSelectorItem>
-        );
-    });
+    const sampleItemComponents =
+        Array.isArray(results) &&
+        results.map(item => {
+            const result = item.id ? item : item.item;
+            return (
+                <SampleSidebarSelectorItem
+                    key={result.id}
+                    selected={selectedItems.includes(result.id)}
+                    partiallySelected={partiallySelectedItems.includes(result.id)}
+                    {...result}
+                    onClick={onUpdate}
+                >
+                    {render(result)}
+                </SampleSidebarSelectorItem>
+            );
+        });
 
     return (
         <>
-            {!sampleItems.length || (
+            {!sampleItems?.length || (
                 <SidebarHeaderButton
                     aria-label={`select ${selectionType}`}
                     type="button"

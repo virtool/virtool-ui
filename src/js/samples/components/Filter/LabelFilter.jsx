@@ -3,21 +3,31 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { SidebarHeader, SideBarSection } from "../../../base";
+import { useFetchLabels } from "../../../labels/hooks";
 import { updateSearch } from "../../actions";
 import { getLabelsFromURL } from "../../selectors";
 import { LabelFilterItem } from "./LabelFilterItem";
 
-export const LabelFilter = ({ initialLabels, labels, onFind }) => {
+export const LabelFilter = ({ initialLabels, onFind }) => {
     const [selected, setSelected] = useState(initialLabels);
+    const { data: labels } = useFetchLabels();
 
     const handleClick = id => {
         setSelected(selected => xor(selected, [id]));
         onFind(xor(selected, [id]));
     };
 
-    const labelComponents = labels.map(label => (
-        <LabelFilterItem key={label.id} {...label} pressed={selected.includes(label.id)} onClick={handleClick} />
-    ));
+    const labelComponents =
+        labels && Array.isArray(labels)
+            ? labels.map(label => (
+                  <LabelFilterItem
+                      key={label.id}
+                      {...label}
+                      pressed={selected.includes(label.id)}
+                      onClick={handleClick}
+                  />
+              ))
+            : null;
 
     return (
         <SideBarSection>
@@ -31,7 +41,6 @@ export const LabelFilter = ({ initialLabels, labels, onFind }) => {
 
 export const mapStateToProps = state => ({
     initialLabels: getLabelsFromURL(state),
-    labels: state.labels.documents,
 });
 
 export const mapDispatchToProps = dispatch => ({

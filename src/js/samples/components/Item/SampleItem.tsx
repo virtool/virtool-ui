@@ -1,15 +1,10 @@
-import { find } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { pushState } from "../../../app/actions";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Attribution, Box, Checkbox } from "../../../base";
 import { JobMinimal } from "../../../jobs/types";
 import { LabelNested } from "../../../labels/types";
-import { selectSample } from "../../actions";
-import { getIsSelected } from "../../selectors";
 import { LibraryType, SampleWorkflows } from "../../types";
 import { SampleLibraryTypeLabel, SmallSampleLabel } from "../Label";
 import { WorkflowTags } from "../Tag/WorkflowTags";
@@ -99,41 +94,42 @@ type SampleItemProps = {
     /** Callback to trigger quick analysis */
     onQuickAnalyze: (id: string) => void;
     /** Callback to handle sample selection */
-    onSelect: (id: string, index: number, shiftKey: boolean) => void;
+    onSelect: () => void;
     /** Whether the sample is ready */
     ready: boolean;
     /** Workflows associated with the sample */
     workflows: SampleWorkflows;
+    selected: string[];
+    select: any;
+    document: any;
 };
 
 /**
  * A condensed sample item for use in a list of samples
  */
-function SampleItem({
-    checked,
-    created_at,
-    handle,
+export default function SampleItem({
     id,
-    index,
+    created_at,
     labels,
     library_type,
     name,
-    onQuickAnalyze,
-    onSelect,
     ready,
     workflows,
+    handle,
+    onSelect,
+    select,
+    checked,
 }: SampleItemProps) {
-    function handleCheck(e) {
-        onSelect(id, index, e.shiftKey);
-    }
+    const history = useHistory();
 
     function handleQuickAnalyze() {
-        onQuickAnalyze(id);
+        history.push({ state: { quickAnalysis: true } });
+        select();
     }
 
     return (
         <StyledSampleItem>
-            <SampleItemCheckboxContainer onClick={handleCheck}>
+            <SampleItemCheckboxContainer onClick={onSelect}>
                 <Checkbox checked={checked} />
             </SampleItemCheckboxContainer>
 
@@ -160,39 +156,3 @@ function SampleItem({
         </StyledSampleItem>
     );
 }
-
-function mapStateToProps(state, ownProps) {
-    const { created_at, id, index, labels, library_type, name, ready, user, workflows } = find(
-        state.samples.documents,
-        {
-            id: ownProps.id,
-        },
-    );
-
-    return {
-        checked: getIsSelected(state, ownProps.id),
-        created_at,
-        handle: user.handle,
-        id,
-        index,
-        labels,
-        library_type,
-        name,
-        ready,
-        workflows,
-    };
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-    return {
-        onSelect: () => {
-            dispatch(selectSample(ownProps.id));
-        },
-        onQuickAnalyze: id => {
-            dispatch(selectSample(id));
-            dispatch(pushState({ quickAnalysis: true }));
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SampleItem);

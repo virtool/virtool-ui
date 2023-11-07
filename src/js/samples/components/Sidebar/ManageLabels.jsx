@@ -1,12 +1,13 @@
-import { forEach, map, reject, union } from "lodash-es";
+import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import { SidebarHeader, SideBarSection } from "../../../base";
-import { editSample } from "../../actions";
-import { getPartiallySelectedLabels, getSelectedLabels, getSelectedSamples } from "../../selectors";
+import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
+import { useFetchLabels } from "../../../labels/hooks";
+import { useUpdateLabel } from "../../querys";
+import { getPartiallySelectedLabels } from "../../selectors";
 import { SampleLabelInner } from "./Labels";
 import { SampleSidebarMultiselectList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
@@ -26,14 +27,42 @@ const StyledSideBarSection = styled(SideBarSection)`
     align-self: start;
 `;
 
-export const ManageLabels = ({
-    allLabels,
-    selectedSamples,
-    selectedLabels,
-    onLabelUpdate,
-    partiallySelectedLabels,
-}) => {
-    const onUpdate = label => onLabelUpdate(selectedSamples, selectedLabels, label);
+export function ManageLabels({ selectedSamples, partiallySelectedLabels, documents }) {
+    const { data: allLabels, isLoading } = useFetchLabels();
+
+    const document = documents.filter(documentItem =>
+        selectedSamples.some(selectedItem => selectedItem.id === documentItem.id),
+    );
+
+    const selectedLabels = getSelectedLabels();
+    const onUpdateLabel = useUpdateLabel(selectedLabels, document);
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
+    function getSelectedLabels() {
+        if (!document || !Array.isArray(document)) {
+            return [];
+        }
+        const selectedLabelsCount = document.reduce((result, sample) => {
+            sample.labels.forEach(label => {
+                if (result[label.id]) {
+                    result[label.id].count++;
+                } else {
+                    result[label.id] = { ...label, count: 1 };
+                }
+            });
+            return result;
+        }, {});
+
+        return Object.values(selectedLabelsCount).map(label => {
+            label.allLabeled = label.count === document.length;
+            delete label.count;
+            return label;
+        });
+    }
+
     return (
         <StyledSideBarSection>
             <SidebarHeader>
@@ -45,12 +74,12 @@ export const ManageLabels = ({
                     sampleItems={allLabels}
                     selectedItems={map(selectedLabels, label => label.id)}
                     partiallySelectedItems={map(partiallySelectedLabels, label => label.id)}
-                    onUpdate={onUpdate}
+                    onUpdate={onUpdateLabel}
                     selectionType="labels"
                     manageLink={"/samples/labels"}
                 />
             </SidebarHeader>
-            <SampleSidebarMultiselectList items={selectedLabels} onUpdate={onUpdate} />
+            <SampleSidebarMultiselectList items={selectedLabels} onUpdate={onUpdateLabel} />
             {Boolean(allLabels.length) || (
                 <SampleLabelsFooter>
                     No labels found. <Link to="/samples/labels">Create one</Link>.
@@ -58,26 +87,10 @@ export const ManageLabels = ({
             )}
         </StyledSideBarSection>
     );
-};
+}
 
 export const mapStateToProps = state => ({
-    allLabels: state.labels.documents,
-    selectedSamples: getSelectedSamples(state),
-    selectedLabels: getSelectedLabels(state),
     partiallySelectedLabels: getPartiallySelectedLabels(state),
 });
 
-export const mapDispatchToProps = dispatch => ({
-    onLabelUpdate: (selectedSamples, selectedLabels, label) => {
-        forEach(selectedSamples, sample => {
-            const sampleLabelIds = map(sample.labels, label => label.id);
-            if (!selectedLabels[label] || !selectedLabels[label].allLabeled) {
-                dispatch(editSample(sample.id, { labels: union(sampleLabelIds, [label]) }));
-            } else {
-                dispatch(editSample(sample.id, { labels: reject(sampleLabelIds, id => label === id) }));
-            }
-        });
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ManageLabels);
+export default connect(mapStateToProps, null)(ManageLabels);

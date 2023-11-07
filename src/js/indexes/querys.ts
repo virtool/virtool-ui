@@ -1,4 +1,5 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
+import { Request } from "../app/request";
 import { findIndexes } from "./api";
 import { IndexSearchResult } from "./types";
 
@@ -35,4 +36,14 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
             },
         },
     );
+}
+
+export function listReadyIndexes() {
+    return Request.get("/indexes")
+        .query({ ready: true })
+        .then(res => res.body);
+}
+
+export function useListReadyIndexes() {
+    return useQuery("listReadyIndex", listReadyIndexes);
 }
