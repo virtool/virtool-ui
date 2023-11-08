@@ -92,11 +92,12 @@ export default function ReadSelector({
     const files = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
 
     function renderRow(file) {
-        const index = indexOf(selected, file.id);
+        const index = indexOf(selected, file?.id);
+        console.log(JSON.stringify(file));
         return (
             <ReadSelectorItem
                 {...file}
-                key={file.id}
+                key={file?.id}
                 index={index}
                 selected={index > -1}
                 selectedFiles={selectedFiles}

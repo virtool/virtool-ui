@@ -57,6 +57,7 @@ export default function ReadSelectorItem({ id, index, name, selected, size, onSe
     const select = useCallback(() => {
         // alert(id);
         onSelect(id);
+        console.log(id);
     }, []);
 
     return (

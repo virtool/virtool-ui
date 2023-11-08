@@ -22,7 +22,6 @@ import {
 } from "../../../base";
 import { useInfiniteFindFiles } from "../../../files/querys";
 import { FileType } from "../../../files/types";
-import PersistForm from "../../../forms/components/PersistForm";
 import { useListGroups } from "../../../groups/querys";
 import { useFetchLabels } from "../../../labels/hooks";
 import { useSubtractionsShortlist } from "../../../subtraction/querys";
@@ -182,10 +181,7 @@ export default function CreateSample() {
 
     const forceGroupChoice = settings.sample_group === "force_choice";
 
-    const reads = readsResponse.pages.flatMap(page => page.items);
-    // alert(items);
-
-    // const reads = filter(readsResponse.pages[0].items, { reserved: false });
+    const reads = readsResponse.pages.flatMap(page => page.items, { reserved: false });
 
     function autofill(selected, setFieldValue) {
         const fileName = getFileNameFromId(selected[0], reads);
@@ -241,10 +237,10 @@ export default function CreateSample() {
                 }) => (
                     <CreateSampleForm>
                         <AlertContainer>
-                            <PersistForm
-                                formName="create-sample"
-                                castValues={castValues(reads, subtractions.body, allLabels)}
-                            />
+                            {/*<PersistForm*/}
+                            {/*    formName="create-sample"*/}
+                            {/*    castValues={castValues(reads, subtractions.body, allLabels)}*/}
+                            {/*/>*/}
                         </AlertContainer>
                         <CreateSampleName>
                             <InputLabel>Name</InputLabel>
