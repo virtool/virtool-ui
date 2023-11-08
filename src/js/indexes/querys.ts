@@ -38,12 +38,18 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
     );
 }
 
+/**
+ * Retrieves a list of indexes that are ready
+ */
 export function listReadyIndexes() {
     return Request.get("/indexes")
         .query({ ready: true })
         .then(res => res.body);
 }
 
+/**
+ * Fetches a list of ready indexes
+ */
 export function useListReadyIndexes() {
     return useQuery("listReadyIndex", listReadyIndexes);
 }

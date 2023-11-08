@@ -10,7 +10,6 @@ import { mockCreateSample } from "../../../../tests/fake/sample";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";
-import SamplesToolbar from "../SamplesToolbar";
 
 describe("<SamplesList />", () => {
     const history = createBrowserHistory();
@@ -60,16 +59,16 @@ describe("<SamplesList />", () => {
     it("should render create button when [canModify=true]", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockGetAccountAPI(account);
-        renderWithRouter(<SamplesToolbar {...props} />, {}, history);
+        renderWithRouter(<SamplesList />, {}, history);
 
         expect(await screen.findByLabelText("create")).toBeInTheDocument();
     });
 
-    it("should not render create button when [canModify=false]", () => {
+    it("should not render create button when [canModify=false]", async () => {
         const account = createFakeAccount({ administrator_role: null });
         mockGetAccountAPI(account);
 
-        renderWithRouter(<SamplesToolbar {...props} />, {}, history);
+        renderWithRouter(<SamplesList />, {}, history);
 
         const createButton = screen.queryByLabelText("create");
         expect(createButton).toBeNull();

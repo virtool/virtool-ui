@@ -32,7 +32,7 @@ export default function SamplesList() {
     const location = useLocation();
     const [term, setTerm] = useUrlSearchParams("find");
     const URLPage = parseInt(new URLSearchParams(location.search).get("page")) || 1;
-    const { data, isLoading } = useFindSamples(URLPage, 2, term as unknown as string);
+    const { data, isLoading } = useFindSamples(URLPage, 2, term);
     const [selected, setSelected] = useState([]);
 
     if (isLoading) {

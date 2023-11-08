@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
-import { pushState } from "../../app/actions";
 import { Icon, InputSearch, LinkButton, Toolbar } from "../../base";
 import { SampleSelectionToolbar } from "./SelectionToolbar";
 
@@ -26,8 +26,13 @@ export function SampleSearchToolbar({ onChange, term }) {
     );
 }
 
-function SampleToolbar({ selected, onQuickAnalyze, onClear, onChange, term }) {
-    if (selected?.length) {
+function SampleToolbar({ selected, onClear, onChange, term }) {
+    const history = useHistory();
+    function onQuickAnalyze() {
+        history.push({ state: { quickAnalysis: true } });
+    }
+
+    if (selected.length) {
         return <SampleSelectionToolbar selected={selected} onQuickAnalyze={onQuickAnalyze} onClear={onClear} />;
     }
 
@@ -35,10 +40,6 @@ function SampleToolbar({ selected, onQuickAnalyze, onClear, onChange, term }) {
 }
 
 const mapDispatchToProps = dispatch => ({
-    onQuickAnalyze: () => {
-        dispatch(pushState({ quickAnalysis: true }));
-    },
-
     onSelect: sampleId => {
         // There is something wrong with this...
         // dispatch(toggleSelectSample(sampleId));
