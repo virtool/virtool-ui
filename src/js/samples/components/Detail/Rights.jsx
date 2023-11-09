@@ -1,4 +1,4 @@
-import { capitalize, includes, map } from "lodash-es";
+import { find, includes, map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { getAccountId } from "../../../account/selectors";
@@ -31,9 +31,6 @@ export class SampleRights extends React.Component {
         this.props.onChangeRights(this.props.sampleId, scope, e.target.value);
     };
 
-    getValueGroupRights = () => (this.props.group_read ? "r" : "") + (this.props.group_write ? "w" : "");
-    getValueAllRights = () => (this.props.all_read ? "r" : "") + (this.props.all_write ? "w" : "");
-
     render() {
         if (this.props.groups === null) {
             return <LoadingPlaceholder />;
@@ -43,14 +40,22 @@ export class SampleRights extends React.Component {
             return <Box>Not allowed</Box>;
         }
 
-        const groupRights = this.getValueGroupRights();
-        const allRights = this.getValueAllRights();
+        const groupRights = (this.props.group_read ? "r" : "") + (this.props.group_write ? "w" : "");
+        const allRights = (this.props.all_read ? "r" : "") + (this.props.all_write ? "w" : "");
 
         const groupOptionComponents = map(this.props.groups, group => (
             <option key={group.id} value={group.id}>
-                {capitalize(group.id)}
+                {group.name}
             </option>
         ));
+
+        const selectedGroup =
+            typeof this.props.group === "number"
+                ? this.props.group
+                : find(
+                      this.props.groups,
+                      group => this.props.group === group.legacy_id || this.props.group === group.id,
+                  )?.id;
 
         return (
             <ContainerNarrow>
@@ -62,7 +67,7 @@ export class SampleRights extends React.Component {
                     <BoxGroupSection>
                         <InputGroup>
                             <InputLabel>Group</InputLabel>
-                            <InputSelect value={this.props.group} onChange={this.handleChangeGroup}>
+                            <InputSelect value={selectedGroup} onChange={this.handleChangeGroup}>
                                 <option value="none">None</option>
                                 {groupOptionComponents}
                             </InputSelect>
@@ -101,7 +106,7 @@ export class SampleRights extends React.Component {
     }
 }
 
-export const mapStateToProps = state => {
+export function mapStateToProps(state) {
     const { all_read, all_write, group, group_read, group_write, id, user } = state.samples.detail;
 
     return {
@@ -116,25 +121,27 @@ export const mapStateToProps = state => {
         all_read,
         all_write,
     };
-};
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onListGroups: () => {
-        dispatch(listGroups());
-    },
+export function mapDispatchToProps(dispatch) {
+    return {
+        onListGroups: () => {
+            dispatch(listGroups());
+        },
 
-    onChangeGroup: (sampleId, groupId) => {
-        dispatch(updateSampleRights(sampleId, { group: groupId }));
-    },
+        onChangeGroup: (sampleId, groupId) => {
+            dispatch(updateSampleRights(sampleId, { group: groupId }));
+        },
 
-    onChangeRights: (sampleId, scope, value) => {
-        const update = {
-            [`${scope}_read`]: includes(value, "r"),
-            [`${scope}_write`]: includes(value, "w"),
-        };
+        onChangeRights: (sampleId, scope, value) => {
+            const update = {
+                [`${scope}_read`]: includes(value, "r"),
+                [`${scope}_write`]: includes(value, "w"),
+            };
 
-        dispatch(updateSampleRights(sampleId, update));
-    },
-});
+            dispatch(updateSampleRights(sampleId, update));
+        },
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleRights);

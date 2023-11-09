@@ -56,7 +56,8 @@ export const samplesReducer = createReducer(initialState, builder => {
             set(state, "detail", action.payload);
         })
         .addCase(UPDATE_SAMPLE_RIGHTS.SUCCEEDED, (state, action) => {
-            set(state, "detail", action.payload);
+            const { all_read, all_write, group, group_read, group_write } = action.payload;
+            state.detail = { ...state.detail, all_read, all_write, group, group_read, group_write };
         })
         .addCase(REMOVE_SAMPLE.SUCCEEDED, state => {
             state.detail = null;

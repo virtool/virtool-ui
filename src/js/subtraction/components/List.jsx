@@ -2,13 +2,27 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { Badge, LegacyScrollList, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
+import { useUrlSearchParams } from "../../utils/hooks";
 import { findSubtractions } from "../actions";
 import SubtractionItem from "./Item";
 import SubtractionToolbar from "./Toolbar";
 
 const renderRow = index => <SubtractionItem key={index} index={index} />;
 
-export function SubtractionList({ onLoadNextPage, documents, page, page_count, total_count, fetched, term }) {
+/**
+ * Display and filter a list of subtractions
+ *
+ * @param onLoadNextPage - Function to load the next page of subtraction operations
+ * @param documents - List of subtraction documents to display
+ * @param page - The current page of list
+ * @param page_count - The total number of pages
+ * @param total_count - The total number of subtractions
+ * @param fetched - Indicates whether subtraction data has been fetched
+ * @returns SubtractionList - A list of subtractions
+ */
+export function SubtractionList({ onLoadNextPage, documents, page, page_count, total_count, fetched }) {
+    const [term] = useUrlSearchParams("find");
+
     useEffect(() => {
         if (!fetched) {
             onLoadNextPage(term, 1);
@@ -19,7 +33,7 @@ export function SubtractionList({ onLoadNextPage, documents, page, page_count, t
         return <LoadingPlaceholder />;
     }
 
-    const subtractionComponents = documents.length ? (
+    const subtractionComponents = documents?.length ? (
         <LegacyScrollList
             documents={documents}
             onLoadNextPage={page => onLoadNextPage(term, page)}
@@ -52,7 +66,6 @@ const mapStateToProps = state => ({
     page: state.subtraction.page,
     page_count: state.subtraction.page_count,
     total_count: state.subtraction.total_count,
-    term: state.subtraction.term,
     canModify: checkAdminRoleOrPermission(state, "modify_subtraction"),
 });
 

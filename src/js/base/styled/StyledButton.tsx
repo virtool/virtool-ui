@@ -44,6 +44,7 @@ type StyledButtonProps = {
     active?: boolean;
     as?: any;
     color?: string;
+    disabled?: boolean;
     theme: DefaultTheme;
 };
 

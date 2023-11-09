@@ -25,14 +25,14 @@ exports[`<SampleRights /> > should render 1`] = `
             None
           </option>
           <option
-            key="managers"
-            value="managers"
+            key="1"
+            value={1}
           >
             Managers
           </option>
           <option
-            key="technicians"
-            value="technicians"
+            key="2"
+            value={2}
           >
             Technicians
           </option>

@@ -59,11 +59,10 @@ const initialValues = {
 
 const validationSchema = Yup.object().shape({
     workflows: Yup.array().min(1, "At least one workflow must be selected"),
-    subtractions: Yup.array().min(1, "At least one subtraction must be selected"),
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
-export const QuickAnalyze = ({
+export function QuickAnalyze({
     accountId,
     compatibleIndexes,
     compatibleSamples,
@@ -77,7 +76,7 @@ export const QuickAnalyze = ({
     onHide,
     onShortlistSubtractions,
     onUnselect,
-}) => {
+}) {
     const show = Boolean(mode);
 
     useEffect(() => {
@@ -90,9 +89,6 @@ export const QuickAnalyze = ({
             onHide();
         }
     }, [mode]);
-
-    // Use this as the subtraction if none is selected.
-    // const firstSubtractionId = get(subtractionOptions, [0, "id"]);
 
     const handleSubmit = ({ indexes, subtractions, workflows }) => {
         const referenceIds = map(
@@ -128,7 +124,7 @@ export const QuickAnalyze = ({
                             <SelectedSamples samples={compatibleSamples} />
                             <Field
                                 as={WorkflowSelector}
-                                dataType={mode || "genome"}
+                                dataType={mode ?? "genome"}
                                 hasHmm={hasHmm}
                                 selected={values.workflows}
                                 onSelect={workflows => setFieldValue("workflows", workflows)}
@@ -169,39 +165,43 @@ export const QuickAnalyze = ({
             </Formik>
         </Modal>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    ...getQuickAnalysisGroups(state),
-    accountId: getAccountId(state),
-    compatibleIndexes: getCompatibleIndexesWithDataType(state),
-    compatibleSamples: getCompatibleSamples(state),
-    hasHmm: Boolean(state.hmms.total_count),
-    mode: getQuickAnalysisMode(state),
-    samples: getSelectedSamples(state),
-    subtractionOptions: getReadySubtractionShortlist(state),
-});
+export function mapStateToProps(state) {
+    return {
+        ...getQuickAnalysisGroups(state),
+        accountId: getAccountId(state),
+        compatibleIndexes: getCompatibleIndexesWithDataType(state),
+        compatibleSamples: getCompatibleSamples(state),
+        hasHmm: Boolean(state.hmms.total_count),
+        mode: getQuickAnalysisMode(state),
+        samples: getSelectedSamples(state),
+        subtractionOptions: getReadySubtractionShortlist(state),
+    };
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onAnalyze: (samples, references, subtractionId, accountId, workflows) => {
-        forEach(samples, ({ id }) => {
-            forEach(references, refId => {
-                forEach(workflows, workflow => dispatch(analyze(id, refId, subtractionId, accountId, workflow)));
+export function mapDispatchToProps(dispatch) {
+    return {
+        onAnalyze: (samples, references, subtractionId, accountId, workflows) => {
+            forEach(samples, ({ id }) => {
+                forEach(references, refId => {
+                    forEach(workflows, workflow => dispatch(analyze(id, refId, subtractionId, accountId, workflow)));
+                });
             });
-        });
-    },
+        },
 
-    onHide: () => {
-        dispatch(pushState({ quickAnalysis: false }));
-    },
+        onHide: () => {
+            dispatch(pushState({ quickAnalysis: false }));
+        },
 
-    onShortlistSubtractions: () => {
-        dispatch(shortlistSubtractions());
-    },
+        onShortlistSubtractions: () => {
+            dispatch(shortlistSubtractions());
+        },
 
-    onUnselect: sampleIds => {
-        dispatch(deselectSamples(sampleIds));
-    },
-});
+        onUnselect: sampleIds => {
+            dispatch(deselectSamples(sampleIds));
+        },
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuickAnalyze);
