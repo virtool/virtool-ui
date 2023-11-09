@@ -152,7 +152,7 @@ export default function CreateSample() {
         isLoading: isReadsLoading,
         isFetchingNextPage,
         fetchNextPage,
-    } = useInfiniteFindFiles(FileType.reads, 9);
+    } = useInfiniteFindFiles(FileType.reads, 11);
 
     const history = useHistory();
     const samplesMutation = useMutation(createSample, {

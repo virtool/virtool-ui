@@ -68,16 +68,12 @@ export default function ReadSelector({
     function handleSelect(selectedId) {
         if (includes(selectedFiles, selectedId)) {
             selectedFiles = without(selectedFiles, selectedId);
-            // selected = without(selected, selectedId);
         } else {
-            // selected = [...selected, selectedId];
             selectedFiles = [...selectedFiles, selectedId];
             if (selectedFiles.length === 3) {
                 selectedFiles.shift();
-                // selected.shift();
             }
         }
-        // alert(selectedFiles);
         onSelect(selectedFiles);
     }
 
