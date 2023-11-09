@@ -1,6 +1,10 @@
 import { useQuery } from "react-query";
-import { shortlist } from "./api";
+import { Request } from "../app/request";
+
+function subtractionShortlist() {
+    return Request.get("/subtractions?short=true").then(res => res.body);
+}
 
 export function useSubtractionsShortlist() {
-    return useQuery("subtractionsShortlist", shortlist);
+    return useQuery("subtractionsShortlist", subtractionShortlist);
 }

@@ -53,11 +53,9 @@ type ReadSelectorItemProps = {
     onSelect: (id: number) => void;
 };
 
-export default function ReadSelectorItem({ id, index, name, selected, size, onSelect }: ReadSelectorItemProps) {
+export default function ReadSelectorItem({ id, index, name, selected = false, size, onSelect }: ReadSelectorItemProps) {
     const select = useCallback(() => {
-        // alert(id);
         onSelect(id);
-        console.log(id);
     }, []);
 
     return (
@@ -75,7 +73,3 @@ export default function ReadSelectorItem({ id, index, name, selected, size, onSe
         </StyledReadSelectorItem>
     );
 }
-
-ReadSelectorItem.defaultProps = {
-    selected: false,
-};

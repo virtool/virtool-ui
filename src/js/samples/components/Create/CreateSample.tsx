@@ -22,6 +22,7 @@ import {
 } from "../../../base";
 import { useInfiniteFindFiles } from "../../../files/querys";
 import { FileType } from "../../../files/types";
+import PersistForm from "../../../forms/components/PersistForm";
 import { useListGroups } from "../../../groups/querys";
 import { useFetchLabels } from "../../../labels/hooks";
 import { useSubtractionsShortlist } from "../../../subtraction/querys";
@@ -104,17 +105,16 @@ const AlertContainer = styled.div`
     grid-row: 1;
 `;
 
-function castValues(reads, subtractions, allLabels) {
+function castValues(subtractions, allLabels) {
     return function (values) {
-        alert(reads.length);
-        const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
+        // const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
         const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
         const subtractionIds = intersectionWith(
             values.sidebar.subtractionIds,
             subtractions,
             (subtractionId, subtraction) => subtractionId === subtraction.id,
         );
-        return { ...values, readFiles, sidebar: { labels, subtractionIds } };
+        return { ...values, sidebar: { labels, subtractionIds } };
     };
 }
 
@@ -144,7 +144,7 @@ function getInitialValues(forceGroupChoice) {
 
 export default function CreateSample() {
     const { data: allLabels, isLoading: labelsLoading } = useFetchLabels();
-    const { data: groups } = useListGroups();
+    const { data: groups, isLoading: groupsLoading } = useListGroups();
     const { data: subtractions, isLoading: subtractionsLoading } = useSubtractionsShortlist();
     const { data: settings, isLoading: settingsLoading } = useFetchSettings();
     const {
@@ -152,7 +152,7 @@ export default function CreateSample() {
         isLoading: isReadsLoading,
         isFetchingNextPage,
         fetchNextPage,
-    } = useInfiniteFindFiles(FileType.reads, 10);
+    } = useInfiniteFindFiles(FileType.reads, 9);
 
     const history = useHistory();
     const samplesMutation = useMutation(createSample, {
@@ -161,7 +161,7 @@ export default function CreateSample() {
         },
     });
 
-    if (isReadsLoading || labelsLoading || subtractionsLoading || settingsLoading) {
+    if (isReadsLoading || labelsLoading || subtractionsLoading || settingsLoading || groupsLoading) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
@@ -237,10 +237,7 @@ export default function CreateSample() {
                 }) => (
                     <CreateSampleForm>
                         <AlertContainer>
-                            {/*<PersistForm*/}
-                            {/*    formName="create-sample"*/}
-                            {/*    castValues={castValues(reads, subtractions.body, allLabels)}*/}
-                            {/*/>*/}
+                            <PersistForm formName="create-sample" castValues={castValues(subtractions, allLabels)} />
                         </AlertContainer>
                         <CreateSampleName>
                             <InputLabel>Name</InputLabel>

@@ -1,5 +1,5 @@
 import { flatMap, includes, indexOf, toLower, without } from "lodash-es";
-import React, { ReactEventHandler, useState } from "react";
+import React, { useState } from "react";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -9,8 +9,12 @@ import { ScrollList } from "../../../base/ScrollList";
 import { FileResponse } from "../../../files/types";
 import ReadSelectorItem from "./ReadSelectorItem";
 
-const ReadSelectorBox = styled(Box)`
-    ${props => (props.onError ? `border-color: ${theme.color.red};` : "")};
+type ReadSelectorBoxProps = {
+    error: string;
+};
+
+const ReadSelectorBox = styled(Box)<ReadSelectorBoxProps>`
+    ${props => (props.error ? `border-color: ${theme.color.red};` : "")};
 `;
 
 export const ReadSelectorButton = styled(Button)`
@@ -60,6 +64,7 @@ export default function ReadSelector({
     const [term, setTerm] = useState("");
 
     selectedFiles = selected || [];
+
     function handleSelect(selectedId) {
         if (includes(selectedFiles, selectedId)) {
             selectedFiles = without(selectedFiles, selectedId);
@@ -72,7 +77,7 @@ export default function ReadSelector({
                 // selected.shift();
             }
         }
-        alert(selectedFiles);
+        // alert(selectedFiles);
         onSelect(selectedFiles);
     }
 
@@ -88,16 +93,16 @@ export default function ReadSelector({
 
     const loweredFilter = toLower(term);
 
-    const items = flatMap(data?.pages, page => page.items);
+    const items = flatMap(data.pages, page => page.items);
     const files = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
 
-    function renderRow(file) {
-        const index = indexOf(selected, file?.id);
-        console.log(JSON.stringify(file));
+    function renderRow(item) {
+        const index = indexOf(selected, item?.id);
+
         return (
             <ReadSelectorItem
-                {...file}
-                key={file?.id}
+                {...item}
+                key={item?.id}
                 index={index}
                 selected={index > -1}
                 selectedFiles={selectedFiles}
@@ -132,7 +137,7 @@ export default function ReadSelector({
                 </span>
             </ReadSelectorHeader>
 
-            <ReadSelectorBox onError={error as unknown as ReactEventHandler}>
+            <ReadSelectorBox error={error}>
                 <Toolbar>
                     <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
                     <ReadSelectorButton type="button" icon="undo" tip="Clear" onClick={reset} />

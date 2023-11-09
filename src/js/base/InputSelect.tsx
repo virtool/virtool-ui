@@ -10,7 +10,7 @@ type InputSelectProps = {
 
 export const InputSelect = ({ children, name, value, onChange }: InputSelectProps) => {
     return (
-        <Input as="select" name={name} value={value} onChange={onChange}>
+        <Input as="select" name={name} value={value || ""} onChange={onChange}>
             {children}
         </Input>
     );

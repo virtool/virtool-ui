@@ -21,13 +21,11 @@ const SampleSubtractionFooter = styled.div`
 `;
 
 export default function DefaultSubtractions({ defaultSubtractions, onUpdate }) {
-    const { data, isLoading } = useSubtractionsShortlist();
+    const { data: subtractionOptions, isLoading } = useSubtractionsShortlist();
 
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
-
-    const subtractionOptions = data.body;
 
     return (
         <SideBarSection>
