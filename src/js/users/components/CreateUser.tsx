@@ -36,7 +36,7 @@ export default function CreateUser() {
 
     return (
         <Dialog open={history.state?.createUser} onOpenChange={onOpenChange}>
-            <StyledButton as={DialogTrigger} color="blue">
+            <StyledButton as={DialogTrigger} color="blue" aria-label="user-plus">
                 <Icon name="user-plus" />
             </StyledButton>
             <DialogPortal>
