@@ -30,7 +30,6 @@ export function Button({
 }: ButtonProps) {
     const button = (
         <StyledButton
-            aria-label={icon}
             active={active}
             className={className}
             color={color}

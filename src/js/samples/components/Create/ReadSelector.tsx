@@ -4,8 +4,9 @@ import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from 
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontWeight, theme } from "../../../app/theme";
-import { Box, Button, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
+import { Box, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
 import { ScrollList } from "../../../base/ScrollList";
+import { StyledButton } from "../../../base/styled/StyledButton";
 import { FileResponse } from "../../../files/types";
 import ReadSelectorItem from "./ReadSelectorItem";
 
@@ -17,7 +18,7 @@ const ReadSelectorBox = styled(Box)<ReadSelectorBoxProps>`
     ${props => (props.error ? `border-color: ${theme.color.red};` : "")};
 `;
 
-export const ReadSelectorButton = styled(Button)`
+export const ReadSelectorButton = styled(StyledButton)`
     min-width: 44px;
 `;
 
@@ -136,8 +137,12 @@ export default function ReadSelector({
             <ReadSelectorBox error={error}>
                 <Toolbar>
                     <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
-                    <ReadSelectorButton type="button" icon="undo" tip="Clear" onClick={reset} />
-                    <ReadSelectorButton type="button" icon="retweet" tip="Swap Orientations" onClick={swap} />
+                    <ReadSelectorButton type="button" aria-label="undo" onClick={reset}>
+                        <Icon name="undo" />
+                    </ReadSelectorButton>
+                    <ReadSelectorButton type="button" aria-label="retweet" onClick={swap}>
+                        <Icon name="retweet" />
+                    </ReadSelectorButton>
                 </Toolbar>
                 {noneFound}
 

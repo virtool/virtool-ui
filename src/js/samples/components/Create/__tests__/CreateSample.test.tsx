@@ -37,7 +37,7 @@ describe("<CreateSample>", () => {
         };
     });
 
-    const submitForm = () => userEvent.click(screen.getByRole("button", { name: "save" }));
+    const submitForm = () => userEvent.click(screen.getByRole("button", { name: "Create" }));
 
     async function inputFormRequirements(sampleName = "Name", files) {
         await userEvent.type(await screen.findByLabelText("Name"), sampleName);
@@ -173,7 +173,7 @@ describe("<CreateSample>", () => {
             .reply(200, [{ name: "foo", ready: true, id: "test" }]);
         renderWithRouter(<CreateSample />, {}, history);
 
-        const field = await screen.findByRole("textbox", { name: /Name/i });
+        const field = await screen.findByRole("textbox", { name: "Name" });
         expect(field).toHaveValue("");
 
         await userEvent.click(screen.getByText(file.name));
