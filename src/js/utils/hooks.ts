@@ -1,3 +1,4 @@
+import { xor } from "lodash-es";
 import { useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
@@ -90,4 +91,39 @@ export function useUrlSearchParams(key: string, defaultValue?: string): [string,
     firstRender.current = false;
 
     return [value, (value: string) => updateUrlSearchParams(value, key, history)];
+}
+
+function updateUrlSearchParamsList(value: string, key: string, history: HistoryType) {
+    const params = new URLSearchParams(window.location.search);
+    let values = params.getAll(key);
+
+    if (value && !values.includes(value.toString())) {
+        params.append(key, value);
+    } else {
+        values = xor(values, [value.toString()]);
+        params.delete(key);
+        values.forEach(val => params.append(key, val));
+    }
+
+    history?.replace({
+        pathname: window.location.pathname,
+        search: params.toString() ? `?${params.toString()}` : null,
+    });
+}
+
+export function useUrlSearchParamsList(key: string, defaultValue?: string): [string[], (newValue: string) => void] {
+    const history = useHistory();
+    const location = useLocation();
+    const firstRender = useRef(true);
+
+    let value = new URLSearchParams(location.search).getAll(key);
+
+    if (firstRender.current && defaultValue && !value) {
+        value = [defaultValue];
+        updateUrlSearchParamsList(defaultValue, key, history);
+    }
+
+    firstRender.current = false;
+
+    return [value, (value: string) => updateUrlSearchParamsList(value, key, history)];
 }

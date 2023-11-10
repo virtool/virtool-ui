@@ -1,9 +1,9 @@
 import { Field, Form, Formik } from "formik";
-import { filter, forEach } from "lodash-es";
+import { filter, forEach, uniqBy } from "lodash-es";
 import React, { useEffect } from "react";
 import { useMutation } from "react-query";
 import { connect } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
 import {
@@ -11,6 +11,7 @@ import {
     Button,
     Icon,
     InputError,
+    LoadingPlaceholder,
     Modal,
     ModalBody,
     ModalFooter,
@@ -56,17 +57,14 @@ const validationSchema = Yup.object().shape({
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
-export function useQuickAnalysisMode(libraryType) {
-    const location = useLocation();
-
-    if (location.state?.quickAnalysis === true) {
+export function quickAnalysisMode(libraryType, history) {
+    if (history.location.state?.quickAnalysis === true) {
         if (libraryType === "amplicon") {
             return "barcode";
         }
 
         return "genome";
     }
-    return false;
 }
 
 export function getCompatibleSamples(mode, samples) {
@@ -81,12 +79,13 @@ export function getCompatibleSamples(mode, samples) {
 
 export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtractions, onClear }) {
     const history = useHistory();
-    const mode = useQuickAnalysisMode(samples.library_type);
+    const mode = quickAnalysisMode(samples.library_type, history);
+
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
-    const { data: hasHmm } = useFindHmms();
-    const { data: indexes } = useListReadyIndexes();
+    const { data: hmms, isLoading: isLoadingHmms } = useFindHmms();
+    const { data: indexes, isLoading: isLoadingIndexes } = useListReadyIndexes();
     const mutation = useMutation(analyze);
 
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
@@ -122,21 +121,25 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
         }
     }, [mode]);
 
+    if (isLoadingHmms || isLoadingIndexes) {
+        return <LoadingPlaceholder />;
+    }
+
     function referenceId(selectedIndexes) {
         const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));
 
         const referenceIds = selectedCompatibleIndexes.map(index => index.reference.id);
 
-        return Array.from(new Set(referenceIds));
+        return uniqBy(referenceIds, "id");
     }
 
-    const handleSubmit = ({ indexes, subtractions, workflows }) => {
+    function handleSubmit({ indexes, subtractions, workflows }) {
         const referenceIds = referenceId(indexes);
 
         onAnalyze(compatibleSamples, referenceIds, subtractions, workflows);
         onClear();
         onHide();
-    };
+    }
 
     return (
         <Modal label="Quick Analyze" show={show} size="lg" onHide={onHide}>
@@ -164,7 +167,7 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
                             <Field
                                 as={WorkflowSelector}
                                 dataType={mode ?? "genome"}
-                                hasHmm={Boolean(hasHmm.total_count)}
+                                hasHmm={Boolean(hmms.total_count)}
                                 selected={values.workflows}
                                 onSelect={workflows => setFieldValue("workflows", workflows)}
                             />

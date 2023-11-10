@@ -49,28 +49,14 @@ function findSamples(page: number, per_page: number, term: string, labels: strin
 }
 
 /**
- * Get the labels from the URL parameters
- */
-export const getLabelsFromURL = () => {
-    if (window.location.search) {
-        const search = new URLSearchParams(window.location.search);
-        const labels = search.getAll("label");
-
-        return labels;
-    }
-
-    return [];
-};
-
-/**
  * Fetch a page of samples from the API
  *
  * @param page - The page to fetch
- * @param per_page - The number of users to fetch per page
- * @param term - The search term to filter users by
+ * @param per_page - The number of samples to fetch per page
+ * @param term - The search term to filter samples by
+ * @param labels - The labels to filter the samples by
  */
-export function useFindSamples(page: number, per_page: number, term?: string) {
-    const labels = getLabelsFromURL();
+export function useFindSamples(page: number, per_page: number, term?: string, labels?: string[]) {
     const params = new URLSearchParams(window.location.search);
     const workflows = params.get("workflows");
 

@@ -3,9 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Attribution, Box, Checkbox } from "../../../base";
-import { JobMinimal } from "../../../jobs/types";
-import { LabelNested } from "../../../labels/types";
-import { LibraryType, SampleWorkflows } from "../../types";
+import { SampleMinimal } from "../../types";
 import { SampleLibraryTypeLabel, SmallSampleLabel } from "../Label";
 import { WorkflowTags } from "../Tag/WorkflowTags";
 import EndIcon from "./EndIcon";
@@ -73,48 +71,20 @@ const StyledSampleItem = styled(Box)`
 `;
 
 type SampleItemProps = {
+    /**  */
+    sample: SampleMinimal;
     /** Whether the sample is selected */
     checked: boolean;
-    /** The date the sample was created */
-    created_at: string;
-    /** The user who created the sample */
-    handle: string;
-    /** The unique identifier of the sample */
-    id: string;
-    /** Information about the job associated with the sample */
-    job?: JobMinimal;
-    /** Labels associated with the sample */
-    labels: Array<LabelNested>;
-    /** Library type associated with the sample */
-    library_type: LibraryType;
-    /** Name of the sample */
-    name: string;
     /** Callback to handle sample selection */
     onSelect: () => void;
-    /** Whether the sample is ready */
-    ready: boolean;
     /** Callback to handle sample selection on end icon quick analysis */
     select: () => void;
-    /** Workflows associated with the sample */
-    workflows: SampleWorkflows;
 };
 
 /**
  * A condensed sample item for use in a list of samples
  */
-export default function SampleItem({
-    checked,
-    created_at,
-    handle,
-    id,
-    labels,
-    library_type,
-    name,
-    onSelect,
-    ready,
-    select,
-    workflows,
-}: SampleItemProps) {
+export default function SampleItem({ sample, checked, onSelect, select }: SampleItemProps) {
     const history = useHistory();
 
     function handleQuickAnalyze() {
@@ -131,22 +101,22 @@ export default function SampleItem({
             <SampleItemData>
                 <SampleItemMain>
                     <SampleItemTitle>
-                        <Link to={`/samples/${id}`}>{name}</Link>
-                        <Attribution time={created_at} user={handle} />
+                        <Link to={`/samples/${sample.id}`}>{sample.name}</Link>
+                        <Attribution time={sample.created_at} user={sample.user.handle} />
                     </SampleItemTitle>
                 </SampleItemMain>
                 <SampleItemLabels>
-                    <SampleLibraryTypeLabel libraryType={library_type} />
-                    {labels.map(label => (
+                    <SampleLibraryTypeLabel libraryType={sample.library_type} />
+                    {sample.labels.map(label => (
                         <SmallSampleLabel key={label.id} {...label} />
                     ))}
                 </SampleItemLabels>
             </SampleItemData>
             <SampleItemWorkflows>
-                <WorkflowTags id={id} workflows={workflows} />
+                <WorkflowTags id={sample.id} workflows={sample.workflows} />
             </SampleItemWorkflows>
             <SampleItemIcon>
-                <EndIcon ready={ready} onClick={handleQuickAnalyze} />
+                <EndIcon ready={sample.ready} onClick={handleQuickAnalyze} />
             </SampleItemIcon>
         </StyledSampleItem>
     );

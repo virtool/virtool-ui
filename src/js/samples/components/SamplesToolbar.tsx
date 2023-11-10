@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
@@ -26,7 +25,7 @@ export function SampleSearchToolbar({ onChange, term }) {
     );
 }
 
-function SampleToolbar({ selected, onClear, onChange, term }) {
+export default function SampleToolbar({ selected, onClear, onChange, term }) {
     const history = useHistory();
     function onQuickAnalyze() {
         history.push({ state: { quickAnalysis: true } });
@@ -38,12 +37,3 @@ function SampleToolbar({ selected, onClear, onChange, term }) {
 
     return <SampleSearchToolbar onChange={onChange} term={term} />;
 }
-
-const mapDispatchToProps = dispatch => ({
-    onSelect: sampleId => {
-        // There is something wrong with this...
-        // dispatch(toggleSelectSample(sampleId));
-    },
-});
-
-export default connect(null, mapDispatchToProps)(SampleToolbar);

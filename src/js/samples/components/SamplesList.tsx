@@ -1,11 +1,13 @@
+import { union, xor } from "lodash-es";
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import QuickAnalysis from "../../analyses/components/Create/Quick";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
-import { useUrlSearchParams } from "../../utils/hooks";
+import { useFetchLabels } from "../../labels/hooks";
+import { useUrlSearchParams, useUrlSearchParamsList } from "../../utils/hooks";
 import { useFindSamples } from "../querys";
-import { SampleFilters } from "./Filter/Filters";
+import { SampleMinimal } from "../types";
+import { SampleFilters } from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
@@ -29,51 +31,47 @@ const StyledSamplesList = styled.div`
  * A list of samples with filtering
  */
 export default function SamplesList() {
-    const location = useLocation();
+    const [urlPage] = useUrlSearchParams("page");
     const [term, setTerm] = useUrlSearchParams("find");
-    const URLPage = parseInt(new URLSearchParams(location.search).get("page")) || 1;
-    const { data, isLoading } = useFindSamples(URLPage, 2, term);
+    const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
+
+    const { data: samples, isLoading: isSamplesLoading } = useFindSamples(Number(urlPage) || 1, 2, term, filterLabels);
+    const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
+
     const [selected, setSelected] = useState([]);
 
-    if (isLoading) {
+    if (isSamplesLoading || isLabelsLoading) {
         return <LoadingPlaceholder />;
     }
-    const { documents, page, page_count, total_count } = data;
+
+    const { documents, page, page_count, total_count } = samples;
 
     function onClear() {
         setSelected([]);
     }
 
-    function renderRow(document) {
+    function renderRow(document: SampleMinimal) {
         function handleSelect() {
             if (!selected.includes(document)) {
-                setSelected(selected => [...selected, document]);
+                setSelected(union(selected, [document]));
             } else {
-                setSelected(prevSelected => prevSelected.filter(item => item !== document));
+                setSelected(xor(selected, [document]));
             }
         }
 
         function select() {
             if (!selected.includes(document)) {
-                setSelected(selected => [...selected, document]);
+                setSelected(union(selected, [document]));
             }
         }
 
         return (
             <SampleItem
-                {...document}
                 key={document.id}
-                id={document.id}
+                sample={document}
                 checked={selected.some(item => item.id === document.id)}
-                created_at={document.created_at}
-                handle={document.user.handle}
-                labels={document.labels}
-                library_type={document.library_type}
-                name={document.name}
                 onSelect={handleSelect}
-                ready={document.ready}
                 select={select}
-                workflows={document.workflows}
             />
         );
     }
@@ -102,16 +100,16 @@ export default function SamplesList() {
                         <Pagination
                             items={documents}
                             storedPage={page}
-                            currentPage={URLPage}
+                            currentPage={Number(urlPage) || 1}
                             renderRow={renderRow}
                             pageCount={page_count}
                         />
                     )}
                 </SamplesListContent>
                 {selected.length ? (
-                    <SampleLabels selectedSamples={selected} documents={documents} />
+                    <SampleLabels labels={labels} selectedSamples={selected} documents={documents} />
                 ) : (
-                    <SampleFilters />
+                    <SampleFilters labels={labels} onClick={e => setFilterLabels(e)} selectedLabels={filterLabels} />
                 )}
             </StyledSamplesList>
         </>

@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
-import { useFetchLabels } from "../../../labels/hooks";
+import { SidebarHeader, SideBarSection } from "../../../base";
 import { useUpdateLabel } from "../../querys";
 import { getPartiallySelectedLabels } from "../../selectors";
 import { SampleLabelInner } from "./Labels";
@@ -27,38 +26,33 @@ const StyledSideBarSection = styled(SideBarSection)`
     align-self: start;
 `;
 
-export function ManageLabels({ selectedSamples, partiallySelectedLabels, documents }) {
-    const { data: allLabels, isLoading } = useFetchLabels();
+function getSelectedLabels(document) {
+    const selectedLabelsCount = document.reduce((result, sample) => {
+        sample.labels.forEach(label => {
+            if (result[label.id]) {
+                result[label.id].count++;
+            } else {
+                result[label.id] = { ...label, count: 1 };
+            }
+        });
+        return result;
+    }, {});
+    alert(JSON.stringify(selectedLabelsCount));
 
+    return Object.values(selectedLabelsCount).map(label => {
+        label.allLabeled = label.count === document.length;
+        delete label.count;
+        return label;
+    });
+}
+
+export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels, documents }) {
     const document = documents.filter(documentItem =>
         selectedSamples.some(selectedItem => selectedItem.id === documentItem.id),
     );
 
-    const selectedLabels = getSelectedLabels();
+    const selectedLabels = getSelectedLabels(document);
     const onUpdateLabel = useUpdateLabel(selectedLabels, document);
-
-    if (isLoading) {
-        return <LoadingPlaceholder />;
-    }
-
-    function getSelectedLabels() {
-        const selectedLabelsCount = document.reduce((result, sample) => {
-            sample.labels.forEach(label => {
-                if (result[label.id]) {
-                    result[label.id].count++;
-                } else {
-                    result[label.id] = { ...label, count: 1 };
-                }
-            });
-            return result;
-        }, {});
-
-        return Object.values(selectedLabelsCount).map(label => {
-            label.allLabeled = label.count === document.length;
-            delete label.count;
-            return label;
-        });
-    }
 
     return (
         <StyledSideBarSection>
@@ -68,7 +62,7 @@ export function ManageLabels({ selectedSamples, partiallySelectedLabels, documen
                     render={({ name, color, description }) => (
                         <SampleLabelInner name={name} color={color} description={description} />
                     )}
-                    sampleItems={allLabels}
+                    sampleItems={labels}
                     selectedItems={map(selectedLabels, label => label.id)}
                     partiallySelectedItems={map(partiallySelectedLabels, label => label.id)}
                     onUpdate={onUpdateLabel}
@@ -77,7 +71,7 @@ export function ManageLabels({ selectedSamples, partiallySelectedLabels, documen
                 />
             </SidebarHeader>
             <SampleSidebarMultiselectList items={selectedLabels} onUpdate={onUpdateLabel} />
-            {Boolean(allLabels.length) || (
+            {Boolean(labels.length) || (
                 <SampleLabelsFooter>
                     No labels found. <Link to="/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
