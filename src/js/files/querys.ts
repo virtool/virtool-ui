@@ -7,7 +7,7 @@ export const fileQueryKeys = {
     lists: () => ["files", "list"] as const,
     list: (type: string, filters: Array<string | number | boolean>) => ["files", "list", type, ...filters] as const,
     infiniteList: (type: string, filters: Array<string | number | boolean>) =>
-        ["files", "infiniteList", type, ...filters] as const,
+        ["files", "list", "infinite", type, ...filters] as const,
 };
 
 function listFiles(type: FileType, paginate: boolean, page: number) {

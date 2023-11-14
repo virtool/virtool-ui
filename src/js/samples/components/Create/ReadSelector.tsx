@@ -66,7 +66,7 @@ export default function ReadSelector({
 
     selectedFiles = selected || [];
 
-    function handleSelect(selectedId) {
+    function handleSelect(selectedId: number) {
         if (includes(selectedFiles, selectedId)) {
             selectedFiles = without(selectedFiles, selectedId);
         } else {
@@ -94,12 +94,12 @@ export default function ReadSelector({
     const files = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
 
     function renderRow(item) {
-        const index = indexOf(selected, item?.id);
+        const index = indexOf(selected, item.id);
 
         return (
             <ReadSelectorItem
                 {...item}
-                key={item?.id}
+                key={item.id}
                 index={index}
                 selected={index > -1}
                 selectedFiles={selectedFiles}

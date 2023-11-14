@@ -1,5 +1,5 @@
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { find, intersectionWith } from "lodash-es";
+import { find, flatMap } from "lodash-es";
 import React from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
@@ -22,10 +22,7 @@ import {
 } from "../../../base";
 import { useInfiniteFindFiles } from "../../../files/querys";
 import { FileType } from "../../../files/types";
-import PersistForm from "../../../forms/components/PersistForm";
 import { useListGroups } from "../../../groups/querys";
-import { useFetchLabels } from "../../../labels/hooks";
-import { useSubtractionsShortlist } from "../../../subtraction/querys";
 import { createSample } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
@@ -100,24 +97,6 @@ const SampleSidebar = styled(Field)`
     grid-row: 3;
 `;
 
-const AlertContainer = styled.div`
-    grid-column: 1 / 3;
-    grid-row: 1;
-`;
-
-function castValues(subtractions, allLabels) {
-    return function (values) {
-        // const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
-        const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
-        const subtractionIds = intersectionWith(
-            values.sidebar.subtractionIds,
-            subtractions,
-            (subtractionId, subtraction) => subtractionId === subtraction.id,
-        );
-        return { ...values, sidebar: { labels, subtractionIds } };
-    };
-}
-
 type formValues = {
     name: string;
     isolate: string;
@@ -129,7 +108,7 @@ type formValues = {
     sidebar: { labels: number[]; subtractionIds: string[] };
 };
 
-function getInitialValues(forceGroupChoice) {
+function getInitialValues(forceGroupChoice: boolean) {
     return {
         name: "",
         isolate: "",
@@ -143,13 +122,11 @@ function getInitialValues(forceGroupChoice) {
 }
 
 export default function CreateSample() {
-    const { data: allLabels, isLoading: labelsLoading } = useFetchLabels();
-    const { data: groups, isLoading: groupsLoading } = useListGroups();
-    const { data: subtractions, isLoading: subtractionsLoading } = useSubtractionsShortlist();
-    const { data: settings, isLoading: settingsLoading } = useFetchSettings();
+    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const { data: settings, isLoading: isLoadingSettings } = useFetchSettings();
     const {
         data: readsResponse,
-        isLoading: isReadsLoading,
+        isLoading: isLoadingReads,
         isFetchingNextPage,
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.reads, 11);
@@ -161,11 +138,11 @@ export default function CreateSample() {
         },
     });
 
-    if (isReadsLoading || labelsLoading || subtractionsLoading || settingsLoading || groupsLoading) {
+    if (isLoadingReads || isLoadingSettings || isLoadingGroups) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    function onCreate(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group?) {
+    function onCreate(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group) {
         samplesMutation.mutate({
             name,
             isolate,
@@ -181,7 +158,7 @@ export default function CreateSample() {
 
     const forceGroupChoice = settings.sample_group === "force_choice";
 
-    const reads = readsResponse.pages.flatMap(page => page.items, { reserved: false });
+    const reads = flatMap(readsResponse.pages, page => page.items);
 
     function autofill(selected, setFieldValue) {
         const fileName = getFileNameFromId(selected[0], reads);
@@ -193,7 +170,7 @@ export default function CreateSample() {
     function handleSubmit(values) {
         const { name, isolate, host, locale, libraryType, readFiles, group, sidebar } = values;
         const { subtractionIds, labels } = sidebar;
-        // Only send the group if forceGroupChoice is true
+
         if (forceGroupChoice) {
             onCreate(
                 name,
@@ -207,7 +184,7 @@ export default function CreateSample() {
                 group === "none" ? "" : group,
             );
         } else {
-            onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
+            onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels, group);
         }
     }
 
@@ -236,9 +213,6 @@ export default function CreateSample() {
                     values: formValues;
                 }) => (
                     <CreateSampleForm>
-                        <AlertContainer>
-                            <PersistForm formName="create-sample" castValues={castValues(subtractions, allLabels)} />
-                        </AlertContainer>
                         <CreateSampleName>
                             <InputLabel>Name</InputLabel>
                             <InputContainer align="right">
@@ -299,7 +273,7 @@ export default function CreateSample() {
                                 data={readsResponse}
                                 isFetchingNextPage={isFetchingNextPage}
                                 fetchNextPage={fetchNextPage}
-                                isLoading={isReadsLoading}
+                                isLoading={isLoadingReads}
                                 selected={values.readFiles}
                                 onSelect={selection => setFieldValue("readFiles", selection)}
                                 error={touched.readFiles ? errors.readFiles : null}
