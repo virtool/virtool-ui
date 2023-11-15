@@ -1,6 +1,5 @@
 import { screen, waitFor } from "@testing-library/react";
 import { createBrowserHistory } from "history";
-import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderWithRouter } from "../../../../../tests/setupTests";
@@ -15,12 +14,17 @@ describe("<ManageLabels>", () => {
         props = {
             documents: [],
             selectedSamples: [],
+            labels: [
+                { color: "#C4B5FD", description: "", id: 1, name: "test" },
+                { color: "#FCA5A5", description: "", id: 2, name: "label" },
+                { color: "#1D4ED8", description: "", id: 3, name: "bar" },
+            ],
             partiallySelectedLabels: [],
         };
     });
 
     it("should be disabled if no labels exist", async () => {
-        nock("http://localhost").get("/api/labels").query(true).reply(200, []);
+        props.labels = [];
         renderWithRouter(<ManageLabels {...props} />, {}, history);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
@@ -28,14 +32,6 @@ describe("<ManageLabels>", () => {
     });
 
     it("should display labels of one selected document", async () => {
-        nock("http://localhost")
-            .get("/api/labels")
-            .query(true)
-            .reply(200, [
-                { color: "#C4B5FD", description: "", id: 1, name: "test" },
-                { color: "#FCA5A5", description: "", id: 2, name: "label" },
-                { color: "#1D4ED8", description: "", id: 3, name: "bar" },
-            ]);
         props.selectedSamples = props.documents = [
             {
                 name: "Foo Sample",
@@ -50,14 +46,6 @@ describe("<ManageLabels>", () => {
     });
 
     it("should display labels of two selected documents", async () => {
-        nock("http://localhost")
-            .get("/api/labels")
-            .query(true)
-            .reply(200, [
-                { color: "#C4B5FD", description: "", id: 1, name: "test" },
-                { color: "#FCA5A5", description: "", id: 2, name: "label" },
-                { color: "#1D4ED8", description: "", id: 3, name: "bar" },
-            ]);
         props.selectedSamples = props.documents = [
             {
                 name: "Foo Sample",

@@ -86,13 +86,16 @@ export const Pagination = ({
         </PaginationLink>
     ));
 
+    const filters = new URLSearchParams(window.location.search);
+    filters.delete("page");
+
     return (
         <div>
             <PaginationContainer>{entries}</PaginationContainer>
             {pageCount > 1 && (
                 <PaginationBox>
                     <PaginationLink
-                        to={`?page=${currentPage - 1}`}
+                        to={`?page=${currentPage - 1}${filters.toString() ? `&${filters.toString()}` : ""}`}
                         color="blue"
                         disabled={currentPage === 1}
                         $active={currentPage !== 1}
@@ -102,7 +105,7 @@ export const Pagination = ({
                     </PaginationLink>
                     {pageButtons}
                     <PaginationNextLink
-                        to={`?page=${currentPage + 1}`}
+                        to={`?page=${currentPage + 1}${filters.toString() ? `&${filters.toString()}` : ""}`}
                         color="blue"
                         disabled={currentPage === pageCount}
                     >

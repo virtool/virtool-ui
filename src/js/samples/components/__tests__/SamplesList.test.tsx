@@ -1,10 +1,10 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { mockCreateSample } from "../../../../tests/fake/sample";
 import { renderWithRouter } from "../../../../tests/setupTests";
@@ -13,16 +13,10 @@ import SamplesList from "../SamplesList";
 
 describe("<SamplesList />", () => {
     const history = createBrowserHistory();
-    const props = {
-        onChange: vi.fn(),
-        term: "",
-        selected: [],
-        onClear: vi.fn(),
-    };
 
     beforeEach(() => {
         mockCreateSample();
-        nock("http://localhost").get("/api/labels").query(true).reply(200, { labels: [] });
+        nock("http://localhost").get("/api/labels").reply(200, []);
     });
 
     it("should render correctly", async () => {
@@ -33,7 +27,7 @@ describe("<SamplesList />", () => {
             {},
             history,
         );
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        expect(await screen.findByText("Samples")).toBeInTheDocument();
 
         expect(screen.getByText("sample1")).toBeInTheDocument();
         expect(screen.getByText("Normal")).toBeInTheDocument();
@@ -47,7 +41,7 @@ describe("<SamplesList />", () => {
             {},
             history,
         );
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        expect(await screen.findByText("Samples")).toBeInTheDocument();
 
         const inputElement = screen.getByPlaceholderText("Sample name");
         expect(inputElement).toHaveValue("");

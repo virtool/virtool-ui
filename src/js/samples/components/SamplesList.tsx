@@ -46,10 +46,6 @@ export default function SamplesList() {
 
     const { documents, page, page_count, total_count } = samples;
 
-    function onClear() {
-        setSelected([]);
-    }
-
     function renderRow(document: SampleMinimal) {
         function handleSelect() {
             if (!selected.includes(document)) {
@@ -78,7 +74,7 @@ export default function SamplesList() {
 
     return (
         <>
-            <QuickAnalysis samples={selected} onClear={onClear} />
+            <QuickAnalysis samples={selected} onClear={() => setSelected([])} />
             <StyledSamplesList>
                 <SamplesListHeader>
                     <ViewHeader title="Samples">
@@ -88,7 +84,7 @@ export default function SamplesList() {
                     </ViewHeader>
                     <SampleToolbar
                         selected={selected}
-                        onClear={onClear}
+                        onClear={() => setSelected([])}
                         term={term}
                         onChange={e => setTerm(e.target.value)}
                     />
