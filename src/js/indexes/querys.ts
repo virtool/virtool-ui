@@ -1,6 +1,5 @@
 import { useInfiniteQuery, useQuery } from "react-query";
-import { Request } from "../app/request";
-import { findIndexes } from "./api";
+import { findIndexes, listReady } from "./api";
 import { IndexSearchResult } from "./types";
 
 /**
@@ -39,17 +38,8 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
 }
 
 /**
- * Retrieves a list of indexes that are ready
- */
-export function listReadyIndexes() {
-    return Request.get("/indexes")
-        .query({ ready: true })
-        .then(res => res.body);
-}
-
-/**
- * Fetches a list of ready indexes
+ * Gets a list of ready indexes
  */
 export function useListReadyIndexes() {
-    return useQuery("listReadyIndex", listReadyIndexes);
+    return useQuery<IndexSearchResult>("listReadyIndex", listReady);
 }

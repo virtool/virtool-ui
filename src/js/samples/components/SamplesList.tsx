@@ -59,7 +59,7 @@ export default function SamplesList() {
             }
         }
 
-        function select() {
+        function selectOnQuickAnalyze() {
             if (!selected.includes(document)) {
                 setSelected(union(selected, [document]));
             }
@@ -70,8 +70,8 @@ export default function SamplesList() {
                 key={document.id}
                 sample={document}
                 checked={selected.some(item => item.id === document.id)}
-                onSelect={handleSelect}
-                select={select}
+                handleSelect={handleSelect}
+                selectOnQuickAnalyze={selectOnQuickAnalyze}
             />
         );
     }

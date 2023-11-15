@@ -34,3 +34,12 @@ export function install(): Promise<any> {
 export function fetch({ hmmId }: { hmmId: string }): Promise<any> {
     return Request.get(`/hmms/${hmmId}`);
 }
+
+/**
+ * Get a list of all HMMs from the API
+ *
+ * @returns A promise resolving to the list of HMMs
+ */
+export function listHmms() {
+    return Request.get("/hmms").then(res => res.body);
+}

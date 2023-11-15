@@ -30,7 +30,9 @@ export function get({ indexId }) {
  * @returns A promise resolving to the API response containing the list of ready indexes
  */
 export function listReady() {
-    return Request.get("/indexes").query({ ready: true });
+    return Request.get("/indexes")
+        .query({ ready: true })
+        .then(res => res.body);
 }
 
 /**

@@ -57,7 +57,7 @@ const validationSchema = Yup.object().shape({
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
-export function quickAnalysisMode(libraryType, history) {
+export function getQuickAnalysisMode(libraryType, history) {
     if (history.location.state?.quickAnalysis === true) {
         if (libraryType === "amplicon") {
             return "barcode";
@@ -79,7 +79,7 @@ export function getCompatibleSamples(mode, samples) {
 
 export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtractions, onClear }) {
     const history = useHistory();
-    const mode = quickAnalysisMode(samples.library_type, history);
+    const mode = getQuickAnalysisMode(samples.library_type, history);
 
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
@@ -127,7 +127,6 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
 
     function referenceId(selectedIndexes) {
         const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));
-
         const referenceIds = selectedCompatibleIndexes.map(index => index.reference.id);
 
         return uniqBy(referenceIds, "id");

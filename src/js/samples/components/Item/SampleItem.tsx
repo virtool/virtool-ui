@@ -76,25 +76,25 @@ type SampleItemProps = {
     /** Whether the sample is selected */
     checked: boolean;
     /** Callback to handle sample selection */
-    onSelect: () => void;
+    handleSelect: () => void;
     /** Callback to handle sample selection on end icon quick analysis */
-    select: () => void;
+    selectOnQuickAnalyze: () => void;
 };
 
 /**
  * A condensed sample item for use in a list of samples
  */
-export default function SampleItem({ sample, checked, onSelect, select }: SampleItemProps) {
+export default function SampleItem({ sample, checked, handleSelect, selectOnQuickAnalyze }: SampleItemProps) {
     const history = useHistory();
 
     function handleQuickAnalyze() {
         history.push({ state: { quickAnalysis: true } });
-        select();
+        selectOnQuickAnalyze();
     }
 
     return (
         <StyledSampleItem>
-            <SampleItemCheckboxContainer onClick={onSelect}>
+            <SampleItemCheckboxContainer onClick={handleSelect}>
                 <Checkbox checked={checked} />
             </SampleItemCheckboxContainer>
 

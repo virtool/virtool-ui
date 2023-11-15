@@ -28,22 +28,17 @@ const StyledSideBarSection = styled(SideBarSection)`
 
 function getSelectedLabels(document) {
     const selectedLabelsCount = document.reduce((result, sample) => {
-        sample.labels.forEach(label => {
-            if (result[label.id]) {
-                result[label.id].count++;
-            } else {
-                result[label.id] = { ...label, count: 1 };
-            }
+        sample.labels.forEach(({ id }) => {
+            result[id] = result[id] || { ...sample.labels.find(label => label.id === id), count: 0 };
+            result[id].count++;
         });
         return result;
     }, {});
-    alert(JSON.stringify(selectedLabelsCount));
 
-    return Object.values(selectedLabelsCount).map(label => {
-        label.allLabeled = label.count === document.length;
-        delete label.count;
-        return label;
-    });
+    return Object.values(selectedLabelsCount).map(({ count, ...label }) => ({
+        ...label,
+        allLabeled: count === document.length,
+    }));
 }
 
 export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels, documents }) {
