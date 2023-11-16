@@ -45,14 +45,23 @@ const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
 `;
 
 type ReadSelectorItemProps = {
+    /** The unique identifier */
     id: number;
+    /** The name of the file */
     name: string;
+    /** The index number of the file */
     index: number;
+    /** The size of the file in bytes */
     size: number;
+    /** The selected files */
     selected?: boolean;
+    /** A callback function to handle file selection */
     onSelect: (id: number) => void;
 };
 
+/**
+ * A condensed file for use in a list of read files
+ */
 export default function ReadSelectorItem({ id, index, name, selected = false, size, onSelect }: ReadSelectorItemProps) {
     const select = useCallback(() => {
         onSelect(id);

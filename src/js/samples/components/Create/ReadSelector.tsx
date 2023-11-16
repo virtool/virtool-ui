@@ -1,10 +1,10 @@
-import { flatMap, includes, indexOf, toLower, without } from "lodash-es";
-import React, { useState } from "react";
+import { flatMap, includes, indexOf, toLower } from "lodash-es";
+import React, { useEffect, useState } from "react";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontWeight, theme } from "../../../app/theme";
-import { Box, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
+import { Box, BoxGroup, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
 import { ScrollList } from "../../../base/ScrollList";
 import { StyledButton } from "../../../base/styled/StyledButton";
 import { FileResponse } from "../../../files/types";
@@ -42,17 +42,25 @@ const ReadSelectorHeader = styled.label`
 `;
 
 type ReadSelectorProps = {
+    /** Samples files on current page */
     data: InfiniteData<FileResponse>;
+    /** Whether the next page is being fetched */
     isFetchingNextPage: boolean;
+    /** Fetches the next page of data */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    /** Whether the data is loading */
     isLoading: boolean;
+    /** A callback function to handle file selection */
     onSelect: (selected: number[]) => void;
+    /** Errors occurred on sample creation */
     error: string;
+    /** The selected files */
     selected: number[];
 };
 
-let selectedFiles = [];
-
+/**
+ * A list of read files with filtering
+ */
 export default function ReadSelector({
     data,
     isFetchingNextPage,
@@ -63,19 +71,35 @@ export default function ReadSelector({
     selected,
 }: ReadSelectorProps) {
     const [term, setTerm] = useState("");
+    const [selectedFiles, setSelectedFiles] = useState(selected);
 
-    selectedFiles = selected || [];
+    const { total_count } = data.pages[0];
+
+    useEffect(() => {
+        setSelectedFiles(selected);
+    }, [selected]);
+
+    useEffect(() => {
+        if (selected.length) {
+            onSelect([]);
+        }
+    }, [total_count]);
 
     function handleSelect(selectedId: number) {
-        if (includes(selectedFiles, selectedId)) {
-            selectedFiles = without(selectedFiles, selectedId);
-        } else {
-            selectedFiles = [...selectedFiles, selectedId];
-            if (selectedFiles.length === 3) {
-                selectedFiles.shift();
+        setSelectedFiles(prevArray => {
+            if (prevArray.includes(selectedId)) {
+                const newArray = prevArray.filter(id => id !== selectedId);
+                onSelect(newArray);
+                return newArray;
+            } else {
+                const newArray = [...prevArray, selectedId];
+                if (newArray.length === 3) {
+                    newArray.shift();
+                }
+                onSelect(newArray);
+                return newArray;
             }
-        }
-        onSelect(selectedFiles);
+        });
     }
 
     function swap() {
@@ -84,7 +108,6 @@ export default function ReadSelector({
 
     function reset() {
         setTerm("");
-        selectedFiles = [];
         onSelect([]);
     }
 
@@ -108,7 +131,7 @@ export default function ReadSelector({
         );
     }
 
-    const noneFound = data?.pages[0].total_count === 0 && (
+    const noneFound = total_count === 0 && (
         <NoneFoundSection noun="data">
             <Link to="/samples/data">Upload some</Link>
         </NoneFoundSection>
@@ -130,7 +153,7 @@ export default function ReadSelector({
                 <label>Read files</label>
                 <span>
                     {pairedness}
-                    {selected.length} of {data?.pages[0].total_count || 0} selected
+                    {selected.length} of {total_count || 0} selected
                 </span>
             </ReadSelectorHeader>
 
@@ -146,13 +169,15 @@ export default function ReadSelector({
                 </Toolbar>
                 {noneFound}
 
-                <ScrollList
-                    fetchNextPage={fetchNextPage}
-                    isFetchingNextPage={isFetchingNextPage}
-                    isLoading={isLoading}
-                    items={files}
-                    renderRow={renderRow}
-                />
+                <BoxGroup>
+                    <ScrollList
+                        fetchNextPage={fetchNextPage}
+                        isFetchingNextPage={isFetchingNextPage}
+                        isLoading={isLoading}
+                        items={files}
+                        renderRow={renderRow}
+                    />
+                </BoxGroup>
 
                 <ReadSelectorError>{error}</ReadSelectorError>
             </ReadSelectorBox>
