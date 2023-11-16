@@ -1,7 +1,8 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
+import { useMutation } from "react-query";
+import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import {
     Input,
@@ -13,30 +14,59 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "../../base";
-import { useListFiles } from "../../files/querys";
+import { useInfiniteFindFiles } from "../../files/querys";
 import { FileType } from "../../files/types";
 import PersistForm from "../../forms/components/PersistForm";
-import { createSubtraction } from "../actions";
-import { SubtractionFileSelector } from "./FileSelector";
+import { create } from "../api";
+import { SubtractionFileSelector } from "./SubtractionFileSelector";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("A name is required"),
     uploadId: Yup.string().required("Please select a file"),
 });
 
-const castValues = files => values => {
-    const uploadId = find(files, ["id", values.uploadId]) ? values.uploadId : "";
-    return { ...values, uploadId };
+function castValues(files) {
+    files.forEach(item => {
+        return function (values) {
+            const uploadId = find(item, ["id", values.uploadId]) ? values.uploadId : "";
+            return { ...values, uploadId };
+        };
+    });
+}
+
+type formValues = {
+    name: "";
+    nickname: "";
+    uploadId: "";
 };
 
-export const CreateSubtraction = ({ onCreate }) => {
-    const { data: filesResponse, isLoading } = useListFiles(FileType.subtraction, false, 1);
+/**
+ * A form for creating a subtraction
+ */
+export default function CreateSubtraction() {
+    const {
+        data: filesResponse,
+        isLoading,
+        isFetchingNextPage,
+        fetchNextPage,
+    } = useInfiniteFindFiles(FileType.subtraction, 25);
+
+    const history = useHistory();
+    const subtractionMutation = useMutation(create, {
+        onSuccess: () => {
+            history.push("/subtractions");
+        },
+    });
 
     if (isLoading) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    const files = filesResponse.documents;
+    function onCreate(uploadId, name, nickname) {
+        subtractionMutation.mutate({ name, nickname, uploadId });
+    }
+
+    const files = filesResponse.pages;
 
     const initialValues = {
         name: "",
@@ -44,9 +74,9 @@ export const CreateSubtraction = ({ onCreate }) => {
         uploadId: "",
     };
 
-    const handleSubmit = ({ uploadId, name, nickname }) => {
-        onCreate({ uploadId, name, nickname });
-    };
+    function handleSubmit({ uploadId, name, nickname }) {
+        onCreate(uploadId, name, nickname);
+    }
 
     return (
         <>
@@ -54,7 +84,17 @@ export const CreateSubtraction = ({ onCreate }) => {
                 <ViewHeaderTitle>Create Subtraction</ViewHeaderTitle>
             </ViewHeader>
             <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-                {({ errors, setFieldValue, touched }) => (
+                {({
+                    errors,
+                    setFieldValue,
+                    touched,
+                    values,
+                }: {
+                    errors: FormikErrors<formValues>;
+                    setFieldValue: (field: string, value: string) => void;
+                    touched: FormikTouched<formValues>;
+                    values: formValues;
+                }) => (
                     <Form>
                         <PersistForm formName="create-subtraction" castValues={castValues(files)} />
                         <InputGroup>
@@ -80,7 +120,12 @@ export const CreateSubtraction = ({ onCreate }) => {
                             name="uploadId"
                             onClick={id => setFieldValue("uploadId", id)}
                             error={touched.uploadId && errors.uploadId}
-                            files={files}
+                            files={filesResponse}
+                            isFetchingNextPage={isFetchingNextPage}
+                            fetchNextPage={fetchNextPage}
+                            isLoading={isLoading}
+                            foundCount={filesResponse.pages[0].found_count}
+                            selected={values.uploadId}
                         />
                         <SaveButton />
                     </Form>
@@ -88,12 +133,4 @@ export const CreateSubtraction = ({ onCreate }) => {
             </Formik>
         </>
     );
-};
-
-const mapDispatchToProps = dispatch => ({
-    onCreate: ({ uploadId, name, nickname }) => {
-        dispatch(createSubtraction(uploadId, name, nickname));
-    },
-});
-
-export default connect(null, mapDispatchToProps)(CreateSubtraction);
+}
