@@ -13,9 +13,10 @@ export function mockApiCreateSample(name, isolate, host, locale, subtractions, l
             host: host,
             locale: locale,
             subtractions: subtractions,
-            labels: labels,
             files: files,
             library_type: libraryType.toLowerCase(),
+            labels: labels,
+            group: null,
         })
         .reply(201, {
             name: name,
@@ -23,8 +24,9 @@ export function mockApiCreateSample(name, isolate, host, locale, subtractions, l
             host: host,
             locale: locale,
             subtractions: subtractions,
-            labels: labels,
             files: files,
             library_type: libraryType.toLowerCase(),
+            labels: labels,
+            group: null,
         });
 }

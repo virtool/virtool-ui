@@ -14,6 +14,7 @@ import {
     InputContainer,
     InputError,
     InputGroup,
+    InputIcon,
     InputLabel,
     LoadingPlaceholder,
     SaveButton,
@@ -155,7 +156,7 @@ export default function CreateSample() {
         isLoading: isLoadingReads,
         isFetchingNextPage,
         fetchNextPage,
-    } = useInfiniteFindFiles(FileType.reads, 11);
+    } = useInfiniteFindFiles(FileType.reads, 25);
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -255,13 +256,13 @@ export default function CreateSample() {
                                     autocomplete={false}
                                     error={touched.name ? errors.name : null}
                                 />
-                                {/*{Boolean(values.readFiles.length) && (*/}
-                                {/*    <InputIcon*/}
-                                {/*        name="magic"*/}
-                                {/*        aria-label="Auto Fill"*/}
-                                {/*        onClick={() => autofill(values.readFiles, setFieldValue)}*/}
-                                {/*    />*/}
-                                {/*)}*/}
+                                {Boolean(values.readFiles.length) && (
+                                    <InputIcon
+                                        name="magic"
+                                        aria-label="Auto Fill"
+                                        onClick={() => autofill(values.readFiles, setFieldValue)}
+                                    />
+                                )}
                             </InputContainer>
                             {touched.name && <InputError>{errors.name}</InputError>}
                         </CreateSampleName>
