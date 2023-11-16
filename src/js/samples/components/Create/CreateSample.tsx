@@ -143,10 +143,10 @@ function getInitialValues(forceGroupChoice: boolean) {
  * A form for creating a sample
  */
 export default function CreateSample() {
-    const { data: allLabels, isLoading: labelsLoading } = useFetchLabels();
-    const { data: groups, isLoading: groupsLoading } = useListGroups();
-    const { data: subtractions, isLoading: subtractionsLoading } = useSubtractionsShortlist();
-    const { data: settings, isLoading: settingsLoading } = useFetchSettings();
+    const { data: allLabels, isLoading: isLoadingLabels } = useFetchLabels();
+    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const { data: subtractions, isLoading: isLoadingSubtractions } = useSubtractionsShortlist();
+    const { data: settings, isLoading: isLoadingSettings } = useFetchSettings();
     const {
         data: readsResponse,
         isLoading: isLoadingReads,
@@ -161,7 +161,7 @@ export default function CreateSample() {
         },
     });
 
-    if (isLoadingReads || labelsLoading || subtractionsLoading || settingsLoading || groupsLoading) {
+    if (isLoadingReads || isLoadingLabels || isLoadingSubtractions || isLoadingSettings || isLoadingGroups) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
