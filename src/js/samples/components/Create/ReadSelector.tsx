@@ -76,10 +76,6 @@ export default function ReadSelector({
     const { total_count } = data.pages[0];
 
     useEffect(() => {
-        setSelectedFiles(selected);
-    }, [selected]);
-
-    useEffect(() => {
         if (selected.length) {
             onSelect([]);
         }
@@ -102,6 +98,10 @@ export default function ReadSelector({
         });
     }
 
+    useEffect(() => {
+        setSelectedFiles(selected);
+    }, [selected]);
+
     function swap() {
         onSelect(selected.slice().reverse());
     }
@@ -117,18 +117,9 @@ export default function ReadSelector({
     const files = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
 
     function renderRow(item) {
-        const index = indexOf(selected, item.id);
+        const index = indexOf(selectedFiles, item.id);
 
-        return (
-            <ReadSelectorItem
-                {...item}
-                key={item.id}
-                index={index}
-                selected={index > -1}
-                selectedFiles={selectedFiles}
-                onSelect={handleSelect}
-            />
-        );
+        return <ReadSelectorItem {...item} key={item.id} index={index} selected={index > -1} onSelect={handleSelect} />;
     }
 
     const noneFound = total_count === 0 && (

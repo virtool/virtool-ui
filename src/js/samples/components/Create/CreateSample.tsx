@@ -2,6 +2,7 @@ import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find, flatMap, intersectionWith } from "lodash-es";
 import React from "react";
 import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
@@ -13,7 +14,6 @@ import {
     InputContainer,
     InputError,
     InputGroup,
-    InputIcon,
     InputLabel,
     LoadingPlaceholder,
     SaveButton,
@@ -22,6 +22,7 @@ import {
 } from "../../../base";
 import { useInfiniteFindFiles } from "../../../files/querys";
 import { FileType } from "../../../files/types";
+import { deletePersistentFormState } from "../../../forms/actions";
 import PersistForm from "../../../forms/components/PersistForm";
 import { useListGroups } from "../../../groups/querys";
 import { useFetchLabels } from "../../../labels/hooks";
@@ -105,15 +106,17 @@ const AlertContainer = styled.div`
     grid-row: 1;
 `;
 
-const castValues = (subtractions, allLabels) => values => {
-    const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
-    const subtractionIds = intersectionWith(
-        values.sidebar.subtractionIds,
-        subtractions,
-        (subtractionId, subtraction) => subtractionId === subtraction.id,
-    );
-    return { ...values, sidebar: { labels, subtractionIds } };
-};
+function castValues(subtractions, allLabels) {
+    return function (values) {
+        const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
+        const subtractionIds = intersectionWith(
+            values.sidebar.subtractionIds,
+            subtractions,
+            (subtractionId, subtraction) => subtractionId === subtraction.id,
+        );
+        return { ...values, sidebar: { labels, subtractionIds } };
+    };
+}
 
 type formValues = {
     name: string;
@@ -155,9 +158,11 @@ export default function CreateSample() {
     } = useInfiniteFindFiles(FileType.reads, 11);
 
     const history = useHistory();
+    const dispatch = useDispatch();
     const samplesMutation = useMutation(createSample, {
         onSuccess: () => {
             history.push("/samples");
+            dispatch(deletePersistentFormState("create-sample"));
         },
     });
 
@@ -250,13 +255,13 @@ export default function CreateSample() {
                                     autocomplete={false}
                                     error={touched.name ? errors.name : null}
                                 />
-                                {Boolean(values.readFiles.length) && (
-                                    <InputIcon
-                                        name="magic"
-                                        aria-label="Auto Fill"
-                                        onClick={() => autofill(values.readFiles, setFieldValue)}
-                                    />
-                                )}
+                                {/*{Boolean(values.readFiles.length) && (*/}
+                                {/*    <InputIcon*/}
+                                {/*        name="magic"*/}
+                                {/*        aria-label="Auto Fill"*/}
+                                {/*        onClick={() => autofill(values.readFiles, setFieldValue)}*/}
+                                {/*    />*/}
+                                {/*)}*/}
                             </InputContainer>
                             {touched.name && <InputError>{errors.name}</InputError>}
                         </CreateSampleName>
