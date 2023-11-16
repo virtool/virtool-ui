@@ -21,14 +21,7 @@ exports[`<Subtraction /> > should render 1`] = `
         path="/subtractions/files"
       />
       <Route
-        component={
-          {
-            "$$typeof": Symbol(react.memo),
-            "WrappedComponent": [Function],
-            "compare": null,
-            "type": [Function],
-          }
-        }
+        component={[Function]}
         path="/subtractions/create"
       />
       <Route
