@@ -32,14 +32,14 @@ type SubtractionItemProps = {
     created_at: string;
     /** The unique subtraction id */
     id: string;
+    /** The job associated with the subtraction */
+    job?: JobMinimal;
     /** The name of the subtraction */
     name: string;
     /** Whether the associated job is complete */
     ready: boolean;
     /** The user who created the subtraction */
     user: UserNested;
-    /** The job associated with the subtraction */
-    job?: JobMinimal;
 };
 
 /**

@@ -1,14 +1,17 @@
 import { useQuery } from "react-query";
-import { Request } from "../app/request";
+import { findSubtractions } from "./api";
+import { SubtractionSearchResult } from "./types";
 
-function fetchSubtractions({ term, page }) {
-    return Request.get("/subtractions")
-        .query({ find: term, page })
-        .then(response => {
-            return response.body;
-        });
-}
+export const subtractionQueryKeys = {
+    list: (filters: Array<string | number | boolean>) => ["subtraction", "list", ...filters] as const,
+};
 
-export function useFetchSubtractions(term: string, page: number) {
-    return useQuery("subtractions", () => fetchSubtractions({ term, page }));
+export function useFindSubtractions(page: number, per_page: number, term: string) {
+    return useQuery<SubtractionSearchResult>(
+        subtractionQueryKeys.list([page, per_page, term]),
+        () => findSubtractions({ page, per_page, term }),
+        {
+            keepPreviousData: true,
+        },
+    );
 }

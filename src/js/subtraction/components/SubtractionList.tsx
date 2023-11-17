@@ -1,8 +1,7 @@
-import { map } from "lodash";
-import React, { useEffect } from "react";
-import { Badge, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
+import React from "react";
+import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useUrlSearchParams } from "../../utils/hooks";
-import { useFetchSubtractions } from "../querys";
+import { useFindSubtractions } from "../querys";
 import { SubtractionMinimal } from "../types";
 import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
@@ -15,25 +14,19 @@ function renderRow({ created_at, user, name, id, ready, job }: SubtractionMinima
  * A list of subtractions
  */
 export default function SubtractionList() {
-    const [value, setValue] = useUrlSearchParams("find");
-    const { data, isLoading, refetch } = useFetchSubtractions(value, 1);
-
-    useEffect(() => {
-        refetch();
-    }, [value, refetch]);
+    const [term, setTerm] = useUrlSearchParams("find");
+    const [urlPage] = useUrlSearchParams("page");
+    const { data, isLoading } = useFindSubtractions(Number(urlPage) || 1, 5, term);
 
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
     function handleChange(e) {
-        const searchValue = e.target.value;
-        setValue(searchValue);
+        setTerm(e.target.value);
     }
 
-    const { documents, total_count } = data;
-
-    const subtractionComponents = documents.length ? map(documents, renderRow) : <NoneFoundBox noun="subtractions" />;
+    const { documents, total_count, page, page_count } = data;
 
     return (
         <>
@@ -43,9 +36,19 @@ export default function SubtractionList() {
                 </ViewHeaderTitle>
             </ViewHeader>
 
-            <SubtractionToolbar term={value} handleChange={handleChange} />
+            <SubtractionToolbar term={term} handleChange={handleChange} />
 
-            {subtractionComponents}
+            {!documents.length ? (
+                <NoneFoundBox key="noSample" noun="samples" />
+            ) : (
+                <Pagination
+                    items={documents}
+                    storedPage={page}
+                    currentPage={Number(urlPage) || 1}
+                    renderRow={renderRow}
+                    pageCount={page_count}
+                />
+            )}
         </>
     );
 }
