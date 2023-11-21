@@ -5,7 +5,13 @@ import styled from "styled-components";
 import { usePrevious } from "./hooks";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
-function getScrollRatio(): number {
+function getScrollRatio(scrollListElement?: HTMLElement | Window): number {
+    if (scrollListElement !== window) {
+        return Math.round(
+            ((scrollListElement as HTMLElement).scrollTop + (scrollListElement as HTMLElement).clientHeight) /
+                (scrollListElement as HTMLElement).scrollHeight,
+        );
+    }
     return Math.round((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight);
 }
 
@@ -21,6 +27,7 @@ type ScrollListProps = {
     isLoading: boolean;
     items: unknown[];
     renderRow: (item: unknown) => void;
+    elementId?: string;
 };
 
 /**
@@ -31,19 +38,29 @@ type ScrollListProps = {
  * @param isLoading - Whether the first page is being fetched
  * @param items - The list of items
  * @param renderRow - A function which accepts an item and returns a react element
+ * @param elementId - The element identifier to scroll within
  * @returns An infinitely scrolling list of items
  */
 
-export const ScrollList = ({ fetchNextPage, isFetchingNextPage, isLoading, items, renderRow }: ScrollListProps) => {
+export const ScrollList = ({
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    items,
+    renderRow,
+    elementId,
+}: ScrollListProps) => {
     useEffect(() => {
+        const scrollListElement = elementId ? document.getElementById(elementId) : window;
+
         const onScroll = () => {
-            if (getScrollRatio() > 0.8 && !isFetchingNextPage) {
+            if (getScrollRatio(scrollListElement) > 0.8 && !isFetchingNextPage) {
                 void fetchNextPage();
             }
         };
 
-        window.addEventListener("scroll", onScroll);
-        return () => window.removeEventListener("scroll", onScroll);
+        scrollListElement.addEventListener("scroll", onScroll);
+        return () => scrollListElement.removeEventListener("scroll", onScroll);
     }, [isFetchingNextPage, fetchNextPage]);
 
     const entries = map(items, item => renderRow(item));

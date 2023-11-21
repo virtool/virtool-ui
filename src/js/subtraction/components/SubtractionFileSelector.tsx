@@ -4,9 +4,10 @@ import { InfiniteData } from "react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Attribution, BoxGroup, InputError, NoneFoundBox, SelectBoxGroupSection } from "../../base";
+import { Attribution, BoxGroup, InputError, LoadingPlaceholder, NoneFoundBox, SelectBoxGroupSection } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
-import { FileResponse } from "../../files/types";
+import { useInfiniteFindFiles } from "../../files/querys";
+import { FileResponse, FileType } from "../../files/types";
 
 type StyledSubtractionFileItemProps = {
     error: string;
@@ -38,8 +39,16 @@ const SubtractionFileSelectorError = styled(InputError)`
 `;
 
 const SubtractionFileSelectorList = styled(BoxGroup)`
-    margin-bottom: 5px;
+    max-height: 400px;
+    overflow-y: auto;
 `;
+
+function getAllSubtractions(fetchNextPage, hasNextPage, data) {
+    if (hasNextPage) {
+        void fetchNextPage();
+    }
+    return data.pages.flatMap(page => page.items);
+}
 
 type SubtractionFileSelectorProps = {
     /** The subtraction files */
@@ -73,6 +82,27 @@ export function SubtractionFileSelector({
     isLoading,
     isFetchingNextPage,
 }: SubtractionFileSelectorProps) {
+    const {
+        data: subtractions,
+        isLoading: isLoadingSubtractions,
+        fetchNextPage: fetchNextSubtractionsPage,
+        hasNextPage,
+    } = useInfiniteFindFiles(FileType.subtraction, 25);
+
+    useEffect(() => {
+        if (!isLoadingSubtractions && selected) {
+            const allSubtractions = getAllSubtractions(fetchNextSubtractionsPage, hasNextPage, subtractions);
+
+            if (!hasNextPage && !allSubtractions.some(item => item.id === selected)) {
+                onClick("");
+            }
+        }
+    }, [subtractions]);
+
+    if (isLoadingSubtractions) {
+        return <LoadingPlaceholder />;
+    }
+
     const items = flatMap(files.pages, page => page.items);
 
     function renderRow(item) {
@@ -87,25 +117,20 @@ export function SubtractionFileSelector({
         );
     }
 
-    useEffect(() => {
-        if (selected) {
-            onClick("");
-        }
-    }, [foundCount]);
-
     return foundCount === 0 ? (
         <NoneFoundBox noun="files">
             <Link to="/subtractions/files">Upload some</Link>
         </NoneFoundBox>
     ) : (
         <>
-            <SubtractionFileSelectorList>
+            <SubtractionFileSelectorList id="subtraction-scroll">
                 <ScrollList
                     fetchNextPage={fetchNextPage}
                     isFetchingNextPage={isFetchingNextPage}
                     isLoading={isLoading}
                     items={items}
                     renderRow={renderRow}
+                    elementId={"subtraction-scroll"}
                 />
             </SubtractionFileSelectorList>
             <SubtractionFileSelectorError>{error}</SubtractionFileSelectorError>

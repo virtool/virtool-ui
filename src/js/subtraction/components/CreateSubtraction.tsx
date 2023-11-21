@@ -1,5 +1,4 @@
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { find } from "lodash-es";
 import React from "react";
 import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
@@ -24,15 +23,6 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("A name is required"),
     uploadId: Yup.string().required("Please select a file"),
 });
-
-function castValues(files) {
-    files.forEach(item => {
-        return function (values) {
-            const uploadId = find(item, ["id", values.uploadId]) ? values.uploadId : "";
-            return { ...values, uploadId };
-        };
-    });
-}
 
 type formValues = {
     name: "";
@@ -66,8 +56,6 @@ export default function CreateSubtraction() {
         subtractionMutation.mutate({ name, nickname, uploadId });
     }
 
-    const files = filesResponse.pages;
-
     const initialValues = {
         name: "",
         nickname: "",
@@ -96,7 +84,7 @@ export default function CreateSubtraction() {
                     values: formValues;
                 }) => (
                     <Form>
-                        <PersistForm formName="create-subtraction" castValues={castValues(files)} />
+                        <PersistForm formName="create-subtraction" />
                         <InputGroup>
                             <InputLabel>Name</InputLabel>
                             <Field
