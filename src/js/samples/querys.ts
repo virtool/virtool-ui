@@ -1,7 +1,6 @@
 import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Request } from "../app/request";
-import { update } from "./api";
+import { listSamples, update } from "./api";
 import { SampleMinimal } from "./types";
 
 type Labels = {
@@ -26,29 +25,6 @@ export const samplesQueryKeys = {
 };
 
 /**
- * Fetch a page of samples
- *
- * @param page - The page to fetch
- * @param per_page - The number of samples to fetch per page
- * @param term - The search term to filter samples by
- * @param labels - Filter the samples by labels
- * @param workflows - Filter the samples by workflows
- */
-function findSamples(page: number, per_page: number, term: string, labels: string[], workflows: string) {
-    const request = Request.get("/samples").query({ page, per_page, find: term });
-
-    if (labels) {
-        labels.forEach(label => request.query({ label }));
-    }
-
-    if (workflows) {
-        request.query({ workflows });
-    }
-
-    return request.then(res => res.body);
-}
-
-/**
  * Fetch a page of samples from the API
  *
  * @param page - The page to fetch
@@ -56,13 +32,13 @@ function findSamples(page: number, per_page: number, term: string, labels: strin
  * @param term - The search term to filter samples by
  * @param labels - The labels to filter the samples by
  */
-export function useFindSamples(page: number, per_page: number, term?: string, labels?: string[]) {
+export function useListSamples(page: number, per_page: number, term?: string, labels?: string[]) {
     const params = new URLSearchParams(window.location.search);
     const workflows = params.get("workflows");
 
     return useQuery(
         samplesQueryKeys.list([page, per_page, term, labels, workflows]),
-        () => findSamples(page, per_page, term, labels, workflows),
+        () => listSamples(page, per_page, term, labels, workflows),
         {
             keepPreviousData: true,
         },

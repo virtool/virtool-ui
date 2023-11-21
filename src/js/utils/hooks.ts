@@ -1,4 +1,4 @@
-import { xor } from "lodash-es";
+import { forEach } from "lodash-es/lodash";
 import { useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
@@ -96,21 +96,15 @@ export function useUrlSearchParams(key: string, defaultValue?: string): [string,
 /**
  * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
  *
- * @param value - The value to be used in the search parameter
+ * @param values - The values to be used in the search parameter
  * @param key - The search parameter key to be managed
  * @param history - The history object
  */
-function updateUrlSearchParamsList(value: string, key: string, history: HistoryType) {
+function updateUrlSearchParamsList(values: string[], key: string, history: HistoryType) {
     const params = new URLSearchParams(window.location.search);
-    let values = params.getAll(key);
 
-    if (value && !values.includes(value.toString())) {
-        params.append(key, value);
-    } else {
-        values = xor(values, [value.toString()]);
-        params.delete(key);
-        values.forEach(val => params.append(key, val));
-    }
+    params.delete(key);
+    forEach(values, value => params.append(key, value));
 
     history?.replace({
         pathname: window.location.pathname,
@@ -125,7 +119,7 @@ function updateUrlSearchParamsList(value: string, key: string, history: HistoryT
  * @param defaultValue - The default values to use when the search parameter key is not present in the URL
  * @returns Object - An object containing the current values and a function to set the URL search parameter
  */
-export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [string[], (newValue: string) => void] {
+export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [string[], (newValue: string[]) => void] {
     const history = useHistory();
     const location = useLocation();
     const firstRender = useRef(true);
@@ -134,10 +128,10 @@ export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [s
 
     if (firstRender.current && defaultValue && !value.length) {
         value = defaultValue;
-        value.forEach(val => updateUrlSearchParamsList(val, key, history));
+        updateUrlSearchParamsList(value, key, history);
     }
 
     firstRender.current = false;
 
-    return [value, (value: string) => updateUrlSearchParamsList(value, key, history)];
+    return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history)];
 }

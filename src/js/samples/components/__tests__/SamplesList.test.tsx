@@ -6,16 +6,17 @@ import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
-import { mockCreateSample } from "../../../../tests/fake/sample";
+import { createFakeSampleMinimal, mockApiGetSamples } from "../../../../tests/fake/sample";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";
 
 describe("<SamplesList />", () => {
     const history = createBrowserHistory();
+    const samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
 
     beforeEach(() => {
-        mockCreateSample();
+        mockApiGetSamples(samples);
         nock("http://localhost").get("/api/labels").reply(200, []);
     });
 
@@ -29,8 +30,8 @@ describe("<SamplesList />", () => {
         );
         expect(await screen.findByText("Samples")).toBeInTheDocument();
 
-        expect(screen.getByText("sample1")).toBeInTheDocument();
-        expect(screen.getByText("Normal")).toBeInTheDocument();
+        expect(screen.getByText(samples[0].name)).toBeInTheDocument();
+        expect(screen.getByText("Labels")).toBeInTheDocument();
     });
 
     it("should call onChange when search input changes in toolbar", async () => {

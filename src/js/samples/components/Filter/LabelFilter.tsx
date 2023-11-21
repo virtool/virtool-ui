@@ -22,16 +22,14 @@ export default function LabelFilter({ labels, onClick, selected }: LabelFilterPr
             <SidebarHeader>
                 Labels <Link to="/samples/labels">Manage</Link>
             </SidebarHeader>
-            {Array.isArray(labels)
-                ? labels.map(label => (
-                      <LabelFilterItem
-                          key={label.id}
-                          {...label}
-                          pressed={selected.includes(label.id.toString())}
-                          onClick={onClick}
-                      />
-                  ))
-                : null}
+            {labels.map(label => (
+                <LabelFilterItem
+                    key={label.id}
+                    {...label}
+                    pressed={selected.includes(label.id.toString())}
+                    onClick={onClick}
+                />
+            ))}
         </SideBarSection>
     );
 }

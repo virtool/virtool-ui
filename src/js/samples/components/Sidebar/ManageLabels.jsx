@@ -41,13 +41,9 @@ function getSelectedLabels(document) {
     }));
 }
 
-export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels, documents }) {
-    const document = documents.filter(documentItem =>
-        selectedSamples.some(selectedItem => selectedItem.id === documentItem.id),
-    );
-
-    const selectedLabels = getSelectedLabels(document);
-    const onUpdateLabel = useUpdateLabel(selectedLabels, document);
+export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels }) {
+    const selectedLabels = getSelectedLabels(selectedSamples);
+    const onUpdateLabel = useUpdateLabel(selectedLabels, selectedSamples);
 
     return (
         <StyledSideBarSection>

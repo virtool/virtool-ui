@@ -1,6 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import { filter, forEach, uniqBy } from "lodash-es";
-import React, { useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { useMutation } from "react-query";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -19,10 +19,12 @@ import {
     ModalTabs,
     TabsLink,
 } from "../../../base";
-import { useFindHmms } from "../../../hmm/querys";
-import { useListReadyIndexes } from "../../../indexes/querys";
+import { useListHmms } from "../../../hmm/querys";
+import { useListIndexes } from "../../../indexes/querys";
+import { SampleMinimal } from "../../../samples/types";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
+import { HistoryType } from "../../../utils/hooks";
 import { analyze } from "../../api";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
@@ -57,8 +59,15 @@ const validationSchema = Yup.object().shape({
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
-export function getQuickAnalysisMode(libraryType, history) {
-    if (history.location.state?.quickAnalysis === true) {
+/**
+ * Gets the quick analysis mode
+ *
+ * @param libraryType - The library type of the sample
+ * @param history - The history object
+ * @returns The quick analysis mode
+ */
+export function getQuickAnalysisMode(libraryType: string, history: HistoryType) {
+    if (history.location.state?.["quickAnalysis"] === true) {
         if (libraryType === "amplicon") {
             return "barcode";
         }
@@ -67,8 +76,15 @@ export function getQuickAnalysisMode(libraryType, history) {
     }
 }
 
-export function getCompatibleSamples(mode, samples) {
-    return filter(samples, sample => {
+/**
+ * Gets the compatible samples
+ *
+ * @param mode - The quick analysis mode
+ * @param samples - The selected samples
+ * @returns A list of compatible samples
+ */
+export function getCompatibleSamples(mode: string, samples: SampleMinimal[]) {
+    return filter(samples, (sample: SampleMinimal) => {
         if (mode === "barcode") {
             return sample.library_type === "amplicon";
         }
@@ -77,24 +93,47 @@ export function getCompatibleSamples(mode, samples) {
     });
 }
 
-export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtractions, onClear }) {
+type HandleSubmitProps = {
+    /** The selected indexes */
+    indexes: string[];
+    /** The selected subtractions */
+    subtractions: string[];
+    /** The selected workflows */
+    workflows: string[];
+};
+
+type QuickAnalyzeProps = {
+    /** The selected samples */
+    samples: SampleMinimal[];
+    /** The ready subtraction options */
+    subtractionOptions: any;
+    /** A callback function to shortlist subtractions */
+    onShortlistSubtractions: () => void;
+    /** A callback function to clear selected samples */
+    onClear: () => void;
+};
+
+/**
+ * A form for triggering quick analyses on selected samples
+ */
+export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtractions, onClear }: QuickAnalyzeProps) {
     const history = useHistory();
-    const mode = getQuickAnalysisMode(samples.library_type, history);
+    const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
 
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
-    const { data: hmms, isLoading: isLoadingHmms } = useFindHmms();
-    const { data: indexes, isLoading: isLoadingIndexes } = useListReadyIndexes();
+    const { data: hmms, isLoading: isLoadingHmms } = useListHmms();
+    const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
     const mutation = useMutation(analyze);
 
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
 
-    function onAnalyze(samples, references, subtractionId, workflows) {
+    function onAnalyze(samples: SampleMinimal[], references: string[], subtractionId: string[], workflows: string[]) {
         forEach(samples, ({ id }) => {
-            forEach(references, refId => {
-                forEach(workflows, workflow =>
+            forEach(references, (refId: string) => {
+                forEach(workflows, (workflow: string) =>
                     mutation.mutate({
                         sampleId: id,
                         refId: refId,
@@ -125,15 +164,15 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
         return <LoadingPlaceholder />;
     }
 
-    function referenceId(selectedIndexes) {
+    function getReferenceId(selectedIndexes: string[]) {
         const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));
         const referenceIds = selectedCompatibleIndexes.map(index => index.reference.id);
 
         return uniqBy(referenceIds, "id");
     }
 
-    function handleSubmit({ indexes, subtractions, workflows }) {
-        const referenceIds = referenceId(indexes);
+    function handleSubmit({ indexes, subtractions, workflows }: HandleSubmitProps) {
+        const referenceIds = getReferenceId(indexes);
 
         onAnalyze(compatibleSamples, referenceIds, subtractions, workflows);
         onClear();
@@ -170,7 +209,9 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
                                 selected={values.workflows}
                                 onSelect={workflows => setFieldValue("workflows", workflows)}
                             />
-                            <QuickAnalyzeError>{touched.workflows && errors.workflows}</QuickAnalyzeError>
+                            <QuickAnalyzeError>
+                                {touched.workflows && (errors.workflows as ReactNode & (string | string[]))}
+                            </QuickAnalyzeError>
                             {mode === "genome" && (
                                 <>
                                     <Field
@@ -180,7 +221,10 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
                                         onChange={value => setFieldValue("subtractions", value)}
                                     />
 
-                                    <QuickAnalyzeError>{touched.subtractions && errors.subtractions}</QuickAnalyzeError>
+                                    <QuickAnalyzeError>
+                                        {touched.subtractions &&
+                                            (errors.subtractions as ReactNode & (string | string[]))}
+                                    </QuickAnalyzeError>
                                 </>
                             )}
                             <Field
@@ -189,7 +233,9 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
                                 selected={values.indexes}
                                 onChange={value => setFieldValue("indexes", value)}
                             />
-                            <QuickAnalyzeError>{touched.indexes && errors.indexes}</QuickAnalyzeError>{" "}
+                            <QuickAnalyzeError>
+                                {touched.indexes && (errors.indexes as ReactNode & (string | string[]))}
+                            </QuickAnalyzeError>{" "}
                         </ModalBody>
                         <QuickAnalyzeFooter>
                             <CreateAnalysisSummary

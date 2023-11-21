@@ -1,11 +1,11 @@
-import { union, xor } from "lodash-es";
-import React, { useState } from "react";
+import { union, without } from "lodash-es";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import QuickAnalysis from "../../analyses/components/Create/Quick";
+import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useFetchLabels } from "../../labels/hooks";
 import { useUrlSearchParams, useUrlSearchParamsList } from "../../utils/hooks";
-import { useFindSamples } from "../querys";
+import { useListSamples } from "../querys";
 import { SampleMinimal } from "../types";
 import { SampleFilters } from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
@@ -35,10 +35,18 @@ export default function SamplesList() {
     const [term, setTerm] = useUrlSearchParams("find");
     const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
 
-    const { data: samples, isLoading: isSamplesLoading } = useFindSamples(Number(urlPage) || 1, 25, term, filterLabels);
+    const { data: samples, isLoading: isSamplesLoading } = useListSamples(Number(urlPage) || 1, 5, term, filterLabels);
     const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
 
     const [selected, setSelected] = useState([]);
+
+    useEffect(() => {
+        setSelected(
+            selected.map(
+                prevSample => samples.documents.find(newSample => newSample.id === prevSample.id) || prevSample,
+            ),
+        );
+    }, [samples]);
 
     if (isSamplesLoading || isLabelsLoading) {
         return <LoadingPlaceholder />;
@@ -51,7 +59,7 @@ export default function SamplesList() {
             if (!selected.includes(document)) {
                 setSelected(union(selected, [document]));
             } else {
-                setSelected(xor(selected, [document]));
+                setSelected(without(selected, document));
             }
         }
 
@@ -103,9 +111,17 @@ export default function SamplesList() {
                     )}
                 </SamplesListContent>
                 {selected.length ? (
-                    <SampleLabels labels={labels} selectedSamples={selected} documents={documents} />
+                    <SampleLabels labels={labels} selectedSamples={selected} />
                 ) : (
-                    <SampleFilters labels={labels} onClick={e => setFilterLabels(e)} selectedLabels={filterLabels} />
+                    <SampleFilters
+                        labels={labels}
+                        onClick={e => {
+                            !filterLabels.includes(e.toString())
+                                ? setFilterLabels(union(filterLabels, [e]))
+                                : setFilterLabels(without(filterLabels, e.toString()));
+                        }}
+                        selectedLabels={filterLabels}
+                    />
                 )}
             </StyledSamplesList>
         </>
