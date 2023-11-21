@@ -5,7 +5,11 @@ import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
-import { createFakeSubtractions, mockApiGetSubtractions } from "../../../../tests/fake/subtractions";
+import {
+    createFakeSubtraction,
+    createFakeSubtractionMinimal,
+    mockApiGetSubtractions,
+} from "../../../../tests/fake/subtractions";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import Subtraction from "../Subtraction";
@@ -20,15 +24,23 @@ function createAppStore(state) {
 
 describe("<Subtraction />", () => {
     const history = createMemoryHistory();
+    const subtractionMinimal = createFakeSubtractionMinimal();
     const state = {
         account: { administrator_role: AdministratorRoles.FULL },
+        subtraction: {
+            detail: createFakeSubtraction(subtractionMinimal),
+        },
+        router: {
+            location: {
+                pathname: "/subtractions",
+            },
+        },
     };
 
     it("should render /subtractions route", async () => {
         history.push("/subtractions");
 
-        const subtractions = createFakeSubtractions();
-        mockApiGetSubtractions([subtractions]);
+        mockApiGetSubtractions([subtractionMinimal]);
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: history.location.pathname }]}>
                 <Subtraction />
@@ -74,9 +86,9 @@ describe("<Subtraction />", () => {
     });
 
     it("should render /subtractions/:subtractionId route", async () => {
-        const subtractions = createFakeSubtractions();
-        history.push(`/subtractions/${subtractions.id}`);
-        mockApiGetSubtractions([subtractions]);
+        history.push(`/subtractions/${subtractionMinimal.id}`);
+
+        mockApiGetSubtractions([subtractionMinimal]);
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: history.location.pathname }]}>
                 <Subtraction />

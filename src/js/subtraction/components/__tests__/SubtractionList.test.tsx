@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
-import { createFakeSubtractions, mockApiGetSubtractions } from "../../../../tests/fake/subtractions";
+import { createFakeSubtractionMinimal, mockApiGetSubtractions } from "../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import SubtractionList from "../SubtractionList";
@@ -14,7 +14,7 @@ describe("<SubtractionList />", () => {
     let subtractions;
 
     beforeEach(() => {
-        subtractions = createFakeSubtractions();
+        subtractions = createFakeSubtractionMinimal();
         history = createBrowserHistory();
     });
 

@@ -1,12 +1,38 @@
 import { faker } from "@faker-js/faker";
 import nock from "nock";
-import { SubtractionMinimal } from "../../js/subtraction/types";
+import { Subtraction, SubtractionFile, SubtractionMinimal } from "../../js/subtraction/types";
 import { createFakeUserNested } from "./user";
+
+/**
+ * Create a fake subtraction file
+ */
+export function createFakeSubtractionFile(): SubtractionFile {
+    return {
+        download_url: faker.random.word(),
+        id: faker.datatype.number(),
+        name: faker.random.word(),
+        size: faker.datatype.number(),
+        subtraction: faker.random.alphaNumeric(8),
+        type: "fasta",
+    };
+}
+
+/**
+ * Create a fake subtraction
+ */
+export function createFakeSubtraction(subtractionMinimal: SubtractionMinimal): Subtraction {
+    return {
+        ...subtractionMinimal,
+        files: [createFakeSubtractionFile()],
+        gc: { a: 1, c: 1, g: 1, n: 1, t: 1 },
+        linked_samples: [],
+    };
+}
 
 /**
  * Create a fake minimal subtraction
  */
-export function createFakeSubtractions(): SubtractionMinimal {
+export function createFakeSubtractionMinimal(): SubtractionMinimal {
     return {
         id: faker.random.alphaNumeric(8),
         created_at: faker.date.past().toISOString(),
@@ -14,7 +40,7 @@ export function createFakeSubtractions(): SubtractionMinimal {
         ready: true,
         user: createFakeUserNested(),
         file: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
-        nickname: "",
+        nickname: faker.random.word(),
     };
 }
 
