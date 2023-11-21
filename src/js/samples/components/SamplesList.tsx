@@ -35,7 +35,7 @@ export default function SamplesList() {
     const [term, setTerm] = useUrlSearchParams("find");
     const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
 
-    const { data: samples, isLoading: isSamplesLoading } = useListSamples(Number(urlPage) || 1, 5, term, filterLabels);
+    const { data: samples, isLoading: isSamplesLoading } = useListSamples(Number(urlPage) || 1, 25, term, filterLabels);
     const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
 
     const [selected, setSelected] = useState([]);
