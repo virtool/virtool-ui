@@ -4,35 +4,11 @@ import { InfiniteData } from "react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Attribution, BoxGroup, InputError, LoadingPlaceholder, NoneFoundBox, SelectBoxGroupSection } from "../../base";
+import { BoxGroup, InputError, LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useInfiniteFindFiles } from "../../files/querys";
 import { FileResponse, FileType } from "../../files/types";
-
-type StyledSubtractionFileItemProps = {
-    error: string;
-};
-
-const StyledSubtractionFileItem = styled(SelectBoxGroupSection)<StyledSubtractionFileItemProps>`
-    display: flex;
-
-    ${Attribution} {
-        margin-left: auto;
-    }
-`;
-
-export function SubtractionFileItem({ active, onClick, name, uploaded_at, user, id, error }) {
-    function handleClick() {
-        onClick(id);
-    }
-
-    return (
-        <StyledSubtractionFileItem active={active} onClick={handleClick} error={error}>
-            <strong>{name}</strong>
-            <Attribution user={user.handle} time={uploaded_at} />
-        </StyledSubtractionFileItem>
-    );
-}
+import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
     margin-bottom: 5px;

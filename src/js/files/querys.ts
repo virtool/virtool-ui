@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { Request } from "../app/request";
+import { findFiles } from "./api";
 import { FileResponse, FileType } from "./types";
 
 export const fileQueryKeys = {
@@ -20,12 +21,6 @@ export function useListFiles(type: FileType, paginate: boolean, page = 1) {
     return useQuery(fileQueryKeys.list(type, [paginate, page]), () => listFiles(type, paginate, page), {
         keepPreviousData: true,
     });
-}
-
-function findFiles(type: FileType, page: number, per_page: number, term?: string) {
-    return Request.get("/uploads")
-        .query({ upload_type: type, page, per_page, ready: true, paginate: true, find: term })
-        .then(response => response.body);
 }
 
 export function useInfiniteFindFiles(type: FileType, per_page: number, term?: string) {
