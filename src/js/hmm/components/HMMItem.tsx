@@ -1,9 +1,9 @@
 import { keys, map, reject } from "lodash-es";
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { BoxLink, Label } from "../../base";
+import { HMMMinimal } from "../types";
 
 const StyledHMMItem = styled(BoxLink)`
     display: flex;
@@ -26,8 +26,16 @@ const HMMItemFamilies = styled.div`
     margin-left: auto;
 `;
 
-export default function HMMItem({ cluster, families, id, names }) {
-    const filteredFamilies = reject(keys(families), family => family === "None");
+type HMMItemProps = {
+    /** Minimal hmm data */
+    hmm: HMMMinimal;
+};
+
+/**
+ * A condensed hmm item for use in a list of hmms
+ */
+export default function HMMItem({ hmm }: HMMItemProps) {
+    const filteredFamilies = reject(keys(hmm.families), family => family === "None");
 
     const labelComponents = map(filteredFamilies.slice(0, 3), (family, i) => (
         <Label key={i} spaced>
@@ -36,19 +44,12 @@ export default function HMMItem({ cluster, families, id, names }) {
     ));
 
     return (
-        <StyledHMMItem to={`/hmm/${id}`}>
-            <HMMItemCluster>{cluster}</HMMItemCluster>
-            <HMMItemName>{names[0]}</HMMItemName>
+        <StyledHMMItem to={`/hmm/${hmm.id}`}>
+            <HMMItemCluster>{hmm.cluster}</HMMItemCluster>
+            <HMMItemName>{hmm.names[0]}</HMMItemName>
             <HMMItemFamilies>
                 {labelComponents} {filteredFamilies.length > 3 ? "..." : null}
             </HMMItemFamilies>
         </StyledHMMItem>
     );
 }
-
-HMMItem.propTypes = {
-    cluster: PropTypes.number,
-    families: PropTypes.object,
-    id: PropTypes.string,
-    names: PropTypes.array,
-};
