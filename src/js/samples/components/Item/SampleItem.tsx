@@ -71,7 +71,7 @@ const StyledSampleItem = styled(Box)`
 `;
 
 type SampleItemProps = {
-    /**  */
+    /** Minimal sample data */
     sample: SampleMinimal;
     /** Whether the sample is selected */
     checked: boolean;

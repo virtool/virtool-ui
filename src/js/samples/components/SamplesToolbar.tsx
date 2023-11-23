@@ -7,20 +7,15 @@ import { SampleSelectionToolbar } from "./SelectionToolbar";
 
 export function SampleSearchToolbar({ onChange, term }) {
     const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
-    let createButton;
-
-    if (canCreate) {
-        createButton = (
-            <LinkButton icon="create" to="/samples/create" color="blue" tip="Create">
-                <Icon name="plus-square fa-fw" />
-            </LinkButton>
-        );
-    }
 
     return (
         <Toolbar>
             <InputSearch value={term} onChange={onChange} placeholder="Sample name" />
-            {createButton}
+            {canCreate && (
+                <LinkButton icon="create" to="/samples/create" color="blue" tip="Create">
+                    <Icon name="plus-square fa-fw" />
+                </LinkButton>
+            )}
         </Toolbar>
     );
 }
