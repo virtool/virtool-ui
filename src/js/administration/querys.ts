@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
-import { UserResponse } from "../users/types";
-import { fetchAdministratorRoles, fetchSettings, findUsers, setAdministratorRole } from "./api";
+import { User, UserResponse } from "../users/types";
+import { fetchAdministratorRoles, fetchSettings, findUsers, getUser, setAdministratorRole, updateUser } from "./api";
 import { AdministratorRoles, Settings } from "./types";
 
 /**
@@ -86,6 +86,30 @@ export const useInfiniteFindUsers = (per_page: number, term: string, administrat
         },
     );
 };
+
+/**
+ * Fetches a single user
+ *
+ * @param userId - The id of the user to fetch
+ * @returns A single user
+ */
+export function useGetUser(userId: string) {
+    return useQuery<User>(userQueryKeys.detail(userId), () => getUser(userId));
+}
+
+/**
+ * Initializes a mutator for updating a user
+ *
+ * @returns A mutator for updating a user
+ */
+export function useUpdateUser() {
+    const queryClient = useQueryClient();
+    return useMutation(updateUser, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(userQueryKeys.details());
+        },
+    });
+}
 
 /**
  * Set up a query for updating users administrator roles

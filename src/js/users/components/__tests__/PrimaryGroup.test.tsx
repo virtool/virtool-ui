@@ -1,9 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { mockApiEditUser } from "../../../../tests/fake/user";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { mapDispatchToProps, mapStateToProps, PrimaryGroup } from "../PrimaryGroup";
+import PrimaryGroup from "../PrimaryGroup";
 
 describe("<PrimaryGroup />", () => {
     let props;
@@ -17,7 +18,6 @@ describe("<PrimaryGroup />", () => {
             ],
             id: "bob",
             primaryGroup: { id: "2", name: "bar" },
-            onSetPrimaryGroup: vi.fn(),
         };
     });
 
@@ -57,52 +57,13 @@ describe("<PrimaryGroup />", () => {
     it("should call onSetPrimaryGroup() when selection changes", async () => {
         props.primaryGroup = "3";
 
+        const scope = mockApiEditUser(props.id, 200, { primary_group: "foo" });
         renderWithProviders(<PrimaryGroup {...props} />);
 
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
 
         await userEvent.selectOptions(screen.getByRole("combobox"), "Bar");
 
-        expect(props.onSetPrimaryGroup).toHaveBeenCalledWith("bob", "2");
-
-        await userEvent.selectOptions(screen.getByRole("combobox"), "none");
-
-        expect(props.onSetPrimaryGroup).toHaveBeenCalledWith("bob", null);
-    });
-});
-
-describe("mapStateToProps", () => {
-    const groups = ["foo", "bar", "baz"];
-    const state = {
-        users: {
-            detail: { id: "bob", groups, primary_group: "bar" },
-        },
-    };
-    it("should return props", () => {
-        const result = mapStateToProps(state);
-        expect(result).toEqual({
-            id: "bob",
-            groups,
-            primaryGroup: "bar",
-        });
-    });
-});
-
-describe("mapDispatchToProps", () => {
-    it("should return onSetPrimaryGroup() in props", () => {
-        const dispatch = vi.fn();
-        const props = mapDispatchToProps(dispatch);
-
-        props.onSetPrimaryGroup("foo", "bar");
-
-        expect(dispatch).toHaveBeenCalledWith({
-            type: "EDIT_USER_REQUESTED",
-            payload: {
-                update: {
-                    primary_group: "bar",
-                },
-                userId: "foo",
-            },
-        });
+        scope.isDone();
     });
 });

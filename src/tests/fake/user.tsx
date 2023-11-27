@@ -35,6 +35,7 @@ type CreateFakeUserProps = {
     primary_group?: GroupMinimal;
     handle?: string;
     administrator_role?: AdministratorRoles;
+    force_reset?: boolean;
 };
 
 /**
@@ -100,4 +101,19 @@ export function mockApiFindUsers(users: Array<User>, query?: Query) {
             total_count: users.length,
             items: users,
         });
+}
+
+/**
+ * Mocks an API call for getting the user details
+ *
+ * @param userId - The users unique id
+ * @param userDetail - The details of the user
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiGetUser(userId: string, userDetail: User) {
+    return nock("http://localhost").get(`/api/users/${userId}`).reply(200, userDetail);
+}
+
+export function mockApiEditUser(userId: string, statisCode: number, update: any) {
+    return nock("http://localhost").patch(`/api/users/${userId}`).reply(statisCode, update);
 }

@@ -5,7 +5,7 @@
  */
 import { Response } from "superagent";
 import { Request } from "../app/request";
-import { UserResponse } from "../users/types";
+import { User, UserResponse } from "../users/types";
 import { AdministratorRoles, Settings } from "./types";
 
 /**
@@ -75,6 +75,34 @@ export function findUsers(page: number, per_page: number, term: string, administ
         .then(response => {
             return response.body;
         });
+}
+
+/**
+ * Fetch a single user
+ *
+ * @param userId - The id of the user to fetch
+ * @returns A promise resolving to a single user
+ */
+export function getUser(userId: string): Promise<User> {
+    return Request.get(`/users/${userId}`).then(res => res.body);
+}
+
+type UserUpdate = {
+    force_reset?: boolean;
+    password?: string;
+    primary_group?: string;
+    groups?: string[];
+};
+
+/**
+ * Updates the data for the user
+ *
+ * @param userId - The user to be updated
+ * @param update - The update to apply to the user
+ * @returns A promise resolving to a response containing the updated user's data
+ */
+export function updateUser({ userId, update }: { userId: string; update: UserUpdate }): Promise<Response> {
+    return Request.patch(`/users/${userId}`).send(update);
 }
 
 /**
