@@ -16,7 +16,7 @@ function renderRow({ created_at, user, name, id, ready, job }: SubtractionMinima
 export default function SubtractionList() {
     const [term, setTerm] = useUrlSearchParams("find");
     const [urlPage] = useUrlSearchParams("page");
-    const { data, isLoading } = useFindSubtractions(Number(urlPage) || 1, 5, term);
+    const { data, isLoading } = useFindSubtractions(Number(urlPage) || 1, 25, term);
 
     if (isLoading) {
         return <LoadingPlaceholder />;

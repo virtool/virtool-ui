@@ -1,6 +1,9 @@
 import { faker } from "@faker-js/faker";
+import { merge } from "lodash";
 import nock from "nock";
-import { Subtraction, SubtractionFile, SubtractionMinimal } from "../../js/subtraction/types";
+import { JobMinimal } from "../../js/jobs/types";
+import { Subtraction, SubtractionFile, SubtractionMinimal, SubtractionUpload } from "../../js/subtraction/types";
+import { UserNested } from "../../js/users/types";
 import { createFakeUserNested } from "./user";
 
 /**
@@ -17,12 +20,25 @@ export function createFakeSubtractionFile(): SubtractionFile {
     };
 }
 
+type CreateFakeSubtractionMinimal = {
+    id?: string;
+    name?: string;
+    count?: number;
+    created_at?: string;
+    file?: SubtractionUpload;
+    job?: JobMinimal;
+    nickname?: string;
+    ready?: boolean;
+    user?: UserNested;
+};
+
 /**
  * Create a fake subtraction
  */
-export function createFakeSubtraction(subtractionMinimal: SubtractionMinimal): Subtraction {
+export function createFakeSubtraction(overrides?: CreateFakeSubtractionMinimal): Subtraction {
+    const { id, name, count, created_at, file, job, nickname, ready, user } = overrides || {};
     return {
-        ...subtractionMinimal,
+        ...createFakeSubtractionMinimal({ id, name, count, created_at, file, job, nickname, ready, user }),
         files: [createFakeSubtractionFile()],
         gc: { a: 1, c: 1, g: 1, n: 1, t: 1 },
         linked_samples: [],
@@ -32,16 +48,20 @@ export function createFakeSubtraction(subtractionMinimal: SubtractionMinimal): S
 /**
  * Create a fake minimal subtraction
  */
-export function createFakeSubtractionMinimal(): SubtractionMinimal {
-    return {
+export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMinimal): SubtractionMinimal {
+    const defaultSubtractionMinimal = {
         id: faker.random.alphaNumeric(8),
-        created_at: faker.date.past().toISOString(),
         name: faker.random.word(),
+        count: faker.datatype.number(),
+        created_at: faker.date.past().toISOString(),
+        file: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
+        job: {},
+        nickname: faker.random.word(),
         ready: true,
         user: createFakeUserNested(),
-        file: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
-        nickname: faker.random.word(),
     };
+
+    return merge(defaultSubtractionMinimal, overrides);
 }
 
 /**
@@ -51,8 +71,13 @@ export function createFakeSubtractionMinimal(): SubtractionMinimal {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
-    return nock("http://localhost")
-        .get("/api/subtractions")
-        .query(true)
-        .reply(200, { documents: Subtractions, total_count: 1 });
+    return nock("http://localhost").get("/api/subtractions").query(true).reply(200, {
+        documents: Subtractions,
+        found_count: Subtractions.length,
+        page: 1,
+        page_count: 1,
+        per_page: 25,
+        ready_count: Subtractions.length,
+        total_count: Subtractions.length,
+    });
 }

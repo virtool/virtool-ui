@@ -27,7 +27,7 @@ describe("<SubtractionList />", () => {
         expect(screen.getByText("1")).toBeInTheDocument();
         expect(screen.getByText(subtractions.name)).toBeInTheDocument();
 
-        scope.isDone();
+        scope.done();
     });
 
     it("should call handleChange when search input changes in toolbar", async () => {
@@ -42,7 +42,7 @@ describe("<SubtractionList />", () => {
         expect(inputElement).toHaveValue("Foo");
 
         await userEvent.clear(inputElement);
-        scope.isDone();
+        scope.done();
     });
 
     it("should render create button when [canModify=true]", async () => {
@@ -54,7 +54,7 @@ describe("<SubtractionList />", () => {
 
         expect(await screen.findByLabelText("plus-square")).toBeInTheDocument();
 
-        scope.isDone();
+        scope.done();
     });
 
     it("should not render create button when [canModify=false]", async () => {
@@ -67,7 +67,7 @@ describe("<SubtractionList />", () => {
         const createButton = screen.queryByLabelText("plus-square");
         expect(createButton).toBeNull();
 
-        scope.isDone();
+        scope.done();
     });
 
     it("should handle toolbar updates correctly", async () => {
@@ -84,6 +84,6 @@ describe("<SubtractionList />", () => {
 
         expect(history.location.search).toEqual("?find=Foobar");
 
-        scope.isDone();
+        scope.done();
     });
 });
