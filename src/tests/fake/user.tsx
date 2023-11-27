@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { merge, times } from "lodash-es";
 import nock from "nock";
-import { UserUpdate } from "../../js/administration/api";
 import { AdministratorRoles } from "../../js/administration/types";
 import { GroupMinimal, Permissions } from "../../js/groups/types";
 import { User, UserNested } from "../../js/users/types";
@@ -123,6 +122,6 @@ export function mockApiGetUser(userId: string, userDetail: User) {
  * @param update - The update to apply to the user
  * @returns A nock scope for the mocked API call
  */
-export function mockApiEditUser(userId: string, statusCode: number, update: UserUpdate) {
+export function mockApiEditUser(userId: string, statusCode: number, update: any) {
     return nock("http://localhost").patch(`/api/users/${userId}`).reply(statusCode, update);
 }
