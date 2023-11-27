@@ -64,6 +64,6 @@ describe("<PrimaryGroup />", () => {
 
         await userEvent.selectOptions(screen.getByRole("combobox"), "Bar");
 
-        scope.isDone();
+        scope.done();
     });
 });

@@ -69,7 +69,7 @@ describe("<UserDetail />", () => {
             expect(screen.getByText("cancel_job")).toBeInTheDocument();
             expect(screen.getByText("create_sample")).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
 
         it("should render loading when the user details hasn't loaded", () => {
@@ -94,7 +94,7 @@ describe("<UserDetail />", () => {
             expect(screen.getByText("Group4")).toBeInTheDocument();
             expect(screen.getByText("create_sample")).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
 
         it("should render correctly when user has insufficient permissions", async () => {
@@ -111,7 +111,7 @@ describe("<UserDetail />", () => {
             expect(screen.queryByText("Groups")).not.toBeInTheDocument();
             expect(screen.queryByText("Permissions")).not.toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
     });
 
@@ -127,7 +127,7 @@ describe("<UserDetail />", () => {
             expect(screen.getByLabelText("group1")).toBeInTheDocument();
             expect(screen.getByLabelText("group3")).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
         it("should render loading when groups haven't loaded", async () => {
             mockGetAccountAPI(account);
@@ -143,7 +143,7 @@ describe("<UserDetail />", () => {
             expect(screen.queryByLabelText("Group3")).not.toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
         it("should render NoneFound when documents = []", async () => {
             mockGetAccountAPI(account);
@@ -162,7 +162,7 @@ describe("<UserDetail />", () => {
             expect(screen.getByText("Primary Group")).toBeInTheDocument();
             expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
     });
 
@@ -182,7 +182,7 @@ describe("<UserDetail />", () => {
             expect(screen.getByLabelText("password")).toBeInTheDocument();
             expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
 
         it("should render correctly when forceReset = false", async () => {
@@ -202,7 +202,7 @@ describe("<UserDetail />", () => {
             expect(screen.getByText("Force user to reset password on next login")).toBeInTheDocument();
             expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
 
         it("should submit when password is long enough", async () => {
@@ -218,7 +218,7 @@ describe("<UserDetail />", () => {
             await userEvent.type(screen.getByLabelText("password"), "newPassword");
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-            scope.isDone();
+            scope.done();
         });
 
         it("should display error when password is not long enough", async () => {
@@ -240,7 +240,7 @@ describe("<UserDetail />", () => {
                 expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument(),
             );
 
-            scope.isDone();
+            scope.done();
         });
     });
 
@@ -274,7 +274,7 @@ describe("<UserDetail />", () => {
             expect(screen.getByLabelText("remove_file:false")).toBeInTheDocument();
             expect(screen.getByLabelText("upload_file:false")).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
     });
 });

@@ -87,7 +87,7 @@ export function getUser(userId: string): Promise<User> {
     return Request.get(`/users/${userId}`).then(res => res.body);
 }
 
-type UserUpdate = {
+export type UserUpdate = {
     force_reset?: boolean;
     password?: string;
     primary_group?: string;
@@ -101,8 +101,10 @@ type UserUpdate = {
  * @param update - The update to apply to the user
  * @returns A promise resolving to a response containing the updated user's data
  */
-export function updateUser({ userId, update }: { userId: string; update: UserUpdate }): Promise<Response> {
-    return Request.patch(`/users/${userId}`).send(update);
+export function updateUser(userId: string, update: UserUpdate): Promise<User> {
+    return Request.patch(`/users/${userId}`)
+        .send(update)
+        .then(res => res.body);
 }
 
 /**

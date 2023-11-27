@@ -1,6 +1,14 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 import { User, UserResponse } from "../users/types";
-import { fetchAdministratorRoles, fetchSettings, findUsers, getUser, setAdministratorRole, updateUser } from "./api";
+import {
+    fetchAdministratorRoles,
+    fetchSettings,
+    findUsers,
+    getUser,
+    setAdministratorRole,
+    updateUser,
+    UserUpdate,
+} from "./api";
 import { AdministratorRoles, Settings } from "./types";
 
 /**
@@ -93,7 +101,7 @@ export const useInfiniteFindUsers = (per_page: number, term: string, administrat
  * @param userId - The id of the user to fetch
  * @returns A single user
  */
-export function useGetUser(userId: string) {
+export function useFetchUser(userId: string) {
     return useQuery<User>(userQueryKeys.detail(userId), () => getUser(userId));
 }
 
@@ -104,11 +112,14 @@ export function useGetUser(userId: string) {
  */
 export function useUpdateUser() {
     const queryClient = useQueryClient();
-    return useMutation(updateUser, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(userQueryKeys.details());
+    return useMutation<User, unknown, { userId: string; update: UserUpdate }>(
+        ({ userId, update }) => updateUser(userId, update),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(userQueryKeys.details());
+            },
         },
-    });
+    );
 }
 
 /**

@@ -2,7 +2,7 @@ import React from "react";
 import { Link, match } from "react-router-dom";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
-import { useGetUser } from "../../administration/querys";
+import { useFetchUser } from "../../administration/querys";
 import { AdministratorRoles } from "../../administration/types";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "../../base";
@@ -55,7 +55,7 @@ type UserDetailProps = {
  * The detailed view of a user
  */
 export default function UserDetail({ match }: UserDetailProps) {
-    const { data, isLoading } = useGetUser(match.params["userId"]);
+    const { data, isLoading } = useFetchUser(match.params["userId"]);
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
