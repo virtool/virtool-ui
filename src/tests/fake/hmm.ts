@@ -1,48 +1,14 @@
 import { faker } from "@faker-js/faker";
+import { merge } from "lodash";
 import { times, toString } from "lodash-es";
 import nock from "nock";
 import { HMMSearchResults } from "../../js/hmm/types";
 
 /**
- * Create a fake HMM search result before installation
- *
- * @param hasTask - Whether the status has a task
+ * Create a fake HMM minimal
  */
-export function createFakeInitialHMMSearchResults(hasTask = false) {
-    const status = {
-        installed: null,
-        task: hasTask && {
-            complete: false,
-            id: 21,
-            progress: 33,
-            step: "decompress",
-        },
-    };
+export function createFakeHMMMinimal() {
     return {
-        documents: [],
-        status,
-        found_count: 0,
-        page: 1,
-        page_count: 0,
-        per_page: faker.datatype.number(),
-        total_count: 0,
-    };
-}
-
-/**
- * Create a fake HMM search result
- *
- * @param hasDocument - Whether the search result has documents
- */
-export function createFakeHMMSearchResults(hasDocument = true): HMMSearchResults {
-    const status = {
-        errors: [toString(faker.internet.httpStatusCode())],
-        installed: {
-            ready: faker.datatype.boolean(),
-        },
-    };
-
-    const documents = times(5, () => ({
         cluster: faker.datatype.number(),
         count: faker.datatype.number(),
         families: {
@@ -51,25 +17,52 @@ export function createFakeHMMSearchResults(hasDocument = true): HMMSearchResults
         },
         id: faker.random.alphaNumeric(9, { casing: "lower" }),
         names: [faker.name.lastName()],
-    }));
+    };
+}
 
-    return {
-        documents: hasDocument ? documents : [],
-        status,
+type CreateFakeHMMSearchResults = {
+    documents?: string[];
+    status?: { [key: string]: any };
+    total_count?: number;
+};
+
+/**
+ * Create a fake HMM search result
+ *
+ * @param overrides - optional properties for creating a fake HHM search result with specific values
+ */
+export function createFakeHMMSearchResults(overrides?: CreateFakeHMMSearchResults): HMMSearchResults {
+    const defaultStatus = {
+        errors: [toString(faker.internet.httpStatusCode())],
+        installed: {
+            ready: faker.datatype.boolean(),
+        },
+        task: {
+            complete: true,
+        },
+    };
+
+    const { documents, status, total_count } = overrides || {};
+
+    const defaultHMMSearchResult = {
+        documents: documents || times(5, () => createFakeHMMMinimal()),
+        status: status || defaultStatus,
         found_count: faker.datatype.number(),
         page: faker.datatype.number(),
         page_count: faker.datatype.number(),
         per_page: faker.datatype.number(),
-        total_count: faker.datatype.number(),
+        total_count: total_count || faker.datatype.number(),
     };
+
+    return merge(defaultHMMSearchResult, overrides);
 }
 
 /**
  * Sets up a mocked API route for fetching a list of HMMs
  *
- * @param hmm - The hmm search results to be returned from the mocked API call
+ * @param hmmSearchResults - The hmm search results to be returned from the mocked API call
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetHmms(hmm: HMMSearchResults) {
-    return nock("http://localhost").get("/api/hmms").query(true).reply(200, hmm);
+export function mockApiGetHmms(hmmSearchResults: HMMSearchResults) {
+    return nock("http://localhost").get("/api/hmms").query(true).reply(200, hmmSearchResults);
 }

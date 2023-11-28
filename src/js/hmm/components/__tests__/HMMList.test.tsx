@@ -4,11 +4,7 @@ import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
-import {
-    createFakeHMMSearchResults,
-    createFakeInitialHMMSearchResults,
-    mockApiGetHmms,
-} from "../../../../tests/fake/hmm";
+import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import HMMList from "../HMMList";
@@ -33,7 +29,7 @@ describe("<HMMList />", () => {
     });
 
     it("should render correctly when no documents exist", async () => {
-        const fakeHMMData = createFakeHMMSearchResults(false);
+        const fakeHMMData = createFakeHMMSearchResults({ documents: [] });
         const scope = mockApiGetHmms(fakeHMMData);
         renderWithRouter(<HMMList />, {}, history);
 
@@ -45,7 +41,7 @@ describe("<HMMList />", () => {
 
     describe("<HMMInstaller />", () => {
         it("should render correctly when installed = false and user has permission to install", async () => {
-            const fakeHMMData = createFakeInitialHMMSearchResults();
+            const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockGetAccountAPI(account);
@@ -65,7 +61,7 @@ describe("<HMMList />", () => {
         });
 
         it("should render correctly when installed = false and user does not have permission to install", async () => {
-            const fakeHMMData = createFakeInitialHMMSearchResults();
+            const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: null });
             mockGetAccountAPI(account);
@@ -82,7 +78,18 @@ describe("<HMMList />", () => {
         });
 
         it("should render correctly when installed = false, user has permission to install and task !== undefined", async () => {
-            const fakeHMMData = createFakeInitialHMMSearchResults(true);
+            const fakeHMMData = createFakeHMMSearchResults({
+                documents: [],
+                total_count: 0,
+                status: {
+                    task: {
+                        complete: false,
+                        id: 21,
+                        progress: 33,
+                        step: "decompress",
+                    },
+                },
+            });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockGetAccountAPI(account);

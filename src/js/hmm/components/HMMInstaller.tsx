@@ -48,10 +48,11 @@ export default function HMMInstaller() {
         return <LoadingPlaceholder />;
     }
 
-    const { status } = data;
-    const { task } = status;
+    const {
+        status: { task, installed },
+    } = data;
 
-    if (task && !status.installed) {
+    if (task && !installed) {
         const progress = task.progress;
         const step = replace(task.step, "_", " ");
 

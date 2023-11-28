@@ -7,6 +7,10 @@ import HMMInstaller from "./HMMInstaller";
 import HMMItem from "./HMMItem";
 import HMMToolbar from "./HMMToolbar";
 
+function renderRow(document: HMMMinimal) {
+    return <HMMItem key={document.id} hmm={document} />;
+}
+
 /**
  * A list of HMMs
  */
@@ -21,14 +25,10 @@ export default function HMMList() {
 
     const { documents, page, page_count, found_count, total_count } = data;
 
-    function renderRow(document: HMMMinimal) {
-        return <HMMItem key={document.id} hmm={document} />;
-    }
-
     return (
         <div>
             <ViewHeader title="HMMs">
-                <ViewHeaderTitle>HMMs {total_count > 0 && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
+                <ViewHeaderTitle>HMMs {data.status.task.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
             </ViewHeader>
 
             {total_count ? (
