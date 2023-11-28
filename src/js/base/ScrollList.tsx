@@ -19,39 +19,44 @@ const StyledScrollList = styled.div`
     padding-bottom: 20px;
     position: relative;
     z-index: 0;
+    overflow-y: auto;
+
+    &.maxHeight {
+        max-height: 400px;
+    }
 `;
 
 type ScrollListProps = {
+    className?: string;
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
     isFetchingNextPage: boolean;
     isLoading: boolean;
     items: unknown[];
     renderRow: (item: unknown) => void;
-    elementId?: string;
 };
 
 /**
  * An infinitely scrolling list of items.
  *
+ * @param className - The class name of the scroll list
  * @param fetchNextPage - A function which initiates fetching the next page
  * @param isFetchingNextPage - Whether a new page is being fetched
  * @param isLoading - Whether the first page is being fetched
  * @param items - The list of items
  * @param renderRow - A function which accepts an item and returns a react element
- * @param elementId - The element identifier to scroll within
  * @returns An infinitely scrolling list of items
  */
 
 export const ScrollList = ({
+    className,
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
     items,
     renderRow,
-    elementId,
 }: ScrollListProps) => {
     useEffect(() => {
-        const scrollListElement = elementId ? document.getElementById(elementId) : window;
+        const scrollListElement = document.getElementById("scroll-list");
 
         const onScroll = () => {
             if (getScrollRatio(scrollListElement) > 0.8 && !isFetchingNextPage) {
@@ -66,7 +71,7 @@ export const ScrollList = ({
     const entries = map(items, item => renderRow(item));
 
     return (
-        <StyledScrollList>
+        <StyledScrollList id={"scroll-list"} className={className}>
             {entries}
             {isLoading && <LoadingPlaceholder margin="20px" />}
         </StyledScrollList>

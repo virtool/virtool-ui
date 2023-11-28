@@ -1,5 +1,5 @@
 import { flatMap } from "lodash-es";
-import React, { useEffect } from "react";
+import React from "react";
 import { InfiniteData } from "react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
@@ -8,23 +8,12 @@ import { BoxGroup, InputError, LoadingPlaceholder, NoneFoundBox } from "../../ba
 import { ScrollList } from "../../base/ScrollList";
 import { useInfiniteFindFiles } from "../../files/querys";
 import { FileResponse, FileType } from "../../files/types";
+import { useValidateFiles } from "../../utils/hooks";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
     margin-bottom: 5px;
 `;
-
-const SubtractionFileSelectorList = styled(BoxGroup)`
-    max-height: 400px;
-    overflow-y: auto;
-`;
-
-function getAllSubtractions(fetchNextPage, hasNextPage, data) {
-    if (hasNextPage) {
-        void fetchNextPage();
-    }
-    return data.pages.flatMap(page => page.items);
-}
 
 type SubtractionFileSelectorProps = {
     /** The subtraction files */
@@ -65,15 +54,7 @@ export function SubtractionFileSelector({
         hasNextPage,
     } = useInfiniteFindFiles(FileType.subtraction, 25);
 
-    useEffect(() => {
-        if (!isLoadingSubtractions && selected) {
-            const allSubtractions = getAllSubtractions(fetchNextSubtractionsPage, hasNextPage, subtractions);
-
-            if (!hasNextPage && !allSubtractions.some(item => item.id === selected)) {
-                onClick("");
-            }
-        }
-    }, [subtractions]);
+    useValidateFiles(subtractions, fetchNextSubtractionsPage, hasNextPage, isLoadingSubtractions, onClick, selected);
 
     if (isLoadingSubtractions) {
         return <LoadingPlaceholder />;
@@ -99,16 +80,16 @@ export function SubtractionFileSelector({
         </NoneFoundBox>
     ) : (
         <>
-            <SubtractionFileSelectorList id="subtraction-scroll">
+            <BoxGroup>
                 <ScrollList
+                    className={"maxHeight"}
                     fetchNextPage={fetchNextPage}
                     isFetchingNextPage={isFetchingNextPage}
                     isLoading={isLoading}
                     items={items}
                     renderRow={renderRow}
-                    elementId={"subtraction-scroll"}
                 />
-            </SubtractionFileSelectorList>
+            </BoxGroup>
             <SubtractionFileSelectorError>{error}</SubtractionFileSelectorError>
         </>
     );

@@ -52,10 +52,6 @@ export default function CreateSubtraction() {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    function onCreate(uploadId, name, nickname) {
-        subtractionMutation.mutate({ name, nickname, uploadId });
-    }
-
     const initialValues = {
         name: "",
         nickname: "",
@@ -63,7 +59,7 @@ export default function CreateSubtraction() {
     };
 
     function handleSubmit({ uploadId, name, nickname }) {
-        onCreate(uploadId, name, nickname);
+        subtractionMutation.mutate({ name, nickname, uploadId });
     }
 
     return (
