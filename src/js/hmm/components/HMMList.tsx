@@ -23,12 +23,12 @@ export default function HMMList() {
         return <LoadingPlaceholder />;
     }
 
-    const { documents, page, page_count, found_count, total_count } = data;
+    const { documents, page, page_count, found_count, total_count, status } = data;
 
     return (
         <div>
             <ViewHeader title="HMMs">
-                <ViewHeaderTitle>HMMs {data.status.task.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
+                <ViewHeaderTitle>HMMs {data.status.task?.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
             </ViewHeader>
 
             {total_count ? (
@@ -48,7 +48,7 @@ export default function HMMList() {
                     )}
                 </>
             ) : (
-                <HMMInstaller />
+                <HMMInstaller taskId={status.task?.id} />
             )}
         </div>
     );

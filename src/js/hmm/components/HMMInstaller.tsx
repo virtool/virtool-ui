@@ -1,9 +1,11 @@
 import { replace } from "lodash-es";
 import React from "react";
 import { useQueryClient } from "react-query";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "../../base";
 import { hmmQueryKeys, useListHmms } from "../querys";
+import { getTaskById } from "../selectors";
 import InstallOption from "./InstallOption";
 
 const HMMInstalling = styled(Box)`
@@ -40,7 +42,7 @@ const StyledHMMInstaller = styled(Box)`
 /**
  * The hmm installation view
  */
-export default function HMMInstaller() {
+export function HMMInstaller({ task }) {
     const { data, isLoading } = useListHmms(1, 25);
     const queryClient = useQueryClient();
 
@@ -48,15 +50,17 @@ export default function HMMInstaller() {
         return <LoadingPlaceholder />;
     }
 
+    if (task?.complete) {
+        queryClient.invalidateQueries(hmmQueryKeys.lists());
+    }
+
     const {
-        status: { task, installed },
+        status: { installed },
     } = data;
 
     if (task && !installed) {
         const progress = task.progress;
         const step = replace(task.step, "_", " ");
-
-        queryClient.invalidateQueries(hmmQueryKeys.lists());
 
         return (
             <HMMInstalling>
@@ -83,3 +87,13 @@ export default function HMMInstaller() {
         </StyledHMMInstaller>
     );
 }
+
+export function mapStateToProps(state: any, ownProps: { taskId: any }) {
+    const { taskId } = ownProps;
+
+    return {
+        task: getTaskById(state, taskId),
+    };
+}
+
+export default connect(mapStateToProps, null)(HMMInstaller);
