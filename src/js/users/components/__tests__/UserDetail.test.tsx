@@ -208,7 +208,7 @@ describe("<UserDetail />", () => {
         it("should submit when password is long enough", async () => {
             mockGetAccountAPI(account);
             mockApiListGroups(groups);
-            mockApiEditUser(props.match.params.userId, 200, { password: "newPassword" });
+            mockApiEditUser(props.match.params.userId, 200, { password: "newPassword" }, userDetail);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
             renderWithRouter(<UserDetail {...props} />, {}, history);

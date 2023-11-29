@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { mockApiEditUser } from "../../../../tests/fake/user";
+import { createFakeUser, mockApiEditUser } from "../../../../tests/fake/user";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import PrimaryGroup from "../PrimaryGroup";
 
@@ -55,9 +55,9 @@ describe("<PrimaryGroup />", () => {
     });
 
     it("should call onSetPrimaryGroup() when selection changes", async () => {
-        props.primaryGroup = "3";
+        const userDetails = createFakeUser({ id: props.id, groups: props.groups, primary_group: props.primaryGroup });
 
-        const scope = mockApiEditUser(props.id, 200, { primary_group: "foo" });
+        const scope = mockApiEditUser(props.id, 200, { primary_group: { id: "1", name: "foo" } }, userDetails);
         renderWithProviders(<PrimaryGroup {...props} />);
 
         expect(screen.getByText("Primary Group")).toBeInTheDocument();

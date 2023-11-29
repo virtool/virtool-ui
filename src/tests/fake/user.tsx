@@ -33,6 +33,7 @@ type CreateFakeUserProps = {
     permissions?: Permissions;
     groups?: Array<GroupMinimal>;
     primary_group?: GroupMinimal;
+    id?: string;
     handle?: string;
     administrator_role?: AdministratorRoles;
     force_reset?: boolean;
@@ -120,8 +121,11 @@ export function mockApiGetUser(userId: string, userDetail: User) {
  * @param userId - The users unique id
  * @param statusCode - The HTTP status code to simulate in the response
  * @param update - The update to apply to the user
+ * @param user - The user details
  * @returns A nock scope for the mocked API call
  */
-export function mockApiEditUser(userId: string, statusCode: number, update: any) {
-    return nock("http://localhost").patch(`/api/users/${userId}`).reply(statusCode, update);
+export function mockApiEditUser(userId: string, statusCode: number, update: any, user?: User) {
+    const userDetail = { ...user, ...update };
+
+    return nock("http://localhost").patch(`/api/users/${userId}`).reply(statusCode, userDetail);
 }
