@@ -4,11 +4,10 @@ import { InfiniteData } from "react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, InputError, LoadingPlaceholder, NoneFoundBox } from "../../base";
+import { BoxGroup, InputError, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
-import { useInfiniteFindFiles } from "../../files/querys";
+import { useValidateFiles } from "../../files/hooks";
 import { FileResponse, FileType } from "../../files/types";
-import { useValidateFiles } from "../../utils/hooks";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
@@ -21,9 +20,9 @@ type SubtractionFileSelectorProps = {
     /** The number of subtraction files */
     foundCount: number;
     /** The selected file id */
-    selected: string;
+    selected: string[];
     /** A callback function to handle file selection */
-    onClick: (selected: string) => void;
+    onClick: (selected: string[]) => void;
     /** Errors occurred on sample creation */
     error: string;
     /** Fetches the next page of data */
@@ -47,18 +46,7 @@ export function SubtractionFileSelector({
     isLoading,
     isFetchingNextPage,
 }: SubtractionFileSelectorProps) {
-    const {
-        data: subtractions,
-        isLoading: isLoadingSubtractions,
-        fetchNextPage: fetchNextSubtractionsPage,
-        hasNextPage,
-    } = useInfiniteFindFiles(FileType.subtraction, 25);
-
-    useValidateFiles(subtractions, fetchNextSubtractionsPage, hasNextPage, isLoadingSubtractions, onClick, selected);
-
-    if (isLoadingSubtractions) {
-        return <LoadingPlaceholder />;
-    }
+    useValidateFiles(FileType.subtraction, selected, onClick);
 
     const items = flatMap(files.pages, page => page.items);
 
@@ -67,7 +55,7 @@ export function SubtractionFileSelector({
             <SubtractionFileItem
                 key={item.id}
                 {...item}
-                active={item.id === selected}
+                active={selected.includes(item.id)}
                 onClick={onClick}
                 error={error}
             />

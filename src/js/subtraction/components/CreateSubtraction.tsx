@@ -21,13 +21,19 @@ import { SubtractionFileSelector } from "./SubtractionFileSelector";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("A name is required"),
-    uploadId: Yup.string().required("Please select a file"),
+    uploadId: Yup.array().min(1, "Please select a file"),
 });
 
 type formValues = {
     name: "";
     nickname: "";
-    uploadId: "";
+    uploadId: string[];
+};
+
+const initialValues = {
+    name: "",
+    nickname: "",
+    uploadId: [],
 };
 
 /**
@@ -52,14 +58,8 @@ export default function CreateSubtraction() {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    const initialValues = {
-        name: "",
-        nickname: "",
-        uploadId: "",
-    };
-
     function handleSubmit({ uploadId, name, nickname }) {
-        subtractionMutation.mutate({ name, nickname, uploadId });
+        subtractionMutation.mutate({ name, nickname, uploadId: uploadId[0] });
     }
 
     return (

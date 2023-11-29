@@ -25,7 +25,7 @@ type SubtractionFileItemProps = {
     /** The name of the file */
     name: string;
     /** A callback function to handle file selection */
-    onClick: (selected: string) => void;
+    onClick: (selected: string[]) => void;
     /** The iso formatted date of upload */
     uploaded_at: string;
     /** The user who created the file */
@@ -37,7 +37,7 @@ type SubtractionFileItemProps = {
  */
 export function SubtractionFileItem({ active, error, id, name, onClick, uploaded_at, user }: SubtractionFileItemProps) {
     return (
-        <StyledSubtractionFileItem active={active} onClick={() => onClick(id)} error={error}>
+        <StyledSubtractionFileItem active={active} onClick={() => onClick([id])} error={error}>
             <strong>{name}</strong>
             <Attribution user={user.handle} time={uploaded_at} />
         </StyledSubtractionFileItem>

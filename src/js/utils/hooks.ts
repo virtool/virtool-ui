@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { InfiniteData } from "react-query";
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
-import { FileResponse } from "../files/types";
 
 export type HistoryType = RouteComponentProps["history"];
 
@@ -93,40 +90,4 @@ export function useUrlSearchParams(key: string, defaultValue?: string): [string,
     firstRender.current = false;
 
     return [value, (value: string) => updateUrlSearchParams(value, key, history)];
-}
-
-/**
- * Hook for validating selected files from paginated data
- *
- * @param data - The data files
- * @param fetchNextPage - Fetches the next page of data
- * @param hasNextPage - Whether the search result has a next page
- * @param isLoading - Whether the data is loading
- * @param onClick - A callback function to handle file selection
- * @param selected - The selected file id
- */
-export function useValidateFiles(
-    data: InfiniteData<FileResponse>,
-    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>,
-    hasNextPage: boolean,
-    isLoading: boolean,
-    onClick: (file: string) => void,
-    selected: string,
-) {
-    function getData() {
-        if (hasNextPage) {
-            void fetchNextPage();
-        }
-        return data.pages.flatMap(page => page.items);
-    }
-
-    useEffect(() => {
-        if (!isLoading && selected) {
-            const documents = getData();
-
-            if (!hasNextPage && !documents.some(item => item.id === selected)) {
-                onClick("");
-            }
-        }
-    }, [data]);
 }
