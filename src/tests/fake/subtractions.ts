@@ -2,7 +2,14 @@ import { faker } from "@faker-js/faker";
 import { merge } from "lodash";
 import nock from "nock";
 import { JobMinimal } from "../../js/jobs/types";
-import { Subtraction, SubtractionFile, SubtractionMinimal, SubtractionUpload } from "../../js/subtraction/types";
+import { SampleNested } from "../../js/samples/types";
+import {
+    NucleotideComposition,
+    Subtraction,
+    SubtractionFile,
+    SubtractionMinimal,
+    SubtractionUpload,
+} from "../../js/subtraction/types";
 import { UserNested } from "../../js/users/types";
 import { createFakeUserNested } from "./user";
 
@@ -20,6 +27,25 @@ export function createFakeSubtractionFile(): SubtractionFile {
     };
 }
 
+type CreateFakeSubtraction = CreateFakeSubtractionMinimal & {
+    files?: Array<SubtractionFile>;
+    gc?: NucleotideComposition;
+    linked_samples?: Array<SampleNested>;
+};
+
+/**
+ * Create a fake subtraction
+ */
+export function createFakeSubtraction(overrides?: CreateFakeSubtraction): Subtraction {
+    const { files, gc, linked_samples, ...props } = overrides || {};
+    return {
+        ...createFakeSubtractionMinimal(props),
+        files: files || [createFakeSubtractionFile()],
+        gc: gc || { a: 1, c: 1, g: 1, n: 1, t: 1 },
+        linked_samples: linked_samples || [],
+    };
+}
+
 type CreateFakeSubtractionMinimal = {
     id?: string;
     name?: string;
@@ -31,19 +57,6 @@ type CreateFakeSubtractionMinimal = {
     ready?: boolean;
     user?: UserNested;
 };
-
-/**
- * Create a fake subtraction
- */
-export function createFakeSubtraction(overrides?: CreateFakeSubtractionMinimal): Subtraction {
-    const { id, name, count, created_at, file, job, nickname, ready, user } = overrides || {};
-    return {
-        ...createFakeSubtractionMinimal({ id, name, count, created_at, file, job, nickname, ready, user }),
-        files: [createFakeSubtractionFile()],
-        gc: { a: 1, c: 1, g: 1, n: 1, t: 1 },
-        linked_samples: [],
-    };
-}
 
 /**
  * Create a fake minimal subtraction
