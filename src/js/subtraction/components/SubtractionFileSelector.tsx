@@ -55,7 +55,7 @@ export function SubtractionFileSelector({
             <SubtractionFileItem
                 key={item.id}
                 {...item}
-                active={selected.includes(item.id)}
+                active={selected?.includes(item.id)}
                 onClick={onClick}
                 error={error}
             />

@@ -24,13 +24,9 @@ export function useValidateFiles(type: FileType, selected: string[], setSelected
             const documents = getData();
 
             if (!hasNextPage) {
-                const matchingDocument = documents.find(item => selected.includes(item.id));
+                const matchingIds = documents.filter(item => selected.includes(item.id)).map(item => item.id);
 
-                if (matchingDocument) {
-                    setSelected([matchingDocument.id]);
-                } else {
-                    setSelected([]);
-                }
+                matchingIds ? setSelected(matchingIds) : setSelected([]);
             }
         }
     }, [data]);
