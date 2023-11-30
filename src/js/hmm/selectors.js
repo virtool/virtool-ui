@@ -17,7 +17,6 @@ export const getTask = state => {
 export function getTaskById(state, taskId) {
     const tasks = state.tasks.documents;
     if (taskId && tasks.length) {
-        const task = find(tasks, { id: taskId });
-        return task || undefined;
+        return find(tasks, { id: taskId });
     }
 }

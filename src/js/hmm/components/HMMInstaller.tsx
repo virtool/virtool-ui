@@ -40,7 +40,7 @@ const StyledHMMInstaller = styled(Box)`
 `;
 
 /**
- * The hmm installation view
+ * Displays the installation progress information or provides the option to install HMMs
  */
 export function HMMInstaller({ task }) {
     const { data, isLoading } = useListHmms(1, 25);

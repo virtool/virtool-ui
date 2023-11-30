@@ -9,7 +9,7 @@ type HMMToolbarProps = {
 };
 
 /**
- * A search filtering toolbar
+ * A toolbar which allows the HMMs to be filtered by their names
  */
 export default function HMMToolbar({ term, onChange }: HMMToolbarProps) {
     return (

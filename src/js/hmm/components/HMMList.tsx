@@ -12,7 +12,7 @@ function renderRow(document: HMMMinimal) {
 }
 
 /**
- * A list of HMMs
+ * A list of HMMs with filtering options
  */
 export default function HMMList() {
     const [urlPage] = useUrlSearchParams("page");
