@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { BoxGroup, InputError, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useValidateFiles } from "../../files/hooks";
-import { FileResponse, FileType } from "../../files/types";
+import { File, FileResponse, FileType } from "../../files/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
@@ -50,7 +50,7 @@ export function SubtractionFileSelector({
 
     const items = flatMap(files.pages, page => page.items);
 
-    function renderRow(item) {
+    function renderRow(item: File) {
         return (
             <SubtractionFileItem
                 key={item.id}
@@ -70,7 +70,6 @@ export function SubtractionFileSelector({
         <>
             <BoxGroup>
                 <ScrollList
-                    className={"maxHeight"}
                     fetchNextPage={fetchNextPage}
                     isFetchingNextPage={isFetchingNextPage}
                     isLoading={isLoading}
