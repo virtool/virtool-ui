@@ -54,7 +54,7 @@ describe("<HMMList />", () => {
         expect(screen.getByText(fakeHMMData.documents[0].cluster)).toBeInTheDocument();
         expect(screen.getByText(fakeHMMData.documents[0].names[0])).toBeInTheDocument();
 
-        scope.isDone();
+        scope.done();
     });
 
     it("should render correctly when no documents exist", async () => {
@@ -65,7 +65,7 @@ describe("<HMMList />", () => {
         expect(await screen.findByText("HMMs")).toBeInTheDocument();
         expect(screen.getByText("No HMMs found.")).toBeInTheDocument();
 
-        scope.isDone();
+        scope.done();
     });
 
     describe("<HMMInstaller />", () => {
@@ -86,7 +86,7 @@ describe("<HMMList />", () => {
 
             expect(await screen.findByRole("button", { name: "Install" })).toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
 
         it("should render correctly when installed = false and user does not have permission to install", async () => {
@@ -103,7 +103,7 @@ describe("<HMMList />", () => {
 
             expect(screen.queryByRole("button", { name: "Install" })).not.toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
 
         it("should render correctly when installed = false, user has permission to install and task !== undefined", async () => {
@@ -132,7 +132,7 @@ describe("<HMMList />", () => {
             expect(screen.queryByText("No HMM data available.")).not.toBeInTheDocument();
             expect(screen.queryByRole("button", { name: "Install" })).not.toBeInTheDocument();
 
-            scope.isDone();
+            scope.done();
         });
     });
 });
