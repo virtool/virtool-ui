@@ -108,11 +108,11 @@ export function mockApiFindUsers(users: Array<User>, query?: Query) {
  * Mocks an API call for getting the user details
  *
  * @param userId - The users unique id
- * @param userDetail - The details of the user
+ * @param user - The details of the user
  * @returns A nock scope for the mocked API call
  */
-export function mockApiGetUser(userId: string, userDetail: User) {
-    return nock("http://localhost").get(`/api/users/${userId}`).reply(200, userDetail);
+export function mockApiGetUser(userId: string, user: User) {
+    return nock("http://localhost").get(`/api/users/${userId}`).reply(200, user);
 }
 
 /**
