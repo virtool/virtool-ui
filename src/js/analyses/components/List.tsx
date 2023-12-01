@@ -1,7 +1,8 @@
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { ContainerNarrow, NoneFoundBox } from "../../base";
+import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox } from "../../base";
+import { useListHmms } from "../../hmm/querys";
 import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
 import AnalysisItem from "./Item";
@@ -12,9 +13,15 @@ interface AnalysesListProps {
 }
 
 function AnalysesList({ analyses }: AnalysesListProps) {
+    const { data: hmms, isLoading: isLoadingHmms } = useListHmms();
+
+    if (isLoadingHmms) {
+        return <LoadingPlaceholder />;
+    }
+
     return (
         <ContainerNarrow>
-            <AnalysisHMMAlert />
+            <AnalysisHMMAlert installed={hmms.status.task.complete} />
             <AnalysesToolbar />
 
             {analyses.length ? (
@@ -25,7 +32,7 @@ function AnalysesList({ analyses }: AnalysesListProps) {
                 <NoneFoundBox noun="analyses" />
             )}
 
-            <CreateAnalysis />
+            <CreateAnalysis hmms={hmms} />
         </ContainerNarrow>
     );
 }

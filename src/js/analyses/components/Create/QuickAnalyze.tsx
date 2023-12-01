@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import { filter, forEach, uniqBy } from "lodash-es";
 import React, { ReactNode, useEffect } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -21,6 +21,7 @@ import {
 } from "../../../base";
 import { useListHmms } from "../../../hmm/querys";
 import { useListIndexes } from "../../../indexes/querys";
+import { samplesQueryKeys } from "../../../samples/querys";
 import { SampleMinimal } from "../../../samples/types";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
@@ -117,6 +118,7 @@ type QuickAnalyzeProps = {
  * A form for triggering quick analyses on selected samples
  */
 export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtractions, onClear }: QuickAnalyzeProps) {
+    const queryClient = useQueryClient();
     const history = useHistory();
     const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
 
@@ -125,7 +127,11 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
 
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms();
     const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
-    const mutation = useMutation(analyze);
+    const mutation = useMutation(analyze, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(samplesQueryKeys.lists());
+        },
+    });
 
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
@@ -200,7 +206,7 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
                 {({ errors, setFieldValue, touched, values }) => (
                     <Form>
                         <ModalBody>
-                            {mode === "genome" && <HMMAlert />}
+                            {mode === "genome" && <HMMAlert installed={hmms.status.task.complete} />}
                             <SelectedSamples samples={compatibleSamples} />
                             <Field
                                 as={WorkflowSelector}
