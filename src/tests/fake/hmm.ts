@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { merge } from "lodash";
-import { times, toString } from "lodash-es";
+import { assign, times, toString } from "lodash-es";
 import nock from "nock";
 import { HMMSearchResults } from "../../js/hmm/types";
 
@@ -42,19 +41,17 @@ export function createFakeHMMSearchResults(overrides?: CreateFakeHMMSearchResult
         },
     };
 
-    const { documents, status, total_count } = overrides || {};
-
     const defaultHMMSearchResult = {
-        documents: documents || times(5, () => createFakeHMMMinimal()),
-        status: status || defaultStatus,
+        documents: times(5, () => createFakeHMMMinimal()),
+        status: defaultStatus,
         found_count: faker.datatype.number(),
         page: faker.datatype.number(),
         page_count: faker.datatype.number(),
         per_page: faker.datatype.number(),
-        total_count: total_count || faker.datatype.number(),
+        total_count: faker.datatype.number(),
     };
 
-    return merge(defaultHMMSearchResult, overrides);
+    return assign(defaultHMMSearchResult, overrides);
 }
 
 /**
