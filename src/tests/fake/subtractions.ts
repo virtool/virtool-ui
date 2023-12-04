@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { merge } from "lodash";
+import { assign } from "lodash-es";
 import nock from "nock";
 import { JobMinimal } from "../../js/jobs/types";
 import { SampleNested } from "../../js/samples/types";
@@ -74,7 +74,7 @@ export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMi
         user: createFakeUserNested(),
     };
 
-    return merge(defaultSubtractionMinimal, overrides);
+    return assign(defaultSubtractionMinimal, overrides);
 }
 
 /**
