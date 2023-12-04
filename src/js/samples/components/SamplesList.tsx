@@ -77,7 +77,10 @@ export default function SamplesList() {
 
     return (
         <>
-            <QuickAnalysis samples={selected} onClear={() => setSelected([])} />
+            <QuickAnalysis
+                samples={intersectionWith(documents, selected, (document, id) => document.id === id)}
+                onClear={() => setSelected([])}
+            />
             <StyledSamplesList>
                 <SamplesListHeader>
                     <ViewHeader title="Samples">

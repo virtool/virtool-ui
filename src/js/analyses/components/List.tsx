@@ -13,7 +13,7 @@ interface AnalysesListProps {
 }
 
 function AnalysesList({ analyses }: AnalysesListProps) {
-    const { data: hmms, isLoading: isLoadingHmms } = useListHmms();
+    const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
 
     if (isLoadingHmms) {
         return <LoadingPlaceholder />;

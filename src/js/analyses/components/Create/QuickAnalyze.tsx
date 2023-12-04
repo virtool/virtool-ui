@@ -125,7 +125,7 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
-    const { data: hmms, isLoading: isLoadingHmms } = useListHmms();
+    const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
     const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
     const mutation = useMutation(analyze, {
         onSuccess: () => {

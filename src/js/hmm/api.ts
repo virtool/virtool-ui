@@ -4,6 +4,7 @@
  * @module hmm/api
  */
 import { Request } from "../app/request";
+import { HMMSearchResults } from "./types";
 
 /**
  * Fetch a page of HMM search results from the API.
@@ -36,10 +37,15 @@ export function fetch({ hmmId }: { hmmId: string }): Promise<any> {
 }
 
 /**
- * Get a list of all HMMs from the API
+ * Fetch a page of hmm search results
  *
- * @returns A promise resolving to the list of HMMs
+ * @param page - The page to fetch
+ * @param per_page -The number of hmms to fetch per page
+ * @param term - The search term to filter the hmms by
+ * @returns A promise resolving to a page of hmm search results
  */
-export function listHmms() {
-    return Request.get("/hmms").then(res => res.body);
+export function listHmms(page: number, per_page: number, term: string): Promise<HMMSearchResults> {
+    return Request.get("/hmms")
+        .query({ page, per_page, find: term })
+        .then(res => res.body);
 }
