@@ -76,3 +76,9 @@ export function checkUpdates({ refId }) {
 export function updateRemote({ refId }) {
     return Request.post(`/refs/${refId}/updates`).send({});
 }
+
+export function findReferences({ term, page, per_page }) {
+    return Request.get("/refs")
+        .query({ find: term, page, per_page })
+        .then(response => response.body);
+}
