@@ -1,5 +1,4 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { Icon, InputSearch, LinkButton, Toolbar } from "../../base";
@@ -21,14 +20,9 @@ export function SampleSearchToolbar({ onChange, term }) {
 }
 
 export default function SampleToolbar({ selected, onClear, onChange, term }) {
-    const history = useHistory();
-    function onQuickAnalyze() {
-        history.push({ state: { quickAnalysis: true } });
-    }
-
-    if (selected.length) {
-        return <SampleSelectionToolbar selected={selected} onQuickAnalyze={onQuickAnalyze} onClear={onClear} />;
-    }
-
-    return <SampleSearchToolbar onChange={onChange} term={term} />;
+    return selected.length ? (
+        <SampleSelectionToolbar selected={selected} onClear={onClear} />
+    ) : (
+        <SampleSearchToolbar onChange={onChange} term={term} />
+    );
 }

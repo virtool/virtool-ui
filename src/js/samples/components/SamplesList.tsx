@@ -1,5 +1,5 @@
-import { union, without } from "lodash-es";
-import React, { useEffect, useState } from "react";
+import { intersectionWith, union, xor } from "lodash-es";
+import React, { useState } from "react";
 import styled from "styled-components";
 import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
@@ -34,19 +34,18 @@ export default function SamplesList() {
     const [urlPage] = useUrlSearchParams("page");
     const [term, setTerm] = useUrlSearchParams("find");
     const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
+    const [filterWorkflows, setFilterWorkflows] = useUrlSearchParamsList("workflows");
 
-    const { data: samples, isLoading: isSamplesLoading } = useListSamples(Number(urlPage) || 1, 25, term, filterLabels);
+    const { data: samples, isLoading: isSamplesLoading } = useListSamples(
+        Number(urlPage) || 1,
+        5,
+        term,
+        filterLabels,
+        filterWorkflows,
+    );
     const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
 
     const [selected, setSelected] = useState([]);
-
-    useEffect(() => {
-        setSelected(
-            selected.map(
-                prevSample => samples.documents.find(newSample => newSample.id === prevSample.id) || prevSample,
-            ),
-        );
-    }, [samples]);
 
     if (isSamplesLoading || isLabelsLoading) {
         return <LoadingPlaceholder />;
@@ -56,16 +55,12 @@ export default function SamplesList() {
 
     function renderRow(document: SampleMinimal) {
         function handleSelect() {
-            if (!selected.includes(document)) {
-                setSelected(union(selected, [document]));
-            } else {
-                setSelected(without(selected, document));
-            }
+            setSelected(xor(selected, [document.id]));
         }
 
         function selectOnQuickAnalyze() {
-            if (!selected.includes(document)) {
-                setSelected(union(selected, [document]));
+            if (!selected.includes(document.id)) {
+                setSelected(union(selected, [document.id]));
             }
         }
 
@@ -73,7 +68,7 @@ export default function SamplesList() {
             <SampleItem
                 key={document.id}
                 sample={document}
-                checked={selected.some(item => item.id === document.id)}
+                checked={selected.includes(document.id)}
                 handleSelect={handleSelect}
                 selectOnQuickAnalyze={selectOnQuickAnalyze}
             />
@@ -111,16 +106,17 @@ export default function SamplesList() {
                     )}
                 </SamplesListContent>
                 {selected.length ? (
-                    <SampleLabels labels={labels} selectedSamples={selected} />
+                    <SampleLabels
+                        labels={labels}
+                        selectedSamples={intersectionWith(documents, selected, (document, id) => document.id === id)}
+                    />
                 ) : (
                     <SampleFilters
                         labels={labels}
-                        onClick={e => {
-                            !filterLabels.includes(e.toString())
-                                ? setFilterLabels(union(filterLabels, [e]))
-                                : setFilterLabels(without(filterLabels, e.toString()));
-                        }}
+                        onClickLabels={e => setFilterLabels(xor(filterLabels, [e.toString()]))}
                         selectedLabels={filterLabels}
+                        selectedWorkflows={filterWorkflows}
+                        onClickWorkflows={setFilterWorkflows}
                     />
                 )}
             </StyledSamplesList>

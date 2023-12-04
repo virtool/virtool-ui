@@ -13,19 +13,29 @@ type LabelFilterProps = {
     /** A list of labels */
     labels: Label[];
     /** Handles click event when label is clicked */
-    onClick: (value: string) => void;
+    onClickLabels: (value: string) => void;
     /** A list of selected labels */
     selectedLabels: string[];
+    /** Handles click event when workflow is clicked */
+    onClickWorkflows: (value: string[]) => void;
+    /** A list of selected workflows */
+    selectedWorkflows: string[];
 };
 
 /**
  * Filter samples by labels and workflows
  */
-export function SampleFilters({ labels, onClick, selectedLabels }: LabelFilterProps) {
+export function SampleFilters({
+    labels,
+    onClickLabels,
+    onClickWorkflows,
+    selectedLabels,
+    selectedWorkflows,
+}: LabelFilterProps) {
     return (
         <StyledSampleFilters>
-            <LabelFilter labels={labels} onClick={onClick} selected={selectedLabels} />
-            <WorkflowFilter />
+            <LabelFilter labels={labels} onClick={onClickLabels} selected={selectedLabels} />
+            <WorkflowFilter selected={selectedWorkflows} onClick={onClickWorkflows} />
         </StyledSampleFilters>
     );
 }

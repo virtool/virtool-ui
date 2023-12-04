@@ -241,7 +241,7 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
                             />
                             <QuickAnalyzeError>
                                 {touched.indexes && (errors.indexes as ReactNode & (string | string[]))}
-                            </QuickAnalyzeError>{" "}
+                            </QuickAnalyzeError>
                         </ModalBody>
                         <QuickAnalyzeFooter>
                             <CreateAnalysisSummary

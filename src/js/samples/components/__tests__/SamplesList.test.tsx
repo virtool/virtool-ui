@@ -12,10 +12,12 @@ import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";
 
 describe("<SamplesList />", () => {
-    const history = createBrowserHistory();
-    const samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
+    let history;
+    let samples;
 
     beforeEach(() => {
+        history = createBrowserHistory();
+        samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
         mockApiGetSamples(samples);
         nock("http://localhost").get("/api/labels").reply(200, []);
     });

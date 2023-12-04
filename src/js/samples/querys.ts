@@ -31,11 +31,9 @@ export const samplesQueryKeys = {
  * @param per_page - The number of samples to fetch per page
  * @param term - The search term to filter samples by
  * @param labels - The labels to filter the samples by
+ * @param workflows - The workflows to filter the samples by
  */
-export function useListSamples(page: number, per_page: number, term?: string, labels?: string[]) {
-    const params = new URLSearchParams(window.location.search);
-    const workflows = params.get("workflows");
-
+export function useListSamples(page: number, per_page: number, term?: string, labels?: string[], workflows?: string[]) {
     return useQuery(
         samplesQueryKeys.list([page, per_page, term, labels, workflows]),
         () => listSamples(page, per_page, term, labels, workflows),
