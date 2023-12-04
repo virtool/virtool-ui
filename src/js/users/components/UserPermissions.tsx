@@ -1,10 +1,9 @@
 import { transform } from "lodash-es";
-import PropTypes from "prop-types";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { BoxGroup } from "../../base";
+import { Permissions } from "../../groups/types";
 import { PermissionItem } from "./Permission";
 
 const UserPermissionsHeader = styled.div`
@@ -17,28 +16,30 @@ const UserPermissionsHeader = styled.div`
         margin-left: auto;
     }
 `;
-export const UserPermissions = ({ permissions }) => {
-    const permissionComponents = transform(
-        permissions,
-        (acc, value, permission) => acc.push(<PermissionItem key={permission} permission={permission} value={value} />),
-        [],
-    );
 
+type UserPermissionsProps = {
+    /** The users permissions */
+    permissions: Permissions;
+};
+
+/**
+ * A view of the users permissions
+ */
+export default function UserPermissions({ permissions }: UserPermissionsProps) {
     return (
         <div>
             <UserPermissionsHeader>
                 <label>Permissions</label>
                 <small>Change group membership to modify permissions</small>
             </UserPermissionsHeader>
-            <BoxGroup>{permissionComponents}</BoxGroup>
+            <BoxGroup>
+                {transform(
+                    permissions,
+                    (acc, value, permission) =>
+                        acc.push(<PermissionItem key={permission} permission={permission} value={value} />),
+                    [],
+                )}
+            </BoxGroup>
         </div>
     );
-};
-
-UserPermissions.propTypes = {
-    permissions: PropTypes.object,
-};
-export const mapStateToProps = state => ({
-    permissions: state.users.detail.permissions,
-});
-export default connect(mapStateToProps)(UserPermissions);
+}

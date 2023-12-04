@@ -1,10 +1,11 @@
 import { replace } from "lodash-es";
 import React from "react";
+import { useQueryClient } from "react-query";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { Box, ExternalLink, Icon, ProgressBarAffixed } from "../../base";
-import { findHmms } from "../actions";
-import { getTask } from "../selectors";
+import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "../../base";
+import { hmmQueryKeys, useListHmms } from "../querys";
+import { getTaskById } from "../selectors";
 import InstallOption from "./InstallOption";
 
 const HMMInstalling = styled(Box)`
@@ -38,14 +39,28 @@ const StyledHMMInstaller = styled(Box)`
     }
 `;
 
-export const HMMInstaller = ({ installed, task, onComplete }) => {
+/**
+ * Displays the installation progress information or provides the option to install HMMs
+ */
+export function HMMInstaller({ task }) {
+    const { data, isLoading } = useListHmms(1, 25);
+    const queryClient = useQueryClient();
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
+    if (task?.complete) {
+        queryClient.invalidateQueries(hmmQueryKeys.lists());
+    }
+
+    const {
+        status: { installed },
+    } = data;
+
     if (task && !installed) {
         const progress = task.progress;
         const step = replace(task.step, "_", " ");
-
-        if (task.complete) {
-            onComplete();
-        }
 
         return (
             <HMMInstalling>
@@ -71,17 +86,14 @@ export const HMMInstaller = ({ installed, task, onComplete }) => {
             </div>
         </StyledHMMInstaller>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    installed: Boolean(state.hmms.status.installed),
-    task: getTask(state),
-});
+export function mapStateToProps(state: any, ownProps: { taskId: any }) {
+    const { taskId } = ownProps;
 
-export const mapDispatchToProps = dispatch => ({
-    onComplete: () => {
-        dispatch(findHmms("", 1));
-    },
-});
+    return {
+        task: getTaskById(state, taskId),
+    };
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(HMMInstaller);
+export default connect(mapStateToProps, null)(HMMInstaller);

@@ -13,3 +13,10 @@ export const getTask = state => {
         return task || undefined;
     }
 };
+
+export function getTaskById(state, taskId) {
+    const tasks = state.tasks.documents;
+    if (taskId && tasks.length) {
+        return find(tasks, { id: taskId });
+    }
+}

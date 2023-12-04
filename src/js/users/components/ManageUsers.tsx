@@ -1,8 +1,8 @@
 import React from "react";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
-import { Alert, Icon, InputSearch, LinkButton, LoadingPlaceholder, Toolbar } from "../../base";
-import CreateUser from "./Create";
+import { Alert, Icon, InputSearch, LoadingPlaceholder, Toolbar } from "../../base";
+import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";
 
 /**
@@ -28,12 +28,10 @@ export function ManageUsers() {
                         value={term}
                         onChange={e => setTerm(e.target.value)}
                     />
-                    <LinkButton to={{ state: { createUser: true } }} icon="user-plus" tip="Create User" color="blue" />
+                    <CreateUser />
                 </Toolbar>
 
                 <UsersList term={term} />
-
-                <CreateUser />
             </>
         );
     }
