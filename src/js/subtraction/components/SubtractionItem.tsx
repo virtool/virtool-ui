@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { BoxLink } from "../../base";
@@ -29,24 +28,22 @@ const ProgressTag = styled.span`
 `;
 
 type SubtractionItemProps = {
-    id: string;
-    user: UserNested;
-    name: string;
+    /** The date the subtraction was created */
     created_at: string;
+    /** The unique subtraction id */
+    id: string;
+    /** The job associated with the subtraction */
     job?: JobMinimal;
+    /** The name of the subtraction */
+    name: string;
+    /** Whether the associated job is complete */
     ready: boolean;
+    /** The user who created the subtraction */
+    user: UserNested;
 };
 
 /**
- * Condensed subtraction item for use in a list of subtractions
- *
- * @param created_at - The date the subtraction was created
- * @param id - The unique subtraction id
- * @param job - The job associated with the subtraction
- * @param name - The name of the subtraction
- * @param ready - Whether the associated job is complete
- * @param user - The user who created the subtraction
- * @returns A condensed subtraction item
+ * A condensed subtraction item for use in a list of subtractions
  */
 export function SubtractionItem({ created_at, id, job, name, ready, user }: SubtractionItemProps) {
     return (
@@ -70,24 +67,3 @@ export function SubtractionItem({ created_at, id, job, name, ready, user }: Subt
         </BoxLink>
     );
 }
-
-/**
- * Extract information from redux state to pass as props to SubtractionItem
- *
- * @param state - The complete current redux state
- * @param props - The props passed to the SubtractionItem component
- * @returns The props derived from redux state
- */
-export function mapStateToProps(state, props) {
-    const { id, user, name, created_at, job, ready } = state.subtraction.documents[props.index];
-    return {
-        id,
-        user,
-        created_at,
-        name,
-        job,
-        ready,
-    };
-}
-
-export default connect(mapStateToProps)(SubtractionItem);
