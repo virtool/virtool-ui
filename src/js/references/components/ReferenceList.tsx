@@ -5,13 +5,18 @@ import { ScrollList } from "../../base/ScrollList";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useInfiniteFindReferences } from "../querys";
 import { ReferenceMinimal, ReferenceSearchResult } from "../types";
-import Clone from "./Clone";
+import Clone from "./CloneReference";
 import ReferenceItem from "./Item/ReferenceItem";
 import ReferenceOfficial from "./Official";
 import ReferenceToolbar from "./ReferenceToolbar";
 
-const renderRow = (reference: ReferenceMinimal) => <ReferenceItem key={reference.id} reference={reference} />;
+function renderRow(reference: ReferenceMinimal) {
+    return <ReferenceItem key={reference.id} reference={reference} />;
+}
 
+/**
+ * A list of References with filtering options
+ */
 export default function ReferenceList() {
     const [term] = useUrlSearchParams("find");
 

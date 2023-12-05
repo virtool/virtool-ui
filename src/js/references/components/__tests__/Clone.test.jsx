@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { CloneReference, mapDispatchToProps, mapStateToProps } from "../Clone";
+import { CloneReference, mapDispatchToProps, mapStateToProps } from "../CloneReference";
 
 describe("<CloneReference />", () => {
     const props = {

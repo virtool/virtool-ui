@@ -25,6 +25,9 @@ const StyledReferenceItem = styled(BoxSpaced)`
     margin-bottom: 15px;
 `;
 
+/**
+ * A condensed reference item for use in a list of references
+ */
 export default function ReferenceItem({ reference }: { reference: ReferenceMinimal }) {
     const {
         id,

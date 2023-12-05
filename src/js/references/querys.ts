@@ -5,7 +5,7 @@ import { ReferenceSearchResult } from "./types";
 /**
  * Factory for generating react-query keys for reference related queries.
  */
-export const ReferenceQueryKeys = {
+export const referenceQueryKeys = {
     all: () => ["reference"] as const,
     lists: () => ["reference", "list"] as const,
     list: (filters: (string | number)[]) => ["reference", "list", ...filters] as const,
@@ -13,9 +13,15 @@ export const ReferenceQueryKeys = {
     infiniteList: (filters: Array<string | number | boolean>) => ["users", "list", "infinite", ...filters] as const,
 };
 
-export const useInfiniteFindReferences = (term: string) => {
+/**
+ * Gets a paginated list of references
+ *
+ * @param term - The search term to filter references by
+ * @returns The paginated list of references
+ */
+export function useInfiniteFindReferences(term: string) {
     return useInfiniteQuery<ReferenceSearchResult>(
-        ReferenceQueryKeys.list([term]),
+        referenceQueryKeys.list([term]),
         pageParam => findReferences({ page: pageParam, per_page: 25, term }),
         {
             getNextPageParam: lastPage => {
@@ -27,4 +33,4 @@ export const useInfiniteFindReferences = (term: string) => {
             keepPreviousData: true,
         },
     );
-};
+}
