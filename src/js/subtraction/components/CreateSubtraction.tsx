@@ -41,7 +41,7 @@ const initialValues = {
  */
 export default function CreateSubtraction() {
     const {
-        data: filesResponse,
+        data: files,
         isLoading,
         isFetchingNextPage,
         fetchNextPage,
@@ -104,11 +104,11 @@ export default function CreateSubtraction() {
                             name="uploadId"
                             onClick={id => setFieldValue("uploadId", id)}
                             error={touched.uploadId && errors.uploadId}
-                            files={filesResponse}
+                            files={files}
                             isFetchingNextPage={isFetchingNextPage}
                             fetchNextPage={fetchNextPage}
                             isLoading={isLoading}
-                            foundCount={filesResponse.pages[0].found_count}
+                            foundCount={files.pages[0].found_count}
                             selected={values.uploadId}
                         />
                         <SaveButton />

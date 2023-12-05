@@ -12,16 +12,12 @@ import { FileType } from "./types";
 export function useValidateFiles(type: FileType, selected: string[], setSelected: (selected: string[]) => void) {
     const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteFindFiles(type, 25);
 
-    function getData() {
-        if (hasNextPage) {
-            void fetchNextPage();
-        }
-        return data.pages.flatMap(page => page.items);
-    }
-
     useEffect(() => {
         if (!isLoading && selected.length) {
-            const documents = getData();
+            if (hasNextPage) {
+                void fetchNextPage();
+            }
+            const documents = data.pages.flatMap(page => page.items);
 
             if (!hasNextPage) {
                 const matchingIds = documents.filter(item => selected.includes(item.id)).map(item => item.id);
