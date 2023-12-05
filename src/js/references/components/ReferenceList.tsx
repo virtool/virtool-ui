@@ -8,12 +8,12 @@ import { ReferenceMinimal, ReferenceSearchResult } from "../types";
 import Clone from "./Clone";
 import ReferenceItem from "./Item/ReferenceItem";
 import ReferenceOfficial from "./Official";
-import ReferenceToolbar from "./Toolbar";
+import ReferenceToolbar from "./ReferenceToolbar";
 
 const renderRow = (reference: ReferenceMinimal) => <ReferenceItem key={reference.id} reference={reference} />;
 
 export default function ReferenceList() {
-    const [term] = useUrlSearchParams("term");
+    const [term] = useUrlSearchParams("find");
 
     const { data, isLoading, fetchNextPage, isFetchingNextPage } = useInfiniteFindReferences(term);
 
@@ -43,7 +43,7 @@ export default function ReferenceList() {
                     renderRow={renderRow}
                 />
             </ContainerNarrow>
-            <Clone />
+            <Clone references={references} />
         </>
     );
 }

@@ -24,6 +24,7 @@ export const useInfiniteFindReferences = (term: string) => {
                 }
                 return (lastPage.page || 1) + 1;
             },
+            keepPreviousData: true,
         },
     );
 };
