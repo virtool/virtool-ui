@@ -17,7 +17,17 @@ const StyledHMMTaxonomy = styled(BoxGroupSection)`
     padding: 0;
 `;
 
-export const HMMTaxonomy = ({ counts, title }) => {
+type HMMTaxonomyProps = {
+    /**  */
+    counts: { [key: string]: number };
+    /** The title to be displayed */
+    title: string;
+};
+
+/**
+ * Displays a list of taxonomy items
+ */
+export function HMMTaxonomy({ counts, title }: HMMTaxonomyProps) {
     const sorted = sortBy(
         map(counts, (count, name) => ({ name, count })),
         "name",
@@ -39,4 +49,4 @@ export const HMMTaxonomy = ({ counts, title }) => {
             </BoxGroup>
         </div>
     );
-};
+}

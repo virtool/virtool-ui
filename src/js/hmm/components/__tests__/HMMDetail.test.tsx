@@ -1,7 +1,8 @@
+import { screen } from "@testing-library/react";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { HMMDetail, mapDispatchToProps, mapStateToProps } from "../Detail";
+import HMMDetail from "../HMMDetail";
 
 describe("<HMMDetail />", () => {
     let props;
@@ -121,33 +122,5 @@ describe("<HMMDetail />", () => {
             expect(screen.getByText("genera2")).toBeInTheDocument();
             expect(screen.getByText("981")).toBeInTheDocument();
         });
-    });
-});
-
-describe("mapStateToProps()", () => {
-    const state = {
-        errors: {
-            GET_HMM_ERROR: true,
-        },
-        hmms: {
-            detail: "foo",
-        },
-    };
-    it("should return props", () => {
-        const props = mapStateToProps(state);
-        expect(props).toEqual({
-            error: true,
-            detail: "foo",
-        });
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    const dispatch = vi.fn();
-
-    it("should return onGet() in props", () => {
-        const props = mapDispatchToProps(dispatch);
-        props.onGet("foo");
-        expect(dispatch).toHaveBeenCalledWith({ payload: { hmmId: "foo" }, type: "GET_HMM_REQUESTED" });
     });
 });
