@@ -3,6 +3,7 @@ import { merge } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
 import { ReferenceClonedFrom, ReferenceDataType, ReferenceMinimal } from "../../js/references/types";
+import { Task } from "../../js/tasks/types";
 import { createFakeUserNested } from "./user";
 
 type CreateFakeReferenceNestedProps = {
@@ -26,6 +27,8 @@ export function createFakeReferenceNested(props?: CreateFakeReferenceNestedProps
 
 type CreateFakeReferenceMinimal = CreateFakeReferenceNestedProps & {
     cloned_from?: ReferenceClonedFrom | null;
+    organism?: string;
+    task?: Task;
 };
 
 /**
