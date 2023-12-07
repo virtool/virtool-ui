@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FIND_HMMS, GET_HMM, WS_UPDATE_STATUS } from "../../app/actionTypes";
+import { FIND_HMMS, WS_UPDATE_STATUS } from "../../app/actionTypes";
 import reducer, { initialState as reducerInitialState } from "../reducer";
 
 describe("HMM Reducer", () => {
@@ -68,28 +68,6 @@ describe("HMM Reducer", () => {
         expect(result).toEqual({
             documents: [{ id: "foo" }],
             page: 1,
-        });
-    });
-
-    it("should handle GET_HMM_REQUESTED", () => {
-        const state = {};
-        const action = {
-            type: GET_HMM.REQUESTED,
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            detail: null,
-        });
-    });
-
-    it("should handle GET_HMM_SUCCEEDED", () => {
-        const action = {
-            type: GET_HMM.SUCCEEDED,
-            payload: {},
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({
-            detail: action.payload,
         });
     });
 });
