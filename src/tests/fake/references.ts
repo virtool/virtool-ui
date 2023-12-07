@@ -2,17 +2,7 @@ import { faker } from "@faker-js/faker";
 import { merge } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
-import {
-    ReferenceBuild,
-    ReferenceClonedFrom,
-    ReferenceDataType,
-    ReferenceInstalled,
-    ReferenceMinimal,
-    ReferenceRelease,
-    ReferenceRemotesFrom,
-} from "../../js/references/types";
-import { Task } from "../../js/tasks/types";
-import { UserNested } from "../../js/users/types";
+import { ReferenceClonedFrom, ReferenceDataType, ReferenceMinimal } from "../../js/references/types";
 import { createFakeUserNested } from "./user";
 
 type CreateFakeReferenceNestedProps = {
@@ -21,6 +11,9 @@ type CreateFakeReferenceNestedProps = {
     name?: string;
 };
 
+/**
+ * Create a fake reference nested
+ */
 export function createFakeReferenceNested(props?: CreateFakeReferenceNestedProps) {
     const defaultReferenceNested = {
         id: faker.random.alphaNumeric(8),
@@ -33,21 +26,11 @@ export function createFakeReferenceNested(props?: CreateFakeReferenceNestedProps
 
 type CreateFakeReferenceMinimal = CreateFakeReferenceNestedProps & {
     cloned_from?: ReferenceClonedFrom | null;
-    created_at?: string;
-    imported_from?: File | null;
-    installed?: ReferenceInstalled;
-    internal_control?: string | null;
-    latest_build?: ReferenceBuild;
-    organism?: string;
-    otu_count?: number;
-    release?: ReferenceRelease;
-    remotes_from?: ReferenceRemotesFrom | null;
-    task?: Task;
-    unbuilt_change_count?: number;
-    updating?: boolean | null;
-    user?: UserNested;
 };
 
+/**
+ * Create a fake reference minimal
+ */
 export function createFakeReferenceMinimal(props?: CreateFakeReferenceMinimal): ReferenceMinimal {
     const defaultReferenceMinimal = {
         ...createFakeReferenceNested(),
@@ -72,10 +55,13 @@ export function createFakeReferenceMinimal(props?: CreateFakeReferenceMinimal): 
     return assign(defaultReferenceMinimal, props);
 }
 
-export type CreateFakeReference = CreateFakeReferenceMinimal & {
+type CreateFakeReference = CreateFakeReferenceMinimal & {
     description?: string;
 };
 
+/**
+ * Create a fake reference
+ */
 export function createFakeReference(overrides?: CreateFakeReference) {
     const { description, ...props } = overrides || {};
 
@@ -92,6 +78,12 @@ export function createFakeReference(overrides?: CreateFakeReference) {
     return assign(defaultReference, props);
 }
 
+/**
+ * Sets up a mocked API route for fetching a list of references
+ *
+ * @param references - The documents for references
+ * @returns The nock scope for the mocked API call
+ */
 export function mockApiGetReferences(references: ReferenceMinimal[]) {
     return nock("http://localhost").get("/api/refs").query(true).reply(200, {
         documents: references,
@@ -104,6 +96,14 @@ export function mockApiGetReferences(references: ReferenceMinimal[]) {
     });
 }
 
+/**
+ * Sets up a mocked API route for cloning a reference
+ *
+ * @param name - The name of the clone
+ * @param description - The description of the clone
+ * @param reference - The reference being cloned
+ * @returns The nock scope for the mocked API call
+ */
 export function mockApiCloneReference(name: string, description: string, reference: ReferenceMinimal) {
     const clonedReference = createFakeReference({
         cloned_from: {

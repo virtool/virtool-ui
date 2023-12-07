@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import { cloneReference, findReferences } from "./api";
-import { ReferenceSearchResult } from "./types";
+import { ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 /**
  * Factory for generating react-query keys for reference related queries.
@@ -42,9 +42,12 @@ export function useInfiniteFindReferences(term: string) {
  */
 export function useCloneReference() {
     const queryClient = useQueryClient();
-    return useMutation(cloneReference, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(referenceQueryKeys.lists());
+    return useMutation<ReferenceMinimal, unknown, { name: string; description: string; refId: string }>(
+        cloneReference,
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(referenceQueryKeys.lists());
+            },
         },
-    });
+    );
 }

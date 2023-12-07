@@ -15,7 +15,7 @@ function renderRow(reference: ReferenceMinimal) {
 }
 
 /**
- * A list of References with filtering options
+ * A list of references with filtering options
  */
 export default function ReferenceList() {
     const [term] = useUrlSearchParams("find");
