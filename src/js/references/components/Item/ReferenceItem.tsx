@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { BoxSpaced, device } from "../../../base";
+import { getTaskById } from "../../../tasks/selectors";
 import { Task } from "../../../tasks/types";
-import { getReferenceTaskById } from "../../selectors";
 import { ReferenceMinimal } from "../../types";
 import { ReferenceItemBuild } from "./Build";
 import { ReferenceItemHeader } from "./Header";
@@ -74,7 +74,7 @@ export function mapStateToProps(state: any, ownProps: { taskId: any }) {
     const { taskId } = ownProps;
 
     return {
-        task: getReferenceTaskById(state, taskId),
+        task: getTaskById(state, taskId),
     };
 }
 
