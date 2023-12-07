@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InputSearch } from "../../../base";
-import { ReferenceToolbar } from "../Toolbar";
+import { ReferenceToolbar } from "../ReferenceToolbar";
 
 describe("<ReferenceToolbar />", () => {
     let props;

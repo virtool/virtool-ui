@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getReferenceItemProgress } from "../../../selectors";
-import { mapStateToProps, ReferenceItem } from "../Item";
+import { mapStateToProps, ReferenceItem } from "../ReferenceItem";
 
 vi.mock("../../../selectors.ts");
 

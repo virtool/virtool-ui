@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import { find } from "lodash-es";
 import React from "react";
+import { useQueryClient } from "react-query";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import * as Yup from "yup";
@@ -42,8 +43,9 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),
 });
 
-export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) => {
-    const reference = find(refDocuments, { id: refId });
+export function CloneReference({ refId, references, show, onHide, onSubmit }) {
+    const queryClient = useQueryClient();
+    const reference = find(references, { id: refId });
 
     const handleSubmit = ({ name }) => {
         onSubmit(name, `Cloned from ${reference.name}`, reference.id);
@@ -74,18 +76,17 @@ export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) 
                             </InputGroup>
                         </ModalBody>
                         <ModalFooter>
-                            <SaveButton disabled={!refDocuments.length} altText="Clone" />
+                            <SaveButton disabled={!references.length} altText="Clone" />
                         </ModalFooter>
                     </Form>
                 )}
             </Formik>
         </Modal>
     );
-};
+}
 
 export const mapStateToProps = state => ({
     refId: routerLocationHasState(state, "id") ? state.router.location.state.id : "",
-    refDocuments: state.references.documents,
     show: routerLocationHasState(state, "cloneReference"),
 });
 

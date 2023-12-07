@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { checkAdminRoleOrPermission } from "../../administration/utils";
+import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { Box, Button, ExternalLink } from "../../base";
 import { remoteReference } from "../actions";
 
@@ -19,7 +19,10 @@ const StyledReferenceOfficial = styled(Box)`
     }
 `;
 
-export const ReferenceOfficial = ({ show, onRemote }) => {
+export const ReferenceOfficial = ({ officialInstalled, onRemote }) => {
+    const { hasPermission } = useCheckAdminRoleOrPermission("create_ref");
+    const show = !officialInstalled && hasPermission;
+
     if (show) {
         return (
             <StyledReferenceOfficial>
@@ -46,14 +49,10 @@ export const ReferenceOfficial = ({ show, onRemote }) => {
     return null;
 };
 
-const mapStateToProps = state => ({
-    show: !state.references.official_installed && checkAdminRoleOrPermission(state, "create_ref"),
-});
-
 const mapDispatchToProps = dispatch => ({
     onRemote: () => {
         dispatch(remoteReference());
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReferenceOfficial);
+export default connect(null, mapDispatchToProps)(ReferenceOfficial);

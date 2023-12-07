@@ -1,5 +1,6 @@
 import { Task } from "../tasks/types";
 import { UserNested } from "../users/types";
+import { SearchResult } from "../utils/types";
 
 export type ReferenceClonedFrom = {
     id: string;
@@ -43,16 +44,16 @@ export type ReferenceRemotesFrom = {
 
 export type ReferenceRelease = {
     body: string;
-    contentType: string;
-    downloadUrl: string;
+    content_type: string;
+    download_url: string;
     etag: string;
     filename: string;
-    htmlUrl: string;
+    html_url: string;
     id: number;
     name: string;
     newer: boolean;
-    publishedAt: Date;
-    retrievedAt: Date;
+    published_at: Date;
+    retrieved_at: Date;
     size: number;
 };
 
@@ -79,6 +80,50 @@ export type ReferenceNested = {
     data_type: ReferenceDataType;
     /** The user defined name */
     name: string;
+};
+
+export type ReferenceInstalled = {
+    body: string;
+    created_at: Date;
+    filename: string;
+    html_url: string;
+    id: number;
+    name: string;
+    newer: boolean;
+    published_at: Date;
+    ready: boolean;
+    size: number;
+    user: UserNested;
+};
+
+export type ReferenceBuild = {
+    createdAt: Date;
+    id: string;
+    user: UserNested;
+    version: number;
+    has_json: boolean;
+};
+
+export type ReferenceMinimal = ReferenceNested & {
+    cloned_from: ReferenceClonedFrom | null;
+    created_at: string;
+    imported_from: File | null;
+    installed: ReferenceInstalled;
+    internal_control: string | null;
+    latest_build: ReferenceBuild;
+    organism: string;
+    otu_count: number;
+    release: ReferenceRelease;
+    remotes_from: ReferenceRemotesFrom | null;
+    task: Task;
+    unbuilt_change_count: number;
+    updating: boolean | null;
+    user: UserNested;
+};
+
+export type ReferenceSearchResult = SearchResult & {
+    documents: ReferenceMinimal;
+    official_installed: boolean;
 };
 
 export class Reference {
