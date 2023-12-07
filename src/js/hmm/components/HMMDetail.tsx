@@ -87,7 +87,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
     if (isLoading) {
         return <LoadingPlaceholder margin="130px" />;
     }
-    console.log(data);
+
     const clusterMembers = map(data.entries, ({ name, accession, organism }, index) => (
         <ClusterMember name={name} accession={accession} organism={organism} key={index} index={index} />
     ));

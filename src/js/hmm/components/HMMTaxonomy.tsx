@@ -18,7 +18,7 @@ const StyledHMMTaxonomy = styled(BoxGroupSection)`
 `;
 
 type HMMTaxonomyProps = {
-    /**  */
+    /** The names and corresponding counts of the taxonomy items */
     counts: { [key: string]: number };
     /** The title to be displayed */
     title: string;

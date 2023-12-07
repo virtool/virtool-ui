@@ -33,5 +33,7 @@ export function useListHmms(page: number, per_page: number, term?: string) {
  * @returns A single HMM
  */
 export function useFetchHmm(hmmId: string) {
-    return useQuery<HMM>(hmmQueryKeys.detail(hmmId), () => fetchHmm(hmmId));
+    return useQuery<HMM>(hmmQueryKeys.detail(hmmId), () => fetchHmm(hmmId), {
+        retry: 0,
+    });
 }

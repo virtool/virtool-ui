@@ -1,16 +1,15 @@
 import React from "react";
-
 import { ExternalLink } from "../../base";
 
 type ClusterMemberProps = {
     /** The index of the cluster member */
-    index: number,
-    /**  */
-    accession: string,
-    /** */
-    name: string,
-    /** The organism to which the cluster member belongs */
-    organism: string,
+    index: number;
+    /** The accession number */
+    accession: string;
+    /** The name of the accession */
+    name: string;
+    /** The organism associated with the accession */
+    organism: string;
 };
 
 /**

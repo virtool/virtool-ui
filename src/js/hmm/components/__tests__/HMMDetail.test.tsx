@@ -1,126 +1,118 @@
 import { screen } from "@testing-library/react";
+import nock from "nock";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { createFakeHMM, mockApiGetHmmDetail } from "../../../../tests/fake/hmm";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import HMMDetail from "../HMMDetail";
 
 describe("<HMMDetail />", () => {
+    const hmmDetail = createFakeHMM();
     let props;
 
     beforeEach(() => {
         props = {
-            onGet: vi.fn(),
-            error: false,
-            detail: {
-                names: ["HMM Name"],
-                cluster: 44,
-                length: 122,
-                mean_entropy: 0.52,
-                total_entropy: 132.7,
-                entries: ["Foo"],
-                families: "Bar",
-                genera: "Baz",
-            },
             match: {
                 params: {
-                    hmmId: "bar",
+                    hmmId: hmmDetail.id,
                 },
             },
         };
     });
 
-    describe("<HMMDetail />", () => {
-        it("should render correctly when props.error = true", () => {
-            props.error = ["An error occurred"];
+    afterEach(() => nock.cleanAll());
 
+    describe("<HMMDetail />", () => {
+        it("should render correctly when query has an error", async () => {
+            const scope = mockApiGetHmmDetail(hmmDetail, 404);
             renderWithProviders(<HMMDetail {...props} />);
 
-            expect(screen.getByText("404")).toBeInTheDocument();
+            expect(await screen.findByText("404")).toBeInTheDocument();
             expect(screen.getByText("Not found")).toBeInTheDocument();
+
+            scope.done();
         });
 
         it("should render loading when props.detail = null", () => {
-            props.detail = null;
-
             renderWithProviders(<HMMDetail {...props} />);
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
+            expect(screen.queryByText("General")).not.toBeInTheDocument();
+            expect(screen.queryByText("Cluster")).not.toBeInTheDocument();
         });
-    });
 
-    it("should render General table correctly", () => {
-        renderWithProviders(<HMMDetail {...props} />);
+        it("should render General table correctly", async () => {
+            const scope = mockApiGetHmmDetail(hmmDetail);
+            renderWithProviders(<HMMDetail {...props} />);
 
-        expect(screen.getByText("General")).toBeInTheDocument();
+            expect(await screen.findByText("General")).toBeInTheDocument();
 
-        expect(screen.getByText("Cluster")).toBeInTheDocument();
-        expect(screen.getByText("44")).toBeInTheDocument();
+            expect(screen.getByText("Cluster")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.cluster)).toBeInTheDocument();
 
-        expect(screen.getByText("Best Definitions")).toBeInTheDocument();
+            expect(screen.getByText("Best Definitions")).toBeInTheDocument();
 
-        expect(screen.getByText("Length")).toBeInTheDocument();
-        expect(screen.getByText("122")).toBeInTheDocument();
+            expect(screen.getByText("Length")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.length)).toBeInTheDocument();
 
-        expect(screen.getByText("Mean Entropy")).toBeInTheDocument();
-        expect(screen.getByText("0.52")).toBeInTheDocument();
-    });
+            expect(screen.getByText("Mean Entropy")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.mean_entropy)).toBeInTheDocument();
 
-    it("should render Cluster table correctly", () => {
-        props.detail.entries = [
-            { accession: "NP_111111", gi: "7777777", name: "testName1", organism: "testOrganism1" },
-            { accession: "NP_222222", gi: "8888888", name: "testName2", organism: "testOrganism2" },
-            { accession: "NP_333333", gi: "9999999", name: "testName3", organism: "testOrganism3" },
-        ];
+            scope.done();
+        });
 
-        renderWithProviders(<HMMDetail {...props} />);
+        it("should render Cluster table correctly", async () => {
+            const scope = mockApiGetHmmDetail(hmmDetail);
+            renderWithProviders(<HMMDetail {...props} />);
 
-        expect(screen.getByText("Cluster Members")).toBeInTheDocument();
-        expect(screen.getByText("3")).toBeInTheDocument();
+            expect(await screen.findByText("General")).toBeInTheDocument();
 
-        expect(screen.getByText("Accession")).toBeInTheDocument();
-        expect(screen.getByText("NP_111111")).toBeInTheDocument();
-        expect(screen.getByText("NP_333333")).toBeInTheDocument();
+            expect(screen.getByText("Cluster Members")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.entries.length)).toBeInTheDocument();
 
-        expect(screen.getByText("Name")).toBeInTheDocument();
-        expect(screen.getByText("testName1")).toBeInTheDocument();
-        expect(screen.getByText("testName3")).toBeInTheDocument();
+            expect(screen.getByText("Accession")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.entries[0].accession)).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.entries[1].accession)).toBeInTheDocument();
 
-        expect(screen.getByText("Organism")).toBeInTheDocument();
-        expect(screen.getByText("testOrganism1")).toBeInTheDocument();
-        expect(screen.getByText("testOrganism3")).toBeInTheDocument();
+            expect(screen.getByText("Name")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.entries[0].name)).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.entries[1].name)).toBeInTheDocument();
+
+            expect(screen.getByText("Organism")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.entries[0].organism)).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.entries[1].organism)).toBeInTheDocument();
+
+            scope.done();
+        });
     });
 
     describe("HMMTaxonomy", () => {
-        it("should render Families correctly", () => {
-            props.detail.families = {
-                family1: 106,
-                family2: 206,
-            };
-
+        it("should render Families correctly", async () => {
+            const scope = mockApiGetHmmDetail(hmmDetail);
             renderWithProviders(<HMMDetail {...props} />);
 
-            expect(screen.getByText("Families")).toBeInTheDocument();
+            expect(await screen.findByText("Families")).toBeInTheDocument();
 
-            expect(screen.getByText("family1")).toBeInTheDocument();
-            expect(screen.getByText("106")).toBeInTheDocument();
-            expect(screen.getByText("family2")).toBeInTheDocument();
-            expect(screen.getByText("206")).toBeInTheDocument();
+            expect(screen.getByText("Papillomaviridae")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.families.Papillomaviridae)).toBeInTheDocument();
+            expect(screen.getByText("None")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.families.None)).toBeInTheDocument();
+
+            scope.done();
         });
 
-        it("should render Genera correctly", () => {
-            props.detail.genera = {
-                genera1: 900,
-                genera2: 981,
-            };
-
+        it("should render Genera correctly", async () => {
+            const scope = mockApiGetHmmDetail(hmmDetail);
             renderWithProviders(<HMMDetail {...props} />);
 
-            expect(screen.getByText("Genera")).toBeInTheDocument();
+            expect(await screen.findByText("Genera")).toBeInTheDocument();
 
-            expect(screen.getByText("genera1")).toBeInTheDocument();
-            expect(screen.getByText("900")).toBeInTheDocument();
-            expect(screen.getByText("genera2")).toBeInTheDocument();
-            expect(screen.getByText("981")).toBeInTheDocument();
+            expect(screen.getByText("Begomovirus")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.genera.Begomovirus)).toBeInTheDocument();
+            expect(screen.getByText("Curtovirus")).toBeInTheDocument();
+            expect(screen.getByText(hmmDetail.genera.Curtovirus)).toBeInTheDocument();
+
+            scope.done();
         });
     });
 });
