@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from "react-query";
-import { findReferences } from "./api";
+import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { cloneReference, findReferences } from "./api";
 import { ReferenceSearchResult } from "./types";
 
 /**
@@ -33,4 +33,18 @@ export function useInfiniteFindReferences(term: string) {
             keepPreviousData: true,
         },
     );
+}
+
+/**
+ * Initializes a mutator for cloning a reference
+ *
+ * @returns A mutator for cloning a reference
+ */
+export function useCloneReference() {
+    const queryClient = useQueryClient();
+    return useMutation(cloneReference, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(referenceQueryKeys.lists());
+        },
+    });
 }

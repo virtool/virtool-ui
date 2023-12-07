@@ -11,7 +11,7 @@ import ReferenceOfficial from "./Official";
 import ReferenceToolbar from "./ReferenceToolbar";
 
 function renderRow(reference: ReferenceMinimal) {
-    return <ReferenceItem key={reference.id} reference={reference} />;
+    return <ReferenceItem key={reference.id} reference={reference} taskId={reference.task?.id} />;
 }
 
 /**

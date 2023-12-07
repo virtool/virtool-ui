@@ -8,9 +8,7 @@ import { Request } from "../app/request";
 import { Reference } from "./types";
 
 function getReference(refId: string): Reference {
-    return Request.get(`/refs/${refId}`).then(response => {
-        return new Reference(response.body);
-    });
+    return Request.get(`/refs/${refId}`).then(response => response.body);
 }
 
 export function useGetReference(refId) {

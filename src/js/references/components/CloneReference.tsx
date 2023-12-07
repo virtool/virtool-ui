@@ -1,7 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import { find } from "lodash-es";
 import React from "react";
-import { useMutation, useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
@@ -18,8 +17,7 @@ import {
     ModalHeader,
     SaveButton,
 } from "../../base";
-import { cloneReference } from "../api";
-import { referenceQueryKeys } from "../querys";
+import { useCloneReference } from "../querys";
 import { ReferenceMinimal } from "../types";
 
 const ReferenceBox = styled(Box)`
@@ -55,14 +53,7 @@ type CloneReferenceProps = {
  */
 export default function CloneReference({ references }: CloneReferenceProps) {
     const history = useHistory();
-
-    const queryClient = useQueryClient();
-    const mutation = useMutation(cloneReference, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(referenceQueryKeys.lists());
-            onHide();
-        },
-    });
+    const mutation = useCloneReference();
 
     const reference = find(references, { id: (history.location.state && history.location.state["id"]) || "" });
 
@@ -71,7 +62,14 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     }
 
     function handleSubmit({ name }: { name: string }) {
-        mutation.mutate({ name, description: `Cloned from ${reference.name}`, refId: reference.id });
+        mutation.mutate(
+            { name, description: `Cloned from ${reference.name}`, refId: reference.id },
+            {
+                onSuccess: () => {
+                    onHide();
+                },
+            },
+        );
     }
 
     return (

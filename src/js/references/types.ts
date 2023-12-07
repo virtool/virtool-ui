@@ -121,61 +121,17 @@ export type ReferenceMinimal = ReferenceNested & {
     user: UserNested;
 };
 
-export type ReferenceSearchResult = SearchResult & {
-    documents: ReferenceMinimal;
-    official_installed: boolean;
+export type Reference = ReferenceMinimal & {
+    contributers: Array<ReferenceContributor>;
+    description: string;
+    groups: Array<ReferenceGroup>;
+    restrict_source_types: boolean;
+    source_types: Array<string>;
+    targets: ReferenceTarget;
+    users: Array<ReferenceUser>;
 };
 
-export class Reference {
-    clonedFrom: ReferenceClonedFrom | null;
-    contributors: ReferenceContributor[];
-    createdAt: Date;
-    dataType: ReferenceDataType;
-    description: string;
-    groups: ReferenceGroup[];
-    id: string;
-    importedFrom: ReferenceImportedFrom | null;
-    installed: boolean;
-    internalControl: string | null;
-    latestBuild: ReferenceLatestBuild;
-    name: string;
-    organism: string;
-    otuCount: number;
-    release: ReferenceRelease | null;
-    remotesFrom: ReferenceRemotesFrom | null;
-    restrictSourceTypes: boolean;
-    sourceTypes: string[];
-    targets: ReferenceTarget[];
-    task: Task | null;
-    unbuiltChangeCount: number;
-    updating: boolean;
-    user: UserNested;
-    users: ReferenceUser[];
-
-    constructor(data) {
-        this.clonedFrom = data.cloned_from;
-        this.contributors = data.contributors;
-        this.createdAt = new Date(data.created_at);
-        this.dataType = data.data_type;
-        this.description = data.description;
-        this.groups = data.groups;
-        this.id = data.id;
-        this.importedFrom = data.imported_from;
-        this.installed = data.installed;
-        this.internalControl = data.internal_control;
-        this.latestBuild = data.latest_build;
-        this.name = data.name;
-        this.organism = data.organism;
-        this.otuCount = data.otu_count;
-        this.release = data.release;
-        this.remotesFrom = data.remotes_from;
-        this.restrictSourceTypes = data.restrict_source_types;
-        this.sourceTypes = data.source_types;
-        this.targets = data.targets;
-        this.task = data.task;
-        this.unbuiltChangeCount = data.unbuilt_change_count;
-        this.updating = data.updating;
-        this.user = data.user;
-        this.users = data.users;
-    }
-}
+export type ReferenceSearchResult = SearchResult & {
+    documents: Array<ReferenceMinimal>;
+    official_installed: boolean;
+};
