@@ -1,8 +1,11 @@
 import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import { Icon, InputSearch, LinkButton, Toolbar } from "../../base";
+import { InputSearch, LinkButton, Toolbar } from "../../base";
 import { useUrlSearchParams } from "../../utils/hooks";
 
+/**
+ * A toolbar which allows the references to be filtered by name
+ */
 export default function ReferenceToolbar() {
     const [term, setTerm] = useUrlSearchParams("find", "");
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission("create_ref");
@@ -12,9 +15,8 @@ export default function ReferenceToolbar() {
             to={{ pathname: "/refs/add", state: { newReference: true, emptyReference: true } }}
             color="blue"
             tip="Create"
-        >
-            <Icon name="plus-square fa-fw" />
-        </LinkButton>
+            icon="plus-square fa-fw"
+        />
     ) : null;
 
     return (

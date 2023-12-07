@@ -118,3 +118,10 @@ export const getImportData = state => {
 
     return null;
 };
+
+export function getReferenceTaskById(state, taskId) {
+    const tasks = state.tasks.documents;
+    if (taskId && tasks.length) {
+        return find(tasks, { id: taskId });
+    }
+}

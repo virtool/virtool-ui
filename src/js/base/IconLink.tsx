@@ -11,7 +11,7 @@ type IconLinkProps = {
 };
 
 export const IconLink = ({ color, name, replace, tip, to }: IconLinkProps) => (
-    <Link replace={replace} to={to}>
+    <Link replace={replace} to={to} aria-label={name}>
         <Icon color={color} name={name} tip={tip} hoverable />
     </Link>
 );
