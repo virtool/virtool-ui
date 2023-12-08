@@ -14,15 +14,15 @@ export function useValidateFiles(type: FileType, selected: string[], setSelected
 
     useEffect(() => {
         if (!isLoading && selected.length) {
-            if (hasNextPage) {
+            const documents = data.pages.flatMap(page => page.items);
+            const selectedFilesExist = selected.every(itemId => documents.some(item => item.id === itemId));
+
+            if (!selectedFilesExist) {
                 void fetchNextPage();
             }
-            const documents = data.pages.flatMap(page => page.items);
 
-            if (!hasNextPage) {
-                const matchingIds = documents.filter(item => selected.includes(item.id)).map(item => item.id);
-
-                matchingIds ? setSelected(matchingIds) : setSelected([]);
+            if (!hasNextPage && !selectedFilesExist) {
+                setSelected([]);
             }
         }
     }, [data]);
