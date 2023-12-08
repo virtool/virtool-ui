@@ -38,7 +38,7 @@ export default function SamplesList() {
 
     const { data: samples, isLoading: isSamplesLoading } = useListSamples(
         Number(urlPage) || 1,
-        5,
+        25,
         term,
         filterLabels,
         filterWorkflows,
