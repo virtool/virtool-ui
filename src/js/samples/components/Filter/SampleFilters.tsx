@@ -9,7 +9,7 @@ const StyledSampleFilters = styled.div`
     grid-row: 2;
 `;
 
-type LabelFilterProps = {
+type SampleFilterProps = {
     /** A list of labels */
     labels: Label[];
     /** Handles click event when label is clicked */
@@ -31,7 +31,7 @@ export function SampleFilters({
     onClickWorkflows,
     selectedLabels,
     selectedWorkflows,
-}: LabelFilterProps) {
+}: SampleFilterProps) {
     return (
         <StyledSampleFilters>
             <LabelFilter labels={labels} onClick={onClickLabels} selected={selectedLabels} />

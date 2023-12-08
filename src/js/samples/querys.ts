@@ -1,17 +1,10 @@
 import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Label } from "../labels/types";
 import { listSamples, update } from "./api";
 import { SampleMinimal } from "./types";
 
-type Labels = {
-    /** The hex encoded color */
-    color: string;
-    /** The detailed description */
-    description: string;
-    /** The unique identifier */
-    id: number;
-    /** The display name */
-    name: string;
+type SampleLabel = Label & {
     /** Whether all selected samples contain the label */
     allLabeled: boolean;
 };
@@ -49,7 +42,7 @@ export function useListSamples(page: number, per_page: number, term?: string, la
  * @param selectedLabels - The initial labels associated with the sample
  * @param selectedSamples - The selected samples
  */
-export function useUpdateLabel(selectedLabels: Labels[], selectedSamples: SampleMinimal[]) {
+export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: SampleMinimal[]) {
     const queryClient = useQueryClient();
     const mutation = useMutation(update, {
         onSuccess: () => {

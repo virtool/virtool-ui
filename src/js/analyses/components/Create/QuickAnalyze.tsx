@@ -60,6 +60,14 @@ const validationSchema = Yup.object().shape({
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
+type History = HistoryType & {
+    location: {
+        state: {
+            quickAnalysis?: boolean;
+        };
+    };
+};
+
 /**
  * Gets the quick analysis mode
  *
@@ -67,8 +75,8 @@ const validationSchema = Yup.object().shape({
  * @param history - The history object
  * @returns The quick analysis mode
  */
-export function getQuickAnalysisMode(libraryType: string, history: HistoryType) {
-    if (history.location.state?.["quickAnalysis"] === true) {
+export function getQuickAnalysisMode(libraryType: string, history: History) {
+    if (history.location.state?.quickAnalysis === true) {
         if (libraryType === "amplicon") {
             return "barcode";
         }
