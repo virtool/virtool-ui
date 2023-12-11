@@ -95,7 +95,7 @@ export function getUser(userId: string): Promise<User> {
  * @param forceReset - Whether the user will be forced to reset their password on next login
  * @returns A promise resolving to creating a user
  */
-export function createUser({ handle, password, forceReset }) {
+export function createUser({ handle, password, forceReset }): Promise<User> {
     return Request.post("/admin/users")
         .send({
             handle,
