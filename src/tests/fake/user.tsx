@@ -112,7 +112,7 @@ export function mockApiFindUsers(users: Array<User>, query?: Query) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetUser(userId: string, user: User) {
-    return nock("http://localhost").get(`/api/users/${userId}`).reply(200, user);
+    return nock("http://localhost").get(`/api/admin/users/${userId}`).reply(200, user);
 }
 
 /**
@@ -127,5 +127,5 @@ export function mockApiGetUser(userId: string, user: User) {
 export function mockApiEditUser(userId: string, statusCode: number, update: any, user?: User) {
     const userDetail = { ...user, ...update };
 
-    return nock("http://localhost").patch(`/api/users/${userId}`).reply(statusCode, userDetail);
+    return nock("http://localhost").patch(`/api/admin/users/${userId}`).reply(statusCode, userDetail);
 }

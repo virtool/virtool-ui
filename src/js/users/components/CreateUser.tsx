@@ -1,9 +1,9 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
 import { useMutation } from "react-query";
+import { createUser } from "../../administration/api";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { StyledButton } from "../../base/styled/StyledButton";
-import { create } from "../api";
 import { CreateUserForm } from "./CreateUserForm";
 
 type NewUser = {
@@ -19,7 +19,7 @@ type NewUser = {
  * A dialog for creating a new user
  */
 export default function CreateUser() {
-    const mutation = useMutation(create, {
+    const mutation = useMutation(createUser, {
         onSuccess: () => {
             history.replaceState({ createUser: false }, "");
         },
