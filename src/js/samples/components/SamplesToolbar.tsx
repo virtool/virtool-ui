@@ -1,7 +1,7 @@
 import React from "react";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
-import { Icon, InputSearch, LinkButton, Toolbar } from "../../base";
+import { InputSearch, LinkButton, Toolbar } from "../../base";
 import { SampleSelectionToolbar } from "./SelectionToolbar";
 
 export function SampleSearchToolbar({ onChange, term }) {
@@ -10,11 +10,7 @@ export function SampleSearchToolbar({ onChange, term }) {
     return (
         <Toolbar>
             <InputSearch value={term} onChange={onChange} placeholder="Sample name" />
-            {canCreate && (
-                <LinkButton to="/samples/create" color="blue" tip="Create">
-                    <Icon name="plus-square fa-fw" />
-                </LinkButton>
-            )}
+            {canCreate && <LinkButton icon="plus-square fa-fw" to="/samples/create" color="blue" tip="Create" />}
         </Toolbar>
     );
 }

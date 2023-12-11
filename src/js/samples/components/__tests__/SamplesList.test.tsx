@@ -61,7 +61,7 @@ describe("<SamplesList />", () => {
         mockGetAccountAPI(account);
         renderWithRouter(<SamplesList />, {}, history);
 
-        expect(await screen.findByLabelText("create")).toBeInTheDocument();
+        expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
     });
 
     it("should not render create button when [canModify=false]", async () => {
@@ -70,7 +70,7 @@ describe("<SamplesList />", () => {
 
         renderWithRouter(<SamplesList />, {}, history);
 
-        const createButton = screen.queryByLabelText("create");
+        const createButton = screen.queryByLabelText("plus-square fa-fw");
         expect(createButton).toBeNull();
     });
 });
