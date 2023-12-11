@@ -1,5 +1,5 @@
 import { Request } from "../app/request";
-import { ReferenceMinimal, ReferenceSearchResult } from "./types";
+import { Reference, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 export function find({ term, page }) {
     return Request.get("/refs").query({ find: term, page });
@@ -100,4 +100,14 @@ export function findReferences({ term, page, per_page }): Promise<ReferenceSearc
     return Request.get("/refs")
         .query({ find: term, page, per_page })
         .then(response => response.body);
+}
+
+/**
+ * Fetches a single refernce
+ *
+ * @param refId - The id of the reference to fetch
+ * @returns A promise resolving to a single reference
+ */
+export function getReference(refId: string): Promise<Reference> {
+    return Request.get(`/refs/${refId}`).then(response => response.body);
 }
