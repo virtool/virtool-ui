@@ -11,7 +11,7 @@ export function SampleSearchToolbar({ onChange, term }) {
         <Toolbar>
             <InputSearch value={term} onChange={onChange} placeholder="Sample name" />
             {canCreate && (
-                <LinkButton icon="create" to="/samples/create" color="blue" tip="Create">
+                <LinkButton to="/samples/create" color="blue" tip="Create">
                     <Icon name="plus-square fa-fw" />
                 </LinkButton>
             )}
