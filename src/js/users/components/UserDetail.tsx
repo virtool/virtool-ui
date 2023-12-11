@@ -1,16 +1,15 @@
-import { get } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, match } from "react-router-dom";
 import styled from "styled-components";
+import { useCheckAdminRole } from "../../administration/hooks";
+import { useFetchUser } from "../../administration/querys";
+import { AdministratorRoles } from "../../administration/types";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "../../base";
-import { listGroups } from "../../groups/actions";
-import { getUser } from "../actions";
-import UserGroups from "./Groups";
 import Password from "./Password";
-import UserPermissions from "./Permissions";
 import PrimaryGroup from "./PrimaryGroup";
+import UserGroups from "./UserGroups";
+import UserPermissions from "./UserPermissions";
 
 const AdminIcon = styled(Icon)`
     padding-left: 10px;
@@ -47,29 +46,38 @@ const UserDetailTitle = styled.div`
     }
 `;
 
-export const UserDetail = ({ detail, error, match, onGetUser, onListGroups }) => {
-    React.useEffect(() => {
-        onGetUser(match.params.userId);
-        onListGroups();
-    }, []);
+type UserDetailProps = {
+    /** Match object containing path information */
+    match: match<string>;
+};
 
-    if (error?.length) {
+/**
+ * The detailed view of a user
+ */
+export default function UserDetail({ match }: UserDetailProps) {
+    const { data, isLoading } = useFetchUser(match.params["userId"]);
+    const { hasPermission: canEdit } = useCheckAdminRole(
+        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+    );
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
+    if (!canEdit) {
         return (
             <Alert color="orange" level>
                 <Icon name="exclamation-circle" />
                 <span>
-                    <strong>You do not have permission to manage users.</strong>
+                    <strong>You do not have permission to manage this user.</strong>
                     <span> Contact an administrator.</span>
                 </span>
             </Alert>
         );
     }
 
-    if (!detail) {
-        return <LoadingPlaceholder />;
-    }
-
-    const { handle, administrator_role } = detail;
+    const { handle, administrator_role, id, groups, primary_group, permissions, last_password_change, force_reset } =
+        data;
 
     return (
         <div>
@@ -82,32 +90,15 @@ export const UserDetail = ({ detail, error, match, onGetUser, onListGroups }) =>
                 </UserDetailTitle>
             </UserDetailHeader>
 
-            <Password key={detail.lastPasswordChange} />
+            <Password key={id} id={id} lastPasswordChange={last_password_change} forceReset={force_reset} />
 
             <UserDetailGroups>
                 <div>
-                    <UserGroups />
-                    <PrimaryGroup />
+                    <UserGroups userId={id} memberGroups={groups} />
+                    <PrimaryGroup groups={groups} id={id} primaryGroup={primary_group} />
                 </div>
-                <UserPermissions />
+                <UserPermissions permissions={permissions} />
             </UserDetailGroups>
         </div>
     );
-};
-
-export const mapStateToProps = state => ({
-    detail: state.users.detail,
-    error: get(state, "errors.GET_USER_ERROR.message", ""),
-});
-
-export const mapDispatchToProps = dispatch => ({
-    onGetUser: userId => {
-        dispatch(getUser(userId));
-    },
-
-    onListGroups: () => {
-        dispatch(listGroups());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserDetail);
+}

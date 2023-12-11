@@ -4,7 +4,7 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { getStateTitle } from "../../../jobs/utils";
-import { mapStateToProps, SubtractionItem } from "../Item";
+import { SubtractionItem } from "../SubtractionItem";
 
 describe("<SubtractionItem />", () => {
     let props;
@@ -47,45 +47,5 @@ describe("<SubtractionItem />", () => {
         props.job = null;
         props.ready = false;
         renderWithRouter(<SubtractionItem {...props} />, {}, history);
-    });
-});
-
-describe("mapStateToProps()", () => {
-    it("should return props", () => {
-        const state = {
-            subtraction: {
-                documents: [
-                    {
-                        id: "foo",
-                        name: "Foo",
-                        ready: true,
-                        user: { id: "user_id_1", handle: "user_handle_1" },
-                        job: { id: "job_id_1", progress: 50, state: "running" },
-                    },
-                    {
-                        id: "bar",
-                        name: "Bar",
-                        ready: true,
-                        user: { id: "user_id_2", handle: "user_handle_2" },
-                        job: { id: "job_id_2", progress: 50, state: "failed" },
-                    },
-                    {
-                        id: "baz",
-                        name: "Baz",
-                        ready: true,
-                        user: { id: "user_id_3", handle: "user_handle_3" },
-                        job: { id: "job_id_2", progress: 100, state: "complete" },
-                    },
-                ],
-            },
-        };
-        const props = mapStateToProps(state, { index: 1 });
-        expect(props).toEqual({
-            id: "bar",
-            name: "Bar",
-            job: { id: "job_id_2", progress: 50, state: "failed" },
-            user: { id: "user_id_2", handle: "user_handle_2" },
-            ready: true,
-        });
     });
 });
