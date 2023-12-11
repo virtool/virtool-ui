@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
+import { useListHmms } from "../../hmm/querys";
+import { useListIndexes } from "../../indexes/querys";
 import { useFetchLabels } from "../../labels/hooks";
 import { useUrlSearchParams, useUrlSearchParamsList } from "../../utils/hooks";
 import { useListSamples } from "../querys";
@@ -44,10 +46,12 @@ export default function SamplesList() {
         filterWorkflows,
     );
     const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
+    const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
+    const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
 
     const [selected, setSelected] = useState([]);
 
-    if (isSamplesLoading || isLabelsLoading) {
+    if (isSamplesLoading || isLabelsLoading || isLoadingHmms || isLoadingIndexes) {
         return <LoadingPlaceholder />;
     }
 
@@ -78,6 +82,8 @@ export default function SamplesList() {
     return (
         <>
             <QuickAnalysis
+                hmms={hmms}
+                indexes={indexes}
                 samples={intersectionWith(documents, selected, (document, id) => document.id === id)}
                 onClear={() => setSelected([])}
             />

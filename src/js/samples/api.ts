@@ -57,7 +57,11 @@ export const remove = ({ sampleId }) => Request.delete(`/samples/${sampleId}`);
  * @param workflows - Filter the samples by workflows
  */
 export function listSamples(page: number, per_page: number, term: string, labels: string[], workflows: string[]) {
-    return Request.get("/samples")
-        .query({ page, per_page, find: term, labels, workflows })
-        .then(res => res.body);
+    const request = Request.get("/samples").query({ page, per_page, find: term, workflows });
+
+    if (labels) {
+        labels.forEach(label => request.query({ label }));
+    }
+
+    return request.then(res => res.body);
 }

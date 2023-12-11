@@ -11,7 +11,6 @@ import {
     Button,
     Icon,
     InputError,
-    LoadingPlaceholder,
     Modal,
     ModalBody,
     ModalFooter,
@@ -19,8 +18,8 @@ import {
     ModalTabs,
     TabsLink,
 } from "../../../base";
-import { useListHmms } from "../../../hmm/querys";
-import { useListIndexes } from "../../../indexes/querys";
+import { HMMSearchResults } from "../../../hmm/types";
+import { IndexMinimal } from "../../../indexes/types";
 import { samplesQueryKeys } from "../../../samples/querys";
 import { SampleMinimal } from "../../../samples/types";
 import { shortlistSubtractions } from "../../../subtraction/actions";
@@ -112,20 +111,31 @@ type HandleSubmitProps = {
 };
 
 type QuickAnalyzeProps = {
+    /** The HMM search results */
+    hmms: HMMSearchResults;
+    /** A list of indexes with the minimal data */
+    indexes: IndexMinimal[];
+    /** A callback function to clear selected samples */
+    onClear: () => void;
+    /** A callback function to shortlist subtractions */
+    onShortlistSubtractions: () => void;
     /** The selected samples */
     samples: SampleMinimal[];
     /** The ready subtraction options */
     subtractionOptions: any;
-    /** A callback function to shortlist subtractions */
-    onShortlistSubtractions: () => void;
-    /** A callback function to clear selected samples */
-    onClear: () => void;
 };
 
 /**
  * A form for triggering quick analyses on selected samples
  */
-export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtractions, onClear }: QuickAnalyzeProps) {
+export function QuickAnalyze({
+    hmms,
+    indexes,
+    onClear,
+    onShortlistSubtractions,
+    samples,
+    subtractionOptions,
+}: QuickAnalyzeProps) {
     const queryClient = useQueryClient();
     const history = useHistory();
     const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
@@ -133,8 +143,6 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
-    const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
-    const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
     const mutation = useMutation(analyze, {
         onSuccess: () => {
             queryClient.invalidateQueries(samplesQueryKeys.lists());
@@ -173,10 +181,6 @@ export function QuickAnalyze({ samples, subtractionOptions, onShortlistSubtracti
             onHide();
         }
     }, [mode]);
-
-    if (isLoadingHmms || isLoadingIndexes) {
-        return <LoadingPlaceholder />;
-    }
 
     function getReferenceId(selectedIndexes: string[]) {
         const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));
