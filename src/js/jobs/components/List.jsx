@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { getFontWeight } from "../../app/theme";
 import { Box, ContainerNarrow, LegacyScrollList, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Permission } from "../../groups/types";
 import { findJobs } from "../actions";
 import { getJobCountsTotal } from "../selectors";
 import { JobFilters } from "./Filters/Filters";
@@ -86,8 +87,8 @@ export const mapStateToProps = state => ({
     states: new URLSearchParams(state.router.location.search).getAll("state"),
     jobs: state.jobs.documents,
     noJobs: getJobCountsTotal(state) === 0,
-    canCancel: checkAdminRoleOrPermission(state, "cancel_job"),
-    canArchive: checkAdminRoleOrPermission(state, "remove_job"),
+    canCancel: checkAdminRoleOrPermission(state, Permission.cancel_job),
+    canArchive: checkAdminRoleOrPermission(state, Permission.remove_job),
 });
 
 export const mapDispatchToProps = dispatch => ({

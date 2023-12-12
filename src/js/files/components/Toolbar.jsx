@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { Alert, Icon, UploadBar } from "../../base";
+import { Permission } from "../../groups/types";
 import { createRandomString } from "../../utils/utils";
 import { upload } from "../actions";
 
@@ -36,7 +37,7 @@ export const UploadToolbar = ({ canUpload, onDrop, fileType, message, validation
 };
 
 export const mapStateToProps = state => ({
-    canUpload: checkAdminRoleOrPermission(state, "upload_file"),
+    canUpload: checkAdminRoleOrPermission(state, Permission.upload_file),
 });
 
 export const mapDispatchToProps = dispatch => ({
