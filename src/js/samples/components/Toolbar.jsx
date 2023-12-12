@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { pushState } from "../../app/actions";
 import { Icon, InputSearch, LinkButton, Toolbar } from "../../base";
+import { Permission } from "../../groups/types";
 import { clearSampleSelection, updateSearch } from "../actions";
 import { getTermFromURL } from "../selectors";
 import { SampleSelectionToolbar } from "./SelectionToolbar";
@@ -44,7 +45,7 @@ const SampleToolbar = props => {
 };
 
 const mapStateToProps = state => ({
-    canCreate: checkAdminRoleOrPermission(state, "create_sample"),
+    canCreate: checkAdminRoleOrPermission(state, Permission.create_sample),
     initialTerm: getTermFromURL(state),
     selected: state.samples.selected,
 });

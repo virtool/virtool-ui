@@ -3,6 +3,7 @@ import React from "react";
 import { useFetchAccount } from "../../account/querys";
 import { checkAdminRoleOrPermissionsFromAccount } from "../../administration/utils";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Permission } from "../../groups/types";
 import { useListFiles } from "../querys";
 import { File as fileTyping, FileResponse, FileType } from "../types";
 import { File } from "./File";
@@ -31,7 +32,7 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
         return <LoadingPlaceholder />;
     }
 
-    const canRemoveFiles = checkAdminRoleOrPermissionsFromAccount(account, "remove_file");
+    const canRemoveFiles = checkAdminRoleOrPermissionsFromAccount(account, Permission.remove_file);
 
     const noneFound = files.found_count === 0 && <NoneFoundBox noun="files" />;
 
