@@ -5,13 +5,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as Yup from "yup";
 import { Request } from "../app/request";
-import { Reference } from "./types";
-
-function getReference(refId: string): Reference {
-    return Request.get(`/refs/${refId}`).then(response => {
-        return new Reference(response.body);
-    });
-}
+import { getReference } from "./api";
 
 export function useGetReference(refId) {
     return useQuery(["reference", refId], () => getReference(refId));
