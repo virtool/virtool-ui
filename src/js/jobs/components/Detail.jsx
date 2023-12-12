@@ -14,6 +14,7 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "../../base";
+import { Permission } from "../../groups/types";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { archiveJob, cancelJob, getJob } from "../actions";
 import JobError from "./Error";
@@ -94,8 +95,8 @@ class JobDetail extends React.Component {
 const mapStateToProps = state => ({
     error: get(state, "errors.GET_JOB_ERROR", null),
     detail: state.jobs.detail,
-    canCancel: checkAdminRoleOrPermission(state, "cancel_job"),
-    canArchive: checkAdminRoleOrPermission(state, "remove_job"),
+    canCancel: checkAdminRoleOrPermission(state, Permission.cancel_job),
+    canArchive: checkAdminRoleOrPermission(state, Permission.remove_job),
 });
 
 const mapDispatchToProps = dispatch => ({
