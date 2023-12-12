@@ -73,8 +73,8 @@ export function LocalSourceTypes() {
 
     const { mutation: updateReferenceMutation } = useUpdateReference(refId);
 
-    const sourceTypes = get(data, "sourceTypes", []);
-    const restrictSourceTypes = get(data, "restrictSourceTypes", false);
+    const sourceTypes = get(data, "source_types", []);
+    const restrictSourceTypes = get(data, "restrict_source_types", false);
 
     const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
         "source_types",

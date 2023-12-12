@@ -4,8 +4,8 @@ import { useQueryClient } from "react-query";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "../../base";
+import { getTaskById } from "../../tasks/selectors";
 import { hmmQueryKeys, useListHmms } from "../querys";
-import { getTaskById } from "../selectors";
 import InstallOption from "./InstallOption";
 
 const HMMInstalling = styled(Box)`
