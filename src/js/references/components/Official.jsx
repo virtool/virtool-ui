@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { Box, Button, ExternalLink } from "../../base";
+import { Permission } from "../../groups/types";
 import { remoteReference } from "../actions";
 
 const StyledReferenceOfficial = styled(Box)`
@@ -20,7 +21,7 @@ const StyledReferenceOfficial = styled(Box)`
 `;
 
 export const ReferenceOfficial = ({ officialInstalled, onRemote }) => {
-    const { hasPermission } = useCheckAdminRoleOrPermission("create_ref");
+    const { hasPermission } = useCheckAdminRoleOrPermission(Permission.create_ref);
     const show = !officialInstalled && hasPermission;
 
     if (show) {

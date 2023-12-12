@@ -1,6 +1,7 @@
 import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
+import { Permission } from "../../groups/types";
 import { useUrlSearchParams } from "../../utils/hooks";
 
 /**
@@ -8,7 +9,7 @@ import { useUrlSearchParams } from "../../utils/hooks";
  */
 export default function ReferenceToolbar() {
     const [term, setTerm] = useUrlSearchParams("find", "");
-    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission("create_ref");
+    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
     const createButton = canCreate ? (
         <LinkButton

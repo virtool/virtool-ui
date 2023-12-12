@@ -1,4 +1,5 @@
 import { useFetchAccount } from "../account/querys";
+import { Permission } from "../groups/types";
 import { AdministratorRoles } from "./types";
 import { checkAdminRoleOrPermissionsFromAccount, hasSufficientAdminRole } from "./utils";
 
@@ -21,7 +22,7 @@ export function useCheckAdminRole(requiredRole: AdministratorRoles): PermissionQ
     };
 }
 
-export function useCheckAdminRoleOrPermission(permission: string) {
+export function useCheckAdminRoleOrPermission(permission: Permission) {
     const { data: account, isLoading } = useFetchAccount();
     return {
         hasPermission: account ? checkAdminRoleOrPermissionsFromAccount(account, permission) : null,
