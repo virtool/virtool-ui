@@ -19,10 +19,13 @@ import { fileQueryKeys } from "../files/querys";
 import { groupQueryKeys } from "../groups/querys";
 import { indexQueryKeys } from "../indexes/querys";
 import { modelQueryKeys } from "../ml/queries";
+import { samplesQueryKeys } from "../samples/querys";
 
 /** Get affected resource query keys by workflow name  */
 const workflowQueries = {
     build_index: [indexQueryKeys.lists()],
+    create_sample: [samplesQueryKeys.lists()],
+    pathoscope_bowtie: [samplesQueryKeys.lists()],
 };
 
 /**
@@ -48,6 +51,7 @@ const keyFactories = {
     roles: roleQueryKeys,
     uploads: fileQueryKeys,
     users: userQueryKeys,
+    samples: samplesQueryKeys,
 };
 
 /**
@@ -70,7 +74,7 @@ function reactQueryHandler(queryClient: QueryClient) {
             queryClient.invalidateQueries(keyFactory.all());
         }
 
-        if (iface === "jobs" && operation === "update") {
+        if (iface === "jobs" && (operation === "update" || operation === "insert")) {
             jobUpdater(queryClient, data);
         }
     };

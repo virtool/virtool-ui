@@ -6,7 +6,7 @@ import { FileManager } from "../../files/components/Manager";
 import { Labels } from "../../labels/components/Labels";
 import CreateSample from "./Create/Create";
 import SampleDetail from "./Detail/Detail";
-import SamplesList from "./List";
+import SamplesList from "./SamplesList";
 import SamplesSettings from "./Settings";
 
 export const SampleFileManager = () => (

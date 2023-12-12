@@ -1,6 +1,4 @@
-import { get } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { Alert, Icon } from "../../base";
@@ -9,7 +7,7 @@ interface AnalysisHMMAlertProps {
     installed: boolean;
 }
 
-export function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
+export default function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
     if (installed) {
         return null;
     }
@@ -25,11 +23,3 @@ export function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
         </Alert>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        installed: Boolean(get(state, "hmms.status.installed")),
-    };
-}
-
-export default connect(mapStateToProps)(AnalysisHMMAlert);

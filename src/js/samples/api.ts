@@ -46,3 +46,18 @@ export const update = ({ sampleId, update }) => Request.patch(`/samples/${sample
 export const updateRights = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}/rights`).send(update);
 
 export const remove = ({ sampleId }) => Request.delete(`/samples/${sampleId}`);
+
+/**
+ * Fetch a page of samples
+ *
+ * @param page - The page to fetch
+ * @param per_page - The number of samples to fetch per page
+ * @param term - The search term to filter samples by
+ * @param labels - Filter the samples by labels
+ * @param workflows - Filter the samples by workflows
+ */
+export function listSamples(page: number, per_page: number, term: string, labels: string[], workflows: string[]) {
+    return Request.get("/samples")
+        .query({ page, per_page, find: term, label: labels, workflows })
+        .then(res => res.body);
+}
