@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { connectRouter } from "connected-react-router";
-import { createBrowserHistory } from "history";
+import { createMemoryHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { combineReducers } from "redux";
@@ -35,7 +35,7 @@ describe("<ReferenceList />", () => {
             },
         };
         references = createFakeReferenceMinimal();
-        history = createBrowserHistory();
+        history = createMemoryHistory();
     });
 
     afterEach(() => nock.cleanAll());
@@ -121,7 +121,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, state, history, createReducer);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(screen.getByLabelText("clone"));
+            await userEvent.click(screen.getByRole("link", { name: "clone" }));
 
             await userEvent.click(screen.getByRole("button", { name: "Clone" }));
 
@@ -135,7 +135,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, state, history, createReducer);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(screen.getByLabelText("clone"));
+            await userEvent.click(screen.getByRole("link", { name: "clone" }));
 
             await userEvent.clear(screen.getByRole("textbox"));
             await userEvent.type(screen.getByRole("textbox"), "newName");
@@ -144,20 +144,20 @@ describe("<ReferenceList />", () => {
             getReferencesScope.done();
             cloneReferenceScope.done();
         });
-    });
 
-    it("should display an error when name input is cleared", async () => {
-        const scope = mockApiGetReferences([references]);
-        renderWithRouter(<ReferenceList />, state, history, createReducer);
+        it("should display an error when name input is cleared", async () => {
+            const scope = mockApiGetReferences([references]);
+            renderWithRouter(<ReferenceList />, state, history, createReducer);
 
-        expect(await screen.findByText("References")).toBeInTheDocument();
-        await userEvent.click(screen.getByLabelText("clone"));
+            expect(await screen.findByText("References")).toBeInTheDocument();
+            await userEvent.click(screen.getByRole("link", { name: "clone" }));
 
-        await userEvent.clear(screen.getByRole("textbox"));
-        await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+            await userEvent.clear(screen.getByRole("textbox"));
+            await userEvent.click(screen.getByRole("button", { name: "Clone" }));
 
-        expect(screen.getByText("Required Field")).toBeInTheDocument();
+            expect(screen.getByText("Required Field")).toBeInTheDocument();
 
-        scope.done();
+            scope.done();
+        });
     });
 });
