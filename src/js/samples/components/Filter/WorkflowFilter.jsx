@@ -1,12 +1,9 @@
 import { xor } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { getBorder, getFontSize } from "../../../app/theme";
 import { Box, Icon, SidebarHeader, SideBarSection } from "../../../base";
 import { getWorkflowDisplayName } from "../../../utils/utils";
-import { updateSearch } from "../../actions";
-import { getWorkflowsFromURL } from "../../selectors";
 import { workflowStates } from "../../utils";
 
 const WorkflowFilterLabel = styled.div`
@@ -63,8 +60,10 @@ const StyledWorkflowFilterControl = styled(Box)`
     padding: 0;
 `;
 
-const WorkflowFilterControl = ({ workflow, states, onChange }) => {
-    const handleClick = state => onChange(workflow, state);
+function WorkflowFilterControl({ workflow, states, onChange }) {
+    function handleClick(state) {
+        onChange(workflow, state);
+    }
 
     return (
         <StyledWorkflowFilterControl>
@@ -93,14 +92,28 @@ const WorkflowFilterControl = ({ workflow, states, onChange }) => {
             </WorkflowFilterControlButtons>
         </StyledWorkflowFilterControl>
     );
-};
+}
 
-const WorkflowFilter = ({ workflows, onUpdate }) => {
-    const handleClick = (workflow, state) => {
-        onUpdate({
-            [workflow]: xor(workflows[workflow], [state]),
-        });
-    };
+function getWorkflowsFromURL(workflows) {
+    return workflows.reduce(
+        (acc, item) => {
+            const [workflow, state] = item.split(":");
+
+            acc[workflow] = acc[workflow] || [];
+
+            acc[workflow].push(state);
+            return acc;
+        },
+        { pathoscope: [], nuvs: [], aodp: [] },
+    );
+}
+
+export default function WorkflowFilter({ selected, onClick }) {
+    function handleClick(workflow, state) {
+        onClick(xor(selected, [`${workflow}:${state}`]));
+    }
+
+    const workflows = getWorkflowsFromURL(selected);
 
     const { aodp, nuvs, pathoscope } = workflows;
 
@@ -112,16 +125,4 @@ const WorkflowFilter = ({ workflows, onUpdate }) => {
             <WorkflowFilterControl workflow="aodp" states={aodp} onChange={handleClick} />
         </SideBarSection>
     );
-};
-
-export const mapStateToProps = state => ({
-    workflows: getWorkflowsFromURL(state),
-});
-
-export const mapDispatchToProps = dispatch => ({
-    onUpdate: update => {
-        dispatch(updateSearch({ workflows: update, page: 1 }));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(WorkflowFilter);
+}

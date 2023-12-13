@@ -1,10 +1,9 @@
 import { Field, Form, Formik } from "formik";
 import { find } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
-import { pushState } from "../../app/actions";
 import {
     Attribution,
     Badge,
@@ -18,12 +17,8 @@ import {
     ModalHeader,
     SaveButton,
 } from "../../base";
-import { routerLocationHasState } from "../../utils/utils";
-import { cloneReference } from "../actions";
-
-const getInitialValues = originalRef => ({
-    name: originalRef ? `Clone of ${originalRef.name}` : "",
-});
+import { useCloneReference } from "../querys";
+import { ReferenceMinimal } from "../types";
 
 const ReferenceBox = styled(Box)`
     display: flex;
@@ -33,7 +28,7 @@ const ReferenceBox = styled(Box)`
         margin-left: 5px;
     }
 
-    span: last-child {
+    span:last-child {
         margin-left: auto;
     }
 `;
@@ -42,15 +37,47 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),
 });
 
-export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) => {
-    const reference = find(refDocuments, { id: refId });
-
-    const handleSubmit = ({ name }) => {
-        onSubmit(name, `Cloned from ${reference.name}`, reference.id);
+function getInitialValues(originalRef: ReferenceMinimal) {
+    return {
+        name: originalRef ? `Clone of ${originalRef.name}` : "",
     };
+}
+
+type CloneReferenceProps = {
+    /** A list of minimal references */
+    references: ReferenceMinimal[];
+};
+
+/**
+ * Displays a form used for creating a clone of a reference
+ */
+export default function CloneReference({ references }: CloneReferenceProps) {
+    const history = useHistory();
+    const mutation = useCloneReference();
+
+    const reference = find(references, { id: (history.location.state && history.location.state["id"]) || "" });
+
+    function onHide() {
+        history.push({ state: { cloneReference: false } });
+    }
+
+    function handleSubmit({ name }: { name: string }) {
+        mutation.mutate(
+            { name, description: `Cloned from ${reference.name}`, refId: reference.id },
+            {
+                onSuccess: () => {
+                    onHide();
+                },
+            },
+        );
+    }
 
     return (
-        <Modal label="Clone Reference" onHide={onHide} show={show}>
+        <Modal
+            label="Clone Reference"
+            onHide={onHide}
+            show={(history.location.state && history.location.state["cloneReference"]) || false}
+        >
             <ModalHeader>Clone Reference</ModalHeader>
             <Formik
                 onSubmit={handleSubmit}
@@ -74,28 +101,11 @@ export const CloneReference = ({ refId, refDocuments, show, onHide, onSubmit }) 
                             </InputGroup>
                         </ModalBody>
                         <ModalFooter>
-                            <SaveButton disabled={!refDocuments.length} altText="Clone" />
+                            <SaveButton disabled={!references.length} altText="Clone" />
                         </ModalFooter>
                     </Form>
                 )}
             </Formik>
         </Modal>
     );
-};
-
-export const mapStateToProps = state => ({
-    refId: routerLocationHasState(state, "id") ? state.router.location.state.id : "",
-    refDocuments: state.references.documents,
-    show: routerLocationHasState(state, "cloneReference"),
-});
-
-export const mapDispatchToProps = dispatch => ({
-    onSubmit: (name, description, dataType, organism, refId) => {
-        dispatch(cloneReference(name, description, dataType, organism, refId));
-    },
-    onHide: () => {
-        dispatch(pushState({ cloneReference: false }));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CloneReference);
+}

@@ -1,4 +1,5 @@
 import { Request } from "../app/request";
+import { Reference, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 export function find({ term, page }) {
     return Request.get("/refs").query({ find: term, page });
@@ -29,12 +30,22 @@ export function importReference({ name, description, fileId }) {
     });
 }
 
-export function cloneReference({ name, description, refId }) {
-    return Request.post("/refs").send({
-        name,
-        description,
-        clone_from: refId,
-    });
+/**
+ * Creates a clone of a reference
+ *
+ * @param name - The clone's given name
+ * @param description - The clone's given description
+ * @param refId - The id of the original reference
+ * @returns A promise resolving to a clone of a reference
+ */
+export function cloneReference({ name, description, refId }): Promise<ReferenceMinimal> {
+    return Request.post("/refs")
+        .send({
+            name,
+            description,
+            clone_from: refId,
+        })
+        .then(res => res.body);
 }
 
 export function remoteReference({ remote_from }) {
@@ -75,4 +86,28 @@ export function checkUpdates({ refId }) {
 
 export function updateRemote({ refId }) {
     return Request.post(`/refs/${refId}/updates`).send({});
+}
+
+/**
+ * Fetch a page of references search results
+ *
+ * @param term - The search term to filter references by
+ * @param page - The page to fetch
+ * @param per_page - The number of references to fetch per page
+ * @returns A promise resolving to a page of references search results
+ */
+export function findReferences({ term, page, per_page }): Promise<ReferenceSearchResult> {
+    return Request.get("/refs")
+        .query({ find: term, page, per_page })
+        .then(response => response.body);
+}
+
+/**
+ * Fetches a single refernce
+ *
+ * @param refId - The id of the reference to fetch
+ * @returns A promise resolving to a single reference
+ */
+export function getReference(refId: string): Promise<Reference> {
+    return Request.get(`/refs/${refId}`).then(response => response.body);
 }

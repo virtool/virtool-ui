@@ -29,7 +29,7 @@ export const CreateAnalysis = ({
     compatibleIndexes,
     dataType,
     defaultSubtractions,
-    hasHmm,
+    hmms,
     sampleId,
     show,
     subtractionOptions,
@@ -76,11 +76,11 @@ export const CreateAnalysis = ({
             <ModalHeader>Analyze</ModalHeader>
             <form onSubmit={handleSubmit}>
                 <ModalBody>
-                    <HMMAlert />
+                    <HMMAlert installed={hmms.status.task.complete} />
                     <WorkflowSelector
                         dataType={dataType}
                         hasError={errors.workflows}
-                        hasHmm={hasHmm}
+                        hasHmm={Boolean(hmms.total_count)}
                         selected={workflows}
                         onSelect={setWorkflows}
                     />
@@ -114,7 +114,6 @@ export function mapStateToProps(state) {
         compatibleIndexes: getCompatibleIndexesWithLibraryType(state),
         dataType: getDataTypeFromLibraryType(getSampleLibraryType(state)),
         defaultSubtractions: getDefaultSubtractions(state).map(subtraction => subtraction.id),
-        hasHmm: Boolean(state.hmms.total_count),
         sampleId: getSampleDetailId(state),
         show: routerLocationHasState(state, "createAnalysis"),
         subtractionOptions: getAnalysesSubtractions(state),

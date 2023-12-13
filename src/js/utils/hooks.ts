@@ -1,3 +1,4 @@
+import { forEach } from "lodash-es/lodash";
 import { useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
@@ -90,4 +91,47 @@ export function useUrlSearchParams(key: string, defaultValue?: string): [string,
     firstRender.current = false;
 
     return [value, (value: string) => updateUrlSearchParams(value, key, history)];
+}
+
+/**
+ * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
+ *
+ * @param values - The values to be used in the search parameter
+ * @param key - The search parameter key to be managed
+ * @param history - The history object
+ */
+function updateUrlSearchParamsList(values: string[], key: string, history: HistoryType) {
+    const params = new URLSearchParams(window.location.search);
+
+    params.delete(key);
+    forEach(values, value => params.append(key, value));
+
+    history?.replace({
+        pathname: window.location.pathname,
+        search: params.toString() ? `?${params.toString()}` : null,
+    });
+}
+
+/**
+ * Hook for managing and synchronizing a list of URL search parameters with a component's state
+ *
+ * @param key - The search parameter key to be managed
+ * @param defaultValue - The default values to use when the search parameter key is not present in the URL
+ * @returns Object - An object containing the current values and a function to set the URL search parameter
+ */
+export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [string[], (newValue: string[]) => void] {
+    const history = useHistory();
+    const location = useLocation();
+    const firstRender = useRef(true);
+
+    let value = new URLSearchParams(location.search).getAll(key);
+
+    if (firstRender.current && defaultValue && !value.length) {
+        value = defaultValue;
+        updateUrlSearchParamsList(value, key, history);
+    }
+
+    firstRender.current = false;
+
+    return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history)];
 }

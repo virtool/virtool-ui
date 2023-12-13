@@ -49,7 +49,7 @@ export type SampleNested = SampleID & {
 
 /* Minimal Sample used for websocket messages and resource listings */
 export type SampleMinimal = SampleNested & {
-    created_at: Date;
+    created_at: string;
     host: string;
     isolate: string;
     /* Information about the job associated with the sample */

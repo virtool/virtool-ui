@@ -1,12 +1,12 @@
-import { forEach, map, reject, union } from "lodash-es";
+import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { SidebarHeader, SideBarSection } from "../../../base";
-import { editSample } from "../../actions";
-import { getPartiallySelectedLabels, getSelectedLabels, getSelectedSamples } from "../../selectors";
+import { useUpdateLabel } from "../../querys";
+import { getPartiallySelectedLabels } from "../../selectors";
 import { SampleLabelInner } from "./Labels";
 import { SampleSidebarMultiselectList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
@@ -26,14 +26,25 @@ const StyledSideBarSection = styled(SideBarSection)`
     align-self: start;
 `;
 
-export const ManageLabels = ({
-    allLabels,
-    selectedSamples,
-    selectedLabels,
-    onLabelUpdate,
-    partiallySelectedLabels,
-}) => {
-    const onUpdate = label => onLabelUpdate(selectedSamples, selectedLabels, label);
+function getSelectedLabels(document) {
+    const selectedLabelsCount = document.reduce((result, sample) => {
+        sample.labels.forEach(({ id }) => {
+            result[id] = result[id] || { ...sample.labels.find(label => label.id === id), count: 0 };
+            result[id].count++;
+        });
+        return result;
+    }, {});
+
+    return Object.values(selectedLabelsCount).map(({ count, ...label }) => ({
+        ...label,
+        allLabeled: count === document.length,
+    }));
+}
+
+export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels }) {
+    const selectedLabels = getSelectedLabels(selectedSamples);
+    const onUpdateLabel = useUpdateLabel(selectedLabels, selectedSamples);
+
     return (
         <StyledSideBarSection>
             <SidebarHeader>
@@ -42,42 +53,26 @@ export const ManageLabels = ({
                     render={({ name, color, description }) => (
                         <SampleLabelInner name={name} color={color} description={description} />
                     )}
-                    sampleItems={allLabels}
+                    sampleItems={labels}
                     selectedItems={map(selectedLabels, label => label.id)}
                     partiallySelectedItems={map(partiallySelectedLabels, label => label.id)}
-                    onUpdate={onUpdate}
+                    onUpdate={onUpdateLabel}
                     selectionType="labels"
                     manageLink={"/samples/labels"}
                 />
             </SidebarHeader>
-            <SampleSidebarMultiselectList items={selectedLabels} onUpdate={onUpdate} />
-            {Boolean(allLabels.length) || (
+            <SampleSidebarMultiselectList items={selectedLabels} onUpdate={onUpdateLabel} />
+            {Boolean(labels.length) || (
                 <SampleLabelsFooter>
                     No labels found. <Link to="/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
             )}
         </StyledSideBarSection>
     );
-};
+}
 
 export const mapStateToProps = state => ({
-    allLabels: state.labels.documents,
-    selectedSamples: getSelectedSamples(state),
-    selectedLabels: getSelectedLabels(state),
     partiallySelectedLabels: getPartiallySelectedLabels(state),
 });
 
-export const mapDispatchToProps = dispatch => ({
-    onLabelUpdate: (selectedSamples, selectedLabels, label) => {
-        forEach(selectedSamples, sample => {
-            const sampleLabelIds = map(sample.labels, label => label.id);
-            if (!selectedLabels[label] || !selectedLabels[label].allLabeled) {
-                dispatch(editSample(sample.id, { labels: union(sampleLabelIds, [label]) }));
-            } else {
-                dispatch(editSample(sample.id, { labels: reject(sampleLabelIds, id => label === id) }));
-            }
-        });
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ManageLabels);
+export default connect(mapStateToProps, null)(ManageLabels);

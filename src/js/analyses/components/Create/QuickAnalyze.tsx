@@ -1,11 +1,11 @@
 import { Field, Form, Formik } from "formik";
-import { filter, forEach, map } from "lodash-es";
-import React, { useEffect } from "react";
+import { filter, forEach, uniqBy } from "lodash-es";
+import React, { ReactNode, useEffect } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
-import { getAccountId } from "../../../account/selectors";
-import { pushState } from "../../../app/actions";
 import {
     Badge,
     Button,
@@ -18,17 +18,14 @@ import {
     ModalTabs,
     TabsLink,
 } from "../../../base";
-import { deselectSamples } from "../../../samples/actions";
-import { getSelectedSamples } from "../../../samples/selectors";
+import { HMMSearchResults } from "../../../hmm/types";
+import { IndexMinimal } from "../../../indexes/types";
+import { samplesQueryKeys } from "../../../samples/querys";
+import { SampleMinimal } from "../../../samples/types";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
-import { analyze } from "../../actions";
-import {
-    getCompatibleIndexesWithDataType,
-    getCompatibleSamples,
-    getQuickAnalysisGroups,
-    getQuickAnalysisMode,
-} from "../../selectors";
+import { HistoryType } from "../../../utils/hooks";
+import { analyze } from "../../api";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
@@ -62,26 +59,121 @@ const validationSchema = Yup.object().shape({
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
+type History = HistoryType & {
+    location: {
+        state: {
+            quickAnalysis?: boolean;
+        };
+    };
+};
+
+/**
+ * Gets the quick analysis mode
+ *
+ * @param libraryType - The library type of the sample
+ * @param history - The history object
+ * @returns The quick analysis mode
+ */
+export function getQuickAnalysisMode(libraryType: string, history: History) {
+    if (history.location.state?.quickAnalysis === true) {
+        if (libraryType === "amplicon") {
+            return "barcode";
+        }
+
+        return "genome";
+    }
+}
+
+/**
+ * Gets the compatible samples
+ *
+ * @param mode - The quick analysis mode
+ * @param samples - The selected samples
+ * @returns A list of compatible samples
+ */
+export function getCompatibleSamples(mode: string, samples: SampleMinimal[]) {
+    return filter(samples, (sample: SampleMinimal) => {
+        if (mode === "barcode") {
+            return sample.library_type === "amplicon";
+        }
+
+        return sample.library_type === "normal" || sample.library_type === "srna";
+    });
+}
+
+type HandleSubmitProps = {
+    /** The selected indexes */
+    indexes: string[];
+    /** The selected subtractions */
+    subtractions: string[];
+    /** The selected workflows */
+    workflows: string[];
+};
+
+type QuickAnalyzeProps = {
+    /** The HMM search results */
+    hmms: HMMSearchResults;
+    /** A list of indexes with the minimal data */
+    indexes: IndexMinimal[];
+    /** A callback function to clear selected samples */
+    onClear: () => void;
+    /** A callback function to shortlist subtractions */
+    onShortlistSubtractions: () => void;
+    /** The selected samples */
+    samples: SampleMinimal[];
+    /** The ready subtraction options */
+    subtractionOptions: any;
+};
+
+/**
+ * A form for triggering quick analyses on selected samples
+ */
 export function QuickAnalyze({
-    accountId,
-    compatibleIndexes,
-    compatibleSamples,
-    barcode,
-    genome,
-    hasHmm,
-    mode,
+    hmms,
+    indexes,
+    onClear,
+    onShortlistSubtractions,
     samples,
     subtractionOptions,
-    onAnalyze,
-    onHide,
-    onShortlistSubtractions,
-    onUnselect,
-}) {
+}: QuickAnalyzeProps) {
+    const queryClient = useQueryClient();
+    const history = useHistory();
+    const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
+
     const show = Boolean(mode);
+    const compatibleSamples = getCompatibleSamples(mode, samples);
+
+    const mutation = useMutation(analyze, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(samplesQueryKeys.lists());
+        },
+    });
+
+    const barcode = samples.filter(sample => sample.library_type === "amplicon");
+    const genome = samples.filter(sample => sample.library_type !== "amplicon");
+
+    function onAnalyze(samples: SampleMinimal[], references: string[], subtractionId: string[], workflows: string[]) {
+        forEach(samples, ({ id }) => {
+            forEach(references, (refId: string) => {
+                forEach(workflows, (workflow: string) =>
+                    mutation.mutate({
+                        sampleId: id,
+                        refId: refId,
+                        subtractionIds: subtractionId,
+                        workflow: workflow,
+                    }),
+                );
+            });
+        });
+    }
 
     useEffect(() => {
         onShortlistSubtractions();
     }, [show]);
+
+    function onHide() {
+        history.push({ state: { quickAnalysis: false } });
+    }
 
     // The dialog should close when all selected samples have been analyzed and deselected.
     useEffect(() => {
@@ -90,14 +182,20 @@ export function QuickAnalyze({
         }
     }, [mode]);
 
-    const handleSubmit = ({ indexes, subtractions, workflows }) => {
-        const referenceIds = map(
-            filter(compatibleIndexes, index => indexes.includes(index.id)),
-            "reference.id",
-        );
-        onAnalyze(compatibleSamples, referenceIds, subtractions, accountId, workflows);
-        onUnselect(compatibleSamples.map(sample => sample.id));
-    };
+    function getReferenceId(selectedIndexes: string[]) {
+        const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));
+        const referenceIds = selectedCompatibleIndexes.map(index => index.reference.id);
+
+        return uniqBy(referenceIds, "id");
+    }
+
+    function handleSubmit({ indexes, subtractions, workflows }: HandleSubmitProps) {
+        const referenceIds = getReferenceId(indexes);
+
+        onAnalyze(compatibleSamples, referenceIds, subtractions, workflows);
+        onClear();
+        onHide();
+    }
 
     return (
         <Modal label="Quick Analyze" show={show} size="lg" onHide={onHide}>
@@ -120,16 +218,18 @@ export function QuickAnalyze({
                 {({ errors, setFieldValue, touched, values }) => (
                     <Form>
                         <ModalBody>
-                            {mode === "genome" && <HMMAlert />}
+                            {mode === "genome" && <HMMAlert installed={hmms.status.task.complete} />}
                             <SelectedSamples samples={compatibleSamples} />
                             <Field
                                 as={WorkflowSelector}
                                 dataType={mode ?? "genome"}
-                                hasHmm={hasHmm}
+                                hasHmm={Boolean(hmms.total_count)}
                                 selected={values.workflows}
                                 onSelect={workflows => setFieldValue("workflows", workflows)}
                             />
-                            <QuickAnalyzeError>{touched.workflows && errors.workflows}</QuickAnalyzeError>
+                            <QuickAnalyzeError>
+                                {touched.workflows && (errors.workflows as ReactNode & (string | string[]))}
+                            </QuickAnalyzeError>
                             {mode === "genome" && (
                                 <>
                                     <Field
@@ -139,16 +239,21 @@ export function QuickAnalyze({
                                         onChange={value => setFieldValue("subtractions", value)}
                                     />
 
-                                    <QuickAnalyzeError>{touched.subtractions && errors.subtractions}</QuickAnalyzeError>
+                                    <QuickAnalyzeError>
+                                        {touched.subtractions &&
+                                            (errors.subtractions as ReactNode & (string | string[]))}
+                                    </QuickAnalyzeError>
                                 </>
                             )}
                             <Field
                                 as={IndexSelector}
-                                indexes={compatibleIndexes}
+                                indexes={indexes}
                                 selected={values.indexes}
                                 onChange={value => setFieldValue("indexes", value)}
                             />
-                            <QuickAnalyzeError>{touched.indexes && errors.indexes}</QuickAnalyzeError>{" "}
+                            <QuickAnalyzeError>
+                                {touched.indexes && (errors.indexes as ReactNode & (string | string[]))}
+                            </QuickAnalyzeError>
                         </ModalBody>
                         <QuickAnalyzeFooter>
                             <CreateAnalysisSummary
@@ -169,37 +274,14 @@ export function QuickAnalyze({
 
 export function mapStateToProps(state) {
     return {
-        ...getQuickAnalysisGroups(state),
-        accountId: getAccountId(state),
-        compatibleIndexes: getCompatibleIndexesWithDataType(state),
-        compatibleSamples: getCompatibleSamples(state),
-        hasHmm: Boolean(state.hmms.total_count),
-        mode: getQuickAnalysisMode(state),
-        samples: getSelectedSamples(state),
         subtractionOptions: getReadySubtractionShortlist(state),
     };
 }
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onAnalyze: (samples, references, subtractionId, accountId, workflows) => {
-            forEach(samples, ({ id }) => {
-                forEach(references, refId => {
-                    forEach(workflows, workflow => dispatch(analyze(id, refId, subtractionId, accountId, workflow)));
-                });
-            });
-        },
-
-        onHide: () => {
-            dispatch(pushState({ quickAnalysis: false }));
-        },
-
         onShortlistSubtractions: () => {
             dispatch(shortlistSubtractions());
-        },
-
-        onUnselect: sampleIds => {
-            dispatch(deselectSamples(sampleIds));
         },
     };
 }

@@ -43,7 +43,13 @@ export const ReferenceItemHeader = ({ createdAt, dataType, id, name, organism, o
     <StyledReferenceItemHeader>
         <h2>
             <Link to={`/refs/${id}`}>{name}</Link>
-            <IconLink to={{ state: { cloneReference: true, id } }} name="clone" tip="Clone" color="blue" />
+            <IconLink
+                to={{ state: { cloneReference: true, id } }}
+                name="clone"
+                tip="Clone"
+                color="blue"
+                aria-label="clone"
+            />
         </h2>
         <p>
             <span>

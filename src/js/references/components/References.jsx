@@ -4,7 +4,7 @@ import { useFetchSettings } from "../../administration/querys";
 import { Container, LoadingPlaceholder } from "../../base";
 import { CreateReference } from "./Create";
 import ReferenceDetail from "./Detail/Detail";
-import ReferenceList from "./List";
+import ReferenceList from "./ReferenceList";
 import { ReferenceSettings } from "./ReferenceSettings";
 
 export function References() {
