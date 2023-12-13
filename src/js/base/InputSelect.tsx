@@ -4,7 +4,7 @@ import { Input } from "./Input";
 type InputSelectProps = {
     children: React.ReactNode;
     name?: string;
-    value?: string;
+    value?: string | number;
     onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 

@@ -1,3 +1,4 @@
+import { Permission } from "../groups/types";
 import { getAccountAdministratorRole } from "./selectors";
 import { AdministratorRoles } from "./types";
 
@@ -44,9 +45,9 @@ export enum AdministratorPermissions {
  * @param permission - The permissions to check
  * @returns  Whether the user is allowed to perform the action
  */
-export function checkAdminRoleOrPermission(state, permission: string): boolean {
+export function checkAdminRoleOrPermission(state, permission: Permission): boolean {
     return (
-        hasSufficientAdminRole(AdministratorPermissions[permission], getAccountAdministratorRole(state)) ||
+        hasSufficientAdminRole(AdministratorPermissions[permission as string], getAccountAdministratorRole(state)) ||
         state.account.permissions[permission]
     );
 }
@@ -58,9 +59,9 @@ export function checkAdminRoleOrPermission(state, permission: string): boolean {
  * @param permission - The permissions to check
  * @returns  Whether the user is allowed to perform the action
  */
-export function checkAdminRoleOrPermissionsFromAccount(account, permission: string): boolean {
+export function checkAdminRoleOrPermissionsFromAccount(account, permission: Permission): boolean {
     return (
-        hasSufficientAdminRole(AdministratorPermissions[permission], account.administrator_role) ||
+        hasSufficientAdminRole(AdministratorPermissions[permission as string], account.administrator_role) ||
         account.permissions[permission]
     );
 }

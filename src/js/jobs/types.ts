@@ -18,6 +18,15 @@ export type JobNested = {
     id: string;
 };
 
+export enum workflows {
+    pathoscope_bowtie = "pathoscope_bowtie",
+    nuvs = "nuvs",
+    aodp = "aodp",
+    build_index = "build_index",
+    create_sample = "create_sample",
+    create_subtraction = "create_subtraction",
+}
+
 /* Minimal Job used for websocket messages and resource listings */
 export type JobMinimal = JobNested & {
     archived: boolean;
@@ -27,7 +36,7 @@ export type JobMinimal = JobNested & {
     stage?: string;
     state: JobState;
     user: UserNested;
-    workflow: string;
+    workflow: workflows;
 };
 
 /* Provides information on when a Job was pinged */

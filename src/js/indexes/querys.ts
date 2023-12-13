@@ -1,6 +1,6 @@
-import { useInfiniteQuery } from "react-query";
-import { findIndexes } from "./api";
-import { IndexSearchResult } from "./types";
+import { useInfiniteQuery, useQuery } from "react-query";
+import { findIndexes, listIndexes } from "./api";
+import { IndexMinimal, IndexSearchResult } from "./types";
 
 /**
  * Factory for generating react-query keys for index related queries.
@@ -8,7 +8,7 @@ import { IndexSearchResult } from "./types";
 export const indexQueryKeys = {
     all: () => ["indexes"] as const,
     lists: () => ["indexes", "list"] as const,
-    list: (filters: string[]) => ["indexes", "list", ...filters] as const,
+    list: (filters: Array<string | boolean>) => ["indexes", "list", ...filters] as const,
     infiniteLists: () => ["indexes", "list", "infinite"] as const,
     infiniteList: (filters: Array<string | number | boolean>) => ["indexes", "list", "infinite", ...filters] as const,
     details: () => ["indexes", "details"] as const,
@@ -35,4 +35,13 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
             },
         },
     );
+}
+
+/**
+ * Gets a list of ready indexes
+ *
+ * @returns A list of ready indexes
+ */
+export function useListIndexes(ready: boolean, term?: string) {
+    return useQuery<IndexMinimal[]>(indexQueryKeys.list([ready]), () => listIndexes({ ready, term }));
 }

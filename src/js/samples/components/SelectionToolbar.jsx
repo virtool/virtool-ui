@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../base";
 
@@ -20,13 +21,20 @@ const SampleSelectionToolbarTop = styled.div`
     }
 `;
 
-export const SampleSelectionToolbar = ({ onClear, onQuickAnalyze, selected }) => (
-    <SampleSelectionToolbarTop>
-        <Button icon="times-circle" onClick={onClear}>
-            Clear selection of {selected.length} samples
-        </Button>
-        <Button color="green" icon="chart-area" onClick={() => onQuickAnalyze(selected)}>
-            Quick Analyze
-        </Button>
-    </SampleSelectionToolbarTop>
-);
+export function SampleSelectionToolbar({ onClear, selected }) {
+    const history = useHistory();
+    function onQuickAnalyze() {
+        history.push({ state: { quickAnalysis: true } });
+    }
+
+    return (
+        <SampleSelectionToolbarTop>
+            <Button icon="times-circle" onClick={onClear}>
+                Clear selection of {selected.length} samples
+            </Button>
+            <Button color="green" icon="chart-area" onClick={() => onQuickAnalyze(selected)}>
+                Quick Analyze
+            </Button>
+        </SampleSelectionToolbarTop>
+    );
+}

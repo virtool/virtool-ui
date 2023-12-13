@@ -85,3 +85,16 @@ export function findIndexes({
         .query({ find: term, page })
         .then(res => res.body);
 }
+
+/**
+ * Get a list of indexes
+ *
+ * @param ready - Whether the index is ready
+ * @param term - The search term to filter indexes by
+ * @returns A promise resolving to a list of indexes
+ */
+export function listIndexes({ ready, term }: { ready: boolean; term: string }) {
+    return Request.get("/indexes")
+        .query({ ready: ready, find: term })
+        .then(res => res.body);
+}

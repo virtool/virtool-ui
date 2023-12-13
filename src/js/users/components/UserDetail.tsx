@@ -1,0 +1,104 @@
+import React from "react";
+import { Link, match } from "react-router-dom";
+import styled from "styled-components";
+import { useCheckAdminRole } from "../../administration/hooks";
+import { useFetchUser } from "../../administration/querys";
+import { AdministratorRoles } from "../../administration/types";
+import { getFontSize, getFontWeight } from "../../app/theme";
+import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "../../base";
+import Password from "./Password";
+import PrimaryGroup from "./PrimaryGroup";
+import UserGroups from "./UserGroups";
+import UserPermissions from "./UserPermissions";
+
+const AdminIcon = styled(Icon)`
+    padding-left: 10px;
+`;
+
+const UserDetailGroups = styled.div`
+    margin-bottom: 15px;
+
+    @media (min-width: ${device.tablet}) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: ${props => props.theme.gap.column};
+    }
+`;
+
+const UserDetailHeader = styled.div`
+    display: flex;
+    margin-bottom: 20px;
+`;
+
+const UserDetailTitle = styled.div`
+    align-items: center;
+    display: flex;
+    flex: 1 0 auto;
+    font-size: ${getFontSize("xl")};
+    font-weight: ${getFontWeight("bold")};
+    margin-left: 15px;
+    .InitialIcon {
+        margin-right: 8px;
+    }
+    a {
+        font-size: ${getFontSize("md")};
+        margin-left: auto;
+    }
+`;
+
+type UserDetailProps = {
+    /** Match object containing path information */
+    match: match<string>;
+};
+
+/**
+ * The detailed view of a user
+ */
+export default function UserDetail({ match }: UserDetailProps) {
+    const { data, isLoading } = useFetchUser(match.params["userId"]);
+    const { hasPermission: canEdit } = useCheckAdminRole(
+        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+    );
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
+    if (!canEdit) {
+        return (
+            <Alert color="orange" level>
+                <Icon name="exclamation-circle" />
+                <span>
+                    <strong>You do not have permission to manage this user.</strong>
+                    <span> Contact an administrator.</span>
+                </span>
+            </Alert>
+        );
+    }
+
+    const { handle, administrator_role, id, groups, primary_group, permissions, last_password_change, force_reset } =
+        data;
+
+    return (
+        <div>
+            <UserDetailHeader>
+                <UserDetailTitle>
+                    <InitialIcon size="xl" handle={handle} />
+                    <span>{handle}</span>
+                    {administrator_role ? <AdminIcon aria-label="admin" name="user-shield" color="blue" /> : null}
+                    <Link to="/administration/users">Back To List</Link>
+                </UserDetailTitle>
+            </UserDetailHeader>
+
+            <Password key={id} id={id} lastPasswordChange={last_password_change} forceReset={force_reset} />
+
+            <UserDetailGroups>
+                <div>
+                    <UserGroups userId={id} memberGroups={groups} />
+                    <PrimaryGroup groups={groups} id={id} primaryGroup={primary_group} />
+                </div>
+                <UserPermissions permissions={permissions} />
+            </UserDetailGroups>
+        </div>
+    );
+}

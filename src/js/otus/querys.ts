@@ -3,7 +3,7 @@ import { findOTUs } from "./api";
 import { OTUSearchResult } from "./types";
 
 /**
- * Factory for generating react-query keys for index related queries.
+ * Factory for generating react-query keys for otu related queries.
  */
 export const OTUQueryKeys = {
     all: () => ["OTU"] as const,

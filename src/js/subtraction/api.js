@@ -17,3 +17,11 @@ export const edit = ({ subtractionId, name, nickname }) =>
     Request.patch(`/subtractions/${subtractionId}`).send({ name, nickname });
 
 export const remove = ({ subtractionId }) => Request.delete(`/subtractions/${subtractionId}`);
+
+export function findSubtractions({ page, per_page, term }) {
+    return Request.get("/subtractions")
+        .query({ page, per_page, find: term })
+        .then(response => {
+            return response.body;
+        });
+}

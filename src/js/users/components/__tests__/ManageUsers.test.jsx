@@ -43,8 +43,8 @@ describe("<ManageUsers />", () => {
 
         renderWithRouter(<ManageUsers />, state, history, createReducer);
 
-        expect(await screen.findByLabelText("user-plus")).toBeInTheDocument();
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "user-plus" })).toBeInTheDocument();
         expect(await screen.findByText(/Administrator/)).toBeInTheDocument();
         forEach(users, user => {
             expect(screen.getByText(user.handle)).toBeInTheDocument();
@@ -57,8 +57,8 @@ describe("<ManageUsers />", () => {
 
         renderWithRouter(<ManageUsers />, state, history, createReducer);
 
-        expect(await screen.findByLabelText("user-plus")).toBeInTheDocument();
-        expect(screen.getByLabelText("search")).toBeInTheDocument();
+        expect(await screen.findByLabelText("search")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "user-plus" })).toBeInTheDocument();
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });
@@ -74,7 +74,7 @@ describe("<ManageUsers />", () => {
         expect(await screen.findByText("You do not have permission to manage users.")).toBeInTheDocument();
         expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
         expect(screen.queryByText(users[0].handle)).not.toBeInTheDocument();
-        expect(screen.queryByLabelText("user-plus")).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "user-plus" })).not.toBeInTheDocument();
         expect(screen.queryByLabelText("search")).not.toBeInTheDocument();
         expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });
