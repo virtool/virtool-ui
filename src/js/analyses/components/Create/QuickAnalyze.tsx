@@ -31,6 +31,7 @@ import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
 import { SelectedSamples } from "./SelectedSamples";
 import { SubtractionSelector } from "./SubtractionSelector";
+import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
 
 const QuickAnalyzeFooter = styled(ModalFooter)`
@@ -49,13 +50,13 @@ const QuickAnalyzeError = styled(InputError)`
 `;
 
 const initialValues = {
-    workflows: [],
+    workflow: "",
     subtractions: [],
     indexes: [],
 };
 
 const validationSchema = Yup.object().shape({
-    workflows: Yup.array().min(1, "At least one workflow must be selected"),
+    workflow: Yup.string().required("A workflow must be selected"),
     indexes: Yup.array().min(1, "At least one reference must be selected"),
 });
 
@@ -106,8 +107,8 @@ type HandleSubmitProps = {
     indexes: string[];
     /** The selected subtractions */
     subtractions: string[];
-    /** The selected workflows */
-    workflows: string[];
+    /** The selected workflow */
+    workflow: string;
 };
 
 type QuickAnalyzeProps = {
@@ -152,17 +153,15 @@ export function QuickAnalyze({
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
 
-    function onAnalyze(samples: SampleMinimal[], references: string[], subtractionId: string[], workflows: string[]) {
+    function onAnalyze(samples: SampleMinimal[], references: string[], subtractionId: string[], workflow: string) {
         forEach(samples, ({ id }) => {
             forEach(references, (refId: string) => {
-                forEach(workflows, (workflow: string) =>
-                    mutation.mutate({
-                        sampleId: id,
-                        refId: refId,
-                        subtractionIds: subtractionId,
-                        workflow: workflow,
-                    }),
-                );
+                mutation.mutate({
+                    sampleId: id,
+                    refId: refId,
+                    subtractionIds: subtractionId,
+                    workflow: workflow,
+                });
             });
         });
     }
@@ -189,13 +188,15 @@ export function QuickAnalyze({
         return uniqBy(referenceIds, "id");
     }
 
-    function handleSubmit({ indexes, subtractions, workflows }: HandleSubmitProps) {
+    function handleSubmit({ indexes, subtractions, workflow }: HandleSubmitProps) {
         const referenceIds = getReferenceId(indexes);
 
-        onAnalyze(compatibleSamples, referenceIds, subtractions, workflows);
+        onAnalyze(compatibleSamples, referenceIds, subtractions, workflow);
         onClear();
         onHide();
     }
+
+    const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
 
     return (
         <Modal label="Quick Analyze" show={show} size="lg" onHide={onHide}>
@@ -222,13 +223,12 @@ export function QuickAnalyze({
                             <SelectedSamples samples={compatibleSamples} />
                             <Field
                                 as={WorkflowSelector}
-                                dataType={mode ?? "genome"}
-                                hasHmm={Boolean(hmms.total_count)}
-                                selected={values.workflows}
-                                onSelect={workflows => setFieldValue("workflows", workflows)}
+                                workflows={compatibleWorkflows}
+                                selected={values.workflow}
+                                onSelect={workflow => setFieldValue("workflow", workflow)}
                             />
                             <QuickAnalyzeError>
-                                {touched.workflows && (errors.workflows as ReactNode & (string | string[]))}
+                                {touched.workflow && (errors.workflow as ReactNode & (string | string[]))}
                             </QuickAnalyzeError>
                             {mode === "genome" && (
                                 <>
@@ -259,7 +259,7 @@ export function QuickAnalyze({
                             <CreateAnalysisSummary
                                 indexCount={values.indexes.length}
                                 sampleCount={compatibleSamples.length}
-                                workflowCount={values.workflows.length}
+                                workflowCount={1}
                             />
                             <Button type="submit" color="blue" icon="play">
                                 Start
