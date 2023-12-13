@@ -4,7 +4,7 @@ import { InfiniteData } from "react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, InputError, NoneFoundBox } from "../../base";
+import { InputError, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useValidateFiles } from "../../files/hooks";
 import { File, FileResponse, FileType } from "../../files/types";
@@ -68,15 +68,14 @@ export function SubtractionFileSelector({
         </NoneFoundBox>
     ) : (
         <>
-            <BoxGroup>
-                <ScrollList
-                    fetchNextPage={fetchNextPage}
-                    isFetchingNextPage={isFetchingNextPage}
-                    isLoading={isLoading}
-                    items={items}
-                    renderRow={renderRow}
-                />
-            </BoxGroup>
+            <ScrollList
+                className="border"
+                fetchNextPage={fetchNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                isLoading={isLoading}
+                items={items}
+                renderRow={renderRow}
+            />
             <SubtractionFileSelectorError>{error}</SubtractionFileSelectorError>
         </>
     );
