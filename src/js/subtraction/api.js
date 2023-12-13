@@ -25,3 +25,7 @@ export function findSubtractions({ page, per_page, term }) {
             return response.body;
         });
 }
+
+export function subtractionShortlist() {
+    return Request.get("/subtractions?short=true").then(res => res.body);
+}
