@@ -4,22 +4,22 @@ import { ReferenceDataType } from "../../../references/types";
 export type UseCreateAnalysisReturn = {
     errors: {
         indexes: boolean;
-        workflows: boolean;
+        workflow: boolean;
     };
     indexes: string[];
     subtractions: string[];
-    workflows: string[];
-    setErrors: (errors: { indexes: boolean; workflows: boolean }) => void;
+    workflow: string;
+    setErrors: (errors: { indexes: boolean; workflow: boolean }) => void;
     setIndexes: (indexes: string[]) => void;
     setSubtractions: (subtractions: string[]) => void;
-    setWorkflows: (workflows: string[]) => void;
+    setWorkflow: (workflow: string) => void;
 };
 
 export function useCreateAnalysis(dataType: ReferenceDataType, defaultSubtractions: string[]): UseCreateAnalysisReturn {
-    const [errors, setErrors] = useState({ indexes: false, workflows: false });
+    const [errors, setErrors] = useState({ indexes: false, workflow: false });
     const [indexes, setIndexes] = useState([]);
     const [subtractions, setSubtractions] = useState(defaultSubtractions);
-    const [workflows, setWorkflows] = useState([]);
+    const [workflow, setWorkflow] = useState("");
 
     const setIndexesAndError = indexes => {
         setIndexes(indexes);
@@ -29,28 +29,28 @@ export function useCreateAnalysis(dataType: ReferenceDataType, defaultSubtractio
         });
     };
 
-    const setWorkflowsAndError = workflows => {
-        setWorkflows(workflows);
+    function setWorkflowAndError(workflow: string) {
+        setWorkflow(workflow);
         setErrors({
             ...errors,
-            workflows: false,
+            workflow: false,
         });
-    };
+    }
 
     useEffect(() => {
-        setErrors({ indexes: false, workflows: false });
+        setErrors({ indexes: false, workflow: false });
         setIndexes([]);
-        setWorkflows([]);
+        setWorkflow("");
     }, [dataType]);
 
     return {
         errors,
         indexes,
         subtractions,
-        workflows,
+        workflow,
         setErrors,
         setIndexes: setIndexesAndError,
         setSubtractions,
-        setWorkflows: setWorkflowsAndError,
+        setWorkflow: setWorkflowAndError,
     };
 }

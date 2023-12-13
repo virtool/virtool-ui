@@ -16,6 +16,7 @@ import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { useCreateAnalysis } from "./hooks";
 import { IndexSelector } from "./IndexSelector";
 import { SubtractionSelector } from "./SubtractionSelector";
+import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
 
 const CreateAnalysisFooter = styled(ModalFooter)`
@@ -43,7 +44,7 @@ export const CreateAnalysis = ({
         }
     }, [show]);
 
-    const { errors, indexes, subtractions, workflows, setErrors, setIndexes, setSubtractions, setWorkflows } =
+    const { errors, indexes, subtractions, workflow, setErrors, setIndexes, setSubtractions, setWorkflow } =
         useCreateAnalysis(dataType, defaultSubtractions);
 
     function handleSubmit(e) {
@@ -51,10 +52,10 @@ export const CreateAnalysis = ({
 
         const errors = {
             indexes: !indexes.length,
-            workflows: !workflows.length,
+            workflow: !workflow,
         };
 
-        if (errors.indexes || errors.workflows) {
+        if (errors.indexes || errors.workflow) {
             return setErrors(errors);
         }
 
@@ -66,10 +67,12 @@ export const CreateAnalysis = ({
             ),
             subtractions,
             accountId,
-            workflows,
+            workflow,
         );
         onHide();
     }
+
+    const compatibleWorkflows = getCompatibleWorkflows(dataType, Boolean(hmms.total_count));
 
     return (
         <Modal label="Analyze" show={show} size="lg" onHide={onHide}>
@@ -77,13 +80,7 @@ export const CreateAnalysis = ({
             <form onSubmit={handleSubmit}>
                 <ModalBody>
                     <HMMAlert installed={hmms.status.task.complete} />
-                    <WorkflowSelector
-                        dataType={dataType}
-                        hasError={errors.workflows}
-                        hasHmm={Boolean(hmms.total_count)}
-                        selected={workflows}
-                        onSelect={setWorkflows}
-                    />
+                    <WorkflowSelector workflows={compatibleWorkflows} selected={workflow} onSelect={setWorkflow} />
                     {dataType === "genome" && (
                         <SubtractionSelector
                             subtractions={subtractionOptions}
@@ -94,11 +91,7 @@ export const CreateAnalysis = ({
                     <IndexSelector indexes={compatibleIndexes} selected={indexes} onChange={setIndexes} />
                 </ModalBody>
                 <CreateAnalysisFooter>
-                    <CreateAnalysisSummary
-                        sampleCount={1}
-                        indexCount={indexes.length}
-                        workflowCount={workflows.length}
-                    />
+                    <CreateAnalysisSummary sampleCount={1} indexCount={indexes.length} workflowCount={1} />
                     <Button type="submit" color="blue" icon="play">
                         Start
                     </Button>
@@ -122,9 +115,9 @@ export function mapStateToProps(state) {
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onAnalyze: (sampleId, references, subtractionIds, accountId, workflows) => {
+        onAnalyze: (sampleId, references, subtractionIds, accountId, workflow) => {
             forEach(references, refId => {
-                forEach(workflows, workflow => dispatch(analyze(sampleId, refId, subtractionIds, accountId, workflow)));
+                dispatch(analyze(sampleId, refId, subtractionIds, accountId, workflow));
             });
         },
         onHide: () => {
