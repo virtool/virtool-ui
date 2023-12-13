@@ -55,6 +55,14 @@ export default function SamplesList() {
         return <LoadingPlaceholder />;
     }
 
+    const filteredIndexes = indexes.reduce((acc, current) => {
+        const existingIndex = acc.find(item => item.reference.id === current.reference.id);
+        if (!existingIndex || current.version > existingIndex.version) {
+            acc.splice(existingIndex ? acc.indexOf(existingIndex) : acc.length, 1, current);
+        }
+        return acc;
+    }, []);
+
     const { documents, page, page_count, total_count } = samples;
 
     function renderRow(document: SampleMinimal) {
@@ -83,7 +91,7 @@ export default function SamplesList() {
         <>
             <QuickAnalysis
                 hmms={hmms}
-                indexes={indexes}
+                indexes={filteredIndexes}
                 samples={intersectionWith(documents, selected, (document, id) => document.id === id)}
                 onClear={() => setSelected([])}
             />
