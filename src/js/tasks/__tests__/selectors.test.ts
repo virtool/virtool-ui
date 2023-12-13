@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { getTaskById } from "../selectors";
 
-describe("getTask()", () => {
+describe("getTaskById()", () => {
     let state;
     beforeEach(() => {
         state = {
