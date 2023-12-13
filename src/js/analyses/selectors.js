@@ -132,13 +132,22 @@ export const getCompatibleIndexesWithDataType = createSelector(
 export const getCompatibleIndexesWithLibraryType = createSelector(
     [getSampleLibraryType, getReadyIndexes],
     (libraryType, indexes) =>
-        filter(indexes, index => {
-            if (index.reference.data_type === "barcode") {
-                return libraryType === "amplicon";
-            }
+        filter(
+            indexes.reduce((acc, current) => {
+                const existingIndex = acc.find(item => item.reference.id === current.reference.id);
+                if (!existingIndex || current.version > existingIndex.version) {
+                    acc.splice(existingIndex ? acc.indexOf(existingIndex) : acc.length, 1, current);
+                }
+                return acc;
+            }, []),
+            index => {
+                if (index.reference.data_type === "barcode") {
+                    return libraryType === "amplicon";
+                }
 
-            return libraryType === "normal" || libraryType === "srna";
-        }),
+                return libraryType === "normal" || libraryType === "srna";
+            },
+        ),
 );
 
 export const getCompatibleSamples = createSelector([getQuickAnalysisMode, getSelectedSamples], (mode, samples) => {
