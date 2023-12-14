@@ -41,7 +41,7 @@ type Error = {
 export function useFetchHmm(hmmId: string) {
     return useQuery<HMM, Error>(hmmQueryKeys.detail(hmmId), () => fetchHmm(hmmId), {
         retry: (failureCount, error) => {
-            if (error.response.status === 404) {
+            if (error.response?.status === 404) {
                 return false;
             }
             return failureCount <= 3;
