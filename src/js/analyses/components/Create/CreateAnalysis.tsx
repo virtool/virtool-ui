@@ -50,7 +50,7 @@ export const CreateAnalysis = ({
 
     const { errors, indexes, subtractions, workflow, setErrors, setIndexes, setSubtractions, setWorkflow } =
         useCreateAnalysis(dataType, defaultSubtractions);
-    console.log({ errors });
+
     function handleSubmit(e) {
         e.preventDefault();
 

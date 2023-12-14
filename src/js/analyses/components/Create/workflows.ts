@@ -23,7 +23,7 @@ export const nuvsWorkflow = {
 };
 
 export const mlWorkflow = {
-    id: "ml",
+    id: "iimi",
     name: "Iimi",
     compatability: { genome: true, barcode: false },
     resources: { reference: true, subtraction: true },
