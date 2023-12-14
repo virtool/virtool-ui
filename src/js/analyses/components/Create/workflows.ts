@@ -22,7 +22,7 @@ export const nuvsWorkflow = {
     resources: { reference: true, subtraction: true },
 };
 
-export const mlWorkflow = {
+export const iimiWorkflow = {
     id: "iimi",
     name: "Iimi",
     compatability: { genome: true, barcode: false },
@@ -36,7 +36,7 @@ export const aodpWorkflow = {
     resources: { reference: true, subtraction: true },
 };
 
-export const workflows = [pathoscopeWorkflow, nuvsWorkflow, mlWorkflow, aodpWorkflow] as workflow[];
+export const workflows = [pathoscopeWorkflow, nuvsWorkflow, iimiWorkflow, aodpWorkflow] as workflow[];
 
 export function getCompatibleWorkflows(dataType: ReferenceDataType, hasHmm: boolean): workflow[] {
     const compatibleWorkflows = filter(workflows, (workflow: workflow) => workflow.compatability[dataType]);
