@@ -36,7 +36,7 @@ export const aodpWorkflow = {
     resources: { reference: true, subtraction: true },
 };
 
-export const workflows = [pathoscopeWorkflow, nuvsWorkflow, aodpWorkflow] as workflow[];
+export const workflows = [pathoscopeWorkflow, nuvsWorkflow, mlWorkflow, aodpWorkflow] as workflow[];
 
 export function getCompatibleWorkflows(dataType: ReferenceDataType, hasHmm: boolean): workflow[] {
     const compatibleWorkflows = filter(workflows, (workflow: workflow) => workflow.compatability[dataType]);
