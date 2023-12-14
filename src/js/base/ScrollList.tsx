@@ -1,8 +1,7 @@
 import { map } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
-import styled, { ThemeProvider } from "styled-components";
-import { getBorder, theme } from "../app/theme";
+import styled from "styled-components";
 import { usePrevious } from "./hooks";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
@@ -14,11 +13,6 @@ const StyledScrollList = styled.div`
     margin-bottom: 20px;
     position: relative;
     z-index: 0;
-
-    &.border {
-        border: ${props => getBorder(props)};
-        border-radius: ${props => props.theme.borderRadius.sm};
-    }
 `;
 
 type ScrollListProps = {
@@ -118,12 +112,10 @@ export const LegacyScrollList = ({ page, documents, pageCount, onLoadNextPage, r
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <StyledScrollList>
-                {entries}
-                {loading}
-            </StyledScrollList>
-        </ThemeProvider>
+        <StyledScrollList>
+            {entries}
+            {loading}
+        </StyledScrollList>
     );
 };
 

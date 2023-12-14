@@ -4,6 +4,7 @@ import { InfiniteData } from "react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { getBorder } from "../../app/theme";
 import { InputError, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useValidateFiles } from "../../files/hooks";
@@ -12,6 +13,11 @@ import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
     margin-bottom: 5px;
+`;
+
+const StyledScollList = styled(ScrollList)`
+    border: ${props => getBorder(props)};
+    border-radius: ${props => props.theme.borderRadius.sm};
 `;
 
 type SubtractionFileSelectorProps = {
@@ -68,8 +74,7 @@ export function SubtractionFileSelector({
         </NoneFoundBox>
     ) : (
         <>
-            <ScrollList
-                className="border"
+            <StyledScollList
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
