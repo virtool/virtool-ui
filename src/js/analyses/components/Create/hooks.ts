@@ -13,6 +13,7 @@ export type UseCreateAnalysisReturn = {
     setIndexes: (indexes: string[]) => void;
     setSubtractions: (subtractions: string[]) => void;
     setWorkflow: (workflow: string) => void;
+    reset: () => void;
 };
 
 export function useCreateAnalysis(dataType: ReferenceDataType, defaultSubtractions: string[]): UseCreateAnalysisReturn {
