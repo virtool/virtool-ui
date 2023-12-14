@@ -26,6 +26,12 @@ export function useListHmms(page: number, per_page: number, term?: string) {
     });
 }
 
+type Error = {
+    response: {
+        status: number;
+    };
+};
+
 /**
  * Fetches a single HMM
  *
@@ -33,7 +39,12 @@ export function useListHmms(page: number, per_page: number, term?: string) {
  * @returns A single HMM
  */
 export function useFetchHmm(hmmId: string) {
-    return useQuery<HMM>(hmmQueryKeys.detail(hmmId), () => fetchHmm(hmmId), {
-        retry: 0,
+    return useQuery<HMM, Error>(hmmQueryKeys.detail(hmmId), () => fetchHmm(hmmId), {
+        retry: (failureCount, error) => {
+            if (error.response.status === 404) {
+                return false;
+            }
+            return failureCount <= 3;
+        },
     });
 }
