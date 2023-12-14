@@ -48,7 +48,7 @@ export const CreateAnalysis = ({
         }
     }, [show]);
 
-    const { errors, indexes, subtractions, workflow, setErrors, setIndexes, setSubtractions, setWorkflow } =
+    const { errors, indexes, subtractions, workflow, setErrors, setIndexes, setSubtractions, setWorkflow, reset } =
         useCreateAnalysis(dataType, defaultSubtractions);
 
     function handleSubmit(e) {
@@ -73,6 +73,7 @@ export const CreateAnalysis = ({
             accountId,
             workflow,
         );
+        reset();
         onHide();
     }
 

@@ -37,6 +37,13 @@ export function useCreateAnalysis(dataType: ReferenceDataType, defaultSubtractio
         });
     }
 
+    function reset() {
+        setWorkflow("");
+        setIndexes([]);
+        setSubtractions([]);
+        setErrors({ indexes: false, workflow: false });
+    }
+
     useEffect(() => {
         setErrors({ indexes: false, workflow: false });
         setIndexes([]);
@@ -52,5 +59,6 @@ export function useCreateAnalysis(dataType: ReferenceDataType, defaultSubtractio
         setIndexes: setIndexesAndError,
         setSubtractions,
         setWorkflow: setWorkflowAndError,
+        reset,
     };
 }
