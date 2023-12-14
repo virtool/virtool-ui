@@ -1,4 +1,5 @@
-import { intersectionWith, union, xor } from "lodash-es";
+import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
+import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
 import styled from "styled-components";
 import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
@@ -55,13 +56,7 @@ export default function SamplesList() {
         return <LoadingPlaceholder />;
     }
 
-    const filteredIndexes = indexes.reduce((acc, current) => {
-        const existingIndex = acc.find(item => item.reference.id === current.reference.id);
-        if (!existingIndex || current.version > existingIndex.version) {
-            acc.splice(existingIndex ? acc.indexOf(existingIndex) : acc.length, 1, current);
-        }
-        return acc;
-    }, []);
+    const filteredIndexes = map(groupBy(indexes, "reference.id"), group => maxBy(group, "version"));
 
     const { documents, page, page_count, total_count } = samples;
 
