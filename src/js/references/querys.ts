@@ -22,7 +22,7 @@ export const referenceQueryKeys = {
 export function useInfiniteFindReferences(term: string) {
     return useInfiniteQuery<ReferenceSearchResult>(
         referenceQueryKeys.list([term]),
-        pageParam => findReferences({ page: pageParam, per_page: 25, term }),
+        ({ pageParam }) => findReferences({ page: pageParam, per_page: 25, term }),
         {
             getNextPageParam: lastPage => {
                 if (lastPage.page >= lastPage.page_count) {
