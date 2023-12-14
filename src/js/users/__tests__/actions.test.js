@@ -3,8 +3,6 @@ import { FIND_USERS, WS_INSERT_USER, WS_REMOVE_USER, WS_UPDATE_USER } from "../.
 import { findUsers, wsInsertUser, wsRemoveUser, wsUpdateUser } from "../actions";
 
 describe("Users Action Creators", () => {
-    const userId = "bill";
-
     it("wsInsertUser", () => {
         const payload = {};
         const result = wsInsertUser(payload);
