@@ -3,7 +3,6 @@ import React from "react";
 import styled from "styled-components";
 import { getColor, getFontWeight } from "../../../app/theme";
 import { Box } from "../../../base";
-import { getWorkflowDisplayName } from "../../../utils/utils";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 import { workflow } from "./workflows";
 
@@ -57,7 +56,7 @@ export function WorkflowSelector({ onSelect, selected, workflows }: WorkflowSele
                         active={true}
                         onClick={() => onSelect(workflow.id)}
                     >
-                        {getWorkflowDisplayName(workflow.id)}
+                        {workflow.name}
                     </WorkflowItem>
                 ))}
             </StyledWorkflowSelector>

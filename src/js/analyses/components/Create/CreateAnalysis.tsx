@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getAccountId } from "../../../account/selectors";
 import { pushState } from "../../../app/actions";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../base";
+import { Button, InputError, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../base";
 import { getDefaultSubtractions, getSampleDetailId, getSampleLibraryType } from "../../../samples/selectors";
 import { getDataTypeFromLibraryType } from "../../../samples/utils";
 import { shortlistSubtractions } from "../../../subtraction/actions";
@@ -23,6 +23,10 @@ const CreateAnalysisFooter = styled(ModalFooter)`
     align-items: center;
     display: flex;
     justify-content: space-between;
+`;
+
+const CreateAnalysisInputError = styled(InputError)`
+    margin: -5px 0 5px;
 `;
 
 export const CreateAnalysis = ({
@@ -46,7 +50,7 @@ export const CreateAnalysis = ({
 
     const { errors, indexes, subtractions, workflow, setErrors, setIndexes, setSubtractions, setWorkflow } =
         useCreateAnalysis(dataType, defaultSubtractions);
-
+    console.log({ errors });
     function handleSubmit(e) {
         e.preventDefault();
 
@@ -81,6 +85,9 @@ export const CreateAnalysis = ({
                 <ModalBody>
                     <HMMAlert installed={hmms.status.task.complete} />
                     <WorkflowSelector workflows={compatibleWorkflows} selected={workflow} onSelect={setWorkflow} />
+                    <CreateAnalysisInputError>
+                        {errors.workflow && "A workflow must be selected"}
+                    </CreateAnalysisInputError>
                     {dataType === "genome" && (
                         <SubtractionSelector
                             subtractions={subtractionOptions}
@@ -89,6 +96,9 @@ export const CreateAnalysis = ({
                         />
                     )}
                     <IndexSelector indexes={compatibleIndexes} selected={indexes} onChange={setIndexes} />
+                    <CreateAnalysisInputError>
+                        {errors.indexes && "A reference must be selected"}
+                    </CreateAnalysisInputError>
                 </ModalBody>
                 <CreateAnalysisFooter>
                     <CreateAnalysisSummary sampleCount={1} indexCount={indexes.length} workflowCount={1} />

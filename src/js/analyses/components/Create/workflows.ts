@@ -3,35 +3,35 @@ import { ReferenceDataType } from "../../../references/types";
 
 export type workflow = {
     id: string;
-    display: string;
+    name: string;
     compatability: { genome: boolean; barcode: boolean };
     resources: { reference: boolean; subtraction: boolean };
 };
 
 export const pathoscopeWorkflow = {
     id: "pathoscope_bowtie",
-    display: "Pathoscope",
+    name: "Pathoscope",
     compatability: { genome: true, barcode: false },
     resources: { reference: true, subtraction: true },
 };
 
 export const nuvsWorkflow = {
     id: "nuvs",
-    display: "NuVs",
+    name: "NuVs",
     compatability: { genome: true, barcode: false },
     resources: { reference: true, subtraction: true },
 };
 
 export const mlWorkflow = {
     id: "ml",
-    display: "ML",
+    name: "Iimi",
     compatability: { genome: true, barcode: false },
     resources: { reference: true, subtraction: true },
 };
 
 export const aodpWorkflow = {
     id: "aodp",
-    display: "AODP",
+    name: "AODP",
     compatability: { genome: false, barcode: true },
     resources: { reference: true, subtraction: true },
 };
