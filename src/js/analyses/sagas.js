@@ -8,6 +8,7 @@ import {
     WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
 import { apiCall, pushFindTerm } from "../utils/sagas";
+import { findAnalyses as findAnalysesAction } from "./actions";
 import * as analysesAPI from "./api";
 import { getAnalysisDetailId } from "./selectors";
 
@@ -29,6 +30,7 @@ export function* wsUpdateAnalysis(action) {
 }
 
 export function* findAnalyses(action) {
+    console.log({ action });
     yield apiCall(analysesAPI.find, action.payload, FIND_ANALYSES);
     yield pushFindTerm(action.payload.term);
 }
@@ -38,7 +40,15 @@ export function* getAnalysis(action) {
 }
 
 export function* analyze(action) {
-    yield apiCall(analysesAPI.analyze, action.payload, ANALYZE);
+    const response = yield apiCall(analysesAPI.analyze, action.payload, ANALYZE);
+
+    if (response.ok) {
+        const location = yield select(state => state.router.location);
+        const searchParams = new URLSearchParams(location.search);
+        console.log(searchParams);
+
+        yield findAnalyses(findAnalysesAction(action.payload.sampleId, searchParams.get("find") || null, 1));
+    }
 }
 
 export function* blastNuvs(action) {
