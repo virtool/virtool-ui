@@ -1,4 +1,5 @@
-import { intersectionWith, union, xor } from "lodash-es";
+import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
+import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
 import styled from "styled-components";
 import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
@@ -55,6 +56,8 @@ export default function SamplesList() {
         return <LoadingPlaceholder />;
     }
 
+    const filteredIndexes = map(groupBy(indexes, "reference.id"), group => maxBy(group, "version"));
+
     const { documents, page, page_count, total_count } = samples;
 
     function renderRow(document: SampleMinimal) {
@@ -83,7 +86,7 @@ export default function SamplesList() {
         <>
             <QuickAnalysis
                 hmms={hmms}
-                indexes={indexes}
+                indexes={filteredIndexes}
                 samples={intersectionWith(documents, selected, (document, id) => document.id === id)}
                 onClear={() => setSelected([])}
             />
