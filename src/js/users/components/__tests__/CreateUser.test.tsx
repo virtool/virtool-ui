@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createMemoryHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
@@ -8,10 +9,13 @@ import CreateUser from "../CreateUser";
 
 describe("<CreateUser />", () => {
     let props;
+    let history;
 
     beforeEach(() => {
+        history = createMemoryHistory();
         props = {
             show: true,
+            history,
         };
     });
 
