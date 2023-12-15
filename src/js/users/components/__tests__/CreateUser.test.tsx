@@ -7,6 +7,14 @@ import { renderWithProviders } from "../../../../tests/setupTests";
 import CreateUser from "../CreateUser";
 
 describe("<CreateUser />", () => {
+    let props;
+
+    beforeEach(() => {
+        props = {
+            show: true,
+        };
+    });
+
     it("creates user once form is submitted", async () => {
         const usernameInput = "Username";
         const passwordInput = "Password";
@@ -17,9 +25,7 @@ describe("<CreateUser />", () => {
                 password: passwordInput,
                 forceReset: false,
             });
-        renderWithProviders(<CreateUser />);
-
-        await userEvent.click(screen.getByRole("button"));
+        renderWithProviders(<CreateUser {...props} />);
 
         const usernameField = screen.getByLabelText("Username");
         await userEvent.type(usernameField, usernameInput);
@@ -34,8 +40,7 @@ describe("<CreateUser />", () => {
     });
 
     it("should render correct username error message", async () => {
-        renderWithProviders(<CreateUser />);
-        await userEvent.click(screen.getByRole("button"));
+        renderWithProviders(<CreateUser {...props} />);
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 

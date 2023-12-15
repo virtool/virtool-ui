@@ -1,7 +1,9 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { Alert, Icon, InputSearch, LoadingPlaceholder, Toolbar } from "../../base";
+import { StyledButton } from "../../base/styled/StyledButton";
 import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";
 
@@ -11,6 +13,7 @@ import { UsersList } from "./UsersList";
  * @returns The user management view
  */
 export function ManageUsers() {
+    const history = useHistory<{ createUser: boolean }>();
     const [term, setTerm] = React.useState("");
     const { hasPermission, isLoading } = useCheckAdminRole(AdministratorRoles.USERS);
 
@@ -28,7 +31,14 @@ export function ManageUsers() {
                         value={term}
                         onChange={e => setTerm(e.target.value)}
                     />
-                    <CreateUser />
+                    <StyledButton
+                        color="blue"
+                        aria-label="user-plus"
+                        onClick={() => history.push({ state: { createUser: true } })}
+                    >
+                        <Icon name="user-plus" />
+                    </StyledButton>
+                    <CreateUser show={history.location.state?.createUser} history={history} />
                 </Toolbar>
 
                 <UsersList term={term} />

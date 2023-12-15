@@ -1,8 +1,7 @@
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
 import { useMutation } from "react-query";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
-import { StyledButton } from "../../base/styled/StyledButton";
+import { Modal, ModalHeader } from "../../base";
+import { HistoryType } from "../../utils/hooks";
 import { create } from "../api";
 import { CreateUserForm } from "./CreateUserForm";
 
@@ -15,13 +14,20 @@ type NewUser = {
     forceReset: boolean;
 };
 
+type CreateUserProps = {
+    /** Indicates whether the modal for creating a user is visible */
+    show: boolean;
+    /** The history object */
+    history: HistoryType;
+};
+
 /**
  * A dialog for creating a new user
  */
-export default function CreateUser() {
+export default function CreateUser({ show, history }: CreateUserProps) {
     const mutation = useMutation(create, {
         onSuccess: () => {
-            history.replaceState({ createUser: false }, "");
+            history.push({ state: { createUser: false } });
         },
     });
 
@@ -29,26 +35,18 @@ export default function CreateUser() {
         mutation.mutate({ handle, password, forceReset });
     }
 
-    function onOpenChange() {
+    function onHide() {
         mutation.reset();
-        history.replaceState({ createUser: !history.state?.createUser }, "");
+        history.push({ state: { createUser: false } });
     }
 
     return (
-        <Dialog open={history.state?.createUser} onOpenChange={onOpenChange}>
-            <StyledButton as={DialogTrigger} color="blue" aria-label="user-plus">
-                <Icon name="user-plus" />
-            </StyledButton>
-            <DialogPortal>
-                <DialogOverlay />
-                <DialogContent>
-                    <DialogTitle>Create User</DialogTitle>
-                    <CreateUserForm
-                        onSubmit={handleSubmit}
-                        error={mutation.isError && mutation.error["response"]?.body.message}
-                    />
-                </DialogContent>
-            </DialogPortal>
-        </Dialog>
+        <Modal label="Create User" show={show} onHide={onHide}>
+            <ModalHeader>Create User</ModalHeader>
+            <CreateUserForm
+                onSubmit={handleSubmit}
+                error={mutation.isError && mutation.error["response"]?.body.message}
+            />
+        </Modal>
     );
 }
