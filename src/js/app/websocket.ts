@@ -19,7 +19,37 @@ import { fileQueryKeys } from "../files/querys";
 import { groupQueryKeys } from "../groups/querys";
 import { indexQueryKeys } from "../indexes/querys";
 import { modelQueryKeys } from "../ml/queries";
+import { referenceQueryKeys } from "../references/querys";
 import { samplesQueryKeys } from "../samples/querys";
+
+function infiniteListUpdater(data) {
+    return function (cache) {
+        console.log({ data, cache });
+        forEach(cache.pages, page => {
+            forEach(page.documents, document => {
+                if (document.task.id === data.id) {
+                    document.task = data;
+                }
+            });
+        });
+
+        return cache;
+    };
+}
+
+function referenceUpdater(queryClient, data) {
+    queryClient.setQueriesData(referenceQueryKeys.infiniteList([]), infiniteListUpdater(data));
+}
+
+/** Functions for updating task related resources */
+const taskUpdaters = { clone_reference: referenceUpdater, remote_reference: referenceUpdater };
+
+function taskUpdater(queryClient, data) {
+    console.log("referenceUpdater", data);
+    taskUpdaters[data.type](queryClient, data);
+
+    console.log({ data });
+}
 
 /** Get affected resource query keys by workflow name  */
 const workflowQueries = {
@@ -52,6 +82,7 @@ const keyFactories = {
     uploads: fileQueryKeys,
     users: userQueryKeys,
     samples: samplesQueryKeys,
+    references: referenceQueryKeys,
 };
 
 /**
@@ -76,6 +107,10 @@ function reactQueryHandler(queryClient: QueryClient) {
 
         if (iface === "jobs" && (operation === "update" || operation === "insert")) {
             jobUpdater(queryClient, data);
+        }
+
+        if (iface === "tasks" && operation === "update") {
+            taskUpdater(queryClient, data);
         }
     };
 }

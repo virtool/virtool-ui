@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { GET_TASK, LIST_TASKS, WS_INSERT_TASK, WS_UPDATE_TASK } from "../../app/actionTypes";
-import { getTask, listTasks, wsInsertTask, wsUpdateTask } from "../actions";
+import { LIST_TASKS, WS_INSERT_TASK, WS_UPDATE_TASK } from "../../app/actionTypes";
+import { listTasks, wsInsertTask, wsUpdateTask } from "../actions";
 
 describe("wsInsertTask()", () => {
     it("should return action to insert new task", () => {
@@ -21,13 +21,5 @@ describe("wsUpdateTask()", () => {
 describe("listTask()", () => {
     it("should return action to list all tasks", () => {
         expect(listTasks()).toEqual({ type: LIST_TASKS.REQUESTED });
-    });
-});
-
-describe("getTask()", () => {
-    it("should return action to retrieve specific task", () => {
-        const taskId = "123abc";
-        const result = getTask(taskId);
-        expect(result).toEqual({ type: GET_TASK, payload: { taskId } });
     });
 });

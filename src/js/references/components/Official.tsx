@@ -20,6 +20,11 @@ const StyledReferenceOfficial = styled(Box)`
     }
 `;
 
+type ReferenceOfficialProps = {
+    officialInstalled: boolean;
+    onRemote: () => void;
+};
+
 export const ReferenceOfficial = ({ officialInstalled, onRemote }) => {
     const { hasPermission } = useCheckAdminRoleOrPermission(Permission.create_ref);
     const show = !officialInstalled && hasPermission;
