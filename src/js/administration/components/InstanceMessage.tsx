@@ -16,7 +16,7 @@ const InstanceMessageSubtitle = styled.p`
 `;
 
 /**
- * Allows you to display and update the instance message shown to users
+ * Displays the instance message and provides functionality to update it
  */
 export default function InstanceMessage() {
     const { data, isLoading } = useFetchMessage();
