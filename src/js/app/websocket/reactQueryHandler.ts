@@ -1,4 +1,4 @@
-import { forEach } from "lodash-es";
+import { forEach, get } from "lodash-es";
 
 import { QueryClient } from "react-query";
 import { accountKeys } from "../../account/querys";
@@ -38,11 +38,11 @@ const keyFactories = {
     groups: groupQueryKeys,
     indexes: indexQueryKeys,
     models: modelQueryKeys,
+    references: referenceQueryKeys,
     roles: roleQueryKeys,
     uploads: fileQueryKeys,
     users: userQueryKeys,
     samples: samplesQueryKeys,
-    references: referenceQueryKeys,
 };
 
 /**
@@ -72,7 +72,10 @@ export function reactQueryHandler(queryClient: QueryClient) {
         }
 
         if (iface === "tasks" && operation === "update") {
-            taskUpdaters[data.type](queryClient, data);
+            const updater = get(taskUpdaters, data.type);
+            if (updater) {
+                updater(queryClient, data);
+            }
         }
     };
 }

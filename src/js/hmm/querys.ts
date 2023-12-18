@@ -6,6 +6,7 @@ import { HMMSearchResults } from "./types";
  * Factory object for generating hmm query keys
  */
 export const hmmQueryKeys = {
+    all: () => ["hmm"] as const,
     lists: () => ["hmm", "list"] as const,
     list: (filters: Array<string | number | boolean | string[]>) => ["hmm", "list", ...filters] as const,
 };
