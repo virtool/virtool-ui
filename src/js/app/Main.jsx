@@ -15,7 +15,7 @@ import NavBar from "../nav/components/NavBar";
 import { NavContainer } from "../nav/components/NavContainer";
 import Sidebar from "../nav/components/Sidebar";
 import { listTasks } from "../tasks/actions";
-import WSConnection, { ABANDONED, INITIALIZING } from "./websocket";
+import WSConnection, { ABANDONED, INITIALIZING } from "./websocket/WSConnection";
 
 const Administration = lazy(() => import("../administration/components/Settings"));
 const Account = lazy(() => import("../account/components/Account"));
