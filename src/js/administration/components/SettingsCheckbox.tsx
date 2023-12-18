@@ -30,8 +30,20 @@ const StyledSettingsCheckbox = styled(Box)`
     }
 `;
 
-export function SettingsCheckbox({ children, enabled, onToggle }) {
-    const handleClick = useCallback(() => onToggle(!enabled), [enabled, onToggle]);
+type SettingsCheckboxProps = {
+    /** Content to be rendered within the checkbox */
+    children: React.ReactNode;
+    /** Whether the checkbox is enabled */
+    enabled: boolean;
+    /** A callback function to handle checkbox toggling */
+    onToggle: () => void;
+};
+
+/**
+ * A checkbox allowing users to toggle API access for clients
+ */
+export function SettingsCheckbox({ children, enabled, onToggle }: SettingsCheckboxProps) {
+    const handleClick = useCallback(() => onToggle(), [enabled, onToggle]);
 
     return (
         <StyledSettingsCheckbox>

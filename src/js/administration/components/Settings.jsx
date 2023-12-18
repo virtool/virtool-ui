@@ -12,7 +12,7 @@ import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 import { ManageAdministrators } from "./administrators/Administrators";
 import { AdministratorTabs } from "./AdministratorTabs";
-import { ServerSettings } from "./Server";
+import { ServerSettings } from "./ServerSettings";
 export const Settings = ({ loading }) => {
     const { data: account, isLoading } = useFetchAccount();
     loading = loading || isLoading;
