@@ -16,7 +16,6 @@ export default function WSConnection(store, queryClient) {
     // When a websocket message is received, this method is called with the message as the sole argument. Every message
     // has a property "operation" that tells the dispatcher what to do. Illegal operation names will throw an error.
     this.handle = message => {
-        const { interface: iface, operation, data } = message;
         this.reactQueryHandler(message);
         this.reduxHandler(message);
     };
