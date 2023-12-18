@@ -18,7 +18,6 @@ import { watchOTUs } from "../otus/sagas";
 import { watchReferences } from "../references/sagas";
 import { watchSamples } from "../samples/sagas";
 import { watchSubtraction } from "../subtraction/sagas";
-import { watchTasks } from "../tasks/sagas";
 import { watchUsers } from "../users/sagas";
 import { callWithAuthentication } from "../utils/sagas";
 import { GET_INITIAL_STATE, PUSH_STATE } from "./actionTypes";
@@ -77,7 +76,6 @@ function* rootSaga() {
         watchJobs(),
         watchLabels(),
         watchOTUs(),
-        watchTasks(),
         watchRouter(),
         watchSamples(),
         watchSettings(),

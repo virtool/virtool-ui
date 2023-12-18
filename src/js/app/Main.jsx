@@ -14,7 +14,7 @@ import MessageBanner from "../message/components/MessageBanner";
 import NavBar from "../nav/components/NavBar";
 import { NavContainer } from "../nav/components/NavContainer";
 import Sidebar from "../nav/components/Sidebar";
-import { listTasks } from "../tasks/actions";
+
 import WSConnection, { ABANDONED, INITIALIZING } from "./websocket/WSConnection";
 
 const Administration = lazy(() => import("../administration/components/Settings"));
@@ -102,7 +102,6 @@ export const mapDispatchToProps = dispatch => ({
     onLoad: () => {
         dispatch(getAccount());
         dispatch(getSettings());
-        dispatch(listTasks());
     },
 });
 

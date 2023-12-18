@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { BoxSpaced, device } from "../../../base";
-import { Task } from "../../../tasks/types";
+import { Task } from "../../../types";
 import { ReferenceMinimal } from "../../types";
 import { ReferenceItemBuild } from "./Build";
 import { ReferenceItemHeader } from "./Header";

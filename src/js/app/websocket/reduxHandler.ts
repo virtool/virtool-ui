@@ -8,7 +8,6 @@ import { wsInsertReference, wsRemoveReference, wsUpdateReference } from "../../r
 import { wsInsertSample, wsRemoveSample, wsUpdateSample } from "../../samples/actions";
 import { wsUpdateStatus } from "../../status/actions";
 import { wsInsertSubtraction, wsRemoveSubtraction, wsUpdateSubtraction } from "../../subtraction/actions";
-import { wsInsertTask, wsUpdateTask } from "../../tasks/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../../users/actions";
 
 function actionCreatorWrapper(actionCreator) {
@@ -31,7 +30,6 @@ const inserters = {
     references: actionCreatorWrapper(wsInsertReference),
     samples: actionCreatorWrapper(wsInsertSample),
     subtraction: actionCreatorWrapper(wsInsertSubtraction),
-    tasks: actionCreatorWrapper(wsInsertTask),
     users: actionCreatorWrapper(wsInsertUser),
 };
 
@@ -51,7 +49,6 @@ const updaters = {
     samples: actionCreatorWrapper(wsUpdateSample),
     status: actionCreatorWrapper(wsUpdateStatus),
     subtraction: actionCreatorWrapper(wsUpdateSubtraction),
-    tasks: actionCreatorWrapper(wsUpdateTask),
     users: actionCreatorWrapper(wsUpdateUser),
 };
 

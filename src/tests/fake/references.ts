@@ -3,7 +3,7 @@ import { merge } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
 import { ReferenceClonedFrom, ReferenceDataType, ReferenceMinimal } from "../../js/references/types";
-import { Task } from "../../js/tasks/types";
+import { Task } from "../../js/types";
 import { createFakeUserNested } from "./user";
 
 type CreateFakeReferenceNestedProps = {
