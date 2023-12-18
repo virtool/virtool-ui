@@ -13,6 +13,7 @@ type SampleLabel = Label & {
  * Factory for generating react-query keys for samples related queries.
  */
 export const samplesQueryKeys = {
+    all: () => ["samples"] as const,
     lists: () => ["samples", "list"] as const,
     list: (filters: Array<string | number | boolean | string[]>) => ["samples", "list", ...filters] as const,
 };
