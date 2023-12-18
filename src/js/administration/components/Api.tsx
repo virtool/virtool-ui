@@ -29,7 +29,10 @@ export default function Api() {
         <SettingsCheckbox enabled={data.enable_api} onToggle={onToggle}>
             <h2>JSON API</h2>
             <small>Enable API access for clients other than Virtool. See </small>
-            <ExternalLink href="https://www.virtool.ca/docs/developer/api_account">API documentation</ExternalLink>.
+            <ExternalLink href="https://www.virtool.ca/docs/api/overview/authentication/">
+                API documentation
+            </ExternalLink>
+            .
         </SettingsCheckbox>
     );
 }
