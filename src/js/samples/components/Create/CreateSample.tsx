@@ -161,9 +161,13 @@ export default function CreateSample() {
     const history = useHistory();
     const dispatch = useDispatch();
     const samplesMutation = useMutation(createSample, {
-        onSuccess: () => {
+        onSuccess: data => {
+            console.log(data);
             history.push("/samples");
             dispatch(deletePersistentFormState("create-sample"));
+        },
+        onError: error => {
+            console.log(error);
         },
     });
 
@@ -172,6 +176,7 @@ export default function CreateSample() {
     }
 
     function onCreate(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group) {
+        console.log(labels);
         samplesMutation.mutate({
             name,
             isolate,

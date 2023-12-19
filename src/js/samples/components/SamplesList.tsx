@@ -56,6 +56,7 @@ export default function SamplesList() {
     }
 
     const { documents, page, page_count, total_count } = samples;
+    console.log(documents);
 
     function renderRow(document: SampleMinimal) {
         function handleSelect() {

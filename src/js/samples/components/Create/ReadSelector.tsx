@@ -4,8 +4,8 @@ import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from 
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontWeight, theme } from "../../../app/theme";
-import { Box, BoxGroup, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
-import { ScrollList } from "../../../base/ScrollList";
+import { Box, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
+import { ScrollListElement } from "../../../base/ScrollList";
 import { StyledButton } from "../../../base/styled/StyledButton";
 import { FileResponse } from "../../../files/types";
 import ReadSelectorItem from "./ReadSelectorItem";
@@ -160,15 +160,14 @@ export default function ReadSelector({
                 </Toolbar>
                 {noneFound}
 
-                <BoxGroup>
-                    <ScrollList
-                        fetchNextPage={fetchNextPage}
-                        isFetchingNextPage={isFetchingNextPage}
-                        isLoading={isLoading}
-                        items={files}
-                        renderRow={renderRow}
-                    />
-                </BoxGroup>
+                <ScrollListElement
+                    className={"border max-height"}
+                    fetchNextPage={fetchNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    isLoading={isLoading}
+                    items={files}
+                    renderRow={renderRow}
+                />
 
                 <ReadSelectorError>{error}</ReadSelectorError>
             </ReadSelectorBox>

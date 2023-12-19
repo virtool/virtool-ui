@@ -4,6 +4,7 @@ import { SubtractionSearchResult } from "./types";
 
 export const subtractionQueryKeys = {
     list: (filters: Array<string | number | boolean>) => ["subtraction", "list", ...filters] as const,
+    shortlist: () => ["subtraction", "shortlist"] as const,
 };
 
 export function useFindSubtractions(page: number, per_page: number, term: string) {
@@ -17,5 +18,5 @@ export function useFindSubtractions(page: number, per_page: number, term: string
 }
 
 export function useSubtractionsShortlist() {
-    return useQuery("subtractionsShortlist", subtractionShortlist);
+    return useQuery(subtractionQueryKeys.shortlist(), subtractionShortlist);
 }

@@ -2,10 +2,16 @@ import { map } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import styled from "styled-components";
+import { getBorder } from "../app/theme";
 import { usePrevious } from "./hooks";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
-function getScrollRatio(): number {
+function getScrollRatio(scrollListElement?: HTMLElement): number {
+    if (scrollListElement) {
+        return Math.round(
+            (scrollListElement.scrollTop + scrollListElement.clientHeight) / scrollListElement.scrollHeight,
+        );
+    }
     return Math.round((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight);
 }
 
@@ -13,7 +19,65 @@ const StyledScrollList = styled.div`
     padding-bottom: 20px;
     position: relative;
     z-index: 0;
+    overflow-y: auto;
+
+    &.border {
+        border: ${getBorder};
+        border-radius: ${props => props.theme.borderRadius.sm};
+    }
+
+    &.max-height {
+        max-height: 400px;
+    }
 `;
+
+type ScrollListElementProps = {
+    className?: string;
+    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    isFetchingNextPage: boolean;
+    isLoading: boolean;
+    items: unknown[];
+    renderRow: (item: unknown) => void;
+};
+
+/**
+ * An infinitely scrolling list of items within an element
+ *
+ * @param className - The class name used for the scroll list
+ * @param fetchNextPage - A function which initiates fetching the next page
+ * @param isFetchingNextPage - Whether a new page is being fetched
+ * @param isLoading - Whether the first page is being fetched
+ * @param items - The list of items
+ * @param renderRow - A function which accepts an item and returns a react element
+ * @returns An infinitely scrolling list of items
+ */
+export function ScrollListElement({
+    className,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    items,
+    renderRow,
+}: ScrollListElementProps) {
+    function onScroll() {
+        const scrollListElement = document.getElementById("scroll-list");
+        if (getScrollRatio(scrollListElement) > 0.8 && !isFetchingNextPage) {
+            void fetchNextPage();
+        }
+
+        scrollListElement.addEventListener("scroll", onScroll);
+        scrollListElement.removeEventListener("scroll", onScroll);
+    }
+
+    const entries = map(items, item => renderRow(item));
+
+    return (
+        <StyledScrollList id={"scroll-list"} className={className} onScroll={onScroll}>
+            {entries}
+            {isLoading && <LoadingPlaceholder margin="20px" />}
+        </StyledScrollList>
+    );
+}
 
 type ScrollListProps = {
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;

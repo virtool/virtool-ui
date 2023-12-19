@@ -77,6 +77,14 @@ export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMi
     return assign(defaultSubtractionMinimal, overrides);
 }
 
+export function createFakeSubtractionShortlist() {
+    return {
+        id: faker.random.alphaNumeric(8),
+        name: faker.random.word(),
+        ready: true,
+    };
+}
+
 /**
  * Sets up a mocked API route for fetching a list of subtractions
  *
@@ -93,4 +101,8 @@ export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
         ready_count: Subtractions.length,
         total_count: Subtractions.length,
     });
+}
+
+export function mockApiGetShortlistSubtractions(subtractionsShortlist) {
+    return nock("http://localhost").get("/api/subtractions?short=true").reply(200, subtractionsShortlist);
 }
