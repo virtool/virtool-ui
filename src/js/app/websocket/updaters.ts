@@ -1,4 +1,4 @@
-import { forEach, get, assign } from "lodash-es/lodash";
+import { assign, forEach, get } from "lodash-es/lodash";
 import { InfiniteData, QueryClient } from "react-query";
 import { hmmQueryKeys } from "../../hmm/querys";
 import { HMMSearchResults } from "../../hmm/types";
@@ -19,7 +19,6 @@ interface TaskObject {
 function taskSelector<T extends TaskObject>(cache: T): Task {
     return cache.task;
 }
-
 
 type Document = { items: TaskObject[] } | { documents: TaskObject[] };
 

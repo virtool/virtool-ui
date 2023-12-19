@@ -25,7 +25,7 @@ type ReferenceOfficialProps = {
     onRemote: () => void;
 };
 
-export const ReferenceOfficial = ({ officialInstalled, onRemote }) => {
+export const ReferenceOfficial = ({ officialInstalled, onRemote }: ReferenceOfficialProps) => {
     const { hasPermission } = useCheckAdminRoleOrPermission(Permission.create_ref);
     const show = !officialInstalled && hasPermission;
 

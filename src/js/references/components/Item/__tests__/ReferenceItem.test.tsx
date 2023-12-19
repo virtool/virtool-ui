@@ -18,7 +18,7 @@ describe("<ReferenceItem />", () => {
         history = createBrowserHistory();
     });
 
-    it("should render when [organism='virus'] and [progress=32]", async () => {
+    it("should render when [organism='virus'] and [progress=32]", () => {
         props.reference = createFakeReferenceMinimal({
             task: {
                 complete: false,

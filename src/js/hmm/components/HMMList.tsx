@@ -28,7 +28,7 @@ export default function HMMList() {
     return (
         <div>
             <ViewHeader title="HMMs">
-                <ViewHeaderTitle>HMMs {data.status.task?.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
+                <ViewHeaderTitle>HMMs {status.task?.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
             </ViewHeader>
 
             {total_count ? (
