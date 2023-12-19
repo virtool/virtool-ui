@@ -30,7 +30,7 @@ export default function InstanceMessage() {
         );
     }
 
-    const initialValues = { message: data.message || "" };
+    const initialValues = { message: data?.message || "" };
 
     return (
         <Box>

@@ -16,7 +16,7 @@ export const StyledMessageBanner = styled.div`
 export default function MessageBanner() {
     const { data, isLoading } = useFetchMessage();
 
-    return !isLoading && data.message ? (
+    return !isLoading && data?.message ? (
         <StyledMessageBanner color={data.color}>{data.message}</StyledMessageBanner>
     ) : null;
 }
