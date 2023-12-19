@@ -40,7 +40,7 @@ const StyledHMMInstaller = styled(Box)`
 /**
  * Displays the installation progress information or provides the option to install HMMs
  */
-export default function HMMInstaller() {
+export function HMMInstaller() {
     const { data, isLoading } = useListHmms(1, 25);
     const queryClient = useQueryClient();
 

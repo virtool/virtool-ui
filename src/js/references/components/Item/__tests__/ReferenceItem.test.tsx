@@ -4,7 +4,7 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReferenceMinimal } from "../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../tests/setupTests";
-import ReferenceItem from "../ReferenceItem";
+import { ReferenceItem } from "../ReferenceItem";
 
 describe("<ReferenceItem />", () => {
     let props;
@@ -31,7 +31,6 @@ describe("<ReferenceItem />", () => {
             },
             organism: "virus",
         });
-        props.task = props.reference.task;
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.getByText(/virus/)).toBeInTheDocument();
@@ -51,7 +50,6 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        props.task = props.reference.task;
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.getByText(/unknown/)).toBeInTheDocument();
@@ -70,7 +68,6 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        props.task = props.reference.task;
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.queryByRole("progressbar")).toBeNull();

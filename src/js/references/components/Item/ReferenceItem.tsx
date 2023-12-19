@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { BoxSpaced, device } from "../../../base";
-import { Task } from "../../../types";
 import { ReferenceMinimal } from "../../types";
 import { ReferenceItemBuild } from "./Build";
 import { ReferenceItemHeader } from "./Header";
@@ -28,13 +27,12 @@ const StyledReferenceItem = styled(BoxSpaced)`
 
 type ReferenceItemProps = {
     reference: ReferenceMinimal;
-    task: Task;
 };
 
 /**
  * A condensed reference item for use in a list of references
  */
-export default function ReferenceItem({ reference }: ReferenceItemProps) {
+export function ReferenceItem({ reference }: ReferenceItemProps) {
     const {
         id,
         data_type,
