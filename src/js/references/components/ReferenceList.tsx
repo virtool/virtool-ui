@@ -6,12 +6,12 @@ import { useUrlSearchParams } from "../../utils/hooks";
 import { useInfiniteFindReferences } from "../querys";
 import { ReferenceMinimal, ReferenceSearchResult } from "../types";
 import Clone from "./CloneReference";
-import ReferenceItem from "./Item/ReferenceItem";
+import { ReferenceItem } from "./Item/ReferenceItem";
 import ReferenceOfficial from "./Official";
 import ReferenceToolbar from "./ReferenceToolbar";
 
 function renderRow(reference: ReferenceMinimal) {
-    return <ReferenceItem key={reference.id} reference={reference} taskId={reference.task?.id} />;
+    return <ReferenceItem key={reference.id} reference={reference} />;
 }
 
 /**
