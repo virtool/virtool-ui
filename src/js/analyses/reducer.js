@@ -31,6 +31,7 @@ export const initialState = {
     filterOTUs: true,
     filterSequences: true,
     readyIndexes: null,
+    sampleId: null,
     searchIds: null,
     showPathoscopeReads: false,
     sortKey: "coverage",
@@ -89,7 +90,11 @@ export const analysesReducer = createReducer(initialState, builder => {
             return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload);
         })
         .addCase(FIND_ANALYSES.REQUESTED, (state, action) => {
+            if (state.sampleId && state.sampleId !== action.payload.sampleId) {
+                state.documents = null;
+            }
             state.term = action.payload.term;
+            state.sampleId = action.payload.sampleId;
         })
         .addCase(FIND_ANALYSES.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action.payload, "created_at", true);
