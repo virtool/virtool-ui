@@ -1,25 +1,20 @@
 import React from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { ExternalLink, LoadingPlaceholder } from "../../base";
+import { ExternalLink } from "../../base";
 import { updateSettings } from "../api";
-import { settingsQueryKeys, useFetchSettings } from "../querys";
+import { settingsQueryKeys } from "../querys";
 import { SettingsCheckbox } from "./SettingsCheckbox";
 
 /**
  * Displays the API settings and allows the users to toggle API access for clients
  */
-export default function Api() {
-    const { data, isLoading } = useFetchSettings();
+export default function Api({ data }) {
     const queryClient = useQueryClient();
     const mutation = useMutation(updateSettings, {
         onSuccess: () => {
             queryClient.invalidateQueries(settingsQueryKeys.all());
         },
     });
-
-    if (isLoading) {
-        return <LoadingPlaceholder />;
-    }
 
     function onToggle() {
         mutation.mutate({ enable_api: !data.enable_api });
