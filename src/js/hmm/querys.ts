@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import { ErrorResponse } from "../types/types";
 import { fetchHmm, listHmms } from "./api";
 import { HMM, HMMSearchResults } from "./types";
 
@@ -27,12 +28,6 @@ export function useListHmms(page: number, per_page: number, term?: string) {
     });
 }
 
-type Error = {
-    response: {
-        status: number;
-    };
-};
-
 /**
  * Fetches a single HMM
  *
@@ -40,7 +35,7 @@ type Error = {
  * @returns A single HMM
  */
 export function useFetchHmm(hmmId: string) {
-    return useQuery<HMM, Error>(hmmQueryKeys.detail(hmmId), () => fetchHmm(hmmId), {
+    return useQuery<HMM, ErrorResponse>(hmmQueryKeys.detail(hmmId), () => fetchHmm(hmmId), {
         retry: (failureCount, error) => {
             if (error.response?.status === 404) {
                 return false;
