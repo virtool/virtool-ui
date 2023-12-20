@@ -1,10 +1,9 @@
 import { Field, Form, Formik } from "formik";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { Box, BoxTitle, Input, InputGroup, InputLabel, LoadingPlaceholder, SaveButton } from "../../base";
-import { getInstanceMessage, setInstanceMessage } from "../../message/actions";
+import { useFetchMessage, useSetMessage } from "../../message/querys";
 
 const InstanceMessageTitle = styled(BoxTitle)`
     font-size: ${getFontSize("lg")};
@@ -16,10 +15,14 @@ const InstanceMessageSubtitle = styled.p`
     margin: 0 0 15px;
 `;
 
-function InstanceMessage({ loaded, message, onLoad, onSet }) {
-    useEffect(() => onLoad(), [loaded, message]);
+/**
+ * Displays the instance message and provides functionality to update it
+ */
+export default function InstanceMessage() {
+    const { data, isLoading } = useFetchMessage();
+    const mutation = useSetMessage();
 
-    if (!loaded) {
+    if (isLoading) {
         return (
             <Box>
                 <LoadingPlaceholder />
@@ -27,14 +30,14 @@ function InstanceMessage({ loaded, message, onLoad, onSet }) {
         );
     }
 
-    const initialValues = { message: message || "" };
+    const initialValues = { message: data?.message || "" };
 
     return (
         <Box>
             <InstanceMessageTitle>Instance Message</InstanceMessageTitle>
             <InstanceMessageSubtitle>Display a message to all users above the navigation bar.</InstanceMessageSubtitle>
 
-            <Formik initialValues={initialValues} onSubmit={values => onSet(values.message)}>
+            <Formik initialValues={initialValues} onSubmit={values => mutation.mutate({ message: values.message })}>
                 {() => (
                     <Form>
                         <InputGroup>
@@ -48,20 +51,3 @@ function InstanceMessage({ loaded, message, onLoad, onSet }) {
         </Box>
     );
 }
-
-function mapStateToProps(state) {
-    return {
-        color: state.instanceMessage.color,
-        loaded: state.instanceMessage.loaded,
-        message: state.instanceMessage.message,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onSet: message => dispatch(setInstanceMessage(message)),
-        onLoad: () => dispatch(getInstanceMessage()),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InstanceMessage);

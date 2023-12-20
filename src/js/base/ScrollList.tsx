@@ -10,12 +10,13 @@ function getScrollRatio(): number {
 }
 
 const StyledScrollList = styled.div`
-    padding-bottom: 20px;
+    margin-bottom: 20px;
     position: relative;
     z-index: 0;
 `;
 
 type ScrollListProps = {
+    className?: string;
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
     isFetchingNextPage: boolean;
     isLoading: boolean;
@@ -26,6 +27,7 @@ type ScrollListProps = {
 /**
  * An infinitely scrolling list of items.
  *
+ * @param className - The class name of the scroll list
  * @param fetchNextPage - A function which initiates fetching the next page
  * @param isFetchingNextPage - Whether a new page is being fetched
  * @param isLoading - Whether the first page is being fetched
@@ -34,7 +36,14 @@ type ScrollListProps = {
  * @returns An infinitely scrolling list of items
  */
 
-export const ScrollList = ({ fetchNextPage, isFetchingNextPage, isLoading, items, renderRow }: ScrollListProps) => {
+export const ScrollList = ({
+    className,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    items,
+    renderRow,
+}: ScrollListProps) => {
     useEffect(() => {
         const onScroll = () => {
             if (getScrollRatio() > 0.8 && !isFetchingNextPage) {
@@ -49,7 +58,7 @@ export const ScrollList = ({ fetchNextPage, isFetchingNextPage, isLoading, items
     const entries = map(items, item => renderRow(item));
 
     return (
-        <StyledScrollList>
+        <StyledScrollList className={className}>
             {entries}
             {isLoading && <LoadingPlaceholder margin="20px" />}
         </StyledScrollList>

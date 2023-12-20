@@ -1,4 +1,4 @@
-import { Task } from "../tasks/types";
+import { Task } from "../types";
 import { UserNested } from "../users/types";
 import { SearchResult } from "../utils/types";
 

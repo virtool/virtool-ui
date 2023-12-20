@@ -1,9 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { BoxSpaced, device } from "../../../base";
-import { getTaskById } from "../../../tasks/selectors";
-import { Task } from "../../../tasks/types";
 import { ReferenceMinimal } from "../../types";
 import { ReferenceItemBuild } from "./Build";
 import { ReferenceItemHeader } from "./Header";
@@ -30,13 +27,12 @@ const StyledReferenceItem = styled(BoxSpaced)`
 
 type ReferenceItemProps = {
     reference: ReferenceMinimal;
-    task: Task;
 };
 
 /**
  * A condensed reference item for use in a list of references
  */
-export function ReferenceItem({ reference, task }: ReferenceItemProps) {
+export function ReferenceItem({ reference }: ReferenceItemProps) {
     const {
         id,
         data_type,
@@ -49,6 +45,7 @@ export function ReferenceItem({ reference, task }: ReferenceItemProps) {
         remotes_from,
         latest_build,
         created_at,
+        task,
     } = reference;
     return (
         <StyledReferenceItem>
@@ -69,13 +66,3 @@ export function ReferenceItem({ reference, task }: ReferenceItemProps) {
         </StyledReferenceItem>
     );
 }
-
-export function mapStateToProps(state: any, ownProps: { taskId: any }) {
-    const { taskId } = ownProps;
-
-    return {
-        task: getTaskById(state, taskId),
-    };
-}
-
-export default connect(mapStateToProps)(ReferenceItem);
