@@ -18,7 +18,7 @@ describe("<ReferenceItem />", () => {
         history = createBrowserHistory();
     });
 
-    it("should render when [organism='virus'] and [progress=32]", async () => {
+    it("should render when [organism='virus'] and [progress=32]", () => {
         props.reference = createFakeReferenceMinimal({
             task: {
                 complete: false,
@@ -31,7 +31,6 @@ describe("<ReferenceItem />", () => {
             },
             organism: "virus",
         });
-        props.task = props.reference.task;
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.getByText(/virus/)).toBeInTheDocument();
@@ -51,7 +50,6 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        props.task = props.reference.task;
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.getByText(/unknown/)).toBeInTheDocument();
@@ -70,7 +68,6 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        props.task = props.reference.task;
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.queryByRole("progressbar")).toBeNull();
