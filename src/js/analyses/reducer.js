@@ -31,13 +31,13 @@ export const initialState = {
     filterOTUs: true,
     filterSequences: true,
     readyIndexes: null,
+    sampleId: null,
     searchIds: null,
     showPathoscopeReads: false,
     sortKey: "coverage",
     sortDescending: true,
     sortIds: null,
     term: "",
-    sampleId: null,
 };
 
 export const getInitialSortKey = action => {
