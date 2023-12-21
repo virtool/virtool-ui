@@ -32,7 +32,7 @@ describe("<CreateSample>", () => {
 
     const submitForm = () => userEvent.click(screen.getByRole("button", { name: "Create" }));
 
-    async function inputFormRequirements(sampleName = "Name", files) {
+    async function inputFormRequirements(sampleName, files) {
         await userEvent.type(await screen.findByLabelText("Name"), sampleName);
         await userEvent.click(screen.getByText(files[0].name));
         await userEvent.click(screen.getByText(files[1].name));

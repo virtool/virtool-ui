@@ -18,7 +18,6 @@ const StyledScrollList = styled.div`
     margin-bottom: 20px;
     position: relative;
     z-index: 0;
-    overflow-y: auto;
 `;
 
 type ScrollListElementProps = {

@@ -41,19 +41,6 @@ export const create = action => {
     });
 };
 
-export const createSample = ({ name, isolate, host, locale, libraryType, subtractions, files, labels, group }) =>
-    Request.post("/samples").send({
-        name,
-        isolate,
-        host,
-        locale,
-        subtractions,
-        files,
-        library_type: libraryType,
-        labels,
-        group,
-    });
-
 export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
 
 export const updateRights = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}/rights`).send(update);

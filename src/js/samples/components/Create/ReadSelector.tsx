@@ -136,11 +136,11 @@ export default function ReadSelector({
 
     let pairedness;
 
-    if (selected.length == 1) {
+    if (selected.length === 1) {
         pairedness = <span>Unpaired | </span>;
     }
 
-    if (selected.length == 2) {
+    if (selected.length === 2) {
         pairedness = <span>Paired | </span>;
     }
 
@@ -150,7 +150,7 @@ export default function ReadSelector({
                 <label>Read files</label>
                 <span>
                     {pairedness}
-                    {selected.length} of {total_count || 0} selected
+                    {selected.length} of {total_count} selected
                 </span>
             </ReadSelectorHeader>
 

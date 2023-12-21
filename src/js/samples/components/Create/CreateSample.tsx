@@ -28,7 +28,8 @@ import PersistForm from "../../../forms/components/PersistForm";
 import { useListGroups } from "../../../groups/querys";
 import { useFetchLabels } from "../../../labels/hooks";
 import { useSubtractionsShortlist } from "../../../subtraction/querys";
-import { createSample } from "../../api";
+import { ErrorResponse } from "../../../types/types";
+import { create } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import { Sidebar } from "./Sidebar";
@@ -160,7 +161,7 @@ export default function CreateSample() {
 
     const history = useHistory();
     const dispatch = useDispatch();
-    const samplesMutation = useMutation(createSample, {
+    const samplesMutation = useMutation(create, {
         onSuccess: () => {
             history.push("/samples");
             dispatch(deletePersistentFormState("create-sample"));
@@ -222,7 +223,7 @@ export default function CreateSample() {
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
                 <CreateSampleInputError>
-                    {samplesMutation.isError && samplesMutation.error["response"].body.message}
+                    {samplesMutation.isError && (samplesMutation.error as ErrorResponse).response.body.message}
                 </CreateSampleInputError>
             </ViewHeader>
             <Formik
