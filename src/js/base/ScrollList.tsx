@@ -2,7 +2,6 @@ import { map } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import styled from "styled-components";
-import { getBorder } from "../app/theme";
 import { usePrevious } from "./hooks";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
@@ -20,15 +19,6 @@ const StyledScrollList = styled.div`
     position: relative;
     z-index: 0;
     overflow-y: auto;
-
-    &.border {
-        border: ${getBorder};
-        border-radius: ${props => props.theme.borderRadius.sm};
-    }
-
-    &.max-height {
-        max-height: 400px;
-    }
 `;
 
 type ScrollListElementProps = {

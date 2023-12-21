@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeFile, mockApiListFiles } from "../../../../../tests/fake/files";
 import { mockApiListGroups } from "../../../../../tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../../tests/fake/labels";
-import { createFakeSample, mockApiCreateSample } from "../../../../../tests/fake/sample";
+import { createFakeSample, mockApiCreateSample } from "../../../../../tests/fake/samples";
 import {
     createFakeSubtractionShortlist,
     mockApiGetShortlistSubtractions,
@@ -17,7 +17,6 @@ import CreateSample from "../CreateSample";
 
 describe("<CreateSample>", () => {
     const readFileName = "large";
-    let values;
     const history = createBrowserHistory();
     const labels = [createFakeLabelNested()];
     const subtractionShortlist = createFakeSubtractionShortlist();
@@ -27,15 +26,6 @@ describe("<CreateSample>", () => {
         mockApiGetLabels(labels);
         nock("http://localhost").get("/api/settings").reply(200, []);
         mockApiListGroups([]);
-        values = {
-            name: "Sample 1",
-            selected: ["abc123-Foo.fq.gz", "789xyz-Bar.fq.gz"],
-            host: "Host",
-            isolate: "Isolate",
-            locale: "Timbuktu",
-            subtractionId: "sub_bar",
-            libraryType: "sRNA",
-        };
     });
 
     afterEach(() => nock.cleanAll());
@@ -116,20 +106,18 @@ describe("<CreateSample>", () => {
         const files = [createFakeFile(), createFakeFile()];
         const filesScope = mockApiListFiles(files);
         const subtractionsScope = mockApiGetShortlistSubtractions([]);
-        const createSampleScope = mockApiCreateSample(
-            values.name,
-            "",
-            "",
-            "",
-            [],
-            [],
-            [files[0].id, files[1].id],
-            "normal",
-        );
+        const createSample = createFakeSample({
+            isolate: "",
+            host: "",
+            locale: "",
+            subtractions: [],
+            files: [files[0].id, files[1].id],
+        });
+        const createSampleScope = mockApiCreateSample(createSample);
         renderWithRouter(<CreateSample />, {}, history);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
-        await inputFormRequirements(values.name, files);
+        await inputFormRequirements(createSample.name, files);
 
         await submitForm();
 
@@ -236,20 +224,18 @@ describe("<CreateSample>", () => {
     it("should trigger file swap mutation when swap button is clicked", async () => {
         const files = [createFakeFile(), createFakeFile()];
         const filesScope = mockApiListFiles(files);
-        const subtractionsScope = mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
-        const createSampleScope = mockApiCreateSample(
-            values.name,
-            "",
-            "",
-            "",
-            [],
-            [],
-            [files[1].id, files[0].id],
-            "normal",
-        );
+        const subtractionsScope = mockApiGetShortlistSubtractions([]);
+        const createSample = createFakeSample({
+            isolate: "",
+            host: "",
+            locale: "",
+            subtractions: [],
+            files: [files[1].id, files[0].id],
+        });
+        const createSampleScope = mockApiCreateSample(createSample);
         renderWithRouter(<CreateSample />, {}, history);
 
-        await inputFormRequirements(values.name, files);
+        await inputFormRequirements(createSample.name, files);
         expect(screen.getByText("2 of 2 selected")).toBeInTheDocument();
 
         const swapButton = screen.getByRole("button", { name: "retweet" });
@@ -268,7 +254,7 @@ describe("<CreateSample>", () => {
         const subtractionsScope = mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
         renderWithRouter(<CreateSample />, {}, history);
 
-        await inputFormRequirements(values.name, files);
+        await inputFormRequirements("Test", files);
 
         expect(screen.getByText("LEFT")).toBeInTheDocument();
         expect(screen.getByText("RIGHT")).toBeInTheDocument();

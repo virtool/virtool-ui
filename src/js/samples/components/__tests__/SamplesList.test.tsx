@@ -7,7 +7,7 @@ import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
-import { createFakeSampleMinimal, mockApiGetSamples } from "../../../../tests/fake/sample";
+import { createFakeSampleMinimal, mockApiGetSamples } from "../../../../tests/fake/samples";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";

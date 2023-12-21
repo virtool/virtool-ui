@@ -8,8 +8,15 @@ import { createFakeUserNested } from "./user";
 
 type CreateFakeSampleMinimal = {
     labels?: LabelNested[] | number[];
+    host?: string;
+    isolate?: string;
 };
 
+/**
+ * Create a fake sample minimal object
+ *
+ * @param overrides - optional properties for creating a sample minimal with specific values
+ */
 export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): SampleMinimal {
     const defaultSampleMinimal = {
         id: faker.random.alphaNumeric(8),
@@ -30,12 +37,30 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
     return assign(defaultSampleMinimal, overrides);
 }
 
-type CreateFakeSample = CreateFakeSampleMinimal & {
-    files?: any;
-    subtractions?: any;
+type CreateSampleType = {
+    name: string;
+    isolate: string;
+    host: string;
+    locale: string;
+    library_type: string;
+    files: string[];
+    labels: number[];
+    subtractions: string[];
+    group: string | null;
 };
 
-export function createFakeSample(overrides?: CreateFakeSample) {
+type CreateFakeSample = CreateFakeSampleMinimal & {
+    files?: string[];
+    subtractions?: string[];
+    locale?: string;
+};
+
+/**
+ * Create a fake object with the required data for creating a sample
+ *
+ * @param overrides - optional properties for creating a sample with specific values
+ */
+export function createFakeSample(overrides?: CreateFakeSample): CreateSampleType {
     const { files, ...props } = overrides || {};
     const sampleMinimal = pick(createFakeSampleMinimal(props), ["name", "isolate", "host", "library_type"]);
     const defaultCreateSample = {
@@ -50,6 +75,12 @@ export function createFakeSample(overrides?: CreateFakeSample) {
     return assign(defaultCreateSample, overrides);
 }
 
+/**
+ * Creates a mocked API call for getting a paginated list of samples
+ *
+ * @param samples - The sample documents
+ * @returns The nock scope for the mocked API call
+ */
 export function mockApiGetSamples(samples: SampleMinimal[]) {
     return nock("http://localhost").get("/api/samples").query(true).reply(200, {
         page: 1,
@@ -64,8 +95,9 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
 /**
  * Creates a mocked API call for creating a sample
  *
- * @returns {nock.Scope} nock scope for the mocked API call
+ * @param createSample - The data needed to create a sample
+ * @returns The nock scope for the mocked API call
  */
-export function mockApiCreateSample(createSample) {
+export function mockApiCreateSample(createSample: CreateSampleType) {
     return nock("http://localhost").post("/api/samples", createSample).reply(201, createSample);
 }

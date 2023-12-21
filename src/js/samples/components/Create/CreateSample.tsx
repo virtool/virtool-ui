@@ -161,13 +161,9 @@ export default function CreateSample() {
     const history = useHistory();
     const dispatch = useDispatch();
     const samplesMutation = useMutation(createSample, {
-        onSuccess: data => {
-            console.log(data);
+        onSuccess: () => {
             history.push("/samples");
             dispatch(deletePersistentFormState("create-sample"));
-        },
-        onError: error => {
-            console.log(error);
         },
     });
 
@@ -176,7 +172,6 @@ export default function CreateSample() {
     }
 
     function onCreate(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group) {
-        console.log(labels);
         samplesMutation.mutate({
             name,
             isolate,
@@ -312,7 +307,7 @@ export default function CreateSample() {
                                 fetchNextPage={fetchNextPage}
                                 isLoading={isLoadingReads}
                                 selected={values.readFiles}
-                                onSelect={selection => setFieldValue("readFiles", selection)}
+                                onSelect={(selection: string) => setFieldValue("readFiles", selection)}
                                 error={touched.readFiles ? errors.readFiles : null}
                             />
                         </CreateSampleFields>

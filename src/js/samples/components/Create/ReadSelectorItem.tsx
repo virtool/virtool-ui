@@ -29,14 +29,6 @@ const StyledReadOrientation = styled.div`
     width: 48px;
 `;
 
-export const ReadOrientation = ({ index, selected }) => {
-    if (selected) {
-        return <StyledReadOrientation>{index === 0 ? "LEFT" : "RIGHT"}</StyledReadOrientation>;
-    }
-
-    return null;
-};
-
 const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
     align-items: center;
     display: flex;
@@ -78,7 +70,7 @@ export default function ReadSelectorItem({ id, index, name, selected = false, si
                     <div>{byteSize(size)}</div>
                 </div>
             </ReadTitle>
-            <ReadOrientation index={index} selected={selected} />
+            {selected ? <StyledReadOrientation>{index === 0 ? "LEFT" : "RIGHT"}</StyledReadOrientation> : null}
         </StyledReadSelectorItem>
     );
 }

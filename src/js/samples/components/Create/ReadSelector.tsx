@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontWeight, theme } from "../../../app/theme";
-import { Box, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
+import { getBorder, getFontWeight, theme } from "../../../app/theme";
+import { Box, BoxGroup, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
 import { ScrollListElement } from "../../../base/ScrollList";
 import { StyledButton } from "../../../base/styled/StyledButton";
-import { FileResponse } from "../../../files/types";
+import { useValidateFiles } from "../../../files/hooks";
+import { FileResponse, FileType } from "../../../files/types";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 type ReadSelectorBoxProps = {
@@ -41,6 +42,13 @@ const ReadSelectorHeader = styled.label`
     }
 `;
 
+const StyledScrollListElement = styled(ScrollListElement)`
+    border: ${props => getBorder(props)};
+    border-radius: ${props => props.theme.borderRadius.sm};
+    overflow-y: auto;
+    height: 400px;
+`;
+
 type ReadSelectorProps = {
     /** Samples files on current page */
     data: InfiniteData<FileResponse>;
@@ -51,15 +59,15 @@ type ReadSelectorProps = {
     /** Whether the data is loading */
     isLoading: boolean;
     /** A callback function to handle file selection */
-    onSelect: (selected: number[]) => void;
+    onSelect: (selected: string[]) => void;
     /** Errors occurred on sample creation */
     error: string;
     /** The selected files */
-    selected: number[];
+    selected: string[];
 };
 
 /**
- * A list of read files with filtering
+ * A list of read files with option to filter by file name
  */
 export default function ReadSelector({
     data,
@@ -70,18 +78,14 @@ export default function ReadSelector({
     error,
     selected,
 }: ReadSelectorProps) {
+    useValidateFiles(FileType.reads, selected, onSelect);
+
     const [term, setTerm] = useState("");
     const [selectedFiles, setSelectedFiles] = useState(selected);
 
     const { total_count } = data.pages[0];
 
-    useEffect(() => {
-        if (selected.length) {
-            onSelect([]);
-        }
-    }, [total_count]);
-
-    function handleSelect(selectedId: number) {
+    function handleSelect(selectedId: string) {
         setSelectedFiles(prevArray => {
             if (prevArray.includes(selectedId)) {
                 const newArray = prevArray.filter(id => id !== selectedId);
@@ -123,9 +127,11 @@ export default function ReadSelector({
     }
 
     const noneFound = total_count === 0 && (
-        <NoneFoundSection noun="data">
-            <Link to="/samples/data">Upload some</Link>
-        </NoneFoundSection>
+        <BoxGroup>
+            <NoneFoundSection noun="files">
+                <Link to="/samples/files">Upload some</Link>
+            </NoneFoundSection>
+        </BoxGroup>
     );
 
     let pairedness;
@@ -158,18 +164,19 @@ export default function ReadSelector({
                         <Icon name="retweet" />
                     </ReadSelectorButton>
                 </Toolbar>
-                {noneFound}
+                {noneFound || (
+                    <>
+                        <StyledScrollListElement
+                            fetchNextPage={fetchNextPage}
+                            isFetchingNextPage={isFetchingNextPage}
+                            isLoading={isLoading}
+                            items={files}
+                            renderRow={renderRow}
+                        />
 
-                <ScrollListElement
-                    className={"border max-height"}
-                    fetchNextPage={fetchNextPage}
-                    isFetchingNextPage={isFetchingNextPage}
-                    isLoading={isLoading}
-                    items={files}
-                    renderRow={renderRow}
-                />
-
-                <ReadSelectorError>{error}</ReadSelectorError>
+                        <ReadSelectorError>{error}</ReadSelectorError>
+                    </>
+                )}
             </ReadSelectorBox>
         </div>
     );
