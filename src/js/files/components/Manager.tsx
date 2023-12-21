@@ -13,7 +13,7 @@ const renderRow = (canRemoveFiles: boolean) => (item: fileTyping) =>
 
 type FileManagerProps = {
     tip: string;
-    message: string;
+    message: React.ReactNode;
     fileType: FileType;
     validationRegex?: RegExp;
 };
