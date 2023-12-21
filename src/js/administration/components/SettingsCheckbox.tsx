@@ -33,7 +33,7 @@ const StyledSettingsCheckbox = styled(Box)`
 type SettingsCheckboxProps = {
     /** Content to be rendered within the checkbox */
     children: React.ReactNode;
-    /** Whether the checkbox is enabled */
+    /** Whether the external API access is enabled */
     enabled: boolean;
     /** A callback function to handle checkbox toggling */
     onToggle: () => void;

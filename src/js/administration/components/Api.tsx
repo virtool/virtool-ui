@@ -3,12 +3,18 @@ import { useMutation, useQueryClient } from "react-query";
 import { ExternalLink } from "../../base";
 import { updateSettings } from "../api";
 import { settingsQueryKeys } from "../querys";
+import { Settings } from "../types";
 import { SettingsCheckbox } from "./SettingsCheckbox";
 
+type ApiProps = {
+    /** The settings data */
+    data: Settings;
+};
+
 /**
- * Displays the API settings and allows the users to toggle API access for clients
+ * A component managing JSON API settings, allowing users to toggle external API access
  */
-export default function Api({ data }) {
+export default function Api({ data }: ApiProps) {
     const queryClient = useQueryClient();
     const mutation = useMutation(updateSettings, {
         onSuccess: () => {

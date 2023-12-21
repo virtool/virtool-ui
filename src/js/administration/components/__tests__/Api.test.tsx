@@ -1,4 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeSettings } from "../../../../tests/fake/admin";
@@ -18,17 +20,25 @@ describe("<Api />", () => {
 
     it("should render when [onToggle=true]", async () => {
         const settings = createFakeSettings({ enable_api: true });
+        const scope = nock("http://localhost").patch("/api/settings").reply(200, settings);
         renderWithProviders(<Api data={settings} />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        await userEvent.click(screen.getByRole("checkbox"));
         expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "checked");
+
+        scope.done();
     });
 
     it("should render when [onToggle=false]", async () => {
         const settings = createFakeSettings({ enable_api: false });
+        const scope = nock("http://localhost").patch("/api/settings").reply(200, settings);
         renderWithProviders(<Api data={settings} />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        await userEvent.click(screen.getByRole("checkbox"));
         expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "unchecked");
+
+        scope.done();
     });
 });

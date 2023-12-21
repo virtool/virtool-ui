@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { Box, BoxTitle, Input, InputGroup, InputLabel, SaveButton } from "../../base";
 import { useSetMessage } from "../../message/querys";
+import { Message } from "../../message/types";
 
 const InstanceMessageTitle = styled(BoxTitle)`
     font-size: ${getFontSize("lg")};
@@ -15,10 +16,15 @@ const InstanceMessageSubtitle = styled.p`
     margin: 0 0 15px;
 `;
 
+type InstanceMessageProps = {
+    /** The instance message data */
+    data: Message;
+};
+
 /**
  * Displays the instance message and provides functionality to update it
  */
-export default function InstanceMessage({ data }) {
+export default function InstanceMessage({ data }: InstanceMessageProps) {
     const mutation = useSetMessage();
 
     const initialValues = { message: data?.message || "" };

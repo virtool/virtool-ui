@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getMessage, setMessage } from "./api";
-import { InstanceMessage } from "./types";
+import { Message } from "./types";
 
 /**
  * Factory for generating react-query keys for message related queries.
@@ -15,7 +15,7 @@ export const messageQueryKeys = {
  * @returns The instance message
  */
 export function useFetchMessage() {
-    return useQuery<InstanceMessage>(messageQueryKeys.all(), getMessage);
+    return useQuery<Message>(messageQueryKeys.all(), getMessage);
 }
 
 /**
@@ -25,7 +25,7 @@ export function useFetchMessage() {
  */
 export function useSetMessage() {
     const queryClient = useQueryClient();
-    return useMutation<InstanceMessage, unknown, { message: string }>(({ message }) => setMessage(message), {
+    return useMutation<Message, unknown, { message: string }>(({ message }) => setMessage(message), {
         onSuccess: () => {
             queryClient.invalidateQueries(messageQueryKeys.all());
         },
