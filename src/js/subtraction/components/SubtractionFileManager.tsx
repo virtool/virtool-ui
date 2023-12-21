@@ -31,7 +31,7 @@ const MessageContainer = styled.div`
 `;
 
 /**
- * The styled upload message for uploading subtraction files
+ * Styled upload message for uploading subtraction files
  */
 function UploadMessage() {
     return (
