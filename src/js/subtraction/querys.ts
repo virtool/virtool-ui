@@ -17,6 +17,12 @@ export function useFindSubtractions(page: number, per_page: number, term: string
     );
 }
 
+type SubtractionShortlist = {
+    name: string;
+    id: string;
+    ready: boolean;
+};
+
 export function useSubtractionsShortlist() {
-    return useQuery(subtractionQueryKeys.shortlist(), subtractionShortlist);
+    return useQuery<SubtractionShortlist>(subtractionQueryKeys.shortlist(), subtractionShortlist);
 }
