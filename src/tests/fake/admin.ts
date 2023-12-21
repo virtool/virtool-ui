@@ -82,3 +82,13 @@ export function mockSetAdministratorRoleAPI({ user, new_role }: mockSetAdministr
 export function mockApiGetSettings(settings: Settings) {
     return nock("http://localhost").get("/api/settings").reply(200, settings);
 }
+
+/**
+ * Sets up a mocked API route for updating the settings
+ *
+ * @param settings - The updated documents for settings
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiUpdateSettings(settings: Settings) {
+    return nock("http://localhost").patch("/api/settings").reply(200, settings);
+}
