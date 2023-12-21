@@ -11,6 +11,21 @@ export type HMMMinimal = {
     names: string[];
 };
 
+export type HMMSequenceEntry = {
+    accession: string;
+    gi: string;
+    name: string;
+    organism: string;
+};
+
+export type HMM = HMMMinimal & {
+    entries: Array<HMMSequenceEntry>;
+    genera: { [key: string]: number };
+    length: number;
+    mean_entropy: number;
+    total_entropy: number;
+};
+
 /** HMM search results from the API */
 export type HMMSearchResults = SearchResult & {
     /** Gives information about each HMM */

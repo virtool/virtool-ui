@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { assign, times, toString } from "lodash-es";
 import nock from "nock";
-import { HMMSearchResults } from "../../js/hmm/types";
+import { HMM, HMMSearchResults } from "../../js/hmm/types";
 
 /**
  * Create a fake HMM minimal
@@ -16,6 +16,32 @@ export function createFakeHMMMinimal() {
         },
         id: faker.random.alphaNumeric(9, { casing: "lower" }),
         names: [faker.name.lastName()],
+    };
+}
+
+/**
+ * Create a fake HMM
+ */
+export function createFakeHMM() {
+    function entries() {
+        return {
+            accession: faker.random.word(),
+            gi: faker.random.word(),
+            name: faker.random.word(),
+            organism: faker.random.word(),
+        };
+    }
+
+    return {
+        ...createFakeHMMMinimal(),
+        entries: times(2, () => entries()),
+        genera: {
+            Curtovirus: faker.datatype.number(),
+            Begomovirus: faker.datatype.number(),
+        },
+        length: faker.datatype.number(),
+        mean_entropy: faker.datatype.float({ min: 0, max: 1, precision: 0.01 }),
+        total_entropy: faker.datatype.float({ min: 100, max: 200, precision: 0.01 }),
     };
 }
 
@@ -62,4 +88,18 @@ export function createFakeHMMSearchResults(overrides?: CreateFakeHMMSearchResult
  */
 export function mockApiGetHmms(hmmSearchResults: HMMSearchResults) {
     return nock("http://localhost").get("/api/hmms").query(true).reply(200, hmmSearchResults);
+}
+
+/**
+ * Sets up a mocked API route for fetching a single HMM
+ *
+ * @param hmmDetail - The hmm detail to be returned from the mocked API call
+ * @param statusCode - The HTTP status code to simulate in the response
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetHmmDetail(hmmDetail: HMM, statusCode?: number) {
+    return nock("http://localhost")
+        .get(`/api/hmms/${hmmDetail.id}`)
+        .query(true)
+        .reply(statusCode || 200, hmmDetail);
 }

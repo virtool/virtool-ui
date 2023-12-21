@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { FIND_HMMS, GET_HMM, INSTALL_HMMS } from "../../app/actionTypes";
-import { findHmms, getHmm, installHMMs } from "../actions";
+import { FIND_HMMS } from "../../app/actionTypes";
+import { findHmms } from "../actions";
 
 describe("HMM Action Creators:", () => {
     it("findHmms: returns action for filtering results by search term", () => {
@@ -10,24 +10,6 @@ describe("HMM Action Creators:", () => {
         expect(result).toEqual({
             type: FIND_HMMS.REQUESTED,
             payload: { term, page },
-        });
-    });
-
-    it("getHmm: returns action for getting specific hmm document", () => {
-        const hmmId = "tester";
-        const result = getHmm(hmmId);
-        expect(result).toEqual({
-            type: GET_HMM.REQUESTED,
-            payload: { hmmId },
-        });
-    });
-
-    it("installHMMs: returns action for installing HMMs", () => {
-        const releaseId = "123abc";
-        const result = installHMMs(releaseId);
-        expect(result).toEqual({
-            type: INSTALL_HMMS.REQUESTED,
-            payload: { release_id: releaseId },
         });
     });
 });
