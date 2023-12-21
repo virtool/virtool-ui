@@ -4,7 +4,7 @@
  * @module hmm/api
  */
 import { Request } from "../app/request";
-import { HMMSearchResults } from "./types";
+import { HMM, HMMSearchResults } from "./types";
 
 /**
  * Fetch a page of HMM search results from the API.
@@ -32,8 +32,8 @@ export function install(): Promise<any> {
  * @param hmmId - the unique id for the HMM to fetch
  * @returns resolves to an object containing a single HMM
  */
-export function fetch({ hmmId }: { hmmId: string }): Promise<any> {
-    return Request.get(`/hmms/${hmmId}`);
+export function fetchHmm(hmmId: string): Promise<HMM> {
+    return Request.get(`/hmms/${hmmId}`).then(res => res.body);
 }
 
 /**
