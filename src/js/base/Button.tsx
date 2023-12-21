@@ -5,9 +5,9 @@ import { Tooltip } from "./Tooltip";
 
 type ButtonProps = {
     active?: boolean;
-    children?: ReactNode;
+    children: ReactNode;
     className?: string;
-    color?: string;
+    color: string;
     disabled?: boolean;
     icon?: string;
     tip?: string;
