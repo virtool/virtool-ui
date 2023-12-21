@@ -1,5 +1,23 @@
 import { Request } from "../app/request";
+import { InstanceMessage } from "./types";
 
-export const get = () => Request.get("/instance_message");
+/**
+ * Fetch the instance message
+ *
+ * @returns A promise resolving to an instance message
+ */
+export function getMessage(): Promise<InstanceMessage> {
+    return Request.get("/instance_message").then(res => res.body);
+}
 
-export const set = ({ message }) => Request.put("/instance_message").send({ color: "red", message });
+/**
+ * Updates the instance message
+ *
+ * @param message - The updated message
+ * @returns A promise resolving to an updated instance message
+ */
+export function setMessage(message: string): Promise<InstanceMessage> {
+    return Request.put("/instance_message")
+        .send({ color: "red", message })
+        .then(res => res.body);
+}

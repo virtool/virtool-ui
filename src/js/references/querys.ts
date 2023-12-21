@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import { cloneReference, findReferences } from "./api";
 import { ReferenceMinimal, ReferenceSearchResult } from "./types";
 
@@ -8,9 +8,8 @@ import { ReferenceMinimal, ReferenceSearchResult } from "./types";
 export const referenceQueryKeys = {
     all: () => ["reference"] as const,
     lists: () => ["reference", "list"] as const,
-    list: (filters: (string | number)[]) => ["reference", "list", ...filters] as const,
-    infiniteLists: () => ["users", "list", "infinite"] as const,
-    infiniteList: (filters: Array<string | number | boolean>) => ["users", "list", "infinite", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) => ["reference", "list", "single", ...filters] as const,
+    infiniteList: (filters: Array<string | number | boolean>) => ["reference", "list", "infinite", ...filters] as const,
 };
 
 /**
@@ -21,8 +20,8 @@ export const referenceQueryKeys = {
  */
 export function useInfiniteFindReferences(term: string) {
     return useInfiniteQuery<ReferenceSearchResult>(
-        referenceQueryKeys.list([term]),
-        pageParam => findReferences({ page: pageParam, per_page: 25, term }),
+        referenceQueryKeys.infiniteList([term]),
+        ({ pageParam }) => findReferences({ page: pageParam, per_page: 25, term }),
         {
             getNextPageParam: lastPage => {
                 if (lastPage.page >= lastPage.page_count) {
@@ -41,13 +40,5 @@ export function useInfiniteFindReferences(term: string) {
  * @returns A mutator for cloning a reference
  */
 export function useCloneReference() {
-    const queryClient = useQueryClient();
-    return useMutation<ReferenceMinimal, unknown, { name: string; description: string; refId: string }>(
-        cloneReference,
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(referenceQueryKeys.lists());
-            },
-        },
-    );
+    return useMutation<ReferenceMinimal, unknown, { name: string; description: string; refId: string }>(cloneReference);
 }

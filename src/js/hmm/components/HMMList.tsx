@@ -3,7 +3,7 @@ import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHe
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useListHmms } from "../querys";
 import { HMMMinimal } from "../types";
-import HMMInstaller from "./HMMInstaller";
+import { HMMInstaller } from "./HMMInstaller";
 import HMMItem from "./HMMItem";
 import HMMToolbar from "./HMMToolbar";
 
@@ -28,7 +28,7 @@ export default function HMMList() {
     return (
         <div>
             <ViewHeader title="HMMs">
-                <ViewHeaderTitle>HMMs {data.status.task?.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
+                <ViewHeaderTitle>HMMs {status.task?.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
             </ViewHeader>
 
             {total_count ? (
@@ -48,7 +48,7 @@ export default function HMMList() {
                     )}
                 </>
             ) : (
-                <HMMInstaller taskId={status.task?.id} />
+                <HMMInstaller />
             )}
         </div>
     );
