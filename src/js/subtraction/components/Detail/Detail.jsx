@@ -8,8 +8,8 @@ import { Icon, LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons,
 import { Permission } from "../../../groups/types";
 import { getSubtraction } from "../../actions";
 import { SubtractionAttribution } from "../Attribution";
-import EditSubtraction from "../Edit";
 import RemoveSubtraction from "../Remove";
+import EditSubtraction from "./EditSubtraction";
 import SubtractionFiles from "./Files";
 
 function calculateGc(nucleotides) {
@@ -92,7 +92,7 @@ export class SubtractionDetail extends React.Component {
                     </tbody>
                 </Table>
                 <SubtractionFiles />
-                <EditSubtraction show={this.state.showEdit} onHide={this.handleHide} />
+                <EditSubtraction show={this.state.showEdit} onHide={this.handleHide} subtraction={this.props.detail} />
                 <RemoveSubtraction />
             </>
         );

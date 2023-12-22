@@ -1,13 +1,14 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Input, Modal } from "../../../base";
-import { EditSubtraction, mapDispatchToProps } from "../Edit";
+import { createFakeSubtraction } from "../../../../../tests/fake/subtractions";
+import { Input, Modal } from "../../../../base";
+import { EditSubtraction, mapDispatchToProps } from "../EditSubtraction";
 
 describe("<EditSubtraction />", () => {
     let e;
     let props;
-
+    const subtraction = createFakeSubtraction();
     beforeEach(() => {
         e = {
             preventDefault: vi.fn(),
@@ -17,9 +18,7 @@ describe("<EditSubtraction />", () => {
         };
 
         props = {
-            id: "foo",
-            name: "Prunus persica",
-            nickname: "Peach",
+            subtraction: subtraction,
             show: true,
             onHide: vi.fn(),
             onUpdate: vi.fn(),

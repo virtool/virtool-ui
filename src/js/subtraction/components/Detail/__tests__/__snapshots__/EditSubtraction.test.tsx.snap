@@ -1,0 +1,216 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<EditSubtraction /> > should render after name is changed 1`] = `
+<Modal
+  label="Edit Subtraction"
+  onHide={[MockFunction spy]}
+  show={true}
+  size="sm"
+>
+  <ModalHeader>
+    Edit Subtraction
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <ModalBody>
+      <InputGroup>
+        <InputLabel>
+          Name
+        </InputLabel>
+        <Input
+          name="name"
+          onChange={[Function]}
+          value="function"
+        />
+        <InputError />
+      </InputGroup>
+      <InputGroup>
+        <InputLabel>
+          Nickname
+        </InputLabel>
+        <Input
+          name="nickname"
+          onChange={[Function]}
+          value="into"
+        />
+      </InputGroup>
+    </ModalBody>
+    <ModalFooter>
+      <SaveButton />
+    </ModalFooter>
+  </form>
+</Modal>
+`;
+
+exports[`<EditSubtraction /> > should render after name is changed 2`] = `
+<Modal
+  label="Edit Subtraction"
+  onHide={[MockFunction spy]}
+  show={true}
+  size="sm"
+>
+  <ModalHeader>
+    Edit Subtraction
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <ModalBody>
+      <InputGroup>
+        <InputLabel>
+          Name
+        </InputLabel>
+        <Input
+          name="name"
+          onChange={[Function]}
+          value="Foo"
+        />
+        <InputError />
+      </InputGroup>
+      <InputGroup>
+        <InputLabel>
+          Nickname
+        </InputLabel>
+        <Input
+          name="nickname"
+          onChange={[Function]}
+          value="into"
+        />
+      </InputGroup>
+    </ModalBody>
+    <ModalFooter>
+      <SaveButton />
+    </ModalFooter>
+  </form>
+</Modal>
+`;
+
+exports[`<EditSubtraction /> > should render after nickname is changed 1`] = `
+<Modal
+  label="Edit Subtraction"
+  onHide={[MockFunction spy]}
+  show={true}
+  size="sm"
+>
+  <ModalHeader>
+    Edit Subtraction
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <ModalBody>
+      <InputGroup>
+        <InputLabel>
+          Name
+        </InputLabel>
+        <Input
+          name="name"
+          onChange={[Function]}
+          value="function"
+        />
+        <InputError />
+      </InputGroup>
+      <InputGroup>
+        <InputLabel>
+          Nickname
+        </InputLabel>
+        <Input
+          name="nickname"
+          onChange={[Function]}
+          value="into"
+        />
+      </InputGroup>
+    </ModalBody>
+    <ModalFooter>
+      <SaveButton />
+    </ModalFooter>
+  </form>
+</Modal>
+`;
+
+exports[`<EditSubtraction /> > should render after nickname is changed 2`] = `
+<Modal
+  label="Edit Subtraction"
+  onHide={[MockFunction spy]}
+  show={true}
+  size="sm"
+>
+  <ModalHeader>
+    Edit Subtraction
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <ModalBody>
+      <InputGroup>
+        <InputLabel>
+          Name
+        </InputLabel>
+        <Input
+          name="name"
+          onChange={[Function]}
+          value="function"
+        />
+        <InputError />
+      </InputGroup>
+      <InputGroup>
+        <InputLabel>
+          Nickname
+        </InputLabel>
+        <Input
+          name="nickname"
+          onChange={[Function]}
+          value="Foo"
+        />
+      </InputGroup>
+    </ModalBody>
+    <ModalFooter>
+      <SaveButton />
+    </ModalFooter>
+  </form>
+</Modal>
+`;
+
+exports[`<EditSubtraction /> > should render when [show=false] 1`] = `
+<Modal
+  label="Edit Subtraction"
+  onHide={[MockFunction spy]}
+  show={false}
+  size="sm"
+>
+  <ModalHeader>
+    Edit Subtraction
+  </ModalHeader>
+  <form
+    onSubmit={[Function]}
+  >
+    <ModalBody>
+      <InputGroup>
+        <InputLabel>
+          Name
+        </InputLabel>
+        <Input
+          name="name"
+          onChange={[Function]}
+          value="function"
+        />
+        <InputError />
+      </InputGroup>
+      <InputGroup>
+        <InputLabel>
+          Nickname
+        </InputLabel>
+        <Input
+          name="nickname"
+          onChange={[Function]}
+          value="into"
+        />
+      </InputGroup>
+    </ModalBody>
+    <ModalFooter>
+      <SaveButton />
+    </ModalFooter>
+  </form>
+</Modal>
+`;
