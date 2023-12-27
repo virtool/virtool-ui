@@ -12,7 +12,7 @@ describe("<EditSubtraction />", () => {
 
     beforeEach(() => {
         props = {
-            subtraction: subtraction,
+            subtraction,
             show: true,
             onHide: vi.fn(),
             onUpdate: vi.fn(),
