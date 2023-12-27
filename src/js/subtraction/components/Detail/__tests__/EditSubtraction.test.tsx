@@ -1,22 +1,16 @@
-import { shallow } from "enzyme";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeSubtraction } from "../../../../../tests/fake/subtractions";
-import { Input, Modal } from "../../../../base";
+import { renderWithProviders } from "../../../../../tests/setupTests";
 import { EditSubtraction, mapDispatchToProps } from "../EditSubtraction";
 
 describe("<EditSubtraction />", () => {
-    let e;
-    let props;
     const subtraction = createFakeSubtraction();
-    beforeEach(() => {
-        e = {
-            preventDefault: vi.fn(),
-            target: {
-                value: "Foo",
-            },
-        };
+    let props;
 
+    beforeEach(() => {
         props = {
             subtraction: subtraction,
             show: true,
@@ -27,37 +21,57 @@ describe("<EditSubtraction />", () => {
 
     it("should render when [show=false]", () => {
         props.show = false;
-        const wrapper = shallow(<EditSubtraction {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<EditSubtraction {...props} />);
+
+        expect(screen.queryByRole("textbox", { name: "name" })).toBeNull();
+        expect(screen.queryByRole("textbox", { name: "nickname" })).toBeNull();
+        expect(screen.queryByRole("button", { name: "close" })).toBeNull();
+        expect(screen.queryByText("Save")).toBeNull();
     });
 
-    it("should render after name is changed", () => {
-        const wrapper = shallow(<EditSubtraction {...props} />);
-        expect(wrapper).toMatchSnapshot();
-        e.target.name = "name";
-        wrapper.find(Input).at(0).simulate("change", e);
-        expect(wrapper).toMatchSnapshot();
+    it("should render after name is changed", async () => {
+        renderWithProviders(<EditSubtraction {...props} />);
+
+        const nameInput = screen.getByRole("textbox", { name: "name" });
+        expect(nameInput).toBeInTheDocument();
+        expect(nameInput).toHaveValue(subtraction.name);
+
+        await userEvent.clear(nameInput);
+        expect(nameInput).toHaveValue("");
+
+        await userEvent.type(nameInput, "test");
+        expect(nameInput).toHaveValue("test");
     });
 
-    it("should render after nickname is changed", () => {
-        const wrapper = shallow(<EditSubtraction {...props} />);
-        expect(wrapper).toMatchSnapshot();
-        e.target.name = "nickname";
-        wrapper.find(Input).at(1).simulate("change", e);
-        expect(wrapper).toMatchSnapshot();
+    it("should render after nickname is changed", async () => {
+        renderWithProviders(<EditSubtraction {...props} />);
+
+        const nicknameInput = screen.getByRole("textbox", { name: "nickname" });
+        expect(nicknameInput).toBeInTheDocument();
+        expect(nicknameInput).toHaveValue(subtraction.nickname);
+
+        await userEvent.clear(nicknameInput);
+        expect(nicknameInput).toHaveValue("");
+
+        await userEvent.type(nicknameInput, "test");
+        expect(nicknameInput).toHaveValue("test");
     });
 
-    it("should call onUpdate() when form is submitted", () => {
-        const wrapper = shallow(<EditSubtraction {...props} />);
-        wrapper.find("form").simulate("submit", e);
-        expect(props.onUpdate).toHaveBeenCalledWith("foo", "Prunus persica", "Peach");
+    it("should call onUpdate() when form is submitted", async () => {
+        renderWithProviders(<EditSubtraction {...props} />);
+
+        await userEvent.click(screen.getByText("Save"));
+
+        expect(props.onUpdate).toHaveBeenCalledWith(subtraction.id, subtraction.name, subtraction.nickname);
         expect(props.onHide).toHaveBeenCalled();
     });
 
-    it("should call onHide() when closed", () => {
-        const wrapper = shallow(<EditSubtraction {...props} />);
-        wrapper.find(Modal).prop("onHide")();
-        expect(props.onHide).toHaveBeenCalledWith();
+    it("should call onHide() when closed", async () => {
+        renderWithProviders(<EditSubtraction {...props} />);
+
+        await userEvent.click(screen.getByLabelText("close"));
+
+        await waitFor(() => expect(props.onHide).toHaveBeenCalled());
     });
 });
 

@@ -58,12 +58,12 @@ export function EditSubtraction({ subtraction, onUpdate, show, onHide }: EditSub
                 <ModalBody>
                     <InputGroup>
                         <InputLabel>Name</InputLabel>
-                        <Input name="name" value={values.name} onChange={handleChange} />
+                        <Input aria-label="name" name="name" value={values.name} onChange={handleChange} />
                         <InputError>{values.error}</InputError>
                     </InputGroup>
                     <InputGroup>
                         <InputLabel>Nickname</InputLabel>
-                        <Input name="nickname" value={values.nickname} onChange={handleChange} />
+                        <Input aria-label="nickname" name="nickname" value={values.nickname} onChange={handleChange} />
                     </InputGroup>
                 </ModalBody>
 
