@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { Container, ContainerNarrow } from "../../base";
 import SubtractionCreate from "./CreateSubtraction";
 import SubtractionDetail from "./Detail/Detail";
-import { SubtractionFileManager } from "./FileManager";
+import { SubtractionFileManager } from "./SubtractionFileManager";
 import SubtractionList from "./SubtractionList";
 
 /**

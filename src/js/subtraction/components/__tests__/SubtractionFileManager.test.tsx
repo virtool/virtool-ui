@@ -10,9 +10,9 @@ import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { UPLOAD } from "../../../app/actionTypes";
-import { SubtractionFileManager } from "../FileManager";
+import { SubtractionFileManager } from "../SubtractionFileManager";
 
-function createAppStore(state, reducer) {
+function createAppStore(state, reducer?) {
     return () =>
         configureStore({
             reducer: reducer ? reducer : state => state,
