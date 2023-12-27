@@ -9,7 +9,7 @@ import Api from "../Api";
 describe("<Api />", () => {
     it("should render", async () => {
         const settings = createFakeSettings();
-        renderWithProviders(<Api data={settings} />);
+        renderWithProviders(<Api settings={settings} />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(screen.getByText("JSON API")).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe("<Api />", () => {
     it("should render when [onToggle=true]", async () => {
         const settings = createFakeSettings({ enable_api: true });
         const scope = mockApiUpdateSettings(settings);
-        renderWithProviders(<Api data={settings} />);
+        renderWithProviders(<Api settings={settings} />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         await userEvent.click(screen.getByRole("checkbox"));
@@ -32,7 +32,7 @@ describe("<Api />", () => {
     it("should render when [onToggle=false]", async () => {
         const settings = createFakeSettings({ enable_api: false });
         const scope = mockApiUpdateSettings(settings);
-        renderWithProviders(<Api data={settings} />);
+        renderWithProviders(<Api settings={settings} />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         await userEvent.click(screen.getByRole("checkbox"));

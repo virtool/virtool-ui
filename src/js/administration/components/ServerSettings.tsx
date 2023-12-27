@@ -15,8 +15,8 @@ export function ServerSettings() {
 
     return (
         <ContainerNarrow>
-            <InstanceMessage data={message} />
-            <Api data={settings} />
+            <InstanceMessage message={message} />
+            <Api settings={settings} />
         </ContainerNarrow>
     );
 }

@@ -17,17 +17,16 @@ const InstanceMessageSubtitle = styled.p`
 `;
 
 type InstanceMessageProps = {
-    /** The instance message data */
-    data: Message;
+    message: Message;
 };
 
 /**
  * Displays the instance message and provides functionality to update it
  */
-export default function InstanceMessage({ data }: InstanceMessageProps) {
+export default function InstanceMessage({ message }: InstanceMessageProps) {
     const mutation = useSetMessage();
 
-    const initialValues = { message: data?.message || "" };
+    const initialValues = { message: message?.message || "" };
 
     return (
         <Box>
