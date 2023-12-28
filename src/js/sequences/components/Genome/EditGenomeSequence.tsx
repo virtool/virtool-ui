@@ -1,5 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
@@ -9,25 +9,60 @@ import { getError } from "../../../errors/selectors";
 import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
+import { OTUSegment } from "../../../otus/types";
 import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedSegments } from "../../selectors";
-import { SequenceForm, validationSchema } from "../Form";
+import { SequenceForm, validationSchema } from "../SequenceForm";
 import SegmentField from "./SegmentField";
 
-const getInitialValues = ({ initialSegment, initialAccession, initialDefinition, initialHost, initialSequence }) => ({
-    segment: initialSegment || undefined,
-    accession: initialAccession || "",
-    definition: initialDefinition || "",
-    host: initialHost || "",
-    sequence: initialSequence || "",
-});
+function getInitialValues({ initialSegment, initialAccession, initialDefinition, initialHost, initialSequence }) {
+    return {
+        segment: initialSegment || "",
+        accession: initialAccession || "",
+        definition: initialDefinition || "",
+        host: initialHost || "",
+        sequence: initialSequence || "",
+    };
+}
 
-export const castValues = segments => values => {
-    const segment = find(segments, { name: values.segment }) ? values.segment : undefined;
-    return { ...values, segment };
+export function castValues(segments: OTUSegment[]) {
+    return function (values: formValues) {
+        const segment = find(segments, { name: values.segment }) ? values.segment : "";
+        return { ...values, segment };
+    };
+}
+
+type formValues = {
+    segment: string;
+    accession: string;
+    definition: string;
+    host: string;
+    sequence: string;
 };
 
-export const EditGenomeSequence = ({
+type EditGenomeSequenceProps = {
+    initialAccession: string;
+    initialDefinition: string;
+    initialHost: string;
+    initialSegment: string;
+    initialSequence: string;
+    /** A list of unreferenced segments */
+    segments: OTUSegment[];
+    id: string;
+    isolateId: string;
+    otuId: string;
+    /** Indicates whether the dialog for editing a sequence is visible */
+    show: boolean;
+    /** A callback function to hide the dialog */
+    onHide: () => void;
+    /** A callback function to update the sequence */
+    onSave: any;
+};
+
+/**
+ * Displays dialog to edit a genome sequence
+ */
+export function EditGenomeSequence({
     initialAccession,
     initialDefinition,
     initialHost,
@@ -40,12 +75,12 @@ export const EditGenomeSequence = ({
     show,
     onHide,
     onSave,
-}) => {
+}: EditGenomeSequenceProps) {
     const title = "Edit Sequence";
 
-    const handleSubmit = ({ accession, definition, host, sequence, segment }) => {
+    function handleSubmit({ accession, definition, host, sequence, segment }) {
         onSave(otuId, isolateId, id, accession, definition, host, segment, sequence);
-    };
+    }
 
     const initialValues = getInitialValues({
         initialSegment,
@@ -54,6 +89,7 @@ export const EditGenomeSequence = ({
         initialHost,
         initialSequence,
     });
+
     return (
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
@@ -61,7 +97,15 @@ export const EditGenomeSequence = ({
                 <DialogContent>
                     <DialogTitle>{title}</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-                        {({ setFieldValue, errors, touched }) => (
+                        {({
+                            setFieldValue,
+                            errors,
+                            touched,
+                        }: {
+                            setFieldValue: (field: string, value: string) => void;
+                            errors: FormikErrors<formValues>;
+                            touched: FormikTouched<formValues>;
+                        }) => (
                             <Form>
                                 <PersistForm
                                     formName={`editGenomeSequenceForm${id}`}
@@ -83,9 +127,9 @@ export const EditGenomeSequence = ({
             </DialogPortal>
         </Dialog>
     );
-};
+}
 
-export const mapStateToProps = state => {
+export function mapStateToProps(state) {
     const { accession, definition, host, id, segment, sequence } = getActiveSequence(state);
 
     return {
@@ -101,16 +145,29 @@ export const mapStateToProps = state => {
         error: getError(state, "EDIT_SEQUENCE_ERROR"),
         show: routerLocationHasState(state, "editSequence"),
     };
-};
+}
 
-export const mapDispatchToProps = dispatch => ({
-    onHide: () => {
-        dispatch(pushState({ addSequence: false, editSequence: false }));
-    },
+export function mapDispatchToProps(dispatch) {
+    return {
+        onHide: () => {
+            dispatch(pushState({ addSequence: false, editSequence: false }));
+        },
 
-    onSave: (otuId, isolateId, sequenceId, accession, definition, host, segment, sequence) => {
-        dispatch(editSequence({ otuId, isolateId, sequenceId, accession, definition, host, sequence, segment }));
-    },
-});
+        onSave: (otuId, isolateId, sequenceId, accession, definition, host, segment, sequence) => {
+            dispatch(
+                editSequence({
+                    otuId,
+                    isolateId,
+                    sequenceId,
+                    accession,
+                    definition,
+                    host,
+                    sequence,
+                    segment,
+                }),
+            );
+        },
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditGenomeSequence);

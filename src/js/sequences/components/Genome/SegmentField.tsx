@@ -15,9 +15,10 @@ import {
     SelectItem,
 } from "../../../base";
 import { getHasSchema, getOTUDetailId } from "../../../otus/selectors";
+import { OTUSegment } from "../../../otus/types";
 import { getReferenceDetailId } from "../../../references/selectors";
 import { getUnreferencedSegments } from "../../selectors";
-import { SequenceSegment } from "./Segment";
+import { SequenceSegment } from "./SequenceSegment";
 
 const SegmentSelectContainer = styled.div`
     display: flex;
@@ -48,19 +49,44 @@ const NoSchema = styled(Box)`
     }
 `;
 
-export function SequenceSegmentField({ error, hasSchema, otuId, value, refId, segments, onChange }) {
+type SequenceSegmentFieldProps = {
+    error: string;
+    /** Whether a schema exists for the selected OTU */
+    hasSchema: boolean;
+    otuId: string;
+    /** The selected segment */
+    value: string;
+    refId: string;
+    /** A list of unreferenced segments */
+    segments: OTUSegment[];
+    /** A callback function to handle segment selection */
+    onChange: (value: string) => void;
+};
+
+/**
+ * Displays a dropdown list of available segments in adding/editing dialogs or provides option to create schema
+ */
+export function SequenceSegmentField({
+    error,
+    hasSchema,
+    otuId,
+    value,
+    refId,
+    segments,
+    onChange,
+}: SequenceSegmentFieldProps) {
     if (hasSchema) {
         const segmentOptions = map(segments, segment => (
-            <SequenceSegment name={segment.name} required={segment.required} />
+            <SequenceSegment key={segment.name} name={segment.name} required={segment.required} />
         ));
-        console.log(value);
+
         return (
             <InputGroup>
                 <InputLabel>Segment</InputLabel>
                 <SegmentSelectContainer>
                     <Select
                         value={value || "None"}
-                        onValueChange={value => value !== "" && onChange(value === "None" ? undefined : value)}
+                        onValueChange={value => value !== "" && onChange(value === "None" ? "" : value)}
                     >
                         <SelectButton icon="chevron-down" />
                         <SelectContent position="popper" align="start">
@@ -90,11 +116,13 @@ export function SequenceSegmentField({ error, hasSchema, otuId, value, refId, se
     );
 }
 
-export const mapStateToProps = state => ({
-    hasSchema: getHasSchema(state),
-    otuId: getOTUDetailId(state),
-    refId: getReferenceDetailId(state),
-    segments: getUnreferencedSegments(state),
-});
+export function mapStateToProps(state) {
+    return {
+        hasSchema: getHasSchema(state),
+        otuId: getOTUDetailId(state),
+        refId: getReferenceDetailId(state),
+        segments: getUnreferencedSegments(state),
+    };
+}
 
 export default connect(mapStateToProps)(SequenceSegmentField);

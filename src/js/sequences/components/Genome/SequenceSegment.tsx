@@ -36,19 +36,31 @@ const StyledSequenceSegment = styled.div`
     width: 100%;
 `;
 
-export const SequenceSegment = ({ name, required }) => (
-    <StyledSelectItem value={name} key={name}>
-        <RadixSelect.ItemText>
-            <StyledSequenceSegment>
-                <span>{name}</span>
+type SequenceSegmentProps = {
+    /** The name of the segment */
+    name: string;
+    /** Whether the segment is required */
+    required: boolean;
+};
 
-                {required && (
-                    <SequenceSegmentRequired>
-                        <Icon name="exclamation-circle" />
-                        <span>Required</span>
-                    </SequenceSegmentRequired>
-                )}
-            </StyledSequenceSegment>
-        </RadixSelect.ItemText>
-    </StyledSelectItem>
-);
+/**
+ * A condensed sequence segment for use in a list of segments
+ */
+export function SequenceSegment({ name, required }: SequenceSegmentProps) {
+    return (
+        <StyledSelectItem value={name} key={name}>
+            <RadixSelect.ItemText>
+                <StyledSequenceSegment>
+                    <span>{name}</span>
+
+                    {required && (
+                        <SequenceSegmentRequired>
+                            <Icon name="exclamation-circle" />
+                            <span>Required</span>
+                        </SequenceSegmentRequired>
+                    )}
+                </StyledSequenceSegment>
+            </RadixSelect.ItemText>
+        </StyledSelectItem>
+    );
+}

@@ -5,7 +5,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { SaveButton } from "../../../base";
-import { SequenceForm, validationSchema } from "../Form";
+import { SequenceForm, validationSchema } from "../SequenceForm";
 
 const initialValues = { accession: "", definition: "", host: "", sequence: "" };
 

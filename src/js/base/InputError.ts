@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
 import styled from "styled-components";
 import { getFontWeight } from "../app/theme";
 
 type InputErrorProps = {
-    children: string | string[];
+    children: ReactNode;
 };
 
 export const InputError = styled.p<InputErrorProps>`
