@@ -48,19 +48,19 @@ const NoSchema = styled(Box)`
     }
 `;
 
-export const SequenceSegmentField = ({ error, hasSchema, otuId, value, refId, segments, onChange }) => {
+export function SequenceSegmentField({ error, hasSchema, otuId, value, refId, segments, onChange }) {
     if (hasSchema) {
         const segmentOptions = map(segments, segment => (
             <SequenceSegment name={segment.name} required={segment.required} />
         ));
-
+        console.log(value);
         return (
             <InputGroup>
                 <InputLabel>Segment</InputLabel>
                 <SegmentSelectContainer>
                     <Select
                         value={value || "None"}
-                        onValueChange={value => value != "" && onChange(value === "None" ? undefined : value)}
+                        onValueChange={value => value !== "" && onChange(value === "None" ? undefined : value)}
                     >
                         <SelectButton icon="chevron-down" />
                         <SelectContent position="popper" align="start">
@@ -88,9 +88,9 @@ export const SequenceSegmentField = ({ error, hasSchema, otuId, value, refId, se
             </NoSchema>
         </InputGroup>
     );
-};
+}
 
-export const mapStateToProps = (state, ownProps) => ({
+export const mapStateToProps = state => ({
     hasSchema: getHasSchema(state),
     otuId: getOTUDetailId(state),
     refId: getReferenceDetailId(state),

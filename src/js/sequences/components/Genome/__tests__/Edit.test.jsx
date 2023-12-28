@@ -66,7 +66,7 @@ describe("<EditGenomeSequence>", () => {
         renderWithProviders(<EditGenomeSequence {...props} />, createAppStore(state));
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "test_segment Required" })).toBeInTheDocument();
+        expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveValue(props.initialAccession);
         expect(screen.getByRole("textbox", { name: "Host" })).toHaveValue(props.initialHost);
         expect(screen.getByRole("textbox", { name: "Definition" })).toHaveValue(props.initialDefinition);
@@ -76,7 +76,7 @@ describe("<EditGenomeSequence>", () => {
     it("should submit correct data when all fields changed", async () => {
         renderWithProviders(<EditGenomeSequence {...props} />, createAppStore(state));
 
-        await userEvent.click(screen.getByRole("button", { name: "test_segment Required" }));
+        expect(screen.getByRole("combobox")).toBeInTheDocument();
         await userEvent.click(screen.getByText("None"));
 
         const accessionField = screen.getByRole("textbox", { name: "Accession (ID)" });
@@ -151,6 +151,6 @@ describe("castValues", () => {
     it("should return values where segment: null when segment is not selectable", () => {
         values.segment = "invalid_segment";
         const castedValues = castValues(segments)(values);
-        expect(castedValues).toEqual({ ...values, segment: null });
+        expect(castedValues).toEqual({ ...values, segment: undefined });
     });
 });
