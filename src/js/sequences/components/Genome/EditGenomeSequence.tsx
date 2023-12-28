@@ -56,7 +56,16 @@ type EditGenomeSequenceProps = {
     /** A callback function to hide the dialog */
     onHide: () => void;
     /** A callback function to update the sequence */
-    onSave: any;
+    onSave: (
+        otuId: string,
+        isolateId: string,
+        sequenceId: string,
+        accession: string,
+        definition: string,
+        host: string,
+        segment: string,
+        sequence: string,
+    ) => void;
 };
 
 /**

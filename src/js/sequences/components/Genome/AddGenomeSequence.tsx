@@ -41,7 +41,15 @@ type AddGenomeSequenceProps = {
     /** A callback function to hide the dialog */
     onHide: () => void;
     /** A callback function to add the sequence */
-    onSave: any;
+    onSave: (
+        otuId: string,
+        isolateId: string,
+        accession: string,
+        definition: string,
+        host: string,
+        segment: string,
+        sequence: string,
+    ) => void;
 };
 
 /**
