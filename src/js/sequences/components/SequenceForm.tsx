@@ -14,15 +14,15 @@ export const validationSchema = Yup.object().shape({
         .matches(/^[:?ATCGNRYKM]+$/, "Sequence should only contain the characters: ATCGNRYKM"),
 });
 
-type FormValueTypes = {
+type formValues = {
     accession: string;
     definition: string;
     sequence: string;
 };
 
 type SequenceFormProps = {
-    errors: FormikErrors<FormValueTypes>;
-    touched: FormikTouched<FormValueTypes>;
+    errors: FormikErrors<formValues>;
+    touched: FormikTouched<formValues>;
 };
 
 /**
