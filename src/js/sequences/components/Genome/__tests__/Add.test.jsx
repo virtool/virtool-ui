@@ -60,13 +60,13 @@ describe("<AddGenomeSequence>", () => {
         renderWithProviders(<AddGenomeSequence {...props} />, createAppStore(state));
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "None" })).toBeInTheDocument();
+        expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Host" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Definition" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Sequence 0" })).toBeInTheDocument();
 
-        await userEvent.click(screen.getByRole("button", { name: "None" }));
+        await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByText("test_segment"));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
@@ -125,6 +125,6 @@ describe("castValues", () => {
     it("should return values where segment: null when segment is not selectable", () => {
         values.segment = "invalid_segment";
         const castedValues = castValues(segments)(values);
-        expect(castedValues).toEqual({ ...values, segment: null });
+        expect(castedValues).toEqual({ ...values, segment: undefined });
     });
 });

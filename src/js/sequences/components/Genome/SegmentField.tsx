@@ -1,4 +1,4 @@
-import { find, map } from "lodash-es";
+import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -9,16 +9,25 @@ import {
     InputError,
     InputGroup,
     InputLabel,
-    ListboxButton,
-    ListboxInput,
-    ListboxList,
-    ListboxOption,
-    ListboxPopover,
+    Select,
+    SelectButton,
+    SelectContent,
+    SelectItem,
 } from "../../../base";
-import { getHasSchema, getOTUDetailId, getSchema } from "../../../otus/selectors";
+import { getHasSchema, getOTUDetailId } from "../../../otus/selectors";
 import { getReferenceDetailId } from "../../../references/selectors";
 import { getUnreferencedSegments } from "../../selectors";
 import { SequenceSegment } from "./Segment";
+
+const SegmentSelectContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    button {
+        flex-grow: 1;
+        padding: 10px 10px;
+    }
+`;
 
 const NoSchema = styled(Box)`
     align-items: center;
@@ -39,30 +48,27 @@ const NoSchema = styled(Box)`
     }
 `;
 
-export const SequenceSegmentField = ({ error, hasSchema, otuId, value, refId, segmentValue, segments, onChange }) => {
+export const SequenceSegmentField = ({ error, hasSchema, otuId, value, refId, segments, onChange }) => {
     if (hasSchema) {
         const segmentOptions = map(segments, segment => (
-            <ListboxOption key={segment.name} value={segment.name}>
-                <SequenceSegment name={segment.name} required={segment.required} />
-            </ListboxOption>
+            <SequenceSegment name={segment.name} required={segment.required} />
         ));
 
         return (
             <InputGroup>
                 <InputLabel>Segment</InputLabel>
-                <ListboxInput value={value || "None"} onChange={value => onChange(value === "None" ? null : value)}>
-                    <ListboxButton>
-                        <SequenceSegment name={segmentValue.name} required={segmentValue.required} />
-                    </ListboxButton>
-                    <ListboxPopover>
-                        <ListboxList>
-                            <ListboxOption key="None" value="None">
-                                <SequenceSegment name="None" />
-                            </ListboxOption>
+                <SegmentSelectContainer>
+                    <Select
+                        value={value || "None"}
+                        onValueChange={value => value != "" && onChange(value === "None" ? undefined : value)}
+                    >
+                        <SelectButton icon="chevron-down" />
+                        <SelectContent position="popper" align="start">
+                            <SelectItem value="None" text="None" description={undefined} />
                             {segmentOptions}
-                        </ListboxList>
-                    </ListboxPopover>
-                </ListboxInput>
+                        </SelectContent>
+                    </Select>
+                </SegmentSelectContainer>
                 <InputError>{error}</InputError>
             </InputGroup>
         );
@@ -88,7 +94,6 @@ export const mapStateToProps = (state, ownProps) => ({
     hasSchema: getHasSchema(state),
     otuId: getOTUDetailId(state),
     refId: getReferenceDetailId(state),
-    segmentValue: find(getSchema(state), { name: ownProps.value }) || { name: "None" },
     segments: getUnreferencedSegments(state),
 });
 
