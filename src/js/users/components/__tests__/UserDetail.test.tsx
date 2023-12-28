@@ -33,7 +33,7 @@ describe("<UserDetail />", () => {
     afterEach(() => nock.cleanAll());
 
     describe("<UserDetail />", () => {
-        it("should render correctly when administrator=true, canModifyUser=true and 5 groups exist", async () => {
+        it("should render correctly when administrator_role = AdministratorRoles.FULL, canModifyUser=true and 5 groups exist", async () => {
             mockApiListGroups(groups);
             mockGetAccountAPI(account);
 
@@ -80,7 +80,7 @@ describe("<UserDetail />", () => {
             expect(screen.queryByText("bob")).not.toBeInTheDocument();
         });
 
-        it("should render correctly when [administrator=false] and canModifyUser=false", async () => {
+        it("should render correctly when [administrator_role=null] and canModifyUser=false", async () => {
             mockApiListGroups(groups);
             mockGetAccountAPI(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);

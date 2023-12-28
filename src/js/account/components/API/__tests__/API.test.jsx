@@ -130,8 +130,8 @@ describe("<API />", () => {
             expect(screen.getByText("Provide a name for the key")).toBeInTheDocument();
         });
 
-        describe("APIKeyAdiminstratorInfo", () => {
-            it("should render correctly when newKey is empty and state.administrator = true", () => {
+        describe("APIKeyAdministratorInfo", () => {
+            it("should render correctly when newKey is empty and state.administratorRole = AdministratorRoles.FULL", () => {
                 state.account.administrator_role = AdministratorRoles.FULL;
 
                 renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
@@ -142,7 +142,7 @@ describe("<API />", () => {
                 ).toBeInTheDocument();
             });
 
-            it("should render correctly when newKey is empty and state.administrator = false", () => {
+            it("should render correctly when newKey is empty and state.administratorRole = null", () => {
                 renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();

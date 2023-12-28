@@ -39,7 +39,7 @@ describe("<SubtractionFileManager />", () => {
                     size: 1024,
                     type: "subtraction",
                     uploaded_at: "2022-04-13T20:22:25.000000Z",
-                    user: { handle: "test_handle", id: "n91xt5wq", administrator: true },
+                    user: { handle: "test_handle", id: "n91xt5wq" },
                 },
             ],
         },

@@ -2,6 +2,7 @@ import { filter, find, get, includes, some } from "lodash-es";
 import createCachedSelector from "re-reselect";
 import { createSelector } from "reselect";
 import { getAccount } from "../account/selectors";
+import { AdministratorRoles } from "../administration/types";
 import { getTermSelectorFactory } from "../utils/selectors";
 
 const getStateTerm = state => state.references.term;
@@ -52,7 +53,7 @@ export const getReferenceItemProgress = createSelector([getReferenceItemTaskId, 
 export const checkReferenceRight = createCachedSelector(
     [getAccount, getReferenceDetail, (state, right) => right],
     (account, detail, right) => {
-        if (account.administrator) {
+        if (account.administrator_role === AdministratorRoles.FULL) {
             return true;
         }
 
