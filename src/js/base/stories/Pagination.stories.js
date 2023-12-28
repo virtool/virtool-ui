@@ -50,5 +50,4 @@ const fakeUserListFactory = (seed, numItems) => {
 const fakeUserFactory = () => ({
     id: faker.random.alphaNumeric(6),
     handle: `${faker.name.firstName()}${faker.name.lastName()}`,
-    administrator: false,
 });

@@ -7,11 +7,8 @@ export type ReferenceClonedFrom = {
     name: string;
 };
 
-export type ReferenceContributor = {
-    administrator: boolean;
+export type ReferenceContributor = UserNested & {
     count: number;
-    handle: string;
-    id: string;
 };
 
 export type ReferenceDataType = "barcode" | "genome";

@@ -10,7 +10,6 @@ import { createFakePermissions } from "./permissions";
 type CreateFakeUserNestedProps = {
     handle?: string;
     id?: string;
-    administrator?: boolean;
 };
 
 /**
@@ -20,11 +19,10 @@ type CreateFakeUserNestedProps = {
  * @returns a UserNested object with fake data
  */
 export function createFakeUserNested(props?: CreateFakeUserNestedProps): UserNested {
-    let { handle, id, administrator } = props || {};
+    let { handle, id } = props || {};
 
     return {
         id: id || faker.random.alphaNumeric(8),
-        administrator: administrator || false,
         handle: handle || faker.internet.userName(),
     };
 }
@@ -76,7 +74,7 @@ export function createFakeUsers(count: number): Array<User> {
     return times(count || 1, () => createFakeUser());
 }
 
-type Query = {
+type FindUsersQuery = {
     page: number;
     per_page: number;
     term: string;
@@ -90,7 +88,7 @@ type Query = {
  * @param query - the query parameters to match
  * @returns - a nock Scope for the mocked API call
  */
-export function mockApiFindUsers(users: Array<User>, query?: Query) {
+export function mockApiFindUsers(users: Array<User>, query?: FindUsersQuery) {
     return nock("http://localhost")
         .get("/api/admin/users")
         .query(query || true)
