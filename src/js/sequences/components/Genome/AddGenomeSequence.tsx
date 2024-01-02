@@ -14,7 +14,7 @@ import { getUnreferencedSegments } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
 import SegmentField from "./SegmentField";
 
-const initialValues = { segment: "", accession: "", definition: "", host: "", sequence: "" };
+const initialValues = { segment: null, accession: "", definition: "", host: "", sequence: "" };
 
 type formValues = {
     segment: string;
@@ -26,7 +26,7 @@ type formValues = {
 
 export function castValues(segments: OTUSegment[]) {
     return function (values: formValues) {
-        const segment = find(segments, { name: values.segment }) ? values.segment : "";
+        const segment = find(segments, { name: values.segment }) ? values.segment : null;
         return { ...values, segment };
     };
 }

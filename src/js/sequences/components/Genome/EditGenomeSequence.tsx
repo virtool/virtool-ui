@@ -15,9 +15,9 @@ import { getActiveSequence, getUnreferencedSegments } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
 import SegmentField from "./SegmentField";
 
-function getInitialValues({ initialSegment, initialAccession, initialDefinition, initialHost, initialSequence }) {
+function getInitialValues({ initialSegmentName, initialAccession, initialDefinition, initialHost, initialSequence }) {
     return {
-        segment: initialSegment || "",
+        segment: initialSegmentName || null,
         accession: initialAccession || "",
         definition: initialDefinition || "",
         host: initialHost || "",
@@ -27,7 +27,7 @@ function getInitialValues({ initialSegment, initialAccession, initialDefinition,
 
 export function castValues(segments: OTUSegment[]) {
     return function (values: formValues) {
-        const segment = find(segments, { name: values.segment }) ? values.segment : "";
+        const segment = find(segments, { name: values.segment }) ? values.segment : null;
         return { ...values, segment };
     };
 }
@@ -44,7 +44,7 @@ type EditGenomeSequenceProps = {
     initialAccession: string;
     initialDefinition: string;
     initialHost: string;
-    initialSegment: string;
+    initialSegmentName: string;
     initialSequence: string;
     /** A list of unreferenced segments */
     segments: OTUSegment[];
@@ -75,7 +75,7 @@ export function EditGenomeSequence({
     initialAccession,
     initialDefinition,
     initialHost,
-    initialSegment,
+    initialSegmentName,
     initialSequence,
     segments,
     id,
@@ -85,14 +85,12 @@ export function EditGenomeSequence({
     onHide,
     onSave,
 }: EditGenomeSequenceProps) {
-    const title = "Edit Sequence";
-
     function handleSubmit({ accession, definition, host, sequence, segment }) {
         onSave(otuId, isolateId, id, accession, definition, host, segment, sequence);
     }
 
     const initialValues = getInitialValues({
-        initialSegment,
+        initialSegmentName,
         initialAccession,
         initialDefinition,
         initialHost,
@@ -104,7 +102,7 @@ export function EditGenomeSequence({
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
-                    <DialogTitle>{title}</DialogTitle>
+                    <DialogTitle>Edit Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
                         {({
                             setFieldValue,
@@ -146,7 +144,7 @@ export function mapStateToProps(state) {
         initialAccession: accession,
         initialDefinition: definition,
         initialHost: host,
-        initialSegment: segment,
+        initialSegmentName: segment,
         initialSequence: sequence,
         segments: getUnreferencedSegments(state),
         isolateId: getActiveIsolateId(state),

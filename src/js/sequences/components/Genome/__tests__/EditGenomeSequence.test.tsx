@@ -104,7 +104,7 @@ describe("<EditGenomeSequence>", () => {
             "user_typed_accession",
             "user_typed_definition",
             "user_typed_host",
-            "",
+            null,
             "ACGRYKM",
         );
     });
@@ -151,6 +151,6 @@ describe("castValues", () => {
     it("should return values where segment: null when segment is not selectable", () => {
         values.segment = "invalid_segment";
         const castedValues = castValues(segments)(values);
-        expect(castedValues).toEqual({ ...values, segment: "" });
+        expect(castedValues).toEqual({ ...values, segment: null });
     });
 });

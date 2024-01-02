@@ -125,6 +125,6 @@ describe("castValues", () => {
     it("should return values where segment: null when segment is not selectable", () => {
         values.segment = "invalid_segment";
         const castedValues = castValues(segments)(values);
-        expect(castedValues).toEqual({ ...values, segment: "" });
+        expect(castedValues).toEqual({ ...values, segment: null });
     });
 });

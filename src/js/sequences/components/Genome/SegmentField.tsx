@@ -86,11 +86,11 @@ export function SequenceSegmentField({
                 <SegmentSelectContainer>
                     <Select
                         value={value || "None"}
-                        onValueChange={value => value !== "" && onChange(value === "None" ? "" : value)}
+                        onValueChange={value => value !== "" && onChange(value === "None" ? null : value)}
                     >
                         <SelectButton icon="chevron-down" />
                         <SelectContent position="popper" align="start">
-                            <SelectItem value="None" text="None" description={undefined} />
+                            <SelectItem value="None" text="None" description="" />
                             {segmentOptions}
                         </SelectContent>
                     </Select>
