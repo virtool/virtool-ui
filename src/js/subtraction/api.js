@@ -25,3 +25,7 @@ export function findSubtractions({ page, per_page, term }) {
             return response.body;
         });
 }
+
+export function getSubtraction(subtractionId) {
+    return Request.get(`/subtractions/${subtractionId}`).then(res => res.body);
+}
