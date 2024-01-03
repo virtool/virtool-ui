@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { ContainerNarrow, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "../../base";
-import EmptyReference from "./Empty";
+import EmptyReference from "./EmptyReference";
 import { ImportReference } from "./ImportReference";
 
 export function CreateReference() {

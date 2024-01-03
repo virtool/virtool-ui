@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { EmptyReference, mapDispatchToProps } from "../Empty";
+import { EmptyReference, mapDispatchToProps } from "../EmptyReference";
 
 describe("<EmptyReference />", () => {
     let props;

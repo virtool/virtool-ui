@@ -20,10 +20,10 @@ const getInitialState = () => ({
     mode: "empty",
 });
 
-export const EmptyReference = ({ onSubmit }) => {
-    const handleSubmit = ({ name, description, dataType, organism }) => {
+export function EmptyReference({ onSubmit }) {
+    function handleSubmit({ name, description, dataType, organism }) {
         onSubmit(name, description, dataType, organism);
-    };
+    }
 
     return (
         <Formik initialValues={getInitialState()} onSubmit={handleSubmit} validationSchema={validationSchema}>
@@ -44,7 +44,7 @@ export const EmptyReference = ({ onSubmit }) => {
             )}
         </Formik>
     );
-};
+}
 
 export const mapDispatchToProps = dispatch => ({
     onSubmit: (name, description, dataType, organism) => {
