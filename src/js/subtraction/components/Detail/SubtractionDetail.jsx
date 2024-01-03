@@ -1,6 +1,6 @@
 import { get } from "lodash-es";
 import numbro from "numbro";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { checkAdminRoleOrPermission } from "../../../administration/utils";
 import { pushState } from "../../../app/actions";
@@ -16,87 +16,71 @@ function calculateGc(nucleotides) {
     return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
 }
 
-export class SubtractionDetail extends React.Component {
-    constructor(props) {
-        super(props);
+export function SubtractionDetail({ error, canModify, detail, onGet, onShowRemove, match }) {
+    const [show, setShow] = useState(false);
 
-        this.state = {
-            showEdit: false,
-        };
-    }
+    useEffect(() => {
+        onGet(match.params.subtractionId);
+    }, []);
 
-    componentDidMount() {
-        this.props.onGet(this.props.match.params.subtractionId);
-    }
-
-    handleHide = () => {
-        this.setState({ showEdit: false });
+    const handleHide = () => {
+        setShow(false);
     };
 
-    render() {
-        if (this.props.error) {
-            return <NotFound />;
-        }
-
-        if (this.props.detail === null) {
-            return <LoadingPlaceholder />;
-        }
-
-        const detail = this.props.detail;
-
-        if (!detail.ready) {
-            return <LoadingPlaceholder message="Subtraction is still being imported" />;
-        }
-        return (
-            <>
-                <ViewHeader title={detail.name}>
-                    <ViewHeaderTitle>
-                        {detail.name}
-                        {this.props.canModify && (
-                            <ViewHeaderIcons>
-                                <Icon
-                                    name="pencil-alt"
-                                    color="orange"
-                                    onClick={() => this.setState({ showEdit: true })}
-                                />
-                                <Icon name="trash" color="red" onClick={this.props.onShowRemove} />
-                            </ViewHeaderIcons>
-                        )}
-                    </ViewHeaderTitle>
-                    {detail.user ? (
-                        <SubtractionAttribution handle={detail.user.handle} time={detail.created_at} />
-                    ) : null}
-                </ViewHeader>
-                <Table>
-                    <tbody>
-                        <tr>
-                            <th>Nickname</th>
-                            <td>{this.props.detail.nickname}</td>
-                        </tr>
-                        <tr>
-                            <th>File</th>
-                            <td>{detail.file.name || detail.file.id}</td>
-                        </tr>
-                        <tr>
-                            <th>Sequence Count</th>
-                            <td>{detail.count}</td>
-                        </tr>
-                        <tr>
-                            <th>GC Estimate</th>
-                            <td>{calculateGc(detail.gc)}</td>
-                        </tr>
-                        <tr>
-                            <th>Linked Samples</th>
-                            <td>{detail.linked_samples.length}</td>
-                        </tr>
-                    </tbody>
-                </Table>
-                <SubtractionFiles />
-                <EditSubtraction show={this.state.showEdit} onHide={this.handleHide} />
-                <RemoveSubtraction />
-            </>
-        );
+    if (error) {
+        return <NotFound />;
     }
+
+    if (detail === null) {
+        return <LoadingPlaceholder />;
+    }
+
+    if (!detail.ready) {
+        return <LoadingPlaceholder message="Subtraction is still being imported" />;
+    }
+    return (
+        <>
+            <ViewHeader title={detail.name}>
+                <ViewHeaderTitle>
+                    {detail.name}
+                    {canModify && (
+                        <ViewHeaderIcons>
+                            <Icon name="pencil-alt" color="orange" onClick={() => setShow(true)} />
+                            <Icon name="trash" color="red" onClick={onShowRemove} />
+                        </ViewHeaderIcons>
+                    )}
+                </ViewHeaderTitle>
+                {detail.user ? <SubtractionAttribution handle={detail.user.handle} time={detail.created_at} /> : null}
+            </ViewHeader>
+            <Table>
+                <tbody>
+                    <tr>
+                        <th>Nickname</th>
+                        <td>{detail.nickname}</td>
+                    </tr>
+                    <tr>
+                        <th>File</th>
+                        <td>{detail.file.name || detail.file.id}</td>
+                    </tr>
+                    <tr>
+                        <th>Sequence Count</th>
+                        <td>{detail.count}</td>
+                    </tr>
+                    <tr>
+                        <th>GC Estimate</th>
+                        <td>{calculateGc(detail.gc)}</td>
+                    </tr>
+                    <tr>
+                        <th>Linked Samples</th>
+                        <td>{detail.linked_samples.length}</td>
+                    </tr>
+                </tbody>
+            </Table>
+            <SubtractionFiles />
+            <EditSubtraction show={show} onHide={handleHide} />
+            <RemoveSubtraction />
+        </>
+    );
 }
 
 const mapStateToProps = state => ({
