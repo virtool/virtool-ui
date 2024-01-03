@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { SubtractionDetail } from "../Detail";
+import { SubtractionDetail } from "../SubtractionDetail";
 
 describe("<SubtractionDetail />", () => {
     let props;
