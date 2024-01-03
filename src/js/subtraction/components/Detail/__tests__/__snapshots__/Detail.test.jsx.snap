@@ -55,6 +55,35 @@ exports[`<SubtractionDetail /> > should not render icons when [canModify=false] 
   <Connect(EditSubtraction)
     onHide={[Function]}
     show={false}
+    subtraction={
+      {
+        "file": {
+          "id": "123-Foo.fa.gz",
+          "name": "Foo.fa.gz",
+        },
+        "gc": {
+          "a": 0.2,
+          "c": 0.2,
+          "g": 0.2,
+          "n": 0.2,
+          "t": 0.2,
+        },
+        "id": "foo",
+        "linked_samples": [
+          {
+            "id": "bar",
+            "name": "Bar",
+          },
+          {
+            "id": "baz",
+            "name": "Baz",
+          },
+        ],
+        "name": "Foo",
+        "nickname": "foo-nickname",
+        "ready": true,
+      }
+    }
   />
   <Connect(RemoveSubtraction) />
 </Fragment>
@@ -127,6 +156,35 @@ exports[`<SubtractionDetail /> > should render 1`] = `
   <Connect(EditSubtraction)
     onHide={[Function]}
     show={false}
+    subtraction={
+      {
+        "file": {
+          "id": "123-Foo.fa.gz",
+          "name": "Foo.fa.gz",
+        },
+        "gc": {
+          "a": 0.2,
+          "c": 0.2,
+          "g": 0.2,
+          "n": 0.2,
+          "t": 0.2,
+        },
+        "id": "foo",
+        "linked_samples": [
+          {
+            "id": "bar",
+            "name": "Bar",
+          },
+          {
+            "id": "baz",
+            "name": "Baz",
+          },
+        ],
+        "name": "Foo",
+        "nickname": "foo-nickname",
+        "ready": true,
+      }
+    }
   />
   <Connect(RemoveSubtraction) />
 </Fragment>
@@ -199,6 +257,34 @@ exports[`<SubtractionDetail /> > should render file id when name not defined 1`]
   <Connect(EditSubtraction)
     onHide={[Function]}
     show={false}
+    subtraction={
+      {
+        "file": {
+          "id": "123-Foo.fa.gz",
+        },
+        "gc": {
+          "a": 0.2,
+          "c": 0.2,
+          "g": 0.2,
+          "n": 0.2,
+          "t": 0.2,
+        },
+        "id": "foo",
+        "linked_samples": [
+          {
+            "id": "bar",
+            "name": "Bar",
+          },
+          {
+            "id": "baz",
+            "name": "Baz",
+          },
+        ],
+        "name": "Foo",
+        "nickname": "foo-nickname",
+        "ready": true,
+      }
+    }
   />
   <Connect(RemoveSubtraction) />
 </Fragment>
