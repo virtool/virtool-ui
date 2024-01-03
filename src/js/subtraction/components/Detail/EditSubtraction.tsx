@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import {
-    Input,
     InputError,
     InputGroup,
     InputLabel,
+    InputSimple,
     Modal,
     ModalBody,
     ModalFooter,
@@ -29,41 +30,30 @@ type EditSubtractionProps = {
  * A modal for editing the subtraction
  */
 export function EditSubtraction({ subtraction, onUpdate, show, onHide }: EditSubtractionProps) {
-    const [values, setValues] = useState({
-        error: "",
-        name: subtraction.name,
-        nickname: subtraction.nickname,
-    });
+    const {
+        formState: { errors },
+        register,
+        handleSubmit,
+    } = useForm({ defaultValues: { name: subtraction.name, nickname: subtraction.nickname } });
 
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setValues(prevValues => ({ ...prevValues, [name]: value }));
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-
-        if (!values.name) {
-            return setValues(prevValues => ({ ...prevValues, error: "A name must be provided" }));
-        }
-
-        onUpdate(subtraction.id, values.name, values.nickname);
+    function onSubmit({ name, nickname }) {
+        onUpdate(subtraction.id, name, nickname);
         onHide();
     }
 
     return (
         <Modal label="Edit Subtraction" show={show} onHide={onHide}>
             <ModalHeader>Edit Subtraction</ModalHeader>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
                 <ModalBody>
                     <InputGroup>
-                        <InputLabel>Name</InputLabel>
-                        <Input aria-label="name" name="name" value={values.name} onChange={handleChange} />
-                        <InputError>{values.error}</InputError>
+                        <InputLabel htmlFor="name">Name</InputLabel>
+                        <InputSimple id="name" {...register("name", { required: "A name must be provided" })} />
+                        <InputError>{errors.name?.message}</InputError>
                     </InputGroup>
                     <InputGroup>
-                        <InputLabel>Nickname</InputLabel>
-                        <Input aria-label="nickname" name="nickname" value={values.nickname} onChange={handleChange} />
+                        <InputLabel htmlFor="nickname">Nickname</InputLabel>
+                        <InputSimple id="nickname" {...register("nickname")} />
                     </InputGroup>
                 </ModalBody>
 

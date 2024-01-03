@@ -32,7 +32,7 @@ describe("<EditSubtraction />", () => {
     it("should render after name is changed", async () => {
         renderWithProviders(<EditSubtraction {...props} />);
 
-        const nameInput = screen.getByRole("textbox", { name: "name" });
+        const nameInput = screen.getByLabelText("Name");
         expect(nameInput).toBeInTheDocument();
         expect(nameInput).toHaveValue(subtraction.name);
 
@@ -46,7 +46,7 @@ describe("<EditSubtraction />", () => {
     it("should render after nickname is changed", async () => {
         renderWithProviders(<EditSubtraction {...props} />);
 
-        const nicknameInput = screen.getByRole("textbox", { name: "nickname" });
+        const nicknameInput = screen.getByLabelText("Nickname");
         expect(nicknameInput).toBeInTheDocument();
         expect(nicknameInput).toHaveValue(subtraction.nickname);
 
