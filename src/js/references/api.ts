@@ -111,3 +111,28 @@ export function findReferences({ term, page, per_page }): Promise<ReferenceSearc
 export function getReference(refId: string): Promise<Reference> {
     return Request.get(`/refs/${refId}`).then(response => response.body);
 }
+
+/**
+ * Create an empty reference
+ *
+ * @param name - The name of the reference
+ * @param description - The description of the reference
+ * @param dataType - The reference data type
+ * @param organism - The organism of the reference
+ * @returns A promise resolving to creating an empty reference
+ */
+export function createReference(
+    name: string,
+    description: string,
+    dataType: string,
+    organism: string,
+): Promise<Reference> {
+    return Request.post("/refs")
+        .send({
+            name,
+            description,
+            data_type: dataType,
+            organism,
+        })
+        .then(response => response.body);
+}
