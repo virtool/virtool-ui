@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { getDataType } from "../../references/selectors";
 import { routerLocationHasState } from "../../utils/utils";
 import AddBarcodeSequence from "./Barcode/Add";
-import AddGenomeSequence from "./Genome/Add";
+import AddGenomeSequence from "./Genome/AddGenomeSequence";
 
 export const AddSequence = ({ dataType, show }) => {
     if (dataType === "barcode") {

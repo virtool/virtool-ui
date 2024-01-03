@@ -9,7 +9,7 @@ import { editSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
 import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedTargets } from "../../selectors";
-import { SequenceForm, validationSchema } from "../Form";
+import { SequenceForm, validationSchema } from "../SequenceForm";
 import TargetsField from "./TargetField";
 
 const getInitialValues = ({

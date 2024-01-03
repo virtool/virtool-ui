@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
-import { AddGenomeSequence, castValues } from "../Add";
+import { AddGenomeSequence, castValues } from "../AddGenomeSequence";
 
 function createAppStore(state) {
     return () =>
@@ -60,13 +60,13 @@ describe("<AddGenomeSequence>", () => {
         renderWithProviders(<AddGenomeSequence {...props} />, createAppStore(state));
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "None" })).toBeInTheDocument();
+        expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Host" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Definition" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Sequence 0" })).toBeInTheDocument();
 
-        await userEvent.click(screen.getByRole("button", { name: "None" }));
+        await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByText("test_segment"));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
@@ -111,11 +111,11 @@ describe("<AddGenomeSequence>", () => {
 
 describe("castValues", () => {
     const segments = [
-        { name: "test_1", molecule: "", required: true },
-        { name: "test_2", molecule: "", required: true },
+        { name: "test_1", molecule: null, required: true },
+        { name: "test_2", molecule: null, required: true },
     ];
 
-    const values = { segment: "test_1", otherData: {} };
+    const values = { segment: "test_1", sequence: "", accession: "", definition: "", host: "" };
 
     it("should return unchanged values when segment in selectable segments", () => {
         const castedValues = castValues(segments)(values);
