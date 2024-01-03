@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import { cloneReference, createReference, findReferences } from "./api";
-import { Reference, ReferenceMinimal, ReferenceSearchResult } from "./types";
+import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 /**
  * Factory for generating react-query keys for reference related queries.
@@ -52,12 +52,13 @@ export function useCloneReference() {
 export function useCreateReference() {
     const history = useHistory();
 
-    return useMutation<Reference, unknown, { name: string; description: string; dataType: string; organism: string }>(
-        ({ name, description, dataType, organism }) => createReference(name, description, dataType, organism),
-        {
-            onSuccess: () => {
-                history.push("/refs", { emptyReference: false });
-            },
+    return useMutation<
+        Reference,
+        unknown,
+        { name: string; description: string; dataType: ReferenceDataType; organism: string }
+    >(({ name, description, dataType, organism }) => createReference(name, description, dataType, organism), {
+        onSuccess: () => {
+            history.push("/refs", { emptyReference: false });
         },
-    );
+    });
 }

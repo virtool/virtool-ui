@@ -3,6 +3,7 @@ import React from "react";
 import * as Yup from "yup";
 import { Alert, Button } from "../../base";
 import { useCreateReference } from "../querys";
+import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
 import { ReferenceForm } from "./Form";
 
@@ -24,7 +25,7 @@ function getInitialState() {
 type formValues = {
     name: string;
     description: string;
-    dataType: string;
+    dataType: ReferenceDataType;
     organism: string;
 };
 

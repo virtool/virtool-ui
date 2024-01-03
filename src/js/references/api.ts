@@ -1,5 +1,5 @@
 import { Request } from "../app/request";
-import { Reference, ReferenceMinimal, ReferenceSearchResult } from "./types";
+import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 export function find({ term, page }) {
     return Request.get("/refs").query({ find: term, page });
@@ -124,7 +124,7 @@ export function getReference(refId: string): Promise<Reference> {
 export function createReference(
     name: string,
     description: string,
-    dataType: string,
+    dataType: ReferenceDataType,
     organism: string,
 ): Promise<Reference> {
     return Request.post("/refs")
