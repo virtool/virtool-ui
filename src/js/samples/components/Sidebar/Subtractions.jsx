@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
-import { useSubtractionsShortlist } from "../../../subtraction/querys";
+import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
 import { SampleSidebarList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
 
@@ -21,7 +21,7 @@ const SampleSubtractionFooter = styled.div`
 `;
 
 export default function DefaultSubtractions({ defaultSubtractions, onUpdate }) {
-    const { data: subtractionOptions, isLoading } = useSubtractionsShortlist();
+    const { data: subtractionOptions, isLoading } = useFetchSubtractionsShortlist();
 
     if (isLoading) {
         return <LoadingPlaceholder />;

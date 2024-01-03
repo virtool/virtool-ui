@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getBorder, getFontWeight, theme } from "../../../app/theme";
 import { Box, BoxGroup, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
-import { ScrollListElement } from "../../../base/ScrollList";
+import { CompactScrollList } from "../../../base/ScrollList";
 import { StyledButton } from "../../../base/styled/StyledButton";
 import { useValidateFiles } from "../../../files/hooks";
 import { FileResponse, FileType } from "../../../files/types";
@@ -42,7 +42,7 @@ const ReadSelectorHeader = styled.label`
     }
 `;
 
-const StyledScrollListElement = styled(ScrollListElement)`
+const StyledScrollListElement = styled(CompactScrollList)`
     border: ${props => getBorder(props)};
     border-radius: ${props => props.theme.borderRadius.sm};
     overflow-y: auto;

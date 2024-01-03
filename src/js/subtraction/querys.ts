@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
-import { findSubtractions, subtractionShortlist } from "./api";
-import { SubtractionSearchResult } from "./types";
+import { fetchSubtractionShortlist, findSubtractions } from "./api";
+import { SubtractionSearchResult, SubtractionShortlist } from "./types";
 
 export const subtractionQueryKeys = {
     list: (filters: Array<string | number | boolean>) => ["subtraction", "list", ...filters] as const,
@@ -17,12 +17,6 @@ export function useFindSubtractions(page: number, per_page: number, term: string
     );
 }
 
-type SubtractionShortlist = {
-    name: string;
-    id: string;
-    ready: boolean;
-};
-
-export function useSubtractionsShortlist() {
-    return useQuery<SubtractionShortlist>(subtractionQueryKeys.shortlist(), subtractionShortlist);
+export function useFetchSubtractionsShortlist() {
+    return useQuery<SubtractionShortlist>(subtractionQueryKeys.shortlist(), fetchSubtractionShortlist);
 }

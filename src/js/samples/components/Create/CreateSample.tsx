@@ -27,7 +27,7 @@ import { deletePersistentFormState } from "../../../forms/actions";
 import PersistForm from "../../../forms/components/PersistForm";
 import { useListGroups } from "../../../groups/querys";
 import { useFetchLabels } from "../../../labels/hooks";
-import { useSubtractionsShortlist } from "../../../subtraction/querys";
+import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
 import { ErrorResponse } from "../../../types/types";
 import { create } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
@@ -150,7 +150,7 @@ function getInitialValues(forceGroupChoice: boolean) {
 export default function CreateSample() {
     const { data: allLabels, isLoading: isLoadingLabels } = useFetchLabels();
     const { data: groups, isLoading: isLoadingGroups } = useListGroups();
-    const { data: subtractions, isLoading: isLoadingSubtractions } = useSubtractionsShortlist();
+    const { data: subtractions, isLoading: isLoadingSubtractions } = useFetchSubtractionsShortlist();
     const { data: settings, isLoading: isLoadingSettings } = useFetchSettings();
     const {
         data: readsResponse,
@@ -167,7 +167,7 @@ export default function CreateSample() {
             dispatch(deletePersistentFormState("create-sample"));
         },
     });
-
+    console.log(groups);
     if (isLoadingReads || isLoadingLabels || isLoadingSubtractions || isLoadingSettings || isLoadingGroups) {
         return <LoadingPlaceholder margin="36px" />;
     }

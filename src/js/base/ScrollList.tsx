@@ -30,7 +30,7 @@ type ScrollListElementProps = {
 };
 
 /**
- * An infinitely scrolling list of items within an element
+ * A height-constrained, infinitely scrolling list of items for compact display
  *
  * @param className - The class name used for the scroll list
  * @param fetchNextPage - A function which initiates fetching the next page
@@ -40,7 +40,7 @@ type ScrollListElementProps = {
  * @param renderRow - A function which accepts an item and returns a react element
  * @returns An infinitely scrolling list of items
  */
-export function ScrollListElement({
+export function CompactScrollList({
     className,
     fetchNextPage,
     isFetchingNextPage,
@@ -48,20 +48,17 @@ export function ScrollListElement({
     items,
     renderRow,
 }: ScrollListElementProps) {
-    function onScroll() {
-        const scrollListElement = document.getElementById("scroll-list");
+    function onScroll(e) {
+        const scrollListElement = e.target;
         if (getScrollRatio(scrollListElement) > 0.8 && !isFetchingNextPage) {
             void fetchNextPage();
         }
-
-        scrollListElement.addEventListener("scroll", onScroll);
-        scrollListElement.removeEventListener("scroll", onScroll);
     }
 
     const entries = map(items, item => renderRow(item));
 
     return (
-        <StyledScrollList id={"scroll-list"} className={className} onScroll={onScroll}>
+        <StyledScrollList className={className} onScroll={onScroll}>
             {entries}
             {isLoading && <LoadingPlaceholder margin="20px" />}
         </StyledScrollList>
