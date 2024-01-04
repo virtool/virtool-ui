@@ -22,7 +22,7 @@ export const DialogContent = styled(DialogPrimitive.Content)<DialogContentProps>
     border-radius: ${props => props.theme.borderRadius.md};
     box-shadow: ${props => props.theme.boxShadow.lg};
     position: fixed;
-    top: 40%;
+    top: 50%;
     left: 50%;
     padding: 25px;
     transform: translate(-50%, -50%);
