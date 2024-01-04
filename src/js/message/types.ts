@@ -1,6 +1,6 @@
 import { UserNested } from "../users/types";
 
-export type InstanceMessage = {
+export type Message = {
     active: boolean;
     color: string;
     created_at: string;

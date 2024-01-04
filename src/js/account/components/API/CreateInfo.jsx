@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import { AdministratorRoles } from "../../../administration/types";
+import { hasSufficientAdminRole } from "../../../administration/utils";
 import { AlertOuter } from "../../../base";
 import { getAccountAdministratorRole } from "../../selectors";
 
@@ -15,8 +17,8 @@ const StyledAPIKeyAdministratorInfo = styled(AlertOuter)`
     }
 `;
 
-export const APIKeyAdministratorInfo = ({ administrator }) => {
-    if (administrator) {
+export const APIKeyAdministratorInfo = ({ administratorRole }) => {
+    if (hasSufficientAdminRole(AdministratorRoles.BASE, administratorRole)) {
         return (
             <StyledAPIKeyAdministratorInfo color="purple">
                 <div>
@@ -38,7 +40,7 @@ export const APIKeyAdministratorInfo = ({ administrator }) => {
 };
 
 export const mapStateToProps = state => ({
-    administrator: getAccountAdministratorRole(state) !== null,
+    administratorRole: getAccountAdministratorRole(state),
 });
 
 export default connect(mapStateToProps)(APIKeyAdministratorInfo);

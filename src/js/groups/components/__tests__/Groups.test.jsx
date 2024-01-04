@@ -126,7 +126,7 @@ describe("Groups", () => {
     });
 
     it("should render correctly when active group has a group member", async () => {
-        const group = createFakeGroup({ users: [{ handle: "testUser1", administrator: false, id: "test_id" }] });
+        const group = createFakeGroup({ users: [{ handle: "testUser1", id: "test_id" }] });
         mockApiListGroups([group]);
         mockApiGetGroup(group);
 
@@ -139,12 +139,12 @@ describe("Groups", () => {
 
     it("should render correctly when more than one group exists", async () => {
         const group_1 = createFakeGroup({
-            users: [{ handle: "testUser1", administrator: false, id: "test_id" }],
+            users: [{ handle: "testUser1", id: "test_id" }],
             permissions: { create_sample: true, modify_hmm: true },
             name: "testName",
         });
         const group_2 = createFakeGroup({
-            users: [{ handle: "testUser2", administrator: false, id: "test_id2" }],
+            users: [{ handle: "testUser2", id: "test_id2" }],
             permissions: { create_sample: true, modify_hmm: true, remove_job: true },
             name: "testName2",
         });

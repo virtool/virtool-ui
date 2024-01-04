@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { AdministratorRoles } from "../../administration/types";
 import { checkReferenceRight, getCanModifyReferenceOTU } from "../selectors";
 
 const rights = ["build", "modify", "modify_otu", "remove"];
@@ -9,7 +10,7 @@ describe("checkReferenceRight()", () => {
     beforeEach(() => {
         state = {
             account: {
-                administrator: false,
+                administrator_role: null,
                 groups: ["leads"],
                 id: "bob",
             },
@@ -23,7 +24,7 @@ describe("checkReferenceRight()", () => {
     });
 
     it("should return true when account is administrator", () => {
-        state.account.administrator = true;
+        state.account.administrator_role = AdministratorRoles.FULL;
         rights.forEach(rightToCheck => {
             expect(checkReferenceRight(state, rightToCheck)).toBe(true);
         });
@@ -81,7 +82,7 @@ describe("getCanModifyReferenceOTU()", () => {
     beforeEach(() => {
         state = {
             account: {
-                administrator: false,
+                administrator_role: null,
                 groups: ["leads"],
                 id: "bob",
             },
@@ -102,7 +103,7 @@ describe("getCanModifyReferenceOTU()", () => {
     });
 
     it("should return true when administrator", () => {
-        state.account.administrator = true;
+        state.account.administrator_role = AdministratorRoles.FULL;
         expect(getCanModifyReferenceOTU(state)).toBe(true);
     });
 

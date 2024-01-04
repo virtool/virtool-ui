@@ -8,6 +8,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeIndexMinimal, mockApiFindIndexes } from "../../../../tests/fake/indexes";
 import { createFakeReferenceNested } from "../../../../tests/fake/references";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
+import { AdministratorRoles } from "../../../administration/types";
 import { Indexes } from "../Indexes";
 
 function createReducer(state, history) {
@@ -26,7 +27,7 @@ describe("<Indexes />", () => {
     beforeEach(() => {
         state = {
             references: { detail: { id: defaultReference.id } },
-            account: { administrator: true },
+            account: { administrator_role: AdministratorRoles.FULL },
             indexes: { unbuilt: [] },
         };
     });

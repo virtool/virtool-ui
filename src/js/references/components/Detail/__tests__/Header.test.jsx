@@ -1,6 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { AdministratorRoles } from "../../../../administration/types";
 import { mapDispatchToProps, mapStateToProps, ReferenceDetailHeader, ReferenceDetailHeaderIcon } from "../Header";
 
 describe("<ReferenceDetailHeaderIcon />", () => {
@@ -92,7 +93,7 @@ describe("mapStateToProps()", () => {
                 },
             },
             account: {
-                administrator: true,
+                administrator_role: AdministratorRoles.FULL,
             },
             router: {
                 location: {

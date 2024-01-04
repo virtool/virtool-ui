@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 
@@ -7,15 +6,14 @@ import { useFetchAccount } from "../../account/querys";
 import { Groups } from "../../groups/components/Groups";
 import { ManageUsers } from "../../users/components/ManageUsers";
 import UserDetail from "../../users/components/UserDetail";
-import { mapSettingsStateToProps } from "../mappers";
 import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 import { ManageAdministrators } from "./administrators/Administrators";
 import { AdministratorTabs } from "./AdministratorTabs";
-import { ServerSettings } from "./Server";
-export const Settings = ({ loading }) => {
+import { ServerSettings } from "./ServerSettings";
+
+export default function Settings() {
     const { data: account, isLoading } = useFetchAccount();
-    loading = loading || isLoading;
 
     const redirect = hasSufficientAdminRole(AdministratorRoles.SETTINGS, account?.administrator_role)
         ? "settings"
@@ -27,7 +25,7 @@ export const Settings = ({ loading }) => {
                 <ViewHeaderTitle>Administration</ViewHeaderTitle>
             </ViewHeader>
 
-            {loading ? (
+            {isLoading ? (
                 <LoadingPlaceholder />
             ) : (
                 <>
@@ -46,6 +44,4 @@ export const Settings = ({ loading }) => {
             )}
         </ContainerWide>
     );
-};
-
-export default connect(mapSettingsStateToProps)(Settings);
+}

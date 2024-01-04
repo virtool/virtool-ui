@@ -16,8 +16,6 @@ type UserB2C = {
 
 /** A user with the essential information */
 export type UserNested = {
-    /** Indicates if the user is an administrator */
-    administrator: boolean;
     /** The unique identifier */
     id: string;
     /** The user's handle or username */
@@ -26,6 +24,8 @@ export type UserNested = {
 
 /** A Virtool user */
 export type User = UserNested & {
+    /** Their administrator role defining what resources they can modify */
+    administrator_role: AdministratorRoles;
     /** Indicates if user is active */
     active: boolean;
     /** Their B2C specific information */
@@ -48,8 +48,6 @@ export type User = UserNested & {
     permissions: Permissions;
     /** Their primary group */
     primary_group: GroupMinimal;
-    /** Their administrator role defining what resources they can modify */
-    administrator_role: AdministratorRoles;
 };
 
 /** User search results from the API */

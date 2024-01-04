@@ -1,8 +1,8 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { AdministratorRoles } from "../../../../administration/types";
 import { InputSelect } from "../../../../base";
-import { getCanModifyRights } from "../../../selectors";
 import { mapDispatchToProps, mapStateToProps, SampleRights } from "../Rights";
 
 vi.mock("../../../selectors.ts");
@@ -68,26 +68,29 @@ describe("<SampleRights />", () => {
     });
 });
 
+vi.unmock("../../../selectors.ts");
+
 describe("mapStateToProps()", () => {
-    const state = {
-        samples: {
-            detail: {
-                all_read: true,
-                all_write: false,
-                group: "baz",
-                group_read: true,
-                group_write: false,
-                user: { id: "Baz" },
-                id: "Boo",
+    let state;
+    beforeEach(() => {
+        state = {
+            samples: {
+                detail: {
+                    all_read: true,
+                    all_write: false,
+                    group: "baz",
+                    group_read: true,
+                    group_write: false,
+                    user: { id: "Baz" },
+                    id: "Boo",
+                },
             },
-        },
-        account: { id: "foo", administrator: true },
-        groups: { documents: "bar" },
-    };
+            account: { id: "foo", administrator_role: null },
+            groups: { documents: "bar" },
+        };
+    });
 
     it("should return props when getCanModifyRights returns false", () => {
-        getCanModifyRights.mockReturnValue(false);
-
         const props = mapStateToProps(state);
         expect(props).toEqual({
             accountId: "foo",
@@ -104,8 +107,7 @@ describe("mapStateToProps()", () => {
     });
 
     it("should return props when getCanModifyRights returns true", () => {
-        getCanModifyRights.mockReturnValue(true);
-
+        state.account.administrator_role = AdministratorRoles.FULL;
         const props = mapStateToProps(state);
         expect(props).toEqual({
             accountId: "foo",
