@@ -2,8 +2,9 @@ import { Field, Form, Formik } from "formik";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
-import { Box, BoxTitle, Input, InputGroup, InputLabel, LoadingPlaceholder, SaveButton } from "../../base";
-import { useFetchMessage, useSetMessage } from "../../message/querys";
+import { Box, BoxTitle, Input, InputGroup, InputLabel, SaveButton } from "../../base";
+import { useSetMessage } from "../../message/querys";
+import { Message } from "../../message/types";
 
 const InstanceMessageTitle = styled(BoxTitle)`
     font-size: ${getFontSize("lg")};
@@ -15,22 +16,17 @@ const InstanceMessageSubtitle = styled.p`
     margin: 0 0 15px;
 `;
 
+type InstanceMessageProps = {
+    message: Message;
+};
+
 /**
  * Displays the instance message and provides functionality to update it
  */
-export default function InstanceMessage() {
-    const { data, isLoading } = useFetchMessage();
+export default function InstanceMessage({ message }: InstanceMessageProps) {
     const mutation = useSetMessage();
 
-    if (isLoading) {
-        return (
-            <Box>
-                <LoadingPlaceholder />
-            </Box>
-        );
-    }
-
-    const initialValues = { message: data?.message || "" };
+    const initialValues = { message: message?.message || "" };
 
     return (
         <Box>
