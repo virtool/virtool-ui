@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-import { Badge, InputContainer, InputError, InputGroup, InputLabel, TextArea } from "../../base";
+import { Badge, InputError, InputGroup, InputLabel, TextArea } from "../../base";
 export const SequenceFieldTextArea = styled(TextArea)`
     font-family: ${props => props.theme.fontFamily.monospace};
-    transform-text: uppercase;
+    text-transform: uppercase;
 `;
 
 const SequenceField = ({ value, readOnly = false, error, onChange, onBlur }) => (
@@ -12,18 +12,16 @@ const SequenceField = ({ value, readOnly = false, error, onChange, onBlur }) => 
         <InputLabel htmlFor="sequence">
             Sequence <Badge>{value.length}</Badge>
         </InputLabel>
-        <InputContainer>
-            <SequenceFieldTextArea
-                name="sequence"
-                readOnly={readOnly}
-                onChange={onChange}
-                value={value}
-                error={error}
-                onBlur={onBlur}
-                id="sequence"
-            />
-            <InputError>{error}</InputError>
-        </InputContainer>
+        <SequenceFieldTextArea
+            name="sequence"
+            readOnly={readOnly}
+            onChange={onChange}
+            value={value}
+            error={error}
+            onBlur={onBlur}
+            id="sequence"
+        />
+        <InputError>{error}</InputError>
     </InputGroup>
 );
 
