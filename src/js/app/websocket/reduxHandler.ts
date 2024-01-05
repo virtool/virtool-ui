@@ -7,7 +7,7 @@ import { wsInsertOTU, wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
 import { wsInsertReference, wsRemoveReference, wsUpdateReference } from "../../references/actions";
 import { wsInsertSample, wsRemoveSample, wsUpdateSample } from "../../samples/actions";
 import { wsUpdateStatus } from "../../status/actions";
-import { wsInsertSubtraction, wsRemoveSubtraction, wsUpdateSubtraction } from "../../subtraction/actions";
+import { wsRemoveSubtraction } from "../../subtraction/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../../users/actions";
 
 function actionCreatorWrapper(actionCreator) {
@@ -29,7 +29,6 @@ const inserters = {
     otus: actionCreatorWrapper(wsInsertOTU),
     references: actionCreatorWrapper(wsInsertReference),
     samples: actionCreatorWrapper(wsInsertSample),
-    subtraction: actionCreatorWrapper(wsInsertSubtraction),
     users: actionCreatorWrapper(wsInsertUser),
 };
 
@@ -48,7 +47,6 @@ const updaters = {
     references: actionCreatorWrapper(wsUpdateReference),
     samples: actionCreatorWrapper(wsUpdateSample),
     status: actionCreatorWrapper(wsUpdateStatus),
-    subtraction: actionCreatorWrapper(wsUpdateSubtraction),
     users: actionCreatorWrapper(wsUpdateUser),
 };
 
