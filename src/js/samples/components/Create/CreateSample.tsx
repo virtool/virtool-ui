@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
-import { useFetchSettings } from "../../../administration/querys";
+import { useFetchAccount } from "../../../account/querys";
 import {
     Box,
     Icon,
@@ -29,6 +29,7 @@ import { useListGroups } from "../../../groups/querys";
 import { useFetchLabels } from "../../../labels/hooks";
 import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
 import { ErrorResponse } from "../../../types/types";
+import { User } from "../../../users/types";
 import { create } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
@@ -131,7 +132,7 @@ type formValues = {
     sidebar: { labels: number[]; subtractionIds: string[] };
 };
 
-function getInitialValues(forceGroupChoice: boolean) {
+function getInitialValues(account: User) {
     return {
         name: "",
         isolate: "",
@@ -139,7 +140,7 @@ function getInitialValues(forceGroupChoice: boolean) {
         locale: "",
         libraryType: "normal",
         readFiles: [],
-        group: forceGroupChoice ? "none" : null,
+        group: account.primary_group?.id || null,
         sidebar: { labels: [], subtractionIds: [] },
     };
 }
@@ -151,7 +152,7 @@ export default function CreateSample() {
     const { data: allLabels, isLoading: isLoadingLabels } = useFetchLabels();
     const { data: groups, isLoading: isLoadingGroups } = useListGroups();
     const { data: subtractions, isLoading: isLoadingSubtractions } = useFetchSubtractionsShortlist();
-    const { data: settings, isLoading: isLoadingSettings } = useFetchSettings();
+    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
     const {
         data: readsResponse,
         isLoading: isLoadingReads,
@@ -167,8 +168,8 @@ export default function CreateSample() {
             dispatch(deletePersistentFormState("create-sample"));
         },
     });
-    console.log(groups);
-    if (isLoadingReads || isLoadingLabels || isLoadingSubtractions || isLoadingSettings || isLoadingGroups) {
+
+    if (isLoadingReads || isLoadingLabels || isLoadingSubtractions || isLoadingGroups || isLoadingAccount) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
@@ -186,8 +187,6 @@ export default function CreateSample() {
         });
     }
 
-    const forceGroupChoice = settings.sample_group === "force_choice";
-
     const reads = flatMap(readsResponse.pages, page => page.items);
 
     function autofill(selected, setFieldValue) {
@@ -201,21 +200,17 @@ export default function CreateSample() {
         const { name, isolate, host, locale, libraryType, readFiles, group, sidebar } = values;
         const { subtractionIds, labels } = sidebar;
 
-        if (forceGroupChoice) {
-            onCreate(
-                name,
-                isolate,
-                host,
-                locale,
-                libraryType,
-                subtractionIds,
-                readFiles,
-                labels,
-                group === "none" ? "" : group,
-            );
-        } else {
-            onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels, group);
-        }
+        onCreate(
+            name,
+            isolate,
+            host,
+            locale,
+            libraryType,
+            subtractionIds,
+            readFiles,
+            labels,
+            group === "none" ? "" : group,
+        );
     }
 
     return (
@@ -228,7 +223,7 @@ export default function CreateSample() {
             </ViewHeader>
             <Formik
                 onSubmit={handleSubmit}
-                initialValues={getInitialValues(forceGroupChoice)}
+                initialValues={getInitialValues(account)}
                 validationSchema={validationSchema}
             >
                 {({

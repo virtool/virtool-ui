@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { pick } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
 import { JobMinimal } from "../../js/jobs/types";
@@ -8,6 +9,7 @@ import {
     Subtraction,
     SubtractionFile,
     SubtractionMinimal,
+    SubtractionShortlist,
     SubtractionUpload,
 } from "../../js/subtraction/types";
 import { UserNested } from "../../js/users/types";
@@ -77,12 +79,11 @@ export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMi
     return assign(defaultSubtractionMinimal, overrides);
 }
 
-export function createFakeSubtractionShortlist() {
-    return {
-        id: faker.random.alphaNumeric(8),
-        name: faker.random.word(),
-        ready: true,
-    };
+/**
+ * Create a fake subtraction shortlist
+ */
+export function createFakeReducedSubtraction(): SubtractionShortlist {
+    return pick(createFakeSubtractionMinimal(), ["id", "name", "ready"]);
 }
 
 /**

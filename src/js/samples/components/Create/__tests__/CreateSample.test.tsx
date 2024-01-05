@@ -4,14 +4,12 @@ import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
+import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../../tests/fake/files";
 import { mockApiListGroups } from "../../../../../tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../../tests/fake/labels";
 import { createFakeSample, mockApiCreateSample } from "../../../../../tests/fake/samples";
-import {
-    createFakeSubtractionShortlist,
-    mockApiGetShortlistSubtractions,
-} from "../../../../../tests/fake/subtractions";
+import { createFakeReducedSubtraction, mockApiGetShortlistSubtractions } from "../../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../../tests/setupTests";
 import CreateSample from "../CreateSample";
 
@@ -19,12 +17,12 @@ describe("<CreateSample>", () => {
     const readFileName = "large";
     const history = createBrowserHistory();
     const labels = [createFakeLabelNested()];
-    const subtractionShortlist = createFakeSubtractionShortlist();
+    const subtractionShortlist = createFakeReducedSubtraction();
 
     beforeEach(() => {
         window.sessionStorage.clear();
         mockApiGetLabels(labels);
-        nock("http://localhost").get("/api/settings").reply(200, []);
+        mockGetAccountAPI(createFakeAccount({ primary_group: null }));
         mockApiListGroups([]);
     });
 
@@ -115,7 +113,7 @@ describe("<CreateSample>", () => {
         });
         const createSampleScope = mockApiCreateSample(createSample);
         renderWithRouter(<CreateSample />, {}, history);
-
+        console.log();
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
         await inputFormRequirements(createSample.name, files);
 

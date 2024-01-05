@@ -53,6 +53,7 @@ type CreateFakeSample = CreateFakeSampleMinimal & {
     files?: string[];
     subtractions?: string[];
     locale?: string;
+    group?: number | string | null;
 };
 
 /**
