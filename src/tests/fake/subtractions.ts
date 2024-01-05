@@ -94,3 +94,32 @@ export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
         total_count: Subtractions.length,
     });
 }
+
+/**
+ * Sets up a mocked API route for fetching a single subtraction
+ *
+ * @param subtractionDetail - The subtraction detail to be returned from the mocked API call
+ * @param statusCode - The HTTP status code to simulate in the response
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetSubtractionDetail(subtractionDetail: Subtraction, statusCode?: number) {
+    return nock("http://localhost")
+        .get(`/api/subtractions/${subtractionDetail.id}`)
+        .query(true)
+        .reply(statusCode || 200, subtractionDetail);
+}
+
+/**
+ * Sets up a mocked API route for updating the subtraction details
+ *
+ * @returns The nock scope for the mocked API call
+ * @param subtraction - The subtraction details
+ * @param name - The updated name
+ * @param nickname - The updated nickname
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiEditSubtraction(subtraction: Subtraction, name: string, nickname: string) {
+    const subtractionDetail = { ...subtraction, name, nickname };
+
+    return nock("http://localhost").patch(`/api/subtractions/${subtraction.id}`).reply(200, subtractionDetail);
+}

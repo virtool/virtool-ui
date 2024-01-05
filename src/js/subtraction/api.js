@@ -29,3 +29,7 @@ export function findSubtractions({ page, per_page, term }) {
 export function getSubtraction(subtractionId) {
     return Request.get(`/subtractions/${subtractionId}`).then(res => res.body);
 }
+
+export function updateSubtraction(subtractionId, name, nickname) {
+    return Request.patch(`/subtractions/${subtractionId}`).send({ name, nickname });
+}

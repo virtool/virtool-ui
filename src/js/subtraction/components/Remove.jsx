@@ -12,7 +12,7 @@ export const RemoveSubtraction = ({ subtraction, show, onConfirm, onHide }) => (
         noun="Subtraction"
         show={show}
         onHide={onHide}
-        onConfirm={() => onConfirm(id)}
+        onConfirm={() => onConfirm(subtraction.id)}
     />
 );
 

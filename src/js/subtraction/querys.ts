@@ -1,8 +1,11 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorResponse } from "../types/types";
-import { findSubtractions, getSubtraction } from "./api";
+import { findSubtractions, getSubtraction, updateSubtraction } from "./api";
 import { Subtraction, SubtractionSearchResult } from "./types";
 
+/**
+ * Factory object for generating subtraction query keys
+ */
 export const subtractionQueryKeys = {
     all: () => ["subtraction"] as const,
     lists: () => ["subtraction", "list"] as const,
@@ -11,6 +14,14 @@ export const subtractionQueryKeys = {
     detail: (subtractionId: string) => ["subtraction", "details", subtractionId] as const,
 };
 
+/**
+ * Fetch a page of subtraction search results from the API
+ *
+ * @param page - The page to fetch
+ * @param per_page - The number of hmms to fetch per page
+ * @param term - The search term to filter the hmms by
+ * @returns A page of subtraction search results
+ */
 export function useFindSubtractions(page: number, per_page: number, term: string) {
     return useQuery<SubtractionSearchResult>(
         subtractionQueryKeys.list([page, per_page, term]),
@@ -21,6 +32,12 @@ export function useFindSubtractions(page: number, per_page: number, term: string
     );
 }
 
+/**
+ * Fetches a single subtraction
+ *
+ * @param subtractionId - The id of the subtraction to fetch
+ * @returns A single subtraction
+ */
 export function useFetchSubtraction(subtractionId: string) {
     return useQuery<Subtraction, ErrorResponse>(
         subtractionQueryKeys.detail(subtractionId),
@@ -31,6 +48,24 @@ export function useFetchSubtraction(subtractionId: string) {
                     return false;
                 }
                 return failureCount <= 3;
+            },
+        },
+    );
+}
+
+/**
+ * Initializes a mutator for updating a subtraction
+ *
+ * @param subtractionId - The id of the subtraction to update
+ * @returns A mutator for updating a subtraction
+ */
+export function useUpdateSubtraction(subtractionId: string) {
+    const queryClient = useQueryClient();
+    return useMutation<Subtraction, unknown, { name: string; nickname: string }>(
+        ({ name, nickname }) => updateSubtraction(subtractionId, name, nickname),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(subtractionQueryKeys.detail(subtractionId));
             },
         },
     );

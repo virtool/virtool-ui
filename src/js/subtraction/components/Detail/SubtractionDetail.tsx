@@ -1,23 +1,33 @@
 import numbro from "numbro";
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { checkAdminRoleOrPermission } from "../../../administration/utils";
-import { pushState } from "../../../app/actions";
+import { match, useHistory } from "react-router-dom";
+import { useCheckAdminRoleOrPermission } from "../../../administration/hooks";
 import { Icon, LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
 import { Permission } from "../../../groups/types";
 import { useFetchSubtraction } from "../../querys";
+import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";
-import EditSubtraction from "../Edit";
 import RemoveSubtraction from "../Remove";
+import EditSubtraction from "./EditSubtraction";
 import SubtractionFiles from "./Files";
 
-function calculateGc(nucleotides) {
+function calculateGc(nucleotides: NucleotideComposition) {
     return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
 }
 
-export function SubtractionDetail({ canModify, onShowRemove, match }) {
+type SubtractionDetailProps = {
+    /** Match object containing path information */
+    match: match<{ subtractionId: string }>;
+};
+
+/**
+ * The subtraction detailed view
+ */
+export default function SubtractionDetail({ match }: SubtractionDetailProps) {
+    const history = useHistory();
     const [show, setShow] = useState(false);
     const { data, isLoading, isError } = useFetchSubtraction(match.params.subtractionId);
+    const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
 
     if (isError) {
         return <NotFound />;
@@ -26,11 +36,6 @@ export function SubtractionDetail({ canModify, onShowRemove, match }) {
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
-    console.log(data);
-
-    const handleHide = () => {
-        setShow(false);
-    };
 
     if (!data.ready) {
         return <LoadingPlaceholder message="Subtraction is still being imported" />;
@@ -43,8 +48,13 @@ export function SubtractionDetail({ canModify, onShowRemove, match }) {
                     {data.name}
                     {canModify && (
                         <ViewHeaderIcons>
-                            <Icon name="pencil-alt" color="orange" onClick={() => setShow(true)} />
-                            <Icon name="trash" color="red" onClick={onShowRemove} />
+                            <Icon aria-label="edit" name="pencil-alt" color="orange" onClick={() => setShow(true)} />
+                            <Icon
+                                aria-label="remove"
+                                name="trash"
+                                color="red"
+                                onClick={() => history.push({ state: { removeSubtraction: true } })}
+                            />
                         </ViewHeaderIcons>
                     )}
                 </ViewHeaderTitle>
@@ -75,20 +85,8 @@ export function SubtractionDetail({ canModify, onShowRemove, match }) {
                 </tbody>
             </Table>
             <SubtractionFiles files={data.files} />
-            <EditSubtraction show={show} onHide={handleHide} />
+            <EditSubtraction show={show} onHide={() => setShow(false)} subtraction={data} />
             <RemoveSubtraction subtraction={data} />
         </>
     );
 }
-
-const mapStateToProps = state => ({
-    canModify: checkAdminRoleOrPermission(state, Permission.modify_subtraction),
-});
-
-const mapDispatchToProps = dispatch => ({
-    onShowRemove: () => {
-        dispatch(pushState({ removeSubtraction: true }));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SubtractionDetail);
