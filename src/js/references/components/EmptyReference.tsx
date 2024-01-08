@@ -5,7 +5,7 @@ import { Alert, Button } from "../../base";
 import { useCreateReference } from "../querys";
 import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
-import { ReferenceForm } from "./Form";
+import { ReferenceForm } from "./ReferenceForm";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),

@@ -5,7 +5,7 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { theme } from "../../../app/theme";
-import { ReferenceForm } from "../Form";
+import { ReferenceForm } from "../ReferenceForm";
 
 function renderWithFormik(renderer, ui, initialValues, onSubmit, mode) {
     const jsx = (

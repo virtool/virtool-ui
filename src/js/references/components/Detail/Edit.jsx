@@ -6,7 +6,7 @@ import { pushState } from "../../../app/actions";
 import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../base";
 import { routerLocationHasState } from "../../../utils/utils";
 import { editReference } from "../../actions";
-import { ReferenceForm } from "../Form";
+import { ReferenceForm } from "../ReferenceForm";
 
 const getInitialValues = detail => ({
     name: detail.name,
