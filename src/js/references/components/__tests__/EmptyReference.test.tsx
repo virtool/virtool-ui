@@ -52,4 +52,14 @@ describe("<EmptyReference />", () => {
 
         scope.done();
     });
+
+    describe("<ReferenceForm />", () => {
+        it("should render", async () => {
+            renderWithProviders(<EmptyReference />);
+
+            await userEvent.click(screen.getByRole("button", { name: "Save" }));
+
+            expect(screen.getByText("Required Field")).toBeInTheDocument();
+        });
+    });
 });
