@@ -1,12 +1,12 @@
 import { faker } from "@faker-js/faker";
-import { assign, pick } from "lodash";
+import { assign } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
 import { LibraryType, SampleMinimal, WorkflowState } from "../../js/samples/types";
 import { createFakeLabelNested } from "./labels";
 import { createFakeUserNested } from "./user";
 
-type CreateFakeSampleMinimal = {
+export type CreateFakeSampleMinimal = {
     labels?: LabelNested[] | number[];
     host?: string;
     isolate?: string;
@@ -37,45 +37,6 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
     return assign(defaultSampleMinimal, overrides);
 }
 
-type CreateSampleType = {
-    name: string;
-    isolate: string;
-    host: string;
-    locale: string;
-    library_type: string;
-    files: string[];
-    labels: number[];
-    subtractions: string[];
-    group: string | null;
-};
-
-type CreateFakeSample = CreateFakeSampleMinimal & {
-    files?: string[];
-    subtractions?: string[];
-    locale?: string;
-    group?: number | string | null;
-};
-
-/**
- * Create a fake object with the required data for creating a sample
- *
- * @param overrides - optional properties for creating a sample with specific values
- */
-export function createFakeSample(overrides?: CreateFakeSample): CreateSampleType {
-    const { files, ...props } = overrides || {};
-    const sampleMinimal = pick(createFakeSampleMinimal(props), ["name", "isolate", "host", "library_type"]);
-    const defaultCreateSample = {
-        ...sampleMinimal,
-        locale: faker.random.word(),
-        subtractions: faker.datatype.number(),
-        files: files || [faker.datatype.number(), faker.datatype.number()],
-        labels: [],
-        group: null,
-    };
-
-    return assign(defaultCreateSample, overrides);
-}
-
 /**
  * Creates a mocked API call for getting a paginated list of samples
  *
@@ -92,6 +53,18 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
         documents: samples,
     });
 }
+
+export type CreateSampleType = {
+    name: string;
+    isolate: string;
+    host: string;
+    locale: string;
+    library_type: string;
+    files: string[];
+    labels: number[];
+    subtractions: string[];
+    group: string | null;
+};
 
 /**
  * Creates a mocked API call for creating a sample

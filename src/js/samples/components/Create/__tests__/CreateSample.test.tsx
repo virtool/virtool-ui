@@ -1,6 +1,8 @@
+import { faker } from "@faker-js/faker";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
+import { assign, pick } from "lodash";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -8,16 +10,45 @@ import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/
 import { createFakeFile, mockApiListFiles } from "../../../../../tests/fake/files";
 import { mockApiListGroups } from "../../../../../tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../../tests/fake/labels";
-import { createFakeSample, mockApiCreateSample } from "../../../../../tests/fake/samples";
-import { createFakeReducedSubtraction, mockApiGetShortlistSubtractions } from "../../../../../tests/fake/subtractions";
+import {
+    CreateFakeSampleMinimal,
+    createFakeSampleMinimal,
+    CreateSampleType,
+    mockApiCreateSample,
+} from "../../../../../tests/fake/samples";
+import {
+    createFakeShortlistSubtraction,
+    mockApiGetShortlistSubtractions,
+} from "../../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../../tests/setupTests";
 import CreateSample from "../CreateSample";
+
+type CreateFakeSample = CreateFakeSampleMinimal & {
+    files?: string[];
+    subtractions?: string[];
+    locale?: string;
+};
+
+function createFakeSample(overrides?: CreateFakeSample): CreateSampleType {
+    const { files, ...props } = overrides || {};
+    const sampleMinimal = pick(createFakeSampleMinimal(props), ["name", "isolate", "host", "library_type"]);
+    const defaultCreateSample = {
+        ...sampleMinimal,
+        locale: faker.random.word(),
+        subtractions: faker.datatype.number(),
+        files: files || [faker.datatype.number(), faker.datatype.number()],
+        labels: [],
+        group: null,
+    };
+
+    return assign(defaultCreateSample, overrides);
+}
 
 describe("<CreateSample>", () => {
     const readFileName = "large";
     const history = createBrowserHistory();
     const labels = [createFakeLabelNested()];
-    const subtractionShortlist = createFakeReducedSubtraction();
+    const subtractionShortlist = createFakeShortlistSubtraction();
 
     beforeEach(() => {
         window.sessionStorage.clear();

@@ -82,7 +82,7 @@ export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMi
 /**
  * Create a fake subtraction shortlist
  */
-export function createFakeReducedSubtraction(): SubtractionShortlist {
+export function createFakeShortlistSubtraction(): SubtractionShortlist {
     return pick(createFakeSubtractionMinimal(), ["id", "name", "ready"]);
 }
 

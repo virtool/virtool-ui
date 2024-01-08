@@ -173,20 +173,6 @@ export default function CreateSample() {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    function onCreate(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group) {
-        samplesMutation.mutate({
-            name,
-            isolate,
-            host,
-            locale,
-            libraryType,
-            subtractions: subtractionIds,
-            files,
-            labels,
-            group,
-        });
-    }
-
     const reads = flatMap(readsResponse.pages, page => page.items);
 
     function autofill(selected, setFieldValue) {
@@ -200,17 +186,17 @@ export default function CreateSample() {
         const { name, isolate, host, locale, libraryType, readFiles, group, sidebar } = values;
         const { subtractionIds, labels } = sidebar;
 
-        onCreate(
+        samplesMutation.mutate({
             name,
             isolate,
             host,
             locale,
             libraryType,
-            subtractionIds,
-            readFiles,
+            subtractions: subtractionIds,
+            files: readFiles,
             labels,
-            group === "none" ? "" : group,
-        );
+            group: group === "none" ? "" : group,
+        });
     }
 
     return (
