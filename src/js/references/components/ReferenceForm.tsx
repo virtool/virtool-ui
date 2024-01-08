@@ -36,7 +36,7 @@ export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
         <>
             <StyledInputGroup>
                 <InputLabel htmlFor="name">Name</InputLabel>
-                <InputSimple id="name" {...register("name", { required: "Required Field." })} />
+                <InputSimple id="name" {...register("name", { required: "Required Field" })} />
                 <InputError>{errors.name?.message}</InputError>
             </StyledInputGroup>
 

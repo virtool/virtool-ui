@@ -9,7 +9,7 @@ import OTUDetail from "../../../otus/components/Detail/Detail";
 import OTUList from "../../../otus/components/List";
 import { getReference } from "../../actions";
 import { checkReferenceRight } from "../../selectors";
-import EditReference from "./Edit";
+import EditReference from "./EditReference";
 import ReferenceDetailHeader from "./Header";
 import ReferenceManage from "./Manage";
 import ReferenceSettings from "./Settings";
