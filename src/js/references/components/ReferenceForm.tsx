@@ -1,12 +1,26 @@
 import React from "react";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 import styled from "styled-components";
 import { InputError, InputGroup, InputLabel, InputSimple } from "../../base";
+import { FormValues } from "./EmptyReference";
 
 const StyledInputGroup = styled(InputGroup)`
     padding-bottom: 0px;
 `;
 
-export function ReferenceForm({ errors, mode, register }) {
+type ReferenceFormProps = {
+    /** Form validation errors */
+    errors: FieldErrors<FormValues>;
+    /** The mode of the reference form */
+    mode: string;
+    /** Function to register form fields */
+    register: UseFormRegister<FormValues>;
+};
+
+/**
+ * Form input fields for organism, name and description
+ */
+export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
     let organismComponent;
 
     if (mode === "empty" || mode === "edit") {
