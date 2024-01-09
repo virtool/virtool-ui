@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
-import { AddBarcodeSequence, castValues } from "../Add";
+import { AddBarcodeSequence, castValues } from "../AddBarcodeSequence";
 
 function createAppStore(state) {
     return () =>
