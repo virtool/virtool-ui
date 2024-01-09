@@ -27,6 +27,7 @@ function getInitialValues(defaultTarget: string) {
 export function castValues(targets: ReferenceTarget[], defaultTarget: string) {
     return function (values: formValues) {
         const targetName = find(targets, { name: values.targetName }) ? values.targetName : defaultTarget;
+        console.log(targetName);
         return { ...values, targetName };
     };
 }

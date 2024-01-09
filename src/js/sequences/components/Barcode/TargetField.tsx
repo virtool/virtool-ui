@@ -3,20 +3,21 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { fontWeight, getFontSize } from "../../../app/theme";
-import {
-    Icon,
-    InputError,
-    InputGroup,
-    InputLabel,
-    ListboxButton,
-    ListboxInput,
-    ListboxList,
-    ListboxOption,
-    ListboxPopover,
-} from "../../../base";
+import { Icon, InputGroup, InputLabel, ListboxInput, Select, SelectButton, SelectContent } from "../../../base";
 import { getTargets } from "../../../otus/selectors";
+import { ReferenceTarget } from "../../../references/types";
 import { getUnreferencedTargets } from "../../selectors";
-import { SequenceTarget } from "./Target";
+import { SequenceTarget } from "./SequenceTarget";
+
+const TargetSelectContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    button {
+        flex-grow: 1;
+        padding: 10px 10px;
+    }
+`;
 
 const TargetFieldLabel = styled(InputLabel)`
     align-items: center;
@@ -42,11 +43,21 @@ const TargetFieldListboxInput = styled(ListboxInput)`
     }
 `;
 
-export const TargetField = ({ targets, targetValue, onChange }) => {
+type TargetFieldProps = {
+    /** A list of unreferenced targets */
+    targets: ReferenceTarget[];
+    /** The data associated to the selected target */
+    targetValue: ReferenceTarget;
+    /** A callback function to handle target selection */
+    onChange: (value: string) => void;
+};
+
+/**
+ * Displays a dropdown list of available targets in adding/editing dialogs
+ */
+export function TargetField({ targets, targetValue, onChange }: TargetFieldProps) {
     const targetSelectOptions = map(targets, target => (
-        <ListboxOption key={target.name} value={target.name}>
-            <SequenceTarget name={target.name} description={target.description} />
-        </ListboxOption>
+        <SequenceTarget key={target.name} name={target.name} description={target.description} />
     ));
 
     const disabled = targets.length === 0;
@@ -62,18 +73,17 @@ export const TargetField = ({ targets, targetValue, onChange }) => {
                     </TargetFieldLabelLock>
                 )}
             </TargetFieldLabel>
-            <TargetFieldListboxInput disabled={disabled} value={targetValue.name} onChange={onChange}>
-                <ListboxButton>
-                    <SequenceTarget name={targetValue.name} description={targetValue.description} />
-                </ListboxButton>
-                <ListboxPopover>
-                    <ListboxList>{targetSelectOptions}</ListboxList>
-                </ListboxPopover>
-            </TargetFieldListboxInput>
-            <InputError />
+            <TargetSelectContainer>
+                <Select defaultValue={targetValue.name} onValueChange={onChange}>
+                    <SelectButton icon="chevron-down" />
+                    <SelectContent position="popper" align="start">
+                        {targetSelectOptions}
+                    </SelectContent>
+                </Select>
+            </TargetSelectContainer>
         </InputGroup>
     );
-};
+}
 
 export const mapStateToProps = (state, props) => ({
     targets: getUnreferencedTargets(state),
