@@ -1,9 +1,9 @@
 import { includes, map } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
+import { useUpdateSettings } from "../../administration/querys";
+import { Settings } from "../../administration/types";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, InputGroup, InputLabel, InputSelect, SelectBox } from "../../base";
-import { updateSetting, updateSettings } from "../actions";
 
 const rights = [
     { label: "None", value: "" },
@@ -17,7 +17,22 @@ export const SampleRightsGroup = styled.div`
     grid-column-gap: ${props => props.theme.gap.column};
 `;
 
-export const SampleRights = props => {
+type SampleRightsProps = {
+    /** The settings data used for configuring sample rights */
+    settings: Settings;
+};
+
+/**
+ * A component managing sample settings, allowing users to configure sample rights
+ */
+export default function SampleRights({ settings }: SampleRightsProps) {
+    const mutation = useUpdateSettings();
+
+    const { sample_group, sample_group_read, sample_group_write, sample_all_read, sample_all_write } = settings;
+
+    const group = (sample_group_read ? "r" : "") + (sample_group_write ? "w" : "");
+    const all = (sample_all_read ? "r" : "") + (sample_all_write ? "w" : "");
+
     const options = map(rights, (entry, index) => (
         <option key={index} value={entry.value}>
             {entry.label}
@@ -34,8 +49,8 @@ export const SampleRights = props => {
                 <label>Sample Group</label>
                 <SampleRightsGroup>
                     <SelectBox
-                        onClick={() => props.onChangeSampleGroup("none")}
-                        active={props.sampleGroup === "none" ? true : ""}
+                        onClick={() => mutation.mutate({ sample_group: "none" })}
+                        active={sample_group === "none"}
                     >
                         <strong>None</strong>
                         <p>
@@ -45,16 +60,16 @@ export const SampleRights = props => {
                     </SelectBox>
 
                     <SelectBox
-                        onClick={() => props.onChangeSampleGroup("force_choice")}
-                        active={props.sampleGroup === "force_choice" ? true : ""}
+                        onClick={() => mutation.mutate({ sample_group: "force_choice" })}
+                        active={sample_group === "force_choice"}
                     >
                         <strong>Force choice</strong>
                         <p>Samples are automatically assigned the creating user's primary group</p>
                     </SelectBox>
 
                     <SelectBox
-                        onClick={() => props.onChangeSampleGroup("users_primary_group")}
-                        active={props.sampleGroup === "users_primary_group" ? true : ""}
+                        onClick={() => mutation.mutate({ sample_group: "users_primary_group" })}
+                        active={sample_group === "users_primary_group"}
                     >
                         <strong>User's primary group</strong>
                         <p>Samples are assigned by the user in the creation form</p>
@@ -63,7 +78,15 @@ export const SampleRights = props => {
 
                 <InputGroup>
                     <InputLabel>Group Rights</InputLabel>
-                    <InputSelect value={props.group} onChange={e => props.onChangeRights("group", e.target.value)}>
+                    <InputSelect
+                        value={group}
+                        onChange={e =>
+                            mutation.mutate({
+                                sample_group_read: includes(e.target.value, "r"),
+                                sample_group_write: includes(e.target.value, "w"),
+                            })
+                        }
+                    >
                         {options}
                     </InputSelect>
                 </InputGroup>
@@ -72,8 +95,13 @@ export const SampleRights = props => {
                     <InputLabel>All Users' Rights</InputLabel>
                     <InputSelect
                         name="all"
-                        value={props.all}
-                        onChange={e => props.onChangeRights("all", e.target.value)}
+                        value={all}
+                        onChange={e =>
+                            mutation.mutate({
+                                sample_all_read: includes(e.target.value, "r"),
+                                sample_all_write: includes(e.target.value, "w"),
+                            })
+                        }
                     >
                         {options}
                     </InputSelect>
@@ -81,31 +109,4 @@ export const SampleRights = props => {
             </BoxGroupSection>
         </BoxGroup>
     );
-};
-
-export const mapStateToProps = state => {
-    const settings = state.settings.data;
-
-    return {
-        sampleGroup: settings.sample_group,
-        group: (settings.sample_group_read ? "r" : "") + (settings.sample_group_write ? "w" : ""),
-        all: (settings.sample_all_read ? "r" : "") + (settings.sample_all_write ? "w" : ""),
-    };
-};
-
-export const mapDispatchToProps = dispatch => ({
-    onChangeSampleGroup: value => {
-        dispatch(updateSetting("sample_group", value));
-    },
-
-    onChangeRights: (scope, value) => {
-        dispatch(
-            updateSettings({
-                [`sample_${scope}_read`]: includes(value, "r"),
-                [`sample_${scope}_write`]: includes(value, "w"),
-            }),
-        );
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SampleRights);
+}

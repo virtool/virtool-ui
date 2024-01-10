@@ -1,8 +1,6 @@
 import React from "react";
-import { useMutation, useQueryClient } from "react-query";
 import { ExternalLink } from "../../base";
-import { updateSettings } from "../api";
-import { settingsQueryKeys } from "../querys";
+import { useUpdateSettings } from "../querys";
 import { Settings } from "../types";
 import { SettingsCheckbox } from "./SettingsCheckbox";
 
@@ -15,12 +13,7 @@ type ApiProps = {
  * A component managing JSON API settings, allowing users to toggle external API access
  */
 export default function Api({ settings: { enable_api } }: ApiProps) {
-    const queryClient = useQueryClient();
-    const mutation = useMutation(updateSettings, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(settingsQueryKeys.all());
-        },
-    });
+    const mutation = useUpdateSettings();
 
     return (
         <SettingsCheckbox enabled={enable_api} onToggle={() => mutation.mutate({ enable_api: !enable_api })}>
