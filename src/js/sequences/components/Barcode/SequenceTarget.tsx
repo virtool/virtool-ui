@@ -22,6 +22,7 @@ const StyledSequenceTarget = styled.div`
     padding: 5px;
 
     h5 {
+        text-align: start;
         font-weight: ${fontWeight.thick};
         margin: 0 0 3px 0;
     }
