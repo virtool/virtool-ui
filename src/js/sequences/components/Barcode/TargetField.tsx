@@ -37,23 +37,22 @@ const TargetFieldLabelLock = styled.span`
 type TargetFieldProps = {
     /** A list of unreferenced targets */
     targets: ReferenceTarget[];
-    /** The data associated to the selected target */
-    targetValue: ReferenceTarget;
+    /** The selected target */
+    value: string;
     /** A callback function to handle target selection */
     onChange: (value: string) => void;
-    value: any;
 };
 
 /**
  * Displays a dropdown list of available targets in adding/editing dialogs
  */
-export function TargetField({ targets, targetValue, onChange, value }: TargetFieldProps) {
+export function TargetField({ targets, onChange, value }: TargetFieldProps) {
     const targetSelectOptions = map(targets, target => (
         <SequenceTarget key={target.name} name={target.name} description={target.description} />
     ));
 
     const disabled = targets.length === 0;
-    console.log(value);
+
     return (
         <InputGroup>
             <TargetFieldLabel>
@@ -66,7 +65,7 @@ export function TargetField({ targets, targetValue, onChange, value }: TargetFie
                 )}
             </TargetFieldLabel>
             <TargetSelectContainer>
-                <Select disabled={disabled} value={value} onValueChange={onChange}>
+                <Select disabled={disabled} value={value} onValueChange={value => value !== "" && onChange(value)}>
                     <SelectButton icon="chevron-down" />
                     <SelectContent position="popper" align="start">
                         {targetSelectOptions}
@@ -77,11 +76,9 @@ export function TargetField({ targets, targetValue, onChange, value }: TargetFie
     );
 }
 
-export function mapStateToProps(state, props) {
-    console.log(props);
+export function mapStateToProps(state) {
     return {
         targets: getUnreferencedTargets(state),
-        // targetValue: find(getTargets(state), { name: props.value }),
     };
 }
 

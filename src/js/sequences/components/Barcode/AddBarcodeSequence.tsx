@@ -1,5 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
@@ -27,7 +27,6 @@ function getInitialValues(defaultTarget: string) {
 export function castValues(targets: ReferenceTarget[], defaultTarget: string) {
     return function (values: formValues) {
         const targetName = find(targets, { name: values.targetName }) ? values.targetName : defaultTarget;
-        console.log(targetName);
         return { ...values, targetName };
     };
 }
@@ -92,7 +91,15 @@ export function AddBarcodeSequence({
                 <StyledContent>
                     <DialogTitle>Add Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-                        {({ errors, touched, setFieldValue }) => (
+                        {({
+                            errors,
+                            touched,
+                            setFieldValue,
+                        }: {
+                            setFieldValue: (field: string, value: string) => void;
+                            errors: FormikErrors<formValues>;
+                            touched: FormikTouched<formValues>;
+                        }) => (
                             <Form>
                                 <PersistForm
                                     formName="addGenomeSequenceForm"
@@ -101,7 +108,7 @@ export function AddBarcodeSequence({
                                 <Field
                                     as={TargetsField}
                                     name="targetName"
-                                    onChange={(target: string) => setFieldValue("targetName", target)}
+                                    onChange={(targetName: string) => setFieldValue("targetName", targetName)}
                                 />
                                 <SequenceForm touched={touched} errors={errors} />
                                 <SaveButton />

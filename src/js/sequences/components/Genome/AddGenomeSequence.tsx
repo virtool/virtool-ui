@@ -17,14 +17,6 @@ import SegmentField from "./SegmentField";
 
 const initialValues = { segment: null, accession: "", definition: "", host: "", sequence: "" };
 
-type formValues = {
-    segment: string;
-    accession: string;
-    definition: string;
-    host: string;
-    sequence: string;
-};
-
 export function castValues(segments: OTUSegment[]) {
     return function (values: formValues) {
         const segment = find(segments, { name: values.segment }) ? values.segment : null;
@@ -35,6 +27,14 @@ export function castValues(segments: OTUSegment[]) {
 export const StyledContent = styled(DialogContent)`
     top: 50%;
 `;
+
+type formValues = {
+    segment: string;
+    accession: string;
+    definition: string;
+    host: string;
+    sequence: string;
+};
 
 type AddGenomeSequenceProps = {
     isolateId: string;

@@ -1,10 +1,10 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../../app/actions";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
+import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
@@ -12,6 +12,7 @@ import { ReferenceTarget } from "../../../references/types";
 import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedTargets } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
+import { StyledContent } from "./AddBarcodeSequence";
 import TargetsField from "./TargetField";
 
 function getInitialValues({ initialTargetName, initialAccession, initialDefinition, initialHost, initialSequence }) {
@@ -100,10 +101,18 @@ export function EditBarcodeSequence({
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
-                <DialogContent>
+                <StyledContent>
                     <DialogTitle>Edit Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-                        {({ touched, errors, setFieldValue }) => (
+                        {({
+                            touched,
+                            errors,
+                            setFieldValue,
+                        }: {
+                            setFieldValue: (field: string, value: string) => void;
+                            errors: FormikErrors<formValues>;
+                            touched: FormikTouched<formValues>;
+                        }) => (
                             <Form>
                                 <PersistForm
                                     formName={`editGenomeSequenceForm${id}`}
@@ -119,7 +128,7 @@ export function EditBarcodeSequence({
                             </Form>
                         )}
                     </Formik>
-                </DialogContent>
+                </StyledContent>
             </DialogPortal>
         </Dialog>
     );
