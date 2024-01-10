@@ -83,7 +83,7 @@ describe("<EditBarcodeSequence>", () => {
         renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
 
         expect(screen.getByText("Target")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "test_target_name test_target_description" })).toBeInTheDocument();
+        expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveValue(props.initialAccession);
         expect(screen.getByRole("textbox", { name: "Host" })).toHaveValue(props.initialHost);
         expect(screen.getByRole("textbox", { name: "Definition" })).toHaveValue(props.initialDefinition);
@@ -93,7 +93,7 @@ describe("<EditBarcodeSequence>", () => {
     it("should submit correct data when all fields changed", async () => {
         renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
 
-        await userEvent.click(screen.getByRole("button", { name: "test_target_name test_target_description" }));
+        await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByText("test_target_name_2"));
 
         const accessionField = screen.getByRole("textbox", { name: "Accession (ID)" });
@@ -167,10 +167,10 @@ describe("castValues", () => {
         },
     ];
 
-    const values = { targetName: "test_target_name", otherData: {} };
+    const values = { targetName: "test_target_name", accession: "", definition: "", host: "", sequence: "" };
 
     it("should return unchanged values when segment in selectable segments", () => {
-        const castedValues = castValues(targets)(values);
+        const castedValues = castValues(targets, "test_target_name")(values);
         expect(castedValues).toEqual(values);
     });
     it("should return values where segment: null when segment is not selectable", () => {

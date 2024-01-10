@@ -77,7 +77,7 @@ describe("<AddBarcodeSequence>", () => {
     it("should render all fields", () => {
         renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
         expect(screen.getByText("Target")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "test_target_name test_target_description" })).toBeInTheDocument();
+        expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Host" })).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Definition" })).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe("<AddBarcodeSequence>", () => {
     it("should submit correct data when all fields changed", async () => {
         renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
 
-        await userEvent.click(screen.getByRole("button", { name: "test_target_name test_target_description" }));
+        await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByText("test_target_name_2"));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
@@ -145,10 +145,10 @@ describe("castValues", () => {
         },
     ];
 
-    const values = { targetName: "test_target_name", otherData: {} };
+    const values = { targetName: "test_target_name", accession: "", definition: "", host: "", sequence: "" };
 
     it("should return unchanged values when target in selectable targets", () => {
-        const castedValues = castValues(targets)(values);
+        const castedValues = castValues(targets, "test_target_name")(values);
         expect(castedValues).toEqual(values);
     });
 

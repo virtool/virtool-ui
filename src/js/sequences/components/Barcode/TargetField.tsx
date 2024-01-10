@@ -1,10 +1,9 @@
-import { find, map } from "lodash-es";
+import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { fontWeight, getFontSize } from "../../../app/theme";
-import { Icon, InputGroup, InputLabel, ListboxInput, Select, SelectButton, SelectContent } from "../../../base";
-import { getTargets } from "../../../otus/selectors";
+import { Icon, InputGroup, InputLabel, Select, SelectButton, SelectContent } from "../../../base";
 import { ReferenceTarget } from "../../../references/types";
 import { getUnreferencedTargets } from "../../selectors";
 import { SequenceTarget } from "./SequenceTarget";
@@ -35,14 +34,6 @@ const TargetFieldLabelLock = styled.span`
     }
 `;
 
-const TargetFieldListboxInput = styled(ListboxInput)`
-    > [data-reach-listbox-button][aria-disabled="true"] {
-        opacity: 1;
-        color: ${props => props.theme.color.black};
-        cursor: default;
-    }
-`;
-
 type TargetFieldProps = {
     /** A list of unreferenced targets */
     targets: ReferenceTarget[];
@@ -50,18 +41,19 @@ type TargetFieldProps = {
     targetValue: ReferenceTarget;
     /** A callback function to handle target selection */
     onChange: (value: string) => void;
+    value: any;
 };
 
 /**
  * Displays a dropdown list of available targets in adding/editing dialogs
  */
-export function TargetField({ targets, targetValue, onChange }: TargetFieldProps) {
+export function TargetField({ targets, targetValue, onChange, value }: TargetFieldProps) {
     const targetSelectOptions = map(targets, target => (
         <SequenceTarget key={target.name} name={target.name} description={target.description} />
     ));
 
     const disabled = targets.length === 0;
-
+    console.log(value);
     return (
         <InputGroup>
             <TargetFieldLabel>
@@ -74,7 +66,7 @@ export function TargetField({ targets, targetValue, onChange }: TargetFieldProps
                 )}
             </TargetFieldLabel>
             <TargetSelectContainer>
-                <Select defaultValue={targetValue.name} onValueChange={onChange}>
+                <Select disabled={disabled} value={value} onValueChange={onChange}>
                     <SelectButton icon="chevron-down" />
                     <SelectContent position="popper" align="start">
                         {targetSelectOptions}
@@ -85,9 +77,12 @@ export function TargetField({ targets, targetValue, onChange }: TargetFieldProps
     );
 }
 
-export const mapStateToProps = (state, props) => ({
-    targets: getUnreferencedTargets(state),
-    targetValue: find(getTargets(state), { name: props.value }),
-});
+export function mapStateToProps(state, props) {
+    console.log(props);
+    return {
+        targets: getUnreferencedTargets(state),
+        // targetValue: find(getTargets(state), { name: props.value }),
+    };
+}
 
 export default connect(mapStateToProps)(TargetField);
