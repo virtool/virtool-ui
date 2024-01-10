@@ -36,6 +36,11 @@ export const administratorRoles = [
 
 type CreateFakeSettings = {
     enable_api?: boolean;
+    sample_group?: string;
+    sample_group_read?: boolean;
+    sample_group_write?: boolean;
+    sample_all_read?: boolean;
+    sample_all_write?: boolean;
 };
 
 /**
