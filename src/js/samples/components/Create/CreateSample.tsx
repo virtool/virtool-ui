@@ -1,9 +1,12 @@
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { filter, find, get, intersectionWith } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { find, flatMap, intersectionWith } from "lodash-es";
+import React from "react";
+import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
+import { useFetchAccount } from "../../../account/querys";
 import {
     Box,
     Icon,
@@ -18,14 +21,16 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "../../../base";
-import { clearError } from "../../../errors/actions";
-import { useListFiles } from "../../../files/querys";
-import { FileType, UnpaginatedFileResponse } from "../../../files/types";
+import { useInfiniteFindFiles } from "../../../files/querys";
+import { FileType } from "../../../files/types";
+import { deletePersistentFormState } from "../../../forms/actions";
 import PersistForm from "../../../forms/components/PersistForm";
-import { listLabels } from "../../../labels/actions";
-import { shortlistSubtractions } from "../../../subtraction/actions";
-import { getSubtractionShortlist } from "../../../subtraction/selectors";
-import { createSample } from "../../actions";
+import { useListGroups } from "../../../groups/querys";
+import { useFetchLabels } from "../../../labels/hooks";
+import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
+import { ErrorResponse } from "../../../types/types";
+import { User } from "../../../users/types";
+import { create } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
 import { Sidebar } from "./Sidebar";
@@ -41,10 +46,10 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  * @param {Array} files - all available read files
  * @returns {*|string} the filename without its extension
  */
-const getFileNameFromId = (id, files) => {
+function getFileNameFromId(id, files) {
     const file = find(files, file => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
-};
+}
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required Field"),
@@ -104,16 +109,17 @@ const AlertContainer = styled.div`
     grid-row: 1;
 `;
 
-const castValues = (reads, subtractions, allLabels) => values => {
-    const readFiles = intersectionWith(values.readFiles, reads, (readFile, read) => readFile === read.id);
-    const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
-    const subtractionIds = intersectionWith(
-        values.sidebar.subtractionIds,
-        subtractions,
-        (subtractionId, subtraction) => subtractionId === subtraction.id,
-    );
-    return { ...values, readFiles, sidebar: { labels, subtractionIds } };
-};
+function castValues(subtractions, allLabels) {
+    return function (values) {
+        const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
+        const subtractionIds = intersectionWith(
+            values.sidebar.subtractionIds,
+            subtractions,
+            (subtractionId, subtraction) => subtractionId === subtraction.id,
+        );
+        return { ...values, sidebar: { labels, subtractionIds } };
+    };
+}
 
 type formValues = {
     name: string;
@@ -126,78 +132,84 @@ type formValues = {
     sidebar: { labels: number[]; subtractionIds: string[] };
 };
 
-const getInitialValues = forceGroupChoice => ({
-    name: "",
-    isolate: "",
-    host: "",
-    locale: "",
-    libraryType: "normal",
-    readFiles: [],
-    group: forceGroupChoice ? "none" : null,
-    sidebar: { labels: [], subtractionIds: [] },
-});
+function getInitialValues(account: User) {
+    return {
+        name: "",
+        isolate: "",
+        host: "",
+        locale: "",
+        libraryType: "normal",
+        readFiles: [],
+        group: account.primary_group?.id || null,
+        sidebar: { labels: [], subtractionIds: [] },
+    };
+}
 
-export function CreateSample({
-    error,
-    forceGroupChoice,
-    groups,
-    subtractions,
-    allLabels,
-    onLoadSubtractionsAndFiles,
-    onCreate,
-    onClearError,
-    onListLabels,
-}) {
-    useEffect(() => {
-        onLoadSubtractionsAndFiles();
-        onListLabels();
-    }, []);
+/**
+ * A form for creating a sample
+ */
+export default function CreateSample() {
+    const { data: allLabels, isLoading: isLoadingLabels } = useFetchLabels();
+    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const { data: subtractions, isLoading: isLoadingSubtractions } = useFetchSubtractionsShortlist();
+    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
+    const {
+        data: readsResponse,
+        isLoading: isLoadingReads,
+        isFetchingNextPage,
+        fetchNextPage,
+    } = useInfiniteFindFiles(FileType.reads, 25);
 
-    const { data: readsResponse, isLoading: isReadsLoading }: { data: UnpaginatedFileResponse; isLoading: boolean } =
-        useListFiles(FileType.reads, false);
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const samplesMutation = useMutation(create, {
+        onSuccess: () => {
+            history.push("/samples");
+            dispatch(deletePersistentFormState("create-sample"));
+        },
+    });
 
-    if (subtractions === null || allLabels === null || isReadsLoading) {
+    if (isLoadingReads || isLoadingLabels || isLoadingSubtractions || isLoadingGroups || isLoadingAccount) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    const reads = filter(readsResponse.documents, { reserved: false });
+    const reads = flatMap(readsResponse.pages, page => page.items);
 
-    const autofill = (selected, setFieldValue) => {
+    function autofill(selected, setFieldValue) {
         const fileName = getFileNameFromId(selected[0], reads);
         if (fileName) {
             setFieldValue("name", fileName);
         }
-    };
+    }
 
-    const handleSubmit = values => {
+    function handleSubmit(values) {
         const { name, isolate, host, locale, libraryType, readFiles, group, sidebar } = values;
         const { subtractionIds, labels } = sidebar;
-        // Only send the group if forceGroupChoice is true
-        if (forceGroupChoice) {
-            onCreate(
-                name,
-                isolate,
-                host,
-                locale,
-                libraryType,
-                subtractionIds,
-                readFiles,
-                labels,
-                group === "none" ? "" : group,
-            );
-        } else {
-            onCreate(name, isolate, host, locale, libraryType, subtractionIds, readFiles, labels);
-        }
-    };
+
+        samplesMutation.mutate({
+            name,
+            isolate,
+            host,
+            locale,
+            libraryType,
+            subtractions: subtractionIds,
+            files: readFiles,
+            labels,
+            group: group === "none" ? "" : group,
+        });
+    }
+
     return (
         <>
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
-                <CreateSampleInputError>{error}</CreateSampleInputError>
+                <CreateSampleInputError>
+                    {samplesMutation.isError && (samplesMutation.error as ErrorResponse).response.body.message}
+                </CreateSampleInputError>
             </ViewHeader>
             <Formik
                 onSubmit={handleSubmit}
-                initialValues={getInitialValues(forceGroupChoice)}
+                initialValues={getInitialValues(account)}
                 validationSchema={validationSchema}
             >
                 {({
@@ -213,10 +225,7 @@ export function CreateSample({
                 }) => (
                     <CreateSampleForm>
                         <AlertContainer>
-                            <PersistForm
-                                formName="create-sample"
-                                castValues={castValues(reads, subtractions, allLabels)}
-                            />
+                            <PersistForm formName="create-sample" castValues={castValues(subtractions, allLabels)} />
                         </AlertContainer>
                         <CreateSampleName>
                             <InputLabel>Name</InputLabel>
@@ -275,9 +284,12 @@ export function CreateSample({
                             <Field
                                 name="readFiles"
                                 as={ReadSelector}
-                                files={reads}
+                                data={readsResponse}
+                                isFetchingNextPage={isFetchingNextPage}
+                                fetchNextPage={fetchNextPage}
+                                isLoading={isLoadingReads}
                                 selected={values.readFiles}
-                                onSelect={selection => setFieldValue("readFiles", selection)}
+                                onSelect={(selection: string) => setFieldValue("readFiles", selection)}
                                 error={touched.readFiles ? errors.readFiles : null}
                             />
                         </CreateSampleFields>
@@ -300,35 +312,3 @@ export function CreateSample({
         </>
     );
 }
-
-export const mapStateToProps = state => ({
-    error: get(state, "errors.CREATE_SAMPLE_ERROR.message", ""),
-    forceGroupChoice: state.settings.data.sample_group === "force_choice",
-    groups: state.account.groups,
-    subtractions: getSubtractionShortlist(state),
-    allLabels: state.labels.documents,
-});
-
-export const mapDispatchToProps = dispatch => ({
-    onLoadSubtractionsAndFiles: () => {
-        dispatch(shortlistSubtractions());
-    },
-
-    onCreate: (name, isolate, host, locale, libraryType, subtractionIds, files, labels, group) => {
-        if (group === null) {
-            dispatch(createSample(name, isolate, host, locale, libraryType, subtractionIds, files, labels));
-        } else {
-            dispatch(createSample(name, isolate, host, locale, libraryType, subtractionIds, files, labels, group));
-        }
-    },
-
-    onClearError: () => {
-        dispatch(clearError("CREATE_SAMPLE_ERROR"));
-    },
-
-    onListLabels: () => {
-        dispatch(listLabels());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateSample);

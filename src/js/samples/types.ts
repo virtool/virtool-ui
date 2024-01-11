@@ -8,6 +8,7 @@
 
 import { JobMinimal } from "../jobs/types";
 import { LabelNested } from "../labels/types";
+import { SubtractionNested } from "../subtraction/types";
 import { UserNested } from "../users/types";
 import { SearchResult } from "../utils/types";
 
@@ -35,6 +36,13 @@ export type SampleWorkflows = {
     nuvs: WorkflowState;
     /** The state of Pathoscope workflows */
     pathoscope: WorkflowState;
+};
+
+export type SampleArtifact = {
+    id: number;
+    download_url: string;
+    name: string;
+    size: number;
 };
 
 /* A Sample ID */
@@ -93,6 +101,24 @@ export type Read = {
     size: number;
     upload?: File;
     uploaded_at: Date;
+};
+
+/* A complete sample */
+export type Sample = SampleMinimal & {
+    all_read: boolean;
+    all_write: boolean;
+    artifacts: Array<SampleArtifact>;
+    format: string;
+    group: number | string | null;
+    group_read: boolean;
+    group_write: boolean;
+    hold: boolean;
+    is_legacy: boolean;
+    locale: string;
+    paired: boolean;
+    quality: Quality | null;
+    reads: Array<Read>;
+    subtractions: Array<SubtractionNested>;
 };
 
 /* Sample search results from the API */
