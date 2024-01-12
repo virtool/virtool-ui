@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FIND_ANALYSES, PUSH_STATE } from "../../../app/actionTypes";
 import { Button, InputSearch } from "../../../base";
 import { getCanModify } from "../../../samples/selectors";
-import { AnalysesToolbar, mapDispatchToProps, mapStateToProps } from "../Toolbar";
+import { AnalysesToolbar, mapDispatchToProps, mapStateToProps } from "../AnalysisToolbar";
 
 vi.mock("../../../samples/selectors");
 

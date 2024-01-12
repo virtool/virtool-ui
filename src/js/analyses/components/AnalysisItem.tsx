@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
@@ -62,26 +62,16 @@ const UnsupportedAnalysisTitle = styled.div`
     }
 `;
 
-interface MatchTypes {
-    /** The sample id */
+type AnalysisItemProps = {
+    analysis: AnalysisMinimal;
     sampleId: string;
-}
+};
 
 /**
  * Condensed analysis item for use in a list of analyses
  */
-export default function AnalysisItem({
-    created_at,
-    id,
-    index,
-    job,
-    ready,
-    reference,
-    subtractions,
-    user,
-    workflow,
-}: AnalysisMinimal) {
-    const sampleId = useRouteMatch<MatchTypes>().params.sampleId;
+export default function AnalysisItem({ analysis, sampleId }: AnalysisItemProps) {
+    const { id, workflow, ready, job, user, reference, index, subtractions, created_at } = analysis;
     const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
     const onRemove = useRemoveAnalysis(id);
 

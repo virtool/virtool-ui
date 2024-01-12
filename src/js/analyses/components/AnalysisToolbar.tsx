@@ -1,0 +1,36 @@
+import React, { ChangeEvent } from "react";
+import { useHistory } from "react-router-dom";
+import { useCheckAdminRole } from "../../administration/hooks";
+import { AdministratorRoles } from "../../administration/types";
+import { Button, Icon, InputSearch, Toolbar } from "../../base";
+
+type AnalysesToolbarProps = {
+    /** A callback function to handle changes in search input */
+    onChange: (term: ChangeEvent<HTMLInputElement>) => void;
+    /** The sample id to be used to push the create analysis dialog onto */
+    sampleId: string;
+    /** Current search term used for filtering */
+    term: string;
+};
+
+/**
+ * A toolbar which allows the analyses to be filtered by their names
+ */
+export default function AnalysesToolbar({ onChange, sampleId, term }: AnalysesToolbarProps) {
+    const history = useHistory();
+    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
+
+    return (
+        <Toolbar>
+            <InputSearch value={term} onChange={onChange} />
+            <Button
+                tip="New Analysis"
+                color="blue"
+                onClick={() => history.push({ state: { createAnalysis: sampleId } })}
+                disabled={!canModify}
+            >
+                <Icon name="plus-square" />
+            </Button>
+        </Toolbar>
+    );
+}
