@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { pick } from "lodash";
+import { merge, pick } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
 import { JobMinimal } from "../../js/jobs/types";
@@ -29,6 +29,51 @@ export function createFakeSubtractionFile(): SubtractionFile {
     };
 }
 
+type CreateFakeSubtractionNestedProps = {
+    id?: string;
+    name?: string;
+};
+
+/**
+ * Create a fake subtraction nested
+ */
+export function createFakeSubtractionNested(props?: CreateFakeSubtractionNestedProps) {
+    const defaultSubtractionNested = {
+        id: faker.random.alphaNumeric(8),
+        name: faker.random.word(),
+    };
+
+    return merge(defaultSubtractionNested, props);
+}
+
+type CreateFakeSubtractionMinimal = CreateFakeSubtractionNestedProps & {
+    count?: number;
+    created_at?: string;
+    file?: SubtractionUpload;
+    job?: JobMinimal;
+    nickname?: string;
+    ready?: boolean;
+    user?: UserNested;
+};
+
+/**
+ * Create a fake minimal subtraction
+ */
+export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMinimal): SubtractionMinimal {
+    const defaultSubtractionMinimal = {
+        ...createFakeSubtractionNested(),
+        count: faker.datatype.number(),
+        created_at: faker.date.past().toISOString(),
+        file: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
+        job: {},
+        nickname: faker.random.word(),
+        ready: true,
+        user: createFakeUserNested(),
+    };
+
+    return assign(defaultSubtractionMinimal, overrides);
+}
+
 type CreateFakeSubtraction = CreateFakeSubtractionMinimal & {
     files?: Array<SubtractionFile>;
     gc?: NucleotideComposition;
@@ -46,37 +91,6 @@ export function createFakeSubtraction(overrides?: CreateFakeSubtraction): Subtra
         gc: gc || { a: 1, c: 1, g: 1, n: 1, t: 1 },
         linked_samples: linked_samples || [],
     };
-}
-
-type CreateFakeSubtractionMinimal = {
-    id?: string;
-    name?: string;
-    count?: number;
-    created_at?: string;
-    file?: SubtractionUpload;
-    job?: JobMinimal;
-    nickname?: string;
-    ready?: boolean;
-    user?: UserNested;
-};
-
-/**
- * Create a fake minimal subtraction
- */
-export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMinimal): SubtractionMinimal {
-    const defaultSubtractionMinimal = {
-        id: faker.random.alphaNumeric(8),
-        name: faker.random.word(),
-        count: faker.datatype.number(),
-        created_at: faker.date.past().toISOString(),
-        file: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
-        job: {},
-        nickname: faker.random.word(),
-        ready: true,
-        user: createFakeUserNested(),
-    };
-
-    return assign(defaultSubtractionMinimal, overrides);
 }
 
 /**

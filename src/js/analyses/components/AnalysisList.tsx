@@ -1,10 +1,7 @@
-import { groupBy, maxBy } from "lodash-es";
-import { map } from "lodash-es/lodash";
 import React from "react";
 import { match } from "react-router-dom";
 import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "../../base";
 import { useListHmms } from "../../hmm/querys";
-import { useListIndexes } from "../../indexes/querys";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useListAnalyses } from "../querys";
 import { AnalysisMinimal } from "../types";
@@ -33,13 +30,10 @@ export default function AnalysesList({ match }: AnalysisListProps) {
     const [term, setTerm] = useUrlSearchParams("find");
     const { data: analyses, isLoading: isLoadingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
-    const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
 
-    if (isLoadingHmms || isLoadingAnalyses || isLoadingIndexes) {
+    if (isLoadingHmms || isLoadingAnalyses) {
         return <LoadingPlaceholder />;
     }
-
-    const filteredIndexes = map(groupBy(indexes, "reference.id"), group => maxBy(group, "version"));
 
     return (
         <ContainerNarrow>
@@ -58,7 +52,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
                 <NoneFoundBox noun="analyses" />
             )}
 
-            <CreateAnalysis compatibleIndexes={filteredIndexes} hmms={hmms} sampleId={sampleId} />
+            <CreateAnalysis hmms={hmms} />
         </ContainerNarrow>
     );
 }

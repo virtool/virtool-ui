@@ -29,7 +29,7 @@ export type AnalysisMinimal = {
     /** Subtractions used in the analysis */
     subtractions: Array<SubtractionNested>;
     /** When the analysis was last updated */
-    updated_at: Date;
+    updated_at: string;
     /** The user who created the analysis */
     user: UserNested;
     /** Workflow used to generate the analysis */

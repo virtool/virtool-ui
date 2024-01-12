@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { samplesQueryKeys } from "../samples/querys";
-import { createAnalysis, listAnalyses, removeAnalysis } from "./api";
-import { Analysis, AnalysisSearchResult } from "./types";
+import { listAnalyses, removeAnalysis } from "./api";
+import { AnalysisSearchResult } from "./types";
 
 /**
  * Factory object for generating analyses query keys
@@ -31,26 +30,6 @@ export function useListAnalyses(sampleId: string, page: number, per_page: number
             keepPreviousData: true,
         },
     );
-}
-
-/**
- * Initializes a mutator for creating an analysis
- *
- * @returns A mutator for creating an analysis
- */
-export function useAnalyze() {
-    const queryClient = useQueryClient();
-
-    return useMutation<
-        Analysis,
-        unknown,
-        { sampleId: string; refId: string; subtractionIds: string[]; workflow: string }
-    >(({ sampleId, refId, subtractionIds, workflow }) => createAnalysis(sampleId, refId, subtractionIds, workflow), {
-        onSuccess: () => {
-            queryClient.invalidateQueries(analysesQueryKeys.lists());
-            queryClient.invalidateQueries(samplesQueryKeys.lists());
-        },
-    });
 }
 
 /**

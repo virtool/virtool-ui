@@ -1,15 +1,16 @@
 import { filter, forEach, map } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { getAccountId } from "../../../account/selectors";
+import { pushState } from "../../../app/actions";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../base";
-import { getDefaultSubtractions, getSampleLibraryType } from "../../../samples/selectors";
+import { getDefaultSubtractions, getSampleDetailId, getSampleLibraryType } from "../../../samples/selectors";
 import { getDataTypeFromLibraryType } from "../../../samples/utils";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { routerLocationHasState } from "../../../utils/utils";
-import { useAnalyze } from "../../querys";
-import { getAnalysesSubtractions } from "../../selectors";
+import { analyze } from "../../actions";
+import { getAnalysesSubtractions, getCompatibleIndexesWithLibraryType } from "../../selectors";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { useCreateAnalysis } from "./hooks";
@@ -23,7 +24,8 @@ const CreateAnalysisFooter = styled(ModalFooter)`
     justify-content: space-between;
 `;
 
-export function CreateAnalysis({
+export const CreateAnalysis = ({
+    accountId,
     compatibleIndexes,
     dataType,
     defaultSubtractions,
@@ -31,33 +33,15 @@ export function CreateAnalysis({
     sampleId,
     show,
     subtractionOptions,
+    onAnalyze,
+    onHide,
     onShortlistSubtractions,
-}) {
-    const history = useHistory();
-    const mutation = useAnalyze();
-
-    function onAnalyze(references: string[], subtractionId: string[], workflows: string[]) {
-        forEach(references, (refId: string) => {
-            forEach(workflows, (workflow: string) =>
-                mutation.mutate({
-                    sampleId,
-                    refId: refId,
-                    subtractionIds: subtractionId,
-                    workflow: workflow,
-                }),
-            );
-        });
-    }
-
+}) => {
     useEffect(() => {
         if (show) {
             onShortlistSubtractions();
         }
     }, [show]);
-
-    function onHide() {
-        history.push({ state: { quickAnalysis: false } });
-    }
 
     const { errors, indexes, subtractions, workflows, setErrors, setIndexes, setSubtractions, setWorkflows } =
         useCreateAnalysis(dataType, defaultSubtractions);
@@ -75,11 +59,13 @@ export function CreateAnalysis({
         }
 
         onAnalyze(
+            sampleId,
             map(
                 filter(compatibleIndexes, index => indexes.includes(index.id)),
                 "reference.id",
             ),
             subtractions,
+            accountId,
             workflows,
         );
         onHide();
@@ -120,12 +106,15 @@ export function CreateAnalysis({
             </form>
         </Modal>
     );
-}
+};
 
 export function mapStateToProps(state) {
     return {
+        accountId: getAccountId(state),
+        compatibleIndexes: getCompatibleIndexesWithLibraryType(state),
         dataType: getDataTypeFromLibraryType(getSampleLibraryType(state)),
         defaultSubtractions: getDefaultSubtractions(state).map(subtraction => subtraction.id),
+        sampleId: getSampleDetailId(state),
         show: routerLocationHasState(state, "createAnalysis"),
         subtractionOptions: getAnalysesSubtractions(state),
     };
@@ -133,6 +122,14 @@ export function mapStateToProps(state) {
 
 export function mapDispatchToProps(dispatch) {
     return {
+        onAnalyze: (sampleId, references, subtractionIds, accountId, workflows) => {
+            forEach(references, refId => {
+                forEach(workflows, workflow => dispatch(analyze(sampleId, refId, subtractionIds, accountId, workflow)));
+            });
+        },
+        onHide: () => {
+            dispatch(pushState({}));
+        },
         onShortlistSubtractions: () => {
             dispatch(shortlistSubtractions());
         },

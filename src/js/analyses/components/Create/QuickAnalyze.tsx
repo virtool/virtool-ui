@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import { filter, forEach, uniqBy } from "lodash-es";
 import React, { ReactNode, useEffect } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -19,11 +20,12 @@ import {
 } from "../../../base";
 import { HMMSearchResults } from "../../../hmm/types";
 import { IndexMinimal } from "../../../indexes/types";
+import { samplesQueryKeys } from "../../../samples/querys";
 import { SampleMinimal } from "../../../samples/types";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 import { HistoryType } from "../../../utils/hooks";
-import { useAnalyze } from "../../querys";
+import { analyze } from "../../api";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
@@ -134,13 +136,18 @@ export function QuickAnalyze({
     samples,
     subtractionOptions,
 }: QuickAnalyzeProps) {
+    const queryClient = useQueryClient();
     const history = useHistory();
     const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
 
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
-    const mutation = useAnalyze();
+    const mutation = useMutation(analyze, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(samplesQueryKeys.lists());
+        },
+    });
 
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
