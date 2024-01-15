@@ -172,7 +172,7 @@ export function QuickAnalyze({
     }, [show]);
 
     function onHide() {
-        history.push({ state: { quickAnalysis: false } });
+        history.push({ ...history.location, state: { quickAnalysis: false } });
     }
 
     // The dialog should close when all selected samples have been analyzed and deselected.
