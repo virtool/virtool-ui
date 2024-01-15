@@ -3,6 +3,7 @@ import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import { pushState } from "../../../app/actions";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import PersistForm from "../../../forms/components/PersistForm";
@@ -30,6 +31,10 @@ export function castValues(segments: OTUSegment[]) {
         return { ...values, segment };
     };
 }
+
+export const StyledContent = styled(DialogContent)`
+    top: 50%;
+`;
 
 type AddGenomeSequenceProps = {
     isolateId: string;
@@ -59,14 +64,14 @@ export function AddGenomeSequence({ isolateId, otuId, show, segments, onHide, on
     const title = "Add Sequence";
 
     function handleSubmit({ accession, definition, host, sequence, segment }) {
-        onSave(otuId, isolateId, accession, definition, host, segment, sequence);
+        onSave(otuId, isolateId, accession, definition, host, segment, sequence.toUpperCase());
     }
 
     return (
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
-                <DialogContent>
+                <StyledContent>
                     <DialogTitle>{title}</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
                         {({
@@ -90,7 +95,7 @@ export function AddGenomeSequence({ isolateId, otuId, show, segments, onHide, on
                             </Form>
                         )}
                     </Formik>
-                </DialogContent>
+                </StyledContent>
             </DialogPortal>
         </Dialog>
     );

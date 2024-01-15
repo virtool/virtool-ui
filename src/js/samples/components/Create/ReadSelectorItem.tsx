@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
@@ -30,14 +29,6 @@ const StyledReadOrientation = styled.div`
     width: 48px;
 `;
 
-export const ReadOrientation = ({ index, selected }) => {
-    if (selected) {
-        return <StyledReadOrientation>{index === 0 ? "LEFT" : "RIGHT"}</StyledReadOrientation>;
-    }
-
-    return null;
-};
-
 const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
     align-items: center;
     display: flex;
@@ -45,8 +36,28 @@ const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
     user-select: none;
 `;
 
-export const ReadSelectorItem = ({ id, index, name, selected, size, onSelect }) => {
-    const select = useCallback(() => onSelect(id), []);
+type ReadSelectorItemProps = {
+    /** The unique identifier */
+    id: number;
+    /** The name of the file */
+    name: string;
+    /** The index number of the file */
+    index: number;
+    /** The size of the file in bytes */
+    size: number;
+    /** The selected files */
+    selected?: boolean;
+    /** A callback function to handle file selection */
+    onSelect: (id: number) => void;
+};
+
+/**
+ * A condensed file for use in a list of read files
+ */
+export default function ReadSelectorItem({ id, index, name, selected = false, size, onSelect }: ReadSelectorItemProps) {
+    const select = useCallback(() => {
+        onSelect(id);
+    }, []);
 
     return (
         <StyledReadSelectorItem onClick={select} active={selected}>
@@ -59,22 +70,7 @@ export const ReadSelectorItem = ({ id, index, name, selected, size, onSelect }) 
                     <div>{byteSize(size)}</div>
                 </div>
             </ReadTitle>
-            <ReadOrientation index={index} selected={selected} />
+            {selected ? <StyledReadOrientation>{index === 0 ? "LEFT" : "RIGHT"}</StyledReadOrientation> : null}
         </StyledReadSelectorItem>
     );
-};
-
-ReadSelectorItem.defaultProps = {
-    selected: false,
-};
-
-ReadSelectorItem.propTypes = {
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-    size: PropTypes.number.isRequired,
-    onSelect: PropTypes.func.isRequired,
-    selected: PropTypes.bool,
-};
-
-export default ReadSelectorItem;
+}

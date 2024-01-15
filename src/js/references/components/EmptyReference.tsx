@@ -1,9 +1,9 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikErrors, FormikTouched } from "formik";
 import React from "react";
-import { connect } from "react-redux";
 import * as Yup from "yup";
 import { Alert, Button } from "../../base";
-import { emptyReference } from "../actions";
+import { useCreateReference } from "../querys";
+import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
 import { ReferenceForm } from "./Form";
 
@@ -12,22 +12,46 @@ const validationSchema = Yup.object().shape({
     dataType: Yup.string().required("Required Field"),
 });
 
-const getInitialState = () => ({
-    name: "",
-    description: "",
-    dataType: "genome",
-    organism: "",
-    mode: "empty",
-});
-
-export const EmptyReference = ({ onSubmit }) => {
-    const handleSubmit = ({ name, description, dataType, organism }) => {
-        onSubmit(name, description, dataType, organism);
+function getInitialState() {
+    return {
+        name: "",
+        description: "",
+        dataType: "genome",
+        organism: "",
+        mode: "empty",
     };
+}
+
+type formValues = {
+    name: string;
+    description: string;
+    dataType: ReferenceDataType;
+    organism: string;
+};
+
+/**
+ * A form for creating an empty reference
+ */
+export default function EmptyReference() {
+    const mutation = useCreateReference();
+
+    function handleSubmit({ name, description, dataType, organism }) {
+        mutation.mutate({ name, description, dataType, organism });
+    }
 
     return (
         <Formik initialValues={getInitialState()} onSubmit={handleSubmit} validationSchema={validationSchema}>
-            {({ errors, touched, setFieldValue, values }) => (
+            {({
+                errors,
+                touched,
+                setFieldValue,
+                values,
+            }: {
+                errors: FormikErrors<formValues>;
+                touched: FormikTouched<formValues>;
+                setFieldValue: (field: string, value: string) => void;
+                values: formValues;
+            }) => (
                 <Form>
                     <Alert>
                         <strong>Create an empty reference.</strong>
@@ -44,12 +68,4 @@ export const EmptyReference = ({ onSubmit }) => {
             )}
         </Formik>
     );
-};
-
-export const mapDispatchToProps = dispatch => ({
-    onSubmit: (name, description, dataType, organism) => {
-        dispatch(emptyReference(name, description, dataType, organism));
-    },
-});
-
-export default connect(null, mapDispatchToProps)(EmptyReference);
+}

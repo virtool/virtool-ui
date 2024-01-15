@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FormikErrors, FormikTouched } from "formik";
 import React from "react";
 import * as Yup from "yup";
-import { Input, InputContainer, InputError, InputGroup, InputLabel } from "../../base";
+import { Input, InputError, InputGroup, InputLabel } from "../../base";
 import { Accession } from "./Accession";
 import SequenceField from "./Field";
 
@@ -40,17 +40,15 @@ export function SequenceForm({ errors, touched }: SequenceFormProps) {
 
             <InputGroup>
                 <InputLabel htmlFor="definition">Definition</InputLabel>
-                <InputContainer>
-                    <Field
-                        as={Input}
-                        name="definition"
-                        id="definition"
-                        error={touched.definition ? errors.definition : null}
-                    />
-                    <InputError>
-                        <ErrorMessage name="definition" />
-                    </InputError>
-                </InputContainer>
+                <Field
+                    as={Input}
+                    name="definition"
+                    id="definition"
+                    error={touched.definition ? errors.definition : null}
+                />
+                <InputError>
+                    <ErrorMessage name="definition" />
+                </InputError>
             </InputGroup>
 
             <Field as={SequenceField} name="sequence" error={touched.sequence ? errors.sequence : null} />

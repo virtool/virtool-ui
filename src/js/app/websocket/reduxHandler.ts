@@ -6,7 +6,6 @@ import { wsInsertJob, wsRemoveJob, wsUpdateJob } from "../../jobs/actions";
 import { wsInsertOTU, wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
 import { wsInsertReference, wsRemoveReference, wsUpdateReference } from "../../references/actions";
 import { wsInsertSample, wsRemoveSample, wsUpdateSample } from "../../samples/actions";
-import { wsUpdateStatus } from "../../status/actions";
 import { wsRemoveSubtraction } from "../../subtraction/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../../users/actions";
 
@@ -46,7 +45,6 @@ const updaters = {
     otus: actionCreatorWrapper(wsUpdateOTU),
     references: actionCreatorWrapper(wsUpdateReference),
     samples: actionCreatorWrapper(wsUpdateSample),
-    status: actionCreatorWrapper(wsUpdateStatus),
     users: actionCreatorWrapper(wsUpdateUser),
 };
 

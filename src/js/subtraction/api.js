@@ -33,3 +33,7 @@ export function getSubtraction(subtractionId) {
 export function updateSubtraction(subtractionId, name, nickname) {
     return Request.patch(`/subtractions/${subtractionId}`).send({ name, nickname });
 }
+
+export function fetchSubtractionShortlist() {
+    return Request.get("/subtractions?short=true").then(res => res.body);
+}

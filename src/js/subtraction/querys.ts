@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorResponse } from "../types/types";
-import { findSubtractions, getSubtraction, updateSubtraction } from "./api";
-import { Subtraction, SubtractionSearchResult } from "./types";
+import { fetchSubtractionShortlist, findSubtractions, getSubtraction, updateSubtraction } from "./api";
+import { Subtraction, SubtractionSearchResult, SubtractionShortlist } from "./types";
 
 /**
  * Factory object for generating subtraction query keys
@@ -12,6 +12,7 @@ export const subtractionQueryKeys = {
     list: (filters: Array<string | number | boolean>) => ["subtraction", "list", ...filters] as const,
     details: () => ["subtraction", "details"] as const,
     detail: (subtractionId: string) => ["subtraction", "details", subtractionId] as const,
+    shortlist: () => ["subtraction", "list", "short"] as const,
 };
 
 /**
@@ -69,4 +70,13 @@ export function useUpdateSubtraction(subtractionId: string) {
             },
         },
     );
+}
+
+/**
+ * Fetches a list of subtractions with reduced information
+ *
+ * @returns A list of subtractions
+ */
+export function useFetchSubtractionsShortlist() {
+    return useQuery<SubtractionShortlist[]>(subtractionQueryKeys.shortlist(), fetchSubtractionShortlist);
 }
