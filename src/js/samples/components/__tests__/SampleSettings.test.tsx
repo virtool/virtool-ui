@@ -24,9 +24,9 @@ describe("<SampleSettings />", () => {
         expect(screen.getByRole("button", { name: /Force choice/ })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /User's primary group/ })).toBeInTheDocument();
         expect(screen.getByText("Group Rights")).toBeInTheDocument();
-        expect(screen.getByRole("combobox", { name: "group" })).toBeInTheDocument();
+        expect(screen.getByLabelText("Group Rights")).toBeInTheDocument();
         expect(screen.getByText("All Users' Rights")).toBeInTheDocument();
-        expect(screen.getByRole("combobox", { name: "all" })).toBeInTheDocument();
+        expect(screen.getByLabelText("All Users' Rights")).toBeInTheDocument();
     });
 
     it("should call update settings mutator when none SelectBox is clicked", async () => {
@@ -68,7 +68,7 @@ describe("<SampleSettings />", () => {
         renderWithProviders(<SampleSettings />);
 
         await waitFor(() => expect(screen.getByText("Sample Settings")).toBeInTheDocument());
-        await userEvent.selectOptions(screen.getByRole("combobox", { name: "group" }), "rw");
+        await userEvent.selectOptions(screen.getByLabelText("Group Rights"), "rw");
 
         scope.done();
     });
@@ -79,7 +79,7 @@ describe("<SampleSettings />", () => {
         renderWithProviders(<SampleSettings />);
 
         await waitFor(() => expect(screen.getByText("Sample Settings")).toBeInTheDocument());
-        await userEvent.selectOptions(screen.getByRole("combobox", { name: "all" }), "rw");
+        await userEvent.selectOptions(screen.getByLabelText("All Users' Rights"), "rw");
 
         scope.done();
     });

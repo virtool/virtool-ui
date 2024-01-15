@@ -77,9 +77,9 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                 </SampleRightsGroup>
 
                 <InputGroup>
-                    <InputLabel>Group Rights</InputLabel>
+                    <InputLabel htmlFor="group">Group Rights</InputLabel>
                     <InputSelect
-                        aria-label="group"
+                        id="group"
                         value={group}
                         onChange={e =>
                             mutation.mutate({
@@ -93,9 +93,9 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                 </InputGroup>
 
                 <InputGroup>
-                    <InputLabel>All Users' Rights</InputLabel>
+                    <InputLabel htmlFor="all">All Users' Rights</InputLabel>
                     <InputSelect
-                        aria-label="all"
+                        id="all"
                         value={all}
                         onChange={e =>
                             mutation.mutate({
