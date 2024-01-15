@@ -1,14 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { REMOVE_SUBTRACTION, SHORTLIST_SUBTRACTIONS, WS_REMOVE_SUBTRACTION } from "../app/actionTypes";
-
-/**
- * Returns an action that should be dispatched when a subtraction document is removed via websocket.
- *
- * @func
- * @param data {object} update data passed in the websocket message
- * @returns {object} an action object
- */
-export const wsRemoveSubtraction = createAction(WS_REMOVE_SUBTRACTION);
+import { REMOVE_SUBTRACTION, SHORTLIST_SUBTRACTIONS } from "../app/actionTypes";
 
 export const shortlistSubtractions = createAction(SHORTLIST_SUBTRACTIONS.REQUESTED);
 
