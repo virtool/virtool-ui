@@ -1,15 +1,13 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-    Checkbox,
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    ModalBody,
-    ModalFooter,
-    SaveButton,
-} from "../../base";
+import styled from "styled-components";
+import { Checkbox, InputError, InputGroup, InputLabel, InputSimple, SaveButton } from "../../base";
+
+const DialogFooter = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
 
 interface CreateUserFormProps {
     /** The user's handle or username */
@@ -35,28 +33,28 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
 
     return (
         <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
-            <ModalBody>
-                <InputGroup>
-                    <InputLabel htmlFor="handle">Username</InputLabel>
-                    <InputSimple id="handle" {...register("handle", { required: "Please specify a username" })} />
-                    <InputError>{errors.handle?.message}</InputError>
-                </InputGroup>
-                <InputGroup>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <InputSimple
-                        id="password"
-                        type="password"
-                        {...register("password", {
-                            required: "Password does not meet minimum length requirement (8)",
-                            minLength: {
-                                value: 8,
-                                message: "Password does not meet minimum length requirement (8)",
-                            },
-                        })}
-                    />
-                    <InputError>{errors.password?.message || error}</InputError>
-                </InputGroup>
+            <InputGroup>
+                <InputLabel htmlFor="handle">Username</InputLabel>
+                <InputSimple id="handle" {...register("handle", { required: "Please specify a username" })} />
+                <InputError>{errors.handle?.message}</InputError>
+            </InputGroup>
+            <InputGroup>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <InputSimple
+                    id="password"
+                    type="password"
+                    {...register("password", {
+                        required: "Password does not meet minimum length requirement (8)",
+                        minLength: {
+                            value: 8,
+                            message: "Password does not meet minimum length requirement (8)",
+                        },
+                    })}
+                />
+                <InputError>{errors.password?.message || error}</InputError>
+            </InputGroup>
 
+            <DialogFooter>
                 <Controller
                     name="forceReset"
                     control={control}
@@ -68,11 +66,8 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
                         />
                     )}
                 />
-            </ModalBody>
-
-            <ModalFooter>
                 <SaveButton />
-            </ModalFooter>
+            </DialogFooter>
         </form>
     );
 }
