@@ -31,7 +31,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
     const { data: analyses, isLoading: isLoadingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
 
-    if (isLoadingHmms || isLoadingAnalyses) {
+    if (isLoadingAnalyses || isLoadingHmms) {
         return <LoadingPlaceholder />;
     }
 

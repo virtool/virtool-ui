@@ -1,8 +1,7 @@
 import React, { ChangeEvent } from "react";
-import { useHistory } from "react-router-dom";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
-import { Button, Icon, InputSearch, Toolbar } from "../../base";
+import { InputSearch, LinkButton, Toolbar } from "../../base";
 
 type AnalysesToolbarProps = {
     /** A callback function to handle changes in search input */
@@ -17,20 +16,19 @@ type AnalysesToolbarProps = {
  * A toolbar which allows the analyses to be filtered by their names
  */
 export default function AnalysesToolbar({ onChange, sampleId, term }: AnalysesToolbarProps) {
-    const history = useHistory();
-    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
 
     return (
         <Toolbar>
             <InputSearch value={term} onChange={onChange} />
-            <Button
-                tip="New Analysis"
-                color="blue"
-                onClick={() => history.push({ state: { createAnalysis: sampleId } })}
-                disabled={!canModify}
-            >
-                <Icon name="plus-square" />
-            </Button>
+            {canCreate && (
+                <LinkButton
+                    icon="plus-square fa-fw"
+                    to={{ state: { createAnalysis: sampleId } }}
+                    color="blue"
+                    tip="New Analysis"
+                />
+            )}
         </Toolbar>
     );
 }
