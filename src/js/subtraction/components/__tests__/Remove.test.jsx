@@ -17,7 +17,7 @@ describe("<RemoveSubtraction />", () => {
     beforeEach(() => {
         props = {
             show: true,
-            subtraction: subtraction,
+            subtraction,
             onHide: vi.fn(),
             onConfirm: vi.fn(),
         };

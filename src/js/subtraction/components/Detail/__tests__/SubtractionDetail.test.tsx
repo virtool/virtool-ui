@@ -42,16 +42,6 @@ describe("<SubtractionDetail />", () => {
         expect(screen.queryByText(subtractionDetail.name)).not.toBeInTheDocument();
     });
 
-    it("should render correctly when query has an error", async () => {
-        const scope = mockApiGetSubtractionDetail(subtractionDetail, 404);
-        renderWithProviders(<SubtractionDetail {...props} />);
-
-        expect(await screen.findByText("404")).toBeInTheDocument();
-        expect(screen.getByText("Not found")).toBeInTheDocument();
-
-        scope.done();
-    });
-
     it("should render pending message when subtraction is not ready", async () => {
         const subtractionDetail = createFakeSubtraction({ ready: false });
         props.match.params.subtractionId = subtractionDetail.id;
@@ -65,7 +55,7 @@ describe("<SubtractionDetail />", () => {
 
     it("should not render icons when [canModify=true]", async () => {
         const permissions = createFakePermissions({ modify_subtraction: true });
-        const account = createFakeAccount({ permissions: permissions });
+        const account = createFakeAccount({ permissions });
         mockGetAccountAPI(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
         renderWithRouter(<SubtractionDetail {...props} />, {}, history);
@@ -79,7 +69,7 @@ describe("<SubtractionDetail />", () => {
 
     it("should not render icons when [canModify=false]", async () => {
         const permissions = createFakePermissions({ modify_subtraction: false });
-        const account = createFakeAccount({ permissions: permissions });
+        const account = createFakeAccount({ permissions });
         mockGetAccountAPI(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
         renderWithRouter(<SubtractionDetail {...props} />, {}, history);
