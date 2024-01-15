@@ -88,7 +88,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
     const history = useHistory();
 
     function handleQuickAnalyze() {
-        history.push({ state: { quickAnalysis: true } });
+        history.push({...history.location, state: { quickAnalysis: true } });
         selectOnQuickAnalyze();
     }
 
