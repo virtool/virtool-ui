@@ -24,7 +24,7 @@ const SampleSelectionToolbarTop = styled.div`
 export function SampleSelectionToolbar({ onClear, selected }) {
     const history = useHistory();
     function onQuickAnalyze() {
-        history.push({...history.location, state: { quickAnalysis: true } });
+        history.push({ ...history.location, state: { quickAnalysis: true } });
     }
 
     return (
