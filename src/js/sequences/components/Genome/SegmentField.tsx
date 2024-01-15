@@ -1,3 +1,4 @@
+import * as RadixSelect from "@radix-ui/react-select";
 import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
@@ -80,7 +81,9 @@ export function SequenceSegmentField({
                     >
                         <SelectButton icon="chevron-down" />
                         <SelectContent position="popper" align="start">
-                            <SelectItem value="None" text="None" description="" />
+                            <SelectItem key="None" value="None">
+                                <RadixSelect.ItemText>None</RadixSelect.ItemText>
+                            </SelectItem>
                             {segmentOptions}
                         </SelectContent>
                     </Select>

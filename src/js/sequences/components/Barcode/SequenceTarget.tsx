@@ -1,22 +1,8 @@
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled from "styled-components";
-import { fontWeight, getColor, getFontSize, getFontWeight } from "../../../app/theme";
-
-const StyledSelectItem = styled(RadixSelect.Item)`
-    font-size: ${getFontSize("md")};
-    font-weight: ${getFontWeight("thick")};
-    padding: 5px 35px 5px 25px;
-    position: relative;
-    user-select: none;
-    margin-bottom: 5px;
-    text-transform: capitalize;
-
-    :hover {
-        background-color: ${({ theme }) => getColor({ color: "greyHover", theme })};
-        border: 0;
-    }
-`;
+import { fontWeight } from "../../../app/theme";
+import { SelectItem } from "../../../base";
 
 const StyledSequenceTarget = styled.div`
     padding: 5px;
@@ -45,13 +31,13 @@ type SequenceTargetProps = {
  */
 export function SequenceTarget({ name, description }: SequenceTargetProps) {
     return (
-        <StyledSelectItem value={name} key={name}>
+        <SelectItem value={name} key={name}>
             <RadixSelect.ItemText>
                 <StyledSequenceTarget>
                     <h5>{name}</h5>
                     <p>{description || <em>No Description</em>}</p>
                 </StyledSequenceTarget>
             </RadixSelect.ItemText>
-        </StyledSelectItem>
+        </SelectItem>
     );
 }

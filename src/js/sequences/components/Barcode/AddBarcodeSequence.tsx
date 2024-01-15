@@ -31,7 +31,7 @@ export function castValues(targets: ReferenceTarget[], defaultTarget: string) {
     };
 }
 
-export const StyledContent = styled(DialogContent)`
+const CenteredDialogContent = styled(DialogContent)`
     top: 50%;
 `;
 
@@ -88,7 +88,7 @@ export function AddBarcodeSequence({
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
-                <StyledContent>
+                <CenteredDialogContent>
                     <DialogTitle>Add Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
                         {({
@@ -115,7 +115,7 @@ export function AddBarcodeSequence({
                             </Form>
                         )}
                     </Formik>
-                </StyledContent>
+                </CenteredDialogContent>
             </DialogPortal>
         </Dialog>
     );

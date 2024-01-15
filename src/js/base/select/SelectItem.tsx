@@ -21,19 +21,10 @@ const StyledSelectItem = styled(RadixSelect.Item)`
     }
 `;
 
-const Description = styled.div`
-    font-size: ${getFontSize("sm")};
-    font-weight: ${getFontWeight("normal")};
-    color: ${({ theme }) => getColor({ color: "greyDarkest", theme })};
-    margin-top: 5px;
-    white-space: pre-wrap;
-`;
-
-export const SelectItem = ({ value, text, description }) => {
+export function SelectItem({ value, children }) {
     return (
         <StyledSelectItem value={value} key={value}>
-            <RadixSelect.ItemText>{text}</RadixSelect.ItemText>
-            <Description>{description}</Description>
+            {children}
         </StyledSelectItem>
     );
-};
+}

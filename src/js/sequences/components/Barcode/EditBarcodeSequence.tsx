@@ -3,8 +3,9 @@ import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import { pushState } from "../../../app/actions";
-import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
@@ -12,7 +13,6 @@ import { ReferenceTarget } from "../../../references/types";
 import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedTargets } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
-import { StyledContent } from "./AddBarcodeSequence";
 import TargetsField from "./TargetField";
 
 function getInitialValues({ initialTargetName, initialAccession, initialDefinition, initialHost, initialSequence }) {
@@ -31,6 +31,10 @@ export function castValues(targets: ReferenceTarget[], initialTargetName: string
         return { ...values, targetName };
     };
 }
+
+const CenteredDialogContent = styled(DialogContent)`
+    top: 50%;
+`;
 
 type formValues = {
     targetName: string;
@@ -101,7 +105,7 @@ export function EditBarcodeSequence({
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
-                <StyledContent>
+                <CenteredDialogContent>
                     <DialogTitle>Edit Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
                         {({
@@ -128,7 +132,7 @@ export function EditBarcodeSequence({
                             </Form>
                         )}
                     </Formik>
-                </StyledContent>
+                </CenteredDialogContent>
             </DialogPortal>
         </Dialog>
     );
