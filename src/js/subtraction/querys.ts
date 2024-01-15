@@ -40,17 +40,8 @@ export function useFindSubtractions(page: number, per_page: number, term: string
  * @returns A single subtraction
  */
 export function useFetchSubtraction(subtractionId: string) {
-    return useQuery<Subtraction, ErrorResponse>(
-        subtractionQueryKeys.detail(subtractionId),
-        () => getSubtraction(subtractionId),
-        {
-            retry: (failureCount, error) => {
-                if (error.response?.status === 404) {
-                    return false;
-                }
-                return failureCount <= 3;
-            },
-        },
+    return useQuery<Subtraction, ErrorResponse>(subtractionQueryKeys.detail(subtractionId), () =>
+        getSubtraction(subtractionId),
     );
 }
 
