@@ -1,18 +1,30 @@
 import React from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import styled from "styled-components";
-import { InputError, InputGroup, InputLabel, InputSimple } from "../../base";
-import { FormValues } from "./EmptyReference";
+import { InputError, InputGroup, InputLabel, InputSimple, TextArea } from "../../base";
+import { ReferenceDataType } from "../types";
 
 const StyledInputGroup = styled(InputGroup)`
     padding-bottom: 0px;
 `;
 
+export enum Mode {
+    edit = "edit",
+    empty = "empty",
+}
+
+type FormValues = {
+    name: string;
+    description: string;
+    dataType: ReferenceDataType;
+    organism: string;
+};
+
 type ReferenceFormProps = {
     /** Form validation errors */
     errors: FieldErrors<FormValues>;
     /** The mode of the reference form */
-    mode: string;
+    mode: Mode;
     /** Function to register form fields */
     register: UseFormRegister<FormValues>;
 };
@@ -27,7 +39,7 @@ export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
         organismComponent = (
             <InputGroup>
                 <InputLabel htmlFor="organism">Organism</InputLabel>
-                <InputSimple as="textarea" id="organism" {...register("organism")} />
+                <InputSimple id="organism" {...register("organism")} />
             </InputGroup>
         );
     }
@@ -44,7 +56,7 @@ export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
 
             <InputGroup>
                 <InputLabel htmlFor="description">Description</InputLabel>
-                <InputSimple as="textarea" id="description" {...register("description")} />
+                <TextArea id="description" name="description" register={register} />
             </InputGroup>
         </>
     );

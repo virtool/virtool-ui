@@ -8,6 +8,6 @@ const StyledTextArea = styled(Input)`
     overflow-y: scroll;
 `;
 
-export function TextArea(props) {
-    return <StyledTextArea as="textarea" {...props} />;
+export function TextArea({ register, name, ...props }) {
+    return <StyledTextArea as="textarea" {...register(name)} {...props} />;
 }
