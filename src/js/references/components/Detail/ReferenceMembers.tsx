@@ -88,8 +88,16 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                     </NoMembers>
                 )}
             </BoxGroup>
-            <AddReferenceMember show={history.location.state[`add${noun}`]} noun={noun} onHide={handleHide} />
-            <EditReferenceMember show={history.location.state[`edit${noun}`]} noun={noun} onHide={handleHide} />
+            <AddReferenceMember
+                show={history.location.state && history.location.state[`add${noun}`]}
+                noun={noun}
+                onHide={handleHide}
+            />
+            <EditReferenceMember
+                show={history.location.state && history.location.state[`edit${noun}`]}
+                noun={noun}
+                onHide={handleHide}
+            />
         </>
     );
 }

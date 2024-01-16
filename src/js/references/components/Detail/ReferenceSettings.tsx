@@ -1,13 +1,18 @@
 import { sortBy } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
+import { match } from "react-router-dom";
 import { LoadingPlaceholder, SectionHeader } from "../../../base";
 import { useGetReference } from "../../hooks";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./Remove";
 
-export function ReferenceSettings({ isRemote, match }) {
+type ReferenceSettingsProps = {
+    /** Match object containing path information */
+    match: match<{ refId: string }>;
+};
+
+export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
     const { refId } = match.params;
     const { data, isLoading } = useGetReference(refId);
 
@@ -17,7 +22,7 @@ export function ReferenceSettings({ isRemote, match }) {
 
     return (
         <>
-            {isRemote || <LocalSourceTypes />}
+            {Boolean(data.remotes_from) || <LocalSourceTypes />}
             <SectionHeader>
                 <h2>Access</h2>
                 <p>Manage who can access this reference.</p>
@@ -32,11 +37,3 @@ export function ReferenceSettings({ isRemote, match }) {
         </>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        isRemote: Boolean(state.references.detail.remotes_from),
-    };
-}
-
-export default connect(mapStateToProps)(ReferenceSettings);
