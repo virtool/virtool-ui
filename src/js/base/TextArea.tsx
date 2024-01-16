@@ -9,5 +9,5 @@ const StyledTextArea = styled(Input)`
 `;
 
 export function TextArea({ register, name, ...props }) {
-    return <StyledTextArea as="textarea" {...register(name)} {...props} />;
+    return <StyledTextArea as="textarea" {...(register && register(name))} {...props} />;
 }
