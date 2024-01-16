@@ -1,5 +1,6 @@
 import { map } from "lodash-es";
-import React, { useState } from "react";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../../administration/hooks";
 import { AdministratorRoles } from "../../../administration/types";
@@ -45,38 +46,17 @@ type ReferenceMembersProps = {
  * Displays a component for managing who can access a reference by users or groups
  */
 export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
-    const [showAdd, setShowAdd] = useState(false);
-    const [showEdit, setShowEdit] = useState(false);
-
+    const history = useHistory();
     const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
 
     const mutation = useRemoveReferenceUser(refId, noun);
 
     function handleHide() {
-        setShowAdd(false);
-        setShowEdit(false);
+        history.replace({ state: { [`add${noun}`]: false } });
+        history.replace({ state: { [`edit${noun}`]: false } });
     }
 
     const plural = `${noun}s`;
-
-    let memberComponents;
-    if (members.length) {
-        memberComponents = map(members, member => (
-            <MemberItem
-                key={member.id}
-                {...member}
-                canModify={canModify}
-                onEdit={id => setShowEdit(id)}
-                onRemove={id => mutation.mutate({ id })}
-            />
-        ));
-    } else {
-        memberComponents = (
-            <NoMembers>
-                <Icon name="exclamation-circle" /> None Found
-            </NoMembers>
-        );
-    }
 
     return (
         <>
@@ -84,14 +64,32 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 <ReferenceMembersHeader>
                     <h2>
                         {plural}
-                        {canModify && <NewMemberLink onClick={() => setShowAdd(true)}>Add {noun}</NewMemberLink>}
+                        {canModify && (
+                            <NewMemberLink onClick={() => history.push({ state: { [`add${noun}`]: true } })}>
+                                Add {noun}
+                            </NewMemberLink>
+                        )}
                     </h2>
                     <p>Manage membership and rights for reference {plural}.</p>
                 </ReferenceMembersHeader>
-                {memberComponents}
+                {members.length ? (
+                    map(members, member => (
+                        <MemberItem
+                            key={member.id}
+                            {...member}
+                            canModify={canModify}
+                            onEdit={id => history.push({ state: { [`edit${noun}`]: id } })}
+                            onRemove={id => mutation.mutate({ id })}
+                        />
+                    ))
+                ) : (
+                    <NoMembers>
+                        <Icon name="exclamation-circle" /> None Found
+                    </NoMembers>
+                )}
             </BoxGroup>
-            <AddReferenceMember show={showAdd} noun={noun} onHide={handleHide} />
-            <EditReferenceMember show={showEdit} noun={noun} onHide={handleHide} />
+            <AddReferenceMember show={history.location.state[`add${noun}`]} noun={noun} onHide={handleHide} />
+            <EditReferenceMember show={history.location.state[`edit${noun}`]} noun={noun} onHide={handleHide} />
         </>
     );
 }
