@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { pick } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
 import { JobMinimal } from "../../js/jobs/types";
@@ -8,6 +9,7 @@ import {
     Subtraction,
     SubtractionFile,
     SubtractionMinimal,
+    SubtractionShortlist,
     SubtractionUpload,
 } from "../../js/subtraction/types";
 import { UserNested } from "../../js/users/types";
@@ -78,6 +80,13 @@ export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMi
 }
 
 /**
+ * Create a fake subtraction shortlist
+ */
+export function createFakeShortlistSubtraction(): SubtractionShortlist {
+    return pick(createFakeSubtractionMinimal(), ["id", "name", "ready"]);
+}
+
+/**
  * Sets up a mocked API route for fetching a list of subtractions
  *
  * @param Subtractions - The list of subtractions to be returned from the mocked API call
@@ -93,4 +102,8 @@ export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
         ready_count: Subtractions.length,
         total_count: Subtractions.length,
     });
+}
+
+export function mockApiGetShortlistSubtractions(subtractionsShortlist) {
+    return nock("http://localhost").get("/api/subtractions?short=true").reply(200, subtractionsShortlist);
 }

@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
 
 export function createFakeLabelNested(): LabelNested {
@@ -8,4 +9,8 @@ export function createFakeLabelNested(): LabelNested {
         id: faker.datatype.number(),
         name: faker.random.word(),
     };
+}
+
+export function mockApiGetLabels(labels: LabelNested[]) {
+    return nock("http://localhost").get("/api/labels").query(true).reply(200, labels);
 }
