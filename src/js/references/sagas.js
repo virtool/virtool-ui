@@ -14,8 +14,6 @@ import {
     IMPORT_REFERENCE,
     REMOTE_REFERENCE,
     REMOVE_REFERENCE,
-    REMOVE_REFERENCE_GROUP,
-    REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
     WS_UPDATE_REFERENCE,
 } from "../app/actionTypes";
@@ -109,26 +107,12 @@ export function* editRefUser(action) {
     yield apiCall(referenceAPI.editUser, action.payload, EDIT_REFERENCE_USER);
 }
 
-export function* removeRefUser(action) {
-    yield apiCall(referenceAPI.removeUser, action.payload, REMOVE_REFERENCE_USER, {
-        userId: action.payload.userId,
-        refId: action.payload.refId,
-    });
-}
-
 export function* addRefGroup(action) {
     yield apiCall(referenceAPI.addGroup, action.payload, ADD_REFERENCE_GROUP);
 }
 
 export function* editRefGroup(action) {
     yield apiCall(referenceAPI.editGroup, action.payload, EDIT_REFERENCE_GROUP);
-}
-
-export function* removeRefGroup(action) {
-    yield apiCall(referenceAPI.removeGroup, action.payload, REMOVE_REFERENCE_GROUP, {
-        groupId: action.payload.groupId,
-        refId: action.payload.refId,
-    });
 }
 
 export function* checkRemoteUpdates(action) {
@@ -150,10 +134,8 @@ export function* watchReferences() {
     yield throttle(500, REMOVE_REFERENCE.REQUESTED, removeReference);
     yield takeEvery(ADD_REFERENCE_USER.REQUESTED, addRefUser);
     yield takeEvery(EDIT_REFERENCE_USER.REQUESTED, editRefUser);
-    yield takeEvery(REMOVE_REFERENCE_USER.REQUESTED, removeRefUser);
     yield takeEvery(ADD_REFERENCE_GROUP.REQUESTED, addRefGroup);
     yield takeEvery(EDIT_REFERENCE_GROUP.REQUESTED, editRefGroup);
-    yield takeEvery(REMOVE_REFERENCE_GROUP.REQUESTED, removeRefGroup);
     yield takeEvery(CHECK_REMOTE_UPDATES.REQUESTED, checkRemoteUpdates);
     yield takeEvery(UPDATE_REMOTE_REFERENCE.REQUESTED, updateRemoteReference);
     yield takeLatest(WS_UPDATE_REFERENCE, wsGetReference);

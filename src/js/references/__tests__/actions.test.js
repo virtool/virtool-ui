@@ -12,8 +12,6 @@ import {
     IMPORT_REFERENCE,
     REMOTE_REFERENCE,
     REMOVE_REFERENCE,
-    REMOVE_REFERENCE_GROUP,
-    REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
     WS_INSERT_REFERENCE,
     WS_REMOVE_REFERENCE,
@@ -32,8 +30,6 @@ import {
     importReference,
     remoteReference,
     removeReference,
-    removeReferenceGroup,
-    removeReferenceUser,
     updateRemoteReference,
     wsInsertReference,
     wsRemoveReference,
@@ -157,16 +153,6 @@ describe("References Action Creators:", () => {
         });
     });
 
-    it("removeReferenceUser", () => {
-        const refId = "123abc";
-        const userId = "test-user";
-        const result = removeReferenceUser(refId, userId);
-        expect(result).toEqual({
-            type: REMOVE_REFERENCE_USER.REQUESTED,
-            payload: { refId, userId },
-        });
-    });
-
     it("addReferenceGroup", () => {
         const refId = "123abc";
         const group = "test-group";
@@ -185,16 +171,6 @@ describe("References Action Creators:", () => {
         expect(result).toEqual({
             type: EDIT_REFERENCE_GROUP.REQUESTED,
             payload: { refId, groupId, update },
-        });
-    });
-
-    it("removeReferenceGroup", () => {
-        const refId = "123abc";
-        const groupId = "test-group";
-        const result = removeReferenceGroup(refId, groupId);
-        expect(result).toEqual({
-            type: REMOVE_REFERENCE_GROUP.REQUESTED,
-            payload: { refId, groupId },
         });
     });
 

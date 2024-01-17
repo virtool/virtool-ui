@@ -1,6 +1,6 @@
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
-import { cloneReference, createReference, findReferences } from "./api";
+import { cloneReference, createReference, findReferences, removeReferenceGroup, removeReferenceUser } from "./api";
 import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 /**
@@ -11,6 +11,8 @@ export const referenceQueryKeys = {
     lists: () => ["reference", "list"] as const,
     list: (filters: Array<string | number | boolean>) => ["reference", "list", "single", ...filters] as const,
     infiniteList: (filters: Array<string | number | boolean>) => ["reference", "list", "infinite", ...filters] as const,
+    details: () => ["reference", "details"] as const,
+    detail: (refId: string) => ["reference", "details", refId] as const,
 };
 
 /**
@@ -61,4 +63,24 @@ export function useCreateReference() {
             history.push("/refs", { emptyReference: false });
         },
     });
+}
+
+/**
+ * Initializes a mutator for removing members from a reference
+ *
+ * @param refId - The reference to remove the member from
+ * @param noun - Whether the member is a user or a group
+ * @returns A mutator for removing members from a reference
+ */
+export function useRemoveReferenceUser(refId: string, noun: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<Response, unknown, { id: string | number }>(
+        ({ id }) => (noun === "user" ? removeReferenceUser(refId, id) : removeReferenceGroup(refId, id)),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
+            },
+        },
+    );
 }

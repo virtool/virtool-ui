@@ -64,20 +64,12 @@ export function editUser({ refId, userId, update }) {
     return Request.patch(`/refs/${refId}/users/${userId}`).send(update);
 }
 
-export function removeUser({ refId, userId }) {
-    return Request.delete(`/refs/${refId}/users/${userId}`);
-}
-
 export function addGroup({ refId, group }) {
     return Request.post(`/refs/${refId}/groups`).send({ group_id: group });
 }
 
 export function editGroup({ refId, groupId, update }) {
     return Request.patch(`/refs/${refId}/groups/${groupId}`).send(update);
-}
-
-export function removeGroup({ refId, groupId }) {
-    return Request.delete(`/refs/${refId}/groups/${groupId}`);
 }
 
 export function checkUpdates({ refId }) {
@@ -135,4 +127,26 @@ export function createReference(
             organism,
         })
         .then(response => response.body);
+}
+
+/**
+ * Removes user from a reference
+ *
+ * @param refId - The reference to have the user removed from
+ * @param userId - The user to remove
+ * @returns A promise resolving to the API response indicating if the removal was successful
+ */
+export function removeReferenceUser(refId: string, userId: string | number): Promise<Response> {
+    return Request.delete(`/refs/${refId}/users/${userId}`).then(response => response.body);
+}
+
+/**
+ * Removes group from a reference
+ *
+ * @param refId - The reference to have the group removed from
+ * @param groupId - The group to remove
+ * @returns  A promise resolving to the API response indicating if the removal was successful
+ */
+export function removeReferenceGroup(refId: string, groupId: string | number): Promise<Response> {
+    return Request.delete(`/refs/${refId}/groups/${groupId}`).then(response => response.body);
 }
