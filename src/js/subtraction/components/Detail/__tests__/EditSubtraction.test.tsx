@@ -2,9 +2,9 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeSubtraction } from "../../../../../tests/fake/subtractions";
+import { createFakeSubtraction, mockApiEditSubtraction } from "../../../../../tests/fake/subtractions";
 import { renderWithProviders } from "../../../../../tests/setupTests";
-import { EditSubtraction, mapDispatchToProps } from "../EditSubtraction";
+import EditSubtraction from "../EditSubtraction";
 
 describe("<EditSubtraction />", () => {
     const subtraction = createFakeSubtraction();
@@ -15,7 +15,6 @@ describe("<EditSubtraction />", () => {
             subtraction,
             show: true,
             onHide: vi.fn(),
-            onUpdate: vi.fn(),
         };
     });
 
@@ -57,13 +56,22 @@ describe("<EditSubtraction />", () => {
         expect(nicknameInput).toHaveValue("test");
     });
 
-    it("should call onUpdate() when form is submitted", async () => {
+    it("should update subtraction when form is submitted", async () => {
+        const scope = mockApiEditSubtraction(subtraction, "newName", "newNickname");
         renderWithProviders(<EditSubtraction {...props} />);
+
+        const nameInput = screen.getByLabelText("Name");
+        await userEvent.clear(nameInput);
+        await userEvent.type(nameInput, "newName");
+
+        const nicknameInput = screen.getByLabelText("Nickname");
+        await userEvent.clear(nicknameInput);
+        await userEvent.type(nicknameInput, "newNickname");
 
         await userEvent.click(screen.getByText("Save"));
 
-        expect(props.onUpdate).toHaveBeenCalledWith(subtraction.id, subtraction.name, subtraction.nickname);
         expect(props.onHide).toHaveBeenCalled();
+        scope.done();
     });
 
     it("should call onHide() when closed", async () => {
@@ -72,17 +80,5 @@ describe("<EditSubtraction />", () => {
         await userEvent.click(screen.getByLabelText("close"));
 
         await waitFor(() => expect(props.onHide).toHaveBeenCalled());
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    it("should return updateSubtraction in props", () => {
-        const dispatch = vi.fn();
-        const props = mapDispatchToProps(dispatch);
-        props.onUpdate("foo", "Foo", "Bar");
-        expect(dispatch).toHaveBeenCalledWith({
-            payload: { subtractionId: "foo", name: "Foo", nickname: "Bar" },
-            type: "UPDATE_SUBTRACTION_REQUESTED",
-        });
     });
 });

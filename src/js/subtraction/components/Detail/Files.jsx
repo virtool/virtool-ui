@@ -1,10 +1,9 @@
 import { map, sortBy } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import { BoxGroup, BoxGroupHeader, NoneFound } from "../../../base";
 import { File as SubtractionFile } from "./File";
 
-export const SubtractionFiles = ({ files }) => {
+export default function SubtractionFiles({ files }) {
     let fileComponents = map(sortBy(files, "name"), file => <SubtractionFile file={file} key={file.id} />);
 
     if (files.length === 0) {
@@ -20,8 +19,4 @@ export const SubtractionFiles = ({ files }) => {
             {fileComponents}
         </BoxGroup>
     );
-};
-
-export const mapStateToProps = state => ({ files: state.subtraction.detail.files });
-
-export default connect(mapStateToProps)(SubtractionFiles);
+}
