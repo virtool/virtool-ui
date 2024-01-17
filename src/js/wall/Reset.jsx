@@ -2,7 +2,7 @@ import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { resetPassword } from "../account/actions";
-import { InputGroup, InputLabel, InputPassword } from "../base";
+import { InputError, InputGroup, InputLabel, InputPassword } from "../base";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
 
@@ -14,13 +14,22 @@ export class Reset extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.setState({
+            resetCode: this.props.resetCode,
+        });
+    }
+
     handleChange = e => {
         this.setState({ password: e.target.value });
     };
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.onReset(this.state.password, this.props.resetCode);
+
+        if (!this.state.password.length < 8) {
+            this.props.onReset(this.state.password, this.state.resetCode);
+        }
     };
 
     render() {
@@ -41,12 +50,11 @@ export class Reset extends React.Component {
                                     value={this.state.password}
                                     onChange={this.handleChange}
                                 />
+                                <InputError>{this.props.error}</InputError>
                             </InputGroup>
-
                             <WallButton type="submit" color="blue">
                                 Reset
                             </WallButton>
-                            <span>{this.props.error}</span>
                         </form>
                     </WallLoginContainer>
                 </WallDialog>
@@ -56,7 +64,7 @@ export class Reset extends React.Component {
 }
 
 export const mapStateToProps = state => ({
-    error: get(state, "errors.RESET_ERROR.message"),
+    error: get(state, "errors.RESET_PASSWORD_ERROR.message"),
     resetCode: get(state, "app.resetCode"),
 });
 
