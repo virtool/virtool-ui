@@ -7,7 +7,7 @@ type ButtonProps = {
     active?: boolean;
     children: ReactNode;
     className?: string;
-    color: string;
+    color?: string;
     disabled?: boolean;
     icon?: string;
     tip?: string;

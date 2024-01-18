@@ -2,9 +2,9 @@ import React from "react";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
-import { SampleSelectionToolbar } from "./SelectionToolbar";
+import { SampleSelectionToolbar } from "./SampleSelectionToolbar";
 
-export function SampleSearchToolbar({ onChange, term }) {
+function SampleSearchToolbar({ onChange, term }) {
     const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
 
     return (
@@ -15,6 +15,9 @@ export function SampleSearchToolbar({ onChange, term }) {
     );
 }
 
+/**
+ * A toolbar allowing samples to be filtered by name and to create an analysis for selected samples
+ */
 export default function SampleToolbar({ selected, onClear, onChange, term }) {
     return selected.length ? (
         <SampleSelectionToolbar selected={selected} onClear={onClear} />

@@ -1,7 +1,7 @@
 import React from "react";
 import { ContainerNarrow } from "../../../base";
 import SampleFileSizeWarning from "../Detail/FileSizeWarning";
-import SampleFilesMessage from "../LegacyAlert";
+import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./Reads";
 
 export function SampleDetailFiles() {

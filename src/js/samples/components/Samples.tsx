@@ -17,6 +17,9 @@ function SampleFileManager() {
     );
 }
 
+/**
+ * The samples view with routes to sample-related components
+ */
 export default function Samples() {
     return (
         <Container>
