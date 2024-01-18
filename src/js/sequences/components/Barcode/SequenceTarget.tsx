@@ -1,4 +1,3 @@
-import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled from "styled-components";
 import { fontWeight } from "../../../app/theme";
@@ -31,13 +30,11 @@ type SequenceTargetProps = {
  */
 export function SequenceTarget({ name, description }: SequenceTargetProps) {
     return (
-        <SelectItem value={name} key={name}>
-            <RadixSelect.ItemText>
-                <StyledSequenceTarget>
-                    <h5>{name}</h5>
-                    <p>{description || <em>No Description</em>}</p>
-                </StyledSequenceTarget>
-            </RadixSelect.ItemText>
+        <SelectItem value={name} key={name} description="">
+            <StyledSequenceTarget>
+                <h5>{name}</h5>
+                <p>{description || <em>No Description</em>}</p>
+            </StyledSequenceTarget>
         </SelectItem>
     );
 }
