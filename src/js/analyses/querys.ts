@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getAnalysis, listAnalyses, removeAnalysis } from "./api";
-import { Analysis, AnalysisSearchResult } from "./types";
+import { listAnalyses, removeAnalysis } from "./api";
+import { AnalysisSearchResult } from "./types";
 
 /**
  * Factory object for generating analyses query keys
