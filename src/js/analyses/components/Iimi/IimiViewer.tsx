@@ -20,15 +20,13 @@ export function IimiViewer({ detail }) {
         );
     });
     return (
-        <>
-            <BoxGroup>
-                <BoxGroupHeader>
-                    <h2>Results</h2>
-                </BoxGroupHeader>
-                <ResultsTable>
-                    <tbody>{results}</tbody>
-                </ResultsTable>
-            </BoxGroup>
-        </>
+        <BoxGroup>
+            <BoxGroupHeader>
+                <h2>Results</h2>
+            </BoxGroupHeader>
+            <ResultsTable>
+                <tbody>{results}</tbody>
+            </ResultsTable>
+        </BoxGroup>
     );
 }
