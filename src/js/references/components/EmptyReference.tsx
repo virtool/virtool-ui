@@ -4,7 +4,7 @@ import { Alert, Button } from "../../base";
 import { useCreateReference } from "../querys";
 import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
-import { Mode, ReferenceForm } from "./ReferenceForm";
+import { ReferenceForm, ReferenceFormMode } from "./ReferenceForm";
 
 type FormValues = {
     name: string;
@@ -31,7 +31,7 @@ export default function EmptyReference() {
             <Alert>
                 <strong>Create an empty reference.</strong>
             </Alert>
-            <ReferenceForm errors={errors} mode={Mode.empty} register={register} />
+            <ReferenceForm errors={errors} mode={ReferenceFormMode.empty} register={register} />
             <Controller
                 name="dataType"
                 control={control}

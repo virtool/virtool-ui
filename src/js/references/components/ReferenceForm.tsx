@@ -8,7 +8,7 @@ const StyledInputGroup = styled(InputGroup)`
     padding-bottom: 0px;
 `;
 
-export enum Mode {
+export enum ReferenceFormMode {
     edit = "edit",
     empty = "empty",
 }
@@ -24,7 +24,7 @@ type ReferenceFormProps = {
     /** Form validation errors */
     errors: FieldErrors<FormValues>;
     /** The mode of the reference form */
-    mode: Mode;
+    mode: ReferenceFormMode;
     /** Function to register form fields */
     register: UseFormRegister<FormValues>;
 };
@@ -35,7 +35,7 @@ type ReferenceFormProps = {
 export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
     let organismComponent;
 
-    if (mode === "empty" || mode === "edit") {
+    if (mode === ReferenceFormMode.empty || mode === ReferenceFormMode.edit) {
         organismComponent = (
             <InputGroup>
                 <InputLabel htmlFor="organism">Organism</InputLabel>
@@ -56,7 +56,7 @@ export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
 
             <InputGroup>
                 <InputLabel htmlFor="description">Description</InputLabel>
-                <TextArea id="description" name="description" register={register} />
+                <TextArea id="description" {...register("description")} />
             </InputGroup>
         </>
     );

@@ -127,6 +127,7 @@ export function createReference(
     dataType: ReferenceDataType,
     organism: string,
 ): Promise<Reference> {
+    console.log(description);
     return Request.post("/refs")
         .send({
             name,

@@ -6,7 +6,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../..
 import { routerLocationHasState } from "../../../utils/utils";
 import { editReference } from "../../actions";
 import { Reference, ReferenceDataType } from "../../types";
-import { Mode, ReferenceForm } from "../ReferenceForm";
+import { ReferenceForm, ReferenceFormMode } from "../ReferenceForm";
 
 export type FormValues = {
     name: string;
@@ -48,7 +48,7 @@ export function EditReference({ show, detail, onHide, onSubmit }: EditReferenceP
             <ModalHeader>Edit Reference</ModalHeader>
             <form onSubmit={handleSubmit(values => handleEdit({ ...values }))}>
                 <ModalBody>
-                    <ReferenceForm errors={errors} mode={Mode.edit} register={register} />
+                    <ReferenceForm errors={errors} mode={ReferenceFormMode.edit} register={register} />
                 </ModalBody>
                 <ModalFooter>
                     <SaveButton />
