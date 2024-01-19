@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GET_SETTINGS, UPDATE_SETTINGS } from "../../app/actionTypes";
+import { GET_SETTINGS } from "../../app/actionTypes";
 import reducer from "../reducer";
 
 describe("Settings Reducer", () => {
@@ -26,27 +26,6 @@ describe("Settings Reducer", () => {
         expect(result).toEqual({
             data: {
                 foo: "bar",
-            },
-        });
-    });
-
-    it("should handle UPDATE_SETTINGS_SUCCEEDED", () => {
-        const state = { data: { boo: 1, foo: "bar" } };
-        const action = {
-            type: UPDATE_SETTINGS.SUCCEEDED,
-            context: {
-                update: {
-                    foo: "baz",
-                    bar: "baz",
-                },
-            },
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            data: {
-                bar: "baz",
-                boo: 1,
-                foo: "baz",
             },
         });
     });

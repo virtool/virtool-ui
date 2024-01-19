@@ -66,6 +66,7 @@ export type Subtraction = SubtractionMinimal & {
     linked_samples: Array<SampleNested>;
 };
 
+/** A subtraction with reduced information */
 export type SubtractionShortlist = SubtractionNested & {
     ready: boolean;
 };

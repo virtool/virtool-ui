@@ -1,11 +1,12 @@
 import React from "react";
-import { connect } from "react-redux";
-import SampleRights from "../../administration/components/SampleRights";
-import { mapSettingsStateToProps } from "../../administration/mappers";
+import { useFetchSettings } from "../../administration/querys";
 import { ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
+import SampleRights from "./SampleRights";
 
-export const SamplesSettings = ({ loading }) => {
-    if (loading) {
+export default function SamplesSettings() {
+    const { data, isLoading } = useFetchSettings();
+
+    if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
@@ -14,9 +15,7 @@ export const SamplesSettings = ({ loading }) => {
             <ViewHeader title="Sample Settings">
                 <ViewHeaderTitle>Sample Settings</ViewHeaderTitle>
             </ViewHeader>
-            <SampleRights />
+            <SampleRights settings={data} />
         </ContainerNarrow>
     );
-};
-
-export default connect(mapSettingsStateToProps)(SamplesSettings);
+}

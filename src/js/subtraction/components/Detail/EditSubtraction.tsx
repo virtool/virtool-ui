@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { connect } from "react-redux";
 import {
     InputError,
     InputGroup,
@@ -12,14 +11,12 @@ import {
     ModalHeader,
     SaveButton,
 } from "../../../base";
-import { editSubtraction } from "../../actions";
+import { useUpdateSubtraction } from "../../querys";
 import { Subtraction } from "../../types";
 
 type EditSubtractionProps = {
     /** The subtraction data */
     subtraction: Subtraction;
-    /** A callback function to update the subtraction data */
-    onUpdate: (subtractionId: string, name: string, nickname: string) => void;
     /** Indicates whether the modal for editing a subtraction is visible */
     show: boolean;
     /** A callback function to hide the modal */
@@ -29,7 +26,9 @@ type EditSubtractionProps = {
 /**
  * A modal for editing the subtraction
  */
-export function EditSubtraction({ subtraction, onUpdate, show, onHide }: EditSubtractionProps) {
+export default function EditSubtraction({ subtraction, show, onHide }: EditSubtractionProps) {
+    const mutation = useUpdateSubtraction(subtraction.id);
+
     const {
         formState: { errors },
         register,
@@ -37,7 +36,7 @@ export function EditSubtraction({ subtraction, onUpdate, show, onHide }: EditSub
     } = useForm({ defaultValues: { name: subtraction.name, nickname: subtraction.nickname } });
 
     function onSubmit({ name, nickname }) {
-        onUpdate(subtraction.id, name, nickname);
+        mutation.mutate({ name, nickname });
         onHide();
     }
 
@@ -64,13 +63,3 @@ export function EditSubtraction({ subtraction, onUpdate, show, onHide }: EditSub
         </Modal>
     );
 }
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onUpdate: (id, name, nickname) => {
-            dispatch(editSubtraction(id, name, nickname));
-        },
-    };
-}
-
-export default connect(null, mapDispatchToProps)(EditSubtraction);

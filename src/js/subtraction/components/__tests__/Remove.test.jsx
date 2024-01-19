@@ -1,6 +1,9 @@
-import { shallow } from "enzyme";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createFakeSubtraction } from "../../../../tests/fake/subtractions";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import { PUSH_STATE, REMOVE_SUBTRACTION } from "../../../app/actionTypes";
 import { routerLocationHasState } from "../../../utils/utils";
 import { mapDispatchToProps, mapStateToProps, RemoveSubtraction } from "../Remove";
@@ -8,33 +11,42 @@ import { mapDispatchToProps, mapStateToProps, RemoveSubtraction } from "../Remov
 vi.mock("../../../utils/utils.js");
 
 describe("<RemoveSubtraction />", () => {
+    const subtraction = createFakeSubtraction();
     let props;
 
     beforeEach(() => {
         props = {
             show: true,
-            id: "foo",
-            name: "Foo",
+            subtraction,
             onHide: vi.fn(),
             onConfirm: vi.fn(),
         };
     });
 
-    it.each([true, false])("should render when [show=%p]", show => {
-        props.show = show;
-        const wrapper = shallow(<RemoveSubtraction {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render when [show=true]", () => {
+        renderWithProviders(<RemoveSubtraction {...props} />);
+
+        expect(screen.getByText("Remove Subtraction")).toBeInTheDocument();
     });
 
-    it("should call onConfirm() when onConfirm() on <RemoveModal /> is called", () => {
-        const wrapper = shallow(<RemoveSubtraction {...props} />);
-        wrapper.props().onConfirm();
-        expect(props.onConfirm).toHaveBeenCalledWith("foo");
+    it("should render when [show=false]", () => {
+        props.show = false;
+        renderWithProviders(<RemoveSubtraction {...props} />);
+
+        expect(screen.queryByText("Remove Subtraction")).toBeNull();
     });
 
-    it("should call onHide() when onHide() on <RemoveModal /> is called", () => {
-        const wrapper = shallow(<RemoveSubtraction {...props} />);
-        wrapper.props().onHide();
+    it("should call onConfirm() when onConfirm() on <RemoveModal /> is called", async () => {
+        renderWithProviders(<RemoveSubtraction {...props} />);
+
+        await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
+        expect(props.onConfirm).toHaveBeenCalledWith(subtraction.id);
+    });
+
+    it("should call onHide() when onHide() on <RemoveModal /> is called", async () => {
+        renderWithProviders(<RemoveSubtraction {...props} />);
+
+        await userEvent.click(screen.getByRole("button", { name: "close" }));
         expect(props.onHide).toHaveBeenCalled();
     });
 });
@@ -42,14 +54,9 @@ describe("<RemoveSubtraction />", () => {
 describe("mapStateToProps()", () => {
     it.each([true, false])("should return props when routerLocationHasState() returns %p", show => {
         routerLocationHasState.mockReturnValue(show);
-        const state = {
-            subtraction: { detail: { id: "foo", name: "Foo" } },
-        };
-        const props = mapStateToProps(state);
+        const props = mapStateToProps();
         expect(props).toEqual({
             show,
-            id: "foo",
-            name: "Foo",
         });
     });
 });

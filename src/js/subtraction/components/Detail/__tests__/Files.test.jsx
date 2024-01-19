@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/extend-expect";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
-import { mapStateToProps, SubtractionFiles } from "../Files";
+import SubtractionFiles from "../Files";
 
 describe("<SubtractionFiles />", () => {
     let props;
@@ -32,29 +32,15 @@ describe("<SubtractionFiles />", () => {
 
     it("should render NoneFound when no files are supplied", () => {
         props.files = [];
-        const { getByText } = renderWithProviders(<SubtractionFiles {...props} />);
+        renderWithProviders(<SubtractionFiles {...props} />);
 
-        expect(getByText("No subtraction files found")).toBeInTheDocument();
+        expect(screen.getByText("No subtraction files found")).toBeInTheDocument();
     });
 
     it("should render", () => {
-        const { getByText } = renderWithProviders(<SubtractionFiles {...props} />);
+        renderWithProviders(<SubtractionFiles {...props} />);
 
-        expect(getByText("Files")).toBeInTheDocument();
-        expect(getByText("Data files available to workflows using this subtraction.")).toBeInTheDocument();
-    });
-});
-
-describe("mapStateToProps()", () => {
-    it("should return props", () => {
-        const detail = {
-            files: [
-                { id: 1, name: "File 1" },
-                { id: 2, name: "File 2" },
-            ],
-        };
-        const state = { subtraction: { detail } };
-        const props = mapStateToProps(state);
-        expect(props).toEqual(detail);
+        expect(screen.getByText("Files")).toBeInTheDocument();
+        expect(screen.getByText("Data files available to workflows using this subtraction.")).toBeInTheDocument();
     });
 });

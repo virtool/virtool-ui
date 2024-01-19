@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { useUpdateUser } from "../../administration/querys";
 import {
@@ -9,7 +10,7 @@ import {
     InputContainer,
     InputError,
     InputGroup,
-    InputPassword,
+    InputSimple,
     RelativeTime,
     SaveButton,
 } from "../../base";
@@ -36,8 +37,12 @@ type PasswordProps = {
  * The password view to handle password change
  */
 export default function Password({ id, forceReset, lastPasswordChange }: PasswordProps) {
-    const [password, setPassword] = useState("");
     const mutation = useUpdateUser();
+    const {
+        formState: { errors },
+        handleSubmit,
+        register,
+    } = useForm({ defaultValues: { password: "" } });
 
     function handleSetForceReset() {
         mutation.mutate({
@@ -46,12 +51,6 @@ export default function Password({ id, forceReset, lastPasswordChange }: Passwor
                 force_reset: !forceReset,
             },
         });
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-
-        mutation.mutate({ userId: id, update: { password: password } });
     }
 
     return (
@@ -63,27 +62,39 @@ export default function Password({ id, forceReset, lastPasswordChange }: Passwor
                 </p>
             </BoxGroupHeader>
 
-            <BoxGroupSection as="form" onSubmit={handleSubmit}>
-                <InputGroup>
-                    <InputContainer>
-                        <InputPassword
-                            aria-label="password"
-                            name="password"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                        />
-                        <InputError>{mutation.isError && mutation.error["response"].body.message}</InputError>
-                    </InputContainer>
-                </InputGroup>
+            <BoxGroupSection>
+                <form
+                    onSubmit={handleSubmit(values =>
+                        mutation.mutate({ userId: id, update: { password: values.password } }),
+                    )}
+                >
+                    <InputGroup>
+                        <InputContainer>
+                            <InputSimple
+                                aria-label="password"
+                                id="password"
+                                type="password"
+                                {...register("password", {
+                                    required: "Password does not meet minimum length requirement (8)",
+                                    minLength: {
+                                        value: 8,
+                                        message: "Password does not meet minimum length requirement (8)",
+                                    },
+                                })}
+                            />
+                            <InputError>{errors.password?.message}</InputError>
+                        </InputContainer>
+                    </InputGroup>
 
-                <PasswordFooter>
-                    <Checkbox
-                        label="Force user to reset password on next login"
-                        checked={forceReset}
-                        onClick={handleSetForceReset}
-                    />
-                    <SaveButton />
-                </PasswordFooter>
+                    <PasswordFooter>
+                        <Checkbox
+                            label="Force user to reset password on next login"
+                            checked={forceReset}
+                            onClick={handleSetForceReset}
+                        />
+                        <SaveButton />
+                    </PasswordFooter>
+                </form>
             </BoxGroupSection>
         </BoxGroup>
     );

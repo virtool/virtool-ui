@@ -13,8 +13,6 @@ import {
     IMPORT_REFERENCE,
     REMOTE_REFERENCE,
     REMOVE_REFERENCE,
-    REMOVE_REFERENCE_GROUP,
-    REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
     WS_INSERT_REFERENCE,
     WS_REMOVE_REFERENCE,
@@ -92,20 +90,12 @@ export const editReferenceUser = createAction(EDIT_REFERENCE_USER.REQUESTED, (re
     payload: { refId, userId, update },
 }));
 
-export const removeReferenceUser = createAction(REMOVE_REFERENCE_USER.REQUESTED, (refId, userId) => ({
-    payload: { refId, userId },
-}));
-
 export const addReferenceGroup = createAction(ADD_REFERENCE_GROUP.REQUESTED, (refId, group) => ({
     payload: { refId, group },
 }));
 
 export const editReferenceGroup = createAction(EDIT_REFERENCE_GROUP.REQUESTED, (refId, groupId, update) => ({
     payload: { refId, groupId, update },
-}));
-
-export const removeReferenceGroup = createAction(REMOVE_REFERENCE_GROUP.REQUESTED, (refId, groupId) => ({
-    payload: { refId, groupId },
 }));
 
 export const checkUpdates = createAction(CHECK_REMOTE_UPDATES.REQUESTED, refId => ({ payload: { refId } }));

@@ -1,34 +1,15 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import { findHmms } from "../../hmm/actions";
-import { listReadyIndexes } from "../../indexes/actions";
-
+import { Route, Switch } from "react-router-dom";
 import { LoadingPlaceholder } from "../../base";
-import { findAnalyses } from "../actions";
+import { listReadyIndexes } from "../../indexes/actions";
+import AnalysesList from "./AnalysisList";
 import AnalysisDetail from "./Detail";
-import AnalysesList from "./List";
 
-interface AnalysesProps {
-    loading: boolean;
-    onFindAnalyses: (sampleId: string) => void;
-    onFindHmms: () => void;
-    onListReadyIndexes: () => void;
-}
-
-interface MatchTypes {
-    /** The sample id */
-    sampleId: string;
-}
-
-function Analyses({ loading, onFindAnalyses, onFindHmms, onListReadyIndexes }: AnalysesProps) {
-    const sampleId = useRouteMatch<MatchTypes>().params.sampleId;
-
+function Analyses({ loading, onListReadyIndexes }) {
     useEffect(() => {
-        onFindAnalyses(sampleId);
-        onFindHmms();
         onListReadyIndexes();
-    }, [sampleId]);
+    }, []);
 
     if (loading) {
         return <LoadingPlaceholder />;
@@ -44,19 +25,12 @@ function Analyses({ loading, onFindAnalyses, onFindHmms, onListReadyIndexes }: A
 
 function mapStateToProps(state) {
     return {
-        loading:
-            state.analyses.documents === null || state.hmms.documents === null || state.analyses.readyIndexes === null,
+        loading: state.analyses.readyIndexes === null,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onFindAnalyses: sampleId => {
-            dispatch(findAnalyses(sampleId, "", 1));
-        },
-        onFindHmms: () => {
-            dispatch(findHmms());
-        },
         onListReadyIndexes: () => {
             dispatch(listReadyIndexes());
         },

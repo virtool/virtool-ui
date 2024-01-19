@@ -47,8 +47,10 @@ export type SettingsUpdate = {
  *
  * @returns - A promise resolving to the complete response containing the updated settings.
  */
-export function updateSettings(update: SettingsUpdate): Promise<Response> {
-    return Request.patch("/settings").send(update);
+export function updateSettings(update: SettingsUpdate): Promise<Settings> {
+    return Request.patch("/settings")
+        .send(update)
+        .then(response => response.body);
 }
 
 /**
