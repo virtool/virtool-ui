@@ -62,7 +62,7 @@ export type SampleMinimal = SampleNested & {
     isolate: string;
     /* Information about the job associated with the sample */
     job?: JobMinimal;
-    /* Labels associated with the sample */
+    /* Label associated with the sample */
     labels: Array<LabelNested>;
     library_type: LibraryType;
     notes: string;

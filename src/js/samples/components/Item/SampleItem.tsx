@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Attribution, Box, Checkbox } from "../../../base";
 import { SampleMinimal } from "../../types";
-import { SampleLibraryTypeLabel, SmallSampleLabel } from "../Label";
+import { SampleLibraryTypeLabel } from "../Label/SampleLibraryTypeLabel";
+import { SmallSampleLabel } from "../Label/SmallSampleLabel";
 import { WorkflowTags } from "../Tag/WorkflowTags";
 import EndIcon from "./EndIcon";
 

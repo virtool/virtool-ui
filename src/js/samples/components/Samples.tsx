@@ -9,6 +9,9 @@ import SampleDetail from "./Detail/Detail";
 import SamplesSettings from "./SampleSettings";
 import SamplesList from "./SamplesList";
 
+/**
+ * Displays the file manager for samples allowing users to upload/delete files
+ */
 function SampleFileManager() {
     return (
         <ContainerNarrow>

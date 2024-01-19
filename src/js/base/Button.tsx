@@ -20,7 +20,7 @@ export function Button({
     active,
     children,
     className,
-    color = "grey",
+    color,
     disabled = false,
     icon,
     tip,
@@ -32,7 +32,7 @@ export function Button({
         <StyledButton
             active={active}
             className={className}
-            color={color}
+            color={color || "grey"}
             disabled={disabled}
             type={type}
             onBlur={onBlur}
