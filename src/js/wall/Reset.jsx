@@ -1,66 +1,37 @@
 import { get } from "lodash-es";
 import React from "react";
+import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import { resetPassword } from "../account/actions";
-import { InputError, InputGroup, InputLabel, InputPassword } from "../base";
+import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
 
-export class Reset extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            password: "",
-        };
-    }
+export function Reset({ error, onReset, resetCode }) {
+    const { register, handleSubmit } = useForm({ defaultValues: { password: "" } });
 
-    componentDidMount() {
-        this.setState({
-            resetCode: this.props.resetCode,
-        });
-    }
+    return (
+        <WallContainer>
+            <WallDialog>
+                <WallLoginContainer>
+                    <WallTitle />
+                    <WallHeader>Password Reset</WallHeader>
+                    <WallSubheader>You are required to set a new password before proceeding.</WallSubheader>
 
-    handleChange = e => {
-        this.setState({ password: e.target.value });
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-
-        if (!this.state.password.length < 8) {
-            this.props.onReset(this.state.password, this.state.resetCode);
-        }
-    };
-
-    render() {
-        return (
-            <WallContainer>
-                <WallDialog>
-                    <WallLoginContainer>
-                        <WallTitle />
-                        <WallHeader>Password Reset</WallHeader>
-                        <WallSubheader>You are required to set a new password before proceeding.</WallSubheader>
-
-                        <form onSubmit={this.handleSubmit}>
-                            <InputGroup>
-                                <InputLabel htmlFor="password">Password</InputLabel>
-                                <InputPassword
-                                    name="password"
-                                    id="password"
-                                    value={this.state.password}
-                                    onChange={this.handleChange}
-                                />
-                                <InputError>{this.props.error}</InputError>
-                            </InputGroup>
-                            <WallButton type="submit" color="blue">
-                                Reset
-                            </WallButton>
-                        </form>
-                    </WallLoginContainer>
-                </WallDialog>
-            </WallContainer>
-        );
-    }
+                    <form onSubmit={handleSubmit(values => onReset(values.password, resetCode))}>
+                        <InputGroup>
+                            <InputLabel htmlFor="password">Password</InputLabel>
+                            <InputSimple id="password" type="password" {...register("password")} />
+                            <InputError>{error}</InputError>
+                        </InputGroup>
+                        <WallButton type="submit" color="blue">
+                            Reset
+                        </WallButton>
+                    </form>
+                </WallLoginContainer>
+            </WallDialog>
+        </WallContainer>
+    );
 }
 
 export const mapStateToProps = state => ({
