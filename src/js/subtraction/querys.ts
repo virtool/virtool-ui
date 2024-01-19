@@ -30,7 +30,6 @@ export const subtractionQueryKeys = {
  */
 export function useCreateSubtraction() {
     const history = useHistory();
-
     return useMutation<Subtraction, unknown, { name: string; nickname: string; uploadId: string }>(
         ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId),
         {
@@ -52,7 +51,7 @@ export function useCreateSubtraction() {
 export function useFindSubtractions(page: number, per_page: number, term: string) {
     return useQuery<SubtractionSearchResult>(
         subtractionQueryKeys.list([page, per_page, term]),
-        () => findSubtractions({ page, per_page, term }),
+        () => findSubtractions(page, per_page, term),
         {
             keepPreviousData: true,
         },
@@ -96,7 +95,6 @@ export function useUpdateSubtraction(subtractionId: string) {
  */
 export function useRemoveSubtraction() {
     const history = useHistory();
-
     return useMutation<Response, unknown, { subtractionId: string }>(
         ({ subtractionId }) => removeSubtraction(subtractionId),
         {
