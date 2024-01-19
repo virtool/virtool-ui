@@ -1,6 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useHistory } from "react-router-dom";
 import { ErrorResponse } from "../types/types";
-import { fetchSubtractionShortlist, findSubtractions, getSubtraction, updateSubtraction } from "./api";
+import {
+    createSubtraction,
+    fetchSubtractionShortlist,
+    findSubtractions,
+    getSubtraction,
+    removeSubtraction,
+    updateSubtraction,
+} from "./api";
 import { Subtraction, SubtractionSearchResult, SubtractionShortlist } from "./types";
 
 /**
@@ -14,6 +22,24 @@ export const subtractionQueryKeys = {
     detail: (subtractionId: string) => ["subtraction", "details", subtractionId] as const,
     shortlist: () => ["subtraction", "list", "short"] as const,
 };
+
+/**
+ * Initializes a mutator for creating a subtraction
+ *
+ * @returns A mutator for creating a subtraction
+ */
+export function useCreateSubtraction() {
+    const history = useHistory();
+
+    return useMutation<Subtraction, unknown, { name: string; nickname: string; uploadId: string }>(
+        ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId),
+        {
+            onSuccess: () => {
+                history.push("/subtractions");
+            },
+        },
+    );
+}
 
 /**
  * Fetch a page of subtraction search results from the API
@@ -58,6 +84,24 @@ export function useUpdateSubtraction(subtractionId: string) {
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(subtractionQueryKeys.detail(subtractionId));
+            },
+        },
+    );
+}
+
+/**
+ * Initializes a mutator for removing a subtraction
+ *
+ * @returns A mutator for removing a subtraction
+ */
+export function useRemoveSubtraction() {
+    const history = useHistory();
+
+    return useMutation<Response, unknown, { subtractionId: string }>(
+        ({ subtractionId }) => removeSubtraction(subtractionId),
+        {
+            onSuccess: () => {
+                history.push("/subtractions");
             },
         },
     );

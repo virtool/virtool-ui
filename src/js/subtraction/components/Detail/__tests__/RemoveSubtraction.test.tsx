@@ -2,11 +2,11 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeSubtraction } from "../../../../tests/fake/subtractions";
-import { renderWithProviders } from "../../../../tests/setupTests";
-import { PUSH_STATE, REMOVE_SUBTRACTION } from "../../../app/actionTypes";
-import { routerLocationHasState } from "../../../utils/utils";
-import { mapDispatchToProps, mapStateToProps, RemoveSubtraction } from "../Remove";
+import { createFakeSubtraction } from "../../../../../tests/fake/subtractions";
+import { renderWithProviders } from "../../../../../tests/setupTests";
+import { PUSH_STATE, REMOVE_SUBTRACTION } from "../../../../app/actionTypes";
+import { routerLocationHasState } from "../../../../utils/utils";
+import { mapDispatchToProps, mapStateToProps, RemoveSubtraction } from "../RemoveSubtraction";
 
 vi.mock("../../../utils/utils.js");
 
