@@ -1,4 +1,5 @@
 import { Request } from "../app/request";
+import { Sample } from "./types";
 
 export const find = ({ term, labels, workflows, page = 1 }) => {
     const request = Request.get("/samples").query({
@@ -60,4 +61,24 @@ export function listSamples(page: number, per_page: number, term: string, labels
     return Request.get("/samples")
         .query({ page, per_page, find: term, label: labels, workflows })
         .then(res => res.body);
+}
+
+export type SampleUpdate = {
+    name?: string;
+    isolate?: string;
+    locale?: string;
+    notes?: string;
+};
+
+/**
+ * Updates the data for a sample
+ *
+ * @param sampleId - The id of the sample to be updated
+ * @param update - The update to apply to the sample
+ * @returns A promise resolving to a response containing the updated sample's data
+ */
+export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
+    return Request.patch(`/samples/${sampleId}`)
+        .send(update)
+        .then(response => response.body);
 }

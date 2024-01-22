@@ -2,8 +2,10 @@ import { faker } from "@faker-js/faker";
 import { assign } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
-import { LibraryType, SampleMinimal, WorkflowState } from "../../js/samples/types";
+import { LibraryType, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
+import { SubtractionNested } from "../../js/subtraction/types";
 import { createFakeLabelNested } from "./labels";
+import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";
 
 export type CreateFakeSampleMinimal = {
@@ -35,6 +37,34 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
     };
 
     return assign(defaultSampleMinimal, overrides);
+}
+
+type CreateFakeSample = CreateFakeSampleMinimal & {
+    subtractions?: Array<SubtractionNested>;
+};
+
+/**
+ * Create a fake sample object
+ */
+export function createFakeSample(overrides?: CreateFakeSample): Sample {
+    const { subtractions, ...props } = overrides || {};
+    return {
+        ...createFakeSampleMinimal(props),
+        all_read: faker.datatype.boolean(),
+        all_write: faker.datatype.boolean(),
+        artifacts: [],
+        format: "fastq",
+        group: null,
+        group_read: faker.datatype.boolean(),
+        group_write: faker.datatype.boolean(),
+        hold: faker.datatype.boolean(),
+        is_legacy: faker.datatype.boolean(),
+        locale: faker.random.word(),
+        paired: faker.datatype.boolean(),
+        quality: null,
+        reads: [],
+        subtractions: [createFakeSubtractionNested()],
+    };
 }
 
 /**
