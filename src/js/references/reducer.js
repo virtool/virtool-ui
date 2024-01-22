@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { assign, concat, reject, set, union, without } from "lodash-es";
+import { assign, concat, set } from "lodash-es";
 import {
     ADD_REFERENCE_GROUP,
     ADD_REFERENCE_USER,
@@ -10,8 +10,6 @@ import {
     FIND_REFERENCES,
     GET_REFERENCE,
     REMOTE_REFERENCE,
-    REMOVE_REFERENCE_GROUP,
-    REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
     UPLOAD,
     UPLOAD_PROGRESS,
@@ -112,35 +110,11 @@ export const referenceReducer = createReducer(initialState, builder => {
         .addCase(EDIT_REFERENCE_USER.SUCCEEDED, (state, action) => {
             state.detail.users = updateMember(state.detail.users, action.payload);
         })
-        .addCase(REMOVE_REFERENCE_USER.REQUESTED, (state, action) => {
-            if (action.payload.refId === state.detail.id) {
-                state.pendingRemoveUsers = union(state.pendingRemoveUsers, [action.payload.userId]);
-            }
-        })
-        .addCase(REMOVE_REFERENCE_USER.SUCCEEDED, (state, action) => {
-            if (action.payload.context.refId === state.detail.id) {
-                const userId = action.payload.context.userId;
-                state.pendingRemoveUsers = without(state.pendingRemoveUsers, userId);
-                state.detail.users = reject(state.detail.users, { id: userId });
-            }
-        })
         .addCase(ADD_REFERENCE_GROUP.SUCCEEDED, (state, action) => {
             state.detail.groups = concat(state.detail.groups, [action.payload]);
         })
         .addCase(EDIT_REFERENCE_GROUP.SUCCEEDED, (state, action) => {
             state.detail.groups = updateMember(state.detail.groups, action.payload);
-        })
-        .addCase(REMOVE_REFERENCE_GROUP.REQUESTED, (state, action) => {
-            if (action.payload.refId === state.detail.id) {
-                state.pendingRemoveGroups = union(state.pendingRemoveGroups, [action.payload.groupId]);
-            }
-        })
-        .addCase(REMOVE_REFERENCE_GROUP.SUCCEEDED, (state, action) => {
-            if (action.context.refId === state.detail.id) {
-                const groupId = action.context.groupId;
-                state.pendingRemoveGroups = without(state.pendingRemoveGroups, groupId);
-                state.detail.groups = reject(state.detail.groups, { id: groupId });
-            }
         })
         .addCase(REMOTE_REFERENCE.SUCCEEDED, state => {
             state.official_installed = true;

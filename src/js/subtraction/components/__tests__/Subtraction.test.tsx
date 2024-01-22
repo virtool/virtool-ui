@@ -8,6 +8,7 @@ import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import {
     createFakeSubtraction,
     createFakeSubtractionMinimal,
+    mockApiGetSubtractionDetail,
     mockApiGetSubtractions,
 } from "../../../../tests/fake/subtractions";
 import { renderWithProviders } from "../../../../tests/setupTests";
@@ -86,9 +87,10 @@ describe("<Subtraction />", () => {
     });
 
     it("should render /subtractions/:subtractionId route", async () => {
-        history.push(`/subtractions/${subtractionMinimal.id}`);
+        const subtraction = createFakeSubtraction();
+        history.push(`/subtractions/${subtraction.id}`);
 
-        mockApiGetSubtractions([subtractionMinimal]);
+        mockApiGetSubtractionDetail(subtraction);
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: history.location.pathname }]}>
                 <Subtraction />

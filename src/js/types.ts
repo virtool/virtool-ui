@@ -25,3 +25,13 @@ export type B2CSettings = {
     userFlow: string;
     version: string;
 };
+
+export type Task = {
+    complete: boolean;
+    created_at: Date;
+    error: string | null;
+    id: number;
+    progress: number;
+    step: string;
+    type: string;
+};

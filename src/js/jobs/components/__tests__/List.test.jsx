@@ -4,6 +4,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
+import { AdministratorRoles } from "../../../administration/types";
 import * as utils from "../../../administration/utils";
 import { JobsList, mapDispatchToProps, mapStateToProps } from "../List";
 
@@ -35,7 +36,6 @@ describe("<JobsList />", () => {
                     user: {
                         id: "test_user_id",
                         handle: "user_handle",
-                        administrator: true,
                     },
                     workflow: "create_sample",
                 },
@@ -53,7 +53,7 @@ describe("<JobsList />", () => {
                 },
             },
             account: {
-                administrator: true,
+                administrator_role: AdministratorRoles.FULL,
             },
             router: { location: new window.URL("https://www.virtool.ca") },
         };

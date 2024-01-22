@@ -1,10 +1,19 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
 import { useMutation } from "react-query";
+import { createUser } from "../../administration/api";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { StyledButton } from "../../base/styled/StyledButton";
-import { create } from "../api";
+import { User } from "../types";
 import { CreateUserForm } from "./CreateUserForm";
+
+type ErrorResponse = {
+    response: {
+        body: {
+            message: string;
+        };
+    };
+};
 
 type NewUser = {
     /** The user's handle or username */
@@ -19,7 +28,7 @@ type NewUser = {
  * A dialog for creating a new user
  */
 export default function CreateUser() {
-    const mutation = useMutation(create, {
+    const mutation = useMutation<User, ErrorResponse, NewUser>(createUser, {
         onSuccess: () => {
             history.replaceState({ createUser: false }, "");
         },
@@ -45,7 +54,7 @@ export default function CreateUser() {
                     <DialogTitle>Create User</DialogTitle>
                     <CreateUserForm
                         onSubmit={handleSubmit}
-                        error={mutation.isError && mutation.error["response"]?.body.message}
+                        error={mutation.isError && mutation.error.response?.body.message}
                     />
                 </DialogContent>
             </DialogPortal>

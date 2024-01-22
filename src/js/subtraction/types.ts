@@ -66,6 +66,11 @@ export type Subtraction = SubtractionMinimal & {
     linked_samples: Array<SampleNested>;
 };
 
+/** A subtraction with reduced information */
+export type SubtractionShortlist = SubtractionNested & {
+    ready: boolean;
+};
+
 /** Subtraction search results from the API */
 export type SubtractionSearchResult = SearchResult & {
     ready_count: number;

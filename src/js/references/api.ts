@@ -1,5 +1,5 @@
 import { Request } from "../app/request";
-import { Reference, ReferenceMinimal, ReferenceSearchResult } from "./types";
+import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 export function find({ term, page }) {
     return Request.get("/refs").query({ find: term, page });
@@ -64,20 +64,12 @@ export function editUser({ refId, userId, update }) {
     return Request.patch(`/refs/${refId}/users/${userId}`).send(update);
 }
 
-export function removeUser({ refId, userId }) {
-    return Request.delete(`/refs/${refId}/users/${userId}`);
-}
-
 export function addGroup({ refId, group }) {
     return Request.post(`/refs/${refId}/groups`).send({ group_id: group });
 }
 
 export function editGroup({ refId, groupId, update }) {
     return Request.patch(`/refs/${refId}/groups/${groupId}`).send(update);
-}
-
-export function removeGroup({ refId, groupId }) {
-    return Request.delete(`/refs/${refId}/groups/${groupId}`);
 }
 
 export function checkUpdates({ refId }) {
@@ -110,4 +102,51 @@ export function findReferences({ term, page, per_page }): Promise<ReferenceSearc
  */
 export function getReference(refId: string): Promise<Reference> {
     return Request.get(`/refs/${refId}`).then(response => response.body);
+}
+
+/**
+ * Create an empty reference
+ *
+ * @param name - The name of the reference
+ * @param description - The description of the reference
+ * @param dataType - The reference data type
+ * @param organism - The organism of the reference
+ * @returns A promise resolving to creating an empty reference
+ */
+export function createReference(
+    name: string,
+    description: string,
+    dataType: ReferenceDataType,
+    organism: string,
+): Promise<Reference> {
+    return Request.post("/refs")
+        .send({
+            name,
+            description,
+            data_type: dataType,
+            organism,
+        })
+        .then(response => response.body);
+}
+
+/**
+ * Removes user from a reference
+ *
+ * @param refId - The reference to have the user removed from
+ * @param userId - The user to remove
+ * @returns A promise resolving to the API response indicating if the removal was successful
+ */
+export function removeReferenceUser(refId: string, userId: string | number): Promise<Response> {
+    return Request.delete(`/refs/${refId}/users/${userId}`).then(response => response.body);
+}
+
+/**
+ * Removes group from a reference
+ *
+ * @param refId - The reference to have the group removed from
+ * @param groupId - The group to remove
+ * @returns  A promise resolving to the API response indicating if the removal was successful
+ */
+export function removeReferenceGroup(refId: string, groupId: string | number): Promise<Response> {
+    return Request.delete(`/refs/${refId}/groups/${groupId}`).then(response => response.body);
 }

@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { set } from "lodash-es";
-import { FIND_HMMS, GET_HMM, WS_UPDATE_STATUS } from "../app/actionTypes";
+import { FIND_HMMS, WS_UPDATE_STATUS } from "../app/actionTypes";
 import { updateDocuments } from "../utils/reducers";
 
 export const initialState = {
@@ -25,12 +25,6 @@ export const hmmsReducer = createReducer(initialState, builder => {
         })
         .addCase(FIND_HMMS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action.payload, "cluster");
-        })
-        .addCase(GET_HMM.REQUESTED, state => {
-            state.detail = null;
-        })
-        .addCase(GET_HMM.SUCCEEDED, (state, action) => {
-            state.detail = action.payload;
         });
 });
 

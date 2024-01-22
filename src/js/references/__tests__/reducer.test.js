@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
     ADD_REFERENCE_GROUP,
     ADD_REFERENCE_USER,
@@ -8,8 +8,6 @@ import {
     EDIT_REFERENCE_USER,
     FIND_REFERENCES,
     GET_REFERENCE,
-    REMOVE_REFERENCE_GROUP,
-    REMOVE_REFERENCE_USER,
     UPDATE_REMOTE_REFERENCE,
     UPLOAD,
     WS_INSERT_REFERENCE,
@@ -196,69 +194,6 @@ describe("References Reducer", () => {
         });
     });
 
-    describe("should handle REMOVE_REFERENCE_USER_REQUESTED", () => {
-        it("when store and action ref ids match", () => {
-            const state = { detail: { id: "foo" }, pendingRemoveUsers: ["fred"] };
-            const action = {
-                type: REMOVE_REFERENCE_USER.REQUESTED,
-                payload: { refId: "foo", userId: "bob" },
-            };
-            const result = reducer(state, action);
-            expect(result).toEqual({
-                detail: { id: "foo" },
-                pendingRemoveUsers: ["fred", "bob"],
-            });
-        });
-
-        it("when store and action ref ids don't match", () => {
-            const state = { detail: { id: "foo" }, pendingRemoveUsers: ["fred"] };
-            const action = {
-                type: REMOVE_REFERENCE_USER.REQUESTED,
-                payload: { refId: "bar", userId: "bob" },
-            };
-            const result = reducer(state, action);
-            expect(result).toEqual(state);
-        });
-    });
-
-    describe("should handle REMOVE_REFERENCE_USER_SUCCEEDED", () => {
-        let action;
-        let state;
-
-        beforeEach(() => {
-            action = {
-                type: REMOVE_REFERENCE_USER.SUCCEEDED,
-                payload: {
-                    context: {
-                        refId: "foo",
-                        userId: "bar",
-                    },
-                },
-            };
-            state = {
-                detail: {
-                    id: "foo",
-                    users: [{ id: "bar" }, { id: "bad" }],
-                },
-                pendingRemoveUsers: ["bar", "baz"],
-            };
-        });
-
-        it("when store and action ref ids match", () => {
-            const result = reducer(state, action);
-            expect(result).toEqual({
-                detail: { ...state.detail, users: [{ id: "bad" }] },
-                pendingRemoveUsers: ["baz"],
-            });
-        });
-
-        it("when store and action ref ids don't match", () => {
-            action.payload.context.refId = "boo";
-            const result = reducer(state, action);
-            expect(result).toEqual(state);
-        });
-    });
-
     it("should handle ADD_REFERENCE_GROUP_SUCCEEDED", () => {
         const state = { detail: { groups: [] } };
         const action = {
@@ -286,76 +221,6 @@ describe("References Reducer", () => {
             detail: {
                 groups: [{ id: "foo", foo: "baz" }],
             },
-        });
-    });
-
-    describe("should handle REMOVE_REFERENCE_GROUP_REQUESTED", () => {
-        let action;
-        let state;
-
-        beforeEach(() => {
-            action = {
-                type: REMOVE_REFERENCE_GROUP.REQUESTED,
-                payload: { refId: "foo", groupId: "baz" },
-            };
-            state = {
-                detail: { id: "foo" },
-                pendingRemoveGroups: ["bar"],
-            };
-        });
-
-        it("when store and action ref ids match", () => {
-            const result = reducer(state, action);
-            expect(result).toEqual({
-                detail: { id: "foo" },
-                pendingRemoveGroups: ["bar", "baz"],
-            });
-        });
-
-        it("when store and action ref ids don't match", () => {
-            action.payload.refId = "bar";
-            const result = reducer(state, action);
-            expect(result).toEqual(state);
-        });
-    });
-
-    describe("should handle REMOVE_REFERENCE_GROUP_SUCCEEDED", () => {
-        let action;
-        let state;
-
-        beforeEach(() => {
-            action = {
-                type: REMOVE_REFERENCE_GROUP.SUCCEEDED,
-                context: {
-                    refId: "foobar",
-                    groupId: "bar",
-                },
-            };
-
-            state = {
-                detail: {
-                    id: "foobar",
-                    groups: [{ id: "foo" }, { id: "bar" }],
-                },
-                pendingRemoveGroups: ["bar", "baz"],
-            };
-        });
-
-        it("when store and action ref ids match", () => {
-            const result = reducer(state, action);
-            expect(result).toEqual({
-                detail: {
-                    id: "foobar",
-                    groups: [{ id: "foo" }],
-                },
-                pendingRemoveGroups: ["baz"],
-            });
-        });
-
-        it("when store and action ref ids don't match", () => {
-            action.context.refId = "bid";
-            const result = reducer(state, action);
-            expect(result).toEqual(state);
         });
     });
 });

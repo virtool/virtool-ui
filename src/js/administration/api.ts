@@ -47,8 +47,10 @@ export type SettingsUpdate = {
  *
  * @returns - A promise resolving to the complete response containing the updated settings.
  */
-export function updateSettings(update: SettingsUpdate): Promise<Response> {
-    return Request.patch("/settings").send(update);
+export function updateSettings(update: SettingsUpdate): Promise<Settings> {
+    return Request.patch("/settings")
+        .send(update)
+        .then(response => response.body);
 }
 
 /**
@@ -84,7 +86,25 @@ export function findUsers(page: number, per_page: number, term: string, administ
  * @returns A promise resolving to a single user
  */
 export function getUser(userId: string): Promise<User> {
-    return Request.get(`/users/${userId}`).then(res => res.body);
+    return Request.get(`/admin/users/${userId}`).then(res => res.body);
+}
+
+/**
+ * Creates a user
+ *
+ * @param handle - The users username or handle
+ * @param password - The users password
+ * @param forceReset - Whether the user will be forced to reset their password on next login
+ * @returns A promise resolving to creating a user
+ */
+export function createUser({ handle, password, forceReset }): Promise<User> {
+    return Request.post("/admin/users")
+        .send({
+            handle,
+            password,
+            force_reset: forceReset,
+        })
+        .then(res => res.body);
 }
 
 export type UserUpdate = {
@@ -102,7 +122,7 @@ export type UserUpdate = {
  * @returns A promise resolving to a response containing the updated user's data
  */
 export function updateUser(userId: string, update: UserUpdate): Promise<User> {
-    return Request.patch(`/users/${userId}`)
+    return Request.patch(`/admin/users/${userId}`)
         .send(update)
         .then(res => res.body);
 }

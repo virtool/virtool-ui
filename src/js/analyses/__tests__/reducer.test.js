@@ -39,6 +39,7 @@ describe("Analyses Reducer", () => {
             filterOTUs: true,
             filterSequences: true,
             readyIndexes: null,
+            sampleId: null,
             searchIds: null,
             showPathoscopeReads: false,
             sortDescending: true,

@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
-import { cloneReference, findReferences } from "./api";
-import { ReferenceMinimal, ReferenceSearchResult } from "./types";
+import { useHistory } from "react-router-dom";
+import { cloneReference, createReference, findReferences, removeReferenceGroup, removeReferenceUser } from "./api";
+import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 /**
  * Factory for generating react-query keys for reference related queries.
@@ -8,9 +9,10 @@ import { ReferenceMinimal, ReferenceSearchResult } from "./types";
 export const referenceQueryKeys = {
     all: () => ["reference"] as const,
     lists: () => ["reference", "list"] as const,
-    list: (filters: (string | number)[]) => ["reference", "list", ...filters] as const,
-    infiniteLists: () => ["users", "list", "infinite"] as const,
-    infiniteList: (filters: Array<string | number | boolean>) => ["users", "list", "infinite", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) => ["reference", "list", "single", ...filters] as const,
+    infiniteList: (filters: Array<string | number | boolean>) => ["reference", "list", "infinite", ...filters] as const,
+    details: () => ["reference", "details"] as const,
+    detail: (refId: string) => ["reference", "details", refId] as const,
 };
 
 /**
@@ -21,8 +23,8 @@ export const referenceQueryKeys = {
  */
 export function useInfiniteFindReferences(term: string) {
     return useInfiniteQuery<ReferenceSearchResult>(
-        referenceQueryKeys.list([term]),
-        pageParam => findReferences({ page: pageParam, per_page: 25, term }),
+        referenceQueryKeys.infiniteList([term]),
+        ({ pageParam }) => findReferences({ page: pageParam, per_page: 25, term }),
         {
             getNextPageParam: lastPage => {
                 if (lastPage.page >= lastPage.page_count) {
@@ -41,12 +43,43 @@ export function useInfiniteFindReferences(term: string) {
  * @returns A mutator for cloning a reference
  */
 export function useCloneReference() {
+    return useMutation<ReferenceMinimal, unknown, { name: string; description: string; refId: string }>(cloneReference);
+}
+
+/**
+ * Initializes a mutator for creating an empty reference
+ *
+ * @returns A mutator for creating an empty reference
+ */
+export function useCreateReference() {
+    const history = useHistory();
+
+    return useMutation<
+        Reference,
+        unknown,
+        { name: string; description: string; dataType: ReferenceDataType; organism: string }
+    >(({ name, description, dataType, organism }) => createReference(name, description, dataType, organism), {
+        onSuccess: () => {
+            history.push("/refs", { emptyReference: false });
+        },
+    });
+}
+
+/**
+ * Initializes a mutator for removing members from a reference
+ *
+ * @param refId - The reference to remove the member from
+ * @param noun - Whether the member is a user or a group
+ * @returns A mutator for removing members from a reference
+ */
+export function useRemoveReferenceUser(refId: string, noun: string) {
     const queryClient = useQueryClient();
-    return useMutation<ReferenceMinimal, unknown, { name: string; description: string; refId: string }>(
-        cloneReference,
+
+    return useMutation<Response, unknown, { id: string | number }>(
+        ({ id }) => (noun === "user" ? removeReferenceUser(refId, id) : removeReferenceGroup(refId, id)),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(referenceQueryKeys.lists());
+                queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
             },
         },
     );

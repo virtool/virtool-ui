@@ -6,6 +6,7 @@ import {
     findUsers,
     getUser,
     setAdministratorRole,
+    updateSettings,
     updateUser,
     UserUpdate,
 } from "./api";
@@ -25,6 +26,21 @@ export const settingsQueryKeys = {
  */
 export function useFetchSettings() {
     return useQuery<Settings>(settingsQueryKeys.all(), fetchSettings);
+}
+
+/**
+ * Initializes a mutator for updating the current settings on the server
+ *
+ * @returns A mutator for updating the current settings on the server
+ */
+export function useUpdateSettings() {
+    const queryClient = useQueryClient();
+
+    return useMutation(updateSettings, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(settingsQueryKeys.all());
+        },
+    });
 }
 
 export const roleQueryKeys = {

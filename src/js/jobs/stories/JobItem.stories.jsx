@@ -7,7 +7,6 @@ export default {
 };
 
 const user = {
-    administrator: false,
     id: "foo",
     handle: "Foo Bar",
 };

@@ -12,7 +12,7 @@ import { checkReferenceRight } from "../../selectors";
 import EditReference from "./Edit";
 import ReferenceDetailHeader from "./Header";
 import ReferenceManage from "./Manage";
-import ReferenceSettings from "./Settings";
+import ReferenceSettings from "./ReferenceSettings";
 import ReferenceDetailTabs from "./Tabs";
 
 const ReferenceDetail = ({ error, id, match, onGetReference }) => {
