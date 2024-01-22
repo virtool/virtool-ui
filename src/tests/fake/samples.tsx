@@ -3,7 +3,6 @@ import { assign } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
 import { LibraryType, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
-import { SubtractionNested } from "../../js/subtraction/types";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";
@@ -40,16 +39,15 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
 }
 
 type CreateFakeSample = CreateFakeSampleMinimal & {
-    subtractions?: Array<SubtractionNested>;
+    paired?: boolean;
 };
 
 /**
  * Create a fake sample object
  */
 export function createFakeSample(overrides?: CreateFakeSample): Sample {
-    const { subtractions, ...props } = overrides || {};
-    return {
-        ...createFakeSampleMinimal(props),
+    const defaultSample = {
+        ...createFakeSampleMinimal(),
         all_read: faker.datatype.boolean(),
         all_write: faker.datatype.boolean(),
         artifacts: [],
@@ -65,6 +63,8 @@ export function createFakeSample(overrides?: CreateFakeSample): Sample {
         reads: [],
         subtractions: [createFakeSubtractionNested()],
     };
+
+    return assign(defaultSample, overrides);
 }
 
 /**

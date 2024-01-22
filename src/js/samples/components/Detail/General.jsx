@@ -6,8 +6,8 @@ import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, ContainerNarrow, ContainerSide, Markdown, Table } from "../../../base";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
-import SampleFileSizeWarning from "./FileSizeWarning";
-import Sidebar from "./Sidebar";
+import { SampleFileSizeWarning } from "./FileSizeWarning";
+import { Sidebar } from "./Sidebar";
 
 const SampleDetailSidebarContainer = styled(ContainerSide)`
     padding-left: 15px;
@@ -29,7 +29,7 @@ export function SampleDetailGeneral({ count, encoding, gc, lengthRange, libraryT
     return (
         <StyledSampleDetailGeneral>
             <ContainerNarrow>
-                <SampleFileSizeWarning />
+                <SampleFileSizeWarning sampleId={sample.id} />
                 <BoxGroup>
                     <BoxGroupHeader>
                         <h2>General</h2>
@@ -102,7 +102,7 @@ export function SampleDetailGeneral({ count, encoding, gc, lengthRange, libraryT
             </ContainerNarrow>
 
             <SampleDetailSidebarContainer>
-                <Sidebar />
+                <Sidebar sampleId={sample.id} sampleLabels={sample.labels} defaultSubtractions={sample.subtractions} />
             </SampleDetailSidebarContainer>
 
             <EditSample

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { editSample } from "../../actions";
-import { getDefaultSubtractions, getSampleDetailId, getSampleLabels, getSubtractionOptions } from "../../selectors";
+import { getSubtractionOptions } from "../../selectors";
 import SampleLabels from "./../Sidebar/Labels";
 import DefaultSubtractions from "./../Sidebar/Subtractions";
 
@@ -32,9 +32,6 @@ export const Sidebar = ({ sampleId, sampleLabels, onLabelUpdate, defaultSubtract
 );
 
 export const mapStateToProps = state => ({
-    sampleId: getSampleDetailId(state),
-    sampleLabels: getSampleLabels(state),
-    defaultSubtractions: getDefaultSubtractions(state),
     subtractionOptions: getSubtractionOptions(state),
 });
 

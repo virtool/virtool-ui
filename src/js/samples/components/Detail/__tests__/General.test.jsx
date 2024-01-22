@@ -1,22 +1,21 @@
-import { shallow } from "enzyme";
+import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
+import { createFakeSample } from "../../../../../tests/fake/samples";
+import { renderWithRouter } from "../../../../../tests/setupTests";
 import { mapStateToProps, SampleDetailGeneral } from "../General";
+
 describe("<SampleDetailGeneral />", () => {
     let props;
+    let history;
 
     beforeEach(() => {
         props = {
             count: 235,
             encoding: "Sanger / Illumina 2.1",
             gc: "42.3%",
-            host: "Malus domestica",
-            isolate: "Isolate Foo",
             lengthRange: "41 - 76",
-            locale: "Bar",
-            name: "Foo",
-            notes: "Example notes",
-            paired: false,
+            sample: {},
             subtractions: [
                 {
                     id: "baz",
@@ -25,12 +24,23 @@ describe("<SampleDetailGeneral />", () => {
             ],
             libraryType: "",
         };
+        history = createBrowserHistory();
     });
 
-    it.each([true, false])("should render with [paired=%p]", paired => {
-        props.paired = paired;
-        const wrapper = shallow(<SampleDetailGeneral {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    it("should render with [paired=true]", () => {
+        props.sample = createFakeSample({ paired: true });
+        renderWithRouter(<SampleDetailGeneral {...props} />, {}, history);
+
+        expect(screen.getByText("Paired")).toBeInTheDocument();
+        expect(screen.getByText("Yes")).toBeInTheDocument();
+    });
+
+    it("should render with [paired=false]", () => {
+        props.sample = createFakeSample({ paired: false });
+        renderWithRouter(<SampleDetailGeneral {...props} />, {}, history);
+
+        expect(screen.getByText("Paired")).toBeInTheDocument();
+        expect(screen.getByText("No")).toBeInTheDocument();
     });
 });
 
@@ -65,12 +75,23 @@ describe("mapStateToProps()", () => {
         const props = mapStateToProps(state);
         expect(props).toEqual({
             encoding: "Foo 1.2",
-            host: "Malus domestica",
-            isolate: "Isolate Foo",
-            locale: "Bar",
-            notes: "FooBar",
-            name: "Foo",
-            paired: false,
+            sample: {
+                id: "foo",
+                host: "Malus domestica",
+                isolate: "Isolate Foo",
+                locale: "Bar",
+                notes: "FooBar",
+                name: "Foo",
+                paired: false,
+                quality: {
+                    gc: 31.2452,
+                    count: 13198329,
+                    encoding: "Foo 1.2",
+                    length: [50, 100],
+                },
+                library_type: "normal",
+                subtractions: [{ id: "baz", name: "Arabidopsis thaliana" }],
+            },
             gc: "31.2 %",
             count: "13.2 m",
             lengthRange: "50 - 100",
