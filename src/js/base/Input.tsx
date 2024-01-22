@@ -1,4 +1,5 @@
 import React, { useImperativeHandle } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 import styled from "styled-components";
 
 function getInputFocusColor({ error }: { error?: string }) {
@@ -23,6 +24,7 @@ interface InputProps {
     name?: string;
     placeholder?: string;
     readOnly?: boolean;
+    register?: UseFormRegisterReturn;
     step?: number;
     type?: string;
     value: string | number;

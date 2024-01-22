@@ -1,28 +1,12 @@
-import { Form, Formik, FormikErrors, FormikTouched } from "formik";
 import React from "react";
-import * as Yup from "yup";
+import { Controller, useForm } from "react-hook-form";
 import { Alert, Button } from "../../base";
 import { useCreateReference } from "../querys";
 import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
-import { ReferenceForm } from "./Form";
+import { ReferenceForm, ReferenceFormMode } from "./ReferenceForm";
 
-const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Required Field"),
-    dataType: Yup.string().required("Required Field"),
-});
-
-function getInitialState() {
-    return {
-        name: "",
-        description: "",
-        dataType: "genome",
-        organism: "",
-        mode: "empty",
-    };
-}
-
-type formValues = {
+type FormValues = {
     name: string;
     description: string;
     dataType: ReferenceDataType;
@@ -35,37 +19,28 @@ type formValues = {
 export default function EmptyReference() {
     const mutation = useCreateReference();
 
-    function handleSubmit({ name, description, dataType, organism }) {
-        mutation.mutate({ name, description, dataType, organism });
-    }
+    const {
+        formState: { errors },
+        handleSubmit,
+        register,
+        control,
+    } = useForm<FormValues>({ defaultValues: { name: "", description: "", dataType: "genome", organism: "" } });
 
     return (
-        <Formik initialValues={getInitialState()} onSubmit={handleSubmit} validationSchema={validationSchema}>
-            {({
-                errors,
-                touched,
-                setFieldValue,
-                values,
-            }: {
-                errors: FormikErrors<formValues>;
-                touched: FormikTouched<formValues>;
-                setFieldValue: (field: string, value: string) => void;
-                values: formValues;
-            }) => (
-                <Form>
-                    <Alert>
-                        <strong>Create an empty reference.</strong>
-                    </Alert>
-                    <ReferenceForm errors={errors} touched={touched} mode={"empty"} />
-                    <DataTypeSelection
-                        onSelect={datatype => setFieldValue("dataType", datatype)}
-                        dataType={values.dataType}
-                    />
-                    <Button type="submit" icon="save" color="blue">
-                        Save
-                    </Button>
-                </Form>
-            )}
-        </Formik>
+        <form onSubmit={handleSubmit(values => mutation.mutate({ ...values }))}>
+            <Alert>
+                <strong>Create an empty reference.</strong>
+            </Alert>
+            <ReferenceForm errors={errors} mode={ReferenceFormMode.empty} register={register} />
+            <Controller
+                name="dataType"
+                control={control}
+                rules={{ required: "Required Field" }}
+                render={({ field: { onChange, value } }) => <DataTypeSelection onSelect={onChange} dataType={value} />}
+            />
+            <Button type="submit" icon="save" color="blue">
+                Save
+            </Button>
+        </form>
     );
 }
