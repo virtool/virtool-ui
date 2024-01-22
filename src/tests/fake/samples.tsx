@@ -84,6 +84,30 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
     });
 }
 
+/**
+ * Sets up a mocked API route for updating the sample details
+ *
+ * @param sample - The sample details
+ * @param name - The updated name
+ * @param isolate - The updated isolate
+ * @param host - The updated host
+ * @param locale - The updated locale
+ * @param notes - The updated notes
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiEditSample(
+    sample: Sample,
+    name: string,
+    isolate: string,
+    host: string,
+    locale: string,
+    notes: string,
+) {
+    const sampleDetail = { ...sample, name, isolate, host, locale, notes };
+
+    return nock("http://localhost").patch(`/api/samples/${sample.id}`).reply(200, sampleDetail);
+}
+
 export type CreateSampleType = {
     name: string;
     isolate: string;

@@ -72,9 +72,9 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                             <InputLabel htmlFor="locale">Locale</InputLabel>
                             <InputSimple id="locale" {...register("locale")} />
                         </InputGroup>
-                        <InputGroup className="mark-input">
+                        <InputGroup>
                             <InputLabel htmlFor="notes">Notes</InputLabel>
-                            <TextArea name="notes" {...register("host")} />
+                            <TextArea id="notes" {...register("notes")} />
                         </InputGroup>
 
                         <SaveButton />
