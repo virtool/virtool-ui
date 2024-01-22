@@ -30,7 +30,6 @@ export function* wsUpdateAnalysis(action) {
 }
 
 export function* findAnalyses(action) {
-    console.log({ action });
     yield apiCall(analysesAPI.find, action.payload, FIND_ANALYSES);
     yield pushFindTerm(action.payload.term);
 }
@@ -45,7 +44,6 @@ export function* analyze(action) {
     if (response.ok) {
         const location = yield select(state => state.router.location);
         const searchParams = new URLSearchParams(location.search);
-        console.log(searchParams);
 
         yield findAnalyses(findAnalysesAction(action.payload.sampleId, searchParams.get("find") || null, 1));
     }

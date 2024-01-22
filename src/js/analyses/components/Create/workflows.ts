@@ -1,39 +1,48 @@
 import { filter, remove } from "lodash-es";
 import { ReferenceDataType } from "../../../references/types";
+import { Workflows } from "../../types";
 
 export type workflow = {
     id: string;
     name: string;
     compatability: { genome: boolean; barcode: boolean };
-    resources: { reference: boolean; subtraction: boolean };
+    resources: AnalysisResources;
 };
 
+type AnalysisResources = {
+    reference: boolean;
+    subtraction: boolean;
+    ml: boolean;
+};
+
+const defaultResources = { reference: false, subtraction: false, ml: false };
+
 export const pathoscopeWorkflow = {
-    id: "pathoscope_bowtie",
+    id: Workflows.pathoscope_bowtie,
     name: "Pathoscope",
     compatability: { genome: true, barcode: false },
-    resources: { reference: true, subtraction: true },
+    resources: { ...defaultResources, reference: true, subtraction: true },
 };
 
 export const nuvsWorkflow = {
-    id: "nuvs",
+    id: Workflows.nuvs,
     name: "NuVs",
     compatability: { genome: true, barcode: false },
-    resources: { reference: true, subtraction: true },
+    resources: { ...defaultResources, reference: true, subtraction: true },
 };
 
 export const iimiWorkflow = {
-    id: "iimi",
+    id: Workflows.iimi,
     name: "Iimi",
     compatability: { genome: true, barcode: false },
-    resources: { reference: true, subtraction: true },
+    resources: { ...defaultResources, ml: true },
 };
 
 export const aodpWorkflow = {
-    id: "aodp",
+    id: Workflows.aodp,
     name: "AODP",
     compatability: { genome: false, barcode: true },
-    resources: { reference: true, subtraction: true },
+    resources: { ...defaultResources, reference: true, subtraction: true },
 };
 
 export const workflows = [pathoscopeWorkflow, nuvsWorkflow, iimiWorkflow, aodpWorkflow] as workflow[];
@@ -46,4 +55,14 @@ export function getCompatibleWorkflows(dataType: ReferenceDataType, hasHmm: bool
     }
 
     return compatibleWorkflows;
+}
+
+export function getRequiredResources(workflowId: string): AnalysisResources {
+    const workflow = workflows.find((workflow: workflow) => workflow.id === workflowId);
+
+    if (workflow) {
+        return workflow.resources;
+    }
+
+    return defaultResources;
 }

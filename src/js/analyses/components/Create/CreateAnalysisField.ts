@@ -5,4 +5,5 @@ export const CreateAnalysisField = styled.div`
     column-gap: ${props => props.theme.gap.column};
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin-bottom: 30px;
 `;

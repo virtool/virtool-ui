@@ -68,3 +68,10 @@ export type Analysis = AnalysisMinimal & {
 export type AnalysisSearchResult = SearchResult & {
     documents: Array<AnalysisMinimal>;
 };
+
+export enum Workflows {
+    pathoscope_bowtie = "pathoscope_bowtie",
+    nuvs = "nuvs",
+    iimi = "iimi",
+    aodp = "aodp",
+}
