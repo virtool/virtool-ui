@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { listAnalyses, removeAnalysis } from "./api";
-import { AnalysisSearchResult } from "./types";
+import { createAnalysis, listAnalyses, removeAnalysis } from "./api";
+import { Analysis, AnalysisSearchResult } from "./types";
 
 /**
  * Factory object for generating analyses query keys
@@ -51,4 +51,28 @@ export function useRemoveAnalysis(analysisId: string) {
     );
 
     return () => mutation.mutate({ analysisId });
+}
+
+type createAnalysisMutationParams = {
+    sampleId: string;
+    refId: string;
+    subtractionIds: string[];
+    workflow: string;
+    mlModel: string;
+};
+
+export function useCreateAnalysis() {
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation<Analysis, unknown, createAnalysisMutationParams>(
+        ({ sampleId, refId, subtractionIds, workflow, mlModel }) =>
+            createAnalysis(sampleId, refId, subtractionIds, workflow, mlModel),
+        {
+            onSuccess: () => {
+                void queryClient.invalidateQueries(analysesQueryKeys.lists());
+            },
+        },
+    );
+
+    return mutation;
 }

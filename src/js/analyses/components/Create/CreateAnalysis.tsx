@@ -1,26 +1,44 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { forEach } from "lodash-es";
+import { filter, forEach, map } from "lodash-es";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { connect } from "react-redux";
-import styled from "styled-components";
-import { getAccountId } from "../../../account/selectors";
+import styled, { keyframes } from "styled-components";
 import { pushState } from "../../../app/actions";
-import { Button, Dialog, DialogContent, DialogTitle, InputError, LoadingPlaceholder, ModalFooter } from "../../../base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+    LoadingPlaceholder,
+    ModalFooter,
+} from "../../../base";
 import { useFindModels } from "../../../ml/queries";
 import { getDefaultSubtractions, getSampleDetailId, getSampleLibraryType } from "../../../samples/selectors";
 import { getDataTypeFromLibraryType } from "../../../samples/utils";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { routerLocationHasState } from "../../../utils/utils";
-import { analyze } from "../../actions";
+import { useCreateAnalysis } from "../../querys";
 import { getAnalysesSubtractions, getCompatibleIndexesWithLibraryType } from "../../selectors";
-import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
+import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
 import { MLModelSelector } from "./MLModelSelector";
 import { SubtractionSelector } from "./SubtractionSelector";
 import { getCompatibleWorkflows, getRequiredResources } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
+
+const createAnalysisOpen = keyframes`
+  from {
+    opacity: 0;
+    transform: translate(-50%, -2%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0%) scale(1);
+  }
+`;
 
 const CreateAnalysisFooter = styled(ModalFooter)`
     align-items: center;
@@ -33,17 +51,13 @@ const CreateAnalysisFooter = styled(ModalFooter)`
     }
 `;
 
-const CreateAnalysisInputError = styled(InputError)`
-    margin: -20px 0 5px;
-`;
-
 const CreateAnalysisDialogContent = styled(DialogContent)`
+    animation: ${createAnalysisOpen} 150ms cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 5%;
-    transform: translatex(-50%);
-    overflow: auto;
+    transform: translate(-50%, 0%);
     width: 700px;
 
     form {
@@ -53,21 +67,13 @@ const CreateAnalysisDialogContent = styled(DialogContent)`
     }
 `;
 
-type createStandardAnalysisFormValues = {
-    workflow: Workflows.pathoscope_bowtie | Workflows.nuvs;
-    indexes: string[];
-    subtractions: string[];
+type createAnalysisFormValues = {
+    indexes?: string[];
+    subtractions?: string[];
+    mlModel?: string;
 };
-
-type createMLAnalysisFormValues = {
-    workflow: Workflows.iimi;
-    mlModel: string[];
-};
-
-type createAnalysisFormValues = createStandardAnalysisFormValues & createMLAnalysisFormValues;
 
 export const CreateAnalysis = ({
-    accountId,
     compatibleIndexes,
     dataType,
     defaultSubtractions,
@@ -75,27 +81,27 @@ export const CreateAnalysis = ({
     sampleId,
     open,
     subtractionOptions,
-    onAnalyze,
-    onHide,
     onSetOpen,
     onShortlistSubtractions,
 }) => {
-    open = true;
+    console.log(defaultSubtractions);
+
     useEffect(() => {
         if (open) {
             onShortlistSubtractions();
         }
     }, [open]);
 
-    // const { errors, indexes, subtractions, workflow, setErrors, setIndexes, setSubtractions, setWorkflow, reset } =
-    //     useCreateAnalysis(dataType, defaultSubtractions);
+    const createAnalysis = useCreateAnalysis();
 
     const {
         control,
         handleSubmit,
         formState: { errors },
         watch,
-    } = useForm<createStandardAnalysisFormValues>({ defaultValues: { workflow: Workflows.iimi } });
+    } = useForm<createAnalysisFormValues>({
+        defaultValues: { subtractions: defaultSubtractions },
+    });
 
     const { data: mlModels, isLoading } = useFindModels();
 
@@ -108,23 +114,27 @@ export const CreateAnalysis = ({
 
     function onSubmit(props) {
         console.log(props);
-        // onAnalyze(
-        //     sampleId,
-        //     map(
-        //         filter(compatibleIndexes, index => indexes.includes(index.id)),
-        //         "reference.id",
-        //     ),
-        //     subtractions,
-        //     accountId,
-        //     workflow,
-        // );
-        // reset();
-        // onHide();
+        const { indexes, subtractions, workflow, mlModel } = props as createAnalysisFormValues;
+
+        const references = map(
+            filter(compatibleIndexes, index => indexes.includes(index.id)),
+            "reference.id",
+        );
+
+        forEach(references, refId => {
+            createAnalysis.mutate(
+                { refId, subtractionIds: subtractions, sampleId, workflow, mlModel },
+                { onSuccess: () => onSetOpen(false) },
+            );
+        });
+
+        return;
     }
 
     return (
         <Dialog open={open} onOpenChange={open => onSetOpen(open)}>
             <DialogPortal>
+                <DialogOverlay />
                 <CreateAnalysisDialogContent>
                     <DialogTitle>Analyze</DialogTitle>
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -199,7 +209,7 @@ export const CreateAnalysis = ({
                         )}
 
                         <CreateAnalysisFooter>
-                            {/*<CreateAnalysisSummary sampleCount={1} indexCount={watch("indexes")?.length ?? 0} />*/}
+                            <CreateAnalysisSummary sampleCount={1} indexCount={watch("indexes")?.length ?? 0} />
                             <Button type="submit" color="blue" icon="play">
                                 Start
                             </Button>
@@ -213,7 +223,6 @@ export const CreateAnalysis = ({
 
 export function mapStateToProps(state) {
     return {
-        accountId: getAccountId(state),
         compatibleIndexes: getCompatibleIndexesWithLibraryType(state),
         dataType: getDataTypeFromLibraryType(getSampleLibraryType(state)),
         defaultSubtractions: getDefaultSubtractions(state).map(subtraction => subtraction.id),
@@ -225,11 +234,6 @@ export function mapStateToProps(state) {
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onAnalyze: (sampleId, references, subtractionIds, accountId, workflow) => {
-            forEach(references, refId => {
-                dispatch(analyze(sampleId, refId, subtractionIds, accountId, workflow));
-            });
-        },
         onSetOpen: open => {
             dispatch(pushState({ createAnalysis: open }));
         },

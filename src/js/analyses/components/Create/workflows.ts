@@ -35,7 +35,7 @@ export const iimiWorkflow = {
     id: Workflows.iimi,
     name: "Iimi",
     compatability: { genome: true, barcode: false },
-    resources: { ...defaultResources, ml: true },
+    resources: { ...defaultResources, ml: true, reference: true },
 };
 
 export const aodpWorkflow = {
