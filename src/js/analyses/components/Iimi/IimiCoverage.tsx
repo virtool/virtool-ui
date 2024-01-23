@@ -4,7 +4,7 @@ import { area } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 
-function draw(element, data, length, yMax, onRendered) {
+function draw(element, data, length, yMax) {
     select(element).append("svg");
 
     const margin = {
@@ -38,8 +38,6 @@ function draw(element, data, length, yMax, onRendered) {
 
         svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
     }
-
-    onRendered();
 }
 
 type StyledIimiCoverageChartProps = {
@@ -66,11 +64,8 @@ export function IimiCoverageChart({ data, id, yMax }: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
-        function onRendered() {
-            console.log("rendered");
-        }
         const length = data.length;
-        draw(chartEl.current, data, length, yMax, onRendered);
+        draw(chartEl.current, data, length, yMax);
     }, [data, id, yMax]);
 
     return <StyledIimiCoverageChart ref={chartEl} />;
