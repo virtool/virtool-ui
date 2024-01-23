@@ -1,32 +1,37 @@
-import { map } from "lodash";
 import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, Table } from "../../../base";
+import { Box, BoxTitle } from "../../../base";
+import { formatIsolateName } from "../../../utils/utils";
+import { IimiIsolate } from "./IimiIsolate";
 
-const ResultsTable = styled(Table)`
-    margin-bottom: 10px;
+const IimiHitTitle = styled(BoxTitle)`
+    justify-content: space-between;
+    display: flex;
 `;
 
 export function IimiViewer({ detail }) {
-    const sortedHits = sortBy(detail.results.hits, hit => !hit.result);
+    const hits = sortBy(detail.results.hits, hit => !hit.result);
 
-    const results = map(sortedHits, hit => {
-        return (
-            <tr>
-                <th>{hit.name}</th>
-                <td>{hit.result ? "Detected" : "Undetected"}</td>
-            </tr>
-        );
-    });
     return (
-        <BoxGroup>
-            <BoxGroupHeader>
-                <h2>Results</h2>
-            </BoxGroupHeader>
-            <ResultsTable>
-                <tbody>{results}</tbody>
-            </ResultsTable>
-        </BoxGroup>
+        <>
+            {hits.map(hit => (
+                <Box key={hit.id}>
+                    <IimiHitTitle>
+                        <h3>{hit.name}</h3>
+                        <span>{hit.result ? "Detected" : "Undetected"}</span>
+                    </IimiHitTitle>
+                    <div>
+                        {hit.isolates.map(isolate => (
+                            <IimiIsolate
+                                key={isolate.id}
+                                name={formatIsolateName(isolate)}
+                                sequences={isolate.sequences}
+                            />
+                        ))}
+                    </div>
+                </Box>
+            ))}
+        </>
     );
 }
