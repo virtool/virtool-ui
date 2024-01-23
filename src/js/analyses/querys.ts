@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { samplesQueryKeys } from "../samples/querys";
 import { createAnalysis, listAnalyses, removeAnalysis } from "./api";
 import { Analysis, AnalysisSearchResult } from "./types";
 
@@ -70,6 +71,7 @@ export function useCreateAnalysis() {
         {
             onSuccess: () => {
                 void queryClient.invalidateQueries(analysesQueryKeys.lists());
+                void queryClient.invalidateQueries(samplesQueryKeys.lists());
             },
         },
     );

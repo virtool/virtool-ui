@@ -3,13 +3,19 @@ import React from "react";
 import styled from "styled-components";
 import { getColor, getFontWeight } from "../../../app/theme";
 import { Box } from "../../../base";
+import { CreateAnalysisField } from "./CreateAnalysisField";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 import { workflow } from "./workflows";
+
+const WorkflowAnalysisField = styled(CreateAnalysisField)`
+    display: flex;
+    flex-direction: column;
+`;
 
 const StyledWorkflowSelector = styled.div`
     display: flex;
     justify-content: space-evenly;
-    margin-bottom: 10px;
+
     div:not(:last-child) {
         border-right: none;
     }
@@ -17,7 +23,6 @@ const StyledWorkflowSelector = styled.div`
 
 type WorkflowItemProps = {
     selected: boolean;
-    active: boolean;
 };
 
 const WorkflowItem = styled(Box)<WorkflowItemProps>`
@@ -46,20 +51,19 @@ type WorkflowSelectorProps = {
 
 export function WorkflowSelector({ onSelect, selected, workflows }: WorkflowSelectorProps) {
     return (
-        <>
+        <WorkflowAnalysisField>
             <CreateAnalysisFieldTitle>Workflow </CreateAnalysisFieldTitle>{" "}
             <StyledWorkflowSelector>
                 {map(workflows, workflow => (
                     <WorkflowItem
                         key={workflow.id}
                         selected={selected === workflow.id}
-                        active={true}
                         onClick={() => onSelect(workflow.id)}
                     >
                         {workflow.name}
                     </WorkflowItem>
                 ))}
             </StyledWorkflowSelector>
-        </>
+        </WorkflowAnalysisField>
     );
 }
