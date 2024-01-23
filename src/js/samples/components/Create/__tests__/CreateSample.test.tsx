@@ -144,7 +144,6 @@ describe("<CreateSample>", () => {
         });
         const createSampleScope = mockApiCreateSample(createSample);
         renderWithRouter(<CreateSample />, {}, history);
-        console.log();
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
         await inputFormRequirements(createSample.name, files);
 
