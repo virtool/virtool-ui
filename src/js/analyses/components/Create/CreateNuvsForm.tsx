@@ -57,7 +57,6 @@ export function CreateNuvsForm({
                     <SubtractionSelector subtractions={subtractions} selected={value} onChange={onChange} />
                 )}
                 name={"subtractions"}
-                defaultValue={[]}
             />
 
             <Controller
