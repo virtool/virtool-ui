@@ -7,7 +7,7 @@ import { AdministratorRoles } from "../../../administration/types";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { useRemoveReferenceUser } from "../../querys";
 import { ReferenceGroup, ReferenceUser } from "../../types";
-import AddReferenceMember from "./AddMember";
+import AddReferenceMember from "./AddReferenceMember";
 import EditReferenceMember from "./EditMember";
 import MemberItem from "./MemberItem";
 
@@ -35,17 +35,33 @@ const ReferenceMembersHeader = styled(BoxGroupHeader)`
 `;
 
 type ReferenceMembersProps = {
+    data: any;
     /** The list of users or groups associated with the reference */
     members: ReferenceGroup[] | ReferenceUser[];
     /** Whether the member is a user or a group */
     noun: string;
     refId: string;
+    term?: string;
+    setTerm?: any;
+    fetchNextPage?: any;
+    isFetchingNextPage?: any;
+    isLoading?: any;
 };
 
 /**
  * Displays a component for managing who can access a reference by users or groups
  */
-export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
+export default function ReferenceMembers({
+    data,
+    members,
+    noun,
+    refId,
+    term,
+    setTerm,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+}: ReferenceMembersProps) {
     const history = useHistory();
     const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
 
@@ -89,9 +105,17 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 )}
             </BoxGroup>
             <AddReferenceMember
+                data={data}
                 show={history.location.state && history.location.state[`add${noun}`]}
+                members={members}
                 noun={noun}
+                refId={refId}
                 onHide={handleHide}
+                setTerm={setTerm}
+                term={term}
+                isFetchingNextPage={isFetchingNextPage}
+                fetchNextPage={fetchNextPage}
+                isLoading={isLoading}
             />
             <EditReferenceMember
                 show={history.location.state && history.location.state[`edit${noun}`]}
