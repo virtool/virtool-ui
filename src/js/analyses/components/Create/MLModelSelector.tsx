@@ -26,12 +26,9 @@ export type MLModelSelectorProps = {
 
 export function MLModelSelector({ models, selected, onChange }) {
     const mlModelItems = map(models, ({ latest_release, name, description }) => (
-        <SelectItem
-            value={latest_release.id.toString()}
-            key={latest_release.id}
-            text={name}
-            description={description}
-        />
+        <SelectItem value={latest_release.id.toString()} key={latest_release.id} description={description}>
+            {name}
+        </SelectItem>
     ));
 
     return (
