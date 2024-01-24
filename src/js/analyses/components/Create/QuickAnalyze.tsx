@@ -1,7 +1,6 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { filter, forEach, uniqBy } from "lodash-es";
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Badge, Dialog, DialogOverlay, DialogTitle, Icon, LoadingPlaceholder, Tabs, TabsLink } from "../../../base";
@@ -9,8 +8,7 @@ import { HMMSearchResults } from "../../../hmm/types";
 import { IndexMinimal } from "../../../indexes/types";
 import { useFindModels } from "../../../ml/queries";
 import { SampleMinimal } from "../../../samples/types";
-import { shortlistSubtractions } from "../../../subtraction/actions";
-import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
+import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
 import { HistoryType } from "../../../utils/hooks";
 import { useCreateAnalysis } from "../../querys";
 import { Workflows } from "../../types";
@@ -75,25 +73,14 @@ type QuickAnalyzeProps = {
     indexes: IndexMinimal[];
     /** A callback function to clear selected samples */
     onClear: () => void;
-    /** A callback function to shortlist subtractions */
-    onShortlistSubtractions: () => void;
     /** The selected samples */
     samples: SampleMinimal[];
-    /** The ready subtraction options */
-    subtractionOptions: any;
 };
 
 /**
  * A form for triggering quick analyses on selected samples
  */
-export function QuickAnalyze({
-    hmms,
-    indexes,
-    onClear,
-    onShortlistSubtractions,
-    samples,
-    subtractionOptions,
-}: QuickAnalyzeProps) {
+export default function QuickAnalyze({ hmms, indexes, onClear, samples }: QuickAnalyzeProps) {
     const history = useHistory();
     const location = useLocation<{ quickAnalysis: string; workflow: Workflows }>();
     const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
@@ -102,16 +89,13 @@ export function QuickAnalyze({
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
-    const { data: mlModels, isLoading } = useFindModels();
+    const { data: subtractionOptions, isLoading: isLoadingSubtractionOptions } = useFetchSubtractionsShortlist();
+    const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
 
     const createAnalysis = useCreateAnalysis();
 
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
-
-    useEffect(() => {
-        onShortlistSubtractions();
-    }, [show]);
 
     function onHide() {
         history.push({ ...history.location, state: { quickAnalysis: false } });
@@ -124,7 +108,7 @@ export function QuickAnalyze({
         }
     }, [mode]);
 
-    if (isLoading) {
+    if (isLoadingMLModels || isLoadingSubtractionOptions) {
         return <LoadingPlaceholder />;
     }
 
@@ -201,19 +185,3 @@ export function QuickAnalyze({
         </Dialog>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        subtractionOptions: getReadySubtractionShortlist(state),
-    };
-}
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onShortlistSubtractions: () => {
-            dispatch(shortlistSubtractions());
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(QuickAnalyze);
