@@ -1,63 +1,30 @@
-import { Field, Form, Formik } from "formik";
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { filter, forEach, uniqBy } from "lodash-es";
-import React, { ReactNode, useEffect } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import * as Yup from "yup";
-import {
-    Badge,
-    Button,
-    Icon,
-    InputError,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    ModalTabs,
-    TabsLink,
-} from "../../../base";
+import { Badge, Dialog, DialogOverlay, DialogTitle, Icon, LoadingPlaceholder, Tabs, TabsLink } from "../../../base";
 import { HMMSearchResults } from "../../../hmm/types";
 import { IndexMinimal } from "../../../indexes/types";
-import { samplesQueryKeys } from "../../../samples/querys";
+import { useFindModels } from "../../../ml/queries";
 import { SampleMinimal } from "../../../samples/types";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getReadySubtractionShortlist } from "../../../subtraction/selectors";
 import { HistoryType } from "../../../utils/hooks";
-import { analyze } from "../../api";
+import { useCreateAnalysis } from "../../querys";
+import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
-import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
-import { IndexSelector } from "./IndexSelector";
+import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
+import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisForm";
 import { SelectedSamples } from "./SelectedSamples";
-import { SubtractionSelector } from "./SubtractionSelector";
+import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
-
-const QuickAnalyzeFooter = styled(ModalFooter)`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-`;
 
 const QuickAnalyzeSelected = styled.span`
     align-self: center;
     margin: 0 15px 0 auto;
 `;
-
-const QuickAnalyzeError = styled(InputError)`
-    margin: -5px 0px 0px;
-`;
-
-const initialValues = {
-    workflows: [],
-    subtractions: [],
-    indexes: [],
-};
-
-const validationSchema = Yup.object().shape({
-    workflows: Yup.array().min(1, "At least one workflow must be selected"),
-    indexes: Yup.array().min(1, "At least one reference must be selected"),
-});
 
 type History = HistoryType & {
     location: {
@@ -101,15 +68,6 @@ export function getCompatibleSamples(mode: string, samples: SampleMinimal[]) {
     });
 }
 
-type HandleSubmitProps = {
-    /** The selected indexes */
-    indexes: string[];
-    /** The selected subtractions */
-    subtractions: string[];
-    /** The selected workflows */
-    workflows: string[];
-};
-
 type QuickAnalyzeProps = {
     /** The HMM search results */
     hmms: HMMSearchResults;
@@ -136,36 +94,20 @@ export function QuickAnalyze({
     samples,
     subtractionOptions,
 }: QuickAnalyzeProps) {
-    const queryClient = useQueryClient();
     const history = useHistory();
+    const location = useLocation<{ quickAnalysis: string; workflow: Workflows }>();
     const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
+    const workflow = location.state?.workflow;
 
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
-    const mutation = useMutation(analyze, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(samplesQueryKeys.lists());
-        },
-    });
+    const { data: mlModels, isLoading } = useFindModels();
+
+    const createAnalysis = useCreateAnalysis();
 
     const barcode = samples.filter(sample => sample.library_type === "amplicon");
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
-
-    function onAnalyze(samples: SampleMinimal[], references: string[], subtractionId: string[], workflows: string[]) {
-        forEach(samples, ({ id }) => {
-            forEach(references, (refId: string) => {
-                forEach(workflows, (workflow: string) =>
-                    mutation.mutate({
-                        sampleId: id,
-                        refId: refId,
-                        subtractionIds: subtractionId,
-                        workflow: workflow,
-                    }),
-                );
-            });
-        });
-    }
 
     useEffect(() => {
         onShortlistSubtractions();
@@ -182,6 +124,10 @@ export function QuickAnalyze({
         }
     }, [mode]);
 
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
     function getReferenceId(selectedIndexes: string[]) {
         const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));
         const referenceIds = selectedCompatibleIndexes.map(index => index.reference.id);
@@ -189,86 +135,70 @@ export function QuickAnalyze({
         return uniqBy(referenceIds, "id");
     }
 
-    function handleSubmit({ indexes, subtractions, workflows }: HandleSubmitProps) {
+    function handleSubmit({ indexes, subtractions, workflow, mlModel }: CreateAnalysisFormValues) {
         const referenceIds = getReferenceId(indexes);
 
-        onAnalyze(compatibleSamples, referenceIds, subtractions, workflows);
+        forEach(compatibleSamples, ({ id }) => {
+            forEach(referenceIds, (refId: string) => {
+                createAnalysis.mutate({
+                    refId,
+                    sampleId: id,
+                    subtractionIds: subtractions,
+                    mlModel,
+                    workflow,
+                });
+            });
+        });
         onClear();
         onHide();
     }
 
+    const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
+
+    function onChangeWorkflow(workflow: Workflows) {
+        history.push({ state: { ...location.state, workflow } });
+    }
+
     return (
-        <Modal label="Quick Analyze" show={show} size="lg" onHide={onHide}>
-            <ModalHeader>Quick Analyze</ModalHeader>
-            <ModalTabs>
-                {genome.length > 0 && (
-                    <TabsLink to={{ state: { quickAnalysis: "genome" } }} isActive={() => mode === "genome"}>
-                        <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
-                    </TabsLink>
-                )}
-                {barcode.length > 0 && (
-                    <TabsLink to={{ state: { quickAnalysis: "barcode" } }} isActive={() => mode === "barcode"}>
-                        <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
-                    </TabsLink>
-                )}
-                <QuickAnalyzeSelected>{samples.length} samples selected</QuickAnalyzeSelected>
-            </ModalTabs>
-
-            <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
-                {({ errors, setFieldValue, touched, values }) => (
-                    <Form>
-                        <ModalBody>
-                            {mode === "genome" && <HMMAlert installed={hmms.status.task.complete} />}
-                            <SelectedSamples samples={compatibleSamples} />
-                            <Field
-                                as={WorkflowSelector}
-                                dataType={mode ?? "genome"}
-                                hasHmm={Boolean(hmms.total_count)}
-                                selected={values.workflows}
-                                onSelect={workflows => setFieldValue("workflows", workflows)}
-                            />
-                            <QuickAnalyzeError>
-                                {touched.workflows && (errors.workflows as ReactNode & (string | string[]))}
-                            </QuickAnalyzeError>
-                            {mode === "genome" && (
-                                <>
-                                    <Field
-                                        as={SubtractionSelector}
-                                        subtractions={subtractionOptions}
-                                        selected={values.subtractions}
-                                        onChange={value => setFieldValue("subtractions", value)}
-                                    />
-
-                                    <QuickAnalyzeError>
-                                        {touched.subtractions &&
-                                            (errors.subtractions as ReactNode & (string | string[]))}
-                                    </QuickAnalyzeError>
-                                </>
-                            )}
-                            <Field
-                                as={IndexSelector}
-                                indexes={indexes}
-                                selected={values.indexes}
-                                onChange={value => setFieldValue("indexes", value)}
-                            />
-                            <QuickAnalyzeError>
-                                {touched.indexes && (errors.indexes as ReactNode & (string | string[]))}
-                            </QuickAnalyzeError>
-                        </ModalBody>
-                        <QuickAnalyzeFooter>
-                            <CreateAnalysisSummary
-                                indexCount={values.indexes.length}
-                                sampleCount={compatibleSamples.length}
-                                workflowCount={values.workflows.length}
-                            />
-                            <Button type="submit" color="blue" icon="play">
-                                Start
-                            </Button>
-                        </QuickAnalyzeFooter>
-                    </Form>
-                )}
-            </Formik>
-        </Modal>
+        <Dialog open={show} onOpenChange={() => onHide()}>
+            <DialogPortal>
+                <DialogOverlay />
+                <CreateAnalysisDialogContent>
+                    <DialogTitle>Quick Analyze</DialogTitle>
+                    <Tabs>
+                        {genome.length > 0 && (
+                            <TabsLink to={{ state: { quickAnalysis: "genome" } }} isActive={() => mode === "genome"}>
+                                <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
+                            </TabsLink>
+                        )}
+                        {barcode.length > 0 && (
+                            <TabsLink to={{ state: { quickAnalysis: "barcode" } }} isActive={() => mode === "barcode"}>
+                                <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
+                            </TabsLink>
+                        )}
+                        <QuickAnalyzeSelected>
+                            {samples.length} sample{samples.length > 1 ? "s" : ""} selected
+                        </QuickAnalyzeSelected>
+                    </Tabs>
+                    <SelectedSamples samples={compatibleSamples} />
+                    {mode === "genome" && <HMMAlert installed={hmms.status.task.complete} />}
+                    <WorkflowSelector
+                        onSelect={onChangeWorkflow}
+                        selected={location.state?.workflow}
+                        workflows={compatibleWorkflows}
+                    />
+                    <CreateAnalysisForm
+                        compatibleIndexes={indexes}
+                        defaultSubtractions={[]}
+                        mlModels={mlModels.items}
+                        onSubmit={handleSubmit}
+                        sampleCount={samples.length}
+                        subtractions={subtractionOptions}
+                        workflow={workflow}
+                    />
+                </CreateAnalysisDialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }
 

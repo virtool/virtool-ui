@@ -43,19 +43,24 @@ export function listAnalyses(
  * @param refId - The reference used in the analysis
  * @param subtractionIds - The subtractions used in the analysis
  * @param workflow - The workflow used in the analysis
+ * @param mlModel - The machine learning model used in the analysis
  * @returns A promise resolving to a new analysis
  */
 export function createAnalysis(
-    sampleId: string,
+    mlModel: string,
     refId: string,
+    sampleId: string,
     subtractionIds: string[],
     workflow: string,
 ): Promise<Analysis> {
-    return Request.post(`/samples/${sampleId}/analyses`).send({
-        workflow,
-        ref_id: refId,
-        subtractions: subtractionIds,
-    });
+    return Request.post(`/samples/${sampleId}/analyses`)
+        .send({
+            workflow,
+            ref_id: refId,
+            subtractions: subtractionIds,
+            ml: mlModel,
+        })
+        .then(res => res.body);
 }
 
 /**

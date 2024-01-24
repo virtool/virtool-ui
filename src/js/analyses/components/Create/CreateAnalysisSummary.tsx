@@ -9,11 +9,10 @@ const StyledCreateAnalysisSummary = styled.div`
 interface CreateAnalysisSummaryProps {
     indexCount: number;
     sampleCount: number;
-    workflowCount: number;
 }
 
-export function CreateAnalysisSummary({ indexCount, sampleCount, workflowCount }: CreateAnalysisSummaryProps) {
-    const product = indexCount * sampleCount * workflowCount;
+export function CreateAnalysisSummary({ indexCount, sampleCount }: CreateAnalysisSummaryProps) {
+    const product = indexCount * sampleCount;
 
     if (product === 0) {
         return <StyledCreateAnalysisSummary />;
