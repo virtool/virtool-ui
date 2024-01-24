@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useHistory } from "react-router-dom";
 import { ErrorResponse } from "../types/types";
 import {
     createSubtraction,
@@ -29,14 +28,8 @@ export const subtractionQueryKeys = {
  * @returns A mutator for creating a subtraction
  */
 export function useCreateSubtraction() {
-    const history = useHistory();
     return useMutation<Subtraction, unknown, { name: string; nickname: string; uploadId: string }>(
         ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId),
-        {
-            onSuccess: () => {
-                history.push("/subtractions");
-            },
-        },
     );
 }
 
@@ -94,14 +87,8 @@ export function useUpdateSubtraction(subtractionId: string) {
  * @returns A mutator for removing a subtraction
  */
 export function useRemoveSubtraction() {
-    const history = useHistory();
-    return useMutation<Response, unknown, { subtractionId: string }>(
-        ({ subtractionId }) => removeSubtraction(subtractionId),
-        {
-            onSuccess: () => {
-                history.push("/subtractions");
-            },
-        },
+    return useMutation<Response, unknown, { subtractionId: string }>(({ subtractionId }) =>
+        removeSubtraction(subtractionId),
     );
 }
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { RemoveModal } from "../../../base";
 import { useRemoveSubtraction } from "../../querys";
 import { Subtraction } from "../../types";
@@ -13,10 +14,11 @@ type RemoveSubtractionProps = {
 };
 
 /**
- * Displays a modal for removing a subtraction
+ * Dialog for removing an existing subtraction
  */
 export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveSubtractionProps) {
     const mutation = useRemoveSubtraction();
+    const history = useHistory();
 
     return (
         <RemoveModal
@@ -24,7 +26,16 @@ export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveS
             noun="Subtraction"
             show={show}
             onHide={onHide}
-            onConfirm={() => mutation.mutate({ subtractionId: subtraction.id })}
+            onConfirm={() =>
+                mutation.mutate(
+                    { subtractionId: subtraction.id },
+                    {
+                        onSuccess: () => {
+                            history.push("/subtractions");
+                        },
+                    },
+                )
+            }
         />
     );
 }

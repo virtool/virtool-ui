@@ -1,5 +1,6 @@
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import {
     Input,
@@ -38,6 +39,7 @@ const initialValues = {
  * A form for creating a subtraction
  */
 export default function CreateSubtraction() {
+    const history = useHistory();
     const {
         data: files,
         isLoading,
@@ -51,7 +53,14 @@ export default function CreateSubtraction() {
     }
 
     function handleSubmit({ uploadId, name, nickname }) {
-        subtractionMutation.mutate({ name, nickname, uploadId: uploadId[0] });
+        subtractionMutation.mutate(
+            { name, nickname, uploadId: uploadId[0] },
+            {
+                onSuccess: () => {
+                    history.push("/subtractions");
+                },
+            },
+        );
     }
 
     return (
