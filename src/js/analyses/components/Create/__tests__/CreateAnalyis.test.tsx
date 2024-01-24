@@ -10,7 +10,7 @@ import { createFakeMLModel, mockApiGetModels } from "../../../../../tests/fake/m
 import { createFakeSubtractionMinimal } from "../../../../../tests/fake/subtractions";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { Workflows } from "../../../types";
-import { CreateAnalysis } from "../CreateAnalysis";
+import CreateAnalysis from "../CreateAnalysis";
 
 describe("getCompatibleWorkflows()", () => {
     let props;

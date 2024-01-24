@@ -1,4 +1,5 @@
 import { Request } from "../app/request";
+import { Sample } from "./types";
 
 export const find = ({ term, labels, workflows, page = 1 }) => {
     const request = Request.get("/samples").query({
@@ -60,4 +61,14 @@ export function listSamples(page: number, per_page: number, term: string, labels
     return Request.get("/samples")
         .query({ page, per_page, find: term, label: labels, workflows })
         .then(res => res.body);
+}
+
+/**
+ * Fetch a single sample
+ *
+ * @param sampleId - The id of the sample to fetch
+ * @returns A promise resolving to fetching a single sample
+ */
+export function getSample(sampleId: string): Promise<Sample> {
+    return Request.get(`/samples/${sampleId}`).then(res => res.body);
 }

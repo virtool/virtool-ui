@@ -35,5 +35,7 @@ export function updateSubtraction(subtractionId, name, nickname) {
 }
 
 export function fetchSubtractionShortlist() {
-    return Request.get("/subtractions?short=true").then(res => res.body);
+    return Request.get("/subtractions?short=true")
+        .query({ ready: true })
+        .then(res => res.body);
 }
