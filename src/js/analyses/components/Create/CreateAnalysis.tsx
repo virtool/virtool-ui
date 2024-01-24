@@ -3,13 +3,11 @@ import { filter, forEach, map } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { pushState } from "../../../app/actions";
 import { Dialog, DialogOverlay, DialogTitle, LoadingPlaceholder } from "../../../base";
 import { useFindModels } from "../../../ml/queries";
 import { getDefaultSubtractions, getSampleDetailId, getSampleLibraryType } from "../../../samples/selectors";
 import { getDataTypeFromLibraryType } from "../../../samples/utils";
 import { shortlistSubtractions } from "../../../subtraction/actions";
-import { routerLocationHasState } from "../../../utils/utils";
 import { useCreateAnalysis } from "../../querys";
 import { getAnalysesSubtractions, getCompatibleIndexesWithLibraryType } from "../../selectors";
 import { Workflows } from "../../types";
@@ -25,14 +23,13 @@ export const CreateAnalysis = ({
     defaultSubtractions,
     hmms,
     sampleId,
-    open,
     subtractionOptions,
-    onSetOpen,
     onShortlistSubtractions,
 }) => {
     const history = useHistory();
     const location = useLocation<{ createAnalysis: Workflows }>();
     const workflow = location.state?.createAnalysis;
+    const open = Boolean(workflow);
 
     useEffect(() => {
         if (open) {
@@ -61,7 +58,7 @@ export const CreateAnalysis = ({
         forEach(references, refId => {
             createAnalysis.mutate(
                 { refId, subtractionIds: subtractions, sampleId, workflow, mlModel },
-                { onSuccess: () => onSetOpen(false) },
+                { onSuccess: () => history.push({ state: { createAnalysis: false } }) },
             );
         });
     }
@@ -71,7 +68,7 @@ export const CreateAnalysis = ({
     }
 
     return (
-        <Dialog open={open} onOpenChange={open => onSetOpen(open)}>
+        <Dialog open={open} onOpenChange={open => history.push({ state: { createAnalysis: open } })}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
@@ -103,16 +100,12 @@ export function mapStateToProps(state) {
         dataType: getDataTypeFromLibraryType(getSampleLibraryType(state)),
         defaultSubtractions: getDefaultSubtractions(state).map(subtraction => subtraction.id),
         sampleId: getSampleDetailId(state),
-        open: routerLocationHasState(state, "createAnalysis"),
         subtractionOptions: getAnalysesSubtractions(state),
     };
 }
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onSetOpen: open => {
-            dispatch(pushState({ createAnalysis: open }));
-        },
         onShortlistSubtractions: () => {
             dispatch(shortlistSubtractions());
         },

@@ -25,8 +25,6 @@ export type MLModelSelectorProps = {
 };
 
 export function MLModelSelector({ models, selected, onChange }) {
-    console.log(models);
-
     const mlModelItems = map(models, ({ latest_release, name, description }) => (
         <SelectItem
             value={latest_release.id.toString()}
@@ -35,7 +33,7 @@ export function MLModelSelector({ models, selected, onChange }) {
             description={description}
         />
     ));
-    console.log(selected);
+
     return (
         <StyledMLModelSelector>
             <CreateAnalysisFieldTitle>MLModel</CreateAnalysisFieldTitle>

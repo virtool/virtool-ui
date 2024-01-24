@@ -54,20 +54,20 @@ export function useRemoveAnalysis(analysisId: string) {
     return () => mutation.mutate({ analysisId });
 }
 
-type createAnalysisMutationParams = {
-    sampleId: string;
+export type CreateAnalysisParams = {
+    mlModel?: string;
     refId: string;
-    subtractionIds: string[];
+    sampleId: string;
+    subtractionIds?: string[];
     workflow: string;
-    mlModel: string;
 };
 
 export function useCreateAnalysis() {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation<Analysis, unknown, createAnalysisMutationParams>(
-        ({ sampleId, refId, subtractionIds, workflow, mlModel }) =>
-            createAnalysis(sampleId, refId, subtractionIds, workflow, mlModel),
+    const mutation = useMutation<Analysis, unknown, CreateAnalysisParams>(
+        ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
+            createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
         {
             onSuccess: () => {
                 void queryClient.invalidateQueries(analysesQueryKeys.lists());

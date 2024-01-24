@@ -47,11 +47,11 @@ export function listAnalyses(
  * @returns A promise resolving to a new analysis
  */
 export function createAnalysis(
-    sampleId: string,
+    mlModel: string,
     refId: string,
+    sampleId: string,
     subtractionIds: string[],
     workflow: string,
-    mlModel: string,
 ): Promise<Analysis> {
     return Request.post(`/samples/${sampleId}/analyses`)
         .send({
