@@ -16,7 +16,7 @@ type AnalysesToolbarProps = {
 /**
  * A toolbar which allows the analyses to be filtered by their names
  */
-export default function AnalysesToolbar({ onChange, sampleId, term }: AnalysesToolbarProps) {
+export default function AnalysesToolbar({ onChange, term }: AnalysesToolbarProps) {
     const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
 
     return (

@@ -1,6 +1,5 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryHistory } from "history";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, vi } from "vitest";
@@ -15,7 +14,6 @@ import { CreateAnalysis } from "../CreateAnalysis";
 
 describe("getCompatibleWorkflows()", () => {
     let props;
-    let history;
 
     beforeEach(() => {
         props = {
@@ -27,7 +25,6 @@ describe("getCompatibleWorkflows()", () => {
             subtractionOptions: [createFakeSubtractionMinimal()],
             onShortlistSubtractions: vi.fn(),
         };
-        history = createMemoryHistory();
     });
 
     it("should render", async () => {

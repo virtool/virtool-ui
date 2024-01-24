@@ -35,7 +35,7 @@ export function MLModelSelector({ models, selected, onChange }) {
         <StyledMLModelSelector>
             <CreateAnalysisFieldTitle>MLModel</CreateAnalysisFieldTitle>
             <Select value={selected} onValueChange={onChange}>
-                <MLModelSelectButton placeholder="Select a model" icon="chevron-down"></MLModelSelectButton>
+                <MLModelSelectButton placeholder="Select a model" icon="chevron-down" />
                 <SelectContent position="popper" align="start">
                     {mlModelItems}
                 </SelectContent>

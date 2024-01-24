@@ -113,16 +113,16 @@ export function QuickAnalyze({
         onShortlistSubtractions();
     }, [show]);
 
+    function onHide() {
+        history.push({ ...history.location, state: { quickAnalysis: false } });
+    }
+
     // The dialog should close when all selected samples have been analyzed and deselected.
     useEffect(() => {
         if (show && compatibleSamples.length === 0) {
             onHide();
         }
     }, [mode]);
-
-    function onHide() {
-        history.push({ ...history.location, state: { quickAnalysis: false } });
-    }
 
     if (isLoading) {
         return <LoadingPlaceholder />;
@@ -141,11 +141,11 @@ export function QuickAnalyze({
         forEach(compatibleSamples, ({ id }) => {
             forEach(referenceIds, (refId: string) => {
                 createAnalysis.mutate({
+                    refId,
                     sampleId: id,
-                    refId: refId,
                     subtractionIds: subtractions,
-                    workflow: workflow,
                     mlModel,
+                    workflow,
                 });
             });
         });
@@ -156,11 +156,11 @@ export function QuickAnalyze({
     const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
 
     function onChangeWorkflow(workflow: Workflows) {
-        history.push({ state: { ...location.state, workflow: workflow } });
+        history.push({ state: { ...location.state, workflow } });
     }
 
     return (
-        <Dialog open={show} onOpenChange={open => onHide()}>
+        <Dialog open={show} onOpenChange={() => onHide()}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
