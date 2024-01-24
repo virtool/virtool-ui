@@ -29,11 +29,11 @@ const Description = styled.div`
     white-space: pre-wrap;
 `;
 
-export const SelectItem = ({ value, text, description }) => {
+export function SelectItem({ value, children, description }) {
     return (
         <StyledSelectItem value={value} key={value}>
-            <RadixSelect.ItemText>{text}</RadixSelect.ItemText>
-            <Description>{description}</Description>
+            <RadixSelect.ItemText>{children}</RadixSelect.ItemText>
+            {description && <Description>{description}</Description>}
         </StyledSelectItem>
     );
-};
+}

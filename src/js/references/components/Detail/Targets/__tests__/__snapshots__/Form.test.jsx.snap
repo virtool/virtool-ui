@@ -18,7 +18,7 @@ exports[`<TargetForm /> > should render 1`] = `
     <InputLabel>
       Description
     </InputLabel>
-    <TextArea
+    <ForwardRef
       name="description"
       onChange={[MockFunction spy]}
       value="bar"
@@ -61,7 +61,7 @@ exports[`<TargetForm /> > should render with error 1`] = `
     <InputLabel>
       Description
     </InputLabel>
-    <TextArea
+    <ForwardRef
       name="description"
       onChange={[MockFunction spy]}
       value="bar"
