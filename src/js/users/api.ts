@@ -1,10 +1,6 @@
 import { Request } from "../app/request";
 import { UserResponse } from "./types";
 
-export function find({ term, page }) {
-    return Request.get("/users").query({ find: term, page });
-}
-
 /**
  * Creates the first user
  *
