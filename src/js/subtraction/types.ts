@@ -69,6 +69,7 @@ export type Subtraction = SubtractionMinimal & {
 /** A subtraction with reduced information */
 export type SubtractionShortlist = SubtractionNested & {
     ready: boolean;
+    isDefault?: boolean;
 };
 
 /** Subtraction search results from the API */

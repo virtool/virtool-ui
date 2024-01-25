@@ -1,7 +1,7 @@
 import React from "react";
 import { IndexMinimal } from "../../../indexes/types";
 import { MLModelMinimal } from "../../../ml/types";
-import { Subtraction } from "../../../subtraction/types";
+import { SubtractionShortlist } from "../../../subtraction/types";
 import { Workflows } from "../../types";
 import { CreateIimiForm } from "./CreateIimiForm";
 import { CreateNuvsForm } from "./CreateNuvsForm";
@@ -20,7 +20,7 @@ type CreateAnalysisFormProps = {
     mlModels: MLModelMinimal[];
     onSubmit: (values: CreateAnalysisFormValues) => void;
     sampleCount: number;
-    subtractions: Subtraction[];
+    subtractions: SubtractionShortlist[];
     workflow: Workflows;
 };
 
