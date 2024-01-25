@@ -74,6 +74,8 @@ export function removeSubtraction(subtractionId: string): Promise<Response> {
  *
  * @returns A promise resolving to list of shortlisted subtractions
  */
-export function fetchSubtractionShortlist(): Promise<SubtractionShortlist[]> {
-    return Request.get("/subtractions?short=true").then(response => response.body);
+export function fetchSubtractionShortlist(ready?: boolean): Promise<SubtractionShortlist[]> {
+    return Request.get("/subtractions?short=true")
+        .query({ ready })
+        .then(response => response.body);
 }

@@ -4,6 +4,7 @@ import { includes, keysIn } from "lodash-es/lodash";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogOverlay, DialogTitle, LoadingPlaceholder } from "../../../base";
+import { HMMSearchResults } from "../../../hmm/types";
 import { useListIndexes } from "../../../indexes/querys";
 import { useFindModels } from "../../../ml/queries";
 import { useFetchSample } from "../../../samples/querys";
@@ -16,7 +17,17 @@ import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisFo
 import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
 
-export default function CreateAnalysis({ hmms, sampleId }) {
+type CreateAnalysisProps = {
+    /** The HMM search results */
+    hmms: HMMSearchResults;
+    /** The id of the sample being used */
+    sampleId: string;
+};
+
+/**
+ * Dialog for creating an analysis
+ */
+export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) {
     const history = useHistory();
     const location = useLocation<{ createAnalysis: Workflows }>();
     const workflow = location.state?.createAnalysis;
@@ -24,7 +35,8 @@ export default function CreateAnalysis({ hmms, sampleId }) {
 
     const createAnalysis = useCreateAnalysis();
 
-    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } = useFetchSubtractionsShortlist();
+    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } =
+        useFetchSubtractionsShortlist(true);
     const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
     const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
     const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();

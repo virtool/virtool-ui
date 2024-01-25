@@ -71,11 +71,13 @@ type QuickAnalyzeProps = {
     hmms: HMMSearchResults;
     /** A list of indexes with the minimal data */
     indexes: IndexMinimal[];
+    /** The ML Model search results */
     mlModels: MLModelSearchResult;
     /** A callback function to clear selected samples */
     onClear: () => void;
     /** The selected samples */
     samples: SampleMinimal[];
+    /** A shortlist of ready subtractions */
     subtractionOptions: SubtractionShortlist[];
 };
 

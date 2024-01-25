@@ -51,7 +51,8 @@ export default function SamplesList() {
     const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
     const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
-    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } = useFetchSubtractionsShortlist();
+    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } =
+        useFetchSubtractionsShortlist(true);
     const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
 
     const [selected, setSelected] = useState([]);
