@@ -10,6 +10,7 @@ import { createFakeIndexMinimal, mockApiListIndexes } from "../../../../tests/fa
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../tests/fake/labels";
 import { createFakeMLModelMinimal, mockApiGetModels } from "../../../../tests/fake/ml";
 import { createFakeSampleMinimal, mockApiGetSamples } from "../../../../tests/fake/samples";
+import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";
@@ -26,6 +27,7 @@ describe("<SamplesList />", () => {
         mockApiListIndexes([createFakeIndexMinimal()]);
         mockApiGetLabels([createFakeLabelNested()]);
         mockApiGetModels([createFakeMLModelMinimal()]);
+        mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()]);
     });
 
     it("should render correctly", async () => {

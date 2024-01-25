@@ -3,12 +3,12 @@ import { filter, forEach, uniqBy } from "lodash-es";
 import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Badge, Dialog, DialogOverlay, DialogTitle, Icon, LoadingPlaceholder, Tabs, TabsLink } from "../../../base";
+import { Badge, Dialog, DialogOverlay, DialogTitle, Icon, Tabs, TabsLink } from "../../../base";
 import { HMMSearchResults } from "../../../hmm/types";
 import { IndexMinimal } from "../../../indexes/types";
-import { useFindModels } from "../../../ml/queries";
+import { MLModelSearchResult } from "../../../ml/types";
 import { SampleMinimal } from "../../../samples/types";
-import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
+import { SubtractionShortlist } from "../../../subtraction/types";
 import { HistoryType } from "../../../utils/hooks";
 import { useCreateAnalysis } from "../../querys";
 import { Workflows } from "../../types";
@@ -71,16 +71,25 @@ type QuickAnalyzeProps = {
     hmms: HMMSearchResults;
     /** A list of indexes with the minimal data */
     indexes: IndexMinimal[];
+    mlModels: MLModelSearchResult;
     /** A callback function to clear selected samples */
     onClear: () => void;
     /** The selected samples */
     samples: SampleMinimal[];
+    subtractionOptions: SubtractionShortlist[];
 };
 
 /**
  * A form for triggering quick analyses on selected samples
  */
-export default function QuickAnalyze({ hmms, indexes, onClear, samples }: QuickAnalyzeProps) {
+export default function QuickAnalyze({
+    hmms,
+    indexes,
+    mlModels,
+    onClear,
+    samples,
+    subtractionOptions,
+}: QuickAnalyzeProps) {
     const history = useHistory();
     const location = useLocation<{ quickAnalysis: string; workflow: Workflows }>();
     const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
@@ -88,9 +97,6 @@ export default function QuickAnalyze({ hmms, indexes, onClear, samples }: QuickA
 
     const show = Boolean(mode);
     const compatibleSamples = getCompatibleSamples(mode, samples);
-
-    const { data: subtractionOptions, isLoading: isLoadingSubtractionOptions } = useFetchSubtractionsShortlist();
-    const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
 
     const createAnalysis = useCreateAnalysis();
 
@@ -107,10 +113,6 @@ export default function QuickAnalyze({ hmms, indexes, onClear, samples }: QuickA
             onHide();
         }
     }, [mode]);
-
-    if (isLoadingMLModels || isLoadingSubtractionOptions) {
-        return <LoadingPlaceholder />;
-    }
 
     function getReferenceId(selectedIndexes: string[]) {
         const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));

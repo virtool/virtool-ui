@@ -7,6 +7,8 @@ import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHe
 import { useListHmms } from "../../hmm/querys";
 import { useListIndexes } from "../../indexes/querys";
 import { useFetchLabels } from "../../labels/hooks";
+import { useFindModels } from "../../ml/queries";
+import { useFetchSubtractionsShortlist } from "../../subtraction/querys";
 import { useUrlSearchParams, useUrlSearchParamsList } from "../../utils/hooks";
 import { useListSamples } from "../querys";
 import { SampleMinimal } from "../types";
@@ -49,10 +51,19 @@ export default function SamplesList() {
     const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
     const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
+    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } = useFetchSubtractionsShortlist();
+    const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
 
     const [selected, setSelected] = useState([]);
 
-    if (isSamplesLoading || isLabelsLoading || isLoadingHmms || isLoadingIndexes) {
+    if (
+        isSamplesLoading ||
+        isLabelsLoading ||
+        isLoadingHmms ||
+        isLoadingIndexes ||
+        isLoadingSubtractionShortlist ||
+        isLoadingMLModels
+    ) {
         return <LoadingPlaceholder />;
     }
 
@@ -87,8 +98,10 @@ export default function SamplesList() {
             <QuickAnalysis
                 hmms={hmms}
                 indexes={filteredIndexes}
-                samples={intersectionWith(documents, selected, (document, id) => document.id === id)}
+                mlModels={mlModels}
                 onClear={() => setSelected([])}
+                samples={intersectionWith(documents, selected, (document, id) => document.id === id)}
+                subtractionOptions={subtractionShortlist}
             />
             <StyledSamplesList>
                 <SamplesListHeader>
