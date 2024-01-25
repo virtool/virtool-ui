@@ -13,7 +13,9 @@ type RoleSelectProps = {
 
 export const RoleSelect = ({ value, roles, onChange, className, id }: RoleSelectProps) => {
     const roleItems = map(roles, role => (
-        <SelectItem value={role.id} key={role.id} text={`${role.id} Administrator`} description={role.description} />
+        <SelectItem value={role.id} key={role.id} description={role.description}>
+            {`${role.id} Administrator`}
+        </SelectItem>
     ));
 
     return (

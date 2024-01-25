@@ -9,40 +9,47 @@ import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from ".
 import PersistForm from "../../../forms/components/PersistForm";
 import { addSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
-import { OTUSegment } from "../../../otus/types";
-import { routerLocationHasState } from "../../../utils/utils";
-import { getUnreferencedSegments } from "../../selectors";
+import { ReferenceTarget } from "../../../references/types";
+import { getDefaultTargetName, getUnreferencedTargets } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
-import SegmentField from "./SegmentField";
+import TargetsField from "./TargetField";
 
-const initialValues = { segment: null, accession: "", definition: "", host: "", sequence: "" };
-
-export function castValues(segments: OTUSegment[]) {
-    return function (values: formValues) {
-        const segment = find(segments, { name: values.segment }) ? values.segment : null;
-        return { ...values, segment };
+function getInitialValues(defaultTarget: string) {
+    return {
+        targetName: defaultTarget,
+        accession: "",
+        definition: "",
+        host: "",
+        sequence: "",
     };
 }
 
-export const StyledContent = styled(DialogContent)`
+export function castValues(targets: ReferenceTarget[], defaultTarget: string) {
+    return function (values: formValues) {
+        const targetName = find(targets, { name: values.targetName }) ? values.targetName : defaultTarget;
+        return { ...values, targetName };
+    };
+}
+
+const CenteredDialogContent = styled(DialogContent)`
     top: 50%;
 `;
 
 type formValues = {
-    segment: string;
+    targetName: string;
     accession: string;
     definition: string;
     host: string;
     sequence: string;
 };
 
-type AddGenomeSequenceProps = {
+type AddBarcodeSequenceProps = {
+    /** The default target */
+    defaultTarget: string;
     isolateId: string;
     otuId: string;
     /** Indicates whether the dialog for adding a sequence is visible */
     show: boolean;
-    /** A list of unreferenced segments */
-    segments: OTUSegment[];
     /** A callback function to hide the dialog */
     onHide: () => void;
     /** A callback function to add the sequence */
@@ -52,48 +59,63 @@ type AddGenomeSequenceProps = {
         accession: string,
         definition: string,
         host: string,
-        segment: string,
         sequence: string,
+        targetName: string,
     ) => void;
+    /** A list of unreferenced targets */
+    targets: ReferenceTarget[];
 };
 
 /**
- * Displays dialog to add a genome sequence
+ * Displays dialog to add a barcode sequence
  */
-export function AddGenomeSequence({ isolateId, otuId, show, segments, onHide, onSave }: AddGenomeSequenceProps) {
-    function handleSubmit({ accession, definition, host, sequence, segment }) {
-        onSave(otuId, isolateId, accession, definition, host, segment, sequence.toUpperCase());
+export function AddBarcodeSequence({
+    defaultTarget,
+    isolateId,
+    otuId,
+    show,
+    onHide,
+    onSave,
+    targets,
+}: AddBarcodeSequenceProps) {
+    function handleSubmit({ accession, definition, host, sequence, targetName }) {
+        onSave(otuId, isolateId, accession, definition, host, sequence.toUpperCase(), targetName);
     }
+
+    const initialValues = getInitialValues(defaultTarget);
 
     return (
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
-                <StyledContent>
+                <CenteredDialogContent>
                     <DialogTitle>Add Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
                         {({
-                            setFieldValue,
                             errors,
                             touched,
+                            setFieldValue,
                         }: {
                             setFieldValue: (field: string, value: string) => void;
                             errors: FormikErrors<formValues>;
                             touched: FormikTouched<formValues>;
                         }) => (
                             <Form>
-                                <PersistForm formName="addGenomeSequenceForm" castValues={castValues(segments)} />
-                                <Field
-                                    as={SegmentField}
-                                    name="segment"
-                                    onChange={(segment: string) => setFieldValue("segment", segment)}
+                                <PersistForm
+                                    formName="addGenomeSequenceForm"
+                                    castValues={castValues(targets, defaultTarget)}
                                 />
-                                <SequenceForm errors={errors} touched={touched} />
+                                <Field
+                                    as={TargetsField}
+                                    name="targetName"
+                                    onChange={(targetName: string) => setFieldValue("targetName", targetName)}
+                                />
+                                <SequenceForm touched={touched} errors={errors} />
                                 <SaveButton />
                             </Form>
                         )}
                     </Formik>
-                </StyledContent>
+                </CenteredDialogContent>
             </DialogPortal>
         </Dialog>
     );
@@ -101,10 +123,10 @@ export function AddGenomeSequence({ isolateId, otuId, show, segments, onHide, on
 
 export function mapStateToProps(state) {
     return {
+        defaultTarget: getDefaultTargetName(state),
         isolateId: getActiveIsolateId(state),
         otuId: getOTUDetailId(state),
-        show: routerLocationHasState(state, "addSequence"),
-        segments: getUnreferencedSegments(state),
+        targets: getUnreferencedTargets(state),
     };
 }
 
@@ -113,20 +135,11 @@ export function mapDispatchToProps(dispatch) {
         onHide: () => {
             dispatch(pushState({ addSequence: false }));
         },
-        onSave: (otuId, isolateId, accession, definition, host, segment, sequence) => {
-            dispatch(
-                addSequence({
-                    otuId,
-                    isolateId,
-                    accession,
-                    definition,
-                    host,
-                    sequence,
-                    segment,
-                }),
-            );
+
+        onSave: (otuId, isolateId, accession, definition, host, sequence, target) => {
+            dispatch(addSequence({ otuId, isolateId, accession, definition, host, sequence, target }));
         },
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddGenomeSequence);
+export default connect(mapStateToProps, mapDispatchToProps)(AddBarcodeSequence);

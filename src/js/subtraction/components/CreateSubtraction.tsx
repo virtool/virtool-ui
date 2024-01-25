@@ -1,6 +1,5 @@
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import React from "react";
-import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import {
@@ -16,7 +15,7 @@ import {
 import { useInfiniteFindFiles } from "../../files/querys";
 import { FileType } from "../../files/types";
 import PersistForm from "../../forms/components/PersistForm";
-import { create } from "../api";
+import { useCreateSubtraction } from "../querys";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";
 
 const validationSchema = Yup.object().shape({
@@ -40,26 +39,28 @@ const initialValues = {
  * A form for creating a subtraction
  */
 export default function CreateSubtraction() {
+    const history = useHistory();
     const {
         data: files,
         isLoading,
         isFetchingNextPage,
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.subtraction, 25);
-
-    const history = useHistory();
-    const subtractionMutation = useMutation(create, {
-        onSuccess: () => {
-            history.push("/subtractions");
-        },
-    });
+    const subtractionMutation = useCreateSubtraction();
 
     if (isLoading) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
     function handleSubmit({ uploadId, name, nickname }) {
-        subtractionMutation.mutate({ name, nickname, uploadId: uploadId[0] });
+        subtractionMutation.mutate(
+            { name, nickname, uploadId: uploadId[0] },
+            {
+                onSuccess: () => {
+                    history.push("/subtractions");
+                },
+            },
+        );
     }
 
     return (

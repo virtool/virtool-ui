@@ -23,10 +23,10 @@ describe("mapStateToProps()", () => {
     it("should return props given state", () => {
         const state = {
             app: { resetCode: "test_reset_code" },
-            errors: { RESET_ERROR: { message: "test_reset_error" } },
+            errors: { RESET_PASSWORD_ERROR: { message: "test_reset_error" } },
         };
         const result = mapStateToProps(state);
-        expect(result).toEqual({ resetCode: state.app.resetCode, error: state.errors.RESET_ERROR.message });
+        expect(result).toEqual({ resetCode: state.app.resetCode, error: state.errors.RESET_PASSWORD_ERROR.message });
     });
 });
 

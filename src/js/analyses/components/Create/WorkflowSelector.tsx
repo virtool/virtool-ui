@@ -1,64 +1,69 @@
-import { concat, difference, without } from "lodash-es";
+import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { ReferenceDataType } from "../../../references/types";
-import { getWorkflowDisplayName } from "../../../utils/utils";
+import { getColor, getFontWeight } from "../../../app/theme";
+import { Box } from "../../../base";
 import { CreateAnalysisField } from "./CreateAnalysisField";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
-import { CreateAnalysisSelected } from "./CreateAnalysisSelected";
-import { CreateAnalysisSelector } from "./CreateAnalysisSelector";
-import { CreateAnalysisSelectorList } from "./CreateAnalysisSelectorList";
-import { SelectorItem } from "./SelectorItem";
+import { workflow } from "./workflows";
 
-export function getCompatibleWorkflows(dataType: ReferenceDataType, hasHmm: boolean): string[] {
-    if (dataType === "barcode") {
-        return ["aodp"];
-    }
-
-    if (hasHmm) {
-        return ["pathoscope_bowtie", "nuvs"];
-    }
-
-    return ["pathoscope_bowtie"];
-}
-
-const ShorterCreateAnalysisSelector = styled(CreateAnalysisSelector)`
-    height: 90px;
+const WorkflowAnalysisField = styled(CreateAnalysisField)`
+    display: flex;
+    flex-direction: column;
 `;
 
-interface WorkflowSelectorProps {
-    dataType: ReferenceDataType;
-    hasError: boolean;
-    hasHmm: boolean;
-    selected: string[];
-    onSelect: (selected: string[]) => void;
-}
+const StyledWorkflowSelector = styled.div`
+    display: flex;
+    justify-content: space-evenly;
 
-export function WorkflowSelector({ dataType, hasError, hasHmm, selected, onSelect }: WorkflowSelectorProps) {
-    const compatibleWorkflows = getCompatibleWorkflows(dataType, hasHmm);
-    const unselectedWorkflows = difference(compatibleWorkflows, selected);
+    div:not(:last-child) {
+        border-right: none;
+    }
+`;
 
+type WorkflowItemProps = {
+    selected: boolean;
+};
+
+const WorkflowItem = styled(Box)<WorkflowItemProps>`
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    margin-bottom: 0;
+
+    background-color: ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "white" })};
+    color: ${props => getColor({ theme: props.theme, color: props.selected ? "white" : "black" })};
+    font-weight: ${props => getFontWeight(props.selected ? "thick" : "normal")(props)};
+    border: 1px solid ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "greyLight" })};
+
+    :hover {
+        background-color: ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "greyHover" })};
+    }
+`;
+
+type WorkflowSelectorProps = {
+    onSelect: (selected: string) => void;
+    selected: string;
+    workflows: workflow[];
+};
+
+export function WorkflowSelector({ onSelect, selected, workflows }: WorkflowSelectorProps) {
     return (
-        <CreateAnalysisField>
-            <CreateAnalysisFieldTitle>Workflow</CreateAnalysisFieldTitle>
-            <ShorterCreateAnalysisSelector>
-                <CreateAnalysisSelectorList
-                    items={unselectedWorkflows}
-                    render={workflow => (
-                        <SelectorItem key={workflow} onClick={() => onSelect(concat(selected, workflow))}>
-                            {getWorkflowDisplayName(workflow)}
-                        </SelectorItem>
-                    )}
-                />
-            </ShorterCreateAnalysisSelector>
-            <CreateAnalysisSelected
-                items={selected}
-                render={workflow => (
-                    <SelectorItem key={workflow} onClick={() => onSelect(without(selected, workflow))}>
-                        {getWorkflowDisplayName(workflow)}
-                    </SelectorItem>
-                )}
-            />
-        </CreateAnalysisField>
+        <WorkflowAnalysisField>
+            <CreateAnalysisFieldTitle>Workflow </CreateAnalysisFieldTitle>{" "}
+            <StyledWorkflowSelector>
+                {map(workflows, workflow => (
+                    <WorkflowItem
+                        key={workflow.id}
+                        selected={selected === workflow.id}
+                        onClick={() => onSelect(workflow.id)}
+                    >
+                        {workflow.name}
+                    </WorkflowItem>
+                ))}
+            </StyledWorkflowSelector>
+        </WorkflowAnalysisField>
     );
 }

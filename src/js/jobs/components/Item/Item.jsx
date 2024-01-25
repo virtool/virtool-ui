@@ -53,7 +53,7 @@ export function JobItem({
         progressColor = "blue";
     }
 
-    if (state === "error" || state === "cancelled" || state === "timeout") {
+    if (state === "error" || state === "cancelled" || state === "timeout" || state === "terminated") {
         progressColor = "red";
     }
 

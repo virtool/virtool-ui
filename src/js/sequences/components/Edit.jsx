@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { getDataType } from "../../references/selectors";
 import { routerLocationHasState } from "../../utils/utils";
-import EditBarcodeSequence from "./Barcode/Edit";
+import EditBarcodeSequence from "./Barcode/EditBarcodeSequence";
 import EditGenomeSequence from "./Genome/EditGenomeSequence";
 
 export const EditSequence = ({ dataType }) =>
