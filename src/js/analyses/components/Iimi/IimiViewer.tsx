@@ -26,8 +26,8 @@ export function IimiViewer({ detail }) {
                     <li>We do not guarantee the accuracy of the results.</li>
                     <li>This analysis could become inaccessbile at any time as the workflow changes.</li>
                     <li>
-                        This analysis viewer is a work in progress. If you think something is missing, we probably know.
-                        We will solicit feedback when the viewer is stable.
+                        This analysis viewer is a work in progress. Some features may not be present as we continue to
+                        improve the viewer.
                     </li>
                 </ImportantList>
             </Box>
