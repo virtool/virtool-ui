@@ -50,7 +50,6 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
 
     path.depth-area {
         fill: ${props => props.theme.color.blue};
-        stroke: ${props => props.theme.color.blue};
     }
 `;
 
