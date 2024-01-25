@@ -1,8 +1,6 @@
-import { faker } from "@faker-js/faker";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
-import { assign, pick } from "lodash";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -10,39 +8,14 @@ import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/
 import { createFakeFile, mockApiListFiles } from "../../../../../tests/fake/files";
 import { mockApiListGroups } from "../../../../../tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../../tests/fake/labels";
-import {
-    CreateFakeSampleMinimal,
-    createFakeSampleMinimal,
-    CreateSampleType,
-    mockApiCreateSample,
-} from "../../../../../tests/fake/samples";
+import { mockApiCreateSample } from "../../../../../tests/fake/samples";
 import {
     createFakeShortlistSubtraction,
     mockApiGetShortlistSubtractions,
 } from "../../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../../tests/setupTests";
+import { LibraryType } from "../../../types";
 import CreateSample from "../CreateSample";
-
-type CreateFakeSample = CreateFakeSampleMinimal & {
-    files?: string[];
-    subtractions?: string[];
-    locale?: string;
-};
-
-function createFakeSample(overrides?: CreateFakeSample): CreateSampleType {
-    const { files, ...props } = overrides || {};
-    const sampleMinimal = pick(createFakeSampleMinimal(props), ["name", "isolate", "host", "library_type"]);
-    const defaultCreateSample = {
-        ...sampleMinimal,
-        locale: faker.random.word(),
-        subtractions: faker.datatype.number(),
-        files: files || [faker.datatype.number(), faker.datatype.number()],
-        labels: [],
-        group: null,
-    };
-
-    return assign(defaultCreateSample, overrides);
-}
 
 describe("<CreateSample>", () => {
     const readFileName = "large";
@@ -135,17 +108,20 @@ describe("<CreateSample>", () => {
         const files = [createFakeFile(), createFakeFile()];
         const filesScope = mockApiListFiles(files);
         const subtractionsScope = mockApiGetShortlistSubtractions([]);
-        const createSample = createFakeSample({
-            isolate: "",
-            host: "",
-            locale: "",
-            subtractions: [],
-            files: [files[0].id, files[1].id],
-        });
-        const createSampleScope = mockApiCreateSample(createSample);
+        const createSampleScope = mockApiCreateSample(
+            "testSample",
+            "",
+            "",
+            "",
+            LibraryType.normal,
+            [files[0].id, files[1].id],
+            [],
+            [],
+            null,
+        );
         renderWithRouter(<CreateSample />, {}, history);
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
-        await inputFormRequirements(createSample.name, files);
+        await inputFormRequirements("testSample", files);
 
         await submitForm();
 
@@ -158,19 +134,25 @@ describe("<CreateSample>", () => {
         const files = [createFakeFile(), createFakeFile()];
         const filesScope = mockApiListFiles(files);
         const subtractionsScope = mockApiGetShortlistSubtractions([subtractionShortlist]);
-        const createSample = createFakeSample({
-            subtractions: [subtractionShortlist.id],
-            files: [files[0].id, files[1].id],
-        });
-        const createSampleScope = mockApiCreateSample(createSample);
+        const createSampleScope = mockApiCreateSample(
+            "testSample",
+            "testIsolate",
+            "testHost",
+            "testLocale",
+            LibraryType.normal,
+            [files[0].id, files[1].id],
+            [],
+            [subtractionShortlist.id],
+            null,
+        );
         renderWithRouter(<CreateSample />, {}, history);
 
-        await inputFormRequirements(createSample.name, files);
+        await inputFormRequirements("testSample", files);
 
         // Fill out the rest of the form and submit
-        await userEvent.type(await screen.findByLabelText("Isolate"), createSample.isolate);
-        await userEvent.type(screen.getByLabelText("Host"), createSample.host);
-        await userEvent.type(screen.getByLabelText("Locale"), createSample.locale);
+        await userEvent.type(await screen.findByLabelText("Isolate"), "testIsolate");
+        await userEvent.type(screen.getByLabelText("Host"), "testHost");
+        await userEvent.type(screen.getByLabelText("Locale"), "testLocale");
         await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
         await userEvent.click(screen.getByText(subtractionShortlist.name));
         await userEvent.click(screen.getByText("Normal"));
@@ -186,20 +168,25 @@ describe("<CreateSample>", () => {
         const files = [createFakeFile(), createFakeFile()];
         const filesScope = mockApiListFiles(files);
         const subtractionsScope = mockApiGetShortlistSubtractions([subtractionShortlist]);
-        const createSample = createFakeSample({
-            labels: [labels[0].id],
-            files: [files[0].id, files[1].id],
-            subtractions: [subtractionShortlist.id],
-        });
-        const createSampleScope = mockApiCreateSample(createSample);
+        const createSampleScope = mockApiCreateSample(
+            "testSample",
+            "testIsolate",
+            "testHost",
+            "testLocale",
+            LibraryType.normal,
+            [files[0].id, files[1].id],
+            [labels[0].id],
+            [subtractionShortlist.id],
+            null,
+        );
         renderWithRouter(<CreateSample />, {}, history);
 
-        await inputFormRequirements(createSample.name, files);
+        await inputFormRequirements("testSample", files);
 
         // Fill out the rest of the form and submit
-        await userEvent.type(screen.getByLabelText("Isolate"), createSample.isolate);
-        await userEvent.type(screen.getByLabelText("Host"), createSample.host);
-        await userEvent.type(screen.getByLabelText("Locale"), createSample.locale);
+        await userEvent.type(screen.getByLabelText("Isolate"), "testIsolate");
+        await userEvent.type(screen.getByLabelText("Host"), "testHost");
+        await userEvent.type(screen.getByLabelText("Locale"), "testLocale");
         await userEvent.click(screen.getByText("Normal"));
         await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
         await userEvent.click(screen.getByText(subtractionShortlist.name));
@@ -253,17 +240,20 @@ describe("<CreateSample>", () => {
         const files = [createFakeFile(), createFakeFile()];
         const filesScope = mockApiListFiles(files);
         const subtractionsScope = mockApiGetShortlistSubtractions([]);
-        const createSample = createFakeSample({
-            isolate: "",
-            host: "",
-            locale: "",
-            subtractions: [],
-            files: [files[1].id, files[0].id],
-        });
-        const createSampleScope = mockApiCreateSample(createSample);
+        const createSampleScope = mockApiCreateSample(
+            "testSample",
+            "",
+            "",
+            "",
+            LibraryType.normal,
+            [files[1].id, files[0].id],
+            [],
+            [],
+            null,
+        );
         renderWithRouter(<CreateSample />, {}, history);
 
-        await inputFormRequirements(createSample.name, files);
+        await inputFormRequirements("testSample", files);
         expect(screen.getByText("2 of 2 selected")).toBeInTheDocument();
 
         const swapButton = screen.getByRole("button", { name: "retweet" });
