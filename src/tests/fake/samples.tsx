@@ -91,6 +91,20 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
 }
 
 /**
+ * Sets up a mocked API route for fetching a single sample
+ *
+ * @param sampleDetail - The sample detail to be returned from the mocked API call
+ * @param statusCode - The HTTP status code to simulate in the response
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetSampleDetail(sampleDetail: Sample, statusCode?: number) {
+    return nock("http://localhost")
+        .get(`/api/samples/${sampleDetail.id}`)
+        .query(true)
+        .reply(statusCode || 200, sampleDetail);
+}
+
+/**
  * Creates a mocked API call for creating a sample
  *
  * @param name - The name of the sample

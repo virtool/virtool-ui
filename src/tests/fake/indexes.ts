@@ -74,6 +74,10 @@ export function mockApiFindIndexes(refId: string, page: number, searchResults: I
         .reply(200, merge(defaultSearchResults, searchResults));
 }
 
+export function mockApiListIndexes(indexMinimal: IndexMinimal[]) {
+    return nock("http://localhost").get("/api/indexes").query(true).reply(200, indexMinimal);
+}
+
 export function mockApiBuildIndexes(refId: string) {
     return nock("http://localhost").post(`/api/refs/${refId}/indexes`).reply(201);
 }
