@@ -46,7 +46,7 @@ export function IimiIsolate({ name, sequences }) {
                         <IimiCoverageChart
                             data={convertRleToCoverage(sequence.coverage.lengths, sequence.coverage.values)}
                             id={sequence.id}
-                            yMax={100}
+                            yMax={1000}
                         />
                     </Box>
                 ))}
