@@ -160,8 +160,12 @@ export function mockApiRemoveSubtraction(subtractionId: string) {
  * Sets up a mocked API route for fetching a subtraction shortlist
  *
  * @param subtractionsShortlist - The list of subtractions to be returned from the mocked API call
+ * @param ready - Indicates whether to show all the ready subtractions
  * @returns A nock scope for the mocked API call
  */
-export function mockApiGetShortlistSubtractions(subtractionsShortlist: SubtractionShortlist[]) {
-    return nock("http://localhost").get("/api/subtractions?short=true").reply(200, subtractionsShortlist);
+export function mockApiGetShortlistSubtractions(subtractionsShortlist: SubtractionShortlist[], ready?: boolean) {
+    return nock("http://localhost")
+        .get("/api/subtractions")
+        .query(ready ? { short: true, ready } : true)
+        .reply(200, subtractionsShortlist);
 }

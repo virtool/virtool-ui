@@ -32,7 +32,7 @@ describe("getCompatibleWorkflows()", () => {
             sampleId: sample.id,
         };
         mockApiGetSampleDetail(sample);
-        mockApiGetShortlistSubtractions([subtractionShortlist]);
+        mockApiGetShortlistSubtractions([subtractionShortlist], true);
         mockApiListIndexes([indexMinimal]);
     });
 
@@ -49,7 +49,7 @@ describe("getCompatibleWorkflows()", () => {
         );
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
-        console.log(indexMinimal);
+
         expect(screen.getByText("Workflow")).toBeInTheDocument();
         expect(screen.getByText("Pathoscope")).toBeInTheDocument();
         expect(screen.getByText("NuVs")).toBeInTheDocument();

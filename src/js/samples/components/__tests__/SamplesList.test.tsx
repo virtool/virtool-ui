@@ -27,7 +27,7 @@ describe("<SamplesList />", () => {
         mockApiListIndexes([createFakeIndexMinimal()]);
         mockApiGetLabels([createFakeLabelNested()]);
         mockApiGetModels([createFakeMLModelMinimal()]);
-        mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()]);
+        mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
     });
 
     it("should render correctly", async () => {
