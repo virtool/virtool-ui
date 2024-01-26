@@ -28,6 +28,7 @@ export const SampleFileSizeWarning = ({ sampleId, show, showLink }) => {
 };
 
 export const mapStateToProps = state => ({
+    sampleId: state.samples.detail.id,
     show: getFilesUndersized(state),
     showLink: !endsWith(state.router.location.pathname, "/files"),
 });

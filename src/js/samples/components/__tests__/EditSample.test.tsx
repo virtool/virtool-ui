@@ -30,74 +30,18 @@ describe("<Editsample />", () => {
         expect(screen.queryByText("Save")).toBeNull();
     });
 
-    it("should render after name is changed", async () => {
+    it.each(["Name", "Isolate", "Host", "Locale", "Notes"])("should render changed data for", async inputLabel => {
         renderWithProviders(<EditSample {...props} />);
 
-        const nameInput = screen.getByLabelText("Name");
-        expect(nameInput).toBeInTheDocument();
-        expect(nameInput).toHaveValue(sample.name);
+        const inputBox = screen.getByLabelText(inputLabel);
+        expect(inputBox).toBeInTheDocument();
+        expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
 
-        await userEvent.clear(nameInput);
-        expect(nameInput).toHaveValue("");
+        await userEvent.clear(inputBox);
+        expect(inputBox).toHaveValue("");
 
-        await userEvent.type(nameInput, "test");
-        expect(nameInput).toHaveValue("test");
-    });
-
-    it("should render after isolate is changed", async () => {
-        renderWithProviders(<EditSample {...props} />);
-
-        const isolateInput = screen.getByLabelText("Isolate");
-        expect(isolateInput).toBeInTheDocument();
-        expect(isolateInput).toHaveValue(sample.isolate);
-
-        await userEvent.clear(isolateInput);
-        expect(isolateInput).toHaveValue("");
-
-        await userEvent.type(isolateInput, "test");
-        expect(isolateInput).toHaveValue("test");
-    });
-
-    it("should render after host is changed", async () => {
-        renderWithProviders(<EditSample {...props} />);
-
-        const hostInput = screen.getByLabelText("Host");
-        expect(hostInput).toBeInTheDocument();
-        expect(hostInput).toHaveValue(sample.host);
-
-        await userEvent.clear(hostInput);
-        expect(hostInput).toHaveValue("");
-
-        await userEvent.type(hostInput, "test");
-        expect(hostInput).toHaveValue("test");
-    });
-
-    it("should render after locale is changed", async () => {
-        renderWithProviders(<EditSample {...props} />);
-
-        const localeInput = screen.getByLabelText("Locale");
-        expect(localeInput).toBeInTheDocument();
-        expect(localeInput).toHaveValue(sample.locale);
-
-        await userEvent.clear(localeInput);
-        expect(localeInput).toHaveValue("");
-
-        await userEvent.type(localeInput, "test");
-        expect(localeInput).toHaveValue("test");
-    });
-
-    it("should render after notes is changed", async () => {
-        renderWithProviders(<EditSample {...props} />);
-
-        const notesInput = screen.getByLabelText("Notes");
-        expect(notesInput).toBeInTheDocument();
-        expect(notesInput).toHaveValue(sample.notes);
-
-        await userEvent.clear(notesInput);
-        expect(notesInput).toHaveValue("");
-
-        await userEvent.type(notesInput, "test");
-        expect(notesInput).toHaveValue("test");
+        await userEvent.type(inputBox, "test");
+        expect(inputBox).toHaveValue("test");
     });
 
     it("should update sample when form is submitted", async () => {

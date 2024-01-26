@@ -1,13 +1,24 @@
+import { screen } from "@testing-library/react";
+import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import React from "react";
+import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeSample } from "../../../../../tests/fake/samples";
-import { renderWithRouter } from "../../../../../tests/setupTests";
-import { mapStateToProps, SampleDetailGeneral } from "../General";
+import { createGenericReducer, renderWithRouter } from "../../../../../tests/setupTests";
+import { mapStateToProps, SampleDetailGeneral } from "../SampleDetailGeneral";
+
+function createReducer(state, history) {
+    return combineReducers({
+        samples: createGenericReducer(state.samples),
+        router: connectRouter(history),
+    });
+}
 
 describe("<SampleDetailGeneral />", () => {
     let props;
     let history;
+    let state;
 
     beforeEach(() => {
         props = {
@@ -15,21 +26,54 @@ describe("<SampleDetailGeneral />", () => {
             encoding: "Sanger / Illumina 2.1",
             gc: "42.3%",
             lengthRange: "41 - 76",
-            sample: {},
+            sample: createFakeSample({ paired: true }),
             subtractions: [
                 {
                     id: "baz",
                     name: "Arabidopsis thaliana",
                 },
             ],
-            libraryType: "",
+            libraryType: "Normal",
+        };
+        state = {
+            samples: { detail: props.sample },
         };
         history = createBrowserHistory();
     });
 
+    it("should render properly", () => {
+        renderWithRouter(<SampleDetailGeneral {...props} />, state, history, createReducer);
+
+        expect(screen.getByText("Name")).toBeInTheDocument();
+        expect(screen.getByText(props.sample.name)).toBeInTheDocument();
+
+        expect(screen.getByText("Host")).toBeInTheDocument();
+        expect(screen.getByText(props.sample.host)).toBeInTheDocument();
+
+        expect(screen.getByText("Isolate")).toBeInTheDocument();
+        expect(screen.getByText(props.sample.isolate)).toBeInTheDocument();
+
+        expect(screen.getByText("Locale")).toBeInTheDocument();
+        expect(screen.getByText(props.sample.locale)).toBeInTheDocument();
+
+        expect(screen.getByText("Encoding")).toBeInTheDocument();
+        expect(screen.getByText("Sanger / Illumina 2.1")).toBeInTheDocument();
+
+        expect(screen.getByText("Read Count")).toBeInTheDocument();
+        expect(screen.getByText("235")).toBeInTheDocument();
+
+        expect(screen.getByText("Library Type")).toBeInTheDocument();
+        expect(screen.getByText("Normal")).toBeInTheDocument();
+
+        expect(screen.getByText("Length Range")).toBeInTheDocument();
+        expect(screen.getByText("41 - 76")).toBeInTheDocument();
+
+        expect(screen.getByText("GC Content")).toBeInTheDocument();
+        expect(screen.getByText("42.3%")).toBeInTheDocument();
+    });
+
     it("should render with [paired=true]", () => {
-        props.sample = createFakeSample({ paired: true });
-        renderWithRouter(<SampleDetailGeneral {...props} />, {}, history);
+        renderWithRouter(<SampleDetailGeneral {...props} />, state, history, createReducer);
 
         expect(screen.getByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("Yes")).toBeInTheDocument();
@@ -37,7 +81,8 @@ describe("<SampleDetailGeneral />", () => {
 
     it("should render with [paired=false]", () => {
         props.sample = createFakeSample({ paired: false });
-        renderWithRouter(<SampleDetailGeneral {...props} />, {}, history);
+        state.samples.detail = props.sample;
+        renderWithRouter(<SampleDetailGeneral {...props} />, state, history, createReducer);
 
         expect(screen.getByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("No")).toBeInTheDocument();

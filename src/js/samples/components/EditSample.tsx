@@ -2,6 +2,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { pick } from "lodash";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import {
     Dialog,
     DialogContent,
@@ -30,15 +31,16 @@ type EditSampleProps = {
  * Displays a dialog for editing the sample
  */
 export default function EditSample({ sample, show, onHide }: EditSampleProps) {
+    const history = useHistory();
     const mutation = useUpdateSample(sample.id);
 
     const { register, handleSubmit } = useForm({
         defaultValues: {
-            name: sample.name || "",
-            isolate: sample.isolate || "",
-            host: sample.host || "",
-            locale: sample.locale || "",
-            notes: sample.notes || "",
+            name: sample.name ?? "",
+            isolate: sample.isolate ?? "",
+            host: sample.host ?? "",
+            locale: sample.locale ?? "",
+            notes: sample.notes ?? "",
         },
     });
 
@@ -50,7 +52,14 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                     <DialogTitle>Edit Sample</DialogTitle>
                     <form
                         onSubmit={handleSubmit(values =>
-                            mutation.mutate({ update: pick(values, ["name", "isolate", "host", "locale", "notes"]) }),
+                            mutation.mutate(
+                                { update: pick(values, ["name", "isolate", "host", "locale", "notes"]) },
+                                {
+                                    onSuccess: () => {
+                                        history.replace({ state: { editSample: false } });
+                                    },
+                                },
+                            ),
                         )}
                     >
                         <InputGroup>

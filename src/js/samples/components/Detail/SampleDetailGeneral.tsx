@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, ContainerNarrow, ContainerSide, Markdown, Table } from "../../../base";
+import { LibraryType, Sample } from "../../types";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
-import { SampleFileSizeWarning } from "./FileSizeWarning";
+import SampleFileSizeWarning from "./FileSizeWarning";
 import Sidebar from "./Sidebar";
 
 const SampleDetailSidebarContainer = styled(ContainerSide)`
@@ -22,14 +23,37 @@ const StyledSampleDetailGeneral = styled.div`
     }
 `;
 
-export function SampleDetailGeneral({ count, encoding, gc, lengthRange, libraryType, sample }) {
+type SampleDetailGeneralProps = {
+    /** The read count of the sample */
+    count: string;
+    encoding: string;
+    /** The GC content of the sample (percentage) */
+    gc: string;
+    /** The length range */
+    lengthRange: string;
+    libraryType: LibraryType;
+    /** The sample data */
+    sample: Sample;
+};
+
+/**
+ * The general view in sample details
+ */
+export function SampleDetailGeneral({
+    count,
+    encoding,
+    gc,
+    lengthRange,
+    libraryType,
+    sample,
+}: SampleDetailGeneralProps) {
     const { name, host, isolate, locale, paired, notes } = sample;
-    const history = useHistory();
+    const history = useHistory<{ editSample: boolean }>();
 
     return (
         <StyledSampleDetailGeneral>
             <ContainerNarrow>
-                <SampleFileSizeWarning sampleId={sample.id} />
+                <SampleFileSizeWarning />
                 <BoxGroup>
                     <BoxGroupHeader>
                         <h2>General</h2>

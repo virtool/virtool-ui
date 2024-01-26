@@ -1,6 +1,5 @@
 import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useHistory } from "react-router-dom";
 import { Label } from "../labels/types";
 import { ErrorResponse } from "../types/types";
 import { listSamples, SampleUpdate, update, updateSample } from "./api";
@@ -47,15 +46,7 @@ export function useListSamples(page: number, per_page: number, term?: string, la
  * @returns A mutator for updating a sample
  */
 export function useUpdateSample(sampleId: string) {
-    const history = useHistory();
-    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(
-        ({ update }) => updateSample(sampleId, update),
-        {
-            onSuccess: () => {
-                history.replace({ state: { editSample: false } });
-            },
-        },
-    );
+    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(({ update }) => updateSample(sampleId, update));
 }
 
 /**
