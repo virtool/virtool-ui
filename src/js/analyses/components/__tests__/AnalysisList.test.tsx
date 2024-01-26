@@ -12,6 +12,7 @@ import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fa
 import { createFakeIndexMinimal } from "../../../../tests/fake/indexes";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
+import { Workflows } from "../../types";
 import AnalysesList from "../AnalysisList";
 
 function createReducer(state, history) {
@@ -87,7 +88,7 @@ describe("<AnalysesList />", () => {
             expect(history.location.state).toEqual(undefined);
 
             await userEvent.click(await screen.findByLabelText("plus-square fa-fw"));
-            expect(history.location.state).toEqual({ createAnalysis: analyses[0].sample.id });
+            expect(history.location.state).toEqual({ createAnalysis: Workflows.pathoscope_bowtie });
         });
     });
 });

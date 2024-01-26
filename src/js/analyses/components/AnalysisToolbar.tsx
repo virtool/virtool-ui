@@ -2,6 +2,7 @@ import React, { ChangeEvent } from "react";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
+import { Workflows } from "../types";
 
 type AnalysesToolbarProps = {
     /** A callback function to handle changes in search input */
@@ -15,7 +16,7 @@ type AnalysesToolbarProps = {
 /**
  * A toolbar which allows the analyses to be filtered by their names
  */
-export default function AnalysesToolbar({ onChange, sampleId, term }: AnalysesToolbarProps) {
+export default function AnalysesToolbar({ onChange, term }: AnalysesToolbarProps) {
     const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
 
     return (
@@ -24,7 +25,7 @@ export default function AnalysesToolbar({ onChange, sampleId, term }: AnalysesTo
             {canCreate && (
                 <LinkButton
                     icon="plus-square fa-fw"
-                    to={{ state: { createAnalysis: sampleId } }}
+                    to={{ state: { createAnalysis: Workflows.pathoscope_bowtie } }}
                     color="blue"
                     tip="New Analysis"
                 />

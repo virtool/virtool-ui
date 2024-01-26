@@ -35,7 +35,7 @@ type CreateFakeMLModelOverrides = {
 export function createFakeMLModelMinimal(overrides?: CreateFakeMLModelOverrides): MLModelMinimal {
     return {
         id: faker.datatype.number(100),
-        created_at: overrides.created_at ?? faker.date.past().toISOString(),
+        created_at: overrides?.created_at ?? faker.date.past().toISOString(),
         description: faker.lorem.sentence(),
         latest_release: createFakeMLModelRelease(),
         name: `model-${faker.lorem.word()}`,

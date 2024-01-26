@@ -279,9 +279,11 @@ export const formatData = detail => {
     if (detail.workflow === "aodp") {
         return formatAODPData(detail);
     }
+
+    return detail;
 };
 
-const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "aodp"];
+const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "aodp", "iimi"];
 
 export function checkSupportedWorkflow(workflow) {
     return includes(supportedWorkflows, workflow);

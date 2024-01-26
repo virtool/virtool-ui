@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { Workflows } from "../../analyses/types";
 import { Button } from "../../base";
 
 const SampleSelectionToolbarTop = styled.div`
@@ -35,7 +36,7 @@ export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToo
     const history = useHistory();
 
     function onQuickAnalyze() {
-        history.push({ ...history.location, state: { quickAnalysis: true } });
+        history.push({ ...history.location, state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } });
     }
 
     return (

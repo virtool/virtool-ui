@@ -7,9 +7,9 @@ import { Permission } from "../../../groups/types";
 import { useFetchSubtraction } from "../../querys";
 import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";
-import RemoveSubtraction from "../Remove";
 import EditSubtraction from "./EditSubtraction";
 import SubtractionFiles from "./Files";
+import RemoveSubtraction from "./RemoveSubtraction";
 
 function calculateGc(nucleotides: NucleotideComposition) {
     return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
@@ -24,7 +24,7 @@ type SubtractionDetailProps = {
  * The subtraction detailed view
  */
 export default function SubtractionDetail({ match }: SubtractionDetailProps) {
-    const history = useHistory();
+    const history = useHistory<{ removeSubtraction: boolean }>();
     const [show, setShow] = useState(false);
     const { data, isLoading, isError } = useFetchSubtraction(match.params.subtractionId);
     const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
@@ -86,7 +86,11 @@ export default function SubtractionDetail({ match }: SubtractionDetailProps) {
             </Table>
             <SubtractionFiles files={data.files} />
             <EditSubtraction show={show} onHide={() => setShow(false)} subtraction={data} />
-            <RemoveSubtraction subtraction={data} />
+            <RemoveSubtraction
+                subtraction={data}
+                show={history.location.state?.removeSubtraction}
+                onHide={() => history.push({ state: { removeSubtraction: false } })}
+            />
         </>
     );
 }

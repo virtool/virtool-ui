@@ -1,135 +1,111 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { filter, forEach, map } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
-import { getAccountId } from "../../../account/selectors";
-import { pushState } from "../../../app/actions";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../base";
+import { useHistory, useLocation } from "react-router-dom";
+import { Dialog, DialogOverlay, DialogTitle, LoadingPlaceholder } from "../../../base";
+import { useFindModels } from "../../../ml/queries";
 import { getDefaultSubtractions, getSampleDetailId, getSampleLibraryType } from "../../../samples/selectors";
 import { getDataTypeFromLibraryType } from "../../../samples/utils";
 import { shortlistSubtractions } from "../../../subtraction/actions";
-import { routerLocationHasState } from "../../../utils/utils";
-import { analyze } from "../../actions";
+import { useCreateAnalysis } from "../../querys";
 import { getAnalysesSubtractions, getCompatibleIndexesWithLibraryType } from "../../selectors";
+import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
-import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
-import { useCreateAnalysis } from "./hooks";
-import { IndexSelector } from "./IndexSelector";
-import { SubtractionSelector } from "./SubtractionSelector";
+import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
+import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisForm";
+import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
 
-const CreateAnalysisFooter = styled(ModalFooter)`
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-`;
-
 export const CreateAnalysis = ({
-    accountId,
     compatibleIndexes,
     dataType,
     defaultSubtractions,
     hmms,
     sampleId,
-    show,
     subtractionOptions,
-    onAnalyze,
-    onHide,
     onShortlistSubtractions,
 }) => {
+    const history = useHistory();
+    const location = useLocation<{ createAnalysis: Workflows }>();
+    const workflow = location.state?.createAnalysis;
+    const open = Boolean(workflow);
+
     useEffect(() => {
-        if (show) {
+        if (open) {
             onShortlistSubtractions();
         }
-    }, [show]);
+    }, [open]);
 
-    const { errors, indexes, subtractions, workflows, setErrors, setIndexes, setSubtractions, setWorkflows } =
-        useCreateAnalysis(dataType, defaultSubtractions);
+    const createAnalysis = useCreateAnalysis();
 
-    function handleSubmit(e) {
-        e.preventDefault();
+    const { data: mlModels, isLoading } = useFindModels();
 
-        const errors = {
-            indexes: !indexes.length,
-            workflows: !workflows.length,
-        };
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
 
-        if (errors.indexes || errors.workflows) {
-            return setErrors(errors);
-        }
+    const compatibleWorkflows = getCompatibleWorkflows(dataType, Boolean(hmms.total_count));
 
-        onAnalyze(
-            sampleId,
-            map(
-                filter(compatibleIndexes, index => indexes.includes(index.id)),
-                "reference.id",
-            ),
-            subtractions,
-            accountId,
-            workflows,
+    function onSubmit(props: CreateAnalysisFormValues) {
+        const { indexes, subtractions, workflow, mlModel } = props;
+
+        const references = map(
+            filter(compatibleIndexes, index => indexes.includes(index.id)),
+            "reference.id",
         );
-        onHide();
+
+        forEach(references, refId => {
+            createAnalysis.mutate(
+                { refId, subtractionIds: subtractions, sampleId, workflow, mlModel },
+                { onSuccess: () => history.push({ state: { createAnalysis: false } }) },
+            );
+        });
+    }
+
+    function onChangeWorkflow(workflow: Workflows) {
+        history.push({ state: { createAnalysis: workflow } });
     }
 
     return (
-        <Modal label="Analyze" show={show} size="lg" onHide={onHide}>
-            <ModalHeader>Analyze</ModalHeader>
-            <form onSubmit={handleSubmit}>
-                <ModalBody>
+        <Dialog open={open} onOpenChange={open => history.push({ state: { createAnalysis: open } })}>
+            <DialogPortal>
+                <DialogOverlay />
+                <CreateAnalysisDialogContent>
+                    <DialogTitle>Analyze</DialogTitle>
                     <HMMAlert installed={hmms.status.task.complete} />
                     <WorkflowSelector
-                        dataType={dataType}
-                        hasError={errors.workflows}
-                        hasHmm={Boolean(hmms.total_count)}
-                        selected={workflows}
-                        onSelect={setWorkflows}
+                        onSelect={onChangeWorkflow}
+                        selected={location.state?.createAnalysis}
+                        workflows={compatibleWorkflows}
                     />
-                    {dataType === "genome" && (
-                        <SubtractionSelector
-                            subtractions={subtractionOptions}
-                            selected={subtractions}
-                            onChange={setSubtractions}
-                        />
-                    )}
-                    <IndexSelector indexes={compatibleIndexes} selected={indexes} onChange={setIndexes} />
-                </ModalBody>
-                <CreateAnalysisFooter>
-                    <CreateAnalysisSummary
+                    <CreateAnalysisForm
+                        compatibleIndexes={compatibleIndexes}
+                        defaultSubtractions={defaultSubtractions}
+                        mlModels={mlModels.items}
+                        onSubmit={onSubmit}
                         sampleCount={1}
-                        indexCount={indexes.length}
-                        workflowCount={workflows.length}
+                        subtractions={subtractionOptions}
+                        workflow={workflow}
                     />
-                    <Button type="submit" color="blue" icon="play">
-                        Start
-                    </Button>
-                </CreateAnalysisFooter>
-            </form>
-        </Modal>
+                </CreateAnalysisDialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 };
 
 export function mapStateToProps(state) {
     return {
-        accountId: getAccountId(state),
         compatibleIndexes: getCompatibleIndexesWithLibraryType(state),
         dataType: getDataTypeFromLibraryType(getSampleLibraryType(state)),
         defaultSubtractions: getDefaultSubtractions(state).map(subtraction => subtraction.id),
         sampleId: getSampleDetailId(state),
-        show: routerLocationHasState(state, "createAnalysis"),
         subtractionOptions: getAnalysesSubtractions(state),
     };
 }
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onAnalyze: (sampleId, references, subtractionIds, accountId, workflows) => {
-            forEach(references, refId => {
-                forEach(workflows, workflow => dispatch(analyze(sampleId, refId, subtractionIds, accountId, workflow)));
-            });
-        },
-        onHide: () => {
-            dispatch(pushState({}));
-        },
         onShortlistSubtractions: () => {
             dispatch(shortlistSubtractions());
         },
