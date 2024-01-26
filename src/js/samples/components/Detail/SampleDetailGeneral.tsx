@@ -29,7 +29,6 @@ type SampleDetailGeneralProps = {
     encoding: string;
     /** The GC content of the sample (percentage) */
     gc: string;
-    /** The length range */
     lengthRange: string;
     libraryType: LibraryType;
     /** The sample data */
