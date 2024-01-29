@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import { mapSettingsStateToProps } from "../../administration/mappers";
 import { Container, LoadingPlaceholder } from "../../base";
 import JobDetail from "./Detail";
-import JobsList from "./List";
+import JobsList from "./JobList";
 
 interface JobsProps {
     loading: boolean;

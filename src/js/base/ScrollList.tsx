@@ -116,6 +116,7 @@ export const ScrollList = ({
 };
 
 type LegacyScrollListProps = {
+    className?: string;
     page: number;
     documents: any[];
     pageCount: number;
@@ -126,6 +127,7 @@ type LegacyScrollListProps = {
 /**
  * An infinitely scrolling list of documents.
  *
+ * @param className - The class name of the scroll list
  * @param page - The most recently fetched page
  * @param documents - The list of documents
  * @param pageCount - The total number of pages
@@ -133,7 +135,14 @@ type LegacyScrollListProps = {
  * @param renderRow - A function which accepts a document and returns a react element
  * @returns An infinitely scrolling list of documents
  */
-export const LegacyScrollList = ({ page, documents, pageCount, onLoadNextPage, renderRow }: LegacyScrollListProps) => {
+export const LegacyScrollList = ({
+    className,
+    page,
+    documents,
+    pageCount,
+    onLoadNextPage,
+    renderRow,
+}: LegacyScrollListProps) => {
     const [prevRequestedPage, setPrevRequestedPage] = useState(1);
     const prevPage = usePrevious(page);
 
@@ -162,7 +171,7 @@ export const LegacyScrollList = ({ page, documents, pageCount, onLoadNextPage, r
     }
 
     return (
-        <StyledScrollList>
+        <StyledScrollList className={className}>
             {entries}
             {loading}
         </StyledScrollList>
