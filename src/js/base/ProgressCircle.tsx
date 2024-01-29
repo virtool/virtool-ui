@@ -186,7 +186,7 @@ function determineProgressColour(state: JobState): string {
 }
 type ProgressCircleProps = {
     progress: number;
-    state: JobState;
+    state?: JobState;
     size?: sizes;
 };
 

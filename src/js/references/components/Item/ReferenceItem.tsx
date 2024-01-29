@@ -1,28 +1,41 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BoxSpaced, device } from "../../../base";
+import { getFontSize, getFontWeight } from "../../../app/theme";
+import { Attribution, BoxGroupSection, Icon, IconLink } from "../../../base";
+import { ProgressCircle } from "../../../base/ProgressCircle";
 import { ReferenceMinimal } from "../../types";
-import { ReferenceItemBuild } from "./Build";
-import { ReferenceItemHeader } from "./Header";
-import { ReferenceItemOrigin } from "./Origin";
-import { ReferenceItemProgress } from "./Progress";
 
-const ReferenceItemBody = styled.div`
-    align-items: stretch;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: ${props => props.theme.gap.column};
-    margin-bottom: 5px;
-    padding: 0 15px 5px;
+const StyledReferenceItem = styled(BoxGroupSection)`
+    align-items: center;
+    display: flex;
+    padding-bottom: 15px;
+    padding-top: 15px;
 
-    @media (min-width: ${device.desktop}) {
-        grid-template-columns: 1fr 1fr;
+    i {
+        margin-right: 4px;
     }
 `;
 
-const StyledReferenceItem = styled(BoxSpaced)`
-    padding: 0 0 10px;
-    margin-bottom: 15px;
+const ReferenceLink = styled(Link)`
+    min-width: 30%;
+    font-size: ${getFontSize("lg")};
+    font-weight: ${getFontWeight("thick")};
+`;
+
+const ReferenceItemDataDescriptor = styled.strong`
+    text-transform: capitalize;
+`;
+
+const ReferenceJobItemRight = styled.div`
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+`;
+
+const LargeIconLink = styled.div`
+    font-size: ${getFontSize("lg")};
 `;
 
 type ReferenceItemProps = {
@@ -33,36 +46,31 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ reference }: ReferenceItemProps) {
-    const {
-        id,
-        data_type,
-        name,
-        organism,
-        otu_count,
-        user,
-        cloned_from,
-        imported_from,
-        remotes_from,
-        latest_build,
-        created_at,
-        task,
-    } = reference;
+    const { id, data_type, name, organism, user, created_at, task } = reference;
+
     return (
         <StyledReferenceItem>
-            <ReferenceItemHeader
-                id={id}
-                createdAt={created_at}
-                dataType={data_type}
-                name={name}
-                organism={organism}
-                otuCount={otu_count}
-                userHandle={user.handle}
-            />
-            <ReferenceItemBody>
-                <ReferenceItemOrigin clonedFrom={cloned_from} importedFrom={imported_from} remotesFrom={remotes_from} />
-                <ReferenceItemBuild id={id} latestBuild={latest_build} progress={task?.progress} />
-            </ReferenceItemBody>
-            <ReferenceItemProgress now={task?.progress} />
+            <ReferenceLink to={`/refs/${id}`}>{name}</ReferenceLink>
+            <Icon name={data_type === "genome" ? "dna" : "barcode"} />
+            <ReferenceItemDataDescriptor>
+                {organism || "unknown"} {data_type || "genome"}s
+            </ReferenceItemDataDescriptor>
+            <ReferenceJobItemRight>
+                <Attribution time={created_at} user={user.handle} />
+                {task.complete ? (
+                    <LargeIconLink>
+                        <IconLink
+                            to={{ state: { cloneReference: true, id } }}
+                            name="clone"
+                            tip="Clone"
+                            color="blue"
+                            aria-label="clone"
+                        />
+                    </LargeIconLink>
+                ) : (
+                    <ProgressCircle progress={task?.progress || 0} state={task.complete ? "complete" : "running"} />
+                )}
+            </ReferenceJobItemRight>
         </StyledReferenceItem>
     );
 }
