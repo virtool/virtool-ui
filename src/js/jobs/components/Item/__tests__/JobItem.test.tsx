@@ -36,7 +36,6 @@ describe("<JobItem />", () => {
             ["running", 40],
             ["cancelled", 45],
             ["error", 25],
-            ["complete", 100],
         ])("and [state=%p]", (state, progress) => {
             props.state = state;
             props.progress = progress;
@@ -45,6 +44,16 @@ describe("<JobItem />", () => {
 
             expect(screen.getByText(capitalizedState)).toBeInTheDocument();
             expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", `${progress}`);
+        });
+
+        it("should render properly when job is complete", () => {
+            props.state = "complete";
+            props.progress = 100;
+            const capitalizedState = props.state.charAt(0).toUpperCase() + props.state.slice(1);
+            renderWithRouter(<JobItem {...props} />, {}, history);
+
+            expect(screen.getByText(capitalizedState)).toBeInTheDocument();
+            expect(screen.queryByRole("progressbar")).toBeNull();
         });
     });
 });
