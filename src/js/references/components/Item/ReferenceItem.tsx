@@ -8,9 +8,12 @@ import { ReferenceMinimal } from "../../types";
 
 const StyledReferenceItem = styled(BoxGroupSection)`
     align-items: center;
-    display: flex;
+    display: grid;
+    grid-template-columns: 30% 1fr 30% auto;
     padding-bottom: 15px;
     padding-top: 15px;
+    margin-left: auto;
+    line-height: 1;
 
     i {
         margin-right: 4px;
@@ -18,7 +21,6 @@ const StyledReferenceItem = styled(BoxGroupSection)`
 `;
 
 const ReferenceLink = styled(Link)`
-    min-width: 30%;
     font-size: ${getFontSize("lg")};
     font-weight: ${getFontWeight("thick")};
 `;
@@ -27,15 +29,8 @@ const ReferenceItemDataDescriptor = styled.strong`
     text-transform: capitalize;
 `;
 
-const ReferenceJobItemRight = styled.div`
-    align-items: center;
-    display: flex;
-    gap: 5px;
-    margin-left: auto;
-`;
-
-const LargeIconLink = styled.div`
-    font-size: ${getFontSize("lg")};
+const ReferenceItemUser = styled.div`
+    margin-right: auto;
 `;
 
 type ReferenceItemProps = {
@@ -51,26 +46,24 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
     return (
         <StyledReferenceItem>
             <ReferenceLink to={`/refs/${id}`}>{name}</ReferenceLink>
-            <Icon name={data_type === "genome" ? "dna" : "barcode"} />
             <ReferenceItemDataDescriptor>
+                <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s
             </ReferenceItemDataDescriptor>
-            <ReferenceJobItemRight>
+            <ReferenceItemUser>
                 <Attribution time={created_at} user={user.handle} />
-                {task.complete ? (
-                    <LargeIconLink>
-                        <IconLink
-                            to={{ state: { cloneReference: true, id } }}
-                            name="clone"
-                            tip="Clone"
-                            color="blue"
-                            aria-label="clone"
-                        />
-                    </LargeIconLink>
-                ) : (
-                    <ProgressCircle progress={task?.progress || 0} state={task.complete ? "complete" : "running"} />
-                )}
-            </ReferenceJobItemRight>
+            </ReferenceItemUser>
+            {task?.complete ? (
+                <IconLink
+                    to={{ state: { cloneReference: true, id } }}
+                    name="clone"
+                    tip="Clone"
+                    color="blue"
+                    aria-label="clone"
+                />
+            ) : (
+                <ProgressCircle progress={task?.progress || 0} state={task?.complete ? "complete" : "running"} />
+            )}
         </StyledReferenceItem>
     );
 }
