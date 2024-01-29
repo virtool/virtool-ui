@@ -11,10 +11,10 @@ import { JobStatus } from "./JobStatus";
 const StyledJobItem = styled(BoxGroupSection)`
     align-items: center;
     display: flex;
-    font-size: ${getFontSize("lg")};
-    font-weight: ${getFontWeight("thick")};
     padding-top: 15px;
     padding-bottom: 15px;
+    font-size: ${getFontSize("lg")};
+    line-height: 1;
 
     ${Attribution} {
         font-size: ${getFontSize("md")};
@@ -22,6 +22,7 @@ const StyledJobItem = styled(BoxGroupSection)`
 `;
 
 const JobLink = styled(Link)`
+    font-weight: ${getFontWeight("thick")};
     min-width: 30%;
 `;
 
@@ -30,6 +31,7 @@ const JobItemHeaderRight = styled.div`
     display: flex;
     gap: 5px;
     margin-left: auto;
+    font-weight: ${getFontWeight("thick")};
 `;
 
 type JobItemProps = {
