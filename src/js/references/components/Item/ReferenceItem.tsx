@@ -47,7 +47,9 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 {organism || "unknown"} {data_type || "genome"}s
             </ReferenceItemDataDescriptor>
             <Attribution time={created_at} user={user.handle} />
-            {task?.complete ? (
+            {task && !task.complete ? (
+                <ProgressCircle progress={task?.progress || 0} state={task?.complete ? "complete" : "running"} />
+            ) : (
                 <IconLink
                     to={{ state: { cloneReference: true, id } }}
                     name="clone"
@@ -55,8 +57,6 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                     color="blue"
                     aria-label="clone"
                 />
-            ) : (
-                <ProgressCircle progress={task?.progress || 0} state={task?.complete ? "complete" : "running"} />
             )}
         </StyledReferenceItem>
     );
