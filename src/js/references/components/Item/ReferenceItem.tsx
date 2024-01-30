@@ -9,7 +9,7 @@ import { ReferenceMinimal } from "../../types";
 const StyledReferenceItem = styled(BoxGroupSection)`
     align-items: center;
     display: grid;
-    grid-template-columns: 30% 30% 30% auto;
+    grid-template-columns: 30% 35% 30% auto;
     padding-bottom: 15px;
     padding-top: 15px;
     margin-left: auto;
