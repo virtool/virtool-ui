@@ -5,8 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
-import * as utils from "../../../administration/utils";
-import { JobsList, mapDispatchToProps, mapStateToProps } from "../List";
+import { JobsList, mapDispatchToProps } from "../JobList";
 
 function createAppStore(state) {
     return () =>
@@ -41,8 +40,6 @@ describe("<JobsList />", () => {
                 },
             ],
             onLoadNextPage: vi.fn(),
-            canArchive: true,
-            canCancel: true,
         };
 
         state = {
@@ -82,65 +79,6 @@ describe("<JobsList />", () => {
         props.jobs = [];
         renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
         expect(screen.getByText("No jobs matching filters")).toBeInTheDocument();
-    });
-});
-
-describe("mapStateToProps", () => {
-    it("checkAdminOrPermission should return state.account.permissions[permission]", () => {
-        vi.clearAllMocks();
-        vi.spyOn(utils, "checkAdminRoleOrPermission");
-        const state = {
-            jobs: {
-                term: "foo",
-            },
-            account: {
-                administrator_role: null,
-                permissions: {
-                    cancel_job: "fee",
-                    remove_job: "bee",
-                },
-            },
-            router: { location: new window.URL("https://www.virtool.ca") },
-        };
-
-        const result = mapStateToProps(state);
-        expect(utils.checkAdminRoleOrPermission).toHaveBeenNthCalledWith(
-            1,
-            {
-                jobs: {
-                    term: "foo",
-                },
-                account: {
-                    administrator_role: null,
-                    permissions: {
-                        cancel_job: "fee",
-                        remove_job: "bee",
-                    },
-                },
-                router: { location: new window.URL("https://www.virtool.ca") },
-            },
-            "cancel_job",
-        );
-        expect(utils.checkAdminRoleOrPermission).toHaveBeenNthCalledWith(
-            2,
-            {
-                jobs: {
-                    term: "foo",
-                },
-                account: {
-                    administrator_role: null,
-                    permissions: {
-                        cancel_job: "fee",
-                        remove_job: "bee",
-                    },
-                },
-                router: { location: new window.URL("https://www.virtool.ca") },
-            },
-            "remove_job",
-        );
-
-        expect(result.canCancel).toEqual("fee");
-        expect(result.canArchive).toEqual("bee");
     });
 });
 
