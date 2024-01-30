@@ -15,6 +15,8 @@ const StyledScrollList = styled.div`
 `;
 
 type LegacyScrollListProps = {
+    /** The class name of the scroll list */
+    className?: string;
     /** The most recently fetched page */
     page: number;
     /** The list of documents */
@@ -30,7 +32,14 @@ type LegacyScrollListProps = {
 /**
  * An infinitely scrolling list of documents.
  */
-export function LegacyScrollList({ page, documents, pageCount, onLoadNextPage, renderRow }: LegacyScrollListProps) {
+export function LegacyScrollList({
+    className,
+    page,
+    documents,
+    pageCount,
+    onLoadNextPage,
+    renderRow,
+}: LegacyScrollListProps) {
     const [prevRequestedPage, setPrevRequestedPage] = useState(1);
     const prevPage = usePrevious(page);
 
@@ -53,7 +62,7 @@ export function LegacyScrollList({ page, documents, pageCount, onLoadNextPage, r
     const entries = map(documents, (item, index) => renderRow(index));
 
     return (
-        <StyledScrollList>
+        <StyledScrollList className={className}>
             {entries}
             {documents === null && page < pageCount && <LoadingPlaceholder margin="20px" />}
         </StyledScrollList>
