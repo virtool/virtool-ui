@@ -29,10 +29,6 @@ const ReferenceItemDataDescriptor = styled.strong`
     text-transform: capitalize;
 `;
 
-const ReferenceItemUser = styled.div`
-    margin-right: auto;
-`;
-
 type ReferenceItemProps = {
     reference: ReferenceMinimal;
 };
@@ -50,9 +46,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s
             </ReferenceItemDataDescriptor>
-            <ReferenceItemUser>
-                <Attribution time={created_at} user={user.handle} />
-            </ReferenceItemUser>
+            <Attribution time={created_at} user={user.handle} />
             {task?.complete ? (
                 <IconLink
                     to={{ state: { cloneReference: true, id } }}
