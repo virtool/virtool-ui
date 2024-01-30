@@ -32,7 +32,9 @@ describe("<ReferenceList />", () => {
 
         expect(await screen.findByText("References")).toBeInTheDocument();
         expect(screen.getByText(references.name)).toBeInTheDocument();
-        expect(screen.getByText(references.cloned_from.name)).toBeInTheDocument();
+        expect(screen.getByText(`${references.user.handle} created`)).toBeInTheDocument();
+        expect(screen.getByText(`${references.organism} ${references.data_type}s`)).toBeInTheDocument();
+        expect(screen.getByLabelText("clone")).toBeInTheDocument();
 
         scope.done();
     });
