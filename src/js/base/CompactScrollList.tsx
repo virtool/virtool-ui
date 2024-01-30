@@ -1,11 +1,11 @@
 import { map } from "lodash-es";
-import React, { useEffect } from "react";
+import React from "react";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import styled from "styled-components";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
-function getScrollRatio(): number {
-    return Math.round((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight);
+function getScrollRatio(scrollListElement: HTMLElement): number {
+    return Math.round((scrollListElement.scrollTop + scrollListElement.clientHeight) / scrollListElement.scrollHeight);
 }
 
 const StyledScrollList = styled.div`
@@ -14,7 +14,7 @@ const StyledScrollList = styled.div`
     z-index: 0;
 `;
 
-type ScrollListProps = {
+type CompactScrollListProps = {
     /** The class name of the scroll list */
     className?: string;
     /** A function which initiates fetching the next page */
@@ -32,29 +32,25 @@ type ScrollListProps = {
 /**
  * An infinitely scrolling list of items.
  */
-export function ScrollList({
+export function CompactScrollList({
     className,
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
     items,
     renderRow,
-}: ScrollListProps) {
-    useEffect(() => {
-        function onScroll() {
-            if (getScrollRatio() > 0.8 && !isFetchingNextPage) {
-                void fetchNextPage();
-            }
+}: CompactScrollListProps) {
+    function onScroll(e) {
+        const scrollListElement = e.target;
+        if (getScrollRatio(scrollListElement) > 0.8 && !isFetchingNextPage) {
+            void fetchNextPage();
         }
-
-        window.addEventListener("scroll", onScroll);
-        return () => window.removeEventListener("scroll", onScroll);
-    }, [isFetchingNextPage, fetchNextPage]);
+    }
 
     const entries = map(items, item => renderRow(item));
 
     return (
-        <StyledScrollList className={className}>
+        <StyledScrollList className={className} onScroll={onScroll}>
             {entries}
             {isLoading && <LoadingPlaceholder margin="20px" />}
         </StyledScrollList>

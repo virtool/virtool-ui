@@ -1,7 +1,7 @@
 import { mount } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { LegacyScrollList } from "../ScrollList";
+import { LegacyScrollList } from "../LegacyScrollList";
 
 describe("<ScrollList />", () => {
     let props;
