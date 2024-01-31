@@ -1,6 +1,7 @@
-import { shallow } from "enzyme";
+import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import { mapStateToProps, OTUItem } from "../Item";
 
 describe("<OTUItem />", () => {
@@ -17,14 +18,28 @@ describe("<OTUItem />", () => {
     });
 
     it("should render when [verified=true]", () => {
-        const wrapper = shallow(<OTUItem {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        const history = createBrowserHistory();
+
+        renderWithRouter(<OTUItem {...props} />, {}, history);
+
+        const link = screen.getByRole("link");
+
+        expect(link).toHaveTextContent("Foo");
+        expect(link).toHaveAttribute("href", "/refs/baz/otus/foo");
+        expect(screen.queryByText("Unverified")).not.toBeInTheDocument();
     });
 
     it("should render when [verified=false]", () => {
-        props.verified = false;
-        const wrapper = shallow(<OTUItem {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        const history = createBrowserHistory();
+
+        renderWithRouter(<OTUItem {...props} verified={false} />, {}, history);
+
+        const link = screen.getByRole("link");
+
+        expect(link).toHaveTextContent("Foo");
+        expect(link).toHaveAttribute("href", "/refs/baz/otus/foo");
+
+        expect(screen.getByText("Unverified")).toBeInTheDocument();
     });
 });
 
@@ -33,9 +48,24 @@ describe("mapStateToProps()", () => {
         const state = {
             otus: {
                 documents: [
-                    { id: "foo", name: "Foo", abbreviation: "FO", verified: true },
-                    { id: "bar", name: "Bar", abbreviation: "BR", verified: true },
-                    { id: "baz", name: "Baz", abbreviation: "BZ", verified: true },
+                    {
+                        id: "foo",
+                        name: "Foo",
+                        abbreviation: "FO",
+                        verified: true,
+                    },
+                    {
+                        id: "bar",
+                        name: "Bar",
+                        abbreviation: "BR",
+                        verified: true,
+                    },
+                    {
+                        id: "baz",
+                        name: "Baz",
+                        abbreviation: "BZ",
+                        verified: true,
+                    },
                 ],
             },
             references: {
