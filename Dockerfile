@@ -6,7 +6,7 @@ RUN npm i
 FROM library/node:16-buster as dev
 WORKDIR /build
 COPY --from=npm /build/node_modules /build/node_modules
-COPY package.json package-lock.json vite.config.js /build/
+COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js /build/
 COPY server /build/server
 COPY src /build/src
 CMD ["npx", "vite", "serve"]
