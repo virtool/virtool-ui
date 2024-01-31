@@ -4,6 +4,7 @@ import { createBrowserHistory } from "history";
 import "normalize.css";
 import React from "react";
 import ReactDOM from "react-dom";
+import "tailwindcss/tailwind.css";
 import App from "./app/App";
 import { createAppStore } from "./app/reducer";
 import "./nonce";
