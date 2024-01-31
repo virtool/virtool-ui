@@ -1,15 +1,14 @@
+import { map } from "lodash";
 import { capitalize } from "lodash-es";
 import React from "react";
 import { useFetchAccount } from "../../account/querys";
 import { checkAdminRoleOrPermissionsFromAccount } from "../../administration/utils";
-import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { Permission } from "../../groups/types";
 import { useListFiles } from "../querys";
-import { File as fileTyping, FileResponse, FileType } from "../types";
+import { FileResponse, FileType } from "../types";
 import { File } from "./File";
 import UploadToolbar from "./Toolbar";
-const renderRow = (canRemoveFiles: boolean) => (item: fileTyping) =>
-    <File {...item} canRemove={canRemoveFiles} key={item.id} />;
 
 type FileManagerProps = {
     tip: string;
@@ -47,14 +46,13 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
             <UploadToolbar fileType={fileType} message={message} validationRegex={validationRegex} tip={tip} />
             {noneFound}
 
-            <Pagination
-                boxGroup={true}
-                items={files.items}
-                renderRow={renderRow(canRemoveFiles)}
-                storedPage={files.page}
-                currentPage={URLPage}
-                pageCount={files.page_count}
-            />
+            <Pagination items={files.items} storedPage={files.page} currentPage={URLPage} pageCount={files.page_count}>
+                <BoxGroup>
+                    {map(files.items, item => (
+                        <File {...item} canRemove={canRemoveFiles} key={item.id} />
+                    ))}
+                </BoxGroup>
+            </Pagination>
         </>
     );
 }
