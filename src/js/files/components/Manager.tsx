@@ -48,6 +48,7 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
             {noneFound}
 
             <Pagination
+                boxGroup={true}
                 items={files.items}
                 renderRow={renderRow(canRemoveFiles)}
                 storedPage={files.page}

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { getColor, getFontSize } from "../app/theme";
+import { BoxGroup } from "./BoxGroup";
 import { LinkButton } from "./LinkButton";
 
 const PaginationBox = styled.div`
@@ -54,6 +55,7 @@ function getPageRange(pageCount, storedPage, leftButtons = 1, rightButtons = 2) 
 }
 
 interface PaginationProps {
+    boxGroup?: boolean;
     items: any[];
     renderRow: (item: any) => JSX.Element;
     storedPage: number;
@@ -63,6 +65,7 @@ interface PaginationProps {
 }
 
 export const Pagination = ({
+    boxGroup,
     items,
     renderRow,
     storedPage,
@@ -91,7 +94,7 @@ export const Pagination = ({
 
     return (
         <div>
-            <PaginationContainer>{entries}</PaginationContainer>
+            {boxGroup ? <BoxGroup>{entries}</BoxGroup> : <PaginationContainer>{entries}</PaginationContainer>}
             {pageCount > 1 && (
                 <PaginationBox>
                     <PaginationLink
