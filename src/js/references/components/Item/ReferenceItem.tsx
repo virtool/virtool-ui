@@ -30,11 +30,13 @@ const ReferenceItemDataDescriptor = styled.strong`
 `;
 
 const ReferenceItemUser = styled.div`
-    margin-right: auto;
+    display: flex;
+    justify-content: flex-start;
 `;
 
 const ReferenceItemEndIcon = styled.div`
-    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
 `;
 
 type ReferenceItemProps = {
@@ -54,18 +56,22 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s
             </ReferenceItemDataDescriptor>
-            <Attribution time={created_at} user={user.handle} />
-            {task && !task.complete ? (
-                <ProgressCircle progress={task?.progress || 0} state={task?.complete ? "complete" : "running"} />
-            ) : (
-                <IconLink
-                    to={{ state: { cloneReference: true, id } }}
-                    name="clone"
-                    tip="Clone"
-                    color="blue"
-                    aria-label="clone"
-                />
-            )}
+            <ReferenceItemUser>
+                <Attribution time={created_at} user={user.handle} />
+            </ReferenceItemUser>
+            <ReferenceItemEndIcon>
+                {task && !task.complete ? (
+                    <ProgressCircle progress={task.progress || 0} state={task.complete ? "complete" : "running"} />
+                ) : (
+                    <IconLink
+                        to={{ state: { cloneReference: true, id } }}
+                        name="clone"
+                        tip="Clone"
+                        color="blue"
+                        aria-label="clone"
+                    />
+                )}
+            </ReferenceItemEndIcon>
         </StyledReferenceItem>
     );
 }
