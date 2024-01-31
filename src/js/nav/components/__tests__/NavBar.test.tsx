@@ -1,3 +1,4 @@
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
 import React from "react";
@@ -18,19 +19,35 @@ describe("<Bar />", () => {
     it("should render", async () => {
         renderWithRouter(<Bar {...props} />, {}, createBrowserHistory());
         expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
-        expect(screen.getByRole("link", { name: "Samples" })).toBeInTheDocument();
-        expect(screen.getByRole("link", { name: "References" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("link", { name: "Samples" }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("link", { name: "References" }),
+        ).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "HMM" })).toBeInTheDocument();
-        expect(screen.getByRole("link", { name: "Subtractions" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("link", { name: "Subtractions" }),
+        ).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "ML" })).toBeInTheDocument();
 
         await userEvent.click(screen.getByRole("button"));
 
-        expect(screen.getByRole("menuitem", { name: "Signed in as Bob" })).toBeInTheDocument();
-        expect(screen.getByRole("menuitem", { name: "Account" })).toBeInTheDocument();
-        expect(screen.getByRole("menuitem", { name: "Administration" })).toBeInTheDocument();
-        expect(screen.getByRole("menuitem", { name: "Documentation" })).toBeInTheDocument();
-        expect(screen.getByRole("menuitem", { name: "Logout" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("menuitem", { name: "Signed in as Bob" }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("menuitem", { name: "Account" }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("menuitem", { name: "Administration" }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("menuitem", { name: "Documentation" }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("menuitem", { name: "Logout" }),
+        ).toBeInTheDocument();
     });
 });
 

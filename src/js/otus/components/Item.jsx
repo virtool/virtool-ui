@@ -1,34 +1,51 @@
 import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
-import { BoxLink, Icon } from "../../base";
+import { Box, Icon } from "../../base";
 
-const OTUItemAbbreviation = styled.span`
-    margin-left: auto;
-`;
-
-const OTUItemName = styled.strong`
+const OTUItemName = styled(Link)`
     font-size: ${getFontSize("lg")};
     font-weight: ${getFontWeight("thick")};
 `;
 
-const StyledOTUItem = styled(BoxLink)`
+const OtuItemUnverified = styled.span`
     align-items: center;
     display: flex;
+    gap: 5px;
+    justify-content: flex-end;
 `;
 
-export const OTUItem = ({ abbreviation, id, name, refId, verified }) => (
-    <StyledOTUItem key={id} to={`/refs/${refId}/otus/${id}`}>
-        <OTUItemName>{name}</OTUItemName>
-        <OTUItemAbbreviation>{abbreviation}</OTUItemAbbreviation>
-        {verified ? null : <Icon name="tag" tip="This OTU is unverified" />}
-    </StyledOTUItem>
-);
+const StyledOTUItem = styled(Box)`
+    align-items: center;
+    display: grid;
+    grid-template-columns: 5fr 2fr 1fr;
+`;
 
-export const mapStateToProps = (state, props) => {
-    const { abbreviation, id, name, verified } = get(state, ["otus", "documents", props.index]);
+export function OTUItem({ abbreviation, id, name, refId, verified }) {
+    return (
+        <StyledOTUItem key={id}>
+            <OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
+            <span>{abbreviation}</span>
+            {verified || (
+                <OtuItemUnverified>
+                    <Icon name="tag" />
+                    Unverified
+                </OtuItemUnverified>
+            )}
+        </StyledOTUItem>
+    );
+}
+
+export function mapStateToProps(state, props) {
+    const { abbreviation, id, name, verified } = get(state, [
+        "otus",
+        "documents",
+        props.index,
+    ]);
+
     return {
         abbreviation,
         id,
@@ -36,6 +53,6 @@ export const mapStateToProps = (state, props) => {
         verified,
         refId: state.references.detail.id,
     };
-};
+}
 
 export default connect(mapStateToProps)(OTUItem);
