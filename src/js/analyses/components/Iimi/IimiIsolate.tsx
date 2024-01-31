@@ -1,4 +1,4 @@
-import { sortBy } from "lodash-es";
+import { max, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { Box, Label } from "../../../base";
@@ -46,7 +46,7 @@ export function IimiIsolate({ name, sequences }) {
                         <IimiCoverageChart
                             data={convertRleToCoverage(sequence.coverage.lengths, sequence.coverage.values)}
                             id={sequence.id}
-                            yMax={1000}
+                            yMax={max(sequence.coverage.values)}
                         />
                     </Box>
                 ))}

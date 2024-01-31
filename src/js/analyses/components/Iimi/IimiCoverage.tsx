@@ -1,3 +1,5 @@
+import { axisBottom, axisLeft } from "d3-axis";
+import { format } from "d3-format";
 import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { area } from "d3-shape";
@@ -8,9 +10,9 @@ function draw(element, data, length, yMax) {
     select(element).append("svg");
 
     const margin = {
-        top: 0,
-        left: 0,
-        bottom: 0,
+        top: 5,
+        left: 30,
+        bottom: 20,
         right: 0,
     };
 
@@ -19,7 +21,10 @@ function draw(element, data, length, yMax) {
     const width = (length > 800 ? length / 5 : length) - margin.left - margin.right;
 
     const x = scaleLinear().range([0, width]).domain([0, length]);
-    const y = scaleLinear().range([height, 0]).domain([0, yMax]);
+    const y = scaleLinear().range([height, 0]).domain([0, yMax]).nice(5);
+
+    const yAxis = axisLeft(y).ticks(5).tickFormat(format(".2s"));
+    const xAxis = axisBottom(x).ticks(5).tickFormat(format(".1s"));
 
     select(element).selectAll("*").remove();
 
@@ -37,6 +42,9 @@ function draw(element, data, length, yMax) {
             .y1(height);
 
         svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
+
+        svg.append("g").attr("transform", `translate(0,0)`).call(yAxis);
+        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis);
     }
 }
 
