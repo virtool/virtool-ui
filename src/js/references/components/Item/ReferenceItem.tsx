@@ -54,22 +54,18 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s
             </ReferenceItemDataDescriptor>
-            <ReferenceItemUser>
-                <Attribution time={created_at} user={user.handle} />
-            </ReferenceItemUser>
-            <ReferenceItemEndIcon>
-                {task && !task.complete ? (
-                    <ProgressCircle progress={task.progress || 0} state={task.complete ? "complete" : "running"} />
-                ) : (
-                    <IconLink
-                        to={{ state: { cloneReference: true, id } }}
-                        name="clone"
-                        tip="Clone"
-                        color="blue"
-                        aria-label="clone"
-                    />
-                )}
-            </ReferenceItemEndIcon>
+            <Attribution time={created_at} user={user.handle} />
+            {task && !task.complete ? (
+                <ProgressCircle progress={task?.progress || 0} state={task?.complete ? "complete" : "running"} />
+            ) : (
+                <IconLink
+                    to={{ state: { cloneReference: true, id } }}
+                    name="clone"
+                    tip="Clone"
+                    color="blue"
+                    aria-label="clone"
+                />
+            )}
         </StyledReferenceItem>
     );
 }

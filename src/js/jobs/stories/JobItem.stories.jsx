@@ -1,5 +1,5 @@
 import React from "react";
-import { JobItem } from "../components/Item/Item";
+import { JobItem } from "../components/Item/JobItem";
 
 export default {
     title: "jobs/Item",

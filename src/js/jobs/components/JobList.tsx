@@ -1,14 +1,21 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { checkAdminRoleOrPermission } from "../../administration/utils";
 import { getFontWeight } from "../../app/theme";
-import { Box, ContainerNarrow, LegacyScrollList, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
-import { Permission } from "../../groups/types";
+import {
+    Box,
+    BoxGroup,
+    ContainerNarrow,
+    LegacyScrollList,
+    LoadingPlaceholder,
+    ViewHeader,
+    ViewHeaderTitle,
+} from "../../base";
 import { findJobs } from "../actions";
 import { getJobCountsTotal } from "../selectors";
+import { JobMinimal } from "../types";
 import { JobFilters } from "./Filters/Filters";
-import Job from "./Item/Item";
+import Job from "./Item/JobItem";
 
 const JobsListViewContainer = styled.div`
     display: flex;
@@ -28,9 +35,31 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
+const StyledLegacyScrollList = styled(LegacyScrollList)`
+    margin-bottom: 0;
+`;
+
 const initialState = ["preparing", "running"];
 
-export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, page, page_count, states }) => {
+type JobListProps = {
+    /** A list of jobs */
+    jobs: JobMinimal[];
+    /** Indicates whether there are no jobs available */
+    noJobs: boolean;
+    /** A callback function to load the next page of data */
+    onLoadNextPage: (states: string[], page: number) => void;
+    /** The current page number */
+    page: number;
+    /** The total number of pages */
+    page_count: number;
+    /** The job states */
+    states: string[];
+};
+
+/**
+ * A list of jobs with filtering options
+ */
+export function JobsList({ jobs, noJobs, onLoadNextPage, page, page_count, states }: JobListProps) {
     useEffect(() => {
         onLoadNextPage(states?.length ? states : initialState, 1);
     }, []);
@@ -55,16 +84,18 @@ export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, 
         );
     } else {
         inner = (
-            <LegacyScrollList
-                documents={jobs}
-                page={page}
-                pageCount={page_count}
-                onLoadNextPage={page => onLoadNextPage(states, page)}
-                renderRow={index => {
-                    const job = jobs[index];
-                    return <Job key={job.id} {...job} canArchive={canArchive} canCancel={canCancel} />;
-                }}
-            />
+            <BoxGroup>
+                <StyledLegacyScrollList
+                    documents={jobs}
+                    page={page}
+                    pageCount={page_count}
+                    onLoadNextPage={page => onLoadNextPage(states, page)}
+                    renderRow={index => {
+                        const job = jobs[index];
+                        return <Job key={job.id} {...job} />;
+                    }}
+                />
+            </BoxGroup>
         );
     }
 
@@ -79,7 +110,7 @@ export const JobsList = ({ canArchive, canCancel, jobs, noJobs, onLoadNextPage, 
             </JobsListViewContainer>
         </>
     );
-};
+}
 
 export const mapStateToProps = state => ({
     page: state.jobs.page,
@@ -87,8 +118,6 @@ export const mapStateToProps = state => ({
     states: new URLSearchParams(state.router.location.search).getAll("state"),
     jobs: state.jobs.documents,
     noJobs: getJobCountsTotal(state) === 0,
-    canCancel: checkAdminRoleOrPermission(state, Permission.cancel_job),
-    canArchive: checkAdminRoleOrPermission(state, Permission.remove_job),
 });
 
 export const mapDispatchToProps = dispatch => ({
