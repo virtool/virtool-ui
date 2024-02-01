@@ -47,7 +47,7 @@ export default function OTUList({ match }: OTUListProps) {
     }
 
     function renderRow(document: OTUMinimal) {
-        return <OTUItem {...document} refId={refId} />;
+        return <OTUItem key={document.id} {...document} refId={refId} />;
     }
 
     const items = flatMap(otu.pages, page => page.documents);
@@ -60,7 +60,7 @@ export default function OTUList({ match }: OTUListProps) {
                 onChange={e => setTerm(e.target.value)}
                 remotesFrom={reference.remotes_from}
             />
-            <CreateOTU />
+            <CreateOTU refId={refId} />
 
             {items.length ? (
                 <BoxGroup>
