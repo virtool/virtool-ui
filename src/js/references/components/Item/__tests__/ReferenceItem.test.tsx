@@ -34,7 +34,7 @@ describe("<ReferenceItem />", () => {
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.getByText(/virus/)).toBeInTheDocument();
-        expect(screen.getByRole("progressbar")).toHaveValue(32);
+        expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "32");
     });
 
     it("should render when [organism=null]", () => {
@@ -58,7 +58,7 @@ describe("<ReferenceItem />", () => {
     it("should render when [progress=100]", () => {
         props.reference = createFakeReferenceMinimal({
             task: {
-                complete: false,
+                complete: true,
                 created_at: null,
                 error: null,
                 id: 1,
@@ -71,5 +71,6 @@ describe("<ReferenceItem />", () => {
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.queryByRole("progressbar")).toBeNull();
+        expect(screen.getByLabelText("clone")).toBeInTheDocument();
     });
 });

@@ -4,9 +4,15 @@ import { connect } from "react-redux";
 import { Badge, BoxGroup, BoxGroupHeader } from "../../base";
 import { IndexOTU } from "./OTU";
 
-export const IndexOTUs = ({ otus, refId }) => {
+export function IndexOTUs({ otus, refId }) {
     const otuComponents = map(otus, otu => (
-        <IndexOTU key={otu.id} refId={refId} name={otu.name} id={otu.id} changeCount={otu.change_count} />
+        <IndexOTU
+            key={otu.id}
+            refId={refId}
+            name={otu.name}
+            id={otu.id}
+            changeCount={otu.change_count}
+        />
     ));
 
     return (
@@ -19,11 +25,13 @@ export const IndexOTUs = ({ otus, refId }) => {
             {otuComponents}
         </BoxGroup>
     );
-};
+}
 
-export const mapStateToProps = state => ({
-    refId: state.indexes.detail.reference.id,
-    otus: state.indexes.detail.otus,
-});
+export function mapStateToProps(state) {
+    return {
+        refId: state.indexes.detail.reference.id,
+        otus: state.indexes.detail.otus,
+    };
+}
 
 export default connect(mapStateToProps)(IndexOTUs);

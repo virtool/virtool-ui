@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Icon } from "../../base";
+import { excludePaths } from "../utils";
 
 const StyledSidebarItem = styled(NavLink)`
     color: ${props => props.theme.color.greyDark};
@@ -32,11 +33,13 @@ const StyledSidebarItem = styled(NavLink)`
     }
 `;
 
-import { excludePaths } from "../utils";
-
 export default function SidebarItem({ exclude, icon, link, title }) {
     return (
-        <StyledSidebarItem to={link} activeClassName="active" isActive={excludePaths(exclude)}>
+        <StyledSidebarItem
+            to={link}
+            activeClassName="active"
+            isActive={excludePaths(exclude)}
+        >
             <Icon name={icon} />
             <p>{title}</p>
         </StyledSidebarItem>

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getBorder, getFontWeight, theme } from "../../../app/theme";
 import { Box, BoxGroup, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
-import { CompactScrollList } from "../../../base/ScrollList";
+import { CompactScrollList } from "../../../base/CompactScrollList";
 import { StyledButton } from "../../../base/styled/StyledButton";
 import { useValidateFiles } from "../../../files/hooks";
 import { FileResponse, FileType } from "../../../files/types";

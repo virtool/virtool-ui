@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
 import { useFetchLabels } from "../../../labels/hooks";
-import { SmallSampleLabel } from "../Label";
+import { SmallSampleLabel } from "../Label/SmallSampleLabel";
 import { SampleSidebarList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
 
