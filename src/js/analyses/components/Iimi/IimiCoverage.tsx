@@ -2,9 +2,25 @@ import { axisBottom, axisLeft } from "d3-axis";
 import { format } from "d3-format";
 import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
-import { area, line } from "d3-shape";
+import { area } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
+import { theme } from "../../../app/theme";
+
+function deriveTrustworthyRegions(untrustWorthyRanges, length: number) {
+    const trustworthyRanges = [];
+    let start = 1;
+    let end;
+
+    untrustWorthyRanges.forEach(range => {
+        end = range[0];
+        trustworthyRanges.push([start, end]);
+        start = range[1];
+    });
+
+    trustworthyRanges.push([start, length]);
+    return trustworthyRanges;
+}
 
 function draw(element, data, length, yMax, untrustworthyRanges) {
     select(element).append("svg");
@@ -47,17 +63,29 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
         svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis).attr("class", "axis");
     }
 
+    const trustworthyRanges = deriveTrustworthyRegions(untrustworthyRanges, length);
+
+    if (trustworthyRanges.length) {
+        trustworthyRanges.forEach(range => {
+            svg.append("rect")
+                .attr("x", x(range[0]))
+                .attr("y", 0)
+                .attr("width", x(range[1] - range[0]))
+                .attr("height", height)
+                .attr("fill", theme.color.blue)
+                .attr("opacity", 0.2);
+        });
+    }
+
     if (untrustworthyRanges.length) {
         untrustworthyRanges.forEach(range => {
-            const lineGenerator = line()
-                .x(d => x(d))
-                .y(0);
-
-            svg.append("path")
-                .datum(range)
-                .attr("class", "untrustworthy-range")
-                .attr("d", lineGenerator)
-                .attr("transform", `translate(0,${-4})`);
+            svg.append("rect")
+                .attr("x", x(range[0]))
+                .attr("y", 0)
+                .attr("width", x(range[1] - range[0]))
+                .attr("height", height)
+                .attr("fill", theme.color.red)
+                .attr("opacity", 0.5);
         });
     }
 }
