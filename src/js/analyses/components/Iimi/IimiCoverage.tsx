@@ -2,16 +2,16 @@ import { axisBottom, axisLeft } from "d3-axis";
 import { format } from "d3-format";
 import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
-import { area } from "d3-shape";
+import { area, line } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 
-function draw(element, data, length, yMax) {
+function draw(element, data, length, yMax, untrustworthyRanges) {
     select(element).append("svg");
 
     const margin = {
         top: 5,
-        left: 30,
+        left: 35,
         bottom: 20,
         right: 0,
     };
@@ -43,8 +43,22 @@ function draw(element, data, length, yMax) {
 
         svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
 
-        svg.append("g").attr("transform", `translate(0,0)`).call(yAxis);
-        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis);
+        svg.append("g").attr("transform", `translate(0,0)`).call(yAxis).attr("class", "axis");
+        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis).attr("class", "axis");
+    }
+
+    if (untrustworthyRanges.length) {
+        untrustworthyRanges.forEach(range => {
+            const lineGenerator = line()
+                .x(d => x(d))
+                .y(0);
+
+            svg.append("path")
+                .datum(range)
+                .attr("class", "untrustworthy-range")
+                .attr("d", lineGenerator)
+                .attr("transform", `translate(0,${-4})`);
+        });
     }
 }
 
@@ -56,6 +70,11 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
     display: inline-block;
     margin-top: 5px;
 
+    path.untrustworthy-range {
+        stroke: ${props => props.theme.color.red};
+        stroke-width: 1;
+    }
+
     path.depth-area {
         fill: ${props => props.theme.color.blue};
     }
@@ -65,14 +84,15 @@ interface IimiCoverageChartProps {
     data: any;
     id: string;
     yMax: number;
+    untrustworthyRanges: any;
 }
 
-export function IimiCoverageChart({ data, id, yMax }: IimiCoverageChartProps) {
+export function IimiCoverageChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
         const length = data.length;
-        draw(chartEl.current, data, length, yMax);
+        draw(chartEl.current, data, length, yMax, untrustworthyRanges);
     }, [data, id, yMax]);
 
     return <StyledIimiCoverageChart ref={chartEl} />;
