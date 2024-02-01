@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { getFontWeight } from "../../app/theme";
 import { Box, Button, Color, InputError, InputGroup, InputLabel, InputSimple } from "../../base";
-import { SampleLabel } from "../../samples/components/Label";
+import { SampleLabel } from "../../samples/components/Label/SampleLabel";
 
 const LabelFormPreview = styled(Box)`
     padding: 10px;

@@ -9,6 +9,9 @@ import SampleDetail from "./Detail/Detail";
 import SamplesSettings from "./SampleSettings";
 import SamplesList from "./SamplesList";
 
+/**
+ * Displays the file manager for samples allowing users to upload/delete files
+ */
 function SampleFileManager() {
     return (
         <ContainerNarrow>
@@ -17,6 +20,9 @@ function SampleFileManager() {
     );
 }
 
+/**
+ * The samples view with routes to sample-related components
+ */
 export default function Samples() {
     return (
         <Container>
