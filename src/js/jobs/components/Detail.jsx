@@ -67,14 +67,9 @@ class JobDetail extends React.Component {
                 <ViewHeader title={workflow}>
                     <ViewHeaderTitle>
                         {workflow}
-                        <JobDetailBadge color={color}>
-                            {latest.state}
-                        </JobDetailBadge>
+                        <JobDetailBadge color={color}>{latest.state}</JobDetailBadge>
                     </ViewHeaderTitle>
-                    <ViewHeaderAttribution
-                        time={detail.status[0].timestamp}
-                        user={detail.user.handle}
-                    />
+                    <ViewHeaderAttribution time={detail.status[0].timestamp} user={detail.user.handle} />
                 </ViewHeader>
 
                 <JobArgs workflow={detail.workflow} args={detail.args} />
