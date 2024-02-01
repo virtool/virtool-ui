@@ -54,8 +54,9 @@ function getPageRange(pageCount, storedPage, leftButtons = 1, rightButtons = 2) 
 }
 
 interface PaginationProps {
+    children?: React.ReactNode;
     items: any[];
-    renderRow: (item: any) => JSX.Element;
+    renderRow?: (item: any) => JSX.Element;
     storedPage: number;
     currentPage: number;
     pageCount: number;
@@ -63,6 +64,7 @@ interface PaginationProps {
 }
 
 export const Pagination = ({
+    children,
     items,
     renderRow,
     storedPage,
@@ -72,7 +74,7 @@ export const Pagination = ({
 }: PaginationProps) => {
     onLoadNextPage = onLoadNextPage || (() => {});
 
-    const entries = map(items, item => renderRow(item));
+    const entries = renderRow && map(items, item => renderRow(item));
 
     const pageButtons = map(getPageRange(pageCount, storedPage), pageNumber => (
         <PaginationLink
@@ -91,7 +93,10 @@ export const Pagination = ({
 
     return (
         <div>
-            <PaginationContainer>{entries}</PaginationContainer>
+            <PaginationContainer>
+                {entries}
+                {children}
+            </PaginationContainer>
             {pageCount > 1 && (
                 <PaginationBox>
                     <PaginationLink
