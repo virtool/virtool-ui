@@ -73,7 +73,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
                 .attr("width", x(range[1] - range[0]))
                 .attr("height", height)
                 .attr("fill", theme.color.blue)
-                .attr("opacity", 0.2);
+                .attr("opacity", 0.15);
         });
     }
 
@@ -85,7 +85,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
                 .attr("width", x(range[1] - range[0]))
                 .attr("height", height)
                 .attr("fill", theme.color.red)
-                .attr("opacity", 0.5);
+                .attr("opacity", 0.4);
         });
     }
 }
