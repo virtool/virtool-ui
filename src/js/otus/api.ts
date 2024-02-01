@@ -1,29 +1,6 @@
 import { Request } from "../app/request";
 
 /**
- * Get a page of OTUs from the API
- *
- * @param refId - The unique identifier of the reference to search
- * @param term - The search term to filter OTUs by name or abbreviation
- * @param verified - Whether OTUs should be filtered by verified status
- * @param page - The page of results to fetch
- * @returns A Promise resolving to the API response containing a page of OTUs
- */
-export function find({
-    refId,
-    term,
-    verified,
-    page,
-}: {
-    refId: string;
-    term: string;
-    verified: boolean;
-    page: number;
-}) {
-    return Request.get(`/refs/${refId}/otus`).query({ find: term, page, verified: verified || undefined });
-}
-
-/**
  * Get a single OTU data from the API
  *
  * @param otuId - The unique identifier of the OTU to fetch
@@ -61,7 +38,15 @@ export function getGenbank(accession: { accession: string }) {
  * @param abbreviation - The shorthand name for the new otu
  * @returns A Promise resolving to the API response containing the new OTU data
  */
-export function create({ refId, name, abbreviation }: { refId: string; name: string; abbreviation: string }) {
+export function create({
+    refId,
+    name,
+    abbreviation,
+}: {
+    refId: string;
+    name: string;
+    abbreviation: string;
+}) {
     return Request.post(`/refs/${refId}/otus`).send({
         name,
         abbreviation,
@@ -243,7 +228,9 @@ export function editSequence({
     segment: string;
     target: string;
 }) {
-    return Request.patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`).send({
+    return Request.patch(
+        `/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`,
+    ).send({
         accession,
         definition,
         host,
@@ -270,7 +257,9 @@ export function removeSequence({
     isolateId: string;
     sequenceId: string;
 }) {
-    return Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`);
+    return Request.delete(
+        `/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`,
+    );
 }
 
 /**
