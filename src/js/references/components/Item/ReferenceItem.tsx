@@ -9,7 +9,7 @@ import { ReferenceMinimal } from "../../types";
 const StyledReferenceItem = styled(BoxGroupSection)`
     align-items: center;
     display: grid;
-    grid-template-columns: 30% 1fr 30% auto;
+    grid-template-columns: 30% 35% 30% auto;
     padding-bottom: 15px;
     padding-top: 15px;
     margin-left: auto;
@@ -29,6 +29,16 @@ const ReferenceItemDataDescriptor = styled.strong`
     text-transform: capitalize;
 `;
 
+const ReferenceItemUser = styled.div`
+    display: flex;
+    justify-content: flex-start;
+`;
+
+const ReferenceItemEndIcon = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
+
 type ReferenceItemProps = {
     reference: ReferenceMinimal;
 };
@@ -46,18 +56,22 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s
             </ReferenceItemDataDescriptor>
-            <Attribution time={created_at} user={user.handle} />
-            {task && !task.complete ? (
-                <ProgressCircle progress={task?.progress || 0} state={task?.complete ? "complete" : "running"} />
-            ) : (
-                <IconLink
-                    to={{ state: { cloneReference: true, id } }}
-                    name="clone"
-                    tip="Clone"
-                    color="blue"
-                    aria-label="clone"
-                />
-            )}
+            <ReferenceItemUser>
+                <Attribution time={created_at} user={user.handle} />
+            </ReferenceItemUser>
+            <ReferenceItemEndIcon>
+                {task && !task.complete ? (
+                    <ProgressCircle progress={task.progress || 0} state={task.complete ? "complete" : "running"} />
+                ) : (
+                    <IconLink
+                        to={{ state: { cloneReference: true, id } }}
+                        name="clone"
+                        tip="Clone"
+                        color="blue"
+                        aria-label="clone"
+                    />
+                )}
+            </ReferenceItemEndIcon>
         </StyledReferenceItem>
     );
 }
