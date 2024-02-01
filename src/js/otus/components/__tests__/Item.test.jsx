@@ -2,7 +2,7 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderWithRouter } from "../../../../tests/setupTests";
-import { mapStateToProps, OTUItem } from "../Item";
+import { mapStateToProps, OTUItem } from "../OTUItem";
 
 describe("<OTUItem />", () => {
     let props;

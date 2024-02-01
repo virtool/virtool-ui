@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PUSH_STATE } from "../../../app/actionTypes";
-import { mapDispatchToProps, mapStateToProps, OTUsList } from "../List";
+import { mapDispatchToProps, mapStateToProps, OTUsList } from "../OTUList";
 
 describe("<OTUsList />", () => {
     let props;

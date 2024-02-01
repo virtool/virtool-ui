@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { InputSearch } from "../../../base";
-import { OTUToolbar } from "../Toolbar";
+import { OTUToolbar } from "../OTUToolbar";
 
 describe("<OTUToolbar />", () => {
     const props = {
@@ -29,12 +29,22 @@ describe("<OTUToolbar />", () => {
         const wrapper = shallow(<OTUToolbar {...props} />);
         const e = { target: { value: "baz" } };
         wrapper.find(InputSearch).simulate("change", e);
-        expect(props.onFind).toHaveBeenCalledWith(props.refId, "baz", props.verified, 1);
+        expect(props.onFind).toHaveBeenCalledWith(
+            props.refId,
+            "baz",
+            props.verified,
+            1,
+        );
     });
 
     it("should call onFind() when filter button is clicked", () => {
         const wrapper = shallow(<OTUToolbar {...props} />);
         wrapper.find("#verified-button").simulate("click");
-        expect(props.onFind).toHaveBeenCalledWith(props.refId, props.term, !props.verified, 1);
+        expect(props.onFind).toHaveBeenCalledWith(
+            props.refId,
+            props.term,
+            !props.verified,
+            1,
+        );
     });
 });
