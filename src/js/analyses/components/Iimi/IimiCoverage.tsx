@@ -34,7 +34,8 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 
     const height = 100 - margin.top - margin.bottom;
 
-    const width = (length > 800 ? length / 5 : length) - margin.left - margin.right;
+    const width =
+        (length > 800 ? length / 5 : length) - margin.left - margin.right;
 
     const x = scaleLinear().range([0, width]).domain([0, length]);
     const y = scaleLinear().range([height, 0]).domain([0, yMax]).nice(5);
@@ -51,19 +52,10 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    if (data) {
-        const areaDrawer = area()
-            .x((d, i) => x(i))
-            .y0(d => y(d))
-            .y1(height);
-
-        svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
-
-        svg.append("g").attr("transform", `translate(0,0)`).call(yAxis).attr("class", "axis");
-        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis).attr("class", "axis");
-    }
-
-    const trustworthyRanges = deriveTrustworthyRegions(untrustworthyRanges, length);
+    const trustworthyRanges = deriveTrustworthyRegions(
+        untrustworthyRanges,
+        length,
+    );
 
     if (trustworthyRanges.length) {
         trustworthyRanges.forEach(range => {
@@ -87,6 +79,27 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
                 .attr("fill", theme.color.red)
                 .attr("opacity", 0.4);
         });
+    }
+
+    if (data) {
+        const areaDrawer = area()
+            .x((d, i) => x(i))
+            .y0(d => y(d))
+            .y1(height);
+
+        svg.append("path")
+            .datum(data)
+            .attr("class", "depth-area")
+            .attr("d", areaDrawer);
+
+        svg.append("g")
+            .attr("transform", `translate(0,0)`)
+            .call(yAxis)
+            .attr("class", "axis");
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(xAxis)
+            .attr("class", "axis");
     }
 }
 
@@ -115,7 +128,12 @@ interface IimiCoverageChartProps {
     untrustworthyRanges: any;
 }
 
-export function IimiCoverageChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {
+export function IimiCoverageChart({
+    data,
+    id,
+    yMax,
+    untrustworthyRanges,
+}: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
