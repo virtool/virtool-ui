@@ -17,11 +17,11 @@ type MarkdownProps = {
 export function Markdown({ markdown = "" }: MarkdownProps) {
     marked.use({
         gfm: true,
+        async: false,
     });
-    console.log(marked.parse(markdown));
 
     if (markdown) {
-        return <StyledMarkdown dangerouslySetInnerHTML={{ __html: marked.parse(markdown) }} />;
+        return <StyledMarkdown dangerouslySetInnerHTML={{ __html: marked.parse(markdown) as string }} />;
     }
 
     return (
