@@ -35,11 +35,7 @@ const StyledSidebarItem = styled(NavLink)`
 
 export default function SidebarItem({ exclude, icon, link, title }) {
     return (
-        <StyledSidebarItem
-            to={link}
-            activeClassName="active"
-            isActive={excludePaths(exclude)}
-        >
+        <StyledSidebarItem to={link} activeClassName="active" isActive={excludePaths(exclude)}>
             <Icon name={icon} />
             <p>{title}</p>
         </StyledSidebarItem>
