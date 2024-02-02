@@ -61,11 +61,7 @@ export function* editOTU(action) {
 }
 
 export function* setIsolateAsDefault(action) {
-    yield updateAndGetOTU(
-        otusAPI.setIsolateAsDefault,
-        action,
-        SET_ISOLATE_AS_DEFAULT,
-    );
+    yield updateAndGetOTU(otusAPI.setIsolateAsDefault, action, SET_ISOLATE_AS_DEFAULT);
 }
 
 export function* removeOTU(action) {
@@ -89,11 +85,7 @@ export function* removeIsolate(action) {
 }
 
 export function* addSequence(action) {
-    const response = yield updateAndGetOTU(
-        otusAPI.addSequence,
-        action,
-        ADD_SEQUENCE,
-    );
+    const response = yield updateAndGetOTU(otusAPI.addSequence, action, ADD_SEQUENCE);
 
     if (response.ok) {
         yield put(pushState({ addSequence: false }));
@@ -102,20 +94,12 @@ export function* addSequence(action) {
 }
 
 export function* editSequence(action) {
-    const response = yield updateAndGetOTU(
-        otusAPI.editSequence,
-        action,
-        EDIT_SEQUENCE,
-    );
+    const response = yield updateAndGetOTU(otusAPI.editSequence, action, EDIT_SEQUENCE);
 
     if (response.ok) {
         yield put(pushState({ editSequence: false }));
         const sequenceData = JSON.parse(response.text);
-        yield put(
-            deletePersistentFormState(
-                `editGenomeSequenceForm${sequenceData.id}`,
-            ),
-        );
+        yield put(deletePersistentFormState(`editGenomeSequenceForm${sequenceData.id}`));
     }
 }
 

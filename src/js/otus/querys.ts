@@ -10,8 +10,7 @@ export const OTUQueryKeys = {
     lists: () => ["OTU", "list"] as const,
     list: (filters: string[]) => ["OTU", "list", ...filters] as const,
     infiniteLists: () => ["OTU", "list", "infinite"] as const,
-    infiniteList: (filters: Array<string | number | boolean>) =>
-        ["OTU", "list", "infinite", ...filters] as const,
+    infiniteList: (filters: Array<string | number | boolean>) => ["OTU", "list", "infinite", ...filters] as const,
     details: () => ["OTU", "details"] as const,
     detail: (id: string) => ["OTU", "detail", id] as const,
 };
@@ -24,11 +23,7 @@ export const OTUQueryKeys = {
  * @param verified - Filter the results to verified OTUs only
  * @returns The paginated list of indexes
  */
-export function useInfiniteFindOTUS(
-    refId: string,
-    term: string,
-    verified?: boolean,
-) {
+export function useInfiniteFindOTUS(refId: string, term: string, verified?: boolean) {
     return useInfiniteQuery<OTUSearchResult>(
         OTUQueryKeys.infiniteList([refId, term]),
         ({ pageParam }) => findOTUs({ refId, term, verified, page: pageParam }),

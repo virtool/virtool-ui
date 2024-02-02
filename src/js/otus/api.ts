@@ -38,15 +38,7 @@ export function getGenbank(accession: { accession: string }) {
  * @param abbreviation - The shorthand name for the new otu
  * @returns A Promise resolving to the API response containing the new OTU data
  */
-export function create({
-    refId,
-    name,
-    abbreviation,
-}: {
-    refId: string;
-    name: string;
-    abbreviation: string;
-}) {
+export function create({ refId, name, abbreviation }: { refId: string; name: string; abbreviation: string }) {
     return Request.post(`/refs/${refId}/otus`).send({
         name,
         abbreviation,
@@ -228,9 +220,7 @@ export function editSequence({
     segment: string;
     target: string;
 }) {
-    return Request.patch(
-        `/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`,
-    ).send({
+    return Request.patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`).send({
         accession,
         definition,
         host,
@@ -257,9 +247,7 @@ export function removeSequence({
     isolateId: string;
     sequenceId: string;
 }) {
-    return Request.delete(
-        `/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`,
-    );
+    return Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`);
 }
 
 /**

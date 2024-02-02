@@ -2,12 +2,7 @@ import { flatMap } from "lodash-es";
 import React from "react";
 import { match } from "react-router-dom";
 import styled from "styled-components";
-import {
-    BoxGroup,
-    ContainerNarrow,
-    LoadingPlaceholder,
-    NoneFoundBox,
-} from "../../base";
+import { BoxGroup, ContainerNarrow, LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
 import { useGetReference } from "../../references/hooks";
@@ -32,15 +27,9 @@ type OTUListProps = {
  */
 export default function OTUList({ match }: OTUListProps) {
     const { refId } = match.params;
-    const { data: reference, isLoading: isLoadingReference } =
-        useGetReference(refId);
+    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
     const [term, setTerm] = useUrlSearchParams("find");
-    const {
-        data: otu,
-        isLoading: isLoadingOTUs,
-        fetchNextPage,
-        isFetchingNextPage,
-    } = useInfiniteFindOTUS(refId, term);
+    const { data: otu, isLoading: isLoadingOTUs, fetchNextPage, isFetchingNextPage } = useInfiniteFindOTUS(refId, term);
 
     if (isLoadingOTUs || isLoadingReference) {
         return <LoadingPlaceholder />;
@@ -55,11 +44,7 @@ export default function OTUList({ match }: OTUListProps) {
     return (
         <ContainerNarrow>
             <RebuildAlert />
-            <OTUToolbar
-                term={term}
-                onChange={e => setTerm(e.target.value)}
-                remotesFrom={reference.remotes_from}
-            />
+            <OTUToolbar term={term} onChange={e => setTerm(e.target.value)} remotesFrom={reference.remotes_from} />
             <CreateOTU refId={refId} />
 
             {items.length ? (

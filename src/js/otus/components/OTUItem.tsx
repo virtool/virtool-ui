@@ -36,13 +36,7 @@ type OTUItemProps = {
 /**
  * A condensed OTU item for use in a list of OTUs
  */
-export default function OTUItem({
-    abbreviation,
-    id,
-    name,
-    refId,
-    verified,
-}: OTUItemProps) {
+export default function OTUItem({ abbreviation, id, name, refId, verified }: OTUItemProps) {
     return (
         <StyledOTUItem key={id}>
             <OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>

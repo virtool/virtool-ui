@@ -26,12 +26,7 @@ import {
     WS_UPDATE_OTU,
     WS_UPDATE_STATUS,
 } from "../../app/actionTypes";
-import reducer, {
-    getActiveIsolate,
-    hideOTUModal,
-    initialState as reducerInitialState,
-    receiveOTU,
-} from "../reducer";
+import reducer, { getActiveIsolate, hideOTUModal, initialState as reducerInitialState, receiveOTU } from "../reducer";
 
 describe("OTUs Reducer:", () => {
     it("should return the initial state on first pass", () => {
@@ -109,9 +104,7 @@ describe("OTUs Reducer:", () => {
             const refId = "baz";
             const state = {
                 refId,
-                documents: [
-                    { id: "test-otu", foo: "bar", reference: { id: refId } },
-                ],
+                documents: [{ id: "test-otu", foo: "bar", reference: { id: refId } }],
             };
             const action = {
                 type: WS_UPDATE_OTU,
@@ -124,9 +117,7 @@ describe("OTUs Reducer:", () => {
             const result = reducer(state, action);
             expect(result).toEqual({
                 refId,
-                documents: [
-                    { id: "test-otu", foo: "baz", reference: { id: refId } },
-                ],
+                documents: [{ id: "test-otu", foo: "baz", reference: { id: refId } }],
             });
         });
     });
@@ -341,9 +332,7 @@ describe("Helper functions:", () => {
 
     it("receiveOTU(): replace state.detail with action data and reformat isolates", () => {
         const action = {
-            isolates: [
-                { id: "123abc", sourceType: "isolate", sourceName: "tester" },
-            ],
+            isolates: [{ id: "123abc", sourceType: "isolate", sourceName: "tester" }],
         };
         const result = receiveOTU({}, action);
         expect(result).toEqual({

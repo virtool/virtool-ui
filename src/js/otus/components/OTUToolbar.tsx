@@ -16,29 +16,15 @@ type OTUToolbarProps = {
 /**
  * A toolbar which allows the OTUs to be filtered by their names
  */
-export default function OTUToolbar({
-    term,
-    onChange,
-    remotesFrom,
-}: OTUToolbarProps) {
-    const { hasPermission: canCreate } = useCheckAdminRole(
-        AdministratorRoles.USERS,
-    );
+export default function OTUToolbar({ term, onChange, remotesFrom }: OTUToolbarProps) {
+    const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
 
     return (
         <Toolbar>
-            <InputSearch
-                placeholder="Name or abbreviation"
-                value={term}
-                onChange={onChange}
-            />
+            <InputSearch placeholder="Name or abbreviation" value={term} onChange={onChange} />
 
             {canCreate && !remotesFrom && (
-                <LinkButton
-                    to={{ state: { createOTU: true } }}
-                    color="blue"
-                    replace
-                >
+                <LinkButton to={{ state: { createOTU: true } }} color="blue" replace>
                     Create
                 </LinkButton>
             )}

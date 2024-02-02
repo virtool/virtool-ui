@@ -50,11 +50,7 @@ class CreateOTU extends React.Component {
         }
 
         if (!this.state.error) {
-            this.props.onSubmit(
-                this.props.refId,
-                this.state.name,
-                this.state.abbreviation,
-            );
+            this.props.onSubmit(this.props.refId, this.state.name, this.state.abbreviation);
         }
     };
 

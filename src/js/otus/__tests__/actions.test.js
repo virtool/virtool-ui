@@ -248,12 +248,7 @@ describe("OTUs Action Creators", () => {
     });
 
     it("showEditIsolate: returns action to display edit isolate modal", () => {
-        const result = showEditIsolate(
-            otuId,
-            isolateId,
-            sourceType,
-            sourceName,
-        );
+        const result = showEditIsolate(otuId, isolateId, sourceType, sourceName);
         expect(result).toEqual({
             type: SHOW_EDIT_ISOLATE,
             payload: { otuId, isolateId, sourceType, sourceName },
