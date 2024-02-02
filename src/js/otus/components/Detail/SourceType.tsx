@@ -1,8 +1,24 @@
 import { capitalize, map } from "lodash-es";
 import React from "react";
+import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { InputGroup, InputLabel, InputSimple } from "../../../base";
 
-export function SourceType({ restrictSourceTypes, allowedSourceTypes, register, watch }) {
+type IsolateFormValues = {
+    sourceName: string;
+    sourceType: string;
+};
+
+type SourceTypeProps = {
+    allowedSourceTypes: string[];
+    register: UseFormRegister<IsolateFormValues>;
+    restrictSourceTypes: boolean;
+    watch: UseFormWatch<IsolateFormValues>;
+};
+
+/**
+ * Displays input for source type in isolate creation dialog
+ */
+export function SourceType({ allowedSourceTypes, register, restrictSourceTypes, watch }: SourceTypeProps) {
     if (restrictSourceTypes) {
         const optionComponents = map(allowedSourceTypes, sourceType => (
             <option key={sourceType} value={capitalize(sourceType)}>

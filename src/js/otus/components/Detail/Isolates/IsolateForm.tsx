@@ -11,7 +11,7 @@ const IsolateFormFields = styled.div`
     grid-column-gap: ${props => props.theme.gap.column};
 `;
 
-type addIsolateFormValues = {
+type IsolateFormValues = {
     sourceName: string;
     sourceType: string;
 };
@@ -20,8 +20,8 @@ type IsolateFormProps = {
     sourceName?: string;
     sourceType?: string;
     restrictSourceTypes: boolean;
-    onSubmit: (values: addIsolateFormValues) => void;
-    allowedSourceTypes: any;
+    onSubmit: (values: IsolateFormValues) => void;
+    allowedSourceTypes: string[];
 };
 
 /**
