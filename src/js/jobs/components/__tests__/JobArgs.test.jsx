@@ -55,41 +55,27 @@ const workflowTests = [
 describe("<JobArgs />", () => {
     it("Should render basics correctly", () => {
         renderWithRouter(
-            <JobArgs
-                workflow={"create_sample"}
-                args={{ sample_id: "test_sample_id" }}
-            />,
+            <JobArgs workflow={"create_sample"} args={{ sample_id: "test_sample_id" }} />,
             {},
             CreateBrowserHistory(),
         );
 
         expect(screen.getByText("Arguments")).toBeInTheDocument();
-        expect(
-            screen.getByText("Run arguments that make this job unique."),
-        ).toBeInTheDocument();
+        expect(screen.getByText("Run arguments that make this job unique.")).toBeInTheDocument();
     });
 
-    it.each(workflowTests)(
-        "Should render $workflow jobs correctly",
-        ({ workflow, args, urls }) => {
-            renderWithRouter(
-                <JobArgs
-                    workflow={workflow}
-                    args={{ ...args, extra_param: "extra_param" }}
-                />,
-                {},
-                CreateBrowserHistory(),
-            );
+    it.each(workflowTests)("Should render $workflow jobs correctly", ({ workflow, args, urls }) => {
+        renderWithRouter(
+            <JobArgs workflow={workflow} args={{ ...args, extra_param: "extra_param" }} />,
+            {},
+            CreateBrowserHistory(),
+        );
 
-            forEach(urls, ({ id, url }) => {
-                expect(screen.getByRole("link", { name: id })).toHaveAttribute(
-                    "href",
-                    url,
-                );
-            });
-            expect(screen.queryByText("extra_param")).not.toBeInTheDocument();
-        },
-    );
+        forEach(urls, ({ id, url }) => {
+            expect(screen.getByRole("link", { name: id })).toHaveAttribute("href", url);
+        });
+        expect(screen.queryByText("extra_param")).not.toBeInTheDocument();
+    });
 
     it("Should render correctly render unknown workflows", () => {
         renderWithRouter(

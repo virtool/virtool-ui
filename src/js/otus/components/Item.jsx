@@ -40,11 +40,7 @@ export function OTUItem({ abbreviation, id, name, refId, verified }) {
 }
 
 export function mapStateToProps(state, props) {
-    const { abbreviation, id, name, verified } = get(state, [
-        "otus",
-        "documents",
-        props.index,
-    ]);
+    const { abbreviation, id, name, verified } = get(state, ["otus", "documents", props.index]);
 
     return {
         abbreviation,

@@ -10,11 +10,7 @@ describe("<RightIcon />", () => {
         const onRemove = vi.fn();
 
         const { rerender } = renderWithProviders(
-            <AnalysisItemRightIcon
-                canModify={true}
-                ready={true}
-                onRemove={onRemove}
-            />,
+            <AnalysisItemRightIcon canModify={true} ready={true} onRemove={onRemove} />,
         );
 
         const button = screen.getByRole("button");
@@ -26,24 +22,12 @@ describe("<RightIcon />", () => {
         // Should call onRemove when clicked.
         expect(onRemove).toHaveBeenCalled();
 
-        rerender(
-            <AnalysisItemRightIcon
-                canModify={false}
-                ready={true}
-                onRemove={onRemove}
-            />,
-        );
+        rerender(<AnalysisItemRightIcon canModify={false} ready={true} onRemove={onRemove} />);
 
         // Should not be shown if the user can't modify the analysis.
         expect(screen.queryByRole("button")).not.toBeInTheDocument();
 
-        rerender(
-            <AnalysisItemRightIcon
-                canModify={true}
-                ready={false}
-                onRemove={onRemove}
-            />,
-        );
+        rerender(<AnalysisItemRightIcon canModify={true} ready={false} onRemove={onRemove} />);
 
         expect(screen.queryByRole("button")).not.toBeInTheDocument();
         expect(screen.getByLabelText("loading")).toBeInTheDocument();

@@ -51,18 +51,6 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    if (data) {
-        const areaDrawer = area()
-            .x((d, i) => x(i))
-            .y0(d => y(d))
-            .y1(height);
-
-        svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
-
-        svg.append("g").attr("transform", `translate(0,0)`).call(yAxis).attr("class", "axis");
-        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis).attr("class", "axis");
-    }
-
     const trustworthyRanges = deriveTrustworthyRegions(untrustworthyRanges, length);
 
     if (trustworthyRanges.length) {
@@ -87,6 +75,18 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
                 .attr("fill", theme.color.red)
                 .attr("opacity", 0.4);
         });
+    }
+
+    if (data) {
+        const areaDrawer = area()
+            .x((d, i) => x(i))
+            .y0(d => y(d))
+            .y1(height);
+
+        svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
+
+        svg.append("g").attr("transform", `translate(0,0)`).call(yAxis).attr("class", "axis");
+        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis).attr("class", "axis");
     }
 }
 
