@@ -16,8 +16,7 @@ type SampleLabel = Label & {
 export const samplesQueryKeys = {
     all: () => ["samples"] as const,
     lists: () => ["samples", "list"] as const,
-    list: (filters: Array<string | number | boolean | string[]>) =>
-        ["samples", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean | string[]>) => ["samples", "list", ...filters] as const,
     details: () => ["samples", "details"] as const,
     detail: (sampleId: string) => ["samples", "details", sampleId] as const,
 };
@@ -31,13 +30,7 @@ export const samplesQueryKeys = {
  * @param labels - The labels to filter the samples by
  * @param workflows - The workflows to filter the samples by
  */
-export function useListSamples(
-    page: number,
-    per_page: number,
-    term?: string,
-    labels?: string[],
-    workflows?: string[],
-) {
+export function useListSamples(page: number, per_page: number, term?: string, labels?: string[], workflows?: string[]) {
     return useQuery(
         samplesQueryKeys.list([page, per_page, term, labels, workflows]),
         () => listSamples(page, per_page, term, labels, workflows),
@@ -53,9 +46,7 @@ export function useListSamples(
  * @returns A mutator for updating a sample
  */
 export function useUpdateSample(sampleId: string) {
-    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(
-        ({ update }) => updateSample(sampleId, update),
-    );
+    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(({ update }) => updateSample(sampleId, update));
 }
 
 /**
@@ -64,10 +55,7 @@ export function useUpdateSample(sampleId: string) {
  * @param selectedLabels - The initial labels associated with the sample
  * @param selectedSamples - The selected samples
  */
-export function useUpdateLabel(
-    selectedLabels: SampleLabel[],
-    selectedSamples: SampleMinimal[],
-) {
+export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: SampleMinimal[]) {
     const queryClient = useQueryClient();
     const mutation = useMutation(update, {
         onSuccess: () => {
@@ -79,9 +67,7 @@ export function useUpdateLabel(
         forEach(selectedSamples, sample => {
             const sampleLabelIds = map(sample.labels, label => label.id);
             const labelExists = selectedLabels.some(item => item.id === label);
-            const allLabeled = selectedLabels.every(
-                item => item.allLabeled === true,
-            );
+            const allLabeled = selectedLabels.every(item => item.allLabeled === true);
 
             if (!labelExists || !allLabeled) {
                 mutation.mutate({

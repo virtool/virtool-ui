@@ -55,12 +55,7 @@ function SampleDetail({
     }
 
     if (!detail.ready) {
-        return (
-            <LoadingPlaceholder
-                message="Sample is still being created."
-                margin="220px"
-            />
-        );
+        return <LoadingPlaceholder message="Sample is still being created." margin="220px" />;
     }
 
     let editIcon;
@@ -71,24 +66,12 @@ function SampleDetail({
         if (includes(history.location.pathname, "general")) {
             editIcon = (
                 <Link to={{ state: { editSample: true } }}>
-                    <Icon
-                        color="orange"
-                        name="pencil-alt"
-                        tip="Edit"
-                        hoverable
-                    />
+                    <Icon color="orange" name="pencil-alt" tip="Edit" hoverable />
                 </Link>
             );
         }
 
-        removeIcon = (
-            <IconLink
-                color="red"
-                to={{ state: { removeSample: true } }}
-                name="trash"
-                tip="Remove"
-            />
-        );
+        removeIcon = <IconLink color="red" to={{ state: { removeSample: true } }} name="trash" tip="Remove" />;
 
         rightsTabLink = (
             <TabsLink to={`/samples/${sampleId}/rights`}>
@@ -122,22 +105,11 @@ function SampleDetail({
             </Tabs>
 
             <Switch>
-                <Redirect
-                    from="/samples/:sampleId"
-                    to={`/samples/${sampleId}/general`}
-                    exact
-                />
+                <Redirect from="/samples/:sampleId" to={`/samples/${sampleId}/general`} exact />
                 <Route path="/samples/:sampleId/general" component={General} />
-                <Route
-                    path="/samples/:sampleId/files"
-                    component={SampleDetailFiles}
-                    exact
-                />
+                <Route path="/samples/:sampleId/files" component={SampleDetailFiles} exact />
                 <Route path="/samples/:sampleId/quality" component={Quality} />
-                <Route
-                    path="/samples/:sampleId/analyses"
-                    component={Analyses}
-                />
+                <Route path="/samples/:sampleId/analyses" component={Analyses} />
                 <Route path="/samples/:sampleId/rights" component={Rights} />
             </Switch>
 

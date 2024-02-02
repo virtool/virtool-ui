@@ -13,13 +13,7 @@ const StyledSidebar = styled.div`
     z-index: 0;
 `;
 
-export function Sidebar({
-    sampleId,
-    sampleLabels,
-    onLabelUpdate,
-    defaultSubtractions,
-    onSubtractionUpdate,
-}) {
+export function Sidebar({ sampleId, sampleLabels, onLabelUpdate, defaultSubtractions, onSubtractionUpdate }) {
     return (
         <StyledSidebar>
             <SampleLabels
@@ -32,9 +26,7 @@ export function Sidebar({
                 onUpdate={subtractions => {
                     onSubtractionUpdate(sampleId, subtractions);
                 }}
-                defaultSubtractions={defaultSubtractions.map(
-                    subtraction => subtraction.id,
-                )}
+                defaultSubtractions={defaultSubtractions.map(subtraction => subtraction.id)}
             />
         </StyledSidebar>
     );
