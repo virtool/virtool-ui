@@ -3,7 +3,14 @@ import React from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, ContainerNarrow, ContainerSide, Markdown, Table } from "../../../base";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    ContainerNarrow,
+    ContainerSide,
+    Markdown,
+    Table,
+} from "../../../base";
 import { LibraryType, Sample } from "../../types";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
@@ -83,7 +90,10 @@ export function SampleDetailGeneral({
                 <BoxGroup>
                     <BoxGroupHeader>
                         <h2>Library</h2>
-                        <p>Information about the sequencing reads in this sample.</p>
+                        <p>
+                            Information about the sequencing reads in this
+                            sample.
+                        </p>
                     </BoxGroupHeader>
                     <Table>
                         <tbody>
@@ -125,7 +135,11 @@ export function SampleDetailGeneral({
             </ContainerNarrow>
 
             <SampleDetailSidebarContainer>
-                <Sidebar sampleId={sample.id} sampleLabels={sample.labels} defaultSubtractions={sample.subtractions} />
+                <Sidebar
+                    sampleId={sample.id}
+                    sampleLabels={sample.labels}
+                    defaultSubtractions={sample.subtractions}
+                />
             </SampleDetailSidebarContainer>
 
             <EditSample

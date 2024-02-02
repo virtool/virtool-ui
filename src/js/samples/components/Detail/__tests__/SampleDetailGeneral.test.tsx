@@ -5,7 +5,10 @@ import React from "react";
 import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeSample } from "../../../../../tests/fake/samples";
-import { createGenericReducer, renderWithRouter } from "../../../../../tests/setupTests";
+import {
+    createGenericReducer,
+    renderWithRouter,
+} from "../../../../../tests/setupTests";
 import { mapStateToProps, SampleDetailGeneral } from "../SampleDetailGeneral";
 
 function createReducer(state, history) {
@@ -42,7 +45,12 @@ describe("<SampleDetailGeneral />", () => {
     });
 
     it("should render properly", () => {
-        renderWithRouter(<SampleDetailGeneral {...props} />, state, history, createReducer);
+        renderWithRouter(
+            <SampleDetailGeneral {...props} />,
+            state,
+            history,
+            createReducer,
+        );
 
         expect(screen.getByText("Name")).toBeInTheDocument();
         expect(screen.getByText(props.sample.name)).toBeInTheDocument();
@@ -73,7 +81,12 @@ describe("<SampleDetailGeneral />", () => {
     });
 
     it("should render with [paired=true]", () => {
-        renderWithRouter(<SampleDetailGeneral {...props} />, state, history, createReducer);
+        renderWithRouter(
+            <SampleDetailGeneral {...props} />,
+            state,
+            history,
+            createReducer,
+        );
 
         expect(screen.getByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("Yes")).toBeInTheDocument();
@@ -82,7 +95,12 @@ describe("<SampleDetailGeneral />", () => {
     it("should render with [paired=false]", () => {
         props.sample = createFakeSample({ paired: false });
         state.samples.detail = props.sample;
-        renderWithRouter(<SampleDetailGeneral {...props} />, state, history, createReducer);
+        renderWithRouter(
+            <SampleDetailGeneral {...props} />,
+            state,
+            history,
+            createReducer,
+        );
 
         expect(screen.getByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("No")).toBeInTheDocument();

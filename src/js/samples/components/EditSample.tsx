@@ -53,10 +53,20 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                     <form
                         onSubmit={handleSubmit(values =>
                             mutation.mutate(
-                                { update: pick(values, ["name", "isolate", "host", "locale", "notes"]) },
+                                {
+                                    update: pick(values, [
+                                        "name",
+                                        "isolate",
+                                        "host",
+                                        "locale",
+                                        "notes",
+                                    ]),
+                                },
                                 {
                                     onSuccess: () => {
-                                        history.replace({ state: { editSample: false } });
+                                        history.replace({
+                                            state: { editSample: false },
+                                        });
                                     },
                                 },
                             ),
@@ -66,12 +76,17 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                             <InputLabel htmlFor="name">Name</InputLabel>
                             <InputSimple id="name" {...register("name")} />
                             <InputError>
-                                {mutation.isError && (mutation.error.response.body.message || "Required Field")}
+                                {mutation.isError &&
+                                    (mutation.error.response.body.message ||
+                                        "Required Field")}
                             </InputError>
                         </InputGroup>
                         <InputGroup>
                             <InputLabel htmlFor="isolate">Isolate</InputLabel>
-                            <InputSimple id="isolate" {...register("isolate")} />
+                            <InputSimple
+                                id="isolate"
+                                {...register("isolate")}
+                            />
                         </InputGroup>
                         <InputGroup>
                             <InputLabel htmlFor="host">Host</InputLabel>

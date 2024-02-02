@@ -2,7 +2,12 @@ import { faker } from "@faker-js/faker";
 import { assign } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
-import { LibraryType, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
+import {
+    LibraryType,
+    Sample,
+    SampleMinimal,
+    WorkflowState,
+} from "../../js/samples/types";
 import { SubtractionNested } from "../../js/subtraction/types";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
@@ -21,7 +26,9 @@ export type CreateFakeSampleMinimal = {
  *
  * @param overrides - optional properties for creating a sample minimal with specific values
  */
-export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): SampleMinimal {
+export function createFakeSampleMinimal(
+    overrides?: CreateFakeSampleMinimal,
+): SampleMinimal {
     const defaultSampleMinimal = {
         id: faker.random.alphaNumeric(8),
         name: faker.random.word(),
@@ -35,7 +42,11 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
         pathoscope: faker.datatype.boolean(),
         ready: true,
         user: createFakeUserNested(),
-        workflows: { aodp: WorkflowState.INCOMPATIBLE, nuvs: WorkflowState.NONE, pathoscope: WorkflowState.NONE },
+        workflows: {
+            aodp: WorkflowState.INCOMPATIBLE,
+            nuvs: WorkflowState.NONE,
+            pathoscope: WorkflowState.NONE,
+        },
     };
 
     return assign(defaultSampleMinimal, overrides);
@@ -111,7 +122,9 @@ export function mockApiEditSample(
 ) {
     const sampleDetail = { ...sample, name, isolate, host, locale, notes };
 
-    return nock("http://localhost").patch(`/api/samples/${sample.id}`).reply(200, sampleDetail);
+    return nock("http://localhost")
+        .patch(`/api/samples/${sample.id}`)
+        .reply(200, sampleDetail);
 }
 
 export type CreateSampleType = {
@@ -163,6 +176,16 @@ export function mockApiCreateSample(
     });
 
     return nock("http://localhost")
-        .post("/api/samples", { name, isolate, host, locale, library_type, files, labels, subtractions, group })
+        .post("/api/samples", {
+            name,
+            isolate,
+            host,
+            locale,
+            library_type,
+            files,
+            labels,
+            subtractions,
+            group,
+        })
         .reply(201, sample);
 }

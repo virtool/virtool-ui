@@ -2,7 +2,10 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeSample, mockApiEditSample } from "../../../../tests/fake/samples";
+import {
+    createFakeSample,
+    mockApiEditSample,
+} from "../../../../tests/fake/samples";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import EditSample from "../EditSample";
 
@@ -30,22 +33,32 @@ describe("<Editsample />", () => {
         expect(screen.queryByText("Save")).toBeNull();
     });
 
-    it.each(["Name", "Isolate", "Host", "Locale", "Notes"])("should render changed data for", async inputLabel => {
-        renderWithProviders(<EditSample {...props} />);
+    it.each(["Name", "Isolate", "Host", "Locale", "Notes"])(
+        "should render changed data for",
+        async inputLabel => {
+            renderWithProviders(<EditSample {...props} />);
 
-        const inputBox = screen.getByLabelText(inputLabel);
-        expect(inputBox).toBeInTheDocument();
-        expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
+            const inputBox = screen.getByLabelText(inputLabel);
+            expect(inputBox).toBeInTheDocument();
+            expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
 
-        await userEvent.clear(inputBox);
-        expect(inputBox).toHaveValue("");
+            await userEvent.clear(inputBox);
+            expect(inputBox).toHaveValue("");
 
-        await userEvent.type(inputBox, "test");
-        expect(inputBox).toHaveValue("test");
-    });
+            await userEvent.type(inputBox, "test");
+            expect(inputBox).toHaveValue("test");
+        },
+    );
 
     it("should update sample when form is submitted", async () => {
-        const scope = mockApiEditSample(sample, "newName", "newIsolate", "newHost", "newLocale", "newNotes");
+        const scope = mockApiEditSample(
+            sample,
+            "newName",
+            "newIsolate",
+            "newHost",
+            "newLocale",
+            "newNotes",
+        );
         renderWithProviders(<EditSample {...props} />);
 
         const nameInput = screen.getByLabelText("Name");
