@@ -28,7 +28,7 @@ describe("<File />", () => {
         renderWithProviders(<File {...props} />);
         expect(screen.getByText(new RegExp(props.user.handle))).toBeInTheDocument();
         expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
-        expect(screen.getByText("10.0B")).toBeInTheDocument();
+        expect(screen.getByText("10.0 B")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "delete" })).toBeInTheDocument();
     });
 
@@ -37,7 +37,7 @@ describe("<File />", () => {
         renderWithProviders(<File {...props} />);
         expect(screen.getByText(new RegExp(props.user.handle))).toBeInTheDocument();
         expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
-        expect(screen.queryByText("10.0B")).not.toBeInTheDocument();
+        expect(screen.queryByText("10.0 B")).not.toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "delete" })).not.toBeInTheDocument();
     });
 
@@ -45,7 +45,7 @@ describe("<File />", () => {
         props.user = null;
         renderWithProviders(<File {...props} />);
         expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
-        expect(screen.getByText("10.0B")).toBeInTheDocument();
+        expect(screen.getByText("10.0 B")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "delete" })).toBeInTheDocument();
     });
 
@@ -54,7 +54,7 @@ describe("<File />", () => {
         renderWithProviders(<File {...props} />);
         expect(screen.getByText(new RegExp(props.user.handle))).toBeInTheDocument();
         expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
-        expect(screen.getByText("10.0B")).toBeInTheDocument();
+        expect(screen.getByText("10.0 B")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "delete" })).not.toBeInTheDocument();
     });
 

@@ -6,13 +6,7 @@ import { IndexOTU } from "./OTU";
 
 export function IndexOTUs({ otus, refId }) {
     const otuComponents = map(otus, otu => (
-        <IndexOTU
-            key={otu.id}
-            refId={refId}
-            name={otu.name}
-            id={otu.id}
-            changeCount={otu.change_count}
-        />
+        <IndexOTU key={otu.id} refId={refId} name={otu.name} id={otu.id} changeCount={otu.change_count} />
     ));
 
     return (

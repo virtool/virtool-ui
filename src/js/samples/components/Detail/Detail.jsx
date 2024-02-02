@@ -21,7 +21,7 @@ import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/Files";
-import Quality from "../Quality";
+import Quality from "../SampleQuality";
 import General from "./General";
 import RemoveSample from "./Remove";
 import Rights from "./Rights";

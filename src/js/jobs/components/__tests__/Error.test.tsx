@@ -24,8 +24,6 @@ describe("<JobError />", () => {
 
         rerender(<JobError error={null} />);
 
-        expect(
-            screen.queryByText("TestErrorWithStackTrace"),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText("TestErrorWithStackTrace")).not.toBeInTheDocument();
     });
 });
