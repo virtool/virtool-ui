@@ -113,15 +113,7 @@ export function remove({ otuId }) {
  * @param sourceName - The name of the source
  * @returns A promise resolving to the API response containing the new isolate
  */
-export function addIsolate({
-    otuId,
-    sourceType,
-    sourceName,
-}: {
-    otuId: string;
-    sourceType: string;
-    sourceName: string;
-}) {
+export function addIsolate(otuId: string, sourceType: string, sourceName: string) {
     return Request.post(`/otus/${otuId}/isolates`).send({
         source_type: sourceType,
         source_name: sourceName,

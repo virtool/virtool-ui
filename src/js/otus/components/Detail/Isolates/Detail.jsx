@@ -6,7 +6,7 @@ import { DownloadLink } from "../../../../references/components/Detail/DownloadL
 import { getCanModifyReferenceOTU, getReferenceDetailId } from "../../../../references/selectors";
 import IsolateSequences from "../../../../sequences/components/Sequences";
 import { setIsolateAsDefault, showEditIsolate, showRemoveIsolate } from "../../../actions";
-import EditIsolate from "./Edit";
+import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./Remove";
 
 const IsolateDetailHeader = styled(Box)`

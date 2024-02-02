@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from "react-query";
-import { findOTUs } from "./api";
+import { useInfiniteQuery, useMutation } from "react-query";
+import { addIsolate, findOTUs } from "./api";
 import { OTUSearchResult } from "./types";
 
 /**
@@ -34,5 +34,16 @@ export function useInfiniteFindOTUS(refId: string, term: string, verified) {
                 return (lastPage.page || 1) + 1;
             },
         },
+    );
+}
+
+/**
+ * Initializes a mutator for creating an OTU isolate
+ *
+ * @returns A mutator for creating an OTU isolate
+ */
+export function useCreateIsolate() {
+    return useMutation<unknown, unknown, { otuId: string; sourceType: string; sourceName: string }>(
+        ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName),
     );
 }

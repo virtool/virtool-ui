@@ -1,8 +1,8 @@
 import { capitalize, map } from "lodash-es";
 import React from "react";
-import { Input, InputGroup, InputLabel, InputSelect } from "../../../base";
+import { InputGroup, InputLabel, InputSimple } from "../../../base";
 
-export const SourceType = ({ restrictSourceTypes, allowedSourceTypes, value, onChange }) => {
+export function SourceType({ restrictSourceTypes, allowedSourceTypes, register, watch }) {
     if (restrictSourceTypes) {
         const optionComponents = map(allowedSourceTypes, sourceType => (
             <option key={sourceType} value={capitalize(sourceType)}>
@@ -13,20 +13,20 @@ export const SourceType = ({ restrictSourceTypes, allowedSourceTypes, value, onC
         return (
             <InputGroup>
                 <InputLabel>Source Type</InputLabel>
-                <InputSelect value={capitalize(value)} onChange={onChange}>
+                <InputSimple as="select" id="sourceType" {...register("sourceType")}>
                     <option key="default" value="unknown">
                         Unknown
                     </option>
                     {optionComponents}
-                </InputSelect>
+                </InputSimple>
             </InputGroup>
         );
     }
 
     return (
         <InputGroup>
-            <InputLabel>Source type</InputLabel>
-            <Input value={capitalize(value)} onChange={onChange} />
+            <InputLabel htmlFor="sourceType">Source type</InputLabel>
+            <InputSimple id="sourceType" {...register("sourceType")} value={capitalize(watch("sourceType"))} />
         </InputGroup>
     );
-};
+}

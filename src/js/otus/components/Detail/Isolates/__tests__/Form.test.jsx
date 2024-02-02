@@ -3,7 +3,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Input } from "../../../../../base";
 import { SourceType } from "../../SourceType";
-import { IsolateForm } from "../Form";
+import { IsolateForm } from "../IsolateForm";
 
 describe("<IsolateForm />", () => {
     let props;
