@@ -22,7 +22,7 @@ export default function AddIsolate({ allowedSourceTypes, onHide, otuId, restrict
 
     function handleSubmit({ sourceName, sourceType }) {
         mutation.mutate(
-            { otuId, sourceType, sourceName },
+            { otuId, sourceType: sourceType || "unknown", sourceName },
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));

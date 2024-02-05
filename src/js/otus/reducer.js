@@ -1,7 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { find, hasIn, map } from "lodash-es";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
     CREATE_OTU,
     EDIT_ISOLATE,
@@ -188,7 +187,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
                     [EDIT_SEQUENCE.SUCCEEDED]: true,
                     [REMOVE_SEQUENCE.SUCCEEDED]: true,
                     [SET_ISOLATE_AS_DEFAULT.SUCCEEDED]: true,
-                    [ADD_ISOLATE.SUCCEEDED]: true,
                     [REMOVE_ISOLATE.SUCCEEDED]: true,
                 };
                 return hasIn(matches, action.type);

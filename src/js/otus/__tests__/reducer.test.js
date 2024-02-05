@@ -1,7 +1,6 @@
 import { forEach } from "lodash-es";
 import { describe, expect, it } from "vitest";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
     EDIT_ISOLATE,
     EDIT_OTU,
@@ -206,7 +205,6 @@ describe("OTUs Reducer:", () => {
             EDIT_SEQUENCE.SUCCEEDED,
             REMOVE_SEQUENCE.SUCCEEDED,
             SET_ISOLATE_AS_DEFAULT.SUCCEEDED,
-            ADD_ISOLATE.SUCCEEDED,
             REMOVE_ISOLATE.SUCCEEDED,
         ];
 

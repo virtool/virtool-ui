@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Input, InputGroup, InputLabel, InputSimple, ModalFooter, SaveButton } from "../../../../base";
 import { formatIsolateName } from "../../../../utils/utils";
-import { SourceType } from "../SourceType";
+import { SourceType } from "./SourceType";
 
 const IsolateFormFields = styled.div`
     display: grid;
@@ -34,12 +34,7 @@ export default function IsolateForm({
     onSubmit,
     allowedSourceTypes,
 }: IsolateFormProps) {
-    const {
-        formState: { errors },
-        register,
-        handleSubmit,
-        watch,
-    } = useForm({
+    const { register, handleSubmit, watch, control } = useForm({
         defaultValues: {
             sourceName: sourceName || "",
             sourceType: sourceType || (restrictSourceTypes ? "unknown" : ""),
@@ -54,6 +49,7 @@ export default function IsolateForm({
                     allowedSourceTypes={allowedSourceTypes}
                     register={register}
                     watch={watch}
+                    control={control}
                 />
 
                 <InputGroup>
@@ -61,14 +57,15 @@ export default function IsolateForm({
                     <InputSimple
                         id="sourceName"
                         {...register("sourceName")}
-                        disabled={watch("sourceType") === "unknown"}
+                        disabled={watch("sourceType").toLowerCase() === "unknown"}
                     />
                 </InputGroup>
             </IsolateFormFields>
 
             <InputGroup>
-                <InputLabel>Isolate Name</InputLabel>
+                <InputLabel htmlFor="isolateName">Isolate Name</InputLabel>
                 <Input
+                    id="isolateName"
                     value={formatIsolateName({ sourceName: watch("sourceName"), sourceType: watch("sourceType") })}
                     readOnly
                 />

@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
     CREATE_OTU,
     EDIT_ISOLATE,
@@ -26,7 +25,6 @@ import {
     WS_UPDATE_OTU,
 } from "../../app/actionTypes";
 import {
-    addIsolate,
     addSequence,
     createOTU,
     editIsolate,
@@ -123,11 +121,6 @@ describe("OTUs Action Creators", () => {
         const history = {};
         const result = removeOTU(refId, otuId, history);
         expect(result).toEqual({ type: REMOVE_OTU.REQUESTED, payload: { refId, otuId, history } });
-    });
-
-    it("addIsolate: returns action to add an isolate to an otu", () => {
-        const result = addIsolate(otuId, sourceType, sourceName);
-        expect(result).toEqual({ type: ADD_ISOLATE.REQUESTED, payload: { otuId, sourceType, sourceName } });
     });
 
     it("setIsolateAsDefault: returns action to set specific isolate as default", () => {

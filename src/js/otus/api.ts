@@ -1,4 +1,5 @@
 import { Request } from "../app/request";
+import { OTUIsolate } from "./types";
 
 /**
  * Get a page of OTUs from the API
@@ -113,11 +114,13 @@ export function remove({ otuId }) {
  * @param sourceName - The name of the source
  * @returns A promise resolving to the API response containing the new isolate
  */
-export function addIsolate(otuId: string, sourceType: string, sourceName: string) {
-    return Request.post(`/otus/${otuId}/isolates`).send({
-        source_type: sourceType,
-        source_name: sourceName,
-    });
+export function addIsolate(otuId: string, sourceType: string, sourceName: string): Promise<OTUIsolate> {
+    return Request.post(`/otus/${otuId}/isolates`)
+        .send({
+            source_type: sourceType,
+            source_name: sourceName,
+        })
+        .then(res => res.body);
 }
 
 /**
