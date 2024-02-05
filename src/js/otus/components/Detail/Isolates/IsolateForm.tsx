@@ -19,7 +19,9 @@ type IsolateFormValues = {
 type IsolateFormProps = {
     sourceName?: string;
     sourceType?: string;
+    /** Indicates whether the source types are restricted */
     restrictSourceTypes: boolean;
+    /** A callback function to be called when the form is submitted */
     onSubmit: (values: IsolateFormValues) => void;
     allowedSourceTypes: string[];
 };

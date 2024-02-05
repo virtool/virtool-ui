@@ -7,9 +7,12 @@ import IsolateForm from "./IsolateForm";
 
 type AddIsolateProps = {
     allowedSourceTypes: string[];
+    /** A callback function to hide the dialog */
     onHide: () => void;
     otuId: string;
+    /** Indicates whether the source types are restricted */
     restrictSourceTypes: boolean;
+    /** Indicates whether the dialog to add an OTU is visible */
     show: boolean;
 };
 

@@ -10,9 +10,13 @@ type IsolateFormValues = {
 
 type SourceTypeProps = {
     allowedSourceTypes: string[];
+    /** Function to register form fields */
     register: UseFormRegister<IsolateFormValues>;
+    /** Indicates whether the source types are restricted */
     restrictSourceTypes: boolean;
+    /** Watches for changes in form values */
     watch: UseFormWatch<IsolateFormValues>;
+    /** Controls the state of a form */
     control: Control<IsolateFormValues>;
 };
 
