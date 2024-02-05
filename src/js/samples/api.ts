@@ -63,6 +63,16 @@ export function listSamples(page: number, per_page: number, term: string, labels
         .then(res => res.body);
 }
 
+/**
+ * Fetch a single sample
+ *
+ * @param sampleId - The id of the sample to fetch
+ * @returns A promise resolving to a single sample
+ */
+export function getSample(sampleId: string): Promise<Sample> {
+    return Request.get(`/samples/${sampleId}`).then(res => res.body);
+}
+
 export type SampleUpdate = {
     name?: string;
     isolate?: string;
