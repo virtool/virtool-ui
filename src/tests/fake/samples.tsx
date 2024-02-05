@@ -2,7 +2,12 @@ import { faker } from "@faker-js/faker";
 import { assign } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
-import { LibraryType, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
+import {
+    LibraryType,
+    Sample,
+    SampleMinimal,
+    WorkflowState,
+} from "../../js/samples/types";
 import { SubtractionNested } from "../../js/subtraction/types";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
@@ -21,7 +26,9 @@ export type CreateFakeSampleMinimal = {
  *
  * @param overrides - optional properties for creating a sample minimal with specific values
  */
-export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): SampleMinimal {
+export function createFakeSampleMinimal(
+    overrides?: CreateFakeSampleMinimal,
+): SampleMinimal {
     const defaultSampleMinimal = {
         id: faker.random.alphaNumeric(8),
         name: faker.random.word(),
@@ -35,7 +42,11 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
         pathoscope: faker.datatype.boolean(),
         ready: true,
         user: createFakeUserNested(),
-        workflows: { aodp: WorkflowState.INCOMPATIBLE, nuvs: WorkflowState.NONE, pathoscope: WorkflowState.NONE },
+        workflows: {
+            aodp: WorkflowState.INCOMPATIBLE,
+            nuvs: WorkflowState.NONE,
+            pathoscope: WorkflowState.NONE,
+        },
     };
 
     return assign(defaultSampleMinimal, overrides);
@@ -91,6 +102,44 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
 }
 
 /**
+ * Sets up a mocked API route for updating the sample details
+ *
+ * @param sample - The sample details
+ * @param name - The updated name
+ * @param isolate - The updated isolate
+ * @param host - The updated host
+ * @param locale - The updated locale
+ * @param notes - The updated notes
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiEditSample(
+    sample: Sample,
+    name: string,
+    isolate: string,
+    host: string,
+    locale: string,
+    notes: string,
+) {
+    const sampleDetail = { ...sample, name, isolate, host, locale, notes };
+
+    return nock("http://localhost")
+        .patch(`/api/samples/${sample.id}`)
+        .reply(200, sampleDetail);
+}
+
+export type CreateSampleType = {
+    name: string;
+    isolate: string;
+    host: string;
+    locale: string;
+    library_type: string;
+    files: string[];
+    labels: number[];
+    subtractions: string[];
+    group: string | null;
+};
+
+/**
  * Creates a mocked API call for creating a sample
  *
  * @param name - The name of the sample
@@ -127,6 +176,16 @@ export function mockApiCreateSample(
     });
 
     return nock("http://localhost")
-        .post("/api/samples", { name, isolate, host, locale, library_type, files, labels, subtractions, group })
+        .post("/api/samples", {
+            name,
+            isolate,
+            host,
+            locale,
+            library_type,
+            files,
+            labels,
+            subtractions,
+            group,
+        })
         .reply(201, sample);
 }
