@@ -14,6 +14,7 @@ describe("<SubtractionItem />", () => {
         props = {
             id: "foo",
             name: "Foo",
+            nickname: "testNickname",
             user: { handle: "user_handle" },
             job: { progress: 50, state: "running" },
             created_at: new Date().setFullYear(new Date().getFullYear() - 1),
@@ -25,8 +26,7 @@ describe("<SubtractionItem />", () => {
     it("should render", () => {
         renderWithRouter(<SubtractionItem {...props} />, {}, history);
         expect(screen.getByText("Foo")).toBeInTheDocument();
-        expect(screen.getByText(/user_handle/)).toBeInTheDocument();
-        expect(screen.getByText(/1 year ago/)).toBeInTheDocument();
+        expect(screen.getByText("testNickname")).toBeInTheDocument();
         expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "50");
         expect(screen.getByText("Running")).toBeInTheDocument();
     });
@@ -42,7 +42,10 @@ describe("<SubtractionItem />", () => {
         renderWithRouter(<SubtractionItem {...props} />, {}, history);
         expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
         expect(screen.queryByText("Complete")).not.toBeInTheDocument();
+        expect(screen.getByText("user_handle created")).toBeInTheDocument();
+        expect(screen.getByText("1 year ago")).toBeInTheDocument();
     });
+
     it("should correctly render subtractions where jobs=null", () => {
         props.job = null;
         props.ready = false;

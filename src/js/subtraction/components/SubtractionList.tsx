@@ -1,14 +1,10 @@
+import { map } from "lodash";
 import React from "react";
-import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
+import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useFindSubtractions } from "../querys";
-import { SubtractionMinimal } from "../types";
 import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
-
-function renderRow({ created_at, user, name, id, ready, job }: SubtractionMinimal) {
-    return <SubtractionItem key={id} id={id} user={user} name={name} created_at={created_at} ready={ready} job={job} />;
-}
 
 /**
  * A list of subtractions
@@ -45,9 +41,14 @@ export default function SubtractionList() {
                     items={documents}
                     storedPage={page}
                     currentPage={Number(urlPage) || 1}
-                    renderRow={renderRow}
                     pageCount={page_count}
-                />
+                >
+                    <BoxGroup>
+                        {map(documents, document => (
+                            <SubtractionItem key={document.id} {...document} />
+                        ))}{" "}
+                    </BoxGroup>
+                </Pagination>
             )}
         </>
     );
