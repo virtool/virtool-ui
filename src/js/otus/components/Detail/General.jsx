@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import Issues from "./Issues";
+import OTUIssues from "./OTUIssues";
 
 export const OTUGeneral = ({ issues, isolates }) => {
     if (issues) {
-        return <Issues issues={issues} isolates={isolates} />;
+        return <OTUIssues issues={issues} isolates={isolates} />;
     }
 
     return null;
