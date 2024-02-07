@@ -78,7 +78,6 @@ export const mapStateToProps = state => ({
     organism: state.references.detail.organism,
     remotesFrom: state.references.detail.remotes_from,
     dataType: state.references.detail.data_type,
-    targets: state.references.detail.targets,
     detail: state.references.detail,
 });
 

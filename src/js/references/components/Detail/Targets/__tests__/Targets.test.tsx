@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createBrowserHistory } from "history";
+import { createMemoryHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../../../tests/fake/account";
@@ -18,7 +18,7 @@ describe("<Targets />", () => {
         props = {
             reference: createFakeReference({ data_type: "barcode" }),
         };
-        history = createBrowserHistory();
+        history = createMemoryHistory();
     });
 
     it("should render when [canModify=true]", async () => {
