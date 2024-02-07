@@ -32,48 +32,38 @@ const StyledMemberItem = styled(BoxGroupSection)`
 `;
 
 type MemberItemProps = {
+    /** Whether the current user can modify members in the list */
     canModify: boolean;
+    /** The unique identifier for the member */
     id: number | string;
+    /** The name of the member */
     name?: string;
+    /** The handle of the member */
     handle?: string;
+    /** Callback to initiate editing the member */
     onEdit: (id: number | string) => void;
+    /** Callback to initiate removing the member */
     onRemove: (id: number | string) => void;
 };
 
 /**
- * A user or group for display in the reference members list.
- *
- * @param canModify - Whether the current user can modify members in the list.
- * @param id - The unique identifier for the member.
- * @param name - The name of the member.
- * @param handle - The handle of the member.
- * @param onEdit - Callback to initiate editing the member.
- * @param onRemove - Callback to initiate removing the member.
- * @returns A condensed member item.
+ * A condensed user or group item for display in the reference members list
  */
-function MemberItem({ canModify, id, name, handle, onEdit, onRemove }: MemberItemProps) {
+export default function MemberItem({ canModify, id, name, handle, onEdit, onRemove }: MemberItemProps) {
     const displayName = handle || name || "";
     const handleEdit = useCallback(() => onEdit(id), [id]);
     const handleRemove = useCallback(() => onRemove(id), [id]);
-
-    let icons;
-
-    if (canModify) {
-        icons = (
-            <MemberItemIcons>
-                <Icon name="edit" color="orange" tip="Modify" onClick={handleEdit} />
-                <Icon name="trash" color="red" tip="Remove" onClick={handleRemove} />
-            </MemberItemIcons>
-        );
-    }
 
     return (
         <StyledMemberItem>
             <MemberItemIcon handle={displayName} />
             {displayName}
-            {icons}
+            {canModify && (
+                <MemberItemIcons>
+                    <Icon aria-label="edit" name="edit" color="orange" tip="Modify" onClick={handleEdit} />
+                    <Icon aria-label="remove" name="trash" color="red" tip="Remove" onClick={handleRemove} />
+                </MemberItemIcons>
+            )}
         </StyledMemberItem>
     );
 }
-
-export default MemberItem;
