@@ -1,4 +1,4 @@
-import { map, some, xor } from "lodash-es";
+import { map, some, sortBy, xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
@@ -39,7 +39,7 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
             <label>Groups</label>
             <UserGroupsList>
                 {documents.length ? (
-                    map(documents, ({ id, name }) => (
+                    map(sortBy(documents, [document => document.name.toLowerCase()]), ({ id, name }) => (
                         <UserGroup
                             key={id}
                             id={id}
