@@ -11,21 +11,11 @@ import { SubtractionAttribution } from "./Attribution";
 const StyledSubtractionItem = styled(BoxGroupSection)`
     align-items: center;
     display: grid;
-    grid-template-columns: 45% 25% auto;
+    grid-template-columns: 45% 35% auto;
     padding-bottom: 15px;
     padding-top: 15px;
     margin-left: auto;
     line-height: 1;
-`;
-
-const SubtractionNickname = styled.div`
-    //font-size: ${getFontSize("lg")};
-`;
-
-const StyledSubtractionItemHeader = styled.div`
-    align-items: center;
-    display: flex;
-    justify-content: flex-end;
 `;
 
 const SubtractionLink = styled(Link)`
@@ -38,9 +28,15 @@ const ProgressTag = styled.span`
     font-weight: ${getFontWeight("thick")};
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     svg {
         margin-right: 5px;
     }
+`;
+
+const Attribution = styled.div`
+    display: flex;
+    justify-content: flex-start;
 `;
 
 /**
@@ -50,17 +46,17 @@ export function SubtractionItem({ created_at, id, job, name, nickname, ready, us
     return (
         <StyledSubtractionItem>
             <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
-            <SubtractionNickname>{nickname}</SubtractionNickname>
-            <StyledSubtractionItemHeader>
-                {ready ? (
+            <div>{nickname}</div>
+            {ready ? (
+                <Attribution>
                     <SubtractionAttribution handle={user.handle} time={created_at} />
-                ) : (
-                    <ProgressTag>
-                        <ProgressCircle size={sizes.md} progress={job?.progress ?? 0} state={job?.state ?? "waiting"} />
-                        {getStateTitle(job?.state)}
-                    </ProgressTag>
-                )}
-            </StyledSubtractionItemHeader>
+                </Attribution>
+            ) : (
+                <ProgressTag>
+                    <ProgressCircle size={sizes.md} progress={job?.progress ?? 0} state={job?.state ?? "waiting"} />
+                    {getStateTitle(job?.state)}
+                </ProgressTag>
+            )}
         </StyledSubtractionItem>
     );
 }
