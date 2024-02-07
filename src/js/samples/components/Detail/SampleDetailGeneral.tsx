@@ -1,10 +1,17 @@
 import numbro from "numbro";
 import React from "react";
-import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { match, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, ContainerNarrow, ContainerSide, Markdown, Table } from "../../../base";
-import { LibraryType, Sample } from "../../types";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    ContainerNarrow,
+    ContainerSide,
+    LoadingPlaceholder,
+    Markdown,
+    Table,
+} from "../../../base";
+import { useFetchSample } from "../../querys";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./FileSizeWarning";
@@ -24,30 +31,24 @@ const StyledSampleDetailGeneral = styled.div`
 `;
 
 type SampleDetailGeneralProps = {
-    /** The read count of the sample */
-    count: string;
-    encoding: string;
-    /** The GC content of the sample (percentage) */
-    gc: string;
-    lengthRange: string;
-    libraryType: LibraryType;
-    /** The sample data */
-    sample: Sample;
+    /** Match object containing path information */
+    match: match<{ sampleId: string }>;
 };
 
 /**
  * The general view in sample details
  */
-export function SampleDetailGeneral({
-    count,
-    encoding,
-    gc,
-    lengthRange,
-    libraryType,
-    sample,
-}: SampleDetailGeneralProps) {
-    const { name, host, isolate, locale, paired, notes } = sample;
+export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps) {
+    const { sampleId } = match.params;
     const history = useHistory<{ editSample: boolean }>();
+
+    const { data, isLoading } = useFetchSample(sampleId);
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
+    const { quality } = data;
 
     return (
         <StyledSampleDetailGeneral>
@@ -55,26 +56,22 @@ export function SampleDetailGeneral({
                 <SampleFileSizeWarning />
                 <BoxGroup>
                     <BoxGroupHeader>
-                        <h2>General</h2>
+                        <h2>Metadata</h2>
                         <p>User-defined information about the sample.</p>
                     </BoxGroupHeader>
                     <Table>
                         <tbody>
                             <tr>
-                                <th>Name</th>
-                                <td>{name}</td>
-                            </tr>
-                            <tr>
                                 <th>Host</th>
-                                <td>{host}</td>
+                                <td>{data.host}</td>
                             </tr>
                             <tr>
                                 <th>Isolate</th>
-                                <td>{isolate}</td>
+                                <td>{data.isolate}</td>
                             </tr>
                             <tr>
                                 <th>Locale</th>
-                                <td>{locale}</td>
+                                <td>{data.locale}</td>
                             </tr>
                         </tbody>
                     </Table>
@@ -89,27 +86,27 @@ export function SampleDetailGeneral({
                         <tbody>
                             <tr>
                                 <th>Encoding</th>
-                                <td>{encoding}</td>
+                                <td>{quality.encoding}</td>
                             </tr>
                             <tr>
                                 <th>Read Count</th>
-                                <td>{count}</td>
+                                <td>{numbro(quality.count).format("0.0 a")}</td>
                             </tr>
                             <tr>
                                 <th>Library Type</th>
-                                <td>{libraryType}</td>
+                                <td>{getLibraryTypeDisplayName(data.library_type)}</td>
                             </tr>
                             <tr>
                                 <th>Length Range</th>
-                                <td>{lengthRange}</td>
+                                <td>{quality.length.join(" - ")}</td>
                             </tr>
                             <tr>
                                 <th>GC Content</th>
-                                <td>{gc}</td>
+                                <td>{numbro(quality.gc / 100).format("0.0 %")}</td>
                             </tr>
                             <tr>
                                 <th>Paired</th>
-                                <td>{paired ? "Yes" : "No"}</td>
+                                <td>{data.paired ? "Yes" : "No"}</td>
                             </tr>
                         </tbody>
                     </Table>
@@ -120,35 +117,19 @@ export function SampleDetailGeneral({
                         <h2>Notes</h2>
                         <p>Additional notes about the sample.</p>
                     </BoxGroupHeader>
-                    <Markdown markdown={notes} />
+                    <Markdown markdown={data.notes} />
                 </BoxGroup>
             </ContainerNarrow>
 
             <SampleDetailSidebarContainer>
-                <Sidebar sampleId={sample.id} sampleLabels={sample.labels} defaultSubtractions={sample.subtractions} />
+                <Sidebar sampleId={data.id} sampleLabels={data.labels} defaultSubtractions={data.subtractions} />
             </SampleDetailSidebarContainer>
 
             <EditSample
-                sample={sample}
+                sample={data}
                 show={history.location.state?.editSample}
                 onHide={() => history.push({ state: { editSample: false } })}
             />
         </StyledSampleDetailGeneral>
     );
 }
-
-export const mapStateToProps = state => {
-    const { quality, library_type } = state.samples.detail;
-    const { count, encoding, gc, length } = quality;
-
-    return {
-        encoding,
-        count: numbro(count).format("0.0 a"),
-        gc: numbro(gc / 100).format("0.0 %"),
-        libraryType: getLibraryTypeDisplayName(library_type),
-        lengthRange: length.join(" - "),
-        sample: state.samples.detail,
-    };
-};
-
-export default connect(mapStateToProps)(SampleDetailGeneral);
