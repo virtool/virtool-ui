@@ -29,6 +29,7 @@ export const ReferenceManage = ({
     latestBuild,
     organism,
     remotesFrom,
+    detail,
 }) => (
     <ContainerNarrow>
         <BoxGroup>
@@ -64,7 +65,7 @@ export const ReferenceManage = ({
         </BoxGroup>
 
         <Contributors contributors={contributors} />
-        <Targets />
+        <Targets reference={detail} />
     </ContainerNarrow>
 );
 
@@ -77,6 +78,8 @@ export const mapStateToProps = state => ({
     organism: state.references.detail.organism,
     remotesFrom: state.references.detail.remotes_from,
     dataType: state.references.detail.data_type,
+    targets: state.references.detail.targets,
+    detail: state.references.detail,
 });
 
 export const mapDispatchToProps = dispatch => ({
