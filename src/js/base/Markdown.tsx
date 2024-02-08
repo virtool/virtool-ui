@@ -15,8 +15,13 @@ type MarkdownProps = {
 };
 
 export function Markdown({ markdown = "" }: MarkdownProps) {
+    marked.use({
+        gfm: true,
+        async: false,
+    });
+
     if (markdown) {
-        return <StyledMarkdown dangerouslySetInnerHTML={{ __html: marked(markdown) }} />;
+        return <StyledMarkdown dangerouslySetInnerHTML={{ __html: marked.parse(markdown) as string }} />;
     }
 
     return (

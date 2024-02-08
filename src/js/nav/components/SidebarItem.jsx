@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Icon } from "../../base";
+import { excludePaths } from "../utils";
 
 const StyledSidebarItem = styled(NavLink)`
     color: ${props => props.theme.color.greyDark};
@@ -31,8 +32,6 @@ const StyledSidebarItem = styled(NavLink)`
         margin: 0.4rem 0;
     }
 `;
-
-import { excludePaths } from "../utils";
 
 export default function SidebarItem({ exclude, icon, link, title }) {
     return (

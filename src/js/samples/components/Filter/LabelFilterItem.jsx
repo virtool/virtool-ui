@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { getRing } from "../../../app/theme";
 import { Icon } from "../../../base";
-import { StyledSampleLabel } from "../Label";
+import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
-const StyledLabelFilterItem = styled(StyledSampleLabel)`
+const StyledLabelFilterItem = styled(BaseSampleLabel)`
     ${props => props.pressed && `border-color: ${props.theme.color.blue};`};
     box-shadow: ${props => (props.pressed ? getRing("blueLight")(props) : "none")};
     cursor: pointer;

@@ -79,8 +79,6 @@ class CreateOTU extends React.Component {
 
 const mapStateToProps = state => ({
     error: get(state, "errors.CREATE_OTU_ERROR.message", ""),
-    pending: state.otus.createPending,
-    refId: state.references.detail.id,
     show: routerLocationHasState(state, "createOTU"),
 });
 

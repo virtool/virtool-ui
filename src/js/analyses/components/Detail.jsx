@@ -15,7 +15,6 @@ import {
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { getAnalysis } from "../actions";
 import AODPViewer from "./AODP/Viewer";
-import AnalysisCache from "./CacheLink";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/Viewer";
 import { PathoscopeViewer } from "./Pathoscope/Viewer";
@@ -79,7 +78,6 @@ export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis
             <SubviewHeader>
                 <SubviewHeaderTitle>
                     {getWorkflowDisplayName(detail.workflow)} for {sampleName}
-                    <AnalysisCache />
                 </SubviewHeaderTitle>
                 <SubviewHeaderAttribution>
                     {detail.user.handle} started <RelativeTime time={detail.created_at} />

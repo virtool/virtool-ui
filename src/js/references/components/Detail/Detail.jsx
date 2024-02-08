@@ -6,7 +6,7 @@ import { ContainerNarrow, LoadingPlaceholder, NotFound } from "../../../base";
 import IndexDetail from "../../../indexes/components/Detail";
 import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/Detail";
-import OTUList from "../../../otus/components/List";
+import OTUList from "../../../otus/components/OTUList";
 import { getReference } from "../../actions";
 import { checkReferenceRight } from "../../selectors";
 import EditReference from "./EditReference";

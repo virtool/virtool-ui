@@ -1,7 +1,8 @@
 import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Label } from "../labels/types";
-import { getSample, listSamples, update } from "./api";
+import { ErrorResponse } from "../types/types";
+import { getSample, listSamples, SampleUpdate, update, updateSample } from "./api";
 import { Sample, SampleMinimal } from "./types";
 
 type SampleLabel = Label & {
@@ -46,7 +47,16 @@ export function useListSamples(page: number, per_page: number, term?: string, la
  * @returns A single sample
  */
 export function useFetchSample(sampleId: string) {
-    return useQuery<Sample>(samplesQueryKeys.detail(sampleId), () => getSample(sampleId));
+    return useQuery<Sample, ErrorResponse>(samplesQueryKeys.detail(sampleId), () => getSample(sampleId));
+}
+
+/**
+ * Initializes a mutator for updating a sample
+ *
+ * @returns A mutator for updating a sample
+ */
+export function useUpdateSample(sampleId: string) {
+    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(({ update }) => updateSample(sampleId, update));
 }
 
 /**
@@ -70,7 +80,10 @@ export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: S
             const allLabeled = selectedLabels.every(item => item.allLabeled === true);
 
             if (!labelExists || !allLabeled) {
-                mutation.mutate({ sampleId: sample.id, update: { labels: union(sampleLabelIds, [label]) } });
+                mutation.mutate({
+                    sampleId: sample.id,
+                    update: { labels: union(sampleLabelIds, [label]) },
+                });
             } else {
                 mutation.mutate({
                     sampleId: sample.id,

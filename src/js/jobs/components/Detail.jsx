@@ -11,14 +11,12 @@ import {
     NotFound,
     ViewHeader,
     ViewHeaderAttribution,
-    ViewHeaderIcons,
     ViewHeaderTitle,
 } from "../../base";
 import { Permission } from "../../groups/types";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { archiveJob, cancelJob, getJob } from "../actions";
 import JobError from "./Error";
-import { JobAction } from "./Item/Action";
 import { JobArgs } from "./JobArgs";
 import JobSteps from "./Steps";
 
@@ -68,16 +66,8 @@ class JobDetail extends React.Component {
             <ContainerNarrow>
                 <ViewHeader title={workflow}>
                     <ViewHeaderTitle>
-                        {workflow} <JobDetailBadge color={color}>{latest.state}</JobDetailBadge>
-                        <ViewHeaderIcons>
-                            <JobAction
-                                state={detail.state}
-                                onCancel={() => this.props.onCancel(this.props.detail.id)}
-                                onArchive={() => this.props.onArchive(this.props.detail.id)}
-                                canCancel={this.props.canCancel}
-                                canArchive={this.props.canArchive}
-                            />
-                        </ViewHeaderIcons>
+                        {workflow}
+                        <JobDetailBadge color={color}>{latest.state}</JobDetailBadge>
                     </ViewHeaderTitle>
                     <ViewHeaderAttribution time={detail.status[0].timestamp} user={detail.user.handle} />
                 </ViewHeader>
@@ -92,24 +82,28 @@ class JobDetail extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    error: get(state, "errors.GET_JOB_ERROR", null),
-    detail: state.jobs.detail,
-    canCancel: checkAdminRoleOrPermission(state, Permission.cancel_job),
-    canArchive: checkAdminRoleOrPermission(state, Permission.remove_job),
-});
+function mapStateToProps(state) {
+    return {
+        error: get(state, "errors.GET_JOB_ERROR", null),
+        detail: state.jobs.detail,
+        canCancel: checkAdminRoleOrPermission(state, Permission.cancel_job),
+        canArchive: checkAdminRoleOrPermission(state, Permission.remove_job),
+    };
+}
 
-const mapDispatchToProps = dispatch => ({
-    getDetail: jobId => {
-        dispatch(getJob(jobId));
-    },
-    onCancel: jobId => {
-        dispatch(cancelJob(jobId));
-    },
-    onArchive: jobId => {
-        dispatch(archiveJob(jobId));
-        dispatch(push("/jobs"));
-    },
-});
+function mapDispatchToProps(dispatch) {
+    return {
+        getDetail: jobId => {
+            dispatch(getJob(jobId));
+        },
+        onCancel: jobId => {
+            dispatch(cancelJob(jobId));
+        },
+        onArchive: jobId => {
+            dispatch(archiveJob(jobId));
+            dispatch(push("/jobs"));
+        },
+    };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobDetail);

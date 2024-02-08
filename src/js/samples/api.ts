@@ -67,8 +67,28 @@ export function listSamples(page: number, per_page: number, term: string, labels
  * Fetch a single sample
  *
  * @param sampleId - The id of the sample to fetch
- * @returns A promise resolving to fetching a single sample
+ * @returns A promise resolving to a single sample
  */
 export function getSample(sampleId: string): Promise<Sample> {
     return Request.get(`/samples/${sampleId}`).then(res => res.body);
+}
+
+export type SampleUpdate = {
+    name?: string;
+    isolate?: string;
+    locale?: string;
+    notes?: string;
+};
+
+/**
+ * Updates the data for a sample
+ *
+ * @param sampleId - The id of the sample to be updated
+ * @param update - The update to apply to the sample
+ * @returns A promise resolving to a response containing the updated sample's data
+ */
+export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
+    return Request.patch(`/samples/${sampleId}`)
+        .send(update)
+        .then(response => response.body);
 }

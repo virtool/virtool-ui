@@ -21,10 +21,10 @@ import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/Files";
-import Quality from "../Quality";
-import General from "./General";
+import Quality from "../SampleQuality";
 import RemoveSample from "./Remove";
 import Rights from "./Rights";
+import General from "./SampleDetailGeneral";
 
 function SampleDetail({
     canModify,
