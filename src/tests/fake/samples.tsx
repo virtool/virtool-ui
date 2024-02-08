@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
-import { assign } from "lodash";
+import { assign, times } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
-import { LibraryType, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
+import { LibraryType, Quality, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
 import { SubtractionNested } from "../../js/subtraction/types";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
@@ -35,10 +35,26 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
         pathoscope: faker.datatype.boolean(),
         ready: true,
         user: createFakeUserNested(),
-        workflows: { aodp: WorkflowState.INCOMPATIBLE, nuvs: WorkflowState.NONE, pathoscope: WorkflowState.NONE },
+        workflows: {
+            aodp: WorkflowState.INCOMPATIBLE,
+            nuvs: WorkflowState.NONE,
+            pathoscope: WorkflowState.NONE,
+        },
     };
 
     return assign(defaultSampleMinimal, overrides);
+}
+
+export function createFakeSampleQuality(): Quality {
+    return {
+        bases: [times(6, () => faker.datatype.number())],
+        composition: [times(4, () => faker.datatype.number())],
+        count: faker.datatype.number(),
+        encoding: "Sanger / Illumina 1.9",
+        gc: faker.datatype.number(),
+        length: [faker.datatype.number(), faker.datatype.number()],
+        sequences: times(10, () => faker.datatype.number()),
+    };
 }
 
 type CreateFakeSample = CreateFakeSampleMinimal & {
@@ -65,7 +81,7 @@ export function createFakeSample(overrides?: CreateFakeSample): Sample {
         is_legacy: faker.datatype.boolean(),
         locale: faker.random.word(),
         paired: faker.datatype.boolean(),
-        quality: null,
+        quality: createFakeSampleQuality(),
         reads: [],
         subtractions: [createFakeSubtractionNested()],
     };
@@ -88,6 +104,44 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
         found_count: samples.length,
         documents: samples,
     });
+}
+
+/**
+ * Sets up a mocked API route for fetching a single sample
+ *
+ * @param sampleDetail - The sample detail to be returned from the mocked API call
+ * @param statusCode - The HTTP status code to simulate in the response
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetSampleDetail(sampleDetail: Sample, statusCode?: number) {
+    return nock("http://localhost")
+        .get(`/api/samples/${sampleDetail.id}`)
+        .query(true)
+        .reply(statusCode || 200, sampleDetail);
+}
+
+/**
+ * Sets up a mocked API route for updating the sample details
+ *
+ * @param sample - The sample details
+ * @param name - The updated name
+ * @param isolate - The updated isolate
+ * @param host - The updated host
+ * @param locale - The updated locale
+ * @param notes - The updated notes
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiEditSample(
+    sample: Sample,
+    name: string,
+    isolate: string,
+    host: string,
+    locale: string,
+    notes: string,
+) {
+    const sampleDetail = { ...sample, name, isolate, host, locale, notes };
+
+    return nock("http://localhost").patch(`/api/samples/${sample.id}`).reply(200, sampleDetail);
 }
 
 /**
@@ -127,6 +181,16 @@ export function mockApiCreateSample(
     });
 
     return nock("http://localhost")
-        .post("/api/samples", { name, isolate, host, locale, library_type, files, labels, subtractions, group })
+        .post("/api/samples", {
+            name,
+            isolate,
+            host,
+            locale,
+            library_type,
+            files,
+            labels,
+            subtractions,
+            group,
+        })
         .reply(201, sample);
 }

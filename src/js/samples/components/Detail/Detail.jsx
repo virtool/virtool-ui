@@ -22,9 +22,9 @@ import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/Files";
 import Quality from "../SampleQuality";
-import General from "./General";
 import RemoveSample from "./Remove";
 import Rights from "./Rights";
+import General from "./SampleDetailGeneral";
 
 function SampleDetail({
     canModify,

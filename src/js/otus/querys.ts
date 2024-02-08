@@ -20,12 +20,13 @@ export const OTUQueryKeys = {
  *
  * @param refId - The reference id to fetch the indexes of
  * @param term - The search term to filter indexes by
- * @returns {UseQueryResult} The paginated list of indexes
+ * @param verified - Filter the results to verified OTUs only
+ * @returns The paginated list of indexes
  */
-export function useInfiniteFindOTUS(refId: string, term: string, verified) {
+export function useInfiniteFindOTUS(refId: string, term: string, verified?: boolean) {
     return useInfiniteQuery<OTUSearchResult>(
-        OTUQueryKeys.infiniteList([refId]),
-        ({ pageParam }) => findOTUs({ page: pageParam, refId, term, verified }),
+        OTUQueryKeys.infiniteList([refId, term]),
+        ({ pageParam }) => findOTUs({ refId, term, verified, page: pageParam }),
         {
             getNextPageParam: lastPage => {
                 if (lastPage.page >= lastPage.page_count) {
@@ -33,6 +34,7 @@ export function useInfiniteFindOTUS(refId: string, term: string, verified) {
                 }
                 return (lastPage.page || 1) + 1;
             },
+            keepPreviousData: true,
         },
     );
 }
