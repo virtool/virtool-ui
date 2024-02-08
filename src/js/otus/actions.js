@@ -2,7 +2,6 @@ import { createAction } from "@reduxjs/toolkit";
 import {
     ADD_SEQUENCE,
     CREATE_OTU,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -126,25 +125,6 @@ export const removeOTU = createAction(REMOVE_OTU.REQUESTED, (refId, otuId, histo
  */
 export const setIsolateAsDefault = createAction(SET_ISOLATE_AS_DEFAULT.REQUESTED, (otuId, isolateId) => ({
     payload: { otuId, isolateId },
-}));
-
-/**
- * Returns action that can trigger an API call for modifying an isolate.
- *
- * @func
- * @param otuID {string} unique OTU id
- * @param isolateId {string} unique isolate id
- * @param sourceType {string} category of isolate source types
- * @param sourceName {string} the name of the isolate source
- * @returns {object}
- */
-export const editIsolate = createAction(EDIT_ISOLATE.REQUESTED, (otuId, isolateId, sourceType, sourceName) => ({
-    payload: {
-        otuId,
-        isolateId,
-        sourceType,
-        sourceName,
-    },
 }));
 
 /**

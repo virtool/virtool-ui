@@ -5,7 +5,6 @@ import { pushState } from "../app/actions";
 import {
     ADD_SEQUENCE,
     CREATE_OTU,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -71,10 +70,6 @@ export function* removeOTU(action) {
     }
 }
 
-export function* editIsolate(action) {
-    yield updateAndGetOTU(otusAPI.editIsolate, action, EDIT_ISOLATE);
-}
-
 export function* removeIsolate(action) {
     yield updateAndGetOTU(otusAPI.removeIsolate, action, REMOVE_ISOLATE);
 }
@@ -127,7 +122,6 @@ export function* watchOTUs() {
     yield takeEvery(CREATE_OTU.REQUESTED, createOTU);
     yield takeEvery(EDIT_OTU.REQUESTED, editOTU);
     yield takeEvery(REMOVE_OTU.REQUESTED, removeOTU);
-    yield takeEvery(EDIT_ISOLATE.REQUESTED, editIsolate);
     yield takeEvery(SET_ISOLATE_AS_DEFAULT.REQUESTED, setIsolateAsDefault);
     yield takeEvery(REMOVE_ISOLATE.REQUESTED, removeIsolate);
     yield takeEvery(ADD_SEQUENCE.REQUESTED, addSequence);

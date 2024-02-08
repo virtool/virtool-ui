@@ -3,7 +3,6 @@ import { find, hasIn, map } from "lodash-es";
 import {
     ADD_SEQUENCE,
     CREATE_OTU,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
     FIND_OTUS,
@@ -17,7 +16,6 @@ import {
     REVERT,
     SELECT_ISOLATE,
     SET_ISOLATE_AS_DEFAULT,
-    SHOW_EDIT_ISOLATE,
     SHOW_EDIT_OTU,
     SHOW_REMOVE_ISOLATE,
     SHOW_REMOVE_OTU,
@@ -40,8 +38,6 @@ export const initialState = {
     detailHistory: null,
     edit: false,
     remove: false,
-    addIsolate: false,
-    editIsolate: false,
     removeIsolate: false,
     removeSequence: false,
     activeIsolateId: null,
@@ -53,8 +49,6 @@ export const hideOTUModal = state => ({
     ...state,
     edit: false,
     remove: false,
-    addIsolate: false,
-    editIsolate: false,
     removeIsolate: false,
     removeSequence: false,
 });
@@ -156,9 +150,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
         .addCase(SHOW_REMOVE_OTU, state => {
             state.remove = true;
         })
-        .addCase(SHOW_EDIT_ISOLATE, state => {
-            state.editIsolate = true;
-        })
         .addCase(SHOW_REMOVE_ISOLATE, state => {
             state.removeIsolate = true;
         })
@@ -168,7 +159,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
         .addCase(HIDE_OTU_MODAL, state => {
             state.edit = false;
             state.remove = false;
-            state.editIsolate = false;
             state.removeIsolate = false;
             state.removeSequence = false;
         })
@@ -182,7 +172,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
                 const matches = {
                     [GET_OTU.SUCCEEDED]: true,
                     [EDIT_OTU.SUCCEEDED]: true,
-                    [EDIT_ISOLATE.SUCCEEDED]: true,
                     [ADD_SEQUENCE.SUCCEEDED]: true,
                     [EDIT_SEQUENCE.SUCCEEDED]: true,
                     [REMOVE_SEQUENCE.SUCCEEDED]: true,

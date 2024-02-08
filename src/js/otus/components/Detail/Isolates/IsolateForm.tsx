@@ -36,7 +36,7 @@ export default function IsolateForm({
     onSubmit,
     allowedSourceTypes,
 }: IsolateFormProps) {
-    const { register, handleSubmit, watch, control } = useForm({
+    const { register, handleSubmit, watch } = useForm({
         defaultValues: {
             sourceName: sourceName || "",
             sourceType: sourceType || (restrictSourceTypes ? "unknown" : ""),
@@ -51,7 +51,6 @@ export default function IsolateForm({
                     allowedSourceTypes={allowedSourceTypes}
                     register={register}
                     watch={watch}
-                    control={control}
                 />
 
                 <InputGroup>

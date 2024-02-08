@@ -109,11 +109,18 @@ export function addIsolate(otuId: string, sourceType: string, sourceName: string
  * @param sourceName - The name of the source
  * @returns A Promise resolving to the API response containing the updated isolate
  */
-export function editIsolate({ otuId, isolateId, sourceType, sourceName }) {
-    return Request.patch(`/otus/${otuId}/isolates/${isolateId}`).send({
-        source_type: sourceType,
-        source_name: sourceName,
-    });
+export function editIsolate(
+    otuId: string,
+    isolateId: string,
+    sourceType: string,
+    sourceName: string,
+): Promise<OTUIsolate> {
+    return Request.patch(`/otus/${otuId}/isolates/${isolateId}`)
+        .send({
+            source_type: sourceType,
+            source_name: sourceName,
+        })
+        .then(res => res.body);
 }
 
 /**

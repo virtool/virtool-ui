@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation } from "react-query";
-import { addIsolate, findOTUs } from "./api";
+import { addIsolate, editIsolate, findOTUs } from "./api";
 import { OTUIsolate, OTUSearchResult } from "./types";
 
 /**
@@ -48,4 +48,17 @@ export function useCreateIsolate() {
     return useMutation<OTUIsolate, unknown, { otuId: string; sourceType: string; sourceName: string }>(
         ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName),
     );
+}
+
+/**
+ * Initializes a mutator for editing an OTU isolate
+ *
+ * @returns A mutator for editing an OTU isolate
+ */
+export function useUpdateIsolate() {
+    return useMutation<
+        OTUIsolate,
+        unknown,
+        { otuId: string; isolateId: string; sourceType: string; sourceName: string }
+    >(({ otuId, isolateId, sourceType, sourceName }) => editIsolate(otuId, isolateId, sourceType, sourceName));
 }

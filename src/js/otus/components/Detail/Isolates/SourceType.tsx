@@ -1,7 +1,7 @@
 import { capitalize, map } from "lodash-es";
 import React from "react";
-import { Control, Controller, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { InputGroup, InputLabel, InputSimple } from "../../../../base";
+import { UseFormRegister, UseFormWatch } from "react-hook-form";
+import { InputGroup, InputLabel, InputSelect, InputSimple } from "../../../../base";
 
 type IsolateFormValues = {
     sourceName: string;
@@ -16,14 +16,12 @@ type SourceTypeProps = {
     restrictSourceTypes: boolean;
     /** Watches for changes in form values */
     watch: UseFormWatch<IsolateFormValues>;
-    /** Controls the state of a form */
-    control: Control<IsolateFormValues>;
 };
 
 /**
  * Displays input for source type in isolate creation dialog
  */
-export function SourceType({ allowedSourceTypes, control, register, restrictSourceTypes, watch }: SourceTypeProps) {
+export function SourceType({ allowedSourceTypes, register, restrictSourceTypes, watch }: SourceTypeProps) {
     if (restrictSourceTypes) {
         const optionComponents = map(allowedSourceTypes, sourceType => (
             <option key={sourceType} value={capitalize(sourceType)}>
@@ -34,24 +32,12 @@ export function SourceType({ allowedSourceTypes, control, register, restrictSour
         return (
             <InputGroup>
                 <InputLabel htmlFor="sourceType">Source Type</InputLabel>
-                <Controller
-                    name="sourceType"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                        <InputSimple
-                            as="select"
-                            id="sourceType"
-                            {...register("sourceType")}
-                            value={value}
-                            onChange={onChange}
-                        >
-                            <option key="default" value="unknown">
-                                Unknown
-                            </option>
-                            {optionComponents}
-                        </InputSimple>
-                    )}
-                />
+                <InputSelect id="sourceType" {...register("sourceType")}>
+                    <option key="default" value="unknown">
+                        Unknown
+                    </option>
+                    {optionComponents}
+                </InputSelect>
             </InputGroup>
         );
     }

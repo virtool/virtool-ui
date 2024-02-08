@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Icon, Label } from "../../../../base";
 import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
 import { getCanModifyReferenceOTU, getReferenceDetailId } from "../../../../references/selectors";
 import IsolateSequences from "../../../../sequences/components/Sequences";
-import { setIsolateAsDefault, showEditIsolate, showRemoveIsolate } from "../../../actions";
+import { setIsolateAsDefault, showRemoveIsolate } from "../../../actions";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./Remove";
 
@@ -35,79 +36,84 @@ const StyledIsolateDetail = styled.div`
     min-width: 0;
 `;
 
-export class Detail extends React.Component {
-    handleSetDefaultIsolate = () => {
-        this.props.setIsolateAsDefault(this.props.otuId, this.props.activeIsolate.id);
+export function Detail(props) {
+    const history = useHistory();
+    const location = useLocation();
+
+    const handleSetDefaultIsolate = () => {
+        props.setIsolateAsDefault(props.otuId, props.activeIsolate.id);
     };
 
-    render() {
-        const isolate = this.props.activeIsolate;
+    const isolate = props.activeIsolate;
 
-        const defaultIsolateLabel = isolate.default && this.props.dataType !== "barcode" && (
-            <Label color="green">
-                <Icon name="star" /> Default Isolate
-            </Label>
-        );
+    const defaultIsolateLabel = isolate.default && props.dataType !== "barcode" && (
+        <Label color="green">
+            <Icon name="star" /> Default Isolate
+        </Label>
+    );
 
-        let modifyIcons;
+    let modifyIcons;
 
-        if (this.props.canModify) {
-            modifyIcons = (
-                <>
-                    <Icon
-                        name="pencil-alt"
-                        color="orange"
-                        tip="Edit Isolate"
-                        tipPlacement="left"
-                        onClick={this.props.showEditIsolate}
-                    />
-                    {!isolate.default && this.props.dataType !== "barcode" && (
-                        <Icon
-                            name="star"
-                            color="green"
-                            tip="Set as Default"
-                            tipPlacement="left"
-                            onClick={this.handleSetDefaultIsolate}
-                        />
-                    )}
-                    <Icon
-                        name="trash"
-                        color="red"
-                        tip="Remove Isolate"
-                        tipPlacement="left"
-                        onClick={this.props.showRemoveIsolate}
-                    />
-                </>
-            );
-        }
-
-        return (
-            <StyledIsolateDetail>
-                <EditIsolate
-                    key={isolate.id}
-                    otuId={this.props.otuId}
-                    isolateId={isolate.id}
-                    sourceType={isolate.source_type}
-                    sourceName={isolate.source_name}
+    if (props.canModify) {
+        modifyIcons = (
+            <>
+                <Icon
+                    name="pencil-alt"
+                    color="orange"
+                    tip="Edit Isolate"
+                    tipPlacement="left"
+                    onClick={() => history.push({ state: { editIsolate: true } })}
                 />
-
-                <RemoveIsolate />
-
-                <IsolateDetailHeader>
-                    <div>{isolate.name}</div>
-                    <div>
-                        {defaultIsolateLabel}
-                        {modifyIcons}
-                        <DownloadLink href={`/api/otus/${this.props.otuId}/isolates/${this.props.activeIsolate.id}.fa`}>
-                            FASTA
-                        </DownloadLink>
-                    </div>
-                </IsolateDetailHeader>
-
-                <IsolateSequences canModify={this.props.canModify} />
-            </StyledIsolateDetail>
+                {!isolate.default && props.dataType !== "barcode" && (
+                    <Icon
+                        name="star"
+                        color="green"
+                        tip="Set as Default"
+                        tipPlacement="left"
+                        onClick={handleSetDefaultIsolate}
+                    />
+                )}
+                <Icon
+                    name="trash"
+                    color="red"
+                    tip="Remove Isolate"
+                    tipPlacement="left"
+                    onClick={props.showRemoveIsolate}
+                />
+            </>
         );
     }
+
+    return (
+        <StyledIsolateDetail>
+            <EditIsolate
+                key={isolate.id}
+                otuId={props.otuId}
+                isolateId={isolate.id}
+                sourceType={isolate.source_type}
+                sourceName={isolate.source_name}
+                allowedSourceTypes={props.allowedSourceTypes}
+                restrictSourceTypes={props.restrictSourceTypes}
+                show={location.state?.editIsolate}
+                onHide={() => history.replace({ state: { editIsolate: false } })}
+            />
+
+            <RemoveIsolate />
+
+            <IsolateDetailHeader>
+                <div>{isolate.name}</div>
+                <div>
+                    {defaultIsolateLabel}
+                    {modifyIcons}
+                    <DownloadLink href={`/api/otus/${props.otuId}/isolates/${props.activeIsolate.id}.fa`}>
+                        FASTA
+                    </DownloadLink>
+                </div>
+            </IsolateDetailHeader>
+
+            <IsolateSequences canModify={props.canModify} />
+        </StyledIsolateDetail>
+    );
 }
 
 const mapStateToProps = state => ({
@@ -127,10 +133,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setIsolateAsDefault: (otuId, isolateId) => {
         dispatch(setIsolateAsDefault(otuId, isolateId));
-    },
-
-    showEditIsolate: (otuId, isolateId, sourceType, sourceName) => {
-        dispatch(showEditIsolate(otuId, isolateId, sourceType, sourceName));
     },
 
     showRemoveIsolate: () => {
