@@ -16,7 +16,7 @@ exports[`<SampleRights /> > should render 1`] = `
         <InputLabel>
           Group
         </InputLabel>
-        <InputSelect
+        <ForwardRef
           onChange={[Function]}
         >
           <option
@@ -36,13 +36,13 @@ exports[`<SampleRights /> > should render 1`] = `
           >
             Technicians
           </option>
-        </InputSelect>
+        </ForwardRef>
       </InputGroup>
       <InputGroup>
         <InputLabel>
           Group Rights
         </InputLabel>
-        <InputSelect
+        <ForwardRef
           name="groupRights"
           onChange={[Function]}
           value="rw"
@@ -62,13 +62,13 @@ exports[`<SampleRights /> > should render 1`] = `
           >
             Read & write
           </option>
-        </InputSelect>
+        </ForwardRef>
       </InputGroup>
       <InputGroup>
         <InputLabel>
           All Users' Rights
         </InputLabel>
-        <InputSelect
+        <ForwardRef
           label="All Users' Rights"
           name="allUsers"
           onChange={[Function]}
@@ -89,7 +89,7 @@ exports[`<SampleRights /> > should render 1`] = `
           >
             Read & write
           </option>
-        </InputSelect>
+        </ForwardRef>
       </InputGroup>
     </BoxGroupSection>
   </BoxGroup>

@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
     ADD_SEQUENCE,
     CREATE_OTU,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -26,7 +25,6 @@ import {
 import {
     addSequence,
     createOTU,
-    editIsolate,
     editOTU,
     editSequence,
     getOTU,
@@ -129,14 +127,6 @@ describe("OTUs Action Creators", () => {
         expect(result).toEqual({
             type: SET_ISOLATE_AS_DEFAULT.REQUESTED,
             payload: { otuId, isolateId },
-        });
-    });
-
-    it("editIsolate: returns action to edit a specific isolate", () => {
-        const result = editIsolate(otuId, isolateId, sourceType, sourceName);
-        expect(result).toEqual({
-            type: EDIT_ISOLATE.REQUESTED,
-            payload: { otuId, isolateId, sourceType, sourceName },
         });
     });
 
