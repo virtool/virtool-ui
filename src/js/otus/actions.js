@@ -6,7 +6,6 @@ import {
     EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
-    FIND_OTUS,
     GET_OTU,
     GET_OTU_HISTORY,
     HIDE_OTU_MODAL,
@@ -53,15 +52,6 @@ export const wsUpdateOTU = createAction(WS_UPDATE_OTU);
  */
 export const wsRemoveOTU = createAction(WS_REMOVE_OTU);
 
-export const findOTUs = createAction(FIND_OTUS.REQUESTED, (refId, term, verified, page) => ({
-    payload: {
-        refId,
-        term,
-        verified,
-        page,
-    },
-}));
-
 /**
  * Returns action that can trigger an API call for retrieving a specific OTU.
  *
@@ -69,7 +59,9 @@ export const findOTUs = createAction(FIND_OTUS.REQUESTED, (refId, term, verified
  * @param otuId {string} unique OTU id
  * @returns {object}
  */
-export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({ payload: { otuId } }));
+export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({
+    payload: { otuId },
+}));
 
 /**
  * Returns action that can trigger an API call for getting a OTU's history.
@@ -78,7 +70,9 @@ export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({ payload: { otu
  * @param otuId {string} unique OTU id
  * @returns {object}
  */
-export const getOTUHistory = createAction(GET_OTU_HISTORY.REQUESTED, otuId => ({ payload: { otuId } }));
+export const getOTUHistory = createAction(GET_OTU_HISTORY.REQUESTED, otuId => ({
+    payload: { otuId },
+}));
 
 /**
  * Returns action that can trigger an API call for creating a new OTU.
@@ -279,7 +273,9 @@ export const revert = createAction(REVERT.REQUESTED, (otuId, otuVersion, changeI
  * @param error {onject} error object
  * @returns {object}
  */
-export const revertFailed = createAction(REVERT.FAILED, error => ({ payload: { error } }));
+export const revertFailed = createAction(REVERT.FAILED, error => ({
+    payload: { error },
+}));
 
 /**
  * Returns action that can trigger an API call for deleting unbuilt changes of a OTU.
@@ -300,7 +296,9 @@ export const revertSucceeded = createAction(REVERT.SUCCEEDED, (otu, history) => 
  * @param isolateId {string} unique isolate id
  * @returns {object}
  */
-export const selectIsolate = createAction(SELECT_ISOLATE, isolateId => ({ payload: { isolateId } }));
+export const selectIsolate = createAction(SELECT_ISOLATE, isolateId => ({
+    payload: { isolateId },
+}));
 
 /**
  * Returns action for displaying the edit OTU modal.

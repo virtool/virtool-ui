@@ -2,7 +2,7 @@ import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Label } from "../labels/types";
 import { ErrorResponse } from "../types/types";
-import { listSamples, SampleUpdate, update, updateSample } from "./api";
+import { getSample, listSamples, SampleUpdate, update, updateSample } from "./api";
 import { Sample, SampleMinimal } from "./types";
 
 type SampleLabel = Label & {
@@ -38,6 +38,16 @@ export function useListSamples(page: number, per_page: number, term?: string, la
             keepPreviousData: true,
         },
     );
+}
+
+/**
+ * Fetches a single sample
+ *
+ * @param sampleId - The id of the sample to fetch
+ * @returns A single sample
+ */
+export function useFetchSample(sampleId: string) {
+    return useQuery<Sample, ErrorResponse>(samplesQueryKeys.detail(sampleId), () => getSample(sampleId));
 }
 
 /**

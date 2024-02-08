@@ -33,7 +33,9 @@ type CreateFakeReferenceNestedProps = {
 /**
  * Create a fake reference nested
  */
-export function createFakeReferenceNested(props?: CreateFakeReferenceNestedProps) {
+export function createFakeReferenceNested(
+    props?: CreateFakeReferenceNestedProps,
+) {
     const defaultReferenceNested = {
         id: faker.random.alphaNumeric(8),
         data_type: faker.helpers.arrayElement(["barcode", "genome"]),
@@ -52,10 +54,15 @@ type CreateFakeReferenceMinimal = CreateFakeReferenceNestedProps & {
 /**
  * Create a fake reference minimal
  */
-export function createFakeReferenceMinimal(props?: CreateFakeReferenceMinimal): ReferenceMinimal {
+export function createFakeReferenceMinimal(
+    props?: CreateFakeReferenceMinimal,
+): ReferenceMinimal {
     const defaultReferenceMinimal = {
         ...createFakeReferenceNested(),
-        cloned_from: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
+        cloned_from: {
+            id: faker.random.alphaNumeric(8),
+            name: faker.random.word(),
+        },
         created_at: faker.date.past().toISOString(),
         imported_from: null,
         installed: true,
@@ -83,7 +90,9 @@ type CreateFakeReference = CreateFakeReferenceMinimal & {
 /**
  * Create a fake reference
  */
-export function createFakeReference(overrides?: CreateFakeReference): Reference {
+export function createFakeReference(
+    overrides?: CreateFakeReference,
+): Reference {
     const { description, ...props } = overrides || {};
 
     const defaultReference = {
@@ -119,6 +128,23 @@ export function mockApiGetReferences(references: ReferenceMinimal[]) {
 }
 
 /**
+ * Sets up a mocked API route for fetching a single reference
+ *
+ * @param referenceDetail - The reference detail to be returned from the mocked API call
+ * @param statusCode - The HTTP status code to simulate in the response
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetReferenceDetail(
+    referenceDetail: Reference,
+    statusCode?: number,
+) {
+    return nock("http://localhost")
+        .get(`/api/refs/${referenceDetail.id}`)
+        .query(true)
+        .reply(statusCode || 200, referenceDetail);
+}
+
+/**
  * Sets up a mocked API route for cloning a reference
  *
  * @param name - The name of the clone
@@ -126,7 +152,11 @@ export function mockApiGetReferences(references: ReferenceMinimal[]) {
  * @param reference - The reference being cloned
  * @returns The nock scope for the mocked API call
  */
-export function mockApiCloneReference(name: string, description: string, reference: ReferenceMinimal) {
+export function mockApiCloneReference(
+    name: string,
+    description: string,
+    reference: ReferenceMinimal,
+) {
     const clonedReference = createFakeReference({
         cloned_from: {
             id: reference.id,
@@ -160,9 +190,16 @@ export function mockApiCreateReference(
     data_type: ReferenceDataType,
     organism: string,
 ) {
-    const reference = createFakeReference({ name, description, data_type, organism });
+    const reference = createFakeReference({
+        name,
+        description,
+        data_type,
+        organism,
+    });
 
-    return nock("http://localhost").post("/api/refs", { name, description, data_type, organism }).reply(201, reference);
+    return nock("http://localhost")
+        .post("/api/refs", { name, description, data_type, organism })
+        .reply(201, reference);
 }
 
 /**
