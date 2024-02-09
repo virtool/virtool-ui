@@ -32,7 +32,19 @@ const StyledMemberRight = styled.div`
     }
 `;
 
-export const MemberRight = ({ right, enabled, onToggle }) => {
+type MemberRightProps = {
+    /** The name of the right */
+    right: string;
+    /** Indicates whether the right is currently enabled */
+    enabled: boolean;
+    /** A callback function to toggle the enabled state of the right */
+    onToggle: (right: string, enabled: boolean) => void;
+};
+
+/**
+ * Displays the rights for the group/user with options to modify the rights
+ */
+export function MemberRight({ right, enabled, onToggle }: MemberRightProps) {
     const handleClick = useCallback(() => onToggle(right, !enabled), [enabled]);
 
     return (
@@ -44,4 +56,4 @@ export const MemberRight = ({ right, enabled, onToggle }) => {
             </MemberRightDescription>
         </StyledMemberRight>
     );
-};
+}
