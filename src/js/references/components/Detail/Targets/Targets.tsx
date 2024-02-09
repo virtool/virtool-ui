@@ -27,7 +27,7 @@ type TargetsProps = {
  * Displays the targets with options to edit/remove
  */
 export default function Targets({ reference }: TargetsProps) {
-    const { data_type, targets, id, name } = reference;
+    const { data_type, targets, id } = reference;
 
     const history = useHistory();
     const location = useLocation<{ addTarget: boolean; editTarget: boolean }>();

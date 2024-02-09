@@ -54,7 +54,7 @@ export default function AddTarget({ refId, targets, show, onHide }: AddTargetPro
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
-                    <DialogTitle>Add target</DialogTitle>
+                    <DialogTitle>Add Target</DialogTitle>
                     <TargetForm onSubmit={onSubmit} error={mutation.isError && mutation.error.response.body[0].msg} />
                 </DialogContent>
             </DialogPortal>

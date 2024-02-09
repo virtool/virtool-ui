@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EditTarget, mapDispatchToProps } from "../EditTarget";
+import EditTarget from "../EditTarget";
 import { TargetForm } from "../TargetForm";
 
 describe("<EditTarget />", () => {
@@ -9,10 +9,6 @@ describe("<EditTarget />", () => {
     let e;
 
     beforeEach(() => {
-        e = {
-            preventDefault: vi.fn(),
-        };
-
         props = {
             name: "Bar",
             description: "Bar description",
@@ -115,17 +111,5 @@ describe("<EditTarget />", () => {
         wrapper.setState({ name: "CPN60", description: "This is a test" });
         wrapper.setProps({ show: true });
         setTimeout(() => expect(wrapper).toMatchSnapshot(), 500);
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    it("should return onSubmit in props", () => {
-        const dispatch = vi.fn();
-        const props = mapDispatchToProps(dispatch);
-        props.onSubmit("foo", "bar");
-        expect(dispatch).toHaveBeenCalledWith({
-            payload: { refId: "foo", update: "bar" },
-            type: "EDIT_REFERENCE_REQUESTED",
-        });
     });
 });
