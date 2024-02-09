@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Checkbox } from "../../../../../base";
-import { TargetForm } from "../Form";
+import { TargetForm } from "../TargetForm";
 
 describe("<TargetForm />", () => {
     const props = {

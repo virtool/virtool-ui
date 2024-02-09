@@ -124,7 +124,7 @@ export type Reference = ReferenceMinimal & {
     groups: Array<ReferenceGroup>;
     restrict_source_types: boolean;
     source_types: Array<string>;
-    targets: ReferenceTarget;
+    targets: ReferenceTarget[];
     users: Array<ReferenceUser>;
 };
 

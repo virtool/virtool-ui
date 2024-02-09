@@ -7,9 +7,9 @@ import { AdministratorRoles } from "../../../../administration/types";
 import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "../../../../base";
 import { useUpdateReference } from "../../../hooks";
 import { Reference } from "../../../types";
-import AddTarget from "./Add";
-import EditTarget from "./Edit";
-import { TargetItem } from "./Item";
+import AddTarget from "./AddTarget";
+import EditTarget from "./EditTarget";
+import { TargetItem } from "./TargetItem";
 
 const TargetsHeader = styled(BoxGroupHeader)`
     h2 {
@@ -63,8 +63,6 @@ export default function Targets({ reference }: TargetsProps) {
             {canModify && (
                 <>
                     <AddTarget
-                        names={name}
-                        dataType={data_type}
                         refId={id}
                         targets={targets}
                         show={location.state?.addTarget}

@@ -1,8 +1,8 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AddTarget, mapDispatchToProps } from "../Add";
-import { TargetForm } from "../Form";
+import { AddTarget, mapDispatchToProps } from "../AddTarget";
+import { TargetForm } from "../TargetForm";
 
 describe("<AddTarget />", () => {
     let props;
