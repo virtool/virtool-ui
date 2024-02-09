@@ -28,7 +28,7 @@ export function IimiViewer({ detail }) {
             </Box>
             <Accordion type="single" collapsible>
                 {hits.map(hit => (
-                    <IimiOTU hit={hit} />
+                    <IimiOTU hit={hit} key={hit.id} />
                 ))}
             </Accordion>
         </>
