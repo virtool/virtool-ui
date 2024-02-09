@@ -1,9 +1,7 @@
 import { forEach } from "lodash-es";
 import { describe, expect, it } from "vitest";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -15,7 +13,6 @@ import {
     REVERT,
     SELECT_ISOLATE,
     SET_ISOLATE_AS_DEFAULT,
-    SHOW_EDIT_ISOLATE,
     SHOW_EDIT_OTU,
     SHOW_REMOVE_ISOLATE,
     SHOW_REMOVE_OTU,
@@ -174,12 +171,10 @@ describe("OTUs Reducer:", () => {
         const actionList = [
             GET_OTU.SUCCEEDED,
             EDIT_OTU.SUCCEEDED,
-            EDIT_ISOLATE.SUCCEEDED,
             ADD_SEQUENCE.SUCCEEDED,
             EDIT_SEQUENCE.SUCCEEDED,
             REMOVE_SEQUENCE.SUCCEEDED,
             SET_ISOLATE_AS_DEFAULT.SUCCEEDED,
-            ADD_ISOLATE.SUCCEEDED,
             REMOVE_ISOLATE.SUCCEEDED,
         ];
 
@@ -266,12 +261,6 @@ describe("OTUs Reducer:", () => {
         expect(result).toEqual({ remove: true });
     });
 
-    it("should handle SHOW_EDIT_ISOLATE", () => {
-        const action = { type: SHOW_EDIT_ISOLATE };
-        const result = reducer({}, action);
-        expect(result).toEqual({ editIsolate: true });
-    });
-
     it("should handle SHOW_REMOVE_ISOLATE", () => {
         const action = { type: SHOW_REMOVE_ISOLATE };
         const result = reducer({}, action);
@@ -290,7 +279,6 @@ describe("OTUs Reducer:", () => {
     it("should handle HIDE_OTU_MODAL", () => {
         const state = {
             edit: true,
-            editIsolate: true,
             remove: false,
             removeIsolate: false,
             removeSequence: "foo",
@@ -299,7 +287,6 @@ describe("OTUs Reducer:", () => {
         const result = reducer(state, action);
         expect(result).toEqual({
             edit: false,
-            editIsolate: false,
             remove: false,
             removeIsolate: false,
             removeSequence: false,

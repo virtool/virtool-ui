@@ -1,7 +1,7 @@
 import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link, Redirect, Route, Switch, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { getFontWeight } from "../../../app/theme";
 import {
@@ -14,22 +14,37 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "../../../base";
+import { useGetReference } from "../../../references/hooks";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
 import { getOTU, showEditOTU, showRemoveOTU } from "../../actions";
 import EditOTU from "./Edit";
 import IsolateEditor from "./Editor";
 import General from "./General";
 import History from "./History/History";
-import AddIsolate from "./Isolates/Add";
+import AddIsolate from "./Isolates/AddIsolate";
 import RemoveOTU from "./Remove";
 import Schema from "./Schema/Schema";
 
-function OTUSection() {
+function OTUSection({ match }) {
+    const history = useHistory();
+    const { otuId, refId } = match.params;
+    const { data, isLoading } = useGetReference(refId);
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
     return (
         <div>
             <General />
             <IsolateEditor />
-            <AddIsolate />
+            <AddIsolate
+                allowedSourceTypes={data.source_types}
+                otuId={otuId}
+                restrictSourceTypes={data.restrict_source_types}
+                show={history.location.state?.addIsolate}
+                onHide={() => history.replace({ state: { addIsolate: false } })}
+            />
         </div>
     );
 }
