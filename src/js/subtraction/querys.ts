@@ -95,8 +95,9 @@ export function useRemoveSubtraction() {
 /**
  * Fetches a list of subtractions with reduced information
  *
+ * @param ready - Indicates whether to show all the ready subtractions
  * @returns A list of subtractions
  */
-export function useFetchSubtractionsShortlist() {
-    return useQuery<SubtractionShortlist[]>(subtractionQueryKeys.shortlist(), fetchSubtractionShortlist);
+export function useFetchSubtractionsShortlist(ready?: boolean) {
+    return useQuery<SubtractionShortlist[]>(subtractionQueryKeys.shortlist(), () => fetchSubtractionShortlist(ready));
 }

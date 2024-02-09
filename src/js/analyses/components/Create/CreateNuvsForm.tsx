@@ -2,7 +2,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../../../base";
 import { IndexMinimal } from "../../../indexes/types";
-import { Subtraction } from "../../../subtraction/types";
+import { SubtractionShortlist } from "../../../subtraction/types";
 import { Workflows } from "../../types";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
@@ -21,7 +21,7 @@ type createNuvsFormProps = {
     defaultSubtractions: string[];
     onSubmit: (values: createNuvsFormValues) => void;
     sampleCount: number;
-    subtractions: Subtraction[];
+    subtractions: SubtractionShortlist[];
 };
 
 /**

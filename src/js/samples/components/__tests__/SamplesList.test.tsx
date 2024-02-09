@@ -1,13 +1,16 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
-import nock from "nock";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
+import { createFakeIndexMinimal, mockApiListIndexes } from "../../../../tests/fake/indexes";
+import { createFakeLabelNested, mockApiGetLabels } from "../../../../tests/fake/labels";
+import { createFakeMLModelMinimal, mockApiGetModels } from "../../../../tests/fake/ml";
 import { createFakeSampleMinimal, mockApiGetSamples } from "../../../../tests/fake/samples";
+import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";
@@ -21,8 +24,10 @@ describe("<SamplesList />", () => {
         samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
         mockApiGetSamples(samples);
         mockApiGetHmms(createFakeHMMSearchResults());
-        nock("http://localhost").get("/api/indexes").query(true).reply(200, []);
-        nock("http://localhost").get("/api/labels").reply(200, []);
+        mockApiListIndexes([createFakeIndexMinimal()]);
+        mockApiGetLabels([createFakeLabelNested()]);
+        mockApiGetModels([createFakeMLModelMinimal()]);
+        mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
     });
 
     it("should render correctly", async () => {

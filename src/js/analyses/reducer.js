@@ -1,7 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import {
     BLAST_NUVS,
-    FIND_ANALYSES,
     GET_ANALYSIS,
     LIST_READY_INDEXES,
     SET_ANALYSIS_ACTIVE_ID,
@@ -14,11 +13,9 @@ import {
     TOGGLE_FILTER_OTUS,
     TOGGLE_FILTER_SEQUENCES,
     TOGGLE_SHOW_PATHOSCOPE_READS,
-    WS_INSERT_ANALYSIS,
-    WS_REMOVE_ANALYSIS,
     WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
-import { insert, remove, update, updateDocuments } from "../utils/reducers";
+import { update } from "../utils/reducers";
 import { formatData } from "./utils";
 
 export const initialState = {
@@ -89,16 +86,6 @@ export const analysesReducer = createReducer(initialState, builder => {
             const { analysisId, sequenceIndex } = action.context;
             return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload);
         })
-        .addCase(FIND_ANALYSES.REQUESTED, (state, action) => {
-            if (state.sampleId && state.sampleId !== action.payload.sampleId) {
-                state.documents = null;
-            }
-            state.term = action.payload.term;
-            state.sampleId = action.payload.sampleId;
-        })
-        .addCase(FIND_ANALYSES.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action.payload, "created_at", true);
-        })
         .addCase(GET_ANALYSIS.SUCCEEDED, (state, action) => {
             return {
                 ...state,
@@ -142,14 +129,8 @@ export const analysesReducer = createReducer(initialState, builder => {
         .addCase(TOGGLE_ANALYSIS_SORT_DESCENDING, state => {
             state.sortDescending = !state.sortDescending;
         })
-        .addCase(WS_INSERT_ANALYSIS, (state, action) => {
-            return insert(state, action.payload, state.sortKey, state.sortDescending);
-        })
         .addCase(WS_UPDATE_ANALYSIS, (state, action) => {
             return update(state, action.payload);
-        })
-        .addCase(WS_REMOVE_ANALYSIS, (state, action) => {
-            return remove(state, action.payload);
         });
 });
 

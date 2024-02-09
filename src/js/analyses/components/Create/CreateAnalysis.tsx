@@ -1,15 +1,15 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { filter, forEach, map } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { filter, forEach, groupBy, map, maxBy } from "lodash-es";
+import { includes, keysIn } from "lodash-es/lodash";
+import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogOverlay, DialogTitle, LoadingPlaceholder } from "../../../base";
+import { HMMSearchResults } from "../../../hmm/types";
+import { useListIndexes } from "../../../indexes/querys";
 import { useFindModels } from "../../../ml/queries";
-import { getDefaultSubtractions, getSampleDetailId, getSampleLibraryType } from "../../../samples/selectors";
-import { getDataTypeFromLibraryType } from "../../../samples/utils";
-import { shortlistSubtractions } from "../../../subtraction/actions";
+import { useFetchSample } from "../../../samples/querys";
+import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
 import { useCreateAnalysis } from "../../querys";
-import { getAnalysesSubtractions, getCompatibleIndexesWithLibraryType } from "../../selectors";
 import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
@@ -17,34 +17,43 @@ import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisFo
 import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
 
-export const CreateAnalysis = ({
-    compatibleIndexes,
-    dataType,
-    defaultSubtractions,
-    hmms,
-    sampleId,
-    subtractionOptions,
-    onShortlistSubtractions,
-}) => {
+type CreateAnalysisProps = {
+    /** The HMM search results */
+    hmms: HMMSearchResults;
+    /** The id of the sample being used */
+    sampleId: string;
+};
+
+/**
+ * Dialog for creating an analysis
+ */
+export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) {
     const history = useHistory();
     const location = useLocation<{ createAnalysis: Workflows }>();
     const workflow = location.state?.createAnalysis;
     const open = Boolean(workflow);
 
-    useEffect(() => {
-        if (open) {
-            onShortlistSubtractions();
-        }
-    }, [open]);
-
     const createAnalysis = useCreateAnalysis();
 
-    const { data: mlModels, isLoading } = useFindModels();
+    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } =
+        useFetchSubtractionsShortlist(true);
+    const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
+    const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
+    const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
 
-    if (isLoading) {
+    if (isLoadingMLModels || isLoadingSubtractionShortlist || isLoadingSample || isLoadingIndexes) {
         return <LoadingPlaceholder />;
     }
 
+    const dataType = sample.library_type === "amplicon" ? "barcode" : "genome";
+    const defaultSubtractions = sample.subtractions.map(subtraction => subtraction.id);
+    const subtractionOptions = map(keysIn(subtractionShortlist), key => {
+        return {
+            ...subtractionShortlist[key],
+            isDefault: includes(defaultSubtractions, subtractionShortlist[key].id),
+        };
+    });
+    const compatibleIndexes = map(groupBy(indexes, "reference.id"), group => maxBy(group, "version"));
     const compatibleWorkflows = getCompatibleWorkflows(dataType, Boolean(hmms.total_count));
 
     function onSubmit(props: CreateAnalysisFormValues) {
@@ -92,24 +101,4 @@ export const CreateAnalysis = ({
             </DialogPortal>
         </Dialog>
     );
-};
-
-export function mapStateToProps(state) {
-    return {
-        compatibleIndexes: getCompatibleIndexesWithLibraryType(state),
-        dataType: getDataTypeFromLibraryType(getSampleLibraryType(state)),
-        defaultSubtractions: getDefaultSubtractions(state).map(subtraction => subtraction.id),
-        sampleId: getSampleDetailId(state),
-        subtractionOptions: getAnalysesSubtractions(state),
-    };
 }
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onShortlistSubtractions: () => {
-            dispatch(shortlistSubtractions());
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateAnalysis);

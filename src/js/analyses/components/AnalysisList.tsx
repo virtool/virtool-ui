@@ -52,7 +52,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
                 <NoneFoundBox noun="analyses" />
             )}
 
-            <CreateAnalysis hmms={hmms} />
+            <CreateAnalysis hmms={hmms} sampleId={sampleId} />
         </ContainerNarrow>
     );
 }
