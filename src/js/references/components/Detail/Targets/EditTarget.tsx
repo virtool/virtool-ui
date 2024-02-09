@@ -3,30 +3,36 @@ import { map, toNumber } from "lodash-es";
 import React from "react";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../../base";
 import { useUpdateReference } from "../../../hooks";
+import { ReferenceTarget } from "../../../types";
 import { TargetForm } from "./TargetForm";
+
+type EditTargetProps = {
+    /** Indicates whether the dialog for adding a target is visible */
+    show: boolean;
+    /** A callback function to hide the dialog */
+    onHide: () => void;
+    refId: string;
+    /** A list of targets associated with the reference */
+    targets: ReferenceTarget[];
+    /** The target being edited */
+    target: ReferenceTarget;
+};
 
 /**
  * Displays a dialog for editing a target
  */
-export default function EditTarget({ show, onHide, refId, targets, target }) {
-    const { description, name, length, required } = target;
+export default function EditTarget({ show, onHide, refId, targets, target }: EditTargetProps) {
+    const initialTargetName = target?.name;
+
     const { mutation } = useUpdateReference(refId);
     const { reset } = mutation;
 
     function onSubmit({ description, name, length, required }) {
-        const updatedTargets = map(targets, target => {
-            if (name === target.name) {
-                return {
-                    ...target,
-                    name,
-                    description,
-                    length: toNumber(length),
-                    required,
-                };
-            }
-
-            return target;
-        });
+        const updatedTargets = map(targets, target =>
+            initialTargetName === target.name
+                ? { ...target, name, description, length: toNumber(length), required }
+                : target,
+        );
 
         mutation.mutate(
             { targets: updatedTargets },
@@ -50,10 +56,10 @@ export default function EditTarget({ show, onHide, refId, targets, target }) {
                 <DialogContent>
                     <DialogTitle>Add target</DialogTitle>
                     <TargetForm
-                        description={description}
-                        name={name}
-                        length={length}
-                        required={required}
+                        description={target?.description}
+                        name={target?.name}
+                        length={target?.length}
+                        required={target?.required}
                         onSubmit={onSubmit}
                         error={mutation.isError && mutation.error.response.body[0].msg}
                     />
