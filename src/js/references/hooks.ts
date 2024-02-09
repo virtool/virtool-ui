@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as Yup from "yup";
 import { Request } from "../app/request";
 import { getReference } from "./api";
+import { ReferenceTarget } from "./types";
 
 export function useGetReference(refId) {
     return useQuery(["reference", refId], () => getReference(refId));
@@ -15,8 +16,10 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
     const queryClient = useQueryClient();
 
     const mutation = useMutation(
-        (data: { restrict_source_types: boolean }) => {
-            return Request.patch(`/refs/${refId}`).send(data);
+        (data: { restrict_source_types?: boolean; targets?: ReferenceTarget[] }) => {
+            return Request.patch(`/refs/${refId}`)
+                .send(data)
+                .then(res => res.body);
         },
         {
             onSuccess: () => {

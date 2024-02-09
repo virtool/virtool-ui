@@ -58,6 +58,7 @@ describe("mapStateToProps()", () => {
             organism: "Bar",
             remotesFrom: "Boo",
             dataType: "Boo",
+            detail: state.references.detail,
         });
     });
 });

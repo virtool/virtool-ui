@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EditTarget, mapDispatchToProps, mapStateToProps } from "../Edit";
+import { EditTarget, mapDispatchToProps } from "../Edit";
 import { TargetForm } from "../Form";
 
 describe("<EditTarget />", () => {
@@ -115,59 +115,6 @@ describe("<EditTarget />", () => {
         wrapper.setState({ name: "CPN60", description: "This is a test" });
         wrapper.setProps({ show: true });
         setTimeout(() => expect(wrapper).toMatchSnapshot(), 500);
-    });
-});
-
-describe("mapStateToProps()", () => {
-    let state;
-
-    beforeEach(() => {
-        state = {
-            references: {
-                detail: {
-                    id: "baz",
-                    targets: [
-                        { name: "foo", description: "bar", length: 1, required: false },
-                        { name: "Foo", description: "Bar", length: 2, required: true },
-                    ],
-                },
-            },
-            router: { location: { state: { editTarget: "foo" } } },
-        };
-    });
-
-    it("should return props when name matches a target", () => {
-        const result = mapStateToProps(state);
-        expect(result).toEqual({
-            targets: [
-                { name: "foo", description: "bar", length: 1, required: false },
-                { name: "Foo", description: "Bar", length: 2, required: true },
-            ],
-            name: "foo",
-            description: "bar",
-            length: 1,
-            required: false,
-            refId: "baz",
-            show: true,
-        });
-    });
-
-    it("should return props when name does not match a target", () => {
-        state.router.location.state = {};
-        const result = mapStateToProps(state);
-
-        expect(result).toEqual({
-            targets: [
-                { name: "foo", description: "bar", length: 1, required: false },
-                { name: "Foo", description: "Bar", length: 2, required: true },
-            ],
-            name: undefined,
-            description: undefined,
-            length: undefined,
-            required: undefined,
-            refId: "baz",
-            show: false,
-        });
     });
 });
 
