@@ -89,6 +89,14 @@ export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sa
         .then(response => response.body);
 }
 
+export type SampleRightsUpdate = {
+    group?: number | string | null;
+    group_read?: boolean;
+    group_write?: boolean;
+    all_read?: boolean;
+    all_write?: boolean;
+};
+
 /**
  * Updates the rights for a sample
  *
@@ -96,7 +104,7 @@ export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sa
  * @param update - The update to apply to the sample
  * @returns A promise resolving to a response containing the updated sample's data
  */
-export function updateSampleRights(sampleId: string, update: SampleUpdate): Promise<Sample> {
+export function updateSampleRights(sampleId: string, update: SampleRightsUpdate): Promise<Sample> {
     return Request.patch(`/samples/${sampleId}/rights`)
         .send(update)
         .then(response => response.body);

@@ -1,167 +1,82 @@
-import { shallow } from "enzyme";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
+import nock from "nock";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
+import { createFakeGroup, mockApiListGroups } from "../../../../../tests/fake/groups";
+import { createFakeSample, mockApiGetSampleDetail, mockApiUpdateSampleRights } from "../../../../../tests/fake/samples";
+import { renderWithRouter } from "../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../administration/types";
-import { InputSelect } from "../../../../base";
-import { mapDispatchToProps, mapStateToProps, SampleRights } from "../SampleRights";
-
-vi.mock("../../../selectors.ts");
+import SampleRights from "../SampleRights";
 
 describe("<SampleRights />", () => {
+    let sample;
+    let group;
     let props;
-    const e = {
-        target: {
-            value: "bar",
-        },
-    };
+    let history;
 
     beforeEach(() => {
+        sample = createFakeSample({ all_read: false, all_write: false, group_read: false, group_write: false });
+        group = createFakeGroup();
+        mockApiGetSampleDetail(sample);
+        mockApiListGroups([group]);
         props = {
-            canModifyRights: true,
-            groups: [
-                { id: 1, legacy_id: "managers", name: "Managers" },
-                { id: 2, legacy_id: "none", name: "Technicians" },
-            ],
-            sampleId: "foo",
-            onListGroups: vi.fn(),
-            onChangeRights: vi.fn(),
-            onChangeGroup: vi.fn(),
-            group_read: true,
-            group_write: true,
-            all_read: true,
-            all_write: true,
+            match: { params: { sampleId: sample.id } },
         };
+        history = createBrowserHistory();
     });
 
-    it("should render", () => {
-        const wrapper = shallow(<SampleRights {...props} />);
-        expect(wrapper).toMatchSnapshot();
+    afterEach(() => nock.cleanAll());
+
+    it("should render", async () => {
+        mockGetAccountAPI(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        renderWithRouter(<SampleRights {...props} />, {}, history);
+
+        expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
+        expect(screen.getByText("Group")).toBeInTheDocument();
+        expect(screen.getByText("Group Rights")).toBeInTheDocument();
+        expect(screen.getByText("All Users' Rights")).toBeInTheDocument();
     });
 
-    it("should call onListGroups after mount", () => {
-        shallow(<SampleRights {...props} />);
-        expect(props.onListGroups).toHaveBeenCalled();
+    it("should return Not allowed panel when[this.props.canModifyRights=false]", async () => {
+        mockGetAccountAPI(createFakeAccount({ administrator_role: null }));
+        renderWithRouter(<SampleRights {...props} />, {}, history);
+
+        expect(await screen.findByText("Not allowed")).toBeInTheDocument();
     });
 
-    it("should call handleChangeGroup() when input is changed", () => {
-        const wrapper = shallow(<SampleRights {...props} />);
-        wrapper.find(InputSelect).at(0).simulate("change", e);
-        expect(props.onChangeGroup).toHaveBeenCalledWith("foo", "bar");
+    it("should handle group change when input is changed", async () => {
+        mockGetAccountAPI(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        const scope = mockApiUpdateSampleRights(sample, { group: group.id });
+        renderWithRouter(<SampleRights {...props} />, {}, history);
+
+        expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
+        await userEvent.selectOptions(screen.getByLabelText("Group"), group.name);
+
+        scope.done();
     });
 
-    it("should call handleChangeRights() when input is changed", () => {
-        const wrapper = shallow(<SampleRights {...props} />);
-        wrapper.find(InputSelect).at(1).simulate("change", e);
-        expect(props.onChangeRights).toHaveBeenCalledWith("foo", "group", "bar");
+    it("should handle group rights change when input is changed", async () => {
+        mockGetAccountAPI(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        const scope = mockApiUpdateSampleRights(sample, { group_read: true, group_write: true });
+        renderWithRouter(<SampleRights {...props} />, {}, history);
+
+        expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
+        await userEvent.selectOptions(screen.getByLabelText("Group Rights"), "rw");
+
+        scope.done();
     });
 
-    it("should return LoadingPlaceholder when[this.props.groups=null]", () => {
-        props.groups = null;
-        const wrapper = shallow(<SampleRights {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
+    it("should handle all users' rights change when input is changed", async () => {
+        mockGetAccountAPI(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        const scope = mockApiUpdateSampleRights(sample, { all_read: true, all_write: true });
+        renderWithRouter(<SampleRights {...props} />, {}, history);
 
-    it("should return Not allowed panel when[this.props.canModifyRights=false]", () => {
-        props.canModifyRights = false;
-        const wrapper = shallow(<SampleRights {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
-});
+        expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
+        await userEvent.selectOptions(screen.getByLabelText("All Users' Rights"), "rw");
 
-vi.unmock("../../../selectors.ts");
-
-describe("mapStateToProps()", () => {
-    let state;
-    beforeEach(() => {
-        state = {
-            samples: {
-                detail: {
-                    all_read: true,
-                    all_write: false,
-                    group: "baz",
-                    group_read: true,
-                    group_write: false,
-                    user: { id: "Baz" },
-                    id: "Boo",
-                },
-            },
-            account: { id: "foo", administrator_role: null },
-            groups: { documents: "bar" },
-        };
-    });
-
-    it("should return props when getCanModifyRights returns false", () => {
-        const props = mapStateToProps(state);
-        expect(props).toEqual({
-            accountId: "foo",
-            all_read: true,
-            all_write: false,
-            canModifyRights: false,
-            group: "baz",
-            group_read: true,
-            group_write: false,
-            groups: "bar",
-            ownerId: "Baz",
-            sampleId: "Boo",
-        });
-    });
-
-    it("should return props when getCanModifyRights returns true", () => {
-        state.account.administrator_role = AdministratorRoles.FULL;
-        const props = mapStateToProps(state);
-        expect(props).toEqual({
-            accountId: "foo",
-            all_read: true,
-            all_write: false,
-            canModifyRights: true,
-            group: "baz",
-            group_read: true,
-            group_write: false,
-            groups: "bar",
-            ownerId: "Baz",
-            sampleId: "Boo",
-        });
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    const dispatch = vi.fn();
-
-    it("onListGroups() should return listGroups in props", () => {
-        const props = mapDispatchToProps(dispatch);
-        props.onListGroups();
-        expect(dispatch).toHaveBeenCalledWith({
-            type: "LIST_GROUPS_REQUESTED",
-        });
-    });
-
-    it("onChangeGroup() should return updateSampleRights in props", () => {
-        const props = mapDispatchToProps(dispatch);
-        props.onChangeGroup("foo", "bar");
-        expect(dispatch).toHaveBeenNthCalledWith(1, { type: "LIST_GROUPS_REQUESTED" });
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
-            payload: { sampleId: "foo", update: { group: "bar" } },
-            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
-        });
-    });
-
-    it("onChangeRights() should return updateSampleRights in props", () => {
-        const props = mapDispatchToProps(dispatch);
-        props.onChangeRights("foo", "group", "read");
-        expect(dispatch).toHaveBeenNthCalledWith(1, { type: "LIST_GROUPS_REQUESTED" });
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
-            payload: { sampleId: "foo", update: { group: "bar" } },
-            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
-        });
-        expect(dispatch).toHaveBeenNthCalledWith(3, {
-            type: "UPDATE_SAMPLE_RIGHTS_REQUESTED",
-            payload: {
-                sampleId: "foo",
-                update: {
-                    group_read: true,
-                    group_write: false,
-                },
-            },
-        });
+        scope.done();
     });
 });

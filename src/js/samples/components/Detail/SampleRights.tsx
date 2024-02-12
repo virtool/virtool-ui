@@ -1,6 +1,7 @@
 import { find, includes, map } from "lodash-es";
 import React from "react";
 import { useQueryClient } from "react-query";
+import { match } from "react-router-dom";
 import { useCheckAdminRole } from "../../../administration/hooks";
 import { AdministratorRoles } from "../../../administration/types";
 import {
@@ -17,14 +18,22 @@ import {
 import { useListGroups } from "../../../groups/querys";
 import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../querys";
 
-export default function SampleRights({ match }) {
+type SampleRightsProps = {
+    /** Match object containing path information */
+    match: match<{ sampleId: string }>;
+};
+
+/**
+ * A component managing a samples rights
+ */
+export default function SampleRights({ match }: SampleRightsProps) {
     const { sampleId } = match.params;
 
     const { hasPermission: canModifyRights } = useCheckAdminRole(AdministratorRoles.FULL);
     const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
     const { data: groups, isLoading: isLoadingGroups } = useListGroups();
-    const queryClient = useQueryClient();
 
+    const queryClient = useQueryClient();
     const mutation = useUpdateSampleRights(sampleId);
 
     if (isLoadingSample || isLoadingGroups) {
@@ -37,9 +46,7 @@ export default function SampleRights({ match }) {
         mutation.mutate(
             { update: { group: e.target.value } },
             {
-                onSuccess: data => {
-                    console.log(data);
-
+                onSuccess: () => {
                     queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
                 },
             },
@@ -55,8 +62,7 @@ export default function SampleRights({ match }) {
                 },
             },
             {
-                onSuccess: data => {
-                    console.log(data);
+                onSuccess: () => {
                     queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
                 },
             },
@@ -88,17 +94,17 @@ export default function SampleRights({ match }) {
                 </BoxGroupHeader>
                 <BoxGroupSection>
                     <InputGroup>
-                        <InputLabel>Group</InputLabel>
-                        <InputSelect value={selectedGroup} onChange={handleChangeGroup}>
+                        <InputLabel htmlFor="group">Group</InputLabel>
+                        <InputSelect id="group" value={selectedGroup} onChange={handleChangeGroup}>
                             <option value="none">None</option>
                             {groupOptionComponents}
                         </InputSelect>
                     </InputGroup>
 
                     <InputGroup>
-                        <InputLabel>Group Rights</InputLabel>
+                        <InputLabel htmlFor="groupRights">Group Rights</InputLabel>
                         <InputSelect
-                            name="groupRights"
+                            id="groupRights"
                             value={groupRights}
                             onChange={e => handleChangeRights(e, "group")}
                         >
@@ -109,8 +115,8 @@ export default function SampleRights({ match }) {
                     </InputGroup>
 
                     <InputGroup>
-                        <InputLabel>All Users' Rights</InputLabel>
-                        <InputSelect name="allUsers" value={allRights} onChange={e => handleChangeRights(e, "all")}>
+                        <InputLabel htmlFor="allUsers">All Users' Rights</InputLabel>
+                        <InputSelect id="allUsers" value={allRights} onChange={e => handleChangeRights(e, "all")}>
                             <option value="">None</option>
                             <option value="r">Read</option>
                             <option value="rw">Read & write</option>
