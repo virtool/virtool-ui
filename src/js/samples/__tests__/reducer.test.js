@@ -6,7 +6,6 @@ import {
     REMOVE_SAMPLE,
     SELECT_SAMPLE,
     UPDATE_SAMPLE,
-    UPDATE_SAMPLE_RIGHTS,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
     WS_UPDATE_SAMPLE,
@@ -137,25 +136,6 @@ describe("Samples Reducer", () => {
         const result = reducer(initialState, action);
         expect(result).toEqual({
             ...initialState,
-            detail: action.payload,
-        });
-    });
-
-    it("should handle UPDATE_SAMPLE_RIGHTS_SUCCEEDED", () => {
-        const state = {};
-        const action = {
-            type: UPDATE_SAMPLE_RIGHTS.SUCCEEDED,
-            payload: {
-                all_read: true,
-                all_write: true,
-                group: 1,
-                group_read: true,
-                group_write: false,
-            },
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...state,
             detail: action.payload,
         });
     });

@@ -7,7 +7,6 @@ import {
     REMOVE_SAMPLE,
     SHOW_REMOVE_SAMPLE,
     UPDATE_SAMPLE,
-    UPDATE_SAMPLE_RIGHTS,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
     WS_UPDATE_SAMPLE,
@@ -20,7 +19,6 @@ import {
     hideSampleModal,
     removeSample,
     showRemoveSample,
-    updateSampleRights,
     wsInsertSample,
     wsRemoveSample,
     wsUpdateSample,
@@ -104,15 +102,6 @@ describe("Sample Action Creators:", () => {
         const result = editSample(sampleId, update);
         expect(result).toEqual({
             type: UPDATE_SAMPLE.REQUESTED,
-            payload: { sampleId, update },
-        });
-    });
-
-    it("updateSampleRights", () => {
-        const update = { foo: "bar" };
-        const result = updateSampleRights(sampleId, update);
-        expect(result).toEqual({
-            type: UPDATE_SAMPLE_RIGHTS.REQUESTED,
             payload: { sampleId, update },
         });
     });
