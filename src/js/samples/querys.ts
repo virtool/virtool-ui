@@ -2,7 +2,7 @@ import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Label } from "../labels/types";
 import { ErrorResponse } from "../types/types";
-import { getSample, listSamples, SampleUpdate, update, updateSample } from "./api";
+import { getSample, listSamples, SampleUpdate, update, updateSample, updateSampleRights } from "./api";
 import { Sample, SampleMinimal } from "./types";
 
 type SampleLabel = Label & {
@@ -57,6 +57,15 @@ export function useFetchSample(sampleId: string) {
  */
 export function useUpdateSample(sampleId: string) {
     return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(({ update }) => updateSample(sampleId, update));
+}
+
+/**
+ * Initializes a mutator for updating a samples rights
+ *
+ * @returns A mutator for updating a samples rights
+ */
+export function useUpdateSampleRights(sampleId: string) {
+    return useMutation<unknown, unknown, { update: any }>(({ update }) => updateSampleRights(sampleId, update));
 }
 
 /**

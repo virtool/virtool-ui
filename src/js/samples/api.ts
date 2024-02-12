@@ -23,8 +23,6 @@ export const find = ({ term, labels, workflows, page = 1 }) => {
     return request;
 };
 
-export const filter = ({ term }) => Request.get(`/samples?find=${term}`);
-
 export const get = ({ sampleId }) => Request.get(`/samples/${sampleId}`);
 
 export const create = action => {
@@ -43,8 +41,6 @@ export const create = action => {
 };
 
 export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
-
-export const updateRights = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}/rights`).send(update);
 
 export const remove = ({ sampleId }) => Request.delete(`/samples/${sampleId}`);
 
@@ -89,6 +85,19 @@ export type SampleUpdate = {
  */
 export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
     return Request.patch(`/samples/${sampleId}`)
+        .send(update)
+        .then(response => response.body);
+}
+
+/**
+ * Updates the rights for a sample
+ *
+ * @param sampleId - The id of the sample to be updated
+ * @param update - The update to apply to the sample
+ * @returns A promise resolving to a response containing the updated sample's data
+ */
+export function updateSampleRights(sampleId: string, update: SampleUpdate): Promise<Sample> {
+    return Request.patch(`/samples/${sampleId}/rights`)
         .send(update)
         .then(response => response.body);
 }

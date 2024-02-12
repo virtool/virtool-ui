@@ -3,7 +3,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AdministratorRoles } from "../../../../administration/types";
 import { InputSelect } from "../../../../base";
-import { mapDispatchToProps, mapStateToProps, SampleRights } from "../Rights";
+import { mapDispatchToProps, mapStateToProps, SampleRights } from "../SampleRights";
 
 vi.mock("../../../selectors.ts");
 
