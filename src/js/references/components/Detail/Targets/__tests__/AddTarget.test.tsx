@@ -7,12 +7,13 @@ import { renderWithProviders } from "../../../../../../tests/setupTests";
 import AddTarget from "../AddTarget";
 
 describe("<AddTarget />", () => {
+    const reference = createFakeReference();
     let props;
 
     beforeEach(() => {
         props = {
-            targets: [{ name: "foo", description: "bar", length: 1, required: true }],
-            refId: "baz",
+            targets: reference.targets,
+            refId: reference.id,
             onHide: vi.fn(),
             show: true,
         };
@@ -28,7 +29,7 @@ describe("<AddTarget />", () => {
         expect(screen.getByLabelText("Required")).toBeInTheDocument();
     });
 
-    it("should render required when form onClick() prop is called", async () => {
+    it("should render required when clicked", async () => {
         renderWithProviders(<AddTarget {...props} />);
 
         expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "unchecked");
@@ -43,17 +44,10 @@ describe("<AddTarget />", () => {
         expect(screen.getByText("Required Field")).toBeInTheDocument();
     });
 
-    it("should call onSubmit() and onHide() when submitted", async () => {
-        const reference = createFakeReference();
-        props.refId = reference.id;
+    it("should handle submit and call onHide() when submitted", async () => {
         const scope = mockApiEditReference(reference, {
             targets: [
-                {
-                    description: "bar",
-                    length: 1,
-                    name: "foo",
-                    required: true,
-                },
+                reference.targets[0],
                 {
                     description: "Foo description",
                     length: 10,

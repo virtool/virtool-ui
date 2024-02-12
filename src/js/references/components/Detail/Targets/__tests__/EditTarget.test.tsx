@@ -1,115 +1,76 @@
-import { shallow } from "enzyme";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
+import { renderWithProviders } from "../../../../../../tests/setupTests";
 import EditTarget from "../EditTarget";
-import { TargetForm } from "../TargetForm";
 
 describe("<EditTarget />", () => {
+    const reference = createFakeReference();
     let props;
-    let e;
 
     beforeEach(() => {
         props = {
-            name: "Bar",
-            description: "Bar description",
-            length: 490,
-            refId: "foo",
-            required: true,
-            onSubmit: vi.fn(),
+            refId: reference.id,
             onHide: vi.fn(),
             show: true,
-            targets: [
-                {
-                    name: "Foo",
-                    description: "Foo description",
-                    length: 540,
-                    required: true,
-                },
-                {
-                    name: "Bar",
-                    description: "Bar description",
-                    length: 490,
-                    required: true,
-                },
-                {
-                    name: "Baz",
-                    description: "Baz description",
-                    length: 490,
-                    required: true,
-                },
-            ],
+            targets: reference.targets,
+            target: reference.targets[0],
         };
     });
 
     it("should render", () => {
-        const wrapper = shallow(<EditTarget {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithProviders(<EditTarget {...props} />);
+
+        expect(screen.getByText("Edit Target")).toBeInTheDocument();
+        expect(screen.getByLabelText("Name")).toBeInTheDocument();
+        expect(screen.getByLabelText("Description")).toBeInTheDocument();
+        expect(screen.getByLabelText("Length")).toBeInTheDocument();
+        expect(screen.getByLabelText("Required")).toBeInTheDocument();
     });
 
-    it("should render error when submitted without name", () => {
-        const wrapper = shallow(<EditTarget {...props} />);
-        wrapper.setState({
-            name: "",
-            description: "This is a test",
-            length: 310,
-            required: false,
-        });
-        wrapper.find("form").simulate("submit", e);
+    it("should render error when submitted without name", async () => {
+        renderWithProviders(<EditTarget {...props} />);
+
+        await userEvent.clear(screen.getByLabelText("Name"));
+        await userEvent.click(screen.getByRole("button"));
+
+        expect(screen.getByText("Required Field")).toBeInTheDocument();
         expect(props.onHide).not.toHaveBeenCalled();
-        expect(props.onSubmit).not.toHaveBeenCalled();
-        expect(wrapper).toMatchSnapshot();
     });
 
-    it("should should call onSubmit() when name provided", () => {
-        const wrapper = shallow(<EditTarget {...props} />);
-        wrapper.setState({
-            name: "CPN60",
-            description: "This is a test",
-            length: 310,
-            required: false,
-        });
-        wrapper.find("form").simulate("submit", e);
-        expect(props.onSubmit).toHaveBeenCalledWith("foo", {
+    it("should should call onSubmit() when name provided", async () => {
+        const scope = mockApiEditReference(reference, {
             targets: [
                 {
-                    name: "Foo",
                     description: "Foo description",
-                    length: 540,
-                    required: true,
-                },
-                {
-                    name: "CPN60",
-                    description: "This is a test",
-                    length: 310,
-                    required: false,
-                },
-                {
-                    name: "Baz",
-                    description: "Baz description",
-                    length: 490,
-                    required: true,
+                    length: 10,
+                    name: "Foo",
+                    required: reference.targets[0].required,
                 },
             ],
         });
-        expect(props.onHide).toHaveBeenCalledWith();
-    });
+        renderWithProviders(<EditTarget {...props} />);
 
-    it("should update when TargetForm onChange() prop called", () => {
-        e.target = {
-            name: "name",
-            value: "Foo",
-            checked: true,
-        };
-        const wrapper = shallow(<EditTarget {...props} />);
-        wrapper.find(TargetForm).prop("onChange")(e);
-        expect(wrapper).toMatchSnapshot();
+        await userEvent.clear(screen.getByLabelText("Name"));
+        await userEvent.type(screen.getByLabelText("Name"), "Foo");
+        await userEvent.clear(screen.getByLabelText("Description"));
+        await userEvent.type(screen.getByLabelText("Description"), "Foo description");
+        await userEvent.clear(screen.getByLabelText("Length"));
+        await userEvent.type(screen.getByLabelText("Length"), "10");
+        await userEvent.click(screen.getByRole("button"));
+
+        await waitFor(() => expect(props.onHide).toHaveBeenCalled());
+        scope.done();
     });
 
     it("should set initial state on open", () => {
-        props.show = false;
-        const wrapper = shallow(<EditTarget {...props} />);
-        wrapper.setState({ name: "CPN60", description: "This is a test" });
-        wrapper.setProps({ show: true });
-        setTimeout(() => expect(wrapper).toMatchSnapshot(), 500);
+        renderWithProviders(<EditTarget {...props} />);
+
+        expect(screen.getByLabelText("Name")).toHaveValue(props.target.name);
+        expect(screen.getByLabelText("Description")).toHaveValue(props.target.description);
+        expect(screen.getByLabelText("Length")).toHaveValue(props.target.length);
+        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "checked");
     });
 });

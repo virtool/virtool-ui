@@ -54,7 +54,7 @@ export default function EditTarget({ show, onHide, refId, targets, target }: Edi
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
-                    <DialogTitle>Add target</DialogTitle>
+                    <DialogTitle>Edit Target</DialogTitle>
                     <TargetForm
                         description={target?.description}
                         name={target?.name}

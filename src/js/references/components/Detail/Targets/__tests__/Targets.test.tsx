@@ -1,6 +1,5 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { shallow } from "enzyme";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -8,7 +7,6 @@ import { createFakeAccount, mockGetAccountAPI } from "../../../../../../tests/fa
 import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../../administration/types";
-import { TargetItem } from "../TargetItem";
 import Targets from "../Targets";
 
 describe("<Targets />", () => {
@@ -24,9 +22,20 @@ describe("<Targets />", () => {
     });
 
     it("should render with no description", () => {
-        props.description = "";
-        const wrapper = shallow(<TargetItem {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        props.reference = createFakeReference({
+            data_type: "barcode",
+            targets: [
+                {
+                    name: "test",
+                    description: "",
+                    length: 10,
+                    required: false,
+                },
+            ],
+        });
+        renderWithRouter(<Targets {...props} />, {}, history);
+
+        expect(screen.getByText("No description")).toBeInTheDocument();
     });
 
     it("should render when [canModify=true]", async () => {
@@ -52,8 +61,8 @@ describe("<Targets />", () => {
     it("should show modal when add target is called", async () => {
         renderWithRouter(<Targets {...props} />, {}, history);
 
-        expect(await screen.findByText("Add target")).toBeInTheDocument();
-        await userEvent.click(screen.getByRole("link", { name: "Add target" }));
+        expect(await screen.findByText("Add Target")).toBeInTheDocument();
+        await userEvent.click(screen.getByRole("link", { name: "Add Target" }));
         expect(history.location.state.addTarget).toBe(true);
     });
 

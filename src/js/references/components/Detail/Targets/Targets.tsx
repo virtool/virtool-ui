@@ -53,7 +53,7 @@ export default function Targets({ reference }: TargetsProps) {
             <TargetsHeader>
                 <h2>
                     <span>Targets</span>
-                    {canModify && <Link to={{ state: { addTarget: true } }}>Add target</Link>}
+                    {canModify && <Link to={{ state: { addTarget: true } }}>Add Target</Link>}
                 </h2>
                 <p>Manage the allowable sequence targets for this barcode reference.</p>
             </TargetsHeader>
