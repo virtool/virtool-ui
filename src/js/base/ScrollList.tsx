@@ -19,6 +19,8 @@ type ScrollListProps = {
     className?: string;
     /** A function which initiates fetching the next page */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    /** Whether there is another page of data available */
+    hasNextPage: boolean;
     /** Whether a new page is being fetched */
     isFetchingNextPage: boolean;
     /** Whether the first page is being fetched */
@@ -36,6 +38,7 @@ export function ScrollList({
     className,
     fetchNextPage,
     isFetchingNextPage,
+    hasNextPage,
     isLoading,
     items,
     renderRow,
@@ -44,7 +47,7 @@ export function ScrollList({
         handleFetchNextPage();
 
         function handleFetchNextPage() {
-            if (getScrollRatio() > 0.8 && !isFetchingNextPage) {
+            if (getScrollRatio() > 0.8 && !isFetchingNextPage && hasNextPage) {
                 void fetchNextPage();
             }
         }
