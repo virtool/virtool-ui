@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 function getScrollRatio(): number {
-    return Math.round((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight);
+    return (window.innerHeight + window.scrollY) / document.documentElement.scrollHeight;
 }
 
 const StyledScrollList = styled.div`
@@ -41,14 +41,16 @@ export function ScrollList({
     renderRow,
 }: ScrollListProps) {
     useEffect(() => {
-        function onScroll() {
+        handleFetchNextPage();
+
+        function handleFetchNextPage() {
             if (getScrollRatio() > 0.8 && !isFetchingNextPage) {
                 void fetchNextPage();
             }
         }
 
-        window.addEventListener("scroll", onScroll);
-        return () => window.removeEventListener("scroll", onScroll);
+        window.addEventListener("scroll", handleFetchNextPage);
+        return () => window.removeEventListener("scroll", handleFetchNextPage);
     }, [isFetchingNextPage, fetchNextPage]);
 
     const entries = map(items, item => renderRow(item));
