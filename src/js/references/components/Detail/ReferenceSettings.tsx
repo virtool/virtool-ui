@@ -2,7 +2,7 @@ import { sortBy } from "lodash-es";
 import React, { useState } from "react";
 import { match } from "react-router-dom";
 import { LoadingPlaceholder, SectionHeader } from "../../../base";
-import { useListGroups } from "../../../groups/querys";
+import { useInfiniteFindGroups } from "../../../groups/querys";
 import { useInfiniteFindUsers } from "../../../users/querys";
 import { useGetReference } from "../../hooks";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
@@ -14,6 +14,9 @@ type ReferenceSettingsProps = {
     match: match<{ refId: string }>;
 };
 
+/**
+ * The reference settings view allowing users to manage the reference
+ */
 export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
     const { refId } = match.params;
     const [term, setTerm] = useState("");
@@ -21,10 +24,15 @@ export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
     const {
         data: users,
         isLoading: isLoadingUsers,
-        isFetchingNextPage,
-        fetchNextPage,
+        isFetchingNextPage: isFetchingUsersNextPage,
+        fetchNextPage: fetchUsersNextPage,
     } = useInfiniteFindUsers(25, term);
-    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const {
+        data: groups,
+        isLoading: isLoadingGroups,
+        isFetchingNextPage: isFetchingGroupsNextPage,
+        fetchNextPage: fetchGroupsNextPage,
+    } = useInfiniteFindGroups(25, term);
 
     if (isLoadingReference || isLoadingUsers || isLoadingGroups) {
         return <LoadingPlaceholder />;
@@ -44,11 +52,21 @@ export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
                 refId={refId}
                 term={term}
                 setTerm={setTerm}
-                isFetchingNextPage={isFetchingNextPage}
-                fetchNextPage={fetchNextPage}
+                isFetchingNextPage={isFetchingUsersNextPage}
+                fetchNextPage={fetchUsersNextPage}
                 isLoading={isLoadingUsers}
             />
-            <ReferenceMembers data={groups} noun="group" members={sortBy(reference.groups, "id")} refId={refId} />
+            <ReferenceMembers
+                data={groups}
+                noun="group"
+                members={sortBy(reference.groups, "id")}
+                refId={refId}
+                term={term}
+                setTerm={setTerm}
+                isFetchingNextPage={isFetchingGroupsNextPage}
+                fetchNextPage={fetchGroupsNextPage}
+                isLoading={isLoadingGroups}
+            />
             <SectionHeader>
                 <h2>Delete</h2>
                 <p>Permanently delete the reference.</p>

@@ -1,4 +1,5 @@
 import { UserNested } from "../users/types";
+import { SearchResult } from "../utils/types";
 
 export type GroupMinimal = { id: string | number; name?: string };
 
@@ -44,4 +45,10 @@ export type GroupUpdate = {
     id: string | number;
     name?: string;
     permissions?: PermissionsUpdate;
+};
+
+/** Group search results from the API */
+export type GroupSearchResults = SearchResult & {
+    /** Gives information about each group */
+    items: Array<GroupMinimal>;
 };

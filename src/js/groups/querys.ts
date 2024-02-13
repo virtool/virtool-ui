@@ -1,6 +1,6 @@
-import { useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
-import { createGroup, getGroup, listGroups, removeGroup, updateGroup } from "./api";
-import { Group, GroupMinimal, GroupUpdate } from "./types";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
+import { createGroup, findGroups, getGroup, listGroups, removeGroup, updateGroup } from "./api";
+import { Group, GroupMinimal, GroupSearchResults, GroupUpdate } from "./types";
 
 /**
  * Factory for generating react-query keys for group-related queries.
@@ -9,9 +9,34 @@ export const groupQueryKeys = {
     all: () => ["groups"] as const,
     lists: () => ["groups", "list"] as const,
     list: filters => ["groups", "list", ...filters] as const,
+    infiniteLists: () => ["groups", "infiniteList"] as const,
+    infiniteList: (filters: Array<string | number | boolean>) => ["groups", "infiniteList", ...filters] as const,
     details: () => ["groups", "details"] as const,
     detail: id => ["groups", "detail", id] as const,
 };
+
+/**
+ * Setup query for fetching group search results for infinite scrolling view
+ *
+ * @param per_page - The number of groups to fetch per page
+ * @param term - The search term to filter groups by
+ * @returns An UseInfiniteQueryResult object containing the group search results
+ */
+export function useInfiniteFindGroups(per_page: number, term: string) {
+    return useInfiniteQuery<GroupSearchResults>(
+        groupQueryKeys.infiniteList([per_page, term]),
+        ({ pageParam }) => findGroups(pageParam, per_page, term),
+        {
+            getNextPageParam: lastPage => {
+                if (lastPage.page >= lastPage.page_count) {
+                    return undefined;
+                }
+                return (lastPage.page || 1) + 1;
+            },
+            keepPreviousData: true,
+        },
+    );
+}
 
 /**
  * Gets a non-paginated list of all groups.
