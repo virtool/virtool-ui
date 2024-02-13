@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { BoxGroupSection } from "../../base";
-import { SampleLabel } from "../../samples/components/Label";
+import { SampleLabel } from "../../samples/components/Label/SampleLabel";
 import { EditLabel } from "./Edit";
 import { RemoveLabel } from "./Remove";
 

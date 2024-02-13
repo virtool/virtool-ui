@@ -1,8 +1,9 @@
 import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Label } from "../labels/types";
-import { listSamples, update } from "./api";
-import { SampleMinimal } from "./types";
+import { ErrorResponse } from "../types/types";
+import { getSample, listSamples, SampleUpdate, update, updateSample } from "./api";
+import { Sample, SampleMinimal } from "./types";
 
 type SampleLabel = Label & {
     /** Whether all selected samples contain the label */
@@ -16,6 +17,8 @@ export const samplesQueryKeys = {
     all: () => ["samples"] as const,
     lists: () => ["samples", "list"] as const,
     list: (filters: Array<string | number | boolean | string[]>) => ["samples", "list", ...filters] as const,
+    details: () => ["samples", "details"] as const,
+    detail: (sampleId: string) => ["samples", "details", sampleId] as const,
 };
 
 /**
@@ -35,6 +38,25 @@ export function useListSamples(page: number, per_page: number, term?: string, la
             keepPreviousData: true,
         },
     );
+}
+
+/**
+ * Fetches a single sample
+ *
+ * @param sampleId - The id of the sample to fetch
+ * @returns A single sample
+ */
+export function useFetchSample(sampleId: string) {
+    return useQuery<Sample, ErrorResponse>(samplesQueryKeys.detail(sampleId), () => getSample(sampleId));
+}
+
+/**
+ * Initializes a mutator for updating a sample
+ *
+ * @returns A mutator for updating a sample
+ */
+export function useUpdateSample(sampleId: string) {
+    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(({ update }) => updateSample(sampleId, update));
 }
 
 /**
@@ -58,7 +80,10 @@ export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: S
             const allLabeled = selectedLabels.every(item => item.allLabeled === true);
 
             if (!labelExists || !allLabeled) {
-                mutation.mutate({ sampleId: sample.id, update: { labels: union(sampleLabelIds, [label]) } });
+                mutation.mutate({
+                    sampleId: sample.id,
+                    update: { labels: union(sampleLabelIds, [label]) },
+                });
             } else {
                 mutation.mutate({
                     sampleId: sample.id,

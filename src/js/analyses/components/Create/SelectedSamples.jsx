@@ -3,9 +3,10 @@ import React from "react";
 import styled from "styled-components";
 
 import { Badge, BoxGroup, BoxGroupSection } from "../../../base";
+import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 
 const SelectedSamplesList = styled(BoxGroup)`
-    margin-bottom: 16px;
+    margin-bottom: 15px;
     max-height: 220px;
     overflow-y: ${props => (props.count > 1 ? "scroll" : "auto")};
 
@@ -25,9 +26,9 @@ export function SelectedSamples({ samples }) {
 
     return (
         <>
-            <label>
+            <CreateAnalysisFieldTitle>
                 Compatible Samples <Badge>{count}</Badge>
-            </label>
+            </CreateAnalysisFieldTitle>
             <SelectedSamplesList count={count}>{sampleComponents}</SelectedSamplesList>
         </>
     );

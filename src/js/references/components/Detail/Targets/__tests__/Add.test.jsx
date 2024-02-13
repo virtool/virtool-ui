@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AddTarget, mapDispatchToProps, mapStateToProps } from "../Add";
+import { AddTarget, mapDispatchToProps } from "../Add";
 import { TargetForm } from "../Form";
 
 describe("<AddTarget />", () => {
@@ -89,33 +89,6 @@ describe("<AddTarget />", () => {
         });
         wrapper.setProps({ show: false });
         setTimeout(() => expect(wrapper.state()).toEqual({ ...state }), 500);
-    });
-});
-
-describe("mapStateToProps()", () => {
-    it("should return props", () => {
-        const state = {
-            references: {
-                documents: "baz",
-                detail: {
-                    name: "foo",
-                    data_type: "bar",
-
-                    id: "boo",
-                    targets: [{ Foo: "Bar" }],
-                },
-            },
-            router: { location: { state: { addTarget: true } } },
-        };
-        const result = mapStateToProps(state);
-        expect(result).toEqual({
-            names: "foo",
-            dataType: "bar",
-            documents: "baz",
-            refId: "boo",
-            targets: [{ Foo: "Bar" }],
-            show: true,
-        });
     });
 });
 

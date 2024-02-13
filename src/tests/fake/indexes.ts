@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { merge } from "lodash";
+import { assign } from "lodash-es";
 import nock from "nock";
 import { IndexMinimal, IndexNested } from "../../js/indexes/types";
 import { JobMinimal } from "../../js/jobs/types";
@@ -21,7 +22,7 @@ export function createFakeIndexNested(props?: CreateFakeIndexNestedProps): Index
         version: faker.datatype.number(5),
     };
 
-    return merge(defaultIndexNested, props);
+    return assign(defaultIndexNested, props);
 }
 
 type CreateFakeIndexMinimalProps = CreateFakeIndexNestedProps & {
@@ -35,7 +36,7 @@ type CreateFakeIndexMinimalProps = CreateFakeIndexNestedProps & {
     ready?: boolean;
 };
 
-export function createFakeIndexMinimal(props: CreateFakeIndexMinimalProps): IndexMinimal {
+export function createFakeIndexMinimal(props?: CreateFakeIndexMinimalProps): IndexMinimal {
     const defaultIndexMinimal = {
         ...createFakeIndexNested(),
         change_count: faker.datatype.number({ min: 2, max: 10 }),
@@ -48,7 +49,7 @@ export function createFakeIndexMinimal(props: CreateFakeIndexMinimalProps): Inde
         ready: faker.datatype.boolean(),
     };
 
-    return merge(defaultIndexMinimal, props);
+    return assign(defaultIndexMinimal, props);
 }
 
 type IndexSearchResults = BaseFakeSearchResultOptions & {
@@ -71,6 +72,16 @@ export function mockApiFindIndexes(refId: string, page: number, searchResults: I
         .get(`/api/refs/${refId}/indexes`)
         .query(true)
         .reply(200, merge(defaultSearchResults, searchResults));
+}
+
+/**
+ * Creates a mocked API call for getting a list of indexes
+ *
+ * @param indexMinimal - The index minimal documents
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiListIndexes(indexMinimal: IndexMinimal[]) {
+    return nock("http://localhost").get("/api/indexes").query(true).reply(200, indexMinimal);
 }
 
 export function mockApiBuildIndexes(refId: string) {

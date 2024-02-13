@@ -24,7 +24,7 @@ type EditSubtractionProps = {
 };
 
 /**
- * A modal for editing the subtraction
+ * Dialog for editing an existing subtraction
  */
 export default function EditSubtraction({ subtraction, show, onHide }: EditSubtractionProps) {
     const mutation = useUpdateSubtraction(subtraction.id);

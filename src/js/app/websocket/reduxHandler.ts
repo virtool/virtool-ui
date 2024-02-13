@@ -1,5 +1,5 @@
 import { get } from "lodash-es/lodash";
-import { wsInsertAnalysis, wsRemoveAnalysis, wsUpdateAnalysis } from "../../analyses/actions";
+import { wsUpdateAnalysis } from "../../analyses/actions";
 import { wsInsertGroup, wsRemoveGroup, wsUpdateGroup } from "../../groups/actions";
 import { wsInsertHistory, wsInsertIndex, wsUpdateIndex } from "../../indexes/actions";
 import { wsInsertJob, wsRemoveJob, wsUpdateJob } from "../../jobs/actions";
@@ -12,13 +12,6 @@ function actionCreatorWrapper(actionCreator) {
 }
 
 const inserters = {
-    analyses: (state, message) => {
-        const sampleId = get(state, "samples.detail.id");
-
-        if (sampleId && sampleId === message.data.sample.id) {
-            return wsInsertAnalysis(message.data);
-        }
-    },
     groups: actionCreatorWrapper(wsInsertGroup),
     history: actionCreatorWrapper(wsInsertHistory),
     indexes: actionCreatorWrapper(wsInsertIndex),
@@ -45,7 +38,6 @@ const updaters = {
 };
 
 const removers = {
-    analyses: actionCreatorWrapper(wsRemoveAnalysis),
     groups: actionCreatorWrapper(wsRemoveGroup),
     jobs: actionCreatorWrapper(wsRemoveJob),
     otus: actionCreatorWrapper(wsRemoveOTU),

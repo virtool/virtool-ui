@@ -17,14 +17,6 @@ import SegmentField from "./SegmentField";
 
 const initialValues = { segment: null, accession: "", definition: "", host: "", sequence: "" };
 
-type formValues = {
-    segment: string;
-    accession: string;
-    definition: string;
-    host: string;
-    sequence: string;
-};
-
 export function castValues(segments: OTUSegment[]) {
     return function (values: formValues) {
         const segment = find(segments, { name: values.segment }) ? values.segment : null;
@@ -36,10 +28,18 @@ export const StyledContent = styled(DialogContent)`
     top: 50%;
 `;
 
+type formValues = {
+    segment: string;
+    accession: string;
+    definition: string;
+    host: string;
+    sequence: string;
+};
+
 type AddGenomeSequenceProps = {
     isolateId: string;
     otuId: string;
-    /** Indicates whether the dialog for editing a sequence is visible */
+    /** Indicates whether the dialog for adding a sequence is visible */
     show: boolean;
     /** A list of unreferenced segments */
     segments: OTUSegment[];
@@ -61,8 +61,6 @@ type AddGenomeSequenceProps = {
  * Displays dialog to add a genome sequence
  */
 export function AddGenomeSequence({ isolateId, otuId, show, segments, onHide, onSave }: AddGenomeSequenceProps) {
-    const title = "Add Sequence";
-
     function handleSubmit({ accession, definition, host, sequence, segment }) {
         onSave(otuId, isolateId, accession, definition, host, segment, sequence.toUpperCase());
     }
@@ -72,7 +70,7 @@ export function AddGenomeSequence({ isolateId, otuId, show, segments, onHide, on
             <DialogPortal>
                 <DialogOverlay />
                 <StyledContent>
-                    <DialogTitle>{title}</DialogTitle>
+                    <DialogTitle>Add Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
                         {({
                             setFieldValue,

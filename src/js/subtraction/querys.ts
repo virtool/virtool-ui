@@ -1,6 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorResponse } from "../types/types";
-import { fetchSubtractionShortlist, findSubtractions, getSubtraction, updateSubtraction } from "./api";
+import {
+    createSubtraction,
+    fetchSubtractionShortlist,
+    findSubtractions,
+    getSubtraction,
+    removeSubtraction,
+    updateSubtraction,
+} from "./api";
 import { Subtraction, SubtractionSearchResult, SubtractionShortlist } from "./types";
 
 /**
@@ -16,6 +23,17 @@ export const subtractionQueryKeys = {
 };
 
 /**
+ * Initializes a mutator for creating a subtraction
+ *
+ * @returns A mutator for creating a subtraction
+ */
+export function useCreateSubtraction() {
+    return useMutation<Subtraction, unknown, { name: string; nickname: string; uploadId: string }>(
+        ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId),
+    );
+}
+
+/**
  * Fetch a page of subtraction search results from the API
  *
  * @param page - The page to fetch
@@ -26,7 +44,7 @@ export const subtractionQueryKeys = {
 export function useFindSubtractions(page: number, per_page: number, term: string) {
     return useQuery<SubtractionSearchResult>(
         subtractionQueryKeys.list([page, per_page, term]),
-        () => findSubtractions({ page, per_page, term }),
+        () => findSubtractions(page, per_page, term),
         {
             keepPreviousData: true,
         },
@@ -64,10 +82,22 @@ export function useUpdateSubtraction(subtractionId: string) {
 }
 
 /**
+ * Initializes a mutator for removing a subtraction
+ *
+ * @returns A mutator for removing a subtraction
+ */
+export function useRemoveSubtraction() {
+    return useMutation<Response, unknown, { subtractionId: string }>(({ subtractionId }) =>
+        removeSubtraction(subtractionId),
+    );
+}
+
+/**
  * Fetches a list of subtractions with reduced information
  *
+ * @param ready - Indicates whether to show all the ready subtractions
  * @returns A list of subtractions
  */
-export function useFetchSubtractionsShortlist() {
-    return useQuery<SubtractionShortlist[]>(subtractionQueryKeys.shortlist(), fetchSubtractionShortlist);
+export function useFetchSubtractionsShortlist(ready?: boolean) {
+    return useQuery<SubtractionShortlist[]>(subtractionQueryKeys.shortlist(), () => fetchSubtractionShortlist(ready));
 }

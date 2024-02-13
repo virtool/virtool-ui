@@ -20,6 +20,7 @@ const SelectedContainer = styled(BoxGroup)<SelectedContainer>`
     ${props => (props.error ? `border-color: ${props.theme.color.red};` : "")};
     overflow-y: auto;
     height: 160px;
+    margin-bottom: 0px;
 `;
 
 const SelectedItemsContainer = styled.div`

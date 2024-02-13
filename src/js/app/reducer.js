@@ -50,7 +50,6 @@ export const appReducer = createReducer(initialState, builder => {
         .addCase(RESET_PASSWORD.FAILED, (state, action) => {
             state.login = false;
             state.reset = true;
-            state.resetCode = action.payload.reset_code;
             state.resetError = action.payload.error;
         })
         .addCase(CREATE_FIRST_USER.SUCCEEDED, state => {

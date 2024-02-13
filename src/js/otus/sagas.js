@@ -1,15 +1,12 @@
 import { createAction } from "@reduxjs/toolkit";
 import { push } from "connected-react-router";
-import { all, put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
+import { all, put, select, takeEvery, takeLatest } from "redux-saga/effects";
 import { pushState } from "../app/actions";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
     CREATE_OTU,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
-    FIND_OTUS,
     GET_OTU,
     GET_OTU_HISTORY,
     REMOVE_ISOLATE,
@@ -19,7 +16,7 @@ import {
     SET_ISOLATE_AS_DEFAULT,
 } from "../app/actionTypes";
 import { deletePersistentFormState } from "../forms/actions";
-import { apiCall, pushFindTerm, putGenericError } from "../utils/sagas";
+import { apiCall, putGenericError } from "../utils/sagas";
 import { revertFailed, revertSucceeded } from "./actions";
 import * as otusAPI from "./api";
 const getCurrentOTUsPath = state => `/refs/${state.references.detail.id}/otus`;
@@ -39,11 +36,6 @@ export function* updateAndGetOTU(apiMethod, action, actionType) {
     yield put(curAction(getResponse.body));
 
     return response;
-}
-
-export function* findOTUs(action) {
-    yield apiCall(otusAPI.find, action.payload, FIND_OTUS);
-    yield pushFindTerm(action.payload.term);
 }
 
 export function* getOTU(action) {
@@ -76,14 +68,6 @@ export function* removeOTU(action) {
     if (resp.ok) {
         yield put(push(`/refs/${action.payload.refId}/otus`));
     }
-}
-
-export function* addIsolate(action) {
-    yield updateAndGetOTU(otusAPI.addIsolate, action, ADD_ISOLATE);
-}
-
-export function* editIsolate(action) {
-    yield updateAndGetOTU(otusAPI.editIsolate, action, EDIT_ISOLATE);
 }
 
 export function* removeIsolate(action) {
@@ -133,14 +117,11 @@ export function* revert(action) {
 }
 
 export function* watchOTUs() {
-    yield throttle(500, FIND_OTUS.REQUESTED, findOTUs);
     yield takeLatest(GET_OTU.REQUESTED, getOTU);
     yield takeLatest(GET_OTU_HISTORY.REQUESTED, getOTUHistory);
     yield takeEvery(CREATE_OTU.REQUESTED, createOTU);
     yield takeEvery(EDIT_OTU.REQUESTED, editOTU);
     yield takeEvery(REMOVE_OTU.REQUESTED, removeOTU);
-    yield takeEvery(ADD_ISOLATE.REQUESTED, addIsolate);
-    yield takeEvery(EDIT_ISOLATE.REQUESTED, editIsolate);
     yield takeEvery(SET_ISOLATE_AS_DEFAULT.REQUESTED, setIsolateAsDefault);
     yield takeEvery(REMOVE_ISOLATE.REQUESTED, removeIsolate);
     yield takeEvery(ADD_SEQUENCE.REQUESTED, addSequence);

@@ -31,6 +31,7 @@ import {
     GET_SUBTRACTION,
     GET_USER,
     LOGIN,
+    RESET_PASSWORD,
     UPDATE_ACCOUNT,
     UPDATE_SAMPLE,
     UPDATE_SETTINGS,
@@ -110,6 +111,7 @@ export const errorsReducer = createReducer({}, builder => {
                     case CHANGE_ACCOUNT_PASSWORD.FAILED:
                     case CREATE_USER.FAILED:
                     case EDIT_USER.FAILED:
+                    case RESET_PASSWORD.FAILED:
                     case CREATE_GROUP.FAILED:
                     case GET_JOB.FAILED:
                     case GET_SAMPLE.FAILED:

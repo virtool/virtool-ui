@@ -54,3 +54,21 @@ export function mockApiGetAnalyses(analyses: AnalysisMinimal[]) {
         documents: analyses,
     });
 }
+
+type CreateAnalysisRequestBody = {
+    ml?: string;
+    ref_id: string;
+    subtractions?: string[];
+    workflow: string;
+};
+
+/**
+ * Creates a mocked API call for getting an analysis
+ *
+ * @param sampleId - The unique identifier of the sample being analysed
+ * @param requestBody - The request body for creating an analysis
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiCreateAnalysis(sampleId: string, requestBody: CreateAnalysisRequestBody) {
+    return nock("http://localhost").post(`/api/samples/${sampleId}/analyses`, requestBody).reply(201);
+}

@@ -1,10 +1,12 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { Workflows } from "../../../analyses/types";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Attribution, Box, Checkbox } from "../../../base";
 import { SampleMinimal } from "../../types";
-import { SampleLibraryTypeLabel, SmallSampleLabel } from "../Label";
+import { SampleLibraryTypeLabel } from "../Label/SampleLibraryTypeLabel";
+import { SmallSampleLabel } from "../Label/SmallSampleLabel";
 import { WorkflowTags } from "../Tag/WorkflowTags";
 import EndIcon from "./EndIcon";
 
@@ -88,7 +90,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
     const history = useHistory();
 
     function handleQuickAnalyze() {
-        history.push({ ...history.location, state: { quickAnalysis: true } });
+        history.push({ ...history.location, state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } });
         selectOnQuickAnalyze();
     }
 

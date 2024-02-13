@@ -135,7 +135,6 @@ export function mockApiGetSubtractionDetail(subtractionDetail: Subtraction, stat
 /**
  * Sets up a mocked API route for updating the subtraction details
  *
- * @returns The nock scope for the mocked API call
  * @param subtraction - The subtraction details
  * @param name - The updated name
  * @param nickname - The updated nickname
@@ -147,6 +146,26 @@ export function mockApiEditSubtraction(subtraction: Subtraction, name: string, n
     return nock("http://localhost").patch(`/api/subtractions/${subtraction.id}`).reply(200, subtractionDetail);
 }
 
-export function mockApiGetShortlistSubtractions(subtractionsShortlist) {
-    return nock("http://localhost").get("/api/subtractions?short=true").reply(200, subtractionsShortlist);
+/**
+ * Sets up a mocked API route for deleting a subtraction
+ *
+ * @param subtractionId - The subtraction to be removed
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiRemoveSubtraction(subtractionId: string) {
+    return nock("http://localhost").delete(`/api/subtractions/${subtractionId}`).reply(200);
+}
+
+/**
+ * Sets up a mocked API route for fetching a subtraction shortlist
+ *
+ * @param subtractionsShortlist - The list of subtractions to be returned from the mocked API call
+ * @param ready - Indicates whether to show all the ready subtractions
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiGetShortlistSubtractions(subtractionsShortlist: SubtractionShortlist[], ready?: boolean) {
+    return nock("http://localhost")
+        .get("/api/subtractions")
+        .query(ready ? { short: true, ready } : true)
+        .reply(200, subtractionsShortlist);
 }

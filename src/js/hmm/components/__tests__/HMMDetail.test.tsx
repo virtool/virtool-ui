@@ -79,8 +79,8 @@ describe("<HMMDetail />", () => {
             expect(screen.getByText(hmmDetail.entries[1].name)).toBeInTheDocument();
 
             expect(screen.getByText("Organism")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.entries[0].organism)).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.entries[1].organism)).toBeInTheDocument();
+            expect(screen.queryByText(hmmDetail.entries[0].organism)).toBeInTheDocument();
+            expect(screen.queryByText(hmmDetail.entries[1].organism)).toBeInTheDocument();
 
             scope.done();
         });

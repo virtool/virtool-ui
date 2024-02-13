@@ -2,9 +2,27 @@ import { faker } from "@faker-js/faker";
 import { merge } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
-import { Reference, ReferenceClonedFrom, ReferenceDataType, ReferenceMinimal } from "../../js/references/types";
+import {
+    Reference,
+    ReferenceClonedFrom,
+    ReferenceDataType,
+    ReferenceMinimal,
+    ReferenceTarget,
+} from "../../js/references/types";
 import { Task } from "../../js/types";
 import { createFakeUserNested } from "./user";
+
+/**
+ * Create a fake reference target
+ */
+export function createFakeReferenceTarget(): ReferenceTarget {
+    return {
+        description: faker.lorem.lines(1),
+        length: faker.datatype.number(),
+        name: faker.random.word(),
+        required: faker.datatype.boolean(),
+    };
+}
 
 type CreateFakeReferenceNestedProps = {
     id?: string;
@@ -15,7 +33,9 @@ type CreateFakeReferenceNestedProps = {
 /**
  * Create a fake reference nested
  */
-export function createFakeReferenceNested(props?: CreateFakeReferenceNestedProps) {
+export function createFakeReferenceNested(
+    props?: CreateFakeReferenceNestedProps,
+) {
     const defaultReferenceNested = {
         id: faker.random.alphaNumeric(8),
         data_type: faker.helpers.arrayElement(["barcode", "genome"]),
@@ -34,10 +54,15 @@ type CreateFakeReferenceMinimal = CreateFakeReferenceNestedProps & {
 /**
  * Create a fake reference minimal
  */
-export function createFakeReferenceMinimal(props?: CreateFakeReferenceMinimal): ReferenceMinimal {
+export function createFakeReferenceMinimal(
+    props?: CreateFakeReferenceMinimal,
+): ReferenceMinimal {
     const defaultReferenceMinimal = {
         ...createFakeReferenceNested(),
-        cloned_from: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
+        cloned_from: {
+            id: faker.random.alphaNumeric(8),
+            name: faker.random.word(),
+        },
         created_at: faker.date.past().toISOString(),
         imported_from: null,
         installed: true,
@@ -65,7 +90,9 @@ type CreateFakeReference = CreateFakeReferenceMinimal & {
 /**
  * Create a fake reference
  */
-export function createFakeReference(overrides?: CreateFakeReference): Reference {
+export function createFakeReference(
+    overrides?: CreateFakeReference,
+): Reference {
     const { description, ...props } = overrides || {};
 
     const defaultReference = {
@@ -75,7 +102,7 @@ export function createFakeReference(overrides?: CreateFakeReference): Reference 
         groups: [],
         restrict_source_types: false,
         source_types: ["isolate", "strain"],
-        targets: null,
+        targets: [createFakeReferenceTarget()],
         users: { ...createFakeUserNested(), modify: true, remove: true, modify_otu: true },
     };
 
@@ -101,6 +128,23 @@ export function mockApiGetReferences(references: ReferenceMinimal[]) {
 }
 
 /**
+ * Sets up a mocked API route for fetching a single reference
+ *
+ * @param referenceDetail - The reference detail to be returned from the mocked API call
+ * @param statusCode - The HTTP status code to simulate in the response
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetReferenceDetail(
+    referenceDetail: Reference,
+    statusCode?: number,
+) {
+    return nock("http://localhost")
+        .get(`/api/refs/${referenceDetail.id}`)
+        .query(true)
+        .reply(statusCode || 200, referenceDetail);
+}
+
+/**
  * Sets up a mocked API route for cloning a reference
  *
  * @param name - The name of the clone
@@ -108,7 +152,11 @@ export function mockApiGetReferences(references: ReferenceMinimal[]) {
  * @param reference - The reference being cloned
  * @returns The nock scope for the mocked API call
  */
-export function mockApiCloneReference(name: string, description: string, reference: ReferenceMinimal) {
+export function mockApiCloneReference(
+    name: string,
+    description: string,
+    reference: ReferenceMinimal,
+) {
     const clonedReference = createFakeReference({
         cloned_from: {
             id: reference.id,
@@ -142,7 +190,27 @@ export function mockApiCreateReference(
     data_type: ReferenceDataType,
     organism: string,
 ) {
-    const reference = createFakeReference({ name, description, data_type, organism });
+    const reference = createFakeReference({
+        name,
+        description,
+        data_type,
+        organism,
+    });
 
-    return nock("http://localhost").post("/api/refs", { name, description, data_type, organism }).reply(201, reference);
+    return nock("http://localhost")
+        .post("/api/refs", { name, description, data_type, organism })
+        .reply(201, reference);
+}
+
+/**
+ * Mocks an API call for updating the reference details
+ *
+ * @param reference - The reference details
+ * @param update - The update to apply to the reference
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiEditReference(reference: Reference, update: any) {
+    const referenceDetail = { reference, ...update };
+
+    return nock("http://localhost").patch(`/api/refs/${reference.id}`).reply(200, referenceDetail);
 }

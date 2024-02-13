@@ -1,6 +1,7 @@
 import { flatMap } from "lodash-es";
 import React from "react";
-import { Badge, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
+import styled from "styled-components";
+import { Badge, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useInfiniteFindReferences } from "../querys";
@@ -13,6 +14,10 @@ import ReferenceToolbar from "./ReferenceToolbar";
 function renderRow(reference: ReferenceMinimal) {
     return <ReferenceItem key={reference.id} reference={reference} />;
 }
+
+const StyledScrollList = styled(ScrollList)`
+    margin-bottom: 0;
+`;
 
 /**
  * A list of references with filtering options
@@ -37,16 +42,19 @@ export default function ReferenceList() {
                         References <Badge>{total_count}</Badge>
                     </ViewHeaderTitle>
                 </ViewHeader>
-
                 <ReferenceToolbar />
                 <ReferenceOfficial officialInstalled={official_installed} />
-                <ScrollList
-                    fetchNextPage={fetchNextPage}
-                    isFetchingNextPage={isFetchingNextPage}
-                    isLoading={isLoading}
-                    items={references}
-                    renderRow={renderRow}
-                />
+                {total_count !== 0 && (
+                    <BoxGroup>
+                        <StyledScrollList
+                            fetchNextPage={fetchNextPage}
+                            isFetchingNextPage={isFetchingNextPage}
+                            isLoading={isLoading}
+                            items={references}
+                            renderRow={renderRow}
+                        />
+                    </BoxGroup>
+                )}
             </ContainerNarrow>
             <Clone references={references} />
         </>

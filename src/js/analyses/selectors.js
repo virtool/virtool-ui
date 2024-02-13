@@ -1,27 +1,6 @@
-import {
-    filter,
-    find,
-    get,
-    groupBy,
-    includes,
-    intersection,
-    keyBy,
-    keysIn,
-    map,
-    reject,
-    sortBy,
-    toNumber,
-    toString,
-} from "lodash-es";
+import { filter, find, get, intersection, keyBy, map, reject, sortBy, toNumber, toString } from "lodash-es";
 import { createSelector } from "reselect";
-import { getRouterLocationState } from "../app/selectors";
-import {
-    getDefaultSubtractions,
-    getMaxReadLength,
-    getSampleLibraryType,
-    getSelectedSamples,
-} from "../samples/selectors";
-import { getReadySubtractionShortlist } from "../subtraction/selectors";
+import { getMaxReadLength } from "../samples/selectors";
 import { createFuse } from "../utils/utils";
 import { fuseSearchKeys } from "./utils";
 
@@ -76,89 +55,6 @@ export const getFilterIds = createSelector(
         return map(hits, "id");
     },
 );
-
-export const getQuickAnalysisGroups = createSelector([getSelectedSamples], documents => {
-    const { barcode, genome } = groupBy(documents, document =>
-        document.library_type === "amplicon" ? "barcode" : "genome",
-    );
-
-    return {
-        barcode: barcode || [],
-        genome: genome || [],
-    };
-});
-
-export const getQuickAnalysisMode = createSelector(
-    [getQuickAnalysisGroups, getRouterLocationState],
-    ({ genome }, routerLocationState) => {
-        const modeFromLocation = get(routerLocationState, "quickAnalysis");
-
-        if (modeFromLocation === true) {
-            return genome.length ? "genome" : "barcode";
-        }
-
-        if (modeFromLocation) {
-            return modeFromLocation;
-        }
-
-        return false;
-    },
-);
-
-export const getAnalysesSubtractions = createSelector(
-    [getReadySubtractionShortlist, getDefaultSubtractions],
-    (subtractions, defaultSubtractions) => {
-        const defaultSubtractionIds = map(keysIn(defaultSubtractions), key => defaultSubtractions[key].id);
-        const formattedSubtractions = map(keysIn(subtractions), key => {
-            return {
-                ...subtractions[key],
-                isDefault: includes(defaultSubtractionIds, subtractions[key].id) ? true : false,
-            };
-        });
-
-        return filter(formattedSubtractions, { ready: true });
-    },
-);
-
-const getReadyIndexes = state => state.analyses.readyIndexes;
-
-export const getCompatibleIndexesWithDataType = createSelector(
-    [getQuickAnalysisMode, getReadyIndexes],
-    (mode, indexes) => {
-        return filter(indexes, ["reference.data_type", mode]);
-    },
-);
-
-export const getCompatibleIndexesWithLibraryType = createSelector(
-    [getSampleLibraryType, getReadyIndexes],
-    (libraryType, indexes) =>
-        filter(
-            indexes.reduce((acc, current) => {
-                const existingIndex = acc.find(item => item.reference.id === current.reference.id);
-                if (!existingIndex || current.version > existingIndex.version) {
-                    acc.splice(existingIndex ? acc.indexOf(existingIndex) : acc.length, 1, current);
-                }
-                return acc;
-            }, []),
-            index => {
-                if (index.reference.data_type === "barcode") {
-                    return libraryType === "amplicon";
-                }
-
-                return libraryType === "normal" || libraryType === "srna";
-            },
-        ),
-);
-
-export const getCompatibleSamples = createSelector([getQuickAnalysisMode, getSelectedSamples], (mode, samples) => {
-    return filter(samples, sample => {
-        if (mode === "barcode") {
-            return sample.library_type === "amplicon";
-        }
-
-        return sample.library_type === "normal" || sample.library_type === "srna";
-    });
-});
 
 export const getSearchIds = state => state.analyses.searchIds;
 

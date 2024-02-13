@@ -1,7 +1,8 @@
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { SampleLabel, SampleMultiSelectLabel } from "../Label";
+import { SampleLabel } from "../Label/SampleLabel";
+import { SampleMultiSelectLabel } from "../Label/SampleMultiSelectLabel";
 
 const SampleSidebarListItem = styled(SampleLabel)`
     background-color: ${props => props.theme.color.white};

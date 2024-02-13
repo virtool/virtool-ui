@@ -1,27 +1,5 @@
 import { Request } from "../app/request";
-
-/**
- * Get a page of OTUs from the API
- *
- * @param refId - The unique identifier of the reference to search
- * @param term - The search term to filter OTUs by name or abbreviation
- * @param verified - Whether OTUs should be filtered by verified status
- * @param page - The page of results to fetch
- * @returns A Promise resolving to the API response containing a page of OTUs
- */
-export function find({
-    refId,
-    term,
-    verified,
-    page,
-}: {
-    refId: string;
-    term: string;
-    verified: boolean;
-    page: number;
-}) {
-    return Request.get(`/refs/${refId}/otus`).query({ find: term, page, verified: verified || undefined });
-}
+import { OTUIsolate } from "./types";
 
 /**
  * Get a single OTU data from the API
@@ -113,19 +91,13 @@ export function remove({ otuId }) {
  * @param sourceName - The name of the source
  * @returns A promise resolving to the API response containing the new isolate
  */
-export function addIsolate({
-    otuId,
-    sourceType,
-    sourceName,
-}: {
-    otuId: string;
-    sourceType: string;
-    sourceName: string;
-}) {
-    return Request.post(`/otus/${otuId}/isolates`).send({
-        source_type: sourceType,
-        source_name: sourceName,
-    });
+export function addIsolate(otuId: string, sourceType: string, sourceName: string): Promise<OTUIsolate> {
+    return Request.post(`/otus/${otuId}/isolates`)
+        .send({
+            source_type: sourceType,
+            source_name: sourceName,
+        })
+        .then(res => res.body);
 }
 
 /**
@@ -137,11 +109,18 @@ export function addIsolate({
  * @param sourceName - The name of the source
  * @returns A Promise resolving to the API response containing the updated isolate
  */
-export function editIsolate({ otuId, isolateId, sourceType, sourceName }) {
-    return Request.patch(`/otus/${otuId}/isolates/${isolateId}`).send({
-        source_type: sourceType,
-        source_name: sourceName,
-    });
+export function editIsolate(
+    otuId: string,
+    isolateId: string,
+    sourceType: string,
+    sourceName: string,
+): Promise<OTUIsolate> {
+    return Request.patch(`/otus/${otuId}/isolates/${isolateId}`)
+        .send({
+            source_type: sourceType,
+            source_name: sourceName,
+        })
+        .then(res => res.body);
 }
 
 /**

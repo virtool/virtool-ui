@@ -1,12 +1,9 @@
 import { createAction } from "@reduxjs/toolkit";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
     CREATE_OTU,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
-    FIND_OTUS,
     GET_OTU,
     GET_OTU_HISTORY,
     HIDE_OTU_MODAL,
@@ -53,15 +50,6 @@ export const wsUpdateOTU = createAction(WS_UPDATE_OTU);
  */
 export const wsRemoveOTU = createAction(WS_REMOVE_OTU);
 
-export const findOTUs = createAction(FIND_OTUS.REQUESTED, (refId, term, verified, page) => ({
-    payload: {
-        refId,
-        term,
-        verified,
-        page,
-    },
-}));
-
 /**
  * Returns action that can trigger an API call for retrieving a specific OTU.
  *
@@ -69,7 +57,9 @@ export const findOTUs = createAction(FIND_OTUS.REQUESTED, (refId, term, verified
  * @param otuId {string} unique OTU id
  * @returns {object}
  */
-export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({ payload: { otuId } }));
+export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({
+    payload: { otuId },
+}));
 
 /**
  * Returns action that can trigger an API call for getting a OTU's history.
@@ -78,7 +68,9 @@ export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({ payload: { otu
  * @param otuId {string} unique OTU id
  * @returns {object}
  */
-export const getOTUHistory = createAction(GET_OTU_HISTORY.REQUESTED, otuId => ({ payload: { otuId } }));
+export const getOTUHistory = createAction(GET_OTU_HISTORY.REQUESTED, otuId => ({
+    payload: { otuId },
+}));
 
 /**
  * Returns action that can trigger an API call for creating a new OTU.
@@ -124,19 +116,6 @@ export const removeOTU = createAction(REMOVE_OTU.REQUESTED, (refId, otuId, histo
 }));
 
 /**
- * Returns action that can trigger an API call for adding an isolate to a OTU.
- *
- * @func
- * @param otuId {string} unique OTU id
- * @param sourceType {string} category of isolate source types
- * @param sourceName {string} the name of the isolate source
- * @returns {object}
- */
-export const addIsolate = createAction(ADD_ISOLATE.REQUESTED, (otuId, sourceType, sourceName) => ({
-    payload: { otuId, sourceType, sourceName },
-}));
-
-/**
  * Returns action that can trigger an API call for modifying which isolate is made default.
  *
  * @func
@@ -146,25 +125,6 @@ export const addIsolate = createAction(ADD_ISOLATE.REQUESTED, (otuId, sourceType
  */
 export const setIsolateAsDefault = createAction(SET_ISOLATE_AS_DEFAULT.REQUESTED, (otuId, isolateId) => ({
     payload: { otuId, isolateId },
-}));
-
-/**
- * Returns action that can trigger an API call for modifying an isolate.
- *
- * @func
- * @param otuID {string} unique OTU id
- * @param isolateId {string} unique isolate id
- * @param sourceType {string} category of isolate source types
- * @param sourceName {string} the name of the isolate source
- * @returns {object}
- */
-export const editIsolate = createAction(EDIT_ISOLATE.REQUESTED, (otuId, isolateId, sourceType, sourceName) => ({
-    payload: {
-        otuId,
-        isolateId,
-        sourceType,
-        sourceName,
-    },
 }));
 
 /**
@@ -279,7 +239,9 @@ export const revert = createAction(REVERT.REQUESTED, (otuId, otuVersion, changeI
  * @param error {onject} error object
  * @returns {object}
  */
-export const revertFailed = createAction(REVERT.FAILED, error => ({ payload: { error } }));
+export const revertFailed = createAction(REVERT.FAILED, error => ({
+    payload: { error },
+}));
 
 /**
  * Returns action that can trigger an API call for deleting unbuilt changes of a OTU.
@@ -300,7 +262,9 @@ export const revertSucceeded = createAction(REVERT.SUCCEEDED, (otu, history) => 
  * @param isolateId {string} unique isolate id
  * @returns {object}
  */
-export const selectIsolate = createAction(SELECT_ISOLATE, isolateId => ({ payload: { isolateId } }));
+export const selectIsolate = createAction(SELECT_ISOLATE, isolateId => ({
+    payload: { isolateId },
+}));
 
 /**
  * Returns action for displaying the edit OTU modal.

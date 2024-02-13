@@ -4,6 +4,10 @@ import { BoxGroup, InputError } from "../../../base";
 
 const StyledCreateAnalysisSelector = styled.div`
     min-width: 0;
+
+    div {
+        margin-bottom: 0;
+    }
 `;
 
 interface CreateAnalysisSelectorProps {

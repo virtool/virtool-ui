@@ -25,6 +25,14 @@ export type OTUSequence = {
     target?: string;
 };
 
+export type OTUIsolate = {
+    default: boolean;
+    id: string;
+    sequences: OTUSequence[];
+    source_name: string;
+    source_type: string;
+};
+
 export type OTUSegment = {
     molecule?: Molecule;
     name: string;

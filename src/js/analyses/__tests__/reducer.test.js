@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
     BLAST_NUVS,
-    FIND_ANALYSES,
     LIST_READY_INDEXES,
     SET_ANALYSIS_SORT_KEY,
     TOGGLE_ANALYSIS_SORT_DESCENDING,
@@ -10,8 +9,6 @@ import {
     TOGGLE_FILTER_OTUS,
     TOGGLE_FILTER_SEQUENCES,
     TOGGLE_SHOW_PATHOSCOPE_READS,
-    WS_INSERT_ANALYSIS,
-    WS_REMOVE_ANALYSIS,
     WS_UPDATE_ANALYSIS,
 } from "../../app/actionTypes";
 import reducer, { setNuvsBLAST } from "../reducer";
@@ -58,26 +55,6 @@ describe("Analyses Reducer", () => {
         expect(result).toEqual(state);
     });
 
-    it("should handle WS_INSERT_ANALYSIS", () => {
-        const state = {
-            documents: [],
-        };
-        const action = {
-            type: WS_INSERT_ANALYSIS,
-            payload: {
-                id: "foo",
-                created_at: "2018-01-01T00:00:00.000000Z",
-                sample: {
-                    id: "baz",
-                },
-            },
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            documents: [action.payload],
-        });
-    });
-
     it("should handle WS_UPDATE_ANALYSIS", () => {
         const state = {
             documents: [{ id: "foo", created_at: "2018-01-01T00:00:00.000000Z", sample: { id: "baz" } }],
@@ -96,20 +73,6 @@ describe("Analyses Reducer", () => {
         const result = reducer(state, action);
         expect(result).toEqual({
             documents: [action.payload],
-        });
-    });
-
-    it("should handle WS_REMOVE_ANALYSIS", () => {
-        const state = {
-            documents: [{ id: "foo" }],
-        };
-        const action = {
-            type: WS_REMOVE_ANALYSIS,
-            payload: ["foo"],
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            documents: [],
         });
     });
 
@@ -177,23 +140,6 @@ describe("Analyses Reducer", () => {
         const action = { type: LIST_READY_INDEXES.SUCCEEDED, payload: ["foo"] };
         const result = reducer(state, action);
         expect(result).toEqual({ foo: "bar", readyIndexes: ["foo"] });
-    });
-
-    it("should handle FIND_ANALYSES_REQUESTED", () => {
-        const state = { term: "" };
-        const action = { type: FIND_ANALYSES.REQUESTED, payload: { term: "foo" } };
-        const result = reducer(state, action);
-        expect(result).toEqual({ ...state, term: "foo" });
-    });
-
-    it("should handle FIND_ANALYSES_SUCCEEDED", () => {
-        const initialState = { documents: null };
-        const action = {
-            type: FIND_ANALYSES.SUCCEEDED,
-            payload: { documents: ["foo"] },
-        };
-        const result = reducer(initialState, action);
-        expect(result).toEqual({ ...initialState, documents: ["foo"] });
     });
 
     it.each([true, false])("should handle GET_ANALYSIS_SUCCEEDED for nuvs when [action.ready=%p]", ready => {

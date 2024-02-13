@@ -4,7 +4,7 @@ import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { pushState } from "../../../app/actions";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
+import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import { getError } from "../../../errors/selectors";
 import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
@@ -13,6 +13,7 @@ import { OTUSegment } from "../../../otus/types";
 import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedSegments } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
+import { StyledContent } from "./AddGenomeSequence";
 import SegmentField from "./SegmentField";
 
 function getInitialValues({ initialSegmentName, initialAccession, initialDefinition, initialHost, initialSequence }) {
@@ -101,7 +102,7 @@ export function EditGenomeSequence({
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
-                <DialogContent>
+                <StyledContent>
                     <DialogTitle>Edit Sequence</DialogTitle>
                     <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
                         {({
@@ -130,7 +131,7 @@ export function EditGenomeSequence({
                             </Form>
                         )}
                     </Formik>
-                </DialogContent>
+                </StyledContent>
             </DialogPortal>
         </Dialog>
     );

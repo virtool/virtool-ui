@@ -4,16 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight } from "../../../app/theme";
-import {
-    Box,
-    InputError,
-    InputGroup,
-    InputLabel,
-    Select,
-    SelectButton,
-    SelectContent,
-    SelectItem,
-} from "../../../base";
+import { Box, InputGroup, InputLabel, Select, SelectButton, SelectContent, SelectItem } from "../../../base";
 import { getHasSchema, getOTUDetailId } from "../../../otus/selectors";
 import { OTUSegment } from "../../../otus/types";
 import { getReferenceDetailId } from "../../../references/selectors";
@@ -67,7 +58,6 @@ type SequenceSegmentFieldProps = {
  * Displays a dropdown list of available segments in adding/editing dialogs or provides option to create schema
  */
 export function SequenceSegmentField({
-    error,
     hasSchema,
     otuId,
     value,
@@ -90,12 +80,13 @@ export function SequenceSegmentField({
                     >
                         <SelectButton icon="chevron-down" />
                         <SelectContent position="popper" align="start">
-                            <SelectItem value="None" text="None" description="" />
+                            <SelectItem key="None" value="None" description="">
+                                None
+                            </SelectItem>
                             {segmentOptions}
                         </SelectContent>
                     </Select>
                 </SegmentSelectContainer>
-                <InputError>{error}</InputError>
             </InputGroup>
         );
     }

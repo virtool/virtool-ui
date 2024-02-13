@@ -1,12 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
     CREATE_OTU,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
-    FIND_OTUS,
     GET_OTU,
     GET_OTU_HISTORY,
     HIDE_OTU_MODAL,
@@ -26,13 +23,10 @@ import {
     WS_UPDATE_OTU,
 } from "../../app/actionTypes";
 import {
-    addIsolate,
     addSequence,
     createOTU,
-    editIsolate,
     editOTU,
     editSequence,
-    findOTUs,
     getOTU,
     getOTUHistory,
     hideOTUModal,
@@ -83,15 +77,6 @@ describe("OTUs Action Creators", () => {
         expect(result).toEqual({ type: WS_REMOVE_OTU, payload: data });
     });
 
-    it("findOTUs: returns action to list specific page of otu documents", () => {
-        const refId = "123abc";
-        const term = "foo";
-        const verified = true;
-        const page = 2;
-        const result = findOTUs(refId, term, verified, page);
-        expect(result).toEqual({ type: FIND_OTUS.REQUESTED, payload: { refId, term, verified, page } });
-    });
-
     it("getOTU: returns action to retrieve a specific otu", () => {
         const result = getOTU(otuId);
         expect(result).toEqual({ type: GET_OTU.REQUESTED, payload: { otuId } });
@@ -99,7 +84,10 @@ describe("OTUs Action Creators", () => {
 
     it("getOTUHistory: returns action to retrieve change history of specific otu", () => {
         const result = getOTUHistory(otuId);
-        expect(result).toEqual({ type: GET_OTU_HISTORY.REQUESTED, payload: { otuId } });
+        expect(result).toEqual({
+            type: GET_OTU_HISTORY.REQUESTED,
+            payload: { otuId },
+        });
     });
 
     it("createOTU: returns action to create a new otu", () => {
@@ -107,7 +95,10 @@ describe("OTUs Action Creators", () => {
         const name = "new otu";
         const abbreviation = "NEW";
         const result = createOTU(refId, name, abbreviation);
-        expect(result).toEqual({ type: CREATE_OTU.REQUESTED, payload: { refId, name, abbreviation } });
+        expect(result).toEqual({
+            type: CREATE_OTU.REQUESTED,
+            payload: { refId, name, abbreviation },
+        });
     });
 
     it("editOTU: return action to edit a specific otu", () => {
@@ -115,31 +106,27 @@ describe("OTUs Action Creators", () => {
         const abbreviation = "OLD";
         const schema = [];
         const result = editOTU(otuId, name, abbreviation, schema);
-        expect(result).toEqual({ type: EDIT_OTU.REQUESTED, payload: { otuId, name, abbreviation, schema } });
+        expect(result).toEqual({
+            type: EDIT_OTU.REQUESTED,
+            payload: { otuId, name, abbreviation, schema },
+        });
     });
 
     it("removeOTU: returns action to delete specific otu", () => {
         const refId = "123abc";
         const history = {};
         const result = removeOTU(refId, otuId, history);
-        expect(result).toEqual({ type: REMOVE_OTU.REQUESTED, payload: { refId, otuId, history } });
-    });
-
-    it("addIsolate: returns action to add an isolate to an otu", () => {
-        const result = addIsolate(otuId, sourceType, sourceName);
-        expect(result).toEqual({ type: ADD_ISOLATE.REQUESTED, payload: { otuId, sourceType, sourceName } });
+        expect(result).toEqual({
+            type: REMOVE_OTU.REQUESTED,
+            payload: { refId, otuId, history },
+        });
     });
 
     it("setIsolateAsDefault: returns action to set specific isolate as default", () => {
         const result = setIsolateAsDefault(otuId, isolateId);
-        expect(result).toEqual({ type: SET_ISOLATE_AS_DEFAULT.REQUESTED, payload: { otuId, isolateId } });
-    });
-
-    it("editIsolate: returns action to edit a specific isolate", () => {
-        const result = editIsolate(otuId, isolateId, sourceType, sourceName);
         expect(result).toEqual({
-            type: EDIT_ISOLATE.REQUESTED,
-            payload: { otuId, isolateId, sourceType, sourceName },
+            type: SET_ISOLATE_AS_DEFAULT.REQUESTED,
+            payload: { otuId, isolateId },
         });
     });
 
@@ -153,10 +140,28 @@ describe("OTUs Action Creators", () => {
     });
 
     it("addSequence: returns action to add a new sequence to an isolate", () => {
-        const result = addSequence({ otuId, isolateId, accession, definition, host, sequence, segment, target });
+        const result = addSequence({
+            otuId,
+            isolateId,
+            accession,
+            definition,
+            host,
+            sequence,
+            segment,
+            target,
+        });
         expect(result).toEqual({
             type: ADD_SEQUENCE.REQUESTED,
-            payload: { otuId, isolateId, accession, definition, host, sequence, segment, target },
+            payload: {
+                otuId,
+                isolateId,
+                accession,
+                definition,
+                host,
+                sequence,
+                segment,
+                target,
+            },
         });
     });
 
@@ -174,7 +179,17 @@ describe("OTUs Action Creators", () => {
         });
         expect(result).toEqual({
             type: EDIT_SEQUENCE.REQUESTED,
-            payload: { otuId, isolateId, sequenceId, accession, definition, host, sequence, segment, target },
+            payload: {
+                otuId,
+                isolateId,
+                sequenceId,
+                accession,
+                definition,
+                host,
+                sequence,
+                segment,
+                target,
+            },
         });
     });
 
@@ -190,12 +205,18 @@ describe("OTUs Action Creators", () => {
         const changeId = "123abc";
         const otuVersion = 3;
         const result = revert(otuId, otuVersion, changeId);
-        expect(result).toEqual({ type: REVERT.REQUESTED, payload: { otuId, otuVersion, change_id: changeId } });
+        expect(result).toEqual({
+            type: REVERT.REQUESTED,
+            payload: { otuId, otuVersion, change_id: changeId },
+        });
     });
 
     it("selectIsolate: returns action to select isolate to expand", () => {
         const result = selectIsolate(isolateId);
-        expect(result).toEqual({ type: SELECT_ISOLATE, payload: { isolateId } });
+        expect(result).toEqual({
+            type: SELECT_ISOLATE,
+            payload: { isolateId },
+        });
     });
 
     it("showEditOTU: returns action to display edit otu modal", () => {
@@ -220,7 +241,10 @@ describe("OTUs Action Creators", () => {
 
     it("showRemoveSequence: returns action to display remove sequence modal", () => {
         const result = showRemoveSequence(sequenceId);
-        expect(result).toEqual({ type: SHOW_REMOVE_SEQUENCE, payload: { sequenceId } });
+        expect(result).toEqual({
+            type: SHOW_REMOVE_SEQUENCE,
+            payload: { sequenceId },
+        });
     });
 
     it("hideOTUModal: returns action to hide otu modal", () => {

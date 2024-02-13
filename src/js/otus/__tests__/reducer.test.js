@@ -1,12 +1,9 @@
 import { forEach } from "lodash-es";
 import { describe, expect, it } from "vitest";
 import {
-    ADD_ISOLATE,
     ADD_SEQUENCE,
-    EDIT_ISOLATE,
     EDIT_OTU,
     EDIT_SEQUENCE,
-    FIND_OTUS,
     GET_OTU,
     GET_OTU_HISTORY,
     HIDE_OTU_MODAL,
@@ -16,7 +13,6 @@ import {
     REVERT,
     SELECT_ISOLATE,
     SET_ISOLATE_AS_DEFAULT,
-    SHOW_EDIT_ISOLATE,
     SHOW_EDIT_OTU,
     SHOW_REMOVE_ISOLATE,
     SHOW_REMOVE_OTU,
@@ -44,9 +40,14 @@ describe("OTUs Reducer:", () => {
 
     describe("should handle WS_UPDATE_STATUS", () => {
         it("if status id is 'OTU_import', return importData", () => {
-            const action = { type: WS_UPDATE_STATUS, payload: { id: "OTU_import" } };
+            const action = {
+                type: WS_UPDATE_STATUS,
+                payload: { id: "OTU_import" },
+            };
             const result = reducer({}, action);
-            expect(result).toEqual({ importData: { id: "OTU_import", inProgress: true } });
+            expect(result).toEqual({
+                importData: { id: "OTU_import", inProgress: true },
+            });
         });
 
         it("otherwise return state", () => {
@@ -104,7 +105,11 @@ describe("OTUs Reducer:", () => {
             };
             const action = {
                 type: WS_UPDATE_OTU,
-                payload: { id: "test-otu", foo: "baz", reference: { id: refId } },
+                payload: {
+                    id: "test-otu",
+                    foo: "baz",
+                    reference: { id: refId },
+                },
             };
             const result = reducer(state, action);
             expect(result).toEqual({
@@ -140,41 +145,6 @@ describe("OTUs Reducer:", () => {
         });
     });
 
-    it("should handle FIND_OTUS_REQUESTED", () => {
-        const refId = "baz";
-        const term = "foo";
-        const action = { type: FIND_OTUS.REQUESTED, payload: { refId, term, page: 3 } };
-        const result = reducer({ refId: "baz" }, action);
-        expect(result).toEqual({ term, refId });
-    });
-
-    it("should handle FIND_OTUS_REQUESTED when [payload.refId != state.refId]", () => {
-        const refId = "baz";
-        const term = "foo";
-        const action = { type: FIND_OTUS.REQUESTED, payload: { refId, term, page: 3 } };
-        const result = reducer({}, action);
-        expect(result).toEqual({ documents: null, term, refId });
-    });
-
-    it("should handle FIND_OTUS_SUCCEEDED", () => {
-        const state = { documents: [], page: 1 };
-        const action = {
-            type: FIND_OTUS.SUCCEEDED,
-            payload: { documents: [{ id: "test" }], page: 2 },
-        };
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            ...action.payload,
-        });
-    });
-
-    it("should handle FIND_OTUS.SUCCEEDED", () => {
-        const state = { documents: null };
-        const action = { type: FIND_OTUS.SUCCEEDED, payload: { documents: [] } };
-        const result = reducer(state, action);
-        expect(result).toEqual({ documents: [] });
-    });
-
     it("should handle GET_OTU_REQUESTED", () => {
         const state = {};
         const action = { type: GET_OTU.REQUESTED };
@@ -201,12 +171,10 @@ describe("OTUs Reducer:", () => {
         const actionList = [
             GET_OTU.SUCCEEDED,
             EDIT_OTU.SUCCEEDED,
-            EDIT_ISOLATE.SUCCEEDED,
             ADD_SEQUENCE.SUCCEEDED,
             EDIT_SEQUENCE.SUCCEEDED,
             REMOVE_SEQUENCE.SUCCEEDED,
             SET_ISOLATE_AS_DEFAULT.SUCCEEDED,
-            ADD_ISOLATE.SUCCEEDED,
             REMOVE_ISOLATE.SUCCEEDED,
         ];
 
@@ -262,7 +230,9 @@ describe("OTUs Reducer:", () => {
             payload: { foo: "bar" },
         };
         const result = reducer({}, action);
-        expect(result).toEqual({ importData: { foo: "bar", inProgress: false } });
+        expect(result).toEqual({
+            importData: { foo: "bar", inProgress: false },
+        });
     });
 
     it("should handle SELECT_ISOLATE", () => {
@@ -291,12 +261,6 @@ describe("OTUs Reducer:", () => {
         expect(result).toEqual({ remove: true });
     });
 
-    it("should handle SHOW_EDIT_ISOLATE", () => {
-        const action = { type: SHOW_EDIT_ISOLATE };
-        const result = reducer({}, action);
-        expect(result).toEqual({ editIsolate: true });
-    });
-
     it("should handle SHOW_REMOVE_ISOLATE", () => {
         const action = { type: SHOW_REMOVE_ISOLATE };
         const result = reducer({}, action);
@@ -304,7 +268,10 @@ describe("OTUs Reducer:", () => {
     });
 
     it("should handle SHOW_REMOVE_SEQUENCE", () => {
-        const action = { type: SHOW_REMOVE_SEQUENCE, payload: { sequenceId: "test-sequence" } };
+        const action = {
+            type: SHOW_REMOVE_SEQUENCE,
+            payload: { sequenceId: "test-sequence" },
+        };
         const result = reducer({}, action);
         expect(result).toEqual({ removeSequence: "test-sequence" });
     });
@@ -312,7 +279,6 @@ describe("OTUs Reducer:", () => {
     it("should handle HIDE_OTU_MODAL", () => {
         const state = {
             edit: true,
-            editIsolate: true,
             remove: false,
             removeIsolate: false,
             removeSequence: "foo",
@@ -321,7 +287,6 @@ describe("OTUs Reducer:", () => {
         const result = reducer(state, action);
         expect(result).toEqual({
             edit: false,
-            editIsolate: false,
             remove: false,
             removeIsolate: false,
             removeSequence: false,
