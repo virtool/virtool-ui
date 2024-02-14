@@ -6,6 +6,7 @@ import {
     getSample,
     listSamples,
     SampleRightsUpdate,
+    SampleRightsUpdateReturn,
     SampleUpdate,
     update,
     updateSample,
@@ -73,7 +74,7 @@ export function useUpdateSample(sampleId: string) {
  * @returns A mutator for updating a samples rights
  */
 export function useUpdateSampleRights(sampleId: string) {
-    return useMutation<Sample, unknown, { update: SampleRightsUpdate }>(({ update }) =>
+    return useMutation<SampleRightsUpdateReturn, unknown, { update: SampleRightsUpdate }>(({ update }) =>
         updateSampleRights(sampleId, update),
     );
 }

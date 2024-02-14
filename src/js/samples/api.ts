@@ -89,6 +89,16 @@ export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sa
         .then(response => response.body);
 }
 
+/** Data returned from API on sample rights update */
+export type SampleRightsUpdateReturn = {
+    all_read: boolean;
+    all_write: boolean;
+    group: number | string | null;
+    group_read: boolean;
+    group_write: boolean;
+    user: { [key: string]: string };
+};
+
 export type SampleRightsUpdate = {
     group?: number | string | null;
     group_read?: boolean;
@@ -104,7 +114,7 @@ export type SampleRightsUpdate = {
  * @param update - The update to apply to the sample
  * @returns A promise resolving to a response containing the updated sample's data
  */
-export function updateSampleRights(sampleId: string, update: SampleRightsUpdate): Promise<Sample> {
+export function updateSampleRights(sampleId: string, update: SampleRightsUpdate): Promise<SampleRightsUpdateReturn> {
     return Request.patch(`/samples/${sampleId}/rights`)
         .send(update)
         .then(response => response.body);

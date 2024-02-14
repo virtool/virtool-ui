@@ -157,9 +157,17 @@ export function mockApiEditSample(
  * @returns A nock scope for the mocked API call
  */
 export function mockApiUpdateSampleRights(sample: Sample, update: SampleRightsUpdate) {
-    const sampleDetail = { ...sample, ...update };
+    const sampleRightsUpdate = {
+        all_read: faker.datatype.boolean(),
+        all_write: faker.datatype.boolean(),
+        group: null,
+        group_read: faker.datatype.boolean(),
+        group_write: faker.datatype.boolean(),
+        user: { id: sample.user.id },
+        ...update,
+    };
 
-    return nock("http://localhost").patch(`/api/samples/${sample.id}/rights`).reply(200, sampleDetail);
+    return nock("http://localhost").patch(`/api/samples/${sample.id}/rights`).reply(200, sampleRightsUpdate);
 }
 
 /**
