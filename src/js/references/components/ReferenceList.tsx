@@ -25,7 +25,7 @@ const StyledScrollList = styled(ScrollList)`
 export default function ReferenceList() {
     const [term] = useUrlSearchParams("find");
 
-    const { data, isLoading, fetchNextPage, isFetchingNextPage } = useInfiniteFindReferences(term);
+    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
 
     if (isLoading) {
         return <LoadingPlaceholder />;
@@ -48,6 +48,7 @@ export default function ReferenceList() {
                     <BoxGroup>
                         <StyledScrollList
                             fetchNextPage={fetchNextPage}
+                            hasNextPage={hasNextPage}
                             isFetchingNextPage={isFetchingNextPage}
                             isLoading={isLoading}
                             items={references}

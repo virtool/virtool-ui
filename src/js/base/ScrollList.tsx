@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 function getScrollRatio(): number {
-    return Math.round((window.innerHeight + window.scrollY) / document.documentElement.scrollHeight);
+    return (window.innerHeight + window.scrollY) / document.documentElement.scrollHeight;
 }
 
 const StyledScrollList = styled.div`
@@ -19,6 +19,8 @@ type ScrollListProps = {
     className?: string;
     /** A function which initiates fetching the next page */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    /** Whether there is another page of data available */
+    hasNextPage: boolean;
     /** Whether a new page is being fetched */
     isFetchingNextPage: boolean;
     /** Whether the first page is being fetched */
@@ -36,19 +38,22 @@ export function ScrollList({
     className,
     fetchNextPage,
     isFetchingNextPage,
+    hasNextPage,
     isLoading,
     items,
     renderRow,
 }: ScrollListProps) {
     useEffect(() => {
-        function onScroll() {
-            if (getScrollRatio() > 0.8 && !isFetchingNextPage) {
+        handleFetchNextPage();
+
+        function handleFetchNextPage() {
+            if (getScrollRatio() > 0.8 && !isFetchingNextPage && hasNextPage) {
                 void fetchNextPage();
             }
         }
 
-        window.addEventListener("scroll", onScroll);
-        return () => window.removeEventListener("scroll", onScroll);
+        window.addEventListener("scroll", handleFetchNextPage);
+        return () => window.removeEventListener("scroll", handleFetchNextPage);
     }, [isFetchingNextPage, fetchNextPage]);
 
     const entries = map(items, item => renderRow(item));
