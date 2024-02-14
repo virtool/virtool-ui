@@ -15,8 +15,10 @@ type formValues = {
 };
 
 type OTUFormProps = {
+    abbreviation?: string;
     /** Error message to be displayed */
     error: string;
+    name?: string;
     /** A callback function to be called when the form is submitted */
     onSubmit: (values: formValues) => void;
 };
@@ -24,12 +26,12 @@ type OTUFormProps = {
 /**
  * A form component for creating an OTU
  */
-export function OTUForm({ error, onSubmit }: OTUFormProps) {
+export function OTUForm({ abbreviation, error, name, onSubmit }: OTUFormProps) {
     const {
         formState: { errors },
         register,
         handleSubmit,
-    } = useForm<formValues>({ defaultValues: { name: "", abbreviation: "" } });
+    } = useForm<formValues>({ defaultValues: { name: name || "", abbreviation: abbreviation || "" } });
 
     return (
         <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
