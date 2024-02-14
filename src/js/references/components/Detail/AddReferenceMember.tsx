@@ -86,7 +86,7 @@ export default function AddReferenceMember({
     const mutation = useAddReferenceMember(refId, noun);
 
     const memberIds = map(members, "id");
-    const items = flatMap(data.pages, page => page.items);
+    const items = flatMap(data.pages, page => page.items || page.documents);
     const filteredItems = filter(items, item => !includes(memberIds, item.id));
 
     function renderRow(item) {

@@ -24,7 +24,7 @@ export function createFirst({ handle, password }) {
  * @returns A promise resolving to a page of user search results
  */
 export function findUsers(page: number, per_page: number, term: string): Promise<UserResponse> {
-    return Request.get("/admin/users")
+    return Request.get("/users")
         .query({ page, per_page, term })
         .then(res => res.body);
 }
