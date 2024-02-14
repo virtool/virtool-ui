@@ -1,99 +1,46 @@
-import { get } from "lodash-es";
+import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { connect } from "react-redux";
-import { pushState } from "../../app/actions";
-import { Modal, ModalHeader } from "../../base";
-import { clearError } from "../../errors/actions";
-import { getTargetChange, routerLocationHasState } from "../../utils/utils";
-import { createOTU } from "../actions";
+import { useQueryClient } from "react-query";
+import { useHistory, useLocation } from "react-router-dom";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
+import { OTUQueryKeys, useCreateOTU } from "../querys";
 import { OTUForm } from "./OTUForm";
 
-function getInitialState() {
-    return {
-        name: "",
-        abbreviation: "",
-        error: "",
-    };
-}
+type CreateOTUProps = {
+    refId: string;
+};
 
-class CreateOTU extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = getInitialState();
-    }
+/**
+ * Displays a dialog to create an OTU
+ */
+export default function CreateOTU({ refId }: CreateOTUProps) {
+    const history = useHistory();
+    const location = useLocation<{ createOTU: boolean }>();
 
-    handleChange = e => {
-        const { name, value, error } = getTargetChange(e.target);
+    const mutation = useCreateOTU(refId);
+    const queryClient = useQueryClient();
 
-        this.setState({ [name]: value, [error]: "" });
-
-        if (this.props.error) {
-            this.props.onClearError();
-        }
-    };
-
-    handleModalExited = () => {
-        this.setState(getInitialState());
-
-        if (this.props.error) {
-            this.props.onClearError();
-        }
-    };
-
-    handleSubmit = e => {
-        e.preventDefault();
-
-        if (!this.state.name) {
-            return this.setState({
-                error: "Name required",
-            });
-        }
-
-        if (!this.state.error) {
-            this.props.onSubmit(this.props.refId, this.state.name, this.state.abbreviation);
-        }
-    };
-
-    render() {
-        const error = this.state.error || this.props.error || "";
-
-        return (
-            <Modal
-                label="Create OTU"
-                show={this.props.show}
-                onHide={this.props.onHide}
-                onExited={this.handleModalExited}
-            >
-                <ModalHeader>Create OTU</ModalHeader>
-                <OTUForm
-                    name={this.state.name}
-                    abbreviation={this.state.abbreviation}
-                    onSubmit={this.handleSubmit}
-                    onChange={this.handleChange}
-                    error={error}
-                />
-            </Modal>
+    function handleSubmit({ name, abbreviation }) {
+        mutation.mutate(
+            { name, abbreviation },
+            {
+                onSuccess: () => {
+                    history.replace({ state: { createOTU: false } });
+                    queryClient.invalidateQueries(OTUQueryKeys.lists());
+                },
+            },
         );
     }
+
+    return (
+        <Dialog open={location.state?.createOTU} onOpenChange={() => history.replace({ state: { createOTU: false } })}>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Create OTU</DialogTitle>
+                    <OTUForm onSubmit={handleSubmit} error={mutation.isError && mutation.error.response.body.message} />
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
+    );
 }
-
-const mapStateToProps = state => ({
-    error: get(state, "errors.CREATE_OTU_ERROR.message", ""),
-    show: routerLocationHasState(state, "createOTU"),
-});
-
-const mapDispatchToProps = dispatch => ({
-    onSubmit: (refId, name, abbreviation) => {
-        dispatch(createOTU(refId, name, abbreviation));
-    },
-
-    onHide: () => {
-        dispatch(pushState({ createOTU: false }));
-    },
-
-    onClearError: () => {
-        dispatch(clearError("CREATE_OTU_ERROR"));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOTU);

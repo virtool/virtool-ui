@@ -4,7 +4,6 @@ import { all, put, select, takeEvery, takeLatest } from "redux-saga/effects";
 import { pushState } from "../app/actions";
 import {
     ADD_SEQUENCE,
-    CREATE_OTU,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -44,14 +43,6 @@ export function* getOTU(action) {
 
 export function* getOTUHistory(action) {
     yield apiCall(otusAPI.getHistory, action.payload, GET_OTU_HISTORY);
-}
-
-export function* createOTU(action) {
-    const resp = yield apiCall(otusAPI.create, action.payload, CREATE_OTU);
-
-    if (resp.ok) {
-        yield put(push({ state: { createOTU: false } }));
-    }
 }
 
 export function* editOTU(action) {
@@ -119,7 +110,6 @@ export function* revert(action) {
 export function* watchOTUs() {
     yield takeLatest(GET_OTU.REQUESTED, getOTU);
     yield takeLatest(GET_OTU_HISTORY.REQUESTED, getOTUHistory);
-    yield takeEvery(CREATE_OTU.REQUESTED, createOTU);
     yield takeEvery(EDIT_OTU.REQUESTED, editOTU);
     yield takeEvery(REMOVE_OTU.REQUESTED, removeOTU);
     yield takeEvery(SET_ISOLATE_AS_DEFAULT.REQUESTED, setIsolateAsDefault);

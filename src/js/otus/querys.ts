@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation } from "react-query";
-import { addIsolate, editIsolate, findOTUs } from "./api";
-import { OTUIsolate, OTUSearchResult } from "./types";
+import { ErrorResponse } from "../types/types";
+import { addIsolate, createOTU, editIsolate, findOTUs } from "./api";
+import { OTU, OTUIsolate, OTUSearchResult } from "./types";
 
 /**
  * Factory for generating react-query keys for otu related queries.
@@ -8,7 +9,7 @@ import { OTUIsolate, OTUSearchResult } from "./types";
 export const OTUQueryKeys = {
     all: () => ["OTU"] as const,
     lists: () => ["OTU", "list"] as const,
-    list: (filters: string[]) => ["OTU", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) => ["OTU", "list", ...filters] as const,
     infiniteLists: () => ["OTU", "list", "infinite"] as const,
     infiniteList: (filters: Array<string | number | boolean>) => ["OTU", "list", "infinite", ...filters] as const,
     details: () => ["OTU", "details"] as const,
@@ -36,6 +37,17 @@ export function useInfiniteFindOTUS(refId: string, term: string, verified?: bool
             },
             keepPreviousData: true,
         },
+    );
+}
+
+/**
+ * Initializes a mutator for creating an OTU
+ *
+ * @returns A mutator for creating an OTU
+ */
+export function useCreateOTU(refId: string) {
+    return useMutation<OTU, ErrorResponse, { name: string; abbreviation: string }>(({ name, abbreviation }) =>
+        createOTU(refId, name, abbreviation),
     );
 }
 

@@ -1,7 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 import {
     ADD_SEQUENCE,
-    CREATE_OTU,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -70,18 +69,6 @@ export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({
  */
 export const getOTUHistory = createAction(GET_OTU_HISTORY.REQUESTED, otuId => ({
     payload: { otuId },
-}));
-
-/**
- * Returns action that can trigger an API call for creating a new OTU.
- *
- * @func
- * @param name {string} unique OTU name
- * @param abbreviation {string} unique abbreviation for OTU name
- * @returns {object}
- */
-export const createOTU = createAction(CREATE_OTU.REQUESTED, (refId, name, abbreviation) => ({
-    payload: { refId, name, abbreviation },
 }));
 
 /**
