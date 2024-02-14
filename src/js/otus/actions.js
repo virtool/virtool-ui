@@ -17,19 +17,9 @@ import {
     SHOW_REMOVE_ISOLATE,
     SHOW_REMOVE_OTU,
     SHOW_REMOVE_SEQUENCE,
-    WS_INSERT_OTU,
     WS_REMOVE_OTU,
     WS_UPDATE_OTU,
 } from "../app/actionTypes";
-
-/**
- * Returns an action that should be dispatched when an OTU is inserted via websocket.
- *
- * @func
- * @param data {object} the data passed in the websocket message
- * @returns {object}
- */
-export const wsInsertOTU = createAction(WS_INSERT_OTU);
 
 /**
  * Returns an action that should be dispatched when an OTU is updated via websocket.

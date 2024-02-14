@@ -3,7 +3,7 @@ import { wsUpdateAnalysis } from "../../analyses/actions";
 import { wsInsertGroup, wsRemoveGroup, wsUpdateGroup } from "../../groups/actions";
 import { wsInsertHistory, wsInsertIndex, wsUpdateIndex } from "../../indexes/actions";
 import { wsInsertJob, wsRemoveJob, wsUpdateJob } from "../../jobs/actions";
-import { wsInsertOTU, wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
+import { wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
 import { wsInsertReference, wsRemoveReference, wsUpdateReference } from "../../references/actions";
 import { wsInsertSample, wsRemoveSample, wsUpdateSample } from "../../samples/actions";
 import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../../users/actions";
@@ -17,7 +17,6 @@ const inserters = {
     history: actionCreatorWrapper(wsInsertHistory),
     indexes: actionCreatorWrapper(wsInsertIndex),
     jobs: actionCreatorWrapper(wsInsertJob),
-    otus: actionCreatorWrapper(wsInsertOTU),
     references: actionCreatorWrapper(wsInsertReference),
     samples: actionCreatorWrapper(wsInsertSample),
     users: actionCreatorWrapper(wsInsertUser),

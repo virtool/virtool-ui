@@ -1,22 +1,22 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { useQueryClient } from "react-query";
-import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
 import { OTUQueryKeys, useCreateOTU } from "../querys";
 import { OTUForm } from "./OTUForm";
 
 type CreateOTUProps = {
+    /** A callback function to hide the dialog */
+    onHide: () => void;
     refId: string;
+    /** Indicates whether the dialog for creating an OTU is visible */
+    show: boolean;
 };
 
 /**
  * Displays a dialog to create an OTU
  */
-export default function CreateOTU({ refId }: CreateOTUProps) {
-    const history = useHistory();
-    const location = useLocation<{ createOTU: boolean }>();
-
+export default function CreateOTU({ onHide, refId, show }: CreateOTUProps) {
     const mutation = useCreateOTU(refId);
     const queryClient = useQueryClient();
 
@@ -25,7 +25,7 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
             { name, abbreviation },
             {
                 onSuccess: () => {
-                    history.replace({ state: { createOTU: false } });
+                    onHide();
                     queryClient.invalidateQueries(OTUQueryKeys.lists());
                 },
             },
@@ -33,7 +33,7 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
     }
 
     return (
-        <Dialog open={location.state?.createOTU} onOpenChange={() => history.replace({ state: { createOTU: false } })}>
+        <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
