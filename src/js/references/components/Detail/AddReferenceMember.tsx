@@ -106,31 +106,29 @@ export default function AddReferenceMember({
     }
 
     return (
-        <>
-            <Dialog open={show} onOpenChange={onOpenChange}>
-                <DialogPortal>
-                    <DialogOverlay />
-                    <DialogContent>
-                        <AddReferenceMemberHeader>{`Add ${noun}`}</AddReferenceMemberHeader>
-                        <Toolbar>
-                            <InputSearch name="search" value={term} onChange={e => setTerm(e.target.value)} />
-                        </Toolbar>
-                        {filteredItems.length ? (
-                            <StyledScrollList
-                                fetchNextPage={fetchNextPage}
-                                isFetchingNextPage={isFetchingNextPage}
-                                isLoading={isLoading}
-                                items={filteredItems}
-                                renderRow={renderRow}
-                            />
-                        ) : (
-                            <BoxGroup>
-                                <NoneFoundSection noun={`other ${noun}s`} />
-                            </BoxGroup>
-                        )}
-                    </DialogContent>
-                </DialogPortal>
-            </Dialog>
-        </>
+        <Dialog open={show} onOpenChange={onOpenChange}>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <AddReferenceMemberHeader>{`Add ${noun}`}</AddReferenceMemberHeader>
+                    <Toolbar>
+                        <InputSearch name="search" value={term} onChange={e => setTerm(e.target.value)} />
+                    </Toolbar>
+                    {filteredItems.length ? (
+                        <StyledScrollList
+                            fetchNextPage={fetchNextPage}
+                            isFetchingNextPage={isFetchingNextPage}
+                            isLoading={isLoading}
+                            items={filteredItems}
+                            renderRow={renderRow}
+                        />
+                    ) : (
+                        <BoxGroup>
+                            <NoneFoundSection noun={`other ${noun}s`} />
+                        </BoxGroup>
+                    )}
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }
