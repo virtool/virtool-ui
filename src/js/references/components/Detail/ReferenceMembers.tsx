@@ -1,10 +1,14 @@
 import { map } from "lodash-es";
 import React from "react";
+import { InfiniteData } from "react-query";
+import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../../administration/hooks";
 import { AdministratorRoles } from "../../../administration/types";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
+import { GroupSearchResults } from "../../../groups/types";
+import { UserResponse } from "../../../users/types";
 import { useRemoveReferenceUser } from "../../querys";
 import { ReferenceGroup, ReferenceUser } from "../../types";
 import AddReferenceMember from "./AddReferenceMember";
@@ -35,17 +39,23 @@ const ReferenceMembersHeader = styled(BoxGroupHeader)`
 `;
 
 type ReferenceMembersProps = {
-    data: any;
+    /** The data of the member on the current page */
+    data: InfiniteData<GroupSearchResults | UserResponse>;
+    /** Fetches the next page of data */
+    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    /** Whether the next page is being fetched */
+    isFetchingNextPage: boolean;
+    /** Whether the data is loading */
+    isLoading: boolean;
     /** The list of users or groups associated with the reference */
     members: ReferenceGroup[] | ReferenceUser[];
     /** Whether the member is a user or a group */
     noun: string;
     refId: string;
-    term?: string;
-    setTerm?: any;
-    fetchNextPage?: any;
-    isFetchingNextPage?: any;
-    isLoading?: any;
+    /** A function to handle input change */
+    setTerm: (term: string) => void;
+    /** The search term to filter the data by */
+    term: string;
 };
 
 /**
@@ -53,14 +63,14 @@ type ReferenceMembersProps = {
  */
 export default function ReferenceMembers({
     data,
-    members,
-    noun,
-    refId,
-    term,
-    setTerm,
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
+    members,
+    noun,
+    refId,
+    setTerm,
+    term,
 }: ReferenceMembersProps) {
     const history = useHistory();
     const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
