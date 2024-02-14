@@ -5,7 +5,7 @@ import { Modal, ModalHeader } from "../../../base";
 import { clearError } from "../../../errors/actions";
 import { getTargetChange } from "../../../utils/utils";
 import { editOTU, hideOTUModal } from "../../actions";
-import { OTUForm } from "../Form";
+import { OTUForm } from "../OTUForm";
 
 const getInitialState = ({ name = "", abbreviation = "" }) => ({
     name,

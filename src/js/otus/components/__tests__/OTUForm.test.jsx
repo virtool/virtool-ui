@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Input } from "../../../base";
-import { OTUForm } from "../Form";
+import { OTUForm } from "../OTUForm";
 
 describe("<OTUForm />", () => {
     let props;

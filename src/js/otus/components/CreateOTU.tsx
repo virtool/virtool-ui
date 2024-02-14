@@ -6,7 +6,7 @@ import { Modal, ModalHeader } from "../../base";
 import { clearError } from "../../errors/actions";
 import { getTargetChange, routerLocationHasState } from "../../utils/utils";
 import { createOTU } from "../actions";
-import { OTUForm } from "./Form";
+import { OTUForm } from "./OTUForm";
 
 function getInitialState() {
     return {
