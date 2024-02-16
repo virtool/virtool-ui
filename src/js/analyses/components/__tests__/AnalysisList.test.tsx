@@ -93,8 +93,9 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: null });
             mockAPIGetAccount(account);
 
-            sample.groups = account.groups;
+            sample.group = account.groups[0];
             sample.group_write = true;
+
             mockApiGetSampleDetail(sample);
 
             renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
