@@ -2,6 +2,7 @@ import React from "react";
 import { match } from "react-router-dom";
 import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "../../base";
 import { useListHmms } from "../../hmm/querys";
+import { useFetchSample } from "../../samples/querys";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useListAnalyses } from "../querys";
 import { AnalysisMinimal } from "../types";
@@ -30,6 +31,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
     const [term, setTerm] = useUrlSearchParams("find");
     const { data: analyses, isLoading: isLoadingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
+    const { isLoading: isLoadingSample } = useFetchSample(sampleId);
 
     if (isLoadingAnalyses || isLoadingHmms) {
         return <LoadingPlaceholder />;
