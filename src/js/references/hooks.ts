@@ -8,6 +8,7 @@ import { useFetchAccount } from "../account/querys";
 import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
 import { getReference } from "./api";
+import { referenceQueryKeys } from "./querys";
 import { Reference, ReferenceTarget } from "./types";
 
 export function useGetReference(refId) {
@@ -132,53 +133,42 @@ export function useUpdateSourceTypes(
 }
 
 /**
+ * All reference rights
+ */
+export enum ReferenceRight {
+    modify = "modify",
+    modify_otu = "modify_otu",
+}
+
+/**
  * Check if the logged in account has the passed `right` on the reference detail is loaded for.
  *
- * @param reference - The reference to check
+ * @param referenceId - The id of the reference to check
  * @param right - The right to check for (eg. modify_otu)
  * @returns Whether the right is possessed by the account
  */
-export function useCheckReferenceRight(reference: Reference, right: string) {
-    const { data: account, isLoading } = useFetchAccount();
+export function useCheckReferenceRight(referenceId: string, right: ReferenceRight) {
+    const queryClient = useQueryClient();
+    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
 
-    if (isLoading || reference === null) {
-        return;
+    const reference: Reference = queryClient.getQueryData([...referenceQueryKeys.all(), referenceId]);
+
+    if (isLoadingAccount || !reference) {
+        return { hasPermission: false, isLoading: true };
     }
 
     if (account.administrator_role === AdministratorRoles.FULL) {
-        return true;
+        return { hasPermission: true, isLoading: false };
     }
 
     const user = find(reference.users, { id: account.id });
 
     if (user && user[right]) {
-        return true;
+        return { hasPermission: true, isLoading: false };
     }
-
-    // Groups user is a member of.
-    const memberGroups = account.groups;
 
     // Groups in common between the user and the registered ref groups.
-    const groups = filter(reference.groups, group => includes(memberGroups, group.id));
+    const groups = filter(reference.groups, group => includes(account.groups, group.id));
 
-    if (!groups) {
-        return false;
-    }
-
-    return some(groups, { [right]: true });
-}
-
-/**
- * Get a boolean indicating whether the logged in account can modify the OTUs of the
- * reference detail is loaded for.
- *
- * The result depends on the account's rights on the reference. It also depends on whether the reference is a remote
- * reference. Remote references cannot be modified by any user.
- *
- * @param reference - The reference to check
- * @returns The OTU modification right of the account
- */
-export function useCanModifyReferenceOTU(reference: Reference) {
-    const canModifyOTU = useCheckReferenceRight(reference, "modify_otu");
-    return !reference.remotes_from && canModifyOTU;
+    return { hasPermission: groups && some(groups, { [right]: true }), isLoading: false };
 }

@@ -1,22 +1,20 @@
 import React, { ChangeEvent } from "react";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
-import { useCanModifyReferenceOTU } from "../../references/hooks";
-import { Reference } from "../../references/types";
+import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
 
 type OTUToolbarProps = {
     /** Current search term used for filtering */
     term: string;
     /** A callback function to handle changes in search input */
     onChange: (term: ChangeEvent<HTMLInputElement>) => void;
-    /** Whether the reference is installed remotely */
-    reference: Reference;
+    refId: string;
 };
 
 /**
  * A toolbar which allows the OTUs to be filtered by their names
  */
-export default function OTUToolbar({ term, onChange, reference }: OTUToolbarProps) {
-    const canCreate = useCanModifyReferenceOTU(reference);
+export default function OTUToolbar({ term, onChange, refId }: OTUToolbarProps) {
+    const canCreate = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
 
     return (
         <Toolbar>
