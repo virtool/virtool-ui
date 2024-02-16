@@ -9,8 +9,8 @@ export const userQueryKeys = {
     all: () => ["users"] as const,
     lists: () => ["users", "list"] as const,
     list: (filters: Array<string | number | boolean>) => ["users", "list", ...filters] as const,
-    infiniteLists: () => ["users", "infiniteList"] as const,
-    infiniteList: (filters: Array<string | number | boolean>) => ["users", "infiniteList", ...filters] as const,
+    infiniteLists: () => ["users", "list", "infinite"] as const,
+    infiniteList: (filters: Array<string | number | boolean>) => ["users", "list", "infinite", ...filters] as const,
     details: () => ["users", "details"] as const,
     detail: (user_id: string) => ["users", "details", user_id] as const,
 };
