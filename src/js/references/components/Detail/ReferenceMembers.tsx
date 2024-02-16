@@ -2,9 +2,8 @@ import { map } from "lodash-es";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../../administration/hooks";
-import { AdministratorRoles } from "../../../administration/types";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
+import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReferenceUser } from "../../querys";
 import { ReferenceGroup, ReferenceUser } from "../../types";
 import AddReferenceMember from "./AddMember";
@@ -47,7 +46,7 @@ type ReferenceMembersProps = {
  */
 export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
     const history = useHistory();
-    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
     const mutation = useRemoveReferenceUser(refId, noun);
 
