@@ -21,7 +21,7 @@ function renderRow(refId: string, activeId: string) {
  * @returns A list of indexes
  */
 export function Indexes({ refId }: { refId: string }) {
-    const { data, isLoading, fetchNextPage, isFetchingNextPage } = useInfiniteFindIndexes(refId);
+    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindIndexes(refId);
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
@@ -37,6 +37,7 @@ export function Indexes({ refId }: { refId: string }) {
             {noIndexes}
             <ScrollList
                 fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
                 items={items}

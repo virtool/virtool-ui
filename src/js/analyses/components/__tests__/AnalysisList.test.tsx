@@ -6,10 +6,11 @@ import nock from "nock";
 import React from "react";
 import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "../../../../tests/fake/analyses";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
 import { createFakeIndexMinimal } from "../../../../tests/fake/indexes";
+import { createFakeSample, mockApiGetSampleDetail } from "../../../../tests/fake/samples";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import { Workflows } from "../../types";
@@ -27,13 +28,16 @@ function createReducer(state, history) {
 describe("<AnalysesList />", () => {
     let analyses;
     let history;
+    let sample;
     let props;
     let state;
 
     beforeEach(() => {
+        sample = createFakeSample();
+
         analyses = [
-            createFakeAnalysisMinimal({ sample: { id: "test" } }),
-            createFakeAnalysisMinimal({ sample: { id: "test" }, workflow: "nuvs" }),
+            createFakeAnalysisMinimal({ sample: { id: sample.id } }),
+            createFakeAnalysisMinimal({ sample: { id: sample.id }, workflow: "nuvs" }),
         ];
         mockApiGetAnalyses(analyses);
         mockApiGetHmms(createFakeHMMSearchResults());
@@ -52,6 +56,7 @@ describe("<AnalysesList />", () => {
 
     describe("<AnalysesList />", () => {
         it("should render", async () => {
+            mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
 
             expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
@@ -62,25 +67,70 @@ describe("<AnalysesList />", () => {
     });
 
     describe("<AnalysesToolbar />", () => {
-        it("should render with [canModify=true]", async () => {
+        it("should show analysis creation when user is full admin", async () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
+
+            mockApiGetSampleDetail(sample);
+
             renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
 
             expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
         });
 
-        it("should render with [canModify=false]", async () => {
+        it("should show analysis creation when user is the owner of the sample", async () => {
             const account = createFakeAccount({ administrator_role: null });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
+
+            sample.user.id = account.id;
+            mockApiGetSampleDetail(sample);
+
             renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
 
-            expect(await screen.queryByLabelText("plus-square fa-fw")).toBeNull();
+            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+        });
+
+        it("should show analysis creation when user is in the correct group and write is enabled", async () => {
+            const account = createFakeAccount({ administrator_role: null });
+            mockAPIGetAccount(account);
+
+            sample.group = account.groups[0].id;
+            sample.group_write = true;
+
+            mockApiGetSampleDetail(sample);
+
+            renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
+
+            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+        });
+
+        it("should show analysis creation when all users editing a sample is permitted", async () => {
+            const account = createFakeAccount({ administrator_role: null });
+            mockAPIGetAccount(account);
+
+            sample.all_write = true;
+            mockApiGetSampleDetail(sample);
+
+            renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
+
+            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+        });
+
+        it("should not render analysis creation option when user has no permissions", () => {
+            const account = createFakeAccount({ administrator_role: null });
+            mockAPIGetAccount(account);
+
+            mockApiGetSampleDetail(sample);
+
+            renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
+
+            expect(screen.queryByLabelText("plus-square fa-fw")).toBeNull();
         });
 
         it("should change state once create analysis is clicked", async () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
+            mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
 
             expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
