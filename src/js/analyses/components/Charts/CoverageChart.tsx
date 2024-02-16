@@ -6,21 +6,7 @@ import { area } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 import { theme } from "../../../app/theme";
-
-function deriveTrustworthyRegions(untrustWorthyRanges, length: number) {
-    const trustworthyRanges = [];
-    let start = 1;
-    let end;
-
-    untrustWorthyRanges.forEach(range => {
-        end = range[0];
-        trustworthyRanges.push([start, end]);
-        start = range[1];
-    });
-
-    trustworthyRanges.push([start, length]);
-    return trustworthyRanges;
-}
+import { deriveTrustworthyRegions } from "./utils";
 
 function draw(element, data, length, yMax, untrustworthyRanges) {
     select(element).append("svg");
@@ -36,7 +22,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 
     const width = (length > 800 ? length / 5 : length) - margin.left - margin.right;
 
-    const x = scaleLinear().range([0, width]).domain([0, length]);
+    const x = scaleLinear().range([1, width]).domain([0, length]);
     const y = scaleLinear().range([height, 0]).domain([0, yMax]).nice(5);
 
     const yAxis = axisLeft(y).ticks(5).tickFormat(format(".2s"));
@@ -51,7 +37,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const trustworthyRanges = deriveTrustworthyRegions(untrustworthyRanges, length);
+    const trustworthyRanges = deriveTrustworthyRegions(length, untrustworthyRanges);
 
     if (trustworthyRanges.length) {
         trustworthyRanges.forEach(range => {
@@ -115,7 +101,7 @@ interface IimiCoverageChartProps {
     untrustworthyRanges: any;
 }
 
-export function IimiCoverageChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {
+export function CoverageChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
