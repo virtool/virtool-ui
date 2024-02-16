@@ -5,7 +5,7 @@ import { forEach } from "lodash-es";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
@@ -48,7 +48,7 @@ describe("<SubtractionFileManager />", () => {
 
     it("should render", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
         mockApiListFiles([file]);
@@ -64,7 +64,7 @@ describe("<SubtractionFileManager />", () => {
 
     it("should reject files not ending in fa, fasta, fa.gz, or fasta.gz.", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
         mockApiListFiles([file]);

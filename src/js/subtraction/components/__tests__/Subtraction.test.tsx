@@ -3,7 +3,7 @@ import { screen, waitFor } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import {
     createFakeSubtraction,
@@ -57,7 +57,7 @@ describe("<Subtraction />", () => {
         history.push("/subtractions/files");
 
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
         const file = createFakeFile({ name: "subtraction.fq.gz" });
         mockApiListFiles([file]);
         renderWithProviders(

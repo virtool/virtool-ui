@@ -2,7 +2,7 @@ import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../../tests/fake/account";
 import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
 import { createFakeUsers, mockApiFindUsers } from "../../../../../tests/fake/user";
 import { renderWithProviders } from "../../../../../tests/setupTests";
@@ -12,7 +12,7 @@ import { CreateAdministrator } from "../Create";
 describe("<CreateAdministrator>", () => {
     it("should render form", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const users = createFakeUsers(2);
         mockApiFindUsers(users);
@@ -38,7 +38,7 @@ describe("<CreateAdministrator>", () => {
 
     it("should promote admin when correct", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const users = createFakeUsers(2);
 
@@ -71,7 +71,7 @@ describe("<CreateAdministrator>", () => {
 
     it("should filter users", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const users = createFakeUsers(2);
 

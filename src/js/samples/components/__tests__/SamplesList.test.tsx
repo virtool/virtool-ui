@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
 import { createFakeIndexMinimal, mockApiListIndexes } from "../../../../tests/fake/indexes";
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../tests/fake/labels";
@@ -63,7 +63,7 @@ describe("<SamplesList />", () => {
 
     it("should render create button when [canModify=true]", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
         renderWithRouter(<SamplesList />, {}, history);
 
         expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
@@ -71,7 +71,7 @@ describe("<SamplesList />", () => {
 
     it("should not render create button when [canModify=false]", async () => {
         const account = createFakeAccount({ administrator_role: null });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         renderWithRouter(<SamplesList />, {}, history);
 

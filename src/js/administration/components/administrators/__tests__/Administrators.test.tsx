@@ -2,7 +2,7 @@ import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../../tests/fake/account";
 import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
 import { createFakeUser, createFakeUsers, mockApiFindUsers } from "../../../../../tests/fake/user";
 import { renderWithProviders } from "../../../../../tests/setupTests";
@@ -13,7 +13,7 @@ import { ManageAdministrators } from "../Administrators";
 describe("<Administrators>", () => {
     it("should render", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const users = createFakeUsers(2);
         users[0].administrator_role = AdministratorRoles.FULL;
@@ -40,7 +40,7 @@ describe("<Administrators>", () => {
 
     it("should change user role when dropdown is changed", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const user = createFakeUser({ administrator_role: AdministratorRoles.FULL });
         mockApiFindUsers([user]);
@@ -60,7 +60,7 @@ describe("<Administrators>", () => {
 
     it("should remove admin role when trash icon clicked", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const user = createFakeUser({ administrator_role: AdministratorRoles.FULL });
         mockApiFindUsers([user]);
