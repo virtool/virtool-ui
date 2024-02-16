@@ -2,6 +2,7 @@ import { find, includes, map } from "lodash-es";
 import React from "react";
 import { useQueryClient } from "react-query";
 import { match } from "react-router-dom";
+import { useFetchAccount } from "../../../account/querys";
 import { useCheckAdminRole } from "../../../administration/hooks";
 import { AdministratorRoles } from "../../../administration/types";
 import {
@@ -29,16 +30,19 @@ type SampleRightsProps = {
 export default function SampleRights({ match }: SampleRightsProps) {
     const { sampleId } = match.params;
 
-    const { hasPermission: canModifyRights } = useCheckAdminRole(AdministratorRoles.FULL);
+    const { hasPermission } = useCheckAdminRole(AdministratorRoles.FULL);
     const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
+    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
     const { data: groups, isLoading: isLoadingGroups } = useListGroups();
 
     const queryClient = useQueryClient();
     const mutation = useUpdateSampleRights(sampleId);
 
-    if (isLoadingSample || isLoadingGroups) {
+    if (isLoadingSample || isLoadingGroups || isLoadingAccount) {
         return <LoadingPlaceholder />;
     }
+
+    const canModifyRights = sample !== null && (hasPermission || sample.user.id === account.id);
 
     const { group, group_read, group_write, all_read, all_write } = sample;
 
