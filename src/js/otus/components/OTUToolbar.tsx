@@ -14,7 +14,7 @@ type OTUToolbarProps = {
  * A toolbar which allows the OTUs to be filtered by their names
  */
 export default function OTUToolbar({ term, onChange, refId }: OTUToolbarProps) {
-    const canCreate = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+    const { hasPermission: canCreate } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
 
     return (
         <Toolbar>
