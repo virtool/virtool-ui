@@ -56,6 +56,7 @@ describe("<AnalysesList />", () => {
 
     describe("<AnalysesList />", () => {
         it("should render", async () => {
+            mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, state, history, createReducer);
 
             expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
@@ -93,7 +94,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: null });
             mockAPIGetAccount(account);
 
-            sample.group = account.groups[0];
+            sample.group = account.groups[0].id;
             sample.group_write = true;
 
             mockApiGetSampleDetail(sample);
@@ -115,7 +116,7 @@ describe("<AnalysesList />", () => {
             expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
         });
 
-        it("should not render analysis creation option when user has no permissions", async () => {
+        it("should not render analysis creation option when user has no permissions", () => {
             const account = createFakeAccount({ administrator_role: null });
             mockAPIGetAccount(account);
 

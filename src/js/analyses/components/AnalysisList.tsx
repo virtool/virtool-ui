@@ -33,7 +33,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
     const { isLoading: isLoadingSample } = useFetchSample(sampleId);
 
-    if (isLoadingAnalyses || isLoadingHmms) {
+    if (isLoadingAnalyses || isLoadingHmms || isLoadingSample) {
         return <LoadingPlaceholder />;
     }
 
