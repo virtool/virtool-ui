@@ -4,7 +4,11 @@ import { createMemoryHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../../../tests/fake/account";
-import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
+import {
+    createFakeReference,
+    mockApiEditReference,
+    mockApiGetReferenceDetail,
+} from "../../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../../administration/types";
 import Targets from "../Targets";
@@ -14,9 +18,11 @@ describe("<Targets />", () => {
     let history;
 
     beforeEach(() => {
+        const reference = createFakeReference({ data_type: "barcode" });
         mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetReferenceDetail(reference);
         props = {
-            reference: createFakeReference({ data_type: "barcode" }),
+            reference: reference,
         };
         history = createMemoryHistory();
     });
