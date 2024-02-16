@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
-import { createGroup, findGroups, getGroup, listGroups, removeGroup, updateGroup } from "./api";
+import { createGroup, findGroups, getGroup, removeGroup, updateGroup } from "./api";
 import { Group, GroupMinimal, GroupSearchResults, GroupUpdate } from "./types";
 
 /**
@@ -25,7 +25,7 @@ export const groupQueryKeys = {
 export function useInfiniteFindGroups(per_page: number, term: string) {
     return useInfiniteQuery<GroupSearchResults>(
         groupQueryKeys.infiniteList([per_page, term]),
-        ({ pageParam }) => findGroups(pageParam, per_page, term),
+        ({ pageParam }) => findGroups(pageParam, per_page, term, true) as Promise<GroupSearchResults>,
         {
             getNextPageParam: lastPage => {
                 if (lastPage.page >= lastPage.page_count) {
@@ -44,7 +44,7 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
  * @returns {UseQueryResult} The non-paginated list of groups.
  */
 export function useListGroups() {
-    return useQuery<GroupMinimal[]>(groupQueryKeys.lists(), listGroups);
+    return useQuery<GroupMinimal[]>(groupQueryKeys.lists(), () => findGroups() as Promise<GroupMinimal[]>);
 }
 
 /**
