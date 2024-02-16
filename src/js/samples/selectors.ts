@@ -1,10 +1,8 @@
 import { every, filter, forEach, get, includes, intersectionWith, mapValues, reduce, some, toNumber } from "lodash-es";
-import createCachedSelector from "re-reselect";
 import { createSelector } from "reselect";
 import { getAccountAdministratorRole, getAccountId } from "../account/selectors";
 import { AdministratorRoles } from "../administration/types";
 import { hasSufficientAdminRole } from "../administration/utils";
-import { getTermSelectorFactory } from "../utils/selectors";
 
 export const getSampleGroups = state => state.account.groups;
 export const getSampleDetail = state => state.samples.detail;
@@ -28,28 +26,13 @@ export const getCanModify = createSelector(
     },
 );
 
-export const getCanModifyRights = createSelector(
-    [getAccountAdministratorRole, getAccountId, getSampleDetail],
-    (administratorRole, userId, sample) => {
-        if (sample === null) {
-            return false;
-        }
-
-        return hasSufficientAdminRole(AdministratorRoles.FULL, administratorRole) || sample.user.id === userId;
-    },
-);
-
 export const getDefaultSubtractions = state => state.samples.detail.subtractions;
-export const getSubtractionOptions = state => state.subtraction.shortlist;
 
 export const getMaxReadLength = state => state.samples.detail.quality.length[1];
 
 export const getSampleFiles = state => state.samples.detail.files;
-export const getSampleLabels = state => state.samples.detail.labels;
 
 export const getHasRawFilesOnly = createSelector([getSampleFiles], files => every(files, "raw"));
-
-export const getTerm = getTermSelectorFactory(state => state.samples.term);
 
 export const getTermFromURL = state => {
     if (state.router.location.search) {
@@ -96,11 +79,6 @@ export const getWorkflowsFromURL = state => {
 
     return workflowFilter;
 };
-
-export const getIsSelected = createCachedSelector(
-    [getSelectedSampleIds, (state, sampleId) => sampleId],
-    (selectedSampleIds, sampleId) => includes(selectedSampleIds, sampleId),
-)((state, sampleId) => sampleId);
 
 export const getSelectedSamples = createSelector([getSelectedSampleIds, getSampleDocuments], (selected, documents) =>
     intersectionWith(documents, selected, (document, selectedSample) => document.id === selectedSample),
