@@ -1,11 +1,11 @@
 import React from "react";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
+import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
+import { Permission } from "../../groups/types";
 import { SampleSelectionToolbar } from "./SampleSelectionToolbar";
 
 function SampleSearchToolbar({ onChange, term }) {
-    const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_sample);
 
     return (
         <Toolbar>

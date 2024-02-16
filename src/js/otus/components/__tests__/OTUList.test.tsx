@@ -6,7 +6,7 @@ import nock from "nock";
 import React from "react";
 import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeOTUMinimal, mockApiGetOTUs } from "../../../../tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
@@ -88,7 +88,7 @@ describe("<OTUsList />", () => {
             const account = createFakeAccount({
                 administrator_role: AdministratorRoles.FULL,
             });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
             renderWithRouter(<OTUList {...props} />, state, history, createReducer);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe("<OTUsList />", () => {
             const account = createFakeAccount({
                 administrator_role: null,
             });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
             renderWithRouter(<OTUList {...props} />, state, history, createReducer);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();

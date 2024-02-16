@@ -62,6 +62,7 @@ type CreateFakeSample = CreateFakeSampleMinimal & {
     paired?: boolean;
     locale?: string;
     subtractions?: Array<SubtractionNested>;
+    group_write?: boolean;
 };
 
 /**

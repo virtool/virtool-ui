@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../../../tests/fake/account";
 import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../../administration/types";
@@ -14,7 +14,7 @@ describe("<Targets />", () => {
     let history;
 
     beforeEach(() => {
-        mockGetAccountAPI(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         props = {
             reference: createFakeReference({ data_type: "barcode" }),
         };
@@ -28,7 +28,7 @@ describe("<Targets />", () => {
     });
 
     it("should render when [canModify=false]", () => {
-        mockGetAccountAPI(createFakeAccount({ administrator_role: null }));
+        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithRouter(<Targets {...props} />, {}, history);
 
         expect(screen.queryByRole("button", { name: "edit" })).toBeNull();

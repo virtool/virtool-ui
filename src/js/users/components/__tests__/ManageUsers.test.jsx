@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import { forEach } from "lodash-es";
 import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeUsers, mockApiFindUsers } from "../../../../tests/fake/user";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
@@ -39,7 +39,7 @@ describe("<ManageUsers />", () => {
         users[0].administrator_role = AdministratorRoles.FULL;
         await mockApiFindUsers(users);
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         renderWithRouter(<ManageUsers />, state, history, createReducer);
 
@@ -53,7 +53,7 @@ describe("<ManageUsers />", () => {
 
     it("should render correctly when documents = null", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         renderWithRouter(<ManageUsers />, state, history, createReducer);
 
@@ -67,7 +67,7 @@ describe("<ManageUsers />", () => {
         const users = createFakeUsers(3);
         mockApiFindUsers(users);
         const account = createFakeAccount({ administrator_role: null });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         renderWithRouter(<ManageUsers />, state, history, createReducer);
 
