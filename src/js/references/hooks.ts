@@ -8,8 +8,7 @@ import { useFetchAccount } from "../account/querys";
 import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
 import { getReference } from "./api";
-import { referenceQueryKeys } from "./querys";
-import { Reference, ReferenceTarget } from "./types";
+import { ReferenceTarget } from "./types";
 
 export function useGetReference(refId) {
     return useQuery(["reference", refId], () => getReference(refId));
@@ -136,8 +135,10 @@ export function useUpdateSourceTypes(
  * All reference rights
  */
 export enum ReferenceRight {
+    build = "build",
     modify = "modify",
     modify_otu = "modify_otu",
+    remove = "remove",
 }
 
 /**
@@ -148,12 +149,10 @@ export enum ReferenceRight {
  * @returns Whether the right is possessed by the account
  */
 export function useCheckReferenceRight(referenceId: string, right: ReferenceRight) {
-    const queryClient = useQueryClient();
     const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
+    const { data: reference, isLoading: isLoadingReference } = useGetReference(referenceId);
 
-    const reference: Reference = queryClient.getQueryData([...referenceQueryKeys.all(), referenceId]);
-
-    if (isLoadingAccount || !reference) {
+    if (isLoadingAccount || isLoadingReference) {
         return { hasPermission: false, isLoading: true };
     }
 

@@ -50,7 +50,12 @@ export default function OTUList({ match }: OTUListProps) {
     return (
         <ContainerNarrow>
             <RebuildAlert />
-            <OTUToolbar term={term} onChange={e => setTerm(e.target.value)} refId={refId} />
+            <OTUToolbar
+                term={term}
+                onChange={e => setTerm(e.target.value)}
+                refId={refId}
+                remotesFrom={reference.remotes_from}
+            />
             <CreateOTU refId={refId} />
 
             {items.length ? (
