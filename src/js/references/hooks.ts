@@ -1,12 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { difference, union } from "lodash-es";
+import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as Yup from "yup";
+import { useFetchAccount } from "../account/querys";
+import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
 import { getReference } from "./api";
-import { ReferenceTarget } from "./types";
+import { Reference, ReferenceTarget } from "./types";
 
 export function useGetReference(refId) {
     return useQuery(["reference", refId], () => getReference(refId));
@@ -127,4 +129,56 @@ export function useUpdateSourceTypes(
         handleUndo,
         register,
     };
+}
+
+/**
+ * Check if the logged in account has the passed `right` on the reference detail is loaded for.
+ *
+ * @param reference - The reference to check
+ * @param right - The right to check for (eg. modify_otu)
+ * @returns Whether the right is possessed by the account
+ */
+export function useCheckReferenceRight(reference: Reference, right: string) {
+    const { data: account, isLoading } = useFetchAccount();
+
+    if (isLoading || reference === null) {
+        return;
+    }
+
+    if (account.administrator_role === AdministratorRoles.FULL) {
+        return true;
+    }
+
+    const user = find(reference.users, { id: account.id });
+
+    if (user && user[right]) {
+        return true;
+    }
+
+    // Groups user is a member of.
+    const memberGroups = account.groups;
+
+    // Groups in common between the user and the registered ref groups.
+    const groups = filter(reference.groups, group => includes(memberGroups, group.id));
+
+    if (!groups) {
+        return false;
+    }
+
+    return some(groups, { [right]: true });
+}
+
+/**
+ * Get a boolean indicating whether the logged in account can modify the OTUs of the
+ * reference detail is loaded for.
+ *
+ * The result depends on the account's rights on the reference. It also depends on whether the reference is a remote
+ * reference. Remote references cannot be modified by any user.
+ *
+ * @param reference - The reference to check
+ * @returns The OTU modification right of the account
+ */
+export function useCanModifyReferenceOTU(reference: Reference) {
+    const canModifyOTU = useCheckReferenceRight(reference, "modify_otu");
+    return !reference.remotes_from && canModifyOTU;
 }
