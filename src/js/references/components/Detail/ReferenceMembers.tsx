@@ -1,13 +1,11 @@
 import { map } from "lodash-es";
-import React from "react";
-import { InfiniteData } from "react-query";
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon, LoadingPlaceholder } from "../../../base";
+import { useInfiniteFindGroups } from "../../../groups/querys";
+import { useInfiniteFindUsers } from "../../../users/querys";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
-import { GroupSearchResults } from "../../../groups/types";
-import { UserResponse } from "../../../users/types";
 import { useRemoveReferenceUser } from "../../querys";
 import { ReferenceGroup, ReferenceUser } from "../../types";
 import AddReferenceMember from "./AddReferenceMember";
@@ -38,43 +36,37 @@ const ReferenceMembersHeader = styled(BoxGroupHeader)`
 `;
 
 type ReferenceMembersProps = {
-    /** The data of the member on the current page */
-    data: InfiniteData<GroupSearchResults | UserResponse>;
-    /** Fetches the next page of data */
-    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
-    /** Whether the next page is being fetched */
-    isFetchingNextPage: boolean;
-    /** Whether the data is loading */
-    isLoading: boolean;
     /** The list of users or groups associated with the reference */
     members: ReferenceGroup[] | ReferenceUser[];
     /** Whether the member is a user or a group */
     noun: string;
     refId: string;
-    /** A function to handle input change */
-    setTerm: (term: string) => void;
-    /** The search term to filter the data by */
-    term: string;
 };
 
 /**
  * Displays a component for managing who can access a reference by users or groups
  */
-export default function ReferenceMembers({
-    data,
-    fetchNextPage,
-    isFetchingNextPage,
-    isLoading,
-    members,
-    noun,
-    refId,
-    setTerm,
-    term,
-}: ReferenceMembersProps) {
+export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
     const history = useHistory();
-    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
-
     const mutation = useRemoveReferenceUser(refId, noun);
+    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
+    const [term, setTerm] = useState("");
+    const {
+        data: users,
+        isLoading: isLoadingUsers,
+        isFetchingNextPage: isFetchingUsersNextPage,
+        fetchNextPage: fetchUsersNextPage,
+    } = useInfiniteFindUsers(25, term);
+    const {
+        data: groups,
+        isLoading: isLoadingGroups,
+        isFetchingNextPage: isFetchingGroupsNextPage,
+        fetchNextPage: fetchGroupsNextPage,
+    } = useInfiniteFindGroups(25, term);
+
+    if (isLoadingUsers || isLoadingGroups) {
+        return <LoadingPlaceholder />;
+    }
 
     function handleHide() {
         history.replace({ state: { [`add${noun}`]: false } });
@@ -114,7 +106,7 @@ export default function ReferenceMembers({
                 )}
             </BoxGroup>
             <AddReferenceMember
-                data={data}
+                data={noun === "user" ? users : groups}
                 show={history.location.state && history.location.state[`add${noun}`]}
                 members={members}
                 noun={noun}
@@ -122,9 +114,9 @@ export default function ReferenceMembers({
                 onHide={handleHide}
                 setTerm={setTerm}
                 term={term}
-                isFetchingNextPage={isFetchingNextPage}
-                fetchNextPage={fetchNextPage}
-                isLoading={isLoading}
+                isFetchingNextPage={noun === "user" ? isFetchingUsersNextPage : isFetchingGroupsNextPage}
+                fetchNextPage={noun === "user" ? fetchUsersNextPage : fetchGroupsNextPage}
+                isLoading={noun === "user" ? isLoadingUsers : isLoadingGroups}
             />
             <EditReferenceMember
                 show={history.location.state && history.location.state[`edit${noun}`]}
