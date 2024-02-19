@@ -75,3 +75,40 @@ export enum Workflows {
     iimi = "iimi",
     aodp = "aodp",
 }
+
+/** RLE encoded coverage data output from Iimi workflow analysis*/
+export type IimiCoverage = {
+    /** The length in base-pairs of the corresponding coverage depth*/
+    lengths: number[];
+    /** The coverage depths */
+    values: number[];
+};
+
+/** The data for a segment of an isolates genome */
+export type IimiSequence = {
+    id: string;
+    coverage: IimiCoverage;
+    /** The total base pairs of the sequence*/
+    length: number;
+    /** Whether the ML workflow determined this sequence was present in the sample*/
+    result: false;
+    /** regions of the sequence with high similarity between references */
+    untrustworthy_ranges: [number, number][];
+};
+
+/** The results of the Immi analysis for an individual isolate*/
+export type IimiIsolate = {
+    id: string;
+    sequences: IimiSequence[];
+    source_name: string;
+    source_type: string;
+};
+
+/** An OTU which has mapped reads as a result of the iimi workflow*/
+export type IimiHit = {
+    id: string;
+    abbreviation: string;
+    isolates: IimiIsolate[];
+    name: string;
+    result: boolean;
+};
