@@ -49,6 +49,11 @@ const AnalysisItemTop = styled.div`
     }
 `;
 
+const AnalysisAttribution = styled(Attribution)`
+    font-size: ${getFontSize("md")};
+    font-weight: ${getFontWeight("normal")};
+`;
+
 const UnsupportedAnalysisTitle = styled.div`
     color: ${props => props.theme.color.black};
     i.fas {
@@ -88,13 +93,13 @@ export default function AnalysisItem({ analysis, sampleId }: AnalysisItemProps) 
         <StyledAnalysisItem>
             <AnalysisItemTop>
                 {title}
+                <AnalysisAttribution user={user.handle} time={created_at} />
                 {ready ? (
                     <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} ready={ready} />
                 ) : (
                     <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} size={sizes.md} />
                 )}
             </AnalysisItemTop>
-            <Attribution user={user.handle} time={created_at} />
             <AnalysisItemTags>
                 <AnalysisItemTag key="reference">
                     <Icon name="equals" />
