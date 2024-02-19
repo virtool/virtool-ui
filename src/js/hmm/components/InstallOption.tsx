@@ -1,9 +1,9 @@
 import React from "react";
 import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
+import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { Alert, Button } from "../../base";
+import { Permission } from "../../groups/types";
 import { install } from "../api";
 import { hmmQueryKeys } from "../querys";
 
@@ -16,7 +16,7 @@ const InstallOptionAlert = styled(Alert)`
  * Displays a button to initiate the installation of HMMs or displays an alert if the user lacks permission
  */
 export default function InstallOption() {
-    const { hasPermission: canInstall } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission: canInstall } = useCheckAdminRoleOrPermission(Permission.modify_hmm);
     const queryClient = useQueryClient();
     const mutation = useMutation(install, {
         onSuccess: () => {

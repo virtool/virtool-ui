@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from "react";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
+import { useCheckCanEditSample } from "../../samples/hooks";
 import { Workflows } from "../types";
 
 type AnalysesToolbarProps = {
@@ -16,8 +15,8 @@ type AnalysesToolbarProps = {
 /**
  * A toolbar which allows the analyses to be filtered by their names
  */
-export default function AnalysesToolbar({ onChange, term }: AnalysesToolbarProps) {
-    const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
+export default function AnalysesToolbar({ onChange, term, sampleId }: AnalysesToolbarProps) {
+    const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
 
     return (
         <Toolbar>

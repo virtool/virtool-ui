@@ -4,9 +4,8 @@ import { InfiniteData } from "react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../../administration/hooks";
-import { AdministratorRoles } from "../../../administration/types";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
+import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { GroupSearchResults } from "../../../groups/types";
 import { UserResponse } from "../../../users/types";
 import { useRemoveReferenceUser } from "../../querys";
@@ -73,7 +72,7 @@ export default function ReferenceMembers({
     term,
 }: ReferenceMembersProps) {
     const history = useHistory();
-    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
     const mutation = useRemoveReferenceUser(refId, noun);
 

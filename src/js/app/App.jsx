@@ -79,6 +79,7 @@ const queryClient = new QueryClient({
                 }
                 return failureCount <= 3;
             },
+            staleTime: 2000,
         },
     },
 });

@@ -5,7 +5,7 @@ import nock from "nock";
 import React from "react";
 import { combineReducers } from "redux";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
@@ -73,7 +73,7 @@ describe("<HMMList />", () => {
             const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
             renderWithRouter(<HMMList />, state, history, createReducer);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
@@ -93,7 +93,7 @@ describe("<HMMList />", () => {
             const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: null });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
             renderWithRouter(<HMMList />, state, history, createReducer);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
@@ -121,7 +121,7 @@ describe("<HMMList />", () => {
             });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
             renderWithRouter(<HMMList />, state, history, createReducer);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();

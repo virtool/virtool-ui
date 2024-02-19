@@ -29,7 +29,13 @@ export default function OTUList({ match }: OTUListProps) {
     const { refId } = match.params;
     const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
     const [term, setTerm] = useUrlSearchParams("find");
-    const { data: otu, isLoading: isLoadingOTUs, fetchNextPage, isFetchingNextPage } = useInfiniteFindOTUS(refId, term);
+    const {
+        data: otu,
+        isLoading: isLoadingOTUs,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage,
+    } = useInfiniteFindOTUS(refId, term);
 
     if (isLoadingOTUs || isLoadingReference) {
         return <LoadingPlaceholder />;
@@ -44,13 +50,19 @@ export default function OTUList({ match }: OTUListProps) {
     return (
         <ContainerNarrow>
             <RebuildAlert />
-            <OTUToolbar term={term} onChange={e => setTerm(e.target.value)} remotesFrom={reference.remotes_from} />
+            <OTUToolbar
+                term={term}
+                onChange={e => setTerm(e.target.value)}
+                refId={refId}
+                remotesFrom={reference.remotes_from}
+            />
             <CreateOTU refId={refId} />
 
             {items.length ? (
                 <BoxGroup>
                     <StyledScrollList
                         fetchNextPage={fetchNextPage}
+                        hasNextPage={hasNextPage}
                         isFetchingNextPage={isFetchingNextPage}
                         isLoading={isLoadingOTUs}
                         items={items}

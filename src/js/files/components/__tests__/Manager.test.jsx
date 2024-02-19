@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
@@ -40,7 +40,7 @@ describe("<FileManager>", () => {
 
     it("should render", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
         mockApiListFiles([file], true);
@@ -61,7 +61,7 @@ describe("<FileManager>", () => {
         state.account.administrator_role = null;
 
         const account = createFakeAccount({ administrator_role: null });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
         mockApiListFiles([file], true);
@@ -79,7 +79,7 @@ describe("<FileManager>", () => {
 
     it("should change message if passed", async () => {
         const account = createFakeAccount({ administrator_role: null });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
         mockApiListFiles([file], true);
@@ -96,7 +96,7 @@ describe("<FileManager>", () => {
 
     it("should filter files according to passed regex", async () => {
         const account = createFakeAccount({ administrator_role: null });
-        mockGetAccountAPI(account);
+        mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
         mockApiListFiles([file], true);

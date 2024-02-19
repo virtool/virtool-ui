@@ -1,7 +1,7 @@
 import React from "react";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
+import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
+import { Permission } from "../../groups/types";
 
 type SubtractionToolbarProps = {
     /** Current search term used for filtering */
@@ -14,7 +14,7 @@ type SubtractionToolbarProps = {
  * A search filtering toolbar
  */
 export default function SubtractionToolbar({ term, handleChange }: SubtractionToolbarProps) {
-    const { hasPermission } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
 
     let createButton;
     if (hasPermission) {
