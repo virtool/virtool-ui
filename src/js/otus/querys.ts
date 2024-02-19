@@ -70,7 +70,7 @@ export function useUpdateIsolate() {
  * @returns A mutator for removing an OTU isolate
  */
 export function useRemoveIsolate() {
-    return useMutation<OTUIsolate, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
+    return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
         removeIsolate(otuId, isolateId),
     );
 }
