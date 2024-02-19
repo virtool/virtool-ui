@@ -2,10 +2,8 @@ import { find, map, reject } from "lodash-es";
 import React from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../../../administration/hooks";
-import { AdministratorRoles } from "../../../../administration/types";
 import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "../../../../base";
-import { useUpdateReference } from "../../../hooks";
+import { ReferenceRight, useCheckReferenceRight, useUpdateReference } from "../../../hooks";
 import { Reference } from "../../../types";
 import AddTarget from "./Add";
 import EditTarget from "./Edit";
@@ -31,7 +29,7 @@ export default function Targets({ reference }: TargetsProps) {
 
     const history = useHistory();
     const location = useLocation<{ addTarget: boolean; editTarget: boolean }>();
-    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);
     const { mutation } = useUpdateReference(id);
 
     if (data_type !== "barcode") {
