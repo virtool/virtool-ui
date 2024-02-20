@@ -12,7 +12,6 @@ const draw = (element, data, width) => {
         top: 10,
         left: 15,
         bottom: 10,
-        bottom: 10,
         right: 15,
     };
 
