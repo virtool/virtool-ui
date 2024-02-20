@@ -4,7 +4,7 @@ import { area } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 import { theme } from "../../../app/theme";
-import { deriveTrustworthyRegions } from "./utils";
+import { deriveTrustworthyRegions } from "../../utils";
 
 function summaryPlot(element, data, length, yMax, untrustworthyRanges) {
     select(element).append("svg");

@@ -3,7 +3,8 @@ import React from "react";
 import styled from "styled-components";
 import { Box } from "../../../base";
 import { CoverageChart } from "../Charts/CoverageChart";
-import { convertRleToCoverage } from "../Charts/utils";
+
+import { convertRleToCoverage } from "../../utils";
 import { IimiDetectionTag } from "./IimiDetectionTag";
 
 const CoveragePanel = styled.div`
