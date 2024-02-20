@@ -7,8 +7,9 @@ import * as Yup from "yup";
 import { useFetchAccount } from "../account/querys";
 import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
+import { ErrorResponse } from "../types/types";
 import { getReference } from "./api";
-import { ReferenceTarget } from "./types";
+import { Reference, ReferenceTarget } from "./types";
 
 export function useGetReference(refId) {
     return useQuery(["reference", refId], () => getReference(refId));
@@ -17,7 +18,7 @@ export function useGetReference(refId) {
 export function useUpdateReference(refId: string, onSuccess?: () => void) {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation(
+    const mutation = useMutation<Reference, ErrorResponse, unknown>(
         (data: { restrict_source_types?: boolean; targets?: ReferenceTarget[] }) => {
             return Request.patch(`/refs/${refId}`)
                 .send(data)
