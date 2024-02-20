@@ -11,7 +11,7 @@ import { getReference } from "../../actions";
 import { checkReferenceRight } from "../../selectors";
 import EditReference from "./EditReference";
 import ReferenceDetailHeader from "./Header";
-import ReferenceManage from "./Manage";
+import ReferenceManage from "./ReferenceManage";
 import ReferenceSettings from "./ReferenceSettings";
 import ReferenceDetailTabs from "./Tabs";
 

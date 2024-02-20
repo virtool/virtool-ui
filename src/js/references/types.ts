@@ -119,7 +119,7 @@ export type ReferenceMinimal = ReferenceNested & {
 };
 
 export type Reference = ReferenceMinimal & {
-    contributers: Array<ReferenceContributor>;
+    contributors: Array<ReferenceContributor>;
     description: string;
     groups: Array<ReferenceGroup>;
     restrict_source_types: boolean;
