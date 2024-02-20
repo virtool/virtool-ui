@@ -4,6 +4,7 @@ import { area } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 import { theme } from "../../../app/theme";
+import { UntrustworthyRange } from "../../types";
 import { deriveTrustworthyRegions } from "../../utils";
 
 function summaryPlot(element, data, length, yMax, untrustworthyRanges) {
@@ -88,13 +89,13 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
 
 interface IimiCoverageChartProps {
     /** The data to be graphed */
-    data: any;
+    data: number[];
     /** The unique identifier of the data being graphed */
     id: string;
     /** The maximum number of reads that will be shown on the y axis */
     yMax: number;
     /** regions of the sequence that are untrustworthy annotated by bp position*/
-    untrustworthyRanges: number[][];
+    untrustworthyRanges: UntrustworthyRange[];
 }
 
 export function SummaryChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {

@@ -6,6 +6,7 @@ import { area } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 import { theme } from "../../../app/theme";
+import { UntrustworthyRange } from "../../types";
 import { deriveTrustworthyRegions } from "../../utils";
 
 function draw(element, data, length, yMax, untrustworthyRanges) {
@@ -71,7 +72,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 
         svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
 
-        svg.append("g").attr("transform", `translate(0,0)`).call(yAxis).attr("class", "axis");
+        svg.append("g").attr("transform", "translate(0,0)").call(yAxis).attr("class", "axis");
         svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis).attr("class", "axis");
     }
 }
@@ -95,10 +96,10 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
 `;
 
 interface IimiCoverageChartProps {
-    data: any;
+    data: number[];
     id: string;
     yMax: number;
-    untrustworthyRanges: any;
+    untrustworthyRanges: UntrustworthyRange[];
 }
 
 export function CoverageChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {
