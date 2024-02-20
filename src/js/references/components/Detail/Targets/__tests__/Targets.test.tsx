@@ -27,6 +27,23 @@ describe("<Targets />", () => {
         history = createMemoryHistory();
     });
 
+    it("should render with no description", () => {
+        props.reference = createFakeReference({
+            data_type: "barcode",
+            targets: [
+                {
+                    name: "test",
+                    description: "",
+                    length: 10,
+                    required: false,
+                },
+            ],
+        });
+        renderWithRouter(<Targets {...props} />, {}, history);
+
+        expect(screen.getByText("No description")).toBeInTheDocument();
+    });
+
     it("should render when [canModify=true]", async () => {
         renderWithRouter(<Targets {...props} />, {}, history);
 
@@ -50,8 +67,8 @@ describe("<Targets />", () => {
     it("should show modal when add target is called", async () => {
         renderWithRouter(<Targets {...props} />, {}, history);
 
-        expect(await screen.findByText("Add target")).toBeInTheDocument();
-        await userEvent.click(screen.getByRole("link", { name: "Add target" }));
+        expect(await screen.findByText("Add Target")).toBeInTheDocument();
+        await userEvent.click(screen.getByRole("link", { name: "Add Target" }));
         expect(history.location.state.addTarget).toBe(true);
     });
 
