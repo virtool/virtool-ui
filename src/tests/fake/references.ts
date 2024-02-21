@@ -200,3 +200,13 @@ export function mockApiEditReference(reference: Reference, update: any) {
 
     return nock("http://localhost").patch(`/api/refs/${reference.id}`).reply(200, referenceDetail);
 }
+
+/**
+ * Sets up a mocked API route for deleting a reference
+ *
+ * @param referenceId - The reference to be removed
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiRemoveReference(referenceId: string) {
+    return nock("http://localhost").delete(`/api/refs/${referenceId}`).reply(200);
+}

@@ -1,6 +1,13 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
-import { cloneReference, createReference, findReferences, removeReferenceGroup, removeReferenceUser } from "./api";
+import {
+    cloneReference,
+    createReference,
+    findReferences,
+    removeReference,
+    removeReferenceGroup,
+    removeReferenceUser,
+} from "./api";
 import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
 /**
@@ -63,6 +70,15 @@ export function useCreateReference() {
             history.push("/refs", { emptyReference: false });
         },
     });
+}
+
+/**
+ * Initializes a mutator for removing a reference
+ *
+ * @returns A mutator for removing a reference
+ */
+export function useRemoveReference() {
+    return useMutation<null, unknown, { refId: string }>(({ refId }) => removeReference(refId));
 }
 
 /**
