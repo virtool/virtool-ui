@@ -4,14 +4,13 @@ import styled from "styled-components";
 import { getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { BoxGroupSection } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
-import { getStateTitle } from "../../jobs/utils";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 
 const StyledSubtractionItem = styled(BoxGroupSection)`
     align-items: center;
     display: grid;
-    grid-template-columns: 45% 35% auto;
+    grid-template-columns: 30% 30% 30% auto;
     padding-bottom: 15px;
     padding-top: 15px;
     margin-left: auto;
@@ -47,14 +46,12 @@ export function SubtractionItem({ created_at, id, job, name, nickname, ready, us
         <StyledSubtractionItem>
             <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
             <div>{nickname}</div>
-            {ready ? (
-                <Attribution>
-                    <SubtractionAttribution handle={user.handle} time={created_at} />
-                </Attribution>
-            ) : (
+            <Attribution>
+                <SubtractionAttribution handle={user.handle} time={created_at} />
+            </Attribution>
+            {!ready && (
                 <ProgressTag>
                     <ProgressCircle size={sizes.md} progress={job?.progress ?? 0} state={job?.state ?? "waiting"} />
-                    {getStateTitle(job?.state)}
                 </ProgressTag>
             )}
         </StyledSubtractionItem>
