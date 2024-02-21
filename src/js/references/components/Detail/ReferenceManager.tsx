@@ -25,9 +25,9 @@ type ReferenceManageProps = {
 };
 
 /**
- * Displays the reference manage view showing information about the reference
+ * Display and edit information for a reference
  */
-export default function ReferenceManage({ match }: ReferenceManageProps) {
+export default function ReferenceManager({ match }: ReferenceManageProps) {
     const { refId } = match.params;
     const { data, isLoading } = useGetReference(refId);
 

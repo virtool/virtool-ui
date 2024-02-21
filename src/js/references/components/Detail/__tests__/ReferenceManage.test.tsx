@@ -4,7 +4,7 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../tests/setupTests";
-import ReferenceManage from "../ReferenceManage";
+import ReferenceManage from "../ReferenceManager";
 
 describe("<ReferenceManage />", () => {
     let props;
