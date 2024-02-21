@@ -4,9 +4,9 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../tests/setupTests";
-import ReferenceManage from "../ReferenceManager";
+import ReferenceManager from "../ReferenceManager";
 
-describe("<ReferenceManage />", () => {
+describe("<ReferenceManager />", () => {
     let props;
     let reference;
     let history;
@@ -21,7 +21,7 @@ describe("<ReferenceManage />", () => {
     });
 
     it("should render properly", async () => {
-        renderWithRouter(<ReferenceManage {...props} />, {}, history);
+        renderWithRouter(<ReferenceManager {...props} />, {}, history);
 
         expect(await screen.findByText("General")).toBeInTheDocument();
         expect(screen.getByText("Description")).toBeInTheDocument();
@@ -34,14 +34,14 @@ describe("<ReferenceManage />", () => {
     });
 
     it("should render when [remotes_from=null]", async () => {
-        renderWithRouter(<ReferenceManage {...props} />, {}, history);
+        renderWithRouter(<ReferenceManager {...props} />, {}, history);
 
         expect(await screen.findByText("General")).toBeInTheDocument();
         expect(screen.queryByText("Remote Reference")).toBeNull();
     });
 
     it("should render when [cloned_from={ Bar: 'Bee' }]", async () => {
-        renderWithRouter(<ReferenceManage {...props} />, {}, history);
+        renderWithRouter(<ReferenceManager {...props} />, {}, history);
 
         expect(await screen.findByText("Clone Reference")).toBeInTheDocument();
         expect(screen.getByText("Source Reference"));
