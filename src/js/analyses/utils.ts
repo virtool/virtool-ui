@@ -12,7 +12,6 @@ import {
     maxBy,
     min,
     minBy,
-    reduce,
     reject,
     sortBy,
     startsWith,
@@ -22,7 +21,7 @@ import {
     zipWith,
 } from "lodash-es";
 import { formatIsolateName } from "../utils/utils";
-import { IimiSequence, UntrustworthyRange } from "./types";
+import { PositionMappedReadDepths, UntrustworthyRange } from "./types";
 
 export const calculateAnnotatedOrfCount = orfs => filter(orfs, orf => orf.hits.length).length;
 
@@ -319,11 +318,8 @@ export function convertRleToCoverage(lengths: Array<number>, rle: Array<number>)
  * @param sequences - the sequences to average
  * @returns An averaged sequence
  */
-export function averageSequences(sequences: IimiSequence[]) {
-    return zipWith(...sequences, (...args) => {
-        const filtered = filter(args, num => typeof num === "number");
-        return filtered.length === 0 ? 0 : reduce(filtered, (a, b) => a + b) / filtered.length;
-    });
+export function maxSequences(sequences: PositionMappedReadDepths[]) {
+    return zipWith(...sequences, (...args) => max(args));
 }
 
 /**

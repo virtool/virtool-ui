@@ -1,7 +1,7 @@
 import { filter, map, sortBy, unzip } from "lodash-es";
 import React from "react";
 import { IimiIsolate, IimiSequence } from "../../types";
-import { averageSequences, combineUntrustworthyRegions, convertRleToCoverage } from "../../utils";
+import { combineUntrustworthyRegions, convertRleToCoverage, maxSequences } from "../../utils";
 import { SummaryChart } from "../Charts/SummaryChart";
 
 /** A graph of averaged Iimi analysis sequence coverage */
@@ -10,7 +10,7 @@ export function CondensedIimiCoverage({ isolates }: { isolates: IimiIsolate[] })
 
     const charts = map(sequences, (seqs: IimiSequence[]) => {
         const filteredSeqs = filter(seqs);
-        const avgSeq = averageSequences(
+        const avgSeq = maxSequences(
             map(filteredSeqs, (seq: IimiSequence) => {
                 return convertRleToCoverage(seq.coverage.lengths, seq.coverage.values);
             }),

@@ -76,6 +76,9 @@ export enum Workflows {
     aodp = "aodp",
 }
 
+/** Read depths of a sequence mapped by position to an array */
+export type PositionMappedReadDepths = number[];
+
 /** regions of a sequence where there is a greater chance of erroneous read mapping*/
 export type UntrustworthyRange = [number, number];
 
