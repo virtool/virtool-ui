@@ -92,7 +92,7 @@ export function createFakeReference(overrides?: CreateFakeReference): Reference 
 
     const defaultReference = {
         ...createFakeReferenceMinimal(props),
-        contributers: {},
+        contributors: {},
         description: description || "",
         groups: [],
         restrict_source_types: false,
