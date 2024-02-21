@@ -17,15 +17,15 @@ type ReferenceSettingsProps = {
  */
 export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
     const { refId } = match.params;
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
+    const { data, isLoading } = useGetReference(refId);
 
-    if (isLoadingReference) {
+    if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
     return (
         <>
-            {Boolean(reference.remotes_from) || <LocalSourceTypes />}
+            {Boolean(data.remotes_from) || <LocalSourceTypes />}
             <SectionHeader>
                 <h2>Access</h2>
                 <p>Manage who can access this reference.</p>
