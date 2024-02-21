@@ -3,10 +3,14 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../../tests/fake/account";
-import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+    mockApiRemoveReference,
+} from "../../../../../tests/fake/references";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../administration/types";
-import { RemoveReference } from "../RemoveReference";
+import RemoveReference from "../RemoveReference";
 
 describe("<RemoveReference />", () => {
     let props;
@@ -37,12 +41,12 @@ describe("<RemoveReference />", () => {
 
     it("should call onConfirm() when confirmed", async () => {
         mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-        // const scope = mockApiRemoveReference(reference);
+        const scope = mockApiRemoveReference(reference.id);
         renderWithProviders(<RemoveReference {...props} />);
 
         expect(await screen.findByText("Permanently delete this reference")).toBeInTheDocument();
         await userEvent.click(screen.getByRole("button"));
 
-        // scope.done()
+        scope.done();
     });
 });
