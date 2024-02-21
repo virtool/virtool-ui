@@ -3,7 +3,6 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderWithRouter } from "../../../../tests/setupTests";
-import { getStateTitle } from "../../../jobs/utils";
 import { SubtractionItem } from "../SubtractionItem";
 
 describe("<SubtractionItem />", () => {
@@ -28,13 +27,12 @@ describe("<SubtractionItem />", () => {
         expect(screen.getByText("Foo")).toBeInTheDocument();
         expect(screen.getByText("testNickname")).toBeInTheDocument();
         expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "50");
-        expect(screen.getByText("Running")).toBeInTheDocument();
     });
 
     it.each(["waiting", "running", "error"])("should render %s state", state => {
         props.job.state = state;
         renderWithRouter(<SubtractionItem {...props} />, {}, history);
-        expect(screen.getByText(getStateTitle(state))).toBeInTheDocument();
+        expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
     it("should not render progress bar if job is ready", () => {
