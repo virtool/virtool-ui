@@ -5,9 +5,9 @@ import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "../../../../base";
 import { ReferenceRight, useCheckReferenceRight, useUpdateReference } from "../../../hooks";
 import { Reference } from "../../../types";
-import AddTarget from "./Add";
-import EditTarget from "./Edit";
-import { TargetItem } from "./Item";
+import AddTarget from "./AddTarget";
+import EditTarget from "./EditTarget";
+import { TargetItem } from "./TargetItem";
 
 const TargetsHeader = styled(BoxGroupHeader)`
     h2 {
@@ -25,7 +25,7 @@ type TargetsProps = {
  * Displays the targets with options to edit/remove
  */
 export default function Targets({ reference }: TargetsProps) {
-    const { data_type, targets, id, name } = reference;
+    const { data_type, targets, id } = reference;
 
     const history = useHistory();
     const location = useLocation<{ addTarget: boolean; editTarget: boolean }>();
@@ -51,7 +51,7 @@ export default function Targets({ reference }: TargetsProps) {
             <TargetsHeader>
                 <h2>
                     <span>Targets</span>
-                    {canModify && <Link to={{ state: { addTarget: true } }}>Add target</Link>}
+                    {canModify && <Link to={{ state: { addTarget: true } }}>Add Target</Link>}
                 </h2>
                 <p>Manage the allowable sequence targets for this barcode reference.</p>
             </TargetsHeader>
@@ -61,8 +61,6 @@ export default function Targets({ reference }: TargetsProps) {
             {canModify && (
                 <>
                     <AddTarget
-                        names={name}
-                        dataType={data_type}
                         refId={id}
                         targets={targets}
                         show={location.state?.addTarget}

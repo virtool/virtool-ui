@@ -6,6 +6,7 @@ import {
     cloneReference,
     createReference,
     findReferences,
+    removeReference,
     removeReferenceGroup,
     removeReferenceUser,
 } from "./api";
@@ -78,6 +79,15 @@ export function useCreateReference() {
             history.push("/refs", { emptyReference: false });
         },
     });
+}
+
+/**
+ * Initializes a mutator for removing a reference
+ *
+ * @returns A mutator for removing a reference
+ */
+export function useRemoveReference() {
+    return useMutation<null, unknown, { refId: string }>(({ refId }) => removeReference(refId));
 }
 
 /**
