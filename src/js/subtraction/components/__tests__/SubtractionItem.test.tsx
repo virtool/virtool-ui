@@ -29,7 +29,7 @@ describe("<SubtractionItem />", () => {
         expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "50");
     });
 
-    it.each(["waiting", "running", "error"])("should render %s state", state => {
+    it.each(["waiting", "running", "error"])("should render progress bar for ", state => {
         props.job.state = state;
         renderWithRouter(<SubtractionItem {...props} />, {}, history);
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
