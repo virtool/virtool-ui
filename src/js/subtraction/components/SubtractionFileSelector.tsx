@@ -33,6 +33,8 @@ type SubtractionFileSelectorProps = {
     error: string;
     /** Fetches the next page of data */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    /** Whether there is another page of data available */
+    hasNextPage: boolean;
     /** Whether the data is loading */
     isLoading: boolean;
     /** Whether the next page is being fetched */
@@ -49,6 +51,7 @@ export function SubtractionFileSelector({
     onClick,
     error,
     fetchNextPage,
+    hasNextPage,
     isLoading,
     isFetchingNextPage,
 }: SubtractionFileSelectorProps) {
@@ -76,6 +79,7 @@ export function SubtractionFileSelector({
         <>
             <StyledScollList
                 fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
                 items={items}

@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from "react";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
+import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
 import { ReferenceRemotesFrom } from "../../references/types";
 
 type OTUToolbarProps = {
@@ -9,6 +8,7 @@ type OTUToolbarProps = {
     term: string;
     /** A callback function to handle changes in search input */
     onChange: (term: ChangeEvent<HTMLInputElement>) => void;
+    refId: string;
     /** Whether the reference is installed remotely */
     remotesFrom: ReferenceRemotesFrom | null;
 };
@@ -16,8 +16,8 @@ type OTUToolbarProps = {
 /**
  * A toolbar which allows the OTUs to be filtered by their names
  */
-export default function OTUToolbar({ term, onChange, remotesFrom }: OTUToolbarProps) {
-    const { hasPermission: canCreate } = useCheckAdminRole(AdministratorRoles.USERS);
+export default function OTUToolbar({ term, onChange, refId, remotesFrom }: OTUToolbarProps) {
+    const { hasPermission: canCreate } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
 
     return (
         <Toolbar>

@@ -33,6 +33,6 @@ export function createFakeAccount(props?: createFakeAccountProps): Account {
     };
 }
 
-export function mockGetAccountAPI(account: Account) {
+export function mockAPIGetAccount(account: Account) {
     return nock("http://localhost").get("/api/account").reply(200, account);
 }

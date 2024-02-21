@@ -3,7 +3,7 @@ import { filter, forEach, groupBy, map, maxBy } from "lodash-es";
 import { includes, keysIn } from "lodash-es/lodash";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { Dialog, DialogOverlay, DialogTitle, LoadingPlaceholder } from "../../../base";
+import { Dialog, DialogOverlay, DialogTitle } from "../../../base";
 import { HMMSearchResults } from "../../../hmm/types";
 import { useListIndexes } from "../../../indexes/querys";
 import { useFindModels } from "../../../ml/queries";
@@ -42,7 +42,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
     const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
 
     if (isLoadingMLModels || isLoadingSubtractionShortlist || isLoadingSample || isLoadingIndexes) {
-        return <LoadingPlaceholder />;
+        return null;
     }
 
     const dataType = sample.library_type === "amplicon" ? "barcode" : "genome";

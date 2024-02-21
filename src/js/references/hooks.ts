@@ -1,12 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { difference, union } from "lodash-es";
+import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as Yup from "yup";
+import { useFetchAccount } from "../account/querys";
+import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
+import { ErrorResponse } from "../types/types";
 import { getReference } from "./api";
-import { ReferenceTarget } from "./types";
+import { Reference, ReferenceTarget } from "./types";
 
 export function useGetReference(refId) {
     return useQuery(["reference", refId], () => getReference(refId));
@@ -15,7 +18,7 @@ export function useGetReference(refId) {
 export function useUpdateReference(refId: string, onSuccess?: () => void) {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation(
+    const mutation = useMutation<Reference, ErrorResponse, unknown>(
         (data: { restrict_source_types?: boolean; targets?: ReferenceTarget[] }) => {
             return Request.patch(`/refs/${refId}`)
                 .send(data)
@@ -127,4 +130,45 @@ export function useUpdateSourceTypes(
         handleUndo,
         register,
     };
+}
+
+/**
+ * All reference rights
+ */
+export enum ReferenceRight {
+    build = "build",
+    modify = "modify",
+    modify_otu = "modify_otu",
+    remove = "remove",
+}
+
+/**
+ * Check if the logged in account has the passed `right` on the reference detail is loaded for.
+ *
+ * @param referenceId - The id of the reference to check
+ * @param right - The right to check for (eg. modify_otu)
+ * @returns Whether the right is possessed by the account
+ */
+export function useCheckReferenceRight(referenceId: string, right: ReferenceRight) {
+    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
+    const { data: reference, isLoading: isLoadingReference } = useGetReference(referenceId);
+
+    if (isLoadingAccount || isLoadingReference) {
+        return { hasPermission: false, isLoading: true };
+    }
+
+    if (account.administrator_role === AdministratorRoles.FULL) {
+        return { hasPermission: true, isLoading: false };
+    }
+
+    const user = find(reference.users, { id: account.id });
+
+    if (user && user[right]) {
+        return { hasPermission: true, isLoading: false };
+    }
+
+    // Groups in common between the user and the registered ref groups.
+    const groups = filter(reference.groups, group => includes(account.groups, group.id));
+
+    return { hasPermission: groups && some(groups, { [right]: true }), isLoading: false };
 }

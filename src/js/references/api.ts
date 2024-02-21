@@ -130,6 +130,16 @@ export function createReference(
 }
 
 /**
+ * Remove a reference
+ *
+ * @param refId - The id of the reference to remove
+ * @returns A promise resolving to the removal of a reference
+ */
+export function removeReference(refId: string): Promise<null> {
+    return Request.delete(`/refs/${refId}`).then(res => res.body);
+}
+
+/**
  * Removes user from a reference
  *
  * @param refId - The reference to have the user removed from

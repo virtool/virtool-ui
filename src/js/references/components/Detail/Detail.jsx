@@ -11,7 +11,7 @@ import { getReference } from "../../actions";
 import { checkReferenceRight } from "../../selectors";
 import EditReference from "./EditReference";
 import ReferenceDetailHeader from "./Header";
-import ReferenceManage from "./Manage";
+import ReferenceManager from "./ReferenceManager";
 import ReferenceSettings from "./ReferenceSettings";
 import ReferenceDetailTabs from "./Tabs";
 
@@ -41,7 +41,7 @@ const ReferenceDetail = ({ error, id, match, onGetReference }) => {
             <ContainerNarrow>
                 <Switch>
                     <Redirect from="/refs/:refId" to={`/refs/${id}/manage`} exact />
-                    <Route path="/refs/:refId/manage" component={ReferenceManage} />
+                    <Route path="/refs/:refId/manage" component={ReferenceManager} />
                     <Route path="/refs/:refId/otus" component={OTUList} exact />
                     <Route path="/refs/:refId/otus/:otuId" component={OTUDetail} />
                     <Route path="/refs/:refId/indexes" component={Indexes} exact />

@@ -3,8 +3,12 @@ import userEvent from "@testing-library/user-event";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../../../tests/fake/account";
-import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../../../tests/fake/account";
+import {
+    createFakeReference,
+    mockApiEditReference,
+    mockApiGetReferenceDetail,
+} from "../../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../../administration/types";
 import Targets from "../Targets";
@@ -14,11 +18,30 @@ describe("<Targets />", () => {
     let history;
 
     beforeEach(() => {
-        mockGetAccountAPI(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        const reference = createFakeReference({ data_type: "barcode" });
+        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetReferenceDetail(reference);
         props = {
-            reference: createFakeReference({ data_type: "barcode" }),
+            reference: reference,
         };
         history = createMemoryHistory();
+    });
+
+    it("should render with no description", () => {
+        props.reference = createFakeReference({
+            data_type: "barcode",
+            targets: [
+                {
+                    name: "test",
+                    description: "",
+                    length: 10,
+                    required: false,
+                },
+            ],
+        });
+        renderWithRouter(<Targets {...props} />, {}, history);
+
+        expect(screen.getByText("No description")).toBeInTheDocument();
     });
 
     it("should render when [canModify=true]", async () => {
@@ -28,7 +51,7 @@ describe("<Targets />", () => {
     });
 
     it("should render when [canModify=false]", () => {
-        mockGetAccountAPI(createFakeAccount({ administrator_role: null }));
+        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithRouter(<Targets {...props} />, {}, history);
 
         expect(screen.queryByRole("button", { name: "edit" })).toBeNull();
@@ -44,8 +67,8 @@ describe("<Targets />", () => {
     it("should show modal when add target is called", async () => {
         renderWithRouter(<Targets {...props} />, {}, history);
 
-        expect(await screen.findByText("Add target")).toBeInTheDocument();
-        await userEvent.click(screen.getByRole("link", { name: "Add target" }));
+        expect(await screen.findByText("Add Target")).toBeInTheDocument();
+        await userEvent.click(screen.getByRole("link", { name: "Add Target" }));
         expect(history.location.state.addTarget).toBe(true);
     });
 

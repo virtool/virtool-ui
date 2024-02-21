@@ -22,7 +22,7 @@ type UsersListProps = {
  */
 
 export function UsersList({ term }: UsersListProps) {
-    const { data, isLoading, fetchNextPage, isFetchingNextPage } = useInfiniteFindUsers(25, term);
+    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindUsers(25, term);
 
     if (isLoading) {
         return <LoadingPlaceholder />;
@@ -34,6 +34,7 @@ export function UsersList({ term }: UsersListProps) {
         return (
             <ScrollList
                 fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
                 items={items}

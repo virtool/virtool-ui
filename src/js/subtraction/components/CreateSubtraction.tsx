@@ -45,6 +45,7 @@ export default function CreateSubtraction() {
         isLoading,
         isFetchingNextPage,
         fetchNextPage,
+        hasNextPage,
     } = useInfiniteFindFiles(FileType.subtraction, 25);
     const subtractionMutation = useCreateSubtraction();
 
@@ -108,6 +109,7 @@ export default function CreateSubtraction() {
                             files={files}
                             isFetchingNextPage={isFetchingNextPage}
                             fetchNextPage={fetchNextPage}
+                            hasNextPage={hasNextPage}
                             isLoading={isLoading}
                             foundCount={files.pages[0].found_count}
                             selected={values.uploadId}

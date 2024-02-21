@@ -4,7 +4,7 @@ import { createMemoryHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockGetAccountAPI } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakePermissions } from "../../../../tests/fake/permissions";
 import {
     createFakeReferenceMinimal,
@@ -59,7 +59,7 @@ describe("<ReferenceList />", () => {
         it("should not render creation button when [canCreate=false]", async () => {
             const permissions = createFakePermissions({ create_ref: true });
             const account = createFakeAccount({ permissions: permissions });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, state, history);
 
@@ -72,7 +72,7 @@ describe("<ReferenceList />", () => {
         it("should not render creation button when [canCreate=true]", async () => {
             const permissions = createFakePermissions({ create_ref: true });
             const account = createFakeAccount({ permissions: permissions });
-            mockGetAccountAPI(account);
+            mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, state, history);
 
