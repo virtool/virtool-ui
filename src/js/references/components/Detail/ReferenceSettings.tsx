@@ -29,7 +29,7 @@ export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
             </SectionHeader>
             <ReferenceMembers noun="user" members={sortBy(data.users, "id")} refId={refId} />
             <ReferenceMembers noun="group" members={sortBy(data.groups, "id")} refId={refId} />
-            <RemoveReference id={data.id} />
+            <RemoveReference id={data.id} name={data.name} />
         </>
     );
 }
