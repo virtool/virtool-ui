@@ -1,13 +1,16 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockApiCreateOTU } from "../../../../tests/fake/otus";
-import { renderWithProviders } from "../../../../tests/setupTests";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import CreateOTU from "../CreateOTU";
 
 describe("<OTUForm />", () => {
     let props;
+    let history;
 
     beforeEach(() => {
         props = {
@@ -15,10 +18,17 @@ describe("<OTUForm />", () => {
             show: true,
             onHide: vi.fn(),
         };
+        history = createBrowserHistory();
     });
 
     it("should render", () => {
-        renderWithProviders(<CreateOTU {...props} />);
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { createOTU: true } }]}>
+                <CreateOTU {...props} />
+            </MemoryRouter>,
+            {},
+            history,
+        );
 
         expect(screen.getByText("Create OTU")).toBeInTheDocument();
         expect(screen.getByLabelText("Name")).toBeInTheDocument();
@@ -27,16 +37,26 @@ describe("<OTUForm />", () => {
     });
 
     it("should render error once submitted with no name", async () => {
-        renderWithProviders(<CreateOTU {...props} />);
-
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { createOTU: true } }]}>
+                <CreateOTU {...props} />
+            </MemoryRouter>,
+            {},
+            history,
+        );
         await userEvent.click(screen.getByRole("button"));
         expect(screen.getByText("Name required")).toBeInTheDocument();
     });
 
     it("should create OTU without abbreviation", async () => {
         const scope = mockApiCreateOTU(props.refId, "TestName", "");
-        renderWithProviders(<CreateOTU {...props} />);
-
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { createOTU: true } }]}>
+                <CreateOTU {...props} />
+            </MemoryRouter>,
+            {},
+            history,
+        );
         await userEvent.type(screen.getByLabelText("Name"), "TestName");
         await userEvent.click(screen.getByRole("button"));
 
@@ -45,8 +65,13 @@ describe("<OTUForm />", () => {
 
     it("should create OTU with abbreviation", async () => {
         const scope = mockApiCreateOTU(props.refId, "TestName", "TestAbbreviation");
-        renderWithProviders(<CreateOTU {...props} />);
-
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { createOTU: true } }]}>
+                <CreateOTU {...props} />
+            </MemoryRouter>,
+            {},
+            history,
+        );
         await userEvent.type(screen.getByLabelText("Name"), "TestName");
         await userEvent.type(screen.getByLabelText("Abbreviation"), "TestAbbreviation");
         await userEvent.click(screen.getByRole("button"));

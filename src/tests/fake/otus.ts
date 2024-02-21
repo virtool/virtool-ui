@@ -65,7 +65,7 @@ type CreateFakeOTUMinimalProps = {
 };
 
 /**
- * Create a fake OTU minimal
+ * Create a fake minimal OTU
  *
  * @param overrides - optional properties for creating a minimal OTU with specific values
  */

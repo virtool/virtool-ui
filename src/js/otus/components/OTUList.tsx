@@ -1,6 +1,6 @@
 import { flatMap } from "lodash-es";
 import React from "react";
-import { match, useHistory, useLocation } from "react-router-dom";
+import { match } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, ContainerNarrow, LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
@@ -27,8 +27,6 @@ type OTUListProps = {
  */
 export default function OTUList({ match }: OTUListProps) {
     const { refId } = match.params;
-    const history = useHistory();
-    const location = useLocation<{ createOTU: boolean }>();
 
     const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
     const [term, setTerm] = useUrlSearchParams("find");
@@ -48,11 +46,7 @@ export default function OTUList({ match }: OTUListProps) {
         <ContainerNarrow>
             <RebuildAlert />
             <OTUToolbar term={term} onChange={e => setTerm(e.target.value)} remotesFrom={reference.remotes_from} />
-            <CreateOTU
-                onHide={() => history.replace({ state: { createOTU: false } })}
-                refId={refId}
-                show={location.state?.createOTU}
-            />
+            <CreateOTU refId={refId} />
 
             {items.length ? (
                 <BoxGroup>
