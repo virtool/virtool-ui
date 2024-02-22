@@ -1,3 +1,4 @@
+import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
@@ -8,7 +9,7 @@ import { getCanModifyReferenceOTU, getReferenceDetailId } from "../../../../refe
 import IsolateSequences from "../../../../sequences/components/Sequences";
 import { setIsolateAsDefault, showRemoveIsolate } from "../../../actions";
 import EditIsolate from "./EditIsolate";
-import RemoveIsolate from "./Remove";
+import RemoveIsolate from "./RemoveIsolate";
 
 const IsolateDetailHeader = styled(Box)`
     align-items: center;
@@ -78,7 +79,7 @@ export function Detail(props) {
                     color="red"
                     tip="Remove Isolate"
                     tipPlacement="left"
-                    onClick={props.showRemoveIsolate}
+                    onClick={() => history.push({ state: { removeIsolate: true } })}
                 />
             </>
         );
@@ -98,7 +99,14 @@ export function Detail(props) {
                 onHide={() => history.replace({ state: { editIsolate: false } })}
             />
 
-            <RemoveIsolate />
+            <RemoveIsolate
+                id={props.activeIsolate.id}
+                name={props.activeIsolate.name}
+                nextId={get(props.isolates, [0, "id"], null)}
+                onHide={() => history.replace({ state: { removeIsolate: false } })}
+                otuId={props.otuId}
+                show={location.state?.removeIsolate}
+            />
 
             <IsolateDetailHeader>
                 <div>{isolate.name}</div>

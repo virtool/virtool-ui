@@ -141,8 +141,8 @@ export function setIsolateAsDefault({ otuId, isolateId }) {
  * @param isolateId - The unique identifier of the isolate to set as default
  * @returns A Promise resolving to the API response indicating if removal was successful
  */
-export function removeIsolate({ otuId, isolateId }) {
-    return Request.delete(`/otus/${otuId}/isolates/${isolateId}`);
+export function removeIsolate(otuId: string, isolateId: string): Promise<null> {
+    return Request.delete(`/otus/${otuId}/isolates/${isolateId}`).then(res => res.body);
 }
 
 /**
