@@ -76,6 +76,12 @@ export enum Workflows {
     aodp = "aodp",
 }
 
+/** Read depths of a sequence mapped by position to an array */
+export type PositionMappedReadDepths = number[];
+
+/** regions of a sequence where there is a greater chance of erroneous read mapping*/
+export type UntrustworthyRange = [number, number];
+
 /** RLE encoded coverage data output from Iimi workflow analysis*/
 export type IimiCoverage = {
     /** The length in base-pairs of the corresponding coverage depth*/
@@ -93,7 +99,7 @@ export type IimiSequence = {
     /** Whether the ML workflow determined this sequence was present in the sample*/
     result: false;
     /** regions of the sequence with high similarity between references */
-    untrustworthy_ranges: [number, number][];
+    untrustworthy_ranges: UntrustworthyRange[];
 };
 
 /** The results of the Immi analysis for an individual isolate*/

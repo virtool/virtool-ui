@@ -1,24 +1,11 @@
 import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Box, Label } from "../../../base";
-import { IimiCoverageChart } from "./IimiCoverage";
+import { Box } from "../../../base";
+import { CoverageChart } from "../Charts/CoverageChart";
 
-/**
- * Convert range length encoded data into an array of depth values.
- */
-function convertRleToCoverage(lengths: Array<number>, rle: Array<number>) {
-    const coverage = [];
-
-    for (let sharedIndex = 0; sharedIndex < lengths.length; sharedIndex++) {
-        const length = lengths[sharedIndex];
-        const value = rle[sharedIndex];
-
-        coverage.push(...Array(length).fill(value));
-    }
-
-    return coverage;
-}
+import { convertRleToCoverage } from "../../utils";
+import { IimiDetectionTag } from "./IimiDetectionTag";
 
 const CoveragePanel = styled.div`
     align-items: center;
@@ -37,13 +24,9 @@ export function IimiIsolate({ name, sequences }) {
                 {sorted.map(sequence => (
                     <Box key={sequence.id}>
                         <p>
-                            {sequence.result ? (
-                                <Label color="red">Detected</Label>
-                            ) : (
-                                <Label color="grey">Undetected</Label>
-                            )}
+                            <IimiDetectionTag result={sequence.result} />
                         </p>
-                        <IimiCoverageChart
+                        <CoverageChart
                             data={convertRleToCoverage(sequence.coverage.lengths, sequence.coverage.values)}
                             id={sequence.id}
                             yMax={Math.max(...sequence.coverage.values, 10)}

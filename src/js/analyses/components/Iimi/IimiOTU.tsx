@@ -1,21 +1,39 @@
 import { map } from "lodash-es";
 import React from "react";
-import { Label } from "../../../base";
+import styled from "styled-components";
 import { AccordionContent } from "../../../base/accordion/AccordionContent";
 import { AccordionTrigger } from "../../../base/accordion/AccordionTrigger";
 import { ScrollingAccordionItem } from "../../../base/accordion/ScrollingAccordionItem";
 import { formatIsolateName } from "../../../utils/utils";
 import { IimiHit, IimiIsolate as IimiIsolateData } from "../../types";
+import { CondensedIimiCoverage } from "./CondensedIimiCoverage";
+import { IimiDetectionTag } from "./IimiDetectionTag";
 import { IimiIsolate } from "./IimiIsolate";
 
-/** Collapsible results of an Iimi anaylsis for a single otu */
+const IimiAccordionTrigger = styled(AccordionTrigger)`
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    & > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+`;
+
+/** Collapsible results of an Iimi analysis for a single otu */
 export function IimiOTU({ hit: { id, name, result, isolates } }: { hit: IimiHit }) {
     return (
         <ScrollingAccordionItem value={id}>
-            <AccordionTrigger>
-                <h3>{name}</h3>
-                {result ? <Label color="red">Detected</Label> : <Label color="grey">Undetected</Label>}
-            </AccordionTrigger>
+            <IimiAccordionTrigger>
+                <div>
+                    <h3>{name}</h3>
+                    <IimiDetectionTag result={result} />
+                </div>
+                <CondensedIimiCoverage isolates={isolates} />
+            </IimiAccordionTrigger>
             <AccordionContent>
                 {map(isolates, (isolate: IimiIsolateData) => (
                     <IimiIsolate name={formatIsolateName(isolate)} sequences={isolate.sequences} key={isolate.id} />
