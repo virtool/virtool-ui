@@ -1,69 +1,59 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { BoxLink } from "../../base";
+import { BoxGroupSection } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
-import { JobMinimal } from "../../jobs/types";
-import { getStateTitle } from "../../jobs/utils";
-import { UserNested } from "../../users/types";
+import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 
-const StyledSubtractionItemHeader = styled.div`
+const StyledSubtractionItem = styled(BoxGroupSection)`
     align-items: center;
-    display: flex;
+    display: grid;
+    grid-template-columns: 30% 30% 30% auto;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    margin-left: auto;
+    line-height: 1;
+`;
+
+const SubtractionLink = styled(Link)`
     font-size: ${getFontSize("lg")};
     font-weight: ${getFontWeight("thick")};
-
-    > span:last-child {
-        margin-left: auto;
-    }
 `;
 
 const ProgressTag = styled.span`
+    font-size: ${getFontSize("lg")};
+    font-weight: ${getFontWeight("thick")};
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     svg {
         margin-right: 5px;
     }
 `;
 
-type SubtractionItemProps = {
-    /** The date the subtraction was created */
-    created_at: string;
-    /** The unique subtraction id */
-    id: string;
-    /** The job associated with the subtraction */
-    job?: JobMinimal;
-    /** The name of the subtraction */
-    name: string;
-    /** Whether the associated job is complete */
-    ready: boolean;
-    /** The user who created the subtraction */
-    user: UserNested;
-};
+const Attribution = styled.div`
+    display: flex;
+    justify-content: flex-start;
+`;
 
 /**
  * A condensed subtraction item for use in a list of subtractions
  */
-export function SubtractionItem({ created_at, id, job, name, ready, user }: SubtractionItemProps) {
+export function SubtractionItem({ created_at, id, job, name, nickname, ready, user }: SubtractionMinimal) {
     return (
-        <BoxLink key={id} to={`/subtractions/${id}`}>
-            <StyledSubtractionItemHeader>
-                <span>{name}</span>
+        <StyledSubtractionItem>
+            <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
+            <div>{nickname}</div>
+            <Attribution>
+                <SubtractionAttribution handle={user.handle} time={created_at} />
+            </Attribution>
+            {!ready && (
                 <ProgressTag>
-                    {ready || (
-                        <>
-                            <ProgressCircle
-                                size={sizes.md}
-                                progress={job?.progress ?? 0}
-                                state={job?.state ?? "waiting"}
-                            />
-                            {getStateTitle(job?.state)}
-                        </>
-                    )}
+                    <ProgressCircle size={sizes.md} progress={job?.progress ?? 0} state={job?.state ?? "waiting"} />
                 </ProgressTag>
-            </StyledSubtractionItemHeader>
-            <SubtractionAttribution handle={user.handle} time={created_at} />
-        </BoxLink>
+            )}
+        </StyledSubtractionItem>
     );
 }
