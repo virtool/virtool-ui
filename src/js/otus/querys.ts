@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { ErrorResponse } from "../types/types";
-import { addIsolate, createOTU, editIsolate, findOTUs } from "./api";
+import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate } from "./api";
 import { OTU, OTUIsolate, OTUSearchResult } from "./types";
 
 /**
