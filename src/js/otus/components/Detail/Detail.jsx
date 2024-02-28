@@ -17,8 +17,8 @@ import {
 import { useGetReference } from "../../../references/hooks";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
 import { getOTU, showEditOTU, showRemoveOTU } from "../../actions";
-import EditOTU from "./Edit";
 import IsolateEditor from "./Editor";
+import EditOTU from "./EditOTU";
 import General from "./General";
 import History from "./History/History";
 import AddIsolate from "./Isolates/AddIsolate";

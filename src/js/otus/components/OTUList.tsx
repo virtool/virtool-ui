@@ -9,7 +9,7 @@ import { useGetReference } from "../../references/hooks";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useInfiniteFindOTUS } from "../querys";
 import { OTUMinimal } from "../types";
-import CreateOTU from "./Create";
+import CreateOTU from "./CreateOTU";
 import OTUItem from "./OTUItem";
 import OTUToolbar from "./OTUToolbar";
 

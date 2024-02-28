@@ -18,7 +18,6 @@ import {
     SHOW_REMOVE_OTU,
     SHOW_REMOVE_SEQUENCE,
     UPLOAD_IMPORT,
-    WS_INSERT_OTU,
     WS_REMOVE_OTU,
     WS_UPDATE_OTU,
     WS_UPDATE_STATUS,
@@ -55,34 +54,6 @@ describe("OTUs Reducer:", () => {
             const action = { type: WS_UPDATE_STATUS, payload: { id: "test" } };
             const result = reducer(state, action);
             expect(result).toEqual(state);
-        });
-    });
-
-    describe("should handle WS_INSERT_OTU", () => {
-        it("if reference ids do not match, return state", () => {
-            const state = { refId: "foo" };
-            const action = {
-                type: WS_INSERT_OTU,
-                payload: { id: "test", reference: { id: "bar" } },
-            };
-            const result = reducer(state, action);
-            expect(result).toEqual(state);
-        });
-
-        it("othewise insert new entry into list", () => {
-            const state = {
-                fetched: true,
-                refId: "123abc",
-                documents: [],
-                page: 0,
-                per_page: 3,
-            };
-            const action = {
-                type: WS_INSERT_OTU,
-                payload: { id: "test", reference: { id: "123abc" } },
-            };
-            const result = reducer(state, action);
-            expect(result).toEqual({ ...state, documents: [action.payload] });
         });
     });
 

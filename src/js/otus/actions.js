@@ -1,7 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 import {
     ADD_SEQUENCE,
-    CREATE_OTU,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -18,19 +17,9 @@ import {
     SHOW_REMOVE_ISOLATE,
     SHOW_REMOVE_OTU,
     SHOW_REMOVE_SEQUENCE,
-    WS_INSERT_OTU,
     WS_REMOVE_OTU,
     WS_UPDATE_OTU,
 } from "../app/actionTypes";
-
-/**
- * Returns an action that should be dispatched when an OTU is inserted via websocket.
- *
- * @func
- * @param data {object} the data passed in the websocket message
- * @returns {object}
- */
-export const wsInsertOTU = createAction(WS_INSERT_OTU);
 
 /**
  * Returns an action that should be dispatched when an OTU is updated via websocket.
@@ -70,18 +59,6 @@ export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({
  */
 export const getOTUHistory = createAction(GET_OTU_HISTORY.REQUESTED, otuId => ({
     payload: { otuId },
-}));
-
-/**
- * Returns action that can trigger an API call for creating a new OTU.
- *
- * @func
- * @param name {string} unique OTU name
- * @param abbreviation {string} unique abbreviation for OTU name
- * @returns {object}
- */
-export const createOTU = createAction(CREATE_OTU.REQUESTED, (refId, name, abbreviation) => ({
-    payload: { refId, name, abbreviation },
 }));
 
 /**
