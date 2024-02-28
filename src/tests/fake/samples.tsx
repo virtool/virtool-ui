@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { assign, times } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
+import { SampleRightsUpdate } from "../../js/samples/api";
 import { LibraryType, Quality, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
 import { SubtractionNested } from "../../js/subtraction/types";
 import { createFakeLabelNested } from "./labels";
@@ -58,11 +59,14 @@ export function createFakeSampleQuality(): Quality {
 }
 
 type CreateFakeSample = CreateFakeSampleMinimal & {
+    all_read?: boolean;
+    all_write?: boolean;
     group?: number | string | null;
+    group_read?: boolean;
+    group_write?: boolean;
     paired?: boolean;
     locale?: string;
     subtractions?: Array<SubtractionNested>;
-    group_write?: boolean;
 };
 
 /**
@@ -143,6 +147,27 @@ export function mockApiEditSample(
     const sampleDetail = { ...sample, name, isolate, host, locale, notes };
 
     return nock("http://localhost").patch(`/api/samples/${sample.id}`).reply(200, sampleDetail);
+}
+
+/**
+ * Sets up a mocked API route for updating a samples rights
+ *
+ * @param sample - The sample details
+ * @param update - The update to be applied
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiUpdateSampleRights(sample: Sample, update: SampleRightsUpdate) {
+    const sampleRightsUpdate = {
+        all_read: faker.datatype.boolean(),
+        all_write: faker.datatype.boolean(),
+        group: null,
+        group_read: faker.datatype.boolean(),
+        group_write: faker.datatype.boolean(),
+        user: { id: sample.user.id },
+        ...update,
+    };
+
+    return nock("http://localhost").patch(`/api/samples/${sample.id}/rights`).reply(200, sampleRightsUpdate);
 }
 
 /**

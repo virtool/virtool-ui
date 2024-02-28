@@ -10,7 +10,6 @@ import {
     SELECT_SAMPLE,
     SHOW_REMOVE_SAMPLE,
     UPDATE_SAMPLE,
-    UPDATE_SAMPLE_RIGHTS,
     UPDATE_SEARCH,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
@@ -126,18 +125,6 @@ export const createSample = createAction(
  * @returns {object}
  */
 export const editSample = createAction(UPDATE_SAMPLE.REQUESTED, (sampleId, update) => ({
-    payload: { sampleId, update },
-}));
-
-/**
- * Returns action that can trigger an API call for modifying sample rights.
- *
- * @func
- * @param sampleId {string} unique sample id
- * @param update {object} update data
- * @returns {object}
- */
-export const updateSampleRights = createAction(UPDATE_SAMPLE_RIGHTS.REQUESTED, (sampleId, update) => ({
     payload: { sampleId, update },
 }));
 

@@ -10,7 +10,6 @@ import {
     GET_SAMPLE,
     REMOVE_SAMPLE,
     UPDATE_SAMPLE,
-    UPDATE_SAMPLE_RIGHTS,
     UPDATE_SEARCH,
     WS_UPDATE_JOB,
     WS_UPDATE_SAMPLE,
@@ -30,7 +29,6 @@ export function* watchSamples() {
     yield takeLatest(GET_SAMPLE.REQUESTED, getSample);
     yield throttle(500, CREATE_SAMPLE.REQUESTED, createSample);
     yield takeEvery(UPDATE_SAMPLE.REQUESTED, updateSample);
-    yield takeEvery(UPDATE_SAMPLE_RIGHTS.REQUESTED, updateSampleRights);
     yield throttle(300, REMOVE_SAMPLE.REQUESTED, removeSample);
     yield takeEvery(WS_UPDATE_SAMPLE, wsUpdateSample);
     yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
@@ -128,10 +126,6 @@ export function* updateSample(action) {
     if (resp.ok) {
         yield put(pushState({ editSample: false }));
     }
-}
-
-export function* updateSampleRights(action) {
-    yield apiCall(samplesAPI.updateRights, action.payload, UPDATE_SAMPLE_RIGHTS);
 }
 
 export function* removeSample(action) {

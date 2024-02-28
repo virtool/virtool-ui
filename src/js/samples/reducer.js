@@ -8,7 +8,6 @@ import {
     REMOVE_SAMPLE,
     SELECT_SAMPLE,
     UPDATE_SAMPLE,
-    UPDATE_SAMPLE_RIGHTS,
     WS_INSERT_SAMPLE,
     WS_REMOVE_SAMPLE,
     WS_UPDATE_SAMPLE,
@@ -54,10 +53,6 @@ export const samplesReducer = createReducer(initialState, builder => {
         })
         .addCase(UPDATE_SAMPLE.SUCCEEDED, (state, action) => {
             set(state, "detail", action.payload);
-        })
-        .addCase(UPDATE_SAMPLE_RIGHTS.SUCCEEDED, (state, action) => {
-            const { all_read, all_write, group, group_read, group_write } = action.payload;
-            state.detail = { ...state.detail, all_read, all_write, group, group_read, group_write };
         })
         .addCase(REMOVE_SAMPLE.SUCCEEDED, state => {
             state.detail = null;
