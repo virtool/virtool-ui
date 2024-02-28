@@ -1,14 +1,13 @@
 import { map } from "lodash-es";
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon, LoadingPlaceholder } from "../../../base";
-import { useInfiniteFindGroups } from "../../../groups/querys";
-import { useInfiniteFindUsers } from "../../../users/querys";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReferenceUser } from "../../querys";
 import { ReferenceGroup, ReferenceUser } from "../../types";
-import AddReferenceMember from "./AddReferenceMember";
+import AddReferenceGroup from "./AddReferenceGroup";
+import AddReferenceUser from "./AddReferenceUser";
 import EditReferenceMember from "./EditMember";
 import MemberItem from "./MemberItem";
 
@@ -48,25 +47,10 @@ type ReferenceMembersProps = {
  */
 export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
     const history = useHistory();
+    const location = useLocation<{ addgroup: boolean; adduser: boolean }>();
+
     const mutation = useRemoveReferenceUser(refId, noun);
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
-    const [term, setTerm] = useState("");
-    const {
-        data: users,
-        isLoading: isLoadingUsers,
-        isFetchingNextPage: isFetchingUsersNextPage,
-        fetchNextPage: fetchUsersNextPage,
-    } = useInfiniteFindUsers(25, term);
-    const {
-        data: groups,
-        isLoading: isLoadingGroups,
-        isFetchingNextPage: isFetchingGroupsNextPage,
-        fetchNextPage: fetchGroupsNextPage,
-    } = useInfiniteFindGroups(25, term);
-
-    if (isLoadingUsers || isLoadingGroups) {
-        return <LoadingPlaceholder />;
-    }
 
     function handleHide() {
         history.replace({ state: { [`add${noun}`]: false } });
@@ -105,21 +89,23 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                     </NoMembers>
                 )}
             </BoxGroup>
-            <AddReferenceMember
-                data={noun === "user" ? users : groups}
-                show={history.location.state && history.location.state[`add${noun}`]}
-                members={members}
-                noun={noun}
-                refId={refId}
-                onHide={handleHide}
-                setTerm={setTerm}
-                term={term}
-                isFetchingNextPage={noun === "user" ? isFetchingUsersNextPage : isFetchingGroupsNextPage}
-                fetchNextPage={noun === "user" ? fetchUsersNextPage : fetchGroupsNextPage}
-                isLoading={noun === "user" ? isLoadingUsers : isLoadingGroups}
-            />
+            {noun === "user" ? (
+                <AddReferenceUser
+                    users={members as ReferenceUser[]}
+                    onHide={handleHide}
+                    refId={refId}
+                    show={location.state?.adduser}
+                />
+            ) : (
+                <AddReferenceGroup
+                    groups={members as ReferenceGroup[]}
+                    onHide={handleHide}
+                    refId={refId}
+                    show={location.state?.addgroup}
+                />
+            )}
             <EditReferenceMember
-                show={history.location.state && history.location.state[`edit${noun}`]}
+                show={location.state && location.state[`edit${noun}`]}
                 noun={noun}
                 onHide={handleHide}
             />
