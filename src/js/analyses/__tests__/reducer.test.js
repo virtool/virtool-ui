@@ -14,7 +14,7 @@ import {
 import reducer, { setNuvsBLAST } from "../reducer";
 import { formatData } from "../utils";
 
-vi.mock("../utils.js");
+vi.mock("../utils.ts");
 
 formatData.mockImplementation(({ ready, workflow, results }) => ({
     ready,

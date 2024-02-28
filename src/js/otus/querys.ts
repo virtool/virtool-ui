@@ -74,3 +74,14 @@ export function useUpdateIsolate() {
         { otuId: string; isolateId: string; sourceType: string; sourceName: string }
     >(({ otuId, isolateId, sourceType, sourceName }) => editIsolate(otuId, isolateId, sourceType, sourceName));
 }
+
+/**
+ * Initializes a mutator for removing an OTU isolate
+ *
+ * @returns A mutator for removing an OTU isolate
+ */
+export function useRemoveIsolate() {
+    return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
+        removeIsolate(otuId, isolateId),
+    );
+}
