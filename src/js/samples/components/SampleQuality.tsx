@@ -1,7 +1,9 @@
 import React from "react";
-import { connect } from "react-redux";
+import { match } from "react-router-dom";
 import styled from "styled-components";
+import { LoadingPlaceholder } from "../../base";
 import { Quality } from "../../quality/components/Quality";
+import { useFetchSample } from "../querys";
 import LegacyAlert from "./SampleFilesMessage";
 
 const SampleQualityLegacyAlert = styled(LegacyAlert)`
@@ -14,34 +16,28 @@ const StyledSampleQuality = styled.div`
 `;
 
 type SampleQualityProps = {
-    /** Data for bases chart */
-    bases: number[][];
-    /** Data for composition chart */
-    composition: number[][];
-    /** Data for sequences chart */
-    sequences: number[];
+    /** Match object containing path information */
+    match: match<{ sampleId: string }>;
 };
 
 /**
  * Samples quality view showing charts for bases, composition, and sequences
  */
-export function SampleQuality({ bases, composition, sequences }: SampleQualityProps) {
+export default function SampleQuality({ match }: SampleQualityProps) {
+    const { data, isLoading } = useFetchSample(match.params.sampleId);
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
     return (
         <StyledSampleQuality>
             <SampleQualityLegacyAlert />
-            <Quality bases={bases} composition={composition} sequences={sequences} />
+            <Quality
+                bases={data.quality.bases}
+                composition={data.quality.composition}
+                sequences={data.quality.sequences}
+            />
         </StyledSampleQuality>
     );
 }
-
-const mapStateToProps = state => {
-    const { bases, composition, sequences } = state.samples.detail.quality;
-
-    return {
-        bases,
-        composition,
-        sequences,
-    };
-};
-
-export default connect(mapStateToProps)(SampleQuality);
