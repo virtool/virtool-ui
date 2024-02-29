@@ -1,42 +1,63 @@
-import { shallow } from "enzyme";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { RemoveModal } from "../../../../base";
-import { RemoveSample } from "../RemoveSample";
+import { MemoryRouter } from "react-router-dom";
+import { beforeEach, describe, expect, it } from "vitest";
+import { mockApiRemoveSample } from "../../../../../tests/fake/samples";
+import { renderWithRouter } from "../../../../../tests/setupTests";
+import RemoveSample from "../RemoveSample";
 
-describe("<Remove />", () => {
+describe("<RemoveSample />", () => {
     let props;
+    let history;
 
     beforeEach(() => {
         props = {
             id: "foo",
             name: "test",
-            show: true,
-            onHide: vi.fn(),
-            onConfirm: vi.fn(),
         };
+        history = createBrowserHistory();
     });
 
     it("renders when [show=true]", () => {
-        const wrapper = shallow(<RemoveSample {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { removeSample: true } }]}>
+                <RemoveSample {...props} />
+            </MemoryRouter>,
+        );
+
+        expect(screen.getByText("Remove Sample")).toBeInTheDocument();
+        expect(screen.getByText("test")).toBeInTheDocument();
+        expect(screen.getByRole("button")).toBeInTheDocument();
     });
 
     it("renders when [show=false]", () => {
-        props.show = false;
-        const wrapper = shallow(<RemoveSample {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { removeSample: false } }]}>
+                <RemoveSample {...props} />
+            </MemoryRouter>,
+            {},
+            history,
+        );
+
+        expect(screen.queryByText("Remove Sample")).toBeNull();
+        expect(screen.queryByText("test")).toBeNull();
+        expect(screen.queryByRole("button")).toBeNull();
     });
 
-    it("calls onConfirm() with id when confirmed", () => {
-        const wrapper = shallow(<RemoveSample {...props} />);
-        wrapper.find(RemoveModal).props().onConfirm();
-        expect(props.onConfirm).toHaveBeenCalledWith("foo");
-    });
+    it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
+        const scope = mockApiRemoveSample(props.id);
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { removeSample: true } }]}>
+                <RemoveSample {...props} />
+            </MemoryRouter>,
+            {},
+            history,
+        );
 
-    it("calls onHide() when RemoveModal.onHide() is called", () => {
-        const wrapper = shallow(<RemoveSample {...props} />);
-        wrapper.find(RemoveModal).props().onHide();
-        expect(props.onHide).toHaveBeenCalled();
+        await userEvent.click(screen.getByRole("button"));
+
+        scope.done();
     });
 });
