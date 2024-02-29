@@ -25,6 +25,8 @@ describe("<RemoveSample />", () => {
             <MemoryRouter initialEntries={[{ state: { removeSample: true } }]}>
                 <RemoveSample {...props} />
             </MemoryRouter>,
+            {},
+            history,
         );
 
         expect(screen.getByText("Remove Sample")).toBeInTheDocument();
