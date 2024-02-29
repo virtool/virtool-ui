@@ -8,7 +8,6 @@ import {
     GET_JOB,
     GET_LINKED_JOB,
     GET_SAMPLE,
-    REMOVE_SAMPLE,
     UPDATE_SAMPLE,
     UPDATE_SEARCH,
     WS_UPDATE_JOB,
@@ -29,7 +28,6 @@ export function* watchSamples() {
     yield takeLatest(GET_SAMPLE.REQUESTED, getSample);
     yield throttle(500, CREATE_SAMPLE.REQUESTED, createSample);
     yield takeEvery(UPDATE_SAMPLE.REQUESTED, updateSample);
-    yield throttle(300, REMOVE_SAMPLE.REQUESTED, removeSample);
     yield takeEvery(WS_UPDATE_SAMPLE, wsUpdateSample);
     yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
     yield takeLatest([WS_UPDATE_JOB], findSamples);
@@ -125,13 +123,5 @@ export function* updateSample(action) {
 
     if (resp.ok) {
         yield put(pushState({ editSample: false }));
-    }
-}
-
-export function* removeSample(action) {
-    const resp = yield apiCall(samplesAPI.remove, action.payload, REMOVE_SAMPLE);
-
-    if (resp.ok) {
-        yield put(push("/samples"));
     }
 }

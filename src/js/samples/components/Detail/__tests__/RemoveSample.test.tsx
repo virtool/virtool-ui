@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RemoveModal } from "../../../../base";
-import { RemoveSample } from "../Remove";
+import { RemoveSample } from "../RemoveSample";
 
 describe("<Remove />", () => {
     let props;

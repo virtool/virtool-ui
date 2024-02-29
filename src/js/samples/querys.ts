@@ -5,6 +5,7 @@ import { ErrorResponse } from "../types/types";
 import {
     getSample,
     listSamples,
+    removeSample,
     SampleRightsUpdate,
     SampleRightsUpdateReturn,
     SampleUpdate,
@@ -66,6 +67,15 @@ export function useFetchSample(sampleId: string) {
  */
 export function useUpdateSample(sampleId: string) {
     return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(({ update }) => updateSample(sampleId, update));
+}
+
+/**
+ * Initializes a mutator for removing a sample
+ *
+ * @returns A mutator for removing a sample
+ */
+export function useRemoveSample() {
+    return useMutation<null, unknown, { sampleId: string }>(({ sampleId }) => removeSample(sampleId));
 }
 
 /**
