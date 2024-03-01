@@ -118,7 +118,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
                 <WorkflowTags id={sample.id} workflows={sample.workflows} />
             </SampleItemWorkflows>
             <SampleItemIcon>
-                <EndIcon ready={sample.ready} onClick={handleQuickAnalyze} />
+                <EndIcon ready={sample.ready} onClick={handleQuickAnalyze} job={sample.job} />
             </SampleItemIcon>
         </StyledSampleItem>
     );
