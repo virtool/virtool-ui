@@ -21,7 +21,17 @@ const StyledReadItem = styled(BoxGroupSection)`
     justify-content: space-between;
 `;
 
-export function ReadItem({ name, download_url, from, size }) {
+type ReadItemProps = {
+    name: string;
+    download_url: string;
+    /** The size of the read file in bytes */
+    size: number;
+};
+
+/**
+ * A condensed read item for use in a list of reads
+ */
+export function ReadItem({ name, download_url, size }: ReadItemProps) {
     return (
         <StyledReadItem>
             <ReadItemMain>
@@ -30,11 +40,6 @@ export function ReadItem({ name, download_url, from, size }) {
                     <a href={`/api/${download_url}`} download>
                         {name}
                     </a>
-                    {from && (
-                        <div>
-                            <small>Created from {from.name}</small>
-                        </div>
-                    )}
                 </div>
             </ReadItemMain>
             {byteSize(size)}

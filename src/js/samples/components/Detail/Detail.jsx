@@ -20,7 +20,7 @@ import { listLabels } from "../../../labels/actions";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
-import { SampleDetailFiles } from "../Files/Files";
+import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
 import RemoveSample from "./Remove";
 import General from "./SampleDetailGeneral";

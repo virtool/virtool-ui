@@ -1,3 +1,4 @@
+import { endsWith, some } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
 import { match, useHistory } from "react-router-dom";
@@ -14,7 +15,7 @@ import {
 import { useFetchSample } from "../../querys";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
-import SampleFileSizeWarning from "./FileSizeWarning";
+import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
 
 const SampleDetailSidebarContainer = styled(ContainerSide)`
@@ -53,7 +54,11 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
     return (
         <StyledSampleDetailGeneral>
             <ContainerNarrow>
-                <SampleFileSizeWarning />
+                <SampleFileSizeWarning
+                    sampleId={sampleId}
+                    show={some(data.reads, file => file.size < 10000000)}
+                    showLink={!endsWith(location.pathname, "/files")}
+                />
                 <BoxGroup>
                     <BoxGroupHeader>
                         <h2>Metadata</h2>

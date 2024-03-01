@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { mapStateToProps, SampleFileSizeWarning } from "../FileSizeWarning";
+import { mapStateToProps, SampleFileSizeWarning } from "../SampleFileSizeWarning";
 
 describe("<SampleFileSizeWarning />", () => {
     let props;

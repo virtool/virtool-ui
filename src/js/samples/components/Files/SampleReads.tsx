@@ -1,8 +1,8 @@
-import { map, snakeCase } from "lodash-es";
+import { map } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader } from "../../../base";
+import { Read } from "../../types";
 import { ReadItem } from "./ReadItem";
 
 const SampleReadsTitle = styled.h2`
@@ -14,10 +14,16 @@ const SampleReadsTitle = styled.h2`
     }
 `;
 
-function SampleReads({ reads, prefix }) {
-    const fileComponents = map(reads, (file, index) => (
-        <ReadItem key={file.name} {...file} prefix={prefix} suffix={index + 1} />
-    ));
+type SampleReadsProps = {
+    /** A list of reads used to create the sample */
+    reads: Read[];
+};
+
+/**
+ * Displays a list of reads used to create the sample
+ */
+export default function SampleReads({ reads }: SampleReadsProps) {
+    const fileComponents = map(reads, file => <ReadItem key={file.name} {...file} />);
 
     return (
         <BoxGroup>
@@ -29,15 +35,3 @@ function SampleReads({ reads, prefix }) {
         </BoxGroup>
     );
 }
-
-function mapStateToProps(state) {
-    const { id, reads, name } = state.samples.detail;
-
-    return {
-        reads,
-        id,
-        prefix: snakeCase(name),
-    };
-}
-
-export default connect(mapStateToProps)(SampleReads);
