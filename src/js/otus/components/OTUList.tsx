@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { BoxGroup, ContainerNarrow, LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
-import { useGetReference } from "../../references/hooks";
+import { useGetReference } from "../../references/querys";
 import { useUrlSearchParams } from "../../utils/hooks";
 import { useInfiniteFindOTUS } from "../querys";
 import { OTUMinimal } from "../types";

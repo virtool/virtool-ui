@@ -14,7 +14,7 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "../../../base";
-import { useGetReference } from "../../../references/hooks";
+import { useGetReference } from "../../../references/querys";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
 import { getOTU, showEditOTU, showRemoveOTU } from "../../actions";
 import EditOTU from "./Edit";

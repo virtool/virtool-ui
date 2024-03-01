@@ -17,7 +17,7 @@ interface TaskObject {
  * @returns The task located at the root of the cached item
  */
 function taskSelector<T extends TaskObject>(cache: T): Task {
-    return cache.task;
+    return cache?.task;
 }
 
 type Document = { items: TaskObject[] } | { documents: TaskObject[] };
@@ -52,12 +52,12 @@ function infiniteListItemUpdater<T extends Document>(task: Task, selector: (cach
  * @param selector - A function that returns the task from an instance of the cached item
  * @returns A function that updates the task in the cache
  */
-
 export function updater<T>(task: Task, selector: (cache: T) => Task) {
     return function (cache: T): T {
         const previousTask = selector(cache);
-        if (previousTask && previousTask.id === selector(cache).id) {
-            assign(previousTask, task);
+
+        if (previousTask && previousTask.id === task.id) {
+            return { ...cache, task };
         }
         return cache;
     };
@@ -69,6 +69,7 @@ export function updater<T>(task: Task, selector: (cache: T) => Task) {
 export const taskUpdaters = {
     clone_reference: referenceUpdater,
     remote_reference: referenceUpdater,
+    update_remote_reference: referenceUpdater,
     install_hmms: HMMStatusUpdater,
 };
 
@@ -83,6 +84,7 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
         referenceQueryKeys.infiniteList([]),
         infiniteListItemUpdater<ReferenceSearchResult>(task, taskSelector),
     );
+    queryClient.setQueriesData(referenceQueryKeys.details(), updater(task, taskSelector));
 }
 
 /**

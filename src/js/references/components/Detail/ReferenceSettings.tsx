@@ -2,7 +2,7 @@ import { sortBy } from "lodash-es";
 import React from "react";
 import { match } from "react-router-dom";
 import { LoadingPlaceholder, SectionHeader } from "../../../base";
-import { useGetReference } from "../../hooks";
+import { useGetReference } from "../../querys";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";

@@ -2,18 +2,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import * as Yup from "yup";
 import { useFetchAccount } from "../account/querys";
 import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
 import { ErrorResponse } from "../types/types";
-import { getReference } from "./api";
+import { useGetReference } from "./querys";
 import { Reference, ReferenceTarget } from "./types";
-
-export function useGetReference(refId) {
-    return useQuery(["reference", refId], () => getReference(refId));
-}
 
 export function useUpdateReference(refId: string, onSuccess?: () => void) {
     const queryClient = useQueryClient();

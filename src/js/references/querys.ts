@@ -1,9 +1,10 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
 import {
     cloneReference,
     createReference,
     findReferences,
+    getReference,
     removeReference,
     removeReferenceGroup,
     removeReferenceUser,
@@ -18,8 +19,8 @@ export const referenceQueryKeys = {
     lists: () => ["reference", "list"] as const,
     list: (filters: Array<string | number | boolean>) => ["reference", "list", "single", ...filters] as const,
     infiniteList: (filters: Array<string | number | boolean>) => ["reference", "list", "infinite", ...filters] as const,
-    details: () => ["reference", "details"] as const,
-    detail: (refId: string) => ["reference", "details", refId] as const,
+    details: () => ["reference", "detail"] as const,
+    detail: (refId: string) => ["reference", "detail", refId] as const,
 };
 
 /**
@@ -99,4 +100,14 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
             },
         },
     );
+}
+
+/**
+ * Get a reference by its id
+ *
+ * @param refId - The id of the reference to get
+ * @returns Query results containing the reference
+ */
+export function useGetReference(refId: string) {
+    return useQuery<Reference>(referenceQueryKeys.detail(refId), () => getReference(refId));
 }

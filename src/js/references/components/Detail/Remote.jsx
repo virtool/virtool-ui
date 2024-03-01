@@ -1,18 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import {
-    BoxGroup,
-    BoxGroupHeader,
-    BoxGroupSection,
-    Button,
-    Icon,
-    Loader,
-    ProgressBarAffixed,
-    RelativeTime,
-} from "../../../base";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "../../../base";
+import { ProgressCircle } from "../../../base/ProgressCircle";
 import { checkUpdates, updateRemoteReference } from "../../actions";
-import { checkReferenceRight, getProgress } from "../../selectors";
+import { checkReferenceRight } from "../../selectors";
 
 const ReleaseButtonContainer = styled.div`
     margin: 0;
@@ -95,8 +87,9 @@ const StyledUpgrade = styled(BoxGroupSection)`
 
 const Upgrade = ({ progress }) => (
     <StyledUpgrade>
-        <ProgressBarAffixed color="green" now={progress} />
-        <Icon name="arrow-alt-circle-up" />
+        {/*<ProgressBarAffixed color="green" now={progress} />*/}
+        <ProgressCircle progress={progress} state={"running"} />
+        {/*<Icon name="arrow-alt-circle-up" />*/}
         <strong>Updating</strong>
     </StyledUpgrade>
 );
@@ -114,11 +107,9 @@ const InstalledHeader = styled(BoxGroupSection)`
     gap: ${props => props.theme.gap.text};
 `;
 
-const Remote = ({ detail, onCheckUpdates, onUpdate, checking, progress }) => {
-    const { id, installed, release, remotes_from, updating } = detail;
-
+const Remote = ({ detail, onCheckUpdates, onUpdate, checking }) => {
+    const { id, installed, release, remotes_from, updating, task } = detail;
     const slug = remotes_from.slug;
-
     return (
         <BoxGroup>
             <RemoteHeader>
@@ -141,7 +132,7 @@ const Remote = ({ detail, onCheckUpdates, onUpdate, checking, progress }) => {
             )}
 
             {updating ? (
-                <Upgrade progress={progress} />
+                <Upgrade progress={task.progress} />
             ) : (
                 <Release
                     release={release}
@@ -156,10 +147,8 @@ const Remote = ({ detail, onCheckUpdates, onUpdate, checking, progress }) => {
 };
 
 const mapStateToProps = state => ({
-    detail: state.references.detail,
     checking: state.references.checking,
     canRemove: checkReferenceRight(state, "remove"),
-    progress: getProgress(state),
 });
 
 const mapDispatchToProps = dispatch => ({
