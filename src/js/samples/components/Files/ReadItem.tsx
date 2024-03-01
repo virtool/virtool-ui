@@ -1,13 +1,8 @@
-import { includes } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { fontWeight } from "../../../app/theme";
 import { BoxGroupSection } from "../../../base";
 import { byteSize } from "../../../utils/utils";
-
-function getFileIconName(name) {
-    return includes(name, ".gz") ? "file-archive" : "file";
-}
 
 const ReadItemMain = styled.div`
     align-items: center;
@@ -35,14 +30,13 @@ export function ReadItem({ name, download_url, size }: ReadItemProps) {
     return (
         <StyledReadItem>
             <ReadItemMain>
-                <i className={`fas fa-${getFileIconName(name)} fa-fw`} style={{ fontSize: "24px" }} />
                 <div>
                     <a href={`/api/${download_url}`} download>
                         {name}
                     </a>
                 </div>
             </ReadItemMain>
-            {byteSize(size)}
+            {byteSize(size, true)}
         </StyledReadItem>
     );
 }
