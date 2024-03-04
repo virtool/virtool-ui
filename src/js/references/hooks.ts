@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Yup from "yup";
 import { useFetchAccount } from "../account/querys";
 import { AdministratorRoles } from "../administration/types";

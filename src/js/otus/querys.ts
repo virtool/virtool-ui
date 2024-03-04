@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { ErrorResponse } from "../types/types";
 import { addIsolate, editIsolate, findOTUs, removeIsolate } from "./api";
 import { OTUIsolate, OTUSearchResult } from "./types";

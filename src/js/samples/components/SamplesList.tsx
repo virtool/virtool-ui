@@ -6,7 +6,7 @@ import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useListHmms } from "../../hmm/querys";
 import { useListIndexes } from "../../indexes/querys";
-import { useFetchLabels } from "../../labels/hooks";
+import { useFetchLabels } from "../../labels/queries";
 import { useFindModels } from "../../ml/queries";
 import { useFetchSubtractionsShortlist } from "../../subtraction/querys";
 import { useUrlSearchParams, useUrlSearchParamsList } from "../../utils/hooks";

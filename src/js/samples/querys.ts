@@ -1,5 +1,5 @@
 import { forEach, map, reject, union } from "lodash-es/lodash";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Label } from "../labels/types";
 import { ErrorResponse } from "../types/types";
 import { getSample, listSamples, SampleUpdate, update, updateSample } from "./api";

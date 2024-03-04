@@ -1,6 +1,6 @@
 import { flatMap } from "lodash-es";
 import React from "react";
-import { InfiniteData } from "react-query";
+import { InfiniteData } from '@tanstack/react-query';
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";

@@ -1,6 +1,6 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ResponseError } from "superagent";
 import { Request } from "../../app/request";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";

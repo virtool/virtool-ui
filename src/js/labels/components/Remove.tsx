@@ -1,6 +1,6 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from "styled-components";
 import { Request } from "../../app/request";
 import { getFontSize } from "../../app/theme";

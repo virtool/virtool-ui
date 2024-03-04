@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 import { createGroup, getGroup, listGroups, removeGroup, updateGroup } from "./api";
 import { Group, GroupMinimal, GroupUpdate } from "./types";
 

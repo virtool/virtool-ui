@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { samplesQueryKeys } from "../samples/querys";
 import { createAnalysis, listAnalyses, removeAnalysis } from "./api";
 import { Analysis, AnalysisSearchResult } from "./types";

@@ -1,6 +1,6 @@
 import { replace } from "lodash-es";
 import React from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from '@tanstack/react-query';
 import styled from "styled-components";
 import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "../../base";
 import { hmmQueryKeys, useListHmms } from "../querys";

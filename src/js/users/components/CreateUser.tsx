@@ -1,6 +1,6 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation } from '@tanstack/react-query';
 import { createUser } from "../../administration/api";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { StyledButton } from "../../base/styled/StyledButton";
