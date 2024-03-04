@@ -1,5 +1,5 @@
 import { InfiniteData, QueryClient } from "@tanstack/react-query";
-import { assign, forEach, get } from "lodash-es/lodash";
+import { assign, cloneDeep, forEach, get } from "lodash-es/lodash";
 import { hmmQueryKeys } from "../../hmm/querys";
 import { HMMSearchResults } from "../../hmm/types";
 import { referenceQueryKeys } from "../../references/querys";
@@ -46,7 +46,7 @@ function infiniteListItemUpdater<T extends Document>(task: Task, selector: (cach
 }
 
 /**
- * Update a task in the root of a cached item
+ * Update a task in a single cached item
  *
  * @param task - The new task data
  * @param selector - A function that returns the task from an instance of the cached item
@@ -54,12 +54,13 @@ function infiniteListItemUpdater<T extends Document>(task: Task, selector: (cach
  */
 export function updater<T>(task: Task, selector: (cache: T) => Task) {
     return function (cache: T): T {
-        const previousTask = selector(cache);
+        const newCache = cloneDeep(cache);
+        const previousTask = selector(newCache);
 
         if (previousTask && previousTask.id === task.id) {
-            return { ...cache, task };
+            assign(previousTask, task);
+            return newCache;
         }
-        return cache;
     };
 }
 
