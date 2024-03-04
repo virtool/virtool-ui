@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HIDE_OTU_MODAL, REMOVE_OTU } from "../../../../app/actionTypes";
-import { mapDispatchToProps, mapStateToProps, Remove } from "../Remove";
+import { mapDispatchToProps, mapStateToProps, Remove } from "../RemoveOTU";
 
 describe("<Remove />", () => {
     let props;
