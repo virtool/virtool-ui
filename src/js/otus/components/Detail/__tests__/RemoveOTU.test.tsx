@@ -1,100 +1,68 @@
-import { shallow } from "enzyme";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { HIDE_OTU_MODAL, REMOVE_OTU } from "../../../../app/actionTypes";
-import { mapDispatchToProps, mapStateToProps, Remove } from "../RemoveOTU";
+import { MemoryRouter } from "react-router-dom";
+import { beforeEach, describe, expect, it } from "vitest";
+import { mockApiRemoveOTU } from "../../../../../tests/fake/otus";
+import { renderWithRouter } from "../../../../../tests/setupTests";
+import RemoveOTU from "../RemoveOTU";
 
-describe("<Remove />", () => {
+describe("<RemoveOTU />", () => {
     let props;
+    let history;
 
     beforeEach(() => {
         props = {
-            history: {},
             id: "foo",
             name: "Foo",
             refId: "baz",
-            show: true,
-            onConfirm: vi.fn(),
-            onHide: vi.fn(),
         };
+        history = createBrowserHistory();
     });
 
     it("should render when [show=true]", () => {
-        const wrapper = shallow(<Remove {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { removeOTU: true } }]}>
+                <RemoveOTU {...props} />)
+            </MemoryRouter>,
+            {},
+            history,
+        );
+
+        expect(screen.getByText("Remove OTU")).toBeInTheDocument();
+        expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
+        expect(screen.getByText(/Foo?/)).toBeInTheDocument();
+        expect(screen.getByRole("button")).toBeInTheDocument();
     });
 
     it("should render when [show=false]", () => {
-        props.show = false;
-        const wrapper = shallow(<Remove {...props} />);
-        expect(wrapper).toMatchSnapshot();
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { removeOTU: false } }]}>
+                <RemoveOTU {...props} />)
+            </MemoryRouter>,
+            {},
+            history,
+        );
+
+        expect(screen.queryByText("Remove OTU")).toBeNull();
+        expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
+        expect(screen.queryByText(/Foo?/)).toBeNull();
+        expect(screen.queryByRole("button")).toBeNull();
     });
 
-    it("should call onConfirm() when onConfirm() called on <RemoveModal />", () => {
-        const wrapper = shallow(<Remove {...props} />);
-        wrapper.props().onConfirm();
-        expect(props.onConfirm).toHaveBeenCalledWith("baz", "foo", props.history);
-    });
+    it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
+        const scope = mockApiRemoveOTU(props.id);
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { removeOTU: true } }]}>
+                <RemoveOTU {...props} />
+            </MemoryRouter>,
+            {},
+            history,
+        );
 
-    it("should call onHide() when onHide() called on <RemoveModal />", () => {
-        const wrapper = shallow(<Remove {...props} />);
-        wrapper.props().onHide();
-        expect(props.onHide).toHaveBeenCalled();
-    });
-});
+        await userEvent.click(screen.getByRole("button"));
 
-describe("mapStateToProps()", () => {
-    let state;
-
-    beforeEach(() => {
-        state = {
-            otus: {
-                remove: false,
-            },
-            references: {
-                detail: {
-                    id: "foo",
-                },
-            },
-        };
-    });
-
-    it.each([true, false])("should return props when [state.otus.remove=%p]", show => {
-        state.otus.remove = show;
-        const props = mapStateToProps(state);
-        expect(props).toEqual({
-            show,
-            refId: "foo",
-        });
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    let dispatch;
-    let props;
-
-    beforeEach(() => {
-        dispatch = vi.fn();
-        props = mapDispatchToProps(dispatch);
-    });
-
-    it("should return onConfirm() in props", () => {
-        const refId = "foo";
-        const otuId = "baz";
-        const history = {
-            id: "bar",
-        };
-        props.onConfirm(refId, otuId, history);
-        expect(dispatch).toHaveBeenCalledWith({
-            type: REMOVE_OTU.REQUESTED,
-            payload: { history, otuId, refId },
-        });
-    });
-
-    it("should return onHide() in props", () => {
-        props.onHide();
-        expect(dispatch).toHaveBeenCalledWith({
-            type: HIDE_OTU_MODAL,
-        });
+        scope.done();
     });
 });
