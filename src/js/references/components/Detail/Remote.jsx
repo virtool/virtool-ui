@@ -1,10 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "../../../base";
 import { ProgressCircle } from "../../../base/ProgressCircle";
-import { checkUpdates, updateRemoteReference } from "../../actions";
-import { checkReferenceRight } from "../../selectors";
+import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../querys";
 
 const ReleaseButtonContainer = styled.div`
     margin: 0;
@@ -107,9 +105,12 @@ const InstalledHeader = styled(BoxGroupSection)`
     gap: ${props => props.theme.gap.text};
 `;
 
-const Remote = ({ detail, onCheckUpdates, onUpdate, checking }) => {
+export default function Remote({ detail }) {
     const { id, installed, release, remotes_from, updating, task } = detail;
     const slug = remotes_from.slug;
+    const { mutate: checkReferenceUpdate, isLoading: isLoadingReferenceUpdate } = useCheckReferenceUpdates(id);
+    const { mutate: updateRemoteReference } = useUpdateRemoteReference(id);
+
     return (
         <BoxGroup>
             <RemoteHeader>
@@ -136,29 +137,12 @@ const Remote = ({ detail, onCheckUpdates, onUpdate, checking }) => {
             ) : (
                 <Release
                     release={release}
-                    checking={checking}
+                    checking={isLoadingReferenceUpdate}
                     updating={updating}
-                    onCheckUpdates={() => onCheckUpdates(id)}
-                    onUpdate={() => onUpdate(id)}
+                    onCheckUpdates={checkReferenceUpdate}
+                    onUpdate={updateRemoteReference}
                 />
             )}
         </BoxGroup>
     );
-};
-
-const mapStateToProps = state => ({
-    checking: state.references.checking,
-    canRemove: checkReferenceRight(state, "remove"),
-});
-
-const mapDispatchToProps = dispatch => ({
-    onCheckUpdates: refId => {
-        dispatch(checkUpdates(refId));
-    },
-
-    onUpdate: refId => {
-        dispatch(updateRemoteReference(refId));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Remote);
+}

@@ -29,13 +29,13 @@ type ReferenceManageProps = {
  */
 export default function ReferenceManager({ match }: ReferenceManageProps) {
     const { refId } = match.params;
-    const { data, isLoading } = useGetReference(refId);
+    const { data: reference, isLoading } = useGetReference(refId);
 
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    const { cloned_from, contributors, data_type, description, latest_build, organism, remotes_from } = data;
+    const { cloned_from, contributors, data_type, description, latest_build, organism, remotes_from } = reference;
 
     return (
         <ContainerNarrow>
@@ -61,7 +61,7 @@ export default function ReferenceManager({ match }: ReferenceManageProps) {
                 </ReferenceManageTable>
             </BoxGroup>
 
-            {remotes_from && <RemoteReference detail={data} />}
+            {remotes_from && <RemoteReference detail={reference} />}
             {cloned_from && <Clone source={cloned_from} />}
 
             <BoxGroup>
@@ -72,7 +72,7 @@ export default function ReferenceManager({ match }: ReferenceManageProps) {
             </BoxGroup>
 
             <Contributors contributors={contributors} />
-            <Targets reference={data} />
+            <Targets reference={reference} />
         </ContainerNarrow>
     );
 }

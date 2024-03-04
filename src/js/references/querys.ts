@@ -1,6 +1,7 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHistory } from "react-router-dom";
 import {
+    checkRemoteReferenceUpdates,
     cloneReference,
     createReference,
     findReferences,
@@ -8,6 +9,7 @@ import {
     removeReference,
     removeReferenceGroup,
     removeReferenceUser,
+    updateRemoteReference,
 } from "./api";
 import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
 
@@ -110,4 +112,34 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
  */
 export function useGetReference(refId: string) {
     return useQuery<Reference>(referenceQueryKeys.detail(refId), () => getReference(refId));
+}
+
+/**
+ * Checks if an update is available for a remote reference
+ *
+ * @param refId - The unique identifier of the reference
+ */
+export function useCheckReferenceUpdates(refId: string) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: () => checkRemoteReferenceUpdates(refId),
+        onSuccess: () => {
+            queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
+        },
+    });
+}
+
+/**
+ * Update a reference from a remote source
+ *
+ * @param refId - The unique identifier of the reference
+ */
+export function useUpdateRemoteReference(refId: string) {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: () => updateRemoteReference(refId),
+        onSuccess: () => {
+            queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
+        },
+    });
 }

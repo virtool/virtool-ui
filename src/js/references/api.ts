@@ -160,3 +160,23 @@ export function removeReferenceUser(refId: string, userId: string | number): Pro
 export function removeReferenceGroup(refId: string, groupId: string | number): Promise<Response> {
     return Request.delete(`/refs/${refId}/groups/${groupId}`).then(response => response.body);
 }
+
+/**
+ * Checks for updates to a remote reference
+ *
+ * @param refId - The unique identifier of the reference
+ */
+export function checkRemoteReferenceUpdates(refId: string) {
+    return Request.get(`/refs/${refId}/release`).then(response => response.body);
+}
+
+/**
+ * Request that the reference is updated from the remote source
+ *
+ * @param refId - The unique identifier of the reference
+ */
+export function updateRemoteReference(refId: string) {
+    return Request.post(`/refs/${refId}/updates`)
+        .send({})
+        .then(response => response.body);
+}
