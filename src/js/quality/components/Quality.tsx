@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { useElementSize } from "../../utils/hooks";
@@ -13,11 +13,11 @@ const QualityTitle = styled.h5`
     justify-content: space-between;
 `;
 
-export const Quality = ({ bases, composition, sequences }) => {
+export function Quality({ bases, composition, sequences }) {
     const [ref, { width }] = useElementSize();
 
     return (
-        <div ref={ref}>
+        <div ref={ref as RefObject<HTMLDivElement>}>
             {width && (
                 <>
                     <QualityTitle>
@@ -38,4 +38,4 @@ export const Quality = ({ bases, composition, sequences }) => {
             )}
         </div>
     );
-};
+}
