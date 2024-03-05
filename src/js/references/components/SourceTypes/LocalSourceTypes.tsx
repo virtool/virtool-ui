@@ -18,7 +18,7 @@ import {
     SectionHeader,
 } from "../../../base";
 import { useUpdateReference, useUpdateSourceTypes } from "../../hooks";
-import { useGetReference } from "../../querys";
+import { useGetReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`

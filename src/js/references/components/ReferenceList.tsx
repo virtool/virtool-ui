@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Badge, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useUrlSearchParams } from "../../utils/hooks";
-import { useInfiniteFindReferences } from "../querys";
+import { useInfiniteFindReferences } from "../queries";
 import { ReferenceMinimal, ReferenceSearchResult } from "../types";
 import Clone from "./CloneReference";
 import { ReferenceItem } from "./Item/ReferenceItem";

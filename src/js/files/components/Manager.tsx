@@ -1,11 +1,11 @@
 import { map } from "lodash";
 import { capitalize } from "lodash-es";
 import React from "react";
-import { useFetchAccount } from "../../account/querys";
+import { useFetchAccount } from "../../account/queries";
 import { checkAdminRoleOrPermissionsFromAccount } from "../../administration/utils";
 import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { Permission } from "../../groups/types";
-import { useListFiles } from "../querys";
+import { useListFiles } from "../queries";
 import { FileResponse, FileType } from "../types";
 import { File } from "./File";
 import UploadToolbar from "./Toolbar";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { RemoveDialog } from "../../../base/RemoveDialog";
-import { useRemoveSample } from "../../querys";
+import { useRemoveSample } from "../../queries";
 
 type RemoveSampleProps = {
     /** The id of the sample being removed */

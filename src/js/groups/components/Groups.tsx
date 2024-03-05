@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { getColor } from "../../app/theme";
 import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "../../base";
 import { InputHeader } from "../../base/InputHeader";
-import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../querys";
+import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../queries";
 import Create from "./Create";
 import { GroupSelector } from "./GroupSelector";
 import { Members } from "./Members";

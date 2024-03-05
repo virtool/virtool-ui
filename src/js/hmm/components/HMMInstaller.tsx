@@ -3,7 +3,7 @@ import { replace } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "../../base";
-import { hmmQueryKeys, useListHmms } from "../querys";
+import { hmmQueryKeys, useListHmms } from "../queries";
 import InstallOption from "./InstallOption";
 
 const HMMInstalling = styled(Box)`

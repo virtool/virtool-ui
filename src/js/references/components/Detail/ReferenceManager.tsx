@@ -3,7 +3,7 @@ import { match } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, ContainerNarrow, LoadingPlaceholder, Table } from "../../../base";
 import { Contributors } from "../../../indexes/components/Contributors";
-import { useGetReference } from "../../querys";
+import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";

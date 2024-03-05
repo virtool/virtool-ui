@@ -4,11 +4,11 @@ import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
-import { useFetchAccount } from "../account/querys";
+import { useFetchAccount } from "../account/queries";
 import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
 import { ErrorResponse } from "../types/types";
-import { useGetReference } from "./querys";
+import { useGetReference } from "./queries";
 import { Reference, ReferenceTarget } from "./types";
 
 export function useUpdateReference(refId: string, onSuccess?: () => void) {

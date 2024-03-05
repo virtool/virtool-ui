@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import { Box, BoxTitle, Input, InputGroup, InputLabel, SaveButton } from "../../base";
-import { useSetMessage } from "../../message/querys";
+import { useSetMessage } from "../../message/queries";
 import { Message } from "../../message/types";
 
 const InstanceMessageTitle = styled(BoxTitle)`

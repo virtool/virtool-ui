@@ -4,7 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
-import { useRemoveReferenceUser } from "../../querys";
+import { useRemoveReferenceUser } from "../../queries";
 import { ReferenceGroup, ReferenceUser } from "../../types";
 import AddReferenceGroup from "./AddReferenceGroup";
 import AddReferenceUser from "./AddReferenceUser";

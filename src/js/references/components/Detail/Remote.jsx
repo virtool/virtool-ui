@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "../../../base";
 import { ProgressCircle } from "../../../base/ProgressCircle";
-import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../querys";
+import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../queries";
 
 const ReleaseButtonContainer = styled.div`
     margin: 0;

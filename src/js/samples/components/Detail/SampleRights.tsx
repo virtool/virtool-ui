@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { find, includes, map } from "lodash-es";
 import React from "react";
 import { match } from "react-router-dom";
-import { useFetchAccount } from "../../../account/querys";
+import { useFetchAccount } from "../../../account/queries";
 import { useCheckAdminRole } from "../../../administration/hooks";
 import { AdministratorRoles } from "../../../administration/types";
 import {
@@ -16,8 +16,8 @@ import {
     InputSelect,
     LoadingPlaceholder,
 } from "../../../base";
-import { useListGroups } from "../../../groups/querys";
-import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../querys";
+import { useListGroups } from "../../../groups/queries";
+import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../queries";
 
 type SampleRightsProps = {
     /** Match object containing path information */

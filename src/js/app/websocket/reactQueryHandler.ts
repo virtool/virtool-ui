@@ -1,14 +1,14 @@
 import { forEach, get } from "lodash-es";
 
 import { QueryClient } from "@tanstack/react-query";
-import { accountKeys } from "../../account/querys";
-import { roleQueryKeys, userQueryKeys } from "../../administration/querys";
-import { fileQueryKeys } from "../../files/querys";
-import { groupQueryKeys } from "../../groups/querys";
-import { indexQueryKeys } from "../../indexes/querys";
+import { accountKeys } from "../../account/queries";
+import { roleQueryKeys, userQueryKeys } from "../../administration/queries";
+import { fileQueryKeys } from "../../files/queries";
+import { groupQueryKeys } from "../../groups/queries";
+import { indexQueryKeys } from "../../indexes/queries";
 import { modelQueryKeys } from "../../ml/queries";
-import { referenceQueryKeys } from "../../references/querys";
-import { samplesQueryKeys } from "../../samples/querys";
+import { referenceQueryKeys } from "../../references/queries";
+import { samplesQueryKeys } from "../../samples/queries";
 import { taskUpdaters } from "./updaters";
 
 /** Get affected resource query keys by workflow name  */

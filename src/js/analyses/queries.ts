@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { samplesQueryKeys } from "../samples/querys";
+import { samplesQueryKeys } from "../samples/queries";
 import { createAnalysis, listAnalyses, removeAnalysis } from "./api";
 import { Analysis, AnalysisSearchResult } from "./types";
 

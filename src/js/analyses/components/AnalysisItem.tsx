@@ -7,7 +7,7 @@ import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { Attribution, Box, Icon, SlashList } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
 import { getWorkflowDisplayName } from "../../utils/utils";
-import { useRemoveAnalysis } from "../querys";
+import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
 import { AnalysisItemRightIcon } from "./AnalysisItemRightIcon";

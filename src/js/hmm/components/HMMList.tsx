@@ -1,7 +1,7 @@
 import React from "react";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useUrlSearchParams } from "../../utils/hooks";
-import { useListHmms } from "../querys";
+import { useListHmms } from "../queries";
 import { HMMMinimal } from "../types";
 import { HMMInstaller } from "./HMMInstaller";
 import HMMItem from "./HMMItem";

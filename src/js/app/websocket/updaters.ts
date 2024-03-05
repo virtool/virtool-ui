@@ -1,8 +1,8 @@
 import { InfiniteData, QueryClient } from "@tanstack/react-query";
 import { assign, cloneDeep, forEach, get } from "lodash-es/lodash";
-import { hmmQueryKeys } from "../../hmm/querys";
+import { hmmQueryKeys } from "../../hmm/queries";
 import { HMMSearchResults } from "../../hmm/types";
-import { referenceQueryKeys } from "../../references/querys";
+import { referenceQueryKeys } from "../../references/queries";
 import { ReferenceSearchResult } from "../../references/types";
 import { Task } from "../../types";
 

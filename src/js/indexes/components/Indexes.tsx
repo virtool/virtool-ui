@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
-import { useInfiniteFindIndexes } from "../querys";
+import { useInfiniteFindIndexes } from "../queries";
 import { IndexMinimal } from "../types";
 import { IndexItem } from "./Item/IndexItem";
 import RebuildIndex from "./Rebuild";

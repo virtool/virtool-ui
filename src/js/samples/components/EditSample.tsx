@@ -15,7 +15,7 @@ import {
     SaveButton,
     TextArea,
 } from "../../base";
-import { useUpdateSample } from "../querys";
+import { useUpdateSample } from "../queries";
 import { Sample } from "../types";
 
 type EditSampleProps = {
