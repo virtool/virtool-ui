@@ -61,7 +61,7 @@ export function useFetchSample(sampleId: string) {
 }
 
 /**
- * Initializes a mutator for updating a sample
+ * Initialize a mutator for updating a sample
  *
  * @returns A mutator for updating a sample
  */
@@ -70,7 +70,7 @@ export function useUpdateSample(sampleId: string) {
 }
 
 /**
- * Initializes a mutator for removing a sample
+ * Initialize a mutator for removing a sample
  *
  * @returns A mutator for removing a sample
  */
@@ -79,7 +79,7 @@ export function useRemoveSample() {
 }
 
 /**
- * Initializes a mutator for updating a samples rights
+ * Initialize a mutator for updating a samples rights
  *
  * @returns A mutator for updating a samples rights
  */

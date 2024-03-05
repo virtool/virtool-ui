@@ -91,7 +91,7 @@ export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sa
  * Remove a sample
  *
  * @param sampleId - The id of the sample to remove
- * @returns A promise resolving to the removal of a sample
+ * @returns A promise that resolves to null upon the removal of a sample
  */
 export function removeSample(sampleId: string): Promise<null> {
     return Request.delete(`/samples/${sampleId}`).then(response => response.body);
