@@ -10,7 +10,7 @@ import { getWorkflowDisplayName } from "../../utils/utils";
 import { useRemoveAnalysis } from "../querys";
 import { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
-import { AnalysisItemRightIcon } from "./RightIcon";
+import { AnalysisItemRightIcon } from "./AnalysisItemRightIcon";
 
 const StyledAnalysisItem = styled(Box)`
     color: ${props => props.theme.color.greyDarkest};
@@ -101,7 +101,7 @@ export default function AnalysisItem({ analysis, sampleId }: AnalysisItemProps) 
                 <AnalysisAttribution user={user.handle} time={created_at} />
                 <AnalysisItemEndIcon>
                     {ready ? (
-                        <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} ready={ready} />
+                        <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
                     ) : (
                         <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} size={sizes.md} />
                     )}
