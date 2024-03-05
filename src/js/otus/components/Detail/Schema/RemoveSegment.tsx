@@ -1,5 +1,5 @@
 import { reject } from "lodash-es";
-import React, { useCallback } from "react";
+import React from "react";
 import { RemoveDialog } from "../../../../base/RemoveDialog";
 import { OTUSegment } from "../../../types";
 
@@ -20,9 +20,13 @@ type RemoveSegmentProps = {
  * Displays a dialog for removing a segment
  */
 export default function RemoveSegment({ activeName, schema, show, onHide, onSubmit }: RemoveSegmentProps) {
-    const handleSubmit = useCallback(() => {
-        onSubmit(reject(schema, { name: activeName }));
-    }, [activeName]);
-
-    return <RemoveDialog name={activeName} noun="Segment" onConfirm={handleSubmit} onHide={onHide} show={show} />;
+    return (
+        <RemoveDialog
+            name={activeName}
+            noun="Segment"
+            onConfirm={() => onSubmit(reject(schema, { name: activeName }))}
+            onHide={onHide}
+            show={show}
+        />
+    );
 }
