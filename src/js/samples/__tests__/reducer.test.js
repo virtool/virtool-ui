@@ -3,7 +3,6 @@ import {
     DESELECT_SAMPLES,
     FIND_SAMPLES,
     GET_SAMPLE,
-    REMOVE_SAMPLE,
     SELECT_SAMPLE,
     UPDATE_SAMPLE,
     WS_INSERT_SAMPLE,
@@ -137,16 +136,6 @@ describe("Samples Reducer", () => {
         expect(result).toEqual({
             ...initialState,
             detail: action.payload,
-        });
-    });
-
-    it("should handle REMOVE_SAMPLE_SUCCEEDED", () => {
-        const action = {
-            type: REMOVE_SAMPLE.SUCCEEDED,
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({
-            detail: null,
         });
     });
 

@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { ErrorResponse } from "../types/types";
-import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate } from "./api";
+import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate, removeOTU, setIsolateAsDefault } from "./api";
 import { OTU, OTUIsolate, OTUSearchResult } from "./types";
 
 /**
@@ -52,6 +52,15 @@ export function useCreateOTU(refId: string) {
 }
 
 /**
+ * Initializes a mutator for removing an OTU isolate
+ *
+ * @returns A mutator for removing an OTU isolate
+ */
+export function useRemoveOTU() {
+    return useMutation<null, ErrorResponse, { otuId: string }>(({ otuId }) => removeOTU(otuId));
+}
+
+/**
  * Initializes a mutator for creating an OTU isolate
  *
  * @returns A mutator for creating an OTU isolate
@@ -59,6 +68,17 @@ export function useCreateOTU(refId: string) {
 export function useCreateIsolate() {
     return useMutation<OTUIsolate, unknown, { otuId: string; sourceType: string; sourceName: string }>(
         ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName),
+    );
+}
+
+/**
+ * Initializes a mutator for setting an isolate as the default resource for an OTU
+ *
+ * @returns A mutator for setting an isolate as the default resource for an OTU
+ */
+export function useSetIsolateAsDefault() {
+    return useMutation<OTUIsolate, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
+        setIsolateAsDefault(otuId, isolateId),
     );
 }
 

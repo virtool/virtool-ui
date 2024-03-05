@@ -1,5 +1,12 @@
 import { Request } from "../app/request";
-import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
+import {
+    Reference,
+    ReferenceDataType,
+    ReferenceGroup,
+    ReferenceMinimal,
+    ReferenceSearchResult,
+    ReferenceUser,
+} from "./types";
 
 export function find({ term, page }) {
     return Request.get("/refs").query({ find: term, page });
@@ -137,6 +144,32 @@ export function createReference(
  */
 export function removeReference(refId: string): Promise<null> {
     return Request.delete(`/refs/${refId}`).then(res => res.body);
+}
+
+/**
+ * Adds a user to a reference
+ *
+ * @param refId - The reference to have the user added to
+ * @param userId - The user to add
+ * @returns A promise resolving to adding a user to a reference
+ */
+export function addReferenceUser(refId: string, userId: string | number): Promise<ReferenceUser> {
+    return Request.post(`/refs/${refId}/users`)
+        .send({ user_id: userId })
+        .then(response => response.body);
+}
+
+/**
+ * Adds a group to a reference
+ *
+ * @param refId - The reference to have the group added to
+ * @param groupId - The group to add
+ * @returns A promise resolving to adding a group to a reference
+ */
+export function addReferenceGroup(refId: string, groupId: string | number): Promise<ReferenceGroup> {
+    return Request.post(`/refs/${refId}/groups`)
+        .send({ group_id: groupId })
+        .then(response => response.body);
 }
 
 /**

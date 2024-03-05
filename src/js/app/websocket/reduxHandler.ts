@@ -6,7 +6,6 @@ import { wsInsertJob, wsRemoveJob, wsUpdateJob } from "../../jobs/actions";
 import { wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
 import { wsInsertReference, wsRemoveReference, wsUpdateReference } from "../../references/actions";
 import { wsInsertSample, wsRemoveSample, wsUpdateSample } from "../../samples/actions";
-import { wsInsertUser, wsRemoveUser, wsUpdateUser } from "../../users/actions";
 
 function actionCreatorWrapper(actionCreator) {
     return (state, message) => actionCreator(message.data);
@@ -19,7 +18,6 @@ const inserters = {
     jobs: actionCreatorWrapper(wsInsertJob),
     references: actionCreatorWrapper(wsInsertReference),
     samples: actionCreatorWrapper(wsInsertSample),
-    users: actionCreatorWrapper(wsInsertUser),
 };
 
 const updaters = {
@@ -36,7 +34,6 @@ const updaters = {
     otus: actionCreatorWrapper(wsUpdateOTU),
     references: actionCreatorWrapper(wsUpdateReference),
     samples: actionCreatorWrapper(wsUpdateSample),
-    users: actionCreatorWrapper(wsUpdateUser),
 };
 
 const removers = {
@@ -45,7 +42,6 @@ const removers = {
     otus: actionCreatorWrapper(wsRemoveOTU),
     references: actionCreatorWrapper(wsRemoveReference),
     samples: actionCreatorWrapper(wsRemoveSample),
-    users: actionCreatorWrapper(wsRemoveUser),
 };
 
 const modifiers = {

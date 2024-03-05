@@ -42,8 +42,6 @@ export const create = action => {
 
 export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
 
-export const remove = ({ sampleId }) => Request.delete(`/samples/${sampleId}`);
-
 /**
  * Fetch a page of samples
  *
@@ -87,6 +85,16 @@ export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sa
     return Request.patch(`/samples/${sampleId}`)
         .send(update)
         .then(response => response.body);
+}
+
+/**
+ * Remove a sample
+ *
+ * @param sampleId - The id of the sample to remove
+ * @returns A promise that resolves to null upon the removal of a sample
+ */
+export function removeSample(sampleId: string): Promise<null> {
+    return Request.delete(`/samples/${sampleId}`).then(response => response.body);
 }
 
 /** Data returned from API on sample rights update */

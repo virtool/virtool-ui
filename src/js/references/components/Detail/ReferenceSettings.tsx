@@ -12,6 +12,9 @@ type ReferenceSettingsProps = {
     match: match<{ refId: string }>;
 };
 
+/**
+ * The reference settings view allowing users to manage the reference
+ */
 export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
     const { refId } = match.params;
     const { data, isLoading } = useGetReference(refId);

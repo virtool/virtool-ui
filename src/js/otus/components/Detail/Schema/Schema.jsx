@@ -8,7 +8,7 @@ import { getCanModifyReferenceOTU } from "../../../../references/selectors";
 import { editOTU } from "../../../actions";
 import AddSegment from "./Add";
 import EditSegment from "./Edit";
-import RemoveSegment from "./Remove";
+import RemoveSegment from "./RemoveSegment";
 import Segment from "./Segment";
 
 const AddButton = styled(Button)`
@@ -158,6 +158,7 @@ class Schema extends React.Component {
                 {segArray.length ? (
                     <RemoveSegment
                         activeName={this.state.selected.name}
+                        schema={this.props.schema}
                         show={this.state.showRemove}
                         onHide={this.handleClose}
                         onSubmit={this.handleSubmit}

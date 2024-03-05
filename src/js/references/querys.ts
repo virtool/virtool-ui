@@ -2,6 +2,8 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import { useHistory } from "react-router-dom";
 import {
     checkRemoteReferenceUpdates,
+    addReferenceGroup,
+    addReferenceUser,
     cloneReference,
     createReference,
     findReferences,
@@ -11,7 +13,14 @@ import {
     removeReferenceUser,
     updateRemoteReference,
 } from "./api";
-import { Reference, ReferenceDataType, ReferenceMinimal, ReferenceSearchResult } from "./types";
+import {
+    Reference,
+    ReferenceDataType,
+    ReferenceGroup,
+    ReferenceMinimal,
+    ReferenceSearchResult,
+    ReferenceUser,
+} from "./types";
 
 /**
  * Factory for generating react-query keys for reference related queries.
@@ -82,6 +91,26 @@ export function useCreateReference() {
  */
 export function useRemoveReference() {
     return useMutation<null, unknown, { refId: string }>(({ refId }) => removeReference(refId));
+}
+
+/**
+ * Initializes a mutator for adding members to a reference
+ *
+ * @param refId - The reference to add the member to
+ * @param noun - Whether the member is a user or a group
+ * @returns A mutator for adding members to a reference
+ */
+export function useAddReferenceMember(refId: string, noun: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<ReferenceUser | ReferenceGroup, unknown, { id: string | number }>(
+        ({ id }) => (noun === "user" ? addReferenceUser(refId, id) : addReferenceGroup(refId, id)),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
+            },
+        },
+    );
 }
 
 /**
