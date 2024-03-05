@@ -1,6 +1,6 @@
 import { flatMap } from "lodash-es";
 import React from "react";
-import { useInfiniteFindUsers } from "../../administration/querys";
+import { useInfiniteFindUsers } from "../../administration/queries";
 import { LoadingPlaceholder, NoneFoundBox } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { User } from "../types";

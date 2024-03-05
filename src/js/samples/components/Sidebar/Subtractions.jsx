@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
-import { useFetchSubtractionsShortlist } from "../../../subtraction/querys";
+import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
 import { SampleSidebarList } from "./List";
 import { SampleSidebarSelector } from "./Selector";
 

@@ -1,11 +1,11 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { Alert, Button } from "../../base";
 import { Permission } from "../../groups/types";
 import { install } from "../api";
-import { hmmQueryKeys } from "../querys";
+import { hmmQueryKeys } from "../queries";
 
 const InstallOptionAlert = styled(Alert)`
     display: block;

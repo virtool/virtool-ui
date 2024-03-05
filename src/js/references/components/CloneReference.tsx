@@ -17,7 +17,7 @@ import {
     ModalHeader,
     SaveButton,
 } from "../../base";
-import { useCloneReference } from "../querys";
+import { useCloneReference } from "../queries";
 import { ReferenceMinimal } from "../types";
 
 const ReferenceBox = styled(Box)`

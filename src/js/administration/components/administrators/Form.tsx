@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { InputError, InputGroup, InputLabel, SaveButton } from "../../../base";
 import { User } from "../../../users/types";
-import { useFindUsers, useGetAdministratorRoles, useSetAdministratorRole } from "../../querys";
+import { useFindUsers, useGetAdministratorRoles, useSetAdministratorRole } from "../../queries";
 import { AdministratorRoles } from "../../types";
 import { RoleSelect } from "./RoleSelect";
 import { UserSelect } from "./UserSelect";

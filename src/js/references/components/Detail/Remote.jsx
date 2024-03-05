@@ -1,18 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import {
-    BoxGroup,
-    BoxGroupHeader,
-    BoxGroupSection,
-    Button,
-    Icon,
-    Loader,
-    ProgressBarAffixed,
-    RelativeTime,
-} from "../../../base";
-import { checkUpdates, updateRemoteReference } from "../../actions";
-import { checkReferenceRight, getProgress } from "../../selectors";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "../../../base";
+import { ProgressCircle } from "../../../base/ProgressCircle";
+import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../queries";
 
 const ReleaseButtonContainer = styled.div`
     margin: 0;
@@ -95,8 +85,7 @@ const StyledUpgrade = styled(BoxGroupSection)`
 
 const Upgrade = ({ progress }) => (
     <StyledUpgrade>
-        <ProgressBarAffixed color="green" now={progress} />
-        <Icon name="arrow-alt-circle-up" />
+        <ProgressCircle progress={progress} state={"running"} />
         <strong>Updating</strong>
     </StyledUpgrade>
 );
@@ -114,10 +103,11 @@ const InstalledHeader = styled(BoxGroupSection)`
     gap: ${props => props.theme.gap.text};
 `;
 
-const Remote = ({ detail, onCheckUpdates, onUpdate, checking, progress }) => {
-    const { id, installed, release, remotes_from, updating } = detail;
-
+export default function Remote({ detail }) {
+    const { id, installed, release, remotes_from, updating, task } = detail;
     const slug = remotes_from.slug;
+    const { mutate: checkReferenceUpdate, isLoading: isLoadingReferenceUpdate } = useCheckReferenceUpdates(id);
+    const { mutate: updateRemoteReference } = useUpdateRemoteReference(id);
 
     return (
         <BoxGroup>
@@ -141,35 +131,16 @@ const Remote = ({ detail, onCheckUpdates, onUpdate, checking, progress }) => {
             )}
 
             {updating ? (
-                <Upgrade progress={progress} />
+                <Upgrade progress={task.progress} />
             ) : (
                 <Release
                     release={release}
-                    checking={checking}
+                    checking={isLoadingReferenceUpdate}
                     updating={updating}
-                    onCheckUpdates={() => onCheckUpdates(id)}
-                    onUpdate={() => onUpdate(id)}
+                    onCheckUpdates={checkReferenceUpdate}
+                    onUpdate={updateRemoteReference}
                 />
             )}
         </BoxGroup>
     );
-};
-
-const mapStateToProps = state => ({
-    detail: state.references.detail,
-    checking: state.references.checking,
-    canRemove: checkReferenceRight(state, "remove"),
-    progress: getProgress(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    onCheckUpdates: refId => {
-        dispatch(checkUpdates(refId));
-    },
-
-    onUpdate: refId => {
-        dispatch(updateRemoteReference(refId));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Remote);
+}

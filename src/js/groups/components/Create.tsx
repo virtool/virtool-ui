@@ -15,7 +15,7 @@ import {
     ModalHeader,
     SaveButton,
 } from "../../base";
-import { useCreateGroup } from "../querys";
+import { useCreateGroup } from "../queries";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Provide a name for the group"),

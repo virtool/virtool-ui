@@ -17,3 +17,9 @@ export const update = ({ labelId, name, description, color }) =>
         description,
         color,
     });
+
+export function fetchLabels() {
+    return Request.get("/labels").then(response => {
+        return response.body;
+    });
+}

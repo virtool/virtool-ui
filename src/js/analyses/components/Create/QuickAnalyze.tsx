@@ -10,7 +10,7 @@ import { MLModelSearchResult } from "../../../ml/types";
 import { SampleMinimal } from "../../../samples/types";
 import { SubtractionShortlist } from "../../../subtraction/types";
 import { HistoryType } from "../../../utils/hooks";
-import { useCreateAnalysis } from "../../querys";
+import { useCreateAnalysis } from "../../queries";
 import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";

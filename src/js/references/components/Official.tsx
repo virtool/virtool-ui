@@ -41,6 +41,7 @@ export const ReferenceOfficial = ({ officialInstalled, onRemote }: ReferenceOffi
                             plant virus reference
                         </ExternalLink>
                         <span>
+                            {" "}
                             that can be installed automatically. Once installed, it can easily be kept up-to-date.
                         </span>
                     </p>

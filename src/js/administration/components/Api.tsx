@@ -1,6 +1,6 @@
 import React from "react";
 import { ExternalLink } from "../../base";
-import { useUpdateSettings } from "../querys";
+import { useUpdateSettings } from "../queries";
 import { Settings } from "../types";
 import { SettingsCheckbox } from "./SettingsCheckbox";
 

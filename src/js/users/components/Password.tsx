@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useUpdateUser } from "../../administration/querys";
+import { useUpdateUser } from "../../administration/queries";
 import {
     BoxGroup,
     BoxGroupHeader,

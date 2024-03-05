@@ -12,10 +12,10 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "../../base";
-import { useInfiniteFindFiles } from "../../files/querys";
+import { useInfiniteFindFiles } from "../../files/queries";
 import { FileType } from "../../files/types";
 import PersistForm from "../../forms/components/PersistForm";
-import { useCreateSubtraction } from "../querys";
+import { useCreateSubtraction } from "../queries";
 import { SubtractionFileSelector } from "./SubtractionFileSelector";
 
 const validationSchema = Yup.object().shape({

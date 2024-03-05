@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Alert, Icon } from "../../base";
 import { checkReferenceRight } from "../../references/selectors";
-import { useInfiniteFindIndexes } from "../querys";
+import { useInfiniteFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
     refId: string;

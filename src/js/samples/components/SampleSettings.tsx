@@ -1,5 +1,5 @@
 import React from "react";
-import { useFetchSettings } from "../../administration/querys";
+import { useFetchSettings } from "../../administration/queries";
 import { ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import SampleRights from "./SampleRights";
 

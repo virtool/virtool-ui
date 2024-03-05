@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -8,7 +9,6 @@ import Enzyme, { mount, render, shallow } from "enzyme";
 import { createSerializer } from "enzyme-to-json";
 import { noop } from "lodash-es";
 import React from "react";
-import { QueryClient, QueryClientProvider, setLogger } from "react-query";
 import { Provider } from "react-redux";
 import { combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
@@ -24,14 +24,14 @@ process.env.TZ = "UTC";
 Enzyme.configure({ adapter: new Adapter() });
 expect.addSnapshotSerializer(createSerializer({ mode: "deep" }));
 
-setLogger({
-    log: console.log,
-    warn: console.warn,
-    error: noop,
-});
-
 export function wrapWithProviders(ui, createAppStore) {
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        logger: {
+            log: console.log,
+            warn: console.warn,
+            error: noop,
+        },
+    });
 
     if (createAppStore) {
         return (

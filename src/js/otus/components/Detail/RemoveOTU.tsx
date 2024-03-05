@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { RemoveDialog } from "../../../base/RemoveDialog";
-import { useRemoveOTU } from "../../querys";
+import { useRemoveOTU } from "../../queries";
 
 type RemoveOTUProps = {
     id: string;

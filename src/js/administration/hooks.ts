@@ -1,4 +1,4 @@
-import { useFetchAccount } from "../account/querys";
+import { useFetchAccount } from "../account/queries";
 import { Permission } from "../groups/types";
 import { AdministratorRoles } from "./types";
 import { checkAdminRoleOrPermissionsFromAccount, hasSufficientAdminRole } from "./utils";

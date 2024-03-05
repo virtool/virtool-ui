@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { SidebarHeader, SideBarSection } from "../../../base";
-import { useUpdateLabel } from "../../querys";
+import { useUpdateLabel } from "../../queries";
 import { getPartiallySelectedLabels } from "../../selectors";
 import { SampleLabelInner } from "./Labels";
 import { SampleSidebarMultiselectList } from "./List";

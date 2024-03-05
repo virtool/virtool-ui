@@ -1,8 +1,8 @@
 import { filter } from "lodash-es";
 import React, { useState } from "react";
-import { useFetchAccount } from "../../../account/querys";
+import { useFetchAccount } from "../../../account/queries";
 import { InputSearch, LoadingPlaceholder, NoneFoundBox, Pagination, Toolbar } from "../../../base";
-import { useFindUsers, useGetAdministratorRoles } from "../../querys";
+import { useFindUsers, useGetAdministratorRoles } from "../../queries";
 import { CreateAdministrator } from "./Create";
 import { AdministratorItem } from "./Item";
 

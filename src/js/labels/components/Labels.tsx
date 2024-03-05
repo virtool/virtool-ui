@@ -9,7 +9,7 @@ import {
     ViewHeaderSubtitle,
     ViewHeaderTitle,
 } from "../../base";
-import { useFetchLabels } from "../hooks";
+import { useFetchLabels } from "../queries";
 import { CreateLabel } from "./Create";
 import { Item } from "./Item";
 
