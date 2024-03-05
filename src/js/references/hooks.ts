@@ -9,10 +9,11 @@ import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
 import { ErrorResponse } from "../types/types";
 import { getReference } from "./api";
+import { referenceQueryKeys } from "./querys";
 import { Reference, ReferenceTarget } from "./types";
 
 export function useGetReference(refId) {
-    return useQuery(["reference", refId], () => getReference(refId));
+    return useQuery(referenceQueryKeys.detail(refId), () => getReference(refId));
 }
 
 export function useUpdateReference(refId: string, onSuccess?: () => void) {

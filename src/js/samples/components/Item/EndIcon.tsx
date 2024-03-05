@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Icon, Loader } from "../../../base";
+import { Icon } from "../../../base";
+import { ProgressCircle } from "../../../base/ProgressCircle";
+import { JobMinimal } from "../../../jobs/types";
 
 const StyledSampleItemEndIcon = styled.div`
     align-items: center;
@@ -20,13 +22,15 @@ interface SampleItemEndIconProps {
     onClick: () => void;
     /** Whether the sample is ready */
     ready: boolean;
+    /** The job responsible for creating the sample */
+    job: JobMinimal;
 }
 
 /**
  * Icon indicating the status of sample
  */
-export function SampleItemEndIcon({ onClick, ready }: SampleItemEndIconProps) {
-    if (ready) {
+export function SampleItemEndIcon({ onClick, ready, job }: SampleItemEndIconProps) {
+    if (ready || job?.state === "complete") {
         return (
             <StyledSampleItemEndIcon>
                 <Icon
@@ -42,7 +46,7 @@ export function SampleItemEndIcon({ onClick, ready }: SampleItemEndIconProps) {
     }
     return (
         <StyledSampleItemEndIcon>
-            <Loader size="14px" color="primary" />
+            <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} />
             <strong>Creating</strong>
         </StyledSampleItemEndIcon>
     );

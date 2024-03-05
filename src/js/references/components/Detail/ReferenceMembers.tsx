@@ -1,12 +1,13 @@
 import { map } from "lodash-es";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReferenceUser } from "../../querys";
 import { ReferenceGroup, ReferenceUser } from "../../types";
-import AddReferenceMember from "./AddMember";
+import AddReferenceGroup from "./AddReferenceGroup";
+import AddReferenceUser from "./AddReferenceUser";
 import EditReferenceMember from "./EditMember";
 import MemberItem from "./MemberItem";
 
@@ -46,9 +47,10 @@ type ReferenceMembersProps = {
  */
 export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
     const history = useHistory();
-    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
+    const location = useLocation<{ addgroup: boolean; adduser: boolean }>();
 
     const mutation = useRemoveReferenceUser(refId, noun);
+    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
     function handleHide() {
         history.replace({ state: { [`add${noun}`]: false } });
@@ -87,13 +89,23 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                     </NoMembers>
                 )}
             </BoxGroup>
-            <AddReferenceMember
-                show={history.location.state && history.location.state[`add${noun}`]}
-                noun={noun}
-                onHide={handleHide}
-            />
+            {noun === "user" ? (
+                <AddReferenceUser
+                    users={members as ReferenceUser[]}
+                    onHide={handleHide}
+                    refId={refId}
+                    show={location.state?.adduser}
+                />
+            ) : (
+                <AddReferenceGroup
+                    groups={members as ReferenceGroup[]}
+                    onHide={handleHide}
+                    refId={refId}
+                    show={location.state?.addgroup}
+                />
+            )}
             <EditReferenceMember
-                show={history.location.state && history.location.state[`edit${noun}`]}
+                show={location.state && location.state[`edit${noun}`]}
                 noun={noun}
                 onHide={handleHide}
             />
