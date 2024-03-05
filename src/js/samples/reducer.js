@@ -5,7 +5,6 @@ import {
     DESELECT_SAMPLES,
     FIND_SAMPLES,
     GET_SAMPLE,
-    REMOVE_SAMPLE,
     SELECT_SAMPLE,
     UPDATE_SAMPLE,
     WS_INSERT_SAMPLE,
@@ -53,9 +52,6 @@ export const samplesReducer = createReducer(initialState, builder => {
         })
         .addCase(UPDATE_SAMPLE.SUCCEEDED, (state, action) => {
             set(state, "detail", action.payload);
-        })
-        .addCase(REMOVE_SAMPLE.SUCCEEDED, state => {
-            state.detail = null;
         })
         .addCase(SELECT_SAMPLE, (state, action) => {
             state.selected = xor(state.selected, [action.payload.sampleId]);

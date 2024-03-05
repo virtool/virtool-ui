@@ -4,7 +4,6 @@ import {
     FIND_SAMPLES,
     GET_SAMPLE,
     HIDE_SAMPLE_MODAL,
-    REMOVE_SAMPLE,
     SHOW_REMOVE_SAMPLE,
     UPDATE_SAMPLE,
     WS_INSERT_SAMPLE,
@@ -17,7 +16,6 @@ import {
     findSamples,
     getSample,
     hideSampleModal,
-    removeSample,
     showRemoveSample,
     wsInsertSample,
     wsRemoveSample,
@@ -103,14 +101,6 @@ describe("Sample Action Creators:", () => {
         expect(result).toEqual({
             type: UPDATE_SAMPLE.REQUESTED,
             payload: { sampleId, update },
-        });
-    });
-
-    it("removeSample", () => {
-        const result = removeSample(sampleId);
-        expect(result).toEqual({
-            type: REMOVE_SAMPLE.REQUESTED,
-            payload: { sampleId },
         });
     });
 

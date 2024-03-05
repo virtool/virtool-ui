@@ -6,7 +6,6 @@ import {
     FIND_SAMPLES,
     GET_SAMPLE,
     HIDE_SAMPLE_MODAL,
-    REMOVE_SAMPLE,
     SELECT_SAMPLE,
     SHOW_REMOVE_SAMPLE,
     UPDATE_SAMPLE,
@@ -127,15 +126,6 @@ export const createSample = createAction(
 export const editSample = createAction(UPDATE_SAMPLE.REQUESTED, (sampleId, update) => ({
     payload: { sampleId, update },
 }));
-
-/**
- * Returns action that can trigger an API call for removing a sample.
- *
- * @func
- * @param sampleId {string} unique sample id
- * @returns {object}
- */
-export const removeSample = createAction(REMOVE_SAMPLE.REQUESTED, sampleId => ({ payload: { sampleId } }));
 
 /**
  * Returns action for displaying the remove sample modal.

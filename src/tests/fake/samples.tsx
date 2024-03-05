@@ -220,3 +220,13 @@ export function mockApiCreateSample(
         })
         .reply(201, sample);
 }
+
+/**
+ * Creates a mocked API call for removing a sample
+ *
+ * @param sampleId - The id of the sample being removed
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiRemoveSample(sampleId: string) {
+    return nock("http://localhost").delete(`/api/samples/${sampleId}`).reply(200);
+}

@@ -22,7 +22,7 @@ import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/Files";
 import Quality from "../SampleQuality";
-import RemoveSample from "./Remove";
+import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
 
@@ -80,14 +80,14 @@ function SampleDetail({
         );
     }
 
-    const { created_at, user } = detail;
+    const { created_at, name, user } = detail;
     const prefix = `/samples/${sampleId}`;
 
     return (
         <>
-            <ViewHeader title={detail.name}>
+            <ViewHeader title={name}>
                 <ViewHeaderTitle>
-                    {detail.name}
+                    {name}
                     <ViewHeaderIcons>
                         {editIcon}
                         {removeIcon}
@@ -113,7 +113,7 @@ function SampleDetail({
                 <Route path="/samples/:sampleId/rights" component={Rights} />
             </Switch>
 
-            <RemoveSample />
+            <RemoveSample id={sampleId} name={name} />
         </>
     );
 }
