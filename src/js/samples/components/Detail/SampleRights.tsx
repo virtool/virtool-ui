@@ -1,6 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { find, includes, map } from "lodash-es";
 import React from "react";
-import { useQueryClient } from "react-query";
 import { match } from "react-router-dom";
 import { useFetchAccount } from "../../../account/querys";
 import { useCheckAdminRole } from "../../../administration/hooks";
