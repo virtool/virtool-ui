@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { ErrorResponse } from "../types/types";
-import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate } from "./api";
+import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate, removeOTU } from "./api";
 import { OTU, OTUIsolate, OTUSearchResult } from "./types";
 
 /**
@@ -49,6 +49,15 @@ export function useCreateOTU(refId: string) {
     return useMutation<OTU, ErrorResponse, { name: string; abbreviation: string }>(({ name, abbreviation }) =>
         createOTU(refId, name, abbreviation),
     );
+}
+
+/**
+ * Initializes a mutator for removing an OTU isolate
+ *
+ * @returns A mutator for removing an OTU isolate
+ */
+export function useRemoveOTU() {
+    return useMutation<null, ErrorResponse, { otuId: string }>(({ otuId }) => removeOTU(otuId));
 }
 
 /**
