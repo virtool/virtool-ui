@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { RemoveDialog } from "../../../base/RemoveDialog";
 import { useRemoveOTU } from "../../querys";
@@ -17,7 +17,7 @@ export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
     const location = useLocation<{ removeOTU: boolean }>();
     const mutation = useRemoveOTU();
 
-    const handleConfirm = useCallback(() => {
+    function handleConfirm() {
         mutation.mutate(
             { otuId: id },
             {
@@ -27,7 +27,7 @@ export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
                 },
             },
         );
-    }, [id, refId]);
+    }
 
     return (
         <RemoveDialog
