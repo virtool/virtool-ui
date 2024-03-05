@@ -44,7 +44,6 @@ type IsolateDetailProps = {
     /** Whether the user has permission to modify the Isolate */
     canModify: boolean;
     dataType: ReferenceDataType;
-    isolates: OTUIsolate[];
     otuId: string;
     /** Indicates whether the source types are restricted */
     restrictSourceTypes: boolean;
@@ -65,9 +64,7 @@ export default function IsolateDetail({
     const location = useLocation<{ editIsolate: boolean; removeIsolate: boolean }>();
     const mutation = useSetIsolateAsDefault();
 
-    const isolate = activeIsolate;
-
-    const defaultIsolateLabel = isolate.default && dataType !== "barcode" && (
+    const defaultIsolateLabel = activeIsolate.default && dataType !== "barcode" && (
         <Label color="green">
             <Icon name="star" /> Default Isolate
         </Label>
@@ -76,11 +73,11 @@ export default function IsolateDetail({
     return (
         <StyledIsolateDetail>
             <EditIsolate
-                key={isolate.id}
+                key={activeIsolate.id}
                 otuId={otuId}
-                isolateId={isolate.id}
-                sourceType={isolate.source_type}
-                sourceName={isolate.source_name}
+                isolateId={activeIsolate.id}
+                sourceType={activeIsolate.source_type}
+                sourceName={activeIsolate.source_name}
                 allowedSourceTypes={allowedSourceTypes}
                 restrictSourceTypes={restrictSourceTypes}
                 show={location.state?.editIsolate}
@@ -108,7 +105,7 @@ export default function IsolateDetail({
                                 tipPlacement="left"
                                 onClick={() => history.push({ state: { editIsolate: true } })}
                             />
-                            {!isolate.default && dataType !== "barcode" && (
+                            {!activeIsolate.default && dataType !== "barcode" && (
                                 <Icon
                                     name="star"
                                     color="green"
