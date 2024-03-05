@@ -1,9 +1,9 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHistory } from "react-router-dom";
 import {
-    checkRemoteReferenceUpdates,
     addReferenceGroup,
     addReferenceUser,
+    checkRemoteReferenceUpdates,
     cloneReference,
     createReference,
     findReferences,
