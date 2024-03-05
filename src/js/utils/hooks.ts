@@ -1,5 +1,5 @@
 import { forEach } from "lodash-es/lodash";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 export type HistoryType = RouteComponentProps["history"];
@@ -19,10 +19,15 @@ const getSize = ref => ({
     width: ref.current ? ref.current.offsetWidth : 0,
 });
 
-export const useElementSize = () => {
+type Size = {
+    height: number;
+    width: number;
+};
+
+export function useElementSize(): [React.MutableRefObject<HTMLElement | null>, Size] {
     const ref = useRef(null);
 
-    const [size, setSize] = useState(getSize(ref));
+    const [size, setSize] = useState<{ height: number; width: number }>(getSize(ref));
 
     const handleResize = () => {
         setSize(getSize(ref));
@@ -35,7 +40,7 @@ export const useElementSize = () => {
     }, [null]);
 
     return [ref, size];
-};
+}
 
 export const useDidUpdateEffect = (onUpdate, deps) => {
     const firstRef = useRef(false);

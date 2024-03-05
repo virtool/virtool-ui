@@ -33,8 +33,6 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
 
     const canRemoveFiles = checkAdminRoleOrPermissionsFromAccount(account, Permission.remove_file);
 
-    const noneFound = files.found_count === 0 && <NoneFoundBox noun="files" />;
-
     const title = `${fileType === "reads" ? "Read" : capitalize(fileType)} Files`;
 
     return (
@@ -44,15 +42,23 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
                 {title} <Badge>{files.found_count}</Badge>
             </ViewHeaderTitle>
             <UploadToolbar fileType={fileType} message={message} validationRegex={validationRegex} tip={tip} />
-            {noneFound}
 
-            <Pagination items={files.items} storedPage={files.page} currentPage={URLPage} pageCount={files.page_count}>
-                <BoxGroup>
-                    {map(files.items, item => (
-                        <File {...item} canRemove={canRemoveFiles} key={item.id} />
-                    ))}
-                </BoxGroup>
-            </Pagination>
+            {files.found_count === 0 ? (
+                <NoneFoundBox noun="files" />
+            ) : (
+                <Pagination
+                    items={files.items}
+                    storedPage={files.page}
+                    currentPage={URLPage}
+                    pageCount={files.page_count}
+                >
+                    <BoxGroup>
+                        {map(files.items, item => (
+                            <File {...item} canRemove={canRemoveFiles} key={item.id} />
+                        ))}
+                    </BoxGroup>
+                </Pagination>
+            )}
         </>
     );
 }

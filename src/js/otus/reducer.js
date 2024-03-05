@@ -2,10 +2,8 @@ import { createReducer } from "@reduxjs/toolkit";
 import { find, hasIn, map } from "lodash-es";
 import {
     ADD_SEQUENCE,
-    CREATE_OTU,
     EDIT_OTU,
     EDIT_SEQUENCE,
-    FIND_OTUS,
     GET_OTU,
     GET_OTU_HISTORY,
     HIDE_OTU_MODAL,
@@ -21,12 +19,11 @@ import {
     SHOW_REMOVE_OTU,
     SHOW_REMOVE_SEQUENCE,
     UPLOAD_IMPORT,
-    WS_INSERT_OTU,
     WS_REMOVE_OTU,
     WS_UPDATE_OTU,
     WS_UPDATE_STATUS,
 } from "../app/actionTypes";
-import { insert, remove, update, updateDocuments } from "../utils/reducers";
+import { remove, update, updateDocuments } from "../utils/reducers";
 import { formatIsolateName } from "../utils/utils";
 
 export const initialState = {
@@ -92,13 +89,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
                 state.importData = { ...action.payload, inProgress: true };
             }
         })
-        .addCase(WS_INSERT_OTU, (state, action) => {
-            if (action.payload.reference.id === state.refId) {
-                return insert(state, action.payload, "name");
-            }
-
-            return state;
-        })
         .addCase(WS_UPDATE_OTU, (state, action) => {
             if (action.payload.reference.id === state.refId) {
                 return update(state, action.payload, "name");
@@ -107,17 +97,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
         })
         .addCase(WS_REMOVE_OTU, (state, action) => {
             return remove(state, action.payload);
-        })
-        .addCase(FIND_OTUS.REQUESTED, (state, action) => {
-            if (action.payload.refId !== state.refId) {
-                state.documents = null;
-            }
-            state.term = action.payload.term;
-            state.verified = action.payload.verified;
-            state.refId = action.payload.refId;
-        })
-        .addCase(FIND_OTUS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action.payload, "name");
         })
         .addCase(REFRESH_OTUS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action.payload, "name");
@@ -161,11 +140,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
             state.remove = false;
             state.removeIsolate = false;
             state.removeSequence = false;
-        })
-        .addCase(CREATE_OTU.SUCCEEDED, (state, action) => {
-            if (action.payload.reference.id === state.refId) {
-                return insert(state, action.payload, "name");
-            }
         })
         .addMatcher(
             action => {

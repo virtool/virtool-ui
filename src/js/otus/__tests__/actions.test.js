@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
     ADD_SEQUENCE,
-    CREATE_OTU,
     EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
@@ -18,13 +17,11 @@ import {
     SHOW_REMOVE_ISOLATE,
     SHOW_REMOVE_OTU,
     SHOW_REMOVE_SEQUENCE,
-    WS_INSERT_OTU,
     WS_REMOVE_OTU,
     WS_UPDATE_OTU,
 } from "../../app/actionTypes";
 import {
     addSequence,
-    createOTU,
     editOTU,
     editSequence,
     getOTU,
@@ -41,7 +38,6 @@ import {
     showRemoveIsolate,
     showRemoveOTU,
     showRemoveSequence,
-    wsInsertOTU,
     wsRemoveOTU,
     wsUpdateOTU,
 } from "../actions";
@@ -58,12 +54,6 @@ describe("OTUs Action Creators", () => {
     const sequence = "test-sequence";
     const segment = "test-segment";
     const target = "test-target";
-
-    it("wsInsertOTU: returns action to insert OTU entry via websocket", () => {
-        const data = { id: "test" };
-        const result = wsInsertOTU(data);
-        expect(result).toEqual({ type: WS_INSERT_OTU, payload: { ...data } });
-    });
 
     it("wsUpdateOTU: returns action to update OTU entry via websocket", () => {
         const data = { id: "test", foo: "bar" };
@@ -87,17 +77,6 @@ describe("OTUs Action Creators", () => {
         expect(result).toEqual({
             type: GET_OTU_HISTORY.REQUESTED,
             payload: { otuId },
-        });
-    });
-
-    it("createOTU: returns action to create a new otu", () => {
-        const refId = "123abc";
-        const name = "new otu";
-        const abbreviation = "NEW";
-        const result = createOTU(refId, name, abbreviation);
-        expect(result).toEqual({
-            type: CREATE_OTU.REQUESTED,
-            payload: { refId, name, abbreviation },
         });
     });
 

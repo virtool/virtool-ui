@@ -1,13 +1,13 @@
-/* Contains search results information */
+/** Contains search results information */
 export type SearchResult = {
-    /* The number of items found */
+    /** The number of items found */
     found_count: number;
-    /* The current page number */
+    /** The current page number */
     page: number;
-    /* The total number of pages */
+    /** The total number of pages */
     page_count: number;
-    /* The number of items per page */
+    /** The number of items per page */
     per_page: number;
-    /* The total number of items */
+    /** The total number of items */
     total_count: number;
 };

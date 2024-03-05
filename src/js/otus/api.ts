@@ -1,5 +1,5 @@
 import { Request } from "../app/request";
-import { OTUIsolate } from "./types";
+import { OTU, OTUIsolate } from "./types";
 
 /**
  * Get a single OTU data from the API
@@ -39,11 +39,13 @@ export function getGenbank(accession: { accession: string }) {
  * @param abbreviation - The shorthand name for the new otu
  * @returns A Promise resolving to the API response containing the new OTU data
  */
-export function create({ refId, name, abbreviation }: { refId: string; name: string; abbreviation: string }) {
-    return Request.post(`/refs/${refId}/otus`).send({
-        name,
-        abbreviation,
-    });
+export function createOTU(refId: string, name: string, abbreviation: string): Promise<OTU> {
+    return Request.post(`/refs/${refId}/otus`)
+        .send({
+            name,
+            abbreviation,
+        })
+        .then(res => res.body);
 }
 
 /**
