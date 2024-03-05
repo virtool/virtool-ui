@@ -17,11 +17,8 @@ const StyledReferenceOfficial = styled(Box)`
 
     button {
         margin-left: auto;
+        min-width: 83px;
     }
-`;
-
-const StyledButton = styled(Button)`
-    min-width: 83px;
 `;
 
 type ReferenceOfficialProps = {
@@ -49,9 +46,9 @@ export const ReferenceOfficial = ({ officialInstalled, onRemote }: ReferenceOffi
                         </span>
                     </p>
                 </div>
-                <StyledButton color="blue" icon="cloud-download-alt" onClick={onRemote}>
+                <Button color="blue" icon="cloud-download-alt" onClick={onRemote}>
                     Install
-                </StyledButton>
+                </Button>
             </StyledReferenceOfficial>
         );
     }
