@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { getFontWeight } from "../../../app/theme";
 import {
     Icon,
+    IconLink,
     LoadingPlaceholder,
     NotFound,
     Tabs,
@@ -22,7 +23,7 @@ import EditOTU from "./EditOTU";
 import General from "./General";
 import History from "./History/History";
 import AddIsolate from "./Isolates/AddIsolate";
-import RemoveOTU from "./Remove";
+import RemoveOTU from "./RemoveOTU";
 import Schema from "./Schema/Schema";
 
 function OTUSection({ match }) {
@@ -110,13 +111,12 @@ class OTUDetail extends React.Component {
                         tipPlacement="left"
                         onClick={this.props.showEdit}
                     />
-                    <Icon
+                    <IconLink
                         key="remove-icon"
                         color="red"
                         name="trash"
                         tip="Remove OTU"
-                        tipPlacement="left"
-                        onClick={this.props.showRemove}
+                        to={{ state: { removeOTU: true } }}
                     />
                 </>
             );
@@ -124,7 +124,7 @@ class OTUDetail extends React.Component {
             modifyOTUComponents = (
                 <div>
                     <EditOTU otuId={id} name={name} abbreviation={abbreviation} />
-                    <RemoveOTU id={id} name={name} history={this.props.history} />
+                    <RemoveOTU id={id} name={name} refId={refId} />
                 </div>
             );
         }

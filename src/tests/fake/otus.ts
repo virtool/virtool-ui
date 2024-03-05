@@ -141,6 +141,16 @@ export function mockApiCreateOTU(refId: string, name: string, abbreviation: stri
 }
 
 /**
+ * Creates a mocked API call for removing an OTU
+ *
+ * @param otuId - The id of the OTU being removed
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiRemoveOTU(otuId: string) {
+    return nock("http://localhost").delete(`/api/otus/${otuId}`).reply(200);
+}
+
+/**
  * Creates a mocked API call for creating an OTU isolate
  *
  * @param otuId - The id of the OTU being updated

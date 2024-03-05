@@ -52,6 +52,15 @@ export function useCreateOTU(refId: string) {
 }
 
 /**
+ * Initializes a mutator for removing an OTU isolate
+ *
+ * @returns A mutator for removing an OTU isolate
+ */
+export function useRemoveOTU() {
+    return useMutation<null, ErrorResponse, { otuId: string }>(({ otuId }) => removeOTU(otuId));
+}
+
+/**
  * Initializes a mutator for creating an OTU isolate
  *
  * @returns A mutator for creating an OTU isolate

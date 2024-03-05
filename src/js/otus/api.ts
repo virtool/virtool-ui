@@ -81,8 +81,8 @@ export function edit({
  * @param otuId - The unique identifier of the OTU to remove
  * @returns A promise resolving to the API response indicating if removal was successful
  */
-export function remove({ otuId }) {
-    return Request.delete(`/otus/${otuId}`);
+export function removeOTU(otuId: string): Promise<null> {
+    return Request.delete(`/otus/${otuId}`).then(res => res.body);
 }
 
 /**
