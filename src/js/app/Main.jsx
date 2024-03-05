@@ -1,7 +1,7 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { useQueryClient } from '@tanstack/react-query';
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";

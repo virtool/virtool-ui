@@ -1,6 +1,6 @@
 import { forEach, get } from "lodash-es";
 
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 import { accountKeys } from "../../account/querys";
 import { roleQueryKeys, userQueryKeys } from "../../administration/querys";
 import { fileQueryKeys } from "../../files/querys";

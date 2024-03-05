@@ -1,5 +1,5 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from "styled-components";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { Alert, Button } from "../../base";

@@ -1,6 +1,6 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectedRouter } from "connected-react-router";
 import React, { Suspense, useEffect } from "react";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { connect, Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { LoadingPlaceholder } from "../base";
