@@ -1,6 +1,6 @@
+import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { map } from "lodash-es";
 import React from "react";
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import styled from "styled-components";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 

@@ -1,10 +1,11 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ResponseError } from "superagent";
 import { Request } from "../../app/request";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
 import { StyledButton } from "../../base/styled/StyledButton";
+import { labelQueryKeys } from "../queries";
 import { LabelForm } from "./Form";
 
 type NewLabel = {
@@ -25,7 +26,7 @@ export function CreateLabel() {
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("labels");
+                queryClient.invalidateQueries(labelQueryKeys.lists());
                 setOpen(false);
             },
             onError: (error: ResponseError) => {

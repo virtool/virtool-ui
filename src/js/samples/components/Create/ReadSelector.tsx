@@ -1,6 +1,6 @@
+import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { flatMap, includes, indexOf, toLower } from "lodash-es";
 import React, { useEffect, useState } from "react";
-import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "react-query/types/core/types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getBorder, getFontWeight, theme } from "../../../app/theme";
