@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { ErrorResponse } from "../types/types";
-import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate, removeOTU } from "./api";
+import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate, removeOTU, setIsolateAsDefault } from "./api";
 import { OTU, OTUIsolate, OTUSearchResult } from "./types";
 
 /**
@@ -68,6 +68,17 @@ export function useRemoveOTU() {
 export function useCreateIsolate() {
     return useMutation<OTUIsolate, unknown, { otuId: string; sourceType: string; sourceName: string }>(
         ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName),
+    );
+}
+
+/**
+ * Initializes a mutator for setting an isolate as the default resource for an OTU
+ *
+ * @returns A mutator for setting an isolate as the default resource for an OTU
+ */
+export function useSetIsolateAsDefault() {
+    return useMutation<OTUIsolate, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
+        setIsolateAsDefault(otuId, isolateId),
     );
 }
 

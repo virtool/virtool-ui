@@ -38,7 +38,7 @@ function OTUSection({ match }) {
     return (
         <div>
             <General />
-            <IsolateEditor />
+            <IsolateEditor otuId={otuId} refId={refId} />
             <AddIsolate
                 allowedSourceTypes={data.source_types}
                 otuId={otuId}

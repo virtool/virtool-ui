@@ -132,8 +132,8 @@ export function editIsolate(
  * @param isolateId - The unique identifier of the isolate to set as default
  * @returns A Promise resolving to the API response containing the updated isolate
  */
-export function setIsolateAsDefault({ otuId, isolateId }) {
-    return Request.put(`/otus/${otuId}/isolates/${isolateId}/default`);
+export function setIsolateAsDefault(otuId: string, isolateId: string): Promise<OTUIsolate> {
+    return Request.put(`/otus/${otuId}/isolates/${isolateId}/default`).then(res => res.body);
 }
 
 /**

@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Badge, Box, BoxGroup, NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "../../../base";
+import { ReferenceRight, useCheckReferenceRight } from "../../../references/hooks";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
 import { selectIsolate } from "../../actions";
-import IsolateDetail from "./Isolates/Detail";
-import IsolateItem from "./Isolates/Item";
+import IsolateDetail from "./Isolates/IsolateDetail";
+import IsolateItem from "./Isolates/IsolateItem";
 
 const IsolateEditorContainer = styled.div`
     display: flex;
@@ -50,24 +51,45 @@ const IsolateEditorList = styled(BoxGroup)`
     width: 100%;
 `;
 
-const IsolateEditor = props => {
-    const isolateComponents = map(props.isolates, (isolate, index) => (
+function IsolateEditor({
+    refId,
+    isolates,
+    activeIsolateId,
+    onSelectIsolate,
+    otuId,
+    activeIsolate,
+    dataType,
+    allowedSourceTypes,
+    restrictSourceTypes,
+}) {
+    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
+
+    const isolateComponents = map(isolates, (isolate, index) => (
         <IsolateItem
             key={index}
-            {...isolate}
-            active={isolate.id === props.activeIsolateId}
-            onClick={props.onSelectIsolate}
+            isolate={isolate}
+            active={isolate.id === activeIsolateId}
+            dataType={dataType}
+            onClick={onSelectIsolate}
         />
     ));
 
-    const addIsolateLink = props.canModify ? <Link to={{ state: { addIsolate: true } }}>Add Isolate</Link> : null;
+    const addIsolateLink = canModify ? <Link to={{ state: { addIsolate: true } }}>Add Isolate</Link> : null;
 
     const body = isolateComponents.length ? (
         <IsolateEditorContainer>
             <IsolateEditorListContainer>
                 <IsolateEditorList>{isolateComponents}</IsolateEditorList>
             </IsolateEditorListContainer>
-            <IsolateDetail canModify={props.canModify} />
+            <IsolateDetail
+                canModify={canModify}
+                otuId={otuId}
+                activeIsolate={activeIsolate}
+                dataType={dataType}
+                allowedSourceTypes={allowedSourceTypes}
+                restrictSourceTypes={restrictSourceTypes}
+                isolates={isolates}
+            />
         </IsolateEditorContainer>
     ) : (
         <NoneFoundBox noun="isolates" />
@@ -84,14 +106,18 @@ const IsolateEditor = props => {
             {body}
         </>
     );
-};
+}
 
 const mapStateToProps = state => ({
-    otuId: state.otus.detail.id,
     isolates: state.otus.detail.isolates,
     activeIsolateId: state.otus.activeIsolateId,
+    activeIsolate: state.otus.activeIsolate,
+    activeSequenceId: state.otus.activeSequenceId,
+    allowedSourceTypes: state.settings.data.allowed_source_types,
+    restrictSourceTypes: state.settings.data.restrict_source_types,
     isRemote: state.references.detail.remotes_from,
     canModify: getCanModifyReferenceOTU(state),
+    dataType: state.references.detail.data_type,
 });
 
 const mapDispatchToProps = dispatch => ({
