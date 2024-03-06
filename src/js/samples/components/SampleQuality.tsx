@@ -32,7 +32,7 @@ export default function SampleQuality({ match }: SampleQualityProps) {
 
     return (
         <StyledSampleQuality>
-            <SampleQualityLegacyAlert />
+            <SampleQualityLegacyAlert showLegacy={data.is_legacy} />
             <Quality
                 bases={data.quality.bases}
                 composition={data.quality.composition}

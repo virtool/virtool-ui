@@ -2,7 +2,7 @@ import { endsWith, some } from "lodash-es";
 import React from "react";
 import { match } from "react-router-dom";
 import { ContainerNarrow, LoadingPlaceholder } from "../../../base";
-import { useFetchSample } from "../../querys";
+import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
@@ -29,7 +29,7 @@ export function SampleDetailFiles({ match }: SampleDetailFilesProps) {
                 show={some(data.reads, file => file.size < 10000000)}
                 showLink={!endsWith(location.pathname, "/files")}
             />
-            <SampleFilesMessage />
+            <SampleFilesMessage showLegacy={data.is_legacy} />
             <SampleReads reads={data.reads} />
         </ContainerNarrow>
     );
