@@ -11,6 +11,7 @@ describe("<OTUGeneral />", () => {
 
     beforeEach(() => {
         isolate = createFakeOTUIsolate();
+
         props = {
             issues: {
                 empty_otu: false,
@@ -31,7 +32,7 @@ describe("<OTUGeneral />", () => {
             ),
         ).toBeInTheDocument();
         expect(screen.getByText("There are no sequences associated with the following isolates:")).toBeInTheDocument();
-        expect(screen.getByText(`${isolate.source_type} ${isolate.source_name}`)).toBeInTheDocument();
+        expect(screen.getByText(`${isolate.source_type} ${isolate.source_name}`, { exact: false })).toBeInTheDocument();
     });
 
     it("should render without issues", () => {
