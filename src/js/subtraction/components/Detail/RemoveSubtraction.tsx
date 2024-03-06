@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { RemoveModal } from "../../../base";
-import { useRemoveSubtraction } from "../../querys";
+import { useRemoveSubtraction } from "../../queries";
 import { Subtraction } from "../../types";
 
 type RemoveSubtractionProps = {

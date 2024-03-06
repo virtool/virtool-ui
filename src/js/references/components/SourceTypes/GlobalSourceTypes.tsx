@@ -62,7 +62,7 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
     const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
         "default_source_types",
         "/settings",
-        "settings",
+        ["settings"],
         sourceTypes,
     );
 

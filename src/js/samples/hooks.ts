@@ -1,8 +1,8 @@
 import { some } from "lodash-es";
-import { useFetchAccount } from "../account/querys";
+import { useFetchAccount } from "../account/queries";
 import { AdministratorRoles } from "../administration/types";
 import { hasSufficientAdminRole } from "../administration/utils";
-import { useFetchSample } from "./querys";
+import { useFetchSample } from "./queries";
 
 /**
  * Determines if the current user has permission to edit a sample

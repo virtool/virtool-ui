@@ -1,6 +1,6 @@
 import { map } from "lodash-es";
 import React from "react";
-import { useUpdateGroup } from "../querys";
+import { useUpdateGroup } from "../queries";
 import { Group } from "../types";
 import { GroupsHeaderContainer, GroupsInfoBoxGroupSection, SelectedGroupInfoContainer } from "./Members";
 import { GroupPermission } from "./Permission";

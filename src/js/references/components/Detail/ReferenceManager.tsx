@@ -3,7 +3,7 @@ import { match } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, ContainerNarrow, LoadingPlaceholder, Table } from "../../../base";
 import { Contributors } from "../../../indexes/components/Contributors";
-import { useGetReference } from "../../hooks";
+import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
@@ -29,13 +29,13 @@ type ReferenceManageProps = {
  */
 export default function ReferenceManager({ match }: ReferenceManageProps) {
     const { refId } = match.params;
-    const { data, isLoading } = useGetReference(refId);
+    const { data: reference, isLoading } = useGetReference(refId);
 
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    const { cloned_from, contributors, data_type, description, latest_build, organism, remotes_from } = data;
+    const { cloned_from, contributors, data_type, description, latest_build, organism, remotes_from } = reference;
 
     return (
         <ContainerNarrow>
@@ -61,7 +61,7 @@ export default function ReferenceManager({ match }: ReferenceManageProps) {
                 </ReferenceManageTable>
             </BoxGroup>
 
-            {remotes_from && <RemoteReference />}
+            {remotes_from && <RemoteReference detail={reference} />}
             {cloned_from && <Clone source={cloned_from} />}
 
             <BoxGroup>
@@ -72,7 +72,7 @@ export default function ReferenceManager({ match }: ReferenceManageProps) {
             </BoxGroup>
 
             <Contributors contributors={contributors} />
-            <Targets reference={data} />
+            <Targets reference={reference} />
         </ContainerNarrow>
     );
 }

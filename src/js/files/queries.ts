@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Request } from "../app/request";
 import { findFiles } from "./api";
 import { FileResponse, FileType } from "./types";

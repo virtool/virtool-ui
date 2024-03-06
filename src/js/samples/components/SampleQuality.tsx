@@ -3,7 +3,7 @@ import { match } from "react-router-dom";
 import styled from "styled-components";
 import { LoadingPlaceholder } from "../../base";
 import { Quality } from "../../quality/components/Quality";
-import { useFetchSample } from "../querys";
+import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
 
 const SampleQualityLegacyAlert = styled(LegacyAlert)`

@@ -1,8 +1,8 @@
 import React from "react";
 import { match, useHistory, useLocation } from "react-router-dom";
 import { LoadingPlaceholder } from "../../../base";
-import { useGetReference } from "../../../references/hooks";
-import { useFetchOTU } from "../../querys";
+import { useGetReference } from "../../../references/queries";
+import { useFetchOTU } from "../../queries";
 import IsolateEditor from "./Editor";
 import AddIsolate from "./Isolates/AddIsolate";
 import General from "./OTUGeneral";

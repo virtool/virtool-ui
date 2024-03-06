@@ -17,7 +17,8 @@ import {
     LoadingPlaceholder,
     SectionHeader,
 } from "../../../base";
-import { useGetReference, useUpdateReference, useUpdateSourceTypes } from "../../hooks";
+import { useUpdateReference, useUpdateSourceTypes } from "../../hooks";
+import { useGetReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`

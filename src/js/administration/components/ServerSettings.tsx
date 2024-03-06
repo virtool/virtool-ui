@@ -1,7 +1,7 @@
 import React from "react";
 import { ContainerNarrow, LoadingPlaceholder } from "../../base";
-import { useFetchMessage } from "../../message/querys";
-import { useFetchSettings } from "../querys";
+import { useFetchMessage } from "../../message/queries";
+import { useFetchSettings } from "../queries";
 import Api from "./Api";
 import InstanceMessage from "./InstanceMessage";
 

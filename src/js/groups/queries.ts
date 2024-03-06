@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { createGroup, findGroups, getGroup, removeGroup, updateGroup } from "./api";
 import { Group, GroupMinimal, GroupSearchResults, GroupUpdate } from "./types";
 

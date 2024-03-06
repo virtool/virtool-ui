@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 
-import { useFetchAccount } from "../../account/querys";
+import { useFetchAccount } from "../../account/queries";
 import { Groups } from "../../groups/components/Groups";
 import { ManageUsers } from "../../users/components/ManageUsers";
 import UserDetail from "../../users/components/UserDetail";

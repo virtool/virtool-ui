@@ -1,7 +1,7 @@
 import { includes, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useUpdateSettings } from "../../administration/querys";
+import { useUpdateSettings } from "../../administration/queries";
 import { Settings } from "../../administration/types";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, InputGroup, InputLabel, InputSelect, SelectBox } from "../../base";
 

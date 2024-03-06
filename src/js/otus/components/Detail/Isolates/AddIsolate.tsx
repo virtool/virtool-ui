@@ -1,8 +1,8 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { useQueryClient } from "react-query";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../../base";
-import { OTUQueryKeys, useCreateIsolate } from "../../../querys";
+import { OTUQueryKeys, useCreateIsolate } from "../../../queries";
 import IsolateForm from "./IsolateForm";
 
 type AddIsolateProps = {

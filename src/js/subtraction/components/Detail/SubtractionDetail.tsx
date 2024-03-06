@@ -4,7 +4,7 @@ import { match, useHistory } from "react-router-dom";
 import { useCheckAdminRoleOrPermission } from "../../../administration/hooks";
 import { Icon, LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
 import { Permission } from "../../../groups/types";
-import { useFetchSubtraction } from "../../querys";
+import { useFetchSubtraction } from "../../queries";
 import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";
 import EditSubtraction from "./EditSubtraction";

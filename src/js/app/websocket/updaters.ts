@@ -1,8 +1,8 @@
-import { assign, forEach, get } from "lodash-es/lodash";
-import { InfiniteData, QueryClient } from "react-query";
-import { hmmQueryKeys } from "../../hmm/querys";
+import { InfiniteData, QueryClient } from "@tanstack/react-query";
+import { assign, cloneDeep, forEach, get } from "lodash-es/lodash";
+import { hmmQueryKeys } from "../../hmm/queries";
 import { HMMSearchResults } from "../../hmm/types";
-import { referenceQueryKeys } from "../../references/querys";
+import { referenceQueryKeys } from "../../references/queries";
 import { ReferenceSearchResult } from "../../references/types";
 import { Task } from "../../types";
 
@@ -17,7 +17,7 @@ interface TaskObject {
  * @returns The task located at the root of the cached item
  */
 function taskSelector<T extends TaskObject>(cache: T): Task {
-    return cache.task;
+    return cache?.task;
 }
 
 type Document = { items: TaskObject[] } | { documents: TaskObject[] };
@@ -46,20 +46,21 @@ function infiniteListItemUpdater<T extends Document>(task: Task, selector: (cach
 }
 
 /**
- * Update a task in the root of a cached item
+ * Update a task in a single cached item
  *
  * @param task - The new task data
  * @param selector - A function that returns the task from an instance of the cached item
  * @returns A function that updates the task in the cache
  */
-
 export function updater<T>(task: Task, selector: (cache: T) => Task) {
     return function (cache: T): T {
-        const previousTask = selector(cache);
-        if (previousTask && previousTask.id === selector(cache).id) {
+        const newCache = cloneDeep(cache);
+        const previousTask = selector(newCache);
+
+        if (previousTask && previousTask.id === task.id) {
             assign(previousTask, task);
+            return newCache;
         }
-        return cache;
     };
 }
 
@@ -69,6 +70,7 @@ export function updater<T>(task: Task, selector: (cache: T) => Task) {
 export const taskUpdaters = {
     clone_reference: referenceUpdater,
     remote_reference: referenceUpdater,
+    update_remote_reference: referenceUpdater,
     install_hmms: HMMStatusUpdater,
 };
 
@@ -83,6 +85,7 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
         referenceQueryKeys.infiniteList([]),
         infiniteListItemUpdater<ReferenceSearchResult>(task, taskSelector),
     );
+    queryClient.setQueriesData(referenceQueryKeys.details(), updater(task, taskSelector));
 }
 
 /**
