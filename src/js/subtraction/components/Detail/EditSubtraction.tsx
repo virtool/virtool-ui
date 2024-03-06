@@ -11,7 +11,7 @@ import {
     ModalHeader,
     SaveButton,
 } from "../../../base";
-import { useUpdateSubtraction } from "../../querys";
+import { useUpdateSubtraction } from "../../queries";
 import { Subtraction } from "../../types";
 
 type EditSubtractionProps = {

@@ -4,7 +4,7 @@ import { getFontSize, getFontWeight } from "../../app/theme";
 import { Attribution, BoxGroupSection, Icon, Loader, RelativeTime } from "../../base";
 import { byteSize } from "../../utils/utils";
 
-import { useDeleteFile } from "../querys";
+import { useDeleteFile } from "../queries";
 import { File as FileData } from "../types";
 
 const FileItem = styled(BoxGroupSection)`

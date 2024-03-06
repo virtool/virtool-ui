@@ -1,20 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as Yup from "yup";
-import { useFetchAccount } from "../account/querys";
+import { useFetchAccount } from "../account/queries";
 import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
 import { ErrorResponse } from "../types/types";
-import { getReference } from "./api";
-import { referenceQueryKeys } from "./querys";
+import { useGetReference } from "./queries";
 import { Reference, ReferenceTarget } from "./types";
-
-export function useGetReference(refId) {
-    return useQuery(referenceQueryKeys.detail(refId), () => getReference(refId));
-}
 
 export function useUpdateReference(refId: string, onSuccess?: () => void) {
     const queryClient = useQueryClient();
@@ -62,7 +57,7 @@ export function useSourceTypesForm(sourceTypes: string[]) {
 export function useUpdateSourceTypes(
     key: "default_source_types" | "source_types",
     path: string,
-    queryKey: string | string[],
+    queryKey: string[],
     sourceTypes: string[],
 ) {
     const queryClient = useQueryClient();

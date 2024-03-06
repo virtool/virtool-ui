@@ -16,7 +16,7 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "../../base";
-import { useFetchHmm } from "../querys";
+import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";
 

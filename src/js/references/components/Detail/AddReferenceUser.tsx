@@ -17,8 +17,8 @@ import {
     Toolbar,
 } from "../../../base";
 import { CompactScrollList } from "../../../base/CompactScrollList";
-import { useInfiniteFindUsers } from "../../../users/querys";
-import { useAddReferenceMember } from "../../querys";
+import { useInfiniteFindUsers } from "../../../users/queries";
+import { useAddReferenceMember } from "../../queries";
 import { ReferenceUser } from "../../types";
 
 const StyledAddUserItem = styled(SelectBoxGroupSection)`

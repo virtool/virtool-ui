@@ -7,10 +7,10 @@ import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { Attribution, Box, Icon, SlashList } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
 import { getWorkflowDisplayName } from "../../utils/utils";
-import { useRemoveAnalysis } from "../querys";
+import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
-import { AnalysisItemRightIcon } from "./RightIcon";
+import { AnalysisItemRightIcon } from "./AnalysisItemRightIcon";
 
 const StyledAnalysisItem = styled(Box)`
     color: ${props => props.theme.color.greyDarkest};
@@ -37,16 +37,26 @@ const AnalysisItemTags = styled.div`
     margin-top: 10px;
 `;
 
+const AnalysisItemEndIcon = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
+
 const AnalysisItemTop = styled.div`
     align-items: center;
-    display: flex;
+    display: grid;
+    grid-template-columns: 40% 40% auto;
     font-size: ${getFontSize("lg")};
     font-weight: ${getFontWeight("thick")};
-    justify-content: space-between;
 
     a {
         font-weight: ${getFontWeight("thick")};
     }
+`;
+
+const AnalysisAttribution = styled(Attribution)`
+    font-size: ${getFontSize("md")};
+    font-weight: ${getFontWeight("normal")};
 `;
 
 const UnsupportedAnalysisTitle = styled.div`
@@ -88,13 +98,15 @@ export default function AnalysisItem({ analysis, sampleId }: AnalysisItemProps) 
         <StyledAnalysisItem>
             <AnalysisItemTop>
                 {title}
-                {ready ? (
-                    <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} ready={ready} />
-                ) : (
-                    <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} size={sizes.md} />
-                )}
+                <AnalysisAttribution user={user.handle} time={created_at} />
+                <AnalysisItemEndIcon>
+                    {ready ? (
+                        <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
+                    ) : (
+                        <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} size={sizes.md} />
+                    )}
+                </AnalysisItemEndIcon>
             </AnalysisItemTop>
-            <Attribution user={user.handle} time={created_at} />
             <AnalysisItemTags>
                 <AnalysisItemTag key="reference">
                     <Icon name="equals" />

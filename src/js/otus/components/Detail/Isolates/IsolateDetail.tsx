@@ -6,7 +6,7 @@ import { DownloadLink } from "../../../../references/components/Detail/DownloadL
 import { ReferenceDataType } from "../../../../references/types";
 import IsolateSequences from "../../../../sequences/components/Sequences";
 import { formatIsolateName } from "../../../../utils/utils";
-import { useSetIsolateAsDefault } from "../../../querys";
+import { useSetIsolateAsDefault } from "../../../queries";
 import { OTUIsolate } from "../../../types";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";

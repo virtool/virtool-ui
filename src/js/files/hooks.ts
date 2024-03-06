@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useInfiniteFindFiles } from "./querys";
+import { useInfiniteFindFiles } from "./queries";
 import { FileType } from "./types";
 
 /**

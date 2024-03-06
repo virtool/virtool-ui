@@ -1,9 +1,10 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
 import { Request } from "../../app/request";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { StyledButtonSmall } from "../../base/styled/StyledButtonSmall";
+import { labelQueryKeys } from "../queries";
 import { LabelForm } from "./Form";
 
 interface EditLabelProps {
@@ -30,7 +31,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
         mutation.mutate(data, {
             onSuccess: () => {
                 setShow(false);
-                queryClient.invalidateQueries("labels");
+                queryClient.invalidateQueries(labelQueryKeys.lists());
             },
         });
     };

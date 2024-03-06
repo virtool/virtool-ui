@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { RemoveDialog } from "../../../../base/RemoveDialog";
-import { useRemoveIsolate } from "../../../querys";
+import { useRemoveIsolate } from "../../../queries";
 
 type RemoveIsolateProps = {
     /** The id of the isolate being deleted */

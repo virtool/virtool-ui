@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { findModels } from "./api";
 import { MLModelSearchResult } from "./types";
 

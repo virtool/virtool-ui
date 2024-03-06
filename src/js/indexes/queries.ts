@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { findIndexes, listIndexes } from "./api";
 import { IndexMinimal, IndexSearchResult } from "./types";
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { BoxSpaced, Icon, InitialIcon } from "../../../base";
 import { User } from "../../../users/types";
-import { useSetAdministratorRole } from "../../querys";
+import { useSetAdministratorRole } from "../../queries";
 import { AdministratorRoles } from "../../types";
 import { RoleSelect } from "./RoleSelect";
 

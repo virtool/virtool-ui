@@ -1,7 +1,7 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Alert, Button } from "../../base";
-import { useCreateReference } from "../querys";
+import { useCreateReference } from "../queries";
 import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
 import { ReferenceForm, ReferenceFormMode } from "./ReferenceForm";

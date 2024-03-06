@@ -12,7 +12,7 @@ import {
     Markdown,
     Table,
 } from "../../../base";
-import { useFetchSample } from "../../querys";
+import { useFetchSample } from "../../queries";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";

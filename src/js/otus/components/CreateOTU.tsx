@@ -1,9 +1,9 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { useQueryClient } from "react-query";
 import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
-import { OTUQueryKeys, useCreateOTU } from "../querys";
+import { OTUQueryKeys, useCreateOTU } from "../queries";
 import { OTUForm } from "./OTUForm";
 
 type CreateOTUProps = {

@@ -2,9 +2,9 @@ import { map, some, xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
-import { useUpdateUser } from "../../administration/querys";
+import { useUpdateUser } from "../../administration/queries";
 import { BoxGroup, LoadingPlaceholder, NoneFoundSection } from "../../base";
-import { useListGroups } from "../../groups/querys";
+import { useListGroups } from "../../groups/queries";
 import { GroupMinimal } from "../../groups/types";
 import { UserGroup } from "./UserGroup";
 

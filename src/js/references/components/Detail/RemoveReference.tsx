@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { RemoveBanner } from "../../../base";
 import { RemoveDialog } from "../../../base/RemoveDialog";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
-import { useRemoveReference } from "../../querys";
+import { useRemoveReference } from "../../queries";
 
 type RemoveReferenceProps = {
     /** The id of the reference to remove */

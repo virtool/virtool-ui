@@ -2,7 +2,7 @@ import React from "react";
 import { Link, match } from "react-router-dom";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
-import { useFetchUser } from "../../administration/querys";
+import { useFetchUser } from "../../administration/queries";
 import { AdministratorRoles } from "../../administration/types";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "../../base";

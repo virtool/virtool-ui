@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ErrorResponse } from "../types/types";
 import { fetchHmm, listHmms } from "./api";
 import { HMM, HMMSearchResults } from "./types";

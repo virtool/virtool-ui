@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getColor, getFontWeight } from "../../app/theme";
-import { useFetchMessage } from "../querys";
+import { useFetchMessage } from "../queries";
 
 export const StyledMessageBanner = styled.div`
     background-color: ${getColor};
