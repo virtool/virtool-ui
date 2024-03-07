@@ -3,7 +3,6 @@
  *
  * @module account/reducer
  */
-import { createReducer } from "@reduxjs/toolkit";
 import {
     CLEAR_API_KEY,
     CREATE_API_KEY,
@@ -12,6 +11,7 @@ import {
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
 } from "@app/actionTypes";
+import { createReducer } from "@reduxjs/toolkit";
 
 /**
  * The state that should initially be stored.

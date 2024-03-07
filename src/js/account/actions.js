@@ -3,7 +3,6 @@
  *
  * @module account/actions
  */
-import { createAction } from "@reduxjs/toolkit";
 import {
     CHANGE_ACCOUNT_PASSWORD,
     CLEAR_API_KEY,
@@ -18,6 +17,7 @@ import {
     UPDATE_ACCOUNT_SETTINGS,
     UPDATE_API_KEY,
 } from "@app/actionTypes";
+import { createAction } from "@reduxjs/toolkit";
 
 /**
  * Returns action that can trigger an API call for getting the current account data.

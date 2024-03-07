@@ -4,9 +4,9 @@
  * @module account/api
  */
 
-import { Response } from "superagent";
 import { Request } from "@app/request";
 import { Permissions } from "@groups/types";
+import { Response } from "superagent";
 import { Account } from "./types";
 
 /**
