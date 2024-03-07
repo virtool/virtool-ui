@@ -33,8 +33,8 @@ import { User } from "../../../users/types";
 import { create } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";
+import { SampleUserGroup } from "./SampleUserGroup";
 import { Sidebar } from "./Sidebar";
-import { SampleUserGroup } from "./UserGroup";
 
 const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
 
