@@ -11,7 +11,7 @@ import {
     GET_API_KEYS,
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
-} from "../app/actionTypes";
+} from "@app/actionTypes";
 
 /**
  * The state that should initially be stored.

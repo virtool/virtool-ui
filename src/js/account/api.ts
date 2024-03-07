@@ -5,8 +5,8 @@
  */
 
 import { Response } from "superagent";
-import { Request } from "../app/request";
-import { Permissions } from "../groups/types";
+import { Request } from "@app/request";
+import { Permissions } from "@groups/types";
 import { Account } from "./types";
 
 /**

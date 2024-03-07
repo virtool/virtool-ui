@@ -12,9 +12,9 @@ import {
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
     UPDATE_API_KEY,
-} from "../app/actionTypes";
-import { apiCall } from "../utils/sagas";
-import { resetClient } from "../utils/utils";
+} from "@app/actionTypes";
+import { apiCall } from "@utils/sagas";
+import { resetClient } from "@utils/utils";
 import * as accountAPI from "./api";
 
 export function* watchAccount() {

@@ -11,7 +11,7 @@ import {
     InputGroup,
     InputLabel,
     SaveButton,
-} from "../../base";
+} from "@/base";
 import { updateAccount } from "../actions";
 
 const re = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;

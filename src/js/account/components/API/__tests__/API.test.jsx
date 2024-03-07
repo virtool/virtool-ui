@@ -5,7 +5,7 @@ import React from "react";
 import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { attachResizeObserver, createGenericReducer, renderWithRouter } from "../../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../../administration/types";
+import { AdministratorRoles } from "@administration/types";
 import { APIKeys } from "../API";
 function createReducer(state, history) {
     return combineReducers({

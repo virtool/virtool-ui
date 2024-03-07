@@ -6,7 +6,7 @@ import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount } from "../../../../tests/fake/account";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
+import { AdministratorRoles } from "@administration/types";
 import AccountProfile from "../Profile";
 
 function createReducer(state, history) {

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 
-import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "../../base";
+import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@/base";
 import { getAccount } from "../actions";
 import { getAccountId } from "../selectors";
 import APIKeys from "./API/API";

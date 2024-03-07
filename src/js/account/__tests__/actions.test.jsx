@@ -10,7 +10,7 @@ import {
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
     UPDATE_API_KEY,
-} from "../../app/actionTypes";
+} from "@app/actionTypes";
 import {
     changePassword,
     clearAPIKey,

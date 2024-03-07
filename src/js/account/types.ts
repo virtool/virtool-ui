@@ -1,4 +1,4 @@
-import { User } from "../users/types";
+import { User } from "@users/types";
 
 export enum QuickAnalyzeWorkflow {
     aodp = "aodp",

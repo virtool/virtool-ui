@@ -15,9 +15,9 @@ import {
     LoadingPlaceholder,
     RelativeTime,
     SaveButton,
-} from "../../base";
-import { clearError } from "../../errors/actions";
-import { getTargetChange } from "../../utils/utils";
+} from "@/base";
+import { clearError } from "@/errors/actions";
+import { getTargetChange } from "@utils/utils";
 import { changePassword } from "../actions";
 
 const getInitialState = props => ({
