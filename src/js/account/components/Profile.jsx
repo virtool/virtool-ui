@@ -1,9 +1,9 @@
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Icon, InitialIcon, Label } from "@base";
 import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "@app/theme";
-import { Icon, InitialIcon, Label } from "@/base";
 import { getAccountAdministratorRole, getAccountHandle } from "../selectors";
 import Email from "./Email";
 import ChangePassword from "./Password";

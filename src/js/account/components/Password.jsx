@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
+import { clearError } from "@/errors/actions";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -15,8 +16,7 @@ import {
     LoadingPlaceholder,
     RelativeTime,
     SaveButton,
-} from "@/base";
-import { clearError } from "@/errors/actions";
+} from "@base";
 import { getTargetChange } from "@utils/utils";
 import { changePassword } from "../actions";
 
