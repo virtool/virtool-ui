@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import {
     CHANGE_ACCOUNT_PASSWORD,
     CLEAR_API_KEY,
@@ -10,7 +9,8 @@ import {
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
     UPDATE_API_KEY,
-} from "../../app/actionTypes";
+} from "@app/actionTypes";
+import { describe, expect, it } from "vitest";
 import {
     changePassword,
     clearAPIKey,

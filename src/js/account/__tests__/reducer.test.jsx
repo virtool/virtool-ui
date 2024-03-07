@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import {
     CLEAR_API_KEY,
     CREATE_API_KEY,
@@ -6,7 +5,8 @@ import {
     GET_API_KEYS,
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
-} from "../../app/actionTypes";
+} from "@app/actionTypes";
+import { describe, expect, it } from "vitest";
 import reducer from "../reducer";
 
 describe("Account Reducer", () => {

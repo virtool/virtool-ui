@@ -1,9 +1,9 @@
+import { AdministratorPermissions, hasSufficientAdminRole } from "@administration/utils";
+import { BoxGroup, Checkbox, SelectBoxGroupSection } from "@base";
 import { map, sortBy } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
-import { AdministratorPermissions, hasSufficientAdminRole } from "../../../administration/utils";
-import { BoxGroup, Checkbox, SelectBoxGroupSection } from "../../../base";
 import { getAccountAdministratorRole } from "../../selectors";
 
 export const APIPermissions = ({ administratorRole, className, userPermissions, keyPermissions, onChange }) => {

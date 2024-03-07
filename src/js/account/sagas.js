@@ -1,4 +1,3 @@
-import { takeEvery, takeLatest } from "redux-saga/effects";
 import {
     CHANGE_ACCOUNT_PASSWORD,
     CREATE_API_KEY,
@@ -12,9 +11,10 @@ import {
     UPDATE_ACCOUNT,
     UPDATE_ACCOUNT_SETTINGS,
     UPDATE_API_KEY,
-} from "../app/actionTypes";
-import { apiCall } from "../utils/sagas";
-import { resetClient } from "../utils/utils";
+} from "@app/actionTypes";
+import { apiCall } from "@utils/sagas";
+import { resetClient } from "@utils/utils";
+import { takeEvery, takeLatest } from "redux-saga/effects";
 import * as accountAPI from "./api";
 
 export function* watchAccount() {

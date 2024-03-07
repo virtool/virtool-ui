@@ -1,9 +1,9 @@
+import { AdministratorRoles } from "@administration/types";
+import { hasSufficientAdminRole } from "@administration/utils";
+import { AlertOuter } from "@base";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { AdministratorRoles } from "../../../administration/types";
-import { hasSufficientAdminRole } from "../../../administration/utils";
-import { AlertOuter } from "../../../base";
 import { getAccountAdministratorRole } from "../../selectors";
 
 const StyledAPIKeyAdministratorInfo = styled(AlertOuter)`

@@ -1,3 +1,4 @@
+import { AdministratorRoles } from "@administration/types";
 import userEvent from "@testing-library/user-event";
 import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
@@ -6,7 +7,6 @@ import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount } from "../../../../tests/fake/account";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
 import AccountProfile from "../Profile";
 
 function createReducer(state, history) {

@@ -1,13 +1,11 @@
+import { pushState } from "@app/actions";
 import { mapValues } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { pushState } from "../../../app/actions";
 
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { getFontSize } from "../../../app/theme";
+import { getFontSize } from "@app/theme";
 import {
     Icon,
     Input,
@@ -21,8 +19,10 @@ import {
     ModalFooter,
     ModalHeader,
     SaveButton,
-} from "../../../base";
-import { routerLocationHasState } from "../../../utils/utils";
+} from "@base";
+import { routerLocationHasState } from "@utils/utils";
+import { Field, Form, Formik } from "formik";
+import * as Yup from "yup";
 import { clearAPIKey, createAPIKey } from "../../actions";
 import CreateAPIKeyInfo from "./CreateInfo";
 import APIPermissions from "./Permissions";

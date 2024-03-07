@@ -1,6 +1,3 @@
-import React from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -11,7 +8,10 @@ import {
     InputGroup,
     InputLabel,
     SaveButton,
-} from "../../base";
+} from "@base";
+import React from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 import { updateAccount } from "../actions";
 
 const re = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
