@@ -6,6 +6,7 @@
       "@account/*": ["./js/account/*"],
       "@administration/*": ["./js/administration/*"],
       "@app/*": ["./js/app/*"],
+      "@base": ["./js/base/index.js"],
       "@base/*": ["./js/base/*"],
       "@files/*": ["./js/files/*"],
       "@forms/*": ["./js/forms/*"],

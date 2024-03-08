@@ -10,9 +10,9 @@ import { useElementSize } from "../../../utils/hooks";
 const draw = (element, data, width) => {
     const margin = {
         top: 10,
-        left: 15,
+        left: 0,
         bottom: 10,
-        right: 15,
+        right: 0,
     };
 
     const yMax = max(data);
@@ -21,7 +21,7 @@ const draw = (element, data, width) => {
 
     const height = 60 - margin.top - margin.bottom;
 
-    width -= 30;
+    width -= 10;
 
     const x = scaleLinear().range([0, width]).domain([0, length]);
     const y = scaleLinear().range([height, 0]).domain([0, yMax]);
@@ -45,6 +45,7 @@ const draw = (element, data, width) => {
 };
 
 const StyledOTUCoverage = styled.div`
+    width: 100%;
     path.depth-area {
         fill: ${props => props.theme.color.blue};
         stroke: ${props => props.theme.color.blue};

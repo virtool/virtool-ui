@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { getBorder } from "../../../app/theme";
 import { Icon } from "../../../base";
-import PathoscopeList from "./List";
 import Mapping from "./Mapping";
+import PathoscopeList from "./PathoscopeList";
 import PathoscopeToolbar from "./Toolbar";
 
 const StyledPathoscopeViewerScroller = styled.div`
