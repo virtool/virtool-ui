@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import { pushState } from "../../../app/actions";
 import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../base";
 import { routerLocationHasState } from "../../../utils/utils";
@@ -29,10 +30,13 @@ type EditReferenceProps = {
 /**
  * A dialog for editing a reference
  */
-export function EditReference({ show, detail, onHide, onSubmit }: EditReferenceProps) {
+export function EditReference({ detail, onSubmit }: EditReferenceProps) {
+    const location = useLocation<{ editReference: boolean }>();
+    const history = useHistory();
+
     function handleEdit({ name, description, organism }) {
         onSubmit(detail.id, { name, description, organism });
-        onHide();
+        history.replace({ state: { editReference: false } });
     }
 
     const {
@@ -44,7 +48,11 @@ export function EditReference({ show, detail, onHide, onSubmit }: EditReferenceP
     });
 
     return (
-        <Modal label="Edit" show={show} onHide={onHide}>
+        <Modal
+            label="Edit"
+            show={location.state?.editReference}
+            onHide={() => history.replace({ state: { editReference: false } })}
+        >
             <ModalHeader>Edit Reference</ModalHeader>
             <form onSubmit={handleSubmit(values => handleEdit({ ...values }))}>
                 <ModalBody>

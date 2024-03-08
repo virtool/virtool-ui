@@ -8,14 +8,14 @@ import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/Detail";
 import OTUList from "../../../otus/components/OTUList";
 import { getReference } from "../../actions";
-import { checkReferenceRight } from "../../selectors";
+import { checkReferenceRight, getReferenceDetail } from "../../selectors";
 import EditReference from "./EditReference";
-import ReferenceDetailHeader from "./Header";
+import ReferenceDetailHeader from "./ReferenceDetailHeader";
 import ReferenceManager from "./ReferenceManager";
 import ReferenceSettings from "./ReferenceSettings";
 import ReferenceDetailTabs from "./Tabs";
 
-const ReferenceDetail = ({ error, id, match, onGetReference }) => {
+const ReferenceDetail = ({ error, id, match, onGetReference, detail }) => {
     const matchId = match.params.refId;
 
     useEffect(() => onGetReference(matchId), [matchId]);
@@ -33,7 +33,13 @@ const ReferenceDetail = ({ error, id, match, onGetReference }) => {
             <Switch>
                 <Route path="/refs/:refId/otus/:otuId" />
                 <Route path="/refs">
-                    <ReferenceDetailHeader />
+                    <ReferenceDetailHeader
+                        createdAt={detail.created_at}
+                        isRemote={Boolean(detail.remotes_from)}
+                        name={detail.name}
+                        userHandle={detail.user.handle}
+                        refId={matchId}
+                    />
                     <ReferenceDetailTabs />
                 </Route>
             </Switch>
@@ -60,6 +66,7 @@ const mapStateToProps = state => ({
     error: get(state, "errors.GET_REFERENCE_ERROR", null),
     id: get(state, "references.detail.id"),
     pathname: state.router.location.pathname,
+    detail: getReferenceDetail(state),
 });
 
 const mapDispatchToProps = dispatch => ({
