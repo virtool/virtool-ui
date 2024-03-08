@@ -2,31 +2,34 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { get } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../base";
 import { clearError } from "../../../errors/actions";
-import { editOTU, hideOTUModal } from "../../actions";
+import { editOTU } from "../../actions";
 import { OTUForm } from "../OTUForm";
 
 type EditOTUProps = {
     abbreviation: string;
     error: string;
     name: string;
-    onHide: () => void;
     onSave: (otuId: string, name: string, abbreviation: string) => void;
     otuId: string;
-    show: boolean;
 };
 
 /**
  * Displays a dialog for editing an OTU
  */
-export function EditOTU({ show, onHide, otuId, onSave, error, name, abbreviation }: EditOTUProps) {
+export function EditOTU({ otuId, onSave, error, name, abbreviation }: EditOTUProps) {
+    const location = useLocation<{ editOTU: boolean }>();
+    const history = useHistory();
+
     function handleSubmit({ name, abbreviation }) {
         onSave(otuId, name, abbreviation);
+        history.replace({ state: { editOTU: false } });
     }
 
     return (
-        <Dialog open={show} onOpenChange={onHide}>
+        <Dialog open={location.state?.editOTU} onOpenChange={() => history.replace({ state: { editOTU: false } })}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
@@ -39,15 +42,10 @@ export function EditOTU({ show, onHide, otuId, onSave, error, name, abbreviation
 }
 
 const mapStateToProps = state => ({
-    show: state.otus.edit,
     error: get(state, "errors.EDIT_OTU_ERROR.message", ""),
 });
 
 const mapDispatchToProps = dispatch => ({
-    onHide: () => {
-        dispatch(hideOTUModal());
-    },
-
     onSave: (otuId, name, abbreviation) => {
         dispatch(editOTU(otuId, name, abbreviation));
     },

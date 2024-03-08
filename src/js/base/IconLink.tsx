@@ -14,7 +14,7 @@ type IconLinkProps = {
 export function IconLink({ color, name, replace, tip, to, ...props }: IconLinkProps) {
     return (
         <Link replace={replace} to={to} aria-label={props["aria-label"]}>
-            <Icon color={color} name={name} tip={tip} hoverable />
+            <Icon as="button" color={color} name={name} tip={tip} hoverable />
         </Link>
     );
 }

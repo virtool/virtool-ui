@@ -6,7 +6,7 @@ type OTUGeneralProps = {
     /** The isolates associated with the OTU */
     isolates: OTUIsolate[];
     /** The issues that occurred */
-    issues: { [key: string]: any };
+    issues: { [key: string]: any } | boolean;
 };
 
 /**

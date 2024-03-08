@@ -84,7 +84,7 @@ export type OTUMinimal = {
 /** A complete OTU */
 export type OTU = OTUMinimal & {
     isolates: Array<OTUIsolate>;
-    issues?: { [key: string]: any };
+    issues?: { [key: string]: any } | boolean;
     last_indexed_version?: number;
     most_recent_change: HistoryNested;
     otu_schema: Array<OTUSegment>;
