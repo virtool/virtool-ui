@@ -3,7 +3,7 @@ import { assign, times } from "lodash";
 import nock from "nock";
 import { LabelNested } from "../../js/labels/types";
 import { SampleRightsUpdate } from "../../js/samples/api";
-import { LibraryType, Quality, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
+import { LibraryType, Quality, Read, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
 import { SubtractionNested } from "../../js/subtraction/types";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
@@ -44,6 +44,28 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
     };
 
     return assign(defaultSampleMinimal, overrides);
+}
+
+type CreateFakeSampleReadProps = {
+    size?: number;
+};
+
+/**
+ * Create a fake sample read object
+ */
+export function createFakeSampleRead(overrides?: CreateFakeSampleReadProps): Read {
+    const defaultRead = {
+        download_url: faker.random.word(),
+        id: faker.datatype.number(),
+        name: faker.random.word(),
+        name_on_disk: faker.random.word(),
+        sample: faker.random.word(),
+        size: faker.datatype.number(),
+        upload: null,
+        uploaded_at: faker.date.past().toISOString(),
+    };
+
+    return assign(defaultRead, overrides);
 }
 
 export function createFakeSampleQuality(): Quality {
@@ -87,7 +109,7 @@ export function createFakeSample(overrides?: CreateFakeSample): Sample {
         locale: faker.random.word(),
         paired: faker.datatype.boolean(),
         quality: createFakeSampleQuality(),
-        reads: [],
+        reads: [createFakeSampleRead()],
         subtractions: [createFakeSubtractionNested()],
     };
 
