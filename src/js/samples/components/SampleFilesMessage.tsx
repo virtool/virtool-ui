@@ -16,6 +16,10 @@ export default function SampleFilesMessage({ showLegacy }: SampleFilesMessagePro
                 <strong>
                     Virtool now retains raw data for newly created samples instead of trimming during sample creation.
                 </strong>
+                <p>
+                    Because this is an older sample, only trimmed data is available. Recreate the sample to run analysis
+                    with untrimmed reads.
+                </p>
             </p>
         </Alert>
     ) : null;

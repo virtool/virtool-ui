@@ -1,18 +1,23 @@
+import { endsWith, some } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Alert, Icon } from "../../../base";
+import { Read } from "../../types";
 
 type SampleFileSizeWarningProps = {
+    reads: Read[];
     sampleId: string;
-    show: boolean;
-    showLink: boolean;
 };
 
 /**
  * Displays a warning if any sample files are under 10 megabytes
  */
-export default function SampleFileSizeWarning({ sampleId, show, showLink }: SampleFileSizeWarningProps) {
+export default function SampleFileSizeWarning({ reads, sampleId }: SampleFileSizeWarningProps) {
+    const show = some(reads, file => file.size < 10000000);
+
     if (show) {
+        const showLink = !endsWith(location.pathname, "/files");
+
         const link = showLink ? (
             <Link to={`/samples/${sampleId}/files`}>Check the file sizes</Link>
         ) : (

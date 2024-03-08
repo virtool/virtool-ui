@@ -1,4 +1,3 @@
-import { endsWith, some } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
 import { match, useHistory } from "react-router-dom";
@@ -54,11 +53,7 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
     return (
         <StyledSampleDetailGeneral>
             <ContainerNarrow>
-                <SampleFileSizeWarning
-                    sampleId={sampleId}
-                    show={some(data.reads, file => file.size < 10000000)}
-                    showLink={!endsWith(location.pathname, "/files")}
-                />
+                <SampleFileSizeWarning sampleId={sampleId} reads={data.reads} />
                 <BoxGroup>
                     <BoxGroupHeader>
                         <h2>Metadata</h2>

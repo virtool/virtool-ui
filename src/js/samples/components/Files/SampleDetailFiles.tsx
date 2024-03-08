@@ -1,4 +1,3 @@
-import { endsWith, some } from "lodash-es";
 import React from "react";
 import { match } from "react-router-dom";
 import { ContainerNarrow, LoadingPlaceholder } from "../../../base";
@@ -24,11 +23,7 @@ export function SampleDetailFiles({ match }: SampleDetailFilesProps) {
 
     return (
         <ContainerNarrow>
-            <SampleFileSizeWarning
-                sampleId={data.id}
-                show={some(data.reads, file => file.size < 10000000)}
-                showLink={!endsWith(location.pathname, "/files")}
-            />
+            <SampleFileSizeWarning reads={data.reads} sampleId={data.id} />
             <SampleFilesMessage showLegacy={data.is_legacy} />
             <SampleReads reads={data.reads} />
         </ContainerNarrow>

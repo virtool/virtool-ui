@@ -23,7 +23,9 @@ type SampleReadsProps = {
  * Displays a list of reads used to create the sample
  */
 export default function SampleReads({ reads }: SampleReadsProps) {
-    const fileComponents = map(reads, file => <ReadItem key={file.name} {...file} />);
+    const fileComponents = map(reads, file => (
+        <ReadItem key={file.name} name={file.name} download_url={file.download_url} size={file.size} />
+    ));
 
     return (
         <BoxGroup>
