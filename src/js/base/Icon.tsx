@@ -45,7 +45,6 @@ StyledIcon.displayName = "Icon";
 
 interface IconProps {
     "aria-label"?: string;
-    as?: React.ElementType;
     color?: IconColor;
     name: string;
     className?: string;
@@ -61,7 +60,6 @@ interface IconProps {
 }
 
 export const Icon = ({
-    as,
     faStyle = "fas",
     fixedWidth = false,
     hoverable,
@@ -79,7 +77,7 @@ export const Icon = ({
 
     const icon = (
         <StyledIcon
-            as={as || (props.onClick ? "button" : "i")}
+            as={props.onClick ? "button" : "i"}
             aria-label={props["aria-label"]}
             className={className}
             color={props.color}
