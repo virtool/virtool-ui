@@ -1,12 +1,3 @@
-import { useMutation } from "@tanstack/react-query";
-import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { find, flatMap, intersectionWith } from "lodash-es";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import styled from "styled-components";
-import * as Yup from "yup";
-import { useFetchAccount } from "../../../account/queries";
 import {
     Box,
     Icon,
@@ -20,16 +11,25 @@ import {
     SaveButton,
     ViewHeader,
     ViewHeaderTitle,
-} from "../../../base";
-import { useInfiniteFindFiles } from "../../../files/queries";
-import { FileType } from "../../../files/types";
-import { deletePersistentFormState } from "../../../forms/actions";
+} from "@/base";
+import { ErrorResponse } from "@/virtoolTypes/types";
+import { useFetchAccount } from "@account/queries";
+import { useInfiniteFindFiles } from "@files/queries";
+import { FileType } from "@files/types";
+import { deletePersistentFormState } from "@forms/actions";
+import { useListGroups } from "@groups/queries";
+import { useFetchLabels } from "@labels/queries";
+import { useFetchSubtractionsShortlist } from "@subtraction/queries";
+import { useMutation } from "@tanstack/react-query";
+import { User } from "@users/types";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
+import { find, flatMap, intersectionWith } from "lodash-es";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+import * as Yup from "yup";
 import PersistForm from "../../../forms/components/PersistForm";
-import { useListGroups } from "../../../groups/queries";
-import { useFetchLabels } from "../../../labels/queries";
-import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
-import { ErrorResponse } from "../../../types/types";
-import { User } from "../../../users/types";
 import { create } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import ReadSelector from "./ReadSelector";

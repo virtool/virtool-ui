@@ -1,6 +1,6 @@
+import { ErrorResponse } from "@/virtoolTypes/types";
 import { Request } from "@app/request";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ErrorResponse } from "@types/types";
 import { useHistory } from "react-router-dom";
 import {
     addReferenceGroup,

@@ -1,5 +1,5 @@
+import { ErrorResponse } from "@/virtoolTypes/types";
 import { useQuery } from "@tanstack/react-query";
-import { ErrorResponse } from "../types/types";
 import { fetchHmm, listHmms } from "./api";
 import { HMM, HMMSearchResults } from "./types";
 

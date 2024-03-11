@@ -1,5 +1,5 @@
+import { ErrorResponse } from "@/virtoolTypes/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ErrorResponse } from "../types/types";
 import {
     createSubtraction,
     fetchSubtractionShortlist,
