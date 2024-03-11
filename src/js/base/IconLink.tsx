@@ -4,6 +4,7 @@ import { Icon } from "./Icon";
 
 type IconLinkProps = {
     "aria-label"?: string;
+    className?: string;
     color?: VTColor;
     name: string;
     replace?: boolean;
@@ -11,9 +12,9 @@ type IconLinkProps = {
     to: string | object;
 };
 
-export function IconLink({ color, name, replace, tip, to, ...props }: IconLinkProps) {
+export function IconLink({ className, color, name, replace, tip, to, ...props }: IconLinkProps) {
     return (
-        <Link replace={replace} to={to} aria-label={props["aria-label"]}>
+        <Link className={className} replace={replace} to={to} aria-label={props["aria-label"]}>
             <Icon color={color} name={name} tip={tip} hoverable />
         </Link>
     );

@@ -14,7 +14,7 @@ import AddSequenceLink from "./AddLink";
 import BarcodeSequence from "./Barcode/Sequence";
 import EditSequence from "./Edit";
 import GenomeSequence from "./Genome/Sequence";
-import RemoveSequence from "./Remove";
+import RemoveSequence from "./RemoveSequence";
 
 const IsolateSequencesHeader = styled.label`
     align-items: center;
