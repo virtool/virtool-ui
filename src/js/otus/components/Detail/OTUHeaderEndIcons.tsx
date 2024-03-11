@@ -12,11 +12,7 @@ type OTUHeaderEndIconsProps = {
     abbreviation: string;
 };
 
-const EditOTUIcon = styled(IconLink)`
-    margin: 0 5px;
-`;
-
-const RemoveOTUIcon = styled(IconLink)`
+const OTUIcon = styled(IconLink)`
     margin: 0 5px;
 `;
 
@@ -28,20 +24,14 @@ export function OTUHeaderEndIcons({ id, name, refId, abbreviation }: OTUHeaderEn
 
     return canModify ? (
         <>
-            <EditOTUIcon
+            <OTUIcon
                 key="edit-icon"
                 color="orange"
                 name="pencil-alt"
                 tip="Edit OTU"
                 to={{ state: { editOTU: true } }}
             />
-            <RemoveOTUIcon
-                key="remove-icon"
-                color="red"
-                name="trash"
-                tip="Remove OTU"
-                to={{ state: { removeOTU: true } }}
-            />
+            <OTUIcon key="remove-icon" color="red" name="trash" tip="Remove OTU" to={{ state: { removeOTU: true } }} />
 
             <EditOTU otuId={id} name={name} abbreviation={abbreviation} />
             <RemoveOTU id={id} name={name} refId={refId} />
