@@ -1,4 +1,4 @@
-import { ErrorResponse } from "@/virtoolTypes/types";
+import { ErrorResponse } from "@/types/types";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate, removeOTU, setIsolateAsDefault } from "./api";
 import { OTU, OTUIsolate, OTUSearchResult } from "./types";

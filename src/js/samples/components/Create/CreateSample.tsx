@@ -12,7 +12,7 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "@/base";
-import { ErrorResponse } from "@/virtoolTypes/types";
+import { ErrorResponse } from "@/types/types";
 import { useFetchAccount } from "@account/queries";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";

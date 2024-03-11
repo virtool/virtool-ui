@@ -25,7 +25,7 @@ export const pathAliases = {
     "@samples": path.resolve(__dirname, "src/js/samples"),
     "@sequences": path.resolve(__dirname, "src/js/sequences"),
     "@subtraction": path.resolve(__dirname, "src/js/subtraction"),
-    "@types": path.resolve(__dirname, "src/js/virtoolTypes"),
+    "@types": path.resolve(__dirname, "src/js/types"),
     "@users": path.resolve(__dirname, "src/js/users"),
     "@utils": path.resolve(__dirname, "src/js/utils"),
     "@wall": path.resolve(__dirname, "src/js/wall"),
