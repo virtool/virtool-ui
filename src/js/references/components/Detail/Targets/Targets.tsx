@@ -1,9 +1,10 @@
+import { useUpdateReference } from "@references/queries";
 import { find, map, reject } from "lodash-es";
 import React from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "../../../../base";
-import { ReferenceRight, useCheckReferenceRight, useUpdateReference } from "../../../hooks";
+import { ReferenceRight, useCheckReferenceRight } from "../../../hooks";
 import { Reference } from "../../../types";
 import AddTarget from "./AddTarget";
 import EditTarget from "./EditTarget";

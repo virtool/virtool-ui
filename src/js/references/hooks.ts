@@ -7,28 +7,7 @@ import * as Yup from "yup";
 import { useFetchAccount } from "../account/queries";
 import { AdministratorRoles } from "../administration/types";
 import { Request } from "../app/request";
-import { ErrorResponse } from "../types/types";
 import { useGetReference } from "./queries";
-import { Reference, ReferenceTarget } from "./types";
-
-export function useUpdateReference(refId: string, onSuccess?: () => void) {
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation<Reference, ErrorResponse, unknown>(
-        (data: { restrict_source_types?: boolean; targets?: ReferenceTarget[] }) => {
-            return Request.patch(`/refs/${refId}`)
-                .send(data)
-                .then(res => res.body);
-        },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(["reference", refId]).then(() => onSuccess && onSuccess());
-            },
-        },
-    );
-
-    return { mutation };
-}
 
 export function getValidationSchema(sourceTypes: string[]) {
     return Yup.object({
@@ -57,7 +36,7 @@ export function useSourceTypesForm(sourceTypes: string[]) {
 export function useUpdateSourceTypes(
     key: "default_source_types" | "source_types",
     path: string,
-    queryKey: string[],
+    queryKey: readonly string[],
     sourceTypes: string[],
 ) {
     const queryClient = useQueryClient();
