@@ -1,3 +1,4 @@
+import { getWorkflowDisplayName } from "@utils/utils";
 import { get } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
@@ -12,12 +13,11 @@ import {
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
 } from "../../base/index";
-import { getWorkflowDisplayName } from "../../utils/utils";
 import { getAnalysis } from "../actions";
 import AODPViewer from "./AODP/Viewer";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/Viewer";
-import { PathoscopeViewer } from "./Pathoscope/Viewer";
+import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
 
 const UnsupportedAnalysis = styled(Box)`
     display: flex;

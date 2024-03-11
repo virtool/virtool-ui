@@ -1,10 +1,7 @@
+import { getBorder } from "@app/theme";
+import { Icon } from "@base";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
-import { Icon } from "../../../base";
-import Mapping from "./Mapping";
-import PathoscopeList from "./PathoscopeList";
-import PathoscopeToolbar from "./Toolbar";
 
 const StyledPathoscopeViewerScroller = styled.div`
     align-items: center;
@@ -19,6 +16,7 @@ const StyledPathoscopeViewerScroller = styled.div`
     left: 30px;
     position: fixed;
     width: 40px;
+    z-index: 1;
 
     :hover {
         background-color: ${props => props.theme.color.greyLightest};
@@ -26,7 +24,8 @@ const StyledPathoscopeViewerScroller = styled.div`
     }
 `;
 
-function PathoscopeViewerScroller() {
+/** Button that scrolls the user to the top of the page */
+export function PathoscopeViewerScroller() {
     const [show, setShow] = useState(false);
 
     const handleClick = useCallback(() => {
@@ -51,15 +50,4 @@ function PathoscopeViewerScroller() {
     }
 
     return null;
-}
-
-export function PathoscopeViewer() {
-    return (
-        <>
-            <Mapping />
-            <PathoscopeToolbar />
-            <PathoscopeList />
-            <PathoscopeViewerScroller />
-        </>
-    );
 }
