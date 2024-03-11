@@ -23,7 +23,6 @@
       "@samples/*": ["./js/samples/*"],
       "@sequences/*": ["./js/sequences/*"],
       "@subtraction/*": ["./js/subtraction/*"],
-      "@types/*": ["./js/types/*"],
       "@users/*": ["./js/users/*"],
       "@utils/*": ["./js/utils/*"],
       "@wall/*": ["./js/wall/*"],
