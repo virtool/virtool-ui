@@ -100,7 +100,7 @@ export type Read = {
     sample: string;
     size: number;
     upload?: File;
-    uploaded_at: Date;
+    uploaded_at: string;
 };
 
 /* A complete sample */
