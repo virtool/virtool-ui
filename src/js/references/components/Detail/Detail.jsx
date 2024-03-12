@@ -5,7 +5,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { ContainerNarrow, LoadingPlaceholder, NotFound } from "../../../base";
 import IndexDetail from "../../../indexes/components/Detail";
 import Indexes from "../../../indexes/components/Indexes";
-import OTUDetail from "../../../otus/components/Detail/Detail";
+import OTUDetail from "../../../otus/components/Detail/OTUDetail";
 import OTUList from "../../../otus/components/OTUList";
 import { getReference } from "../../actions";
 import { checkReferenceRight, getReferenceDetail } from "../../selectors";

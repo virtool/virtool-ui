@@ -1,6 +1,15 @@
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { ErrorResponse } from "../types/types";
-import { addIsolate, createOTU, editIsolate, findOTUs, removeIsolate, removeOTU, setIsolateAsDefault } from "./api";
+import {
+    addIsolate,
+    createOTU,
+    editIsolate,
+    findOTUs,
+    getOTU,
+    removeIsolate,
+    removeOTU,
+    setIsolateAsDefault,
+} from "./api";
 import { OTU, OTUIsolate, OTUSearchResult } from "./types";
 
 /**
@@ -38,6 +47,23 @@ export function useInfiniteFindOTUS(refId: string, term: string, verified?: bool
             keepPreviousData: true,
         },
     );
+}
+
+/**
+ * Fetches a single OTU
+ *
+ * @param otuId - The id of the OTU to fetch
+ * @returns A single OTU
+ */
+export function useFetchOTU(otuId: string) {
+    return useQuery<OTU, ErrorResponse>(OTUQueryKeys.detail(otuId), () => getOTU(otuId), {
+        retry: (failureCount, error) => {
+            if (error.response?.status === 404) {
+                return false;
+            }
+            return failureCount <= 3;
+        },
+    });
 }
 
 /**

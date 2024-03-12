@@ -84,7 +84,7 @@ export function createFakeOTUMinimal(overrides?: CreateFakeOTUMinimalProps): OTU
 
 type CreateFakeOTU = CreateFakeOTUMinimalProps & {
     isolates?: Array<OTUIsolate>;
-    issues?: { [key: string]: any } | boolean;
+    issues?: { [key: string]: any };
     remote?: OTURemote;
 };
 
