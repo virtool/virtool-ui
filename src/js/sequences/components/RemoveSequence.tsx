@@ -1,20 +1,26 @@
 import { RemoveDialog } from "@base/RemoveDialog";
+import { useRemoveSequence } from "@otus/queries";
 import React from "react";
-import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { removeSequence } from "../../otus/actions";
-import { getActiveIsolateId, getOTUDetailId } from "../../otus/selectors";
 
-export function RemoveSequence({ isolateName, isolateId, otuId, onConfirm }) {
+type RemoveSequenceProps = {
+    isolateName: string;
+    isolateId: string;
+    otuId: string;
+};
+
+/**
+ * Displays a dialog for removing a sequence
+ */
+export default function RemoveSequence({ isolateName, isolateId, otuId }: RemoveSequenceProps) {
     const history = useHistory();
-    const location = useLocation<{ removeSequence: boolean }>();
-    console.log(location);
+    const location = useLocation<{ removeSequence: string }>();
+    const mutation = useRemoveSequence();
 
     const sequenceId = location.state?.removeSequence;
-    console.log(sequenceId);
 
     function handleConfirm() {
-        onConfirm(otuId, isolateId, sequenceId);
+        mutation.mutate({ otuId, isolateId, sequenceId: sequenceId });
         history.replace({ state: { removeSequence: false } });
     }
 
@@ -31,21 +37,8 @@ export function RemoveSequence({ isolateName, isolateId, otuId, onConfirm }) {
             noun="Sequence"
             onConfirm={handleConfirm}
             onHide={() => history.replace({ state: { removeSequence: false } })}
-            show={location.state?.removeSequence}
+            show={Boolean(location.state?.removeSequence)}
             message={removeMessage}
         />
     );
 }
-
-const mapStateToProps = state => ({
-    isolateId: getActiveIsolateId(state),
-    otuId: getOTUDetailId(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-    onConfirm: (otuId, isolateId, sequenceId) => {
-        dispatch(removeSequence(otuId, isolateId, sequenceId));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(RemoveSequence);

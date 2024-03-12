@@ -8,6 +8,7 @@ import {
     getOTU,
     removeIsolate,
     removeOTU,
+    removeSequence,
     setIsolateAsDefault,
 } from "./api";
 import { OTU, OTUIsolate, OTUSearchResult } from "./types";
@@ -129,5 +130,16 @@ export function useUpdateIsolate() {
 export function useRemoveIsolate() {
     return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
         removeIsolate(otuId, isolateId),
+    );
+}
+
+/**
+ * Initializes a mutator for removing a sequence
+ *
+ * @returns A mutator for removing a sequence
+ */
+export function useRemoveSequence() {
+    return useMutation<null, ErrorResponse, { otuId: string; isolateId: string; sequenceId: string }>(
+        ({ otuId, isolateId, sequenceId }) => removeSequence(otuId, isolateId, sequenceId),
     );
 }

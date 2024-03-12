@@ -252,16 +252,8 @@ export function editSequence({
  * @param sequenceId - The unique identifier of the sequence to remove
  * @returns A Promise resolving to the API response indicating if removal was successful
  */
-export function removeSequence({
-    otuId,
-    isolateId,
-    sequenceId,
-}: {
-    otuId: string;
-    isolateId: string;
-    sequenceId: string;
-}) {
-    return Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`);
+export function removeSequence(otuId: string, isolateId: string, sequenceId: string): Promise<null> {
+    return Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`).then(res => res.body);
 }
 
 /**
