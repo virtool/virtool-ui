@@ -2,15 +2,15 @@ import { PathoscopeViewerScroller } from "@/analyses/components/Pathoscope/Patho
 import React from "react";
 import Mapping from "./Mapping";
 import PathoscopeList from "./PathoscopeList";
-import PathoscopeToolbar from "./Toolbar";
+import PathoscopeToolbar from "./PathoscopeToolbar";
 
 /** Detailed breakdown of the results of a pathoscope analysis */
-export function PathoscopeViewer() {
+export function PathoscopeViewer({ detail }) {
     return (
         <>
             <Mapping />
             <PathoscopeToolbar />
-            <PathoscopeList />
+            <PathoscopeList detail={detail} />
             <PathoscopeViewerScroller />
         </>
     );

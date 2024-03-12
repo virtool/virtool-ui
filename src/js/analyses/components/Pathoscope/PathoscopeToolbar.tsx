@@ -1,4 +1,5 @@
-import React, { useCallback } from "react";
+import { useUrlSearchParams } from "@utils/hooks";
+import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import {
@@ -11,15 +12,7 @@ import {
     InputSearch,
     Toolbar,
 } from "../../../base";
-import {
-    setAnalysisSortKey,
-    setSearchIds,
-    toggleAnalysisSortDescending,
-    toggleFilterIsolates,
-    toggleFilterOTUs,
-    toggleShowPathoscopeReads,
-} from "../../actions";
-import { getFuse } from "../../selectors";
+import { toggleFilterIsolates } from "../../actions";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 
 const StyledPathoscopeToolbar = styled(Toolbar)`
@@ -27,41 +20,26 @@ const StyledPathoscopeToolbar = styled(Toolbar)`
     margin-bottom: 10px !important;
 `;
 
-export const PathoscopeToolbar = ({
-    id,
-    analysisId,
-    filterIsolates,
-    filterOTUs,
-    fuse,
-    showPathoscopeReads,
-    sortDescending,
-    sortKey,
-    onSearch,
-    onSetSortKey,
-    onToggleFilterIsolates,
-    onToggleFilterOTUs,
-    onToggleShowPathoscopeReads,
-    onToggleSortDescending,
-}) => {
-    const handleChange = useCallback(
-        e => {
-            onSearch(e.target.value, fuse);
-        },
-        [id],
-    );
+export const PathoscopeToolbar = ({ analysisId, filterIsolates, onToggleFilterIsolates }) => {
+    const [filterOTUs, setFilterOtu] = useUrlSearchParams<boolean>("filterOtus", true);
+    const [sortKey, setSortKey] = useUrlSearchParams<string>("sort", "coverage");
+    const [sortDesc, setSortDesc] = useUrlSearchParams<boolean>("sortDesc", true);
+    const [find, setFind] = useUrlSearchParams<string>("find", "");
+    const [showReads, setShowReads] = useUrlSearchParams<boolean>("reads", false);
+    console.log("showReads", showReads, typeof showReads);
 
     return (
         <StyledPathoscopeToolbar>
-            <InputSearch onChange={handleChange} onKeyDown={e => e.stopPropagation()} />
-            <AnalysisViewerSort workflow="pathoscope" sortKey={sortKey} onSelect={onSetSortKey} />
-            <Button title="Sort Direction" onClick={onToggleSortDescending} tip="Sort List">
-                <Icon name={sortDescending ? "sort-amount-down" : "sort-amount-up"} />
+            <InputSearch value={find} onChange={e => setFind(e.target.value)} />
+            <AnalysisViewerSort workflow="pathoscope" sortKey={sortKey} onSelect={setSortKey} />
+            <Button onClick={() => setSortDesc(!sortDesc)} tip="Sort Direction">
+                <Icon name={sortDesc ? "sort-amount-down" : "sort-amount-up"} />
             </Button>
             <Button
-                active={showPathoscopeReads}
+                active={showReads}
                 icon="weight-hanging"
                 tip="Show read pseudo-counts instead of weight"
-                onClick={onToggleShowPathoscopeReads}
+                onClick={() => setShowReads(!showReads)}
             >
                 Show Reads
             </Button>
@@ -69,7 +47,9 @@ export const PathoscopeToolbar = ({
                 active={filterOTUs}
                 icon="filter"
                 tip="Hide OTUs with low coverage support"
-                onClick={onToggleFilterOTUs}
+                onClick={() => {
+                    setFilterOtu(!filterOTUs);
+                }}
             >
                 Filter OTUs
             </Button>
@@ -103,40 +83,13 @@ export const PathoscopeToolbar = ({
 export const mapStateToProps = state => {
     const { filterIsolates, filterOTUs, showPathoscopeReads, sortDescending, sortKey } = state.analyses;
     return {
-        id: state.analyses.activeId,
         analysisId: state.analyses.detail.id,
-        filterIsolates,
-        filterOTUs,
-        fuse: getFuse(state),
-        showPathoscopeReads,
-        sortDescending,
-        sortKey,
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
-    onSearch: (term, fuse) => {
-        dispatch(setSearchIds(term ? fuse.search(term) : null));
-    },
-
     onToggleFilterIsolates: () => {
         dispatch(toggleFilterIsolates());
-    },
-
-    onToggleFilterOTUs: () => {
-        dispatch(toggleFilterOTUs());
-    },
-
-    onSetSortKey: key => {
-        dispatch(setAnalysisSortKey(key));
-    },
-
-    onToggleShowPathoscopeReads: () => {
-        dispatch(toggleShowPathoscopeReads());
-    },
-
-    onToggleSortDescending: () => {
-        dispatch(toggleAnalysisSortDescending());
     },
 });
 

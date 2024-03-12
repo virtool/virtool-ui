@@ -2,12 +2,13 @@ import { getColor } from "@app/theme";
 import { AccordionTrigger } from "@base";
 import { AccordionContent } from "@base/accordion/AccordionContent";
 import { ScrollingAccordionItem } from "@base/accordion/ScrollingAccordionItem";
+import { useUrlSearchParams } from "@utils/hooks";
 import { toScientificNotation } from "@utils/utils";
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { setActiveHitId } from "../../actions";
-import { getActiveHit, getMatches, getReadCount } from "../../selectors";
+import { getReadCount } from "../../selectors";
 import { OTUCoverage } from "./OTUCoverage";
 import PathoscopeDetail from "./PathoscopeDetail";
 
@@ -76,10 +77,18 @@ const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
 `;
 
 /** A single pathoscope hit*/
-export function PathoscopeItem({ active, hit, mappedCount, showPathoscopeReads, style }) {
-    const { abbreviation, coverage, depth, filled, name, pi, id } = hit;
+export function PathoscopeItem({ mappedCount, showPathoscopeReads, style, match }) {
+    const { abbreviation, coverage, depth, filled, name, pi, id } = match;
+    const [showReads] = useUrlSearchParams<boolean>("reads");
 
-    const piValue = showPathoscopeReads ? Math.round(pi * mappedCount) : toScientificNotation(pi);
+    // const MemoizedCoverage = useMemo(() => <OTUCoverage filled={filled} />, [filled]
+
+    useEffect(() => {
+        console.log("new object ref");
+    }, [match]);
+
+    console.log("rendered");
+    const piValue = showReads ? Math.round(pi * mappedCount) : toScientificNotation(pi);
 
     return (
         <ScrollingAccordionItem value={id}>
@@ -90,11 +99,7 @@ export function PathoscopeItem({ active, hit, mappedCount, showPathoscopeReads, 
                         <span>{abbreviation || "No Abbreviation"}</span>
                     </PathoscopeItemTitle>
                     <PathoscopeItemValues>
-                        <PathoscopeItemValue
-                            color="green"
-                            label={showPathoscopeReads ? "READS" : "WEIGHT"}
-                            value={piValue}
-                        />
+                        <PathoscopeItemValue color="green" label={showReads ? "READS" : "WEIGHT"} value={piValue} />
                         <PathoscopeItemValue color="red" label="DEPTH" value={depth} />
                         <PathoscopeItemValue color="blue" label="COVERAGE" value={coverage.toFixed(3)} />
                     </PathoscopeItemValues>
@@ -103,19 +108,14 @@ export function PathoscopeItem({ active, hit, mappedCount, showPathoscopeReads, 
                 <OTUCoverage filled={filled} />
             </PathoscopeAccordionTrigger>
             <AccordionContent>
-                <PathoscopeDetail hit={hit} />
+                <PathoscopeDetail hit={match} />
             </AccordionContent>
         </ScrollingAccordionItem>
     );
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const activeId = getActiveHit(state).id;
-    const hit = getMatches(state)[ownProps.index];
-
     return {
-        hit,
-        active: activeId === hit.id,
         mappedCount: getReadCount(state),
         showPathoscopeReads: state.analyses.showPathoscopeReads,
     };

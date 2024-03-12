@@ -55,7 +55,7 @@ export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis
     let content;
 
     if (detail.workflow === "pathoscope_bowtie") {
-        content = <PathoscopeViewer />;
+        content = <PathoscopeViewer detail={detail} />;
     } else if (detail.workflow === "nuvs") {
         content = <NuVsViewer />;
     } else if (detail.workflow === "aodp") {

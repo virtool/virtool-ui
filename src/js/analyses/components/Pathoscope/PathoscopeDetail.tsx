@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { ScrollSync } from "react-scroll-sync";
 import { PathoscopeIsolate } from "./Isolate";
 
-export const PathoscopeDetail = ({ filterIsolates, hit, mappedReads, showPathoscopeReads, onRendered }) => {
+/** Detailed coverage for a single OTU hits from pathoscope analysis*/
+export const PathoscopeDetail = ({ filterIsolates, hit, mappedReads, showPathoscopeReads }) => {
     const { isolates, pi } = hit;
 
     const filtered = filter(isolates, isolate => filterIsolates === false || isolate.pi >= 0.03 * pi);
