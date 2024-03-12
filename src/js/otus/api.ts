@@ -12,6 +12,16 @@ export function get({ otuId }: { otuId: string }) {
 }
 
 /**
+ * Get a single OTU data from the API
+ *
+ * @param otuId - The unique identifier of the OTU to fetch
+ * @returns A Promise resolving to the API response containing the OTU data
+ */
+export function getOTU(otuId: string): Promise<OTU> {
+    return Request.get(`/otus/${otuId}`).then(res => res.body);
+}
+
+/**
  * Get the history of changes for a single OTU
  *
  * @param otuId - The unique identifier of the OTU
