@@ -3,25 +3,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
-import { createSerializer } from "enzyme-to-json";
 import { noop } from "lodash-es";
 import React from "react";
 import { Provider } from "react-redux";
 import { combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { ThemeProvider } from "styled-components";
-import { expect, vi } from "vitest";
+import { vi } from "vitest";
 import { watchRouter } from "../js/app/sagas";
 import { theme } from "../js/app/theme";
 
 process.env.TZ = "UTC";
-
-// Note that enzyme-to-json snapshot serializer is configured in
-// jest configuration settings specified in package.json instead of here.
-Enzyme.configure({ adapter: new Adapter() });
-expect.addSnapshotSerializer(createSerializer({ mode: "deep" }));
 
 export function wrapWithProviders(ui, createAppStore) {
     const queryClient = new QueryClient({
