@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
-import { fireEvent, render as rtlRender } from "@testing-library/react";
+import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
 import { noop } from "lodash-es";
@@ -103,6 +103,7 @@ attachResizeObserver();
 global.fireEvent = fireEvent;
 global.userEvent = userEvent;
 global.React = React;
+global.screen = screen;
 global.renderWithProviders = renderWithProviders;
 global.wrapWithProviders = wrapWithProviders;
 global.renderWithRouter = renderWithRouter;
