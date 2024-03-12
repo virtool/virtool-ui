@@ -30,7 +30,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 1`
           class="sc-hLBbgP icWVMU  fas fa-clock"
         />
         <span>
-          17:48:05
+          10:48:05
         </span>
         <i
           class="sc-hLBbgP icWVMU  fas fa-calendar"
@@ -74,7 +74,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 2`
           class="sc-hLBbgP icWVMU  fas fa-clock"
         />
         <span>
-          17:48:05
+          10:48:05
         </span>
         <i
           class="sc-hLBbgP icWVMU  fas fa-calendar"
@@ -116,7 +116,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 3`
           class="sc-hLBbgP icWVMU  fas fa-clock"
         />
         <span>
-          17:48:05
+          10:48:05
         </span>
         <i
           class="sc-hLBbgP icWVMU  fas fa-calendar"
@@ -158,7 +158,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 4`
           class="sc-hLBbgP icWVMU  fas fa-clock"
         />
         <span>
-          17:48:05
+          10:48:05
         </span>
         <i
           class="sc-hLBbgP icWVMU  fas fa-calendar"
@@ -202,7 +202,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 5`
           class="sc-hLBbgP icWVMU  fas fa-clock"
         />
         <span>
-          17:48:05
+          10:48:05
         </span>
         <i
           class="sc-hLBbgP icWVMU  fas fa-calendar"
@@ -246,7 +246,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 6`
           class="sc-hLBbgP icWVMU  fas fa-clock"
         />
         <span>
-          17:48:05
+          10:48:05
         </span>
         <i
           class="sc-hLBbgP icWVMU  fas fa-calendar"
@@ -290,7 +290,7 @@ exports[`<JobStep /> > should render text and icon when state is special case 7`
           class="sc-hLBbgP icWVMU  fas fa-clock"
         />
         <span>
-          17:48:05
+          10:48:05
         </span>
         <i
           class="sc-hLBbgP icWVMU  fas fa-calendar"

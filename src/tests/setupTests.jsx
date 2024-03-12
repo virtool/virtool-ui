@@ -1,11 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
-import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
+import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
-import Enzyme, { mount, render, shallow } from "enzyme";
 import { createSerializer } from "enzyme-to-json";
 import { noop } from "lodash-es";
 import React from "react";
@@ -110,12 +109,8 @@ attachResizeObserver();
 // Globals are defined here to limit import redundancies.
 global.fireEvent = fireEvent;
 global.userEvent = userEvent;
-global.mount = mount;
 global.React = React;
-global.screen = screen;
-global.render = render;
 global.renderWithProviders = renderWithProviders;
 global.wrapWithProviders = wrapWithProviders;
-global.shallow = shallow;
 global.renderWithRouter = renderWithRouter;
 global.createGenericReducer = createGenericReducer;
