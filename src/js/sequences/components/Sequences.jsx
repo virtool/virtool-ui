@@ -55,7 +55,12 @@ export const IsolateSequences = ({ activeIsolate, dataType, sequences, hasTarget
 
             <AddSequence />
             <EditSequence />
-            <RemoveSequence isolateId={activeIsolate.id} isolateName={activeIsolate.name} otuId={otuId} />
+            <RemoveSequence
+                isolateId={activeIsolate.id}
+                isolateName={activeIsolate.name}
+                otuId={otuId}
+                sequences={sequences}
+            />
         </>
     );
 };
