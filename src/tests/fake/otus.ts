@@ -180,3 +180,17 @@ export function mockApiCreateIsolate(otuId: string, sourceName: string, sourceTy
 export function mockApiRemoveIsolate(otuId: string, isolateId: string) {
     return nock("http://localhost").delete(`/api/otus/${otuId}/isolates/${isolateId}`).reply(200);
 }
+
+/**
+ * Creates a mocked API call for removing an OTU isolate
+ *
+ * @param otuId - The id of the OTU being updated
+ * @param isolateId - The id of the isolate being updated
+ * @param sequenceId - The id of the sequence being removed
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiRemoveSequence(otuId: string, isolateId: string, sequenceId: string) {
+    return nock("http://localhost")
+        .delete(`/api/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
+        .reply(200);
+}

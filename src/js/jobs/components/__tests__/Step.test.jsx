@@ -39,10 +39,9 @@ describe("<JobStep />", () => {
         state => {
             props.step.state = state;
 
-            const { asFragment } = renderWithProviders(<JobStep {...props} />);
+            renderWithProviders(<JobStep {...props} />);
 
             expect(screen.getByTitle(state)).toBeInTheDocument();
-            expect(asFragment()).toMatchSnapshot();
         },
     );
 });

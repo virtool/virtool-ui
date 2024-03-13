@@ -127,7 +127,7 @@ export default function IsolateDetail({
                 </div>
             </IsolateDetailHeader>
 
-            <IsolateSequences />
+            <IsolateSequences otuId={otuId} activeIsolate={activeIsolate} />
         </StyledIsolateDetail>
     );
 }
