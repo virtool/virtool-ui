@@ -1,13 +1,13 @@
+import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundSection } from "@/base";
+import { getFontSize } from "@app/theme";
+import useGetSequences from "@otus/hooks";
+import { getTargets } from "@otus/selectors";
+import { getDataType, getReferenceDetailId } from "@references/selectors";
 import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize } from "../../app/theme";
-import { Badge, BoxGroup, NoneFoundSection } from "../../base";
-import { getTargets } from "../../otus/selectors";
-import { getDataType, getReferenceDetailId } from "../../references/selectors";
-import { getSequences } from "../selectors";
 import AddSequence from "./Add";
 import AddSequenceLink from "./AddLink";
 import BarcodeSequence from "./Barcode/Sequence";
@@ -26,7 +26,13 @@ const IsolateSequencesHeader = styled.label`
     }
 `;
 
-export const IsolateSequences = ({ activeIsolate, dataType, sequences, hasTargets, referenceId, otuId }) => {
+export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenceId, otuId }) => {
+    const { sequences, isLoading } = useGetSequences(otuId, activeIsolate.sequences);
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
     const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
 
     let sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
@@ -67,7 +73,6 @@ export const IsolateSequences = ({ activeIsolate, dataType, sequences, hasTarget
 
 export const mapStateToProps = state => ({
     dataType: getDataType(state),
-    sequences: getSequences(state),
     hasTargets: Boolean(getTargets(state)?.length),
     referenceId: getReferenceDetailId(state),
 });
