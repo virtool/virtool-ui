@@ -4,6 +4,7 @@ import {
     addIsolate,
     createOTU,
     editIsolate,
+    editOTU,
     findOTUs,
     getOTU,
     removeIsolate,
@@ -11,7 +12,7 @@ import {
     removeSequence,
     setIsolateAsDefault,
 } from "./api";
-import { OTU, OTUIsolate, OTUSearchResult } from "./types";
+import { OTU, OTUIsolate, OTUSearchResult, OTUSegment } from "./types";
 
 /**
  * Factory for generating react-query keys for otu related queries.
@@ -76,6 +77,19 @@ export function useCreateOTU(refId: string) {
     return useMutation<OTU, ErrorResponse, { name: string; abbreviation: string }>(({ name, abbreviation }) =>
         createOTU(refId, name, abbreviation),
     );
+}
+
+/**
+ * Initializes a mutator for editing an OTU
+ *
+ * @returns A mutator for editing an OTU
+ */
+export function useUpdateOTU() {
+    return useMutation<
+        OTU,
+        ErrorResponse,
+        { otuId: string; name: string; abbreviation: string; schema?: OTUSegment[] }
+    >(({ otuId, name, abbreviation, schema }) => editOTU(otuId, name, abbreviation, schema));
 }
 
 /**

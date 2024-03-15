@@ -32,8 +32,13 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
         );
     }
 
+    function onHide() {
+        history.replace({ state: { createOTU: false } });
+        mutation.reset();
+    }
+
     return (
-        <Dialog open={location.state?.createOTU} onOpenChange={() => history.replace({ state: { createOTU: false } })}>
+        <Dialog open={location.state?.createOTU} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
