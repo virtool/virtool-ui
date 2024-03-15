@@ -79,17 +79,22 @@ export function useCreateOTU(refId: string) {
     );
 }
 
+export type UpdateOTUProps = {
+    otuId: string;
+    name: string;
+    abbreviation: string;
+    schema?: OTUSegment[];
+};
+
 /**
  * Initializes a mutator for editing an OTU
  *
  * @returns A mutator for editing an OTU
  */
 export function useUpdateOTU() {
-    return useMutation<
-        OTU,
-        ErrorResponse,
-        { otuId: string; name: string; abbreviation: string; schema?: OTUSegment[] }
-    >(({ otuId, name, abbreviation, schema }) => editOTU(otuId, name, abbreviation, schema));
+    return useMutation<OTU, ErrorResponse, UpdateOTUProps>(({ otuId, name, abbreviation, schema }) =>
+        editOTU(otuId, name, abbreviation, schema),
+    );
 }
 
 /**

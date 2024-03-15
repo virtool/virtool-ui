@@ -17,7 +17,7 @@ type RemoveSegmentProps = {
 /**
  * Displays a dialog for removing a segment
  */
-export default function RemoveSegment({ otuId, name, abbreviation, schema }: RemoveSegmentProps) {
+export default function RemoveSegment({ abbreviation, name, otuId, schema }: RemoveSegmentProps) {
     const history = useHistory();
     const location = useLocation<{ removeSegment: string }>();
     const mutation = useUpdateOTU();
