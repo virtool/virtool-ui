@@ -21,7 +21,6 @@ import {
     EDIT_SEQUENCE,
     EDIT_USER,
     FIND_USERS,
-    GET_ANALYSIS,
     GET_HMM,
     GET_INDEX,
     GET_JOB,
@@ -115,7 +114,6 @@ export const errorsReducer = createReducer({}, builder => {
                     case CREATE_GROUP.FAILED:
                     case GET_JOB.FAILED:
                     case GET_SAMPLE.FAILED:
-                    case GET_ANALYSIS.FAILED:
                     case GET_REFERENCE.FAILED:
                     case GET_OTU.FAILED:
                     case GET_HMM.FAILED:

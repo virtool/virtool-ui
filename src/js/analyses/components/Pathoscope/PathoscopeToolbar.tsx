@@ -1,6 +1,5 @@
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import {
     Button,
@@ -12,7 +11,6 @@ import {
     InputSearch,
     Toolbar,
 } from "../../../base";
-import { toggleFilterIsolates } from "../../actions";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 
 const StyledPathoscopeToolbar = styled(Toolbar)`
@@ -20,13 +18,13 @@ const StyledPathoscopeToolbar = styled(Toolbar)`
     margin-bottom: 10px !important;
 `;
 
-export const PathoscopeToolbar = ({ analysisId, filterIsolates, onToggleFilterIsolates }) => {
+export const PathoscopeToolbar = ({ analysisId }) => {
     const [filterOTUs, setFilterOtu] = useUrlSearchParams<boolean>("filterOtus", true);
-    const [sortKey, setSortKey] = useUrlSearchParams<string>("sort", "coverage");
-    const [sortDesc, setSortDesc] = useUrlSearchParams<boolean>("sortDesc", true);
+    const [filterIsolates, setFilterIsolates] = useUrlSearchParams<boolean>("filterIsolates", true);
     const [find, setFind] = useUrlSearchParams<string>("find", "");
     const [showReads, setShowReads] = useUrlSearchParams<boolean>("reads", false);
-    console.log("showReads", showReads, typeof showReads);
+    const [sortKey, setSortKey] = useUrlSearchParams<string>("sort", "coverage");
+    const [sortDesc, setSortDesc] = useUrlSearchParams<boolean>("sortDesc", true);
 
     return (
         <StyledPathoscopeToolbar>
@@ -57,7 +55,7 @@ export const PathoscopeToolbar = ({ analysisId, filterIsolates, onToggleFilterIs
                 active={filterIsolates}
                 icon="filter"
                 tip="Hide isolates with low coverage support"
-                onClick={onToggleFilterIsolates}
+                onClick={() => setFilterIsolates(!filterIsolates)}
             >
                 Filter Isolates
             </Button>
@@ -79,18 +77,3 @@ export const PathoscopeToolbar = ({ analysisId, filterIsolates, onToggleFilterIs
         </StyledPathoscopeToolbar>
     );
 };
-
-export const mapStateToProps = state => {
-    const { filterIsolates, filterOTUs, showPathoscopeReads, sortDescending, sortKey } = state.analyses;
-    return {
-        analysisId: state.analyses.detail.id,
-    };
-};
-
-export const mapDispatchToProps = dispatch => ({
-    onToggleFilterIsolates: () => {
-        dispatch(toggleFilterIsolates());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PathoscopeToolbar);

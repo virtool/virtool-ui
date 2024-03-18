@@ -27,8 +27,8 @@ type AnalysisListProps = {
  */
 export default function AnalysesList({ match }: AnalysisListProps) {
     const sampleId = match.params.sampleId;
-    const [urlPage] = useUrlSearchParams("page");
-    const [term, setTerm] = useUrlSearchParams("find");
+    const [urlPage] = useUrlSearchParams<number>("page");
+    const [term, setTerm] = useUrlSearchParams<string>("find");
     const { data: analyses, isLoading: isLoadingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
     const { isLoading: isLoadingSample } = useFetchSample(sampleId);

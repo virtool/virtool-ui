@@ -57,11 +57,66 @@ export type AnalysisFile = {
 };
 
 /** A complete Analysis */
-export type Analysis = AnalysisMinimal & {
+export type GenericAnalysis = AnalysisMinimal & {
     /** Files generated during the analysis that are available for download */
     files: Array<AnalysisFile>;
     /** The results of the analysis that will be presented to the user */
     results?: { [key: string]: any };
+    workflow: Workflows.nuvs | Workflows.aodp;
+};
+
+export type Analysis = FormattedPathoscopeAnalysis | IimiAnalysis | GenericAnalysis;
+
+export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
+    files: Array<AnalysisFile>;
+    results: FormattedPathoscopeResults;
+    workflow: Workflows.pathoscope_bowtie;
+};
+
+/** All results for a pathoscope analysis*/
+export type FormattedPathoscopeResults = {
+    hits: FormattedPathoscopeHit[];
+    read_count: number;
+    subtracted_count: number;
+};
+
+/** Mapping data for a single pathoscope hit*/
+export type FormattedPathoscopeHit = {
+    abbreviation: string;
+    filled: PositionMappedReadDepths;
+    id: string;
+    isolates: FormattedPathoscopeIsolate[];
+    length: number;
+    name: string;
+    version: number;
+};
+
+/** Mapping data for a single pathoscope reference isolate */
+export type FormattedPathoscopeIsolate = {
+    default: boolean;
+    id: string;
+    source_name: string;
+    source_type: string;
+    sequences: FormattedPathoscopeSequence[];
+};
+
+/** The mapping data for a single pathoscope reference sequence*/
+export type FormattedPathoscopeSequence = {
+    id: string;
+    /** The genebank accession number of the reference sequence */
+    accession: string;
+    /** alignment coordinates  */
+    align: [number, number][];
+    best: number;
+    /** The proportion of the sequence that has mapped read coverage*/
+    coverage: number;
+    /** A description of the sequence */
+    definition: string;
+    length: number;
+    /** The proportion of reads from the entire sample that match this hit */
+    pi: number;
+    /** The number of reads that match this hit */
+    reads: number;
 };
 
 /** Analysis search results from the API */
@@ -117,4 +172,12 @@ export type IimiHit = {
     isolates: IimiIsolate[];
     name: string;
     result: boolean;
+};
+
+export type IimiAnalysis = AnalysisMinimal & {
+    files: Array<AnalysisFile>;
+    results: {
+        hits: IimiHit[];
+    };
+    workflow: Workflows.iimi;
 };

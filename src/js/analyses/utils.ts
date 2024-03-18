@@ -270,15 +270,15 @@ export const fuseSearchKeys = {
 };
 
 export const formatData = detail => {
-    if (startsWith(detail.workflow, "pathoscope")) {
+    if (startsWith(detail?.workflow, "pathoscope")) {
         return formatPathoscopeData(detail);
     }
 
-    if (detail.workflow === "nuvs") {
+    if (detail?.workflow === "nuvs") {
         return formatNuVsData(detail);
     }
 
-    if (detail.workflow === "aodp") {
+    if (detail?.workflow === "aodp") {
         return formatAODPData(detail);
     }
 

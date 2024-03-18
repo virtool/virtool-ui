@@ -5,12 +5,9 @@ import { ScrollingAccordionItem } from "@base/accordion/ScrollingAccordionItem";
 import { useUrlSearchParams } from "@utils/hooks";
 import { toScientificNotation } from "@utils/utils";
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { setActiveHitId } from "../../actions";
-import { getReadCount } from "../../selectors";
 import { OTUCoverage } from "./OTUCoverage";
-import PathoscopeDetail from "./PathoscopeDetail";
+import { PathoscopeDetail } from "./PathoscopeDetail";
 
 const PathoscopeItemHeader = styled.h3`
     display: flex;
@@ -77,11 +74,9 @@ const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
 `;
 
 /** A single pathoscope hit*/
-export function PathoscopeItem({ mappedCount, showPathoscopeReads, style, match }) {
+export function PathoscopeItem({ mappedCount, match }) {
     const { abbreviation, coverage, depth, filled, name, pi, id } = match;
     const [showReads] = useUrlSearchParams<boolean>("reads");
-
-    // const MemoizedCoverage = useMemo(() => <OTUCoverage filled={filled} />, [filled]
 
     useEffect(() => {
         console.log("new object ref");
@@ -108,23 +103,8 @@ export function PathoscopeItem({ mappedCount, showPathoscopeReads, style, match 
                 <OTUCoverage filled={filled} />
             </PathoscopeAccordionTrigger>
             <AccordionContent>
-                <PathoscopeDetail hit={match} />
+                <PathoscopeDetail hit={match} mappedCount={mappedCount} />
             </AccordionContent>
         </ScrollingAccordionItem>
     );
 }
-
-const mapStateToProps = (state, ownProps) => {
-    return {
-        mappedCount: getReadCount(state),
-        showPathoscopeReads: state.analyses.showPathoscopeReads,
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    onSetActiveId: id => {
-        dispatch(setActiveHitId(id));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PathoscopeItem);

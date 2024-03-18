@@ -1,3 +1,5 @@
+import { useGetAnalysis } from "@/analyses/queries";
+import { useFetchSample } from "@samples/queries";
 import { getWorkflowDisplayName } from "@utils/utils";
 import { get } from "lodash-es";
 import React, { useEffect } from "react";
@@ -13,7 +15,7 @@ import {
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
 } from "../../base/index";
-import { getAnalysis } from "../actions";
+import { setAnalysis } from "../actions";
 import AODPViewer from "./AODP/Viewer";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/Viewer";
@@ -29,22 +31,30 @@ const UnsupportedAnalysis = styled(Box)`
     }
 `;
 
-export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis }) {
+export function AnalysisDetail({ detail, match, onSetAnalysis }) {
     const analysisId = match.params.analysisId;
+    const { data: analysis, isLoading, error, isError } = useGetAnalysis(analysisId);
+
+    const sampleId = match.params.sampleId;
+    const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
+
+    // console.log({ analysis, detail });
 
     useEffect(() => {
-        onGetAnalysis(analysisId);
-    }, [analysisId]);
+        if (analysis) {
+            onSetAnalysis(analysis);
+        }
+    }, [analysis]);
 
-    if (error) {
+    if (error?.status == 404) {
         return <NotFound />;
     }
 
-    if (detail === null || detail.id !== analysisId) {
+    if (isLoading || isLoadingSample || !detail?.ready) {
         return <LoadingPlaceholder />;
     }
 
-    if (!detail.ready) {
+    if (!analysis.ready) {
         return (
             <Box>
                 <LoadingPlaceholder message="Analysis in progress" margin="1.2rem" />
@@ -54,14 +64,14 @@ export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis
 
     let content;
 
-    if (detail.workflow === "pathoscope_bowtie") {
-        content = <PathoscopeViewer detail={detail} />;
-    } else if (detail.workflow === "nuvs") {
+    if (analysis.workflow === "pathoscope_bowtie") {
+        content = <PathoscopeViewer detail={analysis} sample={sample} />;
+    } else if (analysis.workflow === "nuvs") {
         content = <NuVsViewer />;
-    } else if (detail.workflow === "aodp") {
+    } else if (analysis.workflow === "aodp") {
         content = <AODPViewer />;
-    } else if (detail.workflow === "iimi") {
-        content = <IimiViewer detail={detail} />;
+    } else if (analysis.workflow === "iimi") {
+        content = <IimiViewer detail={analysis} />;
     } else {
         return (
             <>
@@ -77,10 +87,10 @@ export function AnalysisDetail({ detail, error, match, sampleName, onGetAnalysis
         <div>
             <SubviewHeader>
                 <SubviewHeaderTitle>
-                    {getWorkflowDisplayName(detail.workflow)} for {sampleName}
+                    {getWorkflowDisplayName(analysis.workflow)} for {sample.name}
                 </SubviewHeaderTitle>
                 <SubviewHeaderAttribution>
-                    {detail.user.handle} started <RelativeTime time={detail.created_at} />
+                    {analysis.user.handle} started <RelativeTime time={analysis.created_at} />
                 </SubviewHeaderAttribution>
             </SubviewHeader>
 
@@ -93,14 +103,13 @@ export function mapStateToProps(state) {
     return {
         detail: state.analyses.detail,
         error: get(state, "errors.GET_ANALYSIS_ERROR", null),
-        sampleName: state.samples.detail.name,
     };
 }
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onGetAnalysis: analysisId => {
-            dispatch(getAnalysis(analysisId));
+        onSetAnalysis: analysis => {
+            dispatch(setAnalysis(analysis));
         },
     };
 }

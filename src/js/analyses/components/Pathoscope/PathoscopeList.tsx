@@ -1,14 +1,11 @@
+import { Analysis } from "@/analyses/types";
 import { Accordion } from "@base/accordion/Accordion";
-import { getMaxReadLength } from "@samples/selectors";
 import { createFuse } from "@utils/utils";
 import { map, sortBy } from "lodash-es";
 import { reject } from "lodash-es/lodash";
 import React, { useMemo } from "react";
-import { connect } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { setActiveHitId } from "../../actions";
-import { getMatches } from "../../selectors";
-import PathoscopeItem from "./PathoscopeItem";
+import { PathoscopeItem } from "./PathoscopeItem";
 
 export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
     let hits = detail.results.hits;
@@ -38,32 +35,17 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
     return sortedHits;
 }
 
+const PathoscopeListContext = React.createContext<Analysis>(undefined);
+
 /** A list of pathoscope hits*/
-export const PathoscopeList = ({ matches, maxReadLength, detail }) => {
+export const PathoscopeList = ({ detail, sample }) => {
     return (
-        <Accordion type="single" collapsible>
-            {map(useSortAndFilterPathoscopeHits(detail, maxReadLength), match => (
-                <PathoscopeItem key={match.id} match={match} />
-            ))}
-        </Accordion>
+        <PathoscopeListContext.Provider value={detail}>
+            <Accordion type="single" collapsible>
+                {map(useSortAndFilterPathoscopeHits(detail, sample.quality.length[1]), match => (
+                    <PathoscopeItem key={match.id} match={match} mappedCount={detail.results.read_count} />
+                ))}
+            </Accordion>
+        </PathoscopeListContext.Provider>
     );
 };
-
-export function mapStateToProps(state) {
-    const matches = getMatches(state);
-
-    return {
-        matches,
-        maxReadLength: getMaxReadLength(state),
-    };
-}
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onSetActiveId: index => {
-            dispatch(setActiveHitId(index));
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PathoscopeList);
