@@ -5,8 +5,8 @@ import {
     Button,
     Dropdown,
     DropdownButton,
+    DropdownMenuContent,
     DropdownMenuDownload,
-    DropdownMenuList,
     Icon,
     InputSearch,
     Toolbar,
@@ -87,14 +87,14 @@ export const PathoscopeToolbar = ({
                         <Icon name="file-download" /> Export <Icon name="caret-down" />
                     </span>
                 </DropdownButton>
-                <DropdownMenuList>
+                <DropdownMenuContent>
                     <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.csv`}>
                         <Icon name="file-csv" /> CSV
                     </DropdownMenuDownload>
                     <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.xlsx`}>
                         <Icon name="file-excel" /> Excel
                     </DropdownMenuDownload>
-                </DropdownMenuList>
+                </DropdownMenuContent>
             </Dropdown>
         </StyledPathoscopeToolbar>
     );

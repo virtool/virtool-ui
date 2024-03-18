@@ -1,15 +1,13 @@
-import { MenuLink } from "@reach/menu-button";
+import { DropdownMenuItem } from "@base/DropdownMenuItem";
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { DropdownItemMixin } from "./DropdownItemMixin";
 
-export const DropdownMenuLink = styled(({ children, className, to, target, rel }) => (
-    <MenuLink as={Link} className={className} to={to} target={target} rel={rel}>
-        {children}
-    </MenuLink>
-))`
-    ${DropdownItemMixin}
-`;
-
-DropdownMenuLink.displayName = "DropdownMenuLink";
+export function DropdownMenuLink({ children, className, to, target, rel }) {
+    return (
+        <DropdownMenuItem className={className} asChild>
+            <Link to={to} target={target} rel={rel}>
+                {children}
+            </Link>
+        </DropdownMenuItem>
+    );
+}

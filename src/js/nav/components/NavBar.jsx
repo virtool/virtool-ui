@@ -1,4 +1,4 @@
-import { MenuButton } from "@reach/menu-button";
+import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -6,7 +6,7 @@ import { logout } from "../../account/actions";
 import { getAccountHandle } from "../../account/selectors";
 import { AdministratorRoles } from "../../administration/types";
 import { hasSufficientAdminRole } from "../../administration/utils";
-import { Dropdown, DropdownMenuItem, DropdownMenuLink, DropdownMenuList, Icon, InitialIcon, Logo } from "../../base";
+import { Dropdown, DropdownMenuContent, DropdownMenuItem, DropdownMenuLink, Icon, InitialIcon, Logo } from "../../base";
 import { NavBarItem } from "./NavBarItem";
 
 const NavBarLeft = styled.div`
@@ -30,7 +30,7 @@ const NavBarLogo = styled(Logo)`
 
 NavBarLogo.displayName = "NavBarLogo";
 
-const NavDropdownButton = styled(MenuButton)`
+const NavDropdownButton = styled.div`
     align-items: center;
     background: transparent;
     border: none;
@@ -89,12 +89,14 @@ export const Bar = ({ administrator_role, dev, handle, userId, onLogout }) => (
             )}
 
             <Dropdown>
-                <NavDropdownButton>
-                    <InitialIcon handle={handle} size="md" />
-                    <span>{userId}</span>
-                    <Icon name="caret-down" />
-                </NavDropdownButton>
-                <DropdownMenuList>
+                <DropdownMenuTrigger>
+                    <NavDropdownButton>
+                        <InitialIcon handle={handle} size="md" />
+                        <span>{userId}</span>
+                        <Icon name="caret-down" />
+                    </NavDropdownButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
                     <DropdownMenuLink to="/account">
                         Signed in as <strong>{handle}</strong>
                     </DropdownMenuLink>
@@ -112,7 +114,7 @@ export const Bar = ({ administrator_role, dev, handle, userId, onLogout }) => (
                         Documentation
                     </DropdownMenuLink>
                     <DropdownMenuItem onSelect={onLogout}>Logout</DropdownMenuItem>
-                </DropdownMenuList>
+                </DropdownMenuContent>
             </Dropdown>
         </NavBarRight>
     </StyledNavBar>
