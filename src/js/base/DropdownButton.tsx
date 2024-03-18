@@ -4,12 +4,11 @@ import { StyledButton } from "./styled/StyledButton";
 
 type DropdownButtonProps = {
     children: React.ReactNode;
-    className?: string;
 };
 
-export function DropdownButton({ children, className }: DropdownButtonProps) {
+export function DropdownButton({ children }: DropdownButtonProps) {
     return (
-        <DropdownMenuTrigger className={className}>
+        <DropdownMenuTrigger>
             <StyledButton>{children}</StyledButton>
         </DropdownMenuTrigger>
     );

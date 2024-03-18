@@ -5,5 +5,4 @@ export const DropdownMenuTrigger = styled(DropdownMenu.Trigger)`
     all: unset;
     display: flex;
     cursor: pointer;
-    padding: 5px 7px;
 `;

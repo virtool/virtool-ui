@@ -14,7 +14,9 @@ const slideDown = keyframes`
 `;
 
 export const DropdownMenuContent = styled(DropdownMenu.Content)`
+    all: unset;
     animation: ${slideDown} ease-in 100ms;
+    background-color: white;
     border: ${getBorder};
     border-radius: ${props => props.theme.borderRadius.sm};
     box-shadow: ${props => props.theme.boxShadow.lg};
@@ -22,5 +24,5 @@ export const DropdownMenuContent = styled(DropdownMenu.Content)`
     flex-direction: column;
     font-size: ${getFontSize("md")};
     margin: 0 5px;
-    background-color: white;
+    z-index: 1;
 `;

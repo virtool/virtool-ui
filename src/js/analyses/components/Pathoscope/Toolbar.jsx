@@ -1,6 +1,3 @@
-import React, { useCallback } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
 import {
     Button,
     Dropdown,
@@ -10,7 +7,10 @@ import {
     Icon,
     InputSearch,
     Toolbar,
-} from "../../../base";
+} from "@/base";
+import React, { useCallback } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 import {
     setAnalysisSortKey,
     setSearchIds,
