@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Alert } from "./Alert";
 
-export const ModalAlert = styled(Alert)`
+export const DialogAlert = styled(Alert)`
     border-left: none;
     border-right: none;
     border-radius: 0;
@@ -17,4 +17,4 @@ export const ModalAlert = styled(Alert)`
     }
 `;
 
-ModalAlert.displayName = "ModalAlert";
+DialogAlert.displayName = "DialogAlert";

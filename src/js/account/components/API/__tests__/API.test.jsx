@@ -91,9 +91,7 @@ describe("<API />", () => {
         it("should render correctly when newKey = empty", async () => {
             renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
-            await userEvent.click(screen.getByText("Create"));
-
-            expect(screen.getByText("Create API Key")).toBeInTheDocument();
+            expect(await screen.findByText("Create API Key")).toBeInTheDocument();
 
             expect(screen.getByText("Name")).toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();
@@ -122,9 +120,7 @@ describe("<API />", () => {
         it("should fail to submit and display errors when no name provided", async () => {
             renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
 
-            await userEvent.click(screen.getByText("Create"));
-
-            expect(screen.queryByText("Provide a name for the key")).not.toBeInTheDocument();
+            expect(await screen.findByText("Create API Key")).toBeInTheDocument();
 
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
 

@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -77,7 +77,7 @@ describe("<EditSubtraction />", () => {
     it("should call onHide() when closed", async () => {
         renderWithProviders(<EditSubtraction {...props} />);
 
-        await userEvent.click(screen.getByLabelText("close"));
+        fireEvent.keyDown(document, { key: "Escape" });
 
         await waitFor(() => expect(props.onHide).toHaveBeenCalled());
     });

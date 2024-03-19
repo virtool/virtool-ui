@@ -1,8 +1,9 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { find, findIndex } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../../base";
+import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "../../../../base";
 import SegmentForm from "./Form";
 
 const getInitialState = props => ({
@@ -31,8 +32,9 @@ class EditSegment extends React.Component {
         });
     };
 
-    handleModalEnter = () => {
+    handleHide = () => {
         this.setState(getInitialState(this.props));
+        this.props.onHide();
     };
 
     handleSubmit = e => {
@@ -65,24 +67,22 @@ class EditSegment extends React.Component {
 
     render() {
         return (
-            <Modal
-                label="Edit Segment"
-                show={this.props.show}
-                onHide={this.props.onHide}
-                onEnter={this.handleModalEnter}
-            >
-                <ModalHeader>Edit Segment</ModalHeader>
-                <form onSubmit={this.handleSubmit}>
-                    <ModalBody>
-                        <SegmentForm onChange={this.handleChange} newEntry={this.state.newEntry} />
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="blue" icon="save" type="submit">
-                            Save
-                        </Button>
-                    </ModalFooter>
-                </form>
-            </Modal>
+            <Dialog open={this.props.show} onOpenChange={this.handleHide}>
+                <DialogPortal>
+                    <DialogOverlay />
+                    <DialogContent>
+                        <DialogTitle>Edit Segment</DialogTitle>
+                        <form onSubmit={this.handleSubmit}>
+                            <SegmentForm onChange={this.handleChange} newEntry={this.state.newEntry} />
+                            <DialogFooter>
+                                <Button color="blue" icon="save" type="submit">
+                                    Save
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </DialogPortal>
+            </Dialog>
         );
     }
 }

@@ -7,6 +7,11 @@ import styled from "styled-components";
 
 import { getFontSize } from "@app/theme";
 import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
     Icon,
     Input,
     InputContainer,
@@ -14,12 +19,9 @@ import {
     InputGroup,
     InputIcon,
     InputLabel,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
     SaveButton,
 } from "@base";
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { routerLocationHasState } from "@utils/utils";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -49,7 +51,7 @@ const CreateAPIKeyInputContainer = styled(InputContainer)`
     margin-bottom: 10px;
 `;
 
-const StyledCreateAPIKey = styled(ModalBody)`
+const StyledCreateAPIKey = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -72,9 +74,10 @@ function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
         }
     }, [newKey]);
 
-    const handleModalExited = () => {
+    const handleHide = () => {
         setCopied(false);
         setShowCreated(false);
+        onHide();
     };
 
     const handleSubmit = ({ name, permissions }) => {
@@ -82,59 +85,62 @@ function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
     };
 
     return (
-        <Modal label="Create API Key" show={show} onHide={onHide} onExited={handleModalExited}>
-            <ModalHeader>Create API Key</ModalHeader>
-            {showCreated ? (
-                <StyledCreateAPIKey>
-                    <strong>Here is your key.</strong>
-                    <p>Make note of it now. For security purposes, it will not be shown again.</p>
+        <Dialog open={show} onOpenChange={handleHide}>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Create API Key</DialogTitle>
+                    {showCreated ? (
+                        <StyledCreateAPIKey>
+                            <strong>Here is your key.</strong>
+                            <p>Make note of it now. For security purposes, it will not be shown again.</p>
 
-                    <CreateAPIKeyInputContainer align="right">
-                        <CreateAPIKeyInput value={newKey} readOnly />
-                        <CopyToClipboard text={newKey} onCopy={() => setCopied(true)}>
-                            <InputIcon aria-label="copy" name="copy" />
-                        </CopyToClipboard>
-                    </CreateAPIKeyInputContainer>
-                    {copied && (
-                        <CreateAPIKeyCopied>
-                            <Icon name="check" /> Copied
-                        </CreateAPIKeyCopied>
+                            <CreateAPIKeyInputContainer align="right">
+                                <CreateAPIKeyInput value={newKey} readOnly />
+                                <CopyToClipboard text={newKey} onCopy={() => setCopied(true)}>
+                                    <InputIcon aria-label="copy" name="copy" />
+                                </CopyToClipboard>
+                            </CreateAPIKeyInputContainer>
+                            {copied && (
+                                <CreateAPIKeyCopied>
+                                    <Icon name="check" /> Copied
+                                </CreateAPIKeyCopied>
+                            )}
+                        </StyledCreateAPIKey>
+                    ) : (
+                        <Formik
+                            onSubmit={handleSubmit}
+                            initialValues={getInitialFormValues(permissions)}
+                            validationSchema={validationSchema}
+                        >
+                            {({ errors, setFieldValue, touched, values }) => (
+                                <Form>
+                                    <CreateAPIKeyInfo />
+                                    <InputGroup>
+                                        <InputLabel htmlFor="name">Name</InputLabel>
+                                        <Field name="name" id="name" as={Input} />
+                                        <InputError>{touched.name && errors.name}</InputError>
+                                    </InputGroup>
+
+                                    <label>Permissions</label>
+
+                                    <APIPermissions
+                                        keyPermissions={values.permissions}
+                                        onChange={(key, value) =>
+                                            setFieldValue("permissions", { ...values.permissions, [key]: value })
+                                        }
+                                    />
+
+                                    <DialogFooter>
+                                        <SaveButton />
+                                    </DialogFooter>
+                                </Form>
+                            )}
+                        </Formik>
                     )}
-                </StyledCreateAPIKey>
-            ) : (
-                <Formik
-                    onSubmit={handleSubmit}
-                    initialValues={getInitialFormValues(permissions)}
-                    validationSchema={validationSchema}
-                >
-                    {({ errors, setFieldValue, touched, values }) => (
-                        <Form>
-                            <CreateAPIKeyInfo />
-                            <ModalBody>
-                                <InputGroup>
-                                    <InputLabel htmlFor="name">Name</InputLabel>
-                                    <Field name="name" id="name" as={Input} />
-                                    <InputError>{touched.name && errors.name}</InputError>
-                                </InputGroup>
-
-                                <label>Permissions</label>
-
-                                <APIPermissions
-                                    keyPermissions={values.permissions}
-                                    onChange={(key, value) =>
-                                        setFieldValue("permissions", { ...values.permissions, [key]: value })
-                                    }
-                                />
-                            </ModalBody>
-
-                            <ModalFooter>
-                                <SaveButton />
-                            </ModalFooter>
-                        </Form>
-                    )}
-                </Formik>
-            )}
-        </Modal>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }
 

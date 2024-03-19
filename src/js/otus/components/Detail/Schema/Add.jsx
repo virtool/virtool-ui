@@ -1,8 +1,9 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { find } from "lodash-es";
 import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../../base";
+import { Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, SaveButton } from "../../../../base";
 import SegmentForm from "./Form";
 
 const getInitialState = () => ({
@@ -48,23 +49,27 @@ class Add extends React.Component {
         }
     };
 
-    handleExited = () => {
+    handleHide = () => {
+        this.props.onHide();
         this.setState(getInitialState());
     };
 
     render() {
         return (
-            <Modal label="Add Segment" show={this.props.show} onExited={this.handleExited} onHide={this.props.onHide}>
-                <ModalHeader>Add Segment</ModalHeader>
-                <form onSubmit={this.handleSubmit}>
-                    <ModalBody>
-                        <SegmentForm onChange={this.handleChange} newEntry={this.state.newEntry} />
-                    </ModalBody>
-                    <ModalFooter>
-                        <SaveButton />
-                    </ModalFooter>
-                </form>
-            </Modal>
+            <Dialog open={this.props.show} onOpenChange={this.handleHide}>
+                <DialogPortal>
+                    <DialogOverlay />
+                    <DialogContent>
+                        <DialogTitle>Add Segment</DialogTitle>
+                        <form onSubmit={this.handleSubmit}>
+                            <SegmentForm onChange={this.handleChange} newEntry={this.state.newEntry} />
+                            <DialogFooter>
+                                <SaveButton />
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </DialogPortal>
+            </Dialog>
         );
     }
 }
