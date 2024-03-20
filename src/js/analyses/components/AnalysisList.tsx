@@ -36,10 +36,10 @@ export default function AnalysesList({ match }: AnalysisListProps) {
     if (isLoadingAnalyses || isLoadingHmms || isLoadingSample) {
         return <LoadingPlaceholder />;
     }
-
+    console.log(hmms)
     return (
         <ContainerNarrow>
-            <AnalysisHMMAlert installed={hmms.status.task.complete} />
+            <AnalysisHMMAlert installed={hmms.status.task?.complete} />
             <AnalysesToolbar onChange={e => setTerm(e.target.value)} sampleId={sampleId} term={term} />
 
             {analyses.found_count ? (

@@ -83,11 +83,17 @@ export type FormattedPathoscopeResults = {
 /** Mapping data for a single pathoscope hit*/
 export type FormattedPathoscopeHit = {
     abbreviation: string;
+    coverage: number;
+    depth: number;
     filled: PositionMappedReadDepths;
     id: string;
     isolates: FormattedPathoscopeIsolate[];
     length: number;
+    maxDepth: number;
+    maxGenomeLength: number;
     name: string;
+    pi: number;
+    reads: number;
     version: number;
 };
 

@@ -31,6 +31,7 @@ const UnsupportedAnalysis = styled(Box)`
     }
 `;
 
+/** Base component viewing all supported analysis */
 export function AnalysisDetail({ detail, match, onSetAnalysis }) {
     const analysisId = match.params.analysisId;
     const { data: analysis, isLoading, error, isError } = useGetAnalysis(analysisId);
@@ -46,7 +47,7 @@ export function AnalysisDetail({ detail, match, onSetAnalysis }) {
         }
     }, [analysis]);
 
-    if (error?.status == 404) {
+    if (error?.response.status == 404) {
         return <NotFound />;
     }
 

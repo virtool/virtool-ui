@@ -1,3 +1,4 @@
+import { FormattedPathoscopeHit } from "@/analyses/types";
 import { getColor } from "@app/theme";
 import { AccordionTrigger } from "@base";
 import { AccordionContent } from "@base/accordion/AccordionContent";
@@ -73,8 +74,14 @@ const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
     }
 `;
 
+type PathoscopeItemProps = {
+    mappedCount: number;
+    match: FormattedPathoscopeHit;
+};
+
 /** A single pathoscope hit*/
-export function PathoscopeItem({ mappedCount, match }) {
+export function PathoscopeItem({ mappedCount, match }: PathoscopeItemProps) {
+    console.log({ match, mappedCount });
     const { abbreviation, coverage, depth, filled, name, pi, id } = match;
     const [showReads] = useUrlSearchParams<boolean>("reads");
 

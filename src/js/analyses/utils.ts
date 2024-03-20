@@ -212,6 +212,9 @@ export const formatPathoscopeData = detail => {
             );
 
             const filled = flatMap(sequences, "filled");
+            if (sequences.length >= 2) {
+                console.log("found one!", isolate);
+            }
 
             // Coverage is the number of non-zero depth positions divided by the total number of positions.
             const coverage = compact(filled).length / filled.length;

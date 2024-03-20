@@ -1,4 +1,3 @@
-import { Analysis } from "@/analyses/types";
 import { Accordion } from "@base/accordion/Accordion";
 import { createFuse } from "@utils/utils";
 import { map, sortBy } from "lodash-es";
@@ -35,17 +34,13 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
     return sortedHits;
 }
 
-const PathoscopeListContext = React.createContext<Analysis>(undefined);
-
 /** A list of pathoscope hits*/
 export const PathoscopeList = ({ detail, sample }) => {
     return (
-        <PathoscopeListContext.Provider value={detail}>
-            <Accordion type="single" collapsible>
-                {map(useSortAndFilterPathoscopeHits(detail, sample.quality.length[1]), match => (
-                    <PathoscopeItem key={match.id} match={match} mappedCount={detail.results.read_count} />
-                ))}
-            </Accordion>
-        </PathoscopeListContext.Provider>
+        <Accordion type="single" collapsible>
+            {map(useSortAndFilterPathoscopeHits(detail, sample.quality.length[1]), match => (
+                <PathoscopeItem key={match.id} match={match} mappedCount={detail.results.readCount} />
+            ))}
+        </Accordion>
     );
 };
