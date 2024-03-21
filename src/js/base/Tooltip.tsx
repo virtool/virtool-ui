@@ -1,3 +1,4 @@
+import { boxShadow } from "@app/theme";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import React from "react";
 import styled, { keyframes } from "styled-components";
@@ -51,10 +52,9 @@ const TooltipContent = styled(TooltipPrimitive.Content)`
     padding: 10px 15px;
     font-size: 15px;
     line-height: 1;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: ${props => props.theme.color.greyDarkest};
     color: white;
-    box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
-    user-select: none;
+    box-shadow: ${boxShadow.lg};
     animation-duration: 400ms;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity;
