@@ -1,11 +1,12 @@
+import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { resetClient } from "@utils/utils";
+import { WallContainer } from "@wall/Container";
 import { ConnectedRouter } from "connected-react-router";
 import React, { Suspense, useEffect } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { connect, Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
-import { LoadingPlaceholder } from "../base";
-import { resetClient } from "../utils/utils";
-import { WallContainer } from "../wall/Container";
 import Reset from "../wall/Reset";
 import { getInitialState } from "./actions";
 import { GlobalStyles } from "./GlobalStyles";
@@ -89,10 +90,12 @@ export default function App({ store, history }) {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Provider store={store}>
-                    <ConnectedRouter history={history}>
-                        <GlobalStyles />
-                        <ConnectedApp />
-                    </ConnectedRouter>
+                    <HelmetProvider>
+                        <ConnectedRouter history={history}>
+                            <GlobalStyles />
+                            <ConnectedApp />
+                        </ConnectedRouter>
+                    </HelmetProvider>
                 </Provider>
             </QueryClientProvider>
         </ThemeProvider>
