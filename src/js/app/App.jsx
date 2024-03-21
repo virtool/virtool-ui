@@ -4,7 +4,6 @@ import { resetClient } from "@utils/utils";
 import { WallContainer } from "@wall/Container";
 import { ConnectedRouter } from "connected-react-router";
 import React, { Suspense, useEffect } from "react";
-import { HelmetProvider } from "react-helmet-async";
 import { connect, Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import Reset from "../wall/Reset";
@@ -90,12 +89,10 @@ export default function App({ store, history }) {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Provider store={store}>
-                    <HelmetProvider>
-                        <ConnectedRouter history={history}>
-                            <GlobalStyles />
-                            <ConnectedApp />
-                        </ConnectedRouter>
-                    </HelmetProvider>
+                    <ConnectedRouter history={history}>
+                        <GlobalStyles />
+                        <ConnectedApp />
+                    </ConnectedRouter>
                 </Provider>
             </QueryClientProvider>
         </ThemeProvider>

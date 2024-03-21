@@ -5,7 +5,7 @@ import { NavContainer } from "@nav/components/NavContainer";
 import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
@@ -55,10 +55,12 @@ export const Main = ({ ready, onLoad }) => {
     if (ready) {
         return (
             <>
-                <Helmet>
-                    <title>Virtool</title>
-                    <meta charSet="utf-8" />
-                </Helmet>
+                <HelmetProvider>
+                    <Helmet>
+                        <title>Virtool</title>
+                        <meta charSet="utf-8" />
+                    </Helmet>
+                </HelmetProvider>
 
                 <NavContainer>
                     <MessageBanner />
