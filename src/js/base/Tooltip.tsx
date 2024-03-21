@@ -49,10 +49,10 @@ const slideLeftAndFade = keyframes`
 
 const TooltipContent = styled(TooltipPrimitive.Content)`
     border-radius: 4px;
-    padding: 10px 15px;
+    padding: 0.6rem 1.2rem;
     font-size: 15px;
     line-height: 1;
-    background-color: ${props => props.theme.color.greyDarkest};
+    background-color: rgba(0, 0, 0, 0.8);
     color: white;
     box-shadow: ${boxShadow.lg};
     animation-duration: 400ms;
