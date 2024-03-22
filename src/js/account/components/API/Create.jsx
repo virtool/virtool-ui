@@ -1,7 +1,6 @@
 import { pushState } from "@app/actions";
 import { mapValues } from "lodash-es";
 import React, { useEffect, useState } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
@@ -81,6 +80,10 @@ function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
         onCreate(name, permissions);
     };
 
+    function copyToClipboard() {
+        navigator.clipboard.writeText(newKey).then(() => setCopied(true));
+    }
+
     return (
         <Modal label="Create API Key" show={show} onHide={onHide} onExited={handleModalExited}>
             <ModalHeader>Create API Key</ModalHeader>
@@ -91,9 +94,9 @@ function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
 
                     <CreateAPIKeyInputContainer align="right">
                         <CreateAPIKeyInput value={newKey} readOnly />
-                        <CopyToClipboard text={newKey} onCopy={() => setCopied(true)}>
-                            <InputIcon aria-label="copy" name="copy" />
-                        </CopyToClipboard>
+                        {window.isSecureContext && (
+                            <InputIcon aria-label="copy" name="copy" onClick={copyToClipboard} />
+                        )}
                     </CreateAPIKeyInputContainer>
                     {copied && (
                         <CreateAPIKeyCopied>
