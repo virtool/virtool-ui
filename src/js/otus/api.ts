@@ -1,4 +1,4 @@
-import { Request } from "../app/request";
+import { Request } from "@app/request";
 import { OTU, OTUIsolate } from "./types";
 
 /**
