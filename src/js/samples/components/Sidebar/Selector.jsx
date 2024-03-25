@@ -13,8 +13,7 @@ export const SampleSidebarSelectorButton = styled.div`
     border-top: 1px solid;
     border-color: ${props => props.theme.color.greyLight};
     width: 100%;
-    display: flex;
-    align-items: right;
+    align-items: flex-end;
 
     a {
         margin-left: auto;
