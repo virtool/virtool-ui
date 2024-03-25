@@ -19,7 +19,7 @@ describe("<RemoveSegment />", () => {
             abbreviation: otu.abbreviation,
             name: otu.name,
             otuId: otu.id,
-            schema: otu.schema,
+            schema: otu.otu_schema,
         };
         history = createBrowserHistory();
     });
