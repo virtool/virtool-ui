@@ -7,9 +7,10 @@
 import { forEach, map, reduce, replace } from "lodash-es";
 import React from "react";
 
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { connect } from "react-redux";
 import { pushState } from "../../../app/actions";
-import { Button, ButtonGroup, Modal, ModalBody, ModalFooter, ModalHeader } from "../../../base/";
+import { Button, ButtonGroup, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "../../../base/";
 import { followDynamicDownload, routerLocationHasState } from "../../../utils/utils";
 import { getResults } from "../../selectors";
 import NuVsExportPreview from "./ExportPreview";
@@ -86,8 +87,9 @@ export class NuVsExport extends React.Component {
         this.state = getInitialState();
     }
 
-    handleModalExited = () => {
+    handleHide = () => {
         this.setState(getInitialState());
+        this.props.onHide();
     };
 
     setMode = mode => {
@@ -119,41 +121,39 @@ export class NuVsExport extends React.Component {
 
     render() {
         return (
-            <Modal
-                label="Export Analysis"
-                show={this.props.show}
-                onHide={this.props.onHide}
-                onExited={this.handleModalExited}
-            >
-                <ModalHeader>Export Analysis</ModalHeader>
-                <form onSubmit={this.handleSubmit}>
-                    <ModalBody>
-                        <ButtonGroup>
-                            <Button
-                                type="button"
-                                active={this.state.mode === "contigs"}
-                                onClick={() => this.setMode("contigs")}
-                            >
-                                Contigs
-                            </Button>
-                            <Button
-                                type="button"
-                                active={this.state.mode === "orfs"}
-                                onClick={() => this.setMode("orfs")}
-                            >
-                                ORFs
-                            </Button>
-                        </ButtonGroup>
+            <Dialog open={this.props.show} onOpenChange={this.handleHide}>
+                <DialogPortal>
+                    <DialogOverlay />
+                    <DialogContent>
+                        <DialogTitle>Export Analysis</DialogTitle>
+                        <form onSubmit={this.handleSubmit}>
+                            <ButtonGroup>
+                                <Button
+                                    type="button"
+                                    active={this.state.mode === "contigs"}
+                                    onClick={() => this.setMode("contigs")}
+                                >
+                                    Contigs
+                                </Button>
+                                <Button
+                                    type="button"
+                                    active={this.state.mode === "orfs"}
+                                    onClick={() => this.setMode("orfs")}
+                                >
+                                    ORFs
+                                </Button>
+                            </ButtonGroup>
 
-                        <NuVsExportPreview mode={this.state.mode} />
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button type="submit" color="blueDark" icon="download">
-                            Download
-                        </Button>
-                    </ModalFooter>
-                </form>
-            </Modal>
+                            <NuVsExportPreview mode={this.state.mode} />
+                            <DialogFooter>
+                                <Button type="submit" color="blueDark" icon="download">
+                                    Download
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </DialogPortal>
+            </Dialog>
         );
     }
 }

@@ -3,9 +3,9 @@ import React from "react";
 import { Button } from "./Button";
 import { Dialog } from "./Dialog";
 import { DialogContent } from "./DialogContent";
+import { DialogFooter } from "./DialogFooter";
 import { DialogOverlay } from "./DialogOverlay";
 import { DialogTitle } from "./DialogTitle";
-import { ModalFooter } from "./ModalFooter";
 
 type RemoveDialogProps = {
     /** A message to override the default one displayed in the dialog body */
@@ -38,11 +38,11 @@ export function RemoveDialog({ message, name, noun, show, onConfirm, onHide }: R
                         </span>
                     )}
 
-                    <ModalFooter>
+                    <DialogFooter>
                         <Button color="red" icon="check" onClick={onConfirm}>
                             Confirm
                         </Button>
-                    </ModalFooter>
+                    </DialogFooter>
                 </DialogContent>
             </DialogPortal>
         </Dialog>

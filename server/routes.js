@@ -3,27 +3,27 @@ const buffer = fs.readFileSync("dist/index.html");
 const baseTemplateString = buffer.toString();
 
 function createTemplateString(options) {
-  const b2cEnabled = Boolean(options.b2cUserflow);
+    const b2cEnabled = Boolean(options.b2cUserflow);
 
-  const template = baseTemplateString
-    .replace('"B2C_ENABLED"', b2cEnabled ? `true` : `false`)
-    .replace("SENTRY_DSN", options.sentryDsn)
-    .replace("VERSION", "unknown")
-    .replace("B2C_API_CLIENT_ID", options.b2cApiClientId)
-    .replace("B2C_CLIENT_ID", options.b2cClientId)
-    .replace("B2C_SCOPE", options.b2cScope)
-    .replace("B2C_TENANT", options.b2cTenant)
-    .replace("B2C_USER_FLOW", options.b2cUserflow);
+    const template = baseTemplateString
+        .replace('"B2C_ENABLED"', b2cEnabled ? `true` : `false`)
+        .replace("SENTRY_DSN", options.sentryDsn)
+        .replace("VERSION", "unknown")
+        .replace("B2C_API_CLIENT_ID", options.b2cApiClientId)
+        .replace("B2C_CLIENT_ID", options.b2cClientId)
+        .replace("B2C_SCOPE", options.b2cScope)
+        .replace("B2C_TENANT", options.b2cTenant)
+        .replace("B2C_USER_FLOW", options.b2cUserflow);
 
-  return template;
+    return template;
 }
 
 function defaultPath(options) {
-  const template = createTemplateString(options);
+    const template = createTemplateString(options);
 
-  return (req, res) => {
-    res.send(template.replaceAll("NONCE", res.locals.nonce));
-  };
+    return (req, res) => {
+        res.send(template.replaceAll("NONCE", res.locals.nonce));
+    };
 }
 
 /**

@@ -1,9 +1,10 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { pushState } from "../../../app/actions";
-import { Modal, ModalBody, ModalFooter, ModalHeader, SaveButton } from "../../../base";
+import { Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import { routerLocationHasState } from "../../../utils/utils";
 import { editReference } from "../../actions";
 import { Reference, ReferenceDataType } from "../../types";
@@ -48,21 +49,23 @@ export function EditReference({ detail, onSubmit }: EditReferenceProps) {
     });
 
     return (
-        <Modal
-            label="Edit"
-            show={location.state?.editReference}
-            onHide={() => history.replace({ state: { editReference: false } })}
+        <Dialog
+            open={location.state?.editReference}
+            onOpenChange={() => history.replace({ state: { editReference: false } })}
         >
-            <ModalHeader>Edit Reference</ModalHeader>
-            <form onSubmit={handleSubmit(values => handleEdit({ ...values }))}>
-                <ModalBody>
-                    <ReferenceForm errors={errors} mode={ReferenceFormMode.edit} register={register} />
-                </ModalBody>
-                <ModalFooter>
-                    <SaveButton />
-                </ModalFooter>
-            </form>
-        </Modal>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Edit Reference</DialogTitle>
+                    <form onSubmit={handleSubmit(values => handleEdit({ ...values }))}>
+                        <ReferenceForm errors={errors} mode={ReferenceFormMode.edit} register={register} />
+                        <DialogFooter>
+                            <SaveButton />
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }
 

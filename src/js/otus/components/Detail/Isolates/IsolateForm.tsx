@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Input, InputGroup, InputLabel, InputSimple, ModalFooter, SaveButton } from "../../../../base";
+import { DialogFooter, Input, InputGroup, InputLabel, InputSimple, SaveButton } from "../../../../base";
 import { formatIsolateName } from "../../../../utils/utils";
 import { SourceType } from "./SourceType";
 
@@ -72,9 +72,9 @@ export default function IsolateForm({
                 />
             </InputGroup>
 
-            <ModalFooter>
+            <DialogFooter>
                 <SaveButton />
-            </ModalFooter>
+            </DialogFooter>
         </form>
     );
 }

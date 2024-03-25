@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { InputError, InputGroup, InputLabel, InputSimple, ModalFooter, SaveButton } from "../../base";
+import { DialogFooter, InputError, InputGroup, InputLabel, InputSimple, SaveButton } from "../../base";
 
 const OTUFormBody = styled.div`
     display: grid;
@@ -47,9 +47,9 @@ export function OTUForm({ abbreviation, error, name, onSubmit }: OTUFormProps) {
                     <InputSimple id="abbreviation" {...register("abbreviation")} />
                 </InputGroup>
             </OTUFormBody>
-            <ModalFooter>
+            <DialogFooter>
                 <SaveButton />
-            </ModalFooter>
+            </DialogFooter>
         </form>
     );
 }

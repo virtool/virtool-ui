@@ -1,3 +1,4 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { Field, Form, Formik } from "formik";
 import { find } from "lodash-es";
 import React from "react";
@@ -8,13 +9,14 @@ import {
     Attribution,
     Badge,
     Box,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
     Input,
     InputError,
     InputGroup,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
     SaveButton,
 } from "../../base";
 import { useCloneReference } from "../queries";
@@ -73,39 +75,41 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     }
 
     return (
-        <Modal
-            label="Clone Reference"
-            onHide={onHide}
-            show={(history.location.state && history.location.state["cloneReference"]) || false}
+        <Dialog
+            onOpenChange={onHide}
+            open={(history.location.state && history.location.state["cloneReference"]) || false}
         >
-            <ModalHeader>Clone Reference</ModalHeader>
-            <Formik
-                onSubmit={handleSubmit}
-                initialValues={getInitialValues(reference)}
-                validationSchema={validationSchema}
-            >
-                {({ touched, errors }) => (
-                    <Form>
-                        <ModalBody>
-                            <label htmlFor="selectedReference"> Selected reference </label>
-                            {reference && (
-                                <ReferenceBox id="selectedReference">
-                                    <strong>{reference.name}</strong> <Badge>{reference.otu_count} OTUs</Badge>
-                                    <Attribution time={reference.created_at} user={reference.user.handle} />
-                                </ReferenceBox>
-                            )}
-                            <label htmlFor="name"> Name </label>
-                            <InputGroup>
-                                <Field name="name" id="name" as={Input} />
-                                <InputError>{touched.name && errors.name}</InputError>
-                            </InputGroup>
-                        </ModalBody>
-                        <ModalFooter>
-                            <SaveButton disabled={!references.length} altText="Clone" />
-                        </ModalFooter>
-                    </Form>
-                )}
-            </Formik>
-        </Modal>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Clone Reference</DialogTitle>
+                    <Formik
+                        onSubmit={handleSubmit}
+                        initialValues={getInitialValues(reference)}
+                        validationSchema={validationSchema}
+                    >
+                        {({ touched, errors }) => (
+                            <Form>
+                                <label htmlFor="selectedReference"> Selected reference </label>
+                                {reference && (
+                                    <ReferenceBox id="selectedReference">
+                                        <strong>{reference.name}</strong> <Badge>{reference.otu_count} OTUs</Badge>
+                                        <Attribution time={reference.created_at} user={reference.user.handle} />
+                                    </ReferenceBox>
+                                )}
+                                <label htmlFor="name"> Name </label>
+                                <InputGroup>
+                                    <Field name="name" id="name" as={Input} />
+                                    <InputError>{touched.name && errors.name}</InputError>
+                                </InputGroup>
+                                <DialogFooter>
+                                    <SaveButton disabled={!references.length} altText="Clone" />
+                                </DialogFooter>
+                            </Form>
+                        )}
+                    </Formik>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }
