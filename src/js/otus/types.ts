@@ -87,7 +87,7 @@ export type OTU = OTUMinimal & {
     issues?: { [key: string]: any } | boolean;
     last_indexed_version?: number;
     most_recent_change: HistoryNested;
-    schema: Array<OTUSegment>;
+    otu_schema: Array<OTUSegment>;
     remote?: OTURemote;
 };
 

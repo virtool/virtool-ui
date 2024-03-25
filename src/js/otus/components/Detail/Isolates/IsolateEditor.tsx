@@ -65,7 +65,7 @@ export default function IsolateEditor({ otu, reference }: IsolateEditorProps) {
 
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);
 
-    const activeIsolateId = location.state?.activeIsolateId;
+    const activeIsolateId = location.state?.activeIsolateId || otu.isolates[0]?.id;
     const activeIsolate = isolates.length ? find(isolates, { id: activeIsolateId }) : null;
 
     const isolateComponents = map(isolates, (isolate, index) => (

@@ -12,27 +12,24 @@ export default function useGetSequences(otuId: string, sequences: OTUSequence) {
     const { data, isLoading } = useFetchOTU(otuId);
 
     if (isLoading) {
-        return { sequences: [], isLoading: true };
+        return;
     }
 
     if (sequences) {
-        const segmentNames = map(data.schema, "name");
+        const segmentNames = map(data.otu_schema, "name");
 
-        return {
-            sequences: sortBy(sequences, [
-                entry => {
-                    const index = indexOf(segmentNames, entry.segment);
+        return sortBy(sequences, [
+            entry => {
+                const index = indexOf(segmentNames, entry.segment);
 
-                    if (index !== -1) {
-                        return index;
-                    }
+                if (index !== -1) {
+                    return index;
+                }
 
-                    return segmentNames.length;
-                },
-            ]),
-            isLoading: false,
-        };
+                return segmentNames.length;
+            },
+        ]);
     }
 
-    return { sequences: [], isLoading: false };
+    return [];
 }

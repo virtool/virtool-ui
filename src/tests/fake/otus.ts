@@ -99,7 +99,7 @@ export function createFakeOTU(overrides?: CreateFakeOTU): OTU {
         issues: issues || null,
         last_indexed_version: null,
         most_recent_change: createFakeHistoryNested(),
-        schema: [createFakeOTUSegment()],
+        otu_schema: [createFakeOTUSegment()],
         remote: remote || null,
     };
 }

@@ -1,4 +1,4 @@
-import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundSection } from "@/base";
+import { Badge, BoxGroup, NoneFoundSection } from "@/base";
 import { getFontSize } from "@app/theme";
 import useGetSequences from "@otus/hooks";
 import { getTargets } from "@otus/selectors";
@@ -27,11 +27,7 @@ const IsolateSequencesHeader = styled.label`
 `;
 
 export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenceId, otuId }) => {
-    const { sequences, isLoading } = useGetSequences(otuId, activeIsolate.sequences);
-
-    if (isLoading) {
-        return <LoadingPlaceholder />;
-    }
+    const sequences = useGetSequences(otuId, activeIsolate.sequences);
 
     const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
 
