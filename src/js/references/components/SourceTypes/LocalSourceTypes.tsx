@@ -17,8 +17,8 @@ import {
     LoadingPlaceholder,
     SectionHeader,
 } from "../../../base";
-import { useUpdateReference, useUpdateSourceTypes } from "../../hooks";
-import { useGetReference } from "../../queries";
+import { useUpdateSourceTypes } from "../../hooks";
+import { referenceQueryKeys, useGetReference, useUpdateReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
@@ -80,7 +80,7 @@ export function LocalSourceTypes() {
     const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
         "source_types",
         `/refs/${refId}`,
-        ["reference", refId],
+        referenceQueryKeys.detail(refId),
         sourceTypes,
     );
 

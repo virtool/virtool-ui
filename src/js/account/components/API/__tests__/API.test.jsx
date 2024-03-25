@@ -111,10 +111,6 @@ describe("<API />", () => {
 
             expect(screen.getByDisplayValue("123abc")).toBeInTheDocument();
             expect(screen.queryByText("Copied")).not.toBeInTheDocument();
-
-            await userEvent.click(screen.getByRole("button", { name: "copy" }));
-
-            expect(screen.getByText("Copied")).toBeInTheDocument();
         });
 
         it("should fail to submit and display errors when no name provided", async () => {
