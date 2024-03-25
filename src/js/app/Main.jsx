@@ -1,18 +1,18 @@
+import { Container, LoadingPlaceholder } from "@/base";
+import { getAccount } from "@account/actions";
+import { getSettings } from "@administration/actions";
+import { NavContainer } from "@nav/components/NavContainer";
 import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import { getAccount } from "../account/actions";
-import { getSettings } from "../administration/actions";
-import { Container, LoadingPlaceholder } from "../base";
 import DevDialog from "../dev/components/Dialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
 import NavBar from "../nav/components/NavBar";
-import { NavContainer } from "../nav/components/NavContainer";
 import Sidebar from "../nav/components/Sidebar";
 
 import WSConnection, { ABANDONED, INITIALIZING } from "./websocket/WSConnection";
@@ -55,10 +55,12 @@ export const Main = ({ ready, onLoad }) => {
     if (ready) {
         return (
             <>
-                <Helmet>
-                    <title>Virtool</title>
-                    <meta charSet="utf-8" />
-                </Helmet>
+                <HelmetProvider>
+                    <Helmet>
+                        <title>Virtool</title>
+                        <meta charSet="utf-8" />
+                    </Helmet>
+                </HelmetProvider>
 
                 <NavContainer>
                     <MessageBanner />

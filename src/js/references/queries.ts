@@ -1,3 +1,5 @@
+import { ErrorResponse } from "@/types/types";
+import { Request } from "@app/request";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHistory } from "react-router-dom";
 import {
@@ -19,6 +21,7 @@ import {
     ReferenceGroup,
     ReferenceMinimal,
     ReferenceSearchResult,
+    ReferenceTarget,
     ReferenceUser,
 } from "./types";
 
@@ -91,6 +94,30 @@ export function useCreateReference() {
  */
 export function useRemoveReference() {
     return useMutation<null, unknown, { refId: string }>(({ refId }) => removeReference(refId));
+}
+
+/**
+ * Initializes a mutator for updating a reference
+ *
+ * @returns A mutator for updating a reference
+ */
+export function useUpdateReference(refId: string, onSuccess?: () => void) {
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation<Reference, ErrorResponse, unknown>(
+        (data: { restrict_source_types?: boolean; targets?: ReferenceTarget[] }) => {
+            return Request.patch(`/refs/${refId}`)
+                .send(data)
+                .then(res => res.body);
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(referenceQueryKeys.detail(refId)).then(() => onSuccess && onSuccess());
+            },
+        },
+    );
+
+    return { mutation };
 }
 
 /**

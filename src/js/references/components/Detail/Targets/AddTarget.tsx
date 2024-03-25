@@ -1,8 +1,8 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUpdateReference } from "@references/queries";
 import { toNumber } from "lodash-es";
 import React from "react";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../../base";
-import { useUpdateReference } from "../../../hooks";
 import { ReferenceTarget } from "../../../types";
 import { TargetForm } from "./TargetForm";
 

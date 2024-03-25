@@ -1,5 +1,5 @@
+import { ErrorResponse } from "@/types/types";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { ErrorResponse } from "../types/types";
 import {
     addIsolate,
     createOTU,
