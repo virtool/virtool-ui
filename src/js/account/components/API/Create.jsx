@@ -98,32 +98,32 @@ function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
                             <strong>Here is your key.</strong>
                             <p>Make note of it now. For security purposes, it will not be shown again.</p>
 
-                    <CreateAPIKeyInputContainer align="right">
-                        <CreateAPIKeyInput value={newKey} readOnly />
-                        {window.isSecureContext && (
-                            <InputIcon aria-label="copy" name="copy" onClick={copyToClipboard} />
-                        )}
-                    </CreateAPIKeyInputContainer>
-                    {copied && (
-                        <CreateAPIKeyCopied>
-                            <Icon name="check" /> Copied
-                        </CreateAPIKeyCopied>
-                    )}
-                </StyledCreateAPIKey>
-            ) : (
-                <Formik
-                    onSubmit={handleSubmit}
-                    initialValues={getInitialFormValues(permissions)}
-                    validationSchema={validationSchema}
-                >
-                    {({ errors, setFieldValue, touched, values }) => (
-                        <Form>
-                            <CreateAPIKeyInfo />
-                                <InputGroup>
-                                    <InputLabel htmlFor="name">Name</InputLabel>
-                                    <Field name="name" id="name" as={Input} />
-                                    <InputError>{touched.name && errors.name}</InputError>
-                                </InputGroup>
+                            <CreateAPIKeyInputContainer align="right">
+                                <CreateAPIKeyInput value={newKey} readOnly />
+                                {window.isSecureContext && (
+                                    <InputIcon aria-label="copy" name="copy" onClick={copyToClipboard} />
+                                )}
+                            </CreateAPIKeyInputContainer>
+                            {copied && (
+                                <CreateAPIKeyCopied>
+                                    <Icon name="check" /> Copied
+                                </CreateAPIKeyCopied>
+                            )}
+                        </StyledCreateAPIKey>
+                    ) : (
+                        <Formik
+                            onSubmit={handleSubmit}
+                            initialValues={getInitialFormValues(permissions)}
+                            validationSchema={validationSchema}
+                        >
+                            {({ errors, setFieldValue, touched, values }) => (
+                                <Form>
+                                    <CreateAPIKeyInfo />
+                                    <InputGroup>
+                                        <InputLabel htmlFor="name">Name</InputLabel>
+                                        <Field name="name" id="name" as={Input} />
+                                        <InputError>{touched.name && errors.name}</InputError>
+                                    </InputGroup>
 
                                     <label>Permissions</label>
 

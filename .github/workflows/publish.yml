@@ -1,40 +1,40 @@
 name: publish
 
 on:
-  release:
-    types: [published]
+    release:
+        types: [published]
 
 env:
-  REGISTRY: ghcr.io
+    REGISTRY: ghcr.io
 
 jobs:
-  ghcr:
-    runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      packages: write
-    if: github.repository_owner == 'Virtool'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Write VERSION file
-        run: echo ${{ github.event.release.tag_name }} > VERSION
-      - name: Login
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.GH_USERNAME }}
-          password: ${{ secrets.GH_TOKEN }}
-      - name: Extract Metadata
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: ${{ env.REGISTRY }}/virtool/ui
-      - name: Build & Push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          target: dist
-          labels: ${{ steps.meta.outputs.labels }}
+    ghcr:
+        runs-on: ubuntu-22.04
+        permissions:
+            contents: read
+            packages: write
+        if: github.repository_owner == 'Virtool'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Write VERSION file
+              run: echo ${{ github.event.release.tag_name }} > VERSION
+            - name: Login
+              uses: docker/login-action@v2
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ secrets.GH_USERNAME }}
+                  password: ${{ secrets.GH_TOKEN }}
+            - name: Extract Metadata
+              id: meta
+              uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+              with:
+                  images: ${{ env.REGISTRY }}/virtool/ui
+            - name: Build & Push
+              uses: docker/build-push-action@v4
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ steps.meta.outputs.tags }}
+                  target: dist
+                  labels: ${{ steps.meta.outputs.labels }}
