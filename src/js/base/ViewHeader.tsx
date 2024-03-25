@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import styled from "styled-components";
 
 const StyledViewHeader = styled.header`
@@ -18,12 +18,12 @@ type ViewHeaderProps = {
 export function ViewHeader({ className, title, children }: ViewHeaderProps) {
     return (
         <StyledViewHeader className={className}>
-            <Helmet>
-                <title>{title}</title>
-            </Helmet>
-            {children}
+            <HelmetProvider>
+                <Helmet>
+                    <title>{title}</title>
+                </Helmet>
+                {children}
+            </HelmetProvider>
         </StyledViewHeader>
     );
 }
-
-ViewHeader.displayName = "ViewHeader";
