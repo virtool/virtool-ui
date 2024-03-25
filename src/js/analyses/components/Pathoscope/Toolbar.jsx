@@ -1,16 +1,16 @@
-import React, { useCallback } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
 import {
     Button,
     Dropdown,
     DropdownButton,
+    DropdownMenuContent,
     DropdownMenuDownload,
-    DropdownMenuList,
     Icon,
     InputSearch,
     Toolbar,
-} from "../../../base";
+} from "@/base";
+import React, { useCallback } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 import {
     setAnalysisSortKey,
     setSearchIds,
@@ -87,14 +87,14 @@ export const PathoscopeToolbar = ({
                         <Icon name="file-download" /> Export <Icon name="caret-down" />
                     </span>
                 </DropdownButton>
-                <DropdownMenuList>
+                <DropdownMenuContent>
                     <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.csv`}>
                         <Icon name="file-csv" /> CSV
                     </DropdownMenuDownload>
                     <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.xlsx`}>
                         <Icon name="file-excel" /> Excel
                     </DropdownMenuDownload>
-                </DropdownMenuList>
+                </DropdownMenuContent>
             </Dropdown>
         </StyledPathoscopeToolbar>
     );

@@ -1,4 +1,4 @@
-import { MenuButton } from "@reach/menu-button";
+import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
 import React from "react";
 import { StyledButton } from "./styled/StyledButton";
 
@@ -6,8 +6,10 @@ type DropdownButtonProps = {
     children: React.ReactNode;
 };
 
-export const DropdownButton = ({ children }: DropdownButtonProps) => (
-    <StyledButton as={MenuButton}>{children}</StyledButton>
-);
-
-DropdownButton.displayName = "DropdownButton";
+export function DropdownButton({ children }: DropdownButtonProps) {
+    return (
+        <DropdownMenuTrigger>
+            <StyledButton>{children}</StyledButton>
+        </DropdownMenuTrigger>
+    );
+}

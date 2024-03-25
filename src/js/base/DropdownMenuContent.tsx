@@ -1,6 +1,6 @@
-import { MenuList } from "@reach/menu-button";
+import { getBorder, getFontSize } from "@app/theme";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import styled, { keyframes } from "styled-components";
-import { getBorder, getFontSize } from "../app/theme";
 
 const slideDown = keyframes`
   0% {
@@ -13,15 +13,16 @@ const slideDown = keyframes`
   }
 `;
 
-export const DropdownMenuList = styled(MenuList)`
+export const DropdownMenuContent = styled(DropdownMenu.Content)`
+    all: unset;
     animation: ${slideDown} ease-in 100ms;
+    background-color: white;
     border: ${getBorder};
     border-radius: ${props => props.theme.borderRadius.sm};
     box-shadow: ${props => props.theme.boxShadow.lg};
     display: flex;
     flex-direction: column;
     font-size: ${getFontSize("md")};
-    padding: 0;
+    margin: 0 5px;
+    z-index: 1;
 `;
-
-DropdownMenuList.displayName = "DropdownMenuList";

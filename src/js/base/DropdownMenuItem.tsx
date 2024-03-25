@@ -1,9 +1,7 @@
-import { MenuItem } from "@reach/menu-button";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import styled from "styled-components";
 import { DropdownItemMixin } from "./DropdownItemMixin";
 
-export const DropdownMenuItem = styled(MenuItem)`
+export const DropdownMenuItem = styled(DropdownMenu.Item)`
     ${DropdownItemMixin}
 `;
-
-DropdownMenuItem.displayName = "DropdownMenuItem";
