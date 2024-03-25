@@ -20,7 +20,7 @@ const PopoverContent = styled(PopoverPrimitive.Content)`
     border-radius: ${borderRadius.lg};
     box-shadow: ${boxShadow.lg};
     margin: 5px;
-    width: 300px;
+    width: 320px;
     z-index: 1;
 
     animation-duration: 400ms;
@@ -37,7 +37,9 @@ export function Popover({ children, trigger }) {
         <PopoverPrimitive.Root>
             <PopoverPrimitive.Trigger asChild>{trigger}</PopoverPrimitive.Trigger>
             <PopoverPrimitive.Portal>
-                <PopoverContent sideOffset={0}>{children}</PopoverContent>
+                <PopoverContent sideOffset={15} align="end" alignOffset={-20}>
+                    {children}
+                </PopoverContent>
             </PopoverPrimitive.Portal>
         </PopoverPrimitive.Root>
     );
