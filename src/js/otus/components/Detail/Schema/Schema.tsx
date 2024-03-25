@@ -34,7 +34,7 @@ export default function Schema({ match }: SchemaProps) {
         return <LoadingPlaceholder />;
     }
 
-    const { abbreviation, name, schema } = data;
+    const { abbreviation, name, otu_schema } = data;
 
     return (
         <div>
@@ -47,9 +47,9 @@ export default function Schema({ match }: SchemaProps) {
                     Add Segment
                 </AddButton>
             )}
-            {schema.length ? (
+            {otu_schema.length ? (
                 <BoxGroup>
-                    {map(sortBy(schema, [segment => segment.name.toLowerCase()]), segment => (
+                    {map(sortBy(otu_schema, [segment => segment.name.toLowerCase()]), segment => (
                         <Segment canModify={canModify} segment={segment} />
                     ))}
                 </BoxGroup>
@@ -57,10 +57,10 @@ export default function Schema({ match }: SchemaProps) {
                 <NoneFoundBox noun="segments" />
             )}
 
-            <AddSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
-            <EditSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
-            {schema.length ? (
-                <RemoveSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
+            <AddSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={otu_schema} />
+            <EditSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={otu_schema} />
+            {otu_schema.length ? (
+                <RemoveSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={otu_schema} />
             ) : null}
         </div>
     );

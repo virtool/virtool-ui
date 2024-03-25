@@ -8,8 +8,8 @@ import {
     ModalFooter,
     SaveButton,
 } from "@/base";
-import { Molecule } from "@otus/types";
-import { map } from "lodash-es";
+import { Molecule, OTUSegment } from "@otus/types";
+import { find, map } from "lodash-es";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -40,15 +40,16 @@ type SegmentFormProps = {
     segmentName?: string;
     molecule?: Molecule;
     required?: boolean;
-    error?: string;
     /** A callback function to be called when the form is submitted */
     onSubmit: (values: FormValues) => void;
+    /** The segments associated with the otu */
+    schema: OTUSegment[];
 };
 
 /**
  * Form for creating a segment
  */
-export default function SegmentForm({ segmentName, molecule, required, error, onSubmit }: SegmentFormProps) {
+export default function SegmentForm({ segmentName, molecule, required, onSubmit, schema }: SegmentFormProps) {
     const {
         formState: { errors },
         control,
@@ -69,8 +70,16 @@ export default function SegmentForm({ segmentName, molecule, required, error, on
             <SegmentFormBody>
                 <InputGroup>
                     <InputLabel htmlFor="name">Name</InputLabel>
-                    <InputSimple id="name" {...register("segmentName", { required: "Name required" })} />
-                    <InputError>{errors.segmentName?.message || error}</InputError>
+                    <InputSimple
+                        id="name"
+                        {...register("segmentName", {
+                            required: "Name required",
+                            validate: value =>
+                                find(schema, { name: value }) &&
+                                "Segment names must be unique. This name is currently in use.",
+                        })}
+                    />
+                    <InputError>{errors.segmentName?.message}</InputError>
                 </InputGroup>
 
                 <InputGroup>
