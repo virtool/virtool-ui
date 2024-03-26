@@ -14,7 +14,7 @@ type Size = {
     width: number;
 };
 
-export function useElementSize(): [React.MutableRefObject<HTMLElement | null>, Size] {
+export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject<T>, Size] {
     const ref = useRef(null);
 
     const [size, setSize] = useState<{ height: number; width: number }>(getSize(ref));
@@ -27,7 +27,7 @@ export function useElementSize(): [React.MutableRefObject<HTMLElement | null>, S
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, [null]);
+    }, []);
 
     return [ref, size];
 }
