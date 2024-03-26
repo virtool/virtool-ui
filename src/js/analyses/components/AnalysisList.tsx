@@ -36,7 +36,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
     if (isLoadingAnalyses || isLoadingHmms || isLoadingSample) {
         return <LoadingPlaceholder />;
     }
-    console.log(hmms)
+
     return (
         <ContainerNarrow>
             <AnalysisHMMAlert installed={hmms.status.task?.complete} />

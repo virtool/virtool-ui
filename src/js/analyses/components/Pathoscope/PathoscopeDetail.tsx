@@ -11,7 +11,6 @@ export const PathoscopeDetail = ({ hit, mappedCount }) => {
     const { isolates, pi } = hit;
 
     const filtered = filter(isolates, isolate => !filterIsolates || isolate.pi >= 0.03 * pi);
-    console.log({ filterIsolates });
     const isolateComponents = map(filtered, isolate => (
         <PathoscopeIsolate
             key={isolate.id}

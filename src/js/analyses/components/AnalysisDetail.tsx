@@ -39,8 +39,6 @@ export function AnalysisDetail({ detail, match, onSetAnalysis }) {
     const sampleId = match.params.sampleId;
     const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
 
-    // console.log({ analysis, detail });
-
     useEffect(() => {
         if (analysis) {
             onSetAnalysis(analysis);
