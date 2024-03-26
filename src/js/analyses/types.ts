@@ -76,22 +76,29 @@ export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
 /** All results for a pathoscope analysis*/
 export type FormattedPathoscopeResults = {
     hits: FormattedPathoscopeHit[];
+    /** The total number of reads mapped to the reference during the analysis*/
     read_count: number;
+    /** The number of reads that were mapped to subtractions*/
     subtracted_count: number;
 };
 
 /** Mapping data for a single pathoscope hit*/
 export type FormattedPathoscopeHit = {
     abbreviation: string;
+    /** The proportion of the sequence that has mapped read coverage*/
     coverage: number;
+    /** The average depth of coverage for the sequence */
     depth: number;
+    /** the position mapped depths of the reference sequence*/
     filled: PositionMappedReadDepths;
     id: string;
     isolates: FormattedPathoscopeIsolate[];
     length: number;
+    /** The largest depth on any single reference nucleotide */
     maxDepth: number;
     maxGenomeLength: number;
     name: string;
+    /** The proportion of reads from the entire sample that match this hit */
     pi: number;
     reads: number;
     version: number;

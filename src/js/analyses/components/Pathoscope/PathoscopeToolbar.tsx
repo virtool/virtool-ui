@@ -18,7 +18,13 @@ const StyledPathoscopeToolbar = styled(Toolbar)`
     margin-bottom: 10px !important;
 `;
 
-export const PathoscopeToolbar = ({ analysisId }) => {
+type PathoscopeToolbarProps = {
+    /** The unique identifier the analysis being viewed */
+    analysisId: string;
+};
+
+/** A selection of filters and toggles for pathoscope data presentation */
+export function PathoscopeToolbar({ analysisId }) {
     const [filterOTUs, setFilterOtu] = useUrlSearchParams<boolean>("filterOtus", true);
     const [filterIsolates, setFilterIsolates] = useUrlSearchParams<boolean>("filterIsolates", true);
     const [find, setFind] = useUrlSearchParams<string>("find", "");
@@ -76,4 +82,4 @@ export const PathoscopeToolbar = ({ analysisId }) => {
             </Dropdown>
         </StyledPathoscopeToolbar>
     );
-};
+}

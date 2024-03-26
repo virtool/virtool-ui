@@ -51,11 +51,11 @@ const StyledOTUCoverage = styled.div`
     }
 `;
 
-type OtUCoverageProps = {
+type OTUCoverageProps = {
     filled: number[];
 };
 
-export const OTUCoverage = React.memo<OtUCoverageProps>(({ filled }) => {
+export const OTUCoverage = React.memo<OTUCoverageProps>(({ filled }) => {
     const [ref, { width }] = useElementSize<HTMLDivElement>();
     useLayoutEffect(() => draw(ref.current, filled, width));
     return <StyledOTUCoverage ref={ref} />;

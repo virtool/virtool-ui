@@ -142,8 +142,6 @@ describe("Analyses Reducer", () => {
         expect(result).toEqual({ foo: "bar", readyIndexes: ["foo"] });
     });
 
-
-
     it("should handle BLAST_NUVS_REQUESTED", () => {
         const state = {
             detail: {

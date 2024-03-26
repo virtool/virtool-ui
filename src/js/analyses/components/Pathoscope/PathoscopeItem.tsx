@@ -75,13 +75,15 @@ const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
 `;
 
 type PathoscopeItemProps = {
+    /** Complete information for a pathoscope hit */
+    hit: FormattedPathoscopeHit;
+    /** The total number of reads mapped to any OTU during the analysis*/
     mappedCount: number;
-    match: FormattedPathoscopeHit;
 };
 
-/** A single pathoscope hit*/
-export function PathoscopeItem({ mappedCount, match }: PathoscopeItemProps) {
-    const { abbreviation, coverage, depth, filled, name, pi, id } = match;
+/** Results for a single pathoscope analysis hit  */
+export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
+    const { abbreviation, coverage, depth, filled, name, pi, id } = hit;
     const [showReads] = useUrlSearchParams<boolean>("reads");
 
     const piValue = showReads ? Math.round(pi * mappedCount) : toScientificNotation(pi);
@@ -104,7 +106,7 @@ export function PathoscopeItem({ mappedCount, match }: PathoscopeItemProps) {
                 <OTUCoverage filled={filled} />
             </PathoscopeAccordionTrigger>
             <AccordionContent>
-                <PathoscopeDetail hit={match} mappedCount={mappedCount} />
+                <PathoscopeDetail hit={hit} mappedCount={mappedCount} />
             </AccordionContent>
         </ScrollingAccordionItem>
     );

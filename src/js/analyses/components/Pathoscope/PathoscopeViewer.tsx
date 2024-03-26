@@ -7,7 +7,9 @@ import { PathoscopeList } from "./PathoscopeList";
 import { PathoscopeToolbar } from "./PathoscopeToolbar";
 
 type PathoscopeViewerProps = {
+    /** Complete pathoscope analysis details */
     detail: FormattedPathoscopeAnalysis;
+    /** The sample that was analysed */
     sample: Sample;
 };
 
