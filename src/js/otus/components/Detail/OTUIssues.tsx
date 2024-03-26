@@ -20,7 +20,7 @@ type OTUIssuesProps = {
     /** The isolates associated with the OTU */
     isolates: OTUIsolate[];
     /** The issues that occurred */
-    issues: { [key: string]: any };
+    issues: { [key: string]: any } | boolean;
 };
 
 /**
@@ -30,19 +30,19 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
     const errors = [];
 
     // The OTU has no isolates associated with it.
-    if (issues.empty_otu) {
+    if (typeof issues === "object" && issues.empty_otu) {
         errors.push(<li key="emptyOTU">There are no isolates associated with this OTU</li>);
     }
 
     // The OTU has an inconsistent number of sequences between isolates.
-    if (issues.isolate_inconsistency) {
+    if (typeof issues === "object" && issues.isolate_inconsistency) {
         errors.push(
             <li key="isolateInconsistency">Some isolates have different numbers of sequences than other isolates</li>,
         );
     }
 
     // One or more isolates have no sequences associated with them.
-    if (issues.empty_isolate) {
+    if (typeof issues === "object" && issues.empty_isolate) {
         // The empty_isolate property is an array of isolate_ids of empty isolates.
         const emptyIsolates = map(issues.empty_isolate, (isolateId, index) => {
             // Get the entire isolate identified by isolate_id from the detail data.
@@ -60,7 +60,7 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
     }
 
     // One or more sequence documents have no sequence field.
-    if (issues.empty_sequence) {
+    if (typeof issues === "object" && issues.empty_sequence) {
         // Make a list of sequences that have no defined sequence field.
         const emptySequences = map(issues.empty_sequence, (errorObject, index) => {
             // Get the entire isolate object identified by the isolate_id.

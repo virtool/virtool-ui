@@ -14,7 +14,7 @@ import {
 import { useFetchSample } from "../../queries";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
-import SampleFileSizeWarning from "./FileSizeWarning";
+import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
 
 const SampleDetailSidebarContainer = styled(ContainerSide)`
@@ -53,7 +53,7 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
     return (
         <StyledSampleDetailGeneral>
             <ContainerNarrow>
-                <SampleFileSizeWarning />
+                <SampleFileSizeWarning sampleId={sampleId} reads={data.reads} />
                 <BoxGroup>
                     <BoxGroupHeader>
                         <h2>Metadata</h2>

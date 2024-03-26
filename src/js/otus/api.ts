@@ -1,4 +1,4 @@
-import { Request } from "../app/request";
+import { Request } from "@app/request";
 import { OTU, OTUIsolate } from "./types";
 
 /**
@@ -9,6 +9,16 @@ import { OTU, OTUIsolate } from "./types";
  */
 export function get({ otuId }: { otuId: string }) {
     return Request.get(`/otus/${otuId}`);
+}
+
+/**
+ * Get a single OTU data from the API
+ *
+ * @param otuId - The unique identifier of the OTU to fetch
+ * @returns A Promise resolving to the API response containing the OTU data
+ */
+export function getOTU(otuId: string): Promise<OTU> {
+    return Request.get(`/otus/${otuId}`).then(res => res.body);
 }
 
 /**
@@ -242,16 +252,8 @@ export function editSequence({
  * @param sequenceId - The unique identifier of the sequence to remove
  * @returns A Promise resolving to the API response indicating if removal was successful
  */
-export function removeSequence({
-    otuId,
-    isolateId,
-    sequenceId,
-}: {
-    otuId: string;
-    isolateId: string;
-    sequenceId: string;
-}) {
-    return Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`);
+export function removeSequence(otuId: string, isolateId: string, sequenceId: string): Promise<null> {
+    return Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`).then(res => res.body);
 }
 
 /**

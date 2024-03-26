@@ -1,8 +1,7 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { CloseButton, Icon, IconLink } from "../../../base";
-import { showRemoveSequence } from "../../../otus/actions";
+import { CloseButton, IconLink } from "../../../base";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
 import { DownloadLink } from "../../../references/components/Detail/DownloadLink";
 import { getCanModifyReferenceOTU } from "../../../references/selectors";
@@ -27,9 +26,11 @@ const SequenceHeaderButtons = styled.span`
     }
 `;
 
-export const SequenceButtons = ({ canModify, id, isolateId, otuId, onCollapse, onRemoveSequence }) => {
-    const removeSequence = useCallback(() => onRemoveSequence(id), [id]);
+const StyledButton = styled(IconLink)`
+    padding: 0 5px;
+`;
 
+export function SequenceButtons({ canModify, id, isolateId, otuId, onCollapse }) {
     const href = `/api/otus/${otuId}/isolates/${isolateId}/sequences/${id}.fa`;
 
     return (
@@ -37,12 +38,14 @@ export const SequenceButtons = ({ canModify, id, isolateId, otuId, onCollapse, o
             {canModify && (
                 <IconLink name="pencil-alt" color="orange" tip="Edit Sequence" to={{ state: { editSequence: id } }} />
             )}
-            {canModify && <Icon name="trash" color="red" tip="Remove Sequence" onClick={removeSequence} />}
+            {canModify && (
+                <StyledButton name="trash" color="red" tip="Remove Sequence" to={{ state: { removeSequence: id } }} />
+            )}
             <DownloadLink href={href}>FASTA</DownloadLink>
             <CloseButton onClick={onCollapse} />
         </SequenceHeaderButtons>
     );
-};
+}
 
 export const mapStateToProps = state => ({
     canModify: getCanModifyReferenceOTU(state),
@@ -50,8 +53,4 @@ export const mapStateToProps = state => ({
     otuId: getOTUDetailId(state),
 });
 
-export const mapDispatchToProps = dispatch => ({
-    onRemoveSequence: id => dispatch(showRemoveSequence(id)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SequenceButtons);
+export default connect(mapStateToProps)(SequenceButtons);
