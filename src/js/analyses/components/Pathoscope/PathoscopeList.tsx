@@ -6,11 +6,9 @@ import { PathoscopeItem } from "./PathoscopeItem";
 
 /** A list of Pathoscope analysis results*/
 export function PathoscopeList({ detail, sample }) {
-    const hits = useSortAndFilterPathoscopeHits(detail, sample.quality.length[1]);
-
     return (
         <Accordion type="single" collapsible>
-            {map(hits, hit => (
+            {map(useSortAndFilterPathoscopeHits(detail, sample.quality.length[1]), hit => (
                 <PathoscopeItem key={hit.id} hit={hit} mappedCount={detail.results.readCount} />
             ))}
         </Accordion>

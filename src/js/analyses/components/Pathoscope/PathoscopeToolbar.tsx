@@ -24,7 +24,7 @@ type PathoscopeToolbarProps = {
 };
 
 /** A selection of filters and toggles for pathoscope data presentation */
-export function PathoscopeToolbar({ analysisId }) {
+export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
     const [filterOTUs, setFilterOtu] = useUrlSearchParams<boolean>("filterOtus", true);
     const [filterIsolates, setFilterIsolates] = useUrlSearchParams<boolean>("filterIsolates", true);
     const [find, setFind] = useUrlSearchParams<string>("find", "");
