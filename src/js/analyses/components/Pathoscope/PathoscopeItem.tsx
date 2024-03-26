@@ -5,7 +5,7 @@ import { AccordionContent } from "@base/accordion/AccordionContent";
 import { ScrollingAccordionItem } from "@base/accordion/ScrollingAccordionItem";
 import { useUrlSearchParams } from "@utils/hooks";
 import { toScientificNotation } from "@utils/utils";
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { OTUCoverage } from "./OTUCoverage";
 import { PathoscopeDetail } from "./PathoscopeDetail";

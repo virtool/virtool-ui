@@ -2,7 +2,6 @@ import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { area } from "d3-shape";
 import { max } from "lodash-es";
-import PropTypes from "prop-types";
 import React, { useLayoutEffect } from "react";
 import styled from "styled-components";
 import { useElementSize } from "../../../utils/hooks";
@@ -56,11 +55,8 @@ type OtUCoverageProps = {
     filled: number[];
 };
 
-
-export const OTUCoverage = React.memo<OtUCoverageProps>( ({ filled }) =>{
+export const OTUCoverage = React.memo<OtUCoverageProps>(({ filled }) => {
     const [ref, { width }] = useElementSize<HTMLDivElement>();
     useLayoutEffect(() => draw(ref.current, filled, width));
     return <StyledOTUCoverage ref={ref} />;
 });
-
-

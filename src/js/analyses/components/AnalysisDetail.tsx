@@ -34,7 +34,7 @@ const UnsupportedAnalysis = styled(Box)`
 /** Base component viewing all supported analysis */
 export function AnalysisDetail({ detail, match, onSetAnalysis }) {
     const analysisId = match.params.analysisId;
-    const { data: analysis, isLoading, error, isError } = useGetAnalysis(analysisId);
+    const { data: analysis, isLoading, error } = useGetAnalysis(analysisId);
 
     const sampleId = match.params.sampleId;
     const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
@@ -45,7 +45,7 @@ export function AnalysisDetail({ detail, match, onSetAnalysis }) {
         }
     }, [analysis]);
 
-    if (error?.response.status == 404) {
+    if (error?.response.status === 404) {
         return <NotFound />;
     }
 
@@ -73,12 +73,10 @@ export function AnalysisDetail({ detail, match, onSetAnalysis }) {
         content = <IimiViewer detail={analysis} />;
     } else {
         return (
-            <>
-                <UnsupportedAnalysis>
-                    <Icon name={"info-circle"} />
-                    Workflow not yet supported.
-                </UnsupportedAnalysis>
-            </>
+            <UnsupportedAnalysis>
+                <Icon name={"info-circle"} />
+                Workflow not yet supported.
+            </UnsupportedAnalysis>
         );
     }
 
