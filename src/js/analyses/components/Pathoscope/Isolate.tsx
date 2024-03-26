@@ -61,7 +61,6 @@ export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, 
             accession={hit.accession}
             definition={hit.definition}
             yMax={maxDepth}
-            showYAxis={i === 0}
         />
     ));
 

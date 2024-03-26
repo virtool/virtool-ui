@@ -52,12 +52,15 @@ const StyledOTUCoverage = styled.div`
     }
 `;
 
-export const OTUCoverage = React.memo(function OTUCoverage({ filled }) {
+type OtUCoverageProps = {
+    filled: number[];
+};
+
+
+export const OTUCoverage = React.memo<OtUCoverageProps>(function OTUCoverage({ filled }) {
     const [ref, { width }] = useElementSize();
     useLayoutEffect(() => draw(ref.current, filled, width));
     return <StyledOTUCoverage ref={ref} />;
 });
 
-OTUCoverage.propTypes = {
-    filled: PropTypes.arrayOf(PropTypes.number).isRequired,
-};
+
