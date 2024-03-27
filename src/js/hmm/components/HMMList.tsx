@@ -15,8 +15,8 @@ function renderRow(document: HMMMinimal) {
  * A list of HMMs with filtering options
  */
 export default function HMMList() {
-    const [urlPage] = useUrlSearchParams("page");
-    const [term, setTerm] = useUrlSearchParams("find");
+    const [urlPage] = useUrlSearchParams<number>("page");
+    const [term, setTerm] = useUrlSearchParams<string>("find");
     const { data, isLoading } = useListHmms(Number(urlPage) || 1, 25, term);
 
     if (isLoading) {

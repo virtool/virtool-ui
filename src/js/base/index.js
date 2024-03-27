@@ -1,3 +1,7 @@
+export { Accordion } from "./accordion/Accordion";
+export { AccordionContent } from "./accordion/AccordionContent";
+export { AccordionTrigger } from "./accordion/AccordionTrigger";
+export { ScrollingAccordionItem } from "./accordion/ScrollingAccordionItem";
 export { Alert } from "./Alert";
 export { AlertInner } from "./AlertInner";
 export { AlertOuter } from "./AlertOuter";

@@ -1,12 +1,10 @@
 import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Box, Label } from "../../../base";
 import { toThousand } from "../../../utils/utils";
-import { getReadCount, getSubtractedCount } from "../../selectors";
 import { Bars } from "../Viewer/Bars";
 
 const StyledAnalysisMappingReferenceTitle = styled.div`
@@ -29,10 +27,10 @@ export function AnalysisMappingReferenceTitle({ index, reference }) {
 
 export function AnalysisMappingSubtractionTitle({ subtractions }) {
     return map(subtractions, (subtraction, index) => (
-        <>
+        <span key={subtraction.id}>
             <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
             {index !== subtractions.length - 1 ? ", " : ""}
-        </>
+        </span>
     ));
 }
 
@@ -55,14 +53,17 @@ const StyledAnalysisMapping = styled(Box)`
     }
 `;
 
-export function AnalysisMapping({ index, reference, subtractions, toReference, total, toSubtraction = 0 }) {
-    const totalMapped = toReference + toSubtraction;
-    const sumPercent = toReference / total;
+export function AnalysisMapping({ totalReads, detail }) {
+    const { index, reference, subtractions, results } = detail;
+    const { readCount, subtractedCount } = results;
+
+    const totalMapped = readCount + subtractedCount;
+    const sumPercent = readCount / totalReads;
 
     const legend = [
         {
             color: "blue",
-            count: toReference,
+            count: readCount,
             title: <AnalysisMappingReferenceTitle index={index} reference={reference} />,
         },
     ];
@@ -70,7 +71,7 @@ export function AnalysisMapping({ index, reference, subtractions, toReference, t
     if (subtractions.length > 0) {
         legend.push({
             color: "orange",
-            count: toSubtraction,
+            count: subtractedCount,
             title: <AnalysisMappingSubtractionTitle subtractions={subtractions} />,
         });
     }
@@ -80,26 +81,11 @@ export function AnalysisMapping({ index, reference, subtractions, toReference, t
             <h3>
                 {numbro(sumPercent).format({ output: "percent", mantissa: 2 })} mapped
                 <small>
-                    {toThousand(toReference)} of {toThousand(total)} reads
+                    {toThousand(readCount)} of {toThousand(totalReads)} reads
                 </small>
             </h3>
 
-            <Bars empty={total - totalMapped} items={legend} />
+            <Bars empty={totalReads - totalMapped} items={legend} />
         </StyledAnalysisMapping>
     );
 }
-
-export function mapStateToProps(state) {
-    const { index, reference, subtractions } = state.analyses.detail;
-
-    return {
-        index,
-        reference,
-        subtractions,
-        toReference: getReadCount(state),
-        toSubtraction: getSubtractedCount(state),
-        total: state.samples.detail.quality.count,
-    };
-}
-
-export default connect(mapStateToProps)(AnalysisMapping);

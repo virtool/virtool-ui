@@ -1,20 +1,19 @@
 import { Request } from "../app/request";
-import { Analysis, AnalysisSearchResult } from "./types";
+import { AnalysisSearchResult, GenericAnalysis } from "./types";
 
 export const find = ({ sampleId, term, page = 1 }) =>
     Request.get(`/samples/${sampleId}/analyses`).query({ find: term, page });
 
-export const get = ({ analysisId }) => Request.get(`/analyses/${analysisId}`);
-
-export const analyze = ({ sampleId, refId, subtractionIds, workflow }) =>
-    Request.post(`/samples/${sampleId}/analyses`).send({
-        workflow,
-        ref_id: refId,
-        subtractions: subtractionIds,
-    });
-
 export const blastNuvs = ({ analysisId, sequenceIndex }) =>
     Request.put(`/analyses/${analysisId}/${sequenceIndex}/blast`);
+
+/**
+ * Fetch a complete analysis
+ *
+ * @param AnalysisId - The unique identifier of the analysis to fetch
+ * @returns A promise resolving to an analysis
+ */
+export const getAnalysis = ({ analysisId }) => Request.get(`/analyses/${analysisId}`).then(res => res.body);
 
 /**
  * Fetch a page of analyses search results
@@ -52,7 +51,7 @@ export function createAnalysis(
     sampleId: string,
     subtractionIds: string[],
     workflow: string,
-): Promise<Analysis> {
+): Promise<GenericAnalysis> {
     return Request.post(`/samples/${sampleId}/analyses`)
         .send({
             workflow,

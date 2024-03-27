@@ -142,67 +142,6 @@ describe("Analyses Reducer", () => {
         expect(result).toEqual({ foo: "bar", readyIndexes: ["foo"] });
     });
 
-    it.each([true, false])("should handle GET_ANALYSIS_SUCCEEDED for nuvs when [action.ready=%p]", ready => {
-        const workflow = "nuvs";
-        const state = {
-            activeId: null,
-            detail: null,
-            searchIds: ["bar", "baz"],
-            sortKey: "depth",
-        };
-        const action = {
-            type: "GET_ANALYSIS_SUCCEEDED",
-            payload: {
-                workflow,
-                ready,
-                results: [],
-            },
-        };
-        const result = reducer(state, action);
-
-        const detail = action.payload;
-
-        if (ready) {
-            detail.foo = "bar";
-        }
-
-        expect(result).toEqual({
-            activeId: null,
-            detail,
-            filterIds: null,
-            searchIds: null,
-            sortKey: "length",
-        });
-    });
-
-    it.each([true, false])("should handle GET_ANALYSIS_SUCCEEDED for pathoscope when [action.ready=%p]", ready => {
-        const workflow = "pathoscope_bowtie";
-        const state = {};
-        const action = {
-            type: "GET_ANALYSIS_SUCCEEDED",
-            payload: {
-                workflow,
-                ready,
-                results: [],
-            },
-        };
-
-        const detail = action.payload;
-
-        if (ready) {
-            detail.foo = "bar";
-        }
-
-        const result = reducer(state, action);
-        expect(result).toEqual({
-            activeId: null,
-            detail,
-            filterIds: null,
-            searchIds: null,
-            sortKey: "coverage",
-        });
-    });
-
     it("should handle BLAST_NUVS_REQUESTED", () => {
         const state = {
             detail: {

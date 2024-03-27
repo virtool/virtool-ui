@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { LoadingPlaceholder } from "../../base";
 import { listReadyIndexes } from "../../indexes/actions";
+import AnalysisDetail from "./AnalysisDetail";
 import AnalysesList from "./AnalysisList";
-import AnalysisDetail from "./Detail";
 
 function Analyses({ loading, onListReadyIndexes }) {
     useEffect(() => {
