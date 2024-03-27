@@ -5,8 +5,8 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@base";
 import { getAccount } from "../actions";
 import { getAccountId } from "../selectors";
+import AccountProfile from "./AccountProfile";
 import APIKeys from "./API/API";
-import AccountProfile from "./Profile";
 
 function Account({ userId, onGet }) {
     useEffect(() => onGet(), [userId]);
