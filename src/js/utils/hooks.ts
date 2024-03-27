@@ -135,3 +135,32 @@ export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [s
 
     return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history)];
 }
+
+/**
+ * Hook for synchronizing scroll between components
+ *
+ * @param elements - A list of elements to apply synchronous scroll to
+ */
+export function useScrollSync(elements: HTMLElement[]) {
+    useEffect(() => {
+        if (!elements[1]) {
+            return;
+        }
+
+        function handleScroll(e) {
+            const { scrollLeft, scrollTop } = e.target;
+
+            elements.forEach(element => {
+                element.scrollLeft = scrollLeft;
+                element.scrollTop = scrollTop;
+            });
+        }
+
+        elements.map(element => {
+            element.addEventListener("scroll", e => handleScroll(e));
+            return () => {
+                element.removeEventListener("scroll", e => handleScroll(e));
+            };
+        });
+    }, [elements]);
+}
