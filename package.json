@@ -58,7 +58,7 @@
         "redux-saga": "^1.2.2",
         "reselect": "^4.1.7",
         "semver": "^7.3.8",
-        "styled-components": "^5.3.11",
+        "styled-components": "^5.3.6",
         "superagent": "^8.0.9",
         "yup": "^0.32.11"
     },
