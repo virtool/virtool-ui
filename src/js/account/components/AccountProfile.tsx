@@ -10,18 +10,6 @@ import { getAccountAdministratorRole, getAccountHandle } from "../selectors";
 import Email from "./Email";
 import ChangePassword from "./Password";
 
-const AccountProfileGroups = styled.div`
-    margin-top: 3px;
-
-    ${Label} {
-        text-transform: capitalize;
-
-        &:not(:last-of-type) {
-            margin-right: 3px;
-        }
-    }
-`;
-
 const AccountProfileHeader = styled.div`
     align-items: center;
     display: flex;
