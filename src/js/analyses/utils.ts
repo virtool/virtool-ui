@@ -20,6 +20,7 @@ import {
     uniq,
     zipWith,
 } from "lodash-es";
+import { cloneDeep } from "lodash-es/lodash";
 import { formatIsolateName } from "../utils/utils";
 import { PositionMappedReadDepths, UntrustworthyRange } from "./types";
 
@@ -350,14 +351,15 @@ export function deriveTrustworthyRegions(length: number, untrustworthyRanges: [n
  * @returns the combined untrustworthy regions
  */
 export function combineUntrustworthyRegions(untrustworthyRanges: UntrustworthyRange[][]): UntrustworthyRange[] {
+    untrustworthyRanges = cloneDeep(untrustworthyRanges);
+
     const sortedUntrustworthyRanges = untrustworthyRanges.flat().sort((a, b) => a[0] - b[0]);
 
     if (sortedUntrustworthyRanges.length === 0) {
         return [];
     }
 
-    const combined = [] as [number, number][];
-    combined.push(sortedUntrustworthyRanges.shift());
+    const combined = [sortedUntrustworthyRanges.shift()] as [number, number][];
 
     sortedUntrustworthyRanges.forEach(range => {
         const last = combined[combined.length - 1];
