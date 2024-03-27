@@ -2,7 +2,6 @@ import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { area } from "d3-shape";
 import { max } from "lodash-es";
-import PropTypes from "prop-types";
 import React, { useLayoutEffect } from "react";
 import styled from "styled-components";
 import { useElementSize } from "../../../utils/hooks";
@@ -10,9 +9,9 @@ import { useElementSize } from "../../../utils/hooks";
 const draw = (element, data, width) => {
     const margin = {
         top: 10,
-        left: 15,
+        left: 0,
         bottom: 10,
-        right: 15,
+        right: 0,
     };
 
     const yMax = max(data);
@@ -21,7 +20,7 @@ const draw = (element, data, width) => {
 
     const height = 60 - margin.top - margin.bottom;
 
-    width -= 30;
+    width -= 10;
 
     const x = scaleLinear().range([0, width]).domain([0, length]);
     const y = scaleLinear().range([height, 0]).domain([0, yMax]);
@@ -45,18 +44,19 @@ const draw = (element, data, width) => {
 };
 
 const StyledOTUCoverage = styled.div`
+    width: 100%;
     path.depth-area {
         fill: ${props => props.theme.color.blue};
         stroke: ${props => props.theme.color.blue};
     }
 `;
 
-export function OTUCoverage({ filled }) {
-    const [ref, { width }] = useElementSize();
+type OTUCoverageProps = {
+    filled: number[];
+};
+
+export const OTUCoverage = React.memo<OTUCoverageProps>(({ filled }) => {
+    const [ref, { width }] = useElementSize<HTMLDivElement>();
     useLayoutEffect(() => draw(ref.current, filled, width));
     return <StyledOTUCoverage ref={ref} />;
-}
-
-OTUCoverage.propTypes = {
-    filled: PropTypes.arrayOf(PropTypes.number).isRequired,
-};
+});

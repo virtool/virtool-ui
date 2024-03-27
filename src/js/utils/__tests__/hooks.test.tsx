@@ -6,7 +6,7 @@ import { useUrlSearchParams } from "../hooks";
 describe("useUrlSearchParams", () => {
     it("should render empty with no default value given", () => {
         const key = "find";
-        const { result } = renderHook(() => useUrlSearchParams(key), {
+        const { result } = renderHook(() => useUrlSearchParams<string>(key), {
             wrapper: MemoryRouter,
         });
         const length = result.current.length;
@@ -15,7 +15,7 @@ describe("useUrlSearchParams", () => {
     });
 
     it("should render with default value", () => {
-        const { result } = renderHook(() => useUrlSearchParams("find", "test"), {
+        const { result } = renderHook(() => useUrlSearchParams<string>("find", "test"), {
             wrapper: MemoryRouter,
         });
         const length = result.current.length;

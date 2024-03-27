@@ -1,3 +1,4 @@
+import { settingsQueryKeys } from "@administration/queries";
 import React from "react";
 import styled from "styled-components";
 import {
@@ -62,7 +63,7 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
     const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
         "default_source_types",
         "/settings",
-        ["settings"],
+        settingsQueryKeys.all(),
         sourceTypes,
     );
 
