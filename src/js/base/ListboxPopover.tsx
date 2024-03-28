@@ -25,7 +25,7 @@ export const ListboxPopover = styled(ReachListboxPopover)`
     position: relative;
     z-index: 100;
 
-    :focus-within {
+    &:focus-within {
         border-color: ${props => props.theme.color.blue};
         box-shadow: ${focusShadow};
         outline: none;

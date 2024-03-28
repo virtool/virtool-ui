@@ -41,7 +41,7 @@ const NavDropdownButton = styled(MenuButton)`
     outline: none;
     padding: 0 10px;
 
-    :focus {
+    &:focus {
         color: ${props => props.theme.color.primaryDarkest};
     }
 
