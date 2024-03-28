@@ -25,16 +25,19 @@ type SchemaProps = {
  */
 export default function Schema({ match }: SchemaProps) {
     const { refId, otuId } = match.params;
-    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+    const { hasPermission: canModify, isLoading: isLoadingPermission } = useCheckReferenceRight(
+        refId,
+        ReferenceRight.modify_otu,
+    );
     const history = useHistory();
 
     const { data, isLoading } = useFetchOTU(otuId);
 
-    if (isLoading) {
+    if (isLoading || isLoadingPermission) {
         return <LoadingPlaceholder />;
     }
 
-    const { abbreviation, name, otu_schema } = data;
+    const { abbreviation, name, schema } = data;
 
     return (
         <div>
@@ -47,9 +50,9 @@ export default function Schema({ match }: SchemaProps) {
                     Add Segment
                 </AddButton>
             )}
-            {otu_schema.length ? (
+            {schema.length ? (
                 <BoxGroup>
-                    {map(sortBy(otu_schema, [segment => segment.name.toLowerCase()]), segment => (
+                    {map(sortBy(schema, [segment => segment.name.toLowerCase()]), segment => (
                         <Segment canModify={canModify} segment={segment} />
                     ))}
                 </BoxGroup>
@@ -57,10 +60,10 @@ export default function Schema({ match }: SchemaProps) {
                 <NoneFoundBox noun="segments" />
             )}
 
-            <AddSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={otu_schema} />
-            <EditSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={otu_schema} />
-            {otu_schema.length ? (
-                <RemoveSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={otu_schema} />
+            <AddSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
+            <EditSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
+            {schema.length ? (
+                <RemoveSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
             ) : null}
         </div>
     );
