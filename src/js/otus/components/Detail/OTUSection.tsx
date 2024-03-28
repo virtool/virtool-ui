@@ -3,8 +3,8 @@ import { match, useHistory, useLocation } from "react-router-dom";
 import { LoadingPlaceholder } from "../../../base";
 import { useGetReference } from "../../../references/queries";
 import { useFetchOTU } from "../../queries";
-import IsolateEditor from "./Editor";
 import AddIsolate from "./Isolates/AddIsolate";
+import IsolateEditor from "./Isolates/IsolateEditor";
 import General from "./OTUGeneral";
 
 type OTUSectionProps = {
@@ -30,7 +30,7 @@ export default function OTUSection({ match }: OTUSectionProps) {
     return (
         <div>
             <General issues={otu.issues} isolates={otu.isolates} />
-            <IsolateEditor otuId={otuId} refId={refId} />
+            <IsolateEditor otu={otu} reference={reference} />
             <AddIsolate
                 allowedSourceTypes={reference.source_types}
                 otuId={otuId}
