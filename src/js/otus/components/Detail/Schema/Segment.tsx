@@ -1,4 +1,4 @@
-import { BoxGroupSection, IconLink, Label } from "@/base";
+import { BoxGroupSection, Icon, IconLink, Label } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { OTUSegment } from "@otus/types";
 import React from "react";
@@ -7,7 +7,7 @@ import styled from "styled-components";
 const StyledSegment = styled(BoxGroupSection)`
     display: grid;
     align-items: center;
-    grid-template-columns: 45fr 1fr 10fr;
+    grid-template-columns: 45fr 1fr 10fr 10fr;
     padding: 16px;
     line-height: 1;
 `;
@@ -18,16 +18,30 @@ const SegmentIcon = styled(IconLink)`
     font-size: ${getFontSize("lg")};
 `;
 
+const DragIcons = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+`;
+
 type SegmentProps = {
     /** Whether the user has permission to modify the otu */
     canModify: boolean;
+    /** Whether the segment is the first in the list */
+    first: boolean;
+    /** Whether the segment is the last in the list */
+    last: boolean;
+    /** A callback function to move the segment up */
+    onMoveUp: () => void;
+    /** A callback function to move the segment down */
+    onMoveDown: () => void;
     segment: OTUSegment;
 };
 
 /**
  * A condensed segment item for use in a list of segments
  */
-export default function Segment({ canModify, segment }: SegmentProps) {
+export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, segment }: SegmentProps) {
     return (
         <StyledSegment>
             <strong>{segment.name}</strong>
@@ -49,6 +63,11 @@ export default function Segment({ canModify, segment }: SegmentProps) {
                     />
                 </div>
             )}
+
+            <DragIcons>
+                {!first && <Icon name="caret-up" aria-label="move segment up" onClick={onMoveUp} />}
+                {!last && <Icon name="caret-down" aria-label="move segment down" onClick={onMoveDown} />}
+            </DragIcons>
         </StyledSegment>
     );
 }
