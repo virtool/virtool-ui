@@ -23,7 +23,7 @@ const StyledScrollList = styled(ScrollList)`
  * A list of references with filtering options
  */
 export default function ReferenceList() {
-    const [term] = useUrlSearchParams("find");
+    const [term] = useUrlSearchParams<string>("find");
 
     const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
 

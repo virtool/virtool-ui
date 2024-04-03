@@ -1,5 +1,6 @@
 import { forEach, get } from "lodash-es";
 
+import { analysesQueryKeys } from "@/analyses/queries";
 import { QueryClient } from "@tanstack/react-query";
 import { accountKeys } from "../../account/queries";
 import { roleQueryKeys, userQueryKeys } from "../../administration/queries";
@@ -15,7 +16,10 @@ import { taskUpdaters } from "./updaters";
 const workflowQueries = {
     build_index: [indexQueryKeys.lists()],
     create_sample: [samplesQueryKeys.lists()],
-    pathoscope_bowtie: [samplesQueryKeys.lists()],
+    pathoscope_bowtie: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
+    nuvs: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
+    iimi: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
+    aodp: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
 };
 
 /**

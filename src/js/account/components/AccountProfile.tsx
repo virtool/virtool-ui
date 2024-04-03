@@ -1,24 +1,14 @@
+import AccountGroups from "@account/components/AccountGroups";
+import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { Icon, InitialIcon, Label } from "@base";
-import { map } from "lodash-es";
+import { GroupMinimal } from "@groups/types";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getAccountAdministratorRole, getAccountHandle } from "../selectors";
 import Email from "./Email";
 import ChangePassword from "./Password";
-
-const AccountProfileGroups = styled.div`
-    margin-top: 3px;
-
-    ${Label} {
-        text-transform: capitalize;
-
-        &:not(:last-of-type) {
-            margin-right: 3px;
-        }
-    }
-`;
 
 const AccountProfileHeader = styled.div`
     align-items: center;
@@ -49,13 +39,18 @@ const AdministratorTag = styled(Label)`
     text-transform: capitalize;
 `;
 
-function AccountProfile({ handle, groups, administratorRole }) {
-    const groupLabels = map(groups, ({ id, name }) => (
-        <Label key={id}>
-            <Icon name="users" /> {name}
-        </Label>
-    ));
+type AccountProfileProps = {
+    /** The accounts administrator role */
+    administratorRole: AdministratorRoles;
+    /** A list of groups associated with the account */
+    groups: GroupMinimal[];
+    handle: string;
+};
 
+/**
+ * Displays information related to the users account with options to reset password and email
+ */
+function AccountProfile({ administratorRole, groups, handle }: AccountProfileProps) {
     return (
         <>
             <AccountProfileHeader>
@@ -69,12 +64,12 @@ function AccountProfile({ handle, groups, administratorRole }) {
                             </AdministratorTag>
                         )}
                     </h3>
-                    <AccountProfileGroups>{groupLabels}</AccountProfileGroups>
                 </div>
             </AccountProfileHeader>
 
-            <Email />
             <ChangePassword />
+            <Email />
+            <AccountGroups groups={groups} />
         </>
     );
 }

@@ -1,17 +1,14 @@
 import { createAction } from "@reduxjs/toolkit";
 import {
     BLAST_NUVS,
-    GET_ANALYSIS,
+    SET_ANALYSIS,
     SET_ANALYSIS_ACTIVE_ID,
     SET_ANALYSIS_SORT_KEY,
     SET_AODP_FILTER,
     SET_SEARCH_IDS,
     TOGGLE_ANALYSIS_SORT_DESCENDING,
-    TOGGLE_FILTER_ISOLATES,
     TOGGLE_FILTER_ORFS,
-    TOGGLE_FILTER_OTUS,
     TOGGLE_FILTER_SEQUENCES,
-    TOGGLE_SHOW_PATHOSCOPE_READS,
     WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
 
@@ -40,22 +37,19 @@ export const setAnalysisSortKey = createAction(SET_ANALYSIS_SORT_KEY, sortKey =>
     payload: { sortKey },
 }));
 
-export const toggleFilterOTUs = createAction(TOGGLE_FILTER_OTUS);
-export const toggleFilterIsolates = createAction(TOGGLE_FILTER_ISOLATES);
 export const toggleFilterORFs = createAction(TOGGLE_FILTER_ORFS);
 export const toggleFilterSequences = createAction(TOGGLE_FILTER_SEQUENCES);
 export const toggleAnalysisSortDescending = createAction(TOGGLE_ANALYSIS_SORT_DESCENDING);
-export const toggleShowPathoscopeReads = createAction(TOGGLE_SHOW_PATHOSCOPE_READS);
 
 /**
- * Returns action that can trigger an API call for retrieving a specific analysis.
+ * Returns action that sets the current analysis in redux state
  *
  * @func
- * @param analysisId {string} unique analysis id
+ * @param analysisId {Analysis} A complete analysis
  * @returns {object}
  */
-export const getAnalysis = createAction(GET_ANALYSIS.REQUESTED, analysisId => ({
-    payload: { analysisId },
+export const setAnalysis = createAction(SET_ANALYSIS, analysis => ({
+    payload: analysis,
 }));
 
 /**

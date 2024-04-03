@@ -1,8 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
 import {
     BLAST_NUVS,
-    GET_ANALYSIS,
     LIST_READY_INDEXES,
+    SET_ANALYSIS,
     SET_ANALYSIS_ACTIVE_ID,
     SET_ANALYSIS_SORT_KEY,
     SET_AODP_FILTER,
@@ -16,7 +16,6 @@ import {
     WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
 import { update } from "../utils/reducers";
-import { formatData } from "./utils";
 
 export const initialState = {
     activeId: null,
@@ -86,11 +85,11 @@ export const analysesReducer = createReducer(initialState, builder => {
             const { analysisId, sequenceIndex } = action.context;
             return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload);
         })
-        .addCase(GET_ANALYSIS.SUCCEEDED, (state, action) => {
+        .addCase(SET_ANALYSIS, (state, action) => {
             return {
                 ...state,
                 activeId: null,
-                detail: action.payload.ready ? formatData(action.payload) : action.payload,
+                detail: action.payload,
                 filterIds: null,
                 searchIds: null,
                 sortKey: getInitialSortKey(action),

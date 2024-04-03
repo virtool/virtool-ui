@@ -1,7 +1,10 @@
+import { formatData } from "@/analyses/utils";
+import { ErrorResponse } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { samplesQueryKeys } from "../samples/queries";
-import { createAnalysis, listAnalyses, removeAnalysis } from "./api";
-import { Analysis, AnalysisSearchResult } from "./types";
+import { createAnalysis, getAnalysis, listAnalyses, removeAnalysis } from "./api";
+import { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 
 /**
  * Factory object for generating analyses query keys
@@ -54,6 +57,22 @@ export function useRemoveAnalysis(analysisId: string) {
     return () => mutation.mutate({ analysisId });
 }
 
+/**
+ * Fetch complete information for a single analysis
+ *
+ * @param analysisId - The id of the analysis to fetch
+ * @returns A complete analysis
+ */
+export function useGetAnalysis(analysisId: string) {
+    const queryResult = useQuery<Analysis, ErrorResponse>(analysesQueryKeys.detail(analysisId), () =>
+        getAnalysis({ analysisId }),
+    );
+    return useMemo(
+        () => ({ ...queryResult, data: formatData(queryResult.data) as Analysis }),
+        [queryResult.data, queryResult.error],
+    );
+}
+
 export type CreateAnalysisParams = {
     mlModel?: string;
     refId: string;
@@ -65,7 +84,7 @@ export type CreateAnalysisParams = {
 export function useCreateAnalysis() {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation<Analysis, unknown, CreateAnalysisParams>(
+    const mutation = useMutation<GenericAnalysis, unknown, CreateAnalysisParams>(
         ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
             createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
         {
