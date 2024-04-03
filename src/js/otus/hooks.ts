@@ -18,7 +18,7 @@ export default function useGetSequences(otuId: string) {
         const { sequences } = activeIsolate;
 
         if (sequences) {
-            const segmentNames = map(data.otu_schema, "name");
+            const segmentNames = map(data.schema, "name");
 
             return sortBy(sequences, [
                 entry => {
