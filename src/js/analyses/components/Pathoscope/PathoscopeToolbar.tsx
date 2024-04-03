@@ -1,16 +1,16 @@
-import { useUrlSearchParams } from "@utils/hooks";
-import React from "react";
-import styled from "styled-components";
 import {
     Button,
     Dropdown,
     DropdownButton,
+    DropdownMenuContent,
     DropdownMenuDownload,
-    DropdownMenuList,
     Icon,
     InputSearch,
     Toolbar,
-} from "../../../base";
+} from "@base";
+import { useUrlSearchParams } from "@utils/hooks";
+import React from "react";
+import styled from "styled-components";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 
 const StyledPathoscopeToolbar = styled(Toolbar)`
@@ -71,14 +71,14 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
                         <Icon name="file-download" /> Export <Icon name="caret-down" />
                     </span>
                 </DropdownButton>
-                <DropdownMenuList>
+                <DropdownMenuContent>
                     <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.csv`}>
                         <Icon name="file-csv" /> CSV
                     </DropdownMenuDownload>
                     <DropdownMenuDownload href={`/api/analyses/documents/${analysisId}.xlsx`}>
                         <Icon name="file-excel" /> Excel
                     </DropdownMenuDownload>
-                </DropdownMenuList>
+                </DropdownMenuContent>
             </Dropdown>
         </StyledPathoscopeToolbar>
     );
