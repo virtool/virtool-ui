@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { assign } from "lodash";
+import { UpdateOTUProps } from "@otus/queries";
+import { assign, times } from "lodash";
 import nock from "nock";
 import { HistoryMethod, HistoryNested, OTU, OTUIsolate, OTUMinimal, OTURemote, OTUSegment } from "../../js/otus/types";
 import { createFakeReferenceNested } from "./references";
@@ -99,7 +100,7 @@ export function createFakeOTU(overrides?: CreateFakeOTU): OTU {
         issues: issues || null,
         last_indexed_version: null,
         most_recent_change: createFakeHistoryNested(),
-        otu_schema: [createFakeOTUSegment()],
+        schema: times(2, createFakeOTUSegment),
         remote: remote || null,
     };
 }
@@ -138,6 +139,19 @@ export function mockApiCreateOTU(refId: string, name: string, abbreviation: stri
     });
 
     return nock("http://localhost").post(`/api/refs/${refId}/otus`, { name, abbreviation }).reply(201, OTU);
+}
+
+/**
+ * Mocks an API call for updating the OTU details
+ *
+ * @param otu - The OTU details
+ * @param update - The update to apply to the OTU
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiEditOTU(otu: OTU, update: UpdateOTUProps) {
+    const OTUDetail = { otu, ...update };
+
+    return nock("http://localhost").patch(`/api/otus/${otu.id}`).reply(200, OTUDetail);
 }
 
 /**

@@ -82,7 +82,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
                     <DialogTitle>Analyze</DialogTitle>
-                    <HMMAlert installed={hmms.status.task.complete} />
+                    <HMMAlert installed={hmms.status.task?.complete} />
                     <WorkflowSelector
                         onSelect={onChangeWorkflow}
                         selected={location.state?.createAnalysis}

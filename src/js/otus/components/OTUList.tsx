@@ -28,7 +28,7 @@ type OTUListProps = {
 export default function OTUList({ match }: OTUListProps) {
     const { refId } = match.params;
     const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
-    const [term, setTerm] = useUrlSearchParams("find");
+    const [term, setTerm] = useUrlSearchParams<string>("find");
     const {
         data: otu,
         isLoading: isLoadingOTUs,

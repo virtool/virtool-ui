@@ -8,7 +8,7 @@ import { useUrlSearchParams } from "../../utils/hooks";
  * A toolbar which allows the references to be filtered by name
  */
 export default function ReferenceToolbar() {
-    const [term, setTerm] = useUrlSearchParams("find", "");
+    const [term, setTerm] = useUrlSearchParams<string>("find", "");
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
     const createButton = canCreate ? (

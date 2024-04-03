@@ -1,3 +1,4 @@
+import { IimiAnalysis } from "@/analyses/types";
 import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -9,7 +10,7 @@ const ImportantList = styled.ul`
     max-width: 600px;
 `;
 
-export function IimiViewer({ detail }) {
+export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
     const hits = sortBy(detail.results.hits, hit => !hit.result);
 
     return (

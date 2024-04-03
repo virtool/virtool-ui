@@ -4,16 +4,6 @@ import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 export type HistoryType = RouteComponentProps["history"];
 
-export const useStateWithReset = initialValue => {
-    const [state, setState] = useState(initialValue);
-
-    useEffect(() => {
-        setState(initialValue);
-    }, [initialValue]);
-
-    return [state, setState];
-};
-
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
     width: ref.current ? ref.current.offsetWidth : 0,
@@ -24,7 +14,7 @@ type Size = {
     width: number;
 };
 
-export function useElementSize(): [React.MutableRefObject<HTMLElement | null>, Size] {
+export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject<T>, Size] {
     const ref = useRef(null);
 
     const [size, setSize] = useState<{ height: number; width: number }>(getSize(ref));
@@ -37,7 +27,7 @@ export function useElementSize(): [React.MutableRefObject<HTMLElement | null>, S
         handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, [null]);
+    }, []);
 
     return [ref, size];
 }
@@ -52,6 +42,8 @@ export const useDidUpdateEffect = (onUpdate, deps) => {
     }, deps);
 };
 
+type SearchParamValue = string | boolean | number;
+
 /**
  * Updates the URL search parameters by either setting a new value for a given key or removing the key-value pair
  *
@@ -59,11 +51,11 @@ export const useDidUpdateEffect = (onUpdate, deps) => {
  * @param key - The search parameter key to be managed
  * @param history - The history object
  */
-function updateUrlSearchParams(value: string, key: string, history: HistoryType) {
+function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string, history: HistoryType) {
     const params = new URLSearchParams(window.location.search);
 
     if (value) {
-        params.set(key, value);
+        params.set(key, String(value));
     } else {
         params.delete(key);
     }
@@ -81,21 +73,24 @@ function updateUrlSearchParams(value: string, key: string, history: HistoryType)
  * @param defaultValue - The default value to use when the search parameter key is not present in the URL
  * @returns Object - An object containing the current value and a function to set the URL search parameter
  */
-export function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
+export function useUrlSearchParams<T extends SearchParamValue>(
+    key: string,
+    defaultValue?: T,
+): [T, (newValue: T) => void] {
     const history = useHistory();
     const location = useLocation();
     const firstRender = useRef(true);
 
-    let value = new URLSearchParams(location.search).get(key);
+    let value = new URLSearchParams(location.search).get(key) as T;
 
     if (firstRender.current && defaultValue && !value) {
         value = defaultValue;
-        updateUrlSearchParams(defaultValue, key, history);
+        updateUrlSearchParams(String(defaultValue), key, history);
     }
 
     firstRender.current = false;
 
-    return [value, (value: string) => updateUrlSearchParams(value, key, history)];
+    return [value, (value: T) => updateUrlSearchParams(value, key, history)];
 }
 
 /**

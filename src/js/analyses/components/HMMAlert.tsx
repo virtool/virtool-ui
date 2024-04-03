@@ -7,6 +7,7 @@ interface AnalysisHMMAlertProps {
     installed: boolean;
 }
 
+/** Banner informing the user when HMMs are not installed */
 export default function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
     if (installed) {
         return null;
