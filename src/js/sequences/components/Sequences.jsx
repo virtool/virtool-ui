@@ -27,7 +27,7 @@ const IsolateSequencesHeader = styled.label`
 `;
 
 export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenceId, otuId }) => {
-    const sequences = useGetSequences(otuId, activeIsolate.sequences);
+    const sequences = useGetSequences(otuId);
 
     const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
 
