@@ -28,5 +28,24 @@
       "@utils/*": ["./js/utils/*"],
       "@wall/*": ["./js/wall/*"],
     },
-    "include": ["src/**/*"]
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": false,
+    "esModuleInterop": false,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": ["DOM", "ESNext", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "outDir": "./build/",
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "strict": false,
+    "target": "ESNext",
+    "typeRoots": ["node_modules/@types",
+      "./src/js/types"
+    ]
+  },
+  "include": ["src/**/*"]
 }
