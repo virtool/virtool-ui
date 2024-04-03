@@ -10,8 +10,8 @@ import SubtractionToolbar from "./SubtractionToolbar";
  * A list of subtractions
  */
 export default function SubtractionList() {
-    const [term, setTerm] = useUrlSearchParams("find");
-    const [urlPage] = useUrlSearchParams("page");
+    const [term, setTerm] = useUrlSearchParams<string>("find");
+    const [urlPage] = useUrlSearchParams<number>("page");
     const { data, isLoading } = useFindSubtractions(Number(urlPage) || 1, 25, term);
 
     if (isLoading) {

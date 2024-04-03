@@ -1,3 +1,4 @@
+import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
 import { ScrollSyncPane } from "react-scroll-sync";
@@ -39,11 +40,10 @@ const StyledPathoscopeIsolateWeight = styled.strong`
     font-size: ${props => props.theme.fontSize.sm};
 `;
 
-export function PathoscopeIsolateWeight({ pi, reads, showPathoscopeReads }) {
+export function PathoscopeIsolateWeight({ pi, reads }) {
+    const [showReads] = useUrlSearchParams<boolean>("reads");
     return (
-        <StyledPathoscopeIsolateWeight>
-            {showPathoscopeReads ? reads : toScientificNotation(pi)}
-        </StyledPathoscopeIsolateWeight>
+        <StyledPathoscopeIsolateWeight>{showReads ? reads : toScientificNotation(pi)}</StyledPathoscopeIsolateWeight>
     );
 }
 
@@ -51,7 +51,7 @@ const StyledPathoscopeIsolate = styled.div`
     position: relative;
 `;
 
-export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, sequences, showPathoscopeReads }) {
+export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, sequences }) {
     const hitComponents = map(sequences, (hit, i) => (
         <Coverage
             key={i}
@@ -61,7 +61,6 @@ export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, 
             accession={hit.accession}
             definition={hit.definition}
             yMax={maxDepth}
-            showYAxis={i === 0}
         />
     ));
 
@@ -69,7 +68,7 @@ export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, 
         <StyledPathoscopeIsolate>
             <PathoscopeIsolateHeader>
                 {name}
-                <PathoscopeIsolateWeight pi={pi} reads={reads} showPathoscopeReads={showPathoscopeReads} />
+                <PathoscopeIsolateWeight pi={pi} reads={reads} />
                 <PathoscopeIsolateDepth>{depth.toFixed(0)}</PathoscopeIsolateDepth>
                 <PathoscopeIsolateCoverage>{toScientificNotation(parseFloat(coverage))}</PathoscopeIsolateCoverage>
             </PathoscopeIsolateHeader>

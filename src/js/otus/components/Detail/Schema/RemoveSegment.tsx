@@ -1,32 +1,49 @@
+import { RemoveDialog } from "@base/RemoveDialog";
+import { OTUQueryKeys, useUpdateOTU } from "@otus/queries";
+import { OTUSegment } from "@otus/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { reject } from "lodash-es";
 import React from "react";
-import { RemoveDialog } from "../../../../base/RemoveDialog";
-import { OTUSegment } from "../../../types";
+import { useHistory, useLocation } from "react-router-dom";
 
 type RemoveSegmentProps = {
-    /** Name of the segment being removed */
-    activeName: string;
+    abbreviation: string;
+    name: string;
+    otuId: string;
     /** List of segments associated with the OTU */
     schema: OTUSegment[];
-    /** Indicates whether to show the dialog for removing a segment */
-    show: boolean;
-    /** A callback function to hide the dialog */
-    onHide: () => void;
-    /** A callback function to handle removal of segment */
-    onSubmit: (reject: any) => void;
 };
 
 /**
  * Displays a dialog for removing a segment
  */
-export default function RemoveSegment({ activeName, schema, show, onHide, onSubmit }: RemoveSegmentProps) {
+export default function RemoveSegment({ abbreviation, name, otuId, schema }: RemoveSegmentProps) {
+    const history = useHistory();
+    const location = useLocation<{ removeSegment: string }>();
+    const mutation = useUpdateOTU();
+    const queryClient = useQueryClient();
+
+    const activeName = location.state?.removeSegment;
+
+    function handleSubmit() {
+        mutation.mutate(
+            { otuId, name, abbreviation, schema: reject(schema, { name: activeName }) },
+            {
+                onSuccess: () => {
+                    history.replace({ state: { removeSegment: "" } });
+                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+                },
+            },
+        );
+    }
+
     return (
         <RemoveDialog
             name={activeName}
             noun="Segment"
-            onConfirm={() => onSubmit(reject(schema, { name: activeName }))}
-            onHide={onHide}
-            show={show}
+            onConfirm={handleSubmit}
+            onHide={() => history.replace({ state: { removeSegment: "" } })}
+            show={Boolean(location.state?.removeSegment)}
         />
     );
 }

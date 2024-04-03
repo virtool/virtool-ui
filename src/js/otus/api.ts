@@ -1,5 +1,5 @@
 import { Request } from "../app/request";
-import { OTU, OTUIsolate } from "./types";
+import { OTU, OTUIsolate, OTUSegment } from "./types";
 
 /**
  * Get a single OTU data from the API
@@ -67,22 +67,14 @@ export function createOTU(refId: string, name: string, abbreviation: string): Pr
  * @param schema - The update schema for the otu
  * @returns A Promise resolving to the API response containing the updated OTU data
  */
-export function edit({
-    otuId,
-    name,
-    abbreviation,
-    schema,
-}: {
-    otuId: string;
-    name: string;
-    abbreviation: string;
-    schema: string[];
-}) {
-    return Request.patch(`/otus/${otuId}`).send({
-        name,
-        abbreviation,
-        schema,
-    });
+export function editOTU(otuId: string, name: string, abbreviation: string, schema: OTUSegment[]): Promise<OTU> {
+    return Request.patch(`/otus/${otuId}`)
+        .send({
+            name,
+            abbreviation,
+            schema,
+        })
+        .then(res => res.body);
 }
 
 /**
