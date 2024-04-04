@@ -1,7 +1,7 @@
 import { FormattedPathoscopeHit } from "@/analyses/types";
 import { useScrollSync, useUrlSearchParams } from "@utils/hooks";
 import { filter, map } from "lodash-es";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { PathoscopeIsolate } from "./Isolate";
 
 type PathoscopeDetailProps = {
@@ -19,10 +19,7 @@ export function PathoscopeDetail({ hit, mappedCount }: PathoscopeDetailProps) {
 
     const filtered = filter(isolates, isolate => !filterIsolates || isolate.pi >= 0.03 * pi);
     const isolateRefs = useRef([]);
-
-    useEffect(() => {
-        isolateRefs.current = map(filtered, (_filter, index) => isolateRefs.current[index]);
-    }, [filtered]);
+    useScrollSync(isolateRefs.current, filtered);
 
     const isolateComponents = map(filtered, (isolate, index) => {
         return (
@@ -35,8 +32,6 @@ export function PathoscopeDetail({ hit, mappedCount }: PathoscopeDetailProps) {
             />
         );
     });
-
-    useScrollSync(isolateRefs.current);
 
     return <div>{isolateComponents}</div>;
 }

@@ -6,6 +6,7 @@ import { toScientificNotation } from "../../../utils/utils";
 import Coverage from "./Coverage";
 
 const PathoscopeChartRibbon = styled.div`
+    white-space: nowrap;
     overflow-x: auto;
 `;
 
