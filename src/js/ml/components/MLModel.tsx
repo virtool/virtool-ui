@@ -15,7 +15,7 @@ const MLModelHeader = styled.div`
     display: flex;
     justify-content: space-between;
 
-    :last-child {
+    &:last-child {
         margin-left: auto;
     }
 `;

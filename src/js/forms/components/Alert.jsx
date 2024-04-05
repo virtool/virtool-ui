@@ -11,10 +11,10 @@ const StyledRestoredAlert = styled(Alert)`
         margin-left: 10px;
         color: ${props => getColor({ color: "greyDark", theme: props.theme })};
 
-        :hover {
+        &:hover {
             color: ${props => getColor({ color: "greyDarkest", theme: props.theme })};
         }
-        :last-child {
+        &:last-child {
             margin-left: auto;
             font-size: 16px;
         }
