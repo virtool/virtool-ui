@@ -13,14 +13,17 @@ const LabelFormPreviewLabel = styled.p`
     font-weight: ${getFontWeight("thick")};
 `;
 
-interface LabelFormProps {
+type LabelFormProps = {
     color?: string;
     description?: string;
     error?: string;
     name?: string;
     onSubmit: (data: { color: string; name: string; description: string }) => void;
-}
+};
 
+/**
+ * A form for creating or updating a label
+ */
 export function LabelForm({ color = "#D1D5DB", description = "", error = "", name = "", onSubmit }: LabelFormProps) {
     const [newColor, setColor] = useState(color);
 

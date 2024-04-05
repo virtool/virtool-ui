@@ -4,7 +4,7 @@ import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { CreateLabel } from "../Create";
+import { CreateLabel } from "../CreateLabel";
 
 describe("<CreateLabel>", () => {
     it("creates label with color", async () => {

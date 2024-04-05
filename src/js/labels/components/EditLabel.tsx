@@ -1,40 +1,44 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Request } from "../../app/request";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { StyledButtonSmall } from "../../base/styled/StyledButtonSmall";
-import { labelQueryKeys } from "../queries";
-import { LabelForm } from "./Form";
+import { labelQueryKeys, useUpdateLabel } from "../queries";
+import { LabelForm } from "./LabelForm";
 
-interface EditLabelProps {
-    id: string;
+type UpdatedLabel = {
     color: string;
     description: string;
     name: string;
-}
+};
 
+type EditLabelProps = {
+    /** The id of the label being updated */
+    id: number;
+    color: string;
+    description: string;
+    name: string;
+};
+
+/**
+ * Displays a dialog for updating a label
+ */
 export function EditLabel({ id, color, name, description }: EditLabelProps) {
     const [show, setShow] = useState(false);
-
+    const mutation = useUpdateLabel();
     const queryClient = useQueryClient();
 
-    const mutation = useMutation(data => {
-        return Request.patch(`/labels/${id}`)
-            .send(data)
-            .then(response => {
-                return response.body;
-            });
-    });
-
-    const handleSubmit = data => {
-        mutation.mutate(data, {
-            onSuccess: () => {
-                setShow(false);
-                queryClient.invalidateQueries(labelQueryKeys.lists());
+    function handleSubmit({ color, description, name }: UpdatedLabel) {
+        mutation.mutate(
+            { labelId: id, name, description, color },
+            {
+                onSuccess: () => {
+                    setShow(false);
+                    queryClient.invalidateQueries(labelQueryKeys.lists());
+                },
             },
-        });
-    };
+        );
+    }
 
     return (
         <Dialog open={show} onOpenChange={show => setShow(show)}>

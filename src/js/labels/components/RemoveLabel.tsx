@@ -1,12 +1,11 @@
+import { getFontSize } from "@app/theme";
+import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import { StyledButtonSmall } from "@base/styled/StyledButtonSmall";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Request } from "../../app/request";
-import { getFontSize } from "../../app/theme";
-import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
-import { StyledButtonSmall } from "../../base/styled/StyledButtonSmall";
-import { labelQueryKeys } from "../queries";
+import { labelQueryKeys, useRemoveLabel } from "../queries";
 
 const RemoveLabelQuestion = styled.p`
     font-size: ${getFontSize("lg")};
@@ -17,27 +16,30 @@ const RemoveLabelFooter = styled.footer`
     margin-top: 30px;
 `;
 
-interface RemoveLabelProps {
-    id: string;
+type RemoveLabelProps = {
+    id: number;
     name: string;
-}
+};
 
+/**
+ * Displays a dialog for removing a label
+ */
 export function RemoveLabel({ id, name }: RemoveLabelProps) {
     const [open, setOpen] = useState(false);
-
     const queryClient = useQueryClient();
+    const mutation = useRemoveLabel();
 
-    const mutation = useMutation(
-        () => {
-            return Request.delete(`/labels/${id}`);
-        },
-        {
-            onSuccess: () => {
-                setOpen(false);
-                queryClient.invalidateQueries(labelQueryKeys.lists());
+    function handleSubmit() {
+        mutation.mutate(
+            { labelId: id },
+            {
+                onSuccess: () => {
+                    setOpen(false);
+                    queryClient.invalidateQueries(labelQueryKeys.lists());
+                },
             },
-        },
-    );
+        );
+    }
 
     return (
         <Dialog open={open} onOpenChange={open => setOpen(open)}>
@@ -50,7 +52,7 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
                         Are you sure you want to delete the label <strong>{name}</strong>?
                     </RemoveLabelQuestion>
                     <RemoveLabelFooter>
-                        <Button type="button" color="red" onClick={mutation.mutate}>
+                        <Button type="button" color="red" onClick={handleSubmit}>
                             Delete
                         </Button>
                     </RemoveLabelFooter>

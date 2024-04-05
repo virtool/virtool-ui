@@ -10,7 +10,7 @@ import {
     ViewHeaderTitle,
 } from "../../base";
 import { useFetchLabels } from "../queries";
-import { CreateLabel } from "./Create";
+import { CreateLabel } from "./CreateLabel";
 import { Item } from "./Item";
 
 const LabelsHeader = styled(ViewHeader)`
@@ -19,6 +19,9 @@ const LabelsHeader = styled(ViewHeader)`
     justify-content: space-between;
 `;
 
+/**
+ * Display and manage a list of labels
+ */
 export function Labels() {
     const { data, isLoading } = useFetchLabels();
 
