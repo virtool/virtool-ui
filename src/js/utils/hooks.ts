@@ -140,11 +140,11 @@ export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [s
  * Hook for synchronizing scroll between components
  *
  * @param elements - A list of elements to apply synchronous scroll to
- * @param syncTargets - Filter option to specify which elements to synchronize scroll with
+ * @param targets - Filter option to specify which elements to synchronize scroll with
  */
-export function useScrollSync(elements: HTMLElement[], syncTargets?: any) {
+export function useScrollSync(elements: HTMLElement[], targets?: any) {
     useEffect(() => {
-        const newElements = syncTargets ? elements.slice(0, syncTargets.length) : elements;
+        const newElements = targets ? elements.slice(0, targets.length) : elements;
 
         function handleScroll(e) {
             const { scrollLeft, scrollTop } = e.target;
@@ -166,5 +166,5 @@ export function useScrollSync(elements: HTMLElement[], syncTargets?: any) {
                 });
             };
         }
-    }, [elements, syncTargets]);
+    }, [elements, targets]);
 }
