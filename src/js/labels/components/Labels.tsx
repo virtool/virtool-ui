@@ -11,7 +11,7 @@ import {
 } from "../../base";
 import { useFetchLabels } from "../queries";
 import { CreateLabel } from "./CreateLabel";
-import { Item } from "./Item";
+import { LabelItem } from "./LabelItem";
 
 const LabelsHeader = styled(ViewHeader)`
     align-items: center;
@@ -43,7 +43,7 @@ export function Labels() {
             <BoxGroup>
                 {data.length ? (
                     data.map(label => (
-                        <Item
+                        <LabelItem
                             key={label.id}
                             name={label.name}
                             color={label.color}

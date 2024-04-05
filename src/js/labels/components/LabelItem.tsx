@@ -40,7 +40,7 @@ type ItemProps = {
 /**
  * A condensed label item for use in a list of labels
  */
-export function Item({ name, color, description, id }: ItemProps) {
+export function LabelItem({ name, color, description, id }: ItemProps) {
     return (
         <LabelItemBox>
             <LabelItemExampleContainer>
