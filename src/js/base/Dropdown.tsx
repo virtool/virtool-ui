@@ -1,6 +1,3 @@
-import { Menu } from "@reach/menu-button";
-import "@reach/menu-button/styles.css";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-export const Dropdown = Menu;
-
-Dropdown.displayName = "Dropdown";
+export const Dropdown = DropdownMenu.Root;
