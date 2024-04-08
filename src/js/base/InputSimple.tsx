@@ -14,12 +14,12 @@ export const InputSimple = styled.input`
     transition: border-color ease-in-out 150ms, box-shadow ease-in-out 150ms;
     width: 100%;
 
-    :focus {
+    &:focus {
         border-color: ${props => props.theme.color.blue};
         box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.5);
     }
 
-    :not(select):read-only {
+    &:not(select):read-only {
         background-color: ${props => props.theme.color.greyLightest};
     }
 `;

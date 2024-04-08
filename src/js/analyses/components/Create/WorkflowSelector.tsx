@@ -38,7 +38,7 @@ const WorkflowItem = styled(Box)<WorkflowItemProps>`
     font-weight: ${props => getFontWeight(props.selected ? "thick" : "normal")(props)};
     border: 1px solid ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "greyLight" })};
 
-    :hover {
+    &:hover {
         background-color: ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "greyHover" })};
     }
 `;

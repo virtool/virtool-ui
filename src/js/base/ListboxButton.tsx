@@ -15,7 +15,7 @@ export const ListboxButton = styled(ReachListboxButton)`
     position: relative;
     width: 100%;
 
-    :focus {
+    &:focus {
         border-color: ${props => props.theme.color.blue};
         box-shadow: ${focusShadow};
     }

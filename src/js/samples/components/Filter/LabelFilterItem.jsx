@@ -10,11 +10,11 @@ const StyledLabelFilterItem = styled(BaseSampleLabel)`
     cursor: pointer;
     margin: 4px 0; 
   
-      :not(:last-child) {
+      &:not(:last-child) {
         margin-right: 8px;
       }
 
-    :focus {
+    &:focus {
         border-color: ${props => props.theme.color.blueLight}
         outline: none;
     }
