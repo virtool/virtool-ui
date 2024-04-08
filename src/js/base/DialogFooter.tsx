@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection } from "./BoxGroupSection";
+import { BoxGroupSection, BoxGroupSectionProps } from "./BoxGroupSection";
 
-export const DialogFooter = styled(({ dialogStyle, ...rest }) => <BoxGroupSection {...rest} />)`
+type DialogFooterProps = BoxGroupSectionProps & {
+    dialogStyle?: string;
+};
+
+export const DialogFooter = styled(({ dialogStyle, ...rest }) => <BoxGroupSection {...rest} />)<DialogFooterProps>`
     border-left: none;
     border-right: none;
     border-bottom: none;
