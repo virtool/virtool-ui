@@ -8,8 +8,9 @@ const StyledSegment = styled(BoxGroupSection)`
     display: grid;
     align-items: center;
     grid-template-columns: 45fr 1fr 10fr 10fr;
-    padding: 16px;
+    padding: 0 16px;
     line-height: 1;
+    height: 51px;
 `;
 
 const SegmentIcon = styled(IconLink)`
@@ -20,8 +21,11 @@ const SegmentIcon = styled(IconLink)`
 
 const DragIcons = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-left: auto;
+    font-weight: ${getFontWeight("thick")};
+    font-size: ${getFontSize("lg")};
 `;
 
 type SegmentProps = {

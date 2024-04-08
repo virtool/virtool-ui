@@ -1,6 +1,7 @@
 import { BoxGroup, Button, LoadingPlaceholder, NoneFoundBox } from "@/base";
 import EditSegment from "@otus/components/Detail/Schema/EditSegment";
 import { OTUQueryKeys, useFetchOTU, useUpdateOTU } from "@otus/queries";
+import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { map } from "lodash";
@@ -42,27 +43,20 @@ export default function Schema({ match }: SchemaProps) {
     const { abbreviation, name, schema } = data;
 
     function handleMoveUp(index: number) {
-        const updatedSchema = [...data.schema];
-        const temp = updatedSchema[index];
-        updatedSchema[index] = updatedSchema[index - 1];
-        updatedSchema[index - 1] = temp;
-        mutation.mutate(
-            { otuId, name, abbreviation, schema: updatedSchema },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
-                },
-            },
-        );
+        const updatedSchema = data.schema.slice();
+        [updatedSchema[index], updatedSchema[index - 1]] = [updatedSchema[index - 1], updatedSchema[index]];
+        handleUpdate(updatedSchema);
     }
 
     function handleMoveDown(index: number) {
-        const updatedSchema = [...data.schema];
-        const temp = updatedSchema[index];
-        updatedSchema[index] = updatedSchema[index + 1];
-        updatedSchema[index + 1] = temp;
+        const updatedSchema = data.schema.slice();
+        [updatedSchema[index], updatedSchema[index + 1]] = [updatedSchema[index + 1], updatedSchema[index]];
+        handleUpdate(updatedSchema);
+    }
+
+    function handleUpdate(updatedSchema: OTUSegment[]) {
         mutation.mutate(
-            { otuId, name, abbreviation, schema: updatedSchema },
+            { otuId, schema: updatedSchema },
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));

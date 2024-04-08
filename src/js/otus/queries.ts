@@ -81,8 +81,8 @@ export function useCreateOTU(refId: string) {
 
 export type UpdateOTUProps = {
     otuId: string;
-    name: string;
-    abbreviation: string;
+    name?: string;
+    abbreviation?: string;
     schema?: OTUSegment[];
 };
 
