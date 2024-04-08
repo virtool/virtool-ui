@@ -1,7 +1,5 @@
+import { Request } from "@app/request";
 import { Label } from "@labels/types";
-import { Request } from "../app/request";
-
-export const listLabels = () => Request.get("/labels");
 
 /**
  * Fetch a list of labels

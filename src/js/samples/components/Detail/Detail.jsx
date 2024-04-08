@@ -16,7 +16,6 @@ import {
     ViewHeaderTitle,
 } from "../../../base";
 import { getError } from "../../../errors/selectors";
-import { listLabels } from "../../../labels/actions";
 import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
@@ -31,10 +30,8 @@ function SampleDetail({
     detail,
     error,
     history,
-    labels,
     match,
     onGetSample,
-    onListLabels,
     onShortlistSubtractions,
     subtractionOptions,
 }) {
@@ -43,14 +40,13 @@ function SampleDetail({
     useEffect(() => {
         onGetSample(sampleId);
         onShortlistSubtractions();
-        onListLabels();
     }, [sampleId]);
 
     if (error) {
         return <NotFound />;
     }
 
-    if (detail === null || labels === null || subtractionOptions === null) {
+    if (detail === null || subtractionOptions === null) {
         return <LoadingPlaceholder />;
     }
 
@@ -123,7 +119,6 @@ export function mapStateToProps(state) {
         canModify: getCanModify(state),
         detail: state.samples.detail,
         error: getError("GET_SAMPLE_ERROR"),
-        labels: get(state, "labels.documents"),
         subtractionOptions: get(state, "subtraction.shortlist", ""),
     };
 }
@@ -135,9 +130,6 @@ export function mapDispatchToProps(dispatch) {
         },
         onShortlistSubtractions: () => {
             dispatch(shortlistSubtractions());
-        },
-        onListLabels: () => {
-            dispatch(listLabels());
         },
     };
 }

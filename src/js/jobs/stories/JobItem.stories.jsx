@@ -2,7 +2,7 @@ import React from "react";
 import { JobItem } from "../components/Item/JobItem";
 
 export default {
-    title: "jobs/LabelItem",
+    title: "jobs/Item",
     component: JobItem,
 };
 

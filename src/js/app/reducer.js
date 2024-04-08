@@ -12,7 +12,6 @@ import groupsReducer from "../groups/reducer";
 import hmmsReducer from "../hmm/reducer";
 import indexesReducer from "../indexes/reducer";
 import jobsReducer from "../jobs/reducer";
-import labelsReducer from "../labels/reducer";
 import OTUsReducer from "../otus/reducer";
 import referenceReducer from "../references/reducer";
 import samplesReducer from "../samples/reducer";
@@ -81,7 +80,6 @@ export function createAppStore(history) {
             hmms: hmmsReducer,
             indexes: indexesReducer,
             jobs: jobsReducer,
-            labels: labelsReducer,
             otus: OTUsReducer,
             references: referenceReducer,
             router: connectRouter(history),

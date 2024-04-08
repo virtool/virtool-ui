@@ -19,7 +19,7 @@ export function useFetchLabels() {
 }
 
 /**
- * Initializes a mutator for creating a label
+ * Initialize a mutator for creating a label
  *
  * @returns A mutator for creating a label
  */
@@ -30,7 +30,7 @@ export function useCreateLabel() {
 }
 
 /**
- * Initializes a mutator for updating a label
+ * Initialize a mutator for updating a label
  *
  * @returns A mutator for updating a label
  */
@@ -41,7 +41,7 @@ export function useUpdateLabel() {
 }
 
 /**
- * Initializes a mutator for removing a label
+ * Initialize a mutator for removing a label
  *
  * @returns A mutator for removing a label
  */
