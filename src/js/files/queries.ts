@@ -1,5 +1,5 @@
+import { Request } from "@app/request";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { Request } from "../app/request";
 import { findFiles } from "./api";
 import { FileResponse, FileType } from "./types";
 
@@ -11,14 +11,8 @@ export const fileQueryKeys = {
         ["files", "list", "infinite", type, ...filters] as const,
 };
 
-function listFiles(type: FileType, paginate: boolean, page: number) {
-    return Request.get("/uploads")
-        .query({ upload_type: type, paginate, page, ready: true })
-        .then(response => response.body);
-}
-
-export function useListFiles(type: FileType, paginate: boolean, page = 1) {
-    return useQuery(fileQueryKeys.list(type, [paginate, page]), () => listFiles(type, paginate, page), {
+export function useListFiles(type: FileType, page = 1, per_page: number) {
+    return useQuery(fileQueryKeys.list(type, [page, per_page]), () => findFiles(type, page, per_page), {
         keepPreviousData: true,
     });
 }
