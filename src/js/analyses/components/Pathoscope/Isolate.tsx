@@ -1,8 +1,8 @@
 import { useUrlSearchParams } from "@utils/hooks";
+import { toScientificNotation } from "@utils/utils";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { toScientificNotation } from "../../../utils/utils";
 import Coverage from "./Coverage";
 
 const PathoscopeChartRibbon = styled.div`
@@ -50,7 +50,18 @@ const StyledPathoscopeIsolate = styled.div`
     position: relative;
 `;
 
-export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, sequences, isolateRef }) {
+export function PathoscopeIsolate({
+    coverage,
+    depth,
+    maxDepth,
+    name,
+    pi,
+    reads,
+    sequences,
+    isolateRef,
+    graphWidth,
+    graphRatios,
+}) {
     const hitComponents = map(sequences, (hit, i) => (
         <Coverage
             key={i}
@@ -60,6 +71,8 @@ export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, 
             accession={hit.accession}
             definition={hit.definition}
             yMax={maxDepth}
+            graphWidth={graphWidth}
+            graphRatio={graphRatios[i]}
         />
     ));
 
