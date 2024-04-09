@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Lint
-        uses: wagoid/commitlint-github-action@v4
+        uses: wagoid/commitlint-github-action@v6
   tsc:
     runs-on: ubuntu-latest
     steps:
