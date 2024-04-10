@@ -1,38 +1,38 @@
 import { useFetchOTU } from "@otus/queries";
-import { find } from "lodash-es";
+import { OTUIsolate } from "@otus/types";
 import { indexOf, map, sortBy } from "lodash-es/lodash";
-import { useLocation } from "react-router-dom";
+
+type SequencesResponse = {
+    data: OTUIsolate;
+    isLoading: boolean;
+};
 
 /**
  * A hook for sorting the sequences for the active isolate
  *
  * @param otuId - The otu which the isolate belongs to
+ * @param isolate - The active isolate
  */
-export default function useGetSequences(otuId: string) {
+export default function useGetSequences(otuId: string, isolate: OTUIsolate): SequencesResponse {
     const { data, isLoading } = useFetchOTU(otuId);
-    const location = useLocation<{ activeIsolateId: string }>();
 
-    if (!isLoading) {
-        const activeIsolateId = location.state?.activeIsolateId || data.isolates[0]?.id;
-        const activeIsolate = data.isolates.length ? find(data.isolates, { id: activeIsolateId }) : null;
-        const { sequences } = activeIsolate;
-
-        if (sequences) {
-            const segmentNames = map(data.schema, "name");
-
-            return sortBy(sequences, [
-                entry => {
-                    const index = indexOf(segmentNames, entry.segment);
-
-                    if (index !== -1) {
-                        return index;
-                    }
-
-                    return segmentNames.length;
-                },
-            ]);
-        }
-
-        return [];
+    if (isLoading) {
+        return { data: data, isLoading: isLoading };
     }
+
+    const { sequences } = isolate;
+
+    if (sequences) {
+        const segmentNames = map(data.schema, "name");
+        const updatedSequences = sortBy(sequences, [
+            entry => {
+                const index = indexOf(segmentNames, entry.segment);
+                return index !== -1 ? index : segmentNames.length;
+            },
+        ]);
+
+        return { data: { ...isolate, sequences: updatedSequences }, isLoading: isLoading };
+    }
+
+    return { data: { ...isolate, sequences: [] }, isLoading: isLoading };
 }
