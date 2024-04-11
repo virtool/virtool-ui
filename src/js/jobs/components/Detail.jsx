@@ -16,8 +16,8 @@ import {
 import { Permission } from "../../groups/types";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { archiveJob, cancelJob, getJob } from "../actions";
-import JobError from "./Error";
 import { JobArgs } from "./JobArgs";
+import JobError from "./JobError";
 import JobSteps from "./Steps";
 
 const JobDetailBadge = styled(Badge)`
