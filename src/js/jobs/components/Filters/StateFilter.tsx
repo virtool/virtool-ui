@@ -1,16 +1,16 @@
+import { useUrlSearchParamsList } from "@utils/hooks";
 import { difference, union, xor } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { SidebarHeader, SideBarSection } from "../../../base";
-import { findJobs } from "../../actions";
-import { getJobCountsByState, getStatesFromURL } from "../../selectors";
+import { getJobCounts, getJobCountsByState } from "../../selectors";
 import { StateCategory } from "./StateCategory";
 
 const active = ["waiting", "preparing", "running"];
 const inactive = ["complete", "cancelled", "errored", "terminated"];
 
-const filterStatesByCategory = (category, selected) => {
+function filterStatesByCategory(category, selected) {
     const options = category === "active" ? active : inactive;
 
     const diff = difference(selected, options);
@@ -20,7 +20,7 @@ const filterStatesByCategory = (category, selected) => {
     }
 
     return union(selected, options);
-};
+}
 
 const StyledStatusFilter = styled(SideBarSection)`
     align-items: center;
@@ -30,12 +30,15 @@ const StyledStatusFilter = styled(SideBarSection)`
     z-index: 0;
 `;
 
-export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
-    const handleClick = value =>
-        onUpdateJobStateFilter(
+export function StateFilter({ counts, test }) {
+    const [states, setStates] = useUrlSearchParamsList("state");
+
+    function handleClick(value) {
+        setStates(
             value === "active" || value === "inactive" ? filterStatesByCategory(value, states) : xor(states, [value]),
         );
-
+    }
+    console.log(test);
     return (
         <StyledStatusFilter>
             <SidebarHeader>State</SidebarHeader>
@@ -109,17 +112,11 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
             />
         </StyledStatusFilter>
     );
-};
+}
 
 export const mapStateToProps = state => ({
     counts: getJobCountsByState(state),
-    states: getStatesFromURL(state),
+    test: getJobCounts(state),
 });
 
-export const mapDispatchToProps = dispatch => ({
-    onUpdateJobStateFilter: states => {
-        dispatch(findJobs(states));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(StateFilter);
+export default connect(mapStateToProps)(StateFilter);

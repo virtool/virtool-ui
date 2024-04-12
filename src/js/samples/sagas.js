@@ -1,3 +1,4 @@
+import * as jobsAPI from "@jobs/api";
 import { getLocation, push } from "connected-react-router";
 import { has, includes } from "lodash-es";
 import { put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
@@ -14,7 +15,6 @@ import {
     WS_UPDATE_SAMPLE,
 } from "../app/actionTypes";
 import { deletePersistentFormState } from "../forms/actions";
-import * as jobsAPI from "../jobs/api";
 import { getJobDetailId, getLinkedJobs } from "../jobs/selectors";
 import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
 import { getSampleSucceeded } from "./actions";

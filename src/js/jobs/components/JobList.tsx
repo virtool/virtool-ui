@@ -1,20 +1,13 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { ScrollList } from "@base/ScrollList";
+import { useInfiniteFindJobs } from "@jobs/queries";
+import { useUrlSearchParamsList } from "@utils/hooks";
+import { flatMap } from "lodash-es";
+import React from "react";
 import styled from "styled-components";
 import { getFontWeight } from "../../app/theme";
-import {
-    Box,
-    BoxGroup,
-    ContainerNarrow,
-    LegacyScrollList,
-    LoadingPlaceholder,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "../../base";
-import { findJobs } from "../actions";
-import { getJobCountsTotal } from "../selectors";
-import { JobMinimal } from "../types";
-import { JobFilters } from "./Filters/Filters";
+import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
+import { JobMinimal, JobSearchResult } from "../types";
+import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";
 
 const JobsListViewContainer = styled.div`
@@ -35,42 +28,28 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
-const StyledLegacyScrollList = styled(LegacyScrollList)`
+const StyledScrollList = styled(ScrollList)`
     margin-bottom: 0;
 `;
 
 const initialState = ["preparing", "running"];
 
-type JobListProps = {
-    /** A list of jobs */
-    jobs: JobMinimal[];
-    /** Indicates whether there are no jobs available */
-    noJobs: boolean;
-    /** A callback function to load the next page of data */
-    onLoadNextPage: (states: string[], page: number) => void;
-    /** The current page number */
-    page: number;
-    /** The total number of pages */
-    page_count: number;
-    /** The job states */
-    states: string[];
-};
-
 /**
  * A list of jobs with filtering options
  */
-export function JobsList({ jobs, noJobs, onLoadNextPage, page, page_count, states }: JobListProps) {
-    useEffect(() => {
-        onLoadNextPage(states?.length ? states : initialState, 1);
-    }, []);
+export default function JobsList() {
+    const [states] = useUrlSearchParamsList("state", initialState);
+    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindJobs(states);
 
-    if (jobs === null) {
+    if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
+    const jobs: JobMinimal[] = flatMap(data.pages, (page: JobSearchResult) => page.documents);
+
     let inner;
 
-    if (noJobs) {
+    if (data.pages[0].total_count === 0) {
         inner = (
             <JobsListEmpty>
                 <h3>No jobs found</h3>
@@ -85,14 +64,14 @@ export function JobsList({ jobs, noJobs, onLoadNextPage, page, page_count, state
     } else {
         inner = (
             <BoxGroup>
-                <StyledLegacyScrollList
-                    documents={jobs}
-                    page={page}
-                    pageCount={page_count}
-                    onLoadNextPage={page => onLoadNextPage(states, page)}
-                    renderRow={index => {
-                        const job = jobs[index];
-                        return <Job key={job.id} {...job} />;
+                <StyledScrollList
+                    fetchNextPage={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    isLoading={isLoading}
+                    items={jobs}
+                    renderRow={(item: JobMinimal) => {
+                        return <Job key={item.id} {...item} />;
                     }}
                 />
             </BoxGroup>
@@ -111,19 +90,3 @@ export function JobsList({ jobs, noJobs, onLoadNextPage, page, page_count, state
         </>
     );
 }
-
-export const mapStateToProps = state => ({
-    page: state.jobs.page,
-    page_count: state.jobs.page_count,
-    states: new URLSearchParams(state.router.location.search).getAll("state"),
-    jobs: state.jobs.documents,
-    noJobs: getJobCountsTotal(state) === 0,
-});
-
-export const mapDispatchToProps = dispatch => ({
-    onLoadNextPage: (states, page) => {
-        dispatch(findJobs(states, page));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(JobsList);

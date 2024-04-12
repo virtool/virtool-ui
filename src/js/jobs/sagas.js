@@ -1,6 +1,5 @@
-import { getLocation, push } from "connected-react-router";
-import { forEach, has } from "lodash-es";
-import { put, select, takeEvery, takeLatest } from "redux-saga/effects";
+import { has } from "lodash-es";
+import { select, takeEvery, takeLatest } from "redux-saga/effects";
 import {
     ARCHIVE_JOB,
     CANCEL_JOB,
@@ -33,14 +32,14 @@ export function* wsUpdateJob(action) {
 export function* findJobs(action) {
     yield apiCall(jobsAPI.find, action.payload, FIND_JOBS);
 
-    const location = yield select(getLocation);
-    const params = new URLSearchParams(location.search);
-
-    params.delete("state");
-
-    forEach(action.payload.states, state => params.append("state", state));
-
-    yield put(push({ search: params.toString() }));
+    // const location = yield select(getLocation);
+    // const params = new URLSearchParams(location.search);
+    //
+    // params.delete("state");
+    //
+    // forEach(action.payload.states, state => params.append("state", state));
+    //
+    // yield put(push({ search: params.toString() }));
 }
 
 export function* refreshJobs() {
