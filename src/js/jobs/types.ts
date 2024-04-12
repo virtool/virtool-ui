@@ -60,7 +60,7 @@ export type JobStatus = {
     state: JobState;
     step_description?: string | null;
     step_name?: string | null;
-    timestamp: Date;
+    timestamp: string;
 };
 
 /* A complete Job */

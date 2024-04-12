@@ -3,7 +3,7 @@ import { reportAPIError } from "../../utils/utils";
 import reducer, { checkActionFailed, getErrorName, resetErrorName } from "../reducer";
 
 // Must mock target modules before imports to use in testing
-vi.mock("../../utils/utils.js");
+vi.mock("../../utils/utils.ts");
 
 describe("reducer()", () => {
     it("should return the initial state (null)", () => {

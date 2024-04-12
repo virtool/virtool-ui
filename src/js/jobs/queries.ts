@@ -1,6 +1,6 @@
-import { findJobs } from "@jobs/api";
-import { JobSearchResult } from "@jobs/types";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { findJobs, getJob } from "@jobs/api";
+import { Job, JobSearchResult } from "@jobs/types";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 /**
  * Factory object for generating job query keys
@@ -33,4 +33,14 @@ export function useInfiniteFindJobs(states: string[]) {
             },
         },
     );
+}
+
+/**
+ * Fetch a job by its id
+ *
+ * @param jobId - The id of the job to get
+ * @returns Query results containing the job
+ */
+export function useFetchJob(jobId: string) {
+    return useQuery<Job>(jobQueryKeys.detail(jobId), () => getJob(jobId));
 }

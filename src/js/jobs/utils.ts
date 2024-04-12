@@ -1,3 +1,5 @@
+import { JobState } from "@jobs/types";
+
 export function getStateTitle(state) {
     switch (state) {
         case "cancelled":
@@ -40,7 +42,13 @@ export function getStateDescription(state) {
     }
 }
 
-export function getStepDescription({ state, step_name, step_description }) {
+type StepDescriptionProps = {
+    state: JobState;
+    step_description?: string | null;
+    step_name?: string | null;
+};
+
+export function getStepDescription({ state, step_name, step_description }: StepDescriptionProps) {
     if (step_name && step_description) {
         return {
             title: step_name,

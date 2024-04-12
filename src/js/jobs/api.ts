@@ -1,4 +1,4 @@
-import { JobSearchResult } from "@jobs/types";
+import { Job, JobSearchResult } from "@jobs/types";
 import { Request } from "../app/request";
 
 export const get = ({ jobId }) => Request.get(`/jobs/${jobId}`);
@@ -16,4 +16,14 @@ export function findJobs(page: number, states: string[]): Promise<JobSearchResul
     return Request.get("/jobs")
         .query({ page, state: states })
         .then(res => res.body);
+}
+
+/**
+ * Fetches a single job
+ *
+ * @param jobId - The id of the job to fetch
+ * @returns A promise resolving to a single job
+ */
+export function getJob(jobId: string): Promise<Job> {
+    return Request.get(`/jobs/${jobId}`).then(res => res.body);
 }
