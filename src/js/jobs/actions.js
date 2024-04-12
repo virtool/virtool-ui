@@ -1,13 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import {
-    ARCHIVE_JOB,
-    CANCEL_JOB,
-    FIND_JOBS,
-    GET_JOB,
-    WS_INSERT_JOB,
-    WS_REMOVE_JOB,
-    WS_UPDATE_JOB,
-} from "../app/actionTypes";
+import { ARCHIVE_JOB, CANCEL_JOB, GET_JOB, WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB } from "../app/actionTypes";
 
 /**
  * Returns an action that should be dispatched when a job document is inserted via websocket.
@@ -35,17 +27,6 @@ export const wsUpdateJob = createAction(WS_UPDATE_JOB);
  * @returns {object}
  */
 export const wsRemoveJob = createAction(WS_REMOVE_JOB);
-
-/**
- * Returns action that can trigger an API call for getting all available jobs.
- *
- * @func
- * @returns {object}
- */
-
-export const findJobs = createAction(FIND_JOBS.REQUESTED, (states, page = 1, archived = false) => ({
-    payload: { archived, states, page },
-}));
 
 /**
  * Returns action that can trigger an API call for getting a specific job document.

@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { assign } from "lodash-es";
-import { ARCHIVE_JOB, FIND_JOBS, GET_JOB, GET_LINKED_JOB } from "../app/actionTypes";
-import { remove, updateDocuments } from "../utils/reducers";
+import { ARCHIVE_JOB, GET_JOB, GET_LINKED_JOB } from "../app/actionTypes";
+import { remove } from "../utils/reducers";
 
 export const initialState = {
     documents: null,
@@ -18,12 +18,6 @@ export const jobsReducer = createReducer(initialState, builder => {
     builder
         .addCase(GET_LINKED_JOB.SUCCEEDED, (state, action) => {
             assign(state.linkedJobs, { [action.payload.id]: action.payload });
-        })
-        .addCase(FIND_JOBS.REQUESTED, (state, action) => {
-            state.term = action.payload.term;
-        })
-        .addCase(FIND_JOBS.SUCCEEDED, (state, action) => {
-            return updateDocuments(state, action.payload, "created_at", true);
         })
         .addCase(GET_JOB.REQUESTED, state => {
             state.detail = null;

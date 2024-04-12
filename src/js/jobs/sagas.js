@@ -29,19 +29,6 @@ export function* wsUpdateJob(action) {
     }
 }
 
-export function* findJobs(action) {
-    yield apiCall(jobsAPI.find, action.payload, FIND_JOBS);
-
-    // const location = yield select(getLocation);
-    // const params = new URLSearchParams(location.search);
-    //
-    // params.delete("state");
-    //
-    // forEach(action.payload.states, state => params.append("state", state));
-    //
-    // yield put(push({ search: params.toString() }));
-}
-
 export function* refreshJobs() {
     const states = yield select(getStatesFromURL);
     yield apiCall(jobsAPI.find, { archived: false, states }, FIND_JOBS);
@@ -65,7 +52,6 @@ export function* archiveJob(action) {
 
 export function* watchJobs() {
     yield takeLatest([WS_INSERT_JOB, WS_REMOVE_JOB, WS_UPDATE_JOB], refreshJobs);
-    yield takeLatest([FIND_JOBS.REQUESTED], findJobs);
     yield takeLatest(GET_JOB.REQUESTED, getJob);
     yield takeEvery(CANCEL_JOB.REQUESTED, cancelJob);
     yield takeEvery(ARCHIVE_JOB.REQUESTED, archiveJob);
