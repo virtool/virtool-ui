@@ -18,14 +18,14 @@ export const StyledProgress = styled.progress<StyledProgressProps>`
     margin-bottom: 10px;
     width: 100%;
 
-    ::-webkit-progress-value {
+    &::-webkit-progress-value {
         background-color: ${getProgressColor};
     }
-    ::-moz-progress-bar {
+    &::-moz-progress-bar {
         background-color: ${getProgressColor};
     }
 
-    ::-webkit-progress-bar {
+    &::-webkit-progress-bar {
         background-color: ${props => props.theme.color.grey};
     }
 `;
