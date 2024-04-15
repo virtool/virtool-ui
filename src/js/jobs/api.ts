@@ -2,8 +2,6 @@ import { Job, JobSearchResult } from "@jobs/types";
 import { Request } from "../app/request";
 
 export const get = ({ jobId }) => Request.get(`/jobs/${jobId}`);
-export const cancel = ({ jobId }) => Request.put(`/jobs/${jobId}/cancel`);
-export const archive = ({ jobId }) => Request.patch(`/jobs/${jobId}/archive`);
 
 /**
  * Fetch a page of job search results
@@ -13,7 +11,6 @@ export const archive = ({ jobId }) => Request.patch(`/jobs/${jobId}/archive`);
  * @returns A promise resolving to a page of job search results
  */
 export function findJobs(page: number, states: string[]): Promise<JobSearchResult> {
-    console.log(states);
     return Request.get("/jobs")
         .query({ page, state: states })
         .then(res => res.body);
