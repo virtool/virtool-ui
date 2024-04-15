@@ -1,8 +1,6 @@
 ## Changes
 <!--- Provide the broad strokes of the changes made in a bulleted list --->
 
--
-
 ## Compatiblity
 
 Any changes that require a newer version of the API are considered breaking
