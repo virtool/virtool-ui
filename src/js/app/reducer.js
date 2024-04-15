@@ -11,7 +11,6 @@ import { formsReducer } from "../forms/reducer";
 import groupsReducer from "../groups/reducer";
 import hmmsReducer from "../hmm/reducer";
 import indexesReducer from "../indexes/reducer";
-import jobsReducer from "../jobs/reducer";
 import labelsReducer from "../labels/reducer";
 import OTUsReducer from "../otus/reducer";
 import referenceReducer from "../references/reducer";
@@ -80,7 +79,6 @@ export function createAppStore(history) {
             groups: groupsReducer,
             hmms: hmmsReducer,
             indexes: indexesReducer,
-            jobs: jobsReducer,
             labels: labelsReducer,
             otus: OTUsReducer,
             references: referenceReducer,

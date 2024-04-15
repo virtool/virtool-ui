@@ -1,6 +1,7 @@
 import { forEach, get } from "lodash-es";
 
 import { analysesQueryKeys } from "@/analyses/queries";
+import { jobQueryKeys } from "@jobs/queries";
 import { QueryClient } from "@tanstack/react-query";
 import { accountKeys } from "../../account/queries";
 import { roleQueryKeys, userQueryKeys } from "../../administration/queries";
@@ -30,9 +31,10 @@ const workflowQueries = {
  */
 function jobUpdater(queryClient, data) {
     const queryKeys = workflowQueries[data.workflow];
-
+    console.log("hi");
     forEach(queryKeys, queryKey => {
         queryClient.invalidateQueries(queryKey);
+        queryClient.invalidateQueries(jobQueryKeys.lists());
     });
 }
 
@@ -41,6 +43,7 @@ const keyFactories = {
     account: accountKeys,
     groups: groupQueryKeys,
     indexes: indexQueryKeys,
+    jobs: jobQueryKeys,
     models: modelQueryKeys,
     references: referenceQueryKeys,
     roles: roleQueryKeys,
@@ -72,6 +75,7 @@ export function reactQueryHandler(queryClient: QueryClient) {
         }
 
         if (iface === "jobs") {
+            console.log("hi");
             jobUpdater(queryClient, data);
         }
 

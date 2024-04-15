@@ -13,6 +13,7 @@ export const archive = ({ jobId }) => Request.patch(`/jobs/${jobId}/archive`);
  * @returns A promise resolving to a page of job search results
  */
 export function findJobs(page: number, states: string[]): Promise<JobSearchResult> {
+    console.log(states);
     return Request.get("/jobs")
         .query({ page, state: states })
         .then(res => res.body);

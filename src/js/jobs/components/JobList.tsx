@@ -47,15 +47,16 @@ export default function JobsList() {
 
     const jobs: JobMinimal[] = flatMap(data.pages, (page: JobSearchResult) => page.documents);
 
+    const { counts, found_count, total_count } = data.pages[0];
     let inner;
 
-    if (data.pages[0].total_count === 0) {
+    if (total_count === 0) {
         inner = (
             <JobsListEmpty>
                 <h3>No jobs found</h3>
             </JobsListEmpty>
         );
-    } else if (jobs.length === 0) {
+    } else if (found_count === 0) {
         inner = (
             <JobsListEmpty>
                 <h3>No jobs matching filters</h3>
@@ -85,7 +86,7 @@ export default function JobsList() {
             </ViewHeader>
             <JobsListViewContainer>
                 <ContainerNarrow>{inner}</ContainerNarrow>
-                <JobFilters />
+                <JobFilters counts={counts} />
             </JobsListViewContainer>
         </>
     );
