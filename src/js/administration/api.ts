@@ -122,7 +122,6 @@ export type UserUpdate = {
  * @returns A promise resolving to a response containing the updated user's data
  */
 export function updateUser(userId: string, update: UserUpdate): Promise<User> {
-    console.log(update);
     return Request.patch(`/admin/users/${userId}`)
         .send(update)
         .then(res => res.body);
