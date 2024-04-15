@@ -46,17 +46,21 @@ export function createFakeJobMinimal(props?: CreateJobMinimalProps): JobMinimal 
  * Sets up a mocked API route for fetching a list of jobs
  *
  * @param jobs - The documents for jobs
+ * @param found_count - The number of jobs found
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetJobs(jobs: JobMinimal[], found_count?) {
-    return nock("http://localhost").get("/api/jobs").query(true).reply(200, {
-        documents: jobs,
-        counts: null,
-        found_count: found_count,
-        page: 1,
-        page_count: 1,
-        per_page: 25,
-        ready_count: jobs.length,
-        total_count: jobs.length,
-    });
+export function mockApiGetJobs(jobs: JobMinimal[], found_count?: number) {
+    return nock("http://localhost")
+        .get("/api/jobs")
+        .query(true)
+        .reply(200, {
+            documents: jobs,
+            counts: null,
+            found_count: found_count || jobs.length,
+            page: 1,
+            page_count: 1,
+            per_page: 25,
+            ready_count: jobs.length,
+            total_count: jobs.length,
+        });
 }
