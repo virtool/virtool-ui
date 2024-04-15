@@ -1,31 +1,34 @@
-## Changes:
+## Changes
 <!--- Provide the broad strokes of the changes made in a bulleted list --->
 
 -
 
-## Compatiblity:
+## Compatiblity
 
-Any changes that require a newer version of the API than the oldest currently 
-supported version are considered breaking changes.
+Any changes that require a newer version of the API are considered breaking
+changes.
 
 Common breaking changes:
- -  Using a new API not available in oldest currently supported server
- -  Requiring new elements in an existing response from the API
- -  Dropping support for a previously valid response model from the API.
+ - Making a request to a new API endpoint that will return `403` or `404` in older versions of the API.
+ - No longer sending request fields required by previous versions of the API 
+ - Requiring new fields from an API endpoint that will not be present in
+   responses from older versions of the API
+ - Breaking backwards compatibility with old response data shapes
+
 
 Choose one:
- - [ ] The changes maintain compatibility with the existing API
- - [ ] The changes introduce a potential breaking change
+ - [ ] The changes do not break compatibility
+ - [ ] The changes potentially break compatibility
 
 
-## Pre-Review Checklist:
+## Pre-Review Checklist
  - [ ] All changes are tested
  - [ ] All touched code documentation is updated
  - [ ] All tests pass in your local environment
- - [ ] Deepsource issues have been reviewed and resolved
+ - [ ] Deepsource issues have been reviewed and addressed
  - [ ] Debugging logging and commented out code has been removed
 
  
-## Screenshots (for UI changes):
-<!--- Provide screenshots of all visual changes made in the PR --->
+## Screenshots:
+_Only required for visual changes_.
 
