@@ -9,7 +9,6 @@ import { watchDev } from "../dev/sagas";
 import { watchFiles } from "../files/sagas";
 import { watchForm } from "../forms/sagas";
 import { watchIndexes } from "../indexes/sagas";
-import { watchJobs } from "../jobs/sagas";
 import { watchOTUs } from "../otus/sagas";
 import { watchReferences } from "../references/sagas";
 import { watchSamples } from "../samples/sagas";
@@ -64,7 +63,6 @@ function* rootSaga() {
         watchDev(),
         watchFiles(),
         watchIndexes(),
-        watchJobs(),
         watchOTUs(),
         watchRouter(),
         watchSamples(),

@@ -31,7 +31,6 @@ const updaters = {
 };
 
 const removers = {
-    jobs: actionCreatorWrapper(wsRemoveJob),
     otus: actionCreatorWrapper(wsRemoveOTU),
     references: actionCreatorWrapper(wsRemoveReference),
     samples: actionCreatorWrapper(wsRemoveSample),
