@@ -1,6 +1,5 @@
 import { get } from "lodash-es/lodash";
 import { wsUpdateAnalysis } from "../../analyses/actions";
-import { wsInsertGroup, wsRemoveGroup, wsUpdateGroup } from "../../groups/actions";
 import { wsInsertHistory, wsInsertIndex, wsUpdateIndex } from "../../indexes/actions";
 import { wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
 import { wsInsertReference, wsRemoveReference, wsUpdateReference } from "../../references/actions";
@@ -11,7 +10,6 @@ function actionCreatorWrapper(actionCreator) {
 }
 
 const inserters = {
-    groups: actionCreatorWrapper(wsInsertGroup),
     history: actionCreatorWrapper(wsInsertHistory),
     indexes: actionCreatorWrapper(wsInsertIndex),
     references: actionCreatorWrapper(wsInsertReference),
@@ -26,7 +24,6 @@ const updaters = {
             return wsUpdateAnalysis(message.data);
         }
     },
-    groups: actionCreatorWrapper(wsUpdateGroup),
     indexes: actionCreatorWrapper(wsUpdateIndex),
     otus: actionCreatorWrapper(wsUpdateOTU),
     references: actionCreatorWrapper(wsUpdateReference),
@@ -34,7 +31,7 @@ const updaters = {
 };
 
 const removers = {
-    groups: actionCreatorWrapper(wsRemoveGroup),
+    jobs: actionCreatorWrapper(wsRemoveJob),
     otus: actionCreatorWrapper(wsRemoveOTU),
     references: actionCreatorWrapper(wsRemoveReference),
     samples: actionCreatorWrapper(wsRemoveSample),

@@ -68,6 +68,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           target: dist
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   release:
     runs-on: ubuntu-22.04
     needs: [test]

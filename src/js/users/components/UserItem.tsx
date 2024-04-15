@@ -1,14 +1,16 @@
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoles } from "@administration/types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { BoxGroupSection, Icon, InitialIcon, Label } from "@base";
+import { StyledButtonSmall } from "@base/styled/StyledButtonSmall";
+import { GroupMinimal } from "@groups/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { BoxSpaced, Icon, InitialIcon, Label } from "../../base";
-import { StyledButtonSmall } from "../../base/styled/StyledButtonSmall";
 
-const StyledUserItem = styled(BoxSpaced)`
-    display: flex;
+const StyledUserItem = styled(BoxGroupSection)`
+    display: grid;
+    grid-template-columns: 50% 25% 1fr auto;
     align-items: center;
 
     strong {
@@ -22,94 +24,59 @@ const StyledUserItem = styled(BoxSpaced)`
     }
 `;
 
-const InsufficentRightsContainer = styled.div`
-    margin-left: 20px;
-    color: ${props => props.theme.color.greyDark};
+const UserLink = styled(Link)`
+    padding: 0 10px;
+    font-size: ${getFontSize("lg")};
+    font-weight: ${getFontWeight("thick")};
 `;
 
 const UserContainer = styled.div`
     display: flex;
     align-items: center;
-    grid-column-start: 1;
     flex-grow: 5;
     flex-basis: 0;
 `;
 
-const AdminTagContainer = styled(UserContainer)`
-    grid-column-start: 2;
+const TagContainer = styled(UserContainer)`
     flex-grow: 1.5;
     justify-content: flex-start;
     font-size: ${getFontSize("md")};
     text-transform: capitalize;
 `;
 
-type AdministratorTagProps = {
-    administratorRole: AdministratorRoles;
-};
-
-/**
- * An inline tag indicating a user's administrator role
- *
- * @param administratorRole - The user's administrator role
- * @returns An inline tag indicating a user's administrator role
- */
-function AdministratorTag({ administratorRole }: AdministratorTagProps) {
-    return (
-        <AdminTagContainer>
-            <Label color="purple">
-                <Icon name="user-shield" /> {administratorRole} Administrator
-            </Label>
-        </AdminTagContainer>
-    );
-}
-
-/**
- * An inline button linking to a user's detailed view
- *
- * @param id - The user's id
- * @returns An button linking to a user's detailed view
- */
-function EditButton({ id }: { id: string }): JSX.Element {
-    return (
-        <StyledButtonSmall color="grey" as={Link} to={`users/${id}`}>
-            <Icon name="pen" /> <span>Edit</span>
-        </StyledButtonSmall>
-    );
-}
-
 type UserItemProps = {
-    id: string;
-    handle: string;
+    /** Whether the user is active */
+    active: boolean;
     administratorRole: AdministratorRoles;
+    handle: string;
+    id: string;
+    /** The primary group assigned to the user */
+    primary_group: GroupMinimal;
 };
 
 /**
- * A single user element for use in a list
- *
- * @param id - The user's id
- * @param handle - The user's handle
- * @param administratorRole - The user's administrator role
- * @returns A single user element
+ * A condensed user item for use in a list of users
  */
-export function UserItem({ id, handle, administratorRole }: UserItemProps): JSX.Element {
+export function UserItem({ active, administratorRole, handle, id, primary_group }: UserItemProps): JSX.Element {
     const { hasPermission: canEdit } = useCheckAdminRole(
         administratorRole === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
-    );
-
-    const edit = canEdit ? (
-        <EditButton id={id} />
-    ) : (
-        <InsufficentRightsContainer>Insufficient rights</InsufficentRightsContainer>
     );
 
     return (
         <StyledUserItem>
             <UserContainer>
                 <InitialIcon size="lg" handle={handle} />
-                <strong>{handle}</strong>
+                {canEdit ? <UserLink to={`users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
             </UserContainer>
-            {administratorRole && <AdministratorTag administratorRole={administratorRole} />}
-            {edit}
+            <TagContainer>
+                {administratorRole && (
+                    <Label color="purple">
+                        <Icon name="user-shield" /> {administratorRole} Administrator
+                    </Label>
+                )}
+            </TagContainer>
+            <TagContainer>{primary_group && <Label>{primary_group.name}</Label>}</TagContainer>
+            <TagContainer>{!active && <Label color="redLight">Inactive</Label>}</TagContainer>
         </StyledUserItem>
     );
 }
