@@ -31,7 +31,7 @@ const workflowQueries = {
  */
 function jobUpdater(queryClient, data) {
     const queryKeys = workflowQueries[data.workflow];
-    console.log("hi");
+
     forEach(queryKeys, queryKey => {
         queryClient.invalidateQueries(queryKey);
         queryClient.invalidateQueries(jobQueryKeys.lists());
@@ -75,7 +75,6 @@ export function reactQueryHandler(queryClient: QueryClient) {
         }
 
         if (iface === "jobs") {
-            console.log("hi");
             jobUpdater(queryClient, data);
         }
 
