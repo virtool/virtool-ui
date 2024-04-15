@@ -1,7 +1,7 @@
 <!---
 
-    Please initially open your PR as a draft until CI has passed and the PR is 
-    ready for review. 
+    Please initially open your PR as a draft until CI has passed and the
+    PR is ready for review. 
 
     Once marked as ready for review, avoid force-pushing to the branch. 
 
@@ -10,9 +10,11 @@
 ## PR type: 
 <!---   
 PR types: (check all applicable)
-        Breaking change: Any change that either drops support for a preview server version
+        Breaking change: Any change that either drops support for a 
+        preview server version
         Bug fix: Restores functionality of a currently broken feature
-        Build: Makes changes to how the image is built. Ex: update Vite version, changing the dockerfile
+        Build: Makes changes to how the image is built. Ex: update Vite 
+        version, changing the dockerfile
         CI: Changes to our CI configuration files and scripts
         Documentation: Updates in-code or external documentation
         Feature: Introduce a new feature or rework an existing one
@@ -31,8 +33,10 @@ PR types: (check all applicable)
 - [ ] Other - Please specify
 
 ## Changes:
-<!--- Provide the broad strokes of changes made in a bulleted list --->
-    -
+<!--- Provide the broad strokes of the changes made in a bulleted list --->
+
+-
+
 ## Screenshots (for UI changes):
 <!--- Provide screenshots of all visual changes made in the PR --->
 
@@ -40,5 +44,6 @@ PR types: (check all applicable)
 <!--- Ensure that all touched components are tested for functionality --->
 
 - [ ] Yes
+- [ ] Yes, comment:
 - [ ] No, why:
 
