@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { JobMinimal, JobState, workflows } from "@jobs/types";
+import { UserNested } from "@users/types";
 import { merge } from "lodash";
 import nock from "nock";
-import { UserNested } from "../../js/users/types";
 import { createFakeUserNested } from "./user";
 
 const jobStates = ["complete", "cancelled", "error", "preparing", "running", "terminated", "timeout", "waiting"];
@@ -50,17 +50,14 @@ export function createFakeJobMinimal(props?: CreateJobMinimalProps): JobMinimal 
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetJobs(jobs: JobMinimal[], found_count?: number) {
-    return nock("http://localhost")
-        .get("/api/jobs")
-        .query(true)
-        .reply(200, {
-            documents: jobs,
-            counts: null,
-            found_count: found_count || jobs.length,
-            page: 1,
-            page_count: 1,
-            per_page: 25,
-            ready_count: jobs.length,
-            total_count: jobs.length,
-        });
+    return nock("http://localhost").get("/api/jobs").query(true).reply(200, {
+        documents: jobs,
+        counts: null,
+        found_count,
+        page: 1,
+        page_count: 1,
+        per_page: 25,
+        ready_count: jobs.length,
+        total_count: jobs.length,
+    });
 }
