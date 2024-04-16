@@ -1,7 +1,8 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { find, map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, ModalBody, ModalHeader } from "../../../base";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../base";
 import { editReferenceGroup, editReferenceUser } from "../../actions";
 import { MemberRight } from "./MemberRight";
 
@@ -44,8 +45,9 @@ export class EditReferenceMember extends React.Component {
         });
     };
 
-    handleExited = () => {
+    handleHide = () => {
         this.setState(getInitialState());
+        this.props.onHide();
     };
 
     render() {
@@ -56,15 +58,15 @@ export class EditReferenceMember extends React.Component {
         const title = `Modify Rights for ${this.props.handle || this.props.name}`;
 
         return (
-            <Modal
-                label={title}
-                show={Boolean(this.props.show)}
-                onHide={this.props.onHide}
-                onExited={this.handleExited}
-            >
-                <ModalHeader>{title}</ModalHeader>
-                <ModalBody>{rightComponents}</ModalBody>
-            </Modal>
+            <Dialog open={Boolean(this.props.show)} onOpenChange={this.handleHide}>
+                <DialogPortal>
+                    <DialogOverlay />
+                    <DialogContent>
+                        <DialogTitle>{title}</DialogTitle>
+                        {rightComponents}
+                    </DialogContent>
+                </DialogPortal>
+            </Dialog>
         );
     }
 }

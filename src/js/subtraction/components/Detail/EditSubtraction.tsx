@@ -1,14 +1,16 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
     SaveButton,
 } from "../../../base";
 import { useUpdateSubtraction } from "../../queries";
@@ -41,25 +43,28 @@ export default function EditSubtraction({ subtraction, show, onHide }: EditSubtr
     }
 
     return (
-        <Modal label="Edit Subtraction" show={show} onHide={onHide}>
-            <ModalHeader>Edit Subtraction</ModalHeader>
-            <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
-                <ModalBody>
-                    <InputGroup>
-                        <InputLabel htmlFor="name">Name</InputLabel>
-                        <InputSimple id="name" {...register("name", { required: "A name must be provided" })} />
-                        <InputError>{errors.name?.message}</InputError>
-                    </InputGroup>
-                    <InputGroup>
-                        <InputLabel htmlFor="nickname">Nickname</InputLabel>
-                        <InputSimple id="nickname" {...register("nickname")} />
-                    </InputGroup>
-                </ModalBody>
+        <Dialog open={show} onOpenChange={onHide}>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Edit Subtraction</DialogTitle>
+                    <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
+                        <InputGroup>
+                            <InputLabel htmlFor="name">Name</InputLabel>
+                            <InputSimple id="name" {...register("name", { required: "A name must be provided" })} />
+                            <InputError>{errors.name?.message}</InputError>
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLabel htmlFor="nickname">Nickname</InputLabel>
+                            <InputSimple id="nickname" {...register("nickname")} />
+                        </InputGroup>
 
-                <ModalFooter>
-                    <SaveButton />
-                </ModalFooter>
-            </form>
-        </Modal>
+                        <DialogFooter>
+                            <SaveButton />
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }

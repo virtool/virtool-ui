@@ -3,11 +3,11 @@ import { Controller, useForm } from "react-hook-form";
 import {
     Button,
     Checkbox,
+    DialogFooter,
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
-    ModalFooter,
     TextArea,
 } from "../../../../base";
 
@@ -71,11 +71,11 @@ export function TargetForm({ description, error, length, name, onSubmit, require
                 )}
             />
 
-            <ModalFooter>
+            <DialogFooter>
                 <Button type="submit" icon="save" color="blue">
                     Submit
                 </Button>
-            </ModalFooter>
+            </DialogFooter>
         </form>
     );
 }
