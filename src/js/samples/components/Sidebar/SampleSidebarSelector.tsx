@@ -1,14 +1,15 @@
+import { fontWeight, getFontSize } from "@app/theme";
+import { BoxGroupSearch, Icon, SidebarHeaderButton } from "@base";
+import { useFuse } from "@base/hooks";
 import { Popover } from "@base/Popover";
+import { Label } from "@labels/types";
+import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fontWeight, getFontSize } from "../../../app/theme";
-import { Icon, SidebarHeaderButton } from "../../../base";
-import { BoxGroupSearch } from "../../../base/BoxGroupSearch";
-import { useFuse } from "../../../base/hooks";
-import { SampleSidebarSelectorItem } from "./SelectorItem";
+import { SampleSidebarSelectorItem } from "./SampleSidebarSelectorItem";
 
-export const SampleSidebarSelectorButton = styled.div`
+const SampleSidebarSelectorButton = styled.div`
     display: flex;
     border-top: 1px solid;
     border-color: ${props => props.theme.color.greyLight};
@@ -23,12 +24,32 @@ export const SampleSidebarSelectorButton = styled.div`
     }
 `;
 
-export const SampleItemComponentsContainer = styled.div`
+const SampleItemComponentsContainer = styled.div`
     max-height: 300px;
     overflow-y: scroll;
 `;
 
-export const SampleSidebarSelector = ({
+type SampleSidebarSelectorProps = {
+    /** The link to manage labels or subtractions */
+    manageLink: string;
+    /** A callback function to handle sidebar item selection */
+    onUpdate: () => void;
+    partiallySelectedItems: any;
+    /** The styled component for the list items */
+    render: (result: { color: string; description: string; name: string }) => React.ReactNode;
+    sampleId: string;
+    /** A list of labels or default subtractions */
+    sampleItems: Label[] | SubtractionShortlist[];
+    /** A list of selected items by their ids */
+    selectedItems: string[];
+    /** Whether the sidebar is labels or subtractions */
+    selectionType: string;
+};
+
+/**
+ * Displays a dropdown list of labels or subtractions
+ */
+export function SampleSidebarSelector({
     render,
     sampleItems,
     selectedItems,
@@ -37,7 +58,8 @@ export const SampleSidebarSelector = ({
     onUpdate,
     selectionType,
     manageLink,
-}) => {
+}: SampleSidebarSelectorProps) {
+    console.log(partiallySelectedItems);
     const [results, term, setTerm] = useFuse(sampleItems, ["name"], [sampleId]);
     const sampleItemComponents = results.map(item => {
         const result = item.id ? item : item.item;
@@ -71,4 +93,4 @@ export const SampleSidebarSelector = ({
             </SampleSidebarSelectorButton>
         </Popover>
     );
-};
+}

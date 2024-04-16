@@ -7,7 +7,7 @@ import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base
 import { useFetchLabels } from "../../../labels/queries";
 import { SmallSampleLabel } from "../Label/SmallSampleLabel";
 import { SampleSidebarList } from "./List";
-import { SampleSidebarSelector } from "./Selector";
+import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 export const SampleLabelInner = ({ name, color, description }) => (
     <div>

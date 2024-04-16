@@ -28,15 +28,33 @@ const SampleSidebarSelectorItemContents = styled.div`
     align-items: center;
 `;
 
-export const SampleSidebarSelectorItem = ({ selected, partiallySelected, children, id, onClick, name }) => {
-    const handleSelect = () => onClick(id);
+type SampleSidebarSelectorItemProps = {
+    children: React.ReactNode;
+    id: string;
+    name: string;
+    /** A callback function to handle item selection */
+    onClick: (id: string) => void;
+    partiallySelected: boolean;
+    selected: boolean;
+};
 
+/**
+ * A condensed sidebar item for use in a list of sidebar items
+ */
+export function SampleSidebarSelectorItem({
+    children,
+    id,
+    name,
+    onClick,
+    partiallySelected,
+    selected,
+}: SampleSidebarSelectorItemProps) {
     return (
-        <StyledSampleSidebarSelectorItem as="button" type={"button"} onClick={handleSelect} aria-label={name}>
+        <StyledSampleSidebarSelectorItem as="button" type={"button"} onClick={() => onClick(id)} aria-label={name}>
             <SampleSidebarSelectorItemCheck>
                 {selected && <Icon name={partiallySelected ? "minus" : "check"} />}
             </SampleSidebarSelectorItemCheck>
             <SampleSidebarSelectorItemContents>{children}</SampleSidebarSelectorItemContents>
         </StyledSampleSidebarSelectorItem>
     );
-};
+}

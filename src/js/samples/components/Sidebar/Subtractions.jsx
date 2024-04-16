@@ -6,7 +6,7 @@ import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
 import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
 import { SampleSidebarList } from "./List";
-import { SampleSidebarSelector } from "./Selector";
+import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SubtractionInner = ({ name }) => name;
 

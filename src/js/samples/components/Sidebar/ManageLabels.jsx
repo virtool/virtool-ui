@@ -9,7 +9,7 @@ import { useUpdateLabel } from "../../queries";
 import { getPartiallySelectedLabels } from "../../selectors";
 import { SampleLabelInner } from "./Labels";
 import { SampleSidebarMultiselectList } from "./List";
-import { SampleSidebarSelector } from "./Selector";
+import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
     display: flex;
