@@ -4,7 +4,7 @@ import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { EditLabel } from "../Edit";
+import { EditLabel } from "../EditLabel";
 
 describe("<EditLabel>", () => {
     let props;

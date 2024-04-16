@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { BoxGroupSection } from "../../base";
 import { SampleLabel } from "../../samples/components/Label/SampleLabel";
-import { EditLabel } from "./Edit";
-import { RemoveLabel } from "./Remove";
+import { EditLabel } from "./EditLabel";
+import { RemoveLabel } from "./RemoveLabel";
 
 const LabelItemBox = styled(BoxGroupSection)`
     align-items: center;
@@ -30,14 +30,17 @@ const LabelItemButtons = styled.div`
     }
 `;
 
-interface ItemProps {
+type ItemProps = {
     name: string;
     color: string;
     description: string;
-    id: string;
-}
+    id: number;
+};
 
-export function Item({ name, color, description, id }: ItemProps) {
+/**
+ * A condensed label item for use in a list of labels
+ */
+export function LabelItem({ name, color, description, id }: ItemProps) {
     return (
         <LabelItemBox>
             <LabelItemExampleContainer>
