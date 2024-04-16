@@ -16,7 +16,6 @@ import {
     ViewHeaderTitle,
 } from "../../../base";
 import { getError } from "../../../errors/selectors";
-import { shortlistSubtractions } from "../../../subtraction/actions";
 import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
@@ -25,21 +24,11 @@ import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
 
-function SampleDetail({
-    canModify,
-    detail,
-    error,
-    history,
-    match,
-    onGetSample,
-    onShortlistSubtractions,
-    subtractionOptions,
-}) {
+function SampleDetail({ canModify, detail, error, history, labels, match, onGetSample, subtractionOptions }) {
     const sampleId = match.params.sampleId;
 
     useEffect(() => {
         onGetSample(sampleId);
-        onShortlistSubtractions();
     }, [sampleId]);
 
     if (error) {
@@ -127,9 +116,6 @@ export function mapDispatchToProps(dispatch) {
     return {
         onGetSample: sampleId => {
             dispatch(getSample(sampleId));
-        },
-        onShortlistSubtractions: () => {
-            dispatch(shortlistSubtractions());
         },
     };
 }

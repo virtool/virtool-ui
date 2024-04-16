@@ -73,7 +73,7 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
     width: auto;
     flex-grow: 1;
 
-    :not(:first-child) {
+    &:not(:first-child) {
         margin-left: 10px;
     }
 

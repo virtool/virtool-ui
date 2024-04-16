@@ -1,10 +1,10 @@
+import { useFetchAccount } from "@account/queries";
+import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
+import { Permission } from "@groups/types";
 import { map } from "lodash";
 import { capitalize } from "lodash-es";
 import React from "react";
-import { useFetchAccount } from "../../account/queries";
-import { checkAdminRoleOrPermissionsFromAccount } from "../../administration/utils";
 import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
-import { Permission } from "../../groups/types";
 import { useListFiles } from "../queries";
 import { FileResponse, FileType } from "../types";
 import { File } from "./File";
@@ -23,8 +23,8 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
     const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
     const { data: files, isLoading: isLoadingFiles }: { data: FileResponse; isLoading: boolean } = useListFiles(
         fileType,
-        true,
         URLPage,
+        25,
     );
 
     if (isLoadingFiles || isLoadingAccount) {

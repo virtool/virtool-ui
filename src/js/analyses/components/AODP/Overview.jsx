@@ -11,7 +11,7 @@ const StyledAODPOverview = styled(Box)`
         font-weight: bold;
         margin: 20px 0 10px;
 
-        :first-child {
+        &:first-child {
             margin-top: 5px;
         }
     }

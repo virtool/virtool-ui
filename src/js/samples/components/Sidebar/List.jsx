@@ -27,7 +27,7 @@ const SampleSidebarMultiSelectListItem = styled(SampleMultiSelectLabel)`
     background-color: ${props => props.theme.color.white};
     display: inline;
     margin: 4px 0px;
-    :not(:last-child) {
+    &:not(:last-child) {
         margin-right: 8px;
     }
 `;
