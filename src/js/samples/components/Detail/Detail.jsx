@@ -1,8 +1,4 @@
-import { get, includes } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
-import Analyses from "../../../analyses/components/Analyses";
+import { getError } from "@/errors/selectors";
 import {
     Icon,
     IconLink,
@@ -14,8 +10,12 @@ import {
     ViewHeaderAttribution,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "../../../base";
-import { getError } from "../../../errors/selectors";
+} from "@base";
+import { includes } from "lodash-es";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { Link, Redirect, Route, Switch } from "react-router-dom";
+import Analyses from "../../../analyses/components/Analyses";
 import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
@@ -24,7 +24,7 @@ import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
 
-function SampleDetail({ canModify, detail, error, history, labels, match, onGetSample, subtractionOptions }) {
+function SampleDetail({ canModify, detail, error, history, match, onGetSample }) {
     const sampleId = match.params.sampleId;
 
     useEffect(() => {
@@ -35,7 +35,7 @@ function SampleDetail({ canModify, detail, error, history, labels, match, onGetS
         return <NotFound />;
     }
 
-    if (detail === null || subtractionOptions === null) {
+    if (detail === null) {
         return <LoadingPlaceholder />;
     }
 
@@ -108,7 +108,6 @@ export function mapStateToProps(state) {
         canModify: getCanModify(state),
         detail: state.samples.detail,
         error: getError("GET_SAMPLE_ERROR"),
-        subtractionOptions: get(state, "subtraction.shortlist", ""),
     };
 }
 
