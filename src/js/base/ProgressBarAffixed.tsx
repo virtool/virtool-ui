@@ -27,7 +27,7 @@ const StyledProgressBarAffixed = styled(StyledProgress)<StyledProgressBarAffixed
 
     ${props => (props.bottom ? "bottom" : "top")}: 0;
 
-    ::-webkit-progress-bar {
+    &::-webkit-progress-bar {
         background-color: transparent;
     }
 `;
