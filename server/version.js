@@ -6,10 +6,12 @@ async function verifyAPIVersion(minVersion, apiUrl) {
 
     if (!semver.gte(response.version, minVersion)) {
         console.error(
-            `API version ${response.version} is not compatible with this version of the UI. Please update the API to at least ${minVersion}`,
+            `Found incompatible API version ${response.version}. Please update the API to at least ${minVersion}`,
         );
         process.exit(1);
     }
+
+    console.log(`Found compatible API version ${response.version}, starting server...`);
 }
 
 module.exports = verifyAPIVersion;
