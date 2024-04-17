@@ -33,11 +33,10 @@ type SampleSidebarSelectorProps = {
     /** The link to manage labels or subtractions */
     manageLink: string;
     /** A callback function to handle sidebar item selection */
-    onUpdate: (id: string) => void;
+    onUpdate: (id: string | number) => void;
     partiallySelectedItems?: any;
     /** The styled component for the list items */
     render: (result: { color: string; description: string; name: string }) => React.ReactNode;
-    sampleId: string;
     /** A list of labels or default subtractions */
     sampleItems: Label[] | SubtractionShortlist[];
     /** A list of selected items by their ids */
@@ -54,13 +53,11 @@ export function SampleSidebarSelector({
     sampleItems,
     selectedItems,
     partiallySelectedItems = [],
-    sampleId,
     onUpdate,
     selectionType,
     manageLink,
 }: SampleSidebarSelectorProps) {
-    console.log(partiallySelectedItems);
-    const [results, term, setTerm] = useFuse(sampleItems, ["name"], [sampleId]);
+    const [results, term, setTerm] = useFuse(sampleItems, ["name"], []);
     const sampleItemComponents = results.map(item => {
         const result = item.id ? item : item.item;
         return (

@@ -1,6 +1,6 @@
+import { ContainerSide } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { ContainerSide } from "../../../base";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";
 
@@ -14,7 +14,7 @@ const StyledSidebar = styled(ContainerSide)`
 
 type sidebarProps = {
     className?: string;
-    sampleLabels: number[];
+    sampleLabels: string[];
     defaultSubtractions: string[];
     onUpdate: (key: string, value: string) => void;
 };
