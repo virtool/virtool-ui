@@ -49,7 +49,7 @@ export function AnalysisDetail({ detail, match, onSetAnalysis }) {
         return <NotFound />;
     }
 
-    if (isLoading || isLoadingSample || !detail?.ready) {
+    if (isLoading || isLoadingSample || detail?.id !== analysisId) {
         return <LoadingPlaceholder />;
     }
 
