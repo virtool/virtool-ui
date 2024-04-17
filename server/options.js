@@ -1,5 +1,12 @@
 const { program } = require("commander");
 
+/**
+ * Parses command line options
+ *
+ * @func
+ * @param {string[]} argv - command line arguments
+ * @returns {object} options - parsed options and relevant defaults
+ */
 function parseOptions(argv) {
     program
         .option("-p, --port <port>", "Port to listen on", process.env.VT_UI_PORT || 9900)
