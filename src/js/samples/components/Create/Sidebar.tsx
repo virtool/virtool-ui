@@ -14,7 +14,7 @@ const StyledSidebar = styled(ContainerSide)`
 
 type sidebarProps = {
     className?: string;
-    sampleLabels: string[];
+    sampleLabels: number[];
     defaultSubtractions: string[];
     onUpdate: (key: string, value: string) => void;
 };

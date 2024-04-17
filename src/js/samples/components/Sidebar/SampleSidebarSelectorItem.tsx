@@ -30,10 +30,10 @@ const SampleSidebarSelectorItemContents = styled.div`
 
 type SampleSidebarSelectorItemProps = {
     children: React.ReactNode;
-    id: string;
+    id: string | number;
     name: string;
     /** A callback function to handle item selection */
-    onClick: (id: string) => void;
+    onClick: (id: string | number) => void;
     partiallySelected: boolean;
     selected: boolean;
 };

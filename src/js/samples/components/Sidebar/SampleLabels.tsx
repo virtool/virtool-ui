@@ -1,12 +1,12 @@
+import { fontWeight, getColor, getFontSize } from "@app/theme";
+import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
+import { useFetchLabels } from "@labels/queries";
 import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { xor } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
-import { useFetchLabels } from "../../../labels/queries";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
@@ -21,7 +21,7 @@ const SampleLabelsFooter = styled.div`
 
 type SampleLabelsProps = {
     /** List of label ids associated with the sample */
-    sampleLabels: string[];
+    sampleLabels: number[];
     /** Callback function to handle label selection */
     onUpdate: (labelId: string) => void;
 };
@@ -46,7 +46,7 @@ export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsPro
                     )}
                     sampleItems={data}
                     selectedItems={sampleLabels}
-                    onUpdate={labelId => {
+                    onUpdate={(labelId: number) => {
                         onUpdate(xor(sampleLabels, [labelId]));
                     }}
                     selectionType="labels"
