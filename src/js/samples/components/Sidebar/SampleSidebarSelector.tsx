@@ -33,8 +33,8 @@ type SampleSidebarSelectorProps = {
     /** The link to manage labels or subtractions */
     manageLink: string;
     /** A callback function to handle sidebar item selection */
-    onUpdate: () => void;
-    partiallySelectedItems: any;
+    onUpdate: (id: string) => void;
+    partiallySelectedItems?: any;
     /** The styled component for the list items */
     render: (result: { color: string; description: string; name: string }) => React.ReactNode;
     sampleId: string;

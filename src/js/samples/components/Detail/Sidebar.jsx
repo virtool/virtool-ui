@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { editSample } from "../../actions";
-import SampleLabels from "./../Sidebar/Labels";
-import DefaultSubtractions from "./../Sidebar/Subtractions";
+import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
+import SampleLabels from "../Sidebar/SampleLabels";
 
 const StyledSidebar = styled.div`
     align-items: stretch;

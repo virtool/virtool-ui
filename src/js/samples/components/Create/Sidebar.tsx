@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { ContainerSide } from "../../../base";
-import SampleLabels from "../Sidebar/Labels";
-import DefaultSubtractions from "../Sidebar/Subtractions";
+import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
+import SampleLabels from "../Sidebar/SampleLabels";
 
 const StyledSidebar = styled(ContainerSide)`
     align-items: stretch;

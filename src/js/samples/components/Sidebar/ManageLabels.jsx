@@ -1,3 +1,4 @@
+import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import { map } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
@@ -7,8 +8,7 @@ import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import { SidebarHeader, SideBarSection } from "../../../base";
 import { useUpdateLabel } from "../../queries";
 import { getPartiallySelectedLabels } from "../../selectors";
-import { SampleLabelInner } from "./Labels";
-import { SampleSidebarMultiselectList } from "./List";
+import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
