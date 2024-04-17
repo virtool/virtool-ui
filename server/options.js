@@ -33,7 +33,7 @@ function parseOptions(argv) {
             process.env.VT_UI_B2C_API_CLIENT_ID || "",
         );
 
-    program.parse(process.argv);
+    program.parse(argv);
 
     return program.opts();
 }
