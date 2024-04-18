@@ -1,5 +1,5 @@
 import { SidebarHeader, SideBarSection } from "@base";
-import { JobState } from "@jobs/types";
+import { JobCounts } from "@jobs/types";
 import { useUrlSearchParamsList } from "@utils/hooks";
 import { difference, union, xor } from "lodash-es";
 import { mapValues, reduce } from "lodash-es/lodash";
@@ -8,11 +8,10 @@ import styled from "styled-components";
 import { StateCategory } from "./StateCategory";
 
 const active = ["waiting", "preparing", "running"];
-const inactive = ["complete", "cancelled", "errored", "terminated"];
+const inactive = ["complete", "cancelled", "error", "terminated", "timeout"];
 
 function filterStatesByCategory(category, selected) {
     const options = category === "active" ? active : inactive;
-
     const diff = difference(selected, options);
 
     if (selected.length - difference(selected, options).length === options.length) {
@@ -31,11 +30,7 @@ const StyledStatusFilter = styled(SideBarSection)`
 `;
 
 type StateFilterProps = {
-    counts: {
-        [state in JobState]?: {
-            [key: string]: number | null;
-        };
-    };
+    counts: JobCounts;
 };
 
 /**
@@ -43,7 +38,9 @@ type StateFilterProps = {
  */
 export default function StateFilter({ counts }: StateFilterProps) {
     const [states, setStates] = useUrlSearchParamsList("state");
-    const count = mapValues(counts, workflowCounts => reduce(workflowCounts, (result, value) => (result += value), 0));
+    const availableCounts = mapValues(counts, workflowCounts =>
+        reduce(workflowCounts, (result, value) => (result += value), 0),
+    );
 
     function handleClick(value) {
         setStates(
@@ -60,20 +57,20 @@ export default function StateFilter({ counts }: StateFilterProps) {
                     {
                         active: states.includes("waiting"),
                         color: "grey",
-                        count: count.waiting,
+                        count: availableCounts.waiting,
                         state: "waiting",
                         label: "waiting",
                     },
                     {
                         active: states.includes("preparing"),
-                        count: count.preparing,
+                        count: availableCounts.preparing,
                         state: "preparing",
                         label: "preparing",
                         color: "grey",
                     },
                     {
                         active: states.includes("running"),
-                        count: count.running,
+                        count: availableCounts.running,
                         state: "running",
                         label: "running",
                         color: "blue",
@@ -86,35 +83,35 @@ export default function StateFilter({ counts }: StateFilterProps) {
                 states={[
                     {
                         active: states.includes("complete"),
-                        count: count.complete,
+                        count: availableCounts.complete,
                         state: "complete",
                         label: "complete",
                         color: "green",
                     },
                     {
                         active: states.includes("cancelled"),
-                        count: count.cancelled,
+                        count: availableCounts.cancelled,
                         state: "cancelled",
                         label: "cancelled",
                         color: "red",
                     },
                     {
                         active: states.includes("error"),
-                        count: count.error,
+                        count: availableCounts.error,
                         state: "error",
                         label: "errored",
                         color: "red",
                     },
                     {
                         active: states.includes("terminated"),
-                        count: count.terminated,
+                        count: availableCounts.terminated,
                         state: "terminated",
                         label: "terminated",
                         color: "red",
                     },
                     {
                         active: states.includes("timeout"),
-                        count: count.timeout,
+                        count: availableCounts.timeout,
                         state: "timeout",
                         label: "timed out",
                         color: "red",

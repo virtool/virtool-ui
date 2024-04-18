@@ -1,8 +1,8 @@
+import { getFontWeight } from "@app/theme";
+import { BoxGroup, BoxGroupSection } from "@base";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { getFontWeight } from "../../../app/theme";
-import { BoxGroup, BoxGroupSection } from "../../../base";
 import { StateButton } from "./StateButton";
 
 const StyledStateCategory = styled(BoxGroup)`
@@ -46,7 +46,7 @@ const StateCategoryButton = styled.button`
 `;
 
 type StateCategoryProps = {
-    /** The states associated with the category */
+    /** The states associated with the inactive or active category */
     states: { [key: string]: any };
     /** The category title */
     label: string;

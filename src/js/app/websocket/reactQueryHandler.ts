@@ -34,7 +34,6 @@ function jobUpdater(queryClient, data) {
 
     forEach(queryKeys, queryKey => {
         queryClient.invalidateQueries(queryKey);
-        queryClient.invalidateQueries(jobQueryKeys.lists());
     });
 }
 

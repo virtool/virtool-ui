@@ -1,13 +1,9 @@
-import { JobState } from "@jobs/types";
+import { JobCounts } from "@jobs/types";
 import React from "react";
 import StateFilter from "./StateFilter";
 
 type StateFilterProps = {
-    counts: {
-        [state in JobState]?: {
-            [key: string]: number | null;
-        };
-    };
+    counts: JobCounts;
 };
 
 /**

@@ -41,7 +41,7 @@ export default function JobDetail({ match }: JobDetailProps) {
 
     const latest = data.status[data.status.length - 1];
 
-    let color: "blue" | "green" | "red" | "orange" | "purple" = "green";
+    let color: "blue" | "green" | "red" = "green";
 
     if (latest.state === "running") {
         color = "blue";

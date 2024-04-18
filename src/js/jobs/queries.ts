@@ -31,6 +31,7 @@ export function useInfiniteFindJobs(states: string[]) {
                 }
                 return (lastPage.page || 1) + 1;
             },
+            keepPreviousData: true,
         },
     );
 }

@@ -1,7 +1,5 @@
+import { Request } from "@app/request";
 import { Job, JobSearchResult } from "@jobs/types";
-import { Request } from "../app/request";
-
-export const get = ({ jobId }) => Request.get(`/jobs/${jobId}`);
 
 /**
  * Fetch a page of job search results
