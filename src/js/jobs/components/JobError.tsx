@@ -12,7 +12,7 @@ const JobErrorDetails = styled.span`
     word-break: break-word;
 `;
 
-export const JobError = ({ error }) => {
+export default function JobError({ error }) {
     if (error) {
         // Traceback from a Python exception.
         const tracebackLines = map(error.traceback, (line, index) => <div key={index}>{line}</div>);
@@ -34,6 +34,4 @@ export const JobError = ({ error }) => {
     }
 
     return null;
-};
-
-export default JobError;
+}

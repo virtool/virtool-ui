@@ -9,7 +9,6 @@ import errorsReducer from "../errors/reducer";
 import filesReducer from "../files/reducer";
 import { formsReducer } from "../forms/reducer";
 import indexesReducer from "../indexes/reducer";
-import jobsReducer from "../jobs/reducer";
 import OTUsReducer from "../otus/reducer";
 import referenceReducer from "../references/reducer";
 import samplesReducer from "../samples/reducer";
@@ -74,7 +73,6 @@ export function createAppStore(history) {
             files: filesReducer,
             forms: formsReducer,
             indexes: indexesReducer,
-            jobs: jobsReducer,
             otus: OTUsReducer,
             references: referenceReducer,
             router: connectRouter(history),

@@ -1,6 +1,7 @@
 import { forEach, get } from "lodash-es";
 
 import { analysesQueryKeys } from "@/analyses/queries";
+import { jobQueryKeys } from "@jobs/queries";
 import { QueryClient } from "@tanstack/react-query";
 import { accountKeys } from "../../account/queries";
 import { roleQueryKeys, userQueryKeys } from "../../administration/queries";
@@ -41,6 +42,7 @@ const keyFactories = {
     account: accountKeys,
     groups: groupQueryKeys,
     indexes: indexQueryKeys,
+    jobs: jobQueryKeys,
     models: modelQueryKeys,
     references: referenceQueryKeys,
     roles: roleQueryKeys,

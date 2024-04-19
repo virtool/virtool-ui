@@ -1,98 +1,66 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { screen } from "@testing-library/react";
+import { workflows } from "@jobs/types";
+import { screen, waitFor } from "@testing-library/react";
+import { createBrowserHistory } from "history";
+import nock from "nock";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
-import { JobsList, mapDispatchToProps } from "../JobList";
-
-function createAppStore(state) {
-    return () =>
-        configureStore({
-            reducer: state => state,
-            preloadedState: state,
-        });
-}
-function renderWithAllProviders(ui, store) {
-    const wrappedUI = <BrowserRouter> {ui} </BrowserRouter>;
-    renderWithProviders(wrappedUI, store);
-}
+import { describe, expect, it } from "vitest";
+import { createFakeJobMinimal, mockApiGetJobs } from "../../../../tests/fake/jobs";
+import { renderWithRouter } from "../../../../tests/setupTests";
+import JobsList from "../JobList";
 
 describe("<JobsList />", () => {
-    let props;
-    let state;
+    let history;
 
     beforeEach(() => {
-        props = {
-            jobs: [
-                {
-                    created_at: "2022-06-02T17:21:22.668000Z",
-                    id: "test_id",
-                    progress: 100,
-                    stage: "",
-                    state: "complete",
-                    user: {
-                        id: "test_user_id",
-                        handle: "user_handle",
-                    },
-                    workflow: "create_sample",
-                },
-            ],
-            onLoadNextPage: vi.fn(),
-        };
-
-        state = {
-            jobs: {
-                counts: {
-                    running: { pathoscope_bowtie: 1, nuvs: 1 },
-                    complete: { create_sample: 2, build_index: 2 },
-                },
-            },
-            account: {
-                administrator_role: AdministratorRoles.FULL,
-            },
-            router: { location: new window.URL("https://www.virtool.ca") },
-        };
+        history = createBrowserHistory();
     });
 
-    it("should render", () => {
-        renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(props.onLoadNextPage).toHaveBeenCalled();
+    afterEach(() => nock.cleanAll());
+
+    it("should render", async () => {
+        const jobs = createFakeJobMinimal({
+            progress: 100,
+            stage: "",
+            state: "complete",
+            workflow: workflows.create_sample,
+        });
+        const scope = mockApiGetJobs([jobs]);
+        renderWithRouter(<JobsList />, {}, history);
+
+        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(screen.getByText("Create Sample")).toBeInTheDocument();
+
+        scope.done();
     });
 
     it("should show spinner while loading", () => {
-        props.jobs = null;
-        renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
+        renderWithRouter(<JobsList />, {}, history);
+
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
     });
 
-    it("should show message when there are no unarchived jobs", () => {
-        props.jobs = [];
-        props.noJobs = true;
-        renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
+    it("should show message when there are no unarchived jobs", async () => {
+        const scope = mockApiGetJobs([]);
+        renderWithRouter(<JobsList />, {}, history);
+
+        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(screen.getByText("No jobs found")).toBeInTheDocument();
+
+        scope.done();
     });
 
-    it("should show message when no jobs match filters", () => {
-        props.jobs = [];
-        renderWithAllProviders(<JobsList {...props} />, createAppStore(state));
-        expect(screen.getByText("No jobs matching filters")).toBeInTheDocument();
-    });
-});
-
-describe("mapDispatchToProps", () => {
-    it("should return onFind in props", () => {
-        const dispatch = vi.fn();
-        const props = mapDispatchToProps(dispatch);
-
-        const states = ["running", "preparing"];
-
-        props.onLoadNextPage(states, 1);
-        expect(dispatch).toHaveBeenCalledWith({
-            payload: { states, page: 1, archived: false },
-            type: "FIND_JOBS_REQUESTED",
+    it("should show message when no jobs match filters", async () => {
+        const jobs = createFakeJobMinimal({
+            progress: 100,
+            stage: "",
+            state: "complete",
         });
+        const scope = mockApiGetJobs([jobs], 0);
+        renderWithRouter(<JobsList />, {}, history);
+
+        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        expect(await screen.findByText("No jobs matching filters")).toBeInTheDocument();
+
+        scope.done();
     });
 });

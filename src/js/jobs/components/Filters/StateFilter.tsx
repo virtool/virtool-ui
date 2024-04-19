@@ -1,18 +1,17 @@
+import { SidebarHeader, SideBarSection } from "@base";
+import { JobCounts } from "@jobs/types";
+import { useUrlSearchParamsList } from "@utils/hooks";
 import { difference, union, xor } from "lodash-es";
+import { mapValues, reduce } from "lodash-es/lodash";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { SidebarHeader, SideBarSection } from "../../../base";
-import { findJobs } from "../../actions";
-import { getJobCountsByState, getStatesFromURL } from "../../selectors";
 import { StateCategory } from "./StateCategory";
 
 const active = ["waiting", "preparing", "running"];
-const inactive = ["complete", "cancelled", "errored", "terminated"];
+const inactive = ["complete", "cancelled", "error", "terminated", "timeout"];
 
-const filterStatesByCategory = (category, selected) => {
+function filterStatesByCategory(category, selected) {
     const options = category === "active" ? active : inactive;
-
     const diff = difference(selected, options);
 
     if (selected.length - difference(selected, options).length === options.length) {
@@ -20,7 +19,7 @@ const filterStatesByCategory = (category, selected) => {
     }
 
     return union(selected, options);
-};
+}
 
 const StyledStatusFilter = styled(SideBarSection)`
     align-items: center;
@@ -30,11 +29,24 @@ const StyledStatusFilter = styled(SideBarSection)`
     z-index: 0;
 `;
 
-export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
-    const handleClick = value =>
-        onUpdateJobStateFilter(
+type StateFilterProps = {
+    counts: JobCounts;
+};
+
+/**
+ * Displays the categories of state filtering for jobs
+ */
+export default function StateFilter({ counts }: StateFilterProps) {
+    const [states, setStates] = useUrlSearchParamsList("state");
+    const availableCounts = mapValues(counts, workflowCounts =>
+        reduce(workflowCounts, (result, value) => (result += value), 0),
+    );
+
+    function handleClick(value) {
+        setStates(
             value === "active" || value === "inactive" ? filterStatesByCategory(value, states) : xor(states, [value]),
         );
+    }
 
     return (
         <StyledStatusFilter>
@@ -45,20 +57,20 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                     {
                         active: states.includes("waiting"),
                         color: "grey",
-                        count: counts.waiting,
+                        count: availableCounts.waiting,
                         state: "waiting",
                         label: "waiting",
                     },
                     {
                         active: states.includes("preparing"),
-                        count: counts.preparing,
+                        count: availableCounts.preparing,
                         state: "preparing",
                         label: "preparing",
                         color: "grey",
                     },
                     {
                         active: states.includes("running"),
-                        count: counts.running,
+                        count: availableCounts.running,
                         state: "running",
                         label: "running",
                         color: "blue",
@@ -71,35 +83,35 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
                 states={[
                     {
                         active: states.includes("complete"),
-                        count: counts.complete,
+                        count: availableCounts.complete,
                         state: "complete",
                         label: "complete",
                         color: "green",
                     },
                     {
                         active: states.includes("cancelled"),
-                        count: counts.cancelled,
+                        count: availableCounts.cancelled,
                         state: "cancelled",
                         label: "cancelled",
                         color: "red",
                     },
                     {
                         active: states.includes("error"),
-                        count: counts.error,
+                        count: availableCounts.error,
                         state: "error",
                         label: "errored",
                         color: "red",
                     },
                     {
                         active: states.includes("terminated"),
-                        count: counts.terminated,
+                        count: availableCounts.terminated,
                         state: "terminated",
                         label: "terminated",
                         color: "red",
                     },
                     {
                         active: states.includes("timeout"),
-                        count: counts.timeout,
+                        count: availableCounts.timeout,
                         state: "timeout",
                         label: "timed out",
                         color: "red",
@@ -109,17 +121,4 @@ export const StateFilter = ({ counts, states, onUpdateJobStateFilter }) => {
             />
         </StyledStatusFilter>
     );
-};
-
-export const mapStateToProps = state => ({
-    counts: getJobCountsByState(state),
-    states: getStatesFromURL(state),
-});
-
-export const mapDispatchToProps = dispatch => ({
-    onUpdateJobStateFilter: states => {
-        dispatch(findJobs(states));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(StateFilter);
+}

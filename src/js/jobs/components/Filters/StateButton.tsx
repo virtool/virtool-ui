@@ -1,5 +1,4 @@
 import * as Checkbox from "@radix-ui/react-checkbox";
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 import { Badge, BoxGroupSection, Circle } from "../../../base";
@@ -36,24 +35,34 @@ const StyledStateButton = styled(BoxGroupSection)`
     }
 `;
 
-export const StateButton = ({ active, count = 0, color, label, onClick }) => (
-    <StyledStateButton active={active} onClick={onClick}>
-        <StateButtonCheckbox label={label} checked={active}>
-            <StateButtonIndicator>
-                <i className="fas fa-check" />
-            </StateButtonIndicator>
-        </StateButtonCheckbox>
-
-        <Circle color={color} />
-        {label}
-        <Badge>{count}</Badge>
-    </StyledStateButton>
-);
-
-StateButton.propTypes = {
-    active: PropTypes.bool,
-    color: PropTypes.string.isRequired,
-    count: PropTypes.number,
-    state: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
+type StateButtonProps = {
+    /** Whether the state is selected */
+    active: boolean;
+    /** The number of jobs associated with the state */
+    count: number;
+    /** The state color */
+    color: string;
+    /** The name of the state */
+    label: string;
+    /** A callback function to handle the state selection */
+    onClick: () => void;
 };
+
+/**
+ * A condensed job state item for use in a list of job states
+ */
+export function StateButton({ active, count = 0, color, label, onClick }: StateButtonProps) {
+    return (
+        <StyledStateButton active={active} onClick={onClick}>
+            <StateButtonCheckbox checked={active}>
+                <StateButtonIndicator>
+                    <i className="fas fa-check" />
+                </StateButtonIndicator>
+            </StateButtonCheckbox>
+
+            <Circle color={color} />
+            {label}
+            <Badge>{count}</Badge>
+        </StyledStateButton>
+    );
+}
