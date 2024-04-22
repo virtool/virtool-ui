@@ -25,7 +25,20 @@ const DragIcons = styled.div`
     justify-content: center;
     margin-left: auto;
     font-weight: ${getFontWeight("thick")};
-    font-size: ${getFontSize("lg")};
+    font-size: 26px;
+`;
+
+type CaretIconProps = {
+    show: boolean;
+};
+
+const CaretIcon = styled(Icon)<CaretIconProps>`
+    ${props => (props.show ? "display: flex" : "visibility: hidden")};
+    line-height: 0.5;
+
+    &:hover {
+        color: ${props => props.theme.color.greyDark};
+    }
 `;
 
 type SegmentProps = {
@@ -69,8 +82,8 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
             )}
 
             <DragIcons>
-                {!first && <Icon name="caret-up" aria-label="move segment up" onClick={onMoveUp} />}
-                {!last && <Icon name="caret-down" aria-label="move segment down" onClick={onMoveDown} />}
+                <CaretIcon name="caret-up" aria-label="move segment up" onClick={onMoveUp} show={!first} />
+                <CaretIcon name="caret-down" aria-label="move segment down" onClick={onMoveDown} show={!last} />
             </DragIcons>
         </StyledSegment>
     );
