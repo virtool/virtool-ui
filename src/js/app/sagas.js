@@ -8,15 +8,10 @@ import { watchAnalyses } from "../analyses/sagas";
 import { watchDev } from "../dev/sagas";
 import { watchFiles } from "../files/sagas";
 import { watchForm } from "../forms/sagas";
-import { watchGroups } from "../groups/sagas";
-import { watchHmms } from "../hmm/sagas";
 import { watchIndexes } from "../indexes/sagas";
-import { watchJobs } from "../jobs/sagas";
-import { watchLabels } from "../labels/sagas";
 import { watchOTUs } from "../otus/sagas";
 import { watchReferences } from "../references/sagas";
 import { watchSamples } from "../samples/sagas";
-import { watchSubtraction } from "../subtraction/sagas";
 import { callWithAuthentication } from "../utils/sagas";
 import { GET_INITIAL_STATE, PUSH_STATE } from "./actionTypes";
 import { root as rootAPI } from "./api";
@@ -67,16 +62,11 @@ function* rootSaga() {
         watchAnalyses(),
         watchDev(),
         watchFiles(),
-        watchSubtraction(),
-        watchHmms(),
         watchIndexes(),
-        watchJobs(),
-        watchLabels(),
         watchOTUs(),
         watchRouter(),
         watchSamples(),
         watchSettings(),
-        watchGroups(),
         watchReferences(),
         watchForm(),
     ]);

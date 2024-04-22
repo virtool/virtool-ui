@@ -24,7 +24,7 @@ const StyledContent = styled(RadixSelect.Content)`
     max-height: var(--radix-select-content-available-height);
     min-width: var(--radix-select-trigger-width);
 
-    :first-child {
+    &:first-child {
         margin-top: 10px;
     }
 `;
@@ -33,7 +33,7 @@ const ScrollSection = styled(RadixSelect.ScrollUpButton)`
     margin: 5px 0;
     display: flex;
     justify-content: center;
-    :hover {
+    &:hover {
         background-color: ${props => getColor({ color: "greyHover", theme: props.theme })};
     }
 `;

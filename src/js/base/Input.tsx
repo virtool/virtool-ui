@@ -107,12 +107,12 @@ export const Input = styled(UnstyledInput)<InputProps>`
     transition: border-color ease-in-out 150ms, box-shadow ease-in-out 150ms;
     width: 100%;
 
-    :focus {
+    &:focus {
         border-color: ${props => (props.error ? props.theme.color.red : props.theme.color.blue)};
         box-shadow: 0 0 0 2px ${getInputFocusColor};
     }
 
-    :not(select):read-only {
+    &:not(select):read-only {
         background-color: ${props => props.theme.color.greyLightest};
     }
 `;

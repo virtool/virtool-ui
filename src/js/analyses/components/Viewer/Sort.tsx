@@ -1,7 +1,7 @@
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Dropdown, DropdownButton, DropdownMenuItem, DropdownMenuList, Icon } from "../../../base";
+import { Dropdown, DropdownButton, DropdownMenuContent, DropdownMenuItem, Icon } from "../../../base";
 
 const sortKeys = {
     aodp: ["identity"],
@@ -53,13 +53,13 @@ export function AnalysisViewerSort({ workflow, sortKey, onSelect }: AnalysisView
                 </span>
                 <Icon name="caret-down" />
             </SortDropdownButton>
-            <DropdownMenuList>
+            <DropdownMenuContent>
                 {map(sortKeys[workflow], key => (
                     <DropdownMenuItem key={key} onSelect={() => onSelect(key)}>
                         {sortTitles[key]}
                     </DropdownMenuItem>
                 ))}
-            </DropdownMenuList>
+            </DropdownMenuContent>
         </Dropdown>
     );
 }

@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
@@ -39,10 +40,10 @@ export default defineConfig({
         outDir: "../dist",
         sourcemap: true,
     },
-    plugins: [
-        createHtmlPlugin({}),
-        react({
-            include: "**/*.{jsx,tsx}",
-        }),
-    ],
+    plugins: [createHtmlPlugin({}), react({
+        include: "**/*.{jsx,tsx}",
+    }), sentryVitePlugin({
+        org: "cfia-virtool",
+        project: "cloud-ui"
+    })],
 });

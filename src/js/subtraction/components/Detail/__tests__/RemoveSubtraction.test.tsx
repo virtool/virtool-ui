@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -43,7 +43,7 @@ describe("<RemoveSubtraction />", () => {
     it("should call onHide() when onHide() on <RemoveModal /> is called", async () => {
         renderWithProviders(<RemoveSubtraction {...props} />);
 
-        await userEvent.click(screen.getByRole("button", { name: "close" }));
+        fireEvent.keyDown(document, { key: "Escape" });
         expect(props.onHide).toHaveBeenCalled();
     });
 });

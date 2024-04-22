@@ -1,4 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { merge } from "lodash";
 import { filter, forEach, uniqBy } from "lodash-es";
 import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -144,7 +145,7 @@ export default function QuickAnalyze({
     const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
 
     function onChangeWorkflow(workflow: Workflows) {
-        history.push({ state: { ...location.state, workflow } });
+        history.push(merge(location, { state: { workflow } }));
     }
 
     return (

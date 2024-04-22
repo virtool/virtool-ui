@@ -9,7 +9,7 @@ import { getAccountAdministratorRole } from "../../selectors";
 const StyledAPIKeyAdministratorInfo = styled(AlertOuter)`
     border-radius: 0;
     box-shadow: none;
-    margin-bottom: 0;
+    margin-bottom: 15px;
     padding: 15px;
 
     p:last-of-type {

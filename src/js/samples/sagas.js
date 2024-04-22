@@ -1,22 +1,18 @@
-import { getLocation, push } from "connected-react-router";
-import { has, includes } from "lodash-es";
-import { put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
-import { pushState } from "../app/actions";
+import { pushState } from "@app/actions";
 import {
     CREATE_SAMPLE,
     FIND_SAMPLES,
-    GET_JOB,
-    GET_LINKED_JOB,
     GET_SAMPLE,
     UPDATE_SAMPLE,
     UPDATE_SEARCH,
     WS_UPDATE_JOB,
     WS_UPDATE_SAMPLE,
-} from "../app/actionTypes";
-import { deletePersistentFormState } from "../forms/actions";
-import * as jobsAPI from "../jobs/api";
-import { getJobDetailId, getLinkedJobs } from "../jobs/selectors";
-import { apiCall, callWithAuthentication, putGenericError } from "../utils/sagas";
+} from "@app/actionTypes";
+import { deletePersistentFormState } from "@forms/actions";
+import { apiCall, callWithAuthentication, putGenericError } from "@utils/sagas";
+import { getLocation, push } from "connected-react-router";
+import { includes } from "lodash-es";
+import { put, select, takeEvery, takeLatest, throttle } from "redux-saga/effects";
 import { getSampleSucceeded } from "./actions";
 import * as samplesAPI from "./api";
 import { getLabelsFromURL, getSampleDetailId, getTermFromURL, getWorkflowsFromURL } from "./selectors";
@@ -29,23 +25,7 @@ export function* watchSamples() {
     yield throttle(500, CREATE_SAMPLE.REQUESTED, createSample);
     yield takeEvery(UPDATE_SAMPLE.REQUESTED, updateSample);
     yield takeEvery(WS_UPDATE_SAMPLE, wsUpdateSample);
-    yield takeLatest(WS_UPDATE_JOB, wsUpdateJob);
     yield takeLatest([WS_UPDATE_JOB], findSamples);
-}
-
-export function* wsUpdateJob(action) {
-    const jobId = action.payload.id;
-    const jobDetailId = yield select(getJobDetailId);
-
-    if (jobId === jobDetailId) {
-        yield apiCall(jobsAPI.get, { jobId }, GET_JOB);
-    }
-
-    const linkedJobs = yield select(getLinkedJobs);
-
-    if (has(linkedJobs, jobId)) {
-        yield apiCall(jobsAPI.get, { jobId }, GET_LINKED_JOB);
-    }
 }
 
 export function* wsUpdateSample(action) {
