@@ -1,5 +1,5 @@
 import { FormattedPathoscopeHit } from "@/analyses/types";
-import { useScrollSync, useUrlSearchParams } from "@utils/hooks";
+import { ScrollSyncContext, useUrlSearchParams } from "@utils/hooks";
 import { filter, map, maxBy } from "lodash-es";
 import React from "react";
 import { PathoscopeIsolate } from "./Isolate";
@@ -19,7 +19,6 @@ export function PathoscopeDetail({ hit, mappedCount }: PathoscopeDetailProps) {
 
     const filtered = filter(isolates, isolate => !filterIsolates || isolate.pi >= 0.03 * pi);
     const graphWidth = maxBy(filtered, item => item.filled.length).filled.length;
-    const isolateRef = useScrollSync(filtered);
 
     const isolateComponents = map(filtered, (isolate, index) => {
         const graphRatios =
@@ -31,12 +30,15 @@ export function PathoscopeDetail({ hit, mappedCount }: PathoscopeDetailProps) {
                 {...isolate}
                 reads={Math.round(isolate.pi * mappedCount)}
                 showPathoscopeReads={showReads}
-                isolateRef={element => isolateRef(element, index)}
                 graphWidth={graphWidth}
                 graphRatios={graphRatios}
             />
         );
     });
 
-    return <div>{isolateComponents}</div>;
+    return (
+        <div>
+            <ScrollSyncContext>{isolateComponents}</ScrollSyncContext>
+        </div>
+    );
 }

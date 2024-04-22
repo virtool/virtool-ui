@@ -1,4 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { HistoryType } from "@utils/hooks";
 import { filter, forEach, uniqBy } from "lodash-es";
 import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -9,7 +10,6 @@ import { IndexMinimal } from "../../../indexes/types";
 import { MLModelSearchResult } from "../../../ml/types";
 import { SampleMinimal } from "../../../samples/types";
 import { SubtractionShortlist } from "../../../subtraction/types";
-import { HistoryType } from "../../../utils/hooks";
 import { useCreateAnalysis } from "../../queries";
 import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";

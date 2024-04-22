@@ -1,3 +1,4 @@
+import { useUrlSearchParams, useUrlSearchParamsList } from "@utils/hooks";
 import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
 import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
@@ -9,7 +10,6 @@ import { useListIndexes } from "../../indexes/queries";
 import { useFetchLabels } from "../../labels/queries";
 import { useFindModels } from "../../ml/queries";
 import { useFetchSubtractionsShortlist } from "../../subtraction/queries";
-import { useUrlSearchParams, useUrlSearchParamsList } from "../../utils/hooks";
 import { useListSamples } from "../queries";
 import { SampleMinimal } from "../types";
 import { SampleFilters } from "./Filter/SampleFilters";

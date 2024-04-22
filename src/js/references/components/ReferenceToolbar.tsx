@@ -1,8 +1,8 @@
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
 import { Permission } from "../../groups/types";
-import { useUrlSearchParams } from "../../utils/hooks";
 
 /**
  * A toolbar which allows the references to be filtered by name

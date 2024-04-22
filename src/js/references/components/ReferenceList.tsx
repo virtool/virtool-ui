@@ -1,9 +1,9 @@
+import { useUrlSearchParams } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { Badge, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
-import { useUrlSearchParams } from "../../utils/hooks";
 import { useInfiniteFindReferences } from "../queries";
 import { ReferenceMinimal, ReferenceSearchResult } from "../types";
 import Clone from "./CloneReference";

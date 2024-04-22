@@ -1,5 +1,5 @@
 import { forEach } from "lodash-es/lodash";
-import React, { useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 export type HistoryType = RouteComponentProps["history"];
@@ -136,44 +136,54 @@ export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [s
     return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history)];
 }
 
+type ScrollSyncProps = {
+    children: React.ReactNode;
+};
+
+const ScrollContext = createContext(null);
+
 /**
- * Hook for synchronizing scroll between components
+ * Manages the context and synchronises scroll between subscribed components
  *
- * @param elements - The elements to synchronize scroll with
+ * @param children - The component to synchronise scroll within
  */
-export function useScrollSync(elements?: any[]) {
-    const elementsRef = useRef<HTMLElement[]>([]);
+export function ScrollSyncContext({ children }: ScrollSyncProps) {
+    const [scrollPercentage, setScrollPercentage] = useState(0);
 
-    useEffect(() => {
-        const newElements = elements ? elementsRef.current.slice(0, elements.length) : elementsRef.current;
-
-        function handleScroll(e) {
-            const { scrollLeft, scrollTop } = e.target;
-
-            newElements.forEach(element => {
-                element.scrollLeft = scrollLeft;
-                element.scrollTop = scrollTop;
-            });
-        }
-
-        if (newElements.length > 2) {
-            newElements.forEach(element => {
-                element.addEventListener("scroll", handleScroll);
-            });
-
-            return () => {
-                newElements.forEach(element => {
-                    element.removeEventListener("scroll", handleScroll);
-                });
-            };
-        }
-    }, [elements]);
-
-    function register(element: HTMLElement, index) {
-        if (element) {
-            elementsRef.current[index] = element;
-        }
+    function handleScroll(percentage) {
+        setScrollPercentage(percentage);
     }
 
-    return register;
+    return <ScrollContext.Provider value={[scrollPercentage, handleScroll]}>{children}</ScrollContext.Provider>;
+}
+
+/**
+ * Subscribes components to the context and handles scroll functionality
+ *
+ * @param children - The components to subscribe to the context
+ */
+export function ScrollSync({ children }: ScrollSyncProps) {
+    const [scrollPercentage, handleScroll] = useContext(ScrollContext);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        function handleScrollEvent(e) {
+            const { scrollLeft } = e.target;
+            handleScroll(scrollLeft);
+        }
+
+        ref.current.addEventListener("scroll", handleScrollEvent);
+    }, []);
+
+    useEffect(() => {
+        if (scrollPercentage !== undefined) {
+            ref.current.scrollLeft = scrollPercentage;
+        }
+    }, [scrollPercentage]);
+
+    return (
+        <div ref={ref} style={{ overflowX: "auto" }}>
+            {children}
+        </div>
+    );
 }
