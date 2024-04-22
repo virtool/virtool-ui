@@ -5,18 +5,16 @@ const defaultSrc = "default-src 'self'";
 const imgSrc = "img-src 'self' data:";
 const fontSrc = `font-src 'self' ${fontAwesomeURL}`;
 
-const generateCSPScriptSrc = (nonce) => {
-  return `script-src 'self' 'nonce-${nonce}' ${fontAwesomeURL}`;
+const generateCSPScriptSrc = nonce => {
+    return `script-src 'self' 'nonce-${nonce}' ${fontAwesomeURL}`;
 };
 
-const generateCSPStyleSrc = (nonce) => {
-  return `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com ${fontAwesomeURL}`;
+const generateCSPStyleSrc = nonce => {
+    return `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com ${fontAwesomeURL}`;
 };
 
-const generateCSPConnectSrc = (tenant) => {
-  return `connect-src 'self' *.sentry.io ${
-    tenant ? `https://${tenant}.b2clogin.com` : ""
-  } `;
+const generateCSPConnectSrc = tenant => {
+    return `connect-src 'self' *.sentry.io ${tenant ? `https://${tenant}.b2clogin.com` : ""} `;
 };
 
 /**
@@ -28,20 +26,20 @@ const generateCSPConnectSrc = (tenant) => {
  * @param next {function} passes control to next middleware
  * @returns {N/A}
  */
-exports.applyCSPHeader = (tenant) => (req, res, next) => {
-  const nonce = crypto.randomBytes(32).toString("base64");
-  res.locals.nonce = nonce;
+exports.applyCSPHeader = tenant => (req, res, next) => {
+    const nonce = crypto.randomBytes(32).toString("base64");
+    res.locals.nonce = nonce;
 
-  const csp = [
-    defaultSrc,
-    fontSrc,
-    imgSrc,
-    generateCSPConnectSrc(tenant),
-    generateCSPScriptSrc(nonce),
-    generateCSPStyleSrc(nonce),
-  ];
+    const csp = [
+        defaultSrc,
+        fontSrc,
+        imgSrc,
+        generateCSPConnectSrc(tenant),
+        generateCSPScriptSrc(nonce),
+        generateCSPStyleSrc(nonce),
+    ];
 
-  res.append("Content-Security-Policy", csp.join("; "));
+    res.append("Content-Security-Policy", csp.join("; "));
 
-  next();
+    next();
 };

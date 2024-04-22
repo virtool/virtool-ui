@@ -1,6 +1,6 @@
+import { RemoveDialog } from "@base/RemoveDialog";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { RemoveModal } from "../../../base";
 import { useRemoveSubtraction } from "../../queries";
 import { Subtraction } from "../../types";
 
@@ -21,7 +21,7 @@ export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveS
     const history = useHistory();
 
     return (
-        <RemoveModal
+        <RemoveDialog
             name={subtraction.name}
             noun="Subtraction"
             show={show}

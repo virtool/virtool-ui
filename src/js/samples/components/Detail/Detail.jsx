@@ -1,8 +1,4 @@
-import { get, includes } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
-import Analyses from "../../../analyses/components/Analyses";
+import { getError } from "@/errors/selectors";
 import {
     Icon,
     IconLink,
@@ -14,10 +10,12 @@ import {
     ViewHeaderAttribution,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "../../../base";
-import { getError } from "../../../errors/selectors";
-import { listLabels } from "../../../labels/actions";
-import { shortlistSubtractions } from "../../../subtraction/actions";
+} from "@base";
+import { includes } from "lodash-es";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { Link, Redirect, Route, Switch } from "react-router-dom";
+import Analyses from "../../../analyses/components/Analyses";
 import { getSample } from "../../actions";
 import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
@@ -26,31 +24,18 @@ import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
 
-function SampleDetail({
-    canModify,
-    detail,
-    error,
-    history,
-    labels,
-    match,
-    onGetSample,
-    onListLabels,
-    onShortlistSubtractions,
-    subtractionOptions,
-}) {
+function SampleDetail({ canModify, detail, error, history, match, onGetSample }) {
     const sampleId = match.params.sampleId;
 
     useEffect(() => {
         onGetSample(sampleId);
-        onShortlistSubtractions();
-        onListLabels();
     }, [sampleId]);
 
     if (error) {
         return <NotFound />;
     }
 
-    if (detail === null || labels === null || subtractionOptions === null) {
+    if (detail === null) {
         return <LoadingPlaceholder />;
     }
 
@@ -123,8 +108,6 @@ export function mapStateToProps(state) {
         canModify: getCanModify(state),
         detail: state.samples.detail,
         error: getError("GET_SAMPLE_ERROR"),
-        labels: get(state, "labels.documents"),
-        subtractionOptions: get(state, "subtraction.shortlist", ""),
     };
 }
 
@@ -132,12 +115,6 @@ export function mapDispatchToProps(dispatch) {
     return {
         onGetSample: sampleId => {
             dispatch(getSample(sampleId));
-        },
-        onShortlistSubtractions: () => {
-            dispatch(shortlistSubtractions());
-        },
-        onListLabels: () => {
-            dispatch(listLabels());
         },
     };
 }

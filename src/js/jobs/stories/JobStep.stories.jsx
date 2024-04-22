@@ -1,5 +1,5 @@
 import React from "react";
-import { JobStep } from "../components/Step";
+import { JobStep } from "../components/JobStep";
 
 export default {
     title: "jobs/Step",

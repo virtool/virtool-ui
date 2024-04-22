@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { ModalFooter } from "../../../base";
+import { DialogFooter } from "../../../base";
 
-export const CreateAnalysisFooter = styled(ModalFooter)`
+export const CreateAnalysisFooter = styled(DialogFooter)`
     align-items: center;
     display: flex;
     justify-content: space-between;

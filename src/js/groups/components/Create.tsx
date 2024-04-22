@@ -1,3 +1,4 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
 import { Field, Form, Formik } from "formik";
 import React from "react";
 import { connect } from "react-redux";
@@ -5,14 +6,15 @@ import * as Yup from "yup";
 import { pushState } from "../../app/actions";
 import { getRouterLocationStateValue } from "../../app/selectors";
 import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
     Input,
     InputError,
     InputGroup,
     InputLabel,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
     SaveButton,
 } from "../../base";
 import { useCreateGroup } from "../queries";
@@ -46,25 +48,28 @@ export function CreateGroup({ show, onHide }: CreateGroupProps) {
     }
 
     return (
-        <Modal label="Create" onHide={onHide} show={show} size="sm">
-            <ModalHeader>Create Group</ModalHeader>
-            <Formik onSubmit={handleSubmit} initialValues={{ name: "" }} validationSchema={validationSchema}>
-                {({ errors, touched }) => (
-                    <Form>
-                        <ModalBody>
-                            <InputGroup>
-                                <InputLabel>Name</InputLabel>
-                                <Field name="name" id="name" as={Input} />
-                                <InputError>{touched.name && errors.name}</InputError>
-                            </InputGroup>
-                        </ModalBody>
-                        <ModalFooter>
-                            <SaveButton />
-                        </ModalFooter>
-                    </Form>
-                )}
-            </Formik>
-        </Modal>
+        <Dialog onOpenChange={onHide} open={show}>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Create Group</DialogTitle>
+                    <Formik onSubmit={handleSubmit} initialValues={{ name: "" }} validationSchema={validationSchema}>
+                        {({ errors, touched }) => (
+                            <Form>
+                                <InputGroup>
+                                    <InputLabel>Name</InputLabel>
+                                    <Field name="name" id="name" as={Input} />
+                                    <InputError>{touched.name && errors.name}</InputError>
+                                </InputGroup>
+                                <DialogFooter>
+                                    <SaveButton />
+                                </DialogFooter>
+                            </Form>
+                        )}
+                    </Formik>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }
 

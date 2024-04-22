@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { mapSettingsStateToProps } from "../../administration/mappers";
 import { Container, LoadingPlaceholder } from "../../base";
-import JobDetail from "./Detail";
+import JobDetail from "./JobDetail";
 import JobsList from "./JobList";
 
 interface JobsProps {

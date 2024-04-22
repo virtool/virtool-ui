@@ -1,14 +1,28 @@
+import { useInfiniteFindUsers } from "@administration/queries";
+import { BoxGroup, LoadingPlaceholder, NoneFoundBox } from "@base";
+import { ScrollList } from "@base/ScrollList";
 import { flatMap } from "lodash-es";
 import React from "react";
-import { useInfiniteFindUsers } from "../../administration/queries";
-import { LoadingPlaceholder, NoneFoundBox } from "../../base";
-import { ScrollList } from "../../base/ScrollList";
+import styled from "styled-components";
 import { User } from "../types";
 import { UserItem } from "./UserItem";
 
 function renderRow(item: User) {
-    return <UserItem key={item.id} id={item.id} handle={item.handle} administratorRole={item.administrator_role} />;
+    return (
+        <UserItem
+            key={item.id}
+            active={item.active}
+            administratorRole={item.administrator_role}
+            handle={item.handle}
+            id={item.id}
+            primary_group={item.primary_group}
+        />
+    );
 }
+
+const StyledScrollList = styled(ScrollList)`
+    margin-bottom: 0;
+`;
 
 type UsersListProps = {
     term: string;
@@ -30,9 +44,9 @@ export function UsersList({ term }: UsersListProps) {
 
     const items = flatMap(data.pages, page => page.items);
 
-    if (items.length) {
-        return (
-            <ScrollList
+    return items.length ? (
+        <BoxGroup>
+            <StyledScrollList
                 fetchNextPage={fetchNextPage}
                 hasNextPage={hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
@@ -40,8 +54,8 @@ export function UsersList({ term }: UsersListProps) {
                 items={items}
                 renderRow={renderRow}
             />
-        );
-    }
-
-    return <NoneFoundBox noun="users" />;
+        </BoxGroup>
+    ) : (
+        <NoneFoundBox noun="users" />
+    );
 }

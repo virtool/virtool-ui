@@ -8,15 +8,10 @@ import analysesReducer from "../analyses/reducer";
 import errorsReducer from "../errors/reducer";
 import filesReducer from "../files/reducer";
 import { formsReducer } from "../forms/reducer";
-import groupsReducer from "../groups/reducer";
-import hmmsReducer from "../hmm/reducer";
 import indexesReducer from "../indexes/reducer";
-import jobsReducer from "../jobs/reducer";
-import labelsReducer from "../labels/reducer";
 import OTUsReducer from "../otus/reducer";
 import referenceReducer from "../references/reducer";
 import samplesReducer from "../samples/reducer";
-import subtractionsReducer from "../subtraction/reducer";
 import { CREATE_FIRST_USER, GET_INITIAL_STATE, LOGIN, RESET_PASSWORD } from "./actionTypes";
 import rootSaga from "./sagas";
 
@@ -77,17 +72,12 @@ export function createAppStore(history) {
             errors: errorsReducer,
             files: filesReducer,
             forms: formsReducer,
-            groups: groupsReducer,
-            hmms: hmmsReducer,
             indexes: indexesReducer,
-            jobs: jobsReducer,
-            labels: labelsReducer,
             otus: OTUsReducer,
             references: referenceReducer,
             router: connectRouter(history),
             samples: samplesReducer,
             settings: settingsReducer,
-            subtraction: subtractionsReducer,
         },
         middleware: [sagaMiddleware, routerMiddleware(history)],
         enhancers: [sentryReduxEnhancer],

@@ -10,7 +10,7 @@ const InputHeaderContainer = styled.form`
     box-sizing: border-box;
     margin-bottom: 15px;
 
-    :focus-within {
+    &:focus-within {
         background-color: ${props => props.theme.color.greyHover};
         border-color: ${props => props.theme.color.blue};
 

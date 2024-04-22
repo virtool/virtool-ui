@@ -33,7 +33,7 @@ const StyledIcon = styled.i<StyledIconProps>`
     ${props => (props.hoverable || props.onClick ? "cursor: pointer;" : "")};
     ${props => (props.fixedWidth ? fixedWidth : "")};
 
-    :hover {
+    &:hover {
         ${props =>
             props.hoverable || props.onClick
                 ? `color: ${getIconHoverColor({ color: props.color, theme: props.theme })};`

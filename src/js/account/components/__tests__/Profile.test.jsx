@@ -8,7 +8,7 @@ import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount } from "../../../../tests/fake/account";
 import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import AccountProfile from "../Profile";
+import AccountProfile from "../AccountProfile";
 
 function createReducer(state, history) {
     return combineReducers({

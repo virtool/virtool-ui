@@ -21,7 +21,7 @@ const SequenceHeaderButtons = styled.span`
         margin-right: 5px;
     }
 
-    > :last-child {
+    > &:last-child {
         margin-left: 20px;
     }
 `;

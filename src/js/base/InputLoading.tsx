@@ -3,7 +3,7 @@ import { InputIcon } from "./InputIcon";
 import { Loader } from "./Loader";
 
 export const InputLoading = () => (
-    <InputIcon as="div">
+    <InputIcon name="loading" as="div">
         <Loader size="14px" />
     </InputIcon>
 );

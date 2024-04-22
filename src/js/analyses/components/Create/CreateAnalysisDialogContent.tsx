@@ -1,5 +1,5 @@
+import { DialogContent } from "@base";
 import styled, { keyframes } from "styled-components";
-import { DialogContent } from "../../../base";
 
 const createAnalysisOpen = keyframes`
   from {
@@ -14,8 +14,8 @@ const createAnalysisOpen = keyframes`
 
 export const CreateAnalysisDialogContent = styled(DialogContent)`
     animation: ${createAnalysisOpen} 150ms cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex;
-    flex-direction: column;
+    max-height: 90vh;
+    overflow: auto;
     position: fixed;
     top: 5%;
     transform: translate(-50%, 0%);

@@ -75,21 +75,21 @@ export const StyledButton = styled.button<StyledButtonProps>`
         margin-left: 5px;
     }
 
-    :focus {
+    &:focus {
         color: ${getButtonForegroundColor};
     }
 
-    :disabled {
+    &:disabled {
         cursor: not-allowed;
     }
 
-    :not(:disabled):hover {
+    &:not(:disabled):hover {
         background-color: ${getButtonHoverColor};
         border-color: ${getButtonHoverColor};
         color: ${getButtonForegroundColor};
     }
 
-    :not(:disabled)::after {
+    &:not(:disabled)::after {
         border-radius: ${props => props.theme.borderRadius.sm};
         box-shadow: ${props => props.theme.boxShadow.lg};
         content: "";
@@ -100,7 +100,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
         transition: opacity 150ms ease, scale 150ms ease;
     }
 
-    :not(:disabled):hover::after {
+    &:not(:disabled):hover::after {
         opacity: 1;
     }
 `;
