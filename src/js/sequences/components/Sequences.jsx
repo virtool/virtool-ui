@@ -1,9 +1,11 @@
-import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundSection } from "@/base";
 import { getFontSize } from "@app/theme";
-import useGetSequences from "@otus/hooks";
+import { Badge, BoxGroup, NoneFoundSection } from "@base";
+import { useCurrentOTUContext } from "@otus/queries";
 import { getTargets } from "@otus/selectors";
+import sortSequencesBySegment from "@otus/utils";
 import { getDataType, getReferenceDetailId } from "@references/selectors";
-import { map } from "lodash-es";
+import RemoveSequence from "@sequences/components/RemoveSequence";
+import { map } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -13,7 +15,6 @@ import AddSequenceLink from "./AddLink";
 import BarcodeSequence from "./Barcode/Sequence";
 import EditSequence from "./Edit";
 import GenomeSequence from "./Genome/Sequence";
-import RemoveSequence from "./RemoveSequence";
 
 const IsolateSequencesHeader = styled.label`
     align-items: center;
@@ -27,13 +28,9 @@ const IsolateSequencesHeader = styled.label`
 `;
 
 export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenceId, otuId }) => {
-    const { data, isLoading } = useGetSequences(otuId, activeIsolate);
+    const { otu } = useCurrentOTUContext();
+    const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
-    if (isLoading) {
-        return <LoadingPlaceholder />;
-    }
-
-    const { sequences } = data;
     const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
     let sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
 

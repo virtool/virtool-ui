@@ -1,8 +1,7 @@
 import { Badge, Box, BoxGroup, NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { OTU } from "@otus/types";
+import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { Reference } from "@references/types";
 import { find, map } from "lodash-es";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -50,16 +49,12 @@ const IsolateEditorList = styled(BoxGroup)`
     width: 100%;
 `;
 
-type IsolateEditorProps = {
-    otu: OTU;
-    reference: Reference;
-};
-
 /**
  * Displays a component for managing the isolates
  */
-export default function IsolateEditor({ otu, reference }: IsolateEditorProps) {
+export default function IsolateEditor() {
     const location = useLocation<{ activeIsolateId: string }>();
+    const { otu, reference } = useCurrentOTUContext();
     const { isolates } = otu;
     const { data_type, restrict_source_types, source_types } = reference;
 
