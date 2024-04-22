@@ -1,4 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { HistoryType } from "@utils/hooks";
 import { merge } from "lodash";
 import { filter, forEach, uniqBy } from "lodash-es";
 import React, { useEffect } from "react";
@@ -169,7 +170,7 @@ export default function QuickAnalyze({
                         </QuickAnalyzeSelected>
                     </Tabs>
                     <SelectedSamples samples={compatibleSamples} />
-                    {mode === "genome" && <HMMAlert installed={hmms.status.task.complete} />}
+                    {mode === "genome" && <HMMAlert installed={hmms.status.task?.complete} />}
                     <WorkflowSelector
                         onSelect={onChangeWorkflow}
                         selected={location.state?.workflow}
