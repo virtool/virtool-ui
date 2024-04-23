@@ -21,11 +21,10 @@ const SegmentIcon = styled(IconLink)`
 
 const DragIcons = styled.div`
     display: flex;
-    flex-direction: column;
     justify-content: center;
     margin-left: auto;
     font-weight: ${getFontWeight("thick")};
-    font-size: 26px;
+    font-size: ${getFontSize("xl")};
 `;
 
 type CaretIconProps = {
