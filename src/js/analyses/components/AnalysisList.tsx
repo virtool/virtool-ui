@@ -1,9 +1,9 @@
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import { match } from "react-router-dom";
 import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "../../base";
 import { useListHmms } from "../../hmm/queries";
 import { useFetchSample } from "../../samples/queries";
-import { useUrlSearchParams } from "../../utils/hooks";
 import { useListAnalyses } from "../queries";
 import { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";

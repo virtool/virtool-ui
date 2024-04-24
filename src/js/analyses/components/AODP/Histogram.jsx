@@ -1,3 +1,4 @@
+import { useElementSize } from "@utils/hooks";
 import { extent, histogram, max } from "d3-array";
 import { axisBottom, axisLeft } from "d3-axis";
 import { format } from "d3-format";
@@ -6,7 +7,6 @@ import { select } from "d3-selection";
 import { fill, flatMap } from "lodash-es";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useElementSize } from "../../../utils/hooks";
 
 const draw = (element, data, width) => {
     const flattened = flatMap(data, ([x, y]) => fill(new Array(y), x));

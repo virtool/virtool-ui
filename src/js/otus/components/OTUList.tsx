@@ -1,3 +1,4 @@
+import { useUrlSearchParams } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
 import { match } from "react-router-dom";
@@ -6,7 +7,6 @@ import { BoxGroup, ContainerNarrow, LoadingPlaceholder, NoneFoundBox } from "../
 import { ScrollList } from "../../base/ScrollList";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
 import { useGetReference } from "../../references/queries";
-import { useUrlSearchParams } from "../../utils/hooks";
 import { useInfiniteFindOTUS } from "../queries";
 import { OTUMinimal } from "../types";
 import CreateOTU from "./CreateOTU";

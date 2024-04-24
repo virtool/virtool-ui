@@ -1,10 +1,10 @@
+import { useElementSize } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { getBorder } from "../../../app/theme";
 import { Badge, Box } from "../../../base";
-import { useElementSize } from "../../../utils/hooks";
 import { getActiveHit, getMaxSequenceLength } from "../../selectors";
 import { calculateAnnotatedOrfCount } from "../../utils";
 import NuVsBLAST from "./BLAST";

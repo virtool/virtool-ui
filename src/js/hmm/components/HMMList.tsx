@@ -1,6 +1,6 @@
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
-import { useUrlSearchParams } from "../../utils/hooks";
 import { useListHmms } from "../queries";
 import { HMMMinimal } from "../types";
 import { HMMInstaller } from "./HMMInstaller";
