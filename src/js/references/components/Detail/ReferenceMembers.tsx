@@ -1,4 +1,4 @@
-import { map } from "lodash-es";
+import { find, map } from "lodash-es";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -105,8 +105,10 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 />
             )}
             <EditReferenceMember
-                show={location.state && location.state[`edit${noun}`]}
+                show={location.state?.[`edit${noun}`]}
+                member={find(members, { id: location.state?.[`edit${noun}`] })}
                 noun={noun}
+                refId={refId}
                 onHide={handleHide}
             />
         </>

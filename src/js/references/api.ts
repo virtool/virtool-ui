@@ -4,6 +4,7 @@ import {
     ReferenceDataType,
     ReferenceGroup,
     ReferenceMinimal,
+    ReferenceRights,
     ReferenceSearchResult,
     ReferenceUser,
 } from "./types";
@@ -170,6 +171,34 @@ export function addReferenceGroup(refId: string, groupId: string | number): Prom
     return Request.post(`/refs/${refId}/groups`)
         .send({ group_id: groupId })
         .then(response => response.body);
+}
+
+/**
+ * Updates the modifying rights for a reference user
+ *
+ * @param refId - The id of the reference which the user is associated with
+ * @param userId - The id of the user to be updated
+ * @param update - The update to be applied
+ * @returns A promise resolving to updating the reference user
+ */
+export function editReferenceUser(refId: string, userId: string | number, update: ReferenceRights) {
+    return Request.patch(`/refs/${refId}/users/${userId}`)
+        .send(update)
+        .then(res => res.body);
+}
+
+/**
+ * Updates the modifying rights for a reference group
+ *
+ * @param refId - The id of the reference which the group is associated with
+ * @param groupId - The id of the group to be updated
+ * @param update - The update to be applied
+ * @returns A promise resolving to updating the reference group
+ */
+export function editReferenceGroup(refId: string, groupId: string | number, update: any) {
+    return Request.patch(`/refs/${refId}/groups/${groupId}`)
+        .send(update)
+        .then(res => res.body);
 }
 
 /**

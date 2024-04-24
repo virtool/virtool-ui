@@ -8,6 +8,8 @@ import {
     checkRemoteReferenceUpdates,
     cloneReference,
     createReference,
+    editReferenceGroup,
+    editReferenceUser,
     findReferences,
     getReference,
     removeReference,
@@ -20,6 +22,7 @@ import {
     ReferenceDataType,
     ReferenceGroup,
     ReferenceMinimal,
+    ReferenceRights,
     ReferenceSearchResult,
     ReferenceTarget,
     ReferenceUser,
@@ -137,6 +140,22 @@ export function useAddReferenceMember(refId: string, noun: string) {
                 queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
             },
         },
+    );
+}
+
+/**
+ * Initializes a mutator for updating a reference members modifying rights
+ *
+ * @param noun - Whether the member is a user or a group
+ * @returns A mutator for updating a reference members modifying rights
+ */
+export function useUpdateReferenceMember(noun: string) {
+    return useMutation<
+        ReferenceUser | ReferenceGroup,
+        unknown,
+        { refId: string; id: string | number; update: ReferenceRights }
+    >(({ refId, id, update }) =>
+        noun === "user" ? editReferenceUser(refId, id, update) : editReferenceGroup(refId, id, update),
     );
 }
 
