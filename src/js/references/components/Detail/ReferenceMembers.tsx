@@ -105,11 +105,9 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 />
             )}
             <EditReferenceMember
-                show={location.state?.[`edit${noun}`]}
                 member={find(members, { id: location.state?.[`edit${noun}`] })}
                 noun={noun}
                 refId={refId}
-                onHide={handleHide}
             />
         </>
     );
