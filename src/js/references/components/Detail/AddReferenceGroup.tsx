@@ -62,8 +62,8 @@ export default function AddReferenceGroup({ groups, onHide, refId, show }: AddRe
     }
 
     const groupIds = map(groups, "id");
-    const items = flatMap(data.pages, page => page.items || []);
-    const filteredItems = filter(items, item => !includes(groupIds, item?.id));
+    const items = flatMap(data.pages, page => page.items);
+    const filteredItems = filter(items, item => !includes(groupIds, item.id));
 
     function renderRow(item) {
         return (
