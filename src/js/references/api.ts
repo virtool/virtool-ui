@@ -4,7 +4,6 @@ import {
     ReferenceDataType,
     ReferenceGroup,
     ReferenceMinimal,
-    ReferenceRights,
     ReferenceSearchResult,
     ReferenceUser,
 } from "./types";
@@ -181,7 +180,7 @@ export function addReferenceGroup(refId: string, groupId: string | number): Prom
  * @param update - The update to be applied
  * @returns A promise resolving to updating the reference user
  */
-export function editReferenceUser(refId: string, userId: string | number, update: ReferenceRights) {
+export function editReferenceUser(refId: string, userId: string | number, update: { [key: string]: boolean }) {
     return Request.patch(`/refs/${refId}/users/${userId}`)
         .send(update)
         .then(res => res.body);
@@ -195,7 +194,7 @@ export function editReferenceUser(refId: string, userId: string | number, update
  * @param update - The update to be applied
  * @returns A promise resolving to updating the reference group
  */
-export function editReferenceGroup(refId: string, groupId: string | number, update: any) {
+export function editReferenceGroup(refId: string, groupId: string | number, update: { [key: string]: boolean }) {
     return Request.patch(`/refs/${refId}/groups/${groupId}`)
         .send(update)
         .then(res => res.body);

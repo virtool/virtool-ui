@@ -26,18 +26,14 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
     const queryClient = useQueryClient();
 
     function handleChange(key: string, enabled: boolean) {
-        const { modify_otu, build, modify, remove } = member;
-
-        const update = {
-            modify_otu,
-            build,
-            modify,
-            remove,
-            [key]: enabled,
-        };
-
         mutation.mutate(
-            { refId, id: location.state?.[`edit${noun}`], update },
+            {
+                refId,
+                id: location.state?.[`edit${noun}`],
+                update: {
+                    [key]: enabled,
+                },
+            },
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries(referenceQueryKeys.detail(refId));

@@ -22,7 +22,6 @@ import {
     ReferenceDataType,
     ReferenceGroup,
     ReferenceMinimal,
-    ReferenceRights,
     ReferenceSearchResult,
     ReferenceTarget,
     ReferenceUser,
@@ -153,7 +152,7 @@ export function useUpdateReferenceMember(noun: string) {
     return useMutation<
         ReferenceUser | ReferenceGroup,
         unknown,
-        { refId: string; id: string | number; update: ReferenceRights }
+        { refId: string; id: string | number; update: { [key: string]: boolean } }
     >(({ refId, id, update }) =>
         noun === "user" ? editReferenceUser(refId, id, update) : editReferenceGroup(refId, id, update),
     );
