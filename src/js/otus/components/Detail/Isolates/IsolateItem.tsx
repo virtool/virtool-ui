@@ -1,10 +1,11 @@
-import React, { useCallback } from "react";
+import { BoxGroupSection, Icon } from "@/base";
+import { getActiveShadow } from "@app/theme";
+import { OTUIsolate } from "@otus/types";
+import { ReferenceDataType } from "@references/types";
+import { formatIsolateName } from "@utils/utils";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { getActiveShadow } from "../../../../app/theme";
-import { BoxGroupSection, Icon } from "../../../../base";
-import { ReferenceDataType } from "../../../../references/types";
-import { formatIsolateName } from "../../../../utils/utils";
-import { OTUIsolate } from "../../../types";
 
 const StyledIsolateItem = styled(BoxGroupSection)`
     align-items: center;
@@ -28,20 +29,16 @@ type IsolateItemProps = {
     active: boolean;
     dataType: ReferenceDataType;
     isolate: OTUIsolate;
-    /** A callback function to handle the selection of isolates */
-    onClick: (isolateId: string) => void;
 };
 
 /**
  * A condensed isolate item for use in a list of isolates
  */
-export default function IsolateItem({ active, dataType, isolate, onClick }: IsolateItemProps) {
-    const handleSelectIsolate = useCallback(() => {
-        onClick(isolate.id);
-    }, [isolate.id]);
+export default function IsolateItem({ active, dataType, isolate }: IsolateItemProps) {
+    const history = useHistory();
 
     return (
-        <StyledIsolateItem active={active} onClick={handleSelectIsolate}>
+        <StyledIsolateItem active={active} onClick={() => history.push({ state: { activeIsolateId: isolate.id } })}>
             <span>{formatIsolateName(isolate)}</span>
             {isolate.default && dataType !== "barcode" && <Icon name="star" />}
         </StyledIsolateItem>

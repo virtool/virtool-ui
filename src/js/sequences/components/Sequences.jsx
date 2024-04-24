@@ -1,19 +1,20 @@
-import { map } from "lodash-es";
+import { getFontSize } from "@app/theme";
+import { Badge, BoxGroup, NoneFoundSection } from "@base";
+import { useCurrentOTUContext } from "@otus/queries";
+import { getTargets } from "@otus/selectors";
+import sortSequencesBySegment from "@otus/utils";
+import { getDataType, getReferenceDetailId } from "@references/selectors";
+import RemoveSequence from "@sequences/components/RemoveSequence";
+import { map } from "lodash";
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize } from "../../app/theme";
-import { Badge, BoxGroup, NoneFoundSection } from "../../base";
-import { getTargets } from "../../otus/selectors";
-import { getDataType, getReferenceDetailId } from "../../references/selectors";
-import { getSequences } from "../selectors";
 import AddSequence from "./Add";
 import AddSequenceLink from "./AddLink";
 import BarcodeSequence from "./Barcode/Sequence";
 import EditSequence from "./Edit";
 import GenomeSequence from "./Genome/Sequence";
-import RemoveSequence from "./RemoveSequence";
 
 const IsolateSequencesHeader = styled.label`
     align-items: center;
@@ -26,9 +27,11 @@ const IsolateSequencesHeader = styled.label`
     }
 `;
 
-export const IsolateSequences = ({ activeIsolate, dataType, sequences, hasTargets, referenceId, otuId }) => {
-    const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
+export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenceId, otuId }) => {
+    const { otu } = useCurrentOTUContext();
+    const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
+    const Sequence = dataType === "barcode" ? BarcodeSequence : GenomeSequence;
     let sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
 
     if (!sequenceComponents.length) {
@@ -67,7 +70,6 @@ export const IsolateSequences = ({ activeIsolate, dataType, sequences, hasTarget
 
 export const mapStateToProps = state => ({
     dataType: getDataType(state),
-    sequences: getSequences(state),
     hasTargets: Boolean(getTargets(state)?.length),
     referenceId: getReferenceDetailId(state),
 });

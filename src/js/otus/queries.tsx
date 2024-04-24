@@ -1,5 +1,8 @@
 import { ErrorResponse } from "@/types/types";
+import { LoadingPlaceholder } from "@base";
+import { useGetReference } from "@references/queries";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import React, { createContext, useContext } from "react";
 import {
     addIsolate,
     createOTU,
@@ -161,4 +164,37 @@ export function useRemoveSequence() {
     return useMutation<null, ErrorResponse, { otuId: string; isolateId: string; sequenceId: string }>(
         ({ otuId, isolateId, sequenceId }) => removeSequence(otuId, isolateId, sequenceId),
     );
+}
+
+const CurrentOTUContext = createContext(null);
+
+/**
+ * Initializes a hook to access the current OTU context within a component
+ *
+ * @returns The current OTU context
+ */
+export function useCurrentOTUContext() {
+    return useContext(CurrentOTUContext);
+}
+
+type CurrentOtuContextProviderProps = {
+    children: React.ReactNode;
+    otuId: string;
+    refId: string;
+};
+
+/**
+ * Provides the current OTU context to children components
+ *
+ * @returns Element wrapping children components with the current OTU context
+ */
+export function CurrentOTUContextProvider({ children, otuId, refId }: CurrentOtuContextProviderProps) {
+    const { data: otu, isLoading: isLoadingOTU } = useFetchOTU(otuId);
+    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
+
+    if (isLoadingOTU || isLoadingReference) {
+        return <LoadingPlaceholder />;
+    }
+
+    return <CurrentOTUContext.Provider value={{ otu, reference }}>{children}</CurrentOTUContext.Provider>;
 }
