@@ -1,14 +1,12 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { ScrollSync, useUrlSearchParams } from "@utils/hooks";
+import { toScientificNotation } from "@utils/utils";
 import { map } from "lodash-es";
 import React from "react";
-import { ScrollSyncPane } from "react-scroll-sync";
 import styled from "styled-components";
-import { toScientificNotation } from "../../../utils/utils";
 import Coverage from "./Coverage";
 
 const PathoscopeChartRibbon = styled.div`
     white-space: nowrap;
-    overflow-x: auto;
 `;
 
 const PathoscopeIsolateHeader = styled.div`
@@ -51,7 +49,7 @@ const StyledPathoscopeIsolate = styled.div`
     position: relative;
 `;
 
-export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, sequences }) {
+export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, sequences, graphWidth, graphRatios }) {
     const hitComponents = map(sequences, (hit, i) => (
         <Coverage
             key={i}
@@ -61,6 +59,8 @@ export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, 
             accession={hit.accession}
             definition={hit.definition}
             yMax={maxDepth}
+            graphWidth={graphWidth}
+            graphRatio={graphRatios[i]}
         />
     ));
 
@@ -72,9 +72,9 @@ export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, 
                 <PathoscopeIsolateDepth>{depth.toFixed(0)}</PathoscopeIsolateDepth>
                 <PathoscopeIsolateCoverage>{toScientificNotation(parseFloat(coverage))}</PathoscopeIsolateCoverage>
             </PathoscopeIsolateHeader>
-            <ScrollSyncPane>
-                <PathoscopeChartRibbon>{hitComponents}</PathoscopeChartRibbon>
-            </ScrollSyncPane>
+            <PathoscopeChartRibbon>
+                <ScrollSync>{hitComponents}</ScrollSync>
+            </PathoscopeChartRibbon>
         </StyledPathoscopeIsolate>
     );
 }

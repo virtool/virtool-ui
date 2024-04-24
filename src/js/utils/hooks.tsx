@@ -1,5 +1,5 @@
 import { forEach } from "lodash-es/lodash";
-import React, { useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 export type HistoryType = RouteComponentProps["history"];
@@ -134,4 +134,56 @@ export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [s
     firstRender.current = false;
 
     return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history)];
+}
+
+type ScrollSyncProps = {
+    children: React.ReactNode;
+};
+
+const ScrollContext = createContext(null);
+
+/**
+ * Manages the context and synchronises scroll between subscribed components
+ *
+ * @param children - The component to synchronise scroll within
+ */
+export function ScrollSyncContext({ children }: ScrollSyncProps) {
+    const [scrollPercentage, setScrollPercentage] = useState(0);
+
+    function handleScroll(percentage) {
+        setScrollPercentage(percentage);
+    }
+
+    return <ScrollContext.Provider value={[scrollPercentage, handleScroll]}>{children}</ScrollContext.Provider>;
+}
+
+/**
+ * Subscribes components to the context and handles scroll functionality
+ *
+ * @param children - The components to subscribe to the context
+ */
+export function ScrollSync({ children }: ScrollSyncProps) {
+    const [scrollPercentage, handleScroll] = useContext(ScrollContext);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        function handleScrollEvent(e) {
+            const { scrollLeft } = e.target;
+            handleScroll(scrollLeft);
+        }
+
+        ref.current.addEventListener("scroll", handleScrollEvent);
+    }, []);
+
+    useEffect(() => {
+        if (scrollPercentage !== undefined) {
+            ref.current.scrollLeft = scrollPercentage;
+        }
+    }, [scrollPercentage]);
+
+    return (
+        <div ref={ref} style={{ overflowX: "auto" }}>
+            {children}
+        </div>
+    );
 }
