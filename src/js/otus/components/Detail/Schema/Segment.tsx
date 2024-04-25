@@ -1,4 +1,4 @@
-import { BoxGroupSection, IconLink, Label } from "@/base";
+import { BoxGroupSection, Icon, IconLink, Label } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { OTUSegment } from "@otus/types";
 import React from "react";
@@ -7,9 +7,10 @@ import styled from "styled-components";
 const StyledSegment = styled(BoxGroupSection)`
     display: grid;
     align-items: center;
-    grid-template-columns: 45fr 1fr 10fr;
-    padding: 16px;
+    grid-template-columns: 45fr 1fr 10fr 10fr;
+    padding: 0 16px;
     line-height: 1;
+    height: 51px;
 `;
 
 const SegmentIcon = styled(IconLink)`
@@ -18,16 +19,45 @@ const SegmentIcon = styled(IconLink)`
     font-size: ${getFontSize("lg")};
 `;
 
+const DragIcons = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    font-weight: ${getFontWeight("thick")};
+    font-size: ${getFontSize("xl")};
+`;
+
+type CaretIconProps = {
+    show: boolean;
+};
+
+const CaretIcon = styled(Icon)<CaretIconProps>`
+    ${props => (props.show ? "display: flex" : "visibility: hidden")};
+    line-height: 0.5;
+
+    &:hover {
+        color: ${props => props.theme.color.greyDark};
+    }
+`;
+
 type SegmentProps = {
     /** Whether the user has permission to modify the otu */
     canModify: boolean;
+    /** Whether the segment is the first in the list */
+    first: boolean;
+    /** Whether the segment is the last in the list */
+    last: boolean;
+    /** A callback function to move the segment up */
+    onMoveUp: () => void;
+    /** A callback function to move the segment down */
+    onMoveDown: () => void;
     segment: OTUSegment;
 };
 
 /**
  * A condensed segment item for use in a list of segments
  */
-export default function Segment({ canModify, segment }: SegmentProps) {
+export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, segment }: SegmentProps) {
     return (
         <StyledSegment>
             <strong>{segment.name}</strong>
@@ -49,6 +79,11 @@ export default function Segment({ canModify, segment }: SegmentProps) {
                     />
                 </div>
             )}
+
+            <DragIcons>
+                <CaretIcon name="caret-up" aria-label="move segment up" onClick={onMoveUp} show={!first} />
+                <CaretIcon name="caret-down" aria-label="move segment down" onClick={onMoveDown} show={!last} />
+            </DragIcons>
         </StyledSegment>
     );
 }
