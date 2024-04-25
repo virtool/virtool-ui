@@ -16,7 +16,7 @@ Common breaking changes:
 
 Choose one:
  - [ ] The changes do not break compatibility
- - [ ] The changes break compatibility and the API version has been updated if required
+ - [ ] The changes potentially break compatibility
 
 
 ## Pre-Review Checklist

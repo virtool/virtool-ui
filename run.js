@@ -5,13 +5,12 @@ const { logging } = require("./server/logging");
 const path = require("path");
 const { formatTemplateOptions } = require("./server/templateOptions");
 const verifyAPIVersion = require("./server/version");
-const config = require("./server/config");
 const parseOptions = require("./server/options");
 
 async function main() {
     const options = parseOptions(process.argv);
 
-    await verifyAPIVersion(config.minAPIVersion, options.apiUrl);
+    await verifyAPIVersion(options.apiUrl);
 
     const app = express();
 

@@ -21,6 +21,7 @@ RUN npx vite build
 FROM library/node:16-buster as dist
 WORKDIR /ui
 COPY --from=build /build/dist /ui/dist
+COPY --from=npm /build/package.json /ui/
 RUN npm install commander express superagent semver
 COPY run.js /ui/
 COPY ./server /ui/server
