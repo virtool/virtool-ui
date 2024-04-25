@@ -111,5 +111,8 @@
         "printWidth": 120,
         "tabWidth": 4,
         "trailingComma": "all"
+    },
+    "virtool": {
+        "minApiVersion": "23.4.0"
     }
 }
