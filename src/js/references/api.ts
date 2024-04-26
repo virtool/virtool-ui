@@ -1,4 +1,4 @@
-import { Request } from "../app/request";
+import { Request } from "@app/request";
 import {
     Reference,
     ReferenceDataType,
@@ -8,33 +8,12 @@ import {
     ReferenceUser,
 } from "./types";
 
-export function find({ term, page }) {
-    return Request.get("/refs").query({ find: term, page });
-}
-
 export function get({ refId }) {
     return Request.get(`/refs/${refId}`);
 }
 
-export function create({ name, description, dataType, organism }) {
-    return Request.post("/refs").send({
-        name,
-        description,
-        data_type: dataType,
-        organism,
-    });
-}
-
 export function edit({ refId, update }) {
     return Request.patch(`/refs/${refId}`).send(update);
-}
-
-export function importReference({ name, description, fileId }) {
-    return Request.post("/refs").send({
-        name,
-        description,
-        import_from: fileId,
-    });
 }
 
 /**
@@ -57,34 +36,6 @@ export function cloneReference({ name, description, refId }): Promise<ReferenceM
 
 export function remoteReference({ remote_from }) {
     return Request.post("/refs").send({ remote_from });
-}
-
-export function remove({ refId }) {
-    return Request.delete(`/refs/${refId}`);
-}
-
-export function addUser({ refId, user }) {
-    return Request.post(`/refs/${refId}/users`).send({ user_id: user });
-}
-
-export function editUser({ refId, userId, update }) {
-    return Request.patch(`/refs/${refId}/users/${userId}`).send(update);
-}
-
-export function addGroup({ refId, group }) {
-    return Request.post(`/refs/${refId}/groups`).send({ group_id: group });
-}
-
-export function editGroup({ refId, groupId, update }) {
-    return Request.patch(`/refs/${refId}/groups/${groupId}`).send(update);
-}
-
-export function checkUpdates({ refId }) {
-    return Request.get(`/refs/${refId}/release`);
-}
-
-export function updateRemote({ refId }) {
-    return Request.post(`/refs/${refId}/updates`).send({});
 }
 
 /**
@@ -170,6 +121,34 @@ export function addReferenceGroup(refId: string, groupId: string | number): Prom
     return Request.post(`/refs/${refId}/groups`)
         .send({ group_id: groupId })
         .then(response => response.body);
+}
+
+/**
+ * Updates the modifying rights for a reference user
+ *
+ * @param refId - The id of the reference which the user is associated with
+ * @param userId - The id of the user to be updated
+ * @param update - The update to be applied
+ * @returns A promise resolving to updating the reference user
+ */
+export function editReferenceUser(refId: string, userId: string | number, update: { [key: string]: boolean }) {
+    return Request.patch(`/refs/${refId}/users/${userId}`)
+        .send(update)
+        .then(res => res.body);
+}
+
+/**
+ * Updates the modifying rights for a reference group
+ *
+ * @param refId - The id of the reference which the group is associated with
+ * @param groupId - The id of the group to be updated
+ * @param update - The update to be applied
+ * @returns A promise resolving to updating the reference group
+ */
+export function editReferenceGroup(refId: string, groupId: string | number, update: { [key: string]: boolean }) {
+    return Request.patch(`/refs/${refId}/groups/${groupId}`)
+        .send(update)
+        .then(res => res.body);
 }
 
 /**
