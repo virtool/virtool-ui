@@ -214,9 +214,9 @@ export function mockApiRemoveIsolate(otuId: string, isolateId: string) {
  * @param accession - The accession ID for the sequence
  * @param definition - The sequence definition
  * @param host - The host for the sequence
- * @param sequence - The sequence
- * @param segment
- * @param target
+ * @param sequence - The sequence characters assigned
+ * @param segment - The segment assigned
+ * @param target - The target assigned
  * @returns The nock scope for the mocked API call
  */
 export function mockApiAddSequence(
