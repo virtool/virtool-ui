@@ -57,8 +57,7 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema 
         mutation.mutate(
             { otuId: otuId, isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
-                onSuccess: data => {
-                    console.log(data);
+                onSuccess: () => {
                     history.push({ state: { addSequence: false } });
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
