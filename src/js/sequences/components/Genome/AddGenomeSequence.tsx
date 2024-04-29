@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "@base";
 import { OTUQueryKeys, useAddSequence } from "@otus/queries";
-import { OTUSegment } from "@otus/types";
+import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
@@ -37,8 +37,8 @@ type formValues = {
 type AddGenomeSequenceProps = {
     isolateId: string;
     otuId: string;
-    sequences: any;
-    schema: any;
+    sequences: OTUSequence[];
+    schema: OTUSegment[];
 };
 
 /**
@@ -55,7 +55,7 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema 
 
     function handleSubmit({ accession, definition, host, sequence, segment }) {
         mutation.mutate(
-            { otuId: otuId, isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
+            { otuId, isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
                 onSuccess: () => {
                     history.push({ state: { addSequence: false } });
