@@ -61,9 +61,6 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema 
                     history.push({ state: { addSequence: false } });
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
-                onError: error => {
-                    console.log(error);
-                },
             },
         );
     }
