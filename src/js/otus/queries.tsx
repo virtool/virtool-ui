@@ -5,6 +5,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
 import {
     addIsolate,
+    addSequence,
     createOTU,
     editIsolate,
     editOTU,
@@ -15,7 +16,7 @@ import {
     removeSequence,
     setIsolateAsDefault,
 } from "./api";
-import { OTU, OTUIsolate, OTUSearchResult, OTUSegment } from "./types";
+import { OTU, OTUIsolate, OTUSearchResult, OTUSegment, OTUSequence } from "./types";
 
 /**
  * Factory for generating react-query keys for otu related queries.
@@ -152,6 +153,30 @@ export function useUpdateIsolate() {
 export function useRemoveIsolate() {
     return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
         removeIsolate(otuId, isolateId),
+    );
+}
+
+/**
+ * Initializes a mutator for adding a sequence
+ *
+ * @returns A mutator for adding a sequence
+ */
+export function useAddSequence() {
+    return useMutation<
+        OTUSequence,
+        unknown,
+        {
+            otuId: string;
+            isolateId: string;
+            accession: string;
+            definition: string;
+            host: string;
+            sequence: string;
+            segment: string;
+            target?: string;
+        }
+    >(({ otuId, isolateId, accession, definition, host, sequence, segment, target }) =>
+        addSequence(otuId, isolateId, accession, definition, host, sequence, segment, target),
     );
 }
 

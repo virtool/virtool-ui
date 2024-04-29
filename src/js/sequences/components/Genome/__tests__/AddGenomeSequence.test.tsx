@@ -1,10 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../../../tests/setupTests";
-import { AddGenomeSequence, castValues } from "../AddGenomeSequence";
+import { MemoryRouter } from "react-router-dom";
+import { beforeEach, describe, expect, it } from "vitest";
+import { createFakeOTU } from "../../../../../tests/fake/otus";
+import { renderWithProviders, renderWithRouter } from "../../../../../tests/setupTests";
+import AddGenomeSequence, { castValues } from "../AddGenomeSequence";
 
 function createAppStore(state) {
     return () =>
@@ -17,47 +20,33 @@ function createAppStore(state) {
 describe("<AddGenomeSequence>", () => {
     let props;
     let state;
+    let history;
 
     beforeEach(() => {
+        const otu = createFakeOTU();
+
         props = {
-            isolateId: "test_isolate_id",
-            otuId: "test_otu_id",
-            show: true,
+            isolateId: otu.isolates[0].id,
+            otuId: otu.id,
             segments: [],
-            onHide: vi.fn(),
-            onSave: vi.fn(),
         };
         state = {
             otus: {
-                activeIsolateId: "test_isolate_id",
-                detail: {
-                    schema: [{ name: "test_segment", molecule: "", required: true }],
-                    isolates: [
-                        {
-                            default: true,
-                            id: "test_isolate_id",
-                            name: "test_isolate_name",
-                            sequences: [
-                                {
-                                    accession: "NC_010317",
-                                    definition: "Abaca bunchy top virus DNA-M, complete genome",
-                                    host: "Musa sp.",
-                                    sequence:
-                                        "GGGGCTGGGGCTTATTATTACCCCCAGCCCCGGAACGGGACATCACGTGTATTCTCTATAGTGGTGGGTCATATGTCCCGAGTTAGTGCGCCACGTAA",
-                                    segment: "",
-                                    id: "0r0vmzt4",
-                                    reference: { id: "85r8ucx8" },
-                                },
-                            ],
-                        },
-                    ],
-                },
+                activeIsolateId: otu.isolates[0].id,
+                detail: otu,
             },
         };
+        history = createBrowserHistory();
     });
 
     it("should update fields on typing", async () => {
-        renderWithProviders(<AddGenomeSequence {...props} />, createAppStore(state));
+        renderWithRouter(
+            <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
+                <AddGenomeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+            history,
+        );
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();

@@ -3,6 +3,7 @@ import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { pushState } from "../../../app/actions";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
@@ -69,23 +70,19 @@ type AddBarcodeSequenceProps = {
 /**
  * Displays dialog to add a barcode sequence
  */
-export function AddBarcodeSequence({
-    defaultTarget,
-    isolateId,
-    otuId,
-    show,
-    onHide,
-    onSave,
-    targets,
-}: AddBarcodeSequenceProps) {
+export function AddBarcodeSequence({ defaultTarget, isolateId, otuId, onSave, targets }: AddBarcodeSequenceProps) {
+    const history = useHistory();
+    const location = useLocation<{ addSequence: boolean }>();
+
     function handleSubmit({ accession, definition, host, sequence, targetName }) {
+        console.log(otuId, isolateId, accession, definition, host, sequence, targetName);
         onSave(otuId, isolateId, accession, definition, host, sequence.toUpperCase(), targetName);
     }
 
     const initialValues = getInitialValues(defaultTarget);
 
     return (
-        <Dialog open={show} onOpenChange={onHide}>
+        <Dialog open={location.state?.addSequence} onOpenChange={() => history.push({ state: { addSequence: false } })}>
             <DialogPortal>
                 <DialogOverlay />
                 <CenteredDialogContent>
