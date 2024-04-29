@@ -1,7 +1,7 @@
 import { get } from "lodash-es/lodash";
 import { wsUpdateAnalysis } from "../../analyses/actions";
 import { wsInsertHistory, wsInsertIndex, wsUpdateIndex } from "../../indexes/actions";
-import { wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
+import { wsUpdateOTU } from "../../otus/actions";
 import { wsInsertReference, wsUpdateReference } from "../../references/actions";
 import { wsInsertSample, wsRemoveSample, wsUpdateSample } from "../../samples/actions";
 
@@ -31,7 +31,6 @@ const updaters = {
 };
 
 const removers = {
-    otus: actionCreatorWrapper(wsRemoveOTU),
     samples: actionCreatorWrapper(wsRemoveSample),
 };
 
