@@ -1,30 +1,17 @@
-import { createReducer } from "@reduxjs/toolkit";
-import { find, hasIn, map } from "lodash-es";
 import {
-    ADD_SEQUENCE,
-    EDIT_OTU,
     EDIT_SEQUENCE,
     GET_OTU,
     GET_OTU_HISTORY,
-    HIDE_OTU_MODAL,
     REFRESH_OTUS,
-    REMOVE_ISOLATE,
-    REMOVE_OTU,
-    REMOVE_SEQUENCE,
     REVERT,
-    SELECT_ISOLATE,
-    SET_ISOLATE_AS_DEFAULT,
-    SHOW_EDIT_OTU,
-    SHOW_REMOVE_ISOLATE,
-    SHOW_REMOVE_OTU,
-    SHOW_REMOVE_SEQUENCE,
     UPLOAD_IMPORT,
-    WS_REMOVE_OTU,
     WS_UPDATE_OTU,
     WS_UPDATE_STATUS,
-} from "../app/actionTypes";
-import { remove, update, updateDocuments } from "../utils/reducers";
-import { formatIsolateName } from "../utils/utils";
+} from "@app/actionTypes";
+import { createReducer } from "@reduxjs/toolkit";
+import { update, updateDocuments } from "@utils/reducers";
+import { formatIsolateName } from "@utils/utils";
+import { find, hasIn, map } from "lodash-es";
 
 export const initialState = {
     term: "",
@@ -95,16 +82,10 @@ export const OTUsReducer = createReducer(initialState, builder => {
             }
             return state;
         })
-        .addCase(WS_REMOVE_OTU, (state, action) => {
-            return remove(state, action.payload);
-        })
         .addCase(REFRESH_OTUS.SUCCEEDED, (state, action) => {
             return updateDocuments(state, action.payload, "name");
         })
         .addCase(GET_OTU.REQUESTED, state => {
-            return hideOTUModal({ ...state, detail: null, activeIsolateId: null });
-        })
-        .addCase(REMOVE_OTU.SUCCEEDED, state => {
             return hideOTUModal({ ...state, detail: null, activeIsolateId: null });
         })
         .addCase(GET_OTU_HISTORY.REQUESTED, (state, action) => {
@@ -119,38 +100,11 @@ export const OTUsReducer = createReducer(initialState, builder => {
         .addCase(UPLOAD_IMPORT.SUCCEEDED, (state, action) => {
             state.importData = { ...action.payload, inProgress: false };
         })
-        .addCase(SELECT_ISOLATE, (state, action) => {
-            state.activeIsolate = find(state.detail.isolates, { id: action.payload.isolateId });
-            state.activeIsolateId = action.payload.isolateId;
-        })
-        .addCase(SHOW_EDIT_OTU, state => {
-            state.edit = true;
-        })
-        .addCase(SHOW_REMOVE_OTU, state => {
-            state.remove = true;
-        })
-        .addCase(SHOW_REMOVE_ISOLATE, state => {
-            state.removeIsolate = true;
-        })
-        .addCase(SHOW_REMOVE_SEQUENCE, (state, action) => {
-            state.removeSequence = action.payload.sequenceId;
-        })
-        .addCase(HIDE_OTU_MODAL, state => {
-            state.edit = false;
-            state.remove = false;
-            state.removeIsolate = false;
-            state.removeSequence = false;
-        })
         .addMatcher(
             action => {
                 const matches = {
                     [GET_OTU.SUCCEEDED]: true,
-                    [EDIT_OTU.SUCCEEDED]: true,
-                    [ADD_SEQUENCE.SUCCEEDED]: true,
                     [EDIT_SEQUENCE.SUCCEEDED]: true,
-                    [REMOVE_SEQUENCE.SUCCEEDED]: true,
-                    [SET_ISOLATE_AS_DEFAULT.SUCCEEDED]: true,
-                    [REMOVE_ISOLATE.SUCCEEDED]: true,
                 };
                 return hasIn(matches, action.type);
             },
