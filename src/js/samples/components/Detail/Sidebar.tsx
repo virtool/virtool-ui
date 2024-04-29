@@ -46,7 +46,7 @@ export default function Sidebar({ sampleId, sampleLabels, defaultSubtractions }:
             <DefaultSubtractions
                 onUpdate={subtractions => {
                     mutation.mutate(
-                        { update: { subtractions: subtractions } },
+                        { update: { subtractions } },
                         {
                             onSuccess: () => {
                                 queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
