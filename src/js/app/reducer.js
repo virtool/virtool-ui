@@ -11,7 +11,6 @@ import { formsReducer } from "../forms/reducer";
 import indexesReducer from "../indexes/reducer";
 import OTUsReducer from "../otus/reducer";
 import referenceReducer from "../references/reducer";
-import samplesReducer from "../samples/reducer";
 import { CREATE_FIRST_USER, GET_INITIAL_STATE, LOGIN, RESET_PASSWORD } from "./actionTypes";
 import rootSaga from "./sagas";
 
@@ -76,7 +75,6 @@ export function createAppStore(history) {
             otus: OTUsReducer,
             references: referenceReducer,
             router: connectRouter(history),
-            samples: samplesReducer,
             settings: settingsReducer,
         },
         middleware: [sagaMiddleware, routerMiddleware(history)],

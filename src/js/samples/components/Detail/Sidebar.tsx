@@ -1,6 +1,6 @@
 import { LabelNested } from "@labels/types";
 import { samplesQueryKeys, useUpdateSample } from "@samples/queries";
-import { SubtractionShortlist } from "@subtraction/types";
+import { SubtractionNested } from "@subtraction/types";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import styled from "styled-components";
@@ -18,7 +18,7 @@ const StyledSidebar = styled.div`
 type SidebarProps = {
     sampleId: string;
     sampleLabels: Array<LabelNested>;
-    defaultSubtractions: Array<SubtractionShortlist>;
+    defaultSubtractions: Array<SubtractionNested>;
 };
 
 /**
