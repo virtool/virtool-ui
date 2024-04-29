@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { UpdateOTUProps } from "@otus/queries";
-import { assign, times } from "lodash";
+import { assign, merge, times } from "lodash";
 import nock from "nock";
 import { HistoryMethod, HistoryNested, OTU, OTUIsolate, OTUMinimal, OTURemote, OTUSegment } from "../../js/otus/types";
 import { createFakeReferenceNested } from "./references";
@@ -19,11 +19,20 @@ export function createFakeHistoryNested(): HistoryNested {
     };
 }
 
+type CreateFakeOTUSequenceProps = {
+    accession?: string;
+    definition?: string;
+    host?: string;
+    segment?: string;
+    sequence?: string;
+    target?: string;
+};
+
 /**
  * Create a fake OTU sequence
  */
-export function createFakeOTUSequence() {
-    return {
+export function createFakeOTUSequence(overrides?: CreateFakeOTUSequenceProps) {
+    const sequence = {
         accession: faker.random.word(),
         definition: faker.random.word(),
         host: faker.random.word(),
@@ -33,6 +42,8 @@ export function createFakeOTUSequence() {
         sequence: faker.random.word(),
         target: null,
     };
+
+    return merge(sequence, overrides);
 }
 
 /**
@@ -55,7 +66,7 @@ export function createFakeOTUSegment(): OTUSegment {
     return {
         molecule: null,
         name: faker.random.word(),
-        required: faker.datatype.boolean(),
+        required: false,
     };
 }
 
@@ -193,6 +204,43 @@ export function mockApiCreateIsolate(otuId: string, sourceName: string, sourceTy
  */
 export function mockApiRemoveIsolate(otuId: string, isolateId: string) {
     return nock("http://localhost").delete(`/api/otus/${otuId}/isolates/${isolateId}`).reply(200);
+}
+
+/**
+ * Creates a mocked API call for adding a sequence
+ *
+ * @param otuId - The id of the OTU
+ * @param isolateId - The id of the isolate
+ * @param accession - The accession ID for the sequence
+ * @param definition - The sequence definition
+ * @param host - The host for the sequence
+ * @param sequence - The sequence
+ * @param segment
+ * @param target
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiAddSequence(
+    otuId: string,
+    isolateId: string,
+    accession: string,
+    definition: string,
+    host: string,
+    sequence: string,
+    segment?: string,
+    target?: string,
+) {
+    const OTUSequence = createFakeOTUSequence({ accession, definition, host, sequence, segment });
+
+    return nock("http://localhost")
+        .post(`/api/otus/${otuId}/isolates/${isolateId}/sequences`, {
+            accession,
+            definition,
+            host,
+            sequence,
+            segment,
+            target,
+        })
+        .reply(201, OTUSequence);
 }
 
 /**

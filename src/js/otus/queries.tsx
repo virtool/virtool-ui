@@ -172,7 +172,7 @@ export function useAddSequence() {
             definition: string;
             host: string;
             sequence: string;
-            segment: string;
+            segment?: string;
             target?: string;
         }
     >(({ otuId, isolateId, accession, definition, host, sequence, segment, target }) =>

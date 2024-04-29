@@ -37,8 +37,6 @@ type formValues = {
 type AddGenomeSequenceProps = {
     isolateId: string;
     otuId: string;
-    /** A list of unreferenced segments */
-    segments: OTUSegment[];
     sequences: any;
     schema: any;
 };
@@ -59,9 +57,13 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema 
         mutation.mutate(
             { otuId: otuId, isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
-                onSuccess: () => {
+                onSuccess: data => {
+                    console.log(data);
                     history.push({ state: { addSequence: false } });
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+                },
+                onError: error => {
+                    console.log(error);
                 },
             },
         );
@@ -88,6 +90,8 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema 
                                 <Field
                                     as={SegmentField}
                                     name="segment"
+                                    segments={segments}
+                                    hasSchema={schema.length > 0}
                                     onChange={(segment: string) => setFieldValue("segment", segment)}
                                 />
                                 <SequenceForm errors={errors} touched={touched} />

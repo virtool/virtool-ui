@@ -8,7 +8,7 @@ import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import { getError } from "../../../errors/selectors";
 import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
-import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
+import { getActiveIsolateId, getHasSchema, getOTUDetailId } from "../../../otus/selectors";
 import { OTUSegment } from "../../../otus/types";
 import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedSegments } from "../../selectors";
@@ -42,6 +42,7 @@ type formValues = {
 };
 
 type EditGenomeSequenceProps = {
+    hasSchema: boolean;
     initialAccession: string;
     initialDefinition: string;
     initialHost: string;
@@ -73,6 +74,7 @@ type EditGenomeSequenceProps = {
  * Displays dialog to edit a genome sequence
  */
 export function EditGenomeSequence({
+    hasSchema,
     initialAccession,
     initialDefinition,
     initialHost,
@@ -122,6 +124,8 @@ export function EditGenomeSequence({
                                 <Field
                                     as={SegmentField}
                                     name="segment"
+                                    segments={segments}
+                                    hasSchema={hasSchema}
                                     onChange={segment => {
                                         setFieldValue("segment", segment);
                                     }}
@@ -142,6 +146,7 @@ export function mapStateToProps(state) {
 
     return {
         id,
+        hasSchema: getHasSchema(state),
         initialAccession: accession,
         initialDefinition: definition,
         initialHost: host,
