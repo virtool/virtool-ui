@@ -32,7 +32,7 @@ export function Indexes({ refId }: { refId: string }) {
 
     return (
         <>
-            <RebuildAlert />
+            <RebuildAlert refId={refId} />
             <RebuildIndex />
             {noIndexes}
             <ScrollList
