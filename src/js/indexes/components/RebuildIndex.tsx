@@ -1,0 +1,60 @@
+import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, LoadingPlaceholder } from "@base";
+import { indexQueryKeys, useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import RebuildHistory from "./History";
+import { RebuildIndexError } from "./RebuildError";
+
+type RebuildIndexProps = {
+    refId: string;
+};
+
+/**
+ * Displays a dialog to rebuild an index
+ */
+export default function RebuildIndex({ refId }: RebuildIndexProps) {
+    const history = useHistory();
+    const location = useLocation<{ rebuild: boolean }>();
+    const { data, isLoading } = useFetchUnbuiltChanges(refId);
+    const mutation = useCreateIndex();
+    const queryClient = useQueryClient();
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        mutation.mutate(
+            { refId },
+            {
+                onSuccess: () => {
+                    history.push({ state: { rebuild: false } });
+                    queryClient.invalidateQueries(indexQueryKeys.infiniteLists());
+                },
+            },
+        );
+    }
+
+    return (
+        <Dialog open={location.state?.rebuild} onOpenChange={() => history.push({ state: { rebuild: false } })}>
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent>
+                    <DialogTitle>Rebuild Index</DialogTitle>
+                    <form onSubmit={handleSubmit}>
+                        <RebuildIndexError error={mutation.isError && mutation.error.response.body.message} />
+                        <RebuildHistory unbuilt={data} />
+                        <DialogFooter>
+                            <Button type="submit" color="blue" icon="wrench">
+                                Start
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
+    );
+}
