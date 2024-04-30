@@ -6,7 +6,6 @@ import { useInfiniteFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
     refId: string;
-    hasRights: boolean;
 };
 
 /**
