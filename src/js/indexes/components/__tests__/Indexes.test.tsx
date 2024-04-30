@@ -7,11 +7,7 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
-import {
-    createFakeReference,
-    createFakeReferenceNested,
-    mockApiGetReferenceDetail,
-} from "../../../../tests/fake/references";
+import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import Indexes from "../Indexes";
 
@@ -22,12 +18,12 @@ describe("<Indexes />", () => {
 
     beforeEach(() => {
         reference = createFakeReference();
-        history = createBrowserHistory();
         mockApiGetReferenceDetail(reference);
-        const account = createFakeAccount({
-            administrator_role: AdministratorRoles.FULL,
-        });
-        mockAPIGetAccount(account);
+        mockAPIGetAccount(
+            createFakeAccount({
+                administrator_role: AdministratorRoles.FULL,
+            }),
+        );
         props = {
             match: { params: { refId: reference.id } },
         };
@@ -37,13 +33,7 @@ describe("<Indexes />", () => {
     afterEach(() => nock.cleanAll());
 
     it("should render", async () => {
-        const index = createFakeIndexMinimal({
-            reference: createFakeReferenceNested({
-                id: reference.id,
-                name: reference.name,
-                data_type: reference.data_type,
-            }),
-        });
+        const index = createFakeIndexMinimal({ reference });
         const findIndexesScope = mockApiFindIndexes(reference.id, 1, {
             documents: [index],
             modified_otu_count: 1,
@@ -66,7 +56,7 @@ describe("<Indexes />", () => {
     });
 
     it("should render build alert", async () => {
-        const index = createFakeIndexMinimal({ reference: reference });
+        const index = createFakeIndexMinimal({ reference });
         mockApiGetUnbuiltChanges(reference.id);
         mockApiFindIndexes(reference.id, 1, {
             documents: [index],
