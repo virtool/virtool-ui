@@ -1,36 +1,18 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
-import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import { forEach } from "lodash-es";
-import { combineReducers } from "redux";
+import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeUsers, mockApiFindUsers } from "../../../../tests/fake/user";
-import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import { ManageUsers } from "../ManageUsers";
-
-function createReducer(state, history) {
-    return combineReducers({
-        router: connectRouter(history),
-        users: createGenericReducer(state.users),
-        settings: createGenericReducer(state.settings),
-    });
-}
 
 describe("<ManageUsers />", () => {
     let history;
-    let state;
 
     beforeEach(() => {
-        state = {
-            users: {},
-            settings: {
-                data: {
-                    minimimum_password_length: 8,
-                },
-            },
-        };
         history = createBrowserHistory();
     });
 
@@ -41,7 +23,7 @@ describe("<ManageUsers />", () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockAPIGetAccount(account);
 
-        renderWithRouter(<ManageUsers />, state, history, createReducer);
+        renderWithRouter(<ManageUsers />, {}, history);
 
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "user-plus" })).toBeInTheDocument();
@@ -55,7 +37,7 @@ describe("<ManageUsers />", () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockAPIGetAccount(account);
 
-        renderWithRouter(<ManageUsers />, state, history, createReducer);
+        renderWithRouter(<ManageUsers />, {}, history);
 
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "user-plus" })).toBeInTheDocument();
@@ -69,7 +51,7 @@ describe("<ManageUsers />", () => {
         const account = createFakeAccount({ administrator_role: null });
         mockAPIGetAccount(account);
 
-        renderWithRouter(<ManageUsers />, state, history, createReducer);
+        renderWithRouter(<ManageUsers />, {}, history);
 
         expect(await screen.findByText("You do not have permission to manage users.")).toBeInTheDocument();
         expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
