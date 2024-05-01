@@ -15,12 +15,12 @@ import React, { useEffect, useState } from "react";
 function createTimeString(time) {
     const now = Date.now();
     const timeString = formatDistanceStrict(new Date(time), now, { addSuffix: true });
-    return includes(timeString, "in a") || includes(timeString, "a few") ? "just now" : timeString;
+    return includes(timeString, "in a") || includes(timeString, "seconds") ? "just now" : timeString;
 }
 
 function useRelativeTime(time) {
     const [timeString, setTimeString] = useState(createTimeString(time));
-
+    console.log(timeString);
     useEffect(() => {
         function updateTimeString() {
             const newTimeString = createTimeString(time);
