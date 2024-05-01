@@ -55,9 +55,9 @@ type AddReferenceUserProps = {
 export default function AddReferenceUser({ users, onHide, refId, show }: AddReferenceUserProps) {
     const mutation = useAddReferenceMember(refId, "user");
     const [term, setTerm] = useState("");
-    const { data, isLoading, isFetchingNextPage, fetchNextPage } = useInfiniteFindUsers(25, term);
+    const { data, isLoading, isError, isFetchingNextPage, fetchNextPage } = useInfiniteFindUsers(25, term);
 
-    if (isLoading) {
+    if (isLoading || isError) {
         return null;
     }
 
