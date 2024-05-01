@@ -65,10 +65,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
         );
 
         forEach(references, refId => {
-            createAnalysis.mutate(
-                { refId, subtractionIds: subtractions, sampleId, workflow, mlModel },
-                { onSuccess: () => history.push({ state: { createAnalysis: false } }) },
-            );
+            createAnalysis.mutate({ refId, subtractionIds: subtractions, sampleId, workflow, mlModel });
         });
     }
 
