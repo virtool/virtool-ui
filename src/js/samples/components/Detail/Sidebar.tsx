@@ -1,7 +1,6 @@
 import { LabelNested } from "@labels/types";
-import { samplesQueryKeys, useUpdateSample } from "@samples/queries";
+import { useUpdateSample } from "@samples/queries";
 import { SubtractionNested } from "@subtraction/types";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import styled from "styled-components";
 import SampleLabels from "./../Sidebar/Labels";
@@ -26,33 +25,18 @@ type SidebarProps = {
  */
 export default function Sidebar({ sampleId, sampleLabels, defaultSubtractions }: SidebarProps) {
     const mutation = useUpdateSample(sampleId);
-    const queryClient = useQueryClient();
 
     return (
         <StyledSidebar>
             <SampleLabels
                 onUpdate={labels => {
-                    mutation.mutate(
-                        { update: { labels } },
-                        {
-                            onSuccess: () => {
-                                queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
-                            },
-                        },
-                    );
+                    mutation.mutate({ update: { labels } });
                 }}
                 sampleLabels={sampleLabels.map(label => label.id)}
             />
             <DefaultSubtractions
                 onUpdate={subtractions => {
-                    mutation.mutate(
-                        { update: { subtractions } },
-                        {
-                            onSuccess: () => {
-                                queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
-                            },
-                        },
-                    );
+                    mutation.mutate({ update: { subtractions } });
                 }}
                 defaultSubtractions={defaultSubtractions.map(subtraction => subtraction.id)}
             />
