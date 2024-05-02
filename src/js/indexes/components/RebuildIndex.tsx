@@ -1,7 +1,6 @@
 import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, LoadingPlaceholder } from "@base";
-import { indexQueryKeys, useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
+import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import RebuildHistory from "./History";
@@ -19,7 +18,6 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
     const location = useLocation<{ rebuild: boolean }>();
     const { data, isLoading } = useFetchUnbuiltChanges(refId);
     const mutation = useCreateIndex();
-    const queryClient = useQueryClient();
 
     if (isLoading) {
         return <LoadingPlaceholder />;
@@ -32,7 +30,6 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
             {
                 onSuccess: () => {
                     history.push({ state: { rebuild: false } });
-                    queryClient.invalidateQueries(indexQueryKeys.infiniteLists());
                 },
             },
         );

@@ -1,5 +1,5 @@
 import { ErrorResponse } from "@/types/types";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createIndex, findIndexes, getUnbuiltChanges, listIndexes } from "./api";
 import { Index, IndexMinimal, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
 
@@ -63,5 +63,10 @@ export function useFetchUnbuiltChanges(refId: string) {
  * @returns A mutator for creating an index
  */
 export function useCreateIndex() {
-    return useMutation<Index, ErrorResponse, { refId: string }>(({ refId }) => createIndex(refId));
+    const queryClient = useQueryClient();
+    return useMutation<Index, ErrorResponse, { refId: string }>(({ refId }) => createIndex(refId), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(indexQueryKeys.infiniteLists());
+        },
+    });
 }
