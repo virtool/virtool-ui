@@ -4,11 +4,10 @@
  * @module sagaUtils
  */
 import { InteractionRequiredAuthError } from "@azure/msal-browser";
-import { replace } from "connected-react-router";
-import { get, includes } from "lodash-es";
+import { get } from "lodash-es";
 import { put } from "redux-saga/effects";
 import { getProtectedResources } from "../app/authConfig";
-import { createFindURL, resetClient } from "./utils";
+import { resetClient } from "./utils";
 
 /**
  * Gets access token for b2c authentication
@@ -86,14 +85,6 @@ export function* apiCall(apiMethod, action, actionType, context = {}) {
 
         window.captureException(error);
         throw error;
-    }
-}
-
-export function* pushFindTerm(term, contains) {
-    const url = createFindURL(term);
-
-    if (!contains || includes(url.pathname, contains)) {
-        yield put(replace(url.pathname + url.search, window.history.state));
     }
 }
 
