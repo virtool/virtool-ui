@@ -55,9 +55,9 @@ type AddReferenceGroupProps = {
 export default function AddReferenceGroup({ groups, onHide, refId, show }: AddReferenceGroupProps) {
     const mutation = useAddReferenceMember(refId, "group");
     const [term, setTerm] = useState("");
-    const { data, isLoading, isError, isFetchingNextPage, fetchNextPage } = useInfiniteFindGroups(25, term);
+    const { data, isLoading, isFetchingNextPage, fetchNextPage } = useInfiniteFindGroups(25, term);
 
-    if (isLoading || isError) {
+    if (isLoading) {
         return null;
     }
 
