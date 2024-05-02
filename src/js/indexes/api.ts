@@ -1,5 +1,5 @@
-import { Request } from "../app/request";
-import { IndexSearchResult } from "./types";
+import { Request } from "@app/request";
+import { Index, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
 
 /**
  * Get a paginated list of indexes.
@@ -31,26 +31,6 @@ export function get({ indexId }) {
  */
 export function listReady() {
     return Request.get("/indexes").query({ ready: true });
-}
-
-/**
- * Get a list of unbuilt changes for a reference
- *
- * @param refId - The unique identifier of the reference to fetch unbuilt changes for
- * @returns A promise resolving to the API response containing the unbuilt changes
- */
-export function getUnbuilt({ refId }) {
-    return Request.get(`/refs/${refId}/history?unbuilt=true`);
-}
-
-/**
- * Create a new index
- *
- * @param refId - The unique identifier of the reference to create the index for
- * @returns A promise resolving to the API response from creating the index
- */
-export function create({ refId }) {
-    return Request.post(`/refs/${refId}/indexes`);
 }
 
 /**
@@ -97,4 +77,24 @@ export function listIndexes({ ready, term }: { ready: boolean; term: string }) {
     return Request.get("/indexes")
         .query({ ready: ready, find: term })
         .then(res => res.body);
+}
+
+/**
+ * Get a list of unbuilt changes for a reference
+ *
+ * @param refId - The unique identifier of the reference to fetch unbuilt changes for
+ * @returns A promise resolving to the API response containing the unbuilt changes
+ */
+export function getUnbuiltChanges(refId: string): Promise<UnbuiltChangesSearchResults> {
+    return Request.get(`/refs/${refId}/history?unbuilt=true`).then(res => res.body);
+}
+
+/**
+ * Create a new index
+ *
+ * @param refId - The unique identifier of the reference to create the index for
+ * @returns A promise resolving to the API response from creating the index
+ */
+export function createIndex(refId: string): Promise<Index> {
+    return Request.post(`/refs/${refId}/indexes`).then(res => res.body);
 }

@@ -1,17 +1,12 @@
 import { get } from "lodash-es";
-import { all, put, select, takeEvery, takeLatest } from "redux-saga/effects";
-import { pushState } from "../app/actions";
+import { all, select, takeLatest } from "redux-saga/effects";
 import {
-    CREATE_INDEX,
     FIND_INDEXES,
     GET_INDEX,
     GET_INDEX_HISTORY,
     GET_REFERENCE,
-    GET_UNBUILT,
     LIST_READY_INDEXES,
     REFRESH_OTUS,
-    WS_INSERT_INDEX,
-    WS_REMOVE_INDEX,
     WS_UPDATE_INDEX,
 } from "../app/actionTypes";
 import * as otusAPI from "../otus/api";
@@ -20,13 +15,8 @@ import { apiCall } from "../utils/sagas";
 import * as indexesAPI from "./api";
 
 export function* watchIndexes() {
-    yield takeLatest(WS_INSERT_INDEX, wsChangeIndexes);
     yield takeLatest(WS_UPDATE_INDEX, wsChangeIndexes);
-    yield takeLatest(WS_REMOVE_INDEX, wsChangeIndexes);
-    yield takeLatest(FIND_INDEXES.REQUESTED, findIndexes);
     yield takeLatest(GET_INDEX.REQUESTED, getIndex);
-    yield takeLatest(GET_UNBUILT.REQUESTED, getUnbuilt);
-    yield takeEvery(CREATE_INDEX.REQUESTED, createIndex);
     yield takeLatest(GET_INDEX_HISTORY.REQUESTED, getIndexHistory);
     yield takeLatest(LIST_READY_INDEXES.REQUESTED, listReadyIndexes);
 }
@@ -48,29 +38,13 @@ export function* wsChangeIndexes(action) {
     }
 }
 
-export function* findIndexes(action) {
-    yield apiCall(indexesAPI.find, action.payload, FIND_INDEXES);
-}
-
 export function* getIndex(action) {
     yield select();
     yield apiCall(indexesAPI.get, action.payload, GET_INDEX);
 }
 
-export function* getUnbuilt(action) {
-    yield apiCall(indexesAPI.getUnbuilt, action.payload, GET_UNBUILT);
-}
-
 export function* listReadyIndexes(action) {
     yield apiCall(indexesAPI.listReady, action.payload, LIST_READY_INDEXES);
-}
-
-export function* createIndex(action) {
-    const response = yield apiCall(indexesAPI.create, action.payload, CREATE_INDEX);
-
-    if (response.ok) {
-        yield put(pushState({ rebuild: false }));
-    }
 }
 
 export function* getIndexHistory(action) {

@@ -1,6 +1,7 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { findIndexes, listIndexes } from "./api";
-import { IndexMinimal, IndexSearchResult } from "./types";
+import { ErrorResponse } from "@/types/types";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createIndex, findIndexes, getUnbuiltChanges, listIndexes } from "./api";
+import { Index, IndexMinimal, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
 
 /**
  * Factory for generating react-query keys for index related queries.
@@ -44,4 +45,28 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
  */
 export function useListIndexes(ready: boolean, term?: string) {
     return useQuery<IndexMinimal[]>(indexQueryKeys.list([ready]), () => listIndexes({ ready, term }));
+}
+
+/**
+ * Get a list of unbuilt changes for a reference
+ *
+ * @param refId - The id of the reference to fetch unbuilt changes for
+ * @returns A list of unbuilt changes for a reference
+ */
+export function useFetchUnbuiltChanges(refId: string) {
+    return useQuery<UnbuiltChangesSearchResults>(indexQueryKeys.detail(refId), () => getUnbuiltChanges(refId));
+}
+
+/**
+ * Initializes a mutator for creating an index
+ *
+ * @returns A mutator for creating an index
+ */
+export function useCreateIndex() {
+    const queryClient = useQueryClient();
+    return useMutation<Index, ErrorResponse, { refId: string }>(({ refId }) => createIndex(refId), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(indexQueryKeys.infiniteLists());
+        },
+    });
 }
