@@ -1,45 +1,21 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
-import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
-import { combineReducers } from "redux";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
-import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import HMMList from "../HMMList";
 
-function createReducer(state, history) {
-    return combineReducers({
-        hmms: createGenericReducer(state.hmms),
-        tasks: createGenericReducer(state.tasks),
-        router: connectRouter(history),
-    });
-}
-
 describe("<HMMList />", () => {
-    const history = createBrowserHistory();
-    const fakeHMMData = createFakeHMMSearchResults();
-    let state;
+    let history;
+    let fakeHMMData;
 
     beforeEach(() => {
-        state = {
-            hmms: fakeHMMData,
-            tasks: {
-                documents: [
-                    {
-                        complete: false,
-                        id: 21,
-                        progress: 33,
-                        step: "decompress",
-                    },
-                ],
-                id: 1,
-                progress: 10,
-            },
-        };
+        fakeHMMData = createFakeHMMSearchResults();
+        history = createBrowserHistory();
     });
 
     afterEach(() => nock.cleanAll());
@@ -74,7 +50,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockAPIGetAccount(account);
-            renderWithRouter(<HMMList />, state, history, createReducer);
+            renderWithRouter(<HMMList />, {}, history);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
@@ -94,7 +70,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: null });
             mockAPIGetAccount(account);
-            renderWithRouter(<HMMList />, state, history, createReducer);
+            renderWithRouter(<HMMList />, {}, history);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
@@ -122,7 +98,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockAPIGetAccount(account);
-            renderWithRouter(<HMMList />, state, history, createReducer);
+            renderWithRouter(<HMMList />, {}, history);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
