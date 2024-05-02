@@ -1,3 +1,4 @@
+import { LibraryType } from "@samples/types";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
@@ -18,7 +19,7 @@ const StyledSampleLibraryTypeLabel = styled(BaseSampleLabel)`
 
 type SampleLibraryTypeLabelProps = {
     /** The samples library type */
-    libraryType: string;
+    libraryType: LibraryType;
 };
 
 /**
