@@ -1,4 +1,4 @@
-import { formatDistanceStrict } from "date-fns";
+import { formatDistanceStrict, isAfter } from "date-fns";
 import { includes } from "lodash-es";
 import React, { useEffect, useState } from "react";
 
@@ -14,7 +14,11 @@ import React, { useEffect, useState } from "react";
  */
 function createTimeString(time) {
     const now = Date.now();
-    const timeString = formatDistanceStrict(new Date(time), now, { addSuffix: true });
+    const serverDate = new Date(time);
+    const clientDate = new Date();
+
+    const currentTime = isAfter(serverDate, clientDate) ? clientDate : serverDate;
+    const timeString = formatDistanceStrict(currentTime, now, { addSuffix: true });
     return includes(timeString, "in a") || includes(timeString, "a few") ? "just now" : timeString;
 }
 
