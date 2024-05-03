@@ -1,13 +1,11 @@
+import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
+import { Box, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "@base";
 import { map } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Box, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "../../../base/index";
-
-import { getAPIKeys } from "../../actions";
-import CreateAPIKey from "./Create";
+import CreateAPIKey from "./CreateAPIKeys";
 import APIKey from "./Key";
 
 const APIKeysHeader = styled(Box)`
@@ -22,14 +20,17 @@ const APIKeysHeader = styled(Box)`
     }
 `;
 
-export function APIKeys({ keys, onGet }) {
-    useEffect(onGet, []);
+/**
+ * A component to manage and display API keys for the logged-in user
+ */
+export default function APIKeys() {
+    const { data, isLoading } = useFetchAPIKeys();
 
-    if (keys === null) {
+    if (isLoading) {
         return <LoadingPlaceholder margin="150px" />;
     }
 
-    const keyComponents = map(keys, key => <APIKey key={key.id} apiKey={key} />);
+    const keyComponents = map(data, key => <APIKey key={key.id} apiKey={key} />);
 
     return (
         <div>
@@ -48,15 +49,3 @@ export function APIKeys({ keys, onGet }) {
         </div>
     );
 }
-
-const mapStateToProps = state => ({
-    keys: state.account.apiKeys,
-});
-
-const mapDispatchToProps = dispatch => ({
-    onGet: () => {
-        dispatch(getAPIKeys());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(APIKeys);

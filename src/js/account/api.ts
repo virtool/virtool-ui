@@ -72,7 +72,7 @@ export function changePassword({ old_password, password }: { old_password: strin
  * current user's API keys.
  */
 export function getAPIKeys(): Promise<Response> {
-    return Request.get("/account/keys");
+    return Request.get("/account/keys").then(res => res.body);
 }
 
 /**

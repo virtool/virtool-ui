@@ -1,19 +1,11 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import React from "react";
-import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { attachResizeObserver, createGenericReducer, renderWithRouter } from "../../../../../tests/setupTests";
-import { APIKeys } from "../API";
-function createReducer(state, history) {
-    return combineReducers({
-        account: createGenericReducer(state.account),
-        router: connectRouter(history),
-    });
-}
+import { attachResizeObserver, renderWithRouter } from "../../../../../tests/setupTests";
+import APIKeys from "../APIKeys";
 
 describe("<API />", () => {
     let props;
@@ -54,14 +46,14 @@ describe("<API />", () => {
     it("should render correctly when keys === null", () => {
         props.keys = null;
 
-        renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+        renderWithRouter(<APIKeys {...props} />, state, history);
 
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText("Manage API keys for accessing the")).not.toBeInTheDocument();
     });
 
     it("should render correctly when apiKey exists", () => {
-        renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+        renderWithRouter(<APIKeys {...props} />, state, history);
 
         expect(screen.getByText("Manage API keys for accessing the")).toBeInTheDocument();
         expect(screen.getByText("Virtool API")).toBeInTheDocument();
@@ -73,7 +65,7 @@ describe("<API />", () => {
     it("should render correctly when no apiKeys exist", () => {
         props.keys = [];
 
-        renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+        renderWithRouter(<APIKeys {...props} />, state, history);
 
         expect(screen.getByText("Manage API keys for accessing the")).toBeInTheDocument();
         expect(screen.getByText("Virtool API")).toBeInTheDocument();
@@ -89,7 +81,7 @@ describe("<API />", () => {
             };
         });
         it("should render correctly when newKey = empty", async () => {
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
 
@@ -104,7 +96,7 @@ describe("<API />", () => {
         it("should render correctly when newKey is set", async () => {
             state.account.newKey = "123abc";
 
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             expect(screen.getByText("Here is your key.")).toBeInTheDocument();
             expect(screen.getByText(/Make note of it now. For security purposes/)).toBeInTheDocument();
@@ -114,7 +106,7 @@ describe("<API />", () => {
         });
 
         it("should fail to submit and display errors when no name provided", async () => {
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
 
@@ -127,7 +119,7 @@ describe("<API />", () => {
             it("should render correctly when newKey is empty and state.administratorRole = AdministratorRoles.FULL", () => {
                 state.account.administrator_role = AdministratorRoles.FULL;
 
-                renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+                renderWithRouter(<APIKeys {...props} />, state, history);
 
                 expect(screen.getByText(/You are an administrator/)).toBeInTheDocument();
                 expect(
@@ -136,7 +128,7 @@ describe("<API />", () => {
             });
 
             it("should render correctly when newKey is empty and state.administratorRole = null", () => {
-                renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+                renderWithRouter(<APIKeys {...props} />, state, history);
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
                 expect(
@@ -148,7 +140,7 @@ describe("<API />", () => {
 
     describe("APIKey", () => {
         it("should render correctly when collapsed", () => {
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             expect(screen.getByText("testName1")).toBeInTheDocument();
             expect(screen.getByText(/Created/)).toBeInTheDocument();
@@ -156,7 +148,7 @@ describe("<API />", () => {
         });
 
         it("should render correctly when expanded", async () => {
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             await userEvent.click(screen.getByText("testName1"));
 
@@ -172,7 +164,7 @@ describe("<API />", () => {
         });
 
         it("should collapse view when close button clicked", async () => {
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             await userEvent.click(screen.getByText("testName1"));
 
@@ -190,7 +182,7 @@ describe("<API />", () => {
         it("should render permissions correctly and check and uncheck permissions when clicked, administrator_role == full", async () => {
             state.account.administrator_role = AdministratorRoles.FULL;
 
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             await userEvent.click(screen.getByText("testName1"));
 
@@ -213,7 +205,7 @@ describe("<API />", () => {
         it("should not check and uncheck permissions when administrator_role = base", async () => {
             state.account.administrator_role = AdministratorRoles.BASE;
 
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             await userEvent.click(screen.getByText("testName1"));
 
@@ -235,7 +227,7 @@ describe("<API />", () => {
         });
 
         it("should not check and uncheck permissions when administrator_role = null", async () => {
-            renderWithRouter(<APIKeys {...props} />, state, history, createReducer);
+            renderWithRouter(<APIKeys {...props} />, state, history);
 
             await userEvent.click(screen.getByText("testName1"));
 

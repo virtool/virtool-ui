@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAccount } from "./api";
+import { Response } from "superagent";
+import { fetchAccount, getAPIKeys } from "./api";
 import { Account } from "./types";
 
 /**
@@ -17,3 +18,12 @@ export const accountKeys = {
 export const useFetchAccount = () => {
     return useQuery<Account>(accountKeys.all(), () => fetchAccount());
 };
+
+/**
+ * Fetches the API keys for the logged-in user
+ *
+ * @returns
+ */
+export function useFetchAPIKeys() {
+    return useQuery<Response>(accountKeys.all(), () => getAPIKeys());
+}

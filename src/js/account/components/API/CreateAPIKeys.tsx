@@ -1,4 +1,3 @@
-import { pushState } from "@app/actions";
 import { mapValues } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -21,10 +20,10 @@ import {
     SaveButton,
 } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { routerLocationHasState } from "@utils/utils";
 import { Field, Form, Formik } from "formik";
+import { useHistory, useLocation } from "react-router-dom";
 import * as Yup from "yup";
-import { clearAPIKey, createAPIKey } from "../../actions";
+import { createAPIKey } from "../../actions";
 import CreateAPIKeyInfo from "./CreateInfo";
 import APIPermissions from "./Permissions";
 
@@ -63,7 +62,9 @@ const StyledCreateAPIKey = styled.div`
     }
 `;
 
-function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
+function CreateAPIKey({ newKey, permissions, onCreate }) {
+    const history = useHistory();
+    const location = useLocation<{ createAPIKey: boolean }>();
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
 
@@ -73,22 +74,22 @@ function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
         }
     }, [newKey]);
 
-    const handleHide = () => {
+    function handleHide() {
         setCopied(false);
         setShowCreated(false);
-        onHide();
-    };
+        history.push({ state: { createAPIKey: false } });
+    }
 
-    const handleSubmit = ({ name, permissions }) => {
+    function handleSubmit({ name, permissions }) {
         onCreate(name, permissions);
-    };
+    }
 
     function copyToClipboard() {
         navigator.clipboard.writeText(newKey).then(() => setCopied(true));
     }
 
     return (
-        <Dialog open={show} onOpenChange={handleHide}>
+        <Dialog open={location.state?.createAPIKey} onOpenChange={handleHide}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
@@ -149,7 +150,6 @@ function CreateAPIKey({ newKey, permissions, show, onCreate, onHide }) {
 
 function mapStateToProps(state) {
     return {
-        show: routerLocationHasState(state, "createAPIKey"),
         newKey: state.account.newKey,
         permissions: state.account.permissions,
     };
@@ -159,11 +159,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onCreate: (name, permissions) => {
             dispatch(createAPIKey(name, permissions));
-        },
-
-        onHide: () => {
-            dispatch(pushState({ createAPIKey: false }));
-            dispatch(clearAPIKey());
         },
     };
 }
