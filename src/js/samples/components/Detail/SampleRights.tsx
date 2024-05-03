@@ -1,10 +1,6 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { find, includes, map } from "lodash-es";
-import React from "react";
-import { match } from "react-router-dom";
-import { useFetchAccount } from "../../../account/queries";
-import { useCheckAdminRole } from "../../../administration/hooks";
-import { AdministratorRoles } from "../../../administration/types";
+import { useFetchAccount } from "@account/queries";
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoles } from "@administration/types";
 import {
     Box,
     BoxGroup,
@@ -15,8 +11,12 @@ import {
     InputLabel,
     InputSelect,
     LoadingPlaceholder,
-} from "../../../base";
-import { useListGroups } from "../../../groups/queries";
+} from "@base";
+import { useListGroups } from "@groups/queries";
+import { useQueryClient } from "@tanstack/react-query";
+import { find, includes, map } from "lodash-es";
+import React from "react";
+import { match } from "react-router-dom";
 import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../queries";
 
 type SampleRightsProps = {

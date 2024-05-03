@@ -1,33 +1,21 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
-import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeOTUMinimal, mockApiGetOTUs } from "../../../../tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
-import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import OTUList from "../OTUList";
-
-function createReducer(state, history) {
-    return combineReducers({
-        router: connectRouter(history),
-        references: createGenericReducer(state.references),
-        account: createGenericReducer(state.account),
-        indexes: createGenericReducer(state.indexes),
-    });
-}
 
 describe("<OTUsList />", () => {
     let history;
     let reference;
     let OTUs;
     let props;
-    let state;
 
     beforeEach(() => {
         reference = createFakeReference();
@@ -38,11 +26,6 @@ describe("<OTUsList />", () => {
         props = {
             match: { params: { refId: reference.id } },
         };
-        state = {
-            references: { detail: reference },
-            account: { administrator_role: AdministratorRoles.FULL },
-            indexes: { unbuilt: [] },
-        };
     });
 
     afterEach(() => nock.cleanAll());
@@ -50,7 +33,7 @@ describe("<OTUsList />", () => {
     describe("<OTUList />", () => {
         it("should render correctly", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
             expect(screen.getByText(OTUs[0].abbreviation)).toBeInTheDocument();
@@ -63,7 +46,7 @@ describe("<OTUsList />", () => {
 
         it("should render when no documents are found", async () => {
             const scope = mockApiGetOTUs([], reference.id);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByText("No OTUs found.")).toBeInTheDocument();
             expect(screen.queryByText(OTUs[0].name)).toBeNull();
@@ -76,7 +59,7 @@ describe("<OTUsList />", () => {
     describe("<OTUToolbar />", () => {
         it("should render properly", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
 
@@ -89,7 +72,7 @@ describe("<OTUsList />", () => {
                 administrator_role: AdministratorRoles.FULL,
             });
             mockAPIGetAccount(account);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
 
@@ -102,7 +85,7 @@ describe("<OTUsList />", () => {
                 administrator_role: null,
             });
             mockAPIGetAccount(account);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
             expect(screen.queryByText("Create")).toBeNull();
@@ -112,7 +95,7 @@ describe("<OTUsList />", () => {
 
         it("should handle toolbar updates correctly", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
             const inputElement = screen.getByPlaceholderText("Name or abbreviation");
@@ -130,7 +113,7 @@ describe("<OTUsList />", () => {
     describe("<OTUItem />", () => {
         it("should render when [verified=true]", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
             expect(screen.queryByText("Unverified")).toBeNull();
@@ -140,7 +123,7 @@ describe("<OTUsList />", () => {
 
         it("should render when [verified=false]", async () => {
             const scope = mockApiGetOTUs([createFakeOTUMinimal({ verified: false })], reference.id);
-            renderWithRouter(<OTUList {...props} />, state, history, createReducer);
+            renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByText("Unverified")).toBeInTheDocument();
             scope.done();
