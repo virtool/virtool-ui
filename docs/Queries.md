@@ -80,10 +80,10 @@ where heavy re-use is expected.
 
 ### Pre-caching data
 
-When pre-caching data a component makes a request for data from the API when it is anticipated that
-it will be needed by another component down the tree.
-The results of that data are then cached in react-query for immediate access for any components 
-making the same request.
+Pre-caching data is when a component requests data from the API that it doesn't directly need to reduce
+the load times of child components.
+Data loaded by other components remains in the `react-query` cache and can be immediately accessed by any components 
+using the same query key.
 In practice pre-caching can look similar to central loading where many API request are made from
 a parent component. 
 The key difference is that the data is never directly passed down to any child components. 
