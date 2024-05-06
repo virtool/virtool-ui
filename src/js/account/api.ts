@@ -113,24 +113,24 @@ export function createAPIKey(name: string, permissions: Permissions): Promise<Cr
  *
  * @param keyId - The unique id for the API key to update
  * @param permissions - The new permissions for the API key
- * @returns A promise resolving to a response containing the
- * updated API key.
+ * @returns A promise resolving to a response containing the updated API key
  */
-export function updateAPIKey({ keyId, permissions }: { keyId: string; permissions: Permissions }): Promise<Response> {
-    return Request.patch(`/account/keys/${keyId}`).send({
-        permissions,
-    });
+export function updateAPIKey(keyId: string, permissions: Permissions) {
+    return Request.patch(`/account/keys/${keyId}`)
+        .send({
+            permissions,
+        })
+        .then(res => res.body);
 }
 
 /**
  * Remove an existing API key owned by current account.
  *
  * @param keyId - The unique id of the API key to remove
- * @returns A promise which resolves to a response indicating if the
- * API key was successfully removed.
+ * @returns A promise which resolves to a response indicating if the API key was successfully removed
  */
-export function removeAPIKey({ keyId }: { keyId: string }): Promise<Response> {
-    return Request.delete(`/account/keys/${keyId}`);
+export function removeAPIKey(keyId: string) {
+    return Request.delete(`/account/keys/${keyId}`).then(res => res.body);
 }
 
 /**

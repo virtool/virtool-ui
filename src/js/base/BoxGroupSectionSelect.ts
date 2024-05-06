@@ -1,9 +1,9 @@
 import styled, { DefaultTheme } from "styled-components";
-import { BoxGroupSection } from "./BoxGroupSection";
+import { BoxGroupSection, BoxGroupSectionProps } from "./BoxGroupSection";
 import { CheckboxLabel } from "./CheckboxLabel";
 import { StyledCheckbox } from "./styled/StyledCheckbox";
 
-type SelectBoxGroupSectionProps = {
+type SelectBoxGroupSectionProps = BoxGroupSectionProps & {
     active?: boolean;
     theme: DefaultTheme;
 };

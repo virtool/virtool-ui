@@ -1,7 +1,15 @@
 import { ErrorResponse } from "@/types/types";
 import { Permissions } from "@groups/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { APIKeysResponse, createAPIKey, CreateAPIKeyResponse, fetchAccount, getAPIKeys } from "./api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    APIKeysResponse,
+    createAPIKey,
+    CreateAPIKeyResponse,
+    fetchAccount,
+    getAPIKeys,
+    removeAPIKey,
+    updateAPIKey,
+} from "./api";
 import { Account } from "./types";
 
 /**
@@ -39,4 +47,37 @@ export function useCreateAPIKey() {
     return useMutation<CreateAPIKeyResponse, ErrorResponse, { name: string; permissions: Permissions }>(
         ({ name, permissions }) => createAPIKey(name, permissions),
     );
+}
+
+/**
+ * Initializes a mutator for creating a new API key for the current account
+ *
+ * @returns A mutator for creating a new API key for the current account
+ */
+export function useUpdateAPIKey() {
+    const queryClient = useQueryClient();
+
+    return useMutation<unknown, ErrorResponse, { keyId: string; permissions: Permissions }>(
+        ({ keyId, permissions }) => updateAPIKey(keyId, permissions),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(accountKeys.all());
+            },
+        },
+    );
+}
+
+/**
+ * Initializes a mutator for creating a new API key for the current account
+ *
+ * @returns A mutator for creating a new API key for the current account
+ */
+export function useRemoveAPIKey() {
+    const queryClient = useQueryClient();
+
+    return useMutation<unknown, ErrorResponse, { keyId: string }>(({ keyId }) => removeAPIKey(keyId), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(accountKeys.all());
+        },
+    });
 }

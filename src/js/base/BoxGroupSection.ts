@@ -3,6 +3,7 @@ import { getBorder } from "../app/theme";
 
 export type BoxGroupSectionProps = {
     active?: boolean;
+    disabled?: boolean;
     onClick?: () => void;
     theme: DefaultTheme;
 };

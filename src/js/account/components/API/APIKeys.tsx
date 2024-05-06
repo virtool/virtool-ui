@@ -5,8 +5,8 @@ import { map } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import APIKey from "./APIKey";
 import CreateAPIKey from "./CreateAPIKey";
-import APIKey from "./Key";
 
 const APIKeysHeader = styled(Box)`
     align-items: center;

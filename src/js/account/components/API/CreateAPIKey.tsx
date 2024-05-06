@@ -24,7 +24,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import CreateAPIKeyInfo from "./CreateInfo";
+import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
 
 const CreateAPIKeyCopied = styled.p`
     color: ${props => props.theme.color.blue};
@@ -103,6 +103,7 @@ export default function CreateAPIKey() {
     }
 
     function onSubmit({ name, permissions }: FormValues) {
+        console.log(permissions);
         mutation.mutate(
             { name, permissions },
             {
