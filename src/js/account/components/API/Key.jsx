@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { Attribution, BoxSpaced, Button, ButtonToolbar, Icon } from "../../../base/index";
 import { removeAPIKey, updateAPIKey } from "../../actions";
-import APIPermissions from "./Permissions";
+import APIPermissions from "./APIPermissions";
 
 export const getInitialState = ({ apiKey }) => ({
     in: false,

@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { Response } from "superagent";
-import { fetchAccount, getAPIKeys } from "./api";
+import { ErrorResponse } from "@/types/types";
+import { Permissions } from "@groups/types";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { APIKeysResponse, createAPIKey, CreateAPIKeyResponse, fetchAccount, getAPIKeys } from "./api";
 import { Account } from "./types";
 
 /**
@@ -8,6 +9,7 @@ import { Account } from "./types";
  */
 export const accountKeys = {
     all: () => ["account"],
+    details: () => ["account", "details"] as const,
 };
 
 /**
@@ -25,5 +27,16 @@ export const useFetchAccount = () => {
  * @returns
  */
 export function useFetchAPIKeys() {
-    return useQuery<Response>(accountKeys.all(), () => getAPIKeys());
+    return useQuery<APIKeysResponse[]>(accountKeys.details(), () => getAPIKeys());
+}
+
+/**
+ * Initializes a mutator for creating a new API key for the current account
+ *
+ * @returns A mutator for creating a new API key for the current account
+ */
+export function useCreateAPIKey() {
+    return useMutation<CreateAPIKeyResponse, ErrorResponse, { name: string; permissions: Permissions }>(
+        ({ name, permissions }) => createAPIKey(name, permissions),
+    );
 }

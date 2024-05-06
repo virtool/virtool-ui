@@ -1,27 +1,42 @@
+import { useFetchAccount } from "@account/queries";
 import { AdministratorPermissions, hasSufficientAdminRole } from "@administration/utils";
 import { BoxGroup, Checkbox, SelectBoxGroupSection } from "@base";
 import { map, sortBy } from "lodash-es";
-import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
 import { getAccountAdministratorRole } from "../../selectors";
 
-export const APIPermissions = ({ administratorRole, className, userPermissions, keyPermissions, onChange }) => {
+type APIPermissionsProps = {
+    administratorRole: any;
+    className?: string;
+    keyPermissions: any;
+    onChange: any;
+};
+
+export function APIPermissions({ administratorRole, className, keyPermissions, onChange }: APIPermissionsProps) {
     const permissions = map(keyPermissions, (value, key) => ({
         name: key,
         allowed: value,
     }));
 
+    const { data, isLoading } = useFetchAccount();
+
+    if (isLoading) {
+        return null;
+    }
+
     const rowComponents = map(sortBy(permissions, "name"), permission => {
         const disabled =
             !hasSufficientAdminRole(AdministratorPermissions[permission.name], administratorRole) &&
-            !userPermissions[permission.name];
+            !data.permissions[permission.name];
 
         return (
             <SelectBoxGroupSection
                 key={permission.name}
                 active={permission.allowed}
-                onClick={disabled ? null : () => onChange(permission.name, !permission.allowed)}
+                onClick={
+                    disabled ? null : () => onChange({ ...keyPermissions, [permission.name]: !permission.allowed })
+                }
                 disabled={disabled}
             >
                 <Checkbox checked={permission.allowed} />
@@ -31,19 +46,10 @@ export const APIPermissions = ({ administratorRole, className, userPermissions, 
     });
 
     return <BoxGroup className={className}>{rowComponents}</BoxGroup>;
-};
-
-APIPermissions.propTypes = {
-    administratorRole: PropTypes.string,
-    userPermissions: PropTypes.object.isRequired,
-    keyPermissions: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-    className: PropTypes.string,
-};
+}
 
 const mapStateToProps = state => ({
     administratorRole: getAccountAdministratorRole(state),
-    userPermissions: state.account.permissions,
 });
 
 export default connect(mapStateToProps)(APIPermissions);

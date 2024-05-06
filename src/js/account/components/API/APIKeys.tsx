@@ -5,7 +5,7 @@ import { map } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import CreateAPIKey from "./CreateAPIKeys";
+import CreateAPIKey from "./CreateAPIKey";
 import APIKey from "./Key";
 
 const APIKeysHeader = styled(Box)`
@@ -30,7 +30,7 @@ export default function APIKeys() {
         return <LoadingPlaceholder margin="150px" />;
     }
 
-    const keyComponents = map(data, key => <APIKey key={key.id} apiKey={key} />);
+    const keyComponents = data.length && map(data, key => <APIKey key={key.id} apiKey={key} />);
 
     return (
         <div>

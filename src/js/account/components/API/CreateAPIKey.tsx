@@ -1,8 +1,5 @@
-import { mapValues } from "lodash-es";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
-
+import APIPermissions from "@account/components/API/APIPermissions";
+import { accountKeys, useCreateAPIKey } from "@account/queries";
 import { getFontSize } from "@app/theme";
 import {
     Dialog,
@@ -17,24 +14,17 @@ import {
     InputGroup,
     InputIcon,
     InputLabel,
+    InputSimple,
     SaveButton,
 } from "@base";
+import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { Field, Form, Formik } from "formik";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useHistory, useLocation } from "react-router-dom";
-import * as Yup from "yup";
-import { createAPIKey } from "../../actions";
+import styled from "styled-components";
 import CreateAPIKeyInfo from "./CreateInfo";
-import APIPermissions from "./Permissions";
-
-const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Provide a name for the key"),
-});
-
-const getInitialFormValues = permissions => ({
-    name: "",
-    permissions: mapValues(permissions, () => false),
-});
 
 const CreateAPIKeyCopied = styled.p`
     color: ${props => props.theme.color.blue};
@@ -62,11 +52,43 @@ const StyledCreateAPIKey = styled.div`
     }
 `;
 
-function CreateAPIKey({ newKey, permissions, onCreate }) {
+type FormValues = {
+    name: string;
+    permissions: Permissions;
+};
+
+/**
+ * Displays a dialog to create an API key
+ */
+export default function CreateAPIKey() {
     const history = useHistory();
     const location = useLocation<{ createAPIKey: boolean }>();
+    const [newKey, setNewKey] = useState("");
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
+    const mutation = useCreateAPIKey();
+    const queryClient = useQueryClient();
+
+    const {
+        formState: { errors },
+        handleSubmit,
+        control,
+        register,
+    } = useForm<FormValues>({
+        defaultValues: {
+            name: "",
+            permissions: {
+                cancel_job: false,
+                create_ref: false,
+                create_sample: false,
+                modify_hmm: false,
+                modify_subtraction: false,
+                remove_file: false,
+                remove_job: false,
+                upload_file: false,
+            },
+        },
+    });
 
     useEffect(() => {
         if (!showCreated && newKey) {
@@ -80,8 +102,16 @@ function CreateAPIKey({ newKey, permissions, onCreate }) {
         history.push({ state: { createAPIKey: false } });
     }
 
-    function handleSubmit({ name, permissions }) {
-        onCreate(name, permissions);
+    function onSubmit({ name, permissions }: FormValues) {
+        mutation.mutate(
+            { name, permissions },
+            {
+                onSuccess: data => {
+                    setNewKey(data.key);
+                    queryClient.invalidateQueries(accountKeys.all());
+                },
+            },
+        );
     }
 
     function copyToClipboard() {
@@ -112,55 +142,35 @@ function CreateAPIKey({ newKey, permissions, onCreate }) {
                             )}
                         </StyledCreateAPIKey>
                     ) : (
-                        <Formik
-                            onSubmit={handleSubmit}
-                            initialValues={getInitialFormValues(permissions)}
-                            validationSchema={validationSchema}
-                        >
-                            {({ errors, setFieldValue, touched, values }) => (
-                                <Form>
-                                    <CreateAPIKeyInfo />
-                                    <InputGroup>
-                                        <InputLabel htmlFor="name">Name</InputLabel>
-                                        <Field name="name" id="name" as={Input} />
-                                        <InputError>{touched.name && errors.name}</InputError>
-                                    </InputGroup>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <CreateAPIKeyInfo />
+                            <InputGroup>
+                                <InputLabel htmlFor="name">Name</InputLabel>
+                                <InputSimple
+                                    id="name"
+                                    aria-invalid={errors.name ? "true" : "false"}
+                                    {...register("name", { required: "Provide a name for the key" })}
+                                />
+                                <InputError>{errors.name?.message}</InputError>
+                            </InputGroup>
 
-                                    <label>Permissions</label>
+                            <label>Permissions</label>
 
-                                    <APIPermissions
-                                        keyPermissions={values.permissions}
-                                        onChange={(key, value) =>
-                                            setFieldValue("permissions", { ...values.permissions, [key]: value })
-                                        }
-                                    />
+                            <Controller
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <APIPermissions keyPermissions={value} onChange={onChange} />
+                                )}
+                                name="permissions"
+                            />
 
-                                    <DialogFooter>
-                                        <SaveButton />
-                                    </DialogFooter>
-                                </Form>
-                            )}
-                        </Formik>
+                            <DialogFooter>
+                                <SaveButton />
+                            </DialogFooter>
+                        </form>
                     )}
                 </DialogContent>
             </DialogPortal>
         </Dialog>
     );
 }
-
-function mapStateToProps(state) {
-    return {
-        newKey: state.account.newKey,
-        permissions: state.account.permissions,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onCreate: (name, permissions) => {
-            dispatch(createAPIKey(name, permissions));
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateAPIKey);
