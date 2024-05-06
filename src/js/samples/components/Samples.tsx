@@ -5,7 +5,7 @@ import { FileManager } from "../../files/components/Manager";
 import { FileType } from "../../files/types";
 import { Labels } from "../../labels/components/Labels";
 import CreateSample from "./Create/CreateSample";
-import SampleDetail from "./Detail/Detail";
+import SampleDetail from "./Detail/SampleDetail";
 import SamplesSettings from "./SampleSettings";
 import SamplesList from "./SamplesList";
 

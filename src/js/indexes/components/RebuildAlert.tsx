@@ -1,24 +1,20 @@
+import { Alert, Icon } from "@base";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Alert, Icon } from "../../base";
-import { checkReferenceRight } from "../../references/selectors";
 import { useInfiniteFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
     refId: string;
-    hasRights: boolean;
 };
 
 /**
  * An alert that appears when the reference has unbuilt changes.
- *
- * @param refId - the unique identifier of the parent reference
- * @param hasRights - whether the user has sufficient permission to rebuild the index
- * @returns An rebuild alert
  */
-export function RebuildAlert({ refId, hasRights }: RebuildAlertProps) {
+export default function RebuildAlert({ refId }: RebuildAlertProps) {
     const { data, isLoading } = useInfiniteFindIndexes(refId);
+    const { hasPermission: hasRights } = useCheckReferenceRight(refId, ReferenceRight.build);
+
     if (isLoading) {
         return null;
     }
@@ -54,12 +50,3 @@ export function RebuildAlert({ refId, hasRights }: RebuildAlertProps) {
 
     return null;
 }
-
-export function mapStateToProps(state) {
-    return {
-        refId: state.references.detail.id,
-        hasRights: checkReferenceRight(state, "build"),
-    };
-}
-
-export default connect(mapStateToProps)(RebuildAlert);

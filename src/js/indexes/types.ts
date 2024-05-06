@@ -1,3 +1,4 @@
+import { HistoryNested, OTUNested } from "@otus/types";
 import { JobMinimal } from "../jobs/types";
 import { ReferenceNested } from "../references/types";
 import { UserNested } from "../users/types";
@@ -72,6 +73,17 @@ export type Index = IndexMinimal & {
     manifest: object;
     /** OTUs incorporated in the index*/
     otus: IndexOTU[];
+};
+
+export type UnbuiltChanges = HistoryNested & {
+    index: IndexNested;
+    otu: OTUNested;
+    reference: ReferenceNested;
+};
+
+/** Unbuilt changes search results */
+export type UnbuiltChangesSearchResults = SearchResult & {
+    documents: UnbuiltChanges[];
 };
 
 /** Index search results */

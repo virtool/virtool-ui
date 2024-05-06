@@ -1,7 +1,8 @@
+import { LabelNested } from "@labels/types";
+import { useUpdateSample } from "@samples/queries";
+import { SubtractionNested } from "@subtraction/types";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { editSample } from "../../actions";
 import SampleLabels from "./../Sidebar/Labels";
 import DefaultSubtractions from "./../Sidebar/Subtractions";
 
@@ -13,32 +14,32 @@ const StyledSidebar = styled.div`
     z-index: 0;
 `;
 
-export function Sidebar({ sampleId, sampleLabels, onLabelUpdate, defaultSubtractions, onSubtractionUpdate }) {
+type SidebarProps = {
+    sampleId: string;
+    sampleLabels: Array<LabelNested>;
+    defaultSubtractions: Array<SubtractionNested>;
+};
+
+/**
+ * Displays the sidebar for managing labels and subtractions associated with sample
+ */
+export default function Sidebar({ sampleId, sampleLabels, defaultSubtractions }: SidebarProps) {
+    const mutation = useUpdateSample(sampleId);
+
     return (
         <StyledSidebar>
             <SampleLabels
                 onUpdate={labels => {
-                    onLabelUpdate(sampleId, labels);
+                    mutation.mutate({ update: { labels } });
                 }}
                 sampleLabels={sampleLabels.map(label => label.id)}
             />
             <DefaultSubtractions
                 onUpdate={subtractions => {
-                    onSubtractionUpdate(sampleId, subtractions);
+                    mutation.mutate({ update: { subtractions } });
                 }}
                 defaultSubtractions={defaultSubtractions.map(subtraction => subtraction.id)}
             />
         </StyledSidebar>
     );
 }
-
-export const mapDispatchToProps = dispatch => ({
-    onLabelUpdate: (sampleId, labels) => {
-        dispatch(editSample(sampleId, { labels }));
-    },
-    onSubtractionUpdate: (sampleId, subtractions) => {
-        dispatch(editSample(sampleId, { subtractions }));
-    },
-});
-
-export default connect(null, mapDispatchToProps)(Sidebar);

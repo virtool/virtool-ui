@@ -1,9 +1,8 @@
 import { get } from "lodash-es/lodash";
 import { wsUpdateAnalysis } from "../../analyses/actions";
-import { wsInsertHistory, wsInsertIndex, wsUpdateIndex } from "../../indexes/actions";
+import { wsInsertHistory, wsUpdateIndex } from "../../indexes/actions";
 import { wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
-import { wsInsertReference, wsRemoveReference, wsUpdateReference } from "../../references/actions";
-import { wsInsertSample, wsRemoveSample, wsUpdateSample } from "../../samples/actions";
+import { wsInsertReference, wsUpdateReference } from "../../references/actions";
 
 function actionCreatorWrapper(actionCreator) {
     return (state, message) => actionCreator(message.data);
@@ -11,9 +10,7 @@ function actionCreatorWrapper(actionCreator) {
 
 const inserters = {
     history: actionCreatorWrapper(wsInsertHistory),
-    indexes: actionCreatorWrapper(wsInsertIndex),
     references: actionCreatorWrapper(wsInsertReference),
-    samples: actionCreatorWrapper(wsInsertSample),
 };
 
 const updaters = {
@@ -27,13 +24,10 @@ const updaters = {
     indexes: actionCreatorWrapper(wsUpdateIndex),
     otus: actionCreatorWrapper(wsUpdateOTU),
     references: actionCreatorWrapper(wsUpdateReference),
-    samples: actionCreatorWrapper(wsUpdateSample),
 };
 
 const removers = {
     otus: actionCreatorWrapper(wsRemoveOTU),
-    references: actionCreatorWrapper(wsRemoveReference),
-    samples: actionCreatorWrapper(wsRemoveSample),
 };
 
 const modifiers = {

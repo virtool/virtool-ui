@@ -71,14 +71,17 @@ export type OTUSegment = {
     required: boolean;
 };
 
-/** Basic data for list representations */
-export type OTUMinimal = {
-    abbreviation: string;
+export type OTUNested = {
     id: string;
+    version: number;
+};
+
+/** Basic data for list representations */
+export type OTUMinimal = OTUNested & {
+    abbreviation: string;
     name: string;
     reference: ReferenceNested;
     verified: boolean;
-    version: number;
 };
 
 /** A complete OTU */
