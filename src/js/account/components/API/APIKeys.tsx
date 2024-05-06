@@ -1,6 +1,6 @@
 import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Box, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "@base";
+import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "@base";
 import { map } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -43,7 +43,7 @@ export default function APIKeys() {
                 <Link to={{ state: { createAPIKey: true } }}>Create</Link>
             </APIKeysHeader>
 
-            {keyComponents.length ? keyComponents : <NoneFoundBox noun="API keys" />}
+            {keyComponents.length ? <BoxGroup>{keyComponents}</BoxGroup> : <NoneFoundBox noun="API keys" />}
 
             <CreateAPIKey />
         </div>

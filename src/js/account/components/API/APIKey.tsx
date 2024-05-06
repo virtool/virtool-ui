@@ -1,10 +1,10 @@
 import { useRemoveAPIKey, useUpdateAPIKey } from "@account/queries";
+import { Attribution, BoxGroupSection, Button, ButtonToolbar, Icon } from "@base";
 import { Permissions } from "@groups/types";
 import { isEqual, reduce } from "lodash-es";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Attribution, BoxSpaced, Button, ButtonToolbar, Icon } from "../../../base/index";
 import APIPermissions from "./APIPermissions";
 
 const APIKeyCloseContainer = styled.div`
@@ -46,8 +46,8 @@ export default function APIKey({ apiKey }) {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <BoxSpaced key={apiKey.id} onClick={show ? null : () => setShow(!show)}>
+        <BoxGroupSection key={apiKey.id} onClick={show ? null : () => setShow(!show)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <APIKeyHeader>
                     <strong>{apiKey.name}</strong>
                     <Attribution time={apiKey.created_at} />
@@ -87,7 +87,7 @@ export default function APIKey({ apiKey }) {
                         </ButtonToolbar>
                     </div>
                 )}
-            </BoxSpaced>
-        </form>
+            </form>
+        </BoxGroupSection>
     );
 }
