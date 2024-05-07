@@ -7,6 +7,7 @@ import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-reac
 import { noop } from "lodash-es";
 import React from "react";
 import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
 import { combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { ThemeProvider } from "styled-components";
@@ -80,6 +81,10 @@ export function renderWithRouter(ui, state, history, createReducer) {
         </Provider>
     );
     renderWithProviders(wrappedUI);
+}
+
+export function renderWithMemoryRouter(ui, initialEntries, createAppStore) {
+    renderWithProviders(<MemoryRouter initialEntries={initialEntries}>{ui}</MemoryRouter>, createAppStore);
 }
 
 //mocks HTML element prototypes that are not implemented in jsdom
