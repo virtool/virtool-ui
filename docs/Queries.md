@@ -1,21 +1,65 @@
 # API Requests
 
-As a CSR SPA it is necessary for the UI of Virtool to fetch data from the backend in order to render meaningful views.
-The job of making the API request is currently handled via `SuperAgent` with data management and caching being 
-handled via `react-query`.
+
+The client fetches data from the backend using `SuperAgent` as the HTTP client library, 
+and `react-query` for data management and caching.
 
 
 ## Query keys
 
 A query key is an array of strings that uniquely identifies an API request.
 
+```typescript
+/** An example query key for requesting the fifth page of samples*/
+["samples", "list", "5"] 
+```
+Anytime a query is made with this key the result will be saved in the cache.
+Subsequent requests made with this key will get the cached result before making a request
+to the server to refresh the data.
+
 A query key must be:
 
- 1. Distinct: Every API call with unique parameters must have a unique key (page, per_page, term, ect)
- 2. Deterministic: The same query must always produce the same query key
- 3. Filterable: It should be possible to update or invalidate all queries without knowing the exact query parameters used to make the query
+ 1. Distinct: Every API call with unique parameters must have a unique key (`page`, `per_page`, `term`, `id`, etc.)
+```typescript
+    /* Querys made with additional paramters */
+    useListSamples(5, 25)
+    /* should always include all paramters in the query key*/
+    ["samples", "list", "5", "25"]
+```
 
-To this end virtool-ui uses factory functions to produce hierarchical and predictable query keys. 
+
+ 2. Deterministic: The same parameters must always produce the same query key
+```typescript
+    /* Querys made with the paramters */
+    useListSamples(5, 25)
+    /* Should always produce the query key*/
+    ["samples", "list", "5", "25"]
+    /* and never */
+    ["samples", "list", "25", "5"]
+```
+ 3. Hierarchical: Invalidating general query keys should invalidate more specific query keys below them.
+
+```typescript
+    /* Invalidation key */
+    ["samples", "list"] 
+        
+    /* Can invalidate */
+    ["samples", "list"] 
+
+    /* Can invalidate */
+    ["samples", "list", "5", "25"] 
+        
+    /* Can invalidate */
+    ["samples", "list", ...filters] 
+    
+    /* Can't invalidate */
+    ["samples", "details"]
+
+    /* Can't invalidate */
+    ["samples", "details", "1a2b3c4d"]
+```
+
+To this end virtool-ui uses factory functions to produce query keys. 
 
 A typical factory function will resemble the following:
 
