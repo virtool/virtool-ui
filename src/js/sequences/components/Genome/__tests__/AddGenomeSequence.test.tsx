@@ -15,7 +15,6 @@ describe("<AddGenomeSequence>", () => {
 
     beforeEach(() => {
         otu = createFakeOTU();
-        console.log(otu);
         props = {
             isolateId: otu.isolates[0].id,
             otuId: otu.id,

@@ -229,17 +229,11 @@ export function mockApiAddSequence(
     segment?: string,
     target?: string,
 ) {
-    const OTUSequence = createFakeOTUSequence({ accession, definition, host, sequence, segment });
+    const OTUSequence = createFakeOTUSequence({ accession, definition, host, sequence, segment, target });
 
     return nock("http://localhost")
-        .post(`/api/otus/${otuId}/isolates/${isolateId}/sequences`, {
-            accession,
-            definition,
-            host,
-            sequence,
-            segment,
-            target,
-        })
+        .post(`/api/otus/${otuId}/isolates/${isolateId}/sequences`)
+        .query(true)
         .reply(201, OTUSequence);
 }
 
