@@ -1,47 +1,46 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
+import nock from "nock";
 import React from "react";
-import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeIndexMinimal, mockApiFindIndexes } from "../../../../tests/fake/indexes";
-import { createFakeReferenceNested } from "../../../../tests/fake/references";
-import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
-import { Indexes } from "../Indexes";
-
-function createReducer(state, history) {
-    return combineReducers({
-        router: connectRouter(history),
-        references: createGenericReducer(state.references),
-        account: createGenericReducer(state.account),
-        indexes: createGenericReducer(state.indexes),
-    });
-}
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
+import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
+import { renderWithRouter } from "../../../../tests/setupTests";
+import Indexes from "../Indexes";
 
 describe("<Indexes />", () => {
-    let state;
+    let history;
+    let props;
+    let reference;
 
-    const defaultReference = createFakeReferenceNested();
     beforeEach(() => {
-        state = {
-            references: { detail: { id: defaultReference.id } },
-            account: { administrator_role: AdministratorRoles.FULL },
-            indexes: { unbuilt: [] },
+        reference = createFakeReference();
+        mockApiGetReferenceDetail(reference);
+        mockAPIGetAccount(
+            createFakeAccount({
+                administrator_role: AdministratorRoles.FULL,
+            }),
+        );
+        props = {
+            match: { params: { refId: reference.id } },
         };
+        history = createBrowserHistory();
     });
 
+    afterEach(() => nock.cleanAll());
+
     it("should render", async () => {
-        const index = createFakeIndexMinimal({ reference: defaultReference });
-        const findIndexesScope = mockApiFindIndexes(defaultReference.id, 1, {
+        const index = createFakeIndexMinimal({ reference });
+        const findIndexesScope = mockApiFindIndexes(reference.id, 1, {
             documents: [index],
             modified_otu_count: 1,
             total_otu_count: 1,
             change_count: 1,
         });
-
-        renderWithRouter(<Indexes refId={defaultReference.id} />, state, createBrowserHistory(), createReducer);
+        renderWithRouter(<Indexes {...props} />, {}, history);
 
         await waitFor(() => findIndexesScope.done());
         expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
@@ -52,20 +51,20 @@ describe("<Indexes />", () => {
         expect(await screen.findByText("There are unbuilt changes.")).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: "Rebuild the index" })).toHaveAttribute(
             "href",
-            `/refs/${defaultReference.id}/indexes`,
+            `/refs/${reference.id}/indexes`,
         );
     });
 
     it("should render build alert", async () => {
-        const index = createFakeIndexMinimal({ reference: defaultReference });
-        mockApiFindIndexes(defaultReference.id, 1, {
+        const index = createFakeIndexMinimal({ reference });
+        mockApiGetUnbuiltChanges(reference.id);
+        mockApiFindIndexes(reference.id, 1, {
             documents: [index],
             modified_otu_count: 1,
             total_otu_count: 1,
             change_count: 1,
         });
-
-        renderWithRouter(<Indexes refId={defaultReference.id} />, state, createBrowserHistory(), createReducer);
+        renderWithRouter(<Indexes {...props} />, {}, history);
 
         await userEvent.click(await screen.findByRole("link", { name: "Rebuild the index" }));
 

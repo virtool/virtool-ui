@@ -74,7 +74,7 @@ const queryClient = new QueryClient({
                 }
             },
             retry: (failureCount, error) => {
-                if (error.response.status === 401 || error.response.status === 404) {
+                if (error.response.status === 401 || error.response.status === 404 || error.response.status === 403) {
                     return false;
                 }
                 return failureCount <= 3;

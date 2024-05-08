@@ -1,4 +1,3 @@
-import { getError } from "@/errors/selectors";
 import {
     Icon,
     IconLink,
@@ -11,35 +10,41 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "@base";
+import { useCheckCanEditSample } from "@samples/hooks";
+import { useFetchSample } from "@samples/queries";
 import { includes } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import React from "react";
+import { Link, match, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import Analyses from "../../../analyses/components/Analyses";
-import { getSample } from "../../actions";
-import { getCanModify } from "../../selectors";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
 import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
 
-function SampleDetail({ canModify, detail, error, history, match, onGetSample }) {
-    const sampleId = match.params.sampleId;
+type SampleDetailProps = {
+    /** Match object containing path information */
+    match: match<{ sampleId: string }>;
+};
 
-    useEffect(() => {
-        onGetSample(sampleId);
-    }, [sampleId]);
+/**
+ * The detailed view for managing samples
+ */
+export default function SampleDetail({ match }: SampleDetailProps) {
+    const location = useLocation();
+    const { sampleId } = match.params;
+    const { data, isLoading, isError } = useFetchSample(sampleId);
+    const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
 
-    if (error) {
+    if (isError) {
         return <NotFound />;
     }
 
-    if (detail === null) {
+    if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    if (!detail.ready) {
+    if (!data.ready) {
         return <LoadingPlaceholder message="Sample is still being created." margin="220px" />;
     }
 
@@ -48,7 +53,7 @@ function SampleDetail({ canModify, detail, error, history, match, onGetSample })
     let rightsTabLink;
 
     if (canModify) {
-        if (includes(history.location.pathname, "general")) {
+        if (includes(location.pathname, "general")) {
             editIcon = (
                 <Link to={{ state: { editSample: true } }}>
                     <Icon color="orange" name="pencil-alt" tip="Edit" hoverable />
@@ -65,7 +70,7 @@ function SampleDetail({ canModify, detail, error, history, match, onGetSample })
         );
     }
 
-    const { created_at, name, user } = detail;
+    const { created_at, name, user } = data;
     const prefix = `/samples/${sampleId}`;
 
     return (
@@ -81,7 +86,7 @@ function SampleDetail({ canModify, detail, error, history, match, onGetSample })
                 <ViewHeaderAttribution time={created_at} user={user.handle} />
             </ViewHeader>
 
-            <Tabs bsStyle="tabs">
+            <Tabs>
                 <TabsLink to={`${prefix}/general`}>General</TabsLink>
                 <TabsLink to={`${prefix}/files`}>Files</TabsLink>
                 <TabsLink to={`${prefix}/quality`}>Quality</TabsLink>
@@ -102,21 +107,3 @@ function SampleDetail({ canModify, detail, error, history, match, onGetSample })
         </>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        canModify: getCanModify(state),
-        detail: state.samples.detail,
-        error: getError("GET_SAMPLE_ERROR"),
-    };
-}
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onGetSample: sampleId => {
-            dispatch(getSample(sampleId));
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SampleDetail);

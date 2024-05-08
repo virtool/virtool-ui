@@ -1,27 +1,31 @@
+import { LoadingPlaceholder, NoneFoundBox } from "@base";
+import { ScrollList } from "@base/ScrollList";
 import { reduce } from "lodash-es";
 import { find, get } from "lodash-es/lodash";
 import React from "react";
-import { connect } from "react-redux";
-import { LoadingPlaceholder, NoneFoundBox } from "../../base";
-import { ScrollList } from "../../base/ScrollList";
+import { match } from "react-router-dom";
 import { useInfiniteFindIndexes } from "../queries";
 import { IndexMinimal } from "../types";
 import { IndexItem } from "./Item/IndexItem";
-import RebuildIndex from "./Rebuild";
 import RebuildAlert from "./RebuildAlert";
+import RebuildIndex from "./RebuildIndex";
 
 function renderRow(refId: string, activeId: string) {
     return (index: IndexMinimal) => <IndexItem index={index} refId={refId} activeId={activeId} />;
 }
 
+type IndexesProps = {
+    /** Match object containing path information */
+    match: match<{ refId: string }>;
+};
+
 /**
- * A list of reference indexes.
- *
- * @param refId - The unique identifier of the parent reference
- * @returns A list of indexes
+ * Displays a list of reference indexes
  */
-export function Indexes({ refId }: { refId: string }) {
+export default function Indexes({ match }: IndexesProps) {
+    const { refId } = match.params;
     const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindIndexes(refId);
+
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
@@ -32,8 +36,8 @@ export function Indexes({ refId }: { refId: string }) {
 
     return (
         <>
-            <RebuildAlert />
-            <RebuildIndex />
+            <RebuildAlert refId={refId} />
+            <RebuildIndex refId={refId} />
             {noIndexes}
             <ScrollList
                 fetchNextPage={fetchNextPage}
@@ -46,11 +50,3 @@ export function Indexes({ refId }: { refId: string }) {
         </>
     );
 }
-
-function mapStateToProps(state) {
-    return {
-        refId: state.references.detail.id,
-    };
-}
-
-export default connect(mapStateToProps)(Indexes);
