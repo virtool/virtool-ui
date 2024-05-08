@@ -6,7 +6,7 @@ import { area } from "d3-shape";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
 
-function draw(element, data, length, meta, yMax, xMin) {
+function draw(element, data, length, meta, yMax, xMin, graphWidth, graphRatio) {
     select(element).append("svg");
 
     const margin = {
@@ -18,10 +18,14 @@ function draw(element, data, length, meta, yMax, xMin) {
 
     const height = 200 - margin.top - margin.bottom;
 
-    let width = length > 800 ? length / 5 : length;
+    let width = graphWidth > 800 ? graphWidth / 5 : graphWidth;
 
     if (width < xMin) {
         width = xMin;
+    }
+
+    if (graphRatio) {
+        width = width * graphRatio;
     }
 
     width -= margin.left + margin.right;
@@ -90,16 +94,34 @@ interface CoverageChartProps {
     id: string;
     length: number;
     yMax: number;
+    graphWidth: number;
+    graphRatio: number;
 }
 
-export function CoverageChart({ accession, data, definition, id, length, yMax }: CoverageChartProps) {
+export default function CoverageChart({
+    accession,
+    data,
+    definition,
+    id,
+    length,
+    yMax,
+    graphWidth,
+    graphRatio,
+}: CoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
-        draw(chartEl.current, data, length, { accession, id, definition }, yMax, chartEl.current.offsetWidth);
+        draw(
+            chartEl.current,
+            data,
+            length,
+            { accession, id, definition },
+            yMax,
+            chartEl.current.offsetWidth,
+            graphWidth,
+            graphRatio,
+        );
     }, [id]);
 
     return <StyledCoverageChart ref={chartEl} />;
 }
-
-export default CoverageChart;

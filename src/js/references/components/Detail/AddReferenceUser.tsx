@@ -11,7 +11,6 @@ import {
     DialogTitle,
     InitialIcon,
     InputSearch,
-    LoadingPlaceholder,
     NoneFoundSection,
     SelectBoxGroupSection,
     Toolbar,
@@ -59,7 +58,7 @@ export default function AddReferenceUser({ users, onHide, refId, show }: AddRefe
     const { data, isLoading, isFetchingNextPage, fetchNextPage } = useInfiniteFindUsers(25, term);
 
     if (isLoading) {
-        return <LoadingPlaceholder />;
+        return null;
     }
 
     const userIds = map(users, "id");

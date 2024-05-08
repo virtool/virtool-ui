@@ -84,6 +84,16 @@ export function mockApiListIndexes(indexMinimal: IndexMinimal[]) {
     return nock("http://localhost").get("/api/indexes").query(true).reply(200, indexMinimal);
 }
 
+/**
+ * Creates a mocked API call for getting a list of unbuilt changes for a reference
+ *
+ * @param refId - The id of the reference to fetch unbuilt changes for
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetUnbuiltChanges(refId: string) {
+    return nock("http://localhost").get(`/api/refs/${refId}/history?unbuilt=true`).reply(200);
+}
+
 export function mockApiBuildIndexes(refId: string) {
     return nock("http://localhost").post(`/api/refs/${refId}/indexes`).reply(201);
 }

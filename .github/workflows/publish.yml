@@ -1,11 +1,11 @@
 name: publish
 
 on:
-  release:
-    types: [published]
+    release:
+        types: [published]
 
 env:
-  REGISTRY: ghcr.io
+    REGISTRY: ghcr.io
 
 jobs:
   ghcr:

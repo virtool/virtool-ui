@@ -2,9 +2,9 @@ import React from "react";
 import { match, useHistory, useLocation } from "react-router-dom";
 import { LoadingPlaceholder } from "../../../base";
 import { useGetReference } from "../../../references/queries";
-import { useFetchOTU } from "../../queries";
-import IsolateEditor from "./Editor";
+import { CurrentOTUContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
+import IsolateEditor from "./Isolates/IsolateEditor";
 import General from "./OTUGeneral";
 
 type OTUSectionProps = {
@@ -28,9 +28,9 @@ export default function OTUSection({ match }: OTUSectionProps) {
     }
 
     return (
-        <div>
+        <CurrentOTUContextProvider otuId={otuId} refId={refId}>
             <General issues={otu.issues} isolates={otu.isolates} />
-            <IsolateEditor otuId={otuId} refId={refId} />
+            <IsolateEditor />
             <AddIsolate
                 allowedSourceTypes={reference.source_types}
                 otuId={otuId}
@@ -38,6 +38,6 @@ export default function OTUSection({ match }: OTUSectionProps) {
                 show={location.state?.addIsolate}
                 onHide={() => history.replace({ state: { addIsolate: false } })}
             />
-        </div>
+        </CurrentOTUContextProvider>
     );
 }

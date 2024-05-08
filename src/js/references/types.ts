@@ -1,6 +1,6 @@
-import { Task } from "../types";
-import { UserNested } from "../users/types";
-import { SearchResult } from "../utils/types";
+import { Task } from "@/types";
+import { UserNested } from "@users/types";
+import { SearchResult } from "@utils/types";
 
 export type ReferenceClonedFrom = {
     id: string;
@@ -13,14 +13,24 @@ export type ReferenceContributor = UserNested & {
 
 export type ReferenceDataType = "barcode" | "genome";
 
-export type ReferenceGroup = {
+export type ReferenceRights = {
     build: boolean;
-    createdAt: Date;
-    id: string;
     modify: boolean;
-    modifyOtu: boolean;
+    modify_otu: boolean;
     remove: boolean;
 };
+
+export type ReferenceGroup = ReferenceRights & {
+    id: string | number;
+    created_at: string;
+    legacy_id: string | null;
+    name: string;
+};
+
+export type ReferenceUser = UserNested &
+    ReferenceRights & {
+        created_at: string;
+    };
 
 export type ReferenceImportedFrom = {
     id: string;
@@ -59,14 +69,6 @@ export type ReferenceTarget = {
     length: number;
     name: string;
     required: boolean;
-};
-
-export type ReferenceUser = UserNested & {
-    createdAt: Date;
-    build: boolean;
-    modify: boolean;
-    modifyOtu: boolean;
-    remove: boolean;
 };
 
 /** Basic reference data for nested representation */

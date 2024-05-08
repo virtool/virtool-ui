@@ -1,4 +1,6 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { HistoryType } from "@utils/hooks";
+import { merge } from "lodash";
 import { filter, forEach, uniqBy } from "lodash-es";
 import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -9,7 +11,6 @@ import { IndexMinimal } from "../../../indexes/types";
 import { MLModelSearchResult } from "../../../ml/types";
 import { SampleMinimal } from "../../../samples/types";
 import { SubtractionShortlist } from "../../../subtraction/types";
-import { HistoryType } from "../../../utils/hooks";
 import { useCreateAnalysis } from "../../queries";
 import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
@@ -144,7 +145,7 @@ export default function QuickAnalyze({
     const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
 
     function onChangeWorkflow(workflow: Workflows) {
-        history.push({ state: { ...location.state, workflow } });
+        history.push(merge(location, { state: { workflow } }));
     }
 
     return (
@@ -169,7 +170,7 @@ export default function QuickAnalyze({
                         </QuickAnalyzeSelected>
                     </Tabs>
                     <SelectedSamples samples={compatibleSamples} />
-                    {mode === "genome" && <HMMAlert installed={hmms.status.task.complete} />}
+                    {mode === "genome" && <HMMAlert installed={hmms.status.task?.complete} />}
                     <WorkflowSelector
                         onSelect={onChangeWorkflow}
                         selected={location.state?.workflow}

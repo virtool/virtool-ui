@@ -66,7 +66,16 @@ export function useFetchSample(sampleId: string) {
  * @returns A mutator for updating a sample
  */
 export function useUpdateSample(sampleId: string) {
-    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(({ update }) => updateSample(sampleId, update));
+    const queryClient = useQueryClient();
+
+    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(
+        ({ update }) => updateSample(sampleId, update),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
+            },
+        },
+    );
 }
 
 /**

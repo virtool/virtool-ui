@@ -11,9 +11,6 @@
         "@radix-ui/react-progress": "^1.0.3",
         "@radix-ui/react-select": "^1.2.1",
         "@radix-ui/react-tooltip": "^1.0.7",
-        "@reach/checkbox": "^0.16.0",
-        "@reach/dialog": "^0.16.2",
-        "@reach/listbox": "^0.16.2",
         "@reduxjs/toolkit": "^1.9.2",
         "@sentry/react": "^7.49.0",
         "@sentry/vite-plugin": "^2.16.1",
@@ -46,14 +43,12 @@
         "prop-types": "^15.8.1",
         "re-reselect": "^4.0.1",
         "react": "^17.0.2",
-        "react-beautiful-dnd": "^13.1.1",
         "react-dom": "^17.0.2",
         "react-dropzone": "^14.2.3",
         "react-helmet-async": "^2.0.4",
         "react-hook-form": "^7.43.5",
         "react-redux": "^7.2.6",
         "react-router-dom": "^5.2.0",
-        "react-scroll-sync": "^0.9.0",
         "react-window": "^1.8.10",
         "redux": "^4.2.1",
         "redux-saga": "^1.2.2",
@@ -116,5 +111,8 @@
         "printWidth": 120,
         "tabWidth": 4,
         "trailingComma": "all"
+    },
+    "virtool": {
+        "minApiVersion": "23.4.0"
     }
 }

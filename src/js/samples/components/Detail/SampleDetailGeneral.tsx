@@ -1,16 +1,8 @@
+import { BoxGroup, BoxGroupHeader, ContainerNarrow, ContainerSide, LoadingPlaceholder, Markdown, Table } from "@base";
 import numbro from "numbro";
 import React from "react";
 import { match, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import {
-    BoxGroup,
-    BoxGroupHeader,
-    ContainerNarrow,
-    ContainerSide,
-    LoadingPlaceholder,
-    Markdown,
-    Table,
-} from "../../../base";
 import { useFetchSample } from "../../queries";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";

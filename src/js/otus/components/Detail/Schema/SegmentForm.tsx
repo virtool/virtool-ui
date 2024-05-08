@@ -1,11 +1,11 @@
 import {
     Checkbox,
+    DialogFooter,
     InputError,
     InputGroup,
     InputLabel,
     InputSelect,
     InputSimple,
-    ModalFooter,
     SaveButton,
 } from "@/base";
 import { Molecule, OTUSegment } from "@otus/types";
@@ -97,9 +97,9 @@ export default function SegmentForm({ segmentName, molecule, required, onSubmit,
                     )}
                 />
 
-                <ModalFooter>
+                <DialogFooter>
                     <SaveButton />
-                </ModalFooter>
+                </DialogFooter>
             </SegmentFormBody>
         </form>
     );

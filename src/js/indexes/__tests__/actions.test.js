@@ -1,26 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
-    CREATE_INDEX,
-    FIND_INDEXES,
     GET_INDEX,
     GET_INDEX_HISTORY,
-    GET_UNBUILT,
     LIST_READY_INDEXES,
     WS_INSERT_HISTORY,
-    WS_INSERT_INDEX,
     WS_UPDATE_INDEX,
 } from "../../app/actionTypes";
-import {
-    createIndex,
-    findIndexes,
-    getIndex,
-    getIndexHistory,
-    getUnbuilt,
-    listReadyIndexes,
-    wsInsertHistory,
-    wsInsertIndex,
-    wsUpdateIndex,
-} from "../actions";
+import { getIndex, getIndexHistory, listReadyIndexes, wsInsertHistory, wsUpdateIndex } from "../actions";
 
 describe("Index Action Creators", () => {
     it("wsInsertHistory() should return action to insert history via websocket", () => {
@@ -32,32 +18,12 @@ describe("Index Action Creators", () => {
         });
     });
 
-    it("wsInsertIndex() should return action to insert an index via websocket", () => {
-        const data = { foo: "bar" };
-        const result = wsInsertIndex(data);
-        expect(result).toEqual({
-            type: WS_INSERT_INDEX,
-            payload: { ...data },
-        });
-    });
-
     it("wsUpdateIndex() should return action to update an index via websocket", () => {
         const data = { foo: "baz" };
         const result = wsUpdateIndex(data);
         expect(result).toEqual({
             type: WS_UPDATE_INDEX,
             payload: { ...data },
-        });
-    });
-
-    it("findIndexes() should return action to get a specific page of indexes", () => {
-        const refId = "foo";
-        const term = "bar";
-        const page = 3;
-        const result = findIndexes(refId, term, page);
-        expect(result).toEqual({
-            type: FIND_INDEXES.REQUESTED,
-            payload: { refId, term, page },
         });
     });
 
@@ -72,24 +38,6 @@ describe("Index Action Creators", () => {
         expect(result).toEqual({
             type: GET_INDEX.REQUESTED,
             payload: { indexId },
-        });
-    });
-
-    it("getUnbuilt() should return action to get unbuilt changes for a refId", () => {
-        const refId = "foo";
-        const result = getUnbuilt(refId);
-        expect(result).toEqual({
-            type: GET_UNBUILT.REQUESTED,
-            payload: { refId },
-        });
-    });
-
-    it("createIndex() should return action to create index for a refId", () => {
-        const refId = "foo";
-        const result = createIndex(refId);
-        expect(result).toEqual({
-            type: CREATE_INDEX.REQUESTED,
-            payload: { refId },
         });
     });
 

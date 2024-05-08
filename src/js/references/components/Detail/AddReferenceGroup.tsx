@@ -11,7 +11,6 @@ import {
     DialogTitle,
     InitialIcon,
     InputSearch,
-    LoadingPlaceholder,
     NoneFoundSection,
     SelectBoxGroupSection,
     Toolbar,
@@ -59,7 +58,7 @@ export default function AddReferenceGroup({ groups, onHide, refId, show }: AddRe
     const { data, isLoading, isFetchingNextPage, fetchNextPage } = useInfiniteFindGroups(25, term);
 
     if (isLoading) {
-        return <LoadingPlaceholder />;
+        return null;
     }
 
     const groupIds = map(groups, "id");

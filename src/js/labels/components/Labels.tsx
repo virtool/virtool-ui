@@ -10,8 +10,8 @@ import {
     ViewHeaderTitle,
 } from "../../base";
 import { useFetchLabels } from "../queries";
-import { CreateLabel } from "./Create";
-import { Item } from "./Item";
+import { CreateLabel } from "./CreateLabel";
+import { LabelItem } from "./LabelItem";
 
 const LabelsHeader = styled(ViewHeader)`
     align-items: center;
@@ -19,6 +19,9 @@ const LabelsHeader = styled(ViewHeader)`
     justify-content: space-between;
 `;
 
+/**
+ * Display and manage a list of labels
+ */
 export function Labels() {
     const { data, isLoading } = useFetchLabels();
 
@@ -40,7 +43,7 @@ export function Labels() {
             <BoxGroup>
                 {data.length ? (
                     data.map(label => (
-                        <Item
+                        <LabelItem
                             key={label.id}
                             name={label.name}
                             color={label.color}

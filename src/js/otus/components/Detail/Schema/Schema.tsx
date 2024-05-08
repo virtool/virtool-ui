@@ -1,8 +1,10 @@
 import { BoxGroup, Button, LoadingPlaceholder, NoneFoundBox } from "@/base";
 import EditSegment from "@otus/components/Detail/Schema/EditSegment";
-import { useFetchOTU } from "@otus/queries";
+import { OTUQueryKeys, useFetchOTU, useUpdateOTU } from "@otus/queries";
+import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { map, sortBy } from "lodash-es";
+import { useQueryClient } from "@tanstack/react-query";
+import { map } from "lodash";
 import React from "react";
 import { match, useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -30,14 +32,38 @@ export default function Schema({ match }: SchemaProps) {
         ReferenceRight.modify_otu,
     );
     const history = useHistory();
-
     const { data, isLoading } = useFetchOTU(otuId);
+    const mutation = useUpdateOTU();
+    const queryClient = useQueryClient();
 
     if (isLoading || isLoadingPermission) {
         return <LoadingPlaceholder />;
     }
 
     const { abbreviation, name, schema } = data;
+
+    function handleMoveUp(index: number) {
+        const updatedSchema = data.schema.slice();
+        [updatedSchema[index], updatedSchema[index - 1]] = [updatedSchema[index - 1], updatedSchema[index]];
+        handleUpdate(updatedSchema);
+    }
+
+    function handleMoveDown(index: number) {
+        const updatedSchema = data.schema.slice();
+        [updatedSchema[index], updatedSchema[index + 1]] = [updatedSchema[index + 1], updatedSchema[index]];
+        handleUpdate(updatedSchema);
+    }
+
+    function handleUpdate(updatedSchema: OTUSegment[]) {
+        mutation.mutate(
+            { otuId, schema: updatedSchema },
+            {
+                onSuccess: () => {
+                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+                },
+            },
+        );
+    }
 
     return (
         <div>
@@ -52,8 +78,16 @@ export default function Schema({ match }: SchemaProps) {
             )}
             {schema.length ? (
                 <BoxGroup>
-                    {map(sortBy(schema, [segment => segment.name.toLowerCase()]), segment => (
-                        <Segment canModify={canModify} segment={segment} />
+                    {map(schema, (segment, index) => (
+                        <Segment
+                            key={segment.name}
+                            canModify={canModify}
+                            segment={segment}
+                            first={index === 0}
+                            last={index === schema.length - 1}
+                            onMoveUp={() => handleMoveUp(index)}
+                            onMoveDown={() => handleMoveDown(index)}
+                        />
                     ))}
                 </BoxGroup>
             ) : (
