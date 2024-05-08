@@ -24,7 +24,7 @@ type DefaultSubtractionsProps = {
     /** List of subtraction ids associated with the sample */
     defaultSubtractions: string[];
     /** Callback function to handle subtraction selection */
-    onUpdate: (subtractionId: string) => void;
+    onUpdate: (subtractions: string[]) => void;
 };
 
 /**

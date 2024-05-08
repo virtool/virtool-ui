@@ -59,21 +59,21 @@ export function SampleSidebarSelector({
     manageLink,
 }: SampleSidebarSelectorProps) {
     const [results, term, setTerm] = useFuse(sampleItems, ["name"], []);
-    const sampleItemComponents = results.map((item: Label | SubtractionShortlist) => {
-        const { id } = item;
-
-        return (
-            <SampleSidebarSelectorItem
-                key={item.id}
-                selected={selectedItems.includes(id as never)}
-                partiallySelected={partiallySelectedItems.includes(item.id as number)}
-                {...item}
-                onClick={onUpdate}
-            >
-                {render(item)}
-            </SampleSidebarSelectorItem>
-        );
-    });
+    const sampleItemComponents = results.map((item: Label | SubtractionShortlist) => (
+        <SampleSidebarSelectorItem
+            key={item.id}
+            selected={
+                selectionType === "labels"
+                    ? (selectedItems as number[]).includes(item.id as number)
+                    : (selectedItems as string[]).includes(item.id as string)
+            }
+            partiallySelected={partiallySelectedItems.includes(item.id as number)}
+            {...item}
+            onClick={onUpdate}
+        >
+            {render(item)}
+        </SampleSidebarSelectorItem>
+    ));
 
     return (
         <Popover

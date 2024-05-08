@@ -23,7 +23,7 @@ type SampleLabelsProps = {
     /** List of label ids associated with the sample */
     sampleLabels: number[];
     /** Callback function to handle label selection */
-    onUpdate: (labelId: string) => void;
+    onUpdate: (labels: number[]) => void;
 };
 
 /**

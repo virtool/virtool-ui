@@ -16,7 +16,7 @@ type sidebarProps = {
     className?: string;
     sampleLabels: number[];
     defaultSubtractions: string[];
-    onUpdate: (key: string, value: string) => void;
+    onUpdate: (key: string, value: string[] | number[]) => void;
 };
 
 export function Sidebar({ className, sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) {
