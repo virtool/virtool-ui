@@ -1,7 +1,7 @@
 import { ErrorResponse } from "@/types/types";
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
 import {
     addIsolate,
@@ -10,12 +10,14 @@ import {
     editOTU,
     findOTUs,
     getOTU,
+    getOTUHistory,
     removeIsolate,
     removeOTU,
     removeSequence,
+    revertOTU,
     setIsolateAsDefault,
 } from "./api";
-import { OTU, OTUIsolate, OTUSearchResult, OTUSegment } from "./types";
+import { OTU, OTUHistory, OTUIsolate, OTUSearchResult, OTUSegment } from "./types";
 
 /**
  * Factory for generating react-query keys for otu related queries.
@@ -61,7 +63,7 @@ export function useInfiniteFindOTUS(refId: string, term: string, verified?: bool
  * @returns A single OTU
  */
 export function useFetchOTU(otuId: string) {
-    return useQuery<OTU, ErrorResponse>(OTUQueryKeys.detail(otuId), () => getOTU(otuId), {
+    return useQuery<OTU, ErrorResponse>(OTUQueryKeys.details(), () => getOTU(otuId), {
         retry: (failureCount, error) => {
             if (error.response?.status === 404) {
                 return false;
@@ -69,6 +71,16 @@ export function useFetchOTU(otuId: string) {
             return failureCount <= 3;
         },
     });
+}
+
+/**
+ * Fetches the history of changes for a single OTU
+ *
+ * @param otuId - The id of the OTU to fetch
+ * @returns A history list of changes for a single OTU
+ */
+export function useFetchOTUHistory(otuId: string) {
+    return useQuery<OTUHistory[], ErrorResponse>(OTUQueryKeys.detail(otuId), () => getOTUHistory(otuId));
 }
 
 /**
@@ -107,6 +119,21 @@ export function useUpdateOTU() {
  */
 export function useRemoveOTU() {
     return useMutation<null, ErrorResponse, { otuId: string }>(({ otuId }) => removeOTU(otuId));
+}
+
+/**
+ * Initializes a mutator for reverting an otu to how it was before a given change
+ *
+ * @returns A mutator for reverting an otu to how it was before a given change
+ */
+export function useRevertOTU(otuId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<null, ErrorResponse, { changeId: string }>(({ changeId }) => revertOTU(changeId), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+        },
+    });
 }
 
 /**
