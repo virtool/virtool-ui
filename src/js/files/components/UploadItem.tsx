@@ -1,11 +1,12 @@
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { getBorder, getColor, getFontWeight } from "../../app/theme";
 import { Icon, Loader, ProgressBarAffixed } from "../../base";
 import { byteSize } from "../../utils/utils";
-import { removeUpload } from "../actions";
 
+/**
+ * Styled component for the upload item container.
+ */
 const StyledUploadItem = styled.div`
     padding: 0;
     position: relative;
@@ -15,7 +16,11 @@ const StyledUploadItem = styled.div`
     }
 `;
 
-const UploadItemTitle = styled.div`
+/**
+ * Styled component for the title section of the upload item.
+ * @param failed - whether the upload failed.
+ */
+const UploadItemTitle = styled.div<{ failed: boolean }>`
     justify-content: space-between;
     display: flex;
     padding: 15px 15px 10px;
@@ -37,16 +42,35 @@ const UploadItemTitle = styled.div`
     }
 `;
 
+/**
+ * Styled component for the name of the upload item.
+ */
 const UploadItemName = styled.span`
     font-weight: ${getFontWeight("thick")};
 `;
 
-export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) => {
+/**
+ * Props definition for the UploadItem component.
+ */
+interface UploadItemProps {
+    name: string;
+    progress: number;
+    size: number;
+    failed: boolean;
+    localId: string;
+    onRemove: (localId: string) => void;
+}
+
+/**
+ * Component representing an individual upload item.
+ * @param props The properties passed to the component.
+ */
+export const UploadItem: React.FC<UploadItemProps> = ({ name, progress, size, failed, localId, onRemove }) => {
     let uploadIcon = progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />;
-    let uploadBookend = byteSize(size, true);
+    let uploadBookend: React.ReactNode = byteSize(size, true);
 
     if (failed) {
-        uploadIcon = <Icon name="times" color={"red"} hoverable={false} />;
+        uploadIcon = <Icon name="times" color="red" hoverable={false} />;
         uploadBookend = (
             <>
                 Failed <Icon aria-label={`delete ${name}`} name="trash" color="red" onClick={() => onRemove(localId)} />
@@ -65,11 +89,3 @@ export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) 
         </StyledUploadItem>
     );
 };
-
-const mapDispatchToProps = dispatch => ({
-    onRemove: localId => {
-        dispatch(removeUpload(localId));
-    },
-});
-
-export default connect(null, mapDispatchToProps)(UploadItem);
