@@ -1,7 +1,7 @@
 import { get } from "lodash-es/lodash";
 import { wsUpdateAnalysis } from "../../analyses/actions";
 import { wsInsertHistory, wsUpdateIndex } from "../../indexes/actions";
-import { wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
+import { wsUpdateOTU } from "../../otus/actions";
 import { wsInsertReference, wsUpdateReference } from "../../references/actions";
 
 function actionCreatorWrapper(actionCreator) {
@@ -26,15 +26,10 @@ const updaters = {
     references: actionCreatorWrapper(wsUpdateReference),
 };
 
-const removers = {
-    otus: actionCreatorWrapper(wsRemoveOTU),
-};
-
 const modifiers = {
     insert: inserters,
     create: inserters,
     update: updaters,
-    delete: removers,
 };
 
 export function reduxHandler(store) {
