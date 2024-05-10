@@ -18,7 +18,7 @@ const StyledUploadItem = styled.div`
 
 /**
  * Styled component for the title section of the upload item.
- * @param failed - whether the upload failed.
+ * @prop failed - whether the upload failed.
  */
 const UploadItemTitle = styled.div<{ failed: boolean }>`
     justify-content: space-between;
@@ -43,33 +43,29 @@ const UploadItemTitle = styled.div<{ failed: boolean }>`
 `;
 
 /**
- * Styled component for the name of the upload item.
+ * Emphasized name of the upload item.
  */
 const UploadItemName = styled.span`
     font-weight: ${getFontWeight("thick")};
 `;
 
-/**
- * Props definition for the UploadItem component.
- * @prop name - the name of the file being uploaded.
- * @prop progress - the progress of the upload in percentage.
- * @prop size - the size of the file being uploaded.
- * @prop failed - whether the upload failed.
- * @prop localId - the local id of the file being uploaded.
- * @prop onRemove - function to remove the file from the upload list.
- */
-interface UploadItemProps {
+type UploadItemProps = {
+    /* Name of the file being uploaded */
     name: string;
+    /* Progress of the upload in percentage */
     progress: number;
+    /* Size of the file being uploaded */
     size: number;
+    /* Whether the upload failed */
     failed: boolean;
+    /* Local id of the file being uploaded */
     localId: string;
+    /* Function to remove the file from the upload list */
     onRemove: (localId: string) => void;
-}
+};
 
 /**
- * Component representing an individual upload item.
- * @param {UploadItemProps} props - defined in the UploadItemProps interface.
+ * Progress tracker for a single uploaded file
  */
 export function UploadItem({ name, progress, size, failed, localId, onRemove }: UploadItemProps): JSX.Element {
     let uploadIcon = progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />;
