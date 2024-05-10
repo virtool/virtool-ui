@@ -1,22 +1,12 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { connectRouter } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import React from "react";
-import { combineReducers } from "redux";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount } from "../../../../tests/fake/account";
-import { createGenericReducer, renderWithRouter } from "../../../../tests/setupTests";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import AccountProfile from "../AccountProfile";
-
-function createReducer(state, history) {
-    return combineReducers({
-        account: createGenericReducer(state.account),
-        settings: createGenericReducer(state.settings),
-        router: connectRouter(history),
-    });
-}
 
 describe("<AccountProfile />", () => {
     let history;
@@ -32,7 +22,7 @@ describe("<AccountProfile />", () => {
     });
 
     it("should render when administrator", () => {
-        renderWithRouter(<AccountProfile />, state, history, createReducer);
+        renderWithRouter(<AccountProfile />, state, history);
 
         expect(screen.getByText("amanda36")).toBeInTheDocument();
         expect(screen.getByText("full Administrator")).toBeInTheDocument();
@@ -41,21 +31,21 @@ describe("<AccountProfile />", () => {
 
     it("should render when not administrator", () => {
         state.account.administrator_role = null;
-        renderWithRouter(<AccountProfile />, state, history, createReducer);
+        renderWithRouter(<AccountProfile />, state, history);
 
         expect(screen.getByText("amanda36")).toBeInTheDocument();
     });
 
     it("should render with initial email", () => {
         state.account.email = "virtool.devs@gmail.com";
-        renderWithRouter(<AccountProfile />, state, history, createReducer);
+        renderWithRouter(<AccountProfile />, state, history);
         const emailInput = screen.getByLabelText("Email Address");
         expect(emailInput.value).toBe("virtool.devs@gmail.com");
     });
 
     it("should handle email changes", async () => {
         state.account.email = "";
-        renderWithRouter(<AccountProfile />, state, history, createReducer);
+        renderWithRouter(<AccountProfile />, state, history);
 
         const emailInput = screen.getByLabelText("Email Address");
         expect(emailInput.value).toBe("");
@@ -72,7 +62,7 @@ describe("<AccountProfile />", () => {
     });
 
     it("should handle password changes", async () => {
-        renderWithRouter(<AccountProfile />, state, history, createReducer);
+        renderWithRouter(<AccountProfile />, state, history);
 
         const oldPasswordInput = screen.getByLabelText("Old Password");
         const newPasswordInput = screen.getByLabelText("New Password");
