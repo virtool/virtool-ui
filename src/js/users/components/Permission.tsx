@@ -12,7 +12,7 @@ const StyledPermissionItem = styled(BoxGroupSection)`
 `;
 
 /**
- * Permission item with an icon indicating its status.
+A condensed permission item for use in a list of user permissions
  * @prop permission - name of the permission.
  * @prop value - indicates if the permission is granted.
  */
