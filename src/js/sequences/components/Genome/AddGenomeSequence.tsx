@@ -1,8 +1,7 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "@base";
-import { OTUQueryKeys, useAddSequence } from "@otus/queries";
+import { useAddSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import { compact, map } from "lodash-es/lodash";
@@ -47,19 +46,17 @@ type AddGenomeSequenceProps = {
 export default function AddGenomeSequence({ isolateId, otuId, sequences, schema }: AddGenomeSequenceProps) {
     const history = useHistory();
     const location = useLocation<{ addSequence: boolean }>();
-    const mutation = useAddSequence();
-    const queryClient = useQueryClient();
+    const mutation = useAddSequence(otuId);
 
     const referencedSegmentNames = compact(map(sequences, "segment"));
     const segments = schema.filter(segment => !referencedSegmentNames.includes(segment.name));
 
     function handleSubmit({ accession, definition, host, sequence, segment }) {
         mutation.mutate(
-            { otuId, isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
+            { isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
                 onSuccess: () => {
                     history.push({ state: { addSequence: false } });
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
             },
         );

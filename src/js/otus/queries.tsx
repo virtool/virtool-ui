@@ -1,7 +1,7 @@
 import { ErrorResponse } from "@/types/types";
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
 import {
     addIsolate,
@@ -161,12 +161,13 @@ export function useRemoveIsolate() {
  *
  * @returns A mutator for adding a sequence
  */
-export function useAddSequence() {
+export function useAddSequence(otuId: string) {
+    const queryClient = useQueryClient();
+
     return useMutation<
         OTUSequence,
         unknown,
         {
-            otuId: string;
             isolateId: string;
             accession: string;
             definition: string;
@@ -175,8 +176,14 @@ export function useAddSequence() {
             segment?: string;
             target?: string;
         }
-    >(({ otuId, isolateId, accession, definition, host, sequence, segment, target }) =>
-        addSequence(otuId, isolateId, accession, definition, host, sequence, segment, target),
+    >(
+        ({ isolateId, accession, definition, host, sequence, segment, target }) =>
+            addSequence(otuId, isolateId, accession, definition, host, sequence, segment, target),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+            },
+        },
     );
 }
 

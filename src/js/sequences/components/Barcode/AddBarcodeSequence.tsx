@@ -58,18 +58,24 @@ type AddBarcodeSequenceProps = {
 export function AddBarcodeSequence({ defaultTarget, isolateId, otuId, targets }: AddBarcodeSequenceProps) {
     const history = useHistory();
     const location = useLocation<{ addSequence: boolean }>();
-    const mutation = useAddSequence();
+    const mutation = useAddSequence(otuId);
 
     function handleSubmit({ accession, definition, host, sequence, targetName }) {
-        mutation.mutate({
-            otuId,
-            isolateId,
-            accession,
-            definition,
-            host,
-            sequence: sequence.toUpperCase(),
-            target: targetName,
-        });
+        mutation.mutate(
+            {
+                isolateId,
+                accession,
+                definition,
+                host,
+                sequence: sequence.toUpperCase(),
+                target: targetName,
+            },
+            {
+                onSuccess: () => {
+                    history.push({ state: { addSequence: false } });
+                },
+            },
+        );
     }
 
     const initialValues = getInitialValues(defaultTarget);
