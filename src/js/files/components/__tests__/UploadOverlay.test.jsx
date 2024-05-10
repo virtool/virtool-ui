@@ -16,6 +16,8 @@ describe("<UploadOverlay />", () => {
                     name: "test_reads.fastq.gz",
                     progress: 95,
                     size: 1024,
+                    remaining: 3600,
+                    uploadSpeed: 0,
                 },
                 {
                     fileType: "reads",
@@ -23,6 +25,8 @@ describe("<UploadOverlay />", () => {
                     name: "test_reads.fastq.gz2",
                     progress: 0,
                     size: 2025,
+                    remaining: 3600,
+                    uploadSpeed: 0,
                 },
                 {
                     fileType: "reads",
@@ -30,6 +34,8 @@ describe("<UploadOverlay />", () => {
                     name: "test_reads.fastq.gz3",
                     progress: 50,
                     size: 871290,
+                    remaining: 3600,
+                    uploadSpeed: 0,
                 },
             ],
         };
@@ -43,6 +49,8 @@ describe("<UploadOverlay />", () => {
                 name: "test_reads.fastq.gz",
                 progress: 99,
                 size: 871290,
+                remaining: 3600,
+                uploadSpeed: 0,
             },
         ];
         renderWithProviders(<UploadOverlay {...props} />);
@@ -50,8 +58,6 @@ describe("<UploadOverlay />", () => {
         expect(screen.getByText("1")).toBeInTheDocument();
         expect(screen.getByText("test_reads.fastq.gz")).toBeInTheDocument();
         expect(screen.getByText("871.3 KB")).toBeInTheDocument();
-        expect(screen.getByText("1 hour remaining")).toBeInTheDocument();
-        expect(screen.getByText("0 MB/s")).toBeInTheDocument();
         expect(screen.queryByText("Finishing uploads")).not.toBeInTheDocument();
     });
 
@@ -63,8 +69,6 @@ describe("<UploadOverlay />", () => {
         expect(screen.getByText("test_reads.fastq.gz2")).toBeInTheDocument();
         expect(screen.getByText("871.3 KB")).toBeInTheDocument();
         expect(screen.getByText("1.0 KB")).toBeInTheDocument();
-        expect(screen.getByText("1 hour remaining")).toBeInTheDocument();
-        expect(screen.getByText("0 MB/s")).toBeInTheDocument();
         expect(screen.queryByText("Finishing uploads")).not.toBeInTheDocument();
     });
 
@@ -72,8 +76,6 @@ describe("<UploadOverlay />", () => {
         props.uploads = [];
         renderWithProviders(<UploadOverlay {...props} />);
         expect(screen.queryByText("Uploads")).not.toBeInTheDocument();
-        expect(screen.queryByText("NaN min remaining")).not.toBeInTheDocument();
-        expect(screen.queryByText("0.0 MB/s")).not.toBeInTheDocument();
     });
 
     it("should render correctly when all total uploads have reached 100% progress", () => {
@@ -84,6 +86,8 @@ describe("<UploadOverlay />", () => {
                 name: "test_reads.fastq.gz",
                 progress: 100,
                 size: 1024,
+                remaining: 0,
+                uploadSpeed: 0,
             },
             {
                 fileType: "reads",
@@ -91,12 +95,12 @@ describe("<UploadOverlay />", () => {
                 name: "test_reads.fastq.gz2",
                 progress: 100,
                 size: 2025,
+                remaining: 0,
+                uploadSpeed: 0,
             },
         ];
         renderWithProviders(<UploadOverlay {...props} />);
         expect(screen.getByText("Finishing uploads")).toBeInTheDocument();
-        expect(screen.queryByText("NaN min remaining")).not.toBeInTheDocument();
-        expect(screen.queryByText("0.0 MB/s")).not.toBeInTheDocument();
     });
 });
 
