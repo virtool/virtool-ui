@@ -30,6 +30,8 @@ export const OTUQueryKeys = {
     infiniteList: (filters: Array<string | number | boolean>) => ["OTU", "list", "infinite", ...filters] as const,
     details: () => ["OTU", "details"] as const,
     detail: (id: string) => ["OTU", "detail", id] as const,
+    histories: () => ["OTU", "details", "history"] as const,
+    history: (id: string) => ["OTU", "detail", "history", id] as const,
 };
 
 /**
@@ -63,7 +65,7 @@ export function useInfiniteFindOTUS(refId: string, term: string, verified?: bool
  * @returns A single OTU
  */
 export function useFetchOTU(otuId: string) {
-    return useQuery<OTU, ErrorResponse>(OTUQueryKeys.details(), () => getOTU(otuId), {
+    return useQuery<OTU, ErrorResponse>(OTUQueryKeys.detail(otuId), () => getOTU(otuId), {
         retry: (failureCount, error) => {
             if (error.response?.status === 404) {
                 return false;
@@ -80,7 +82,7 @@ export function useFetchOTU(otuId: string) {
  * @returns A history list of changes for a single OTU
  */
 export function useFetchOTUHistory(otuId: string) {
-    return useQuery<OTUHistory[], ErrorResponse>(OTUQueryKeys.detail(otuId), () => getOTUHistory(otuId));
+    return useQuery<OTUHistory[], ErrorResponse>(OTUQueryKeys.history(otuId), () => getOTUHistory(otuId));
 }
 
 /**
