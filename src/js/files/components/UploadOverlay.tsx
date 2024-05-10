@@ -68,7 +68,9 @@ type UploadProps = {
  * Overlay uploads with their progress and speeds.
  */
 export function UploadOverlay({ uploads }: { uploads: UploadProps[] }): JSX.Element | null {
-    if (!uploads.length) return null;
+    if (!uploads.length) {
+        return null;
+    }
 
     const totalRemainingUploadTime: number = sumBy(uploads, "remaining");
     const overallUploadSpeed: number = sumBy(uploads, "uploadSpeed");

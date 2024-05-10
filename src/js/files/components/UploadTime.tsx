@@ -22,7 +22,7 @@ function isDurationZero(duration: Duration): boolean {
  */
 export function UploadTime({ remaining, uploadSpeed }: { remaining: number; uploadSpeed: number }): JSX.Element {
     const timeRemainingInterval: Duration = intervalToDuration({ start: 0, end: remaining * 1000 });
-    let formattedTimeRemaining: string = "";
+    let formattedTimeRemaining = "";
 
     if (isDurationZero(timeRemainingInterval)) {
         formattedTimeRemaining = "0 seconds remaining";
