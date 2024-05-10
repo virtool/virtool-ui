@@ -41,7 +41,7 @@ type SampleSidebarSelectorProps = {
     /** A list of labels or default subtractions */
     sampleItems: Label[] | SubtractionShortlist[];
     /** A list of selected items by their ids */
-    selectedItems: string[] | number[];
+    selectedItems: Array<string | number>;
     /** Whether the sidebar is labels or subtractions */
     selectionType: string;
 };
@@ -62,11 +62,7 @@ export function SampleSidebarSelector({
     const sampleItemComponents = results.map((item: Label | SubtractionShortlist) => (
         <SampleSidebarSelectorItem
             key={item.id}
-            selected={
-                selectionType === "labels"
-                    ? (selectedItems as number[]).includes(item.id as number)
-                    : (selectedItems as string[]).includes(item.id as string)
-            }
+            selected={selectedItems.includes(item.id)}
             partiallySelected={partiallySelectedItems.includes(item.id as number)}
             {...item}
             onClick={onUpdate}
