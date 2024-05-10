@@ -51,12 +51,12 @@ const UploadItemName = styled.span`
 
 /**
  * Props definition for the UploadItem component.
- * @param name - the name of the file being uploaded.
- * @param progress - the progress of the upload in percentage.
- * @param size - the size of the file being uploaded.
- * @param failed - whether the upload failed.
- * @param localId - the local id of the file being uploaded.
- * @param onRemove - function to remove the file from the upload list.
+ * @prop name - the name of the file being uploaded.
+ * @prop progress - the progress of the upload in percentage.
+ * @prop size - the size of the file being uploaded.
+ * @prop failed - whether the upload failed.
+ * @prop localId - the local id of the file being uploaded.
+ * @prop onRemove - function to remove the file from the upload list.
  */
 interface UploadItemProps {
     name: string;
@@ -69,9 +69,9 @@ interface UploadItemProps {
 
 /**
  * Component representing an individual upload item.
- * @param props - defined in the UploadItemProps interface.
+ * @param {UploadItemProps} props - defined in the UploadItemProps interface.
  */
-export const UploadItem: React.FC<UploadItemProps> = ({ name, progress, size, failed, localId, onRemove }) => {
+export function UploadItem({ name, progress, size, failed, localId, onRemove }: UploadItemProps): JSX.Element {
     let uploadIcon = progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />;
     let uploadBookend: React.ReactNode = byteSize(size, true);
 
@@ -94,4 +94,4 @@ export const UploadItem: React.FC<UploadItemProps> = ({ name, progress, size, fa
             </UploadItemTitle>
         </StyledUploadItem>
     );
-};
+}
