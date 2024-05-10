@@ -24,7 +24,7 @@ type SubtractionAttributionProps = {
 };
 
 /**
- * Component for rendering attribution with user and time.
+ * Subtraction attribution with user handle and time.
  * If only user is provided, renders without time.
  * If neither user nor time is provided, renders default message.
  */
