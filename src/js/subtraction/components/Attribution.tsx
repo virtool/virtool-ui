@@ -5,6 +5,8 @@ import { Attribution, AttributionWithName } from "../../base";
 
 /**
  * Styled component for the attribution when none found.
+ * @prop color - The color of the text.
+ * @prop theme - The theme object.
  */
 const StyledNoneFoundAttribution = styled.div`
     color: ${getColor({ color: "grey", theme })};
@@ -14,21 +16,17 @@ const StyledNoneFoundAttribution = styled.div`
     top: 50%;
 `;
 
-/**
- * Props interface for the SubtractionAttribution component.
- * @prop {string} handle - The user handle.
- * @prop {string} time - The time of the subtraction.
- */
-interface SubtractionAttributionProps {
+type SubtractionAttributionProps = {
+    /* The user handle */
     handle: string;
+    /* The time of the subtraction */
     time?: string;
-}
+};
 
 /**
  * Component for rendering attribution with user and time.
  * If only user is provided, renders without time.
  * If neither user nor time is provided, renders default message.
- * @param {SubtractionAttributionProps} props - The component props.
  */
 export function SubtractionAttribution({ handle, time }: SubtractionAttributionProps): JSX.Element {
     if (handle) {
