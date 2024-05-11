@@ -15,12 +15,17 @@ function isDurationZero(duration: Duration): boolean {
     return Object.values(duration).every(value => value === 0 || value === undefined);
 }
 
+type UploadTimeProps = {
+    /* Remaining time in seconds */
+    remaining: number;
+    /* Upload speed in bytes per second */
+    uploadSpeed: number;
+};
+
 /**
  * Displays remaining time and upload speed.
- * @prop remaining - remaining time in seconds
- * @prop uploadSpeed - upload speed in bytes per second
  */
-export function UploadTime({ remaining, uploadSpeed }: { remaining: number; uploadSpeed: number }): JSX.Element {
+export function UploadTime({ remaining, uploadSpeed }: UploadTimeProps): JSX.Element {
     const timeRemainingInterval: Duration = intervalToDuration({ start: 0, end: remaining * 1000 });
     let formattedTimeRemaining = "";
 

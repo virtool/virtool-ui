@@ -30,3 +30,17 @@ export type File = {
     uploaded_at: string;
     user: UserNested;
 };
+
+export type Upload = {
+    fileType: string;
+    localId: string;
+    name: string;
+    /* Progress of the upload in percentage */
+    progress: number;
+    /* Size of the file in bytes */
+    size: number;
+    /* Remaining time in seconds */
+    remaining: number;
+    /* Upload speed in bytes per second */
+    uploadSpeed: number;
+};

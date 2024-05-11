@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
+import { Upload } from "../types";
 import { UploadItem } from "./UploadItem";
 import { UploadTime } from "./UploadTime";
 
@@ -49,25 +50,14 @@ const StyledUploadInformation = styled.div`
     margin-top: 5px;
 `;
 
-type UploadProps = {
-    fileType: string;
-    /* Unique identifier for the upload */
-    localId: string;
-    name: string;
-    /* Progress of the upload in percentage */
-    progress: number;
-    /* Size of the file in bytes */
-    size: number;
-    /* Remaining time in seconds */
-    remaining: number;
-    /* Upload speed in bytes per second */
-    uploadSpeed: number;
+type UploadOverlayProps = {
+    uploads: Upload[];
 };
 
 /**
  * Overlay uploads with their progress and speeds.
  */
-export function UploadOverlay({ uploads }: { uploads: UploadProps[] }): JSX.Element | null {
+export function UploadOverlay({ uploads }: UploadOverlayProps): JSX.Element | null {
     if (!uploads.length) {
         return null;
     }
