@@ -2,7 +2,7 @@ import { ErrorResponse } from "@/types/types";
 import { Permissions } from "@groups/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createAPIKey, fetchAccount, getAPIKeys, removeAPIKey, updateAPIKey } from "./api";
-import { Account, APIKey } from "./types";
+import { Account, APIKeyMinimal } from "./types";
 
 /**
  * Factory object for generating account query keys
@@ -27,7 +27,7 @@ export function useFetchAccount() {
  * @returns A list of API keys for the current user
  */
 export function useFetchAPIKeys() {
-    return useQuery<APIKey[]>(accountKeys.details(), () => getAPIKeys());
+    return useQuery<APIKeyMinimal[]>(accountKeys.details(), () => getAPIKeys());
 }
 
 /**
@@ -36,8 +36,8 @@ export function useFetchAPIKeys() {
  * @returns A mutator for creating a new API key
  */
 export function useCreateAPIKey() {
-    return useMutation<APIKey, ErrorResponse, { name: string; permissions: Permissions }>(({ name, permissions }) =>
-        createAPIKey(name, permissions),
+    return useMutation<APIKeyMinimal, ErrorResponse, { name: string; permissions: Permissions }>(
+        ({ name, permissions }) => createAPIKey(name, permissions),
     );
 }
 
@@ -49,7 +49,7 @@ export function useCreateAPIKey() {
 export function useUpdateAPIKey() {
     const queryClient = useQueryClient();
 
-    return useMutation<unknown, ErrorResponse, { keyId: string; permissions: Permissions }>(
+    return useMutation<APIKeyMinimal, ErrorResponse, { keyId: string; permissions: Permissions }>(
         ({ keyId, permissions }) => updateAPIKey(keyId, permissions),
         {
             onSuccess: () => {
@@ -67,7 +67,7 @@ export function useUpdateAPIKey() {
 export function useRemoveAPIKey() {
     const queryClient = useQueryClient();
 
-    return useMutation<unknown, ErrorResponse, { keyId: string }>(({ keyId }) => removeAPIKey(keyId), {
+    return useMutation<null, ErrorResponse, { keyId: string }>(({ keyId }) => removeAPIKey(keyId), {
         onSuccess: () => {
             queryClient.invalidateQueries(accountKeys.all());
         },

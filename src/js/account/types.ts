@@ -7,7 +7,7 @@ export enum QuickAnalyzeWorkflow {
     pathoscope_bowtie = "pathoscope_bowtie",
 }
 
-export type APIKey = {
+export type APIKeyMinimal = {
     created_at?: string;
     groups: Array<GroupMinimal>;
     id: string;

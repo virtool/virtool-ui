@@ -1,5 +1,4 @@
-import { APIKeysResponse } from "@account/api";
-import { Account, AccountSettings, QuickAnalyzeWorkflow } from "@account/types";
+import { Account, AccountSettings, APIKeyMinimal, QuickAnalyzeWorkflow } from "@account/types";
 import { AdministratorRoles } from "@administration/types";
 import { faker } from "@faker-js/faker";
 import { GroupMinimal, Permissions } from "@groups/types";
@@ -48,7 +47,7 @@ type CreateFakeApiKeysProps = {
  *
  * @param props - optional properties for creating a fake API key with specific values
  */
-export function createFakeApiKey(props?: CreateFakeApiKeysProps): APIKeysResponse {
+export function createFakeApiKey(props?: CreateFakeApiKeysProps): APIKeyMinimal {
     const apiKeys = {
         created_at: faker.date.past().toISOString(),
         groups: [createFakeGroupMinimal()],
@@ -76,7 +75,7 @@ export function mockAPIGetAccount(account: Account) {
  * @param apiKeys - The array of API keys to return
  * @returns A nock scope for the mocked API call
  */
-export function mockApiGetAPIKeys(apiKeys: APIKeysResponse[]) {
+export function mockApiGetAPIKeys(apiKeys: APIKeyMinimal[]) {
     return nock("http://localhost").get("/api/account/keys").reply(200, apiKeys);
 }
 

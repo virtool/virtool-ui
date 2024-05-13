@@ -1,5 +1,5 @@
 import { useRemoveAPIKey, useUpdateAPIKey } from "@account/queries";
-import { APIKey } from "@account/types";
+import { APIKeyMinimal } from "@account/types";
 import { Attribution, BoxGroupSection, Button, ButtonToolbar, Icon } from "@base";
 import { Permissions } from "@groups/types";
 import { isEqual, reduce } from "lodash-es";
@@ -31,7 +31,7 @@ type FormValues = {
 };
 
 type APIKeyProps = {
-    apiKey: APIKey;
+    apiKey: APIKeyMinimal;
 };
 
 /**

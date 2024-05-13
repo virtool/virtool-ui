@@ -7,7 +7,7 @@
 import { Request } from "@app/request";
 import { Permissions } from "@groups/types";
 import { Response } from "superagent";
-import { Account, APIKey } from "./types";
+import { Account, APIKeyMinimal } from "./types";
 
 /**
  * Gets complete account data for the current user.
@@ -72,7 +72,7 @@ export function changePassword({ old_password, password }: { old_password: strin
  * @returns A promise resolving to a response containing the
  * current user's API keys.
  */
-export function getAPIKeys(): Promise<APIKey[]> {
+export function getAPIKeys(): Promise<APIKeyMinimal[]> {
     return Request.get("/account/keys").then(res => res.body);
 }
 
@@ -83,7 +83,7 @@ export function getAPIKeys(): Promise<APIKey[]> {
  * @param permissions - Complete list of permissions for the API key
  * @returns A promise resolving to a response containing the newly created API key
  */
-export function createAPIKey(name: string, permissions: Permissions): Promise<APIKey> {
+export function createAPIKey(name: string, permissions: Permissions): Promise<APIKeyMinimal> {
     return Request.post("/account/keys")
         .send({
             name,
@@ -99,7 +99,7 @@ export function createAPIKey(name: string, permissions: Permissions): Promise<AP
  * @param permissions - The new permissions for the API key
  * @returns A promise resolving to a response containing the updated API key
  */
-export function updateAPIKey(keyId: string, permissions: Permissions) {
+export function updateAPIKey(keyId: string, permissions: Permissions): Promise<APIKeyMinimal> {
     return Request.patch(`/account/keys/${keyId}`)
         .send({
             permissions,
@@ -113,7 +113,7 @@ export function updateAPIKey(keyId: string, permissions: Permissions) {
  * @param keyId - The unique id of the API key to remove
  * @returns A promise which resolves to a response indicating if the API key was successfully removed
  */
-export function removeAPIKey(keyId: string) {
+export function removeAPIKey(keyId: string): Promise<null> {
     return Request.delete(`/account/keys/${keyId}`).then(res => res.body);
 }
 
