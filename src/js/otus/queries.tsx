@@ -28,9 +28,9 @@ export const OTUQueryKeys = {
     list: (filters: Array<string | number | boolean>) => ["OTU", "list", ...filters] as const,
     infiniteLists: () => ["OTU", "list", "infinite"] as const,
     infiniteList: (filters: Array<string | number | boolean>) => ["OTU", "list", "infinite", ...filters] as const,
-    details: () => ["OTU", "details"] as const,
+    details: () => ["OTU", "detail"] as const,
     detail: (id: string) => ["OTU", "detail", id] as const,
-    histories: () => ["OTU", "details", "history"] as const,
+    histories: () => ["OTU", "detail", "history"] as const,
     history: (id: string) => ["OTU", "detail", "history", id] as const,
 };
 
