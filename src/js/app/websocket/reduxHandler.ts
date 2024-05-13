@@ -2,7 +2,7 @@ import { get } from "lodash-es/lodash";
 import { wsUpdateAnalysis } from "../../analyses/actions";
 import { wsInsertHistory, wsUpdateIndex } from "../../indexes/actions";
 import { wsRemoveOTU, wsUpdateOTU } from "../../otus/actions";
-import { wsInsertReference, wsUpdateReference } from "../../references/actions";
+import { wsUpdateReference } from "../../references/actions";
 
 function actionCreatorWrapper(actionCreator) {
     return (state, message) => actionCreator(message.data);
@@ -10,7 +10,6 @@ function actionCreatorWrapper(actionCreator) {
 
 const inserters = {
     history: actionCreatorWrapper(wsInsertHistory),
-    references: actionCreatorWrapper(wsInsertReference),
 };
 
 const updaters = {

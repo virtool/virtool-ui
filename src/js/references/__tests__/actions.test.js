@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { EDIT_REFERENCE, REMOTE_REFERENCE, WS_INSERT_REFERENCE, WS_UPDATE_REFERENCE } from "../../app/actionTypes";
-import { editReference, remoteReference, wsInsertReference, wsUpdateReference } from "../actions";
+import { EDIT_REFERENCE, WS_INSERT_REFERENCE, WS_UPDATE_REFERENCE } from "../../app/actionTypes";
+import { editReference, wsInsertReference, wsUpdateReference } from "../actions";
 
 describe("References Action Creators:", () => {
     it("wsInsertReference", () => {
@@ -29,9 +29,5 @@ describe("References Action Creators:", () => {
             type: EDIT_REFERENCE.REQUESTED,
             payload: { refId, update },
         });
-    });
-
-    it("remoteReference", () => {
-        expect(remoteReference()).toEqual({ type: REMOTE_REFERENCE.REQUESTED });
     });
 });

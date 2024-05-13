@@ -1,10 +1,4 @@
-import {
-    EDIT_REFERENCE,
-    GET_REFERENCE,
-    REMOTE_REFERENCE,
-    WS_INSERT_REFERENCE,
-    WS_UPDATE_REFERENCE,
-} from "@app/actionTypes";
+import { EDIT_REFERENCE, GET_REFERENCE, WS_INSERT_REFERENCE, WS_UPDATE_REFERENCE } from "@app/actionTypes";
 import { createReducer } from "@reduxjs/toolkit";
 import { insert, update } from "@utils/reducers";
 import { assign } from "lodash-es";
@@ -41,9 +35,6 @@ export const referenceReducer = createReducer(initialState, builder => {
         })
         .addCase(EDIT_REFERENCE.SUCCEEDED, (state, action) => {
             state.detail = action.payload;
-        })
-        .addCase(REMOTE_REFERENCE.SUCCEEDED, state => {
-            state.official_installed = true;
         });
 });
 
