@@ -12,6 +12,7 @@ import {
     editReferenceUser,
     findReferences,
     getReference,
+    remoteReference,
     removeReference,
     removeReferenceGroup,
     removeReferenceUser,
@@ -68,6 +69,24 @@ export function useInfiniteFindReferences(term: string) {
  */
 export function useCloneReference() {
     return useMutation<ReferenceMinimal, unknown, { name: string; description: string; refId: string }>(cloneReference);
+}
+
+/**
+ * Initializes a mutator for remotely installing a reference
+ *
+ * @returns A mutator for remotely installing a reference
+ */
+export function useRemoteReference() {
+    const queryClient = useQueryClient();
+
+    return useMutation<Reference, unknown, { remotes_from: string }>(
+        ({ remotes_from }) => remoteReference(remotes_from),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(referenceQueryKeys.lists());
+            },
+        },
+    );
 }
 
 /**
