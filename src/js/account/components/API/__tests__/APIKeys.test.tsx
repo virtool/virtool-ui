@@ -175,8 +175,8 @@ describe("<APIKeys />", () => {
             await userEvent.click(screen.getByText(apiKeys[0].name));
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
 
-            const create_ref = screen.getAllByRole("checkbox", { name: "checkbox" })[1];
-            const upload_file = screen.getAllByRole("checkbox", { name: "checkbox" })[7];
+            const create_ref = screen.getByRole("checkbox", { name: "create_ref" });
+            const upload_file = screen.getByRole("checkbox", { name: "upload_file" });
 
             expect(create_ref).toBeChecked();
             expect(upload_file).not.toBeChecked();
@@ -196,9 +196,9 @@ describe("<APIKeys />", () => {
             await userEvent.click(screen.getByText(apiKeys[0].name));
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
 
-            const cancel_job = screen.getAllByRole("checkbox", { name: "checkbox" })[0];
-            const create_ref = screen.getAllByRole("checkbox", { name: "checkbox" })[1];
-            const upload_file = screen.getAllByRole("checkbox", { name: "checkbox" })[2];
+            const cancel_job = screen.getByRole("checkbox", { name: "cancel_job" });
+            const create_ref = screen.getByRole("checkbox", { name: "create_ref" });
+            const upload_file = screen.getByRole("checkbox", { name: "upload_file" });
 
             expect(cancel_job).toBeChecked();
             expect(create_ref).toBeChecked();
@@ -221,8 +221,8 @@ describe("<APIKeys />", () => {
             await userEvent.click(screen.getByText(apiKeys[0].name));
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
 
-            const cancel_job = screen.getAllByRole("checkbox", { name: "checkbox" })[0];
-            const upload_file = screen.getAllByRole("checkbox", { name: "checkbox" })[2];
+            const cancel_job = screen.getByRole("checkbox", { name: "cancel_job" });
+            const upload_file = screen.getByRole("checkbox", { name: "upload_file" });
 
             expect(cancel_job).toBeChecked();
             expect(upload_file).not.toBeChecked();
