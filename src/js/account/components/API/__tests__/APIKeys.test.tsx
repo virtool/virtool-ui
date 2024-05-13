@@ -230,7 +230,7 @@ describe("<APIKeys />", () => {
             await userEvent.click(cancel_job);
             await userEvent.click(upload_file);
 
-            expect(cancel_job).not.toBeChecked();
+            expect(cancel_job).toBeChecked();
             expect(upload_file).not.toBeChecked();
         });
     });

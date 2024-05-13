@@ -1,4 +1,5 @@
 import { useRemoveAPIKey, useUpdateAPIKey } from "@account/queries";
+import { APIKey } from "@account/types";
 import { Attribution, BoxGroupSection, Button, ButtonToolbar, Icon } from "@base";
 import { Permissions } from "@groups/types";
 import { isEqual, reduce } from "lodash-es";
@@ -29,7 +30,14 @@ type FormValues = {
     permissions: Permissions;
 };
 
-export default function APIKey({ apiKey }) {
+type APIKeyProps = {
+    apiKey: APIKey;
+};
+
+/**
+ * Display a condensed API key for use in a list of API keys
+ */
+export default function APIKey({ apiKey }: APIKeyProps) {
     const [show, setShow] = useState(false);
     const updateMutation = useUpdateAPIKey();
     const removeMutation = useRemoveAPIKey();

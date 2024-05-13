@@ -5,9 +5,9 @@
  */
 
 import { Request } from "@app/request";
-import { GroupMinimal, Permissions } from "@groups/types";
+import { Permissions } from "@groups/types";
 import { Response } from "superagent";
-import { Account } from "./types";
+import { Account, APIKey } from "./types";
 
 /**
  * Gets complete account data for the current user.
@@ -66,31 +66,15 @@ export function changePassword({ old_password, password }: { old_password: strin
     });
 }
 
-export type APIKeysResponse = {
-    created_at: string;
-    groups: Array<GroupMinimal>;
-    id: string;
-    name: string;
-    permissions: Permissions;
-};
-
 /**
  * Gets all API keys owned by the current account.
  *
  * @returns A promise resolving to a response containing the
  * current user's API keys.
  */
-export function getAPIKeys(): Promise<APIKeysResponse[]> {
+export function getAPIKeys(): Promise<APIKey[]> {
     return Request.get("/account/keys").then(res => res.body);
 }
-
-export type CreateAPIKeyResponse = {
-    groups: Array<GroupMinimal>;
-    id: string;
-    key: string;
-    name: string;
-    permissions: Permissions;
-};
 
 /**
  * Create a new API key for the current account.
@@ -99,7 +83,7 @@ export type CreateAPIKeyResponse = {
  * @param permissions - Complete list of permissions for the API key
  * @returns A promise resolving to a response containing the newly created API key
  */
-export function createAPIKey(name: string, permissions: Permissions): Promise<CreateAPIKeyResponse> {
+export function createAPIKey(name: string, permissions: Permissions): Promise<APIKey> {
     return Request.post("/account/keys")
         .send({
             name,

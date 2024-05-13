@@ -36,16 +36,14 @@ export default function APIPermissions({ className, keyPermissions, onChange }: 
             ) && !data.permissions[permission.name];
 
         return (
-            <SelectBoxGroupSection
-                key={permission.name}
-                active={permission.allowed}
-                onClick={
-                    disabled ? null : () => onChange({ ...keyPermissions, [permission.name]: !permission.allowed })
-                }
-                disabled={disabled}
-            >
-                <Checkbox checked={permission.allowed} />
-                <code>{permission.name}</code>
+            <SelectBoxGroupSection key={permission.name} active={permission.allowed} disabled={disabled}>
+                <Checkbox
+                    checked={permission.allowed}
+                    onClick={
+                        disabled ? null : () => onChange({ ...keyPermissions, [permission.name]: !permission.allowed })
+                    }
+                    label={permission.name}
+                />
             </SelectBoxGroupSection>
         );
     });

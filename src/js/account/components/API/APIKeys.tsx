@@ -21,7 +21,7 @@ const APIKeysHeader = styled(Box)`
 `;
 
 /**
- * A component to manage and display API keys for the logged-in user
+ * A component to manage and display API keys
  */
 export default function APIKeys() {
     const { data, isLoading } = useFetchAPIKeys();

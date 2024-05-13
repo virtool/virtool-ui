@@ -1,3 +1,4 @@
+import { GroupMinimal, Permissions } from "@groups/types";
 import { User } from "@users/types";
 
 export enum QuickAnalyzeWorkflow {
@@ -5,6 +6,15 @@ export enum QuickAnalyzeWorkflow {
     nuvs = "nuvs",
     pathoscope_bowtie = "pathoscope_bowtie",
 }
+
+export type APIKey = {
+    created_at?: string;
+    groups: Array<GroupMinimal>;
+    id: string;
+    key?: string;
+    name: string;
+    permissions: Permissions;
+};
 
 export type AccountSettings = {
     quick_analyze_workflow: QuickAnalyzeWorkflow;
