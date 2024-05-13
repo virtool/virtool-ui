@@ -103,7 +103,6 @@ export default function CreateAPIKey() {
     }
 
     function onSubmit({ name, permissions }: FormValues) {
-        console.log(permissions);
         mutation.mutate(
             { name, permissions },
             {

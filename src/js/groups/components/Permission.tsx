@@ -20,7 +20,6 @@ type GroupPermissionProps = {
  * Group permission checkbox
  */
 export function GroupPermission({ active, permission, onClick }: GroupPermissionProps) {
-    console.log(permission);
     return (
         <StyledGroupPermission active={active} onClick={onClick}>
             <Checkbox checked={active} label={permission} />

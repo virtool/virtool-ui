@@ -91,8 +91,8 @@ export function mockApiCreateAPIKey(name: string, permissions: Permissions) {
         groups: [],
         id: faker.random.alphaNumeric(8),
         key: "testKey",
-        name: name,
-        permissions: permissions,
+        name,
+        permissions,
     };
 
     return nock("http://localhost").post("/api/account/keys").query(true).reply(201, createApiKeyResponse);
