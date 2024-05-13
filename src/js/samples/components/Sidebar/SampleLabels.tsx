@@ -1,20 +1,13 @@
+import { fontWeight, getColor, getFontSize } from "@app/theme";
+import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
+import { useFetchLabels } from "@labels/queries";
+import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
+import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { xor } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "../../../base";
-import { useFetchLabels } from "../../../labels/queries";
-import { SmallSampleLabel } from "../Label/SmallSampleLabel";
-import { SampleSidebarList } from "./List";
-import { SampleSidebarSelector } from "./Selector";
-
-export const SampleLabelInner = ({ name, color, description }) => (
-    <div>
-        <SmallSampleLabel color={color} name={name} />
-        <StyledParagraph>{description}</StyledParagraph>
-    </div>
-);
+import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
     display: flex;
@@ -26,12 +19,17 @@ const SampleLabelsFooter = styled.div`
     }
 `;
 
-const StyledParagraph = styled.div`
-    color: ${props => getColor({ theme: props.theme, color: "greyDarkest" })};
-    font-size: ${getFontSize("sm")};
-`;
+type SampleLabelsProps = {
+    /** List of label ids associated with the sample */
+    sampleLabels: number[];
+    /** Callback function to handle label selection */
+    onUpdate: (labels: number[]) => void;
+};
 
-export default function SampleLabels({ sampleLabels, onUpdate }) {
+/**
+ * Displays a sidebar to manage sample labels
+ */
+export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsProps) {
     const { data, isLoading } = useFetchLabels();
 
     if (isLoading) {
@@ -48,7 +46,7 @@ export default function SampleLabels({ sampleLabels, onUpdate }) {
                     )}
                     sampleItems={data}
                     selectedItems={sampleLabels}
-                    onUpdate={labelId => {
+                    onUpdate={(labelId: number) => {
                         onUpdate(xor(sampleLabels, [labelId]));
                     }}
                     selectionType="labels"
