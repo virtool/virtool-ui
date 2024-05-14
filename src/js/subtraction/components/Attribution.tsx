@@ -4,9 +4,7 @@ import { getColor, getFontSize, theme } from "../../app/theme";
 import { Attribution, AttributionWithName } from "../../base";
 
 /**
- * Styled component for the attribution when none found.
- * @prop color - The color of the text.
- * @prop theme - The theme object.
+ * Default attribution used when creation details are unknown
  */
 const StyledNoneFoundAttribution = styled.div`
     color: ${getColor({ color: "grey", theme })};
@@ -24,9 +22,7 @@ type SubtractionAttributionProps = {
 };
 
 /**
- * Subtraction attribution with user handle and time.
- * If only user is provided, renders without time.
- * If neither user nor time is provided, renders default message.
+ * Formatted attribution showing creating user's handle and time of creation
  */
 export function SubtractionAttribution({ handle, time }: SubtractionAttributionProps): JSX.Element {
     if (handle) {
