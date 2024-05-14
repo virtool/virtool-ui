@@ -1,6 +1,6 @@
 import { forEach } from "lodash-es";
 import { describe, expect, it } from "vitest";
-import { ADD_SEQUENCE, EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "../../app/actionTypes";
+import { EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "../../app/actionTypes";
 import reducer, { getActiveIsolate, hideOTUModal, initialState as reducerInitialState, receiveOTU } from "../reducer";
 
 describe("OTUs Reducer:", () => {
@@ -61,7 +61,7 @@ describe("OTUs Reducer:", () => {
     });
 
     describe("Actions that close all modals:", () => {
-        const actionList = [GET_OTU.SUCCEEDED, ADD_SEQUENCE.SUCCEEDED, EDIT_SEQUENCE.SUCCEEDED];
+        const actionList = [GET_OTU.SUCCEEDED, EDIT_SEQUENCE.SUCCEEDED];
 
         forEach(actionList, actionType => {
             it(`should handle ${actionType}`, () => {

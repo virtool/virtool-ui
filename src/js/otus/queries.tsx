@@ -5,6 +5,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import React, { createContext, useContext } from "react";
 import {
     addIsolate,
+    addSequence,
     createOTU,
     editIsolate,
     editOTU,
@@ -17,7 +18,7 @@ import {
     revertOTU,
     setIsolateAsDefault,
 } from "./api";
-import { OTU, OTUHistory, OTUIsolate, OTUSearchResult, OTUSegment } from "./types";
+import { OTU, OTUHistory, OTUIsolate, OTUSearchResult, OTUSegment, OTUSequence } from "./types";
 
 /**
  * Factory for generating react-query keys for otu related queries.
@@ -181,6 +182,37 @@ export function useUpdateIsolate() {
 export function useRemoveIsolate() {
     return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
         removeIsolate(otuId, isolateId),
+    );
+}
+
+/**
+ * Initializes a mutator for adding a sequence
+ *
+ * @returns A mutator for adding a sequence
+ */
+export function useAddSequence(otuId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<
+        OTUSequence,
+        unknown,
+        {
+            isolateId: string;
+            accession: string;
+            definition: string;
+            host: string;
+            sequence: string;
+            segment?: string;
+            target?: string;
+        }
+    >(
+        ({ isolateId, accession, definition, host, sequence, segment, target }) =>
+            addSequence(otuId, isolateId, accession, definition, host, sequence, segment, target),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+            },
+        },
     );
 }
 

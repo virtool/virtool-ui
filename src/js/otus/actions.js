@@ -1,5 +1,5 @@
+import { EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "@app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
-import { ADD_SEQUENCE, EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "../app/actionTypes";
 
 /**
  * Returns an action that should be dispatched when an OTU is updated via websocket.
@@ -20,36 +20,6 @@ export const wsUpdateOTU = createAction(WS_UPDATE_OTU);
 export const getOTU = createAction(GET_OTU.REQUESTED, otuId => ({
     payload: { otuId },
 }));
-
-/**
- * Returns action that can trigger an API call for adding a sequence to an isolate.
- *
- * @func
- * @param otuId {string} unique OTU id
- * @param isolateId {string} unique isolate id
- * @param accession {string} the accession for the sequence
- * @param definition {string} descriptive definition of the sequence
- * @param host {string} the host the sequence originated from
- * @param sequence {string} an abbreviation for the OTU
- * @param segment {string} the schema segment associated with the OTU
- * @param target {string} the reference target associated with the sequence
- * @returns {object}
- */
-export const addSequence = createAction(
-    ADD_SEQUENCE.REQUESTED,
-    ({ otuId, isolateId, accession, definition, host, sequence, segment, target }) => ({
-        payload: {
-            accession,
-            definition,
-            host,
-            isolateId,
-            otuId,
-            segment,
-            sequence,
-            target,
-        },
-    }),
-);
 
 /**
  * Returns action that can trigger an API call for modifying a sequence.
