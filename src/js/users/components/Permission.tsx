@@ -20,8 +20,6 @@ type PermissionItemProps = {
 
 /**
  * Permission item with an icon indicating its status.
- * @prop permission - name of the permission.
- * @prop value - indicates if the permission is granted.
  */
 export function PermissionItem({ permission, value }: PermissionItemProps) {
     return (
