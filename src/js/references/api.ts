@@ -38,7 +38,7 @@ export function cloneReference({ name, description, refId }): Promise<ReferenceM
  * Remotely installs a reference from the Virtool repository
  *
  * @param remote_from - The repository address
- * @returns A promise resolving to remotely installing a reference
+ * @returns A promise resolving to the installing remote reference
  */
 export function remoteReference(remote_from: string): Promise<Reference> {
     return Request.post("/refs")
