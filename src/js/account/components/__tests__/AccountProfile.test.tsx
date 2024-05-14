@@ -4,72 +4,82 @@ import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import AccountProfile from "../AccountProfile";
 
 describe("<AccountProfile />", () => {
     let history;
-    let state;
 
     beforeEach(() => {
         history = createBrowserHistory();
-
-        state = {
-            account: { ...createFakeAccount(), administrator_role: AdministratorRoles.FULL, handle: "amanda36" },
-            settings: { data: { minimum_password_length: 8 } },
-        };
     });
 
-    it("should render when administrator", () => {
-        renderWithRouter(<AccountProfile />, state, history);
+    it("should render when administrator", async () => {
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockAPIGetAccount(account);
+        renderWithRouter(<AccountProfile />, {}, history);
 
-        expect(screen.getByText("amanda36")).toBeInTheDocument();
+        expect(await screen.findByText(account.handle)).toBeInTheDocument();
         expect(screen.getByText("full Administrator")).toBeInTheDocument();
-        expect(screen.queryAllByText("AM")).toHaveLength(2);
     });
 
-    it("should render when not administrator", () => {
-        state.account.administrator_role = null;
-        renderWithRouter(<AccountProfile />, state, history);
+    it("should render when not administrator", async () => {
+        const account = createFakeAccount({ administrator_role: null });
+        mockAPIGetAccount(account);
+        renderWithRouter(<AccountProfile />, {}, history);
 
-        expect(screen.getByText("amanda36")).toBeInTheDocument();
+        expect(await screen.findByText(account.handle)).toBeInTheDocument();
     });
 
-    it("should render with initial email", () => {
-        state.account.email = "virtool.devs@gmail.com";
-        renderWithRouter(<AccountProfile />, state, history);
+    it("should render with initial email", async () => {
+        const account = createFakeAccount({
+            administrator_role: AdministratorRoles.FULL,
+            email: "virtool.devs@gmail.com",
+        });
+        mockAPIGetAccount(account);
+        renderWithRouter(<AccountProfile />, {}, history);
+
+        expect(await screen.findByText("Email Address")).toBeInTheDocument();
+
         const emailInput = screen.getByLabelText("Email Address");
-        expect(emailInput.value).toBe("virtool.devs@gmail.com");
+        expect(emailInput).toHaveValue("virtool.devs@gmail.com");
     });
 
     it("should handle email changes", async () => {
-        state.account.email = "";
-        renderWithRouter(<AccountProfile />, state, history);
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockAPIGetAccount(account);
+        renderWithRouter(<AccountProfile />, {}, history);
+
+        expect(await screen.findByText("Email Address")).toBeInTheDocument();
 
         const emailInput = screen.getByLabelText("Email Address");
-        expect(emailInput.value).toBe("");
+        expect(emailInput).toHaveValue("");
 
         await userEvent.type(emailInput, "invalid");
-        await userEvent.click(screen.getByText("Save"), { role: "button" });
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(emailInput).toHaveValue("invalid");
         expect(screen.getByText("Please provide a valid email address")).toBeInTheDocument();
 
         await userEvent.clear(emailInput);
         await userEvent.type(emailInput, "virtool.devs@gmail.com");
-        await userEvent.click(screen.getByText("Save"), { role: "button" });
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
     });
 
     it("should handle password changes", async () => {
-        renderWithRouter(<AccountProfile />, state, history);
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        mockAPIGetAccount(account);
+        renderWithRouter(<AccountProfile />, {}, history);
+
+        expect(await screen.findByText("Password")).toBeInTheDocument();
 
         const oldPasswordInput = screen.getByLabelText("Old Password");
         const newPasswordInput = screen.getByLabelText("New Password");
 
         // Try without providing old password.
         await userEvent.type(newPasswordInput, "long_enough_password");
-        await userEvent.click(screen.getByText("Change"), { role: "button" });
+        await userEvent.click(screen.getByRole("button", { name: "Change" }));
 
         expect(screen.getByText("Please provide your old password")).toBeInTheDocument();
 
@@ -79,8 +89,8 @@ describe("<AccountProfile />", () => {
 
         expect(screen.getByLabelText("New Password")).toHaveValue("short");
 
-        await userEvent.click(screen.getByText("Change"), { role: "button" });
+        await userEvent.click(screen.getByRole("button", { name: "Change" }));
 
-        expect(screen.getByText("Passwords must contain at least 8 characters")).toBeInTheDocument();
+        expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument();
     });
 });

@@ -29,7 +29,7 @@ export function get(): Promise<Response> {
 export function updateAccount(update) {
     console.log(update);
     return Request.patch("/account")
-        .send(update)
+        .send({ update })
         .then(res => res.body);
 }
 

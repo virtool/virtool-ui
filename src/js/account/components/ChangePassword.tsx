@@ -29,22 +29,28 @@ const ChangePasswordFooter = styled.div`
     }
 `;
 
+type FormValues = {
+    oldPassword: string;
+    newPassword: string;
+};
+
 type ChangePasswordProps = {
+    /** The iso formatted date of the most recent password change */
     lastPasswordChange: string;
 };
 
 /**
- * A component to update your password
+ * A component to update the accounts password
  */
 export default function ChangePassword({ lastPasswordChange }: ChangePasswordProps) {
     const {
         formState: { errors },
         handleSubmit,
         register,
-    } = useForm({ defaultValues: { oldPassword: "", newPassword: "" } });
+    } = useForm<FormValues>({ defaultValues: { oldPassword: "", newPassword: "" } });
     const mutation = useChangePassword();
 
-    function onSubmit({ oldPassword, newPassword }) {
+    function onSubmit({ oldPassword, newPassword }: FormValues) {
         console.log(oldPassword, newPassword);
         mutation.mutate({ old_password: oldPassword, password: newPassword });
     }
@@ -59,14 +65,32 @@ export default function ChangePassword({ lastPasswordChange }: ChangePasswordPro
                     <InputGroup>
                         <InputLabel htmlFor="oldPassword">Old Password</InputLabel>
                         <InputContainer>
-                            <InputPassword id="oldPassword" {...register("oldPassword")} />
+                            <InputPassword
+                                id="oldPassword"
+                                {...register("oldPassword", {
+                                    required: "Please provide your old password",
+                                    minLength: {
+                                        value: 8,
+                                        message: "Password does not meet minimum length requirement (8)",
+                                    },
+                                })}
+                            />
                             <InputError>{errors.oldPassword?.message}</InputError>
                         </InputContainer>
                     </InputGroup>
                     <InputGroup>
                         <InputLabel htmlFor="newPassword">New Password</InputLabel>
                         <InputContainer>
-                            <InputPassword id="newPassword" {...register("newPassword")} />
+                            <InputPassword
+                                id="newPassword"
+                                {...register("newPassword", {
+                                    required: "Please provide a new password",
+                                    minLength: {
+                                        value: 8,
+                                        message: "Password does not meet minimum length requirement (8)",
+                                    },
+                                })}
+                            />
                             <InputError>{errors.newPassword?.message}</InputError>
                         </InputContainer>
                     </InputGroup>

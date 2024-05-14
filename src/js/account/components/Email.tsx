@@ -30,7 +30,6 @@ type FormValues = {
 type EmailProps = {
     /** The users current email address */
     email: string;
-    onUpdateEmail: any;
 };
 
 /**
@@ -44,7 +43,7 @@ export default function Email({ email }: EmailProps) {
     } = useForm<FormValues>({ defaultValues: { email: email || "" } });
     const mutation = useUpdateAccount();
 
-    function onSubmit({ email }) {
+    function onSubmit({ email }: FormValues) {
         mutation.mutate({ update: email });
     }
 
