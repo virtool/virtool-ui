@@ -1,3 +1,4 @@
+import { IndexNested } from "@indexes/types";
 import { ReferenceNested } from "../references/types";
 import { UserNested } from "../users/types";
 import { SearchResult } from "../utils/types";
@@ -42,6 +43,12 @@ export type HistoryNested = {
     user: UserNested;
 };
 
+export type OTUHistory = HistoryNested & {
+    index: IndexNested;
+    otu: OTUNested;
+    reference: ReferenceNested;
+};
+
 export type OTURemote = {
     id: string;
 };
@@ -73,13 +80,13 @@ export type OTUSegment = {
 
 export type OTUNested = {
     id: string;
+    name: string;
     version: number;
 };
 
 /** Basic data for list representations */
 export type OTUMinimal = OTUNested & {
     abbreviation: string;
-    name: string;
     reference: ReferenceNested;
     verified: boolean;
 };
