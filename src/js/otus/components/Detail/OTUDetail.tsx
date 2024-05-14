@@ -14,7 +14,7 @@ import {
     ViewHeaderTitle,
 } from "../../../base";
 import { getOTU } from "../../actions";
-import History from "./History/History";
+import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
 import OTUSection from "./OTUSection";
 import Schema from "./Schema/Schema";

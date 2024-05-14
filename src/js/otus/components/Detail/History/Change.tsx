@@ -1,8 +1,10 @@
+import { Attribution, BoxGroupSection, Icon, Label } from "@base";
+import { useRevertOTU } from "@otus/queries";
+import { OTUNested } from "@otus/types";
+import { UserNested } from "@users/types";
 import { get } from "lodash-es";
-import React, { useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
-
-import { Attribution, BoxGroupSection, Icon, Label } from "../../../../base";
 
 const methodIconProps = {
     add_isolate: {
@@ -63,14 +65,14 @@ const methodIconProps = {
     },
 };
 
-const getMethodIcon = methodName => {
+function getMethodIcon(methodName: string) {
     const props = get(methodIconProps, methodName, {
         name: "exclamation-triangle",
         color: "red",
     });
 
     return <Icon {...props} />;
-};
+}
 
 const StyledChange = styled(BoxGroupSection)`
     align-items: center;
@@ -91,10 +93,21 @@ const Description = styled.div`
     }
 `;
 
-export const Change = ({ id, createdAt, description, methodName, otu, unbuilt, user, onRevert }) => {
-    const handleRevert = useCallback(() => {
-        onRevert(otu.id, otu.version, id);
-    }, [otu.id, otu.version, id]);
+type ChangeProps = {
+    id: string;
+    createdAt: string;
+    description: string;
+    methodName: string;
+    otu: OTUNested;
+    unbuilt: boolean;
+    user: UserNested;
+};
+
+/**
+ * A condensed change item for use in a list of changes
+ */
+export default function Change({ id, createdAt, description, methodName, otu, unbuilt, user }: ChangeProps) {
+    const mutation = useRevertOTU(otu.id);
 
     return (
         <StyledChange>
@@ -109,7 +122,13 @@ export const Change = ({ id, createdAt, description, methodName, otu, unbuilt, u
 
             <Attribution time={createdAt} user={user.handle} verb="" />
 
-            {unbuilt && <Icon name="history" tip="Revert" onClick={handleRevert} />}
+            {unbuilt && (
+                <Icon
+                    name="history"
+                    tip="Revert"
+                    onClick={() => (unbuilt ? mutation.mutate({ changeId: id }) : null)}
+                />
+            )}
         </StyledChange>
     );
-};
+}

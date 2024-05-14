@@ -3,14 +3,13 @@ import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { pushState } from "../../../app/actions";
+import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import { getError } from "../../../errors/selectors";
 import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
-import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
+import { getActiveIsolateId, getHasSchema, getOTUDetailId } from "../../../otus/selectors";
 import { OTUSegment } from "../../../otus/types";
-import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedSegments } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
 import { StyledContent } from "./AddGenomeSequence";
@@ -42,6 +41,7 @@ type formValues = {
 };
 
 type EditGenomeSequenceProps = {
+    hasSchema: boolean;
     initialAccession: string;
     initialDefinition: string;
     initialHost: string;
@@ -73,6 +73,7 @@ type EditGenomeSequenceProps = {
  * Displays dialog to edit a genome sequence
  */
 export function EditGenomeSequence({
+    hasSchema,
     initialAccession,
     initialDefinition,
     initialHost,
@@ -82,10 +83,11 @@ export function EditGenomeSequence({
     id,
     isolateId,
     otuId,
-    show,
-    onHide,
     onSave,
 }: EditGenomeSequenceProps) {
+    const history = useHistory();
+    const location = useLocation<{ editSequence: boolean }>();
+
     function handleSubmit({ accession, definition, host, sequence, segment }) {
         onSave(otuId, isolateId, id, accession, definition, host, segment, sequence);
     }
@@ -99,7 +101,10 @@ export function EditGenomeSequence({
     });
 
     return (
-        <Dialog open={show} onOpenChange={onHide}>
+        <Dialog
+            open={location.state?.editSequence}
+            onOpenChange={() => history.push({ state: { editSequence: false } })}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <StyledContent>
@@ -122,6 +127,8 @@ export function EditGenomeSequence({
                                 <Field
                                     as={SegmentField}
                                     name="segment"
+                                    segments={segments}
+                                    hasSchema={hasSchema}
                                     onChange={segment => {
                                         setFieldValue("segment", segment);
                                     }}
@@ -142,6 +149,7 @@ export function mapStateToProps(state) {
 
     return {
         id,
+        hasSchema: getHasSchema(state),
         initialAccession: accession,
         initialDefinition: definition,
         initialHost: host,
@@ -151,16 +159,11 @@ export function mapStateToProps(state) {
         isolateId: getActiveIsolateId(state),
         otuId: getOTUDetailId(state),
         error: getError(state, "EDIT_SEQUENCE_ERROR"),
-        show: routerLocationHasState(state, "editSequence"),
     };
 }
 
 export function mapDispatchToProps(dispatch) {
     return {
-        onHide: () => {
-            dispatch(pushState({ addSequence: false, editSequence: false }));
-        },
-
         onSave: (otuId, isolateId, sequenceId, accession, definition, host, segment, sequence) => {
             dispatch(
                 editSequence({

@@ -5,10 +5,9 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight } from "../../../app/theme";
 import { Box, InputGroup, InputLabel, Select, SelectButton, SelectContent, SelectItem } from "../../../base";
-import { getHasSchema, getOTUDetailId } from "../../../otus/selectors";
+import { getOTUDetailId } from "../../../otus/selectors";
 import { OTUSegment } from "../../../otus/types";
 import { getReferenceDetailId } from "../../../references/selectors";
-import { getUnreferencedSegments } from "../../selectors";
 import { SequenceSegment } from "./SequenceSegment";
 
 const SegmentSelectContainer = styled.div`
@@ -109,10 +108,8 @@ export function SequenceSegmentField({
 
 export function mapStateToProps(state) {
     return {
-        hasSchema: getHasSchema(state),
         otuId: getOTUDetailId(state),
         refId: getReferenceDetailId(state),
-        segments: getUnreferencedSegments(state),
     };
 }
 
