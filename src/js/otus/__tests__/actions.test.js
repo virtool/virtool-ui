@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { EDIT_SEQUENCE, GET_OTU, GET_OTU_HISTORY, REVERT, WS_UPDATE_OTU } from "../../app/actionTypes";
-import { editSequence, getOTU, getOTUHistory, revert, wsUpdateOTU } from "../actions";
+import { ADD_SEQUENCE, EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "../../app/actionTypes";
+import { addSequence, editSequence, getOTU, wsUpdateOTU } from "../actions";
 
 describe("OTUs Action Creators", () => {
     const otuId = "test-otu";
@@ -24,11 +24,29 @@ describe("OTUs Action Creators", () => {
         expect(result).toEqual({ type: GET_OTU.REQUESTED, payload: { otuId } });
     });
 
-    it("getOTUHistory: returns action to retrieve change history of specific otu", () => {
-        const result = getOTUHistory(otuId);
+    it("addSequence: returns action to add a new sequence to an isolate", () => {
+        const result = addSequence({
+            otuId,
+            isolateId,
+            accession,
+            definition,
+            host,
+            sequence,
+            segment,
+            target,
+        });
         expect(result).toEqual({
-            type: GET_OTU_HISTORY.REQUESTED,
-            payload: { otuId },
+            type: ADD_SEQUENCE.REQUESTED,
+            payload: {
+                otuId,
+                isolateId,
+                accession,
+                definition,
+                host,
+                sequence,
+                segment,
+                target,
+            },
         });
     });
 
@@ -57,16 +75,6 @@ describe("OTUs Action Creators", () => {
                 segment,
                 target,
             },
-        });
-    });
-
-    it("revert: returns action to undo the latest change of a particular otu", () => {
-        const changeId = "123abc";
-        const otuVersion = 3;
-        const result = revert(otuId, otuVersion, changeId);
-        expect(result).toEqual({
-            type: REVERT.REQUESTED,
-            payload: { otuId, otuVersion, change_id: changeId },
         });
     });
 });

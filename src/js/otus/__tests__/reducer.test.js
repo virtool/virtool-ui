@@ -1,14 +1,6 @@
 import { forEach } from "lodash-es";
 import { describe, expect, it } from "vitest";
-import {
-    EDIT_SEQUENCE,
-    GET_OTU,
-    GET_OTU_HISTORY,
-    REVERT,
-    UPLOAD_IMPORT,
-    WS_UPDATE_OTU,
-    WS_UPDATE_STATUS,
-} from "../../app/actionTypes";
+import { ADD_SEQUENCE, EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "../../app/actionTypes";
 import reducer, { getActiveIsolate, hideOTUModal, initialState as reducerInitialState, receiveOTU } from "../reducer";
 
 describe("OTUs Reducer:", () => {
@@ -22,26 +14,6 @@ describe("OTUs Reducer:", () => {
         const state = { foo: true };
         const result = reducer(state, action);
         expect(result).toEqual(state);
-    });
-
-    describe("should handle WS_UPDATE_STATUS", () => {
-        it("if status id is 'OTU_import', return importData", () => {
-            const action = {
-                type: WS_UPDATE_STATUS,
-                payload: { id: "OTU_import" },
-            };
-            const result = reducer({}, action);
-            expect(result).toEqual({
-                importData: { id: "OTU_import", inProgress: true },
-            });
-        });
-
-        it("otherwise return state", () => {
-            const state = {};
-            const action = { type: WS_UPDATE_STATUS, payload: { id: "test" } };
-            const result = reducer(state, action);
-            expect(result).toEqual(state);
-        });
     });
 
     describe("should handle WS_UPDATE_OTU", () => {
@@ -89,7 +61,7 @@ describe("OTUs Reducer:", () => {
     });
 
     describe("Actions that close all modals:", () => {
-        const actionList = [GET_OTU.SUCCEEDED, EDIT_SEQUENCE.SUCCEEDED];
+        const actionList = [GET_OTU.SUCCEEDED, ADD_SEQUENCE.SUCCEEDED, EDIT_SEQUENCE.SUCCEEDED];
 
         forEach(actionList, actionType => {
             it(`should handle ${actionType}`, () => {
@@ -105,46 +77,6 @@ describe("OTUs Reducer:", () => {
                     activeIsolateId: null,
                 });
             });
-        });
-    });
-
-    it("should handle GET_OTU_HISTORY_REQUESTED", () => {
-        const action = { type: GET_OTU_HISTORY.REQUESTED };
-        const result = reducer({}, action);
-        expect(result).toEqual({ detailHistory: null });
-    });
-
-    it("should handle GET_OTU_HISTORY_SUCCEEDED", () => {
-        const action = {
-            type: GET_OTU_HISTORY.SUCCEEDED,
-            payload: { foo: "bar" },
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({ detailHistory: { foo: "bar" } });
-    });
-
-    it("should handle REVERT_SUCCEEDED", () => {
-        const action = {
-            type: REVERT.SUCCEEDED,
-            payload: { otu: { isolates: [] }, history: {} },
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({
-            detail: { isolates: [] },
-            detailHistory: {},
-            activeIsolate: null,
-            activeIsolateId: null,
-        });
-    });
-
-    it("should handle UPLOAD_IMPORT.SUCCEEDED", () => {
-        const action = {
-            type: UPLOAD_IMPORT.SUCCEEDED,
-            payload: { foo: "bar" },
-        };
-        const result = reducer({}, action);
-        expect(result).toEqual({
-            importData: { foo: "bar", inProgress: false },
         });
     });
 });

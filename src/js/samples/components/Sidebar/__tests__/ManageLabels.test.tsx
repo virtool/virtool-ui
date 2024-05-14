@@ -3,7 +3,7 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderWithRouter } from "../../../../../tests/setupTests";
-import { ManageLabels } from "../ManageLabels";
+import ManageLabels from "../ManageLabels";
 
 describe("<ManageLabels>", () => {
     let props;
@@ -19,7 +19,6 @@ describe("<ManageLabels>", () => {
                 { color: "#FCA5A5", description: "", id: 2, name: "label" },
                 { color: "#1D4ED8", description: "", id: 3, name: "bar" },
             ],
-            partiallySelectedLabels: [],
         };
     });
 

@@ -15,7 +15,7 @@ import {
 } from "./api";
 import { Sample, SampleMinimal } from "./types";
 
-type SampleLabel = Label & {
+export type SampleLabel = Label & {
     /** Whether all selected samples contain the label */
     allLabeled: boolean;
 };

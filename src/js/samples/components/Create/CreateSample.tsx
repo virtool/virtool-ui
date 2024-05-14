@@ -219,7 +219,7 @@ export default function CreateSample() {
                     values,
                 }: {
                     errors: FormikErrors<formValues>;
-                    setFieldValue: (field: string, value: string) => void;
+                    setFieldValue: (field: string, value: string | string[] | number[]) => void;
                     touched: FormikTouched<formValues>;
                     values: formValues;
                 }) => (
