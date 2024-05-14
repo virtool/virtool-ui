@@ -16,10 +16,14 @@ const StyledUploadItem = styled.div`
     }
 `;
 
-/**
- * Styled component for the title section of the upload item.
- * @prop failed - whether the upload failed.
- */
+type UploadItemTitleProps = {
+     /** whether the upload failed. */
+     failed: boolean
+}
+
+/** 
+Styled component for the title section of the upload item. 
+*/
 const UploadItemTitle = styled.div<{ failed: boolean }>`
     justify-content: space-between;
     display: flex;
