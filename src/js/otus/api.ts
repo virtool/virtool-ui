@@ -1,5 +1,5 @@
 import { Request } from "../app/request";
-import { OTU, OTUHistory, OTUIsolate, OTUSegment } from "./types";
+import { OTU, OTUHistory, OTUIsolate, OTUSegment, OTUSequence } from "./types";
 
 /**
  * Get a single OTU data from the API

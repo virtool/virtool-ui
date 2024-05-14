@@ -1,5 +1,5 @@
 import { pushState } from "@app/actions";
-import { ADD_SEQUENCE, EDIT_SEQUENCE, GET_OTU } from "@app/actionTypes";
+import { EDIT_SEQUENCE, GET_OTU } from "@app/actionTypes";
 import { deletePersistentFormState } from "@forms/actions";
 import { createAction } from "@reduxjs/toolkit";
 import { apiCall, putGenericError } from "@utils/sagas";
@@ -27,15 +27,6 @@ export function* getOTU(action) {
     yield apiCall(otusAPI.get, action.payload, GET_OTU);
 }
 
-export function* addSequence(action) {
-    const response = yield updateAndGetOTU(otusAPI.addSequence, action, ADD_SEQUENCE);
-
-    if (response.ok) {
-        yield put(pushState({ addSequence: false }));
-        yield put(deletePersistentFormState("addGenomeSequenceForm"));
-    }
-}
-
 export function* editSequence(action) {
     const response = yield updateAndGetOTU(otusAPI.editSequence, action, EDIT_SEQUENCE);
 
@@ -48,6 +39,5 @@ export function* editSequence(action) {
 
 export function* watchOTUs() {
     yield takeLatest(GET_OTU.REQUESTED, getOTU);
-    yield takeEvery(ADD_SEQUENCE.REQUESTED, addSequence);
     yield takeEvery(EDIT_SEQUENCE.REQUESTED, editSequence);
 }

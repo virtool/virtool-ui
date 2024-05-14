@@ -1,4 +1,4 @@
-import { ADD_SEQUENCE, EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "@app/actionTypes";
+import { EDIT_SEQUENCE, GET_OTU, WS_UPDATE_OTU } from "@app/actionTypes";
 import { createReducer } from "@reduxjs/toolkit";
 import { update } from "@utils/reducers";
 import { formatIsolateName } from "@utils/utils";
@@ -75,7 +75,6 @@ export const OTUsReducer = createReducer(initialState, builder => {
             action => {
                 const matches = {
                     [GET_OTU.SUCCEEDED]: true,
-                    [ADD_SEQUENCE.SUCCEEDED]: true,
                     [EDIT_SEQUENCE.SUCCEEDED]: true,
                 };
                 return hasIn(matches, action.type);

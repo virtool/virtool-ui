@@ -18,7 +18,7 @@ import {
     revertOTU,
     setIsolateAsDefault,
 } from "./api";
-import { OTU, OTUHistory, OTUIsolate, OTUSearchResult, OTUSegment } from "./types";
+import { OTU, OTUHistory, OTUIsolate, OTUSearchResult, OTUSegment, OTUSequence } from "./types";
 
 /**
  * Factory for generating react-query keys for otu related queries.
