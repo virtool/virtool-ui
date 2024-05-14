@@ -1,4 +1,6 @@
+import { ErrorResponse } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@users/types";
 import { changePassword, fetchAccount, updateAccount } from "./api";
 import { Account } from "./types";
 
@@ -14,9 +16,9 @@ export const accountKeys = {
  *
  * @returns UseQueryResult object containing the account data
  */
-export const useFetchAccount = () => {
+export function useFetchAccount() {
     return useQuery<Account>(accountKeys.all(), () => fetchAccount());
-};
+}
 
 /**
  * Initializes a mutator for updating a user
@@ -26,7 +28,7 @@ export const useFetchAccount = () => {
 export function useUpdateAccount() {
     const queryClient = useQueryClient();
 
-    return useMutation<unknown, unknown, { update: any }>(({ update }) => updateAccount(update), {
+    return useMutation<User, ErrorResponse, { update: string }>(({ update }) => updateAccount(update), {
         onSuccess: () => {
             queryClient.invalidateQueries(accountKeys.all());
         },
@@ -41,7 +43,7 @@ export function useUpdateAccount() {
 export function useChangePassword() {
     const queryClient = useQueryClient();
 
-    return useMutation<unknown, unknown, { old_password: string; password: string }>(
+    return useMutation<User, ErrorResponse, { old_password: string; password: string }>(
         ({ old_password, password }) => changePassword(old_password, password),
         {
             onSuccess: () => {

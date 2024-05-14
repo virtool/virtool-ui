@@ -6,6 +6,7 @@
 
 import { Request } from "@app/request";
 import { Permissions } from "@groups/types";
+import { User } from "@users/types";
 import { Response } from "superagent";
 import { Account } from "./types";
 
@@ -26,8 +27,7 @@ export function get(): Promise<Response> {
  * @returns A promise resolving to a response containing the updated
  * user's account data
  */
-export function updateAccount(update) {
-    console.log(update);
+export function updateAccount(update: string): Promise<User> {
     return Request.patch("/account")
         .send({ update })
         .then(res => res.body);
@@ -62,7 +62,7 @@ export function updateSettings({ update }): Promise<Response> {
  * @returns A promise resolving to a response indicating if the
  * password was successfully changed.
  */
-export function changePassword(old_password: string, password: string) {
+export function changePassword(old_password: string, password: string): Promise<User> {
     return Request.patch("/account")
         .send({
             old_password,

@@ -1,24 +1,17 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createBrowserHistory } from "history";
 import React from "react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
-import { renderWithRouter } from "../../../../tests/setupTests";
+import { renderWithProviders } from "../../../../tests/setupTests";
 import AccountProfile from "../AccountProfile";
 
 describe("<AccountProfile />", () => {
-    let history;
-
-    beforeEach(() => {
-        history = createBrowserHistory();
-    });
-
     it("should render when administrator", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockAPIGetAccount(account);
-        renderWithRouter(<AccountProfile />, {}, history);
+        renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText(account.handle)).toBeInTheDocument();
         expect(screen.getByText("full Administrator")).toBeInTheDocument();
@@ -27,7 +20,7 @@ describe("<AccountProfile />", () => {
     it("should render when not administrator", async () => {
         const account = createFakeAccount({ administrator_role: null });
         mockAPIGetAccount(account);
-        renderWithRouter(<AccountProfile />, {}, history);
+        renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText(account.handle)).toBeInTheDocument();
     });
@@ -38,7 +31,7 @@ describe("<AccountProfile />", () => {
             email: "virtool.devs@gmail.com",
         });
         mockAPIGetAccount(account);
-        renderWithRouter(<AccountProfile />, {}, history);
+        renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText("Email Address")).toBeInTheDocument();
 
@@ -49,7 +42,7 @@ describe("<AccountProfile />", () => {
     it("should handle email changes", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockAPIGetAccount(account);
-        renderWithRouter(<AccountProfile />, {}, history);
+        renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText("Email Address")).toBeInTheDocument();
 
@@ -70,7 +63,7 @@ describe("<AccountProfile />", () => {
     it("should handle password changes", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockAPIGetAccount(account);
-        renderWithRouter(<AccountProfile />, {}, history);
+        renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText("Password")).toBeInTheDocument();
 

@@ -51,8 +51,14 @@ export default function ChangePassword({ lastPasswordChange }: ChangePasswordPro
     const mutation = useChangePassword();
 
     function onSubmit({ oldPassword, newPassword }: FormValues) {
-        console.log(oldPassword, newPassword);
-        mutation.mutate({ old_password: oldPassword, password: newPassword });
+        mutation.mutate(
+            { old_password: oldPassword, password: newPassword },
+            {
+                onSuccess: data => {
+                    console.log(data);
+                },
+            },
+        );
     }
 
     return (
@@ -75,7 +81,10 @@ export default function ChangePassword({ lastPasswordChange }: ChangePasswordPro
                                     },
                                 })}
                             />
-                            <InputError>{errors.oldPassword?.message}</InputError>
+                            <InputError>
+                                {errors.oldPassword?.message ||
+                                    (mutation.isError && mutation.error.response.body?.message)}
+                            </InputError>
                         </InputContainer>
                     </InputGroup>
                     <InputGroup>
