@@ -2,7 +2,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mockApiAddSequence } from "../../../../../tests/fake/otus";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { AddBarcodeSequence, castValues } from "../AddBarcodeSequence";
 
@@ -75,7 +77,13 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should render all fields", () => {
-        renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
+                <AddBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
+
         expect(screen.getByText("Target")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toBeInTheDocument();
@@ -85,7 +93,22 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should submit correct data when all fields changed", async () => {
-        renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
+        const scope = mockApiAddSequence(
+            "test_otu_id",
+            "test_isolate_id",
+            "user_typed_accession",
+            "user_typed_host",
+            "user_typed_definition",
+            "ATGRYK",
+            undefined,
+            "test_target_name_2",
+        );
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
+                <AddBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByText("test_target_name_2"));
@@ -96,18 +119,16 @@ describe("<AddBarcodeSequence>", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(props.onSave).toHaveBeenCalledWith(
-            "test_otu_id",
-            "test_isolate_id",
-            "user_typed_accession",
-            "user_typed_definition",
-            "user_typed_host",
-            "ATGRYK",
-            "test_target_name_2",
-        );
+        scope.done();
     });
+
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
+                <AddBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -119,7 +140,12 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithProviders(<AddBarcodeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
+                <AddBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         await userEvent.type(screen.getByRole("textbox", { name: /Sequence/ }), "atbcq");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));

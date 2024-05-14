@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { castValues, EditGenomeSequence } from "../EditGenomeSequence";
@@ -23,9 +24,8 @@ describe("<EditGenomeSequence>", () => {
             isolateId: "test_isolate_id",
             otuId: "test_otu_id",
             id: "test_id",
-            show: true,
+            hasSchema: true,
             segments: [],
-            onHide: vi.fn(),
             onSave: vi.fn(),
             initialAccession: "initialAccession",
             initialDefinition: "initialDefinition",
@@ -63,7 +63,12 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should render all fields with current sequence data", () => {
-        renderWithProviders(<EditGenomeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditGenomeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -74,7 +79,12 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should submit correct data when all fields changed", async () => {
-        renderWithProviders(<EditGenomeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditGenomeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
@@ -110,7 +120,12 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithProviders(<EditGenomeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditGenomeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
@@ -125,7 +140,12 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithProviders(<EditGenomeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditGenomeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));

@@ -1,8 +1,8 @@
+import { ContainerSide } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { ContainerSide } from "../../../base";
-import SampleLabels from "../Sidebar/Labels";
-import DefaultSubtractions from "../Sidebar/Subtractions";
+import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
+import SampleLabels from "../Sidebar/SampleLabels";
 
 const StyledSidebar = styled(ContainerSide)`
     align-items: stretch;
@@ -16,7 +16,7 @@ type sidebarProps = {
     className?: string;
     sampleLabels: number[];
     defaultSubtractions: string[];
-    onUpdate: (key: string, value: string) => void;
+    onUpdate: (key: string, value: string[] | number[]) => void;
 };
 
 export function Sidebar({ className, sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) {

@@ -1,21 +1,24 @@
 import { ErrorResponse } from "@/types/types";
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
 import {
     addIsolate,
+    addSequence,
     createOTU,
     editIsolate,
     editOTU,
     findOTUs,
     getOTU,
+    getOTUHistory,
     removeIsolate,
     removeOTU,
     removeSequence,
+    revertOTU,
     setIsolateAsDefault,
 } from "./api";
-import { OTU, OTUIsolate, OTUSearchResult, OTUSegment } from "./types";
+import { OTU, OTUHistory, OTUIsolate, OTUSearchResult, OTUSegment, OTUSequence } from "./types";
 
 /**
  * Factory for generating react-query keys for otu related queries.
@@ -26,8 +29,10 @@ export const OTUQueryKeys = {
     list: (filters: Array<string | number | boolean>) => ["OTU", "list", ...filters] as const,
     infiniteLists: () => ["OTU", "list", "infinite"] as const,
     infiniteList: (filters: Array<string | number | boolean>) => ["OTU", "list", "infinite", ...filters] as const,
-    details: () => ["OTU", "details"] as const,
+    details: () => ["OTU", "detail"] as const,
     detail: (id: string) => ["OTU", "detail", id] as const,
+    histories: () => ["OTU", "detail", "history"] as const,
+    history: (id: string) => ["OTU", "detail", "history", id] as const,
 };
 
 /**
@@ -72,6 +77,16 @@ export function useFetchOTU(otuId: string) {
 }
 
 /**
+ * Fetches the history of changes for a single OTU
+ *
+ * @param otuId - The id of the OTU to fetch
+ * @returns A history list of changes for a single OTU
+ */
+export function useFetchOTUHistory(otuId: string) {
+    return useQuery<OTUHistory[], ErrorResponse>(OTUQueryKeys.history(otuId), () => getOTUHistory(otuId));
+}
+
+/**
  * Initializes a mutator for creating an OTU
  *
  * @returns A mutator for creating an OTU
@@ -107,6 +122,21 @@ export function useUpdateOTU() {
  */
 export function useRemoveOTU() {
     return useMutation<null, ErrorResponse, { otuId: string }>(({ otuId }) => removeOTU(otuId));
+}
+
+/**
+ * Initializes a mutator for reverting an otu to how it was before a given change
+ *
+ * @returns A mutator for reverting an otu to how it was before a given change
+ */
+export function useRevertOTU(otuId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<null, ErrorResponse, { changeId: string }>(({ changeId }) => revertOTU(changeId), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+        },
+    });
 }
 
 /**
@@ -152,6 +182,37 @@ export function useUpdateIsolate() {
 export function useRemoveIsolate() {
     return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
         removeIsolate(otuId, isolateId),
+    );
+}
+
+/**
+ * Initializes a mutator for adding a sequence
+ *
+ * @returns A mutator for adding a sequence
+ */
+export function useAddSequence(otuId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<
+        OTUSequence,
+        unknown,
+        {
+            isolateId: string;
+            accession: string;
+            definition: string;
+            host: string;
+            sequence: string;
+            segment?: string;
+            target?: string;
+        }
+    >(
+        ({ isolateId, accession, definition, host, sequence, segment, target }) =>
+            addSequence(otuId, isolateId, accession, definition, host, sequence, segment, target),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+            },
+        },
     );
 }
 

@@ -1,5 +1,5 @@
 import { Request } from "../app/request";
-import { OTU, OTUIsolate, OTUSegment } from "./types";
+import { OTU, OTUHistory, OTUIsolate, OTUSegment, OTUSequence } from "./types";
 
 /**
  * Get a single OTU data from the API
@@ -27,8 +27,8 @@ export function getOTU(otuId: string): Promise<OTU> {
  * @param otuId - The unique identifier of the OTU
  * @return A Promise resolving to the API response containing the OTU history
  */
-export function getHistory({ otuId }: { otuId: string }) {
-    return Request.get(`/otus/${otuId}/history`);
+export function getOTUHistory(otuId: string): Promise<OTUHistory[]> {
+    return Request.get(`/otus/${otuId}/history`).then(res => res.body);
 }
 
 /**
@@ -162,33 +162,26 @@ export function removeIsolate(otuId: string, isolateId: string): Promise<null> {
  * @param target - The target the sequence is from
  * @returns A Promise resolving to the API response containing the new sequence
  */
-export function addSequence({
-    otuId,
-    isolateId,
-    accession,
-    definition,
-    host,
-    sequence,
-    segment,
-    target,
-}: {
-    otuId: string;
-    isolateId: string;
-    accession: string;
-    definition: string;
-    host: string;
-    sequence: string;
-    segment: string;
-    target: string;
-}) {
-    return Request.post(`/otus/${otuId}/isolates/${isolateId}/sequences`).send({
-        accession,
-        definition,
-        host,
-        sequence,
-        segment,
-        target,
-    });
+export function addSequence(
+    otuId: string,
+    isolateId: string,
+    accession: string,
+    definition: string,
+    host: string,
+    sequence: string,
+    segment: string,
+    target: string,
+): Promise<OTUSequence> {
+    return Request.post(`/otus/${otuId}/isolates/${isolateId}/sequences`)
+        .send({
+            accession,
+            definition,
+            host,
+            sequence,
+            segment,
+            target,
+        })
+        .then(res => res.body);
 }
 
 /**
@@ -254,8 +247,8 @@ export function removeSequence(otuId: string, isolateId: string, sequenceId: str
  * @param change_id - The unique identifier of the change to revert
  * @returns A Promise resolving to the API response indicating if the revert was successful
  */
-export function revert({ change_id }) {
-    return Request.delete(`/history/${change_id}`);
+export function revertOTU(change_id: string): Promise<null> {
+    return Request.delete(`/history/${change_id}`).then(res => res.body);
 }
 
 /**
