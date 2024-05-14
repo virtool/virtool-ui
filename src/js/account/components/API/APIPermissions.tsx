@@ -1,7 +1,7 @@
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
 import { AdministratorPermissions, hasSufficientAdminRole } from "@administration/utils";
-import { BoxGroup, Checkbox, SelectBoxGroupSection } from "@base";
+import { BoxGroup, BoxGroupSection, Checkbox } from "@base";
 import { Permissions } from "@groups/types";
 import { map, sortBy } from "lodash-es";
 import React from "react";
@@ -36,7 +36,7 @@ export default function APIPermissions({ className, keyPermissions, onChange }: 
             ) && !data.permissions[permission.name];
 
         return (
-            <SelectBoxGroupSection key={permission.name} active={permission.allowed} disabled={disabled}>
+            <BoxGroupSection key={permission.name} disabled={disabled}>
                 <Checkbox
                     checked={permission.allowed}
                     onClick={
@@ -44,7 +44,7 @@ export default function APIPermissions({ className, keyPermissions, onChange }: 
                     }
                     label={permission.name}
                 />
-            </SelectBoxGroupSection>
+            </BoxGroupSection>
         );
     });
 
