@@ -19,7 +19,7 @@ type PermissionItemProps = {
 };
 
 /**
- * Permission item with an icon indicating its status.
+ * A condensed permission item for use in a list of user permissions
  */
 export function PermissionItem({ permission, value }: PermissionItemProps) {
     return (
