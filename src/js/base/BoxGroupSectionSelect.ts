@@ -1,9 +1,9 @@
 import styled, { DefaultTheme } from "styled-components";
-import { BoxGroupSection, BoxGroupSectionProps } from "./BoxGroupSection";
+import { BoxGroupSection } from "./BoxGroupSection";
 import { CheckboxLabel } from "./CheckboxLabel";
 import { StyledCheckbox } from "./styled/StyledCheckbox";
 
-type SelectBoxGroupSectionProps = BoxGroupSectionProps & {
+type SelectBoxGroupSectionProps = {
     active?: boolean;
     theme: DefaultTheme;
 };
@@ -11,6 +11,7 @@ type SelectBoxGroupSectionProps = BoxGroupSectionProps & {
 export const SelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSectionProps>`
     background-color: ${props => (props.active ? props.theme.color.blue : "transparent")};
     color: ${props => (props.active ? props.theme.color.white : "inherit")};
+    cursor: pointer;
     width: 100%;
 
     &:focus {
