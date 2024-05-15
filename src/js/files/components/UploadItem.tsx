@@ -18,10 +18,10 @@ const StyledUploadItem = styled.div`
 
 type UploadItemTitleProps = {
     /** Whether the upload failed */
-    failed: boolean
-}
+    failed: boolean;
+};
 
-/** 
+/**
  * Container for the title section of the upload item.
  */
 const UploadItemTitle = styled.div<UploadItemTitleProps>`
