@@ -1,13 +1,9 @@
+import { LocationType } from "@/types/types";
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 export type HistoryType = RouteComponentProps["history"];
-type LocationStateType = {
-    addSequence?: boolean;
-    editSequence?: boolean;
-    devCommands?: boolean;
-};
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -197,7 +193,7 @@ export function ScrollSync({ children }: ScrollSyncProps) {
  * Hook for managing the location state
  */
 export function useLocationState(): [
-    locationState: LocationStateType,
+    locationState: LocationType,
     setLocationState: (state: { [key: string]: boolean | string }) => void,
 ] {
     const location = useLocation();
