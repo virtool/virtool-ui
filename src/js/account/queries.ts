@@ -1,8 +1,17 @@
 import { ErrorResponse } from "@/types/types";
 import { Permissions } from "@groups/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@users/types";
+import {
+    changePassword,
+    createAPIKey,
+    fetchAccount,
+    getAPIKeys,
+    removeAPIKey,
+    updateAccount,
+    updateAPIKey,
+} from "./api";
 import { Account, APIKeyMinimal } from "./types";
-import { createAPIKey, fetchAccount, getAPIKeys, removeAPIKey, updateAPIKey } from "./api";
 
 /**
  * Factory object for generating account query keys
