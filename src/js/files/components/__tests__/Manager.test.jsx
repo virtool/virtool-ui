@@ -119,7 +119,7 @@ describe("<FileManager>", () => {
                     preloadedState: state,
                 }),
         );
-        const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
+        const invalidFile = new File(["test"], "test_invalid_file.gzz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
 
         await userEvent.upload(await screen.findByLabelText("Upload file"), [invalidFile, validFile]);
