@@ -10,6 +10,7 @@ import { upload } from "../actions";
 type UploadToolbarProps = {
     onDrop: (fileType: string, acceptedFiles: File[]) => void;
     fileType: string;
+    tip?: string;
     message?: React.ReactNode;
     /* For validating file type */
     validationRegex?: RegExp;
