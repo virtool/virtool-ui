@@ -8,7 +8,7 @@ import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHead
 import { useListFiles } from "../queries";
 import { FileResponse, FileType } from "../types";
 import { File } from "./File";
-import { UploadToolbar } from "./UploadToolbar";
+import UploadToolbar from "./UploadToolbar";
 
 type FileManagerProps = {
     message: React.ReactNode;

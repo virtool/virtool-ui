@@ -1,11 +1,14 @@
+import { forEach } from "lodash-es";
 import React from "react";
+import { connect } from "react-redux";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { Alert, Icon, UploadBar } from "../../base";
 import { Permission } from "../../groups/types";
+import { createRandomString } from "../../utils/utils";
+import { upload } from "../actions";
 
 type UploadToolbarProps = {
-    /* Callback when files are dropped */
-    onDrop?: (fileType: string, acceptedFiles: File[]) => void;
+    onDrop: (fileType: string, acceptedFiles: File[]) => void;
     fileType: string;
     message?: React.ReactNode;
     /* For validating file type */
@@ -46,3 +49,16 @@ export function UploadToolbar({ onDrop, fileType, message, validationRegex }: Up
         />
     );
 }
+
+export function mapDispatchToProps(dispatch) {
+    return {
+        onDrop: (fileType: string, acceptedFiles: File[]) => {
+            forEach(acceptedFiles, (file: File) => {
+                const localId = createRandomString();
+                dispatch(upload(localId, file, fileType));
+            });
+        },
+    };
+}
+
+export default connect(mapDispatchToProps)(UploadToolbar);
