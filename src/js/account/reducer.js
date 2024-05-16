@@ -3,14 +3,7 @@
  *
  * @module account/reducer
  */
-import {
-    CLEAR_API_KEY,
-    CREATE_API_KEY,
-    GET_ACCOUNT,
-    GET_API_KEYS,
-    UPDATE_ACCOUNT,
-    UPDATE_ACCOUNT_SETTINGS,
-} from "@app/actionTypes";
+import { GET_ACCOUNT } from "@app/actionTypes";
 import { createReducer } from "@reduxjs/toolkit";
 
 /**
@@ -33,28 +26,9 @@ export const initialState = {
  * @returns {object}
  */
 export const accountReducer = createReducer(initialState, builder => {
-    builder
-        .addCase(GET_ACCOUNT.SUCCEEDED, (state, action) => {
-            return { ...state, ...action.payload, ready: true };
-        })
-        .addCase(UPDATE_ACCOUNT.SUCCEEDED, (state, action) => {
-            return { ...state, ...action.payload };
-        })
-        .addCase(GET_API_KEYS.SUCCEEDED, (state, action) => {
-            state.apiKeys = action.payload;
-        })
-        .addCase(CREATE_API_KEY.REQUESTED, state => {
-            state.key = null;
-        })
-        .addCase(CREATE_API_KEY.SUCCEEDED, (state, action) => {
-            state.newKey = action.payload.key;
-        })
-        .addCase(CLEAR_API_KEY, state => {
-            state.newKey = null;
-        })
-        .addCase(UPDATE_ACCOUNT_SETTINGS.SUCCEEDED, (state, action) => {
-            state.settings = action.payload;
-        });
+    builder.addCase(GET_ACCOUNT.SUCCEEDED, (state, action) => {
+        return { ...state, ...action.payload, ready: true };
+    });
 });
 
 export default accountReducer;
