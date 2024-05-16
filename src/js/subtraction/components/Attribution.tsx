@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { getColor, getFontSize, theme } from "../../app/theme";
 import { Attribution, AttributionWithName } from "../../base";
 
+/**
+ * Default attribution used when creation details are unknown
+ */
 const StyledNoneFoundAttribution = styled.div`
     color: ${getColor({ color: "grey", theme })};
     font-size: ${getFontSize("sm")};
@@ -11,7 +14,17 @@ const StyledNoneFoundAttribution = styled.div`
     top: 50%;
 `;
 
-export function SubtractionAttribution({ handle, time }) {
+type SubtractionAttributionProps = {
+    /* The user handle */
+    handle: string;
+    /* The time of the subtraction */
+    time?: string;
+};
+
+/**
+ * Formatted attribution showing creating user's handle and time of creation
+ */
+export function SubtractionAttribution({ handle, time }: SubtractionAttributionProps): JSX.Element {
     if (handle) {
         if (time) {
             return <Attribution user={handle} time={time} />;

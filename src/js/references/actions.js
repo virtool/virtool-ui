@@ -1,19 +1,6 @@
-import {
-    EDIT_REFERENCE,
-    GET_REFERENCE,
-    REMOTE_REFERENCE,
-    WS_INSERT_REFERENCE,
-    WS_UPDATE_REFERENCE,
-} from "@app/actionTypes";
+import { EDIT_REFERENCE, GET_REFERENCE, WS_UPDATE_REFERENCE } from "@app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
-/**
- * Returns an action that should be dispatched when a reference is inserted via websocket.
- *
- * @func
- * @param data {object} the data passed in the websocket message
- * @returns {object}
- */
-export const wsInsertReference = createAction(WS_INSERT_REFERENCE);
+
 /**
  * Returns an action that should be dispatched when a reference is updated via websocket.
  *
@@ -28,5 +15,3 @@ export const getReference = createAction(GET_REFERENCE.REQUESTED, refId => ({ pa
 export const editReference = createAction(EDIT_REFERENCE.REQUESTED, (refId, update) => ({
     payload: { refId, update },
 }));
-
-export const remoteReference = createAction(REMOTE_REFERENCE.REQUESTED);

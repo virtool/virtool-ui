@@ -8,7 +8,7 @@ import { useInfiniteFindReferences } from "../queries";
 import { ReferenceMinimal, ReferenceSearchResult } from "../types";
 import Clone from "./CloneReference";
 import { ReferenceItem } from "./Item/ReferenceItem";
-import ReferenceOfficial from "./Official";
+import ReferenceOfficial from "./ReferenceOfficial";
 import ReferenceToolbar from "./ReferenceToolbar";
 
 function renderRow(reference: ReferenceMinimal) {

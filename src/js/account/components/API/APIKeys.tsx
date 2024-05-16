@@ -1,14 +1,12 @@
+import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
+import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "@base";
 import { map } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Box, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "../../../base/index";
-
-import { getAPIKeys } from "../../actions";
-import CreateAPIKey from "./Create";
-import APIKey from "./Key";
+import APIKey from "./APIKey";
+import CreateAPIKey from "./CreateAPIKey";
 
 const APIKeysHeader = styled(Box)`
     align-items: center;
@@ -22,14 +20,17 @@ const APIKeysHeader = styled(Box)`
     }
 `;
 
-export function APIKeys({ keys, onGet }) {
-    useEffect(onGet, []);
+/**
+ * A component to manage and display API keys
+ */
+export default function APIKeys() {
+    const { data, isLoading } = useFetchAPIKeys();
 
-    if (keys === null) {
+    if (isLoading) {
         return <LoadingPlaceholder margin="150px" />;
     }
 
-    const keyComponents = map(keys, key => <APIKey key={key.id} apiKey={key} />);
+    const keyComponents = data.length && map(data, key => <APIKey key={key.id} apiKey={key} />);
 
     return (
         <div>
@@ -42,21 +43,9 @@ export function APIKeys({ keys, onGet }) {
                 <Link to={{ state: { createAPIKey: true } }}>Create</Link>
             </APIKeysHeader>
 
-            {keyComponents.length ? keyComponents : <NoneFoundBox noun="API keys" />}
+            {keyComponents.length ? <BoxGroup>{keyComponents}</BoxGroup> : <NoneFoundBox noun="API keys" />}
 
             <CreateAPIKey />
         </div>
     );
 }
-
-const mapStateToProps = state => ({
-    keys: state.account.apiKeys,
-});
-
-const mapDispatchToProps = dispatch => ({
-    onGet: () => {
-        dispatch(getAPIKeys());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(APIKeys);

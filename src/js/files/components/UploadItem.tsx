@@ -1,11 +1,12 @@
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { getBorder, getColor, getFontWeight } from "../../app/theme";
+import { getBorder, getColor, getFontWeight, theme } from "../../app/theme";
 import { Icon, Loader, ProgressBarAffixed } from "../../base";
 import { byteSize } from "../../utils/utils";
-import { removeUpload } from "../actions";
 
+/**
+ * Container for the upload item.
+ */
 const StyledUploadItem = styled.div`
     padding: 0;
     position: relative;
@@ -15,7 +16,15 @@ const StyledUploadItem = styled.div`
     }
 `;
 
-const UploadItemTitle = styled.div`
+type UploadItemTitleProps = {
+    /** Whether the upload failed */
+    failed: boolean;
+};
+
+/**
+ * Container for the title section of the upload item.
+ */
+const UploadItemTitle = styled.div<UploadItemTitleProps>`
     justify-content: space-between;
     display: flex;
     padding: 15px 15px 10px;
@@ -26,7 +35,7 @@ const UploadItemTitle = styled.div`
     }
     span:last-child {
         margin-left: auto;
-        color: ${props => (props.failed ? getColor({ theme: props.theme, color: "red" }) : "inherit")};
+        color: ${props => (props.failed ? getColor({ theme: theme, color: "red" }) : "inherit")};
     }
     i.fa-times {
         font-size: 20px;
@@ -37,16 +46,37 @@ const UploadItemTitle = styled.div`
     }
 `;
 
+/**
+ * Emphasized name of the upload item.
+ */
 const UploadItemName = styled.span`
     font-weight: ${getFontWeight("thick")};
 `;
 
-export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) => {
+type UploadItemProps = {
+    /* Name of the file being uploaded */
+    name: string;
+    /* Progress of the upload in percentage */
+    progress: number;
+    /* Size of the file being uploaded */
+    size: number;
+    /* Whether the upload failed */
+    failed: boolean;
+    /* Local id of the file being uploaded */
+    localId: string;
+    /* Function to remove the file from the upload list */
+    onRemove: (localId: string) => void;
+};
+
+/**
+ * Progress tracker for a single uploaded file
+ */
+export function UploadItem({ name, progress, size, failed, localId, onRemove }: UploadItemProps): JSX.Element {
     let uploadIcon = progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />;
-    let uploadBookend = byteSize(size, true);
+    let uploadBookend: React.ReactNode = byteSize(size, true);
 
     if (failed) {
-        uploadIcon = <Icon name="times" color={"red"} hoverable={false} />;
+        uploadIcon = <Icon name="times" color="red" hoverable={false} />;
         uploadBookend = (
             <>
                 Failed <Icon aria-label={`delete ${name}`} name="trash" color="red" onClick={() => onRemove(localId)} />
@@ -64,12 +94,4 @@ export const UploadItem = ({ name, progress, size, failed, localId, onRemove }) 
             </UploadItemTitle>
         </StyledUploadItem>
     );
-};
-
-const mapDispatchToProps = dispatch => ({
-    onRemove: localId => {
-        dispatch(removeUpload(localId));
-    },
-});
-
-export default connect(null, mapDispatchToProps)(UploadItem);
+}
