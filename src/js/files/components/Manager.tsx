@@ -8,16 +8,15 @@ import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHead
 import { useListFiles } from "../queries";
 import { FileResponse, FileType } from "../types";
 import { File } from "./File";
-import UploadToolbar from "./Toolbar";
+import { UploadToolbar } from "./UploadToolbar";
 
 type FileManagerProps = {
-    tip: string;
     message: React.ReactNode;
     fileType: FileType;
     validationRegex?: RegExp;
 };
 
-export function FileManager({ validationRegex, message, tip, fileType }: FileManagerProps) {
+export function FileManager({ validationRegex, message, fileType }: FileManagerProps) {
     const URLPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
     const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
@@ -41,7 +40,7 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
             <ViewHeaderTitle>
                 {title} <Badge>{files.found_count}</Badge>
             </ViewHeaderTitle>
-            <UploadToolbar fileType={fileType} message={message} validationRegex={validationRegex} tip={tip} />
+            <UploadToolbar fileType={fileType} message={message} validationRegex={validationRegex} />
 
             {files.found_count === 0 ? (
                 <NoneFoundBox noun="files" />

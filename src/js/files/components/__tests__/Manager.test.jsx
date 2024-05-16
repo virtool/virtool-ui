@@ -31,7 +31,6 @@ describe("<FileManager>", () => {
             items: [1],
             fileType: "test_file_type",
             message: "",
-            tip: "",
             validationRegex: "",
             onLoadNextPage: vi.fn(),
         };
