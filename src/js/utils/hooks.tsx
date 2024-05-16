@@ -5,6 +5,7 @@ import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 export type HistoryType = RouteComponentProps["history"];
 type LocationStateType = {
     addSequence?: boolean;
+    editSequence?: boolean;
     devCommands?: boolean;
 };
 

@@ -97,7 +97,7 @@ export function EditBarcodeSequence({
     });
 
     return (
-        <Dialog open={locationState?.addSequence} onOpenChange={() => setLocationState({ addSequence: false })}>
+        <Dialog open={locationState?.editSequence} onOpenChange={() => setLocationState({ editSequence: false })}>
             <DialogPortal>
                 <DialogOverlay />
                 <CenteredDialogContent>
