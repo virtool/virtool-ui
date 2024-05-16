@@ -3,9 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { pushState } from "../../../app/actions";
 import { Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
-import { routerLocationHasState } from "../../../utils/utils";
 import { editReference } from "../../actions";
 import { Reference, ReferenceDataType } from "../../types";
 import { ReferenceForm, ReferenceFormMode } from "../ReferenceForm";
@@ -70,17 +68,12 @@ export function EditReference({ detail, onSubmit }: EditReferenceProps) {
 }
 
 const mapStateToProps = state => ({
-    show: routerLocationHasState(state, "editReference"),
     detail: state.references.detail,
 });
 
 const mapDispatchToProps = dispatch => ({
     onSubmit: (refId, update) => {
         dispatch(editReference(refId, update));
-    },
-
-    onHide: () => {
-        dispatch(pushState({ editReference: false }));
     },
 });
 

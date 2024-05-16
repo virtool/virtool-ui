@@ -3,6 +3,10 @@ import React, { createContext, useContext, useEffect, useRef, useState } from "r
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 export type HistoryType = RouteComponentProps["history"];
+type LocationStateType = {
+    addSequence?: boolean;
+    devCommands?: boolean;
+};
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -186,4 +190,21 @@ export function ScrollSync({ children }: ScrollSyncProps) {
             {children}
         </div>
     );
+}
+
+/**
+ * Hook for managing the location state
+ */
+export function useLocationState(): [
+    locationState: LocationStateType,
+    setLocationState: (state: { [key: string]: boolean | string }) => void,
+] {
+    const location = useLocation();
+    const history = useHistory();
+
+    function setLocationState(state: { [key: string]: boolean | string }) {
+        history.push({ ...history.location, state });
+    }
+
+    return [location.state, setLocationState];
 }

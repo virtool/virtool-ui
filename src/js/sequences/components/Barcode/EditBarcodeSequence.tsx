@@ -1,16 +1,15 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useLocationState } from "@utils/hooks";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { pushState } from "../../../app/actions";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import PersistForm from "../../../forms/components/PersistForm";
 import { editSequence } from "../../../otus/actions";
 import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
 import { ReferenceTarget } from "../../../references/types";
-import { routerLocationHasState } from "../../../utils/utils";
 import { getActiveSequence, getUnreferencedTargets } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
 import TargetsField from "./TargetField";
@@ -55,10 +54,6 @@ type EditBarcodeSequence = {
     targets: ReferenceTarget[];
     isolateId: string;
     otuId: string;
-    /** Indicates whether the dialog for editing a sequence is visible */
-    show: boolean;
-    /** A callback function to hide the dialog */
-    onHide: () => void;
     /** A callback function to update the sequence */
     onSave: (
         otuId: string,
@@ -85,10 +80,10 @@ export function EditBarcodeSequence({
     targets,
     isolateId,
     otuId,
-    show,
-    onHide,
     onSave,
 }: EditBarcodeSequence) {
+    const [locationState, setLocationState] = useLocationState();
+
     function handleSubmit({ accession, definition, host, sequence, targetName }) {
         onSave(otuId, isolateId, id, accession, definition, host, sequence, targetName);
     }
@@ -102,7 +97,7 @@ export function EditBarcodeSequence({
     });
 
     return (
-        <Dialog open={show} onOpenChange={onHide}>
+        <Dialog open={locationState?.addSequence} onOpenChange={() => setLocationState({ addSequence: false })}>
             <DialogPortal>
                 <DialogOverlay />
                 <CenteredDialogContent>
@@ -151,7 +146,6 @@ export function mapStateToProps(state) {
         targets: getUnreferencedTargets(state),
         isolateId: getActiveIsolateId(state),
         otuId: getOTUDetailId(state),
-        show: routerLocationHasState(state, "editSequence"),
     };
 }
 
@@ -159,10 +153,6 @@ export function mapDispatchToProps(dispatch) {
     return {
         onSave: (otuId, isolateId, sequenceId, accession, definition, host, sequence, target) => {
             dispatch(editSequence({ otuId, isolateId, sequenceId, accession, definition, host, sequence, target }));
-        },
-
-        onHide: () => {
-            dispatch(pushState({ editSequence: false }));
         },
     };
 }
