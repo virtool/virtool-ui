@@ -62,4 +62,4 @@ export function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapDispatchToProps)(UploadToolbar);
+export default connect(null, mapDispatchToProps)(UploadToolbar);
