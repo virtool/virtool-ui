@@ -78,7 +78,7 @@ describe("<FileManager>", () => {
     });
 
     it("should change message if passed", async () => {
-        const account = createFakeAccount({ administrator_role: "full" });
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
@@ -95,7 +95,7 @@ describe("<FileManager>", () => {
     });
 
     it("should filter files according to passed regex", async () => {
-        const account = createFakeAccount({ administrator_role: "full" });
+        const account = createFakeAccount({ administrator_role: null, permissions: { upload_file: true } });
         mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
@@ -120,7 +120,7 @@ describe("<FileManager>", () => {
                     preloadedState: state,
                 }),
         );
-        const invalidFile = new File(["test"], "test_invalid_file.gzz", { type: "application/gzip" });
+        const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });
 
         await userEvent.upload(await screen.findByLabelText("Upload file"), [invalidFile, validFile]);
