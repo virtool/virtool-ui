@@ -12,10 +12,6 @@ export function get({ refId }) {
     return Request.get(`/refs/${refId}`);
 }
 
-export function edit({ refId, update }) {
-    return Request.patch(`/refs/${refId}`).send(update);
-}
-
 /**
  * Creates a clone of a reference
  *

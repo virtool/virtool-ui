@@ -8,3 +8,10 @@ export type ErrorResponse = {
         body: { [key: string]: any };
     };
 };
+
+export type LocationType = {
+    addSequence?: boolean;
+    editReference?: boolean;
+    editSequence?: boolean;
+    devCommands?: boolean;
+};
