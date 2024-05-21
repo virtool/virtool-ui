@@ -20,6 +20,10 @@ export function get(): Promise<Response> {
     return Request.get("/account");
 }
 
+type AccountUpdate = {
+    email?: string;
+};
+
 /**
  * Updates the complete data for the current account.
  *
@@ -27,7 +31,7 @@ export function get(): Promise<Response> {
  * @returns A promise resolving to a response containing the updated
  * user's account data
  */
-export function updateAccount(update: string): Promise<User> {
+export function updateAccount(update: AccountUpdate): Promise<User> {
     return Request.patch("/account")
         .send({ update })
         .then(res => res.body);

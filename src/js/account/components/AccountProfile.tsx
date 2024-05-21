@@ -46,7 +46,7 @@ export default function AccountProfile() {
         return <LoadingPlaceholder />;
     }
 
-    const { administrator_role, groups, handle } = data;
+    const { administrator_role, email, groups, handle, last_password_change } = data;
 
     return (
         <>
@@ -64,8 +64,8 @@ export default function AccountProfile() {
                 </div>
             </AccountProfileHeader>
 
-            <ChangePassword lastPasswordChange={data.last_password_change} />
-            <Email email={data.email} />
+            <ChangePassword lastPasswordChange={last_password_change} />
+            <Email email={email} />
             <AccountGroups groups={groups} />
         </>
     );
