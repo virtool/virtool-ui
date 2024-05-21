@@ -19,12 +19,12 @@ function getUploadBarBorderColor({ active, theme }: getUploadBarColorProps): str
     return getColor({ theme, color: active ? "blue" : "greyLight" });
 }
 
-type UploadBarContainerProps = {
+type StyledUploadBarProps = {
     /* Whether the user is able to drag/select files */
     active: boolean;
 };
 
-const UploadBarContainer = styled.div<UploadBarContainerProps>`
+const StyledUploadBar = styled.div<StyledUploadBarProps>`
     display: flex;
     align-items: stretch;
     justify-content: center;
@@ -99,7 +99,7 @@ export function UploadBar({
     });
 
     return (
-        <UploadBarContainer active={isDragAccept} {...rootProps}>
+        <StyledUploadBar active={isDragAccept} {...rootProps}>
             <input {...getInputProps()} aria-label="Upload file" multiple={multiple} />
             <MessageContainer>{message}</MessageContainer>
             <UploadBarDivider text="or" />
@@ -108,6 +108,6 @@ export function UploadBar({
                     Browse Files
                 </Button>
             </ButtonContainer>
-        </UploadBarContainer>
+        </StyledUploadBar>
     );
 }
