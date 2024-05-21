@@ -12,7 +12,7 @@ const StyledUploadInformation = styled.div`
 `;
 
 function isDurationZero(duration: Duration): boolean {
-    return Object.values(duration).every(value => value === 0 || value === undefined);
+    return every(duration, (value) => value === 0 || value === undefined);
 }
 
 type UploadTimeProps = {
