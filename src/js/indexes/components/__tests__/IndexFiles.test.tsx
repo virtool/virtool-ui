@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { Files } from "../Files";
+import IndexFiles from "../IndexFiles";
 
 describe("<Files />", () => {
     it("should render", () => {
@@ -21,7 +21,7 @@ describe("<Files />", () => {
             },
         ];
 
-        renderWithProviders(<Files files={files} />);
+        renderWithProviders(<IndexFiles files={files} />);
 
         const heading = screen.getByRole("heading", {
             level: 2,

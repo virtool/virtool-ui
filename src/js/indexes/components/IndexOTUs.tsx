@@ -1,9 +1,18 @@
+import { Badge, BoxGroup, BoxGroupHeader } from "@base";
+import { IndexOTU as OTU } from "@indexes/types";
 import { map } from "lodash-es";
 import React from "react";
-import { Badge, BoxGroup, BoxGroupHeader } from "../../base";
-import { IndexOTU } from "./OTU";
+import IndexOTU from "./IndexOTU";
 
-export default function IndexOTUs({ otus, refId }) {
+type IndexOTUsProps = {
+    otus: OTU[];
+    refId: string;
+};
+
+/**
+ * A list of OTUs associated with the index
+ */
+export default function IndexOTUs({ otus, refId }: IndexOTUsProps) {
     const otuComponents = map(otus, otu => (
         <IndexOTU key={otu.id} refId={refId} name={otu.name} id={otu.id} changeCount={otu.change_count} />
     ));

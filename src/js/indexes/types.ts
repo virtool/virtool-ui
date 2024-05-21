@@ -33,13 +33,13 @@ export type IndexMinimal = IndexNested & {
 };
 
 /**  Index editor information*/
-type IndexContributor = UserNested & {
+export type IndexContributor = UserNested & {
     /** Total index changes made by the user */
     count: number;
 };
 
 /** Index relevant minimal OTU data*/
-type IndexOTU = {
+export type IndexOTU = {
     /** The quantity of changes made to this otu since last index build */
     change_count: number;
     /** The unique identifier */
@@ -48,7 +48,7 @@ type IndexOTU = {
     name: string;
 };
 
-type IndexFile = {
+export type IndexFile = {
     /** The complete file location on API */
     download_url: string;
     /** The unique identifier */

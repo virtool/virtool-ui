@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { Contributors, mapStateToProps } from "../Contributors";
+import Contributors from "../Contributors";
 
 describe("<Contributors />", () => {
     it("should render", () => {
@@ -30,24 +30,5 @@ describe("<Contributors />", () => {
 
         expect(linda).toBeInTheDocument();
         expect(linda).toHaveTextContent("12 changes");
-    });
-});
-
-describe("mapStateToProps()", () => {
-    it("should return props", () => {
-        const contributors = [
-            { id: "bob", count: 5 },
-            { id: "fred", count: 12 },
-        ];
-
-        const result = mapStateToProps({
-            indexes: {
-                detail: {
-                    contributors,
-                },
-            },
-        });
-
-        expect(result).toEqual({ contributors });
     });
 });
