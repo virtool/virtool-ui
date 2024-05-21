@@ -2,18 +2,6 @@ import { Request } from "@app/request";
 import { Index, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
 
 /**
- * Get a paginated list of indexes.
- *
- * @param refId - The reference id to fetch the indexes of
- * @param term - The search term to filter indexes by
- * @param page - The page to fetch
- * @returns  A promise resolving to the API response containing the paginated list of indexes
- */
-export function find({ refId, term, page }) {
-    return Request.get(`/refs/${refId}/indexes`).query({ find: term, page });
-}
-
-/**
  * Get the details of an index
  *
  * @param indexId - The unique identifier of the index to fetch
@@ -31,17 +19,6 @@ export function getIndex(indexId: string) {
  */
 export function listReady() {
     return Request.get("/indexes").query({ ready: true });
-}
-
-/**
- * Get the history of an index.
- *
- * @param indexId - The unique identifier of the index to fetch the history of
- * @param page - The page to fetch
- * @returns A promise resolving to the API response containing the index history
- */
-export function getHistory({ indexId, page = 1 }: { indexId: string; page: number }) {
-    return Request.get(`/indexes/${indexId}/history?page=${page}`);
 }
 
 /**
