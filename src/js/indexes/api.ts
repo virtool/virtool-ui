@@ -52,7 +52,7 @@ export function findIndexes({
  */
 export function listIndexes({ ready, term }: { ready: boolean; term: string }) {
     return Request.get("/indexes")
-        .query({ ready: ready, find: term })
+        .query({ ready, find: term })
         .then(res => res.body);
 }
 
