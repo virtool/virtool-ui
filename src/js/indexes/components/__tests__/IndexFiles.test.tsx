@@ -1,24 +1,15 @@
 import { screen } from "@testing-library/react";
 import React from "react";
 import { describe, expect, it } from "vitest";
+import { createFakeIndexFile } from "../../../../tests/fake/indexes";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import IndexFiles from "../IndexFiles";
 
-describe("<Files />", () => {
+describe("<IndexFiles />", () => {
     it("should render", () => {
         const files = [
-            {
-                id: "1",
-                name: "foo",
-                download_url: "/testUrl/foo",
-                size: "1024",
-            },
-            {
-                id: "2",
-                name: "bar",
-                download_url: "/testUrl/bar",
-                size: "2048",
-            },
+            createFakeIndexFile({ download_url: "/testUrl/foo", name: "foo", size: 1024 }),
+            createFakeIndexFile({ download_url: "/testUrl/bar", name: "bar", size: 2048 }),
         ];
 
         renderWithProviders(<IndexFiles files={files} />);

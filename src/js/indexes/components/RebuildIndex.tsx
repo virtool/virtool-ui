@@ -4,7 +4,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import RebuildHistory from "./History";
-import RebuildIndexError from "./RebuildError";
+import RebuildIndexError from "./RebuildIndexError";
 
 type RebuildIndexProps = {
     refId: string;
