@@ -3,6 +3,7 @@ import { Permissions } from "@groups/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "@users/types";
 import {
+    AccountUpdate,
     changePassword,
     createAPIKey,
     fetchAccount,
@@ -38,7 +39,7 @@ export function useFetchAccount() {
 export function useUpdateAccount() {
     const queryClient = useQueryClient();
 
-    return useMutation<User, ErrorResponse, { update: string }>(({ update }) => updateAccount(update), {
+    return useMutation<User, ErrorResponse, { update: AccountUpdate }>(({ update }) => updateAccount(update), {
         onSuccess: () => {
             queryClient.invalidateQueries(accountKeys.all());
         },

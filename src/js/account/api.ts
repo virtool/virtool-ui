@@ -20,7 +20,7 @@ export function get(): Promise<Response> {
     return Request.get("/account");
 }
 
-type AccountUpdate = {
+export type AccountUpdate = {
     email?: string;
 };
 
