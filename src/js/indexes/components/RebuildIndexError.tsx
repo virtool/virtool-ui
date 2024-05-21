@@ -2,7 +2,7 @@ import { Alert } from "@base";
 import React from "react";
 
 type RebuildIndexErrorProps = {
-    error: string;
+    error?: string;
 };
 
 /**
