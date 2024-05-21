@@ -20,9 +20,9 @@ type UploadToolbarProps = {
  * Renders an UploadBar if the user has permission to upload files.
  */
 export function UploadToolbar({ onDrop, fileType, message, validationRegex }: UploadToolbarProps) {
-    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
+    const { hasPermission: canUpload } = useCheckAdminRoleOrPermission(Permission.upload_file);
 
-    if (!canCreate) {
+    if (!canUpload) {
         return (
             <Alert color="orange" level>
                 <Icon name="exclamation-circle" />
