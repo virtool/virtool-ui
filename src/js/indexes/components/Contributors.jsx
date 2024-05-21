@@ -1,6 +1,5 @@
 import { map, sortBy } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection, InitialIcon, NoneFoundSection } from "../../base";
 
@@ -25,7 +24,7 @@ export const Contributor = ({ id, count, handle }) => (
     </StyledContributor>
 );
 
-export const Contributors = ({ contributors }) => {
+export default function Contributors({ contributors }) {
     const sorted = sortBy(contributors, ["id", "count"]);
 
     let contributorComponents = map(sorted, contributor => <Contributor key={contributor.id} {...contributor} />);
@@ -44,10 +43,4 @@ export const Contributors = ({ contributors }) => {
             {contributorComponents}
         </BoxGroup>
     );
-};
-
-export const mapStateToProps = state => ({
-    contributors: state.indexes.detail.contributors,
-});
-
-export default connect(mapStateToProps)(Contributors);
+}

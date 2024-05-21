@@ -20,8 +20,8 @@ export function find({ refId, term, page }) {
  * @returns A promise resolving to the API response containing the index details
  */
 
-export function get({ indexId }) {
-    return Request.get(`/indexes/${indexId}`);
+export function getIndex(indexId: string) {
+    return Request.get(`/indexes/${indexId}`).then(res => res.body);
 }
 
 /**
