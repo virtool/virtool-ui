@@ -1,8 +1,15 @@
+import { Badge, Tabs, TabsLink } from "@base";
 import React from "react";
-import { connect } from "react-redux";
-import { Badge, Tabs, TabsLink } from "../../../base";
 
-export function ReferenceDetailTabs({ id, otuCount }) {
+type ReferenceDetailTabsProps = {
+    id: string;
+    otuCount: number;
+};
+
+/**
+ * Displays tabs to navigate through the detailed view of a reference
+ */
+export default function ReferenceDetailTabs({ id, otuCount }: ReferenceDetailTabsProps) {
     return (
         <Tabs>
             <TabsLink to={`/refs/${id}/manage`}>Manage</TabsLink>
@@ -14,10 +21,3 @@ export function ReferenceDetailTabs({ id, otuCount }) {
         </Tabs>
     );
 }
-
-export const mapStateToProps = state => ({
-    id: state.references.detail.id,
-    otuCount: state.references.detail.otu_count,
-});
-
-export default connect(mapStateToProps)(ReferenceDetailTabs);

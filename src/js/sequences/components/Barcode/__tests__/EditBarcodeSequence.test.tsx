@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../../tests/setupTests";
 import { castValues, EditBarcodeSequence } from "../EditBarcodeSequence";
@@ -23,9 +24,7 @@ describe("<EditBarcodeSequence>", () => {
             isolateId: "test_isolate_id",
             otuId: "test_otu_id",
             id: "test_id",
-            show: true,
             targets: [],
-            onHide: vi.fn(),
             onSave: vi.fn(),
             initialAccession: "initialAccession",
             initialDefinition: "initialDefinition",
@@ -80,7 +79,12 @@ describe("<EditBarcodeSequence>", () => {
     });
 
     it("should render all fields with current sequence data", () => {
-        renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
 
         expect(screen.getByText("Target")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -91,8 +95,12 @@ describe("<EditBarcodeSequence>", () => {
     });
 
     it("should submit correct data when all fields changed", async () => {
-        renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
-
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByText("test_target_name_2"));
 
@@ -126,8 +134,12 @@ describe("<EditBarcodeSequence>", () => {
         );
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
-
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
         await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Sequence 4" }));
@@ -141,8 +153,12 @@ describe("<EditBarcodeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithProviders(<EditBarcodeSequence {...props} />, createAppStore(state));
-
+        renderWithProviders(
+            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
+                <EditBarcodeSequence {...props} />
+            </MemoryRouter>,
+            createAppStore(state),
+        );
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 

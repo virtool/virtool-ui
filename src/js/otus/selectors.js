@@ -1,10 +1,5 @@
 import { find, get } from "lodash-es";
 import { createSelector } from "reselect";
-import { getTermSelectorFactory } from "../utils/selectors";
-
-const getStateTerm = state => state.otus.term;
-
-export const getTerm = getTermSelectorFactory(getStateTerm);
 
 export const getSchema = state => get(state, "otus.detail.schema");
 

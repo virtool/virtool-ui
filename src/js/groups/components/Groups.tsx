@@ -5,7 +5,7 @@ import { getColor } from "../../app/theme";
 import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "../../base";
 import { InputHeader } from "../../base/InputHeader";
 import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../queries";
-import Create from "./Create";
+import Create from "./CreateGroup";
 import { GroupSelector } from "./GroupSelector";
 import { Members } from "./Members";
 import { Permissions } from "./Permissions";
