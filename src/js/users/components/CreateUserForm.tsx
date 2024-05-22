@@ -36,7 +36,13 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
         <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
             <InputGroup>
                 <InputLabel htmlFor="handle">Username</InputLabel>
-                <InputSimple id="handle" {...register("handle", { required: "Please specify a username" })} />
+                <InputSimple
+                    id="handle"
+                    autoComplete="username"
+                    {...register("handle", {
+                        required: "Please specify a username",
+                    })}
+                />
                 <InputError>{errors.handle?.message}</InputError>
             </InputGroup>
             <InputGroup>
@@ -44,6 +50,7 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
                 <InputSimple
                     id="password"
                     type="password"
+                    autoComplete="new-password"
                     {...register("password", {
                         required: "Password does not meet minimum length requirement (8)",
                         minLength: {
