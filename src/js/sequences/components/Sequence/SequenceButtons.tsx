@@ -1,10 +1,10 @@
+import { CloseButton, IconLink } from "@base";
+import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
+import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useGetActiveIsolateId } from "@sequences/hooks";
 import React from "react";
 import styled from "styled-components";
-import { CloseButton, IconLink } from "../../../base";
-import { DownloadLink } from "../../../references/components/Detail/DownloadLink";
 
 const SequenceHeaderButtons = styled.span`
     align-items: center;

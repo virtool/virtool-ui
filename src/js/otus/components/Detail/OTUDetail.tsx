@@ -1,12 +1,10 @@
 import { getFontWeight } from "@app/theme";
 import { LoadingPlaceholder, NotFound, Tabs, TabsLink, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
+import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
-import { get } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import { getOTU } from "../../actions";
 import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
 import OTUSection from "./OTUSection";
@@ -39,23 +37,20 @@ const OTUDetailSubtitle = styled.p`
 /**
  * Displays detailed otu view allowing users to manage otus
  */
-export function OTUDetail({ match, error, detail, getOTU }) {
+export default function OTUDetail({ match }) {
     const { otuId, refId } = match.params;
-    const { data: reference, isLoading } = useGetReference(refId);
+    const { data: otu, isLoading: isLoadingOTU, isError } = useFetchOTU(otuId);
+    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
 
-    useEffect(() => {
-        getOTU(otuId);
-    }, []);
-
-    if (error) {
+    if (isError) {
         return <NotFound />;
     }
 
-    if (detail === null || detail.id !== otuId || isLoading) {
+    if (isLoadingOTU || isLoadingReference) {
         return <LoadingPlaceholder />;
     }
 
-    const { id, name, abbreviation } = detail;
+    const { id, name, abbreviation } = otu;
 
     return (
         <>
@@ -71,7 +66,7 @@ export function OTUDetail({ match, error, detail, getOTU }) {
                 </OTUDetailTitle>
                 <OTUDetailSubtitle>
                     <strong>From Reference / </strong>
-                    <Link to={`/refs/${detail.reference.id}`}>{reference.name}</Link>
+                    <Link to={`/refs/${refId}`}>{reference.name}</Link>
                 </OTUDetailSubtitle>
             </ViewHeader>
 
@@ -92,18 +87,3 @@ export function OTUDetail({ match, error, detail, getOTU }) {
         </>
     );
 }
-
-const mapStateToProps = state => {
-    return {
-        error: get(state, "errors.GET_OTU_ERROR", null),
-        detail: state.otus.detail,
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    getOTU: otuId => {
-        dispatch(getOTU(otuId));
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OTUDetail);

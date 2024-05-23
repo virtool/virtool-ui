@@ -1,4 +1,5 @@
 import { LocationType } from "@/types/types";
+import { useGetActiveIsolate } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
 import sortSequencesBySegment from "@otus/utils";
 import { compact, filter, find, map, reject } from "lodash-es";
@@ -13,7 +14,7 @@ import { useLocation } from "react-router-dom";
  *
  * @returns {[boolean, (function(): void), (function(): void)]}
  */
-export const useExpanded = () => {
+export function useExpanded() {
     const [expanded, setExpanded] = useState(false);
 
     let expand;
@@ -27,8 +28,13 @@ export const useExpanded = () => {
     }, [expanded]);
 
     return { expanded, expand, collapse };
-};
+}
 
+/**
+ * A hook to get the active sequence from the OTU
+ *
+ * @returns The active sequence
+ */
 export function useGetActiveSequence() {
     const location = useLocation<LocationType>();
     const { otu } = useCurrentOTUContext();
@@ -48,6 +54,11 @@ export function useGetActiveSequence() {
     return {};
 }
 
+/**
+ * A hook to get unreferenced targets for a barcode sequence
+ *
+ * @returns A list of unreferenced targets
+ */
 export function useGetUnreferencedTargets() {
     const location = useLocation<LocationType>();
     const { otu, reference } = useCurrentOTUContext();
@@ -63,6 +74,11 @@ export function useGetUnreferencedTargets() {
     return filter(targets, target => !referencedTargetNames.includes(target.name));
 }
 
+/**
+ * A hook to get unreferenced segments for a genome sequence
+ *
+ * @returns A list of unreferenced segments
+ */
 export function useGetUnreferencedSegments() {
     const location = useLocation<LocationType>();
     const { otu } = useCurrentOTUContext();
@@ -75,17 +91,4 @@ export function useGetUnreferencedSegments() {
 
     const referencedSegmentNames = compact(map(inactiveSequences, "segment"));
     return otu.schema.filter(segment => !referencedSegmentNames.includes(segment.name));
-}
-
-export function useGetActiveIsolate(otu) {
-    const location = useLocation<LocationType>();
-
-    const activeIsolateId = location.state?.activeIsolateId || otu.isolates[0]?.id;
-    return otu.isolates.length ? find(otu.isolates, { id: activeIsolateId }) : null;
-}
-
-export function useGetActiveIsolateId(otu) {
-    const location = useLocation<LocationType>();
-
-    return location.state?.activeIsolateId || otu.isolates[0]?.id;
 }
