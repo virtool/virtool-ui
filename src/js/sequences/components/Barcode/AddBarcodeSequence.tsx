@@ -1,18 +1,15 @@
+import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "@base";
 import { useAddSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { ReferenceTarget } from "@references/types";
+import TargetField from "@sequences/components/Barcode/TargetField";
+import { useLocationState } from "@utils/hooks";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
 import PersistForm from "../../../forms/components/PersistForm";
-import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
-import { ReferenceTarget } from "../../../references/types";
-import { getDefaultTargetName, getUnreferencedTargets } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
-import TargetsField from "./TargetField";
 
 function getInitialValues(defaultTarget: string) {
     return {
@@ -44,8 +41,6 @@ type formValues = {
 };
 
 type AddBarcodeSequenceProps = {
-    /** The default target */
-    defaultTarget: string;
     isolateId: string;
     otuId: string;
     /** A list of unreferenced targets */
@@ -55,9 +50,8 @@ type AddBarcodeSequenceProps = {
 /**
  * Displays dialog to add a barcode sequence
  */
-export function AddBarcodeSequence({ defaultTarget, isolateId, otuId, targets }: AddBarcodeSequenceProps) {
-    const history = useHistory();
-    const location = useLocation<{ addSequence: boolean }>();
+export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBarcodeSequenceProps) {
+    const [locationState, setLocationState] = useLocationState();
     const mutation = useAddSequence(otuId);
 
     function handleSubmit({ accession, definition, host, sequence, targetName }) {
@@ -72,16 +66,17 @@ export function AddBarcodeSequence({ defaultTarget, isolateId, otuId, targets }:
             },
             {
                 onSuccess: () => {
-                    history.push({ state: { addSequence: false } });
+                    setLocationState({ addSequence: false });
                 },
             },
         );
     }
 
+    const defaultTarget = targets[0].name;
     const initialValues = getInitialValues(defaultTarget);
 
     return (
-        <Dialog open={location.state?.addSequence} onOpenChange={() => history.push({ state: { addSequence: false } })}>
+        <Dialog open={locationState?.addSequence} onOpenChange={() => setLocationState({ addSequence: false })}>
             <DialogPortal>
                 <DialogOverlay />
                 <CenteredDialogContent>
@@ -102,8 +97,9 @@ export function AddBarcodeSequence({ defaultTarget, isolateId, otuId, targets }:
                                     castValues={castValues(targets, defaultTarget)}
                                 />
                                 <Field
-                                    as={TargetsField}
+                                    as={TargetField}
                                     name="targetName"
+                                    targets={targets}
                                     onChange={(targetName: string) => setFieldValue("targetName", targetName)}
                                 />
                                 <SequenceForm touched={touched} errors={errors} />
@@ -116,14 +112,3 @@ export function AddBarcodeSequence({ defaultTarget, isolateId, otuId, targets }:
         </Dialog>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        defaultTarget: getDefaultTargetName(state),
-        isolateId: getActiveIsolateId(state),
-        otuId: getOTUDetailId(state),
-        targets: getUnreferencedTargets(state),
-    };
-}
-
-export default connect(mapStateToProps, null)(AddBarcodeSequence);

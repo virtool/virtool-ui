@@ -1,10 +1,10 @@
+import { useCurrentOTUContext } from "@otus/queries";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useGetActiveIsolateId } from "@sequences/hooks";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { CloseButton, IconLink } from "../../../base";
-import { getActiveIsolateId, getOTUDetailId } from "../../../otus/selectors";
 import { DownloadLink } from "../../../references/components/Detail/DownloadLink";
-import { getCanModifyReferenceOTU } from "../../../references/selectors";
 
 const SequenceHeaderButtons = styled.span`
     align-items: center;
@@ -30,8 +30,15 @@ const StyledButton = styled(IconLink)`
     padding: 0 5px;
 `;
 
-export function SequenceButtons({ canModify, id, isolateId, otuId, onCollapse }) {
-    const href = `/api/otus/${otuId}/isolates/${isolateId}/sequences/${id}.fa`;
+/**
+ * Displays icons for the sequence item to close, edit, or remove
+ */
+export default function SequenceButtons({ id, onCollapse }) {
+    const { otu, reference } = useCurrentOTUContext();
+    const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify_otu);
+    const isolateId = useGetActiveIsolateId(otu);
+
+    const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
 
     return (
         <SequenceHeaderButtons>
@@ -46,11 +53,3 @@ export function SequenceButtons({ canModify, id, isolateId, otuId, onCollapse })
         </SequenceHeaderButtons>
     );
 }
-
-export const mapStateToProps = state => ({
-    canModify: getCanModifyReferenceOTU(state),
-    isolateId: getActiveIsolateId(state),
-    otuId: getOTUDetailId(state),
-});
-
-export default connect(mapStateToProps)(SequenceButtons);

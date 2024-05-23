@@ -1,18 +1,11 @@
+import { getFontWeight } from "@app/theme";
+import { LoadingPlaceholder, NotFound, Tabs, TabsLink, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
+import { useGetReference } from "@references/queries";
 import { get } from "lodash-es";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import { getFontWeight } from "../../../app/theme";
-import {
-    LoadingPlaceholder,
-    NotFound,
-    Tabs,
-    TabsLink,
-    ViewHeader,
-    ViewHeaderIcons,
-    ViewHeaderTitle,
-} from "../../../base";
 import { getOTU } from "../../actions";
 import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
@@ -46,20 +39,22 @@ const OTUDetailSubtitle = styled.p`
 /**
  * Displays detailed otu view allowing users to manage otus
  */
-export function OTUDetail({ match, error, detail, refName, dataType, getOTU }) {
+export function OTUDetail({ match, error, detail, getOTU }) {
+    const { otuId, refId } = match.params;
+    const { data: reference, isLoading } = useGetReference(refId);
+
     useEffect(() => {
-        getOTU(match.params.otuId);
+        getOTU(otuId);
     }, []);
 
     if (error) {
         return <NotFound />;
     }
 
-    if (detail === null || detail.id !== match.params.otuId) {
+    if (detail === null || detail.id !== otuId || isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    const refId = detail.reference.id;
     const { id, name, abbreviation } = detail;
 
     return (
@@ -76,13 +71,15 @@ export function OTUDetail({ match, error, detail, refName, dataType, getOTU }) {
                 </OTUDetailTitle>
                 <OTUDetailSubtitle>
                     <strong>From Reference / </strong>
-                    <Link to={`/refs/${detail.reference.id}`}>{refName}</Link>
+                    <Link to={`/refs/${detail.reference.id}`}>{reference.name}</Link>
                 </OTUDetailSubtitle>
             </ViewHeader>
 
             <Tabs>
                 <TabsLink to={`/refs/${refId}/otus/${id}/otu`}>OTU</TabsLink>
-                {dataType !== "barcode" && <TabsLink to={`/refs/${refId}/otus/${id}/schema`}>Schema</TabsLink>}
+                {reference.data_type !== "barcode" && (
+                    <TabsLink to={`/refs/${refId}/otus/${id}/schema`}>Schema</TabsLink>
+                )}
                 <TabsLink to={`/refs/${refId}/otus/${id}/history`}>History</TabsLink>
             </Tabs>
 
@@ -100,8 +97,6 @@ const mapStateToProps = state => {
     return {
         error: get(state, "errors.GET_OTU_ERROR", null),
         detail: state.otus.detail,
-        refName: state.references.detail.name,
-        dataType: state.references.detail.data_type,
     };
 };
 

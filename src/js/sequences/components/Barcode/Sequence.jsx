@@ -1,13 +1,12 @@
+import { BoxGroupSection } from "@base";
 import React from "react";
-import { connect } from "react-redux";
-import { BoxGroupSection } from "../../../base";
 import { useExpanded } from "../../hooks";
-import SequenceButtons from "../Sequence/Buttons";
 import { SequenceHeader } from "../Sequence/Header";
+import SequenceButtons from "../Sequence/SequenceButtons";
 import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/Values";
 import { BarcodeSequenceTable } from "./Table";
 
-const BarcodeSequence = ({ accession, definition, host, id, sequence, target }) => {
+export default function BarcodeSequence({ accession, definition, host, id, sequence, target }) {
     const { expanded, expand, collapse } = useExpanded();
 
     return (
@@ -23,8 +22,4 @@ const BarcodeSequence = ({ accession, definition, host, id, sequence, target }) 
             )}
         </BoxGroupSection>
     );
-};
-
-export const mapStateToProps = state => ({ targets: state.references.detail.targets });
-
-export default connect(mapStateToProps)(BarcodeSequence);
+}

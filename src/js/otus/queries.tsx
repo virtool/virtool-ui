@@ -9,6 +9,7 @@ import {
     createOTU,
     editIsolate,
     editOTU,
+    editSequence,
     findOTUs,
     getOTU,
     getOTUHistory,
@@ -208,6 +209,38 @@ export function useAddSequence(otuId: string) {
     >(
         ({ isolateId, accession, definition, host, sequence, segment, target }) =>
             addSequence(otuId, isolateId, accession, definition, host, sequence, segment, target),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+            },
+        },
+    );
+}
+
+/**
+ * Initializes a mutator for adding a sequence
+ *
+ * @returns A mutator for adding a sequence
+ */
+export function useEditSequence(otuId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<
+        OTUSequence,
+        unknown,
+        {
+            sequenceId: string;
+            isolateId: string;
+            accession: string;
+            definition: string;
+            host: string;
+            sequence: string;
+            segment?: string;
+            target?: string;
+        }
+    >(
+        ({ isolateId, sequenceId, accession, definition, host, sequence, segment, target }) =>
+            editSequence(otuId, isolateId, sequenceId, accession, definition, host, sequence, segment, target),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));

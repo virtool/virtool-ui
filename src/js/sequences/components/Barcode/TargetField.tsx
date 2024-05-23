@@ -1,11 +1,9 @@
+import { fontWeight, getFontSize } from "@app/theme";
+import { Icon, InputGroup, InputLabel, Select, SelectButton, SelectContent } from "@base";
+import { ReferenceTarget } from "@references/types";
 import { map } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { fontWeight, getFontSize } from "../../../app/theme";
-import { Icon, InputGroup, InputLabel, Select, SelectButton, SelectContent } from "../../../base";
-import { ReferenceTarget } from "../../../references/types";
-import { getUnreferencedTargets } from "../../selectors";
 import { SequenceTarget } from "./SequenceTarget";
 
 const TargetSelectContainer = styled.div`
@@ -46,7 +44,7 @@ type TargetFieldProps = {
 /**
  * Displays a dropdown list of available targets in adding/editing dialogs
  */
-export function TargetField({ targets, onChange, value }: TargetFieldProps) {
+export default function TargetField({ targets, onChange, value }: TargetFieldProps) {
     const targetSelectOptions = map(targets, target => (
         <SequenceTarget key={target.name} name={target.name} description={target.description} />
     ));
@@ -75,11 +73,3 @@ export function TargetField({ targets, onChange, value }: TargetFieldProps) {
         </InputGroup>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        targets: getUnreferencedTargets(state),
-    };
-}
-
-export default connect(mapStateToProps)(TargetField);

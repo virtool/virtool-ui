@@ -1,12 +1,11 @@
+import { getColor } from "@app/theme";
+import { Icon } from "@base";
+import { useCurrentOTUContext } from "@otus/queries";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useGetUnreferencedTargets } from "@sequences/hooks";
 import React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getColor } from "../../app/theme";
-import { Icon } from "../../base";
-import { getTargets } from "../../otus/selectors";
-import { getCanModifyReferenceOTU, getDataType } from "../../references/selectors";
-import { getUnreferencedTargets } from "../selectors";
 
 const AddSequenceLinkMessage = styled.span`
     color: ${getColor};
@@ -17,7 +16,13 @@ const StyledAddSequenceLink = styled(Link)`
     margin-left: auto;
 `;
 
-export const AddSequenceLink = ({ canModify, dataType, hasUnreferencedTargets, hasTargets }) => {
+export default function AddSequenceLink({ dataType, refId }) {
+    const { reference } = useCurrentOTUContext();
+    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+    const unreferencedTargets = useGetUnreferencedTargets();
+    const hasUnreferencedTargets = Boolean(unreferencedTargets?.length);
+    const hasTargets = Boolean(reference.targets?.length);
+
     if (canModify) {
         if (dataType === "barcode") {
             if (!hasTargets) return null;
@@ -35,13 +40,4 @@ export const AddSequenceLink = ({ canModify, dataType, hasUnreferencedTargets, h
     }
 
     return null;
-};
-
-export const mapStateToProps = state => ({
-    canModify: getCanModifyReferenceOTU(state),
-    dataType: getDataType(state),
-    hasUnreferencedTargets: Boolean(getUnreferencedTargets(state)?.length),
-    hasTargets: Boolean(getTargets(state)?.length),
-});
-
-export default connect(mapStateToProps)(AddSequenceLink);
+}
