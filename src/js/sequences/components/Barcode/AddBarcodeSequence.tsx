@@ -72,7 +72,7 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
         );
     }
 
-    const defaultTarget = targets[0].name;
+    const defaultTarget = targets[0]?.name;
     const initialValues = getInitialValues(defaultTarget);
 
     return (
@@ -99,8 +99,8 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
                                 <Field
                                     as={TargetField}
                                     name="targetName"
-                                    targets={targets}
                                     onChange={(targetName: string) => setFieldValue("targetName", targetName)}
+                                    targets={targets}
                                 />
                                 <SequenceForm touched={touched} errors={errors} />
                                 <SaveButton />

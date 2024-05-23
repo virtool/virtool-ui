@@ -33,18 +33,18 @@ const TargetFieldLabelLock = styled.span`
 `;
 
 type TargetFieldProps = {
+    /** A callback function to handle target selection */
+    onChange: (value: string) => void;
     /** A list of unreferenced targets */
     targets: ReferenceTarget[];
     /** The selected target */
     value: string;
-    /** A callback function to handle target selection */
-    onChange: (value: string) => void;
 };
 
 /**
  * Displays a dropdown list of available targets in adding/editing dialogs
  */
-export default function TargetField({ targets, onChange, value }: TargetFieldProps) {
+export default function TargetField({ onChange, targets, value }: TargetFieldProps) {
     const targetSelectOptions = map(targets, target => (
         <SequenceTarget key={target.name} name={target.name} description={target.description} />
     ));

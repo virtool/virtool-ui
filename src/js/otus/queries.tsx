@@ -218,9 +218,9 @@ export function useAddSequence(otuId: string) {
 }
 
 /**
- * Initializes a mutator for adding a sequence
+ * Initializes a mutator for editing a sequence
  *
- * @returns A mutator for adding a sequence
+ * @returns A mutator for editing a sequence
  */
 export function useEditSequence(otuId: string) {
     const queryClient = useQueryClient();

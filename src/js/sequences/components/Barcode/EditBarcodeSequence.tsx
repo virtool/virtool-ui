@@ -10,7 +10,7 @@ import React from "react";
 import styled from "styled-components";
 import PersistForm from "../../../forms/components/PersistForm";
 import { SequenceForm, validationSchema } from "../SequenceForm";
-import TargetsField from "./TargetField";
+import TargetField from "./TargetField";
 
 function getInitialValues({ initialTargetName, initialAccession, initialDefinition, initialHost, initialSequence }) {
     return {
@@ -43,16 +43,16 @@ type formValues = {
 
 type EditBarcodeSequence = {
     activeSequence: OTUSequence;
-    /** A list of unreferenced targets */
-    targets: ReferenceTarget[];
     isolateId: string;
     otuId: string;
+    /** A list of unreferenced targets */
+    targets: ReferenceTarget[];
 };
 
 /**
  * Displays dialog to edit a barcode sequence
  */
-export default function EditBarcodeSequence({ activeSequence, targets, isolateId, otuId }: EditBarcodeSequence) {
+export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, targets }: EditBarcodeSequence) {
     const [locationState, setLocationState] = useLocationState();
     const mutation = useEditSequence(otuId);
     const { accession, definition, host, id, sequence, target } = activeSequence;
@@ -98,10 +98,10 @@ export default function EditBarcodeSequence({ activeSequence, targets, isolateId
                                     castValues={castValues(targets, target)}
                                 />
                                 <Field
-                                    as={TargetsField}
-                                    targets={targets}
+                                    as={TargetField}
                                     name="targetName"
                                     onChange={targetName => setFieldValue("targetName", targetName)}
+                                    targets={targets}
                                 />
                                 <SequenceForm touched={touched} errors={errors} />
                                 <SaveButton />

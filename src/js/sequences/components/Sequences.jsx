@@ -63,11 +63,11 @@ export default function IsolateSequences({ activeIsolate, otuId }) {
                 <AddBarcodeSequence otuId={otuId} isolateId={activeIsolate.id} targets={unreferencedTargets} />
             ) : (
                 <AddGenomeSequence
-                    otuId={otuId}
                     isolateId={activeIsolate.id}
-                    sequences={sequences}
-                    schema={otu.schema}
+                    otuId={otuId}
                     refId={reference.id}
+                    schema={otu.schema}
+                    sequences={sequences}
                 />
             )}
             <EditSequence />

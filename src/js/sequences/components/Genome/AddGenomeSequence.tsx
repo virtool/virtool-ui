@@ -36,15 +36,15 @@ type formValues = {
 type AddGenomeSequenceProps = {
     isolateId: string;
     otuId: string;
-    sequences: OTUSequence[];
-    schema: OTUSegment[];
     refId: string;
+    schema: OTUSegment[];
+    sequences: OTUSequence[];
 };
 
 /**
  * Displays dialog to add a genome sequence
  */
-export default function AddGenomeSequence({ isolateId, otuId, sequences, schema, refId }: AddGenomeSequenceProps) {
+export default function AddGenomeSequence({ isolateId, otuId, refId, schema, sequences }: AddGenomeSequenceProps) {
     const [locationState, setLocationState] = useLocationState();
     const mutation = useAddSequence(otuId);
 
@@ -83,11 +83,11 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema,
                                 <Field
                                     as={SegmentField}
                                     name="segment"
-                                    segments={segments}
-                                    otuId={otuId}
-                                    refId={refId}
                                     hasSchema={schema.length > 0}
                                     onChange={(segment: string) => setFieldValue("segment", segment)}
+                                    otuId={otuId}
+                                    refId={refId}
+                                    segments={segments}
                                 />
                                 <SequenceForm errors={errors} touched={touched} />
                                 <SaveButton />

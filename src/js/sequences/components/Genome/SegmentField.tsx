@@ -39,14 +39,14 @@ const NoSchema = styled(Box)`
 type SequenceSegmentFieldProps = {
     /** Whether a schema exists for the selected OTU */
     hasSchema: boolean;
+    /** A callback function to handle segment selection */
+    onChange: (value: string) => void;
     otuId: string;
-    /** The selected segment */
-    value: string;
     refId: string;
     /** A list of unreferenced segments */
     segments: OTUSegment[];
-    /** A callback function to handle segment selection */
-    onChange: (value: string) => void;
+    /** The selected segment */
+    value: string;
 };
 
 /**
@@ -54,11 +54,11 @@ type SequenceSegmentFieldProps = {
  */
 export default function SequenceSegmentField({
     hasSchema,
+    onChange,
     otuId,
-    value,
     refId,
     segments,
-    onChange,
+    value,
 }: SequenceSegmentFieldProps) {
     if (hasSchema) {
         const segmentOptions = map(segments, segment => (

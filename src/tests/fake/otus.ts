@@ -238,6 +238,39 @@ export function mockApiAddSequence(
 }
 
 /**
+ * Creates a mocked API call for editing a sequence
+ *
+ * @param otuId - The id of the OTU
+ * @param isolateId - The id of the isolate
+ * @param sequenceId - The id of the sequence ot edit
+ * @param accession - The accession ID for the sequence
+ * @param definition - The sequence definition
+ * @param host - The host for the sequence
+ * @param sequence - The sequence characters assigned
+ * @param segment - The segment assigned
+ * @param target - The target assigned
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiEditSequence(
+    otuId: string,
+    isolateId: string,
+    sequenceId: string,
+    accession: string,
+    definition: string,
+    host: string,
+    sequence: string,
+    segment?: string,
+    target?: string,
+) {
+    const OTUSequence = createFakeOTUSequence({ accession, definition, host, sequence, segment, target });
+
+    return nock("http://localhost")
+        .patch(`/api/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
+        .query(true)
+        .reply(201, OTUSequence);
+}
+
+/**
  * Creates a mocked API call for removing an OTU isolate
  *
  * @param otuId - The id of the OTU being updated

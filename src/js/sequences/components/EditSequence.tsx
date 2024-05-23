@@ -20,15 +20,15 @@ export default function EditSequence() {
     const activeSequence = useGetActiveSequence();
 
     return data_type === "barcode" ? (
-        <EditBarcodeSequence activeSequence={activeSequence} otuId={otu.id} targets={targets} isolateId={isolateId} />
+        <EditBarcodeSequence activeSequence={activeSequence} isolateId={isolateId} otuId={otu.id} targets={targets} />
     ) : (
         <EditGenomeSequence
             activeSequence={activeSequence}
-            otuId={otu.id}
-            isolateId={isolateId}
-            segments={segments}
             hasSchema={Boolean(otu.schema.length)}
+            isolateId={isolateId}
+            otuId={otu.id}
             refId={reference.id}
+            segments={segments}
         />
     );
 }

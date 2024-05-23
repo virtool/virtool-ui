@@ -39,11 +39,11 @@ type formValues = {
 type EditGenomeSequenceProps = {
     activeSequence: OTUSequence;
     hasSchema: boolean;
-    /** A list of unreferenced segments */
-    segments: OTUSegment[];
     isolateId: string;
     otuId: string;
     refId: string;
+    /** A list of unreferenced segments */
+    segments: OTUSegment[];
 };
 
 /**
@@ -52,10 +52,10 @@ type EditGenomeSequenceProps = {
 export default function EditGenomeSequence({
     activeSequence,
     hasSchema,
-    segments,
     isolateId,
     otuId,
     refId,
+    segments,
 }: EditGenomeSequenceProps) {
     const [locationState, setLocationState] = useLocationState();
     const mutation = useEditSequence(otuId);
@@ -97,13 +97,13 @@ export default function EditGenomeSequence({
                                 <Field
                                     as={SegmentField}
                                     name="segment"
-                                    otuId={otuId}
-                                    refId={refId}
-                                    segments={segments}
                                     hasSchema={hasSchema}
                                     onChange={segment => {
                                         setFieldValue("segment", segment);
                                     }}
+                                    otuId={otuId}
+                                    refId={refId}
+                                    segments={segments}
                                 />
                                 <SequenceForm touched={touched} errors={errors} />
                                 <SaveButton />
