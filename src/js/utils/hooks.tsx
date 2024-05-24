@@ -1,3 +1,4 @@
+import { LocationType } from "@/types/types";
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
@@ -186,4 +187,21 @@ export function ScrollSync({ children }: ScrollSyncProps) {
             {children}
         </div>
     );
+}
+
+/**
+ * Hook for managing the location state
+ */
+export function useLocationState(): [
+    locationState: LocationType,
+    setLocationState: (state: { [key: string]: boolean | string }) => void,
+] {
+    const location = useLocation();
+    const history = useHistory();
+
+    function setLocationState(state: { [key: string]: boolean | string }) {
+        history.push({ ...history.location, state });
+    }
+
+    return [location.state, setLocationState];
 }

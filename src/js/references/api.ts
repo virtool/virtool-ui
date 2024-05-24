@@ -12,10 +12,6 @@ export function get({ refId }) {
     return Request.get(`/refs/${refId}`);
 }
 
-export function edit({ refId, update }) {
-    return Request.patch(`/refs/${refId}`).send(update);
-}
-
 /**
  * Creates a clone of a reference
  *
@@ -34,8 +30,16 @@ export function cloneReference({ name, description, refId }): Promise<ReferenceM
         .then(res => res.body);
 }
 
-export function remoteReference({ remote_from }) {
-    return Request.post("/refs").send({ remote_from });
+/**
+ * Remotely installs a reference from the Virtool repository
+ *
+ * @param remote_from - The repository address
+ * @returns A promise resolving to the installing remote reference
+ */
+export function remoteReference(remote_from: string): Promise<Reference> {
+    return Request.post("/refs")
+        .send({ remote_from })
+        .then(res => res.body);
 }
 
 /**

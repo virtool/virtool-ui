@@ -6,7 +6,7 @@ import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderT
 import { getAccount } from "../actions";
 import { getAccountId } from "../selectors";
 import AccountProfile from "./AccountProfile";
-import APIKeys from "./API/API";
+import APIKeys from "./API/APIKeys";
 
 function Account({ userId, onGet }) {
     useEffect(() => onGet(), [userId]);

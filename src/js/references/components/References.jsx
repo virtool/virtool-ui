@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { useFetchSettings } from "../../administration/queries";
 import { Container, LoadingPlaceholder } from "../../base";
 import { CreateReference } from "./CreateReference";
-import ReferenceDetail from "./Detail/Detail";
+import ReferenceDetail from "./Detail/ReferenceDetail";
 import ReferenceList from "./ReferenceList";
 import { ReferenceSettings } from "./ReferenceSettings";
 

@@ -10,10 +10,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import AddSequence from "./Add";
 import AddSequenceLink from "./AddLink";
+import AddBarcodeSequence from "./Barcode/AddBarcodeSequence";
 import BarcodeSequence from "./Barcode/Sequence";
 import EditSequence from "./Edit";
+import AddGenomeSequence from "./Genome/AddGenomeSequence";
 import GenomeSequence from "./Genome/Sequence";
 
 const IsolateSequencesHeader = styled.label`
@@ -27,7 +28,7 @@ const IsolateSequencesHeader = styled.label`
     }
 `;
 
-export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenceId, otuId }) => {
+export function IsolateSequences({ activeIsolate, dataType, hasTargets, referenceId, otuId }) {
     const { otu } = useCurrentOTUContext();
     const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
@@ -56,7 +57,16 @@ export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenc
 
             <BoxGroup>{sequenceComponents}</BoxGroup>
 
-            <AddSequence />
+            {dataType === "barcode" ? (
+                <AddBarcodeSequence />
+            ) : (
+                <AddGenomeSequence
+                    otuId={otuId}
+                    isolateId={activeIsolate.id}
+                    sequences={sequences}
+                    schema={otu.schema}
+                />
+            )}
             <EditSequence />
             <RemoveSequence
                 isolateId={activeIsolate.id}
@@ -66,7 +76,7 @@ export const IsolateSequences = ({ activeIsolate, dataType, hasTargets, referenc
             />
         </>
     );
-};
+}
 
 export const mapStateToProps = state => ({
     dataType: getDataType(state),

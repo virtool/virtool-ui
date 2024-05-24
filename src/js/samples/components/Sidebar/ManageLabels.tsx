@@ -1,15 +1,15 @@
-import { map } from "lodash-es";
+import { fontWeight, getColor, getFontSize } from "@app/theme";
+import { SidebarHeader, SideBarSection } from "@base";
+import { Label } from "@labels/types";
+import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
+import { SampleMinimal } from "@samples/types";
+import { filter, flatMap, groupBy, map } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fontWeight, getColor, getFontSize } from "../../../app/theme";
-import { SidebarHeader, SideBarSection } from "../../../base";
 import { useUpdateLabel } from "../../queries";
-import { getPartiallySelectedLabels } from "../../selectors";
-import { SampleLabelInner } from "./Labels";
-import { SampleSidebarMultiselectList } from "./List";
-import { SampleSidebarSelector } from "./Selector";
+import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
+import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
     display: flex;
@@ -26,23 +26,29 @@ const StyledSideBarSection = styled(SideBarSection)`
     align-self: start;
 `;
 
-function getSelectedLabels(document) {
-    const selectedLabelsCount = document.reduce((result, sample) => {
-        sample.labels.forEach(({ id }) => {
-            result[id] = result[id] || { ...sample.labels.find(label => label.id === id), count: 0 };
-            result[id].count++;
-        });
-        return result;
-    }, {});
+function getSelectedLabels(document: SampleMinimal[]) {
+    const selectedLabelsCount = map(groupBy(flatMap(document, "labels"), "id"), labels => ({
+        ...labels[0],
+        count: labels.length,
+    }));
 
-    return Object.values(selectedLabelsCount).map(({ count, ...label }) => ({
+    return map(selectedLabelsCount, ({ count, ...label }) => ({
         ...label,
         allLabeled: count === document.length,
     }));
 }
 
-export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels }) {
+type ManageLabelsProps = {
+    labels: Label[];
+    selectedSamples: SampleMinimal[];
+};
+
+/**
+ * A sidebar to manage labels and filtering samples by labels
+ */
+export default function ManageLabels({ labels, selectedSamples }: ManageLabelsProps) {
     const selectedLabels = getSelectedLabels(selectedSamples);
+    const partiallySelectedLabels = filter(selectedLabels, { allLabeled: false });
     const onUpdateLabel = useUpdateLabel(selectedLabels, selectedSamples);
 
     return (
@@ -61,7 +67,7 @@ export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels 
                     manageLink={"/samples/labels"}
                 />
             </SidebarHeader>
-            <SampleSidebarMultiselectList items={selectedLabels} onUpdate={onUpdateLabel} />
+            <SampleSidebarMultiselectList items={selectedLabels} />
             {Boolean(labels.length) || (
                 <SampleLabelsFooter>
                     No labels found. <Link to="/samples/labels">Create one</Link>.
@@ -70,9 +76,3 @@ export function ManageLabels({ labels, selectedSamples, partiallySelectedLabels 
         </StyledSideBarSection>
     );
 }
-
-export const mapStateToProps = state => ({
-    partiallySelectedLabels: getPartiallySelectedLabels(state),
-});
-
-export default connect(mapStateToProps, null)(ManageLabels);

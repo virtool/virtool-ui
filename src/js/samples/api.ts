@@ -1,5 +1,3 @@
-import { LabelNested } from "@labels/types";
-import { SubtractionNested } from "@subtraction/types";
 import { Request } from "../app/request";
 import { Sample } from "./types";
 
@@ -71,11 +69,11 @@ export function getSample(sampleId: string): Promise<Sample> {
 
 export type SampleUpdate = {
     isolate?: string;
-    labels?: Array<LabelNested>;
+    labels?: number[];
     locale?: string;
     name?: string;
     notes?: string;
-    subtractions?: Array<SubtractionNested>;
+    subtractions?: string[];
 };
 
 /**
