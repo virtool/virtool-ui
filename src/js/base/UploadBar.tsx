@@ -5,11 +5,8 @@ import { getColor } from "../app/theme";
 import { Button } from "./Button";
 import { DividerVertical } from "./DividerVertical";
 
-type StyledUploadBarProps = {
-    active: boolean;
-};
-
 type getUploadBarColorProps = {
+    /* Whether the user is able to drag/select files */
     active: boolean;
     theme: DefaultTheme;
 };
@@ -21,6 +18,11 @@ function getUploadBarBackgroundColor({ active, theme }: getUploadBarColorProps):
 function getUploadBarBorderColor({ active, theme }: getUploadBarColorProps): string {
     return getColor({ theme, color: active ? "blue" : "greyLight" });
 }
+
+type StyledUploadBarProps = {
+    /* Whether the user is able to drag/select files */
+    active: boolean;
+};
 
 const StyledUploadBar = styled.div<StyledUploadBarProps>`
     display: flex;
@@ -62,22 +64,29 @@ const UploadBarDivider = styled(DividerVertical)`
 `;
 
 type UploadBarProps = {
-    message?: string;
+    message?: React.ReactNode;
+    /* Whether multiple files can be uploaded */
     multiple?: boolean;
+    /* Callback when the upload bar loses focus */
     onBlur?: () => void;
+    /* Callback when files are dropped */
     onDrop: (acceptedFiles: File[]) => void;
+    /* Validates if a file is allowed */
     validator?: (file: File) => FileError;
 };
 
-export const UploadBar = ({
+/*
+ * Allows files to be dragged and dropped or selected from the file system.
+ */
+export function UploadBar({
     message = "Drag file here to upload",
     multiple = true,
     onBlur,
     onDrop,
     validator,
-}: UploadBarProps) => {
+}: UploadBarProps) {
     const handleDrop = useCallback(
-        acceptedFiles => {
+        (acceptedFiles: File[]) => {
             onDrop(acceptedFiles);
         },
         [onDrop],
@@ -101,4 +110,4 @@ export const UploadBar = ({
             </ButtonContainer>
         </StyledUploadBar>
     );
-};
+}
