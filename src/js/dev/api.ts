@@ -7,7 +7,7 @@ import { Request } from "@app/request";
  * @returns A promise resolving to executing a developer command
  */
 export function postDevCommand(command: string) {
-    return Request.post(`/dev`)
+    return Request.post("/dev")
         .send({ command })
         .then(res => res.body);
 }
