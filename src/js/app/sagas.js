@@ -5,7 +5,6 @@ import { get as getAccountAPI } from "../account/api";
 import { watchAccount } from "../account/sagas";
 import { watchSettings } from "../administration/sagas";
 import { watchAnalyses } from "../analyses/sagas";
-import { watchDev } from "../dev/sagas";
 import { watchFiles } from "../files/sagas";
 import { watchForm } from "../forms/sagas";
 import { watchIndexes } from "../indexes/sagas";
@@ -58,7 +57,6 @@ function* rootSaga() {
     yield all([
         watchAccount(),
         watchAnalyses(),
-        watchDev(),
         watchFiles(),
         watchIndexes(),
         watchOTUs(),

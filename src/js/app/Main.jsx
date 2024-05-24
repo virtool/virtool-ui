@@ -9,7 +9,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import DevDialog from "../dev/components/Dialog";
+import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
 import NavBar from "../nav/components/NavBar";
