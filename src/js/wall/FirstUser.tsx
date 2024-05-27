@@ -16,9 +16,7 @@ type ErrorResponse = {
 };
 
 type NewUser = {
-    /** The user's handle or username */
     handle: string;
-    /** The user's password */
     password: string;
     /** Whether the user will be forced to reset their password on next login */
     forceReset: boolean;
