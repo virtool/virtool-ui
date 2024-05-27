@@ -1,7 +1,14 @@
+import { Alert } from "@base";
 import React from "react";
-import { Alert } from "../../base";
 
-export const RebuildIndexError = ({ error }) => {
+type RebuildIndexErrorProps = {
+    error?: string;
+};
+
+/**
+ * Displays an error message if there are unverified OTUs
+ */
+export default function RebuildIndexError({ error }: RebuildIndexErrorProps) {
     if (error) {
         const unverified = error === "There are unverified OTUs";
 
@@ -19,4 +26,4 @@ export const RebuildIndexError = ({ error }) => {
     }
 
     return null;
-};
+}

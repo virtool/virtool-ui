@@ -1,6 +1,6 @@
 import { ErrorResponse } from "@/types/types";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createIndex, findIndexes, getUnbuiltChanges, listIndexes } from "./api";
+import { createIndex, findIndexes, getIndex, getUnbuiltChanges, listIndexes } from "./api";
 import { Index, IndexMinimal, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
 
 /**
@@ -45,6 +45,16 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
  */
 export function useListIndexes(ready: boolean, term?: string) {
     return useQuery<IndexMinimal[]>(indexQueryKeys.list([ready]), () => listIndexes({ ready, term }));
+}
+
+/**
+ * Fetches a single index
+ *
+ * @param indexId - The id of the index to fetch
+ * @returns A single index
+ */
+export function useFetchIndex(indexId: string) {
+    return useQuery<Index, ErrorResponse>(indexQueryKeys.detail(indexId), () => getIndex(indexId));
 }
 
 /**

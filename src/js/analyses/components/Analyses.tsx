@@ -1,20 +1,9 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { LoadingPlaceholder } from "../../base";
-import { listReadyIndexes } from "../../indexes/actions";
 import AnalysisDetail from "./AnalysisDetail";
 import AnalysesList from "./AnalysisList";
 
-function Analyses({ loading, onListReadyIndexes }) {
-    useEffect(() => {
-        onListReadyIndexes();
-    }, []);
-
-    if (loading) {
-        return <LoadingPlaceholder />;
-    }
-
+export default function Analyses() {
     return (
         <Switch>
             <Route path="/samples/:sampleId/analyses" component={AnalysesList} exact />
@@ -22,19 +11,3 @@ function Analyses({ loading, onListReadyIndexes }) {
         </Switch>
     );
 }
-
-function mapStateToProps(state) {
-    return {
-        loading: state.analyses.readyIndexes === null,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onListReadyIndexes: () => {
-            dispatch(listReadyIndexes());
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Analyses);

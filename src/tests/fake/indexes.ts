@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { merge } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
-import { IndexMinimal, IndexNested } from "../../js/indexes/types";
+import { IndexFile, IndexMinimal, IndexNested } from "../../js/indexes/types";
 import { JobMinimal } from "../../js/jobs/types";
 import { ReferenceNested } from "../../js/references/types";
 import { UserNested } from "../../js/users/types";
@@ -50,6 +50,25 @@ export function createFakeIndexMinimal(props?: CreateFakeIndexMinimalProps): Ind
     };
 
     return assign(defaultIndexMinimal, props);
+}
+
+type CreateFakeIndexFile = {
+    name?: string;
+    download_url?: string;
+    size?: number;
+};
+
+export function createFakeIndexFile(props?: CreateFakeIndexFile): IndexFile {
+    const defaultIndexFile = {
+        download_url: `/testUrl/${faker.random.word()}`,
+        id: faker.datatype.number(),
+        index: faker.random.alphaNumeric(8),
+        name: faker.random.word(),
+        size: faker.datatype.number(),
+        type: "fasta",
+    };
+
+    return assign(defaultIndexFile, props);
 }
 
 type IndexSearchResults = BaseFakeSearchResultOptions & {
