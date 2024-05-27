@@ -1,15 +1,25 @@
-import PropTypes from "prop-types";
+import { Badge, BoxGroupSection } from "@base";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Badge, BoxGroupSection } from "../../base";
 
 const StyledIndexOTU = styled(BoxGroupSection)`
     display: flex;
     justify-content: space-between;
 `;
 
-export function IndexOTU({ refId, changeCount, id, name }) {
+type IndexOTUProps = {
+    refId: string;
+    /** The quantity of changes made to this otu since last index build */
+    changeCount: number;
+    id: string;
+    name: string;
+};
+
+/**
+ * A condensed index OTU item for use in a list of index OTUs
+ */
+export default function IndexOTU({ refId, changeCount, id, name }: IndexOTUProps) {
     return (
         <StyledIndexOTU>
             <Link to={`/refs/${refId}/otus/${id}`}>{name}</Link>
@@ -19,12 +29,3 @@ export function IndexOTU({ refId, changeCount, id, name }) {
         </StyledIndexOTU>
     );
 }
-
-IndexOTU.propTypes = {
-    refId: PropTypes.string.isRequired,
-    changeCount: PropTypes.number.isRequired,
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-};
-
-export default IndexOTU;

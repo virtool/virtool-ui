@@ -1,14 +1,5 @@
 import { get } from "lodash-es/lodash";
 import { wsUpdateAnalysis } from "../../analyses/actions";
-import { wsInsertHistory, wsUpdateIndex } from "../../indexes/actions";
-
-function actionCreatorWrapper(actionCreator) {
-    return (state, message) => actionCreator(message.data);
-}
-
-const inserters = {
-    history: actionCreatorWrapper(wsInsertHistory),
-};
 
 const updaters = {
     analyses: (state, message) => {
@@ -18,12 +9,9 @@ const updaters = {
             return wsUpdateAnalysis(message.data);
         }
     },
-    indexes: actionCreatorWrapper(wsUpdateIndex),
 };
 
 const modifiers = {
-    insert: inserters,
-    create: inserters,
     update: updaters,
 };
 

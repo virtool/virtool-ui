@@ -8,7 +8,6 @@ import analysesReducer from "../analyses/reducer";
 import errorsReducer from "../errors/reducer";
 import filesReducer from "../files/reducer";
 import { formsReducer } from "../forms/reducer";
-import indexesReducer from "../indexes/reducer";
 import { CREATE_FIRST_USER, GET_INITIAL_STATE, LOGIN, RESET_PASSWORD } from "./actionTypes";
 import rootSaga from "./sagas";
 
@@ -69,7 +68,6 @@ export function createAppStore(history) {
             errors: errorsReducer,
             files: filesReducer,
             forms: formsReducer,
-            indexes: indexesReducer,
             router: connectRouter(history),
             settings: settingsReducer,
         },

@@ -78,7 +78,7 @@ describe("<FileManager>", () => {
     });
 
     it("should change message if passed", async () => {
-        const account = createFakeAccount({ administrator_role: null });
+        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
@@ -95,7 +95,7 @@ describe("<FileManager>", () => {
     });
 
     it("should filter files according to passed regex", async () => {
-        const account = createFakeAccount({ administrator_role: null });
+        const account = createFakeAccount({ administrator_role: null, permissions: { upload_file: true } });
         mockAPIGetAccount(account);
 
         const file = createFakeFile({ name: "subtraction.fq.gz" });
@@ -103,10 +103,12 @@ describe("<FileManager>", () => {
 
         props.validationRegex = /.(?:fa|fasta)(?:.gz|.gzip)?$/;
         const mockUpload = vi.fn();
-        const reducer = (state, action) => {
-            if (action.type === UPLOAD.REQUESTED) mockUpload(action.payload.fileType, action.payload.file);
+        function reducer(state, action) {
+            if (action.type === UPLOAD.REQUESTED) {
+                mockUpload(action.payload.fileType, action.payload.file);
+            }
             return state;
-        };
+        }
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <FileManager {...props} />
