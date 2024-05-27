@@ -1,10 +1,9 @@
+import { usePostDevCommand } from "@/dev/queries";
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useLocationState } from "@utils/hooks";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { postDevCommand } from "../actions";
 
 export const DeveloperCommand = styled.div`
     align-items: center;
@@ -26,18 +25,18 @@ export const DeveloperCommandControl = styled.div`
     margin-left: auto;
 `;
 
-export function DeveloperDialog({ onCommand }) {
+/**
+ * Displays a dialog for developer commands
+ */
+export default function DeveloperDialog() {
     const [locationState, setLocationState] = useLocationState();
+    const mutation = usePostDevCommand();
 
     return (
-        <Dialog
-            open={locationState?.devCommands}
-            size="lg"
-            onOpenChange={() => setLocationState({ devCommands: false })}
-        >
+        <Dialog open={locationState?.devCommands} onOpenChange={() => setLocationState({ devCommands: false })}>
             <DialogPortal>
                 <DialogOverlay />
-                <DialogContent>
+                <DialogContent size="lg">
                     <DialogTitle>Developer</DialogTitle>
                     <DeveloperCommand>
                         <DeveloperCommandLabel>
@@ -45,7 +44,20 @@ export function DeveloperDialog({ onCommand }) {
                             <p>Remove existing users. You will be required to create a first user.</p>
                         </DeveloperCommandLabel>
                         <DeveloperCommandControl>
-                            <Button color="red" onClick={() => onCommand("clear_users")}>
+                            <Button
+                                color="red"
+                                onClick={() =>
+                                    mutation.mutate(
+                                        { command: "clear_users" },
+                                        {
+                                            onSuccess: () => {
+                                                setLocationState({ devCommands: false });
+                                                location.reload();
+                                            },
+                                        },
+                                    )
+                                }
+                            >
                                 Clear Users
                             </Button>
                         </DeveloperCommandControl>
@@ -56,7 +68,7 @@ export function DeveloperDialog({ onCommand }) {
                             <p>Creates a sample that is ready for use.</p>
                         </DeveloperCommandLabel>
                         <DeveloperCommandControl>
-                            <Button color="red" onClick={() => onCommand("create_sample")}>
+                            <Button color="red" onClick={() => mutation.mutate({ command: "create_sample" })}>
                                 Create Sample
                             </Button>
                         </DeveloperCommandControl>
@@ -67,7 +79,7 @@ export function DeveloperDialog({ onCommand }) {
                             <p>Creates a subtraction that is ready for use.</p>
                         </DeveloperCommandLabel>
                         <DeveloperCommandControl>
-                            <Button color="red" onClick={() => onCommand("create_subtraction")}>
+                            <Button color="red" onClick={() => mutation.mutate({ command: "create_subtraction" })}>
                                 Create Subtraction
                             </Button>
                         </DeveloperCommandControl>
@@ -78,7 +90,7 @@ export function DeveloperDialog({ onCommand }) {
                             <p>Creates a subtraction that is ready for use.</p>
                         </DeveloperCommandLabel>
                         <DeveloperCommandControl>
-                            <Button color="red" onClick={() => onCommand("create_subtraction")}>
+                            <Button color="red" onClick={() => mutation.mutate({ command: "create_subtraction" })}>
                                 Create Subtraction
                             </Button>
                         </DeveloperCommandControl>
@@ -89,7 +101,7 @@ export function DeveloperDialog({ onCommand }) {
                             <p>Forces cancellation, then deletion of all jobs regardless of status.</p>
                         </DeveloperCommandLabel>
                         <DeveloperCommandControl>
-                            <Button color="red" onClick={() => onCommand("force_delete_jobs")}>
+                            <Button color="red" onClick={() => mutation.mutate({ command: "force_delete_jobs" })}>
                                 Force Delete Jobs
                             </Button>
                         </DeveloperCommandControl>
@@ -99,11 +111,3 @@ export function DeveloperDialog({ onCommand }) {
         </Dialog>
     );
 }
-
-export const mapDispatchToProps = dispatch => ({
-    onCommand: command => {
-        dispatch(postDevCommand(command));
-    },
-});
-
-export default connect(null, mapDispatchToProps)(DeveloperDialog);
