@@ -55,20 +55,31 @@ export function useGetActiveSequence() {
 }
 
 /**
- * A hook to get unreferenced targets for a barcode sequence
+ * A hook to get a list of inactive sequences
  *
- * @returns A list of unreferenced targets
+ * @returns A list of inactive sequences
  */
-export function useGetUnreferencedTargets() {
+export function useGetInactiveSequences() {
     const location = useLocation<LocationType>();
-    const { otu, reference } = useCurrentOTUContext();
-    const { targets } = reference;
+    const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
     const activeSequenceId = location.state?.editSequence || undefined;
     const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
-    const inactiveSequences = reject(sequences, { id: activeSequenceId });
+    return reject(sequences, { id: activeSequenceId });
+}
+
+/**
+ * A hook to get unreferenced targets for a barcode sequence
+ *
+ * @returns A list of unreferenced targets
+ */
+export function useGetUnreferencedTargets() {
+    const { reference } = useCurrentOTUContext();
+    const { targets } = reference;
+
+    const inactiveSequences = useGetInactiveSequences();
     const referencedTargetNames = map(inactiveSequences, sequence => sequence.target);
 
     return filter(targets, target => !referencedTargetNames.includes(target.name));
@@ -80,15 +91,10 @@ export function useGetUnreferencedTargets() {
  * @returns A list of unreferenced segments
  */
 export function useGetUnreferencedSegments() {
-    const location = useLocation<LocationType>();
     const { otu } = useCurrentOTUContext();
 
-    const activeIsolate = useGetActiveIsolate(otu);
-    const activeSequenceId = location.state?.editSequence || undefined;
-    const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
-
-    const inactiveSequences = reject(sequences, { id: activeSequenceId });
-
+    const inactiveSequences = useGetInactiveSequences();
     const referencedSegmentNames = compact(map(inactiveSequences, "segment"));
+
     return otu.schema.filter(segment => !referencedSegmentNames.includes(segment.name));
 }
