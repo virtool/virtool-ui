@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Input, InputError, InputGroup, InputLabel, InputPassword } from "../base";
+import { useForm } from "react-hook-form";
+import { InputError, InputGroup, InputSimple } from "../base";
 import { createFirst } from "../users/api";
 import { User } from "../users/types";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
@@ -39,7 +39,11 @@ export default function FirstUser() {
         },
     });
 
-    const { control, handleSubmit } = useForm<FormData>();
+    const {
+        formState: { errors },
+        handleSubmit,
+        register,
+    } = useForm<FormData>();
 
     function onSubmit(data: FormData) {
         mutation.mutate({
@@ -61,24 +65,24 @@ export default function FirstUser() {
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <InputGroup>
-                            <InputLabel>Username</InputLabel>
-                            <Controller
-                                name="username"
-                                control={control}
-                                defaultValue=""
-                                rules={{ required: "Username is required" }}
-                                render={({ field }) => <Input type="text" autoFocus {...field} />}
-                            />
+                            <InputSimple aria-label="username" id="username" type="username" defaultValue="" />
+                            <InputError>{errors.username?.message}</InputError>
                         </InputGroup>
                         <InputGroup>
-                            <InputLabel>Password</InputLabel>
-                            <Controller
-                                name="password"
-                                control={control}
+                            <InputSimple
+                                aria-label="password"
+                                id="password"
+                                type="password"
                                 defaultValue=""
-                                rules={{ required: "Password is required" }}
-                                render={({ field }) => <InputPassword {...field} />}
+                                {...register("password", {
+                                    required: "Password does not meet minimum length requirement (8)",
+                                    minLength: {
+                                        value: 8,
+                                        message: "Password does not meet minimum length requirement (8)",
+                                    },
+                                })}
                             />
+                            <InputError>{errors.password?.message}</InputError>
                         </InputGroup>
 
                         <WallButton type="submit" icon="user-plus" color="blue">
