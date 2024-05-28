@@ -13,5 +13,6 @@ export type LocationType = {
     addSequence?: boolean;
     editReference?: boolean;
     editSequence?: boolean;
+    export?: boolean;
     devCommands?: boolean;
 };
