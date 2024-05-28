@@ -13,7 +13,7 @@ const StyledUploadInformation = styled.div`
 `;
 
 function isDurationZero(duration: Duration): boolean {
-    return every(duration, value => value === 0 || value === undefined);
+    return every(duration, value => value === 0);
 }
 
 type UploadTimeProps = {
@@ -27,7 +27,8 @@ type UploadTimeProps = {
  * Displays remaining time and upload speed.
  */
 export function UploadTime({ remaining, uploadSpeed }: UploadTimeProps): JSX.Element {
-    const timeRemainingInterval: Duration = intervalToDuration({ start: 0, end: remaining * 1000 });
+    const remainingTime = remaining ? remaining : 3600;
+    const timeRemainingInterval: Duration = intervalToDuration({ start: 0, end: remainingTime * 1000 });
     let formattedTimeRemaining = "";
 
     if (isDurationZero(timeRemainingInterval)) {
