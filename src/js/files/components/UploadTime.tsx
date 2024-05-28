@@ -27,7 +27,7 @@ type UploadTimeProps = {
  * Displays remaining time and upload speed.
  */
 export function UploadTime({ remaining, uploadSpeed }: UploadTimeProps): JSX.Element {
-    const remainingTime = remaining ? remaining : 3600;
+    const remainingTime = remaining ? remaining : 0;
     const timeRemainingInterval: Duration = intervalToDuration({ start: 0, end: remainingTime * 1000 });
     let formattedTimeRemaining = "";
 
