@@ -1,4 +1,5 @@
 import { formatDuration, intervalToDuration } from "date-fns";
+import { every } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
@@ -12,7 +13,7 @@ const StyledUploadInformation = styled.div`
 `;
 
 function isDurationZero(duration: Duration): boolean {
-    return every(duration, (value) => value === 0 || value === undefined);
+    return every(duration, value => value === 0 || value === undefined);
 }
 
 type UploadTimeProps = {
