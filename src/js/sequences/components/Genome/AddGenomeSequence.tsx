@@ -2,11 +2,11 @@ import { Dialog, DialogContent, DialogOverlay, DialogTitle, SaveButton } from "@
 import { useAddSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useLocationState } from "@utils/hooks";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import { compact, map } from "lodash-es/lodash";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import PersistForm from "../../../forms/components/PersistForm";
 import { SequenceForm, validationSchema } from "../SequenceForm";
@@ -36,16 +36,16 @@ type formValues = {
 type AddGenomeSequenceProps = {
     isolateId: string;
     otuId: string;
-    sequences: OTUSequence[];
+    refId: string;
     schema: OTUSegment[];
+    sequences: OTUSequence[];
 };
 
 /**
  * Displays dialog to add a genome sequence
  */
-export default function AddGenomeSequence({ isolateId, otuId, sequences, schema }: AddGenomeSequenceProps) {
-    const history = useHistory();
-    const location = useLocation<{ addSequence: boolean }>();
+export default function AddGenomeSequence({ isolateId, otuId, refId, schema, sequences }: AddGenomeSequenceProps) {
+    const [locationState, setLocationState] = useLocationState();
     const mutation = useAddSequence(otuId);
 
     const referencedSegmentNames = compact(map(sequences, "segment"));
@@ -56,14 +56,14 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema 
             { isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
                 onSuccess: () => {
-                    history.push({ state: { addSequence: false } });
+                    setLocationState({ addSequence: false });
                 },
             },
         );
     }
 
     return (
-        <Dialog open={location.state?.addSequence} onOpenChange={() => history.push({ state: { addSequence: false } })}>
+        <Dialog open={locationState?.addSequence} onOpenChange={() => setLocationState({ addSequence: false })}>
             <DialogPortal>
                 <DialogOverlay />
                 <StyledContent>
@@ -83,9 +83,11 @@ export default function AddGenomeSequence({ isolateId, otuId, sequences, schema 
                                 <Field
                                     as={SegmentField}
                                     name="segment"
-                                    segments={segments}
                                     hasSchema={schema.length > 0}
                                     onChange={(segment: string) => setFieldValue("segment", segment)}
+                                    otuId={otuId}
+                                    refId={refId}
+                                    segments={segments}
                                 />
                                 <SequenceForm errors={errors} touched={touched} />
                                 <SaveButton />

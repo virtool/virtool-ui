@@ -1,87 +1,36 @@
-import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { mockApiAddSequence } from "../../../../../tests/fake/otus";
-import { renderWithProviders } from "../../../../../tests/setupTests";
-import { AddBarcodeSequence, castValues } from "../AddBarcodeSequence";
-
-function createAppStore(state) {
-    return () =>
-        configureStore({
-            reducer: state => state,
-            preloadedState: state,
-        });
-}
+import { renderWithRouter } from "../../../../../tests/setupTests";
+import AddBarcodeSequence, { castValues } from "../AddBarcodeSequence";
 
 describe("<AddBarcodeSequence>", () => {
     let props;
-    let state;
+    let history;
 
     beforeEach(() => {
         props = {
             isolateId: "test_isolate_id",
             otuId: "test_otu_id",
-            show: true,
-            defaultTarget: "test_target_name",
-            targets: [],
-            onHide: vi.fn(),
-            onSave: vi.fn(),
+            targets: [
+                { description: "", length: 0, name: "test_target_name_1", required: false },
+                { description: "", length: 0, name: "test_target_name_2", required: false },
+            ],
         };
-        state = {
-            otus: {
-                activeIsolateId: "test_isolate_id",
-                detail: {
-                    isolates: [
-                        {
-                            default: true,
-                            id: "test_isolate_id",
-                            name: "test_isolate_name",
-                            sequences: [
-                                {
-                                    accession: "NC_010317",
-                                    definition: "Abaca bunchy top virus DNA-M, complete genome",
-                                    host: "Musa sp.",
-                                    sequence:
-                                        "GGGGCTGGGGCTTATTATTACCCCCAGCCCCGGAACGGGACATCACGTGTATTCTCTATAGTGGTGGGTCATATGTCCCGAGTTAGTGCGCCACGTAA",
-                                    segment: "",
-                                    id: "0r0vmzt4",
-                                    reference: { id: "85r8ucx8" },
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            references: {
-                detail: {
-                    targets: [
-                        {
-                            description: "test_target_description",
-                            length: 5,
-                            name: "test_target_name",
-                            required: false,
-                        },
-                        {
-                            description: "test_target_description_2",
-                            length: 5,
-                            name: "test_target_name_2",
-                            required: false,
-                        },
-                    ],
-                },
-            },
-        };
+        history = createBrowserHistory();
     });
 
     it("should render all fields", () => {
-        renderWithProviders(
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
                 <AddBarcodeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         expect(screen.getByText("Target")).toBeInTheDocument();
@@ -103,11 +52,12 @@ describe("<AddBarcodeSequence>", () => {
             undefined,
             "test_target_name_2",
         );
-        renderWithProviders(
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
                 <AddBarcodeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         await userEvent.click(screen.getByRole("combobox"));
@@ -123,16 +73,16 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithProviders(
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
                 <AddBarcodeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(props.onSave).not.toHaveBeenCalled();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
         expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
         expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
@@ -140,11 +90,12 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithProviders(
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { addSequence: true } }]}>
                 <AddBarcodeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         await userEvent.type(screen.getByRole("textbox", { name: /Sequence/ }), "atbcq");

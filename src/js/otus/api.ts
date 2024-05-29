@@ -198,35 +198,27 @@ export function addSequence(
  * @param target - The target the sequence is from
  * @returns A Promise resolving to the API response containing the updated sequence
  */
-export function editSequence({
-    otuId,
-    isolateId,
-    sequenceId,
-    accession,
-    definition,
-    host,
-    sequence,
-    segment,
-    target,
-}: {
-    otuId: string;
-    isolateId: string;
-    sequenceId: string;
-    accession: string;
-    definition: string;
-    host: string;
-    sequence: string;
-    segment: string;
-    target: string;
-}) {
-    return Request.patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`).send({
-        accession,
-        definition,
-        host,
-        sequence,
-        segment,
-        target,
-    });
+export function editSequence(
+    otuId: string,
+    isolateId: string,
+    sequenceId: string,
+    accession: string,
+    definition: string,
+    host: string,
+    sequence: string,
+    segment: string,
+    target: string,
+): Promise<OTUSequence> {
+    return Request.patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
+        .send({
+            accession,
+            definition,
+            host,
+            sequence,
+            segment,
+            target,
+        })
+        .then(res => res.body);
 }
 
 /**
