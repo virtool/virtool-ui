@@ -4,6 +4,7 @@
  * @author igboyes
  *
  */
+import { FormattedNuVsHit, FormattedNuVsResults } from "@/analyses/types";
 import { Button, ButtonGroup, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useLocationState } from "@utils/hooks";
@@ -27,7 +28,7 @@ function getBestHit(items) {
     );
 }
 
-function exportContigData(hits, sampleName: string) {
+function exportContigData(hits: FormattedNuVsHit[], sampleName: string) {
     return map(hits, result => {
         const orfNames = reduce(
             result.orfs,
@@ -49,7 +50,7 @@ function exportContigData(hits, sampleName: string) {
     });
 }
 
-function exportORFData(hits, sampleName: string) {
+function exportORFData(hits: FormattedNuVsHit[], sampleName: string) {
     return reduce(
         hits,
         (lines, result) => {
@@ -70,7 +71,7 @@ function exportORFData(hits, sampleName: string) {
     );
 }
 
-function downloadData(analysisId: string, content, sampleName: string, suffix: string) {
+function downloadData(analysisId: string, content: string[], sampleName: string, suffix: string) {
     return followDynamicDownload(
         `nuvs.${replace(sampleName, " ", "_")}.${analysisId}.${suffix}.fa`,
         content.join("\n"),
@@ -79,12 +80,13 @@ function downloadData(analysisId: string, content, sampleName: string, suffix: s
 
 type NuVsExportProps = {
     analysisId: string;
-    results: any;
+    /** All results for a NuVs analysis */
+    results: FormattedNuVsResults;
     sampleName: string;
 };
 
 /**
- *
+ * Displays a dialog for exporting NuVs
  */
 export default function NuVsExport({ analysisId, results, sampleName }: NuVsExportProps) {
     const [locationState, setLocationState] = useLocationState();
@@ -125,7 +127,7 @@ export default function NuVsExport({ analysisId, results, sampleName }: NuVsExpo
 
                         <NuVsExportPreview mode={mode} />
                         <DialogFooter>
-                            <Button type="submit" color="blueDark" icon="download">
+                            <Button type="submit" icon="download">
                                 Download
                             </Button>
                         </DialogFooter>

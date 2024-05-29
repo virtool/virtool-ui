@@ -66,10 +66,10 @@ const NuVsORFValues = styled.span`
     }
 `;
 
-export const NuVsORF = ({ hits, index, maxSequenceLength, pos, strand, width }) => {
+export const NuVsORF = ({ hits, index, maxSequenceLength, pos, strand }) => {
     const chartEl = useRef(null);
 
-    useEffect(() => draw(chartEl.current, maxSequenceLength, pos, strand), [index, width]);
+    useEffect(() => draw(chartEl.current, maxSequenceLength, pos, strand), [index]);
 
     const hmm = hits[0];
 

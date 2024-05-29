@@ -132,6 +132,55 @@ export type FormattedPathoscopeSequence = {
     reads: number;
 };
 
+/** Complete NuVs analysis details */
+export type FormattedNuVsAnalysis = {
+    cache: any;
+    created_at: string;
+    id: string;
+    maxSequenceLength: 4155;
+    ready: boolean;
+    results: FormattedNuVsResults;
+    user: UserNested;
+    workflow: Workflows.nuvs;
+};
+
+/** All results for a NuVs analysis */
+export type FormattedNuVsResults = {
+    hits: FormattedNuVsHit[];
+};
+
+/** Mapping data for a single NuVs hit */
+export type FormattedNuVsHit = {
+    annotatedOrfCount: number;
+    blast: Blast;
+    e: number;
+    families: string[];
+    id: number;
+    index: number;
+    name: string[];
+    orfs: NuVsORFs[];
+    sequence: string;
+};
+
+export type Blast = {
+    created_at: string;
+    id: number;
+    interval: number;
+    last_checked_at: string;
+    ready: null;
+    rid: string;
+    updated_at: string;
+};
+
+export type NuVsORFs = {
+    frame: number;
+    hits: { [key: string]: string | object };
+    index: number;
+    pos: number[];
+    pro: string;
+    strand: number;
+};
+
 /** Analysis search results from the API */
 export type AnalysisSearchResult = SearchResult & {
     documents: Array<AnalysisMinimal>;

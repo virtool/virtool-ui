@@ -1,19 +1,13 @@
+import { NuVsList } from "@/analyses/components/NuVs/NuVsList";
+import { FormattedNuVsAnalysis } from "@/analyses/types";
 import { Sample } from "@samples/types";
 import React from "react";
-import styled from "styled-components";
-import NuVsDetail from "./Detail";
-import { NuVsList } from "./List";
 import NuVsExport from "./NuVsExport";
-import NuVsToolbar from "./Toolbar";
-
-const NuVsPanes = styled.div`
-    display: grid;
-    grid-template-columns: 230px 1fr;
-`;
+import NuVsToolbar from "./NuVsToolbar";
 
 type NuVsViewerProps = {
     /** Complete NuVs analysis details */
-    detail: any;
+    detail: FormattedNuVsAnalysis;
     /** The sample that was analysed */
     sample: Sample;
 };
@@ -26,10 +20,7 @@ export default function NuVsViewer({ detail, sample }: NuVsViewerProps) {
         <div>
             <NuVsExport analysisId={detail.id} results={detail.results} sampleName={sample.name} />
             <NuVsToolbar />
-            <NuVsPanes>
-                <NuVsList />
-                <NuVsDetail />
-            </NuVsPanes>
+            <NuVsList detail={detail} />
         </div>
     );
 }

@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { Alert, Box, BoxGroup, BoxGroupHeader, BoxTitle, Button, ExternalLink, Icon, Table } from "../../../base";
 
 import { blastNuvs } from "../../actions";
-import { getActiveHit } from "../../selectors";
 import { BLASTError } from "./BLASTError";
 import { BLASTInProgress } from "./BLASTInProgress";
 
@@ -67,8 +66,9 @@ export const BLASTResults = ({ hits, onBlast }) => {
     );
 };
 
-export const NuVsBLAST = ({ analysisId, blast, sequenceIndex, onBlast }) => {
-    const handleBlast = useCallback(() => onBlast(analysisId, sequenceIndex), [analysisId, sequenceIndex]);
+export const NuVsBLAST = ({ hit, analysisId, onBlast }) => {
+    const { blast, index } = hit;
+    const handleBlast = useCallback(() => onBlast(analysisId, index), [analysisId, index]);
 
     if (blast) {
         if (blast.error) {
@@ -102,20 +102,10 @@ export const NuVsBLAST = ({ analysisId, blast, sequenceIndex, onBlast }) => {
     );
 };
 
-export const mapStateToProps = state => {
-    const { blast, index } = getActiveHit(state);
-
-    return {
-        analysisId: state.analyses.detail.id,
-        blast,
-        sequenceIndex: index,
-    };
-};
-
 export const mapDispatchToProps = dispatch => ({
     onBlast: (analysisId, sequenceIndex) => {
         dispatch(blastNuvs(analysisId, sequenceIndex));
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NuVsBLAST);
+export default connect(null, mapDispatchToProps)(NuVsBLAST);

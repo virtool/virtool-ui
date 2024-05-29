@@ -31,3 +31,26 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
 
     return sortedHits;
 }
+
+/** Sort and filter a list of NuVs hits  */
+export function useSortAndFilterNuVsHits(detail) {
+    let hits = detail.results.hits;
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+
+    const fuse = useMemo(() => {
+        return createFuse(hits, ["name", "families"]);
+    }, [hits]);
+
+    if (searchParams.get("find")) {
+        hits = map(fuse.search(searchParams.get("find")), "item");
+    }
+
+    const sortedHits = sortBy(hits, searchParams.get("sort"));
+
+    if (searchParams.get("sortDesc")) {
+        sortedHits.reverse();
+    }
+
+    return sortedHits;
+}
