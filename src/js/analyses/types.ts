@@ -60,10 +60,9 @@ export type AnalysisFile = {
 export type GenericAnalysis = AnalysisMinimal & {
     /** Files generated during the analysis that are available for download */
     files: Array<AnalysisFile>;
-    maxSequenceLength?: number;
     /** The results of the analysis that will be presented to the user */
     results?: { [key: string]: any };
-    workflow: Workflows.nuvs | Workflows.aodp;
+    workflow: Workflows.aodp;
 };
 
 export type Analysis = FormattedPathoscopeAnalysis | FormattedNuVsAnalysis | IimiAnalysis | GenericAnalysis;
@@ -135,6 +134,7 @@ export type FormattedPathoscopeSequence = {
 
 /** Complete NuVs analysis details */
 export type FormattedNuVsAnalysis = AnalysisMinimal & {
+    files: Array<AnalysisFile>;
     maxSequenceLength: number;
     results: FormattedNuVsResults;
     workflow: Workflows.nuvs;
