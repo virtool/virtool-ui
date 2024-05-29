@@ -16,6 +16,7 @@ type NuVsViewerProps = {
  * Detailed breakdown of the results of a NuVs analysis
  */
 export default function NuVsViewer({ detail, sample }: NuVsViewerProps) {
+    console.log(detail);
     return (
         <div>
             <NuVsExport analysisId={detail.id} results={detail.results} sampleName={sample.name} />
