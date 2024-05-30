@@ -22,7 +22,7 @@ describe("<FirstUser />", () => {
 
         renderWithProviders(<FirstUser />);
 
-        const usernameField = screen.getByRole("textbox", /username/i);
+        const usernameField = screen.getByLabelText("username");
         const passwordField = screen.getByLabelText("password");
 
         expect(usernameField).toHaveValue("");
