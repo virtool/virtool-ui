@@ -1,11 +1,12 @@
 import { useGetActiveHit } from "@/analyses/hooks";
+import { FormattedNuVsHit } from "@/analyses/types";
+import { getBorder, getFontSize } from "@app/theme";
+import { Key } from "@base";
 import { useLocationState } from "@utils/hooks";
 import { findIndex } from "lodash-es";
 import React from "react";
 import { FixedSizeList } from "react-window";
 import styled from "styled-components";
-import { getBorder, getFontSize } from "../../../app/theme";
-import { Key } from "../../../base";
 import { useKeyNavigation } from "./hooks";
 
 const AnalysisViewerListHeader = styled.div`
@@ -41,10 +42,23 @@ const StyledAnalysisViewerList = styled.div<StyledAnalysisViewerListProps>`
     width: ${props => props.width}px;
 `;
 
-export default function AnalysisViewerList({ children, itemSize, matches, total, width }) {
+type AnalysisViewerListProps = {
+    children: React.ReactNode;
+    itemSize: number;
+    /** A list of filtered and sorted hits */
+    matches?: FormattedNuVsHit[];
+    /** The total number of hits */
+    total?: number;
+    width: number;
+};
+
+/**
+ * Displays a list of hits for an analysis
+ */
+export default function AnalysisViewerList({ children, itemSize, matches, total, width }: AnalysisViewerListProps) {
     const [locationState, setLocationState] = useLocationState();
     const activeId = locationState?.activeHitId;
-    const active = useGetActiveHit(matches, activeId);
+    const active = useGetActiveHit(matches);
 
     const shown = matches.length;
 

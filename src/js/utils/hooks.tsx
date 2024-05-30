@@ -62,6 +62,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
     }
 
     history?.replace({
+        ...history.location,
         pathname: window.location.pathname,
         search: params.toString() ? `?${params.toString()}` : null,
     });

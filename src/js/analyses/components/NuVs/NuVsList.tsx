@@ -1,6 +1,6 @@
 import NuVsDetail from "@/analyses/components/NuVs/NuVsDetail";
 import NuVsItem from "@/analyses/components/NuVs/NuVsItem";
-import AnalysisViewerList from "@/analyses/components/Viewer/List";
+import AnalysisViewerList from "@/analyses/components/Viewer/AnalysisViewerList";
 import { useSortAndFilterNuVsHits } from "@/analyses/hooks";
 import { FormattedNuVsAnalysis } from "@/analyses/types";
 import { map } from "lodash";
@@ -18,11 +18,10 @@ type NuVsListProps = {
 };
 
 /**
- * Displays a list of NuVs hits
+ * Displays a list of NuVs hits with a detailed view
  */
 export function NuVsList({ detail }: NuVsListProps) {
     const sortedHits = useSortAndFilterNuVsHits(detail);
-    console.log(sortedHits);
 
     return (
         <NuVsPanes>

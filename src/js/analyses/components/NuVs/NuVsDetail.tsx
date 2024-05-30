@@ -1,9 +1,10 @@
 import { NuVsValues } from "@/analyses/components/NuVs/NuVsValues";
 import { useGetActiveHit } from "@/analyses/hooks";
+import { FormattedNuVsHit } from "@/analyses/types";
 import { calculateAnnotatedOrfCount } from "@/analyses/utils";
 import { getBorder } from "@app/theme";
 import { Badge, Box } from "@base";
-import { useLocationState, useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParams } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -78,7 +79,8 @@ const StyledNuVsDetail = styled(Box)`
 
 type NuVsDetailProps = {
     analysisId: string;
-    matches: any;
+    /** A list of sorted and filtered NuVs hits */
+    matches: FormattedNuVsHit[];
     maxSequenceLength: number;
 };
 
@@ -87,10 +89,7 @@ type NuVsDetailProps = {
  */
 export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: NuVsDetailProps) {
     const [filterORFs] = useUrlSearchParams("filterOrfs");
-    const [locationState] = useLocationState();
-
-    const hit = useGetActiveHit(matches, locationState?.activeHitId);
-    console.log(locationState?.activeHitId);
+    const hit = useGetActiveHit(matches);
 
     if (!hit) {
         return <StyledNuVsDetail>No Hits</StyledNuVsDetail>;

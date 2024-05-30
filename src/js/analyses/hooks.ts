@@ -1,3 +1,4 @@
+import { useLocationState } from "@utils/hooks";
 import { createFuse } from "@utils/utils";
 import { find, map, reject, sortBy } from "lodash-es/lodash";
 import { useMemo } from "react";
@@ -46,16 +47,25 @@ export function useSortAndFilterNuVsHits(detail) {
         hits = map(fuse.search(searchParams.get("find")), "item");
     }
 
-    const sortedHits = sortBy(hits, searchParams.get("sort"));
+    if (searchParams.get("filterSequences")) {
+        hits = reject(hits, hit => hit.e === undefined);
+    }
 
-    if (searchParams.get("sortDesc")) {
-        sortedHits.reverse();
+    let sortedHits;
+
+    if (searchParams.get("sort") === "orfs") {
+        sortedHits = sortBy(hits, "annotatedOrfCount").reverse();
+    } else {
+        sortedHits = sortBy(hits, searchParams.get("sort"));
     }
 
     return sortedHits;
 }
 
-export function useGetActiveHit(matches, activeId) {
+export function useGetActiveHit(matches) {
+    const [locationState, setLocationState] = useLocationState();
+    const activeId = locationState?.activeHitId;
+
     if (activeId !== null) {
         const hit = find(matches, { id: activeId });
 
@@ -64,5 +74,6 @@ export function useGetActiveHit(matches, activeId) {
         }
     }
 
+    setLocationState({ activeHitId: matches[0].id });
     return matches[0] || null;
 }

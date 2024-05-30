@@ -15,7 +15,7 @@ export default function NuVsToolbar() {
     const [filterORFs, setFilterORFs] = useUrlSearchParams<boolean>("filterOrfs", true);
     const [filterSequences, setFilterSequences] = useUrlSearchParams<boolean>("filterSequences", true);
     const [find, setFind] = useUrlSearchParams<string>("find", "");
-    const [sortKey, setSortKey] = useUrlSearchParams<string>("sort", "coverage");
+    const [sortKey, setSortKey] = useUrlSearchParams<string>("sort", "length");
 
     return (
         <StyledNuVsToolbar>
