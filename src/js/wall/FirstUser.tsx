@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { InputError, InputGroup, InputSimple } from "../base";
+import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
 import { createFirst } from "../users/api";
 import { User } from "../users/types";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
@@ -63,14 +63,20 @@ export default function FirstUser() {
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <InputGroup>
-                            <InputSimple aria-label="username" id="username" type="username" defaultValue="" />
+                            <InputLabel htmlFor="username">Username</InputLabel>
+                            <InputSimple
+                                aria-label="username"
+                                id="username"
+                                defaultValue=""
+                                {...register("username", { required: true })}
+                            />
                             <InputError>{errors.username?.message}</InputError>
                         </InputGroup>
                         <InputGroup>
+                            <InputLabel htmlFor="password">Password</InputLabel>
                             <InputSimple
                                 aria-label="password"
                                 id="password"
-                                type="password"
                                 defaultValue=""
                                 {...register("password", {
                                     required: "Password does not meet minimum length requirement (8)",
