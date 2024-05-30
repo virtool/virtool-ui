@@ -1,7 +1,9 @@
-import { FormattedNuVsHit } from "@/analyses/types";
+import { NuVsValues } from "@/analyses/components/NuVs/NuVsValues";
+import { useGetActiveHit } from "@/analyses/hooks";
+import { calculateAnnotatedOrfCount } from "@/analyses/utils";
 import { getBorder } from "@app/theme";
 import { Badge, Box } from "@base";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useLocationState, useUrlSearchParams } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -76,22 +78,25 @@ const StyledNuVsDetail = styled(Box)`
 
 type NuVsDetailProps = {
     analysisId: string;
-    /** Complete information for a NuVs hit */
-    hit: FormattedNuVsHit;
+    matches: any;
     maxSequenceLength: number;
 };
 
 /**
  * The detailed view of a NuVs sequence
  */
-export default function NuVsDetail({ analysisId, hit, maxSequenceLength }: NuVsDetailProps) {
+export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: NuVsDetailProps) {
     const [filterORFs] = useUrlSearchParams("filterOrfs");
+    const [locationState] = useLocationState();
+
+    const hit = useGetActiveHit(matches, locationState?.activeHitId);
+    console.log(locationState?.activeHitId);
 
     if (!hit) {
         return <StyledNuVsDetail>No Hits</StyledNuVsDetail>;
     }
 
-    const { families, orfs, sequence } = hit;
+    const { e, families, orfs, sequence, index } = hit;
 
     let filtered;
 
@@ -106,8 +111,13 @@ export default function NuVsDetail({ analysisId, hit, maxSequenceLength }: NuVsD
     ));
 
     return (
-        <div>
+        <StyledNuVsDetail>
             <NuVsDetailTitle>
+                <h3>
+                    Sequence {index}
+                    <Badge>{sequence.length} bp</Badge>
+                </h3>
+                <NuVsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
                 <NuVsFamilies families={families} />
             </NuVsDetailTitle>
             <NuVsLayout>
@@ -115,6 +125,6 @@ export default function NuVsDetail({ analysisId, hit, maxSequenceLength }: NuVsD
                 {orfComponents}
             </NuVsLayout>
             <NuVsBLAST hit={hit} analysisId={analysisId} />
-        </div>
+        </StyledNuVsDetail>
     );
 }

@@ -1,12 +1,11 @@
+import { useGetActiveHit } from "@/analyses/hooks";
+import { useLocationState } from "@utils/hooks";
 import { findIndex } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import { FixedSizeList } from "react-window";
 import styled from "styled-components";
 import { getBorder, getFontSize } from "../../../app/theme";
 import { Key } from "../../../base";
-import { setActiveHitId } from "../../actions";
-import { getActiveHit, getHits, getMatches } from "../../selectors";
 import { useKeyNavigation } from "./hooks";
 
 const AnalysisViewerListHeader = styled.div`
@@ -42,39 +41,12 @@ const StyledAnalysisViewerList = styled.div<StyledAnalysisViewerListProps>`
     width: ${props => props.width}px;
 `;
 
-export function AnalysisViewerList({
-    activeId,
-    children,
-    itemSize,
-    nextId,
-    nextIndex,
-    previousId,
-    previousIndex,
-    shown,
-    total,
-    width,
-    onSetActiveId,
-}) {
-    const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, onSetActiveId);
+export default function AnalysisViewerList({ children, itemSize, matches, total, width }) {
+    const [locationState, setLocationState] = useLocationState();
+    const activeId = locationState?.activeHitId;
+    const active = useGetActiveHit(matches, activeId);
 
-    return (
-        <StyledAnalysisViewerList width={width}>
-            <AnalysisViewerListHeader>
-                Showing {shown} of {total}
-            </AnalysisViewerListHeader>
-            <AnalysisViewerListWindow ref={ref} height={500} width={width} itemCount={shown} itemSize={itemSize}>
-                {children}
-            </AnalysisViewerListWindow>
-            <AnalysisViewerListFooter>
-                Use <Key>w</Key> and <Key>s</Key> to move
-            </AnalysisViewerListFooter>
-        </StyledAnalysisViewerList>
-    );
-}
-
-function mapStateToProps(state) {
-    const active = getActiveHit(state);
-    const matches = getMatches(state);
+    const shown = matches.length;
 
     let nextId;
     let nextIndex;
@@ -94,23 +66,22 @@ function mapStateToProps(state) {
             nextId = matches[nextIndex].id;
         }
     }
-    return {
-        activeId: active?.id,
-        shown: matches.length,
-        total: getHits(state).length,
-        nextId,
-        nextIndex,
-        previousId,
-        previousIndex,
-    };
-}
 
-function mapDispatchToProps(dispatch) {
-    return {
-        onSetActiveId: index => {
-            dispatch(setActiveHitId(index));
-        },
-    };
-}
+    const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, id =>
+        setLocationState({ activeHitId: id }),
+    );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AnalysisViewerList);
+    return (
+        <StyledAnalysisViewerList width={width}>
+            <AnalysisViewerListHeader>
+                Showing {shown} of {total}
+            </AnalysisViewerListHeader>
+            <AnalysisViewerListWindow ref={ref} height={500} width={width} itemCount={shown} itemSize={itemSize}>
+                {({ index, style }) => <div style={style}>{children[index]}</div>}
+            </AnalysisViewerListWindow>
+            <AnalysisViewerListFooter>
+                Use <Key>w</Key> and <Key>s</Key> to move
+            </AnalysisViewerListFooter>
+        </StyledAnalysisViewerList>
+    );
+}

@@ -1,5 +1,5 @@
 import { createFuse } from "@utils/utils";
-import { map, reject, sortBy } from "lodash-es/lodash";
+import { find, map, reject, sortBy } from "lodash-es/lodash";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -53,4 +53,16 @@ export function useSortAndFilterNuVsHits(detail) {
     }
 
     return sortedHits;
+}
+
+export function useGetActiveHit(matches, activeId) {
+    if (activeId !== null) {
+        const hit = find(matches, { id: activeId });
+
+        if (hit) {
+            return hit;
+        }
+    }
+
+    return matches[0] || null;
 }

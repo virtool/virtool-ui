@@ -1,7 +1,7 @@
-import NuVsDetail from "@/analyses/components/NuVs/NuVsDetail";
+import { AnalysisViewerItem } from "@/analyses/components/Viewer/Item";
 import { FormattedNuVsHit } from "@/analyses/types";
-import { AccordionContent, AccordionTrigger, Badge, ScrollingAccordionItem } from "@base";
-import { toString } from "lodash-es";
+import { Badge } from "@base";
+import { useLocationState } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";
@@ -13,45 +13,34 @@ const NuVsItemHeader = styled.div`
     justify-content: space-between;
 `;
 
-const NuVsAccordionTrigger = styled(AccordionTrigger)`
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    width: 100%;
-
-    & > div {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
+const StyledNuVsItem = styled(AnalysisViewerItem)`
+    border-bottom: none;
+    border-left: none;
+    border-radius: 0;
+    margin: 0;
 `;
 
 type NuVsItemProps = {
-    analysisId: string;
     /** Complete information for a NuVs hit */
     hit: FormattedNuVsHit;
-    maxSequenceLength: number;
 };
 
 /**
  * A condensed NuVs item for use in a list of NuVs
  */
-export default function NuVsItem({ analysisId, hit, maxSequenceLength }: NuVsItemProps) {
+export default function NuVsItem({ hit }: NuVsItemProps) {
+    const [locationState, setLocationState] = useLocationState();
+    const activeId = locationState?.activeHitId;
+
     const { id, e, annotatedOrfCount, sequence, index } = hit;
 
     return (
-        <ScrollingAccordionItem value={toString(id + 1)}>
-            <NuVsAccordionTrigger>
-                <NuVsItemHeader>
-                    <strong>Sequence {index}</strong>
-                    <Badge>{sequence.length}</Badge>
-                </NuVsItemHeader>
-                <NuVsValues e={numbro(e).format()} orfCount={annotatedOrfCount} />
-            </NuVsAccordionTrigger>
-            <AccordionContent>
-                <NuVsDetail analysisId={analysisId} hit={hit} maxSequenceLength={maxSequenceLength} />
-            </AccordionContent>
-        </ScrollingAccordionItem>
+        <StyledNuVsItem active={activeId === id} onClick={() => setLocationState({ activeHitId: id })}>
+            <NuVsItemHeader>
+                <strong>Sequence {index}</strong>
+                <Badge>{sequence.length}</Badge>
+            </NuVsItemHeader>
+            <NuVsValues e={numbro(e).format()} orfCount={annotatedOrfCount} />
+        </StyledNuVsItem>
     );
 }

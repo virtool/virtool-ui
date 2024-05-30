@@ -194,7 +194,7 @@ export function ScrollSync({ children }: ScrollSyncProps) {
  */
 export function useLocationState(): [
     locationState: LocationType,
-    setLocationState: (state: { [key: string]: boolean | string }) => void,
+    setLocationState: (state: { [key: string]: boolean | string | number }) => void,
 ] {
     const location = useLocation();
     const history = useHistory();

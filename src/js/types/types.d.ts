@@ -11,6 +11,7 @@ export type ErrorResponse = {
 
 export type LocationType = {
     addSequence?: boolean;
+    activeHitId?: number;
     editReference?: boolean;
     editSequence?: boolean;
     export?: boolean;
