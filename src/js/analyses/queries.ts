@@ -1,9 +1,9 @@
 import { formatData } from "@/analyses/utils";
 import { ErrorResponse } from "@/types/types";
+import { samplesQueryKeys } from "@samples/queries";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { samplesQueryKeys } from "../samples/queries";
-import { createAnalysis, getAnalysis, listAnalyses, removeAnalysis } from "./api";
+import { blastNuvs, createAnalysis, getAnalysis, listAnalyses, removeAnalysis } from "./api";
 import { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 
 /**
@@ -96,4 +96,23 @@ export function useCreateAnalysis() {
     );
 
     return mutation;
+}
+
+/**
+ * Initializes a mutator for installing blast information for a sequence
+ *
+ * @param analysisId - The id of the analysis the sequence belongs to
+ * @returns A mutator for installing the blast information
+ */
+export function useBlastNuVs(analysisId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<null, unknown, { sequenceIndex: number }>(
+        ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(analysesQueryKeys.lists());
+            },
+        },
+    );
 }

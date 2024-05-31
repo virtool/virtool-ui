@@ -4,7 +4,6 @@ import { all, put, select, takeLatest } from "redux-saga/effects";
 import { get as getAccountAPI } from "../account/api";
 import { watchAccount } from "../account/sagas";
 import { watchSettings } from "../administration/sagas";
-import { watchAnalyses } from "../analyses/sagas";
 import { watchFiles } from "../files/sagas";
 import { watchForm } from "../forms/sagas";
 import { watchOTUs } from "../otus/sagas";
@@ -53,15 +52,7 @@ export function* watchRouter() {
  * @generator
  */
 function* rootSaga() {
-    yield all([
-        watchAccount(),
-        watchAnalyses(),
-        watchFiles(),
-        watchOTUs(),
-        watchRouter(),
-        watchSettings(),
-        watchForm(),
-    ]);
+    yield all([watchAccount(), watchFiles(), watchOTUs(), watchRouter(), watchSettings(), watchForm()]);
 }
 
 export default rootSaga;

@@ -1,9 +1,9 @@
-import { IndexNested } from "../indexes/types";
-import { JobMinimal } from "../jobs/types";
-import { ReferenceNested } from "../references/types";
-import { SubtractionNested } from "../subtraction/types";
-import { UserNested } from "../users/types";
-import { SearchResult } from "../utils/types";
+import { IndexNested } from "@indexes/types";
+import { JobMinimal } from "@jobs/types";
+import { ReferenceNested } from "@references/types";
+import { SubtractionNested } from "@subtraction/types";
+import { UserNested } from "@users/types";
+import { SearchResult } from "@utils/types";
 
 /** The sample associated with the analysis */
 export type AnalysisSample = {
@@ -160,12 +160,45 @@ export type FormattedNuVsHit = {
 
 export type Blast = {
     created_at: string;
+    error?: string;
     id: number;
     interval: number;
     last_checked_at: string;
-    ready: null;
+    ready: boolean;
+    result: BlastResults;
     rid: string;
     updated_at: string;
+};
+
+export type BlastResults = {
+    hits: BlastHit[];
+    masking: BlastMask[];
+    params: { [key: string]: string | number };
+    program: string;
+    stat: { [key: string]: number };
+    target: { [key: string]: string };
+    version: string;
+    rid: string;
+    updated_at: string;
+};
+
+export type BlastHit = {
+    accession: string;
+    align_len: number;
+    bit_score: number;
+    evalue: number;
+    gaps: number;
+    identity: number;
+    len: number;
+    name: string;
+    score: number;
+    taxid: number;
+    title: string;
+};
+
+export type BlastMask = {
+    from: number;
+    to: number;
 };
 
 export type NuVsORFs = {

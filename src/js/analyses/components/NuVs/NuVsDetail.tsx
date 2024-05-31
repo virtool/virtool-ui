@@ -8,7 +8,7 @@ import { useUrlSearchParams } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import NuVsBLAST from "./BLAST";
+import NuVsBLAST from "./NuVsBLAST";
 import { NuVsORF } from "./ORF";
 import { NuVsSequence } from "./Sequence";
 
