@@ -1,16 +1,12 @@
+import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "@base";
+import { useEditSequence } from "@otus/queries";
+import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useLocationState } from "@utils/hooks";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { find } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
-import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "../../../base";
-import { getError } from "../../../errors/selectors";
 import PersistForm from "../../../forms/components/PersistForm";
-import { editSequence } from "../../../otus/actions";
-import { getActiveIsolateId, getHasSchema, getOTUDetailId } from "../../../otus/selectors";
-import { OTUSegment } from "../../../otus/types";
-import { getActiveSequence, getUnreferencedSegments } from "../../selectors";
 import { SequenceForm, validationSchema } from "../SequenceForm";
 import { StyledContent } from "./AddGenomeSequence";
 import SegmentField from "./SegmentField";
@@ -41,70 +37,44 @@ type formValues = {
 };
 
 type EditGenomeSequenceProps = {
+    activeSequence: OTUSequence;
     hasSchema: boolean;
-    initialAccession: string;
-    initialDefinition: string;
-    initialHost: string;
-    initialSegmentName: string;
-    initialSequence: string;
-    /** A list of unreferenced segments */
-    segments: OTUSegment[];
-    id: string;
     isolateId: string;
     otuId: string;
-    /** Indicates whether the dialog for editing a sequence is visible */
-    show: boolean;
-    /** A callback function to hide the dialog */
-    onHide: () => void;
-    /** A callback function to update the sequence */
-    onSave: (
-        otuId: string,
-        isolateId: string,
-        sequenceId: string,
-        accession: string,
-        definition: string,
-        host: string,
-        segment: string,
-        sequence: string,
-    ) => void;
+    refId: string;
+    /** A list of unreferenced segments */
+    segments: OTUSegment[];
 };
 
 /**
  * Displays dialog to edit a genome sequence
  */
-export function EditGenomeSequence({
+export default function EditGenomeSequence({
+    activeSequence,
     hasSchema,
-    initialAccession,
-    initialDefinition,
-    initialHost,
-    initialSegmentName,
-    initialSequence,
-    segments,
-    id,
     isolateId,
     otuId,
-    onSave,
+    refId,
+    segments,
 }: EditGenomeSequenceProps) {
-    const history = useHistory();
-    const location = useLocation<{ editSequence: boolean }>();
+    const [locationState, setLocationState] = useLocationState();
+    const mutation = useEditSequence(otuId);
+    const { accession, definition, host, id, segment, sequence } = activeSequence;
 
     function handleSubmit({ accession, definition, host, sequence, segment }) {
-        onSave(otuId, isolateId, id, accession, definition, host, segment, sequence);
+        mutation.mutate({ isolateId, sequenceId: id, accession, definition, host, segment, sequence });
     }
 
     const initialValues = getInitialValues({
-        initialSegmentName,
-        initialAccession,
-        initialDefinition,
-        initialHost,
-        initialSequence,
+        initialSegmentName: segment,
+        initialAccession: accession,
+        initialDefinition: definition,
+        initialHost: host,
+        initialSequence: sequence,
     });
 
     return (
-        <Dialog
-            open={location.state?.editSequence}
-            onOpenChange={() => history.push({ state: { editSequence: false } })}
-        >
+        <Dialog open={locationState?.editSequence} onOpenChange={() => setLocationState({ editSequence: false })}>
             <DialogPortal>
                 <DialogOverlay />
                 <StyledContent>
@@ -127,11 +97,13 @@ export function EditGenomeSequence({
                                 <Field
                                     as={SegmentField}
                                     name="segment"
-                                    segments={segments}
                                     hasSchema={hasSchema}
                                     onChange={segment => {
                                         setFieldValue("segment", segment);
                                     }}
+                                    otuId={otuId}
+                                    refId={refId}
+                                    segments={segments}
                                 />
                                 <SequenceForm touched={touched} errors={errors} />
                                 <SaveButton />
@@ -143,42 +115,3 @@ export function EditGenomeSequence({
         </Dialog>
     );
 }
-
-export function mapStateToProps(state) {
-    const { accession, definition, host, id, segment, sequence } = getActiveSequence(state);
-
-    return {
-        id,
-        hasSchema: getHasSchema(state),
-        initialAccession: accession,
-        initialDefinition: definition,
-        initialHost: host,
-        initialSegmentName: segment,
-        initialSequence: sequence,
-        segments: getUnreferencedSegments(state),
-        isolateId: getActiveIsolateId(state),
-        otuId: getOTUDetailId(state),
-        error: getError(state, "EDIT_SEQUENCE_ERROR"),
-    };
-}
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onSave: (otuId, isolateId, sequenceId, accession, definition, host, segment, sequence) => {
-            dispatch(
-                editSequence({
-                    otuId,
-                    isolateId,
-                    sequenceId,
-                    accession,
-                    definition,
-                    host,
-                    sequence,
-                    segment,
-                }),
-            );
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditGenomeSequence);

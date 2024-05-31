@@ -1,13 +1,10 @@
 import { map } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fontWeight } from "../../../app/theme";
 import { Box, InputGroup, InputLabel, Select, SelectButton, SelectContent, SelectItem } from "../../../base";
-import { getOTUDetailId } from "../../../otus/selectors";
 import { OTUSegment } from "../../../otus/types";
-import { getReferenceDetailId } from "../../../references/selectors";
 import { SequenceSegment } from "./SequenceSegment";
 
 const SegmentSelectContainer = styled.div`
@@ -40,29 +37,28 @@ const NoSchema = styled(Box)`
 `;
 
 type SequenceSegmentFieldProps = {
-    error: string;
     /** Whether a schema exists for the selected OTU */
     hasSchema: boolean;
+    /** A callback function to handle segment selection */
+    onChange: (value: string) => void;
     otuId: string;
-    /** The selected segment */
-    value: string;
     refId: string;
     /** A list of unreferenced segments */
     segments: OTUSegment[];
-    /** A callback function to handle segment selection */
-    onChange: (value: string) => void;
+    /** The selected segment */
+    value: string;
 };
 
 /**
  * Displays a dropdown list of available segments in adding/editing dialogs or provides option to create schema
  */
-export function SequenceSegmentField({
+export default function SequenceSegmentField({
     hasSchema,
+    onChange,
     otuId,
-    value,
     refId,
     segments,
-    onChange,
+    value,
 }: SequenceSegmentFieldProps) {
     if (hasSchema) {
         const segmentOptions = map(segments, segment => (
@@ -105,12 +101,3 @@ export function SequenceSegmentField({
         </InputGroup>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        otuId: getOTUDetailId(state),
-        refId: getReferenceDetailId(state),
-    };
-}
-
-export default connect(mapStateToProps)(SequenceSegmentField);

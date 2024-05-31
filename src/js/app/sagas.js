@@ -7,7 +7,6 @@ import { watchSettings } from "../administration/sagas";
 import { watchAnalyses } from "../analyses/sagas";
 import { watchFiles } from "../files/sagas";
 import { watchForm } from "../forms/sagas";
-import { watchOTUs } from "../otus/sagas";
 import { callWithAuthentication } from "../utils/sagas";
 import { GET_INITIAL_STATE, PUSH_STATE } from "./actionTypes";
 import { root as rootAPI } from "./api";
@@ -53,15 +52,7 @@ export function* watchRouter() {
  * @generator
  */
 function* rootSaga() {
-    yield all([
-        watchAccount(),
-        watchAnalyses(),
-        watchFiles(),
-        watchOTUs(),
-        watchRouter(),
-        watchSettings(),
-        watchForm(),
-    ]);
+    yield all([watchAccount(), watchAnalyses(), watchFiles(), watchRouter(), watchSettings(), watchForm()]);
 }
 
 export default rootSaga;

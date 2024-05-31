@@ -20,6 +20,7 @@ describe("<AddGenomeSequence>", () => {
             otuId: otu.id,
             sequences: otu.isolates[0].sequences,
             schema: otu.schema,
+            refId: "test_ref_id",
         };
         history = createBrowserHistory();
     });

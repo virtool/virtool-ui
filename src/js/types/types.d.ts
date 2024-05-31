@@ -10,6 +10,7 @@ export type ErrorResponse = {
 };
 
 export type LocationType = {
+    activeIsolateId?: string;
     addSequence?: boolean;
     editReference?: boolean;
     editSequence?: boolean;

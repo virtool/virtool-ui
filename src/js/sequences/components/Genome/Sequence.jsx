@@ -1,13 +1,12 @@
 import React from "react";
-import { connect } from "react-redux";
 import { BoxGroupSection } from "../../../base";
 import { useExpanded } from "../../hooks";
-import SequenceButtons from "../Sequence/Buttons";
 import { SequenceHeader } from "../Sequence/Header";
+import SequenceButtons from "../Sequence/SequenceButtons";
 import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/Values";
 import { GenomeSequenceTable } from "./Table";
 
-const GenomeSequence = ({ accession, definition, host, id, segment, sequence }) => {
+export default function GenomeSequence({ accession, definition, host, id, segment, sequence }) {
     const { expanded, expand, collapse } = useExpanded();
 
     return (
@@ -25,11 +24,4 @@ const GenomeSequence = ({ accession, definition, host, id, segment, sequence }) 
             )}
         </BoxGroupSection>
     );
-};
-
-export const mapStateToProps = state => ({
-    dataType: state.references.detail.data_type,
-    targets: state.references.detail.targets,
-});
-
-export default connect(mapStateToProps)(GenomeSequence);
+}
