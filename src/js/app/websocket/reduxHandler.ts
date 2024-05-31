@@ -1,10 +1,5 @@
 import { get } from "lodash-es/lodash";
 import { wsUpdateAnalysis } from "../../analyses/actions";
-import { wsUpdateOTU } from "../../otus/actions";
-
-function actionCreatorWrapper(actionCreator) {
-    return (state, message) => actionCreator(message.data);
-}
 
 const updaters = {
     analyses: (state, message) => {
@@ -14,7 +9,6 @@ const updaters = {
             return wsUpdateAnalysis(message.data);
         }
     },
-    otus: actionCreatorWrapper(wsUpdateOTU),
 };
 
 const modifiers = {

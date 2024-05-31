@@ -6,6 +6,7 @@
 
 import { Request } from "@app/request";
 import { Permissions } from "@groups/types";
+import { User } from "@users/types";
 import { Response } from "superagent";
 import { Account, APIKeyMinimal } from "./types";
 
@@ -19,6 +20,10 @@ export function get(): Promise<Response> {
     return Request.get("/account");
 }
 
+export type AccountUpdate = {
+    email?: string;
+};
+
 /**
  * Updates the complete data for the current account.
  *
@@ -26,8 +31,10 @@ export function get(): Promise<Response> {
  * @returns A promise resolving to a response containing the updated
  * user's account data
  */
-export function update({ update }): Promise<Response> {
-    return Request.patch("/account").send(update);
+export function updateAccount(update: AccountUpdate): Promise<User> {
+    return Request.patch("/account")
+        .send({ update })
+        .then(res => res.body);
 }
 
 /**
@@ -54,16 +61,18 @@ export function updateSettings({ update }): Promise<Response> {
 /**
  * Changes the password for the current account.
  *
- * @param oldPassword - The old password (for verification)
- * @param newPassword - The new password
+ * @param old_password - The old password (for verification)
+ * @param password - The new password
  * @returns A promise resolving to a response indicating if the
  * password was successfully changed.
  */
-export function changePassword({ old_password, password }: { old_password: string; password: string }) {
-    return Request.patch("/account").send({
-        old_password,
-        password,
-    });
+export function changePassword(old_password: string, password: string): Promise<User> {
+    return Request.patch("/account")
+        .send({
+            old_password,
+            password,
+        })
+        .then(res => res.body);
 }
 
 /**

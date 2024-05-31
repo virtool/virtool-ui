@@ -1,14 +1,11 @@
 import AccountGroups from "@account/components/AccountGroups";
-import { AdministratorRoles } from "@administration/types";
+import { useFetchAccount } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Icon, InitialIcon, Label } from "@base";
-import { GroupMinimal } from "@groups/types";
+import { Icon, InitialIcon, Label, LoadingPlaceholder } from "@base";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { getAccountAdministratorRole, getAccountHandle } from "../selectors";
+import ChangePassword from "./ChangePassword";
 import Email from "./Email";
-import ChangePassword from "./Password";
 
 const AccountProfileHeader = styled.div`
     align-items: center;
@@ -39,18 +36,18 @@ const AdministratorTag = styled(Label)`
     text-transform: capitalize;
 `;
 
-type AccountProfileProps = {
-    /** The accounts administrator role */
-    administratorRole: AdministratorRoles;
-    /** A list of groups associated with the account */
-    groups: GroupMinimal[];
-    handle: string;
-};
-
 /**
  * Displays information related to the users account with options to reset password and email
  */
-function AccountProfile({ administratorRole, groups, handle }: AccountProfileProps) {
+export default function AccountProfile() {
+    const { data, isLoading } = useFetchAccount();
+
+    if (isLoading) {
+        return <LoadingPlaceholder />;
+    }
+
+    const { administrator_role, email, groups, handle, last_password_change } = data;
+
     return (
         <>
             <AccountProfileHeader>
@@ -58,28 +55,18 @@ function AccountProfile({ administratorRole, groups, handle }: AccountProfilePro
                 <div>
                     <h3>
                         {handle}
-                        {administratorRole && (
+                        {administrator_role && (
                             <AdministratorTag key="administrator" color="purple">
-                                <Icon name="user-shield" /> {administratorRole} Administrator
+                                <Icon name="user-shield" /> {administrator_role} Administrator
                             </AdministratorTag>
                         )}
                     </h3>
                 </div>
             </AccountProfileHeader>
 
-            <ChangePassword />
-            <Email />
+            <ChangePassword lastPasswordChange={last_password_change} />
+            <Email email={email} />
             <AccountGroups groups={groups} />
         </>
     );
 }
-
-function mapStateToProps(state) {
-    return {
-        administratorRole: getAccountAdministratorRole(state),
-        groups: state.account.groups,
-        handle: getAccountHandle(state),
-    };
-}
-
-export default connect(mapStateToProps)(AccountProfile);

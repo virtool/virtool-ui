@@ -1,73 +1,36 @@
-import { configureStore } from "@reduxjs/toolkit";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createBrowserHistory } from "history";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../../../tests/setupTests";
-import { castValues, EditGenomeSequence } from "../EditGenomeSequence";
-
-function createAppStore(state) {
-    return () =>
-        configureStore({
-            reducer: state => state,
-            preloadedState: state,
-        });
-}
+import { beforeEach, describe, expect, it } from "vitest";
+import { createFakeOTUSequence, mockApiEditSequence } from "../../../../../tests/fake/otus";
+import { renderWithRouter } from "../../../../../tests/setupTests";
+import EditGenomeSequence, { castValues } from "../EditGenomeSequence";
 
 describe("<EditGenomeSequence>", () => {
     let props;
-    let state;
+    let history;
 
     beforeEach(() => {
         props = {
+            activeSequence: createFakeOTUSequence({ sequence: "ACGY" }),
             isolateId: "test_isolate_id",
             otuId: "test_otu_id",
-            id: "test_id",
             hasSchema: true,
             segments: [],
-            onSave: vi.fn(),
-            initialAccession: "initialAccession",
-            initialDefinition: "initialDefinition",
-            initialHost: "initialHost",
-            initialSegment: "test_segment",
-            initialSequence: "ATAG",
+            refId: "test_ref_id",
         };
-        state = {
-            otus: {
-                activeIsolateId: "test_isolate_id",
-                detail: {
-                    schema: [{ name: "test_segment", molecule: "", required: true }],
-                    isolates: [
-                        {
-                            default: true,
-                            id: "test_isolate_id",
-                            name: "test_isolate_name",
-                            sequences: [
-                                {
-                                    accession: "NC_010317",
-                                    definition: "Abaca bunchy top virus DNA-M, complete genome",
-                                    host: "Musa sp.",
-                                    sequence:
-                                        "GGGGCTGGGGCTTATTATTACCCCCAGCCCCGGAACGGGACATCACGTGTATTCTCTATAGTGGTGGGTCATATGTCCCGAGTTAGTGCGCCACGTAA",
-                                    segment: "",
-                                    id: "0r0vmzt4",
-                                    reference: { id: "85r8ucx8" },
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        };
+        history = createBrowserHistory();
     });
 
     it("should render all fields with current sequence data", () => {
-        renderWithProviders(
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
                 <EditGenomeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
@@ -79,11 +42,22 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should submit correct data when all fields changed", async () => {
-        renderWithProviders(
+        const scope = mockApiEditSequence(
+            props.otuId,
+            props.isolateId,
+            props.activeSequence.id,
+            "user_typed_accession",
+            "user_typed_definition",
+            "user_typed_host",
+            null,
+            "ACGRYKM",
+        );
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
                 <EditGenomeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         await userEvent.click(screen.getByRole("combobox"));
@@ -107,24 +81,16 @@ describe("<EditGenomeSequence>", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(props.onSave).toHaveBeenCalledWith(
-            "test_otu_id",
-            "test_isolate_id",
-            "test_id",
-            "user_typed_accession",
-            "user_typed_definition",
-            "user_typed_host",
-            null,
-            "ACGRYKM",
-        );
+        scope.done();
     });
 
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithProviders(
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
                 <EditGenomeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
@@ -132,7 +98,6 @@ describe("<EditGenomeSequence>", () => {
         await userEvent.clear(screen.getByRole("textbox", { name: "Sequence 4" }));
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(props.onSave).not.toHaveBeenCalled();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
         expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
         expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
@@ -140,11 +105,12 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithProviders(
+        renderWithRouter(
             <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
                 <EditGenomeSequence {...props} />
             </MemoryRouter>,
-            createAppStore(state),
+            {},
+            history,
         );
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");

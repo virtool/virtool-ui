@@ -1,9 +1,9 @@
+import { getColor } from "@app/theme";
+import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "@base";
+import { InputHeader } from "@base/InputHeader";
 import { find, sortBy } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getColor } from "../../app/theme";
-import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "../../base";
-import { InputHeader } from "../../base/InputHeader";
 import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../queries";
 import Create from "./CreateGroup";
 import { GroupSelector } from "./GroupSelector";
@@ -39,7 +39,7 @@ export const NoneSelected = styled.div`
     transform: translate(-50%, -50%);
 `;
 
-export const Groups = () => {
+export default function Groups() {
     const updateGroupMutation = useUpdateGroup();
     const removeMutation = useRemoveGroup();
 
@@ -101,4 +101,4 @@ export const Groups = () => {
             <Create />
         </>
     );
-};
+}
