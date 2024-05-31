@@ -19,19 +19,19 @@ const fixedWidth = css`
     display: inline-block;
 `;
 
-interface StyledIconProps {
+type StyledIconProps = {
     color?: "blue" | "green" | "grey" | "red" | "orange" | "purple";
     hoverable?: boolean;
-    fixedWidth?: boolean;
+    $fixedWidth?: boolean;
     theme: DefaultTheme;
-}
+};
 
 const StyledIcon = styled.i<StyledIconProps>`
     background: inherit;
     border: none;
     color: ${getIconColor};
     ${props => (props.hoverable || props.onClick ? "cursor: pointer;" : "")};
-    ${props => (props.fixedWidth ? fixedWidth : "")};
+    ${props => (props.$fixedWidth ? fixedWidth : "")};
 
     &:hover {
         ${props =>
@@ -43,7 +43,7 @@ const StyledIcon = styled.i<StyledIconProps>`
 
 StyledIcon.displayName = "Icon";
 
-interface IconProps {
+type IconProps = {
     "aria-label"?: string;
     color?: IconColor;
     name: string;
@@ -57,9 +57,9 @@ interface IconProps {
     tip?: string;
     tipPlacement?: "top" | "right" | "bottom" | "left";
     title?: string;
-}
+};
 
-export const Icon = ({
+export function Icon({
     faStyle = "fas",
     fixedWidth = false,
     hoverable,
@@ -68,7 +68,7 @@ export const Icon = ({
     tipPlacement,
     title,
     ...props
-}: IconProps) => {
+}: IconProps) {
     const handleClick = useCallback(props.onClick, [props.onClick]);
 
     const className = `${props.className ? props.className + " " : ""} ${faStyle} fa-${props.name}`;
@@ -81,7 +81,7 @@ export const Icon = ({
             aria-label={props["aria-label"]}
             className={className}
             color={props.color}
-            fixedWidth={fixedWidth}
+            $fixedWidth={fixedWidth}
             hoverable={hoverable}
             style={style}
             title={title}
@@ -99,4 +99,4 @@ export const Icon = ({
     }
 
     return icon;
-};
+}
