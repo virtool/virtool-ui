@@ -1,9 +1,9 @@
-import { IndexNested } from "../indexes/types";
-import { JobMinimal } from "../jobs/types";
-import { ReferenceNested } from "../references/types";
-import { SubtractionNested } from "../subtraction/types";
-import { UserNested } from "../users/types";
-import { SearchResult } from "../utils/types";
+import { IndexNested } from "@indexes/types";
+import { JobMinimal } from "@jobs/types";
+import { ReferenceNested } from "@references/types";
+import { SubtractionNested } from "@subtraction/types";
+import { UserNested } from "@users/types";
+import { SearchResult } from "@utils/types";
 
 /** The sample associated with the analysis */
 export type AnalysisSample = {
@@ -62,10 +62,10 @@ export type GenericAnalysis = AnalysisMinimal & {
     files: Array<AnalysisFile>;
     /** The results of the analysis that will be presented to the user */
     results?: { [key: string]: any };
-    workflow: Workflows.nuvs | Workflows.aodp;
+    workflow: Workflows.aodp;
 };
 
-export type Analysis = FormattedPathoscopeAnalysis | IimiAnalysis | GenericAnalysis;
+export type Analysis = FormattedPathoscopeAnalysis | FormattedNuVsAnalysis | IimiAnalysis | GenericAnalysis;
 
 export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
     files: Array<AnalysisFile>;
@@ -130,6 +130,84 @@ export type FormattedPathoscopeSequence = {
     pi: number;
     /** The number of reads that match this hit */
     reads: number;
+};
+
+/** Complete NuVs analysis details */
+export type FormattedNuVsAnalysis = AnalysisMinimal & {
+    files: Array<AnalysisFile>;
+    maxSequenceLength: number;
+    results: FormattedNuVsResults;
+    workflow: Workflows.nuvs;
+};
+
+/** All results for a NuVs analysis */
+export type FormattedNuVsResults = {
+    hits: FormattedNuVsHit[];
+};
+
+/** Mapping data for a single NuVs hit */
+export type FormattedNuVsHit = {
+    annotatedOrfCount: number;
+    blast: Blast;
+    e: number;
+    families: string[];
+    id: number;
+    index: number;
+    name: string[];
+    orfs: NuVsORFs[];
+    sequence: string;
+};
+
+export type Blast = {
+    created_at: string;
+    error?: string;
+    id: number;
+    interval: number;
+    last_checked_at: string;
+    ready: boolean;
+    result: BlastResults;
+    rid: string;
+    updated_at: string;
+};
+
+export type BlastResults = {
+    hits: BlastHit[];
+    masking: BlastMask[];
+    params: { [key: string]: string | number };
+    program: string;
+    stat: { [key: string]: number };
+    target: { [key: string]: string };
+    version: string;
+    rid: string;
+    updated_at: string;
+};
+
+export type BlastHit = {
+    accession: string;
+    align_len: number;
+    bit_score: number;
+    evalue: number;
+    gaps: number;
+    identity: number;
+    len: number;
+    name: string;
+    score: number;
+    taxid: number;
+    title: string;
+};
+
+export type BlastMask = {
+    from: number;
+    to: number;
+};
+
+export type NuVsORFs = {
+    frame: number;
+    hits: { [key: string]: string | object };
+    index: number;
+    pos: number[];
+    pro: string;
+    strand: number;
 };
 
 /** Analysis search results from the API */

@@ -30,10 +30,10 @@ const StyledNuVsSequence = styled.div`
     margin: 10px 0;
 `;
 
-export const NuVsSequence = ({ maxSequenceLength, sequence, width }) => {
+export const NuVsSequence = ({ maxSequenceLength, sequence }) => {
     const chartEl = useRef(null);
 
-    useEffect(() => draw(chartEl.current, maxSequenceLength, sequence.length), [sequence, width]);
+    useEffect(() => draw(chartEl.current, maxSequenceLength, sequence.length), [sequence]);
 
     return (
         <div style={{ overflow: "hidden" }}>

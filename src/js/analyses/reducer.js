@@ -1,18 +1,10 @@
 import { createReducer } from "@reduxjs/toolkit";
 import {
-    BLAST_NUVS,
-    LIST_READY_INDEXES,
     SET_ANALYSIS,
     SET_ANALYSIS_ACTIVE_ID,
     SET_ANALYSIS_SORT_KEY,
     SET_AODP_FILTER,
     SET_SEARCH_IDS,
-    TOGGLE_ANALYSIS_SORT_DESCENDING,
-    TOGGLE_FILTER_ISOLATES,
-    TOGGLE_FILTER_ORFS,
-    TOGGLE_FILTER_OTUS,
-    TOGGLE_FILTER_SEQUENCES,
-    TOGGLE_SHOW_PATHOSCOPE_READS,
     WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
 import { update } from "../utils/reducers";
@@ -76,15 +68,6 @@ export const setNuvsBLAST = (state, analysisId, sequenceIndex, data = "ip") => {
 
 export const analysesReducer = createReducer(initialState, builder => {
     builder
-        .addCase(BLAST_NUVS.REQUESTED, (state, action) => {
-            return setNuvsBLAST(state, action.payload.analysisId, action.payload.sequenceIndex, {
-                ready: false,
-            });
-        })
-        .addCase(BLAST_NUVS.SUCCEEDED, (state, action) => {
-            const { analysisId, sequenceIndex } = action.context;
-            return setNuvsBLAST(state, analysisId, sequenceIndex, action.payload);
-        })
         .addCase(SET_ANALYSIS, (state, action) => {
             return {
                 ...state,
@@ -94,9 +77,6 @@ export const analysesReducer = createReducer(initialState, builder => {
                 searchIds: null,
                 sortKey: getInitialSortKey(action),
             };
-        })
-        .addCase(LIST_READY_INDEXES.SUCCEEDED, (state, action) => {
-            state.readyIndexes = action.payload;
         })
         .addCase(SET_ANALYSIS_ACTIVE_ID, (state, action) => {
             state.activeId = action.payload.id;
@@ -109,24 +89,6 @@ export const analysesReducer = createReducer(initialState, builder => {
         })
         .addCase(SET_SEARCH_IDS, (state, action) => {
             state.searchIds = action.payload.ids;
-        })
-        .addCase(TOGGLE_FILTER_OTUS, state => {
-            state.filterOTUs = !state.filterOTUs;
-        })
-        .addCase(TOGGLE_FILTER_ISOLATES, state => {
-            state.filterIsolates = !state.filterIsolates;
-        })
-        .addCase(TOGGLE_FILTER_ORFS, state => {
-            state.filterORFs = !state.filterORFs;
-        })
-        .addCase(TOGGLE_FILTER_SEQUENCES, state => {
-            state.filterSequences = !state.filterSequences;
-        })
-        .addCase(TOGGLE_SHOW_PATHOSCOPE_READS, state => {
-            state.showPathoscopeReads = !state.showPathoscopeReads;
-        })
-        .addCase(TOGGLE_ANALYSIS_SORT_DESCENDING, state => {
-            state.sortDescending = !state.sortDescending;
         })
         .addCase(WS_UPDATE_ANALYSIS, (state, action) => {
             return update(state, action.payload);

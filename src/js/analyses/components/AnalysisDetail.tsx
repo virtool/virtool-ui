@@ -18,7 +18,7 @@ import {
 import { setAnalysis } from "../actions";
 import AODPViewer from "./AODP/Viewer";
 import { IimiViewer } from "./Iimi/IimiViewer";
-import NuVsViewer from "./NuVs/Viewer";
+import NuVsViewer from "./NuVs/NuVsViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
 
 const UnsupportedAnalysis = styled(Box)`
@@ -66,7 +66,7 @@ export function AnalysisDetail({ detail, match, onSetAnalysis }) {
     if (analysis.workflow === "pathoscope_bowtie") {
         content = <PathoscopeViewer detail={analysis} sample={sample} />;
     } else if (analysis.workflow === "nuvs") {
-        content = <NuVsViewer />;
+        content = <NuVsViewer detail={analysis} sample={sample} />;
     } else if (analysis.workflow === "aodp") {
         content = <AODPViewer />;
     } else if (analysis.workflow === "iimi") {

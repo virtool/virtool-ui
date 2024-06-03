@@ -15,10 +15,20 @@ const StyledNuVsValues = styled.span`
     }
 `;
 
-export const NuVsValues = ({ e, orfCount }) => (
-    <StyledNuVsValues>
-        <span>{orfCount} ORFs</span>
-        <span> / </span>
-        <span>E = {e}</span>
-    </StyledNuVsValues>
-);
+type NuVsValuesProps = {
+    e: string;
+    orfCount: number;
+};
+
+/**
+ * Displays the values associated with the NuVs
+ */
+export function NuVsValues({ e, orfCount }: NuVsValuesProps) {
+    return (
+        <StyledNuVsValues>
+            <span>{orfCount} ORFs</span>
+            <span> / </span>
+            <span>E = {e}</span>
+        </StyledNuVsValues>
+    );
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import AnalysisViewerList from "../Viewer/List";
+import AnalysisViewerList from "../Viewer/AnalysisViewerList";
 import AODPItem from "./Item";
 
 export const AODPList = () => (

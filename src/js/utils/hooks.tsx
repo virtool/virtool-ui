@@ -62,6 +62,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
     }
 
     history?.replace({
+        ...history.location,
         pathname: window.location.pathname,
         search: params.toString() ? `?${params.toString()}` : null,
     });
@@ -194,7 +195,7 @@ export function ScrollSync({ children }: ScrollSyncProps) {
  */
 export function useLocationState(): [
     locationState: LocationType,
-    setLocationState: (state: { [key: string]: boolean | string }) => void,
+    setLocationState: (state: { [key: string]: boolean | string | number }) => void,
 ] {
     const location = useLocation();
     const history = useHistory();

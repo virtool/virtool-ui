@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { getBorder } from "../app/theme";
 
 type BoxProps = {
+    active?: boolean;
     onClick?: () => void;
 };
 

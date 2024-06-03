@@ -1,11 +1,5 @@
-import { Request } from "../app/request";
+import { Request } from "@app/request";
 import { AnalysisSearchResult, GenericAnalysis } from "./types";
-
-export const find = ({ sampleId, term, page = 1 }) =>
-    Request.get(`/samples/${sampleId}/analyses`).query({ find: term, page });
-
-export const blastNuvs = ({ analysisId, sequenceIndex }) =>
-    Request.put(`/analyses/${analysisId}/${sequenceIndex}/blast`);
 
 /**
  * Fetch a complete analysis
@@ -70,4 +64,15 @@ export function createAnalysis(
  */
 export function removeAnalysis(analysisId: string): Promise<null> {
     return Request.delete(`/analyses/${analysisId}`).then(res => res.body);
+}
+
+/**
+ * Installs the blast information for the sequence
+ *
+ * @param analysisId - The id of the analysis the sequence belongs to
+ * @param sequenceIndex - The index of the sequence to blast NuVs for
+ * @returns A promise resolving to an installation of blast information
+ */
+export function blastNuvs(analysisId: string, sequenceIndex: number) {
+    return Request.put(`/analyses/${analysisId}/${sequenceIndex}/blast`).then(res => res.body);
 }

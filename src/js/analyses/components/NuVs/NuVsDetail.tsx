@@ -1,16 +1,16 @@
-import { useElementSize } from "@utils/hooks";
+import { NuVsValues } from "@/analyses/components/NuVs/NuVsValues";
+import { useGetActiveHit } from "@/analyses/hooks";
+import { FormattedNuVsHit } from "@/analyses/types";
+import { calculateAnnotatedOrfCount } from "@/analyses/utils";
+import { getBorder } from "@app/theme";
+import { Badge, Box } from "@base";
+import { useUrlSearchParams } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
-import { Badge, Box } from "../../../base";
-import { getActiveHit, getMaxSequenceLength } from "../../selectors";
-import { calculateAnnotatedOrfCount } from "../../utils";
-import NuVsBLAST from "./BLAST";
+import NuVsBLAST from "./NuVsBLAST";
 import { NuVsORF } from "./ORF";
 import { NuVsSequence } from "./Sequence";
-import { NuVsValues } from "./Values";
 
 const StyledNuVsFamilies = styled.div`
     border: ${getBorder};
@@ -77,14 +77,25 @@ const StyledNuVsDetail = styled(Box)`
     margin-left: 10px;
 `;
 
-export const NuVsDetail = ({ filterORFs, hit, maxSequenceLength }) => {
-    const [ref, { width }] = useElementSize();
+type NuVsDetailProps = {
+    analysisId: string;
+    /** A list of sorted and filtered NuVs hits */
+    matches: FormattedNuVsHit[];
+    maxSequenceLength: number;
+};
+
+/**
+ * The detailed view of a NuVs sequence
+ */
+export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: NuVsDetailProps) {
+    const [filterORFs] = useUrlSearchParams("filterOrfs");
+    const hit = useGetActiveHit(matches);
 
     if (!hit) {
         return <StyledNuVsDetail>No Hits</StyledNuVsDetail>;
     }
 
-    const { e, families, index, orfs, sequence } = hit;
+    const { e, families, orfs, sequence, index } = hit;
 
     let filtered;
 
@@ -95,11 +106,11 @@ export const NuVsDetail = ({ filterORFs, hit, maxSequenceLength }) => {
     filtered = sortBy(filtered || orfs, orf => orf.hits.length).reverse();
 
     const orfComponents = map(filtered, (orf, index) => (
-        <NuVsORF key={index} index={index} {...orf} maxSequenceLength={maxSequenceLength} width={width} />
+        <NuVsORF key={index} index={index} {...orf} maxSequenceLength={maxSequenceLength} />
     ));
 
     return (
-        <StyledNuVsDetail ref={ref}>
+        <StyledNuVsDetail>
             <NuVsDetailTitle>
                 <h3>
                     Sequence {index}
@@ -109,18 +120,10 @@ export const NuVsDetail = ({ filterORFs, hit, maxSequenceLength }) => {
                 <NuVsFamilies families={families} />
             </NuVsDetailTitle>
             <NuVsLayout>
-                <NuVsSequence key="sequence" maxSequenceLength={maxSequenceLength} sequence={sequence} width={width} />
+                <NuVsSequence key="sequence" maxSequenceLength={maxSequenceLength} sequence={sequence} />
                 {orfComponents}
             </NuVsLayout>
-            <NuVsBLAST />
+            <NuVsBLAST hit={hit} analysisId={analysisId} />
         </StyledNuVsDetail>
     );
-};
-
-const mapStateToProps = state => ({
-    filterORFs: state.analyses.filterORFs,
-    maxSequenceLength: getMaxSequenceLength(state),
-    hit: getActiveHit(state),
-});
-
-export default connect(mapStateToProps)(NuVsDetail);
+}

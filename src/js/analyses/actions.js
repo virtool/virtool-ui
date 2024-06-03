@@ -1,14 +1,10 @@
 import { createAction } from "@reduxjs/toolkit";
 import {
-    BLAST_NUVS,
     SET_ANALYSIS,
     SET_ANALYSIS_ACTIVE_ID,
     SET_ANALYSIS_SORT_KEY,
     SET_AODP_FILTER,
     SET_SEARCH_IDS,
-    TOGGLE_ANALYSIS_SORT_DESCENDING,
-    TOGGLE_FILTER_ORFS,
-    TOGGLE_FILTER_SEQUENCES,
     WS_UPDATE_ANALYSIS,
 } from "../app/actionTypes";
 
@@ -37,10 +33,6 @@ export const setAnalysisSortKey = createAction(SET_ANALYSIS_SORT_KEY, sortKey =>
     payload: { sortKey },
 }));
 
-export const toggleFilterORFs = createAction(TOGGLE_FILTER_ORFS);
-export const toggleFilterSequences = createAction(TOGGLE_FILTER_SEQUENCES);
-export const toggleAnalysisSortDescending = createAction(TOGGLE_ANALYSIS_SORT_DESCENDING);
-
 /**
  * Returns action that sets the current analysis in redux state
  *
@@ -50,16 +42,4 @@ export const toggleAnalysisSortDescending = createAction(TOGGLE_ANALYSIS_SORT_DE
  */
 export const setAnalysis = createAction(SET_ANALYSIS, analysis => ({
     payload: analysis,
-}));
-
-/**
- * Returns action that can trigger an API call for BLASTing NuV analysis contigs.
- *
- * @func
- * @param analysisId {string} unique analysis id
- * @param sequenceIndex {number} index of the sequence
- * @returns {object}
- */
-export const blastNuvs = createAction(BLAST_NUVS.REQUESTED, (analysisId, sequenceIndex) => ({
-    payload: { analysisId, sequenceIndex },
 }));
