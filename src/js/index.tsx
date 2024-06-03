@@ -23,7 +23,7 @@ if (window.virtool.sentryDsn !== "SENTRY_DSN") {
 const history = createBrowserHistory();
 
 window.virtool.b2c = { use: false };
-window.store = createAppStore(history);
+window.store = createAppStore();
 
 const AppWithProfiler = withProfiler(App);
 
