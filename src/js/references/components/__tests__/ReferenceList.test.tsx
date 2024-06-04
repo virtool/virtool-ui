@@ -17,7 +17,6 @@ import ReferenceList from "../ReferenceList";
 describe("<ReferenceList />", () => {
     let history;
     let references;
-    let state;
 
     beforeEach(() => {
         references = createFakeReferenceMinimal();
@@ -28,7 +27,7 @@ describe("<ReferenceList />", () => {
 
     it("should render correctly", async () => {
         const scope = mockApiGetReferences([references]);
-        renderWithRouter(<ReferenceList />, state, history);
+        renderWithRouter(<ReferenceList />, {}, history);
 
         expect(await screen.findByText("References")).toBeInTheDocument();
         expect(screen.getByText(references.name)).toBeInTheDocument();
@@ -42,7 +41,7 @@ describe("<ReferenceList />", () => {
     describe("<ReferenceToolbar />", () => {
         it("should render when toolbar term is changed to foo", async () => {
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -61,7 +60,7 @@ describe("<ReferenceList />", () => {
             const account = createFakeAccount({ permissions: permissions });
             mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             expect(screen.queryByLabelText("plus-square fa-fw")).toBeNull();
@@ -74,7 +73,7 @@ describe("<ReferenceList />", () => {
             const account = createFakeAccount({ permissions: permissions });
             mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
 
@@ -82,7 +81,7 @@ describe("<ReferenceList />", () => {
         });
         it("should handle toolbar updates correctly", async () => {
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -106,7 +105,7 @@ describe("<ReferenceList />", () => {
                 `Cloned from ${references.name}`,
                 references,
             );
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             await userEvent.click(screen.getByRole("link", { name: "clone" }));
@@ -120,7 +119,7 @@ describe("<ReferenceList />", () => {
         it("handleSubmit() should mutate with changed input", async () => {
             const getReferencesScope = mockApiGetReferences([references]);
             const cloneReferenceScope = mockApiCloneReference("newName", `Cloned from ${references.name}`, references);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             await userEvent.click(screen.getByRole("link", { name: "clone" }));
@@ -135,7 +134,7 @@ describe("<ReferenceList />", () => {
 
         it("should display an error when name input is cleared", async () => {
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             await userEvent.click(screen.getByRole("link", { name: "clone" }));

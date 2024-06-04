@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 import { noop } from "lodash-es";
 import React from "react";
 import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Router } from "react-router-dom";
 import createSagaMiddleware from "redux-saga";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
@@ -56,7 +56,7 @@ export function createGenericReducer(initState) {
 }
 
 export function createAppStore(state, history, createReducer) {
-    const reducer = createReducer && createReducer(state, history);
+    const reducer = createReducer ? createReducer(state, history) : createGenericReducer({});
     const sagaMiddleware = createSagaMiddleware();
     const store = configureStore({
         reducer: reducer,
@@ -69,7 +69,11 @@ export function createAppStore(state, history, createReducer) {
 }
 
 export function renderWithRouter(ui, state, history, createReducer) {
-    const wrappedUI = <Provider store={createAppStore(state, history, createReducer)}>{ui}</Provider>;
+    const wrappedUI = (
+        <Provider store={createAppStore(state, history, createReducer)}>
+            <Router history={history}>{ui}</Router>
+        </Provider>
+    );
     renderWithProviders(wrappedUI);
 }
 

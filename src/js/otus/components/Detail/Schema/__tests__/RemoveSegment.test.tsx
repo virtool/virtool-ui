@@ -1,17 +1,14 @@
 import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createBrowserHistory } from "history";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTU, mockApiEditOTU } from "../../../../../../tests/fake/otus";
-import { renderWithRouter } from "../../../../../../tests/setupTests";
+import { renderWithMemoryRouter } from "../../../../../../tests/setupTests";
 import RemoveSegment from "../RemoveSegment";
 
 describe("<RemoveSegment />", () => {
     let props;
     let otu;
-    let history;
 
     beforeEach(() => {
         otu = createFakeOTU();
@@ -21,17 +18,10 @@ describe("<RemoveSegment />", () => {
             otuId: otu.id,
             schema: otu.schema,
         };
-        history = createBrowserHistory();
     });
 
     it("should render when [show=true]", () => {
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { removeSegment: props.schema[0].name } }]}>
-                <RemoveSegment {...props} />)
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: props.schema[0].name } }]);
 
         expect(screen.getByText("Remove Segment")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
@@ -40,13 +30,7 @@ describe("<RemoveSegment />", () => {
     });
 
     it("should render when [show=false]", () => {
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { removeSegment: "" } }]}>
-                <RemoveSegment {...props} />)
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: "" } }]);
 
         expect(screen.queryByText("Remove Segment")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
@@ -61,13 +45,7 @@ describe("<RemoveSegment />", () => {
             otuId: otu.d,
             schema: [props.schema[1]],
         });
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { removeSegment: props.schema[0].name } }]}>
-                <RemoveSegment {...props} />)
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: props.schema[0].name } }]);
 
         await userEvent.click(screen.getByRole("button"));
 
@@ -75,13 +53,7 @@ describe("<RemoveSegment />", () => {
     });
 
     it("should call onHide() when onHide() called on <RemoveDialog />", () => {
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { removeSegment: props.schema[0].name } }]}>
-                <RemoveSegment {...props} />)
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: props.schema[0].name } }]);
 
         fireEvent.keyDown(document, { key: "Escape" });
 

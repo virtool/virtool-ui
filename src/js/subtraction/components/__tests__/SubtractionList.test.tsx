@@ -1,6 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createBrowserHistory } from "history";
+import { createMemoryHistory } from "history";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
@@ -15,7 +15,7 @@ describe("<SubtractionList />", () => {
 
     beforeEach(() => {
         subtractions = createFakeSubtractionMinimal();
-        history = createBrowserHistory();
+        history = createMemoryHistory();
     });
 
     it("renders correctly", async () => {
