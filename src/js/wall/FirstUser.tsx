@@ -70,7 +70,6 @@ export default function FirstUser() {
                                 defaultValue=""
                                 {...register("username", { required: true })}
                             />
-                            <InputError>{errors.username?.message}</InputError>
                         </InputGroup>
                         <InputGroup>
                             <InputLabel htmlFor="password">Password</InputLabel>
@@ -86,7 +85,6 @@ export default function FirstUser() {
                                     },
                                 })}
                             />
-                            <InputError>{errors.password?.message}</InputError>
                         </InputGroup>
 
                         <WallButton type="submit" icon="user-plus" color="blue">
