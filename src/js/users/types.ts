@@ -50,6 +50,13 @@ export type User = UserNested & {
     primary_group: GroupMinimal;
 };
 
+export type NewUser = {
+    handle: string;
+    password: string;
+    /** Whether the user will be forced to reset their password on next login */
+    forceReset: boolean;
+};
+
 /** User search results from the API */
 export type UserResponse = SearchResult & {
     /** The page of users */

@@ -1,26 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
+import { useCreateFirstUser } from "@/users/queries";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
-import { createFirst } from "../users/api";
-import { User } from "../users/types";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
-
-type ErrorResponse = {
-    response: {
-        body: {
-            message: string;
-        };
-    };
-};
-
-type NewUser = {
-    handle: string;
-    password: string;
-    /** Whether the user will be forced to reset their password on next login */
-    forceReset: boolean;
-};
 
 type FormData = {
     username: string;
@@ -31,17 +14,9 @@ type FormData = {
  * A form for creating the first instance user
  */
 export default function FirstUser() {
-    const mutation = useMutation<User, ErrorResponse, NewUser>(createFirst, {
-        onSuccess: () => {
-            window.location.reload();
-        },
-    });
+    const mutation = useCreateFirstUser();
 
-    const {
-        formState: { errors },
-        handleSubmit,
-        register,
-    } = useForm<FormData>();
+    const { handleSubmit, register } = useForm<FormData>();
 
     function onSubmit(data: FormData) {
         mutation.mutate({
