@@ -80,6 +80,7 @@ describe("<ReferenceList />", () => {
 
             scope.done();
         });
+
         it("should handle toolbar updates correctly", async () => {
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, state, history);
@@ -100,6 +101,9 @@ describe("<ReferenceList />", () => {
 
     describe("<CloneReference />", () => {
         it("handleSubmit() should mutate with correct input", async () => {
+            const permissions = createFakePermissions({ create_ref: true });
+            const account = createFakeAccount({ permissions: permissions });
+            mockAPIGetAccount(account);
             const getReferencesScope = mockApiGetReferences([references]);
             const cloneReferenceScope = mockApiCloneReference(
                 `Clone of ${references.name}`,
@@ -118,6 +122,9 @@ describe("<ReferenceList />", () => {
         });
 
         it("handleSubmit() should mutate with changed input", async () => {
+            const permissions = createFakePermissions({ create_ref: true });
+            const account = createFakeAccount({ permissions: permissions });
+            mockAPIGetAccount(account);
             const getReferencesScope = mockApiGetReferences([references]);
             const cloneReferenceScope = mockApiCloneReference("newName", `Cloned from ${references.name}`, references);
             renderWithRouter(<ReferenceList />, state, history);
@@ -134,6 +141,9 @@ describe("<ReferenceList />", () => {
         });
 
         it("should display an error when name input is cleared", async () => {
+            const permissions = createFakePermissions({ create_ref: true });
+            const account = createFakeAccount({ permissions: permissions });
+            mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, state, history);
 
