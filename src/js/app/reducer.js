@@ -3,7 +3,6 @@ import { createReduxEnhancer } from "@sentry/react";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import createSagaMiddleware from "redux-saga";
 import accountReducer from "../account/reducer";
-import settingsReducer from "../administration/reducer";
 import analysesReducer from "../analyses/reducer";
 import errorsReducer from "../errors/reducer";
 import filesReducer from "../files/reducer";
@@ -69,7 +68,6 @@ export function createAppStore(history) {
             files: filesReducer,
             forms: formsReducer,
             router: connectRouter(history),
-            settings: settingsReducer,
         },
         middleware: [sagaMiddleware, routerMiddleware(history)],
         enhancers: [sentryReduxEnhancer],

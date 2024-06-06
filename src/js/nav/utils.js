@@ -1,6 +1,6 @@
 import { includes } from "lodash-es";
 
-export const excludePaths = (paths = []) => {
+export function excludePaths(paths = []) {
     return function (match, location) {
         if (includes(paths, location.pathname)) {
             return false;
@@ -8,4 +8,4 @@ export const excludePaths = (paths = []) => {
 
         return Boolean(match);
     };
-};
+}

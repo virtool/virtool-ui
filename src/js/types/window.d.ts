@@ -1,3 +1,4 @@
+import { IPublicClientApplication } from "@azure/msal-browser";
 import { Store } from "redux";
 
 export declare global {
@@ -5,5 +6,6 @@ export declare global {
         virtool: virtoolState;
         captureException?: (error: Error) => void;
         store: Store;
+        msalInstance: IPublicClientApplication;
     }
 }

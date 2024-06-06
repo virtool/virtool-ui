@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Icon } from "@base";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { Icon } from "../../base";
 import { excludePaths } from "../utils";
 
 const StyledSidebarItem = styled(NavLink)`
@@ -33,7 +32,18 @@ const StyledSidebarItem = styled(NavLink)`
     }
 `;
 
-export default function SidebarItem({ exclude, icon, link, title }) {
+type SidebarItemProps = {
+    /** A list of routes to exclude from the sidebar */
+    exclude?: string[];
+    icon: string;
+    link: string;
+    title: string;
+};
+
+/**
+ * Displays a styled sidebar item for use in the sidebar component
+ */
+export default function SidebarItem({ exclude, icon, link, title }: SidebarItemProps) {
     return (
         <StyledSidebarItem to={link} activeClassName="active" isActive={excludePaths(exclude)}>
             <Icon name={icon} />
@@ -41,10 +51,3 @@ export default function SidebarItem({ exclude, icon, link, title }) {
         </StyledSidebarItem>
     );
 }
-
-SidebarItem.propTypes = {
-    exclude: PropTypes.arrayOf(PropTypes.string),
-    icon: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-};

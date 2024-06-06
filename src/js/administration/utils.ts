@@ -1,5 +1,4 @@
 import { Permission } from "../groups/types";
-import { getAccountAdministratorRole } from "./selectors";
 import { AdministratorRoles } from "./types";
 
 /**
@@ -36,20 +35,6 @@ export enum AdministratorPermissions {
     create_sample = AdministratorRoles.FULL,
     modify_subtraction = AdministratorRoles.FULL,
     remove_file = AdministratorRoles.FULL,
-}
-
-/**
- * Check if a user has a sufficient admin role or legacy permissions to perform an action
- *
- * @param state - The redux state of the application
- * @param permission - The permissions to check
- * @returns  Whether the user is allowed to perform the action
- */
-export function checkAdminRoleOrPermission(state, permission: Permission): boolean {
-    return (
-        hasSufficientAdminRole(AdministratorPermissions[permission as string], getAccountAdministratorRole(state)) ||
-        state.account.permissions[permission]
-    );
 }
 
 /**
