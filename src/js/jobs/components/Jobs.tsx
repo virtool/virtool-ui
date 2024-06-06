@@ -4,6 +4,9 @@ import { Route, Switch } from "react-router-dom";
 import JobDetail from "./JobDetail";
 import JobsList from "./JobList";
 
+/**
+ * The jobs view with routes to job-related components
+ */
 export default function Jobs() {
     return (
         <Container>

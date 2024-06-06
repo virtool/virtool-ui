@@ -67,7 +67,7 @@ type NavBarProps = {
 };
 
 /**
- * Displays the navigation bar
+ * Displays the navigation bar with routes to available components
  */
 export function NavBar({ administrator_role, dev, handle }: NavBarProps) {
     const mutation = useLogout();
