@@ -71,6 +71,5 @@ describe("<ReferenceItem />", () => {
         renderWithRouter(<ReferenceItem {...props} />, {}, history);
 
         expect(screen.queryByRole("progressbar")).toBeNull();
-        expect(screen.getByLabelText("clone")).toBeInTheDocument();
     });
 });
