@@ -17,24 +17,12 @@ const createRequestActionType = root => ({
 });
 
 // App
-export const PUSH_STATE = "PUSH_STATE";
-export const UPDATE_SEARCH = "UPDATE_SEARCH";
 export const GET_INITIAL_STATE = createRequestActionType("GET_INITIAL_STATE");
-
-// Dev
-export const POST_DEV_COMMAND = createRequestActionType("POST_DEV_COMMAND");
 
 // Account
 export const GET_ACCOUNT = createRequestActionType("GET_ACCOUNT");
 export const UPDATE_ACCOUNT = createRequestActionType("UPDATE_ACCOUNT");
-export const GET_ACCOUNT_SETTINGS = createRequestActionType("GET_ACCOUNT_SETTINGS");
-export const UPDATE_ACCOUNT_SETTINGS = createRequestActionType("UPDATE_ACCOUNT_SETTINGS");
 export const CHANGE_ACCOUNT_PASSWORD = createRequestActionType("CHANGE_ACCOUNT_PASSWORD");
-export const GET_API_KEYS = createRequestActionType("GET_API_KEYS");
-export const CREATE_API_KEY = createRequestActionType("CREATE_API_KEY");
-export const UPDATE_API_KEY = createRequestActionType("UPDATE_API_KEY");
-export const REMOVE_API_KEY = createRequestActionType("REMOVE_API_KEY");
-export const CLEAR_API_KEY = "CLEAR_API_KEY";
 export const LOGIN = createRequestActionType("LOGIN");
 export const LOGOUT = createRequestActionType("LOGOUT");
 export const RESET_PASSWORD = createRequestActionType("RESET_PASSWORD");
@@ -44,25 +32,12 @@ export const GET_SETTINGS = createRequestActionType("GET_SETTINGS");
 export const UPDATE_SETTINGS = createRequestActionType("UPDATE_SETTINGS");
 
 // Analysis
-export const WS_INSERT_ANALYSIS = "WS_INSERT_ANALYSIS";
 export const WS_UPDATE_ANALYSIS = "WS_UPDATE_ANALYSIS";
-export const WS_REMOVE_ANALYSIS = "WS_REMOVE_ANALYSIS";
-export const BLAST_NUVS = createRequestActionType("BLAST_NUVS");
-export const GET_ANALYSIS = createRequestActionType("GET_ANALYSIS");
 export const SET_ANALYSIS = "SET_ANALYSIS";
 export const SET_ANALYSIS_ACTIVE_ID = "SET_ANALYSIS_ACTIVE_ID";
 export const SET_SEARCH_IDS = "SET_SEARCH_IDS";
 export const SET_AODP_FILTER = "ADD_AODP_FILTER";
 export const SET_ANALYSIS_SORT_KEY = "SET_ANALYSIS_SORT_KEY";
-export const TOGGLE_FILTER_OTUS = "TOGGLE_FILTER_OTUS";
-export const TOGGLE_FILTER_ISOLATES = "TOGGLE_FILTER_ISOLATES";
-export const TOGGLE_FILTER_ORFS = "TOGGLE_FILTER_ORFS";
-export const TOGGLE_FILTER_SEQUENCES = "TOGGLE_FILTER_SEQUENCES";
-export const TOGGLE_ANALYSIS_SORT_DESCENDING = "TOGGLE_ANALYSIS_SORT_DESCENDING";
-export const TOGGLE_SHOW_PATHOSCOPE_READS = "TOGGLE_SHOW_PATHOSCOPE_READS";
-
-// Caches
-export const GET_CACHE = createRequestActionType("GET_CACHE");
 
 // Errors
 export const CLEAR_ERROR = "CLEAR_ERROR";
@@ -80,148 +55,42 @@ export const DELETE_PERSISTENT_FORM_STATE = "DELETE_PERSISTENT_FORM_STATE";
 export const SET_REDUX_FORM_STATE = "SET_REDUX_FORM_STATE";
 
 // Groups
-export const WS_INSERT_GROUP = "WS_INSERT_GROUP";
-export const WS_UPDATE_GROUP = "WS_UPDATE_GROUP";
-export const WS_REMOVE_GROUP = "WS_REMOVE_GROUP";
-export const REMOVE_ACTIVE_GROUP = "REMOVE_ACTIVE_GROUP";
-export const LIST_GROUPS = createRequestActionType("LIST_GROUPS");
-export const GET_GROUP = createRequestActionType("GET_GROUP");
 export const CREATE_GROUP = createRequestActionType("CREATE_GROUP");
-export const SET_GROUP_NAME = createRequestActionType("SET_GROUP_NAME");
-export const SET_GROUP_PERMISSION = createRequestActionType("SET_GROUP_PERMISSION");
-export const REMOVE_GROUP = createRequestActionType("REMOVE_GROUP");
 
 // HMMs
-export const FIND_HMMS = createRequestActionType("FIND_HMMS");
 export const GET_HMM = createRequestActionType("GET_HMM");
-export const INSTALL_HMMS = createRequestActionType("INSTALL_HMMS");
 
 // Indexes
-export const WS_INSERT_INDEX = "WS_INSERT_INDEX";
-export const WS_UPDATE_INDEX = "WS_UPDATE_INDEX";
-export const WS_REMOVE_INDEX = "WS_REMOVE_INDEX";
-export const WS_INSERT_HISTORY = "WS_INSERT_HISTORY";
-export const FIND_INDEXES = createRequestActionType("FIND_INDEXES");
 export const GET_INDEX = createRequestActionType("GET_INDEX");
-export const GET_UNBUILT = createRequestActionType("GET_UNBUILT");
 export const CREATE_INDEX = createRequestActionType("CREATE_INDEX");
-export const GET_INDEX_HISTORY = createRequestActionType("GET_INDEX_HISTORY");
-export const LIST_READY_INDEXES = createRequestActionType("LIST_READY_INDEXES");
-
-// Instance Message
-export const GET_INSTANCE_MESSAGE = createRequestActionType("GET_INSTANCE_MESSAGE");
-export const SET_INSTANCE_MESSAGE = createRequestActionType("SET_INSTANCE_MESSAGE");
-export const UPDATE_INSTANCE_MESSAGE = createRequestActionType("UPDATE_INSTANCE_MESSAGE");
 
 // Jobs
-export const WS_INSERT_JOB = "WS_INSERT_JOB";
-export const WS_UPDATE_JOB = "WS_UPDATE_JOB";
-export const WS_REMOVE_JOB = "WS_REMOVE_JOB";
-export const FIND_JOBS = createRequestActionType("FIND_JOBS");
 export const GET_JOB = createRequestActionType("GET_JOB");
-export const GET_LINKED_JOB = createRequestActionType("GET_LINKED_JOB");
-export const CANCEL_JOB = createRequestActionType("CANCEL_JOB");
-export const ARCHIVE_JOB = createRequestActionType("ARCHIVE_JOB");
 
 // OTU
-export const WS_INSERT_OTU = "WS_INSERT_OTU";
-export const WS_UPDATE_OTU = "WS_UPDATE_OTU";
-export const WS_REMOVE_OTU = "WS_REMOVE_OTU";
-export const FIND_OTUS = createRequestActionType("FIND_OTUS");
-export const REFRESH_OTUS = createRequestActionType("REFRESH_OTUS");
 export const GET_OTU = createRequestActionType("GET_OTU");
 export const CREATE_OTU = createRequestActionType("CREATE_OTU");
 export const EDIT_OTU = createRequestActionType("EDIT_OTU");
-export const REMOVE_OTU = createRequestActionType("REMOVE_OTU");
-export const GET_OTU_HISTORY = createRequestActionType("GET_OTU_HISTORY");
 export const ADD_ISOLATE = createRequestActionType("ADD_ISOLATE");
 export const EDIT_ISOLATE = createRequestActionType("EDIT_ISOLATE");
-export const SET_ISOLATE_AS_DEFAULT = createRequestActionType("SET_ISOLATE_AS_DEFAULT");
-export const REMOVE_ISOLATE = createRequestActionType("REMOVE_ISOLATE");
 export const ADD_SEQUENCE = createRequestActionType("ADD_SEQUENCE");
 export const EDIT_SEQUENCE = createRequestActionType("EDIT_SEQUENCE");
-export const REMOVE_SEQUENCE = createRequestActionType("REMOVE_SEQUENCE");
-export const REVERT = createRequestActionType("REVERT");
-export const UPLOAD_IMPORT = createRequestActionType("UPLOAD_IMPORT");
-export const SELECT_ISOLATE = "SELECT_ISOLATE";
-export const SHOW_EDIT_OTU = "SHOW_EDIT_OTU";
-export const SHOW_REMOVE_OTU = "SHOW_REMOVE_OTU";
-export const SHOW_ADD_ISOLATE = "SHOW_ADD_ISOLATE";
-export const SHOW_EDIT_ISOLATE = "SHOW_EDIT_ISOLATE";
-export const SHOW_REMOVE_ISOLATE = "SHOW_REMOVE_ISOLATE";
-export const SHOW_REMOVE_SEQUENCE = "SHOW_REMOVE_SEQUENCE";
-export const HIDE_OTU_MODAL = "HIDE_OTU_MODAL";
-
-// Tasks
-export const WS_INSERT_TASK = "WS_INSERT_TASK";
-export const WS_UPDATE_TASK = "WS_UPDATE_TASK";
-export const LIST_TASKS = createRequestActionType("LIST_TASKS");
-export const GET_TASK = createRequestActionType("GET_TASK");
 
 // Refs
-export const WS_INSERT_REFERENCE = "WS_INSERT_REFERENCE";
-export const WS_UPDATE_REFERENCE = "WS_UPDATE_REFERENCE";
-export const WS_REMOVE_REFERENCE = "WS_REMOVE_REFERENCE";
-export const FIND_REFERENCES = createRequestActionType("FIND_REFERENCES");
 export const GET_REFERENCE = createRequestActionType("GET_REFERENCE");
-export const EMPTY_REFERENCE = createRequestActionType("EMPTY_REFERENCE");
-export const EDIT_REFERENCE = createRequestActionType("EDIT_REFERENCE");
-export const REMOVE_REFERENCE = createRequestActionType("REMOVE_REFERENCE");
-export const IMPORT_REFERENCE = createRequestActionType("IMPORT_REFERENCE");
-export const CLONE_REFERENCE = createRequestActionType("CLONE_REFERENCE");
-export const REMOTE_REFERENCE = createRequestActionType("REMOTE_REFERENCE");
-export const ADD_REFERENCE_USER = createRequestActionType("ADD_REFERENCE_USER");
-export const EDIT_REFERENCE_USER = createRequestActionType("EDIT_REFERENCE_USER");
-export const REMOVE_REFERENCE_USER = createRequestActionType("REMOVE_REFERENCE_USER");
-export const ADD_REFERENCE_GROUP = createRequestActionType("ADD_REFERENCE_GROUP");
-export const EDIT_REFERENCE_GROUP = createRequestActionType("EDIT_REFERENCE_GROUP");
-export const REMOVE_REFERENCE_GROUP = createRequestActionType("REMOVE_REFERENCE_GROUP");
-export const CHECK_REMOTE_UPDATES = createRequestActionType("CHECK_REMOTE_UPDATES");
-export const UPDATE_REMOTE_REFERENCE = createRequestActionType("UPDATE_REMOTE_REFERENCE");
 
 // Samples
-export const WS_INSERT_SAMPLE = "WS_INSERT_SAMPLE";
-export const WS_UPDATE_SAMPLE = "WS_UPDATE_SAMPLE";
-export const WS_REMOVE_SAMPLE = "WS_REMOVE_SAMPLE";
-export const FIND_SAMPLES = createRequestActionType("FIND_SAMPLES");
 export const GET_SAMPLE = createRequestActionType("GET_SAMPLE");
 export const CREATE_SAMPLE = createRequestActionType("CREATE_SAMPLE");
 export const UPDATE_SAMPLE = createRequestActionType("UPDATE_SAMPLE");
-export const UPDATE_SAMPLE_RIGHTS = createRequestActionType("UPDATE_SAMPLE_RIGHTS");
-export const REMOVE_SAMPLE = createRequestActionType("REMOVE_SAMPLE");
-export const SELECT_SAMPLE = "SELECT_SAMPLE";
-export const DESELECT_SAMPLES = "DESELECT_SAMPLES";
-export const CLEAR_SAMPLE_SELECTION = "CLEAR_SAMPLE_SELECTION";
-export const SHOW_REMOVE_SAMPLE = "SHOW_REMOVE_SAMPLE";
-export const HIDE_SAMPLE_MODAL = "HIDE_SAMPLE_MODAL";
 
 // Subtraction
-export const WS_INSERT_SUBTRACTION = "WS_INSERT_SUBTRACTION";
-export const WS_UPDATE_SUBTRACTION = "WS_UPDATE_SUBTRACTION";
-export const WS_REMOVE_SUBTRACTION = "WS_REMOVE_SUBTRACTION";
-export const FIND_SUBTRACTIONS = createRequestActionType("FIND_SUBTRACTIONS");
-export const SHORTLIST_SUBTRACTIONS = createRequestActionType("LIST_SUBTRACTION_IDS");
 export const GET_SUBTRACTION = createRequestActionType("GET_SUBTRACTION");
 export const CREATE_SUBTRACTION = createRequestActionType("CREATE_SUBTRACTION");
-export const EDIT_SUBTRACTION = createRequestActionType("UPDATE_SUBTRACTION");
-export const REMOVE_SUBTRACTION = createRequestActionType("REMOVE_SUBTRACTION");
 
 // Users
-export const WS_INSERT_USER = "WS_INSERT_USER";
-export const WS_UPDATE_USER = "WS_UPDATE_USER";
-export const WS_REMOVE_USER = "WS_REMOVE_USER";
 export const FIND_USERS = createRequestActionType("FIND_USERS");
 export const GET_USER = createRequestActionType("GET_USER");
 export const CREATE_USER = createRequestActionType("CREATE_USER");
 export const CREATE_FIRST_USER = createRequestActionType("CREATE_FIRST_USER");
 export const EDIT_USER = createRequestActionType("EDIT_USER");
-export const REMOVE_USER = createRequestActionType("REMOVE_USER");
-
-//Label
-export const UPDATE_LABEL = createRequestActionType("UPDATE_LABEL");
-export const LIST_LABELS = createRequestActionType("LIST_LABELS");
-export const CREATE_LABEL = createRequestActionType("CREATE_LABEL");
-export const REMOVE_LABEL = createRequestActionType("REMOVE_LABEL");
-
-// Status
-export const WS_UPDATE_STATUS = "WS_UPDATE_STATUS";

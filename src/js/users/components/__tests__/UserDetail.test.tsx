@@ -1,6 +1,5 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createBrowserHistory } from "history";
 import { times } from "lodash-es";
 import nock from "nock";
 import React from "react";
@@ -8,12 +7,11 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeGroupMinimal, mockApiListGroups } from "../../../../tests/fake/groups";
 import { createFakeUser, mockApiEditUser, mockApiGetUser } from "../../../../tests/fake/user";
-import { renderWithRouter } from "../../../../tests/setupTests";
+import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../administration/types";
 import UserDetail from "../UserDetail";
 
 describe("<UserDetail />", () => {
-    const history = createBrowserHistory();
     const groups = times(5, index => createFakeGroupMinimal({ name: `group${index}` }));
     const userDetail = createFakeUser({ groups });
     const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
@@ -42,7 +40,7 @@ describe("<UserDetail />", () => {
 
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -73,7 +71,7 @@ describe("<UserDetail />", () => {
         });
 
         it("should render loading when the user details hasn't loaded", () => {
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
             expect(screen.queryByText("Groups")).not.toBeInTheDocument();
@@ -85,7 +83,7 @@ describe("<UserDetail />", () => {
             mockAPIGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -102,7 +100,7 @@ describe("<UserDetail />", () => {
             mockAPIGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("You do not have permission to manage this user.")).toBeInTheDocument();
 
@@ -121,7 +119,7 @@ describe("<UserDetail />", () => {
             mockAPIGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Groups")).toBeInTheDocument();
             expect(screen.getByLabelText("group1")).toBeInTheDocument();
@@ -133,7 +131,7 @@ describe("<UserDetail />", () => {
             mockAPIGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -154,7 +152,7 @@ describe("<UserDetail />", () => {
 
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Groups")).toBeInTheDocument();
             expect(screen.getByText("No groups found")).toBeInTheDocument();
@@ -172,7 +170,7 @@ describe("<UserDetail />", () => {
             mockApiListGroups(groups);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -194,7 +192,7 @@ describe("<UserDetail />", () => {
 
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
             expect(screen.getByText("Last changed")).toBeInTheDocument();
@@ -211,7 +209,7 @@ describe("<UserDetail />", () => {
             mockApiEditUser(props.match.params.userId, 200, { password: "newPassword" }, userDetail);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -230,7 +228,7 @@ describe("<UserDetail />", () => {
             });
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
@@ -265,7 +263,7 @@ describe("<UserDetail />", () => {
 
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
-            renderWithRouter(<UserDetail {...props} />, {}, history);
+            renderWithMemoryRouter(<UserDetail {...props} />);
 
             expect(await screen.findByText("Permissions")).toBeInTheDocument();
             expect(screen.getByText("Change group membership to modify permissions")).toBeInTheDocument();

@@ -1,19 +1,13 @@
-import { getLocation, push } from "connected-react-router";
 import { get } from "lodash-es";
-import { all, put, select, takeLatest } from "redux-saga/effects";
+import { all, put, takeLatest } from "redux-saga/effects";
 import { get as getAccountAPI } from "../account/api";
 import { watchAccount } from "../account/sagas";
 import { watchSettings } from "../administration/sagas";
 import { watchFiles } from "../files/sagas";
 import { watchForm } from "../forms/sagas";
 import { callWithAuthentication } from "../utils/sagas";
-import { GET_INITIAL_STATE, PUSH_STATE } from "./actionTypes";
+import { GET_INITIAL_STATE } from "./actionTypes";
 import { root as rootAPI } from "./api";
-
-function* pushState(action) {
-    const routerLocation = yield select(getLocation);
-    yield put(push({ ...routerLocation, state: action.payload.state }));
-}
 
 function* getInitialState() {
     let login = false;
@@ -41,7 +35,6 @@ function* getInitialState() {
 }
 
 export function* watchRouter() {
-    yield takeLatest(PUSH_STATE, pushState);
     yield takeLatest(GET_INITIAL_STATE.REQUESTED, getInitialState);
 }
 
