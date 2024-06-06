@@ -1,20 +1,10 @@
+import { Container } from "@base";
 import React from "react";
-import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import { mapSettingsStateToProps } from "../../administration/mappers";
-import { Container, LoadingPlaceholder } from "../../base";
 import JobDetail from "./JobDetail";
 import JobsList from "./JobList";
 
-interface JobsProps {
-    loading: boolean;
-}
-
-export function Jobs({ loading }: JobsProps) {
-    if (loading) {
-        return <LoadingPlaceholder />;
-    }
-
+export default function Jobs() {
     return (
         <Container>
             <Switch>
@@ -24,5 +14,3 @@ export function Jobs({ loading }: JobsProps) {
         </Container>
     );
 }
-
-export default connect(mapSettingsStateToProps)(Jobs);
