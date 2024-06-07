@@ -1,15 +1,13 @@
 import { screen } from "@testing-library/react";
-import { createBrowserHistory } from "history";
 import numbro from "numbro";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeSample, mockApiGetSampleDetail } from "../../../../../tests/fake/samples";
-import { renderWithRouter } from "../../../../../tests/setupTests";
+import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import SampleDetailGeneral from "../SampleDetailGeneral";
 
 describe("<SampleDetailGeneral />", () => {
     let props;
-    let history;
     let sample;
 
     beforeEach(() => {
@@ -17,12 +15,11 @@ describe("<SampleDetailGeneral />", () => {
         props = {
             match: { params: { sampleId: sample.id } },
         };
-        history = createBrowserHistory();
     });
 
     it("should render properly", async () => {
         const scope = mockApiGetSampleDetail(sample);
-        renderWithRouter(<SampleDetailGeneral {...props} />, {}, history);
+        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
 
         expect(await screen.findByText("Metadata")).toBeInTheDocument();
 
@@ -55,7 +52,7 @@ describe("<SampleDetailGeneral />", () => {
 
     it("should render with [paired=true]", async () => {
         const scope = mockApiGetSampleDetail(sample);
-        renderWithRouter(<SampleDetailGeneral {...props} />, {}, history);
+        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
 
         expect(await screen.findByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("Yes")).toBeInTheDocument();
@@ -67,7 +64,7 @@ describe("<SampleDetailGeneral />", () => {
         sample = createFakeSample({ paired: false });
         props.match.params.sampleId = sample.id;
         const scope = mockApiGetSampleDetail(sample);
-        renderWithRouter(<SampleDetailGeneral {...props} />, {}, history);
+        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
 
         expect(await screen.findByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("No")).toBeInTheDocument();

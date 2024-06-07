@@ -1,21 +1,18 @@
 import { screen } from "@testing-library/react";
-import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReferenceMinimal } from "../../../../../tests/fake/references";
-import { renderWithRouter } from "../../../../../tests/setupTests";
+import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import { ReferenceItem } from "../ReferenceItem";
 
 describe("<ReferenceItem />", () => {
     let props;
-    let history;
 
     beforeEach(() => {
         props = {
             reference: {},
             task: {},
         };
-        history = createBrowserHistory();
     });
 
     it("should render when [organism='virus'] and [progress=32]", () => {
@@ -31,7 +28,7 @@ describe("<ReferenceItem />", () => {
             },
             organism: "virus",
         });
-        renderWithRouter(<ReferenceItem {...props} />, {}, history);
+        renderWithMemoryRouter(<ReferenceItem {...props} />);
 
         expect(screen.getByText(/virus/)).toBeInTheDocument();
         expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "32");
@@ -50,7 +47,7 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        renderWithRouter(<ReferenceItem {...props} />, {}, history);
+        renderWithMemoryRouter(<ReferenceItem {...props} />);
 
         expect(screen.getByText(/unknown/)).toBeInTheDocument();
     });
@@ -68,7 +65,7 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        renderWithRouter(<ReferenceItem {...props} />, {}, history);
+        renderWithMemoryRouter(<ReferenceItem {...props} />);
 
         expect(screen.queryByRole("progressbar")).toBeNull();
     });

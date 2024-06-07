@@ -17,7 +17,6 @@ import ReferenceList from "../ReferenceList";
 describe("<ReferenceList />", () => {
     let history;
     let references;
-    let state;
 
     beforeEach(() => {
         references = createFakeReferenceMinimal();
@@ -31,7 +30,7 @@ describe("<ReferenceList />", () => {
         const account = createFakeAccount({ permissions: permissions });
         mockAPIGetAccount(account);
         const scope = mockApiGetReferences([references]);
-        renderWithRouter(<ReferenceList />, state, history);
+        renderWithRouter(<ReferenceList />, {}, history);
 
         expect(await screen.findByText("References")).toBeInTheDocument();
         expect(screen.getByText(references.name)).toBeInTheDocument();
@@ -47,7 +46,7 @@ describe("<ReferenceList />", () => {
     describe("<ReferenceToolbar />", () => {
         it("should render when toolbar term is changed to foo", async () => {
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -66,7 +65,7 @@ describe("<ReferenceList />", () => {
             const account = createFakeAccount({ permissions: permissions });
             mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             expect(screen.queryByLabelText("plus-square fa-fw")).toBeNull();
@@ -76,7 +75,7 @@ describe("<ReferenceList />", () => {
 
         it("should handle toolbar updates correctly", async () => {
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
 
@@ -103,7 +102,7 @@ describe("<ReferenceList />", () => {
                 `Cloned from ${references.name}`,
                 references,
             );
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             await userEvent.click(await screen.findByRole("link", { name: "clone" }));
@@ -119,7 +118,7 @@ describe("<ReferenceList />", () => {
             mockAPIGetAccount(account);
             const getReferencesScope = mockApiGetReferences([references]);
             const cloneReferenceScope = mockApiCloneReference("newName", `Cloned from ${references.name}`, references);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             await userEvent.click(await screen.findByRole("link", { name: "clone" }));
@@ -136,7 +135,7 @@ describe("<ReferenceList />", () => {
             const account = createFakeAccount({ permissions: permissions });
             mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
+            renderWithRouter(<ReferenceList />, {}, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             await userEvent.click(await screen.findByRole("link", { name: "clone" }));

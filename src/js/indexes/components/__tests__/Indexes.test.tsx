@@ -1,18 +1,16 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
-import { renderWithRouter } from "../../../../tests/setupTests";
+import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import Indexes from "../Indexes";
 
 describe("<Indexes />", () => {
-    let history;
     let props;
     let reference;
 
@@ -27,7 +25,6 @@ describe("<Indexes />", () => {
         props = {
             match: { params: { refId: reference.id } },
         };
-        history = createBrowserHistory();
     });
 
     afterEach(() => nock.cleanAll());
@@ -40,7 +37,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithRouter(<Indexes {...props} />, {}, history);
+        renderWithMemoryRouter(<Indexes {...props} />);
 
         await waitFor(() => findIndexesScope.done());
         expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
@@ -64,7 +61,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithRouter(<Indexes {...props} />, {}, history);
+        renderWithMemoryRouter(<Indexes {...props} />);
 
         await userEvent.click(await screen.findByRole("link", { name: "Rebuild the index" }));
 
