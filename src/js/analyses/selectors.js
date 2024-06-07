@@ -1,20 +1,16 @@
-import { filter, find, get, intersection, keyBy, map, reject, sortBy, toNumber, toString } from "lodash-es";
+import { filter, find, intersection, keyBy, map, reject, sortBy, toNumber, toString } from "lodash-es";
 import { createSelector } from "reselect";
 import { getMaxReadLength } from "../samples/selectors";
 import { createFuse } from "../utils/utils";
 import { fuseSearchKeys } from "./utils";
 
 export const getActiveId = state => state.analyses.activeId;
-
-export const getAnalysisDetailId = state => get(state, "analyses.detail.id", null);
 export const getFilterOTUs = state => state.analyses.filterOTUs;
 export const getFilterSequences = state => state.analyses.filterSequences;
 export const getFilterAODP = state => state.analyses.filterAODP;
 export const getHits = state => state.analyses.detail.results.hits;
-export const getMaxSequenceLength = state => state.analyses.detail.maxSequenceLength;
 export const getReadCount = state => state.analyses.detail.results.readCount;
 export const getResults = state => state.analyses.detail.results;
-export const getSubtractedCount = state => state.analyses.detail.results.subtractedCount;
 export const getWorkflow = state => state.analyses.detail.workflow;
 
 /**
