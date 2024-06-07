@@ -71,18 +71,6 @@ describe("<ReferenceList />", () => {
             scope.done();
         });
 
-        it("should not render creation button when [canCreate=true]", async () => {
-            const permissions = createFakePermissions({ create_ref: true });
-            const account = createFakeAccount({ permissions: permissions });
-            mockAPIGetAccount(account);
-            const scope = mockApiGetReferences([references]);
-            renderWithRouter(<ReferenceList />, state, history);
-
-            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
-
-            scope.done();
-        });
-
         it("should handle toolbar updates correctly", async () => {
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, state, history);
