@@ -12,8 +12,8 @@ const WorkflowFilterLabel = styled.div`
 
 const StyledWorkflowFilterControlButton = styled.button`
     align-items: center;
-    background-color: ${props => props.theme.color[props.active ? "purple" : "purpleLightest"]};
-    color: ${props => props.theme.color[props.active ? "white" : "purpleDark"]};
+    background-color: ${props => props.theme.color[props.$active ? "purple" : "purpleLightest"]};
+    color: ${props => props.theme.color[props.$active ? "white" : "purpleDark"]};
 
     border: 2px solid ${props => props.theme.color.purple};
     border-radius: 20px;
@@ -21,7 +21,7 @@ const StyledWorkflowFilterControlButton = styled.button`
     justify-content: center;
     display: flex;
     height: 30px;
-    transform: scale(${props => (props.active ? 1 : 0.95)});
+    transform: scale(${props => (props.$active ? 1 : 0.95)});
     width: 30px;
 
     i {
@@ -36,11 +36,13 @@ const StyledWorkflowFilterControlButton = styled.button`
     }
 `;
 
-const WorkflowFilterControlButton = ({ active, icon, value, onClick }) => (
-    <StyledWorkflowFilterControlButton aria-pressed={active} active={active} onClick={() => onClick(value)}>
-        <Icon name={icon} />
-    </StyledWorkflowFilterControlButton>
-);
+function WorkflowFilterControlButton({ active, icon, value, onClick }) {
+    return (
+        <StyledWorkflowFilterControlButton aria-pressed={active} $active={active} onClick={() => onClick(value)}>
+            <Icon name={icon} />
+        </StyledWorkflowFilterControlButton>
+    );
+}
 
 const WorkflowFilterControlPath = styled.div`
     border: ${getBorder};
