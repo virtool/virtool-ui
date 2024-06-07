@@ -62,6 +62,9 @@ describe("<ReferenceList />", () => {
         });
 
         it("should not render creation button when [canCreate=false]", async () => {
+            const permissions = createFakePermissions({ create_ref: false });
+            const account = createFakeAccount({ permissions: permissions });
+            mockAPIGetAccount(account);
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, state, history);
 
