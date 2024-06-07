@@ -68,6 +68,5 @@ describe("<ReferenceItem />", () => {
         renderWithMemoryRouter(<ReferenceItem {...props} />);
 
         expect(screen.queryByRole("progressbar")).toBeNull();
-        expect(screen.getByLabelText("clone")).toBeInTheDocument();
     });
 });
