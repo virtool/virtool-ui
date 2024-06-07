@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
@@ -99,6 +99,7 @@ describe("<CreateSubtraction />", () => {
             createAppStore(state),
         );
 
+        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(await screen.findByRole("textbox", { name: "name" })).toHaveValue(name);
         expect(screen.getByRole("textbox", { name: "nickname" })).toHaveValue(nickname);
     });
