@@ -5,8 +5,8 @@ const baseTemplateString = buffer.toString();
 function createTemplateString(options) {
     const b2cEnabled = Boolean(options.b2cUserflow);
 
-    const template = baseTemplateString
-        .replace('"B2C_ENABLED"', b2cEnabled ? `true` : `false`)
+    return baseTemplateString
+        .replace('"B2C_ENABLED"', b2cEnabled ? "true" : "false")
         .replace("SENTRY_DSN", options.sentryDsn)
         .replace("VERSION", "unknown")
         .replace("B2C_API_CLIENT_ID", options.b2cApiClientId)
@@ -14,8 +14,6 @@ function createTemplateString(options) {
         .replace("B2C_SCOPE", options.b2cScope)
         .replace("B2C_TENANT", options.b2cTenant)
         .replace("B2C_USER_FLOW", options.b2cUserflow);
-
-    return template;
 }
 
 function defaultPath(options) {
