@@ -149,8 +149,8 @@ describe("<ReferenceList />", () => {
 
             expect(await screen.findByText("References")).toBeInTheDocument();
             await userEvent.click(await screen.findByRole("link", { name: "clone" }));
-            await userEvent.click(screen.getByRole("button", { name: "Clone" }));
             await userEvent.clear(screen.getByRole("textbox"));
+            await userEvent.click(screen.getByRole("button", { name: "Clone" }));
             expect(screen.getByText("Required Field")).toBeInTheDocument();
 
             scope.done();
