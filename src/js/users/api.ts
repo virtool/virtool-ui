@@ -6,12 +6,14 @@ import { UserResponse } from "./types";
  *
  * @param handle - The handle of the user
  * @param password - The password of the user
+ * @param forceReset - Whether the user should be forced to reset their password on next login
  * @returns A promise resolving to creating the first user
  */
-export function createFirst({ handle, password }) {
+export function createFirst({ handle, password, forceReset }) {
     return Request.put("/users/first").send({
         handle,
         password,
+        force_reset: forceReset,
     });
 }
 

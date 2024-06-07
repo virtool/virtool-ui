@@ -5,7 +5,7 @@ import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
 
-type FormData = {
+type FormValues = {
     username: string;
     password: string;
 };
@@ -16,9 +16,9 @@ type FormData = {
 export default function FirstUser() {
     const mutation = useCreateFirstUser();
 
-    const { handleSubmit, register } = useForm<FormData>();
+    const { handleSubmit, register } = useForm<FormValues>();
 
-    function onSubmit(data: FormData) {
+    function onSubmit(data: FormValues) {
         mutation.mutate({
             handle: data.username,
             password: data.password,

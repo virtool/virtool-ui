@@ -1,6 +1,6 @@
 import { ErrorResponse } from "@/types/types";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
-import { NewUser, User } from "../users/types";
+import { User } from "../users/types";
 import { createFirst, findUsers } from "./api";
 import { UserResponse } from "./types";
 
@@ -41,9 +41,12 @@ export function useInfiniteFindUsers(per_page: number, term: string) {
 }
 
 export function useCreateFirstUser() {
-    return useMutation<User, ErrorResponse, NewUser>(createFirst, {
-        onSuccess: () => {
-            window.location.reload();
+    return useMutation<User, ErrorResponse, { handle: string; password: string; forceReset: boolean }>(
+        ({ handle, password, forceReset }) => createFirst({ handle, password, forceReset }),
+        {
+            onSuccess: () => {
+                window.location.reload();
+            },
         },
-    });
+    );
 }
