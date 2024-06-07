@@ -115,8 +115,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, state, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            expect(await screen.findByRole("link", { name: "clone" })).toBeInTheDocument();
-            await userEvent.click(screen.getByRole("link", { name: "clone" }));
+            await userEvent.click(await screen.findByRole("link", { name: "clone" }));
             await userEvent.click(screen.getByRole("button", { name: "Clone" }));
 
             getReferencesScope.done();
@@ -132,8 +131,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, state, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            expect(await screen.findByRole("link", { name: "clone" })).toBeInTheDocument();
-            await userEvent.click(screen.getByRole("link", { name: "clone" }));
+            await userEvent.click(await screen.findByRole("link", { name: "clone" }));
             await userEvent.clear(screen.getByRole("textbox"));
             await userEvent.type(screen.getByRole("textbox"), "newName");
             await userEvent.click(screen.getByRole("button", { name: "Clone" }));
@@ -150,8 +148,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, state, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            expect(await screen.findByRole("link", { name: "clone" })).toBeInTheDocument();
-            await userEvent.click(screen.getByRole("link", { name: "clone" }));
+            await userEvent.click(await screen.findByRole("link", { name: "clone" }));
             await userEvent.click(screen.getByRole("button", { name: "Clone" }));
             await userEvent.clear(screen.getByRole("textbox"));
             expect(screen.getByText("Required Field")).toBeInTheDocument();
