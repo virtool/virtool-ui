@@ -5,6 +5,7 @@ import { createBrowserHistory } from "history";
 import "normalize.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
+import "tailwindcss/tailwind.css";
 import App from "./app/App";
 import "./nonce";
 
