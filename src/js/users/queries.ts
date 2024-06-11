@@ -42,7 +42,7 @@ export function useInfiniteFindUsers(per_page: number, term: string) {
 
 export function useCreateFirstUser() {
     return useMutation<User, ErrorResponse, { handle: string; password: string; forceReset: boolean }>(
-        ({ handle, password, forceReset }) => createFirst({ handle, password, forceReset }),
+        ({ handle, password, forceReset }) => createFirst(handle, password, forceReset),
         {
             onSuccess: () => {
                 window.location.reload();
