@@ -12,8 +12,8 @@ const WorkflowFilterLabel = styled.div`
 
 const StyledWorkflowFilterControlButton = styled.button`
     align-items: center;
-    background-color: ${props => props.theme.color[props.$active ? "purple" : "purpleLightest"]};
-    color: ${props => props.theme.color[props.$active ? "white" : "purpleDark"]};
+    background-color: ${props => props.theme.color[props["aria-pressed"] === "true" ? "purple" : "purpleLightest"]};
+    color: ${props => props.theme.color[props["aria-pressed"] === "true" ? "white" : "purpleDark"]};
 
     border: 2px solid ${props => props.theme.color.purple};
     border-radius: 20px;
@@ -21,7 +21,7 @@ const StyledWorkflowFilterControlButton = styled.button`
     justify-content: center;
     display: flex;
     height: 30px;
-    transform: scale(${props => (props.$active ? 1 : 0.95)});
+    transform: scale(${props => (props["aria-pressed"] === "true" ? 1 : 0.95)});
     width: 30px;
 
     i {
@@ -36,9 +36,20 @@ const StyledWorkflowFilterControlButton = styled.button`
     }
 `;
 
-function WorkflowFilterControlButton({ active, icon, value, onClick }) {
+type WorkflowFilterControlButtonProps = {
+    /* Indicates if the button is active */
+    active: boolean;
+    /* Icon to display on the button */
+    icon: string;
+    /* The value to pass to the onClick handler */
+    value: string;
+    /* Handles click event when icon is clicked */
+    onClick: (value: string) => void;
+};
+
+function WorkflowFilterControlButton({ active, icon, value, onClick }: WorkflowFilterControlButtonProps) {
     return (
-        <StyledWorkflowFilterControlButton aria-pressed={active} $active={active} onClick={() => onClick(value)}>
+        <StyledWorkflowFilterControlButton aria-pressed={active} onClick={() => onClick(value)}>
             <Icon name={icon} />
         </StyledWorkflowFilterControlButton>
     );
@@ -62,7 +73,16 @@ const StyledWorkflowFilterControl = styled(Box)`
     padding: 0;
 `;
 
-function WorkflowFilterControl({ workflow, states, onChange }) {
+type WorkflowFilterControlProps = {
+    /* The workflow to filter */
+    workflow: string;
+    /* Active states of filter buttons */
+    states: string[];
+    /* Handles click event when filter button is clicked */
+    onChange: (workflow: string, state: string) => void;
+};
+
+function WorkflowFilterControl({ workflow, states, onChange }: WorkflowFilterControlProps) {
     function handleClick(state) {
         onChange(workflow, state);
     }
@@ -110,7 +130,14 @@ function getWorkflowsFromURL(workflows) {
     );
 }
 
-export default function WorkflowFilter({ selected, onClick }) {
+type WorkflowFilterProps = {
+    /* List of selected workflows */
+    selected: string[];
+    /* Handles click event when filter control is clicked */
+    onClick: (selected: string[]) => void;
+};
+
+export default function WorkflowFilter({ selected, onClick }: WorkflowFilterProps) {
     function handleClick(workflow, state) {
         onClick(xor(selected, [`${workflow}:${state}`]));
     }
