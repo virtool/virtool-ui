@@ -1,7 +1,7 @@
+import { Attribution, SelectBoxGroupSection } from "@base";
+import { UserNested } from "@users/types";
 import React from "react";
 import styled from "styled-components";
-import { Attribution, SelectBoxGroupSection } from "../../base";
-import { UserNested } from "../../users/types";
 
 type StyledSubtractionFileItemProps = {
     error: string;
