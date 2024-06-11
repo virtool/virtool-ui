@@ -57,7 +57,7 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     const history = useHistory();
     const mutation = useCloneReference();
 
-    const reference = find(references, { id: (history.location.state && history.location.state["id"]) || "" });
+    const reference = find(references, { id: (history.location.state?.["id"]) || "" });
 
     function onHide() {
         history.push({ state: { cloneReference: false } });
@@ -77,7 +77,7 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     return (
         <Dialog
             onOpenChange={onHide}
-            open={(history.location.state && history.location.state["cloneReference"]) || false}
+            open={(history.location.state?.["cloneReference"]) || false}
         >
             <DialogPortal>
                 <DialogOverlay />
