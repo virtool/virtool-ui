@@ -1,15 +1,13 @@
-import { DefaultTheme } from "styled-components";
-import { getColor } from "../app/theme";
+import { getColor, theme } from "@app/theme";
 
 type getBadgeOrLabelColorProps = {
     color?: string;
-    theme: DefaultTheme;
 };
 
 export function getBadgeOrLabelColor(props: getBadgeOrLabelColorProps): string {
     if (props.color) {
-        return getColor(props);
+        return getColor({ color: props.color, theme });
     }
 
-    return props.theme.color.greyDark;
+    return theme.color.greyDark;
 }

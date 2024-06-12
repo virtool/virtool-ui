@@ -1,6 +1,6 @@
 import AccountGroups from "@account/components/AccountGroups";
 import { useFetchAccount } from "@account/queries";
-import { getFontSize, getFontWeight } from "@app/theme";
+import { getFontSize, getFontWeight, theme } from "@app/theme";
 import { Icon, InitialIcon, Label, LoadingPlaceholder } from "@base";
 import React from "react";
 import styled from "styled-components";
@@ -18,22 +18,14 @@ const AccountProfileHeader = styled.div`
         h3 {
             align-items: center;
             display: flex;
+            justify-content: space-between;
             flex: 2 0 auto;
             font-size: ${getFontSize("xl")};
             font-weight: ${getFontWeight("thick")};
             line-height: 1.2;
             margin: 0;
-
-            ${Label} {
-                font-size: ${getFontSize("md")};
-                margin-left: auto;
-            }
         }
     }
-`;
-
-const AdministratorTag = styled(Label)`
-    text-transform: capitalize;
 `;
 
 /**
@@ -56,9 +48,13 @@ export default function AccountProfile() {
                     <h3>
                         {handle}
                         {administrator_role && (
-                            <AdministratorTag key="administrator" color="purple">
+                            <Label
+                                className={`capitalize text-[${theme.fontSize.md}] ml-auto`}
+                                key="administrator"
+                                color="purple"
+                            >
                                 <Icon name="user-shield" /> {administrator_role} Administrator
-                            </AdministratorTag>
+                            </Label>
                         )}
                     </h3>
                 </div>

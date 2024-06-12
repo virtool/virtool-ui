@@ -1,3 +1,4 @@
+import { theme } from "@app/theme";
 import React from "react";
 import styled from "styled-components";
 import { Label } from "./Label";
@@ -8,10 +9,6 @@ const StyledNotFound = styled.div`
     flex-direction: column;
     height: 400px;
     justify-content: center;
-
-    ${Label} {
-        font-size: ${props => props.theme.fontSize.xxl};
-    }
 
     strong {
         font-size: ${props => props.theme.fontSize.lg};
@@ -27,7 +24,9 @@ type NotFoundProps = {
 export function NotFound({ status = 404, message = "Not found" }: NotFoundProps) {
     return (
         <StyledNotFound>
-            <Label color="red">{status}</Label>
+            <Label className={`text-[${theme.fontSize.xxl}]`} color="red">
+                {status}
+            </Label>
             <strong>{message}</strong>
         </StyledNotFound>
     );

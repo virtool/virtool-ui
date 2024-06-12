@@ -24,6 +24,7 @@ const HMMItemFamilies = styled.div`
     display: flex;
     font-size: ${getFontSize("md")};
     margin-left: auto;
+    gap: 5px;
 `;
 
 type HMMItemProps = {
@@ -37,11 +38,7 @@ type HMMItemProps = {
 export default function HMMItem({ hmm }: HMMItemProps) {
     const filteredFamilies = reject(keys(hmm.families), family => family === "None");
 
-    const labelComponents = map(filteredFamilies.slice(0, 3), (family, i) => (
-        <Label key={i} spaced>
-            {family}
-        </Label>
-    ));
+    const labelComponents = map(filteredFamilies.slice(0, 3), (family, i) => <Label key={i}>{family}</Label>);
 
     return (
         <StyledHMMItem to={`/hmm/${hmm.id}`}>
