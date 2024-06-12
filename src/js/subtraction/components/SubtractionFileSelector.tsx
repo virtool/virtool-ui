@@ -1,14 +1,14 @@
+import { getBorder } from "@app/theme";
+import { InputError, NoneFoundBox } from "@base";
+import { ScrollList } from "@base/ScrollList";
+import { useValidateFiles } from "@files/hooks";
+import { File, FileResponse, FileType } from "@files/types";
 import { InfiniteData } from "@tanstack/react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { flatMap } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getBorder } from "../../app/theme";
-import { InputError, NoneFoundBox } from "../../base";
-import { ScrollList } from "../../base/ScrollList";
-import { useValidateFiles } from "../../files/hooks";
-import { File, FileResponse, FileType } from "../../files/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`

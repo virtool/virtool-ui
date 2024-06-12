@@ -1,4 +1,4 @@
-import { resetClient } from "../../utils/utils";
+import { resetClient } from "@utils/utils";
 import { reactQueryHandler } from "./reactQueryHandler";
 
 export const INITIALIZING = "initializing";
@@ -15,7 +15,6 @@ export default function WSConnection(store, queryClient) {
     // has a property "operation" that tells the dispatcher what to do. Illegal operation names will throw an error.
     this.handle = message => {
         this.reactQueryHandler(message);
-        this.reduxHandler(message);
     };
 
     this.interval = 500;

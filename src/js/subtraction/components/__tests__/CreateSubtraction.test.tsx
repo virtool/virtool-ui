@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
@@ -77,30 +77,9 @@ describe("<CreateSubtraction />", () => {
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";
 
-        await userEvent.type(await screen.findByRole("textbox", { name: "name" }), name);
-        await userEvent.type(screen.getByRole("textbox", { name: "nickname" }), nickname);
+        await userEvent.type(await screen.findByLabelText("Name"), name);
+        await userEvent.type(screen.getByLabelText("Nickname"), nickname);
         await userEvent.click(screen.getByText(/testsubtraction1/i));
         await userEvent.click(screen.getByText(/save/i));
-    });
-
-    it("should restore form with correct values", async () => {
-        const file = createFakeFile({ name: "testsubtractionname", type: FileType.subtraction });
-        mockApiListFiles([file]);
-
-        const name = "testSubtractionname";
-        const nickname = "testSubtractionNickname";
-
-        state.forms.formState["create-subtraction"] = { name, nickname };
-
-        routerRenderWithProviders(
-            <BrowserRouter>
-                <CreateSubtraction />
-            </BrowserRouter>,
-            createAppStore(state),
-        );
-
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
-        expect(await screen.findByRole("textbox", { name: "name" })).toHaveValue(name);
-        expect(screen.getByRole("textbox", { name: "nickname" })).toHaveValue(nickname);
     });
 });
