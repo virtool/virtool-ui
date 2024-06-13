@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
+import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { FileType } from "../../../files/types";
 import CreateSubtraction from "../CreateSubtraction";
@@ -66,6 +67,29 @@ describe("<CreateSubtraction />", () => {
 
     it("should submit correct values when all fields selected", async () => {
         const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
+        const name = "testSubtractionname";
+        const nickname = "testSubtractionNickname";
+
+        mockApiListFiles([file]);
+        const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
+
+        routerRenderWithProviders(
+            <BrowserRouter>
+                <CreateSubtraction />
+            </BrowserRouter>,
+            createAppStore(state),
+        );
+
+        await userEvent.type(await screen.findByLabelText("Name"), name);
+        await userEvent.type(screen.getByLabelText("Nickname"), nickname);
+        await userEvent.click(screen.getByText(/testsubtraction1/i));
+        await userEvent.click(screen.getByText(/save/i));
+
+        await waitFor(() => createSubtractionScope.done());
+    });
+
+    it("should restore form values of page refresh", async () => {
+        const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
         mockApiListFiles([file]);
         routerRenderWithProviders(
             <BrowserRouter>
@@ -81,5 +105,7 @@ describe("<CreateSubtraction />", () => {
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
         await userEvent.click(screen.getByText(/testsubtraction1/i));
         await userEvent.click(screen.getByText(/save/i));
+
+        await waitFor(() => createSubtractionScope.done());
     });
 });

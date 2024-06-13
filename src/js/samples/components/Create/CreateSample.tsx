@@ -225,7 +225,11 @@ export default function CreateSample() {
                 }) => (
                     <CreateSampleForm>
                         <AlertContainer>
-                            <PersistForm formName="create-sample" castValues={castValues(subtractions, allLabels)} />
+                            <PersistForm
+                                castValues={castValues(subtractions, allLabels)}
+                                formName="create-sample"
+                                resourceName="sample"
+                            />
                         </AlertContainer>
                         <CreateSampleName>
                             <InputLabel>Name</InputLabel>
