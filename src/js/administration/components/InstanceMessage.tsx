@@ -1,10 +1,10 @@
-import { Field, Form, Formik } from "formik";
+import { getFontSize } from "@app/theme";
+import { Box, BoxTitle, InputGroup, InputLabel, InputSimple, SaveButton } from "@base";
+import { useSetMessage } from "@message/queries";
+import { Message } from "@message/types";
 import React from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { getFontSize } from "../../app/theme";
-import { Box, BoxTitle, Input, InputGroup, InputLabel, SaveButton } from "../../base";
-import { useSetMessage } from "../../message/queries";
-import { Message } from "../../message/types";
 
 const InstanceMessageTitle = styled(BoxTitle)`
     font-size: ${getFontSize("lg")};
@@ -24,26 +24,22 @@ type InstanceMessageProps = {
  * Displays the instance message and provides functionality to update it
  */
 export default function InstanceMessage({ message }: InstanceMessageProps) {
+    const { register, handleSubmit } = useForm<{ message: string }>({
+        defaultValues: { message: message?.message || "" },
+    });
     const mutation = useSetMessage();
-
-    const initialValues = { message: message?.message || "" };
 
     return (
         <Box>
             <InstanceMessageTitle>Instance Message</InstanceMessageTitle>
             <InstanceMessageSubtitle>Display a message to all users above the navigation bar.</InstanceMessageSubtitle>
-
-            <Formik initialValues={initialValues} onSubmit={values => mutation.mutate({ message: values.message })}>
-                {() => (
-                    <Form>
-                        <InputGroup>
-                            <InputLabel htmlFor="instanceMessage">Message</InputLabel>
-                            <Field id="instanceMessage" type="text" name="message" as={Input} />
-                        </InputGroup>
-                        <SaveButton />
-                    </Form>
-                )}
-            </Formik>
+            <form onSubmit={handleSubmit(({ message }) => mutation.mutate({ message }))}>
+                <InputGroup>
+                    <InputLabel htmlFor="message">Message</InputLabel>
+                    <InputSimple id="message" {...register("message")} />
+                </InputGroup>
+                <SaveButton />
+            </form>
         </Box>
     );
 }
