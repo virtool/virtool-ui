@@ -1,6 +1,6 @@
 import AccountGroups from "@account/components/AccountGroups";
 import { useFetchAccount } from "@account/queries";
-import { getFontSize, getFontWeight, theme } from "@app/theme";
+import { getFontSize, getFontWeight } from "@app/theme";
 import { Icon, InitialIcon, Label, LoadingPlaceholder } from "@base";
 import React from "react";
 import styled from "styled-components";
@@ -48,11 +48,7 @@ export default function AccountProfile() {
                     <h3>
                         {handle}
                         {administrator_role && (
-                            <Label
-                                className={`capitalize text-[${theme.fontSize.md}] ml-auto`}
-                                key="administrator"
-                                color="purple"
-                            >
+                            <Label className="capitalize text-base ml-auto" key="administrator" color="purple">
                                 <Icon name="user-shield" /> {administrator_role} Administrator
                             </Label>
                         )}

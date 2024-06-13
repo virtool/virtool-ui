@@ -1,4 +1,3 @@
-import { theme } from "@app/theme";
 import React from "react";
 import styled from "styled-components";
 import { Label } from "./Label";
@@ -24,7 +23,7 @@ type NotFoundProps = {
 export function NotFound({ status = 404, message = "Not found" }: NotFoundProps) {
     return (
         <StyledNotFound>
-            <Label className={`text-[${theme.fontSize.xxl}]`} color="red">
+            <Label className="text-2xl" color="red">
                 {status}
             </Label>
             <strong>{message}</strong>
