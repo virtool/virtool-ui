@@ -156,7 +156,7 @@ export function mockApiEditSubtraction(subtraction: Subtraction, name: string, n
  */
 export function mockApiCreateSubtraction(name: string, nickname: string, uploadId: string) {
     return nock("http://localhost")
-        .post(`/api/subtractions`, { name, nickname, upload_id: uploadId })
+        .post("/api/subtractions", { name, nickname, upload_id: uploadId })
         .reply(200, { name, nickname, id: "subtraction_id" });
 }
 
