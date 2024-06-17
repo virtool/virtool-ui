@@ -10,7 +10,7 @@ import {
 } from "@base";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
-import { RestoredAlert } from "@forms/components/Alert";
+import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { SubtractionFileSelector } from "@subtraction/components/SubtractionFileSelector";
 import React from "react";

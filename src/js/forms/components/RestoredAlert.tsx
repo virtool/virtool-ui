@@ -22,8 +22,11 @@ const StyledRestoredAlert = styled(Alert)`
 `;
 
 export type RestoredAlertProps = {
+    /* Whether the form has been restored from cached values */
     hasRestored: boolean;
+    /* the display name of the resource */
     name: string;
+    /* undo the restoration and restore the form to its initial state */
     resetForm: () => void;
 };
 

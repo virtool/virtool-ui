@@ -6,7 +6,7 @@ import { useDidUpdateEffect } from "@utils/hooks";
 import { isEqual } from "lodash-es";
 import { setPersistentFormState } from "../actions";
 import { getSingleFormValues } from "../selectors";
-import { RestoredAlert } from "./Alert";
+import { RestoredAlert } from "./RestoredAlert";
 
 export const PersistForm = ({ castValues, formName, formValues, onSetPersistentFormState, resourceName }) => {
     const { setValues, values, initialValues, resetForm } = useFormikContext();
