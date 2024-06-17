@@ -147,11 +147,11 @@ export function mockApiEditSubtraction(subtraction: Subtraction, name: string, n
 }
 
 /**
- * Sets up a mocked API route for updating the subtraction details
+ * Sets up a mocked API route for creating a new subtraction
  *
- * @param subtraction - The subtraction details
  * @param name - The updated name
  * @param nickname - The updated nickname
+ * @param uploadId - the unique identifier of the file to be used for the subtraction
  * @returns A nock scope for the mocked API call
  */
 export function mockApiCreateSubtraction(name: string, nickname: string, uploadId: string) {
