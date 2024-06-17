@@ -59,6 +59,7 @@ export default function CreateSubtraction() {
             { name, nickname, uploadId: uploadId[0] },
             {
                 onSuccess: () => {
+                    reset();
                     history.push("/subtractions");
                 },
             },
