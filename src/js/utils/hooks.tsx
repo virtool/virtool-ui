@@ -1,5 +1,4 @@
 import { LocationType } from "@/types/types";
-import { merge } from "lodash";
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
@@ -202,7 +201,7 @@ export function useLocationState(): [
     const history = useHistory();
 
     function setLocationState(state: { [key: string]: boolean | string }) {
-        history.push({ ...history.location, state: merge(location.state, state) });
+        history.push({ ...history.location, state });
     }
 
     return [location.state, setLocationState];

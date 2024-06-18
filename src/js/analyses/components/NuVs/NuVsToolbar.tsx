@@ -1,5 +1,6 @@
 import { Button, InputSearch, Toolbar } from "@base";
 import { useLocationState, useUrlSearchParams } from "@utils/hooks";
+import { merge } from "lodash";
 import React from "react";
 import styled from "styled-components";
 import { AnalysisViewerSort } from "../Viewer/Sort";
@@ -38,7 +39,11 @@ export default function NuVsToolbar() {
             >
                 Filter ORFs
             </Button>
-            <Button active={!locationState?.export} onClick={() => setLocationState({ export: true })} tip="Export">
+            <Button
+                active={!locationState?.export}
+                onClick={() => setLocationState(merge(locationState, { export: true }))}
+                tip="Export"
+            >
                 Export
             </Button>
         </StyledNuVsToolbar>
