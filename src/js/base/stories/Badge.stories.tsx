@@ -1,6 +1,7 @@
+import { Badge } from "@base";
+import { Meta, type StoryObj } from "@storybook/react";
 import React from "react";
 import styled from "styled-components";
-import { Badge } from "../Badge";
 
 const StyledBadgeHeader = styled.div`
     align-items: center;
@@ -10,7 +11,7 @@ const StyledBadgeHeader = styled.div`
     }
 `;
 
-export default {
+const meta: Meta<typeof Badge> = {
     title: "base/Badge",
     component: Badge,
     parameters: {
@@ -20,24 +21,31 @@ export default {
             },
         },
     },
+    tags: ["autodocs"],
     argTypes: {
         color: {
             options: ["greyDark", "blue", "orange", "purple", "red"],
             control: { type: "radio" },
-            defaultValue: "greyDark",
         },
         children: {
             type: "number",
-            defaultValue: 10,
         },
     },
 };
 
-const Template = args => (
-    <StyledBadgeHeader>
-        <strong>Files Uploaded</strong>
-        <Badge {...args} />
-    </StyledBadgeHeader>
-);
+export default meta;
 
-export const sampleBadge = Template.bind({});
+type Story = StoryObj<typeof meta>;
+
+export const SampleBadge: Story = {
+    render: args => (
+        <StyledBadgeHeader>
+            <strong>Files Uploaded</strong>
+            <Badge {...args} />
+        </StyledBadgeHeader>
+    ),
+    args: {
+        children: 10,
+        color: "greyDark",
+    },
+};

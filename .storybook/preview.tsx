@@ -17,7 +17,7 @@ export const decorators = [
 
 export const parameters = {
     actions: {
-        argTypesRegex: "^on[A-Z].*",
+        // args: { onClick: fn() },
     },
     controls: {
         matchers: {
