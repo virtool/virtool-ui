@@ -10,9 +10,11 @@ import {
 } from "@base";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
+import { RestoredAlert } from "@forms/components/RestoredAlert";
+import { usePersistentForm } from "@forms/hooks";
 import { SubtractionFileSelector } from "@subtraction/components/SubtractionFileSelector";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { useCreateSubtraction } from "../queries";
 
@@ -28,11 +30,17 @@ type FormValues = {
 export default function CreateSubtraction() {
     const history = useHistory();
     const {
+        hasRestored,
         formState: { errors },
         control,
         register,
         handleSubmit,
-    } = useForm<FormValues>({ defaultValues: { name: "", nickname: "", uploadId: [] } });
+        reset,
+    } = usePersistentForm<FormValues>({
+        formName: "createSubtraction",
+        defaultValues: { name: "", nickname: "", uploadId: [] },
+    });
+
     const {
         data: files,
         isLoading,
@@ -51,6 +59,7 @@ export default function CreateSubtraction() {
             { name, nickname, uploadId: uploadId[0] },
             {
                 onSuccess: () => {
+                    reset();
                     history.push("/subtractions");
                 },
             },
@@ -63,6 +72,7 @@ export default function CreateSubtraction() {
                 <ViewHeaderTitle>Create Subtraction</ViewHeaderTitle>
             </ViewHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
+                <RestoredAlert hasRestored={hasRestored} name="subtraction" resetForm={reset} />
                 <InputGroup>
                     <InputLabel htmlFor="name">Name</InputLabel>
                     <InputSimple id="name" {...register("name", { required: "A name is required" })} />
