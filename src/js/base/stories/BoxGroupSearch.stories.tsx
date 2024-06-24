@@ -19,7 +19,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-function BoxGroupSearchTemplate(args) {
+function Template(args) {
     const [value, setValue] = useState("");
     return (
         <BoxGroup>
@@ -30,7 +30,7 @@ function BoxGroupSearchTemplate(args) {
 }
 
 export const SampleBoxGroupSearch: Story = {
-    render: BoxGroupSearchTemplate,
+    render: Template,
     args: {
         placeholder: "Filter Samples",
         autoFocus: false,

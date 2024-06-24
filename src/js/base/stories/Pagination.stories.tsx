@@ -32,9 +32,9 @@ type Story = StoryObj<typeof meta>;
 function Template(args) {
     const [_, updateArgs] = useArgs();
     const items = useMemo(() => fakeUserListFactory(args.storedPage, 7), [args.storedPage]);
-    const onLoadNextPage = page => {
+    function onLoadNextPage(page) {
         updateArgs({ currentPage: page, storedPage: page });
-    };
+    }
 
     return (
         <Box>
@@ -52,13 +52,15 @@ export const SamplePagination: Story = {
     render: Template,
 };
 
-function fakeUserListFactory(seed, numItems) {
+function fakeUserListFactory(seed: number, numItems: number) {
     faker.seed(seed);
-    let userList = Array(numItems);
+    const userList = Array(numItems);
     return map(userList, () => fakeUserFactory());
 }
 
-const fakeUserFactory = () => ({
-    id: faker.random.alphaNumeric(6),
-    handle: `${faker.name.firstName()}${faker.name.lastName()}`,
-});
+function fakeUserFactory() {
+    return {
+        id: faker.random.alphaNumeric(6),
+        handle: `${faker.name.firstName()}${faker.name.lastName()}`,
+    };
+}
