@@ -1,3 +1,4 @@
+import { JobState } from "@jobs/types";
 import type { Meta } from "@storybook/react";
 import React from "react";
 import { JobStep } from "../components/JobStep";
@@ -10,43 +11,58 @@ const meta: Meta<typeof JobStep> = {
 
 export default meta;
 
+const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
+
 export function Running() {
     const steps = [
-        { state: "waiting", step_description: null, step_name: null, timestamp: Date.now(), progress: 0 },
-        { state: "preparing", step_description: null, step_name: null, timestamp: Date.now(), progress: 0 },
         {
-            state: "running",
+            state: JobState.waiting,
+            step_description: null,
+            step_name: null,
+            timestamp: today.toDateString(),
+            progress: 0,
+        },
+        {
+            state: JobState.preparing,
+            step_description: null,
+            step_name: null,
+            timestamp: today.toDateString(),
+            progress: 0,
+        },
+        {
+            state: JobState.running,
             step_description: "Doing something complex with numbers.",
             step_name: "Reticulate splines",
-            timestamp: Date.now(),
+            timestamp: today.toDateString(),
             progress: 50,
         },
         {
-            state: "timeout",
+            state: JobState.timeout,
             step_description: null,
             step_name: null,
-            timestamp: Date.now(),
+            timestamp: today.toDateString(),
             progress: 20,
         },
         {
-            state: "cancelled",
+            state: JobState.cancelled,
             step_description: null,
             step_name: null,
-            timestamp: Date.now(),
+            timestamp: today.toDateString(),
             progress: 40,
         },
         {
-            state: "error",
+            state: JobState.error,
             step_description: null,
             step_name: null,
-            timestamp: Date.now(),
+            timestamp: today.toDateString(),
             progress: 80,
         },
         {
-            state: "terminated",
+            state: JobState.terminated,
             step_description: null,
             step_name: null,
-            timestamp: Date.now(),
+            timestamp: today.toDateString(),
             progress: 60,
         },
     ];

@@ -29,8 +29,5 @@ export const TestNoneFoundSection: Story = {
 };
 
 export const NoneFoundSectionWithChild: Story = {
-    args: {
-        displayLink: true,
-    },
-    render: Template,
+    render: () => <Template displayLink={true} />,
 };

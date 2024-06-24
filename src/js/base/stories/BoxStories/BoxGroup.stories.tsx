@@ -1,6 +1,6 @@
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Input } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const StyledButton = styled(Button)`
@@ -23,13 +23,19 @@ const meta: Meta<typeof BoxGroup> = {
 };
 
 function Template(args) {
+    const [term, setTerm] = useState("");
     return (
         <BoxGroup>
             <BoxGroupHeader>
                 <h2 {...args} />
             </BoxGroupHeader>
             <BoxGroupSection>
-                <Input type="text" placeholder="Enter a valid email here!" />
+                <Input
+                    type="text"
+                    placeholder="Enter a valid email here!"
+                    value={term}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTerm(e.target.value)}
+                />
                 <StyledButton type="submit" color="blue">
                     Submit
                 </StyledButton>
