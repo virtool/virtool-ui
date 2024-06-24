@@ -1,4 +1,4 @@
-import { Pagination } from "@base";
+import { Box, Pagination } from "@base";
 import { faker } from "@faker-js/faker";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserItem } from "@users/components/UserItem";
 import { map } from "lodash-es";
 import React, { useMemo } from "react";
-import { Box } from "../";
 
 const queryClient = new QueryClient();
 

@@ -9,19 +9,10 @@ const config: StorybookConfig = {
         "@storybook/addon-webpack5-compiler-babel",
         "@chromatic-com/storybook",
     ],
-
-    babel: async options => {
-        return {
-            ...options,
-            presets: ["@babel/preset-react"],
-        };
-    },
-
     framework: {
         name: "@storybook/react-vite",
         options: {},
     },
-
     docs: {},
 };
 
