@@ -1,7 +1,7 @@
+import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
 import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
-import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useFindSubtractions } from "../queries";
 import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
@@ -35,7 +35,7 @@ export default function SubtractionList() {
             <SubtractionToolbar term={term} handleChange={handleChange} />
 
             {!documents.length ? (
-                <NoneFoundBox key="noSample" noun="samples" />
+                <NoneFoundBox key="subtractions" noun="subtractions" />
             ) : (
                 <Pagination
                     items={documents}
@@ -46,7 +46,7 @@ export default function SubtractionList() {
                     <BoxGroup>
                         {map(documents, document => (
                             <SubtractionItem key={document.id} {...document} />
-                        ))}{" "}
+                        ))}
                     </BoxGroup>
                 </Pagination>
             )}

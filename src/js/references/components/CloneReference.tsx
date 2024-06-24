@@ -1,10 +1,3 @@
-import { DialogPortal } from "@radix-ui/react-dialog";
-import { Field, Form, Formik } from "formik";
-import { find } from "lodash-es";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import styled from "styled-components";
-import * as Yup from "yup";
 import {
     Attribution,
     Badge,
@@ -18,7 +11,14 @@ import {
     InputError,
     InputGroup,
     SaveButton,
-} from "../../base";
+} from "@base";
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { Field, Form, Formik } from "formik";
+import { find } from "lodash-es";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+import * as Yup from "yup";
 import { useCloneReference } from "../queries";
 import { ReferenceMinimal } from "../types";
 
@@ -57,7 +57,7 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     const history = useHistory();
     const mutation = useCloneReference();
 
-    const reference = find(references, { id: (history.location.state && history.location.state["id"]) || "" });
+    const reference = find(references, { id: history.location.state?.["id"] || "" });
 
     function onHide() {
         history.push({ state: { cloneReference: false } });
@@ -75,10 +75,7 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     }
 
     return (
-        <Dialog
-            onOpenChange={onHide}
-            open={(history.location.state && history.location.state["cloneReference"]) || false}
-        >
+        <Dialog onOpenChange={onHide} open={history.location.state?.["cloneReference"] || false}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

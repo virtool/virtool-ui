@@ -1,11 +1,12 @@
+import { getFontSize, getFontWeight } from "@app/theme";
+import { BoxGroupSection, Label } from "@base";
 import { keys, map, reject } from "lodash-es";
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { BoxLink, Label } from "../../base";
 import { HMMMinimal } from "../types";
 
-const StyledHMMItem = styled(BoxLink)`
+const StyledHMMItem = styled(BoxGroupSection)`
     display: flex;
     font-size: ${getFontSize("lg")};
 `;
@@ -15,7 +16,7 @@ const HMMItemCluster = styled.strong`
     font-weight: ${getFontWeight("thick")};
 `;
 
-const HMMItemName = styled.span`
+const HMMItemName = styled(Link)`
     flex: 1 0 auto;
 `;
 
@@ -44,9 +45,9 @@ export default function HMMItem({ hmm }: HMMItemProps) {
     ));
 
     return (
-        <StyledHMMItem to={`/hmm/${hmm.id}`}>
+        <StyledHMMItem>
             <HMMItemCluster>{hmm.cluster}</HMMItemCluster>
-            <HMMItemName>{hmm.names[0]}</HMMItemName>
+            <HMMItemName to={`/hmm/${hmm.id}`}>{hmm.names[0]}</HMMItemName>
             <HMMItemFamilies>
                 {labelComponents} {filteredFamilies.length > 3 ? "..." : null}
             </HMMItemFamilies>

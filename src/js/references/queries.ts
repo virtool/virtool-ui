@@ -133,7 +133,7 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(referenceQueryKeys.detail(refId)).then(() => onSuccess && onSuccess());
+                queryClient.invalidateQueries(referenceQueryKeys.detail(refId)).then(() => onSuccess?.());
             },
         },
     );

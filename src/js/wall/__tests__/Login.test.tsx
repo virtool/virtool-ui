@@ -34,8 +34,8 @@ describe("<Login />", () => {
         renderWithProviders(<Login {...props} />, createAppStore(null));
 
         const usernameField = screen.getByLabelText("Username");
-        await userEvent.type(usernameField, `test_Username`);
-        expect(usernameField).toHaveValue(`test_Username`);
+        await userEvent.type(usernameField, "test_Username");
+        expect(usernameField).toHaveValue("test_Username");
 
         const passwordField = screen.getByLabelText("Password");
         await userEvent.type(passwordField, "Password");
