@@ -1,9 +1,12 @@
+import { workflows } from "@jobs/types";
+import type { Meta } from "@storybook/react";
 import React from "react";
 import JobItem from "../components/Item/JobItem";
 
-export default {
+const meta: Meta<typeof JobItem> = {
     title: "jobs/Item",
     component: JobItem,
+    tags: ["autodocs"],
 };
 
 const user = {
@@ -11,67 +14,57 @@ const user = {
     handle: "Foo Bar",
 };
 
-export const Cancellable = () => (
-    <JobItem
-        id="foo"
-        created_at={Date.now()}
-        canCancel
-        progress={23}
-        onArchive={() => {}}
-        user={user}
-        workflow="nuvs"
-        state="running"
-    />
-);
+export default meta;
 
-export const Waiting = () => (
-    <JobItem
-        id="foo"
-        created_at={Date.now()}
-        canCancel={false}
-        progress={0}
-        onArchive={() => {}}
-        user={user}
-        workflow="nuvs"
-        state="waiting"
-    />
-);
+const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
 
-export const Complete = () => (
-    <JobItem
-        id="foo"
-        created_at={Date.now()}
-        canCancel={false}
-        progress={23}
-        onArchive={() => {}}
-        user={user}
-        workflow="nuvs"
-        state="complete"
-    />
-);
+export function Waiting() {
+    return (
+        <JobItem
+            id="foo"
+            created_at={today.toDateString()}
+            progress={0}
+            user={user}
+            workflow={workflows.nuvs}
+            state="waiting"
+        />
+    );
+}
 
-export const Running = () => (
-    <JobItem
-        id="foo"
-        created_at={Date.now()}
-        canCancel={false}
-        progress={23}
-        onArchive={() => {}}
-        user={user}
-        workflow="nuvs"
-        state="running"
-    />
-);
+export function Complete() {
+    return (
+        <JobItem
+            id="foo"
+            created_at={today.toDateString()}
+            progress={23}
+            user={user}
+            workflow={workflows.nuvs}
+            state="complete"
+        />
+    );
+}
+
+export function Running() {
+    return (
+        <JobItem
+            id="foo"
+            created_at={today.toDateString()}
+            progress={23}
+            user={user}
+            workflow={workflows.nuvs}
+            state="running"
+        />
+    );
+}
 
 export const Timeout = () => (
     <JobItem
         id="foo"
-        created_at={Date.now()}
-        canCancel={false}
+        created_at={today.toDateString()}
         progress={23}
-        onArchive={() => {}}
         user={user}
-        workflow="nuvs"
+        workflow={workflows.nuvs}
         state="timeout"
     />
 );

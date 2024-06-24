@@ -17,7 +17,6 @@ const meta: Meta<typeof Alert> = {
         color: {
             options: ["red", "orange", "purple", "blue", "black"],
             control: { type: "radio" },
-            defaultValue: "red",
         },
     },
 };

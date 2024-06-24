@@ -14,15 +14,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const SampleAttribution: Story = {
+export const AttributionWithUsername: Story = {
     args: {
         user: "James Smith",
     },
 };
-// export const attributionWithUsername = Template.bind({});
-//
-// attributionWithUsername.args = {
-//     user: "James Smith",
-// };
-//
-// export const attributionWithNoUsername = Template.bind({});
+
+export const AttributionWithNoUsername: Story = {};

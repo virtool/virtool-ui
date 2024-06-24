@@ -1,3 +1,4 @@
+import { fn } from "@storybook/test";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -17,7 +18,7 @@ export const decorators = [
 
 export const parameters = {
     actions: {
-        // args: { onClick: fn() },
+        args: { onClick: fn() },
     },
     controls: {
         matchers: {

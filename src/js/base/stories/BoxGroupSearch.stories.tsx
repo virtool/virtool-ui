@@ -1,12 +1,10 @@
+import { BoxGroup, BoxGroupHeader, BoxGroupSearch } from "@base";
+import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
-import { BoxGroup } from "../BoxGroup";
-import { BoxGroupHeader } from "../BoxGroupHeader";
-import { BoxGroupSearch } from "../BoxGroupSearch";
 
-export default {
+const meta: Meta<typeof BoxGroupSearch> = {
     title: "base/BoxGroupSearch",
     component: BoxGroupSearch,
-
     parameters: {
         docs: {
             description: {
@@ -14,9 +12,14 @@ export default {
             },
         },
     },
+    tags: ["autodocs"],
 };
 
-const Template = args => {
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+function BoxGroupSearchTemplate(args) {
     const [value, setValue] = useState("");
     return (
         <BoxGroup>
@@ -24,11 +27,12 @@ const Template = args => {
             <BoxGroupSearch {...args} value={value} onChange={setValue} />
         </BoxGroup>
     );
-};
+}
 
-export const sampleBoxGroupSearch = Template.bind({});
-
-sampleBoxGroupSearch.args = {
-    placeholder: "Filter Samples",
-    autoFocus: false,
+export const SampleBoxGroupSearch: Story = {
+    render: BoxGroupSearchTemplate,
+    args: {
+        placeholder: "Filter Samples",
+        autoFocus: false,
+    },
 };
