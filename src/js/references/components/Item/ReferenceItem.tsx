@@ -1,5 +1,6 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
+import { JobState } from "@jobs/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -74,7 +75,10 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
             </ReferenceItemUser>
             <ReferenceItemEndIcon>
                 {task && !task.complete ? (
-                    <ProgressCircle progress={task.progress || 0} state={task.complete ? "complete" : "running"} />
+                    <ProgressCircle
+                        progress={task.progress || 0}
+                        state={task.complete ? JobState.complete : JobState.running}
+                    />
                 ) : (
                     cloneButton
                 )}

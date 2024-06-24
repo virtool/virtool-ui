@@ -1,3 +1,4 @@
+import { JobState } from "@jobs/types";
 import type { Meta, StoryObj } from "@storybook/react";
 import { ProgressCircle } from "../ProgressCircle";
 
@@ -16,13 +17,13 @@ export const Waiting: Story = {
 };
 
 export const Running: Story = {
-    args: { progress: 50, state: "running" },
+    args: { progress: 50, state: JobState.running },
 };
 
 export const Failed: Story = {
-    args: { progress: 50, state: "error" },
+    args: { progress: 50, state: JobState.error },
 };
 
 export const Complete: Story = {
-    args: { progress: 100, state: "complete" },
+    args: { progress: 100, state: JobState.complete },
 };

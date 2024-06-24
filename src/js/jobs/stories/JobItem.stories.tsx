@@ -1,4 +1,4 @@
-import { workflows } from "@jobs/types";
+import { JobState, workflows } from "@jobs/types";
 import type { Meta } from "@storybook/react";
 import React from "react";
 import JobItem from "../components/Item/JobItem";
@@ -27,7 +27,7 @@ export function Waiting() {
             progress={0}
             user={user}
             workflow={workflows.nuvs}
-            state="waiting"
+            state={JobState.waiting}
         />
     );
 }
@@ -40,7 +40,7 @@ export function Complete() {
             progress={23}
             user={user}
             workflow={workflows.nuvs}
-            state="complete"
+            state={JobState.complete}
         />
     );
 }
@@ -53,7 +53,7 @@ export function Running() {
             progress={23}
             user={user}
             workflow={workflows.nuvs}
-            state="running"
+            state={JobState.running}
         />
     );
 }
@@ -65,6 +65,6 @@ export const Timeout = () => (
         progress={23}
         user={user}
         workflow={workflows.nuvs}
-        state="timeout"
+        state={JobState.timeout}
     />
 );

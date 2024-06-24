@@ -199,7 +199,7 @@ type ProgressCircleProps = {
  * @returns A determinate or indeterminate progress circle
  */
 
-export function ProgressCircle({ progress, size = sizes.md, state = "waiting" }: ProgressCircleProps) {
+export function ProgressCircle({ progress, size = sizes.md, state = JobState.waiting }: ProgressCircleProps) {
     const circleSize = progressCircleSizes[size];
     const color = determineProgressColour(state);
 
