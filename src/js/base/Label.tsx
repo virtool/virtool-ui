@@ -4,13 +4,12 @@ import React from "react";
 type LabelProps = {
     children?: React.ReactNode;
     className?: string;
-    color?: string;
 };
 
 /**
  * A styled Label component
  */
-export function Label({ children, className, color }: LabelProps) {
+export function Label({ children, className }: LabelProps) {
     return (
         <span
             className={clsx(

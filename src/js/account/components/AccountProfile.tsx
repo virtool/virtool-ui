@@ -48,11 +48,7 @@ export default function AccountProfile() {
                     <h3>
                         {handle}
                         {administrator_role && (
-                            <Label
-                                className="capitalize text-base ml-auto bg-purple"
-                                key="administrator"
-                                color="purple"
-                            >
+                            <Label key="administrator" className="capitalize text-base ml-auto bg-purple">
                                 <Icon name="user-shield" /> {administrator_role} Administrator
                             </Label>
                         )}

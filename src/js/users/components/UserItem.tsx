@@ -70,13 +70,13 @@ export function UserItem({ active, administratorRole, handle, id, primary_group 
             </UserContainer>
             <TagContainer>
                 {administratorRole && (
-                    <Label color="purple">
+                    <Label className="bg-purple">
                         <Icon name="user-shield" /> {administratorRole} Administrator
                     </Label>
                 )}
             </TagContainer>
             <TagContainer>{primary_group && <Label>{primary_group.name}</Label>}</TagContainer>
-            <TagContainer>{!active && <Label color="redLight">Inactive</Label>}</TagContainer>
+            <TagContainer>{!active && <Label className="bg-redLight">Inactive</Label>}</TagContainer>
         </StyledUserItem>
     );
 }

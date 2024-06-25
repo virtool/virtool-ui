@@ -23,9 +23,7 @@ type NotFoundProps = {
 export function NotFound({ status = 404, message = "Not found" }: NotFoundProps) {
     return (
         <StyledNotFound>
-            <Label className="text-3xl" color="red">
-                {status}
-            </Label>
+            <Label className="bg-red text-5xl">{status}</Label>
             <strong>{message}</strong>
         </StyledNotFound>
     );

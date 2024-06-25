@@ -62,7 +62,7 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
         <StyledSegment>
             <strong>{segment.name}</strong>
 
-            {segment.required ? <Label color="purple">Required</Label> : <Label>Optional</Label>}
+            {segment.required ? <Label className="bg-purple">Required</Label> : <Label>Optional</Label>}
             {canModify && (
                 <div>
                     <SegmentIcon
