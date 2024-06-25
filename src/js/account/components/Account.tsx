@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
 import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@base";
-import { getAccount } from "../actions";
-import { getAccountId } from "../selectors";
 import AccountProfile from "./AccountProfile";
 import APIKeys from "./API/APIKeys";
 
-function Account({ userId, onGet }) {
-    useEffect(() => onGet(), [userId]);
-
+/**
+ * Displays the account page containing the profile and API subpages.
+ */
+export default function Account() {
     return (
         <ContainerWide>
             <ViewHeader title="Account">
@@ -32,19 +30,3 @@ function Account({ userId, onGet }) {
         </ContainerWide>
     );
 }
-
-function mapStateToProps(state) {
-    return {
-        userId: getAccountId(state),
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onGet: () => {
-            dispatch(getAccount());
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Account);
