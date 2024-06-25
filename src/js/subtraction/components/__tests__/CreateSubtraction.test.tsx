@@ -89,9 +89,9 @@ describe("<CreateSubtraction />", () => {
         await waitFor(() => createSubtractionScope.done());
     });
 
-    it("should restore form values of page refresh", async () => {
-        const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
-        const name = "testSubtractionname";
+    it("should restore form values from session storage", async () => {
+        const file = createFakeFile({ name: "testSubtraction1", type: FileType.subtraction });
+        const name = "testSubtractionName";
         const nickname = "testSubtractionNickname";
 
         setSessionStorage("createSubtractionFormValues", { name, nickname, uploadId: [file.id] });
@@ -112,11 +112,9 @@ describe("<CreateSubtraction />", () => {
         await userEvent.click(screen.getByText(/save/i));
 
         await waitFor(() => createSubtractionScope.done());
-
-        await userEvent.click(screen.getByText(/save/i));
     });
 
-    it("should restore write value to session storage", async () => {
+    it("should persist values into session storage", async () => {
         const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";
@@ -140,6 +138,8 @@ describe("<CreateSubtraction />", () => {
         await userEvent.click(screen.getByText(/save/i));
         await waitFor(() => createSubtractionScope.done());
 
-        expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] });
+        await waitFor(() =>
+            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] }),
+        );
     });
 });
