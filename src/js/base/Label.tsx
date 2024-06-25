@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@utils/utils";
 import React from "react";
 
 type LabelProps = {
@@ -12,7 +12,7 @@ type LabelProps = {
 export function Label({ children, className }: LabelProps) {
     return (
         <span
-            className={clsx(
+            className={cn(
                 `text-white rounded inline whitespace-nowrap text-center font-bold px-2 py-1 text-sm align-baseline last-of-type:m-0 bg-greyDark`,
                 className,
             )}

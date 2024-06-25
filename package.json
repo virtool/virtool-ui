@@ -16,7 +16,6 @@
         "@sentry/vite-plugin": "^2.16.1",
         "@tanstack/react-query": "^4.35.3",
         "@types/superagent": "^4.1.16",
-        "classnames": "^2.5.1",
         "clsx": "^2.1.1",
         "commander": "^9.4.1",
         "d3-array": "^3.2.2",
