@@ -43,7 +43,7 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
     }
 
     const rightComponents = map(rights, right => (
-        <MemberRight key={right} right={right} enabled={member && member[right]} onToggle={handleChange} />
+        <MemberRight key={right} right={right} enabled={member?.[right]} onToggle={handleChange} />
     ));
 
     return (

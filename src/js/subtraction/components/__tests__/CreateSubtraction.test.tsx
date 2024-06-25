@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { getSessionStorage, setSessionStorage } from "@utils/utils";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
+import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import { FileType } from "../../../files/types";
 import CreateSubtraction from "../CreateSubtraction";
@@ -66,7 +68,12 @@ describe("<CreateSubtraction />", () => {
 
     it("should submit correct values when all fields selected", async () => {
         const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
+        const name = "testSubtractionname";
+        const nickname = "testSubtractionNickname";
+
         mockApiListFiles([file]);
+        const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
+
         routerRenderWithProviders(
             <BrowserRouter>
                 <CreateSubtraction />
@@ -74,23 +81,48 @@ describe("<CreateSubtraction />", () => {
             createAppStore(state),
         );
 
+        await userEvent.type(await screen.findByLabelText("Name"), name);
+        await userEvent.type(screen.getByLabelText("Nickname"), nickname);
+        await userEvent.click(screen.getByText(/testsubtraction1/i));
+        await userEvent.click(screen.getByText(/save/i));
+
+        await waitFor(() => createSubtractionScope.done());
+    });
+
+    it("should restore form values of page refresh", async () => {
+        const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";
 
-        await userEvent.type(await screen.findByRole("textbox", { name: "name" }), name);
-        await userEvent.type(screen.getByRole("textbox", { name: "nickname" }), nickname);
-        await userEvent.click(screen.getByText(/testsubtraction1/i));
+        setSessionStorage("createSubtractionFormValues", { name, nickname, uploadId: [file.id] });
+
+        const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
+        mockApiListFiles([file]);
+
+        routerRenderWithProviders(
+            <BrowserRouter>
+                <CreateSubtraction />
+            </BrowserRouter>,
+            createAppStore(state),
+        );
+
+        expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
+        expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
+
+        await userEvent.click(screen.getByText(/save/i));
+
+        await waitFor(() => createSubtractionScope.done());
+
         await userEvent.click(screen.getByText(/save/i));
     });
 
-    it("should restore form with correct values", async () => {
-        const file = createFakeFile({ name: "testsubtractionname", type: FileType.subtraction });
-        mockApiListFiles([file]);
-
+    it("should restore write value to session storage", async () => {
+        const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";
 
-        state.forms.formState["create-subtraction"] = { name, nickname };
+        mockApiListFiles([file]);
+        const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
         routerRenderWithProviders(
             <BrowserRouter>
@@ -99,8 +131,15 @@ describe("<CreateSubtraction />", () => {
             createAppStore(state),
         );
 
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
-        expect(await screen.findByRole("textbox", { name: "name" })).toHaveValue(name);
-        expect(screen.getByRole("textbox", { name: "nickname" })).toHaveValue(nickname);
+        await userEvent.type(await screen.findByLabelText("Name"), name);
+        await userEvent.type(screen.getByLabelText("Nickname"), nickname);
+        await userEvent.click(screen.getByText(/testsubtraction1/i));
+
+        expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name, nickname, uploadId: [file.id] });
+
+        await userEvent.click(screen.getByText(/save/i));
+        await waitFor(() => createSubtractionScope.done());
+
+        expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] });
     });
 });

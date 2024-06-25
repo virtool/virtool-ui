@@ -1,38 +1,27 @@
-import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import * as Yup from "yup";
 import {
-    Input,
     InputError,
     InputGroup,
     InputLabel,
+    InputSimple,
     LoadingPlaceholder,
     SaveButton,
     ViewHeader,
     ViewHeaderTitle,
-} from "../../base";
-import { useInfiniteFindFiles } from "../../files/queries";
-import { FileType } from "../../files/types";
-import PersistForm from "../../forms/components/PersistForm";
+} from "@base";
+import { useInfiniteFindFiles } from "@files/queries";
+import { FileType } from "@files/types";
+import { RestoredAlert } from "@forms/components/RestoredAlert";
+import { usePersistentForm } from "@forms/hooks";
+import { SubtractionFileSelector } from "@subtraction/components/SubtractionFileSelector";
+import React from "react";
+import { Controller } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import { useCreateSubtraction } from "../queries";
-import { SubtractionFileSelector } from "./SubtractionFileSelector";
 
-const validationSchema = Yup.object().shape({
-    name: Yup.string().required("A name is required"),
-    uploadId: Yup.array().min(1, "Please select a file"),
-});
-
-type formValues = {
-    name: "";
-    nickname: "";
+type FormValues = {
+    name: string;
+    nickname: string;
     uploadId: string[];
-};
-
-const initialValues = {
-    name: "",
-    nickname: "",
-    uploadId: [],
 };
 
 /**
@@ -40,6 +29,18 @@ const initialValues = {
  */
 export default function CreateSubtraction() {
     const history = useHistory();
+    const {
+        hasRestored,
+        formState: { errors },
+        control,
+        register,
+        handleSubmit,
+        reset,
+    } = usePersistentForm<FormValues>({
+        formName: "createSubtraction",
+        defaultValues: { name: "", nickname: "", uploadId: [] },
+    });
+
     const {
         data: files,
         isLoading,
@@ -53,11 +54,12 @@ export default function CreateSubtraction() {
         return <LoadingPlaceholder margin="36px" />;
     }
 
-    function handleSubmit({ uploadId, name, nickname }) {
+    function onSubmit({ name, nickname, uploadId }: FormValues) {
         subtractionMutation.mutate(
             { name, nickname, uploadId: uploadId[0] },
             {
                 onSuccess: () => {
+                    reset();
                     history.push("/subtractions");
                 },
             },
@@ -69,55 +71,41 @@ export default function CreateSubtraction() {
             <ViewHeader title="Create Subtraction">
                 <ViewHeaderTitle>Create Subtraction</ViewHeaderTitle>
             </ViewHeader>
-            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-                {({
-                    errors,
-                    setFieldValue,
-                    touched,
-                    values,
-                }: {
-                    errors: FormikErrors<formValues>;
-                    setFieldValue: (field: string, value: string) => void;
-                    touched: FormikTouched<formValues>;
-                    values: formValues;
-                }) => (
-                    <Form>
-                        <PersistForm formName="create-subtraction" />
-                        <InputGroup>
-                            <InputLabel>Name</InputLabel>
-                            <Field
-                                aria-label={"name"}
-                                as={Input}
-                                name="name"
-                                type="text"
-                                error={touched.name ? errors.name : null}
-                            />
-                            {touched.name && <InputError>{errors.name}</InputError>}
-                        </InputGroup>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <RestoredAlert hasRestored={hasRestored} name="subtraction" resetForm={reset} />
+                <InputGroup>
+                    <InputLabel htmlFor="name">Name</InputLabel>
+                    <InputSimple id="name" {...register("name", { required: "A name is required" })} />
+                    <InputError>{errors.name?.message}</InputError>
+                </InputGroup>
 
-                        <InputGroup>
-                            <InputLabel>Nickname</InputLabel>
-                            <Field aria-label={"nickname"} as={Input} name="nickname" type="text" />
-                        </InputGroup>
+                <InputGroup>
+                    <InputLabel htmlFor="nickname">Nickname</InputLabel>
+                    <InputSimple id="nickname" {...register("nickname")} />
+                </InputGroup>
 
-                        <label>Files</label>
-                        <Field
-                            as={SubtractionFileSelector}
-                            name="uploadId"
-                            onClick={id => setFieldValue("uploadId", id)}
-                            error={touched.uploadId && errors.uploadId}
+                <label>Files</label>
+
+                <Controller
+                    name="uploadId"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                        <SubtractionFileSelector
+                            onClick={onChange}
+                            error={errors.uploadId?.message}
                             files={files}
                             isFetchingNextPage={isFetchingNextPage}
                             fetchNextPage={fetchNextPage}
                             hasNextPage={hasNextPage}
                             isLoading={isLoading}
                             foundCount={files.pages[0].found_count}
-                            selected={values.uploadId}
+                            selected={value}
                         />
-                        <SaveButton />
-                    </Form>
-                )}
-            </Formik>
+                    )}
+                    rules={{ required: "Please select a file" }}
+                />
+                <SaveButton />
+            </form>
         </>
     );
 }

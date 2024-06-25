@@ -1,18 +1,11 @@
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { map } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 function getScrollRatio(scrollListElement: HTMLElement): number {
     return Math.round((scrollListElement.scrollTop + scrollListElement.clientHeight) / scrollListElement.scrollHeight);
 }
-
-const StyledScrollList = styled.div`
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 0;
-`;
 
 type CompactScrollListProps = {
     /** The class name of the scroll list */
@@ -50,9 +43,9 @@ export function CompactScrollList({
     const entries = map(items, item => renderRow(item));
 
     return (
-        <StyledScrollList className={className} onScroll={onScroll}>
+        <div className={`mb-5 relative z-0 overflow-y-auto ${className}`} onScroll={onScroll}>
             {entries}
             {isLoading && <LoadingPlaceholder margin="20px" />}
-        </StyledScrollList>
+        </div>
     );
 }

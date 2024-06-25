@@ -1,15 +1,11 @@
+import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
 import { useUrlSearchParams } from "@utils/hooks";
+import { map } from "lodash";
 import React from "react";
-import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useListHmms } from "../queries";
-import { HMMMinimal } from "../types";
 import { HMMInstaller } from "./HMMInstaller";
 import HMMItem from "./HMMItem";
 import HMMToolbar from "./HMMToolbar";
-
-function renderRow(document: HMMMinimal) {
-    return <HMMItem key={document.id} hmm={document} />;
-}
 
 /**
  * A list of HMMs with filtering options
@@ -40,9 +36,14 @@ export default function HMMList() {
                             items={documents}
                             storedPage={page}
                             currentPage={Number(urlPage) || 1}
-                            renderRow={renderRow}
                             pageCount={page_count}
-                        />
+                        >
+                            <BoxGroup>
+                                {map(documents, document => (
+                                    <HMMItem key={document.id} hmm={document} />
+                                ))}
+                            </BoxGroup>
+                        </Pagination>
                     ) : (
                         <NoneFoundBox noun="HMMs" />
                     )}

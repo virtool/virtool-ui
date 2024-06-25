@@ -57,7 +57,7 @@ describe("<ManageLabels>", () => {
         renderWithMemoryRouter(<ManageLabels {...props} />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
-        expect(screen.getByText(`test`)).toBeInTheDocument();
-        expect(screen.getByText(`label`)).toBeInTheDocument();
+        expect(screen.getByText("test")).toBeInTheDocument();
+        expect(screen.getByText("label")).toBeInTheDocument();
     });
 });

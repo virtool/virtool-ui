@@ -94,8 +94,9 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
                         }) => (
                             <Form>
                                 <PersistForm
-                                    formName={`editGenomeSequenceForm${id}`}
                                     castValues={castValues(targets, target)}
+                                    formName={`editGenomeSequenceForm${id}`}
+                                    resourceName="sequence"
                                 />
                                 <Field
                                     as={TargetField}
