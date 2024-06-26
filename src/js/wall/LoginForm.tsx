@@ -1,9 +1,11 @@
+import { get } from "lodash-es";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { login } from "../account/actions";
 import { BoxGroupSection, Checkbox, InputGroup, InputLabel, InputSimple } from "../base";
+import { clearError } from "../errors/actions";
 import { WallButton } from "./Container";
 
 const LoginError = styled.div`
@@ -58,12 +60,15 @@ export function LoginForm({ error, onLogin }) {
 
 export function mapStateToProps(state) {
     return {
-        error: state.errors.LOGIN_ERROR?.message,
+        error: get(state, "errors.LOGIN_ERROR.message"),
     };
 }
 
 export function mapDispatchToProps(dispatch) {
     return {
+        onChange: () => {
+            dispatch(clearError("LOGIN_ERROR"));
+        },
         onLogin: (username, password, remember) => {
             dispatch(login(username, password, remember));
         },

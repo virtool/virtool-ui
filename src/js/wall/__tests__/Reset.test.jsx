@@ -6,7 +6,7 @@ import { renderWithProviders } from "../../../tests/setupTests";
 import { RESET_PASSWORD } from "../../app/actionTypes";
 import { mapDispatchToProps, mapStateToProps, ResetForm } from "../ResetForm";
 
-it("<Reset />", async () => {
+it("<ResetForm />", async () => {
     const onReset = vi.fn();
 
     renderWithProviders(<ResetForm error="" resetCode="test_reset_code" onReset={onReset} />);

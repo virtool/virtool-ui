@@ -15,7 +15,7 @@ function createAppStore(state) {
         });
 }
 
-describe("<Login />", () => {
+describe("<LoginForm />", () => {
     attachResizeObserver();
     let props;
 

@@ -1,3 +1,4 @@
+import { get } from "lodash-es";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
@@ -24,8 +25,8 @@ export function ResetForm({ error, onReset, resetCode }) {
 
 export function mapStateToProps(state) {
     return {
-        error: state.errors.RESET_PASSWORD_ERROR?.message,
-        resetCode: state.app.resetCode,
+        error: get(state, "errors.RESET_PASSWORD_ERROR.message"),
+        resetCode: get(state, "app.resetCode"),
     };
 }
 
