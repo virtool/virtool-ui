@@ -1,3 +1,4 @@
+import { JobState } from "@jobs/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -103,7 +104,11 @@ export default function AnalysisItem({ analysis, sampleId }: AnalysisItemProps) 
                     {ready ? (
                         <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
                     ) : (
-                        <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} size={sizes.md} />
+                        <ProgressCircle
+                            progress={job?.progress || 0}
+                            state={job?.state || JobState.waiting}
+                            size={sizes.md}
+                        />
                     )}
                 </AnalysisItemEndIcon>
             </AnalysisItemTop>

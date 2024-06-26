@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { getBadgeOrLabelColor } from "./utils";
 
 type BadgeProps = {
-    color?: "blue" | "green" | "red" | "orange" | "purple";
+    color?: "blue" | "green" | "red" | "orange" | "purple" | "greyDark";
 };
 
 export const Badge = styled.span<BadgeProps>`

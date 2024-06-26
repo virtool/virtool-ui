@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Icon } from "../../../base";
 import { ProgressCircle } from "../../../base/ProgressCircle";
-import { JobMinimal } from "../../../jobs/types";
+import { JobMinimal, JobState } from "../../../jobs/types";
 
 const StyledSampleItemEndIcon = styled.div`
     align-items: center;
@@ -46,7 +46,7 @@ export function SampleItemEndIcon({ onClick, ready, job }: SampleItemEndIconProp
     }
     return (
         <StyledSampleItemEndIcon>
-            <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} />
+            <ProgressCircle progress={job?.progress || 0} state={job?.state || JobState.waiting} />
             <strong>Creating</strong>
         </StyledSampleItemEndIcon>
     );
