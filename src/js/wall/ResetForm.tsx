@@ -4,22 +4,28 @@ import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import { resetPassword } from "../account/actions";
 import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
-import { WallButton } from "./Container";
+import { WallButton, WallHeader, WallSubheader } from "./Container";
+import { WallTitle } from "./WallTitle";
 
 export function ResetForm({ error, onReset, resetCode }) {
     const { register, handleSubmit } = useForm({ defaultValues: { password: "" } });
 
     return (
-        <form onSubmit={handleSubmit(values => onReset(values.password, resetCode))}>
-            <InputGroup>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <InputSimple id="password" type="password" {...register("password")} />
-                <InputError>{error}</InputError>
-            </InputGroup>
-            <WallButton type="submit" color="blue">
-                Reset
-            </WallButton>
-        </form>
+        <>
+            <WallTitle />
+            <WallHeader>Password Reset</WallHeader>
+            <WallSubheader>You are required to set a new password before proceeding.</WallSubheader>
+            <form onSubmit={handleSubmit(values => onReset(values.password, resetCode))}>
+                <InputGroup>
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <InputSimple id="password" type="password" {...register("password")} />
+                    <InputError>{error}</InputError>
+                </InputGroup>
+                <WallButton type="submit" color="blue">
+                    Reset
+                </WallButton>
+            </form>
+        </>
     );
 }
 

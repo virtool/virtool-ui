@@ -6,7 +6,8 @@ import styled from "styled-components";
 import { login } from "../account/actions";
 import { BoxGroupSection, Checkbox, InputGroup, InputLabel, InputSimple } from "../base";
 import { clearError } from "../errors/actions";
-import { WallButton } from "./Container";
+import { WallButton, WallHeader, WallSubheader } from "./Container";
+import { WallTitle } from "./WallTitle";
 
 const LoginError = styled.div`
     color: red;
@@ -30,31 +31,38 @@ export function LoginForm({ error, onLogin }) {
     const { control, handleSubmit, register } = useForm();
 
     return (
-        <form onSubmit={handleSubmit(({ username, password, remember }) => onLogin(username, password, remember))}>
+        <>
+            <WallTitle />
+            <WallHeader>Login</WallHeader>
             <BoxGroupSection>
-                <InputGroup>
-                    <InputLabel htmlFor="username">Username</InputLabel>
-                    <InputSimple id="username" {...register("username", { required: true })} autoFocus />
-                </InputGroup>
-                <InputGroup>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <InputSimple id="password" type="password" {...register("password", { required: true })} />
-                </InputGroup>
-                <LoginContainer>
-                    <Controller
-                        name="remember"
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                            <Checkbox checked={value} onClick={() => onChange(!value)} label="Remember Me" />
-                        )}
-                    />
-                    <LoginError>{error}</LoginError>
-                </LoginContainer>
-                <LoginButton type="submit" color="blue">
-                    Login
-                </LoginButton>
+                <WallSubheader>Sign in with your Virtool account</WallSubheader>
+                <form
+                    onSubmit={handleSubmit(({ username, password, remember }) => onLogin(username, password, remember))}
+                >
+                    <InputGroup>
+                        <InputLabel htmlFor="username">Username</InputLabel>
+                        <InputSimple id="username" {...register("username", { required: true })} autoFocus />
+                    </InputGroup>
+                    <InputGroup>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <InputSimple id="password" type="password" {...register("password", { required: true })} />
+                    </InputGroup>
+                    <LoginContainer>
+                        <Controller
+                            name="remember"
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <Checkbox checked={value} onClick={() => onChange(!value)} label="Remember Me" />
+                            )}
+                        />
+                        <LoginError>{error}</LoginError>
+                    </LoginContainer>
+                    <LoginButton type="submit" color="blue">
+                        Login
+                    </LoginButton>
+                </form>
             </BoxGroupSection>
-        </form>
+        </>
     );
 }
 
