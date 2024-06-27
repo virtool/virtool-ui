@@ -3,6 +3,7 @@ import { Icon, InputGroup, InputLabel, Select, SelectButton, SelectContent } fro
 import { ReferenceTarget } from "@references/types";
 import { map } from "lodash-es";
 import React from "react";
+import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 import { SequenceTarget } from "./SequenceTarget";
 
@@ -33,18 +34,16 @@ const TargetFieldLabelLock = styled.span`
 `;
 
 type TargetFieldProps = {
-    /** A callback function to handle target selection */
-    onChange: (value: string) => void;
     /** A list of unreferenced targets */
     targets: ReferenceTarget[];
-    /** The selected target */
-    value: string;
 };
 
 /**
  * Displays a dropdown list of available targets in adding/editing dialogs
  */
-export default function TargetField({ onChange, targets, value }: TargetFieldProps) {
+export default function TargetField({ targets }: TargetFieldProps) {
+    const { setValue, watch } = useFormContext();
+
     const targetSelectOptions = map(targets, target => (
         <SequenceTarget key={target.name} name={target.name} description={target.description} />
     ));
@@ -63,7 +62,11 @@ export default function TargetField({ onChange, targets, value }: TargetFieldPro
                 )}
             </TargetFieldLabel>
             <TargetSelectContainer>
-                <Select disabled={disabled} value={value} onValueChange={value => value !== "" && onChange(value)}>
+                <Select
+                    disabled={disabled}
+                    value={watch("target")}
+                    onValueChange={value => value !== "" && setValue("target", value)}
+                >
                     <SelectButton icon="chevron-down" />
                     <SelectContent position="popper" align="start">
                         {targetSelectOptions}

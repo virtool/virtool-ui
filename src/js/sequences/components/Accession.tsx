@@ -1,22 +1,30 @@
-import { Field, useFormikContext } from "formik";
+import { InputContainer, InputError, InputGroup, InputIcon, InputLabel, InputLoading, InputSimple } from "@base";
+import { getGenbank } from "@otus/api";
 import { forEach } from "lodash-es";
 import React, { useEffect, useState } from "react";
-import { Input, InputContainer, InputError, InputGroup, InputIcon, InputLabel, InputLoading } from "../../base";
-import { getGenbank } from "../../otus/api";
+import { useFormContext } from "react-hook-form";
 
-export const Accession = ({ error }) => {
+type FormValues = {
+    accession: string;
+};
+
+export function Accession() {
     const [pending, setPending] = useState(false);
     const [sent, setSent] = useState(false);
     const [notFound, setNotFound] = useState(false);
 
     const {
-        values: { accession },
-        setFieldValue,
-    } = useFormikContext();
+        formState: { errors },
+        getValues,
+        register,
+        setValue,
+    } = useFormContext<FormValues>();
+
+    const accession = getValues("accession");
 
     const onAutofill = sequenceValues => {
         forEach(sequenceValues, (value, key) => {
-            setFieldValue(key, value);
+            setValue(key, value);
         });
     };
 
@@ -50,19 +58,18 @@ export const Accession = ({ error }) => {
         }
     }, [accession, pending, notFound, onAutofill]);
 
-    const onChange = e => {
-        setNotFound(false);
-        setFieldValue("accession", e.target.value);
-    };
-
     return (
         <InputGroup>
             <InputLabel htmlFor="accession">Accession (ID)</InputLabel>
             <InputContainer align="right">
-                <Field name="accession" as={Input} error={error} id="accession" onChange={onChange} />
+                <InputSimple
+                    id="accession"
+                    onChange={() => setNotFound(false)}
+                    {...register("accession", { required: "Required Field" })}
+                />
                 {pending ? <InputLoading /> : <InputIcon name="magic" onClick={() => setPending(true)} />}
             </InputContainer>
-            <InputError>{notFound ? "Accession not found" : error}</InputError>
+            <InputError>{notFound ? "Accession not found" : errors.accession?.message}</InputError>
         </InputGroup>
     );
-};
+}
