@@ -10,10 +10,10 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AddSequenceLink from "./AddSequenceLink";
 import AddBarcodeSequence from "./Barcode/AddBarcodeSequence";
-import BarcodeSequence from "./Barcode/Sequence";
+import BarcodeSequence from "./Barcode/BarcodeSequence";
 import EditSequence from "./EditSequence";
 import AddGenomeSequence from "./Genome/AddGenomeSequence";
-import GenomeSequence from "./Genome/Sequence";
+import GenomeSequence from "./Genome/GenomeSequence";
 
 const IsolateSequencesHeader = styled.label`
     align-items: center;

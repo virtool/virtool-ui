@@ -1,22 +1,31 @@
+import { BoxGroupSection } from "@base";
 import React from "react";
-import { BoxGroupSection } from "../../../base";
 import { useExpanded } from "../../hooks";
 import { SequenceHeader } from "../Sequence/Header";
 import SequenceButtons from "../Sequence/SequenceButtons";
 import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/Values";
-import { GenomeSequenceTable } from "./Table";
+import GenomeSequenceTable from "./GenomeSequenceTable";
 
-export default function GenomeSequence({ accession, definition, host, id, segment, sequence }) {
+type GenomeSequenceProps = {
+    accession: string;
+    definition: string;
+    host: string;
+    id: string;
+    segment: string;
+    sequence: string;
+};
+
+/**
+ * A condensed genome sequence item for use in a list of sequences
+ */
+export default function GenomeSequence({ accession, definition, host, id, segment, sequence }: GenomeSequenceProps) {
     const { expanded, expand, collapse } = useExpanded();
 
     return (
         <BoxGroupSection onClick={expand}>
             <SequenceHeader>
                 <SequenceAccessionValue accession={accession} />
-                <SequenceTitleValue>
-                    <p>{segment || definition}</p>
-                    <small>{segment ? "SEGMENT" : "DEFINITION"}</small>
-                </SequenceTitleValue>
+                <SequenceTitleValue label={segment ? "SEGMENT" : "DEFINITION"} value={segment || definition} />
                 {expanded && <SequenceButtons id={id} onCollapse={collapse} />}
             </SequenceHeader>
             {expanded && (
