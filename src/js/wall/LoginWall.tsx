@@ -4,6 +4,11 @@ import { WallContainer, WallDialog, WallLoginContainer } from "./Container";
 import LoginForm from "./LoginForm";
 import ResetForm from "./ResetForm";
 
+/**
+ * Renders either ResetForm or LoginForm based on the reset state.
+ *
+ * @param {boolean} reset - Indicates if the user needs to reset their password.
+ */
 export function LoginWall({ reset }) {
     return (
         <WallContainer>

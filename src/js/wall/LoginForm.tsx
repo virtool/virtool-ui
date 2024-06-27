@@ -27,6 +27,12 @@ const LoginContainer = styled.div`
     margin-top: 10px;
 `;
 
+/**
+ * Handles the user login process.
+ *
+ * @param {string} error - Error message for the login process.
+ * @param {function} onLogin - Function to handle user login.
+ */
 export function LoginForm({ error, onLogin }) {
     const { control, handleSubmit, register } = useForm();
 
