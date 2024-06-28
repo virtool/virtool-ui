@@ -7,14 +7,17 @@ import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
 import { WallButton, WallHeader, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
 
-/**
- * Handles the password reset process.
- *
- * @param {string} error - Error message for the reset process.
- * @param {function} onReset - Function to handle password reset.
- * @param {string} resetCode - Code required for password reset.
- */
-export function ResetForm({ error, onReset, resetCode }) {
+type ResetFormProps = {
+    /** Error message for the reset process. */
+    error: string;
+    /** Callback to handle password reset. */
+    onReset: (password: string, resetCode: string) => void;
+    /** Code required for password reset. */
+    resetCode: string;
+};
+
+/** Handles the password reset process. */
+export function ResetForm({ error, onReset, resetCode }: ResetFormProps) {
     const { register, handleSubmit } = useForm({ defaultValues: { password: "" } });
 
     return (
