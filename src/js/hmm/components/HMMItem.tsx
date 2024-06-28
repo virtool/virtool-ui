@@ -1,8 +1,8 @@
+import { getFontSize, getFontWeight } from "@app/theme";
+import { BoxLink, Label } from "@base";
 import { keys, map, reject } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { BoxLink, Label } from "../../base";
 import { HMMMinimal } from "../types";
 
 const StyledHMMItem = styled(BoxLink)`
