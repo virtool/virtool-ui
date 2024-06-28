@@ -1,8 +1,8 @@
 import { BoxGroupSection } from "@base";
 import React from "react";
 import { useExpanded } from "../../hooks";
-import { SequenceHeader } from "../Sequence/Header";
 import SequenceButtons from "../Sequence/SequenceButtons";
+import { SequenceHeader } from "../Sequence/SequenceHeader";
 import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/Values";
 import BarcodeSequenceTable from "./BarcodeSequenceTable";
 
@@ -12,7 +12,7 @@ type BarcodeSequenceProps = {
     host: string;
     id: string;
     sequence: string;
-    target: string;
+    target?: string;
 };
 
 /**

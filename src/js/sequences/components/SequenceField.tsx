@@ -8,6 +8,9 @@ const SequenceFieldTextArea = styled(TextArea)`
     text-transform: uppercase;
 `;
 
+/**
+ * Displays the sequence field of a form for a sequence
+ */
 export default function SequenceField() {
     const {
         formState: { errors },
@@ -25,7 +28,7 @@ export default function SequenceField() {
                 {...register("sequence", {
                     required: "Required Field",
                     pattern: {
-                        value: /^[:?ATCGNRYKM]+$/,
+                        value: /^[ATCGNRYKM]*$/,
                         message: "Sequence should only contain the characters: ATCGNRYKM",
                     },
                 })}

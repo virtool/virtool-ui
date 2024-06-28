@@ -4,10 +4,9 @@ import { forEach } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-type FormValues = {
-    accession: string;
-};
-
+/**
+ * Displays the accession field of a form for a sequence
+ */
 export function Accession() {
     const [pending, setPending] = useState(false);
     const [sent, setSent] = useState(false);
@@ -18,15 +17,15 @@ export function Accession() {
         getValues,
         register,
         setValue,
-    } = useFormContext<FormValues>();
+    } = useFormContext<{ accession: string }>();
 
     const accession = getValues("accession");
 
-    const onAutofill = sequenceValues => {
+    function onAutofill(sequenceValues) {
         forEach(sequenceValues, (value, key) => {
             setValue(key, value);
         });
-    };
+    }
 
     useEffect(() => {
         if (pending && !sent) {
@@ -34,7 +33,7 @@ export function Accession() {
 
             getGenbank(accession).then(
                 resp => {
-                    const { accession, definition, host, sequence } = resp.body;
+                    const { accession, definition, host, sequence } = resp;
 
                     onAutofill({
                         accession,

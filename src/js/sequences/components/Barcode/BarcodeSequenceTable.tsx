@@ -1,5 +1,5 @@
 import React from "react";
-import { SequenceTable } from "../Table";
+import { SequenceTable } from "../SequenceTable";
 
 type BarcodeSequenceTableProps = {
     definition: string;
