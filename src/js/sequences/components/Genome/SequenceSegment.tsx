@@ -1,8 +1,8 @@
+import { fontWeight, getColor, getFontSize, getFontWeight } from "@app/theme";
+import { Icon } from "@base";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled from "styled-components";
-import { fontWeight, getColor, getFontSize, getFontWeight } from "../../../app/theme";
-import { Icon } from "../../../base";
 
 const SequenceSegmentRequired = styled.span`
     align-items: center;

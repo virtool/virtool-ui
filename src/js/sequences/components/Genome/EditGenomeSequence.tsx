@@ -1,40 +1,11 @@
-import { Dialog, DialogOverlay, DialogTitle, SaveButton } from "@base";
+import { Dialog, DialogOverlay, DialogTitle } from "@base";
 import { useEditSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
 import { useLocationState } from "@utils/hooks";
-import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { find } from "lodash-es";
 import React from "react";
-import PersistForm from "../../../forms/components/PersistForm";
-import { SequenceForm, validationSchema } from "../SequenceForm";
 import { StyledContent } from "./AddGenomeSequence";
-import SegmentField from "./SegmentField";
-
-function getInitialValues({ initialSegmentName, initialAccession, initialDefinition, initialHost, initialSequence }) {
-    return {
-        segment: initialSegmentName || null,
-        accession: initialAccession || "",
-        definition: initialDefinition || "",
-        host: initialHost || "",
-        sequence: initialSequence || "",
-    };
-}
-
-export function castValues(segments: OTUSegment[]) {
-    return function (values: formValues) {
-        const segment = find(segments, { name: values.segment }) ? values.segment : null;
-        return { ...values, segment };
-    };
-}
-
-type formValues = {
-    segment: string;
-    accession: string;
-    definition: string;
-    host: string;
-    sequence: string;
-};
 
 type EditGenomeSequenceProps = {
     activeSequence: OTUSequence;
@@ -59,19 +30,17 @@ export default function EditGenomeSequence({
 }: EditGenomeSequenceProps) {
     const [locationState, setLocationState] = useLocationState();
     const mutation = useEditSequence(otuId);
-    const { accession, definition, host, id, segment, sequence } = activeSequence;
 
-    function handleSubmit({ accession, definition, host, sequence, segment }) {
-        mutation.mutate({ isolateId, sequenceId: id, accession, definition, host, segment, sequence });
+    function onSubmit({ accession, definition, host, sequence, segment }) {
+        mutation.mutate(
+            { isolateId, sequenceId: activeSequence.id, accession, definition, host, segment, sequence },
+            {
+                onSuccess: () => {
+                    setLocationState({ editSequence: false });
+                },
+            },
+        );
     }
-
-    const initialValues = getInitialValues({
-        initialSegmentName: segment,
-        initialAccession: accession,
-        initialDefinition: definition,
-        initialHost: host,
-        initialSequence: sequence,
-    });
 
     return (
         <Dialog open={locationState?.editSequence} onOpenChange={() => setLocationState({ editSequence: false })}>
@@ -79,37 +48,15 @@ export default function EditGenomeSequence({
                 <DialogOverlay />
                 <StyledContent>
                     <DialogTitle>Edit Sequence</DialogTitle>
-                    <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-                        {({
-                            setFieldValue,
-                            errors,
-                            touched,
-                        }: {
-                            setFieldValue: (field: string, value: string) => void;
-                            errors: FormikErrors<formValues>;
-                            touched: FormikTouched<formValues>;
-                        }) => (
-                            <Form>
-                                <PersistForm
-                                    formName={`editGenomeSequenceForm${id}`}
-                                    castValues={castValues(segments)}
-                                />
-                                <Field
-                                    as={SegmentField}
-                                    name="segment"
-                                    hasSchema={hasSchema}
-                                    onChange={segment => {
-                                        setFieldValue("segment", segment);
-                                    }}
-                                    otuId={otuId}
-                                    refId={refId}
-                                    segments={segments}
-                                />
-                                <SequenceForm touched={touched} errors={errors} />
-                                <SaveButton />
-                            </Form>
-                        )}
-                    </Formik>
+                    <GenomeSequenceForm
+                        activeSequence={activeSequence}
+                        hasSchema={hasSchema}
+                        noun="edit"
+                        onSubmit={onSubmit}
+                        otuId={otuId}
+                        refId={refId}
+                        segments={segments}
+                    />
                 </StyledContent>
             </DialogPortal>
         </Dialog>

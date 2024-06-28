@@ -1,7 +1,7 @@
+import { fontWeight } from "@app/theme";
+import { SelectItem } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { fontWeight } from "../../../app/theme";
-import { SelectItem } from "../../../base";
 
 const StyledSequenceTarget = styled.div`
     padding: 5px;
