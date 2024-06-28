@@ -12,7 +12,7 @@ interface DialogControlledProps {
 
 export function DialogControlled({ children, show, onHide, onOpenChange }: DialogControlledProps) {
     function handleOpenChange(open: boolean) {
-        onOpenChange && onOpenChange(open);
+        onOpenChange?.(open);
 
         if (!open) {
             onHide();

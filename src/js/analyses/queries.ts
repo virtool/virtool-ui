@@ -132,7 +132,7 @@ export function useBlastNuVs(analysisId: string) {
         ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(analysesQueryKeys.lists());
+                queryClient.invalidateQueries(analysesQueryKeys.detail(analysisId));
             },
         },
     );

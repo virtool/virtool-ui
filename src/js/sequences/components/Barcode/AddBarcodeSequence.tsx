@@ -93,8 +93,9 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
                         }) => (
                             <Form>
                                 <PersistForm
-                                    formName="addGenomeSequenceForm"
                                     castValues={castValues(targets, defaultTarget)}
+                                    formName="addGenomeSequenceForm"
+                                    resourceName="sequence"
                                 />
                                 <Field
                                     as={TargetField}

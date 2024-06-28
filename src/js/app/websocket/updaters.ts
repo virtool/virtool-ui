@@ -31,7 +31,8 @@ type Document = { items: TaskObject[] } | { documents: TaskObject[] };
  */
 function infiniteListItemUpdater<T extends Document>(task: Task, selector: (cache: TaskObject) => Task) {
     return function (cache: InfiniteData<T>): InfiniteData<T> {
-        forEach(cache.pages, (page: T) => {
+        const newCache = cloneDeep(cache);
+        forEach(newCache.pages, (page: T) => {
             const items = "items" in page ? page.items : page.documents;
             forEach(items, (item: { task: Task }) => {
                 const previousTask = selector(item);
@@ -41,7 +42,7 @@ function infiniteListItemUpdater<T extends Document>(task: Task, selector: (cach
             });
         });
 
-        return cache;
+        return newCache;
     };
 }
 

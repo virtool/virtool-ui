@@ -1,5 +1,6 @@
-import { Button, InputSearch, LinkButton, Toolbar } from "@base";
-import { useUrlSearchParams } from "@utils/hooks";
+import { Button, InputSearch, Toolbar } from "@base";
+import { useLocationState, useUrlSearchParams } from "@utils/hooks";
+import { merge } from "lodash";
 import React from "react";
 import styled from "styled-components";
 import { AnalysisViewerSort } from "../Viewer/Sort";
@@ -12,6 +13,7 @@ const StyledNuVsToolbar = styled(Toolbar)`
  * Displays a toolbar for managing and filtering NuVs
  */
 export default function NuVsToolbar() {
+    const [locationState, setLocationState] = useLocationState();
     const [filterORFs, setFilterORFs] = useUrlSearchParams<boolean>("filterOrfs", true);
     const [filterSequences, setFilterSequences] = useUrlSearchParams<boolean>("filterSequences", true);
     const [find, setFind] = useUrlSearchParams<string>("find", "");
@@ -37,9 +39,13 @@ export default function NuVsToolbar() {
             >
                 Filter ORFs
             </Button>
-            <LinkButton to={{ state: { export: true } }} tip="Export">
+            <Button
+                active={!locationState?.export}
+                onClick={() => setLocationState(merge(locationState, { export: true }))}
+                tip="Export"
+            >
                 Export
-            </LinkButton>
+            </Button>
         </StyledNuVsToolbar>
     );
 }

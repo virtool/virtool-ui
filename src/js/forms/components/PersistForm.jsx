@@ -6,15 +6,15 @@ import { useDidUpdateEffect } from "@utils/hooks";
 import { isEqual } from "lodash-es";
 import { setPersistentFormState } from "../actions";
 import { getSingleFormValues } from "../selectors";
-import { RestoredAlert } from "./Alert";
+import { RestoredAlert } from "./RestoredAlert";
 
-export const PersistForm = ({ formName, castValues, onSetPersistentFormState, formValues }) => {
+export const PersistForm = ({ castValues, formName, formValues, onSetPersistentFormState, resourceName }) => {
     const { setValues, values, initialValues, resetForm } = useFormikContext();
-    const [showAlert, setShowAlert] = useState(false);
+    const [hasRestored, sethasRestored] = useState(false);
     useEffect(() => {
         if (formValues && !isEqual(initialValues, formValues)) {
             const castFormData = castValues ? castValues(formValues) : formValues;
-            setShowAlert(true);
+            sethasRestored(true);
             setValues(castFormData);
         }
     }, []);
@@ -23,7 +23,7 @@ export const PersistForm = ({ formName, castValues, onSetPersistentFormState, fo
         onSetPersistentFormState(formName, values);
     }, [values]);
 
-    return showAlert && <RestoredAlert onClose={() => setShowAlert(false)} resetForm={resetForm} />;
+    return <RestoredAlert hasRestored={hasRestored} resetForm={resetForm} name={resourceName} />;
 };
 
 export const mapStateToProps = (state, ownProps) => {

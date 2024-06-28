@@ -147,6 +147,20 @@ export function mockApiEditSubtraction(subtraction: Subtraction, name: string, n
 }
 
 /**
+ * Sets up a mocked API route for creating a new subtraction
+ *
+ * @param name - The updated name
+ * @param nickname - The updated nickname
+ * @param uploadId - the unique identifier of the file to be used for the subtraction
+ * @returns A nock scope for the mocked API call
+ */
+export function mockApiCreateSubtraction(name: string, nickname: string, uploadId: string) {
+    return nock("http://localhost")
+        .post("/api/subtractions", { name, nickname, upload_id: uploadId })
+        .reply(200, { name, nickname, id: "subtraction_id" });
+}
+
+/**
  * Sets up a mocked API route for deleting a subtraction
  *
  * @param subtractionId - The subtraction to be removed

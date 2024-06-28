@@ -9,6 +9,7 @@ import { Button, ButtonGroup, Dialog, DialogContent, DialogFooter, DialogOverlay
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useLocationState } from "@utils/hooks";
 import { followDynamicDownload } from "@utils/utils";
+import { merge } from "lodash";
 import { forEach, map, reduce, replace } from "lodash-es";
 import React, { useState } from "react";
 import NuVsExportPreview from "./ExportPreview";
@@ -110,7 +111,10 @@ export default function NuVsExport({ analysisId, results, sampleName }: NuVsExpo
     }
 
     return (
-        <Dialog open={locationState?.export} onOpenChange={() => setLocationState({ export: false })}>
+        <Dialog
+            open={locationState?.export}
+            onOpenChange={() => setLocationState(merge(locationState, { export: false }))}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

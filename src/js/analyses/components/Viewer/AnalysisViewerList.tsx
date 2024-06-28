@@ -3,6 +3,7 @@ import { FormattedNuVsHit } from "@/analyses/types";
 import { getBorder, getFontSize } from "@app/theme";
 import { Key } from "@base";
 import { useLocationState } from "@utils/hooks";
+import { merge } from "lodash";
 import { findIndex } from "lodash-es";
 import React from "react";
 import { FixedSizeList } from "react-window";
@@ -82,7 +83,7 @@ export default function AnalysisViewerList({ children, itemSize, matches, total,
     }
 
     const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, id =>
-        setLocationState({ activeHitId: id }),
+        setLocationState(merge(locationState, { activeHitId: id })),
     );
 
     return (

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, LoadingPlaceholder } from "@base";
+import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "@base";
 import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
@@ -20,7 +20,7 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
     const mutation = useCreateIndex();
 
     if (isLoading) {
-        return <LoadingPlaceholder />;
+        return null;
     }
 
     function handleSubmit(e) {

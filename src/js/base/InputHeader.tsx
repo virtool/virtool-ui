@@ -51,7 +51,7 @@ export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
         onSubmit: values => {
             onSubmit(values[id]);
 
-            if (inputElement.current && inputElement.current.hasOwnProperty("blur")) {
+            if (inputElement.current?.hasOwnProperty("blur")) {
                 inputElement.current.blur();
             }
         },

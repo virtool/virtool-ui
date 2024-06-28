@@ -3,28 +3,39 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../../tests/setupTests";
-import { RestoredAlert } from "../Alert";
+import { RestoredAlert } from "../RestoredAlert";
 
 describe("<Alert />", () => {
     let props;
     beforeEach(() => {
         props = {
-            onClose: vi.fn(),
+            hasRestored: true,
             resetForm: vi.fn(),
-            saveTime: 1652289121840,
+            name: "resource",
         };
+    });
+
+    it("Should render when hasRestored is true", () => {
+        renderWithProviders(<RestoredAlert {...props} />);
+        expect(screen.queryByText(/resumed editing draft resource/i));
+    });
+
+    it("Should not render when hasRestored is false", () => {
+        props.hasRestored = false;
+        renderWithProviders(<RestoredAlert {...props} />);
+        expect(screen.queryByText(/resumed editing draft resource/i)).not.toBeInTheDocument();
     });
 
     it("Should call onClose when close icon clicked", async () => {
         renderWithProviders(<RestoredAlert {...props} />);
         await userEvent.click(screen.getByLabelText("close"));
-        expect(props.onClose).toHaveBeenCalled();
+        expect(screen.queryByText(/resumed editing draft resource/i)).not.toBeInTheDocument();
     });
 
     it("Should call resetForm when undo Icon clicked", async () => {
         renderWithProviders(<RestoredAlert {...props} />);
         await userEvent.click(screen.getByLabelText("undo restore"));
         expect(props.resetForm).toHaveBeenCalled();
-        expect(props.onClose).toHaveBeenCalled();
+        expect(screen.queryByText(/resumed editing draft resource/i)).not.toBeInTheDocument();
     });
 });

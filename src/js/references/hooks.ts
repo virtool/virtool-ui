@@ -138,7 +138,7 @@ export function useCheckReferenceRight(referenceId: string, right: ReferenceRigh
 
     const user = find(reference.users, { id: account.id });
 
-    if (user && user[right]) {
+    if (user?.[right]) {
         return { hasPermission: true, isLoading: false };
     }
 

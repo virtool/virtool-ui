@@ -149,6 +149,6 @@ describe("resetErrorName()", () => {
         const action = { type: "TEST_OTHER" };
         const result = resetErrorName(action);
 
-        expect(result).toBe(undefined);
+        expect(result).toBeUndefined();
     });
 });
