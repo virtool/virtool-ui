@@ -4,12 +4,12 @@ import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../tests/setupTests";
 import { RESET_PASSWORD } from "../../app/actionTypes";
-import { mapDispatchToProps, mapStateToProps, Reset } from "../Reset";
+import { mapDispatchToProps, mapStateToProps, ResetForm } from "../ResetForm";
 
-it("<Reset />", async () => {
+it("<ResetForm />", async () => {
     const onReset = vi.fn();
 
-    renderWithProviders(<Reset error="" resetCode="test_reset_code" onReset={onReset} />);
+    renderWithProviders(<ResetForm error="" resetCode="test_reset_code" onReset={onReset} />);
     const field = screen.getByLabelText("Password");
 
     await userEvent.type(field, "P@ssword123");
