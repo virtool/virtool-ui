@@ -30,7 +30,7 @@ const LabelItemButtons = styled.div`
     }
 `;
 
-type ItemProps = {
+type LabelItemProps = {
     name: string;
     color: string;
     description: string;
@@ -40,7 +40,7 @@ type ItemProps = {
 /**
  * A condensed label item for use in a list of labels
  */
-export function LabelItem({ name, color, description, id }: ItemProps) {
+export function LabelItem({ name, color, description, id }: LabelItemProps) {
     return (
         <LabelItemBox>
             <LabelItemExampleContainer>
