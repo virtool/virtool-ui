@@ -14,7 +14,7 @@ export function LoginWall({ reset }: LoginWallProps) {
     return (
         <WallContainer>
             <WallDialog>
-                <WallLoginContainer>{reset ? <ResetForm /> : <LoginForm />}</WallLoginContainer>
+                <WallLoginContainer>{reset ? <ResetForm /> : <LoginForm error="Invalid login" />}</WallLoginContainer>
             </WallDialog>
         </WallContainer>
     );
