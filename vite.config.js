@@ -1,6 +1,7 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
 
@@ -40,10 +41,19 @@ export default defineConfig({
         outDir: "../dist",
         sourcemap: true,
     },
-    plugins: [createHtmlPlugin({}), react({
-        include: "**/*.{jsx,tsx}",
-    }), sentryVitePlugin({
-        org: "cfia-virtool",
-        project: "cloud-ui"
-    })],
+    plugins: [
+        createHtmlPlugin({}),
+        react({
+            include: "**/*.{jsx,tsx}",
+        }),
+        sentryVitePlugin({
+            org: "cfia-virtool",
+            project: "cloud-ui",
+        }),
+    ],
+    css: {
+        postcss: {
+            plugins: [tailwindcss()],
+        },
+    },
 });

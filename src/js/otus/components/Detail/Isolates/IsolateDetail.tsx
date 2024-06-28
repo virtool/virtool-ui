@@ -1,13 +1,13 @@
+import { Box, Icon, Label } from "@base";
+import { useSetIsolateAsDefault } from "@otus/queries";
+import { OTUIsolate } from "@otus/types";
+import { DownloadLink } from "@references/components/Detail/DownloadLink";
+import { ReferenceDataType } from "@references/types";
+import IsolateSequences from "@sequences/components/Sequences";
+import { formatIsolateName } from "@utils/utils";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Box, Icon, Label } from "../../../../base";
-import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
-import { ReferenceDataType } from "../../../../references/types";
-import IsolateSequences from "../../../../sequences/components/Sequences";
-import { formatIsolateName } from "../../../../utils/utils";
-import { useSetIsolateAsDefault } from "../../../queries";
-import { OTUIsolate } from "../../../types";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 

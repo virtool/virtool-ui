@@ -1,7 +1,7 @@
+import { getFontWeight } from "@app/theme";
+import { BoxGroupSection, Label } from "@base";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { getFontWeight } from "../../../app/theme";
-import { BoxGroupSection, Label } from "../../../base";
 
 const StyledIndexSelectorItem = styled(BoxGroupSection)`
     background: white;
