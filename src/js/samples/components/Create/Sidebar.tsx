@@ -22,9 +22,9 @@ type sidebarProps = {
 export function Sidebar({ className, sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) {
     return (
         <StyledSidebar className={className}>
-            <SampleLabels onUpdate={selection => onUpdate("labels", selection)} sampleLabels={sampleLabels} />
+            <SampleLabels onUpdate={selection => onUpdate("sidebar.labels", selection)} sampleLabels={sampleLabels} />
             <DefaultSubtractions
-                onUpdate={selection => onUpdate("subtractionIds", selection)}
+                onUpdate={selection => onUpdate("sidebar.subtractionIds", selection)}
                 defaultSubtractions={defaultSubtractions}
             />
         </StyledSidebar>

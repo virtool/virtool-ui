@@ -1,6 +1,6 @@
+import { SelectBox } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { SelectBox } from "../../../base";
 
 const LibraryTypeSelectBoxContainer = styled.div`
     display: grid;
