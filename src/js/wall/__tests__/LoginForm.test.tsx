@@ -4,8 +4,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { attachResizeObserver, renderWithProviders } from "../../../tests/setupTests";
-import { LOGIN } from "../../app/actionTypes";
-import { LoginForm, mapDispatchToProps, mapStateToProps } from "../LoginForm";
+import { LoginForm } from "../LoginForm";
 
 function createAppStore(state) {
     return () =>
@@ -47,29 +46,5 @@ describe("<LoginForm />", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Login" }));
         await waitFor(() => expect(props.onLogin).toHaveBeenCalledWith("test_Username", "Password", true));
-    });
-});
-
-describe("mapStateToProps()", () => {
-    it("should return props given state", () => {
-        const state = {
-            app: {},
-        };
-        const result = mapStateToProps(state);
-        expect(result).toEqual({});
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    it("should return props with valid onLogin()", () => {
-        const dispatch = vi.fn();
-        const props = mapDispatchToProps(dispatch);
-
-        props.onLogin("bob", "foobar", false);
-
-        expect(dispatch).toHaveBeenCalledWith({
-            type: LOGIN.REQUESTED,
-            payload: { username: "bob", password: "foobar", remember: false },
-        });
     });
 });
