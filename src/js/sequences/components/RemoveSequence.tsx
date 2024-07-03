@@ -18,14 +18,20 @@ type RemoveSequenceProps = {
 export default function RemoveSequence({ isolateName, isolateId, otuId, sequences }: RemoveSequenceProps) {
     const history = useHistory();
     const location = useLocation<{ removeSequence: string }>();
-    const mutation = useRemoveSequence();
+    const mutation = useRemoveSequence(otuId);
 
     const sequenceId = location.state?.removeSequence;
     const sequence = find(sequences, { id: sequenceId });
 
     function handleConfirm() {
-        mutation.mutate({ otuId, isolateId, sequenceId: sequenceId });
-        history.replace({ state: { removeSequence: false } });
+        mutation.mutate(
+            { otuId, isolateId, sequenceId: sequenceId },
+            {
+                onSuccess: () => {
+                    history.replace({ state: { removeSequence: false } });
+                },
+            },
+        );
     }
 
     const removeMessage = (

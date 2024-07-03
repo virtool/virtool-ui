@@ -3,7 +3,7 @@ import { Box, InputGroup, InputLabel, Select, SelectButton, SelectContent, Selec
 import { OTUSegment } from "@otus/types";
 import { map } from "lodash-es";
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { SequenceSegment } from "./SequenceSegment";
@@ -50,7 +50,7 @@ type SequenceSegmentFieldProps = {
  * Displays a dropdown list of available segments in adding/editing dialogs or provides option to create schema
  */
 export default function SequenceSegmentField({ hasSchema, otuId, refId, segments }: SequenceSegmentFieldProps) {
-    const { setValue, watch } = useFormContext<{ segment: string }>();
+    const { control } = useFormContext<{ segment: string }>();
 
     if (hasSchema) {
         const segmentOptions = map(segments, segment => (
@@ -61,18 +61,24 @@ export default function SequenceSegmentField({ hasSchema, otuId, refId, segments
             <InputGroup>
                 <InputLabel htmlFor="segment">Segment</InputLabel>
                 <SegmentSelectContainer>
-                    <Select
-                        value={watch("segment") || "None"}
-                        onValueChange={value => value !== "" && setValue("segment", value === "None" ? null : value)}
-                    >
-                        <SelectButton icon="chevron-down" />
-                        <SelectContent position="popper" align="start">
-                            <SelectItem key="None" value="None" description="">
-                                None
-                            </SelectItem>
-                            {segmentOptions}
-                        </SelectContent>
-                    </Select>
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <Select
+                                value={value || "None"}
+                                onValueChange={value => value !== "" && onChange(value === "None" ? null : value)}
+                            >
+                                <SelectButton icon="chevron-down" />
+                                <SelectContent position="popper" align="start">
+                                    <SelectItem key="None" value="None" description="">
+                                        None
+                                    </SelectItem>
+                                    {segmentOptions}
+                                </SelectContent>
+                            </Select>
+                        )}
+                        name="segment"
+                    />
                 </SegmentSelectContainer>
             </InputGroup>
         );

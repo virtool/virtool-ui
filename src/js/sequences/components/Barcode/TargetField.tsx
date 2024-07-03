@@ -3,7 +3,7 @@ import { Icon, InputGroup, InputLabel, Select, SelectButton, SelectContent } fro
 import { ReferenceTarget } from "@references/types";
 import { map } from "lodash-es";
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
 import { SequenceTarget } from "./SequenceTarget";
 
@@ -42,7 +42,7 @@ type TargetFieldProps = {
  * Displays a dropdown list of available targets in adding/editing dialogs
  */
 export default function TargetField({ targets }: TargetFieldProps) {
-    const { setValue, watch } = useFormContext();
+    const { control } = useFormContext();
 
     const targetSelectOptions = map(targets, target => (
         <SequenceTarget key={target.name} name={target.name} description={target.description} />
@@ -62,16 +62,22 @@ export default function TargetField({ targets }: TargetFieldProps) {
                 )}
             </TargetFieldLabel>
             <TargetSelectContainer>
-                <Select
-                    disabled={disabled}
-                    value={watch("target")}
-                    onValueChange={value => value !== "" && setValue("target", value)}
-                >
-                    <SelectButton icon="chevron-down" />
-                    <SelectContent position="popper" align="start">
-                        {targetSelectOptions}
-                    </SelectContent>
-                </Select>
+                <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                        <Select
+                            disabled={disabled}
+                            value={value}
+                            onValueChange={value => value !== "" && onChange(value)}
+                        >
+                            <SelectButton icon="chevron-down" />
+                            <SelectContent position="popper" align="start">
+                                {targetSelectOptions}
+                            </SelectContent>
+                        </Select>
+                    )}
+                    name="target"
+                />
             </TargetSelectContainer>
         </InputGroup>
     );

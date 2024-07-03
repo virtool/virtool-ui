@@ -254,9 +254,16 @@ export function useEditSequence(otuId: string) {
  *
  * @returns A mutator for removing a sequence
  */
-export function useRemoveSequence() {
+export function useRemoveSequence(otuId: string) {
+    const queryClient = useQueryClient();
+
     return useMutation<null, ErrorResponse, { otuId: string; isolateId: string; sequenceId: string }>(
         ({ otuId, isolateId, sequenceId }) => removeSequence(otuId, isolateId, sequenceId),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+            },
+        },
     );
 }
 
