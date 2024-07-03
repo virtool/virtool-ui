@@ -65,7 +65,7 @@ export default function IsolateDetail({
     const mutation = useSetIsolateAsDefault();
 
     const defaultIsolateLabel = activeIsolate.default && dataType !== "barcode" && (
-        <Label className="bg-green">
+        <Label color="green">
             <Icon name="star" /> Default Isolate
         </Label>
     );
