@@ -29,10 +29,12 @@ const LoginContainer = styled.div`
 type LoginFormProps = {
     /** Error message for the login process. */
     error: string;
+    /** Callback to set the reset code in the parent component state. */
+    setResetCode: (resetCode: string) => void;
 };
 
 /** Handles the user login process. */
-export function LoginForm({ error }: LoginFormProps) {
+export function LoginForm({ error, setResetCode }: LoginFormProps) {
     const { control, handleSubmit, register } = useForm();
     const dispatch = useDispatch();
     const loginMutation = useLoginMutation();
@@ -43,6 +45,9 @@ export function LoginForm({ error }: LoginFormProps) {
             {
                 onSuccess: data => {
                     dispatch({ type: LOGIN.SUCCEEDED, payload: data });
+                    if (data.body.resetCode) {
+                        setResetCode(data.body.resetCode);
+                    }
                 },
             },
         );
