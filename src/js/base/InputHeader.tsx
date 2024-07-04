@@ -1,7 +1,7 @@
-import { useFormik } from "formik";
-import React, { MutableRefObject, useRef } from "react";
+import { borderRadius, getFontSize, getFontWeight } from "@app/theme";
+import React, { MutableRefObject, useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { borderRadius, getFontSize, getFontWeight } from "../app/theme";
 
 const InputHeaderContainer = styled.form`
     border: 2px solid transparent;
@@ -44,34 +44,44 @@ type InputHeaderProps = {
 export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
     const inputElement = useRef<HTMLInputElement>();
 
-    const formik = useFormik({
-        enableReinitialize: true,
-        initialValues: { [id]: value },
-
-        onSubmit: values => {
-            onSubmit(values[id]);
-
-            if (inputElement.current?.hasOwnProperty("blur")) {
-                inputElement.current.blur();
-            }
-        },
+    const {
+        formState: { isSubmitting },
+        handleSubmit,
+        setValue,
+        watch,
+    } = useForm({
+        defaultValues: { [id]: value },
     });
 
+    function onFormSubmit(data) {
+        onSubmit(data[id]);
+
+        if (inputElement.current?.hasOwnProperty("blur")) {
+            inputElement.current.blur();
+        }
+    }
+
+    useEffect(() => {
+        setValue(id, value);
+    }, [value, id, setValue]);
+
     return (
-        <InputHeaderContainer onSubmit={formik.handleSubmit}>
+        <InputHeaderContainer onSubmit={handleSubmit(onFormSubmit)}>
             <InputHeaderControl
                 aria-label={id}
                 autoComplete="off"
                 id={id}
                 name={id}
                 ref={inputElement}
-                value={formik.values[id]}
+                value={watch(id)}
                 onBlur={() => {
-                    if (!formik.isSubmitting) {
-                        formik.submitForm();
+                    if (!isSubmitting) {
+                        handleSubmit(onFormSubmit)();
                     }
                 }}
-                onChange={formik.handleChange}
+                onChange={e => {
+                    setValue(id, e.target.value);
+                }}
             />
         </InputHeaderContainer>
     );
