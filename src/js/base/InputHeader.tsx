@@ -41,6 +41,9 @@ type InputHeaderProps = {
     onSubmit: (value: string) => void;
 };
 
+/**
+ * A styled input header field that handles form submission
+ */
 export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
     const inputElement = useRef<HTMLInputElement>();
 
