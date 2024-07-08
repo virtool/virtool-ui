@@ -1,4 +1,4 @@
-import { LOGIN } from "@app/actionTypes";
+import { loginSucceeded } from "@/account/actions";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -36,8 +36,8 @@ export default function LoginForm() {
         loginMutation.mutate(
             { username, password, remember },
             {
-                onSuccess: data => {
-                    dispatch({ type: LOGIN.SUCCEEDED, payload: data });
+                onSuccess: () => {
+                    dispatch(loginSucceeded());
                 },
             },
         );
