@@ -26,13 +26,8 @@ const LoginContainer = styled.div`
     margin-top: 10px;
 `;
 
-type LoginFormProps = {
-    /** Error message for the login process. */
-    error: string;
-};
-
 /** Handles the user login process. */
-export function LoginForm({ error }: LoginFormProps) {
+export default function LoginForm() {
     const { control, handleSubmit, register } = useForm();
     const dispatch = useDispatch();
     const loginMutation = useLoginMutation();
@@ -47,6 +42,8 @@ export function LoginForm({ error }: LoginFormProps) {
             },
         );
     }
+
+    const { error, isError } = loginMutation;
 
     return (
         <>
@@ -71,7 +68,11 @@ export function LoginForm({ error }: LoginFormProps) {
                                 <Checkbox checked={value} onClick={() => onChange(!value)} label="Remember Me" />
                             )}
                         />
-                        {loginMutation.isError && <LoginError>{error}</LoginError>}
+                        {isError && (
+                            <LoginError>
+                                {error?.response?.body?.message || "An error occurred during login"}
+                            </LoginError>
+                        )}
                     </LoginContainer>
                     <LoginButton type="submit" color="blue">
                         Login
@@ -81,5 +82,3 @@ export function LoginForm({ error }: LoginFormProps) {
         </>
     );
 }
-
-export default LoginForm;
