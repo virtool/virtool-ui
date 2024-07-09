@@ -1,6 +1,5 @@
 import { configureStore, createReducer } from "@reduxjs/toolkit";
 import { createReduxEnhancer } from "@sentry/react";
-import { connectRouter, routerMiddleware } from "connected-react-router";
 import createSagaMiddleware from "redux-saga";
 import accountReducer from "../account/reducer";
 import analysesReducer from "../analyses/reducer";
@@ -56,7 +55,7 @@ export const appReducer = createReducer(initialState, builder => {
 
 const sentryReduxEnhancer = createReduxEnhancer();
 
-export function createAppStore(history) {
+export function createAppStore() {
     const sagaMiddleware = createSagaMiddleware();
 
     const store = configureStore({
@@ -67,9 +66,8 @@ export function createAppStore(history) {
             errors: errorsReducer,
             files: filesReducer,
             forms: formsReducer,
-            router: connectRouter(history),
         },
-        middleware: [sagaMiddleware, routerMiddleware(history)],
+        middleware: [sagaMiddleware],
         enhancers: [sentryReduxEnhancer],
     });
 

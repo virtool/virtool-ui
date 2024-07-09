@@ -99,6 +99,27 @@ export function useCreateAnalysis() {
 }
 
 /**
+ * Initializes a mutator for removing an analysis
+ *
+ * @param analysisId - The id of the analysis to remove
+ * @returns A mutator for removing an analysis
+ */
+export function useSetAnalysis(analysisId: string) {
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation<null, unknown, { analysisId: string }>(
+        ({ analysisId }) => removeAnalysis(analysisId),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(analysesQueryKeys.lists());
+            },
+        },
+    );
+
+    return () => mutation.mutate({ analysisId });
+}
+
+/**
  * Initializes a mutator for installing blast information for a sequence
  *
  * @param analysisId - The id of the analysis the sequence belongs to
@@ -111,7 +132,7 @@ export function useBlastNuVs(analysisId: string) {
         ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries(analysesQueryKeys.lists());
+                queryClient.invalidateQueries(analysesQueryKeys.detail(analysisId));
             },
         },
     );

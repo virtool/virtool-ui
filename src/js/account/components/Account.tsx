@@ -5,7 +5,7 @@ import AccountProfile from "./AccountProfile";
 import APIKeys from "./API/APIKeys";
 
 /**
- * The account view with routes to account-related components
+ * Displays the account page containing the profile and API subpages.
  */
 export default function Account() {
     return (

@@ -13,6 +13,7 @@ export type LocationType = {
     activeIsolateId?: string;
     addSequence?: boolean;
     activeHitId?: number;
+    cloneReference?: string;
     editReference?: boolean;
     editSequence?: boolean;
     export?: boolean;

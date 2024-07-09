@@ -1,19 +1,17 @@
+import { watchRouter } from "@app/sagas";
+import { theme } from "@app/theme";
 import { configureStore } from "@reduxjs/toolkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ConnectedRouter, connectRouter, routerMiddleware } from "connected-react-router";
 import { noop } from "lodash-es";
 import React from "react";
 import { Provider } from "react-redux";
-import { MemoryRouter } from "react-router-dom";
-import { combineReducers } from "redux";
+import { MemoryRouter, Router } from "react-router-dom";
 import createSagaMiddleware from "redux-saga";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
-import { watchRouter } from "../js/app/sagas";
-import { theme } from "../js/app/theme";
 
 process.env.TZ = "UTC";
 
@@ -58,15 +56,11 @@ export function createGenericReducer(initState) {
 }
 
 export function createAppStore(state, history, createReducer) {
-    const reducer = createReducer
-        ? createReducer(state, history)
-        : combineReducers({
-              router: connectRouter(history),
-          });
+    const reducer = createReducer ? createReducer(state, history) : createGenericReducer({});
     const sagaMiddleware = createSagaMiddleware();
     const store = configureStore({
         reducer: reducer,
-        middleware: [sagaMiddleware, routerMiddleware(history)],
+        middleware: [sagaMiddleware],
     });
 
     sagaMiddleware.run(watchRouter);
@@ -77,7 +71,7 @@ export function createAppStore(state, history, createReducer) {
 export function renderWithRouter(ui, state, history, createReducer) {
     const wrappedUI = (
         <Provider store={createAppStore(state, history, createReducer)}>
-            <ConnectedRouter history={history}> {ui} </ConnectedRouter>
+            <Router history={history}>{ui}</Router>
         </Provider>
     );
     renderWithProviders(wrappedUI);

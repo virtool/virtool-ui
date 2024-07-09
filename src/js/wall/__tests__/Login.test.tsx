@@ -5,7 +5,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { attachResizeObserver, renderWithProviders } from "../../../tests/setupTests";
 import { LOGIN } from "../../app/actionTypes";
-import { Login, mapDispatchToProps, mapStateToProps } from "../Login";
+import { LoginForm, mapDispatchToProps, mapStateToProps } from "../LoginForm";
 
 function createAppStore(state) {
     return () =>
@@ -15,7 +15,7 @@ function createAppStore(state) {
         });
 }
 
-describe("<Login />", () => {
+describe("<LoginForm />", () => {
     attachResizeObserver();
     let props;
 
@@ -31,11 +31,11 @@ describe("<Login />", () => {
     });
 
     it("should call onLogin() with correct values when submitted", async () => {
-        renderWithProviders(<Login {...props} />, createAppStore(null));
+        renderWithProviders(<LoginForm {...props} />, createAppStore(null));
 
         const usernameField = screen.getByLabelText("Username");
-        await userEvent.type(usernameField, `test_Username`);
-        expect(usernameField).toHaveValue(`test_Username`);
+        await userEvent.type(usernameField, "test_Username");
+        expect(usernameField).toHaveValue("test_Username");
 
         const passwordField = screen.getByLabelText("Password");
         await userEvent.type(passwordField, "Password");

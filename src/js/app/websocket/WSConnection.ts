@@ -1,6 +1,5 @@
-import { resetClient } from "../../utils/utils";
+import { resetClient } from "@utils/utils";
 import { reactQueryHandler } from "./reactQueryHandler";
-import { reduxHandler } from "./reduxHandler";
 
 export const INITIALIZING = "initializing";
 export const CONNECTING = "connecting";
@@ -10,14 +9,12 @@ export const RECONNECTING = "reconnecting";
 
 export default function WSConnection(store, queryClient) {
     // setup the respective handlers for supporting both redux and react-query data sources
-    this.reduxHandler = reduxHandler(store);
     this.reactQueryHandler = reactQueryHandler(queryClient);
 
     // When a websocket message is received, this method is called with the message as the sole argument. Every message
     // has a property "operation" that tells the dispatcher what to do. Illegal operation names will throw an error.
     this.handle = message => {
         this.reactQueryHandler(message);
-        this.reduxHandler(message);
     };
 
     this.interval = 500;

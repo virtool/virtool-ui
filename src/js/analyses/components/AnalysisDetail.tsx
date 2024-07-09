@@ -1,10 +1,4 @@
 import { useGetAnalysis } from "@/analyses/queries";
-import { useFetchSample } from "@samples/queries";
-import { getWorkflowDisplayName } from "@utils/utils";
-import { get } from "lodash-es";
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
 import {
     Box,
     Icon,
@@ -14,8 +8,12 @@ import {
     SubviewHeader,
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
-} from "../../base/index";
-import { setAnalysis } from "../actions";
+} from "@base";
+import { useFetchSample } from "@samples/queries";
+import { getWorkflowDisplayName } from "@utils/utils";
+import React from "react";
+import { match } from "react-router-dom";
+import styled from "styled-components";
 import AODPViewer from "./AODP/Viewer";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/NuVsViewer";
@@ -31,25 +29,22 @@ const UnsupportedAnalysis = styled(Box)`
     }
 `;
 
+type AnalysisDetailProps = {
+    /** Match object containing path information */
+    match: match<{ analysisId: string; sampleId: string }>;
+};
+
 /** Base component viewing all supported analysis */
-export function AnalysisDetail({ detail, match, onSetAnalysis }) {
-    const analysisId = match.params.analysisId;
+export default function AnalysisDetail({ match }: AnalysisDetailProps) {
+    const { analysisId, sampleId } = match.params;
     const { data: analysis, isLoading, error } = useGetAnalysis(analysisId);
-
-    const sampleId = match.params.sampleId;
     const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
-
-    useEffect(() => {
-        if (analysis) {
-            onSetAnalysis(analysis);
-        }
-    }, [analysis]);
 
     if (error?.response.status === 404) {
         return <NotFound />;
     }
 
-    if (isLoading || isLoadingSample || detail?.id !== analysisId) {
+    if (isLoading || isLoadingSample) {
         return <LoadingPlaceholder />;
     }
 
@@ -95,20 +90,3 @@ export function AnalysisDetail({ detail, match, onSetAnalysis }) {
         </div>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        detail: state.analyses.detail,
-        error: get(state, "errors.GET_ANALYSIS_ERROR", null),
-    };
-}
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onSetAnalysis: analysis => {
-            dispatch(setAnalysis(analysis));
-        },
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AnalysisDetail);

@@ -1,3 +1,5 @@
+import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
+import { Permission } from "@/groups/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -48,6 +50,11 @@ type ReferenceItemProps = {
  */
 export function ReferenceItem({ reference }: ReferenceItemProps) {
     const { id, data_type, name, organism, user, created_at, task } = reference;
+    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
+
+    const cloneButton = canCreate ? (
+        <IconLink to={{ state: { cloneReference: id } }} name="clone" tip="Clone" color="blue" aria-label="clone" />
+    ) : null;
 
     return (
         <StyledReferenceItem>
@@ -63,13 +70,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 {task && !task.complete ? (
                     <ProgressCircle progress={task.progress || 0} state={task.complete ? "complete" : "running"} />
                 ) : (
-                    <IconLink
-                        to={{ state: { cloneReference: true, id } }}
-                        name="clone"
-                        tip="Clone"
-                        color="blue"
-                        aria-label="clone"
-                    />
+                    cloneButton
                 )}
             </ReferenceItemEndIcon>
         </StyledReferenceItem>
