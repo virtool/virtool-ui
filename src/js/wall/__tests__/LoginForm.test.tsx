@@ -32,7 +32,7 @@ describe("<LoginForm />", () => {
         const password = "Password";
 
         const scope = nock("http://localhost")
-            .post("/api/login", { username: username, password: password, remember: true })
+            .post("/api/account/login", { username: username, password: password, remember: true })
             .reply(200);
 
         renderWithProviders(<LoginForm />);
@@ -51,7 +51,7 @@ describe("<LoginForm />", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
-        scope.isDone();
+        scope.done();
     });
 
     it("should display error message on login failure", async () => {
@@ -60,8 +60,8 @@ describe("<LoginForm />", () => {
         const errorMessage = "An error occurred during login";
 
         const scope = nock("http://localhost")
-            .post("/api/login", { username: username, password: password, remember: false })
-            .reply(400);
+            .post("/api/account/login", { username: username, password: password })
+            .reply(400, { message: errorMessage });
 
         renderWithProviders(<LoginForm />);
 
@@ -73,6 +73,6 @@ describe("<LoginForm />", () => {
             expect(screen.getByText(errorMessage)).toBeInTheDocument();
         });
 
-        scope.isDone();
+        scope.done();
     });
 });
