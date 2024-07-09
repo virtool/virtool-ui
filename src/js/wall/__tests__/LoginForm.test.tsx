@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
@@ -69,9 +69,7 @@ describe("<LoginForm />", () => {
         await userEvent.type(screen.getByLabelText("Password"), password);
         await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
-        await waitFor(() => {
-            expect(screen.getByText(errorMessage)).toBeInTheDocument();
-        });
+        expect(await screen.findByText(errorMessage)).toBeInTheDocument();
 
         scope.done();
     });
