@@ -3,22 +3,16 @@ import { WallContainer, WallDialog, WallLoginContainer } from "./Container";
 import LoginForm from "./LoginForm";
 import ResetForm from "./ResetForm";
 
-function LoginWall() {
-    const [resetCode, setResetCode] = useState<string | null>(null);
+export default function LoginWall() {
+    const [resetCode, setResetCode] = useState<string | null>("a");
 
     return (
         <WallContainer>
             <WallDialog>
                 <WallLoginContainer>
-                    {resetCode ? (
-                        <ResetForm error="Invalid password" resetCode={resetCode} />
-                    ) : (
-                        <LoginForm setResetCode={setResetCode} />
-                    )}
+                    {resetCode ? <ResetForm resetCode={resetCode} /> : <LoginForm setResetCode={setResetCode} />}
                 </WallLoginContainer>
             </WallDialog>
         </WallContainer>
     );
 }
-
-export default LoginWall;
