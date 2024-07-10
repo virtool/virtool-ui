@@ -1,6 +1,7 @@
 import { useInfiniteFindUsers } from "@administration/queries";
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox } from "@base";
 import { ScrollList } from "@base/ScrollList";
+import { useUrlSearchParams } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -36,7 +37,13 @@ type UsersListProps = {
  */
 
 export function UsersList({ term }: UsersListProps) {
-    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindUsers(25, term);
+    const [active] = useUrlSearchParams("active");
+    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindUsers(
+        25,
+        term,
+        false,
+        Boolean(active),
+    );
 
     if (isLoading) {
         return <LoadingPlaceholder />;

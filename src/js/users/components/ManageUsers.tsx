@@ -1,3 +1,6 @@
+import { ToggleGroup } from "@base/ToggleGroup";
+import { ToggleGroupItem } from "@base/ToggleGroupItem";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
@@ -12,6 +15,7 @@ import { UsersList } from "./UsersList";
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
+    const [active, setActive] = useUrlSearchParams("active", true);
     const { hasPermission, isLoading } = useCheckAdminRole(AdministratorRoles.USERS);
 
     if (isLoading) {
@@ -28,6 +32,14 @@ export function ManageUsers() {
                         value={term}
                         onChange={e => setTerm(e.target.value)}
                     />
+                    <ToggleGroup type="single" defaultValue="active">
+                        <ToggleGroupItem value="active" onClick={() => setActive(true)}>
+                            Active
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="inactive" onClick={() => setActive(false)}>
+                            Inactive
+                        </ToggleGroupItem>
+                    </ToggleGroup>
                     <CreateUser />
                 </Toolbar>
 
