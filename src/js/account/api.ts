@@ -154,8 +154,8 @@ export function login({
  * @returns A promise which resolves to a response indicating if the
  * logout was successful.
  */
-export function logout(): Promise<Response> {
-    return Request.get("/account/logout");
+export function logout(): Promise<null> {
+    return Request.get("/account/logout").then(res => res.body);
 }
 
 /**

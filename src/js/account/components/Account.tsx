@@ -1,7 +1,6 @@
+import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@base";
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-
-import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@base";
 import AccountProfile from "./AccountProfile";
 import APIKeys from "./API/APIKeys";
 

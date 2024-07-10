@@ -1,33 +1,22 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
+import nock from "nock";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../tests/setupTests";
-import { LoginForm } from "../LoginForm";
-import { useLoginMutation } from "../Queries";
-
-vi.mock("../Queries", () => ({
-    useLoginMutation: vi.fn(),
-}));
+import LoginForm from "../LoginForm";
 
 vi.mock("react-redux", () => ({
     useDispatch: vi.fn(),
 }));
 
 describe("<LoginForm />", () => {
-    let mockLoginMutation;
     let mockDispatch;
 
     beforeEach(() => {
         mockDispatch = vi.fn();
         (useDispatch as jest.Mock).mockReturnValue(mockDispatch);
-
-        mockLoginMutation = {
-            mutate: vi.fn(),
-            isError: false,
-        };
-        (useLoginMutation as jest.Mock).mockReturnValue(mockLoginMutation);
 
         window.virtool = {
             b2c: {
@@ -36,39 +25,54 @@ describe("<LoginForm />", () => {
         };
     });
 
+    afterEach(() => nock.cleanAll());
+
     it("should call mutate() with correct values when submitted", async () => {
-        renderWithProviders(<LoginForm error="" />);
+        const username = "test_Username";
+        const password = "Password";
+        const [, setResetCode] = useState<string | null>(null);
+
+        const scope = nock("http://localhost")
+            .post("/api/account/login", { username: username, password: password, remember: true })
+            .reply(200);
+
+        renderWithProviders(<LoginForm setResetCode={setResetCode} />);
 
         const usernameField = screen.getByLabelText("Username");
-        await userEvent.type(usernameField, "test_Username");
-        expect(usernameField).toHaveValue("test_Username");
+        await userEvent.type(usernameField, username);
+        expect(usernameField).toHaveValue(username);
 
         const passwordField = screen.getByLabelText("Password");
-        await userEvent.type(passwordField, "Password");
-        expect(passwordField).toHaveValue("Password");
+        await userEvent.type(passwordField, password);
+        expect(passwordField).toHaveValue(password);
 
         expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "unchecked");
         await userEvent.click(screen.getByLabelText("Remember Me"));
         expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "checked");
 
         await userEvent.click(screen.getByRole("button", { name: "Login" }));
-        await waitFor(() =>
-            expect(mockLoginMutation.mutate).toHaveBeenCalledWith(
-                { username: "test_Username", password: "Password", remember: true },
-                expect.any(Object),
-            ),
-        );
+
+        scope.done();
     });
 
     it("should display error message on login failure", async () => {
-        mockLoginMutation.isError = true;
+        const username = "test_Username";
+        const password = "Password";
+        const errorMessage = "An error occurred during login";
+        const [, setResetCode] = useState<string | null>(null);
 
-        renderWithProviders(<LoginForm error="Invalid username or password" />);
+        const scope = nock("http://localhost")
+            .post("/api/account/login", { username: username, password: password })
+            .reply(400, { message: errorMessage });
 
-        await userEvent.type(screen.getByLabelText("Username"), "test_Username");
-        await userEvent.type(screen.getByLabelText("Password"), "Password");
+        renderWithProviders(<LoginForm setResetCode={setResetCode} />);
+
+        await userEvent.type(screen.getByLabelText("Username"), username);
+        await userEvent.type(screen.getByLabelText("Password"), password);
         await userEvent.click(screen.getByRole("button", { name: "Login" }));
 
-        await waitFor(() => expect(screen.getByText("Invalid username or password")).toBeInTheDocument());
+        expect(await screen.findByText(errorMessage)).toBeInTheDocument();
+
+        scope.done();
     });
 });

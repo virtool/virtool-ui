@@ -27,14 +27,12 @@ const LoginContainer = styled.div`
 `;
 
 type LoginFormProps = {
-    /** Error message for the login process. */
-    error: string;
     /** Callback to set the reset code in the parent component state. */
     setResetCode: (resetCode: string) => void;
 };
 
 /** Handles the user login process. */
-export function LoginForm({ error, setResetCode }: LoginFormProps) {
+export default function LoginForm({ setResetCode }: LoginFormProps) {
     const { control, handleSubmit, register } = useForm();
     const dispatch = useDispatch();
     const loginMutation = useLoginMutation();
@@ -52,6 +50,8 @@ export function LoginForm({ error, setResetCode }: LoginFormProps) {
             },
         );
     }
+
+    const { error, isError } = loginMutation;
 
     return (
         <>
@@ -76,7 +76,11 @@ export function LoginForm({ error, setResetCode }: LoginFormProps) {
                                 <Checkbox checked={value} onClick={() => onChange(!value)} label="Remember Me" />
                             )}
                         />
-                        {loginMutation.isError && <LoginError>{error}</LoginError>}
+                        {isError && (
+                            <LoginError>
+                                {error?.response?.body?.message || "An error occurred during login"}
+                            </LoginError>
+                        )}
                     </LoginContainer>
                     <LoginButton type="submit" color="blue">
                         Login
@@ -86,5 +90,3 @@ export function LoginForm({ error, setResetCode }: LoginFormProps) {
         </>
     );
 }
-
-export default LoginForm;

@@ -1,7 +1,8 @@
 import { Container, LoadingPlaceholder } from "@/base";
 import { getAccount } from "@account/actions";
-import { getSettings } from "@administration/actions";
+import NavBar from "@nav/components/NavBar";
 import { NavContainer } from "@nav/components/NavContainer";
+import Sidebar from "@nav/components/Sidebar";
 import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
@@ -12,13 +13,11 @@ import styled from "styled-components";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
-import NavBar from "../nav/components/NavBar";
-import Sidebar from "../nav/components/Sidebar";
 
 import WSConnection, { ABANDONED, INITIALIZING } from "./websocket/WSConnection";
 
 const Administration = lazy(() => import("../administration/components/Settings"));
-const Account = lazy(() => import("../account/components/Account"));
+const Account = lazy(() => import("@account/components/Account"));
 const HMM = lazy(() => import("../hmm/components/HMM"));
 const Jobs = lazy(() => import("../jobs/components/Jobs"));
 const References = lazy(() => import("../references/components/References"));
@@ -44,7 +43,7 @@ const MainContainer = styled.div`
     padding-top: 80px;
 `;
 
-export const Main = ({ ready, onLoad }) => {
+export const Main = ({ account, ready, onLoad }) => {
     const queryClient = useQueryClient();
     useEffect(() => {
         if (!ready) onLoad();
@@ -64,7 +63,7 @@ export const Main = ({ ready, onLoad }) => {
 
                 <NavContainer>
                     <MessageBanner />
-                    <NavBar />
+                    <NavBar administrator_role={account.administrator_role} handle={account.handle} />
                 </NavContainer>
 
                 <MainContainer>
@@ -83,7 +82,7 @@ export const Main = ({ ready, onLoad }) => {
                     </Suspense>
                 </MainContainer>
 
-                <Sidebar />
+                <Sidebar administratorRole={account.administrator_role} />
 
                 <DevDialog />
                 <UploadOverlay />
@@ -96,14 +95,14 @@ export const Main = ({ ready, onLoad }) => {
 
 export const mapStateToProps = state => {
     return {
-        ready: state.account.ready && Boolean(state.settings.data),
+        ready: state.account.ready,
+        account: state.account,
     };
 };
 
 export const mapDispatchToProps = dispatch => ({
     onLoad: () => {
         dispatch(getAccount());
-        dispatch(getSettings());
     },
 });
 

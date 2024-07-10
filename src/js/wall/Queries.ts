@@ -1,15 +1,8 @@
 import { login, resetPassword } from "@/account/api";
+import { accountKeys } from "@/account/queries";
 import { ErrorResponse } from "@/types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Response } from "superagent";
-
-/**
- * Factory object for generating account query keys
- */
-export const accountKeys = {
-    all: () => ["account"],
-    details: () => ["account", "details"] as const,
-};
 
 /**
  * Initializes a mutator for sending a login request to the API.

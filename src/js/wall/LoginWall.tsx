@@ -13,7 +13,7 @@ function LoginWall() {
                     {resetCode ? (
                         <ResetForm error="Invalid password" resetCode={resetCode} />
                     ) : (
-                        <LoginForm error="Invalid username or password" setResetCode={setResetCode} />
+                        <LoginForm setResetCode={setResetCode} />
                     )}
                 </WallLoginContainer>
             </WallDialog>
