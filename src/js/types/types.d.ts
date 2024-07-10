@@ -18,4 +18,5 @@ export type LocationType = {
     editSequence?: boolean;
     export?: boolean;
     devCommands?: boolean;
+    removeSequence?: string;
 };
