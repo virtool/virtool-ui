@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../tests/setupTests";
@@ -30,7 +30,7 @@ describe("<LoginForm />", () => {
     it("should call mutate() with correct values when submitted", async () => {
         const username = "test_Username";
         const password = "Password";
-        const [, setResetCode] = useState<string | null>(null);
+        const setResetCode = vi.fn();
 
         const scope = nock("http://localhost")
             .post("/api/account/login", { username: username, password: password, remember: true })
@@ -59,7 +59,7 @@ describe("<LoginForm />", () => {
         const username = "test_Username";
         const password = "Password";
         const errorMessage = "An error occurred during login";
-        const [, setResetCode] = useState<string | null>(null);
+        const setResetCode = vi.fn();
 
         const scope = nock("http://localhost")
             .post("/api/account/login", { username: username, password: password })
