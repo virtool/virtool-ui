@@ -3,9 +3,9 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useLocationState } from "@utils/hooks";
+import { merge } from "lodash";
 import { find, map } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import IsolateDetail from "./IsolateDetail";
 import IsolateItem from "./IsolateItem";
@@ -50,11 +50,16 @@ const IsolateEditorList = styled(BoxGroup)`
     width: 100%;
 `;
 
+const AddIsolateLink = styled.a`
+    margin-left: auto;
+    cursor: pointer;
+`;
+
 /**
  * Displays a component for managing the isolates
  */
 export default function IsolateEditor() {
-    const [locationState] = useLocationState();
+    const [locationState, setLocationState] = useLocationState();
     const { otu, reference } = useCurrentOTUContext();
     const { isolates } = otu;
     const { data_type, restrict_source_types, source_types } = reference;
@@ -63,13 +68,16 @@ export default function IsolateEditor() {
 
     const activeIsolateId = locationState?.activeIsolateId || otu.isolates[0]?.id;
     const activeIsolate = isolates.length ? find(isolates, { id: activeIsolateId }) : null;
-    console.log(locationState?.activeIsolateId, otu.isolates[0]?.id);
 
     const isolateComponents = map(isolates, (isolate, index) => (
         <IsolateItem key={index} isolate={isolate} active={isolate.id === activeIsolate.id} dataType={data_type} />
     ));
 
-    const addIsolateLink = canModify ? <Link to={{ state: { addIsolate: true } }}>Add Isolate</Link> : null;
+    const addIsolateLink = canModify ? (
+        <AddIsolateLink onClick={() => setLocationState(merge(locationState, { addIsolate: true }))}>
+            Add Isolate
+        </AddIsolateLink>
+    ) : null;
 
     const body = isolateComponents.length ? (
         <IsolateEditorContainer>

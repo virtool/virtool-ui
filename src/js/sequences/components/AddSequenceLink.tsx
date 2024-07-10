@@ -7,7 +7,6 @@ import { useGetUnreferencedTargets } from "@sequences/hooks";
 import { useLocationState } from "@utils/hooks";
 import { merge } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const AddSequenceLinkMessage = styled.span`
@@ -15,8 +14,9 @@ const AddSequenceLinkMessage = styled.span`
     margin-left: auto;
 `;
 
-const StyledAddSequenceLink = styled(Link)`
+const StyledAddSequenceLink = styled.a`
     margin-left: auto;
+    cursor: pointer;
 `;
 
 type AddSequenceLinkProps = {
