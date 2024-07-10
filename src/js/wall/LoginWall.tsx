@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 import ResetForm from "./ResetForm";
 
 export default function LoginWall() {
-    const [resetCode, setResetCode] = useState<string | null>("a");
+    const [resetCode, setResetCode] = useState<string | null>(null);
 
     return (
         <WallContainer>
