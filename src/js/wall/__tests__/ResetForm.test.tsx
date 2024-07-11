@@ -25,7 +25,7 @@ describe("<ResetForm />", () => {
         const errorMessage = "Invalid reset code";
 
         const scope = nock("http://localhost")
-            .post("/api/account/reset", { password, resetCode })
+            .post("/api/account/reset", { password, reset_code: resetCode })
             .reply(400, { message: errorMessage });
 
         renderWithProviders(<ResetForm resetCode={resetCode} />);
