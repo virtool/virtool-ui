@@ -33,7 +33,7 @@ describe("<LoginForm />", () => {
         const setResetCode = vi.fn();
 
         const scope = nock("http://localhost")
-            .post("/api/account/login", { username: username, password: password, remember: true })
+            .post("/api/account/login", { username, password, remember: true })
             .reply(200);
 
         renderWithProviders(<LoginForm setResetCode={setResetCode} />);
@@ -62,7 +62,7 @@ describe("<LoginForm />", () => {
         const setResetCode = vi.fn();
 
         const scope = nock("http://localhost")
-            .post("/api/account/login", { username: username, password: password })
+            .post("/api/account/login", { username, password })
             .reply(400, { message: errorMessage });
 
         renderWithProviders(<LoginForm setResetCode={setResetCode} />);
