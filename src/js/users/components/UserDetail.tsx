@@ -1,3 +1,6 @@
+import { UserActivation } from "@users/components/UserActivation";
+import { UserActivationBanner } from "@users/components/UserActivationBanner";
+import { useLocationState } from "@utils/hooks";
 import React from "react";
 import { Link, match } from "react-router-dom";
 import styled from "styled-components";
@@ -55,6 +58,7 @@ type UserDetailProps = {
  * The detailed view of a user
  */
 export default function UserDetail({ match }: UserDetailProps) {
+    const [locationState, setLocationState] = useLocationState();
     const { data, isLoading } = useFetchUser(match.params["userId"]);
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
@@ -99,6 +103,32 @@ export default function UserDetail({ match }: UserDetailProps) {
                 </div>
                 <UserPermissions permissions={permissions} />
             </UserDetailGroups>
+
+            <UserActivationBanner
+                buttonText="Deactivate"
+                message="Deactivate this user"
+                noun="deactivate"
+                onClick={() => setLocationState({ deactivateUser: true })}
+            />
+            <UserActivationBanner
+                buttonText="Reactivate"
+                message="Reactivate this user"
+                noun="reactivate"
+                onClick={() => setLocationState({ reactivateUser: true })}
+            />
+
+            <UserActivation
+                handle={data.handle}
+                noun="deactivate"
+                onHide={() => setLocationState({ deactivateUser: false })}
+                show={locationState?.deactivateUser}
+            />
+            <UserActivation
+                handle={data.handle}
+                noun="reactivate"
+                onHide={() => setLocationState({ reactivateUser: false })}
+                show={locationState?.reactivateUser}
+            />
         </div>
     );
 }

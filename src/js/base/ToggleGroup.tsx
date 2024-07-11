@@ -7,6 +7,7 @@ export const ToggleGroup = styled(ToggleGroupPrimitive.Root)`
     justify-content: center;
     align-content: center;
     align-items: center;
-    background-color: ${theme.color.greyDark};
+    padding: 0 1px;
+    background-color: ${theme.color.greyLight};
     border-radius: ${props => props.theme.borderRadius.sm};
 `;

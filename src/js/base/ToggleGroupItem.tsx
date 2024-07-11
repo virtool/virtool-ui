@@ -6,16 +6,14 @@ export const ToggleGroupItem = styled(ToggleGroupPrimitive.Item)`
     background-color: ${props => props.theme.color.white};
     font-size: ${getFontSize("md")};
     color: black;
-    height: 35px;
-    width: 60px;
-    margin: 2px;
+    height: 36px;
+    width: 65px;
     display: flex;
     line-height: 1;
     align-items: center;
     justify-content: center;
 
     &:first-child {
-        margin-left: 0;
         border-top-left-radius: ${props => props.theme.borderRadius.sm};
         border-bottom-left-radius: ${props => props.theme.borderRadius.sm};
     }
@@ -34,7 +32,6 @@ export const ToggleGroupItem = styled(ToggleGroupPrimitive.Item)`
     }
 
     &[data-state="on"] {
-        background-color: ${props => props.theme.color.greyLight};
-        color: white;
+        background-color: ${props => props.theme.color.greyLightest};
     }
 `;

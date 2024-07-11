@@ -14,8 +14,10 @@ export type LocationType = {
     addSequence?: boolean;
     activeHitId?: number;
     cloneReference?: string;
+    deactivateUser?: boolean;
     editReference?: boolean;
     editSequence?: boolean;
     export?: boolean;
     devCommands?: boolean;
+    reactivateUser?: boolean;
 };
