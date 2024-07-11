@@ -30,12 +30,13 @@ describe("<LoginForm />", () => {
     it("should call mutate() with correct values when submitted", async () => {
         const username = "test_Username";
         const password = "Password";
+        const setResetCode = vi.fn();
 
         const scope = nock("http://localhost")
-            .post("/api/account/login", { username: username, password: password, remember: true })
+            .post("/api/account/login", { username, password, remember: true })
             .reply(200);
 
-        renderWithProviders(<LoginForm />);
+        renderWithProviders(<LoginForm setResetCode={setResetCode} />);
 
         const usernameField = screen.getByLabelText("Username");
         await userEvent.type(usernameField, username);
@@ -58,12 +59,13 @@ describe("<LoginForm />", () => {
         const username = "test_Username";
         const password = "Password";
         const errorMessage = "An error occurred during login";
+        const setResetCode = vi.fn();
 
         const scope = nock("http://localhost")
-            .post("/api/account/login", { username: username, password: password })
+            .post("/api/account/login", { username, password })
             .reply(400, { message: errorMessage });
 
-        renderWithProviders(<LoginForm />);
+        renderWithProviders(<LoginForm setResetCode={setResetCode} />);
 
         await userEvent.type(screen.getByLabelText("Username"), username);
         await userEvent.type(screen.getByLabelText("Password"), password);

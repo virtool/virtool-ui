@@ -26,8 +26,13 @@ const LoginContainer = styled.div`
     margin-top: 10px;
 `;
 
+type LoginFormProps = {
+    /** Callback to set the reset code in the parent component state. */
+    setResetCode: (resetCode: string) => void;
+};
+
 /** Handles the user login process. */
-export default function LoginForm() {
+export default function LoginForm({ setResetCode }: LoginFormProps) {
     const { control, handleSubmit, register } = useForm();
     const dispatch = useDispatch();
     const loginMutation = useLoginMutation();
@@ -38,6 +43,9 @@ export default function LoginForm() {
             {
                 onSuccess: data => {
                     dispatch({ type: LOGIN.SUCCEEDED, payload: data });
+                    if (data.body.resetCode) {
+                        setResetCode(data.body.resetCode);
+                    }
                 },
             },
         );
