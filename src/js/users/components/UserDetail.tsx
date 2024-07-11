@@ -104,27 +104,32 @@ export default function UserDetail({ match }: UserDetailProps) {
                 <UserPermissions permissions={permissions} />
             </UserDetailGroups>
 
-            <UserActivationBanner
-                buttonText="Deactivate"
-                message="Deactivate this user"
-                noun="deactivate"
-                onClick={() => setLocationState({ deactivateUser: true })}
-            />
-            <UserActivationBanner
-                buttonText="Reactivate"
-                message="Reactivate this user"
-                noun="reactivate"
-                onClick={() => setLocationState({ reactivateUser: true })}
-            />
+            {data.active ? (
+                <UserActivationBanner
+                    buttonText="Deactivate"
+                    message="Deactivate this user"
+                    noun="deactivate"
+                    onClick={() => setLocationState({ deactivateUser: true })}
+                />
+            ) : (
+                <UserActivationBanner
+                    buttonText="Reactivate"
+                    message="Reactivate this user"
+                    noun="reactivate"
+                    onClick={() => setLocationState({ reactivateUser: true })}
+                />
+            )}
 
             <UserActivation
                 handle={data.handle}
+                id={data.id}
                 noun="deactivate"
                 onHide={() => setLocationState({ deactivateUser: false })}
                 show={locationState?.deactivateUser}
             />
             <UserActivation
                 handle={data.handle}
+                id={data.id}
                 noun="reactivate"
                 onHide={() => setLocationState({ reactivateUser: false })}
                 show={locationState?.reactivateUser}

@@ -115,6 +115,7 @@ export function createUser({ handle, password, forceReset }): Promise<User> {
 }
 
 export type UserUpdate = {
+    active?: boolean;
     force_reset?: boolean;
     password?: string;
     primary_group?: string;
