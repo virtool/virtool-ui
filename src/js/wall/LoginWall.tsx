@@ -1,29 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
 import { WallContainer, WallDialog, WallLoginContainer } from "./Container";
 import LoginForm from "./LoginForm";
 import ResetForm from "./ResetForm";
 
-type LoginWallProps = {
-    /** Indicates if the user needs to reset their password. */
-    reset: boolean;
-};
+export default function LoginWall() {
+    const [resetCode, setResetCode] = useState<string | null>(null);
 
-/** Renders either ResetForm or LoginForm based on the reset state. */
-export function LoginWall({ reset }: LoginWallProps) {
     return (
         <WallContainer>
             <WallDialog>
-                <WallLoginContainer>{reset ? <ResetForm /> : <LoginForm />}</WallLoginContainer>
+                <WallLoginContainer>
+                    {resetCode ? <ResetForm resetCode={resetCode} /> : <LoginForm setResetCode={setResetCode} />}
+                </WallLoginContainer>
             </WallDialog>
         </WallContainer>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        reset: state.app.reset,
-    };
-}
-
-export default connect(mapStateToProps)(LoginWall);

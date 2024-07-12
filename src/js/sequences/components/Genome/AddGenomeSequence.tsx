@@ -4,6 +4,7 @@ import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useLocationState } from "@utils/hooks";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
+import { merge } from "lodash";
 import { find } from "lodash-es";
 import { compact, map } from "lodash-es/lodash";
 import React from "react";
@@ -56,14 +57,17 @@ export default function AddGenomeSequence({ isolateId, otuId, refId, schema, seq
             { isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
                 onSuccess: () => {
-                    setLocationState({ addSequence: false });
+                    setLocationState(merge(locationState, { addSequence: false }));
                 },
             },
         );
     }
 
     return (
-        <Dialog open={locationState?.addSequence} onOpenChange={() => setLocationState({ addSequence: false })}>
+        <Dialog
+            open={locationState?.addSequence}
+            onOpenChange={() => setLocationState(merge(locationState, { addSequence: false }))}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <StyledContent>

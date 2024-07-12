@@ -3,7 +3,7 @@
  *
  * @module account/actions
  */
-import { GET_ACCOUNT, LOGIN, LOGOUT, RESET_PASSWORD } from "@app/actionTypes";
+import { GET_ACCOUNT, LOGIN, RESET_PASSWORD } from "@app/actionTypes";
 import { createAction } from "@reduxjs/toolkit";
 
 /**
@@ -35,14 +35,6 @@ export const loginSucceeded = createAction(LOGIN.SUCCEEDED, () => ({
         reset: false,
     },
 }));
-
-/**
- * Returns action that can trigger an API call that will logout the current session.
- *
- * @func
- * @returns {object}
- */
-export const logout = createAction(LOGOUT.REQUESTED);
 
 /**
  * Returns action that can trigger an API call that will reset the password for the user associated with the  current

@@ -2,12 +2,14 @@ import { ErrorResponse } from "@/types/types";
 import { Permissions } from "@groups/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "@users/types";
+import { resetClient } from "@utils/utils";
 import {
     AccountUpdate,
     changePassword,
     createAPIKey,
     fetchAccount,
     getAPIKeys,
+    logout,
     removeAPIKey,
     updateAccount,
     updateAPIKey,
@@ -113,6 +115,19 @@ export function useRemoveAPIKey() {
     return useMutation<null, ErrorResponse, { keyId: string }>(({ keyId }) => removeAPIKey(keyId), {
         onSuccess: () => {
             queryClient.invalidateQueries(accountKeys.all());
+        },
+    });
+}
+
+/**
+ * Initializes a mutator for logging out a user
+ *
+ * @returns A mutator for logging out a user
+ */
+export function useLogout() {
+    return useMutation<null, ErrorResponse>(logout, {
+        onSuccess: () => {
+            resetClient();
         },
     });
 }
