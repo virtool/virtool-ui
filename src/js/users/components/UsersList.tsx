@@ -26,16 +26,13 @@ const StyledScrollList = styled(ScrollList)`
 `;
 
 type UsersListProps = {
+    /** The search term used for filtering users */
     term: string;
 };
 
 /**
  * An infinitely scrolling list of users
- *
- * @param term - the search term used for filtering users
- * @returns An infinitely scrolling list of users
  */
-
 export function UsersList({ term }: UsersListProps) {
     const [active] = useUrlSearchParams("active");
     const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindUsers(

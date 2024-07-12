@@ -9,9 +9,7 @@ import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";
 
 /**
- * User management view. A list of editable users and tools for sorting through and creating users.
- *
- * @returns The user management view
+ * Displays a list of editable users and tools for sorting through and creating users
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");

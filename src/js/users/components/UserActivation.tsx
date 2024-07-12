@@ -9,7 +9,7 @@ const CapitalizedTitle = styled(DialogTitle)`
 `;
 
 /**
- * A dialog that requests confirmation from the user for deleting a document or other sensitive information
+ * A dialog that requests confirmation for deactivating or reactivating a user
  */
 export function UserActivation({ handle, id, noun, onHide, show }) {
     const mutation = useUpdateUser();

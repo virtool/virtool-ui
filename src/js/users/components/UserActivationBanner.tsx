@@ -17,11 +17,16 @@ const ActivationBanner = styled(Alert)`
 
 type UserActivationBannerProps = {
     message: string;
+    /** Whether it is a deactivation or reactivation */
     noun: string;
     buttonText: string;
+    /** A callback function to open respective dialog */
     onClick: () => void;
 };
 
+/**
+ * A styled banner for deactivating or reactivating a user
+ */
 export function UserActivationBanner({ buttonText, message, noun, onClick }: UserActivationBannerProps) {
     return (
         <ActivationBanner color={noun === "deactivate" ? "red" : "green"}>
