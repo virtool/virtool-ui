@@ -1,3 +1,4 @@
+import { sizes } from "@app/theme";
 import {
     Icon,
     IconLink,
@@ -10,17 +11,30 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "@base";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
 import { includes } from "lodash-es";
 import React from "react";
 import { Link, match, Redirect, Route, Switch, useLocation } from "react-router-dom";
+import styled from "styled-components";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
 import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
+
+const SampleInstalling = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 220px;
+
+    p {
+        text-align: center;
+    }
+`;
 
 type SampleDetailProps = {
     /** Match object containing path information */
@@ -45,7 +59,12 @@ export default function SampleDetail({ match }: SampleDetailProps) {
     }
 
     if (!data.ready) {
-        return <LoadingPlaceholder message="Sample is still being created." margin="220px" />;
+        return (
+            <SampleInstalling>
+                <p>{data.job?.state !== "waiting" ? `Sample is ${data.job?.state}` : "Sample is being imported"}</p>
+                <ProgressCircle progress={data.job?.progress} state={data.job?.state || "waiting"} size={sizes.lg} />
+            </SampleInstalling>
+        );
     }
 
     let editIcon;
