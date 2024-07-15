@@ -1,4 +1,3 @@
-import { sizes } from "@app/theme";
 import {
     Icon,
     IconLink,
@@ -11,7 +10,6 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "@base";
-import { ProgressCircle } from "@base/ProgressCircle";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
 import { includes } from "lodash-es";
@@ -58,15 +56,6 @@ export default function SampleDetail({ match }: SampleDetailProps) {
         return <LoadingPlaceholder />;
     }
 
-    if (!data.ready) {
-        return (
-            <SampleInstalling>
-                <p>{data.job?.state !== "waiting" ? `Sample is ${data.job?.state}` : "Sample is being imported"}</p>
-                <ProgressCircle progress={data.job?.progress} state={data.job?.state || "waiting"} size={sizes.lg} />
-            </SampleInstalling>
-        );
-    }
-
     let editIcon;
     let removeIcon;
     let rightsTabLink;
@@ -107,10 +96,14 @@ export default function SampleDetail({ match }: SampleDetailProps) {
 
             <Tabs>
                 <TabsLink to={`${prefix}/general`}>General</TabsLink>
-                <TabsLink to={`${prefix}/files`}>Files</TabsLink>
-                <TabsLink to={`${prefix}/quality`}>Quality</TabsLink>
-                <TabsLink to={`${prefix}/analyses`}>Analyses</TabsLink>
-                {rightsTabLink}
+                {data.ready && (
+                    <>
+                        <TabsLink to={`${prefix}/files`}>Files</TabsLink>
+                        <TabsLink to={`${prefix}/quality`}>Quality</TabsLink>
+                        <TabsLink to={`${prefix}/analyses`}>Analyses</TabsLink>
+                        {rightsTabLink}
+                    </>
+                )}
             </Tabs>
 
             <Switch>
