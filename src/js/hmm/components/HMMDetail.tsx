@@ -92,7 +92,11 @@ export default function HMMDetail({ match }: HMMDetailProps) {
         <ClusterMember name={name} accession={accession} organism={organism} key={index} index={index} />
     ));
 
-    const names = map(data.names, (name, index) => <Label key={index}>{name}</Label>);
+    const names = map(data.names, (name, index) => (
+        <Label className="mr-1" key={index}>
+            {name}
+        </Label>
+    ));
 
     const title = data.names[0];
 
@@ -116,9 +120,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
 
                         <tr>
                             <th>Best Definitions</th>
-                            <td>
-                                <div className="flex gap-1 leading-none">{names}</div>
-                            </td>
+                            <td>{names}</td>
                         </tr>
 
                         <tr>

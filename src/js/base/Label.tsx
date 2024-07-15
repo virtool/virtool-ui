@@ -10,7 +10,7 @@ type LabelProps = {
 /**
  * A styled Label component
  */
-export function Label({ children, className, color = "grey" }: LabelProps) {
+export function Label({ children, className, color = "gray" }: LabelProps) {
     return (
         <span
             className={cn(
@@ -28,7 +28,7 @@ export function Label({ children, className, color = "grey" }: LabelProps) {
                 {
                     "bg-blue-600": color == "blue",
                     "bg-green-600": color == "green",
-                    "bg-grey-500": color == "grey",
+                    "bg-gray-500": color == "gray",
                     "bg-purple-600": color == "purple",
                     "bg-red-600": color == "red",
                 },
