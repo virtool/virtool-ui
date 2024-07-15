@@ -5,6 +5,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReferenceTarget } from "@references/types";
 import { useLocationState } from "@utils/hooks";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
+import { merge } from "lodash";
 import { find } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -62,7 +63,7 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
             { isolateId, sequenceId: id, accession, definition, host, sequence, target: targetName },
             {
                 onSuccess: () => {
-                    setLocationState({ editSequence: false });
+                    setLocationState(merge(locationState, { editSequence: false }));
                 },
             },
         );
@@ -77,7 +78,10 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
     });
 
     return (
-        <Dialog open={locationState?.editSequence} onOpenChange={() => setLocationState({ editSequence: false })}>
+        <Dialog
+            open={locationState?.editSequence}
+            onOpenChange={() => setLocationState(merge(locationState, { editSequence: false }))}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <CenteredDialogContent>
@@ -94,8 +98,9 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
                         }) => (
                             <Form>
                                 <PersistForm
-                                    formName={`editGenomeSequenceForm${id}`}
                                     castValues={castValues(targets, target)}
+                                    formName={`editGenomeSequenceForm${id}`}
+                                    resourceName="sequence"
                                 />
                                 <Field
                                     as={TargetField}

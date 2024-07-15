@@ -6,14 +6,13 @@ import React, { Suspense, useEffect } from "react";
 import { connect, Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import Reset from "../wall/Reset";
 import { getInitialState } from "./actions";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
 
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
-const LazyLogin = React.lazy(() => import("../wall/Login"));
+const LazyLoginWall = React.lazy(() => import("../wall/LoginWall"));
 
 function mapStateToProps(state) {
     const { first, login, reset, ready } = state.app;
@@ -50,16 +49,12 @@ const ConnectedApp = connect(
         );
     }
 
-    if (login) {
+    if (login || reset) {
         return (
             <Suspense fallback={<WallContainer />}>
-                <LazyLogin />
+                <LazyLoginWall />
             </Suspense>
         );
-    }
-
-    if (reset) {
-        return <Reset />;
     }
 
     return <Main />;

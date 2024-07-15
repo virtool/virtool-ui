@@ -53,13 +53,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
     const cloneButton = canCreate ? (
-        <IconLink
-            to={{ state: { cloneReference: true, id } }}
-            name="clone"
-            tip="Clone"
-            color="blue"
-            aria-label="clone"
-        />
+        <IconLink to={{ state: { cloneReference: id } }} name="clone" tip="Clone" color="blue" aria-label="clone" />
     ) : null;
 
     return (

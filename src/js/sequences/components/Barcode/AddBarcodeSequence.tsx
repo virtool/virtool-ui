@@ -5,6 +5,7 @@ import { ReferenceTarget } from "@references/types";
 import TargetField from "@sequences/components/Barcode/TargetField";
 import { useLocationState } from "@utils/hooks";
 import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
+import { merge } from "lodash";
 import { find } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -66,7 +67,7 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
             },
             {
                 onSuccess: () => {
-                    setLocationState({ addSequence: false });
+                    setLocationState(merge(locationState, { addSequence: false }));
                 },
             },
         );
@@ -76,7 +77,10 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
     const initialValues = getInitialValues(defaultTarget);
 
     return (
-        <Dialog open={locationState?.addSequence} onOpenChange={() => setLocationState({ addSequence: false })}>
+        <Dialog
+            open={locationState?.addSequence}
+            onOpenChange={() => setLocationState(merge(locationState, { addSequence: false }))}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <CenteredDialogContent>
@@ -93,8 +97,9 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
                         }) => (
                             <Form>
                                 <PersistForm
-                                    formName="addGenomeSequenceForm"
                                     castValues={castValues(targets, defaultTarget)}
+                                    formName="addGenomeSequenceForm"
+                                    resourceName="sequence"
                                 />
                                 <Field
                                     as={TargetField}

@@ -4,8 +4,9 @@ import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceDataType } from "@references/types";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
+import { useLocationState } from "@utils/hooks";
+import { merge } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const AddSequenceLinkMessage = styled.span`
@@ -13,8 +14,9 @@ const AddSequenceLinkMessage = styled.span`
     margin-left: auto;
 `;
 
-const StyledAddSequenceLink = styled(Link)`
+const StyledAddSequenceLink = styled.a`
     margin-left: auto;
+    cursor: pointer;
 `;
 
 type AddSequenceLinkProps = {
@@ -26,6 +28,7 @@ type AddSequenceLinkProps = {
  * Displays a link to add a sequence
  */
 export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProps) {
+    const [locationState, setLocationState] = useLocationState();
     const { reference } = useCurrentOTUContext();
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
     const unreferencedTargets = useGetUnreferencedTargets();
@@ -45,7 +48,11 @@ export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProp
             }
         }
 
-        return <StyledAddSequenceLink to={{ state: { addSequence: true } }}>Add Sequence</StyledAddSequenceLink>;
+        return (
+            <StyledAddSequenceLink onClick={() => setLocationState(merge(locationState, { addSequence: true }))}>
+                Add Sequence
+            </StyledAddSequenceLink>
+        );
     }
 
     return null;
