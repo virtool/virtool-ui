@@ -9,7 +9,6 @@ const meta: Meta<typeof Alert> = {
             exclude: "level",
         },
     },
-    tags: ["autodocs"],
     argTypes: {
         className: { control: { type: "text" } },
         block: { options: ["true", "false"], control: { type: "boolean" } },

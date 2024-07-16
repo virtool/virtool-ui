@@ -4,7 +4,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof BoxLink> = {
     title: "base/Box/LinkBox",
     component: BoxLink,
-    tags: ["autodocs"],
 };
 
 export default meta;

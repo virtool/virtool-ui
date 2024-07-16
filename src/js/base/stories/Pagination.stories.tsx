@@ -21,7 +21,6 @@ const meta: Meta<typeof Pagination> = {
             },
         },
     },
-    tags: ["autodocs"],
 };
 
 export default meta;

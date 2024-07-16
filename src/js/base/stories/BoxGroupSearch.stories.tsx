@@ -12,7 +12,6 @@ const meta: Meta<typeof BoxGroupSearch> = {
             },
         },
     },
-    tags: ["autodocs"],
 };
 
 export default meta;

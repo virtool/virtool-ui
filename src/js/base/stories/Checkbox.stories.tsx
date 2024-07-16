@@ -5,7 +5,6 @@ import React, { useState } from "react";
 const meta: Meta<typeof Checkbox> = {
     title: "base/Checkbox",
     component: Checkbox,
-    tags: ["autodocs"],
     argTypes: {
         checked: { control: "boolean" },
         disabled: { control: "boolean" },

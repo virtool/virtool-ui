@@ -21,7 +21,6 @@ const meta: Meta<typeof Badge> = {
             },
         },
     },
-    tags: ["autodocs"],
     argTypes: {
         color: {
             options: ["greyDark", "blue", "orange", "purple", "red"],

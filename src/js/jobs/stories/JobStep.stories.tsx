@@ -6,7 +6,6 @@ import { JobStep } from "../components/JobStep";
 const meta: Meta<typeof JobStep> = {
     title: "jobs/Step",
     component: JobStep,
-    tags: ["autodocs"],
 };
 
 export default meta;

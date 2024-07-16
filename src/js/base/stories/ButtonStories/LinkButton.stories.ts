@@ -9,7 +9,6 @@ const meta: Meta<typeof LinkButton> = {
             exclude: ["tipPlacement", "replace"],
         },
     },
-    tags: ["autodocs"],
     argTypes: {
         children: { type: "string" },
         color: {

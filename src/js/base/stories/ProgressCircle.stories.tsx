@@ -5,7 +5,6 @@ import { ProgressCircle } from "../ProgressCircle";
 const meta: Meta<typeof ProgressCircle> = {
     title: "base/ProgressCircle",
     component: ProgressCircle,
-    tags: ["autodocs"],
 };
 
 export default meta;

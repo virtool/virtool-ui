@@ -12,7 +12,6 @@ const meta: Meta<typeof Box> = {
             },
         },
     },
-    tags: ["autodocs"],
 };
 
 export default meta;

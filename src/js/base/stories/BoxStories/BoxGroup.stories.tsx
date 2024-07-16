@@ -19,7 +19,6 @@ const meta: Meta<typeof BoxGroup> = {
         },
         controls: { hideNoControlsWarning: true },
     },
-    tags: ["autodocs"],
 };
 
 function Template(args) {

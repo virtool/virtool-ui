@@ -4,7 +4,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Attribution> = {
     title: "base/Attribution/Attribution",
     component: Attribution,
-    tags: ["autodocs"],
     args: {
         time: "2021-12-17T03:24:00",
     },

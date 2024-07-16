@@ -7,7 +7,6 @@ const currentDate = new Date();
 const meta: Meta<typeof RelativeTime> = {
     title: "base/RelativeTime",
     component: RelativeTime,
-    tags: ["autodocs"],
 };
 
 export default meta;

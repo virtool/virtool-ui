@@ -17,7 +17,6 @@ const meta: Meta<typeof SelectBoxGroupSection> = {
             },
         },
     },
-    tags: ["autodocs"],
 };
 
 export default meta;

@@ -5,7 +5,6 @@ import { InputHeader } from "../InputHeader";
 const meta: Meta<typeof InputHeader> = {
     title: "base/InputHeader",
     component: InputHeader,
-    tags: ["autodocs"],
 };
 
 export default meta;

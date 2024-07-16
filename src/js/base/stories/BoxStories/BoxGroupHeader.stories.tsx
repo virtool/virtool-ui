@@ -10,7 +10,6 @@ const meta: Meta<typeof BoxGroupHeader> = {
             hideNoControlsWarning: true,
         },
     },
-    tags: ["autodocs"],
 };
 
 export default meta;

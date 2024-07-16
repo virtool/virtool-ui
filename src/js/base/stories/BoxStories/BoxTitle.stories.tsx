@@ -5,7 +5,6 @@ import React from "react";
 const meta: Meta<typeof BoxTitle> = {
     title: "base/Box/BoxTitle",
     component: BoxTitle,
-    tags: ["autodocs"],
 };
 
 export default meta;

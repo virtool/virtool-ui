@@ -6,7 +6,6 @@ import JobItem from "../components/Item/JobItem";
 const meta: Meta<typeof JobItem> = {
     title: "jobs/Item",
     component: JobItem,
-    tags: ["autodocs"],
 };
 
 const user = {

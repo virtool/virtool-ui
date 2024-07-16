@@ -4,7 +4,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof AttributionWithName> = {
     title: "base/Attribution/NameAttribution",
     component: AttributionWithName,
-    tags: ["autodocs"],
 };
 
 export default meta;

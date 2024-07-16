@@ -13,7 +13,6 @@ const meta: Meta<typeof BoxGroupSection> = {
             },
         },
     },
-    tags: ["autodocs"],
 };
 
 export default meta;
