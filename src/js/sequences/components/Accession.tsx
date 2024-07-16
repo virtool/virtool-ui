@@ -63,8 +63,7 @@ export function Accession() {
             <InputContainer align="right">
                 <InputSimple
                     id="accession"
-                    onChange={() => setNotFound(false)}
-                    {...register("accession", { required: "Required Field" })}
+                    {...register("accession", { required: "Required Field", onChange: () => setNotFound(false) })}
                 />
                 {pending ? <InputLoading /> : <InputIcon name="magic" onClick={() => setPending(true)} />}
             </InputContainer>
