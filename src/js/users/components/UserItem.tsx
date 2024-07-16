@@ -76,7 +76,7 @@ export function UserItem({ active, administratorRole, handle, id, primary_group 
                 )}
             </TagContainer>
             <TagContainer>{primary_group && <Label>{primary_group.name}</Label>}</TagContainer>
-            <TagContainer>{!active && <Label color="redLight">Inactive</Label>}</TagContainer>
+            <TagContainer>{!active && <Label color="redLight">Deactivated</Label>}</TagContainer>
         </StyledUserItem>
     );
 }

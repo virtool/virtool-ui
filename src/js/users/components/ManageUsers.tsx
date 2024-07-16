@@ -5,8 +5,13 @@ import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
+import styled from "styled-components";
 import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";
+
+const StyledToggleGroupItem = styled(ToggleGroupItem)`
+    min-width: 100px;
+`;
 
 /**
  * Displays a list of editable users and tools for sorting through and creating users
@@ -30,13 +35,13 @@ export function ManageUsers() {
                         value={term}
                         onChange={e => setTerm(e.target.value)}
                     />
-                    <ToggleGroup type="single" defaultValue={active ? "active" : "inactive"}>
-                        <ToggleGroupItem value="active" onClick={() => setActive(true)}>
+                    <ToggleGroup type="single" defaultValue={active ? "active" : "deactivated"}>
+                        <StyledToggleGroupItem value="active" onClick={() => setActive(true)}>
                             Active
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="inactive" onClick={() => setActive(false)}>
-                            Inactive
-                        </ToggleGroupItem>
+                        </StyledToggleGroupItem>
+                        <StyledToggleGroupItem value="deactivated" onClick={() => setActive(false)}>
+                            Deactivated
+                        </StyledToggleGroupItem>
                     </ToggleGroup>
                     <CreateUser />
                 </Toolbar>

@@ -107,15 +107,13 @@ export default function UserDetail({ match }: UserDetailProps) {
             {data.active ? (
                 <UserActivationBanner
                     buttonText="Deactivate"
-                    message="Deactivate this user"
                     noun="deactivate"
                     onClick={() => setLocationState({ deactivateUser: true })}
                 />
             ) : (
                 <UserActivationBanner
-                    buttonText="Reactivate"
-                    message="Reactivate this user"
-                    noun="reactivate"
+                    buttonText="Activate"
+                    noun="activate"
                     onClick={() => setLocationState({ reactivateUser: true })}
                 />
             )}
@@ -130,7 +128,7 @@ export default function UserDetail({ match }: UserDetailProps) {
             <UserActivation
                 handle={data.handle}
                 id={data.id}
-                noun="reactivate"
+                noun="activate"
                 onHide={() => setLocationState({ reactivateUser: false })}
                 show={locationState?.reactivateUser}
             />

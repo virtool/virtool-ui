@@ -16,7 +16,6 @@ const ActivationBanner = styled(Alert)`
 `;
 
 type UserActivationBannerProps = {
-    message: string;
     /** Whether it is a deactivation or reactivation */
     noun: string;
     buttonText: string;
@@ -27,22 +26,17 @@ type UserActivationBannerProps = {
 /**
  * A styled banner for deactivating or reactivating a user
  */
-export function UserActivationBanner({ buttonText, message, noun, onClick }: UserActivationBannerProps) {
+export function UserActivationBanner({ buttonText, noun, onClick }: UserActivationBannerProps) {
     return (
         <ActivationBanner color={noun === "deactivate" ? "red" : "green"}>
             <div>
-                <strong>{message}</strong>
                 <div>
                     {noun === "deactivate"
-                        ? "Deactivation temporarily disables a user's account, restricting access without deleting data."
-                        : "Reactivation restores access to a previously deactivated account, allowing the user to regain full use of their account."}
+                        ? "Disable access to the application for this user."
+                        : "Restore access to Virtool for this user. Their account is currently deactivated."}
                 </div>
             </div>
-            <Button
-                color={noun === "deactivate" ? "red" : "green"}
-                icon={noun === "deactivate" ? "times" : "check"}
-                onClick={onClick}
-            >
+            <Button color={noun === "deactivate" ? "red" : "green"} onClick={onClick}>
                 {buttonText}
             </Button>
         </ActivationBanner>
