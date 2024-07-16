@@ -2,9 +2,9 @@ import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { resetClient } from "@utils/utils";
 import { WallContainer } from "@wall/Container";
-import { useRootQuery } from "@wall/Queries";
+import { useAuthentication, useRootQuery } from "@wall/Queries";
 import React, { Suspense } from "react";
-import { connect, Provider } from "react-redux";
+import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./GlobalStyles";
@@ -14,22 +14,15 @@ import { theme } from "./theme";
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
 const LazyLoginWall = React.lazy(() => import("../wall/LoginWall"));
 
-function mapStateToProps(state) {
-    const { login, reset } = state.app;
-    return {
-        login,
-        reset,
-    };
-}
+function ConnectedApp() {
+    const { data: rootData, isLoading: isRootLoading } = useRootQuery();
+    const { authenticated, isLoading: isAuthLoading } = useAuthentication();
 
-const ConnectedApp = connect(mapStateToProps)(({ login, reset }) => {
-    const { data, isLoading } = useRootQuery();
-
-    if (isLoading) {
+    if (isRootLoading || isAuthLoading) {
         return <LoadingPlaceholder />;
     }
 
-    if (data.first_user) {
+    if (rootData.first_user) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyFirstUser />
@@ -37,7 +30,7 @@ const ConnectedApp = connect(mapStateToProps)(({ login, reset }) => {
         );
     }
 
-    if (login || reset) {
+    if (!authenticated) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyLoginWall />
@@ -46,7 +39,7 @@ const ConnectedApp = connect(mapStateToProps)(({ login, reset }) => {
     }
 
     return <Main />;
-});
+}
 
 const queryClient = new QueryClient({
     defaultOptions: {
