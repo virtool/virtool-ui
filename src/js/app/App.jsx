@@ -2,47 +2,34 @@ import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { resetClient } from "@utils/utils";
 import { WallContainer } from "@wall/Container";
-import React, { Suspense, useEffect } from "react";
+import { useRootQuery } from "@wall/Queries";
+import React, { Suspense } from "react";
 import { connect, Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import Reset from "../wall/Reset";
-import { getInitialState } from "./actions";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
 
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
-const LazyLogin = React.lazy(() => import("../wall/Login"));
+const LazyLoginWall = React.lazy(() => import("../wall/LoginWall"));
 
 function mapStateToProps(state) {
-    const { first, login, reset, ready } = state.app;
+    const { login, reset } = state.app;
     return {
-        first,
         login,
         reset,
-        ready,
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getInitialState: () => {
-            dispatch(getInitialState());
-        },
-    };
-}
+const ConnectedApp = connect(mapStateToProps)(({ login, reset }) => {
+    const { data, isLoading } = useRootQuery();
 
-const ConnectedApp = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(({ first, login, reset, ready, getInitialState }) => {
-    useEffect(getInitialState, []);
-    if (!ready) {
+    if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    if (first) {
+    if (data.first_user) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyFirstUser />
@@ -50,16 +37,12 @@ const ConnectedApp = connect(
         );
     }
 
-    if (login) {
+    if (login || reset) {
         return (
             <Suspense fallback={<WallContainer />}>
-                <LazyLogin />
+                <LazyLoginWall />
             </Suspense>
         );
-    }
-
-    if (reset) {
-        return <Reset />;
     }
 
     return <Main />;

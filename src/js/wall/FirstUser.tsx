@@ -1,7 +1,7 @@
 import { useCreateFirstUser } from "@/users/queries";
+import { InputError, InputGroup, InputLabel, InputPassword, InputSimple } from "@base";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
 
@@ -42,16 +42,14 @@ export default function FirstUser() {
                             <InputSimple
                                 aria-label="username"
                                 id="username"
-                                defaultValue=""
                                 {...register("username", { required: true })}
                             />
                         </InputGroup>
                         <InputGroup>
                             <InputLabel htmlFor="password">Password</InputLabel>
-                            <InputSimple
+                            <InputPassword
                                 aria-label="password"
                                 id="password"
-                                defaultValue=""
                                 {...register("password", {
                                     required: "Password does not meet minimum length requirement (8)",
                                     minLength: {

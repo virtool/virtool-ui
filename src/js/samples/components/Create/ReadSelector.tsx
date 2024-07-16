@@ -45,7 +45,6 @@ const ReadSelectorHeader = styled.label`
 const StyledScrollListElement = styled(CompactScrollList)`
     border: ${props => getBorder(props)};
     border-radius: ${props => props.theme.borderRadius.sm};
-    overflow-y: auto;
     height: 400px;
 `;
 
