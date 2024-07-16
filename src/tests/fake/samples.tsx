@@ -240,7 +240,7 @@ export function mockApiCreateSample(
             subtractions,
             group,
         })
-        .reply(200, sample);
+        .reply(201, sample);
 }
 
 /**

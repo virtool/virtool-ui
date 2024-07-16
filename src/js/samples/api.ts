@@ -1,29 +1,5 @@
-import { Request } from "../app/request";
+import { Request } from "@app/request";
 import { Sample } from "./types";
-
-export const find = ({ term, labels, workflows, page = 1 }) => {
-    const request = Request.get("/samples").query({
-        page,
-    });
-
-    if (term) {
-        request.query({ find: term });
-    }
-
-    if (workflows) {
-        request.query({ workflows });
-    }
-
-    if (labels) {
-        labels.forEach(label => request.query({ label }));
-    }
-
-    request.sortQuery();
-
-    return request;
-};
-
-export const get = ({ sampleId }) => Request.get(`/samples/${sampleId}`);
 
 export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
 
@@ -56,14 +32,14 @@ export function getSample(sampleId: string): Promise<Sample> {
  * Creates a sample
  *
  * @param name - The sample name
- * @param isolate - The isolate
- * @param host -
- * @param locale -
+ * @param isolate - Isolate associated with the sample
+ * @param host - The name of the host species the virus was identified in
+ * @param locale - The geographical location of the virus detection
  * @param libraryType - Library type for the sample
  * @param subtractions - The id of the subtractions assigned to the sample
  * @param files - The id of the files used to create the sample
  * @param labels - The id of the labels assigned to the sample
- * @param group - The of of the group assigned to the sample
+ * @param group - The of the group assigned to the sample
  * @returns A promise resolving to creating a sample
  */
 export function createSample(
