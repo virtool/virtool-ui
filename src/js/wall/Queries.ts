@@ -22,6 +22,40 @@ export function useRootQuery() {
 }
 
 /**
+ * Initializes a query for fetching the account document.
+ *
+ * @returns A query for fetching the account document
+ */
+export function useAuthentication() {
+    const queryClient = useQueryClient();
+
+    async function fetchAccount() {
+        try {
+            return await Request.get("/account");
+        } catch (error) {
+            if (error.response?.status === 401) {
+                return null;
+            }
+            throw error;
+        }
+    }
+
+    const { data, isLoading, isError, refetch, ...queryInfo } = useQuery(accountKeys.all(), fetchAccount, {
+        retry: false,
+        refetchOnWindowFocus: false,
+        onError: (error: any) => {
+            if (error.response?.status === 401) {
+                queryClient.setQueryData(accountKeys.all(), null);
+            }
+        },
+    });
+
+    const authenticated = !!data;
+
+    return { authenticated, isLoading, isError, refetch, ...queryInfo };
+}
+
+/**
  * Initializes a mutator for sending a login request to the API.
  *
  * @returns A mutator for sending a login request to the API.
