@@ -1,8 +1,10 @@
 import { ErrorResponse } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { forEach, map, reject, union } from "lodash-es/lodash";
+import { useHistory } from "react-router-dom";
 import { Label } from "../labels/types";
 import {
+    createSample,
     getSample,
     listSamples,
     removeSample,
@@ -58,6 +60,39 @@ export function useListSamples(page: number, per_page: number, term?: string, la
  */
 export function useFetchSample(sampleId: string) {
     return useQuery<Sample, ErrorResponse>(samplesQueryKeys.detail(sampleId), () => getSample(sampleId));
+}
+
+/**
+ * Initialize a mutator for creating a sample
+ *
+ * @returns A mutator for creating a sample
+ */
+export function useCreateSample() {
+    const history = useHistory();
+
+    return useMutation<
+        Sample,
+        ErrorResponse,
+        {
+            name: string;
+            isolate: string;
+            host: string;
+            locale: string;
+            libraryType: string;
+            subtractions: string[];
+            files: string[];
+            labels: number[];
+            group: string;
+        }
+    >(
+        ({ name, isolate, host, locale, libraryType, subtractions, files, labels, group }) =>
+            createSample(name, isolate, host, locale, libraryType, subtractions, files, labels, group),
+        {
+            onSuccess: () => {
+                history.push("/samples");
+            },
+        },
+    );
 }
 
 /**
