@@ -1,5 +1,6 @@
-import { login, resetPassword } from "@/account/api";
+import { fetchAccount, login, resetPassword } from "@/account/api";
 import { accountKeys } from "@/account/queries";
+import { Account } from "@/account/types";
 import { ErrorResponse } from "@/types/types";
 import { Request } from "@app/request";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -29,26 +30,19 @@ export function useRootQuery() {
 export function useAuthentication() {
     const queryClient = useQueryClient();
 
-    async function fetchAccount() {
-        try {
-            return await Request.get("/account");
-        } catch (error) {
-            if (error.response?.status === 401) {
-                return null;
-            }
-            throw error;
-        }
-    }
-
-    const { data, isLoading, isError, refetch, ...queryInfo } = useQuery(accountKeys.all(), fetchAccount, {
-        retry: false,
-        refetchOnWindowFocus: false,
-        onError: (error: any) => {
-            if (error.response?.status === 401) {
-                queryClient.setQueryData(accountKeys.all(), null);
-            }
+    const { data, isLoading, isError, refetch, ...queryInfo } = useQuery<Account, ErrorResponse>(
+        accountKeys.all(),
+        fetchAccount,
+        {
+            retry: false,
+            refetchOnWindowFocus: false,
+            onError: error => {
+                if (error.response?.status === 401) {
+                    queryClient.setQueryData(accountKeys.all(), null);
+                }
+            },
         },
-    });
+    );
 
     const authenticated = !!data;
 
