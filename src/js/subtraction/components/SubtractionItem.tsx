@@ -1,3 +1,4 @@
+import { JobState } from "@jobs/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -51,7 +52,11 @@ export function SubtractionItem({ created_at, id, job, name, nickname, ready, us
             </Attribution>
             {!ready && (
                 <ProgressTag>
-                    <ProgressCircle size={sizes.md} progress={job?.progress ?? 0} state={job?.state ?? "waiting"} />
+                    <ProgressCircle
+                        size={sizes.md}
+                        progress={job?.progress ?? 0}
+                        state={job?.state ?? JobState.waiting}
+                    />
                 </ProgressTag>
             )}
         </StyledSubtractionItem>
