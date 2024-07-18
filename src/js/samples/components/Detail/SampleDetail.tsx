@@ -15,24 +15,12 @@ import { useFetchSample } from "@samples/queries";
 import { includes } from "lodash-es";
 import React from "react";
 import { Link, match, Redirect, Route, Switch, useLocation } from "react-router-dom";
-import styled from "styled-components";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
 import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
-
-const SampleInstalling = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 220px;
-
-    p {
-        text-align: center;
-    }
-`;
 
 type SampleDetailProps = {
     /** Match object containing path information */
