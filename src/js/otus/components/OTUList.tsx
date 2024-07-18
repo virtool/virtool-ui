@@ -1,21 +1,14 @@
+import { BoxGroup, ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import { useGetReference } from "@references/queries";
 import { useUrlSearchParams } from "@utils/hooks";
-import { flatMap } from "lodash-es";
+import { map } from "lodash";
 import React from "react";
 import { match } from "react-router-dom";
-import styled from "styled-components";
-import { BoxGroup, ContainerNarrow, LoadingPlaceholder, NoneFoundBox } from "../../base";
-import { ScrollList } from "../../base/ScrollList";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
-import { useGetReference } from "../../references/queries";
-import { useInfiniteFindOTUS } from "../queries";
-import { OTUMinimal } from "../types";
+import { useListOTUs } from "../queries";
 import CreateOTU from "./CreateOTU";
 import OTUItem from "./OTUItem";
 import OTUToolbar from "./OTUToolbar";
-
-const StyledScrollList = styled(ScrollList)`
-    margin-bottom: 0;
-`;
 
 type OTUListProps = {
     /** Match object containing path information */
@@ -27,25 +20,16 @@ type OTUListProps = {
  */
 export default function OTUList({ match }: OTUListProps) {
     const { refId } = match.params;
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
     const [term, setTerm] = useUrlSearchParams<string>("find");
-    const {
-        data: otu,
-        isLoading: isLoadingOTUs,
-        fetchNextPage,
-        isFetchingNextPage,
-        hasNextPage,
-    } = useInfiniteFindOTUS(refId, term);
+    const [urlPage] = useUrlSearchParams<number>("page");
+    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
+    const { data: otus, isLoading: isLoadingOTUs } = useListOTUs(refId, Number(urlPage) || 1, 25, term);
 
     if (isLoadingOTUs || isLoadingReference) {
         return <LoadingPlaceholder />;
     }
 
-    function renderRow(document: OTUMinimal) {
-        return <OTUItem key={document.id} {...document} refId={refId} />;
-    }
-
-    const items = flatMap(otu.pages, page => page.documents);
+    const { documents, page, page_count } = otus;
 
     return (
         <ContainerNarrow>
@@ -58,17 +42,19 @@ export default function OTUList({ match }: OTUListProps) {
             />
             <CreateOTU refId={refId} />
 
-            {items.length ? (
-                <BoxGroup>
-                    <StyledScrollList
-                        fetchNextPage={fetchNextPage}
-                        hasNextPage={hasNextPage}
-                        isFetchingNextPage={isFetchingNextPage}
-                        isLoading={isLoadingOTUs}
-                        items={items}
-                        renderRow={renderRow}
-                    />
-                </BoxGroup>
+            {documents.length ? (
+                <Pagination
+                    items={documents}
+                    storedPage={page}
+                    currentPage={Number(urlPage) || 1}
+                    pageCount={page_count}
+                >
+                    <BoxGroup>
+                        {map(documents, document => (
+                            <OTUItem key={document.id} {...document} refId={refId} />
+                        ))}
+                    </BoxGroup>
+                </Pagination>
             ) : (
                 <NoneFoundBox noun="OTUs" />
             )}

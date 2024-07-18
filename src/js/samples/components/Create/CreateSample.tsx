@@ -1,40 +1,32 @@
 import {
     Box,
     Icon,
-    Input,
     InputContainer,
     InputError,
     InputGroup,
     InputIcon,
     InputLabel,
+    InputSimple,
     LoadingPlaceholder,
     SaveButton,
     ViewHeader,
     ViewHeaderTitle,
 } from "@/base";
-import { ErrorResponse } from "@/types/types";
 import { useFetchAccount } from "@account/queries";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
-import { deletePersistentFormState } from "@forms/actions";
+import { RestoredAlert } from "@forms/components/RestoredAlert";
+import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
-import { useFetchLabels } from "@labels/queries";
-import { useFetchSubtractionsShortlist } from "@subtraction/queries";
-import { useMutation } from "@tanstack/react-query";
-import { User } from "@users/types";
-import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
-import { find, flatMap, intersectionWith } from "lodash-es";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import ReadSelector from "@samples/components/Create/ReadSelector";
+import { Sidebar } from "@samples/components/Create/Sidebar";
+import { useCreateSample } from "@samples/queries";
+import { find, flatMap, toString } from "lodash-es";
+import React, { useEffect } from "react";
+import { Controller } from "react-hook-form";
 import styled from "styled-components";
-import * as Yup from "yup";
-import PersistForm from "../../../forms/components/PersistForm";
-import { create } from "../../api";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
-import ReadSelector from "./ReadSelector";
 import { SampleUserGroup } from "./SampleUserGroup";
-import { Sidebar } from "./Sidebar";
 
 const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
 
@@ -42,19 +34,14 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  * Gets a filename without extension, given the file ID and an array of all available read files.
  * Used to autofill the name for a new sample based on the selected read file(s).
  *
- * @param {Number} id - the file ID
- * @param {Array} files - all available read files
- * @returns {*|string} the filename without its extension
+ * @param id - the file ID
+ * @param files - all available read files
+ * @returns The filename without its extension
  */
-function getFileNameFromId(id, files) {
+function getFileNameFromId(id: string, files: string[]): string {
     const file = find(files, file => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
 }
-
-const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Required Field"),
-    readFiles: Yup.array().min(1, "At least one read file must be attached to the sample"),
-});
 
 const CreateSampleButtonArea = styled(Box)`
     align-items: center;
@@ -89,7 +76,7 @@ const CreateSampleInputs = styled.div`
     grid-column-gap: 15px;
 `;
 
-const CreateSampleForm = styled(Form)`
+const CreateSampleForm = styled.form`
     display: grid;
     grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
     grid-column-gap: ${props => props.theme.gap.column};
@@ -100,28 +87,12 @@ const CreateSampleName = styled(InputGroup)`
     grid-row: 2;
 `;
 
-const SampleSidebar = styled(Field)`
-    grid-row: 3;
-`;
-
 const AlertContainer = styled.div`
     grid-column: 1 / 3;
     grid-row: 1;
 `;
 
-function castValues(subtractions, allLabels) {
-    return function (values) {
-        const labels = intersectionWith(values.sidebar.labels, allLabels, (label, allLabel) => label === allLabel.id);
-        const subtractionIds = intersectionWith(
-            values.sidebar.subtractionIds,
-            subtractions,
-            (subtractionId, subtraction) => subtractionId === subtraction.id,
-        );
-        return { ...values, sidebar: { labels, subtractionIds } };
-    };
-}
-
-type formValues = {
+type FormValues = {
     name: string;
     isolate: string;
     host: string;
@@ -132,26 +103,11 @@ type formValues = {
     sidebar: { labels: number[]; subtractionIds: string[] };
 };
 
-function getInitialValues(account: User) {
-    return {
-        name: "",
-        isolate: "",
-        host: "",
-        locale: "",
-        libraryType: "normal",
-        readFiles: [],
-        group: account.primary_group?.id || null,
-        sidebar: { labels: [], subtractionIds: [] },
-    };
-}
-
 /**
  * A form for creating a sample
  */
 export default function CreateSample() {
-    const { data: allLabels, isLoading: isLoadingLabels } = useFetchLabels();
     const { data: groups, isLoading: isLoadingGroups } = useListGroups();
-    const { data: subtractions, isLoading: isLoadingSubtractions } = useFetchSubtractionsShortlist();
     const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
     const {
         data: readsResponse,
@@ -159,44 +115,71 @@ export default function CreateSample() {
         isFetchingNextPage,
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.reads, 25);
-
-    const history = useHistory();
-    const dispatch = useDispatch();
-    const samplesMutation = useMutation(create, {
-        onSuccess: () => {
-            history.push("/samples");
-            dispatch(deletePersistentFormState("create-sample"));
+    const {
+        control,
+        formState: { errors },
+        hasRestored,
+        handleSubmit,
+        register,
+        reset,
+        setValue,
+        watch,
+    } = usePersistentForm<FormValues>({
+        formName: "createSample",
+        defaultValues: {
+            name: "",
+            isolate: "",
+            host: "",
+            locale: "",
+            libraryType: "normal",
+            readFiles: [],
+            group: null,
+            sidebar: {
+                labels: [],
+                subtractionIds: [],
+            },
         },
     });
+    const mutation = useCreateSample();
 
-    if (isLoadingReads || isLoadingLabels || isLoadingSubtractions || isLoadingGroups || isLoadingAccount) {
+    useEffect(() => {
+        setValue("group", toString(account?.primary_group?.id));
+    }, [account]);
+
+    if (isLoadingReads || isLoadingGroups || isLoadingAccount) {
         return <LoadingPlaceholder margin="36px" />;
     }
 
     const reads = flatMap(readsResponse.pages, page => page.items);
 
-    function autofill(selected, setFieldValue) {
+    function autofill(selected: string[]) {
         const fileName = getFileNameFromId(selected[0], reads);
         if (fileName) {
-            setFieldValue("name", fileName);
+            setValue("name", fileName);
         }
     }
 
-    function handleSubmit(values) {
-        const { name, isolate, host, locale, libraryType, readFiles, group, sidebar } = values;
-        const { subtractionIds, labels } = sidebar;
+    function onSubmit({ name, isolate, host, locale, libraryType, readFiles, group, sidebar }: FormValues) {
+        const { labels, subtractionIds } = sidebar;
 
-        samplesMutation.mutate({
-            name,
-            isolate,
-            host,
-            locale,
-            libraryType,
-            subtractions: subtractionIds,
-            files: readFiles,
-            labels,
-            group: group === "none" ? "" : group,
-        });
+        mutation.mutate(
+            {
+                name,
+                isolate,
+                host,
+                locale,
+                libraryType,
+                subtractions: subtractionIds,
+                files: readFiles,
+                labels,
+                group: group === "none" ? "" : group,
+            },
+            {
+                onSuccess: () => {
+                    reset();
+                },
+            },
+        );
     }
 
     return (
@@ -204,115 +187,96 @@ export default function CreateSample() {
             <ViewHeader title="Create Sample">
                 <ViewHeaderTitle>Create Sample</ViewHeaderTitle>
                 <CreateSampleInputError>
-                    {samplesMutation.isError && (samplesMutation.error as ErrorResponse).response.body.message}
+                    {mutation.isError && mutation.error.response?.body.message}
                 </CreateSampleInputError>
             </ViewHeader>
-            <Formik
-                onSubmit={handleSubmit}
-                initialValues={getInitialValues(account)}
-                validationSchema={validationSchema}
-            >
-                {({
-                    errors,
-                    setFieldValue,
-                    touched,
-                    values,
-                }: {
-                    errors: FormikErrors<formValues>;
-                    setFieldValue: (field: string, value: string | string[] | number[]) => void;
-                    touched: FormikTouched<formValues>;
-                    values: formValues;
-                }) => (
-                    <CreateSampleForm>
-                        <AlertContainer>
-                            <PersistForm
-                                castValues={castValues(subtractions, allLabels)}
-                                formName="create-sample"
-                                resourceName="sample"
+            <CreateSampleForm onSubmit={handleSubmit(onSubmit)}>
+                <AlertContainer>
+                    <RestoredAlert hasRestored={hasRestored} name="sample" resetForm={reset} />
+                </AlertContainer>
+                <CreateSampleName>
+                    <InputLabel htmlFor="name">Name</InputLabel>
+                    <InputContainer align="right">
+                        <InputSimple id="name" {...register("name", { required: "Required Field" })} />
+                        {Boolean(watch("readFiles").length) && (
+                            <InputIcon
+                                name="magic"
+                                aria-label="Auto Fill"
+                                onClick={() => autofill(watch("readFiles"))}
                             />
-                        </AlertContainer>
-                        <CreateSampleName>
-                            <InputLabel>Name</InputLabel>
-                            <InputContainer align="right">
-                                <Field
-                                    as={Input}
-                                    type="text"
-                                    name="name"
-                                    aria-label="Name"
-                                    autocomplete={false}
-                                    error={touched.name ? errors.name : null}
-                                />
-                                {Boolean(values.readFiles.length) && (
-                                    <InputIcon
-                                        name="magic"
-                                        aria-label="Auto Fill"
-                                        onClick={() => autofill(values.readFiles, setFieldValue)}
-                                    />
-                                )}
-                            </InputContainer>
-                            {touched.name && <InputError>{errors.name}</InputError>}
-                        </CreateSampleName>
-                        <CreateSampleFields>
-                            <CreateSampleInputs>
-                                <Field
-                                    as={SampleUserGroup}
-                                    aria-label="User GroupItem"
-                                    name="group"
-                                    selected={values.group}
-                                    groups={groups}
-                                    onChange={e => setFieldValue("group", e.target.value)}
-                                />
-                                <InputGroup>
-                                    <InputLabel>Locale</InputLabel>
-                                    <Field as={Input} name="locale" aria-label="Locale" />
-                                </InputGroup>
+                        )}
+                    </InputContainer>
+                    <InputError>{errors.name?.message}</InputError>
+                </CreateSampleName>
+                <CreateSampleFields>
+                    <CreateSampleInputs>
+                        <Controller
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <SampleUserGroup selected={value} groups={groups} onChange={onChange} />
+                            )}
+                            name="group"
+                        />
+                        <InputGroup>
+                            <InputLabel htmlFor="locale">Locale</InputLabel>
+                            <InputSimple id="locale" {...register("locale")} />
+                        </InputGroup>
 
-                                <InputGroup>
-                                    <InputLabel>Isolate</InputLabel>
-                                    <Field as={Input} name="isolate" aria-label="Isolate" />
-                                </InputGroup>
+                        <InputGroup>
+                            <InputLabel htmlFor="isolate">Isolate</InputLabel>
+                            <InputSimple id="isolate" {...register("isolate")} />
+                        </InputGroup>
 
-                                <InputGroup>
-                                    <InputLabel>Host</InputLabel>
-                                    <Field as={Input} name="host" aria-label="Host" />
-                                </InputGroup>
-                            </CreateSampleInputs>
+                        <InputGroup>
+                            <InputLabel htmlFor="host">Host</InputLabel>
+                            <InputSimple id="host" {...register("host")} />
+                        </InputGroup>
+                    </CreateSampleInputs>
 
-                            <Field
-                                name="libraryType"
-                                as={LibraryTypeSelector}
-                                onSelect={library => setFieldValue("libraryType", library)}
-                                libraryType={values.libraryType}
-                            />
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <LibraryTypeSelector libraryType={value} onSelect={onChange} />
+                        )}
+                        name="libraryType"
+                    />
 
-                            <Field
-                                name="readFiles"
-                                as={ReadSelector}
+                    <Controller
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <ReadSelector
                                 data={readsResponse}
                                 isFetchingNextPage={isFetchingNextPage}
                                 fetchNextPage={fetchNextPage}
                                 isLoading={isLoadingReads}
-                                selected={values.readFiles}
-                                onSelect={(selection: string) => setFieldValue("readFiles", selection)}
-                                error={touched.readFiles ? errors.readFiles : null}
+                                selected={value}
+                                onSelect={onChange}
+                                error={errors.readFiles?.message}
                             />
-                        </CreateSampleFields>
+                        )}
+                        name="readFiles"
+                        rules={{ required: "At least one read file must be attached to the sample" }}
+                    />
+                </CreateSampleFields>
 
-                        <CreateSampleButtonArea>
-                            <SaveButton altText="Create" />
-                            <p>
-                                <Icon name="clock" /> This will take some time.
-                            </p>
-                        </CreateSampleButtonArea>
-                        <SampleSidebar
-                            as={Sidebar}
-                            onUpdate={(type, value) => setFieldValue(`sidebar.${type}`, value)}
-                            sampleLabels={values.sidebar.labels}
-                            defaultSubtractions={values.sidebar.subtractionIds}
+                <CreateSampleButtonArea>
+                    <SaveButton altText="Create" />
+                    <p>
+                        <Icon name="clock" /> This will take some time.
+                    </p>
+                </CreateSampleButtonArea>
+                <Controller
+                    control={control}
+                    render={({ field: { value } }) => (
+                        <Sidebar
+                            defaultSubtractions={value.subtractionIds}
+                            onUpdate={setValue}
+                            sampleLabels={value.labels}
                         />
-                    </CreateSampleForm>
-                )}
-            </Formik>
+                    )}
+                    name="sidebar"
+                />
+            </CreateSampleForm>
         </>
     );
 }

@@ -1,44 +1,5 @@
-import { Request } from "../app/request";
+import { Request } from "@app/request";
 import { Sample } from "./types";
-
-export const find = ({ term, labels, workflows, page = 1 }) => {
-    const request = Request.get("/samples").query({
-        page,
-    });
-
-    if (term) {
-        request.query({ find: term });
-    }
-
-    if (workflows) {
-        request.query({ workflows });
-    }
-
-    if (labels) {
-        labels.forEach(label => request.query({ label }));
-    }
-
-    request.sortQuery();
-
-    return request;
-};
-
-export const get = ({ sampleId }) => Request.get(`/samples/${sampleId}`);
-
-export const create = action => {
-    const { name, isolate, host, locale, libraryType, subtractions, files, labels, group } = action;
-    return Request.post("/samples").send({
-        name,
-        isolate,
-        host,
-        locale,
-        subtractions,
-        files,
-        library_type: libraryType,
-        labels,
-        group,
-    });
-};
 
 export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
 
@@ -65,6 +26,46 @@ export function listSamples(page: number, per_page: number, term: string, labels
  */
 export function getSample(sampleId: string): Promise<Sample> {
     return Request.get(`/samples/${sampleId}`).then(res => res.body);
+}
+
+/**
+ * Creates a sample
+ *
+ * @param name - The sample name
+ * @param isolate - Isolate associated with the sample
+ * @param host - The name of the host species the virus was identified in
+ * @param locale - The geographical location of the virus detection
+ * @param libraryType - Library type for the sample
+ * @param subtractions - The id of the subtractions assigned to the sample
+ * @param files - The id of the files used to create the sample
+ * @param labels - The id of the labels assigned to the sample
+ * @param group - The of the group assigned to the sample
+ * @returns A promise resolving to creating a sample
+ */
+export function createSample(
+    name: string,
+    isolate: string,
+    host: string,
+    locale: string,
+    libraryType: string,
+    subtractions: string[],
+    files: string[],
+    labels: number[],
+    group: string,
+): Promise<Sample> {
+    return Request.post("/samples")
+        .send({
+            name,
+            isolate,
+            host,
+            locale,
+            subtractions,
+            files,
+            library_type: libraryType,
+            labels,
+            group,
+        })
+        .then(res => res.body);
 }
 
 export type SampleUpdate = {

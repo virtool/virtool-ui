@@ -2,11 +2,11 @@ import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { resetClient } from "@utils/utils";
 import { WallContainer } from "@wall/Container";
-import React, { Suspense, useEffect } from "react";
-import { connect, Provider } from "react-redux";
+import { useAuthentication, useRootQuery } from "@wall/Queries";
+import React, { Suspense } from "react";
+import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import { getInitialState } from "./actions";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
@@ -14,34 +14,15 @@ import { theme } from "./theme";
 const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
 const LazyLoginWall = React.lazy(() => import("../wall/LoginWall"));
 
-function mapStateToProps(state) {
-    const { first, login, reset, ready } = state.app;
-    return {
-        first,
-        login,
-        reset,
-        ready,
-    };
-}
+function ConnectedApp() {
+    const { data: rootData, isLoading: isRootLoading } = useRootQuery();
+    const { authenticated, isLoading: isAuthLoading } = useAuthentication();
 
-function mapDispatchToProps(dispatch) {
-    return {
-        getInitialState: () => {
-            dispatch(getInitialState());
-        },
-    };
-}
-
-const ConnectedApp = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(({ first, login, reset, ready, getInitialState }) => {
-    useEffect(getInitialState, []);
-    if (!ready) {
+    if (isRootLoading || isAuthLoading) {
         return <LoadingPlaceholder />;
     }
 
-    if (first) {
+    if (rootData.first_user) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyFirstUser />
@@ -49,7 +30,7 @@ const ConnectedApp = connect(
         );
     }
 
-    if (login || reset) {
+    if (!authenticated) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyLoginWall />
@@ -58,7 +39,7 @@ const ConnectedApp = connect(
     }
 
     return <Main />;
-});
+}
 
 const queryClient = new QueryClient({
     defaultOptions: {

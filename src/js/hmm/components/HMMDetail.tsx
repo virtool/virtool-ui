@@ -93,7 +93,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
     ));
 
     const names = map(data.names, (name, index) => (
-        <Label key={index} spaced>
+        <Label className="mr-1" key={index}>
             {name}
         </Label>
     ));
