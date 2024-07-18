@@ -17,11 +17,40 @@ describe("<SampleDetailGeneral />", () => {
         };
     });
 
+    it("should render properly when data is installing", async () => {
+        const unreadySample = createFakeSample({ paired: true, ready: false });
+        props.match.params.sampleId = unreadySample.id;
+        const scope = mockApiGetSampleDetail(unreadySample);
+        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
+
+        expect(await screen.findByText("Metadata")).toBeInTheDocument();
+
+        expect(screen.getByText("Create Sample")).toBeInTheDocument();
+        expect(screen.getByText(new RegExp(unreadySample.job.state, "i"))).toBeInTheDocument();
+
+        expect(screen.getByText("Host")).toBeInTheDocument();
+        expect(screen.getByText(unreadySample.host)).toBeInTheDocument();
+
+        expect(screen.getByText("Isolate")).toBeInTheDocument();
+        expect(screen.getByText(unreadySample.isolate)).toBeInTheDocument();
+
+        expect(screen.getByText("Locale")).toBeInTheDocument();
+        expect(screen.getByText(unreadySample.locale)).toBeInTheDocument();
+
+        expect(screen.queryByText("Library")).not.toBeInTheDocument();
+        expect(screen.queryByText("Notes")).not.toBeInTheDocument();
+
+        scope.done();
+    });
+
     it("should render properly", async () => {
         const scope = mockApiGetSampleDetail(sample);
         renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
 
         expect(await screen.findByText("Metadata")).toBeInTheDocument();
+
+        expect(screen.queryByText("Create Sample")).not.toBeInTheDocument();
+        expect(screen.queryByText(new RegExp(sample.job.state, "i"))).not.toBeInTheDocument();
 
         expect(screen.getByText("Host")).toBeInTheDocument();
         expect(screen.getByText(sample.host)).toBeInTheDocument();
