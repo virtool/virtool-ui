@@ -1,4 +1,4 @@
-import { Request } from "../app/request";
+import { Request } from "@app/request";
 import { OTU, OTUHistory, OTUIsolate, OTUSegment, OTUSequence } from "./types";
 
 /**
@@ -244,28 +244,19 @@ export function revertOTU(change_id: string): Promise<null> {
 }
 
 /**
- * Get a page of OTUs from the API
+ * Fetch a page of otu search results
  *
  * @param refId - the unique identifier of the reference to search
+ * @param page - The page to fetch
+ * @param per_page -The number of hmms to fetch per page
  * @param term - The search term to filter OTUs by name or abbreviation
  * @param verified - Whether OTUs should be filtered by verified status
- * @param page - The page of results to fetch
  * @returns A Promise resolving to a page of OTUs
  */
-export function findOTUs({
-    refId,
-    term,
-    verified,
-    page,
-}: {
-    refId: string;
-    term: string;
-    verified: boolean;
-    page: number;
-}) {
+export function listOTUs(refId: string, page: number, per_page: number, term: string, verified: boolean) {
     return Request.get(`/refs/${refId}/otus`)
-        .query({ find: term, page, verified: verified || undefined })
-        .then(response => response.body);
+        .query({ find: term, page, per_page, verified: verified || undefined })
+        .then(res => res.body);
 }
 
 /**
