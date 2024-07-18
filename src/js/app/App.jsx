@@ -22,7 +22,7 @@ function ConnectedApp() {
         return <LoadingPlaceholder />;
     }
 
-    if (rootData.first_user) {
+    if (rootData.body.first_user) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyFirstUser />
