@@ -45,22 +45,20 @@ export default function IsolateSequences({ activeIsolate, otuId }: IsolateSequen
     const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
     const Sequence = data_type === "barcode" ? BarcodeSequence : GenomeSequence;
-    let sequenceComponents: JSX.Element | JSX.Element[] = map(sequences, sequence => (
-        <Sequence key={sequence.id} {...sequence} />
-    ));
+    let sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
 
     let isolateName = `${activeIsolate.source_type} ${activeIsolate.source_name}`;
     isolateName = isolateName[0].toUpperCase() + isolateName.slice(1);
 
     if (!sequenceComponents.length) {
         if (data_type === "barcode" && !hasTargets) {
-            sequenceComponents = (
-                <NoneFoundSection noun="targets">
+            sequenceComponents = [
+                <NoneFoundSection noun="targets" key="noTargets">
                     <Link to={`/refs/${id}/manage`}>Create one</Link>
-                </NoneFoundSection>
-            );
+                </NoneFoundSection>,
+            ];
         } else {
-            sequenceComponents = <NoneFoundSection noun="sequences" />;
+            sequenceComponents = [<NoneFoundSection noun="sequences" key="noSequences" />];
         }
     }
 
