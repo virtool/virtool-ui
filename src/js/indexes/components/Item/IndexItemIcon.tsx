@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { sizes } from "../../../app/theme";
 import { Icon } from "../../../base";
 import { ProgressCircle } from "../../../base/ProgressCircle";
-import { JobMinimal } from "../../../jobs/types";
+import { JobMinimal, JobState } from "../../../jobs/types";
 
 const StyledIndexItemIcon = styled.div`
     margin-left: auto;
@@ -42,7 +42,7 @@ export function IndexItemIcon({ activeId, id, ready, job }: IndexItemIconProps) 
 
     return (
         <StyledIndexItemIcon>
-            <ProgressCircle progress={job?.progress || 0} state={job?.state || "waiting"} size={sizes.md} />
+            <ProgressCircle progress={job?.progress || 0} state={job?.state || JobState.waiting} size={sizes.md} />
             <span> Building</span>
         </StyledIndexItemIcon>
     );

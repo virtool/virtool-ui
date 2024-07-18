@@ -5,7 +5,7 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { renderWithRouter } from "../../../../tests/setupTests";
-import { NavBar } from "../NavBar";
+import NavBar from "../NavBar";
 
 describe("<NavBar />", () => {
     const props = {

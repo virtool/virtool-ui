@@ -3,8 +3,8 @@ import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { Dropdown, DropdownMenuContent, DropdownMenuItem, DropdownMenuLink, Icon, InitialIcon, Logo } from "@base";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
+import { useRootQuery } from "@wall/Queries";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
 import { NavBarItem } from "./NavBarItem";
 
@@ -62,15 +62,15 @@ const StyledNavBar = styled.div`
 
 type NavBarProps = {
     administrator_role: AdministratorRoles;
-    dev: boolean;
     handle: string;
 };
 
 /**
  * Displays the navigation bar with routes to available components
  */
-export function NavBar({ administrator_role, dev, handle }: NavBarProps) {
+export default function NavBar({ administrator_role, handle }: NavBarProps) {
     const mutation = useLogout();
+    const { data } = useRootQuery();
 
     function onLogout() {
         window.virtool.b2c.enabled && window.msalInstance.getActiveAccount()
@@ -91,7 +91,7 @@ export function NavBar({ administrator_role, dev, handle }: NavBarProps) {
             </NavBarLeft>
 
             <NavBarRight>
-                {dev && (
+                {data?.dev && (
                     <NavBarItem to={{ state: { devCommands: true } }}>
                         <Icon color="red" name="bug" />
                     </NavBarItem>
@@ -128,9 +128,3 @@ export function NavBar({ administrator_role, dev, handle }: NavBarProps) {
         </StyledNavBar>
     );
 }
-
-export const mapStateToProps = state => ({
-    dev: state.app.dev,
-});
-
-export default connect(mapStateToProps)(NavBar);

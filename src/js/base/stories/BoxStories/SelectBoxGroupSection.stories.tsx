@@ -1,10 +1,9 @@
-import { useArgs } from "@storybook/client-api";
+import { BoxGroup, Checkbox, SelectBoxGroupSection } from "@base";
+import { useArgs } from "@storybook/preview-api";
+import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { BoxGroup } from "../../BoxGroup";
-import { SelectBoxGroupSection } from "../../BoxGroupSectionSelect";
-import { Checkbox } from "../../Checkbox";
 
-export default {
+const meta: Meta<typeof SelectBoxGroupSection> = {
     title: "base/Box/SelectBoxGroupSection",
     component: SelectBoxGroupSection,
     args: {
@@ -20,23 +19,28 @@ export default {
     },
 };
 
-const Template = args => {
-    const [{ active }, updateArgs] = useArgs(false);
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+function Template(args) {
+    const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
             <SelectBoxGroupSection {...args} checked={active} onClick={() => updateArgs({ active: !active })} />
         </BoxGroup>
     );
+}
+
+export const TestSelectBoxGroupSection: Story = {
+    args: {
+        children: "This is a SelectBoxGroupSection!",
+    },
+    render: Template,
 };
 
-export const testSelectBoxGroupSection = Template.bind({});
-
-testSelectBoxGroupSection.args = {
-    children: "This is a SelectBoxGroupSection!",
-};
-
-const Template2 = args => {
-    const [{ active }, updateArgs] = useArgs(false);
+function CheckboxTemplate(args) {
+    const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
             <SelectBoxGroupSection {...args} onClick={() => updateArgs({ active: !active })}>
@@ -44,6 +48,8 @@ const Template2 = args => {
             </SelectBoxGroupSection>
         </BoxGroup>
     );
-};
+}
 
-export const selectBoxGroupSectionWithCheckbox = Template2.bind({});
+export const SelectBoxGroupSectionWithCheckbox: Story = {
+    render: CheckboxTemplate,
+};
