@@ -25,7 +25,7 @@ export default function RemoveSequence({ isolateName, isolateId, otuId, sequence
 
     function handleConfirm() {
         mutation.mutate(
-            { otuId, isolateId, sequenceId: sequenceId },
+            { otuId, isolateId, sequenceId },
             {
                 onSuccess: () => {
                     setLocationState(merge(locationState, { removeSequence: false }));
