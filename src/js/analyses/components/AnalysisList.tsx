@@ -28,7 +28,6 @@ type AnalysisListProps = {
 export default function AnalysesList({ match }: AnalysisListProps) {
     const sampleId = match.params.sampleId;
     const [urlPage] = useUrlSearchParams<number>("page");
-    const [term, setTerm] = useUrlSearchParams<string>("find");
     const { data: analyses, isLoading: isLoadingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
     const { isLoading: isLoadingSample } = useFetchSample(sampleId);
@@ -40,7 +39,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
     return (
         <ContainerNarrow>
             <AnalysisHMMAlert installed={hmms.status.task?.complete} />
-            <AnalysesToolbar onChange={e => setTerm(e.target.value)} sampleId={sampleId} term={term} />
+            <AnalysesToolbar sampleId={sampleId} />
 
             {analyses.found_count ? (
                 <Pagination
