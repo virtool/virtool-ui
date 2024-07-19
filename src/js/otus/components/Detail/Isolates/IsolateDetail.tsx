@@ -3,12 +3,12 @@ import { useSetIsolateAsDefault } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceDataType } from "@references/types";
+import IsolateSequences from "@sequences/components/IsolateSequences";
 import { useLocationState } from "@utils/hooks";
 import { formatIsolateName } from "@utils/utils";
 import { merge } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import IsolateSequences from "../../../../sequences/components/Sequences";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 

@@ -4,9 +4,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReferenceTarget } from "@references/types";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
 import { useLocationState } from "@utils/hooks";
-import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
 import { merge } from "lodash";
-import { find } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
