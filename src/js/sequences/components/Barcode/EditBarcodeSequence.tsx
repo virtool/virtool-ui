@@ -5,6 +5,9 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReferenceTarget } from "@references/types";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
 import { useLocationState } from "@utils/hooks";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
+import { merge } from "lodash";
+import { find } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
@@ -32,14 +35,17 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
             { isolateId, sequenceId: activeSequence.id, accession, definition, host, sequence, target },
             {
                 onSuccess: () => {
-                    setLocationState({ editSequence: false });
+                    setLocationState(merge(locationState, { editSequence: false }));
                 },
             },
         );
     }
 
     return (
-        <Dialog open={locationState?.editSequence} onOpenChange={() => setLocationState({ editSequence: false })}>
+        <Dialog
+            open={locationState?.editSequence}
+            onOpenChange={() => setLocationState(merge(locationState, { editSequence: false }))}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <CenteredDialogContent>

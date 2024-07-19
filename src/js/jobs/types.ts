@@ -1,15 +1,16 @@
 import { UserNested } from "@users/types";
 import { SearchResult } from "@utils/types";
 
-export type JobState =
-    | "complete"
-    | "cancelled"
-    | "error"
-    | "preparing"
-    | "running"
-    | "terminated"
-    | "timeout"
-    | "waiting";
+export enum JobState {
+    complete = "complete",
+    cancelled = "cancelled",
+    error = "error",
+    preparing = "preparing",
+    running = "running",
+    terminated = "terminated",
+    timeout = "timeout",
+    waiting = "waiting",
+}
 
 export type IconColor = "blue" | "green" | "grey" | "red" | "orange" | "purple";
 

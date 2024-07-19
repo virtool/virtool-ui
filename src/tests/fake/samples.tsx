@@ -1,10 +1,12 @@
 import { faker } from "@faker-js/faker";
+import { workflows } from "@jobs/types";
+import { LabelNested } from "@labels/types";
+import { SampleRightsUpdate } from "@samples/api";
+import { LibraryType, Quality, Read, Sample, SampleMinimal, WorkflowState } from "@samples/types";
+import { SubtractionNested } from "@subtraction/types";
 import { assign, times } from "lodash";
 import nock from "nock";
-import { LabelNested } from "../../js/labels/types";
-import { SampleRightsUpdate } from "../../js/samples/api";
-import { LibraryType, Quality, Read, Sample, SampleMinimal, WorkflowState } from "../../js/samples/types";
-import { SubtractionNested } from "../../js/subtraction/types";
+import { createFakeJobMinimal } from "./jobs";
 import { createFakeLabelNested } from "./labels";
 import { createFakeSubtractionNested } from "./subtractions";
 import { createFakeUserNested } from "./user";
@@ -15,6 +17,7 @@ export type CreateFakeSampleMinimal = {
     host?: string;
     isolate?: string;
     library_type?: LibraryType;
+    ready?: boolean;
 };
 
 /**
@@ -29,6 +32,7 @@ export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): Sa
         created_at: faker.date.past().toISOString(),
         host: faker.random.word(),
         isolate: faker.random.word(),
+        job: createFakeJobMinimal({ workflow: workflows.create_sample }),
         labels: [createFakeLabelNested()],
         library_type: LibraryType.normal,
         notes: faker.random.word(),

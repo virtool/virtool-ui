@@ -1,13 +1,14 @@
-import IsolateSequences from "@sequences/components/IsolateSequences";
+import { Box, Icon, Label } from "@base";
+import { useSetIsolateAsDefault } from "@otus/queries";
+import { OTUIsolate } from "@otus/types";
+import { DownloadLink } from "@references/components/Detail/DownloadLink";
+import { ReferenceDataType } from "@references/types";
+import { useLocationState } from "@utils/hooks";
+import { formatIsolateName } from "@utils/utils";
+import { merge } from "lodash";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Box, Icon, Label } from "../../../../base";
-import { DownloadLink } from "../../../../references/components/Detail/DownloadLink";
-import { ReferenceDataType } from "../../../../references/types";
-import { formatIsolateName } from "../../../../utils/utils";
-import { useSetIsolateAsDefault } from "../../../queries";
-import { OTUIsolate } from "../../../types";
+import IsolateSequences from "../../../../sequences/components/Sequences";
 import EditIsolate from "./EditIsolate";
 import RemoveIsolate from "./RemoveIsolate";
 
@@ -60,8 +61,7 @@ export default function IsolateDetail({
     otuId,
     restrictSourceTypes,
 }: IsolateDetailProps) {
-    const history = useHistory();
-    const location = useLocation<{ editIsolate: boolean; removeIsolate: boolean }>();
+    const [locationState, setLocationState] = useLocationState();
     const mutation = useSetIsolateAsDefault();
 
     const defaultIsolateLabel = activeIsolate.default && dataType !== "barcode" && (
@@ -80,16 +80,16 @@ export default function IsolateDetail({
                 sourceName={activeIsolate.source_name}
                 allowedSourceTypes={allowedSourceTypes}
                 restrictSourceTypes={restrictSourceTypes}
-                show={location.state?.editIsolate}
-                onHide={() => history.replace({ state: { editIsolate: false } })}
+                show={locationState?.editIsolate}
+                onHide={() => setLocationState(merge(locationState, { editIsolate: false }))}
             />
 
             <RemoveIsolate
                 id={activeIsolate.id}
                 name={formatIsolateName(activeIsolate)}
-                onHide={() => history.replace({ state: { removeIsolate: false } })}
+                onHide={() => setLocationState(merge(locationState, { removeIsolate: false }))}
                 otuId={otuId}
-                show={location.state?.removeIsolate}
+                show={locationState?.removeIsolate}
             />
 
             <IsolateDetailHeader>
@@ -103,7 +103,7 @@ export default function IsolateDetail({
                                 color="orange"
                                 tip="Edit Isolate"
                                 tipPlacement="left"
-                                onClick={() => history.push({ state: { editIsolate: true } })}
+                                onClick={() => setLocationState(merge(locationState, { editIsolate: true }))}
                             />
                             {!activeIsolate.default && dataType !== "barcode" && (
                                 <Icon
@@ -119,7 +119,7 @@ export default function IsolateDetail({
                                 color="red"
                                 tip="Remove Isolate"
                                 tipPlacement="left"
-                                onClick={() => history.push({ state: { removeIsolate: true } })}
+                                onClick={() => setLocationState(merge(locationState, { removeIsolate: true }))}
                             />
                         </>
                     )}

@@ -1,7 +1,7 @@
 import { ErrorResponse } from "@/types/types";
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
 import {
     addIsolate,
@@ -10,9 +10,9 @@ import {
     editIsolate,
     editOTU,
     editSequence,
-    findOTUs,
     getOTU,
     getOTUHistory,
+    listOTUs,
     removeIsolate,
     removeOTU,
     removeSequence,
@@ -37,24 +37,20 @@ export const OTUQueryKeys = {
 };
 
 /**
- * Gets a paginated list of OTUs.
+ * Fetches a page of OTU search results from the API
  *
- * @param refId - The reference id to fetch the indexes of
+ * @param refId - The reference id to fetch the OTUs of
+ * @param page - The page to fetch
+ * @param per_page - The number of hmms to fetch per page
  * @param term - The search term to filter indexes by
  * @param verified - Filter the results to verified OTUs only
- * @returns The paginated list of indexes
+ * @returns A page of OTU search results
  */
-export function useInfiniteFindOTUS(refId: string, term: string, verified?: boolean) {
-    return useInfiniteQuery<OTUSearchResult>(
-        OTUQueryKeys.infiniteList([refId, term]),
-        ({ pageParam }) => findOTUs({ refId, term, verified, page: pageParam }),
+export function useListOTUs(refId: string, page: number, per_page: number, term: string, verified?: boolean) {
+    return useQuery<OTUSearchResult>(
+        OTUQueryKeys.list([page, per_page, term]),
+        () => listOTUs(refId, page, per_page, term, verified),
         {
-            getNextPageParam: lastPage => {
-                if (lastPage.page >= lastPage.page_count) {
-                    return undefined;
-                }
-                return (lastPage.page || 1) + 1;
-            },
             keepPreviousData: true,
         },
     );

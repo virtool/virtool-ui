@@ -1,9 +1,10 @@
 import { RemoveDialog } from "@base/RemoveDialog";
 import { useRemoveSequence } from "@otus/queries";
 import { OTUSequence } from "@otus/types";
+import { useLocationState } from "@utils/hooks";
+import { merge } from "lodash";
 import { find } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 
 type RemoveSequenceProps = {
     isolateName: string;
@@ -16,22 +17,15 @@ type RemoveSequenceProps = {
  * Displays a dialog for removing a sequence
  */
 export default function RemoveSequence({ isolateName, isolateId, otuId, sequences }: RemoveSequenceProps) {
-    const history = useHistory();
-    const location = useLocation<{ removeSequence: string }>();
-    const mutation = useRemoveSequence(otuId);
+    const [locationState, setLocationState] = useLocationState();
+    const mutation = useRemoveSequence();
 
-    const sequenceId = location.state?.removeSequence;
+    const sequenceId = locationState?.removeSequence;
     const sequence = find(sequences, { id: sequenceId });
 
     function handleConfirm() {
-        mutation.mutate(
-            { otuId, isolateId, sequenceId: sequenceId },
-            {
-                onSuccess: () => {
-                    history.replace({ state: { removeSequence: false } });
-                },
-            },
-        );
+        mutation.mutate({ otuId, isolateId, sequenceId: sequenceId });
+        setLocationState(merge(locationState, { removeSequence: false }));
     }
 
     const removeMessage = (
@@ -47,8 +41,8 @@ export default function RemoveSequence({ isolateName, isolateId, otuId, sequence
             name={`${sequenceId}`}
             noun="Sequence"
             onConfirm={handleConfirm}
-            onHide={() => history.replace({ state: { removeSequence: false } })}
-            show={Boolean(location.state?.removeSequence)}
+            onHide={() => setLocationState(merge(locationState, { removeSequence: false }))}
+            show={Boolean(locationState?.removeSequence)}
             message={removeMessage}
         />
     );

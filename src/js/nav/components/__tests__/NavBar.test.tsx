@@ -1,23 +1,21 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
 import React from "react";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { renderWithRouter } from "../../../../tests/setupTests";
-import { logout } from "../../../account/actions";
-import { AdministratorRoles } from "../../../administration/types";
-import { Bar, mapDispatchToProps, mapStateToProps } from "../NavBar";
+import NavBar from "../NavBar";
 
-describe("<Bar />", () => {
+describe("<NavBar />", () => {
     const props = {
         administrator_role: AdministratorRoles.FULL,
         dev: false,
         handle: "Bob",
-        onLogout: vi.fn(),
-        userId: "user_id_bob",
     };
+
     it("should render", async () => {
-        renderWithRouter(<Bar {...props} />, {}, createBrowserHistory());
+        renderWithRouter(<NavBar {...props} />, {}, createBrowserHistory());
         expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Samples" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "References" })).toBeInTheDocument();
@@ -32,37 +30,5 @@ describe("<Bar />", () => {
         expect(screen.getByRole("menuitem", { name: "Administration" })).toBeInTheDocument();
         expect(screen.getByRole("menuitem", { name: "Documentation" })).toBeInTheDocument();
         expect(screen.getByRole("menuitem", { name: "Logout" })).toBeInTheDocument();
-    });
-});
-
-describe("mapStateToProps", () => {
-    const state = {
-        account: { foo: "bar" },
-        app: {
-            pending: false,
-        },
-    };
-    it("should return props", () => {
-        const result = mapStateToProps(state);
-        expect(result).toEqual({
-            foo: "bar",
-            pending: false,
-        });
-    });
-});
-
-describe("mapDispatchToProps", () => {
-    const dispatch = vi.fn();
-
-    window.virtool = {
-        b2c: {
-            enabled: false,
-        },
-    };
-
-    it("should return onLogout in props", () => {
-        const props = mapDispatchToProps(dispatch);
-        props.onLogout();
-        expect(dispatch).toHaveBeenCalledWith(logout());
     });
 });

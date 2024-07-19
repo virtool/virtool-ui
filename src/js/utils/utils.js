@@ -2,9 +2,11 @@
  * General utility constants and functions.
  *
  */
+import clsx from "clsx";
 import Fuse from "fuse.js";
 import { capitalize, forEach, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
 import numbro from "numbro";
+import { twMerge } from "tailwind-merge";
 
 /**
  * A string containing all alphanumeric digits in both cases.
@@ -244,4 +246,14 @@ export function updateSearchString(search, params) {
     });
 
     return searchParams.toString();
+}
+
+/**
+ * Return a string with the tailwind classnames merged
+ *
+ * @param args - The styles from the classnames being merged
+ * @returns {string}
+ */
+export function cn(...args) {
+    return twMerge(clsx(args));
 }

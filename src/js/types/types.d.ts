@@ -13,8 +13,12 @@ export type LocationType = {
     activeIsolateId?: string;
     addSequence?: boolean;
     activeHitId?: number;
+    cloneReference?: string;
+    editIsolate?: boolean;
     editReference?: boolean;
     editSequence?: boolean;
     export?: boolean;
     devCommands?: boolean;
+    removeIsolate?: boolean;
+    removeSequence?: string;
 };

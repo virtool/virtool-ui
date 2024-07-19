@@ -2,9 +2,10 @@ import { BoxGroupSection, Icon } from "@/base";
 import { getActiveShadow } from "@app/theme";
 import { OTUIsolate } from "@otus/types";
 import { ReferenceDataType } from "@references/types";
+import { useLocationState } from "@utils/hooks";
 import { formatIsolateName } from "@utils/utils";
+import { merge } from "lodash";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledIsolateItem = styled(BoxGroupSection)`
@@ -35,10 +36,13 @@ type IsolateItemProps = {
  * A condensed isolate item for use in a list of isolates
  */
 export default function IsolateItem({ active, dataType, isolate }: IsolateItemProps) {
-    const history = useHistory();
+    const [locationState, setLocationState] = useLocationState();
 
     return (
-        <StyledIsolateItem active={active} onClick={() => history.push({ state: { activeIsolateId: isolate.id } })}>
+        <StyledIsolateItem
+            active={active}
+            onClick={() => setLocationState(merge(locationState, { activeIsolateId: isolate.id }))}
+        >
             <span>{formatIsolateName(isolate)}</span>
             {isolate.default && dataType !== "barcode" && <Icon name="star" />}
         </StyledIsolateItem>

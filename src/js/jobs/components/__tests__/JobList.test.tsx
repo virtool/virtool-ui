@@ -1,4 +1,4 @@
-import { workflows } from "@jobs/types";
+import { JobState, workflows } from "@jobs/types";
 import { screen, waitFor } from "@testing-library/react";
 import { createBrowserHistory } from "history";
 import nock from "nock";
@@ -21,7 +21,7 @@ describe("<JobsList />", () => {
         const jobs = createFakeJobMinimal({
             progress: 100,
             stage: "",
-            state: "complete",
+            state: JobState.complete,
             workflow: workflows.create_sample,
         });
         const scope = mockApiGetJobs([jobs]);
@@ -53,7 +53,7 @@ describe("<JobsList />", () => {
         const jobs = createFakeJobMinimal({
             progress: 100,
             stage: "",
-            state: "complete",
+            state: JobState.complete,
         });
         const scope = mockApiGetJobs([jobs], 0);
         renderWithRouter(<JobsList />, {}, history);

@@ -3,6 +3,8 @@ import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useLocationState } from "@utils/hooks";
+import { merge } from "lodash";
 import React from "react";
 import styled from "styled-components";
 
@@ -34,6 +36,7 @@ const StyledButton = styled(IconLink)`
  * Displays icons for the sequence item to close, edit, or remove
  */
 export default function SequenceButtons({ id, onCollapse }) {
+    const [locationState, setLocationState] = useLocationState();
     const { otu, reference } = useCurrentOTUContext();
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify_otu);
     const isolateId = useGetActiveIsolateId(otu);
@@ -43,10 +46,20 @@ export default function SequenceButtons({ id, onCollapse }) {
     return (
         <SequenceHeaderButtons>
             {canModify && (
-                <IconLink name="pencil-alt" color="orange" tip="Edit Sequence" to={{ state: { editSequence: id } }} />
+                <IconLink
+                    name="pencil-alt"
+                    color="orange"
+                    tip="Edit Sequence"
+                    onClick={() => setLocationState(merge(locationState, { editSequence: id }))}
+                />
             )}
             {canModify && (
-                <StyledButton name="trash" color="red" tip="Remove Sequence" to={{ state: { removeSequence: id } }} />
+                <StyledButton
+                    name="trash"
+                    color="red"
+                    tip="Remove Sequence"
+                    onClick={() => setLocationState(merge(locationState, { removeSequence: id }))}
+                />
             )}
             <DownloadLink href={href}>FASTA</DownloadLink>
             <CloseButton onClick={onCollapse} />

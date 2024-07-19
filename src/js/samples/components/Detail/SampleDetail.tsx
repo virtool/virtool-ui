@@ -44,10 +44,6 @@ export default function SampleDetail({ match }: SampleDetailProps) {
         return <LoadingPlaceholder />;
     }
 
-    if (!data.ready) {
-        return <LoadingPlaceholder message="Sample is still being created." margin="220px" />;
-    }
-
     let editIcon;
     let removeIcon;
     let rightsTabLink;
@@ -88,10 +84,14 @@ export default function SampleDetail({ match }: SampleDetailProps) {
 
             <Tabs>
                 <TabsLink to={`${prefix}/general`}>General</TabsLink>
-                <TabsLink to={`${prefix}/files`}>Files</TabsLink>
-                <TabsLink to={`${prefix}/quality`}>Quality</TabsLink>
-                <TabsLink to={`${prefix}/analyses`}>Analyses</TabsLink>
-                {rightsTabLink}
+                {data.ready && (
+                    <>
+                        <TabsLink to={`${prefix}/files`}>Files</TabsLink>
+                        <TabsLink to={`${prefix}/quality`}>Quality</TabsLink>
+                        <TabsLink to={`${prefix}/analyses`}>Analyses</TabsLink>
+                        {rightsTabLink}
+                    </>
+                )}
             </Tabs>
 
             <Switch>

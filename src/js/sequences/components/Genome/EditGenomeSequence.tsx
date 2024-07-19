@@ -4,6 +4,9 @@ import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
 import { useLocationState } from "@utils/hooks";
+import { Field, Form, Formik, FormikErrors, FormikTouched } from "formik";
+import { merge } from "lodash";
+import { find } from "lodash-es";
 import React from "react";
 import { StyledContent } from "./AddGenomeSequence";
 
@@ -31,19 +34,22 @@ export default function EditGenomeSequence({
     const [locationState, setLocationState] = useLocationState();
     const mutation = useEditSequence(otuId);
 
-    function onSubmit({ accession, definition, host, sequence, segment }) {
+    function handleSubmit({ accession, definition, host, sequence, segment }) {
         mutation.mutate(
-            { isolateId, sequenceId: activeSequence.id, accession, definition, host, segment, sequence },
+            { isolateId, sequenceId: id, accession, definition, host, segment, sequence },
             {
                 onSuccess: () => {
-                    setLocationState({ editSequence: false });
+                    setLocationState(merge(locationState, { editSequence: false }));
                 },
             },
         );
     }
 
     return (
-        <Dialog open={locationState?.editSequence} onOpenChange={() => setLocationState({ editSequence: false })}>
+        <Dialog
+            open={locationState?.editSequence}
+            onOpenChange={() => setLocationState(merge(locationState, { editSequence: false }))}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <StyledContent>
