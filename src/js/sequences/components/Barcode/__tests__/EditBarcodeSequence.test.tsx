@@ -44,7 +44,7 @@ describe("<EditBarcodeSequence>", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("combobox"));
-        await userEvent.click(screen.getByText("test_target_name_2"));
+        await userEvent.click(screen.getByRole("option", { name: /test_target_name_2/ }));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
         await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
@@ -89,7 +89,7 @@ describe("<EditBarcodeSequence>", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("combobox"));
-        await userEvent.click(screen.getByText("test_target_name_2"));
+        await userEvent.click(screen.getByRole("option", { name: /test_target_name_2/ }));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
         await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
