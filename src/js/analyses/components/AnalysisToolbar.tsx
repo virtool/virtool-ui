@@ -1,6 +1,6 @@
+import { LinkButton } from "@base";
+import { useCheckCanEditSample } from "@samples/hooks";
 import React from "react";
-import { LinkButton, Toolbar } from "../../base";
-import { useCheckCanEditSample } from "../../samples/hooks";
 import { Workflows } from "../types";
 
 type AnalysesToolbarProps = {
@@ -14,15 +14,12 @@ export default function AnalysesToolbar({ sampleId }: AnalysesToolbarProps) {
     const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
 
     return (
-        <Toolbar>
+        <div className="flex justify-end pb-4">
             {canCreate && (
-                <LinkButton
-                    icon="plus-square fa-fw"
-                    to={{ state: { createAnalysis: Workflows.pathoscope_bowtie } }}
-                    color="blue"
-                    tip="New Analysis"
-                />
+                <LinkButton color="blue" to={{ state: { createAnalysis: Workflows.pathoscope_bowtie } }}>
+                    <span className="font-medium">Create</span>
+                </LinkButton>
             )}
-        </Toolbar>
+        </div>
     );
 }
