@@ -42,7 +42,7 @@ type TargetFieldProps = {
  * Displays a dropdown list of available targets in adding/editing dialogs
  */
 export default function TargetField({ targets }: TargetFieldProps) {
-    const { control } = useFormContext();
+    const { control, setValue } = useFormContext();
 
     const targetSelectOptions = map(targets, target => (
         <SequenceTarget key={target.name} name={target.name} description={target.description} />
@@ -64,18 +64,26 @@ export default function TargetField({ targets }: TargetFieldProps) {
             <TargetSelectContainer>
                 <Controller
                     control={control}
-                    render={({ field: { onChange, value } }) => (
-                        <Select
-                            disabled={disabled}
-                            value={value}
-                            onValueChange={value => value !== "" && onChange(value)}
-                        >
-                            <SelectButton icon="chevron-down" />
-                            <SelectContent position="popper" align="start">
-                                {targetSelectOptions}
-                            </SelectContent>
-                        </Select>
-                    )}
+                    render={({ field: { onChange, value } }) => {
+                        const targetExists = targets.some(target => target.name === value);
+
+                        if (value && !targetExists) {
+                            setValue("target", targets[0]?.name);
+                        }
+
+                        return (
+                            <Select
+                                disabled={disabled}
+                                value={value}
+                                onValueChange={value => value !== "" && onChange(value)}
+                            >
+                                <SelectButton icon="chevron-down" />
+                                <SelectContent position="popper" align="start">
+                                    {targetSelectOptions}
+                                </SelectContent>
+                            </Select>
+                        );
+                    }}
                     name="target"
                 />
             </TargetSelectContainer>
