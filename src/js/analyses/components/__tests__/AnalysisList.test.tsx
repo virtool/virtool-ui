@@ -55,7 +55,7 @@ describe("<AnalysesList />", () => {
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
-            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+            expect(await screen.findByText("Create")).toBeInTheDocument();
         });
 
         it("should show analysis creation when user is the owner of the sample", async () => {
@@ -65,7 +65,7 @@ describe("<AnalysesList />", () => {
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
-            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+            expect(await screen.findByText("Create")).toBeInTheDocument();
         });
 
         it("should show analysis creation when user is in the correct group and write is enabled", async () => {
@@ -76,7 +76,7 @@ describe("<AnalysesList />", () => {
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
-            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+            expect(await screen.findByText("Create")).toBeInTheDocument();
         });
 
         it("should show analysis creation when all users editing a sample is permitted", async () => {
@@ -88,29 +88,30 @@ describe("<AnalysesList />", () => {
 
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
-            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+            expect(await screen.findByText("Create")).toBeInTheDocument();
         });
 
-        it("should not render analysis creation option when user has no permissions", () => {
+        it("should not render analysis creation option when user has no permissions", async () => {
             const account = createFakeAccount({ administrator_role: null });
             mockAPIGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
-            expect(screen.queryByLabelText("plus-square fa-fw")).toBeNull();
+            expect(await screen.queryByText("Create")).not.toBeInTheDocument();
         });
 
         it("should change state once create analysis is clicked", async () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+
             mockAPIGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
-            expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
-
+            expect(await screen.findByText("Create")).toBeInTheDocument();
             expect(history.location.state).toEqual(undefined);
 
-            await userEvent.click(await screen.findByLabelText("plus-square fa-fw"));
+            await userEvent.click(screen.getByText("Create"));
+
             expect(history.location.state).toEqual({ createAnalysis: Workflows.pathoscope_bowtie });
         });
     });
