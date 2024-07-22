@@ -14,11 +14,14 @@ export type LocationType = {
     addSequence?: boolean;
     activeHitId?: number;
     cloneReference?: string;
+    createReference?: boolean;
     editIsolate?: boolean;
     editReference?: boolean;
     editSequence?: boolean;
+    emptyReference?: boolean;
     export?: boolean;
     devCommands?: boolean;
+    importReference?: boolean;
     removeIsolate?: boolean;
     removeSequence?: string;
 };
