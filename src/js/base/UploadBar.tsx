@@ -1,3 +1,4 @@
+import { Icon } from "@base/Icon";
 import React, { useCallback } from "react";
 import { FileError, useDropzone } from "react-dropzone";
 import styled, { DefaultTheme } from "styled-components";
@@ -104,8 +105,8 @@ export function UploadBar({
             <MessageContainer>{message}</MessageContainer>
             <UploadBarDivider text="or" />
             <ButtonContainer>
-                <Button color="blue" icon="upload" onClick={open} onBlur={onBlur}>
-                    Browse Files
+                <Button color="blue" onClick={open} onBlur={onBlur}>
+                    <Icon name="upload" /> Browse Files
                 </Button>
             </ButtonContainer>
         </StyledUploadBar>

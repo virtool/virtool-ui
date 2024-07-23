@@ -45,7 +45,7 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
                         <RebuildIndexError error={mutation.isError && mutation.error.response.body.message} />
                         <RebuildHistory unbuilt={data} />
                         <DialogFooter>
-                            <Button type="submit" color="blue" icon="wrench">
+                            <Button type="submit" color="blue">
                                 Start
                             </Button>
                         </DialogFooter>

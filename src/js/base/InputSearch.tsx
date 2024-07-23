@@ -35,3 +35,5 @@ export const InputSearch = React.forwardRef<InputHandle, InputProps>((props, ref
         <InputIcon name="search" />
     </InputContainer>
 ));
+
+InputSearch.displayName = "InputSearch";

@@ -2,7 +2,6 @@ import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { BoxGroupSection, Icon, InitialIcon, Label } from "@base";
-import { StyledButtonSmall } from "@base/styled/StyledButtonSmall";
 import { GroupMinimal } from "@groups/types";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -17,10 +16,6 @@ const StyledUserItem = styled(BoxGroupSection)`
         font-size: ${getFontSize("lg")};
         font-weight: ${getFontWeight("thick")};
         padding-left: 10px;
-    }
-
-    ${StyledButtonSmall} {
-        margin-left: 10px;
     }
 `;
 

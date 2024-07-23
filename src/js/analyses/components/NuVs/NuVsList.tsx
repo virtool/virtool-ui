@@ -2,7 +2,7 @@ import NuVsDetail from "@/analyses/components/NuVs/NuVsDetail";
 import NuVsItem from "@/analyses/components/NuVs/NuVsItem";
 import AnalysisViewerList from "@/analyses/components/Viewer/AnalysisViewerList";
 import { useSortAndFilterNuVsHits } from "@/analyses/hooks";
-import { FormattedNuVsAnalysis } from "@/analyses/types";
+import { FormattedNuvsAnalysis } from "@/analyses/types";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
@@ -14,7 +14,7 @@ const NuVsPanes = styled.div`
 
 type NuVsListProps = {
     /** Complete NuVs analysis details */
-    detail: FormattedNuVsAnalysis;
+    detail: FormattedNuvsAnalysis;
 };
 
 /**

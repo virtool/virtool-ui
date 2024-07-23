@@ -65,7 +65,7 @@ export type GenericAnalysis = AnalysisMinimal & {
     workflow: Workflows.aodp;
 };
 
-export type Analysis = FormattedPathoscopeAnalysis | FormattedNuVsAnalysis | IimiAnalysis | GenericAnalysis;
+export type Analysis = FormattedPathoscopeAnalysis | FormattedNuvsAnalysis | IimiAnalysis | GenericAnalysis;
 
 export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
     files: Array<AnalysisFile>;
@@ -133,20 +133,20 @@ export type FormattedPathoscopeSequence = {
 };
 
 /** Complete NuVs analysis details */
-export type FormattedNuVsAnalysis = AnalysisMinimal & {
+export type FormattedNuvsAnalysis = AnalysisMinimal & {
     files: Array<AnalysisFile>;
     maxSequenceLength: number;
-    results: FormattedNuVsResults;
+    results: FormattedNuvsResults;
     workflow: Workflows.nuvs;
 };
 
 /** All results for a NuVs analysis */
-export type FormattedNuVsResults = {
-    hits: FormattedNuVsHit[];
+export type FormattedNuvsResults = {
+    hits: FormattedNuvsHit[];
 };
 
 /** Mapping data for a single NuVs hit */
-export type FormattedNuVsHit = {
+export type FormattedNuvsHit = {
     annotatedOrfCount: number;
     blast: Blast;
     e: number;

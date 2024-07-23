@@ -1,5 +1,5 @@
 import { useGetActiveHit } from "@/analyses/hooks";
-import { FormattedNuVsHit } from "@/analyses/types";
+import { FormattedNuvsHit } from "@/analyses/types";
 import { getBorder, getFontSize } from "@app/theme";
 import { Key } from "@base";
 import { useLocationState } from "@utils/hooks";
@@ -47,7 +47,7 @@ type AnalysisViewerListProps = {
     children: React.ReactNode;
     itemSize: number;
     /** A list of filtered and sorted hits */
-    matches?: FormattedNuVsHit[];
+    matches?: FormattedNuvsHit[];
     /** The total number of hits */
     total?: number;
     width: number;

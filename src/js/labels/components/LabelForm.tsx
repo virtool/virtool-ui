@@ -1,9 +1,9 @@
+import { getFontWeight } from "@app/theme";
+import { Box, Button, Color, DialogFooter, InputError, InputGroup, InputLabel, InputSimple } from "@base";
+import { SampleLabel } from "@samples/components/Label/SampleLabel";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { getFontWeight } from "../../app/theme";
-import { Box, Button, Color, InputError, InputGroup, InputLabel, InputSimple } from "../../base";
-import { SampleLabel } from "../../samples/components/Label/SampleLabel";
 
 const LabelFormPreview = styled(Box)`
     padding: 10px;
@@ -61,9 +61,11 @@ export function LabelForm({ color = "#D1D5DB", description = "", error = "", nam
             <LabelFormPreview>
                 <SampleLabel color={newColor || "#D1D5DB"} name={watch("name") || "Preview"} />
             </LabelFormPreview>
-            <Button type="submit" color="blue" icon="save">
-                Save
-            </Button>
+            <DialogFooter>
+                <Button color="blue" type="submit">
+                    Save
+                </Button>
+            </DialogFooter>
         </form>
     );
 }

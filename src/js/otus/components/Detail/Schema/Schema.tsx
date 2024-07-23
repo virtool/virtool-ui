@@ -68,11 +68,7 @@ export default function Schema({ match }: SchemaProps) {
     return (
         <div>
             {canModify && (
-                <AddButton
-                    color="blue"
-                    icon="plus-square"
-                    onClick={() => history.push({ state: { addSegment: true } })}
-                >
+                <AddButton color="blue" onClick={() => history.push({ state: { addSegment: true } })}>
                     Add Segment
                 </AddButton>
             )}

@@ -10,7 +10,11 @@ function SampleSearchToolbar({ onChange, term }) {
     return (
         <Toolbar>
             <InputSearch value={term || ""} onChange={onChange} placeholder="Sample name" />
-            {canCreate && <LinkButton icon="plus-square fa-fw" to="/samples/create" color="blue" tip="Create" />}
+            {canCreate && (
+                <LinkButton color="blue" to="/samples/create">
+                    Create
+                </LinkButton>
+            )}
         </Toolbar>
     );
 }

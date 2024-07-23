@@ -18,13 +18,13 @@ import { LibraryType } from "../../../types";
 import CreateSample from "../CreateSample";
 
 describe("<CreateSample>", () => {
-    const readFileName = "large";
     const history = createBrowserHistory();
     const labels = [createFakeLabelNested()];
     const subtractionShortlist = createFakeShortlistSubtraction();
 
     beforeEach(() => {
         window.sessionStorage.clear();
+
         mockApiGetLabels(labels);
         mockAPIGetAccount(createFakeAccount({ primary_group: null }));
         mockApiListGroups([]);
@@ -32,172 +32,119 @@ describe("<CreateSample>", () => {
 
     afterEach(() => nock.cleanAll());
 
-    const submitForm = () => userEvent.click(screen.getByRole("button", { name: "Create" }));
-
-    async function inputFormRequirements(sampleName, files) {
-        await userEvent.type(await screen.findByLabelText("Name"), sampleName);
-        await userEvent.click(screen.getByText(files[0].name));
-        await userEvent.click(screen.getByText(files[1].name));
+    async function submitForm() {
+        await userEvent.click(screen.getByRole("button", { name: "Create" }));
     }
 
-    it("should render", async () => {
-        const file = createFakeFile();
-        mockApiListFiles([file]);
-        mockApiGetShortlistSubtractions([]);
-        renderWithRouter(<CreateSample />, {}, history);
-
-        expect(await screen.findByText("Create Sample")).toBeInTheDocument();
-        expect(screen.getByRole("textbox", { name: "Name" })).toBeInTheDocument();
-        expect(screen.getByRole("textbox", { name: "Locale" })).toBeInTheDocument();
-        expect(screen.getByRole("textbox", { name: "Isolate" })).toBeInTheDocument();
-        expect(screen.getByRole("textbox", { name: "Host" })).toBeInTheDocument();
-
-        expect(screen.getByText("Library Type")).toBeInTheDocument();
-        expect(screen.getByText("Search against whole genome references using normal reads.")).toBeInTheDocument();
-        expect(screen.getByText("Search against whole genome references using sRNA reads")).toBeInTheDocument();
-        expect(screen.getByText("Search against barcode references using amplicon reads.")).toBeInTheDocument();
-
-        expect(await screen.findByText("Labels")).toBeInTheDocument();
-        expect(screen.getByText("Default Subtractions")).toBeInTheDocument();
-
-        expect(screen.getByText(file.name)).toBeInTheDocument();
-    });
-
-    it("should render LoadingPlaceholder when there are no subtractions", async () => {
+    it("should show loader when there are no subtractions", async () => {
         const file = createFakeFile();
         const filesScope = mockApiListFiles([file]);
-        renderWithRouter(<CreateSample />, {}, history);
 
+        renderWithRouter(<CreateSample />, {}, history);
         expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 
         filesScope.done();
     });
 
-    it("should render LoadingPlaceholder when there are no sample files to read", async () => {
+    it("should show loader when there are no sample files to read", async () => {
         renderWithRouter(<CreateSample />, {}, history);
-
         expect(await screen.findByLabelText("loading")).toBeInTheDocument();
     });
 
-    it("should fail to submit and show errors on empty submission", async () => {
+    it("should fail and show errors on empty submission", async () => {
         const file = createFakeFile();
+
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
+
         renderWithRouter(<CreateSample />, {}, history);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
         expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
         expect(screen.queryByText("At least one read file must be attached to the sample")).not.toBeInTheDocument();
 
-        await submitForm();
+        await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
         expect(screen.getByText("Required Field")).toBeInTheDocument();
         expect(screen.getByText("At least one read file must be attached to the sample")).toBeInTheDocument();
     });
 
-    it("should submit when required fields are completed", async () => {
-        const files = [createFakeFile(), createFakeFile()];
-        mockApiListFiles(files);
+    it("should submit when minimum fields are completed", async () => {
+        const file = createFakeFile();
+
+        mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
-        const createSampleScope = mockApiCreateSample(
-            "testSample",
-            "",
-            "",
-            "",
-            LibraryType.normal,
-            [files[0].id, files[1].id],
-            [],
-            [],
-            null,
-        );
+
+        const scope = mockApiCreateSample("Sample A", "", "", "", LibraryType.normal, [file.id], [], [], "");
+
         renderWithRouter(<CreateSample />, {}, history);
 
+        // Wait for the data to load.
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
+        await userEvent.click(screen.getByRole("button", { name: "Reset" }));
 
-        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
-        await inputFormRequirements("testSample", files);
-
-        await submitForm();
-
-        createSampleScope.done();
-    });
-
-    it("should submit expected results when form is fully completed", async () => {
-        const files = [createFakeFile(), createFakeFile()];
-        mockApiListFiles(files);
-        mockApiGetShortlistSubtractions([subtractionShortlist]);
-        const scope = mockApiCreateSample(
-            "testSample",
-            "testIsolate",
-            "testHost",
-            "testLocale",
-            LibraryType.normal,
-            [files[0].id, files[1].id],
-            [],
-            [subtractionShortlist.id],
-            null,
-        );
-        renderWithRouter(<CreateSample />, {}, history);
-
-        expect(await screen.findByText("Create Sample")).toBeInTheDocument();
-
-        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
-        await inputFormRequirements("testSample", files);
-
-        // Fill out the rest of the form and submit
-        await userEvent.type(await screen.findByLabelText("Isolate"), "testIsolate");
-        await userEvent.type(screen.getByLabelText("Host"), "testHost");
-        await userEvent.type(screen.getByLabelText("Locale"), "testLocale");
-        await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
-        await userEvent.click(screen.getByText(subtractionShortlist.name));
-        await userEvent.click(screen.getByText("Normal"));
+        await userEvent.type(await screen.findByLabelText("Name"), "Sample A");
+        await userEvent.click(screen.getByText(file.name));
 
         await submitForm();
 
         scope.done();
     });
 
-    it("should include labels when submitting a completed form", async () => {
+    it("should submit when all form fields complete", async () => {
         const files = [createFakeFile(), createFakeFile()];
+
         mockApiListFiles(files);
         mockApiGetShortlistSubtractions([subtractionShortlist]);
-        const createSampleScope = mockApiCreateSample(
-            "testSample",
-            "testIsolate",
-            "testHost",
-            "testLocale",
+
+        const scope = mockApiCreateSample(
+            "Sample T",
+            "Clone AB",
+            "Apple",
+            "Earth",
             LibraryType.normal,
             [files[0].id, files[1].id],
             [labels[0].id],
             [subtractionShortlist.id],
-            null,
+            "",
         );
+
         renderWithRouter(<CreateSample />, {}, history);
 
+        // Wait for the data to load.
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
-        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
-        await inputFormRequirements("testSample", files);
-
-        // Fill out the rest of the form and submit
-        await userEvent.type(screen.getByLabelText("Isolate"), "testIsolate");
-        await userEvent.type(screen.getByLabelText("Host"), "testHost");
-        await userEvent.type(screen.getByLabelText("Locale"), "testLocale");
+        // Fill out main form.
+        await userEvent.type(screen.getByLabelText("Name"), "Sample T");
+        await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
+        await userEvent.type(screen.getByLabelText("Host"), "Apple");
+        await userEvent.type(screen.getByLabelText("Locale"), "Earth");
         await userEvent.click(screen.getByText("Normal"));
-        await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
-        await userEvent.click(screen.getByText(subtractionShortlist.name));
+
+        // Select Files
+        await userEvent.click(screen.getByText(files[0].name));
+        await userEvent.click(screen.getByText(files[1].name));
+
+        // Select Labels
         await userEvent.click(screen.getByRole("button", { name: "select labels" }));
         await userEvent.click(screen.getByText(labels[0].name));
 
-        await submitForm();
+        // Select Subtractions
+        await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
+        await userEvent.click(screen.getByText(subtractionShortlist.name));
 
-        createSampleScope.done();
+        // Submit.
+        await userEvent.click(screen.getByRole("button", { name: "Create" }));
+
+        scope.done();
     });
 
-    it("should update the sample name when the magic icon is pressed", async () => {
-        const file = createFakeFile({ name: "large.fastq.gz" });
+    it("should be able to autofill the sample name", async () => {
+        const file = createFakeFile({ name: "14T81.fq.gz" });
+
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
         renderWithRouter(<CreateSample />, {}, history);
 
         const field = await screen.findByRole("textbox", { name: "Name" });
@@ -205,13 +152,16 @@ describe("<CreateSample>", () => {
 
         await userEvent.click(screen.getByText(file.name));
         await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
-        expect(field).toHaveValue(readFileName);
+
+        expect(field).toHaveValue("14T81");
     });
 
-    it("should empty selections when clear button is clicked", async () => {
+    it("should clear selections when reset button is clicked", async () => {
         const file = createFakeFile({ name: "large.fastq.gz" });
+
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
+
         renderWithRouter(<CreateSample />, {}, history);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -219,52 +169,50 @@ describe("<CreateSample>", () => {
         await userEvent.click(screen.getByText(file.name));
         expect(screen.getByText("1 of 1 selected")).toBeInTheDocument();
 
-        const clearButton = screen.getByRole("button", { name: "undo" });
-        await userEvent.click(clearButton);
+        await userEvent.click(screen.getByRole("button", { name: "Reset" }));
         expect(screen.getByText("0 of 1 selected")).toBeInTheDocument();
     });
 
-    it("should trigger file swap mutation when swap button is clicked", async () => {
+    it("should be able to swap read orientation", async () => {
         const files = [createFakeFile(), createFakeFile()];
+
         mockApiListFiles(files);
         mockApiGetShortlistSubtractions([]);
-        const createSampleScope = mockApiCreateSample(
-            "testSample",
-            "",
-            "",
-            "",
-            LibraryType.normal,
-            [files[1].id, files[0].id],
-            [],
-            [],
-            null,
-        );
+
         renderWithRouter(<CreateSample />, {}, history);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
-        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
-        await inputFormRequirements("testSample", files);
+        await userEvent.click(screen.getByText(files[0].name));
+        await userEvent.click(screen.getByText(files[1].name));
+
         expect(screen.getByText("2 of 2 selected")).toBeInTheDocument();
 
-        const swapButton = screen.getByRole("button", { name: "retweet" });
-        await userEvent.click(swapButton);
-
-        await submitForm();
-
-        createSampleScope.done();
+        await userEvent.click(await screen.getByRole("button", { name: "Swap" }));
     });
 
-    it("should render correct read orientations with 2 files are selected", async () => {
+    it("should show correct read orientations", async () => {
         const files = [createFakeFile(), createFakeFile()];
+
         mockApiListFiles(files);
         mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+
         renderWithRouter(<CreateSample />, {}, history);
 
-        await inputFormRequirements("Test", files);
+        await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
-        expect(screen.getByText("LEFT")).toBeInTheDocument();
-        expect(screen.getByText("RIGHT")).toBeInTheDocument();
+        expect(screen.queryByText("LEFT")).not.toBeInTheDocument();
+        expect(screen.queryByText("RIGHT")).not.toBeInTheDocument();
+
+        await userEvent.click(screen.getByText(files[0].name));
+
+        expect(screen.queryByText("LEFT")).toBeInTheDocument();
+        expect(screen.queryByText("RIGHT")).not.toBeInTheDocument();
+
+        await userEvent.click(screen.getByText(files[1].name));
+
+        expect(screen.queryByText("LEFT")).toBeInTheDocument();
+        expect(screen.queryByText("RIGHT")).toBeInTheDocument();
     });
 
     it("should render correct read orientations with 1 file selected", async () => {

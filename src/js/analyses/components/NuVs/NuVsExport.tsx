@@ -1,15 +1,9 @@
-/**
- * @copyright 2017 Government of Canada
- * @license MIT
- * @author igboyes
- *
- */
-import { FormattedNuVsHit, FormattedNuVsResults } from "@/analyses/types";
-import { Button, ButtonGroup, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "@base";
-import { DialogPortal } from "@radix-ui/react-dialog";
-import { useLocationState } from "@utils/hooks";
+import { FormattedNuvsHit, FormattedNuvsResults } from "@/analyses/types";
+import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, Icon } from "@base";
+import { ToggleGroup } from "@base/ToggleGroup";
+import { ToggleGroupItem } from "@base/ToggleGroupItem";
+import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { followDynamicDownload } from "@utils/utils";
-import { merge } from "lodash";
 import { forEach, map, reduce, replace } from "lodash-es";
 import React, { useState } from "react";
 import NuVsExportPreview from "./ExportPreview";
@@ -29,7 +23,7 @@ function getBestHit(items) {
     );
 }
 
-function exportContigData(hits: FormattedNuVsHit[], sampleName: string) {
+function exportContigData(hits: FormattedNuvsHit[], sampleName: string) {
     return map(hits, result => {
         const orfNames = reduce(
             result.orfs,
@@ -51,7 +45,7 @@ function exportContigData(hits: FormattedNuVsHit[], sampleName: string) {
     });
 }
 
-function exportORFData(hits: FormattedNuVsHit[], sampleName: string) {
+function exportORFData(hits: FormattedNuvsHit[], sampleName: string) {
     return reduce(
         hits,
         (lines, result) => {
@@ -79,10 +73,10 @@ function downloadData(analysisId: string, content: string[], sampleName: string,
     );
 }
 
-type NuVsExportProps = {
+export type NuVsExportProps = {
     analysisId: string;
     /** All results for a NuVs analysis */
-    results: FormattedNuVsResults;
+    results: FormattedNuvsResults;
     sampleName: string;
 };
 
@@ -90,49 +84,41 @@ type NuVsExportProps = {
  * Displays a dialog for exporting NuVs
  */
 export default function NuVsExport({ analysisId, results, sampleName }: NuVsExportProps) {
-    const [locationState, setLocationState] = useLocationState();
     const [mode, setMode] = useState("contigs");
+    const [open, setOpen] = useState(false);
 
     function onSubmit(e) {
         e.preventDefault();
 
-        let content;
-        let suffix;
-
         if (mode === "contigs") {
-            content = exportContigData(results.hits, sampleName);
-            suffix = "contigs";
+            downloadData(analysisId, exportContigData(results.hits, sampleName), sampleName, "configs");
         } else {
-            content = exportORFData(results.hits, sampleName);
-            suffix = "orfs";
+            downloadData(analysisId, exportORFData(results.hits, sampleName), sampleName, "orfs");
         }
-
-        downloadData(analysisId, content, sampleName, suffix);
     }
 
     return (
-        <Dialog
-            open={locationState?.export}
-            onOpenChange={() => setLocationState(merge(locationState, { export: false }))}
-        >
+        <Dialog open={open} onOpenChange={setOpen}>
+            <Button as={DialogTrigger} color="gray">
+                Export
+            </Button>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Export Analysis</DialogTitle>
                     <form onSubmit={onSubmit}>
-                        <ButtonGroup>
-                            <Button type="button" active={mode === "contigs"} onClick={() => setMode("contigs")}>
-                                Contigs
-                            </Button>
-                            <Button type="button" active={mode === "orfs"} onClick={() => setMode("orfs")}>
-                                ORFs
-                            </Button>
-                        </ButtonGroup>
+                        <label>Scope</label>
+
+                        <ToggleGroup className="flex mb-3" value={mode} onValueChange={setMode}>
+                            <ToggleGroupItem value="contigs">Contigs</ToggleGroupItem>
+                            <ToggleGroupItem value="orfs">ORFs</ToggleGroupItem>
+                        </ToggleGroup>
 
                         <NuVsExportPreview mode={mode} />
+
                         <DialogFooter>
-                            <Button type="submit" icon="download">
-                                Download
+                            <Button type="submit" className="inline-flex gap-1.5">
+                                <Icon name="download" /> Download
                             </Button>
                         </DialogFooter>
                     </form>

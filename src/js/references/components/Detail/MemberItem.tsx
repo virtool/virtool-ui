@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Icon, InitialIcon } from "../../../base";
+import { BoxGroupSection, Button, InitialIcon } from "../../../base";
 
 const StyledMemberItemIcon = styled.div`
     align-items: center;
@@ -16,14 +16,11 @@ function MemberItemIcon({ handle }) {
     );
 }
 
-const MemberItemIcons = styled.span`
+const MemberItemButtons = styled.span`
     align-items: center;
     display: flex;
+    gap: 4px;
     margin-left: auto;
-
-    i {
-        margin-left: 5px;
-    }
 `;
 
 const StyledMemberItem = styled(BoxGroupSection)`
@@ -59,10 +56,14 @@ export default function MemberItem({ canModify, id, name, handle, onEdit, onRemo
             <MemberItemIcon handle={displayName} />
             {displayName}
             {canModify && (
-                <MemberItemIcons>
-                    <Icon aria-label="edit" name="edit" color="orange" tip="Modify" onClick={handleEdit} />
-                    <Icon aria-label="remove" name="trash" color="red" tip="Remove" onClick={handleRemove} />
-                </MemberItemIcons>
+                <MemberItemButtons>
+                    <Button onClick={handleEdit} size="small">
+                        Edit
+                    </Button>
+                    <Button onClick={handleRemove} size="small" color="red">
+                        Remove
+                    </Button>
+                </MemberItemButtons>
             )}
         </StyledMemberItem>
     );

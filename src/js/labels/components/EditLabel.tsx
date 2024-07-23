@@ -1,8 +1,7 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
-import { StyledButtonSmall } from "../../base/styled/StyledButtonSmall";
+import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { labelQueryKeys, useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 
@@ -42,10 +41,10 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
 
     return (
         <Dialog open={show} onOpenChange={show => setShow(show)}>
-            <StyledButtonSmall as={DialogTrigger}>
+            <Button as={DialogTrigger} size="small">
                 <Icon name="pen" />
                 <span>Edit</span>
-            </StyledButtonSmall>
+            </Button>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

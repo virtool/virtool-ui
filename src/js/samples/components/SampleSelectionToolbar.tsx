@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";
-import { Button } from "../../base";
+import { Button, Icon } from "../../base";
 
 const SampleSelectionToolbarTop = styled.div`
     align-items: center;
@@ -41,11 +41,9 @@ export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToo
 
     return (
         <SampleSelectionToolbarTop>
-            <Button icon="times-circle" onClick={onClear}>
-                Clear selection of {selected.length} samples
-            </Button>
-            <Button color="green" icon="chart-area" onClick={() => onQuickAnalyze()}>
-                Quick Analyze
+            <Button onClick={onClear}>Clear selection of {selected.length} samples</Button>
+            <Button color="green" onClick={() => onQuickAnalyze()}>
+                <Icon name="chart-area" /> Quick Analyze
             </Button>
         </SampleSelectionToolbarTop>
     );

@@ -1,13 +1,12 @@
 import { NuVsList } from "@/analyses/components/NuVs/NuVsList";
-import { FormattedNuVsAnalysis } from "@/analyses/types";
+import { FormattedNuvsAnalysis } from "@/analyses/types";
 import { Sample } from "@samples/types";
 import React from "react";
-import NuVsExport from "./NuVsExport";
 import NuVsToolbar from "./NuVsToolbar";
 
 type NuVsViewerProps = {
     /** Complete NuVs analysis details */
-    detail: FormattedNuVsAnalysis;
+    detail: FormattedNuvsAnalysis;
     /** The sample that was analysed */
     sample: Sample;
 };
@@ -18,8 +17,7 @@ type NuVsViewerProps = {
 export default function NuVsViewer({ detail, sample }: NuVsViewerProps) {
     return (
         <div>
-            <NuVsExport analysisId={detail.id} results={detail.results} sampleName={sample.name} />
-            <NuVsToolbar />
+            <NuVsToolbar analysisId={detail.id} results={detail.results} sampleName={sample.name} />
             <NuVsList detail={detail} />
         </div>
     );

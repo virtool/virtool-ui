@@ -72,8 +72,8 @@ export function TargetForm({ description, error, length, name, onSubmit, require
             />
 
             <DialogFooter>
-                <Button type="submit" icon="save" color="blue">
-                    Submit
+                <Button type="submit" color="blue">
+                    Save
                 </Button>
             </DialogFooter>
         </form>

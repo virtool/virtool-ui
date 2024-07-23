@@ -2,8 +2,7 @@ import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { createUser } from "../../administration/api";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
-import { StyledButton } from "../../base/styled/StyledButton";
+import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
 import { User } from "../types";
 import { CreateUserForm } from "./CreateUserForm";
 
@@ -45,9 +44,9 @@ export default function CreateUser() {
 
     return (
         <Dialog open={history.state?.createUser} onOpenChange={onOpenChange}>
-            <StyledButton as={DialogTrigger} color="blue" aria-label="user-plus">
-                <Icon name="user-plus" />
-            </StyledButton>
+            <Button as={DialogTrigger} color="blue">
+                Create
+            </Button>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

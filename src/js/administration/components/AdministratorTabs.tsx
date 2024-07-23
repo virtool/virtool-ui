@@ -1,12 +1,12 @@
+import { Tabs, TabsLink } from "@base";
 import React from "react";
-import { Tabs, TabsLink } from "../../base";
 import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";
 
 type AdministratorTabsProps = {
     administratorRole: AdministratorRoles;
 };
-export const AdministratorTabs = ({ administratorRole }: AdministratorTabsProps) => {
+export function AdministratorTabs({ administratorRole }: AdministratorTabsProps) {
     const tabs = [];
 
     if (hasSufficientAdminRole(AdministratorRoles.SETTINGS, administratorRole)) {
@@ -26,4 +26,4 @@ export const AdministratorTabs = ({ administratorRole }: AdministratorTabsProps)
     }
 
     return <Tabs>{...tabs}</Tabs>;
-};
+}

@@ -7,11 +7,12 @@ import { SubtractionItem } from "./SubtractionItem";
 import SubtractionToolbar from "./SubtractionToolbar";
 
 /**
- * A list of subtractions
+ * A list of subtractions.
  */
 export default function SubtractionList() {
-    const [term, setTerm] = useUrlSearchParams<string>("find");
-    const [urlPage] = useUrlSearchParams<number>("page");
+    const [term, setTerm] = useUrlSearchParams<string>("find", "");
+    const [urlPage] = useUrlSearchParams<number>("page", 1);
+
     const { data, isLoading } = useFindSubtractions(Number(urlPage) || 1, 25, term);
 
     if (isLoading) {

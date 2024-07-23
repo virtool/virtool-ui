@@ -82,7 +82,7 @@ type TooltipProps = {
     tip: string;
 };
 
-export function Tooltip({ tip, position = "top", children }: TooltipProps) {
+export function Tooltip({ children, position = "top", tip }: TooltipProps) {
     return (
         <TooltipPrimitive.Provider>
             <TooltipPrimitive.Root>

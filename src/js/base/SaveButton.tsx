@@ -8,7 +8,7 @@ interface SaveButtonProps {
 
 export function SaveButton({ altText = "Save", disabled = false }: SaveButtonProps) {
     return (
-        <Button type="submit" color="blue" icon="save" disabled={disabled}>
+        <Button color="blue" disabled={disabled} type="submit">
             {altText}
         </Button>
     );

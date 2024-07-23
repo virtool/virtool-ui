@@ -64,7 +64,7 @@ const Release = ({ release, checking, updating, onCheckUpdates, onUpdate }) => {
 
             {hasUpdate && (
                 <ReleaseButtonContainer>
-                    <Button icon="download" color="blue" onClick={onUpdate} disabled={updating}>
+                    <Button color="blue" disabled={updating} onClick={onUpdate}>
                         Install
                     </Button>
                 </ReleaseButtonContainer>

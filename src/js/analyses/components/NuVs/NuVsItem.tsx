@@ -1,5 +1,5 @@
 import { AnalysisViewerItem } from "@/analyses/components/Viewer/Item";
-import { FormattedNuVsHit } from "@/analyses/types";
+import { FormattedNuvsHit } from "@/analyses/types";
 import { Badge } from "@base";
 import { useLocationState } from "@utils/hooks";
 import numbro from "numbro";
@@ -22,7 +22,7 @@ const StyledNuVsItem = styled(AnalysisViewerItem)`
 
 type NuVsItemProps = {
     /** Complete information for a NuVs hit */
-    hit: FormattedNuVsHit;
+    hit: FormattedNuvsHit;
 };
 
 /**

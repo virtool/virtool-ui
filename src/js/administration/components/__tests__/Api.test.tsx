@@ -24,7 +24,7 @@ describe("<Api />", () => {
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         await userEvent.click(screen.getByRole("checkbox"));
-        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "checked");
+        expect(screen.getByRole("checkbox")).toBeChecked();
 
         scope.done();
     });

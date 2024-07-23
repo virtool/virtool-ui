@@ -2,18 +2,22 @@ import { Button } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Button> = {
-    title: "base/Button/Button",
+    title: "base/Button",
     component: Button,
     parameters: {
         controls: {
-            exclude: ["tipPlacement", "type", "onBlur"],
+            exclude: ["onBlur", "type"],
         },
     },
     tags: ["autodocs"],
     argTypes: {
         children: { type: "string" },
         color: {
-            options: ["black", "blue", "orange", "purple", "red"],
+            control: { type: "radio" },
+        },
+        disabled: { control: { type: "boolean" } },
+        size: {
+            options: ["small", "large"],
             control: { type: "radio" },
         },
     },
@@ -23,12 +27,19 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const BasicButton: Story = {
+export const Default: Story = {
     args: {
         active: false,
-        children: "Click here",
-        color: "blue",
+        children: "Button",
         onClick: () => console.log("clicked"),
-        tip: "Display Form",
+    },
+};
+
+export const Small: Story = {
+    args: {
+        active: false,
+        children: "Button",
+        size: "small",
+        onClick: () => console.log("clicked"),
     },
 };

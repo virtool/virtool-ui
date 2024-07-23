@@ -60,7 +60,7 @@ export default function FirstUser() {
                             />
                         </InputGroup>
 
-                        <WallButton type="submit" icon="user-plus" color="blue">
+                        <WallButton type="submit" color="blue">
                             Create User
                         </WallButton>
                         {mutation.isError && <InputError>{mutation.error.response?.body.message}</InputError>}

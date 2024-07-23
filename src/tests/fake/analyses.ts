@@ -1,4 +1,4 @@
-import { AnalysisMinimal, AnalysisSample, Blast, FormattedNuVsResults, Workflows } from "@/analyses/types";
+import { AnalysisMinimal, AnalysisSample, Blast, FormattedNuvsResults, Workflows } from "@/analyses/types";
 import { faker } from "@faker-js/faker";
 import { JobMinimal } from "@jobs/types";
 import { assign, merge } from "lodash";
@@ -39,7 +39,7 @@ export function createFakeAnalysisMinimal(overrides?: CreateFakeAnalysisMinimal)
 }
 
 type FakeFormattedNuVsAnalysis = FakeFormattedNuVsHit & {
-    results?: FormattedNuVsResults;
+    results?: FormattedNuvsResults;
 };
 
 /**

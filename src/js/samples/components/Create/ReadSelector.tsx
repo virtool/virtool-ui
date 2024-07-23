@@ -1,14 +1,13 @@
+import { getBorder, getFontWeight, theme } from "@app/theme";
+import { Box, BoxGroup, Button, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "@base";
+import { CompactScrollList } from "@base/CompactScrollList";
+import { useValidateFiles } from "@files/hooks";
+import { FileResponse, FileType } from "@files/types";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { flatMap, includes, indexOf, toLower } from "lodash-es";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getBorder, getFontWeight, theme } from "../../../app/theme";
-import { Box, BoxGroup, Icon, InputError, InputSearch, NoneFoundSection, Toolbar } from "../../../base";
-import { CompactScrollList } from "../../../base/CompactScrollList";
-import { StyledButton } from "../../../base/styled/StyledButton";
-import { useValidateFiles } from "../../../files/hooks";
-import { FileResponse, FileType } from "../../../files/types";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 type ReadSelectorBoxProps = {
@@ -17,10 +16,6 @@ type ReadSelectorBoxProps = {
 
 const ReadSelectorBox = styled(Box)<ReadSelectorBoxProps>`
     ${props => (props.error ? `border-color: ${theme.color.red};` : "")};
-`;
-
-export const ReadSelectorButton = styled(StyledButton)`
-    min-width: 44px;
 `;
 
 const ReadSelectorError = styled(InputError)`
@@ -133,7 +128,7 @@ export default function ReadSelector({
         </BoxGroup>
     );
 
-    let pairedness;
+    let pairedness: ReactNode | undefined;
 
     if (selected.length === 1) {
         pairedness = <span>Unpaired | </span>;
@@ -156,12 +151,12 @@ export default function ReadSelector({
             <ReadSelectorBox error={error}>
                 <Toolbar>
                     <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
-                    <ReadSelectorButton type="button" aria-label="undo" onClick={reset}>
-                        <Icon name="undo" />
-                    </ReadSelectorButton>
-                    <ReadSelectorButton type="button" aria-label="retweet" onClick={swap}>
-                        <Icon name="retweet" />
-                    </ReadSelectorButton>
+                    <Button className="inline-flex gap-2" onClick={reset}>
+                        <Icon name="undo" /> Reset
+                    </Button>
+                    <Button className="inline-flex gap-2" type="button" onClick={swap}>
+                        <Icon name="retweet" /> Swap
+                    </Button>
                 </Toolbar>
                 {noneFound || (
                     <>

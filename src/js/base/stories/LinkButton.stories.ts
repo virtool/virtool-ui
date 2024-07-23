@@ -2,17 +2,16 @@ import { LinkButton } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof LinkButton> = {
-    title: "base/Button/LinkButton",
+    title: "base/LinkButton",
     component: LinkButton,
     parameters: {
         controls: {
-            exclude: ["tipPlacement", "replace"],
+            exclude: ["replace"],
         },
     },
     argTypes: {
         children: { type: "string" },
         color: {
-            options: ["black", "blue", "orange", "purple", "red"],
             control: { type: "radio" },
         },
     },
@@ -24,9 +23,8 @@ type Story = StoryObj<typeof meta>;
 
 export const linkButton: Story = {
     args: {
-        children: "Virtool Samples Page",
+        children: "Link",
         color: "blue",
         to: "#",
-        tip: "Visit Page",
     },
 };

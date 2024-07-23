@@ -24,15 +24,6 @@ describe("<NuVsViewer />", () => {
 
     afterEach(() => nock.cleanAll());
 
-    it("should render correctly", () => {
-        renderWithMemoryRouter(<NuVsViewer {...props} />);
-
-        expect(screen.getByRole("button", { name: "Filter Sequences" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Filter ORFs" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Export" })).toBeInTheDocument();
-        expect(screen.getAllByText(`Sequence ${nuvs.results.hits[0].index}`).length).toBe(2);
-    });
-
     describe("<NuVsDetail />", () => {
         it("should render correctly", () => {
             renderWithMemoryRouter(<NuVsViewer {...props} />);

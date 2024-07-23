@@ -142,7 +142,7 @@ describe("<APIKeys />", () => {
             expect(await screen.findByText("create_ref")).toBeInTheDocument();
             expect(screen.getByText("create_sample")).toBeInTheDocument();
 
-            expect(screen.getByText("Remove")).toBeInTheDocument();
+            expect(screen.getByText("Delete")).toBeInTheDocument();
             expect(screen.getByText("Update")).toBeInTheDocument();
         });
 
@@ -153,12 +153,12 @@ describe("<APIKeys />", () => {
             await userEvent.click(screen.getByText(apiKeys[0].name));
 
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
 
             await userEvent.click(screen.getByRole("button", { name: "close" }));
 
             expect(screen.queryByText("cancel_job")).not.toBeInTheDocument();
-            expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
         });
     });
 
