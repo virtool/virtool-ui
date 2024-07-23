@@ -37,8 +37,8 @@ export function getOTUHistory(otuId: string): Promise<OTUHistory[]> {
  * @param accession - The unique accession identifying the sequence in genebank
  * @returns A Promise resolving to the API response containing the genebank sequence data
  */
-export function getGenbank(accession: { accession: string }) {
-    return Request.get(`/genbank/${accession}`);
+export function getGenbank(accession: string) {
+    return Request.get(`/genbank/${accession}`).then(res => res.body);
 }
 
 /**

@@ -1,6 +1,7 @@
 import { getFontSize } from "@app/theme";
 import { Badge, BoxGroup, NoneFoundSection } from "@base";
 import { useCurrentOTUContext } from "@otus/queries";
+import { OTUIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
 import RemoveSequence from "@sequences/components/RemoveSequence";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
@@ -10,10 +11,10 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AddSequenceLink from "./AddSequenceLink";
 import AddBarcodeSequence from "./Barcode/AddBarcodeSequence";
-import BarcodeSequence from "./Barcode/Sequence";
+import BarcodeSequence from "./Barcode/BarcodeSequence";
 import EditSequence from "./EditSequence";
 import AddGenomeSequence from "./Genome/AddGenomeSequence";
-import GenomeSequence from "./Genome/Sequence";
+import GenomeSequence from "./Genome/GenomeSequence";
 
 const IsolateSequencesHeader = styled.label`
     align-items: center;
@@ -26,7 +27,16 @@ const IsolateSequencesHeader = styled.label`
     }
 `;
 
-export default function IsolateSequences({ activeIsolate, otuId }) {
+type IsolateSequencesProps = {
+    /** The Isolate that is currently selected */
+    activeIsolate: OTUIsolate;
+    otuId: string;
+};
+
+/**
+ * Display and manage a list sequences for a specific isolate
+ */
+export default function IsolateSequences({ activeIsolate, otuId }: IsolateSequencesProps) {
     const { otu, reference } = useCurrentOTUContext();
     const { data_type, id, targets } = reference;
     const unreferencedTargets = useGetUnreferencedTargets();
@@ -37,15 +47,18 @@ export default function IsolateSequences({ activeIsolate, otuId }) {
     const Sequence = data_type === "barcode" ? BarcodeSequence : GenomeSequence;
     let sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
 
+    let isolateName = `${activeIsolate.source_type} ${activeIsolate.source_name}`;
+    isolateName = isolateName[0].toUpperCase() + isolateName.slice(1);
+
     if (!sequenceComponents.length) {
         if (data_type === "barcode" && !hasTargets) {
-            sequenceComponents = (
-                <NoneFoundSection noun="targets">
+            sequenceComponents = [
+                <NoneFoundSection noun="targets" key="noTargets">
                     <Link to={`/refs/${id}/manage`}>Create one</Link>
-                </NoneFoundSection>
-            );
+                </NoneFoundSection>,
+            ];
         } else {
-            sequenceComponents = <NoneFoundSection noun="sequences" />;
+            sequenceComponents = [<NoneFoundSection noun="sequences" key="noSequences" />];
         }
     }
 
@@ -73,7 +86,7 @@ export default function IsolateSequences({ activeIsolate, otuId }) {
             <EditSequence />
             <RemoveSequence
                 isolateId={activeIsolate.id}
-                isolateName={activeIsolate.name}
+                isolateName={isolateName}
                 otuId={otuId}
                 sequences={sequences}
             />

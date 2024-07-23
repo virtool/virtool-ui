@@ -1,16 +1,13 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createBrowserHistory } from "history";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUSequence, mockApiEditSequence } from "../../../../../tests/fake/otus";
-import { renderWithRouter } from "../../../../../tests/setupTests";
-import EditGenomeSequence, { castValues } from "../EditGenomeSequence";
+import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
+import EditGenomeSequence from "../EditGenomeSequence";
 
 describe("<EditGenomeSequence>", () => {
     let props;
-    let history;
 
     beforeEach(() => {
         props = {
@@ -21,17 +18,10 @@ describe("<EditGenomeSequence>", () => {
             segments: [],
             refId: "test_ref_id",
         };
-        history = createBrowserHistory();
     });
 
     it("should render all fields with current sequence data", () => {
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
-                <EditGenomeSequence {...props} />
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -52,32 +42,15 @@ describe("<EditGenomeSequence>", () => {
             null,
             "ACGRYKM",
         );
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
-                <EditGenomeSequence {...props} />
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
+        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
-
-        const accessionField = screen.getByRole("textbox", { name: "Accession (ID)" });
-        await userEvent.clear(accessionField);
-        await userEvent.type(accessionField, "user_typed_accession");
-
-        const hostField = screen.getByRole("textbox", { name: "Host" });
-        await userEvent.clear(hostField);
-        await userEvent.type(hostField, "user_typed_host");
-
-        const definitionField = screen.getByRole("textbox", { name: "Definition" });
-        await userEvent.clear(definitionField);
-        await userEvent.type(definitionField, "user_typed_definition");
-
-        const sequenceField = screen.getByRole("textbox", { name: "Sequence 4" });
-        await userEvent.clear(sequenceField);
-        await userEvent.type(sequenceField, "ACGRYKM");
+        await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
+        await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
+        await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
+        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "ACGRYKM");
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -85,58 +58,51 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
-                <EditGenomeSequence {...props} />
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
         await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Sequence 4" }));
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByRole("textbox", { name: "Definition" })).toHaveStyle("border: 1px solid #E0282E");
-        expect(screen.getByRole("textbox", { name: "Sequence 0" })).toHaveStyle("border: 1px solid #E0282E");
         expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithRouter(
-            <MemoryRouter initialEntries={[{ state: { editSequence: true } }]}>
-                <EditGenomeSequence {...props} />
-            </MemoryRouter>,
-            {},
-            history,
-        );
+        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(screen.getByRole("textbox", { name: "Sequence 5" })).toHaveStyle("border: 1px solid #E0282E");
         expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
-});
 
-describe("castValues", () => {
-    const segments = [
-        { name: "test_1", molecule: null, required: true },
-        { name: "test_2", molecule: null, required: true },
-    ];
+    it("should resume editing once form opened after submitting", async () => {
+        const scope = mockApiEditSequence(
+            props.otuId,
+            props.isolateId,
+            props.activeSequence.id,
+            "user_typed_accession",
+            "user_typed_definition",
+            "user_typed_host",
+            null,
+            "ACGRYKM",
+        );
+        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
-    const values = { segment: "test_1", sequence: "", accession: "", definition: "", host: "" };
+        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
+        await userEvent.click(screen.getByRole("combobox"));
+        await userEvent.click(screen.getByRole("option", { name: "None" }));
+        await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
+        await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
+        await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
+        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "ACGRYKM");
 
-    it("should return unchanged values when segment in selectable segments", () => {
-        const castedValues = castValues(segments)(values);
-        expect(castedValues).toEqual(values);
-    });
+        await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-    it("should return values where segment: null when segment is not selectable", () => {
-        values.segment = "invalid_segment";
-        const castedValues = castValues(segments)(values);
-        expect(castedValues).toEqual({ ...values, segment: null });
+        scope.done();
+
+        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
+        expect(screen.getByText("Resumed editing draft sequence.")).toBeInTheDocument();
     });
 });

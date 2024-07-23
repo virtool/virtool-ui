@@ -1,12 +1,24 @@
 import { BoxGroupSection } from "@base";
 import React from "react";
 import { useExpanded } from "../../hooks";
-import { SequenceHeader } from "../Sequence/Header";
 import SequenceButtons from "../Sequence/SequenceButtons";
+import { SequenceHeader } from "../Sequence/SequenceHeader";
 import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/Values";
-import { BarcodeSequenceTable } from "./Table";
+import BarcodeSequenceTable from "./BarcodeSequenceTable";
 
-export default function BarcodeSequence({ accession, definition, host, id, sequence, target }) {
+type BarcodeSequenceProps = {
+    accession: string;
+    definition: string;
+    host: string;
+    id: string;
+    sequence: string;
+    target?: string;
+};
+
+/**
+ * A condensed barcode sequence item for use in a list of sequences
+ */
+export default function BarcodeSequence({ accession, definition, host, id, sequence, target }: BarcodeSequenceProps) {
     const { expanded, expand, collapse } = useExpanded();
 
     return (

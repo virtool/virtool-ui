@@ -1,57 +1,39 @@
-import { ErrorMessage, Field, FormikErrors, FormikTouched } from "formik";
+import { InputError, InputGroup, InputLabel, InputSimple } from "@base";
+import { Accession } from "@sequences/components/Accession";
+import SequenceField from "@sequences/components/SequenceField";
 import React from "react";
-import * as Yup from "yup";
-import { Input, InputError, InputGroup, InputLabel } from "../../base";
-import { Accession } from "./Accession";
-import SequenceField from "./Field";
+import { useFormContext } from "react-hook-form";
 
-export const validationSchema = Yup.object().shape({
-    accession: Yup.string().required("Required Field"),
-    definition: Yup.string().required("Required Field"),
-    sequence: Yup.string()
-        .uppercase()
-        .required("Required Field")
-        .matches(/^[:?ATCGNRYKM]+$/, "Sequence should only contain the characters: ATCGNRYKM"),
-});
-
-type formValues = {
-    accession: string;
+type FormValues = {
+    host: string;
     definition: string;
-    sequence: string;
-};
-
-type SequenceFormProps = {
-    errors: FormikErrors<formValues>;
-    touched: FormikTouched<formValues>;
 };
 
 /**
  * Displays a form for entering sequence-related information in adding/editing dialogs
  */
-export function SequenceForm({ errors, touched }: SequenceFormProps) {
+export function SequenceForm() {
+    const {
+        formState: { errors },
+        register,
+    } = useFormContext<FormValues>();
+
     return (
         <>
-            <Accession error={touched.accession ? errors.accession : null} />
+            <Accession />
 
             <InputGroup>
                 <InputLabel htmlFor="host">Host</InputLabel>
-                <Field as={Input} name="host" id="host" />
+                <InputSimple id="host" {...register("host")} />
             </InputGroup>
 
             <InputGroup>
                 <InputLabel htmlFor="definition">Definition</InputLabel>
-                <Field
-                    as={Input}
-                    name="definition"
-                    id="definition"
-                    error={touched.definition ? errors.definition : null}
-                />
-                <InputError>
-                    <ErrorMessage name="definition" />
-                </InputError>
+                <InputSimple id="definition" {...register("definition", { required: "Required Field" })} />
+                <InputError>{errors.definition?.message}</InputError>
             </InputGroup>
 
-            <Field as={SequenceField} name="sequence" error={touched.sequence ? errors.sequence : null} />
+            <SequenceField />
         </>
     );
 }
