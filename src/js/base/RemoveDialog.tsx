@@ -39,7 +39,7 @@ export function RemoveDialog({ message, name, noun, show, onConfirm, onHide }: R
                     )}
 
                     <DialogFooter>
-                        <Button color="red" icon="check" onClick={onConfirm}>
+                        <Button color="red" onClick={onConfirm}>
                             Confirm
                         </Button>
                     </DialogFooter>

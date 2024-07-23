@@ -1,9 +1,9 @@
 import { cn } from "@utils/utils";
-import React, { Component, ReactNode } from "react";
+import React, { ComponentType, ReactNode } from "react";
 
 export type ButtonProps = {
     active?: boolean;
-    as?: string | Component | IStyledComponent;
+    as?: string | ComponentType<any>;
     children: ReactNode;
     className?: string;
     color?: "blue" | "green" | "gray" | "purple" | "red";

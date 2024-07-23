@@ -28,7 +28,6 @@ export function UserActivation({ handle, id, noun, onHide, show }) {
                         <DialogClose>
                             <Button
                                 color={noun === "deactivate" ? "red" : "green"}
-                                icon="check"
                                 onClick={() =>
                                     mutation.mutate({
                                         userId: id,

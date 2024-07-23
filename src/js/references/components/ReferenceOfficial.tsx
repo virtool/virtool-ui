@@ -1,5 +1,5 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { Box, Button, ExternalLink } from "@base";
+import { Box, Button, ExternalLink, Icon } from "@base";
 import { Permission } from "@groups/types";
 import { useRemoteReference } from "@references/queries";
 import React from "react";
@@ -44,12 +44,8 @@ export default function ReferenceOfficial({ officialInstalled }: ReferenceOffici
                     <span> that can be installed automatically. Once installed, it can easily be kept up-to-date.</span>
                 </p>
             </div>
-            <Button
-                color="blue"
-                icon="cloud-download-alt"
-                onClick={() => mutation.mutate({ remotes_from: "virtool/ref-plant-viruses" })}
-            >
-                Install
+            <Button color="blue" onClick={() => mutation.mutate({ remotes_from: "virtool/ref-plant-viruses" })}>
+                <Icon name="cloud-download-alt" /> Install
             </Button>
         </StyledReferenceOfficial>
     ) : null;
