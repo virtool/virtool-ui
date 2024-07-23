@@ -34,12 +34,12 @@ type UsersListProps = {
  * An infinitely scrolling list of users
  */
 export function UsersList({ term }: UsersListProps) {
-    const [active] = useUrlSearchParams("active");
+    const [status] = useUrlSearchParams("status");
     const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindUsers(
         25,
         term,
-        false,
-        Boolean(active),
+        undefined,
+        status === "active",
     );
 
     if (isLoading) {

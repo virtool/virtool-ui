@@ -1,8 +1,7 @@
+import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
-import { StyledButton } from "../../base/styled/StyledButton";
 import { labelQueryKeys, useCreateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 
@@ -34,9 +33,9 @@ export function CreateLabel() {
 
     return (
         <Dialog open={open} onOpenChange={open => setOpen(open)}>
-            <StyledButton as={DialogTrigger} color="blue">
+            <Button as={DialogTrigger} color="blue">
                 Create
-            </StyledButton>
+            </Button>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

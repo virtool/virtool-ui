@@ -1,3 +1,4 @@
+import AODPViewer from "@/analyses/components/AODP/Viewer";
 import { useGetAnalysis } from "@/analyses/queries";
 import {
     Box,
@@ -14,7 +15,6 @@ import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import { match } from "react-router-dom";
 import styled from "styled-components";
-import AODPViewer from "./AODP/Viewer";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/NuVsViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";

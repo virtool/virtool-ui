@@ -1,6 +1,5 @@
 import { getFontSize } from "@app/theme";
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
-import { StyledButtonSmall } from "@base/styled/StyledButtonSmall";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -43,7 +42,9 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
 
     return (
         <Dialog open={open} onOpenChange={open => setOpen(open)}>
-            <StyledButtonSmall as={DialogTrigger}>Delete</StyledButtonSmall>
+            <Button as={DialogTrigger} color="red" size="small">
+                Delete
+            </Button>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

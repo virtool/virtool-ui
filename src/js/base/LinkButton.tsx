@@ -1,51 +1,43 @@
+import { cn } from "@utils/utils";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Icon } from "./Icon";
-import { StyledButton } from "./styled/StyledButton";
-import { Tooltip } from "./Tooltip";
 
 interface LinkButtonProps {
     children?: React.ReactNode;
-    color?: string;
     className?: string;
-    disabled?: boolean;
-    icon?: string;
+    color?: "blue" | "gray" | "red";
     replace?: boolean;
-    tip?: string;
     to: string | object;
-    onClick?: () => void;
 }
 
-export const LinkButton = ({
-    children,
-    color,
-    className,
-    disabled = false,
-    icon,
-    replace,
-    tip,
-    to,
-    onClick,
-}: LinkButtonProps) => {
-    const button = (
-        <StyledButton
-            as={NavLink}
-            aria-label={icon}
-            className={className}
-            color={color}
+export function LinkButton({ children, className, color = "gray", replace = false, to }: LinkButtonProps) {
+    return (
+        <NavLink
+            className={cn(
+                className,
+                "items-center",
+                {
+                    "bg-blue-600": color === "blue",
+                    "bg-gray-200": color === "gray",
+                    "bg-red-600": color === "red",
+                },
+                "inline-flex",
+                "font-medium",
+                "min-h-10",
+                "px-4",
+                "rounded-md",
+                {
+                    "text-black": ["gray"].includes(color),
+                    "text-white": ["blue", "red"].includes(color),
+                },
+                "text-lg",
+                "hover:shadow-lg",
+                { "hover:text-black": ["gray"].includes(color), "hover:text-white": ["blue", "red"].includes(color) },
+            )}
             replace={replace}
             to={to}
-            disabled={disabled}
-            onClick={onClick}
         >
-            {icon && <Icon name={icon} />}
-            {children ? <span>{children}</span> : null}
-        </StyledButton>
+            {children}
+        </NavLink>
     );
-
-    if (tip) {
-        return <Tooltip tip={tip}>{button}</Tooltip>;
-    }
-
-    return button;
-};
+}

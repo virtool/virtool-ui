@@ -65,7 +65,7 @@ export function CreateIimiForm({ compatibleIndexes, mlModels, onSubmit, sampleCo
 
             <CreateAnalysisFooter>
                 <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("indexes")?.length ?? 0} />
-                <Button type="submit" color="blue" icon="play">
+                <Button type="submit" color="blue">
                     Start
                 </Button>
             </CreateAnalysisFooter>

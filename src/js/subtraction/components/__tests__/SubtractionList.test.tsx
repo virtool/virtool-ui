@@ -1,3 +1,4 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryHistory } from "history";
@@ -6,7 +7,6 @@ import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
 import { createFakeSubtractionMinimal, mockApiGetSubtractions } from "../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
 import SubtractionList from "../SubtractionList";
 
 describe("<SubtractionList />", () => {
@@ -23,6 +23,7 @@ describe("<SubtractionList />", () => {
         renderWithRouter(<SubtractionList />, {}, history);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+
         expect(screen.getByText("Subtractions")).toBeInTheDocument();
         expect(screen.getByText("1")).toBeInTheDocument();
         expect(screen.getByText(subtractions.name)).toBeInTheDocument();
@@ -52,7 +53,7 @@ describe("<SubtractionList />", () => {
         renderWithRouter(<SubtractionList />, {}, history);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
-        expect(await screen.findByLabelText("plus-square")).toBeInTheDocument();
+        expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
 
         scope.done();
     });
@@ -64,7 +65,7 @@ describe("<SubtractionList />", () => {
         renderWithRouter(<SubtractionList />, {}, history);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
-        const createButton = screen.queryByLabelText("plus-square");
+        const createButton = screen.queryByLabelText("Create");
         expect(createButton).toBeNull();
 
         scope.done();

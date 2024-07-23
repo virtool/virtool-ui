@@ -1,13 +1,6 @@
-import {
-    Button,
-    Dropdown,
-    DropdownButton,
-    DropdownMenuContent,
-    DropdownMenuDownload,
-    Icon,
-    InputSearch,
-    Toolbar,
-} from "@base";
+import { Dropdown, DropdownButton, DropdownMenuContent, DropdownMenuDownload, Icon, InputSearch, Toolbar } from "@base";
+import { ButtonToggle } from "@base/ButtonToggle";
+import { Tooltip } from "@base/Tooltip";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
@@ -25,7 +18,7 @@ type PathoscopeToolbarProps = {
 
 /** A selection of filters and toggles for pathoscope data presentation */
 export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
-    const [filterOTUs, setFilterOtu] = useUrlSearchParams<boolean>("filterOtus", true);
+    const [filterOTUs, setFilterOtus] = useUrlSearchParams<boolean>("filterOtus", true);
     const [filterIsolates, setFilterIsolates] = useUrlSearchParams<boolean>("filterIsolates", true);
     const [find, setFind] = useUrlSearchParams<string>("find", "");
     const [showReads, setShowReads] = useUrlSearchParams<boolean>("reads", false);
@@ -36,35 +29,24 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
         <StyledPathoscopeToolbar>
             <InputSearch value={find} onChange={e => setFind(e.target.value)} />
             <AnalysisViewerSort workflow="pathoscope" sortKey={sortKey} onSelect={setSortKey} />
-            <Button onClick={() => setSortDesc(!sortDesc)} tip="Sort Direction">
+            <ButtonToggle onPressedChange={setSortDesc} pressed={sortDesc}>
                 <Icon name={sortDesc ? "sort-amount-down" : "sort-amount-up"} />
-            </Button>
-            <Button
-                active={showReads}
-                icon="weight-hanging"
-                tip="Show read pseudo-counts instead of weight"
-                onClick={() => setShowReads(!showReads)}
-            >
-                Show Reads
-            </Button>
-            <Button
-                active={filterOTUs}
-                icon="filter"
-                tip="Hide OTUs with low coverage support"
-                onClick={() => {
-                    setFilterOtu(!filterOTUs);
-                }}
-            >
-                Filter OTUs
-            </Button>
-            <Button
-                active={filterIsolates}
-                icon="filter"
-                tip="Hide isolates with low coverage support"
-                onClick={() => setFilterIsolates(!filterIsolates)}
-            >
-                Filter Isolates
-            </Button>
+            </ButtonToggle>
+            <Tooltip tip="Show read pseudo-counts instead of weight">
+                <ButtonToggle onPressedChange={setShowReads} pressed={showReads}>
+                    Show Reads
+                </ButtonToggle>
+            </Tooltip>
+            <Tooltip tip="Hide OTUs with low coverage support">
+                <ButtonToggle onPressedChange={setFilterOtus} pressed={filterOTUs}>
+                    Filter OTUs
+                </ButtonToggle>
+            </Tooltip>
+            <Tooltip tip="Hide isolates with low coverage support">
+                <ButtonToggle onPressedChange={setFilterIsolates} pressed={filterIsolates}>
+                    Filter Isolates
+                </ButtonToggle>
+            </Tooltip>
             <Dropdown>
                 <DropdownButton>
                     <span>

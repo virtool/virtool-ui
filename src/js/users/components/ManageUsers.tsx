@@ -1,24 +1,21 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
-import { Alert, Icon, InputSearch, LoadingPlaceholder, Toolbar } from "@base";
+import { Alert, Icon, InputSearch, LoadingPlaceholder } from "@base";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import styled from "styled-components";
 import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";
 
-const StyledToggleGroupItem = styled(ToggleGroupItem)`
-    min-width: 100px;
-`;
+type UserStatus = "active" | "deactivated";
 
 /**
  * Displays a list of editable users and tools for sorting through and creating users
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
-    const [active, setActive] = useUrlSearchParams<boolean>("active", true);
+    const [status, setStatus] = useUrlSearchParams<UserStatus>("status", "active");
     const { hasPermission, isLoading } = useCheckAdminRole(AdministratorRoles.USERS);
 
     if (isLoading) {
@@ -28,23 +25,21 @@ export function ManageUsers() {
     if (hasPermission) {
         return (
             <>
-                <Toolbar>
-                    <InputSearch
-                        name="search"
-                        aria-label="search"
-                        value={term}
-                        onChange={e => setTerm(e.target.value)}
-                    />
-                    <ToggleGroup type="single" defaultValue={active ? "active" : "deactivated"}>
-                        <StyledToggleGroupItem value="active" onClick={() => setActive(true)}>
-                            Active
-                        </StyledToggleGroupItem>
-                        <StyledToggleGroupItem value="deactivated" onClick={() => setActive(false)}>
-                            Deactivated
-                        </StyledToggleGroupItem>
+                <div className="flex gap-2 mb-3">
+                    <div className="flex-grow">
+                        <InputSearch
+                            name="search"
+                            aria-label="search"
+                            value={term}
+                            onChange={e => setTerm(e.target.value)}
+                        />
+                    </div>
+                    <ToggleGroup value={status} onValueChange={setStatus}>
+                        <ToggleGroupItem value="active">Active</ToggleGroupItem>
+                        <ToggleGroupItem value="deactivated">Deactivated</ToggleGroupItem>
                     </ToggleGroup>
                     <CreateUser />
-                </Toolbar>
+                </div>
 
                 <UsersList term={term} />
             </>

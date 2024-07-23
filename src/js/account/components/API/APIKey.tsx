@@ -77,18 +77,13 @@ export default function APIKey({ apiKey }: APIKeyProps) {
                         />
 
                         <ButtonToolbar>
-                            <Button
-                                color="red"
-                                icon="trash"
-                                onClick={() => removeMutation.mutate({ keyId: apiKey.id })}
-                            >
-                                Remove
+                            <Button color="red" onClick={() => removeMutation.mutate({ keyId: apiKey.id })}>
+                                Delete
                             </Button>
                             <Button
-                                type="submit"
                                 color="blue"
-                                icon="save"
                                 disabled={isEqual(watch("permissions"), apiKey.permissions)}
+                                type="submit"
                             >
                                 Update
                             </Button>

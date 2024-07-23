@@ -1,21 +1,15 @@
 import { BLASTResults } from "@/analyses/components/NuVs/BLASTResults";
 import { useBlastNuVs } from "@/analyses/queries";
-import { FormattedNuVsHit } from "@/analyses/types";
+import { FormattedNuvsHit } from "@/analyses/types";
 import { Alert, Box, BoxTitle, Button, Icon } from "@base";
 import React from "react";
-import styled from "styled-components";
 import { BLASTError } from "./BLASTError";
 import { BLASTInProgress } from "./BLASTInProgress";
-
-export const BLASTButton = styled(Button)`
-    font-weight: 600;
-    margin-left: auto;
-`;
 
 type NuVsBLASTProps = {
     analysisId: string;
     /** Complete information for a NuVs hit */
-    hit: FormattedNuVsHit;
+    hit: FormattedNuvsHit;
 };
 
 /**
@@ -54,9 +48,9 @@ export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
         <Alert color="purple" level>
             <Icon name="info-circle" />
             <span>This sequence has no BLAST information attached to it.</span>
-            <BLASTButton color="purple" icon="cloud" onClick={handleBlast}>
+            <Button color="purple" onClick={handleBlast}>
                 BLAST at NCBI
-            </BLASTButton>
+            </Button>
         </Alert>
     );
 }

@@ -19,7 +19,7 @@ describe("<ManageUsers />", () => {
         renderWithMemoryRouter(<ManageUsers />);
 
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "user-plus" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
         expect(await screen.findByText(/Administrator/)).toBeInTheDocument();
         forEach(users, user => {
             expect(screen.getByText(user.handle)).toBeInTheDocument();
@@ -33,23 +33,23 @@ describe("<ManageUsers />", () => {
         renderWithMemoryRouter(<ManageUsers />);
 
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "user-plus" })).toBeInTheDocument();
+        expect(screen.getByRole("button")).toBeInTheDocument();
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });
 
-    it("should render correctly if account has insufficent permissions", async () => {
+    it("should render correctly if account has insufficient permissions", async () => {
         const users = createFakeUsers(3);
+
         mockApiFindUsers(users);
-        const account = createFakeAccount({ administrator_role: null });
-        mockAPIGetAccount(account);
+        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
 
         renderWithMemoryRouter(<ManageUsers />);
 
         expect(await screen.findByText("You do not have permission to manage users.")).toBeInTheDocument();
         expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
         expect(screen.queryByText(users[0].handle)).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "user-plus" })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "Create" })).not.toBeInTheDocument();
         expect(screen.queryByLabelText("search")).not.toBeInTheDocument();
         expect(screen.queryByText("Administrator")).not.toBeInTheDocument();
     });

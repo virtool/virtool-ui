@@ -36,7 +36,7 @@ export default function EmptyReference() {
                 render={({ field: { onChange, value } }) => <DataTypeSelection onSelect={onChange} dataType={value} />}
             />
             <DialogFooter>
-                <Button type="submit" icon="save" color="blue">
+                <Button type="submit" color="blue">
                     Save
                 </Button>
             </DialogFooter>

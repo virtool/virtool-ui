@@ -1,6 +1,6 @@
 import { NuVsValues } from "@/analyses/components/NuVs/NuVsValues";
 import { useGetActiveHit } from "@/analyses/hooks";
-import { FormattedNuVsHit } from "@/analyses/types";
+import { FormattedNuvsHit } from "@/analyses/types";
 import { calculateAnnotatedOrfCount } from "@/analyses/utils";
 import { getBorder } from "@app/theme";
 import { Badge, Box } from "@base";
@@ -80,7 +80,7 @@ const StyledNuVsDetail = styled(Box)`
 type NuVsDetailProps = {
     analysisId: string;
     /** A list of sorted and filtered NuVs hits */
-    matches: FormattedNuVsHit[];
+    matches: FormattedNuvsHit[];
     maxSequenceLength: number;
 };
 

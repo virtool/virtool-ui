@@ -43,14 +43,13 @@ describe("<CreateAdministrator>", () => {
         const users = createFakeUsers(2);
 
         mockApiFindUsers(users);
-
         mockGetAdministratorRoles();
 
         const set_role_scope = mockSetAdministratorRoleAPI({ user: users[0], new_role: AdministratorRoles.FULL });
 
         renderWithProviders(<CreateAdministrator />);
 
-        await userEvent.click(await screen.findByRole("button", { name: "create" }));
+        await userEvent.click(await screen.findByRole("button", { name: "Create" }));
 
         //Check user dropdown
         await userEvent.click(await screen.findByRole("option", { name: users[0].handle }));
@@ -81,7 +80,7 @@ describe("<CreateAdministrator>", () => {
 
         renderWithProviders(<CreateAdministrator />);
 
-        await userEvent.click(await screen.findByRole("button", { name: "create" }));
+        await userEvent.click(await screen.findByRole("button", { name: "Create" }));
 
         expect(await screen.findByRole("option", { name: users[0].handle })).toBeInTheDocument();
         expect(await screen.findByRole("option", { name: users[1].handle })).toBeInTheDocument();

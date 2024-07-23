@@ -1,51 +1,72 @@
-import React, { ReactNode } from "react";
-import { Icon } from "./Icon";
-import { StyledButton } from "./styled/StyledButton";
-import { Tooltip } from "./Tooltip";
+import { cn } from "@utils/utils";
+import React, { Component, ReactNode } from "react";
 
-type ButtonProps = {
+export type ButtonProps = {
     active?: boolean;
+    as?: string | Component | IStyledComponent;
     children: ReactNode;
     className?: string;
-    color?: string;
+    color?: "blue" | "green" | "gray" | "purple" | "red";
     disabled?: boolean;
-    icon?: string;
-    tip?: string;
-    type?: "button" | "submit";
     onBlur?: () => void;
     onClick?: () => void;
+    size?: "small" | "large";
+    type?: "button" | "submit";
 };
 
 export function Button({
-    active,
+    as = "button",
     children,
     className,
-    color,
+    color = "gray",
     disabled = false,
-    icon,
-    tip,
+    size = "large",
     type = "button",
     onBlur,
     onClick,
 }: ButtonProps) {
-    const button = (
-        <StyledButton
-            active={active}
-            className={className}
-            color={color || "grey"}
+    const As = as;
+
+    return (
+        <As
+            className={cn(
+                className,
+                {
+                    "bg-blue-600": color === "blue",
+                    "bg-red-600": color === "red",
+                    "bg-green-600": color === "green",
+                    "bg-gray-200": color === "gray",
+                    "bg-purple-600": color === "purple",
+                },
+                "cursor-pointer",
+                "gap-1.5",
+                "items-center",
+                "inline-flex",
+                "font-medium",
+                { "min-h-10": size === "large", "min-h-8": size === "small" },
+                {
+                    "opacity-50": disabled,
+                    "opacity-100": !disabled,
+                },
+                "px-4",
+                "rounded-md",
+                "select-none",
+                {
+                    "text-black": ["gray"].includes(color),
+                    "text-white": ["blue", "green", "purple", "red"].includes(color),
+                },
+                {
+                    "text-lg": size === "large",
+                    "text-sm": size === "small",
+                },
+                "hover:shadow-lg",
+            )}
             disabled={disabled}
-            type={type}
             onBlur={onBlur}
             onClick={onClick}
+            type={type}
         >
-            {icon && <Icon name={icon} />}
-            {children ? <span>{children}</span> : null}
-        </StyledButton>
+            {children}
+        </As>
     );
-
-    if (tip) {
-        return <Tooltip tip={tip}>{button}</Tooltip>;
-    }
-
-    return button;
 }

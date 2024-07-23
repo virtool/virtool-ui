@@ -25,7 +25,7 @@ export default function InstallOption() {
     });
 
     return canInstall ? (
-        <Button color="blue" icon="download" onClick={() => mutation.mutate()}>
+        <Button color="blue" onClick={() => mutation.mutate()}>
             Install
         </Button>
     ) : (

@@ -30,7 +30,7 @@ export function RemoveBanner({ message, buttonText, onClick }: RemoveBannerProps
     return (
         <StyledRemoveBanner color="red">
             <strong>{message}</strong>
-            <Button color="red" icon="trash" onClick={onClick}>
+            <Button color="red" onClick={onClick}>
                 {buttonText}
             </Button>
         </StyledRemoveBanner>

@@ -1,3 +1,4 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
@@ -12,7 +13,6 @@ import { createFakeMLModelMinimal, mockApiGetModels } from "../../../../tests/fa
 import { createFakeSampleMinimal, mockApiGetSamples } from "../../../../tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";
 
 describe("<SamplesList />", () => {
@@ -62,20 +62,17 @@ describe("<SamplesList />", () => {
     });
 
     it("should render create button when [canModify=true]", async () => {
-        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockAPIGetAccount(account);
+        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         renderWithRouter(<SamplesList />, {}, history);
 
-        expect(await screen.findByLabelText("plus-square fa-fw")).toBeInTheDocument();
+        expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
     });
 
     it("should not render create button when [canModify=false]", async () => {
-        const account = createFakeAccount({ administrator_role: null });
-        mockAPIGetAccount(account);
+        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
 
         renderWithRouter(<SamplesList />, {}, history);
 
-        const createButton = screen.queryByLabelText("plus-square fa-fw");
-        expect(createButton).toBeNull();
+        expect(screen.queryByRole("link", { name: "Create" })).not.toBeInTheDocument();
     });
 });

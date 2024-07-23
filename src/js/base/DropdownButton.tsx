@@ -1,15 +1,12 @@
-import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
+import { Button } from "@base/Button";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+
 import React from "react";
-import { StyledButton } from "./styled/StyledButton";
 
 type DropdownButtonProps = {
     children: React.ReactNode;
 };
 
 export function DropdownButton({ children }: DropdownButtonProps) {
-    return (
-        <DropdownMenuTrigger>
-            <StyledButton>{children}</StyledButton>
-        </DropdownMenuTrigger>
-    );
+    return <Button as={DropdownMenu.Trigger}>{children}</Button>;
 }

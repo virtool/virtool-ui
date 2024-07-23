@@ -1,13 +1,29 @@
-import { theme } from "@app/theme";
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import styled from "styled-components";
+import * as RadixToggleGroup from "@radix-ui/react-toggle-group";
+import { cn } from "@utils/utils";
+import React from "react";
 
-export const ToggleGroup = styled(ToggleGroupPrimitive.Root)`
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-    padding: 0 1px;
-    background-color: ${theme.color.greyLight};
-    border-radius: ${props => props.theme.borderRadius.sm};
-`;
+type ToggleGroupProps = {
+    children: React.ReactNode;
+    className?: string;
+    onValueChange: (value: string) => void;
+    value: string;
+};
+
+export function ToggleGroup({ children, className, onValueChange, value }: ToggleGroupProps) {
+    function handleValueChange(value: string) {
+        if (value) {
+            onValueChange(value);
+        }
+    }
+
+    return (
+        <RadixToggleGroup.Root
+            className={cn("inline-flex", className)}
+            onValueChange={handleValueChange}
+            type="single"
+            value={value}
+        >
+            {children}
+        </RadixToggleGroup.Root>
+    );
+}

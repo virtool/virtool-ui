@@ -11,19 +11,14 @@ export default function ReferenceToolbar() {
     const [term, setTerm] = useUrlSearchParams<string>("find", "");
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
-    const createButton = canCreate ? (
-        <LinkButton
-            to={{ state: { createReference: true, emptyReference: true } }}
-            color="blue"
-            tip="Create"
-            icon="plus-square fa-fw"
-        />
-    ) : null;
-
     return (
         <Toolbar>
             <InputSearch placeholder="Reference name" value={term} onChange={e => setTerm(e.target.value)} />
-            {createButton}
+            {canCreate && (
+                <LinkButton to={{ state: { createReference: true, emptyReference: true } }} color="blue">
+                    Create
+                </LinkButton>
+            )}
         </Toolbar>
     );
 }
