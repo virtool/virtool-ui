@@ -76,30 +76,32 @@ export const userQueryKeys = {
  * @param per_page - The number of users to fetch per page
  * @param term - The search term to filter users by
  * @param administrator - filter the users by administrator status
+ * @param active - Filter the users by whether they are active
  * @returns A page of user search results
  */
-export const useFindUsers = (page: number, per_page: number, term: string, administrator?: boolean) => {
+export function useFindUsers(page: number, per_page: number, term: string, administrator?: boolean, active?: boolean) {
     return useQuery<UserResponse>(
-        userQueryKeys.list([page, per_page, term, administrator]),
-        () => findUsers(page, per_page, term, administrator),
+        userQueryKeys.list([page, per_page, term, administrator, active]),
+        () => findUsers(page, per_page, term, administrator, active),
         {
             keepPreviousData: true,
         },
     );
-};
+}
 
 /**
  * Setup query for fetching user search results for infinite scrolling view
  *
  * @param per_page - The number of users to fetch per page
  * @param term - The search term to filter users by
- * @param administrator - filter the users by administrator status
+ * @param administrator - Filter the users by administrator status
+ * @param active - Filter the users by whether they are active
  * @returns An UseInfiniteQueryResult object containing the user search results
  */
-export const useInfiniteFindUsers = (per_page: number, term: string, administrator?: boolean) => {
+export function useInfiniteFindUsers(per_page: number, term: string, administrator?: boolean, active?: boolean) {
     return useInfiniteQuery<UserResponse>(
-        userQueryKeys.infiniteList([per_page, term, administrator]),
-        ({ pageParam }) => findUsers(pageParam, per_page, term, administrator),
+        userQueryKeys.infiniteList([active, per_page, term, administrator]),
+        ({ pageParam }) => findUsers(pageParam, per_page, term, administrator, active),
         {
             getNextPageParam: lastPage => {
                 if (lastPage.page >= lastPage.page_count) {
@@ -109,7 +111,7 @@ export const useInfiniteFindUsers = (per_page: number, term: string, administrat
             },
         },
     );
-};
+}
 
 /**
  * Fetches a single user

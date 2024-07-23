@@ -69,11 +69,18 @@ export function fetchAdministratorRoles(): Promise<AdministratorRoles[]> {
  * @param per_page - The number of users to fetch per page
  * @param term - The search term to filter users by
  * @param administrator - Filter the users by administrator status
+ * @param active - Filter the users by whether they are active
  * @returns A promise resolving to a page of user search results
  */
-export function findUsers(page: number, per_page: number, term: string, administrator: boolean): Promise<UserResponse> {
+export function findUsers(
+    page: number,
+    per_page: number,
+    term: string,
+    administrator: boolean,
+    active: boolean,
+): Promise<UserResponse> {
     return Request.get("/admin/users")
-        .query({ page, per_page, term, administrator })
+        .query({ page, per_page, term, administrator, active })
         .then(response => {
             return response.body;
         });
@@ -108,6 +115,7 @@ export function createUser({ handle, password, forceReset }): Promise<User> {
 }
 
 export type UserUpdate = {
+    active?: boolean;
     force_reset?: boolean;
     password?: string;
     primary_group?: string;

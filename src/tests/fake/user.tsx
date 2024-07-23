@@ -28,6 +28,7 @@ export function createFakeUserNested(props?: CreateFakeUserNestedProps): UserNes
 }
 
 type CreateFakeUserProps = {
+    active?: boolean;
     permissions?: Permissions;
     groups?: Array<GroupMinimal>;
     primary_group?: GroupMinimal;
