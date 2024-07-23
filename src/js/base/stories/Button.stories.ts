@@ -1,5 +1,6 @@
 import { Button } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 
 const meta: Meta<typeof Button> = {
     title: "base/Button",
@@ -31,7 +32,7 @@ export const Default: Story = {
     args: {
         active: false,
         children: "Button",
-        onClick: () => console.log("clicked"),
+        onClick: () => fn(),
     },
 };
 
@@ -40,6 +41,6 @@ export const Small: Story = {
         active: false,
         children: "Button",
         size: "small",
-        onClick: () => console.log("clicked"),
+        onClick: () => fn(),
     },
 };

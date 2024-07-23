@@ -1,5 +1,6 @@
 import { Box } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 
 const meta: Meta<typeof Box> = {
     title: "base/Box/Box",
@@ -27,6 +28,6 @@ export const SampleBox: Story = {
 export const ClickableBox: Story = {
     args: {
         children: "This is a clickable Box!",
-        onClick: () => console.log("clicked"),
+        onClick: fn(),
     },
 };
