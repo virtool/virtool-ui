@@ -1,8 +1,8 @@
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { InputSearch, LinkButton, Toolbar } from "@base";
+import { Permission } from "@groups/types";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import { InputSearch, LinkButton, Toolbar } from "../../base";
-import { Permission } from "../../groups/types";
 
 /**
  * A toolbar which allows the references to be filtered by name
@@ -13,7 +13,7 @@ export default function ReferenceToolbar() {
 
     const createButton = canCreate ? (
         <LinkButton
-            to={{ pathname: "/refs/add", state: { newReference: true, emptyReference: true } }}
+            to={{ state: { createReference: true, emptyReference: true } }}
             color="blue"
             tip="Create"
             icon="plus-square fa-fw"

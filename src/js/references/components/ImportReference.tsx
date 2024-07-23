@@ -1,12 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
-import styled from "styled-components";
-import { Request } from "../../app/request";
+import { Request } from "@app/request";
 import {
     Alert,
-    Box,
+    DialogFooter,
     InputError,
     InputGroup,
     InputLabel,
@@ -14,15 +9,15 @@ import {
     ProgressBarAffixed,
     SaveButton,
     UploadBar,
-} from "../../base";
+} from "@base";
+import { useMutation } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
 
 const ImportReferenceUpload = styled.div`
     margin-bottom: 15px;
-`;
-
-const ImportReferenceUploadBarContainer = styled(Box)`
-    border-radius: ${props => props.theme.borderRadius.sm};
-    padding: 15px 15px 0;
 `;
 
 interface ImportReferenceValues {
@@ -101,17 +96,15 @@ export function ImportReference() {
                 rules={{ required: true }}
                 render={({ field: { onChange } }) => (
                     <ImportReferenceUpload>
-                        <ImportReferenceUploadBarContainer>
-                            <ProgressBarAffixed color="green" now={progress} />
-                            <UploadBar
-                                message={uploadBarMessage}
-                                onDrop={acceptedFiles => {
-                                    handleDrop(acceptedFiles);
-                                    onChange(acceptedFiles[0].name);
-                                }}
-                                multiple={false}
-                            />
-                        </ImportReferenceUploadBarContainer>
+                        <ProgressBarAffixed color="green" now={progress} />
+                        <UploadBar
+                            message={uploadBarMessage}
+                            onDrop={acceptedFiles => {
+                                handleDrop(acceptedFiles);
+                                onChange(acceptedFiles[0].name);
+                            }}
+                            multiple={false}
+                        />
 
                         <InputError>
                             {errors.upload?.type === "required" && "A reference file must be uploaded"}
@@ -135,7 +128,9 @@ export function ImportReference() {
                     <InputSimple as="textarea" id="description" {...register("description")} />
                 </InputGroup>
 
-                <SaveButton disabled={progress !== 100 && progress !== 0} altText="Import" />
+                <DialogFooter>
+                    <SaveButton disabled={progress !== 100 && progress !== 0} altText="Import" />
+                </DialogFooter>
             </form>
         </>
     );

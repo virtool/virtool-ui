@@ -1,3 +1,4 @@
+import { CreateReference } from "@references/components/CreateReference";
 import { useUrlSearchParams } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
@@ -43,6 +44,7 @@ export default function ReferenceList() {
                     </ViewHeaderTitle>
                 </ViewHeader>
                 <ReferenceToolbar />
+                <CreateReference />
                 <ReferenceOfficial officialInstalled={official_installed} />
                 {total_count !== 0 && (
                     <BoxGroup>

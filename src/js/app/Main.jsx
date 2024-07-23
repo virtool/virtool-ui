@@ -20,7 +20,7 @@ const Administration = lazy(() => import("../administration/components/Settings"
 const Account = lazy(() => import("@account/components/Account"));
 const HMM = lazy(() => import("../hmm/components/HMM"));
 const Jobs = lazy(() => import("../jobs/components/Jobs"));
-const References = lazy(() => import("../references/components/References"));
+const References = lazy(() => import("@references/components/References"));
 const Samples = lazy(() => import("../samples/components/Samples"));
 const Subtraction = lazy(() => import("../subtraction/components/Subtraction"));
 const ML = lazy(() => import("../ml/components/ML"));

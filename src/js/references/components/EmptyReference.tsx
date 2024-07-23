@@ -1,6 +1,6 @@
+import { Button, DialogFooter } from "@base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, Button } from "../../base";
 import { useCreateReference } from "../queries";
 import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
@@ -28,9 +28,6 @@ export default function EmptyReference() {
 
     return (
         <form onSubmit={handleSubmit(values => mutation.mutate({ ...values }))}>
-            <Alert>
-                <strong>Create an empty reference.</strong>
-            </Alert>
             <ReferenceForm errors={errors} mode={ReferenceFormMode.empty} register={register} />
             <Controller
                 name="dataType"
@@ -38,9 +35,11 @@ export default function EmptyReference() {
                 rules={{ required: "Required Field" }}
                 render={({ field: { onChange, value } }) => <DataTypeSelection onSelect={onChange} dataType={value} />}
             />
-            <Button type="submit" icon="save" color="blue">
-                Save
-            </Button>
+            <DialogFooter>
+                <Button type="submit" icon="save" color="blue">
+                    Save
+                </Button>
+            </DialogFooter>
         </form>
     );
 }
