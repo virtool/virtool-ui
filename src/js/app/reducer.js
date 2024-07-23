@@ -1,11 +1,10 @@
+import accountReducer from "@account/reducer";
+import filesReducer from "@files/reducer";
 import { configureStore, createReducer } from "@reduxjs/toolkit";
 import { createReduxEnhancer } from "@sentry/react";
 import createSagaMiddleware from "redux-saga";
-import accountReducer from "../account/reducer";
 import analysesReducer from "../analyses/reducer";
 import errorsReducer from "../errors/reducer";
-import filesReducer from "../files/reducer";
-import { formsReducer } from "../forms/reducer";
 import { CREATE_FIRST_USER, GET_INITIAL_STATE, LOGIN, RESET_PASSWORD } from "./actionTypes";
 import rootSaga from "./sagas";
 
@@ -65,7 +64,6 @@ export function createAppStore() {
             app: appReducer,
             errors: errorsReducer,
             files: filesReducer,
-            forms: formsReducer,
         },
         middleware: [sagaMiddleware],
         enhancers: [sentryReduxEnhancer],
