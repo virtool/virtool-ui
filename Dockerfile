@@ -1,30 +1,25 @@
-FROM library/node:16-buster as npm
+FROM node:20-alpine AS base
 WORKDIR /build
-COPY package.json package-lock.json tsconfig.json /build/
+COPY package.json package-lock.json postcss.config.js tailwind.config.js tsconfig.json vite.config.js ./
 RUN npm i
-
-FROM library/node:16-buster as dev
-WORKDIR /build
-COPY --from=npm /build/node_modules /build/node_modules
-COPY package.json package-lock.json postcss.config.js tailwind.config.js vite.config.js /build/
 COPY server /build/server
 COPY src /build/src
+
+FROM base AS dev
+WORKDIR /build
 CMD ["npx", "vite", "serve"]
 
-FROM library/node:16-buster as build
+FROM base AS build
 WORKDIR /build
-COPY --from=npm /build/node_modules /build/node_modules
-COPY vite.config.js ./
-COPY src /build/src
 RUN npx vite build
 
-FROM library/node:16-buster as dist
+FROM node:20-alpine AS dist
 WORKDIR /ui
-COPY --from=build /build/dist /ui/dist
-COPY --from=npm /build/package.json /ui/
+COPY --from=build /build/dist ./dist
+COPY --from=build /build/package.json ./
 RUN npm install commander express superagent semver
-COPY run.js /ui/
-COPY ./server /ui/server
+COPY run.js ./
+COPY ./server ./server
 EXPOSE 9900
 ENV VT_UI_HOST="0.0.0.0"
 ENTRYPOINT ["node", "run"]
