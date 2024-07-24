@@ -24,7 +24,7 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
 
     const previousFormValues = getSessionStorage(`${name}FormValues`);
 
-    if (!isEqual(previousFormValues, defaultValues) && !isDirty) {
+    if (previousFormValues && !isEqual(previousFormValues, defaultValues) && !isDirty) {
         const castFormData = castValues ? castValues(previousFormValues) : previousFormValues;
         forEach(castFormData, (value, key) => {
             setValue(key, value);
@@ -57,10 +57,12 @@ export function usePersistentForm<TFieldValues extends FieldValues>({
     if (firstRender.current) {
         restoreFormValues(formName, methods, setHasRestored, castValues);
     } else {
+        console.log("hello");
         const values = methods.getValues();
         setSessionStorage(`${formName}FormValues`, values);
     }
 
     firstRender.current = false;
+    console.log(hasRestored);
     return { ...methods, hasRestored };
 }
