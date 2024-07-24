@@ -42,7 +42,7 @@ const TagContainer = styled(UserContainer)`
 type UserItemProps = {
     /** Whether the user is active */
     active: boolean;
-    administratorRole: AdministratorRoles;
+    administrator_role: AdministratorRoles;
     handle: string;
     id: string;
     /** The primary group assigned to the user */
@@ -52,9 +52,9 @@ type UserItemProps = {
 /**
  * A condensed user item for use in a list of users
  */
-export function UserItem({ active, administratorRole, handle, id, primary_group }: UserItemProps): JSX.Element {
+export function UserItem({ active, administrator_role, handle, id, primary_group }: UserItemProps): JSX.Element {
     const { hasPermission: canEdit } = useCheckAdminRole(
-        administratorRole === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+        administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
 
     return (
@@ -64,9 +64,9 @@ export function UserItem({ active, administratorRole, handle, id, primary_group 
                 {canEdit ? <UserLink to={`users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
             </UserContainer>
             <TagContainer>
-                {administratorRole && (
+                {administrator_role && (
                     <Label color="purple">
-                        <Icon name="user-shield" /> {administratorRole} Administrator
+                        <Icon name="user-shield" /> {administrator_role} Administrator
                     </Label>
                 )}
             </TagContainer>

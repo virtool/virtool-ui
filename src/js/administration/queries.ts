@@ -1,5 +1,5 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { User, UserResponse } from "../users/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { User, UserResponse } from "@users/types";
 import {
     fetchAdministratorRoles,
     fetchSettings,
@@ -85,30 +85,6 @@ export function useFindUsers(page: number, per_page: number, term: string, admin
         () => findUsers(page, per_page, term, administrator, active),
         {
             keepPreviousData: true,
-        },
-    );
-}
-
-/**
- * Setup query for fetching user search results for infinite scrolling view
- *
- * @param per_page - The number of users to fetch per page
- * @param term - The search term to filter users by
- * @param administrator - Filter the users by administrator status
- * @param active - Filter the users by whether they are active
- * @returns An UseInfiniteQueryResult object containing the user search results
- */
-export function useInfiniteFindUsers(per_page: number, term: string, administrator?: boolean, active?: boolean) {
-    return useInfiniteQuery<UserResponse>(
-        userQueryKeys.infiniteList([active, per_page, term, administrator]),
-        ({ pageParam }) => findUsers(pageParam, per_page, term, administrator, active),
-        {
-            getNextPageParam: lastPage => {
-                if (lastPage.page >= lastPage.page_count) {
-                    return undefined;
-                }
-                return (lastPage.page || 1) + 1;
-            },
         },
     );
 }
