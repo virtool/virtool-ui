@@ -28,7 +28,7 @@ export function PathoscopeViewer({ detail, sample }: PathoscopeViewerProps) {
                     <div>
                         <p className="font-bold">Read Numbers are not realistic.</p>
                         <p>
-                            Read numbers are arbitrarily calculated using weight x total mapped reads and are not
+                            Read numbers are arbitrarily calculated using weight × total mapped reads and are not
                             representative of actual numbers of reads mapped to viruses.
                         </p>
                         <p>Read numbers are shown only for continuity.</p>
