@@ -29,7 +29,7 @@ export const subtractionQueryKeys = {
  */
 export function useCreateSubtraction() {
     return useMutation<Subtraction, unknown, { name: string; nickname: string; uploadId: string }>(
-        ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId),
+        ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId)
     );
 }
 
@@ -47,7 +47,7 @@ export function useFindSubtractions(page: number, per_page: number, term: string
         () => findSubtractions(page, per_page, term),
         {
             keepPreviousData: true,
-        },
+        }
     );
 }
 
@@ -59,7 +59,7 @@ export function useFindSubtractions(page: number, per_page: number, term: string
  */
 export function useFetchSubtraction(subtractionId: string) {
     return useQuery<Subtraction, ErrorResponse>(subtractionQueryKeys.detail(subtractionId), () =>
-        getSubtraction(subtractionId),
+        getSubtraction(subtractionId)
     );
 }
 
@@ -77,7 +77,7 @@ export function useUpdateSubtraction(subtractionId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(subtractionQueryKeys.detail(subtractionId));
             },
-        },
+        }
     );
 }
 
@@ -88,7 +88,7 @@ export function useUpdateSubtraction(subtractionId: string) {
  */
 export function useRemoveSubtraction() {
     return useMutation<Response, unknown, { subtractionId: string }>(({ subtractionId }) =>
-        removeSubtraction(subtractionId),
+        removeSubtraction(subtractionId)
     );
 }
 

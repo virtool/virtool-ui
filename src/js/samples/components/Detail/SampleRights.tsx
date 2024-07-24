@@ -53,7 +53,7 @@ export default function SampleRights({ match }: SampleRightsProps) {
                 onSuccess: () => {
                     queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
                 },
-            },
+            }
         );
     }
 
@@ -69,7 +69,7 @@ export default function SampleRights({ match }: SampleRightsProps) {
                 onSuccess: () => {
                     queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
                 },
-            },
+            }
         );
     }
 

@@ -20,7 +20,7 @@ describe("<Indexes />", () => {
         mockAPIGetAccount(
             createFakeAccount({
                 administrator_role: AdministratorRoles.FULL,
-            }),
+            })
         );
         props = {
             match: { params: { refId: reference.id } },
@@ -43,12 +43,12 @@ describe("<Indexes />", () => {
         expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
         expect(await screen.findByText(new RegExp(index.user.handle))).toBeInTheDocument();
         expect(
-            await screen.findByText(`${index.change_count} changes made in ${index.modified_otu_count} OTUs`),
+            await screen.findByText(`${index.change_count} changes made in ${index.modified_otu_count} OTUs`)
         ).toBeInTheDocument();
         expect(await screen.findByText("There are unbuilt changes.")).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: "Rebuild the index" })).toHaveAttribute(
             "href",
-            `/refs/${reference.id}/indexes`,
+            `/refs/${reference.id}/indexes`
         );
     });
 

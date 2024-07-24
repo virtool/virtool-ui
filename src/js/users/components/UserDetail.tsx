@@ -61,7 +61,7 @@ export default function UserDetail({ match }: UserDetailProps) {
     const [locationState, setLocationState] = useLocationState();
     const { data, isLoading } = useFetchUser(match.params["userId"]);
     const { hasPermission: canEdit } = useCheckAdminRole(
-        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL
     );
 
     if (isLoading) {

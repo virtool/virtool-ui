@@ -38,7 +38,7 @@ export default function AddSegment({ otuId, name, abbreviation, schema }: AddSeg
                     history.replace({ state: { addSegment: false } });
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
-            },
+            }
         );
     }
 

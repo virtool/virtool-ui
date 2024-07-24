@@ -209,7 +209,7 @@ export const formatPathoscopeData = detail => {
 
             const sequences = sortBy(
                 map(isolate.sequences, sequence => formatSequence(sequence, readCount)),
-                "length",
+                "length"
             );
 
             const filled = flatMap(sequences, "filled");

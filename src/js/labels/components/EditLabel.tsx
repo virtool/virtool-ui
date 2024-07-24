@@ -35,7 +35,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
                     setShow(false);
                     queryClient.invalidateQueries(labelQueryKeys.lists());
                 },
-            },
+            }
         );
     }
 

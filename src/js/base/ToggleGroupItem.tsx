@@ -24,7 +24,7 @@ export function ToggleGroupItem({ children, value }: ToggleGroupItemProps) {
                 "aria-checked:bg-gray-300",
                 "first:rounded-l-md",
                 "hover:shadow-lg",
-                "last:rounded-r-md",
+                "last:rounded-r-md"
             )}
             value={value}
         >

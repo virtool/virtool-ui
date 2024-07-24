@@ -36,7 +36,7 @@ export function useInfiniteFindUsers(per_page: number, term: string) {
                 return (lastPage.page || 1) + 1;
             },
             keepPreviousData: true,
-        },
+        }
     );
 }
 
@@ -47,6 +47,6 @@ export function useCreateFirstUser() {
             onSuccess: () => {
                 window.location.reload();
             },
-        },
+        }
     );
 }

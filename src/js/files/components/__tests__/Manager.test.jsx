@@ -50,7 +50,7 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            createAppStore(state),
+            createAppStore(state)
         );
         expect(await screen.findByText("Drag file here to upload.")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
@@ -71,7 +71,7 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            createAppStore(state),
+            createAppStore(state)
         );
         expect(await screen.findByText("You do not have permission to upload files.")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
@@ -89,7 +89,7 @@ describe("<FileManager>", () => {
                 <FileManager {...props} />
             </MemoryRouter>,
 
-            createAppStore(state),
+            createAppStore(state)
         );
         expect(await screen.findByText("test_message")).toBeInTheDocument();
     });
@@ -118,7 +118,7 @@ describe("<FileManager>", () => {
                 configureStore({
                     reducer: reducer,
                     preloadedState: state,
-                }),
+                })
         );
         const invalidFile = new File(["test"], "test_invalid_file.gz", { type: "application/gzip" });
         const validFile = new File(["test"], "test_valid_file.fa.gz", { type: "application/gzip" });

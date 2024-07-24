@@ -25,7 +25,7 @@ export function useFetchLabels() {
  */
 export function useCreateLabel() {
     return useMutation<Label, ErrorResponse, { name: string; description: string; color: string }>(
-        ({ name, description, color }) => createLabel(name, description, color),
+        ({ name, description, color }) => createLabel(name, description, color)
     );
 }
 
@@ -36,7 +36,7 @@ export function useCreateLabel() {
  */
 export function useUpdateLabel() {
     return useMutation<Label, unknown, { labelId: number; name: string; description: string; color: string }>(
-        ({ labelId, name, description, color }) => updateLabel(labelId, name, description, color),
+        ({ labelId, name, description, color }) => updateLabel(labelId, name, description, color)
     );
 }
 

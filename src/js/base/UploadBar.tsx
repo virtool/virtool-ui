@@ -90,7 +90,7 @@ export function UploadBar({
         (acceptedFiles: File[]) => {
             onDrop(acceptedFiles);
         },
-        [onDrop],
+        [onDrop]
     );
 
     const { getRootProps, getInputProps, isDragAccept, open } = useDropzone({ onDrop: handleDrop, validator });

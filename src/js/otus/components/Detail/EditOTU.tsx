@@ -29,7 +29,7 @@ export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
                     history.replace({ state: { editOTU: false } });
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
-            },
+            }
         );
     }
 

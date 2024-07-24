@@ -1,9 +1,9 @@
+import { theme } from "@app/theme";
+import { appendLegend, createSVG } from "@samples/chartUtils";
 import { axisBottom, axisLeft } from "d3-axis";
 import { scaleLinear } from "d3-scale";
 import { area, line } from "d3-shape";
 import { forEach, map, min, values } from "lodash-es";
-import { theme } from "@app/theme";
-import { appendLegend, createSVG } from "@samples/chartUtils";
 
 const series = [
     { label: "Mean", color: theme.color.red },
@@ -80,14 +80,10 @@ export function drawBasesChart(element, data, baseWidth) {
     });
 
     // Append the median line to the chart. Color is blue.
-    svg.append("path")
-        .attr("d", lineDrawer(data, "median", x, y))
-        .attr("class", "graph-line graph-line-blue");
+    svg.append("path").attr("d", lineDrawer(data, "median", x, y)).attr("class", "graph-line graph-line-blue");
 
     // Append the median line to the chart. Color is red.
-    svg.append("path")
-        .attr("d", lineDrawer(data, "mean", x, y))
-        .attr("class", "graph-line graph-line-red");
+    svg.append("path").attr("d", lineDrawer(data, "mean", x, y)).attr("class", "graph-line graph-line-red");
 
     svg.append("g")
         .attr("class", "x axis")

@@ -39,12 +39,12 @@ type StateFilterProps = {
 export default function StateFilter({ counts }: StateFilterProps) {
     const [states, setStates] = useUrlSearchParamsList("state");
     const availableCounts = mapValues(counts, workflowCounts =>
-        reduce(workflowCounts, (result, value) => (result += value), 0),
+        reduce(workflowCounts, (result, value) => (result += value), 0)
     );
 
     function handleClick(value) {
         setStates(
-            value === "active" || value === "inactive" ? filterStatesByCategory(value, states) : xor(states, [value]),
+            value === "active" || value === "inactive" ? filterStatesByCategory(value, states) : xor(states, [value])
         );
     }
 

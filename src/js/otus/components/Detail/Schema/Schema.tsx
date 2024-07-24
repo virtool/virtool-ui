@@ -29,7 +29,7 @@ export default function Schema({ match }: SchemaProps) {
     const { refId, otuId } = match.params;
     const { hasPermission: canModify, isLoading: isLoadingPermission } = useCheckReferenceRight(
         refId,
-        ReferenceRight.modify_otu,
+        ReferenceRight.modify_otu
     );
     const history = useHistory();
     const { data, isLoading } = useFetchOTU(otuId);
@@ -61,7 +61,7 @@ export default function Schema({ match }: SchemaProps) {
                 onSuccess: () => {
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
-            },
+            }
         );
     }
 

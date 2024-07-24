@@ -40,7 +40,7 @@ describe("<AddBarcodeSequence>", () => {
             "user_typed_definition",
             "ATGRYK",
             undefined,
-            "test_target_name_2",
+            "test_target_name_2"
         );
         renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
 
@@ -83,7 +83,7 @@ describe("<AddBarcodeSequence>", () => {
             "user_typed_definition",
             "ATGRYK",
             undefined,
-            "test_target_name_2",
+            "test_target_name_2"
         );
         renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
 

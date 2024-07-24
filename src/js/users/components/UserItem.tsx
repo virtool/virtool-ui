@@ -54,7 +54,7 @@ type UserItemProps = {
  */
 export function UserItem({ active, administrator_role, handle, id, primary_group }: UserItemProps): JSX.Element {
     const { hasPermission: canEdit } = useCheckAdminRole(
-        administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+        administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL
     );
 
     return (

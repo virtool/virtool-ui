@@ -59,7 +59,7 @@ export function Button({
                     "text-lg": size === "large",
                     "text-sm": size === "small",
                 },
-                "hover:shadow-lg",
+                "hover:shadow-lg"
             )}
             disabled={disabled}
             onBlur={onBlur}

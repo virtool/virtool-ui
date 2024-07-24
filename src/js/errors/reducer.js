@@ -131,7 +131,7 @@ export const errorsReducer = createReducer({}, builder => {
                         // Report uncaught errors to Sentry
                         reportAPIError(action);
                 }
-            },
+            }
         )
         .addDefaultCase((state, action) => {
             // Ignore requests until an error has occurred

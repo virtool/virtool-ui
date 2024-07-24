@@ -62,7 +62,7 @@ export default function CreateSubtraction() {
                     reset();
                     history.push("/subtractions");
                 },
-            },
+            }
         );
     }
 

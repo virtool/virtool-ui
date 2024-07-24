@@ -18,7 +18,7 @@ export const AODPToolBar = ({ filterAODP, fuse, id, sortKey, onSearch, onSelect,
         e => {
             onSearch(e.target.value, fuse);
         },
-        [id],
+        [id]
     );
 
     const handleChangeFilter = e => {

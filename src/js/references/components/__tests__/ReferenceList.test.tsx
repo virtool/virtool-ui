@@ -100,7 +100,7 @@ describe("<ReferenceList />", () => {
             const cloneReferenceScope = mockApiCloneReference(
                 `Clone of ${references.name}`,
                 `Cloned from ${references.name}`,
-                references,
+                references
             );
             renderWithRouter(<ReferenceList />, {}, history);
 

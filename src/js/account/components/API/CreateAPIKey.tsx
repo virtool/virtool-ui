@@ -110,7 +110,7 @@ export default function CreateAPIKey() {
                     setNewKey(data.key);
                     queryClient.invalidateQueries(accountKeys.all());
                 },
-            },
+            }
         );
     }
 

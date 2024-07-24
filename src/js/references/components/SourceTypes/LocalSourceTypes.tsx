@@ -81,7 +81,7 @@ export function LocalSourceTypes() {
         "source_types",
         `/refs/${refId}`,
         referenceQueryKeys.detail(refId),
-        sourceTypes,
+        sourceTypes
     );
 
     if (isLoading) {

@@ -100,7 +100,7 @@ describe("<APIKeys />", () => {
 
                 expect(await screen.findByText(/You are an administrator/)).toBeInTheDocument();
                 expect(
-                    screen.getByText(/If your administrator role is reduced or removed, this API/),
+                    screen.getByText(/If your administrator role is reduced or removed, this API/)
                 ).toBeInTheDocument();
             });
 
@@ -110,7 +110,7 @@ describe("<APIKeys />", () => {
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
                 expect(
-                    screen.queryByText(/If your administrator role is reduced or removed, this API/),
+                    screen.queryByText(/If your administrator role is reduced or removed, this API/)
                 ).not.toBeInTheDocument();
             });
         });

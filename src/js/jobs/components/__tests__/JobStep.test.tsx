@@ -42,6 +42,6 @@ describe("<JobStep />", () => {
             renderWithProviders(<JobStep {...props} />);
 
             expect(screen.getByTitle(state)).toBeInTheDocument();
-        },
+        }
     );
 });

@@ -78,7 +78,7 @@ describe("<JobArgs />", () => {
                     extra_param: "extra_param_id",
                     excluded_param: {},
                 }}
-            />,
+            />
         );
 
         expect(screen.getByText("test_sample_id")).toBeInTheDocument();
