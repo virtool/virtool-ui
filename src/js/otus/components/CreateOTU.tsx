@@ -28,7 +28,7 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
                     history.replace({ state: { createOTU: false } });
                     queryClient.invalidateQueries(OTUQueryKeys.lists());
                 },
-            },
+            }
         );
     }
 

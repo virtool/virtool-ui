@@ -41,7 +41,7 @@ export function useAuthentication() {
                     queryClient.setQueryData(accountKeys.all(), null);
                 }
             },
-        },
+        }
     );
 
     const authenticated = !!data;
@@ -63,7 +63,7 @@ export function useLoginMutation() {
             onSuccess: () => {
                 queryClient.invalidateQueries(accountKeys.all());
             },
-        },
+        }
     );
 }
 
@@ -81,6 +81,6 @@ export function useResetPasswordMutation() {
             onSuccess: () => {
                 queryClient.invalidateQueries(accountKeys.all());
             },
-        },
+        }
     );
 }

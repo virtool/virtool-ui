@@ -45,7 +45,7 @@ describe("getCompatibleWorkflows()", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
                 <CreateAnalysis {...props} />
-            </MemoryRouter>,
+            </MemoryRouter>
         );
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe("getCompatibleWorkflows()", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
                 <CreateAnalysis {...props} />
-            </MemoryRouter>,
+            </MemoryRouter>
         );
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
@@ -92,7 +92,7 @@ describe("getCompatibleWorkflows()", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
                 <CreateAnalysis {...props} />
-            </MemoryRouter>,
+            </MemoryRouter>
         );
 
         await userEvent.click(await screen.findByText(name));
@@ -117,7 +117,7 @@ describe("getCompatibleWorkflows()", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.iimi } }]}>
                 <CreateAnalysis {...props} />
-            </MemoryRouter>,
+            </MemoryRouter>
         );
 
         await userEvent.click(await screen.findByText("Iimi"));

@@ -84,7 +84,7 @@ export const taskUpdaters = {
 function referenceUpdater(queryClient: QueryClient, task: Task) {
     queryClient.setQueriesData(
         referenceQueryKeys.infiniteList([]),
-        infiniteListItemUpdater<ReferenceSearchResult>(task, taskSelector),
+        infiniteListItemUpdater<ReferenceSearchResult>(task, taskSelector)
     );
     queryClient.setQueriesData(referenceQueryKeys.details(), updater(task, taskSelector));
 }
@@ -98,6 +98,6 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
 function HMMStatusUpdater(queryClient: QueryClient, task: Task) {
     queryClient.setQueriesData(
         hmmQueryKeys.lists(),
-        updater<HMMSearchResults>(task, item => get(item, "status.task")),
+        updater<HMMSearchResults>(task, item => get(item, "status.task"))
     );
 }

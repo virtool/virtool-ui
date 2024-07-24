@@ -65,7 +65,7 @@ export default function Password({ id, forceReset, lastPasswordChange }: Passwor
             <BoxGroupSection>
                 <form
                     onSubmit={handleSubmit(values =>
-                        mutation.mutate({ userId: id, update: { password: values.password } }),
+                        mutation.mutate({ userId: id, update: { password: values.password } })
                     )}
                 >
                     <InputGroup>

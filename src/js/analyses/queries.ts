@@ -32,7 +32,7 @@ export function useListAnalyses(sampleId: string, page: number, per_page: number
         () => listAnalyses(sampleId, page, per_page, term),
         {
             keepPreviousData: true,
-        },
+        }
     );
 }
 
@@ -51,7 +51,7 @@ export function useRemoveAnalysis(analysisId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(analysesQueryKeys.lists());
             },
-        },
+        }
     );
 
     return () => mutation.mutate({ analysisId });
@@ -65,11 +65,11 @@ export function useRemoveAnalysis(analysisId: string) {
  */
 export function useGetAnalysis(analysisId: string) {
     const queryResult = useQuery<Analysis, ErrorResponse>(analysesQueryKeys.detail(analysisId), () =>
-        getAnalysis({ analysisId }),
+        getAnalysis({ analysisId })
     );
     return useMemo(
         () => ({ ...queryResult, data: formatData(queryResult.data) as Analysis }),
-        [queryResult.data, queryResult.error],
+        [queryResult.data, queryResult.error]
     );
 }
 
@@ -92,7 +92,7 @@ export function useCreateAnalysis() {
                 void queryClient.invalidateQueries(analysesQueryKeys.lists());
                 void queryClient.invalidateQueries(samplesQueryKeys.lists());
             },
-        },
+        }
     );
 
     return mutation;
@@ -113,7 +113,7 @@ export function useSetAnalysis(analysisId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(analysesQueryKeys.lists());
             },
-        },
+        }
     );
 
     return () => mutation.mutate({ analysisId });
@@ -134,6 +134,6 @@ export function useBlastNuVs(analysisId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(analysesQueryKeys.detail(analysisId));
             },
-        },
+        }
     );
 }

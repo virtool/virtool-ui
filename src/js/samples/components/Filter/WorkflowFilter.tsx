@@ -126,7 +126,7 @@ function getWorkflowsFromURL(workflows) {
             acc[workflow].push(state);
             return acc;
         },
-        { pathoscope: [], nuvs: [], aodp: [] },
+        { pathoscope: [], nuvs: [], aodp: [] }
     );
 }
 

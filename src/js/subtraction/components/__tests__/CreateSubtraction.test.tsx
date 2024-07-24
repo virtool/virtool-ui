@@ -43,7 +43,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction />
             </BrowserRouter>,
-            createAppStore(state),
+            createAppStore(state)
         );
 
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction />
             </BrowserRouter>,
-            createAppStore(state),
+            createAppStore(state)
         );
 
         expect(await screen.findByText(file.name)).toBeInTheDocument();
@@ -78,7 +78,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction />
             </BrowserRouter>,
-            createAppStore(state),
+            createAppStore(state)
         );
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
@@ -103,7 +103,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction />
             </BrowserRouter>,
-            createAppStore(state),
+            createAppStore(state)
         );
 
         expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
@@ -126,7 +126,7 @@ describe("<CreateSubtraction />", () => {
             <BrowserRouter>
                 <CreateSubtraction />
             </BrowserRouter>,
-            createAppStore(state),
+            createAppStore(state)
         );
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
@@ -139,7 +139,7 @@ describe("<CreateSubtraction />", () => {
         await waitFor(() => createSubtractionScope.done());
 
         await waitFor(() =>
-            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] }),
+            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] })
         );
     });
 });

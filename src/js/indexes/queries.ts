@@ -34,7 +34,7 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
                 }
                 return (lastPage.page || 1) + 1;
             },
-        },
+        }
     );
 }
 

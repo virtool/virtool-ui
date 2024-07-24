@@ -47,7 +47,7 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
                     history.replace({ state: { editSegment: "" } });
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
-            },
+            }
         );
     }
 

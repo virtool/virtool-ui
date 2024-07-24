@@ -85,7 +85,7 @@ export function useFindUsers(page: number, per_page: number, term: string, admin
         () => findUsers(page, per_page, term, administrator, active),
         {
             keepPreviousData: true,
-        },
+        }
     );
 }
 
@@ -112,7 +112,7 @@ export function useUpdateUser() {
             onSuccess: () => {
                 queryClient.invalidateQueries(userQueryKeys.details());
             },
-        },
+        }
     );
 }
 
@@ -129,6 +129,6 @@ export const useSetAdministratorRole = () => {
             onSuccess: () => {
                 queryClient.invalidateQueries(userQueryKeys.all());
             },
-        },
+        }
     );
 };

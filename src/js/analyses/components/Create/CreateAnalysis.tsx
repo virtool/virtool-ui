@@ -61,7 +61,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
 
         const references = map(
             filter(compatibleIndexes, index => indexes.includes(index.id)),
-            "reference.id",
+            "reference.id"
         );
 
         forEach(references, refId => {

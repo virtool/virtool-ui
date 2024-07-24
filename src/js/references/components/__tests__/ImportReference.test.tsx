@@ -26,7 +26,7 @@ describe("<ImportReference />", () => {
 
         await userEvent.upload(
             screen.getByLabelText("Upload file"),
-            new File(['{"test": true}'], "external.json.gz", { type: "application/gzip" }),
+            new File(['{"test": true}'], "external.json.gz", { type: "application/gzip" })
         );
         await userEvent.type(screen.getByLabelText("Name"), "External");
         await userEvent.type(screen.getByLabelText("Description"), "External reference");

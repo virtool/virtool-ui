@@ -31,7 +31,7 @@ export default function AddIsolate({ allowedSourceTypes, onHide, otuId, restrict
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                     onHide();
                 },
-            },
+            }
         );
     }
 

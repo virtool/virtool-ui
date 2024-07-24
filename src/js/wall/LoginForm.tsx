@@ -47,7 +47,7 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
                         setResetCode(data.body.resetCode);
                     }
                 },
-            },
+            }
         );
     }
 

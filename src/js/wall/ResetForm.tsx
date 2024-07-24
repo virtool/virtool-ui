@@ -25,7 +25,7 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
                 onSuccess: () => {
                     dispatch({ type: RESET_PASSWORD.SUCCEEDED });
                 },
-            },
+            }
         );
     }
 

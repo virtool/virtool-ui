@@ -83,7 +83,7 @@ export default function AnalysisViewerList({ children, itemSize, matches, total,
     }
 
     const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, id =>
-        setLocationState(merge(locationState, { activeHitId: id })),
+        setLocationState(merge(locationState, { activeHitId: id }))
     );
 
     return (

@@ -106,7 +106,7 @@ describe("<CreateSample>", () => {
             [files[0].id, files[1].id],
             [labels[0].id],
             [subtractionShortlist.id],
-            "",
+            ""
         );
 
         renderWithRouter(<CreateSample />, {}, history);

@@ -62,7 +62,7 @@ export function useChangePassword() {
             onSuccess: () => {
                 queryClient.invalidateQueries(accountKeys.all());
             },
-        },
+        }
     );
 }
 
@@ -82,7 +82,7 @@ export function useFetchAPIKeys() {
  */
 export function useCreateAPIKey() {
     return useMutation<APIKeyMinimal, ErrorResponse, { name: string; permissions: Permissions }>(
-        ({ name, permissions }) => createAPIKey(name, permissions),
+        ({ name, permissions }) => createAPIKey(name, permissions)
     );
 }
 
@@ -100,7 +100,7 @@ export function useUpdateAPIKey() {
             onSuccess: () => {
                 queryClient.invalidateQueries(accountKeys.all());
             },
-        },
+        }
     );
 }
 

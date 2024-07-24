@@ -15,7 +15,7 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
     name: string,
     methods: UseFormReturn<TFieldValues>,
     setHasRestored: Dispatch<SetStateAction<boolean>>,
-    castValues?: (value: TFieldValues) => TFieldValues,
+    castValues?: (value: TFieldValues) => TFieldValues
 ) {
     const {
         formState: { defaultValues, isDirty },

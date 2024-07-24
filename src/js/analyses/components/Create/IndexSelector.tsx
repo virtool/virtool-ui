@@ -22,7 +22,7 @@ export function IndexSelector({ indexes, selected, onChange }: IndexSelectorProp
     const unselectedIndexes = differenceWith(
         results.map(result => result.item || result),
         selected,
-        (index, id) => index.id === id,
+        (index, id) => index.id === id
     );
 
     const selectedIndexes = intersectionWith(sortedIndexes, selected, (index, id) => index.id === id);

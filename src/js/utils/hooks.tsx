@@ -77,7 +77,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
  */
 export function useUrlSearchParams<T extends SearchParamValue>(
     key: string,
-    defaultValue?: T,
+    defaultValue?: T
 ): [T, (newValue: T) => void] {
     const history = useHistory();
     const location = useLocation();
@@ -195,7 +195,7 @@ export function ScrollSync({ children }: ScrollSyncProps) {
  */
 export function useLocationState(): [
     locationState: LocationType,
-    setLocationState: (state: { [key: string]: boolean | string | number }) => void,
+    setLocationState: (state: { [key: string]: boolean | string | number }) => void
 ] {
     const location = useLocation();
     const history = useHistory();

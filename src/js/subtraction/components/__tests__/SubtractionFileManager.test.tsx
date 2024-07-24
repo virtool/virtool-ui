@@ -56,7 +56,7 @@ describe("<SubtractionFileManager />", () => {
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
             </MemoryRouter>,
-            createAppStore(state),
+            createAppStore(state)
         );
         expect(await screen.findByText("Drag FASTA files here to upload")).toBeInTheDocument();
         expect(screen.getByText("Accepts files ending in fa, fasta, fa.gz, or fasta.gz.")).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe("<SubtractionFileManager />", () => {
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
             </MemoryRouter>,
-            createAppStore(state, reducer),
+            createAppStore(state, reducer)
         );
 
         const validFiles = createFiles(["test.fa", "test.fa.gz", "test.fasta", "test.fasta.gz"]);

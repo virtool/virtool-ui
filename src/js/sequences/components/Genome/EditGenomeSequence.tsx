@@ -39,7 +39,7 @@ export default function EditGenomeSequence({
                 onSuccess: () => {
                     setLocationState(merge(locationState, { editSequence: false }));
                 },
-            },
+            }
         );
     }
 

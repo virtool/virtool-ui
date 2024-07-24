@@ -30,7 +30,7 @@ export default function RemoveSample({ id, name }: RemoveSampleProps) {
                         onSuccess: () => {
                             history.push("/samples");
                         },
-                    },
+                    }
                 )
             }
             onHide={() => history.replace({ state: { removeSample: false } })}

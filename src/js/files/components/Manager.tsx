@@ -24,7 +24,7 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
     const { data: files, isLoading: isLoadingFiles }: { data: FileResponse; isLoading: boolean } = useListFiles(
         fileType,
         URLPage,
-        25,
+        25
     );
 
     if (isLoadingFiles || isLoadingAccount) {

@@ -25,7 +25,7 @@ export const ButtonToggle = forwardRef<HTMLButtonElement, ButtonToggleProps>(
                     "text-black",
                     "text-lg",
                     "hover:shadow-lg",
-                    "active:inset-2",
+                    "active:inset-2"
                 )}
                 onPressedChange={onPressedChange}
                 pressed={pressed}
@@ -34,7 +34,7 @@ export const ButtonToggle = forwardRef<HTMLButtonElement, ButtonToggleProps>(
                 {children}
             </Toggle.Root>
         );
-    },
+    }
 );
 
 ButtonToggle.displayName = "ButtonToggle";
