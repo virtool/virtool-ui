@@ -44,7 +44,6 @@ describe("<EditGenomeSequence>", () => {
         );
         renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
-        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
@@ -90,7 +89,6 @@ describe("<EditGenomeSequence>", () => {
         );
         renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
-        await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
