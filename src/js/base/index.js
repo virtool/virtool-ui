@@ -69,7 +69,6 @@ export { InputSelect } from "./InputSelect";
 export { InputSimple } from "./InputSimple";
 export { Key } from "./Key";
 export { Label } from "./Label";
-export { LegacyScrollList } from "./LegacyScrollList";
 export { LinkButton } from "./LinkButton";
 export { Loader } from "./Loader";
 export { LoadingPlaceholder } from "./LoadingPlaceholder";
