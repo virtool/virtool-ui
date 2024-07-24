@@ -4,22 +4,21 @@ When initialized in a React component, the lifetime of standard variables is onl
 As a result, any data that needs to exist for more than one render must be stored is some form of persistent storage.
 There are several ways to ensure that data persists, but the best one depends on the data being stored
 
-Any single piece of data should generally only be stored in one type of persistent storage. 
+Any single piece of data should generally only be stored in one type of persistent storage.
 Storing data in more than once in persistent storage allows for desynchronization between the stored
-versions resulting in difficult to catch bugs. 
-
+versions resulting in difficult to catch bugs.
 
 ## Application State
- 
-Application state is data that is stored within the client via Redux, `useState`, ect. 
+
+Application state is data that is stored within the client via Redux, `useState`, ect.
 Any data stored within the application is wiped on refresh, making it well suited for storing
-data that can or should be forgotten on refresh. 
+data that can or should be forgotten on refresh.
 Component level state is currently the only suitable way to store high security data like
 passwords or API keys.
 
 ## Browser storage
 
-Browser state encompasses any data stored in the browser using built-in APIs. 
+Browser state encompasses any data stored in the browser using built-in APIs.
 Data stored here is generally persistent through both rerender and page refresh.
 As a result, the client needs elegantly handle any valid values stored via the browser
 after a refresh.
@@ -46,5 +45,3 @@ React components ingest server data through the interface of custom API querying
 The local copy of the data is lost on refresh, but will be replaced when the page next loads.
 The data returned from the hooks should not be directly mutated inside of components, in most cases
 non-persistent local copies should be made in the component if the shape of the data needs to be changed.
-
-
