@@ -36,7 +36,6 @@ export { Dialog } from "./Dialog";
 export { DialogAlert } from "./DialogAlert";
 export { DialogContent } from "./DialogContent";
 export { DialogContext } from "./DialogContext";
-export { DialogControlled } from "./DialogControlled";
 export { DialogFooter } from "./DialogFooter";
 export { DialogOverlay } from "./DialogOverlay";
 export { DialogTabs } from "./DialogTabs";
