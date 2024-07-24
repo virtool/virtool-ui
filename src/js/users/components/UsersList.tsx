@@ -1,29 +1,10 @@
-import { useInfiniteFindUsers } from "@administration/queries";
-import { BoxGroup, LoadingPlaceholder, NoneFoundBox } from "@base";
-import { ScrollList } from "@base/ScrollList";
+import { useFindUsers } from "@administration/queries";
+import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
 import { useUrlSearchParams } from "@utils/hooks";
-import { flatMap } from "lodash-es";
+import { map } from "lodash";
 import React from "react";
-import styled from "styled-components";
 import { User } from "../types";
 import { UserItem } from "./UserItem";
-
-function renderRow(item: User) {
-    return (
-        <UserItem
-            key={item.id}
-            active={item.active}
-            administratorRole={item.administrator_role}
-            handle={item.handle}
-            id={item.id}
-            primary_group={item.primary_group}
-        />
-    );
-}
-
-const StyledScrollList = styled(ScrollList)`
-    margin-bottom: 0;
-`;
 
 type UsersListProps = {
     /** The search term used for filtering users */
@@ -31,34 +12,27 @@ type UsersListProps = {
 };
 
 /**
- * An infinitely scrolling list of users
+ * A paginated list of users
  */
 export function UsersList({ term }: UsersListProps) {
-    const [status] = useUrlSearchParams("status");
-    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindUsers(
-        25,
-        term,
-        undefined,
-        status === "active",
-    );
+    const [urlPage] = useUrlSearchParams<number>("page");
+    const [status] = useUrlSearchParams<string>("status");
+    const { data, isLoading } = useFindUsers(Number(urlPage) || 1, 25, term, undefined, status === "active");
 
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    const items = flatMap(data.pages, page => page.items);
+    const { items, page, page_count } = data;
 
     return items.length ? (
-        <BoxGroup>
-            <StyledScrollList
-                fetchNextPage={fetchNextPage}
-                hasNextPage={hasNextPage}
-                isFetchingNextPage={isFetchingNextPage}
-                isLoading={isLoading}
-                items={items}
-                renderRow={renderRow}
-            />
-        </BoxGroup>
+        <Pagination items={items} storedPage={page} currentPage={Number(urlPage) || 1} pageCount={page_count}>
+            <BoxGroup>
+                {map(items, (item: User) => (
+                    <UserItem key={item.id} {...item} />
+                ))}
+            </BoxGroup>
+        </Pagination>
     ) : (
         <NoneFoundBox noun="users" />
     );

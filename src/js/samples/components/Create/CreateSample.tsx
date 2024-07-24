@@ -133,7 +133,7 @@ export default function CreateSample() {
             locale: "",
             libraryType: "normal",
             readFiles: [],
-            group: null,
+            group: "",
             sidebar: {
                 labels: [],
                 subtractionIds: [],

@@ -35,7 +35,7 @@ export default function BarcodeSequenceForm({ activeSequence, noun, onSubmit, ta
     const methods = usePersistentForm<FormValues>({
         formName: `${noun}BarcodeSequence${id}`,
         defaultValues: {
-            target: target || targets[0]?.name || null,
+            target: target || targets[0]?.name || "",
             accession: accession || "",
             definition: definition || "",
             host: host || "",
