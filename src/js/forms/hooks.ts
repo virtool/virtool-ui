@@ -57,12 +57,10 @@ export function usePersistentForm<TFieldValues extends FieldValues>({
     if (firstRender.current) {
         restoreFormValues(formName, methods, setHasRestored, castValues);
     } else {
-        console.log("hello");
         const values = methods.getValues();
         setSessionStorage(`${formName}FormValues`, values);
     }
 
     firstRender.current = false;
-    console.log(hasRestored);
     return { ...methods, hasRestored };
 }
