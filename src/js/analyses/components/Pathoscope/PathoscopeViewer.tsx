@@ -26,16 +26,12 @@ export function PathoscopeViewer({ detail, sample }: PathoscopeViewerProps) {
             {showReads && (
                 <Alert color="orange" level>
                     <div>
-                        <div>
-                            <strong>Read Numbers are not realistic.</strong>
-                        </div>
-                        <ul>
-                            <li>
-                                Read numbers are arbitrarily calculated using weight x total mapped reads and are not
-                                representative of actual numbers of reads mapped to viruses.
-                            </li>
-                            <li>Read numbers are shown only for continuity.</li>
-                        </ul>
+                        <p className="font-bold">Read Numbers are not realistic.</p>
+                        <p>
+                            Read numbers are arbitrarily calculated using weight x total mapped reads and are not
+                            representative of actual numbers of reads mapped to viruses.
+                        </p>
+                        <p>Read numbers are shown only for continuity.</p>
                     </div>
                 </Alert>
             )}
