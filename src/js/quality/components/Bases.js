@@ -2,8 +2,8 @@ import { axisBottom, axisLeft } from "d3-axis";
 import { scaleLinear } from "d3-scale";
 import { area, line } from "d3-shape";
 import { forEach, map, min, values } from "lodash-es";
-import { theme } from "../../app/theme";
-import { appendLegend, createSVG } from "../../samples/chartUtils";
+import { theme } from "@app/theme";
+import { appendLegend, createSVG } from "@samples/chartUtils";
 
 const series = [
     { label: "Mean", color: theme.color.red },
@@ -12,15 +12,19 @@ const series = [
     { label: "Decile", color: theme.color.yellow },
 ];
 
-const getArea = (name, areaX, y, a, b) => ({
-    name,
-    func: area()
-        .x(areaX)
-        .y0(d => y(d[a]))
-        .y1(d => y(d[b])),
-});
+function getArea(name, areaX, y, a, b) {
+    return {
+        name,
+        func: area()
+            .x(areaX)
+            .y0(d => y(d[a]))
+            .y1(d => y(d[b])),
+    };
+}
 
-const getMinQuality = data => min(map(data, document => min(values(document))));
+function getMinQuality(data) {
+    return min(map(data, document => min(values(document))));
+}
 
 /**
  * Generates the lines representing mean and median base quality.
@@ -31,7 +35,7 @@ const getMinQuality = data => min(map(data, document => min(values(document))));
  * @param x
  * @param y
  */
-const lineDrawer = (data, key, x, y) => {
+function lineDrawer(data, key, x, y) {
     const column = {
         mean: 0,
         median: 1,
@@ -42,9 +46,9 @@ const lineDrawer = (data, key, x, y) => {
         .y(d => y(d[column]));
 
     return generator(data);
-};
+}
 
-export const drawBasesChart = (element, data, baseWidth) => {
+export function drawBasesChart(element, data, baseWidth) {
     const svg = createSVG(element, baseWidth);
 
     const width = baseWidth - svg.margin.left - svg.margin.right;
@@ -56,7 +60,9 @@ export const drawBasesChart = (element, data, baseWidth) => {
 
     const x = scaleLinear().range([0, width]).domain([0, data.length]);
 
-    const areaX = (d, i) => x(i);
+    function areaX(d, i) {
+        return x(i);
+    }
 
     // Define the d3 area functions to render the inter-quartile and upper and lower decile plot areas.
     const areas = [
@@ -74,10 +80,14 @@ export const drawBasesChart = (element, data, baseWidth) => {
     });
 
     // Append the median line to the chart. Color is blue.
-    svg.append("path").attr("d", lineDrawer(data, "median", x, y)).attr("class", "graph-line graph-line-blue");
+    svg.append("path")
+        .attr("d", lineDrawer(data, "median", x, y))
+        .attr("class", "graph-line graph-line-blue");
 
     // Append the median line to the chart. Color is red.
-    svg.append("path").attr("d", lineDrawer(data, "mean", x, y)).attr("class", "graph-line graph-line-red");
+    svg.append("path")
+        .attr("d", lineDrawer(data, "mean", x, y))
+        .attr("class", "graph-line graph-line-red");
 
     svg.append("g")
         .attr("class", "x axis")
@@ -105,4 +115,4 @@ export const drawBasesChart = (element, data, baseWidth) => {
         .attr("transform", "rotate(-90)");
 
     appendLegend(svg, width, series, 8);
-};
+}

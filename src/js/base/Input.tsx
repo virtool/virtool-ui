@@ -104,7 +104,9 @@ export const Input = styled(UnstyledInput)<InputProps>`
     outline: none;
     padding: 8px 10px;
     position: relative;
-    transition: border-color ease-in-out 150ms, box-shadow ease-in-out 150ms;
+    transition:
+        border-color ease-in-out 150ms,
+        box-shadow ease-in-out 150ms;
     width: 100%;
 
     &:focus {
