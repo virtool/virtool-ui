@@ -1,50 +1,18 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { FileType } from "@files/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { getSessionStorage, setSessionStorage } from "@utils/utils";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
-import { renderWithProviders } from "../../../../tests/setupTests";
-import { FileType } from "../../../files/types";
+import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import CreateSubtraction from "../CreateSubtraction";
-function routerRenderWithProviders(ui, store) {
-    const routerUi = <BrowserRouter> {ui} </BrowserRouter>;
-    return renderWithProviders(routerUi, store);
-}
-
-function createAppStore(state) {
-    return () => {
-        const mockReducer = state => {
-            return state;
-        };
-        return configureStore({
-            reducer: mockReducer,
-            preloadedState: state,
-        });
-    };
-}
 
 describe("<CreateSubtraction />", () => {
-    let state;
-
-    beforeEach(() => {
-        window.sessionStorage.clear();
-        state = {
-            forms: { formState: {} },
-        };
-    });
-
     it("should render when no files available", async () => {
         mockApiListFiles([]);
-        routerRenderWithProviders(
-            <BrowserRouter>
-                <CreateSubtraction />
-            </BrowserRouter>,
-            createAppStore(state)
-        );
+        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
 
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
     });
@@ -52,12 +20,7 @@ describe("<CreateSubtraction />", () => {
     it("should render error when submitted with no name or file entered", async () => {
         const file = createFakeFile({ name: "subtraction.fq.gz", type: FileType.subtraction });
         mockApiListFiles([file]);
-        routerRenderWithProviders(
-            <BrowserRouter>
-                <CreateSubtraction />
-            </BrowserRouter>,
-            createAppStore(state)
-        );
+        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
 
         expect(await screen.findByText(file.name)).toBeInTheDocument();
         await userEvent.click(await screen.findByText(/save/i));
@@ -74,12 +37,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        routerRenderWithProviders(
-            <BrowserRouter>
-                <CreateSubtraction />
-            </BrowserRouter>,
-            createAppStore(state)
-        );
+        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -99,12 +57,7 @@ describe("<CreateSubtraction />", () => {
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
         mockApiListFiles([file]);
 
-        routerRenderWithProviders(
-            <BrowserRouter>
-                <CreateSubtraction />
-            </BrowserRouter>,
-            createAppStore(state)
-        );
+        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
 
         expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
         expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -122,12 +75,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        routerRenderWithProviders(
-            <BrowserRouter>
-                <CreateSubtraction />
-            </BrowserRouter>,
-            createAppStore(state)
-        );
+        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
