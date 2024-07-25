@@ -117,7 +117,7 @@ export function editIsolate(
     otuId: string,
     isolateId: string,
     sourceType: string,
-    sourceName: string,
+    sourceName: string
 ): Promise<OTUIsolate> {
     return Request.patch(`/otus/${otuId}/isolates/${isolateId}`)
         .send({
@@ -170,7 +170,7 @@ export function addSequence(
     host: string,
     sequence: string,
     segment: string,
-    target: string,
+    target: string
 ): Promise<OTUSequence> {
     return Request.post(`/otus/${otuId}/isolates/${isolateId}/sequences`)
         .send({
@@ -207,7 +207,7 @@ export function editSequence(
     host: string,
     sequence: string,
     segment: string,
-    target: string,
+    target: string
 ): Promise<OTUSequence> {
     return Request.patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
         .send({

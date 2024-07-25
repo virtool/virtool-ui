@@ -33,7 +33,7 @@ export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveS
                         onSuccess: () => {
                             history.push("/subtractions");
                         },
-                    },
+                    }
                 )
             }
         />

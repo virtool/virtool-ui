@@ -30,7 +30,7 @@ export default function RemoveSequence({ isolateName, isolateId, otuId, sequence
                 onSuccess: () => {
                     setLocationState(merge(locationState, { removeSequence: false }));
                 },
-            },
+            }
         );
     }
 

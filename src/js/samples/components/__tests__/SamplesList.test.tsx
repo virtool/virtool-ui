@@ -36,7 +36,7 @@ describe("<SamplesList />", () => {
                 <SamplesList />
             </MemoryRouter>,
             {},
-            history,
+            history
         );
         expect(await screen.findByText("Samples")).toBeInTheDocument();
 
@@ -50,7 +50,7 @@ describe("<SamplesList />", () => {
                 <SamplesList />
             </MemoryRouter>,
             {},
-            history,
+            history
         );
         expect(await screen.findByText("Samples")).toBeInTheDocument();
 

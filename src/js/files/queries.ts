@@ -28,7 +28,7 @@ export function useInfiniteFindFiles(type: FileType, per_page: number, term?: st
                 }
                 return (lastPage.page || 1) + 1;
             },
-        },
+        }
     );
 }
 

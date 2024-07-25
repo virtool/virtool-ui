@@ -36,7 +36,7 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
                     setOpen(false);
                     queryClient.invalidateQueries(labelQueryKeys.lists());
                 },
-            },
+            }
         );
     }
 

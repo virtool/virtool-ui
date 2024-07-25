@@ -19,7 +19,7 @@ export const getWorkflow = state => state.analyses.detail.workflow;
  *
  */
 export const getFuse = createSelector([getWorkflow, getHits], (workflow, hits) =>
-    createFuse(hits, fuseSearchKeys[workflow], "id"),
+    createFuse(hits, fuseSearchKeys[workflow], "id")
 );
 
 export const getFilterIds = createSelector(
@@ -49,7 +49,7 @@ export const getFilterIds = createSelector(
         }
 
         return map(hits, "id");
-    },
+    }
 );
 
 export const getSearchIds = state => state.analyses.searchIds;
@@ -94,7 +94,7 @@ export const getMatches = createSelector(
         const keyed = keyBy(hits, "id");
 
         return map(matchIds, id => keyed[id]);
-    },
+    }
 );
 
 export const getActiveHit = createSelector([getWorkflow, getMatches, getActiveId], (workflow, matches, activeId) => {

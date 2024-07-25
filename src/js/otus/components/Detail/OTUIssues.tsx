@@ -37,7 +37,7 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
     // The OTU has an inconsistent number of sequences between isolates.
     if (typeof issues === "object" && issues.isolate_inconsistency) {
         errors.push(
-            <li key="isolateInconsistency">Some isolates have different numbers of sequences than other isolates</li>,
+            <li key="isolateInconsistency">Some isolates have different numbers of sequences than other isolates</li>
         );
     }
 
@@ -55,7 +55,7 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
             <li key="emptyIsolate">
                 There are no sequences associated with the following isolates:
                 <ul>{emptyIsolates}</ul>
-            </li>,
+            </li>
         );
     }
 
@@ -78,7 +78,7 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
             <li key="emptySequence">
                 There are sequence records with undefined <code>sequence</code> fields:
                 <ul>{emptySequences}</ul>
-            </li>,
+            </li>
         );
     }
 

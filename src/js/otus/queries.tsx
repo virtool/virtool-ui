@@ -52,7 +52,7 @@ export function useListOTUs(refId: string, page: number, per_page: number, term:
         () => listOTUs(refId, page, per_page, term, verified),
         {
             keepPreviousData: true,
-        },
+        }
     );
 }
 
@@ -90,7 +90,7 @@ export function useFetchOTUHistory(otuId: string) {
  */
 export function useCreateOTU(refId: string) {
     return useMutation<OTU, ErrorResponse, { name: string; abbreviation: string }>(({ name, abbreviation }) =>
-        createOTU(refId, name, abbreviation),
+        createOTU(refId, name, abbreviation)
     );
 }
 
@@ -108,7 +108,7 @@ export type UpdateOTUProps = {
  */
 export function useUpdateOTU() {
     return useMutation<OTU, ErrorResponse, UpdateOTUProps>(({ otuId, name, abbreviation, schema }) =>
-        editOTU(otuId, name, abbreviation, schema),
+        editOTU(otuId, name, abbreviation, schema)
     );
 }
 
@@ -143,7 +143,7 @@ export function useRevertOTU(otuId: string) {
  */
 export function useCreateIsolate() {
     return useMutation<OTUIsolate, unknown, { otuId: string; sourceType: string; sourceName: string }>(
-        ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName),
+        ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName)
     );
 }
 
@@ -154,7 +154,7 @@ export function useCreateIsolate() {
  */
 export function useSetIsolateAsDefault() {
     return useMutation<OTUIsolate, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
-        setIsolateAsDefault(otuId, isolateId),
+        setIsolateAsDefault(otuId, isolateId)
     );
 }
 
@@ -178,7 +178,7 @@ export function useUpdateIsolate() {
  */
 export function useRemoveIsolate() {
     return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
-        removeIsolate(otuId, isolateId),
+        removeIsolate(otuId, isolateId)
     );
 }
 
@@ -209,7 +209,7 @@ export function useAddSequence(otuId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
             },
-        },
+        }
     );
 }
 
@@ -241,7 +241,7 @@ export function useEditSequence(otuId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
             },
-        },
+        }
     );
 }
 
@@ -259,7 +259,7 @@ export function useRemoveSequence(otuId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
             },
-        },
+        }
     );
 }
 

@@ -29,7 +29,7 @@ describe("<AddGenomeSequence>", () => {
             "user_typed_host",
             "user_typed_definition",
             "ATGRYKM",
-            otu.schema[0].name,
+            otu.schema[0].name
         );
         renderWithMemoryRouter(<AddGenomeSequence {...props} />, [{ state: { addSequence: true } }]);
 
@@ -76,7 +76,7 @@ describe("<AddGenomeSequence>", () => {
             "user_typed_host",
             "user_typed_definition",
             "ATGRYKM",
-            otu.schema[0].name,
+            otu.schema[0].name
         );
         renderWithMemoryRouter(<AddGenomeSequence {...props} />, [{ state: { addSequence: true } }]);
 

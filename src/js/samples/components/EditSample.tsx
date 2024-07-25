@@ -62,8 +62,8 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                                             state: { editSample: false },
                                         });
                                     },
-                                },
-                            ),
+                                }
+                            )
                         )}
                     >
                         <InputGroup>

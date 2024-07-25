@@ -51,7 +51,7 @@ export function createSample(
     subtractions: string[],
     files: string[],
     labels: number[],
-    group: string,
+    group: string
 ): Promise<Sample> {
     return Request.post("/samples")
         .send({

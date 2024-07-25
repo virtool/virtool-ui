@@ -33,7 +33,7 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
                     history.replace({ state: { removeSegment: "" } });
                     queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
-            },
+            }
         );
     }
 

@@ -53,7 +53,7 @@ describe("<HMMList />", () => {
 
             expect(screen.getByText("No HMM data available.")).toBeInTheDocument();
             expect(
-                screen.getByText(/You can download and install the official HMM data automatically from our/),
+                screen.getByText(/You can download and install the official HMM data automatically from our/)
             ).toBeInTheDocument();
             expect(screen.getByText("GitHub repository")).toBeInTheDocument();
 

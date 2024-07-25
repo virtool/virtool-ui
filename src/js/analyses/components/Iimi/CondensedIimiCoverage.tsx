@@ -13,7 +13,7 @@ export function CondensedIimiCoverage({ isolates }: { isolates: IimiIsolate[] })
         const avgSeq = maxSequences(
             map(filteredSeqs, (seq: IimiSequence) => {
                 return convertRleToCoverage(seq.coverage.lengths, seq.coverage.values);
-            }),
+            })
         );
 
         return (
@@ -23,7 +23,7 @@ export function CondensedIimiCoverage({ isolates }: { isolates: IimiIsolate[] })
                 id={isolates[0].id}
                 yMax={Math.max(...avgSeq, 10)}
                 untrustworthyRanges={combineUntrustworthyRegions(
-                    map(seqs, sequence => (sequence ? sequence.untrustworthy_ranges : [])),
+                    map(seqs, sequence => (sequence ? sequence.untrustworthy_ranges : []))
                 )}
             />
         );

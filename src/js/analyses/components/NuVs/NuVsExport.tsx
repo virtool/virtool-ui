@@ -19,7 +19,7 @@ function getBestHit(items) {
 
             return best;
         },
-        { name: null, e: 10 },
+        { name: null, e: 10 }
     );
 }
 
@@ -39,7 +39,7 @@ function exportContigData(hits: FormattedNuvsHit[], sampleName: string) {
 
                 return names;
             },
-            [],
+            []
         );
         return `>sequence_${result.index}|${sampleName}|${orfNames.join("|")}\n${result.sequence}`;
     });
@@ -62,14 +62,14 @@ function exportORFData(hits: FormattedNuvsHit[], sampleName: string) {
 
             return lines;
         },
-        [],
+        []
     );
 }
 
 function downloadData(analysisId: string, content: string[], sampleName: string, suffix: string) {
     return followDynamicDownload(
         `nuvs.${replace(sampleName, " ", "_")}.${analysisId}.${suffix}.fa`,
-        content.join("\n"),
+        content.join("\n")
     );
 }
 

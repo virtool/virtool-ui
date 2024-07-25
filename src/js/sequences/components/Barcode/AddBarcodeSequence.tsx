@@ -40,7 +40,7 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
                 onSuccess: () => {
                     setLocationState(merge(locationState, { addSequence: false }));
                 },
-            },
+            }
         );
     }
 

@@ -28,7 +28,7 @@ export default function RemoveIsolate({ id, name, onHide, otuId, show }: RemoveI
                 onSuccess: () => {
                     onHide();
                 },
-            },
+            }
         );
     }, [otuId, id]);
 

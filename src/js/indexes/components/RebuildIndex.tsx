@@ -31,7 +31,7 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
                 onSuccess: () => {
                     history.push({ state: { rebuild: false } });
                 },
-            },
+            }
         );
     }
 

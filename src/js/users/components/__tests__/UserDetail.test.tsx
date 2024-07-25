@@ -235,7 +235,7 @@ describe("<UserDetail />", () => {
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
             await waitFor(() =>
-                expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument(),
+                expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument()
             );
 
             scope.done();

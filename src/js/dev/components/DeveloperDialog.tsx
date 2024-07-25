@@ -54,7 +54,7 @@ export default function DeveloperDialog() {
                                                 setLocationState({ devCommands: false });
                                                 location.reload();
                                             },
-                                        },
+                                        }
                                     )
                                 }
                             >

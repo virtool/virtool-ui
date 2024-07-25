@@ -46,7 +46,7 @@ export default function SamplesList() {
         25,
         term,
         filterLabels,
-        filterWorkflows,
+        filterWorkflows
     );
     const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
     const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);

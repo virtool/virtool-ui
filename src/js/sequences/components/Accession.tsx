@@ -52,7 +52,7 @@ export function Accession() {
                     setNotFound(err.status === 404);
 
                     return err;
-                },
+                }
             );
         }
     }, [accession, pending, notFound, onAutofill]);

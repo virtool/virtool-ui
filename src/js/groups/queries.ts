@@ -34,7 +34,7 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
                 return (lastPage.page || 1) + 1;
             },
             keepPreviousData: true,
-        },
+        }
     );
 }
 

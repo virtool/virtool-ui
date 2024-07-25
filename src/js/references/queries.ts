@@ -58,7 +58,7 @@ export function useInfiniteFindReferences(term: string) {
                 return (lastPage.page || 1) + 1;
             },
             keepPreviousData: true,
-        },
+        }
     );
 }
 
@@ -85,7 +85,7 @@ export function useRemoteReference() {
             onSuccess: () => {
                 queryClient.invalidateQueries(referenceQueryKeys.lists());
             },
-        },
+        }
     );
 }
 
@@ -135,7 +135,7 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
             onSuccess: () => {
                 queryClient.invalidateQueries(referenceQueryKeys.detail(refId)).then(() => onSuccess?.());
             },
-        },
+        }
     );
 
     return { mutation };
@@ -157,7 +157,7 @@ export function useAddReferenceMember(refId: string, noun: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
             },
-        },
+        }
     );
 }
 
@@ -173,7 +173,7 @@ export function useUpdateReferenceMember(noun: string) {
         unknown,
         { refId: string; id: string | number; update: { [key: string]: boolean } }
     >(({ refId, id, update }) =>
-        noun === "user" ? editReferenceUser(refId, id, update) : editReferenceGroup(refId, id, update),
+        noun === "user" ? editReferenceUser(refId, id, update) : editReferenceGroup(refId, id, update)
     );
 }
 
@@ -193,7 +193,7 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(referenceQueryKeys.detail(refId));
             },
-        },
+        }
     );
 }
 

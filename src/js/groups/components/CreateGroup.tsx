@@ -40,7 +40,7 @@ export default function CreateGroup() {
                 onSuccess: () => {
                     history.replace({ state: { createGroup: false } });
                 },
-            },
+            }
         );
     }
 

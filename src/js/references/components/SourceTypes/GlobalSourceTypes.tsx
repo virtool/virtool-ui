@@ -64,7 +64,7 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
         "default_source_types",
         "/settings",
         settingsQueryKeys.all(),
-        sourceTypes,
+        sourceTypes
     );
 
     return (

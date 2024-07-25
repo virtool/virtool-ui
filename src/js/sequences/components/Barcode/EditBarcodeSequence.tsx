@@ -35,7 +35,7 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
                 onSuccess: () => {
                     setLocationState(merge(locationState, { editSequence: false }));
                 },
-            },
+            }
         );
     }
 

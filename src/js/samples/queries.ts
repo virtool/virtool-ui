@@ -48,7 +48,7 @@ export function useListSamples(page: number, per_page: number, term?: string, la
         () => listSamples(page, per_page, term, labels, workflows),
         {
             keepPreviousData: true,
-        },
+        }
     );
 }
 
@@ -91,7 +91,7 @@ export function useCreateSample() {
             onSuccess: () => {
                 history.push("/samples");
             },
-        },
+        }
     );
 }
 
@@ -109,7 +109,7 @@ export function useUpdateSample(sampleId: string) {
             onSuccess: () => {
                 queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
             },
-        },
+        }
     );
 }
 
@@ -129,7 +129,7 @@ export function useRemoveSample() {
  */
 export function useUpdateSampleRights(sampleId: string) {
     return useMutation<SampleRightsUpdateReturn, unknown, { update: SampleRightsUpdate }>(({ update }) =>
-        updateSampleRights(sampleId, update),
+        updateSampleRights(sampleId, update)
     );
 }
 

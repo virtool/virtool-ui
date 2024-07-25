@@ -65,7 +65,7 @@ export default function CreateSubtraction() {
                 onSuccess: () => {
                     reset();
                 },
-            },
+            }
         );
     }
 

@@ -27,7 +27,7 @@ export function CreateLabel() {
                     queryClient.invalidateQueries(labelQueryKeys.lists());
                     setOpen(false);
                 },
-            },
+            }
         );
     }
 
