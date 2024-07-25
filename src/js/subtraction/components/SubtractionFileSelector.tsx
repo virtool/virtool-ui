@@ -1,6 +1,5 @@
-import { getBorder } from "@app/theme";
 import { InputError, NoneFoundBox } from "@base";
-import { ScrollList } from "@base/ScrollList";
+import { CompactScrollList } from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { File, FileResponse, FileType } from "@files/types";
 import { InfiniteData } from "@tanstack/react-query";
@@ -13,11 +12,6 @@ import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
     margin-bottom: 5px;
-`;
-
-const StyledScollList = styled(ScrollList)`
-    border: ${props => getBorder(props)};
-    border-radius: ${props => props.theme.borderRadius.sm};
 `;
 
 type SubtractionFileSelectorProps = {
@@ -33,8 +27,6 @@ type SubtractionFileSelectorProps = {
     error: string;
     /** Fetches the next page of data */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
-    /** Whether there is another page of data available */
-    hasNextPage: boolean;
     /** Whether the data is loading */
     isLoading: boolean;
     /** Whether the next page is being fetched */
@@ -51,7 +43,6 @@ export function SubtractionFileSelector({
     onClick,
     error,
     fetchNextPage,
-    hasNextPage,
     isLoading,
     isFetchingNextPage,
 }: SubtractionFileSelectorProps) {
@@ -77,9 +68,9 @@ export function SubtractionFileSelector({
         </NoneFoundBox>
     ) : (
         <>
-            <StyledScollList
+            <CompactScrollList
+                className="max-h-96"
                 fetchNextPage={fetchNextPage}
-                hasNextPage={hasNextPage}
                 isFetchingNextPage={isFetchingNextPage}
                 isLoading={isLoading}
                 items={items}

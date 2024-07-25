@@ -1,4 +1,5 @@
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
+import { cn } from "@utils/utils";
 import { map } from "lodash-es";
 import React from "react";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
@@ -43,7 +44,7 @@ export function CompactScrollList({
     const entries = map(items, item => renderRow(item));
 
     return (
-        <div className={`mb-5 relative z-0 overflow-y-auto ${className}`} onScroll={onScroll}>
+        <div className={cn(`mb-2 relative z-0 overflow-y-auto border rounded-md ${className}`)} onScroll={onScroll}>
             {entries}
             {isLoading && <LoadingPlaceholder margin="20px" />}
         </div>

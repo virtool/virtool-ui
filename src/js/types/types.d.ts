@@ -15,6 +15,7 @@ export type LocationType = {
     activeHitId?: number;
     cloneReference?: string;
     createReference?: boolean;
+    createSubtraction?: boolean;
     editIsolate?: boolean;
     deactivateUser?: boolean;
     editReference?: boolean;
