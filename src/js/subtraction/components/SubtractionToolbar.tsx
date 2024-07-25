@@ -1,3 +1,4 @@
+import CreateSubtraction from "@subtraction/components/CreateSubtraction";
 import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import { InputSearch, LinkButton, Toolbar } from "../../base";
@@ -21,10 +22,11 @@ export default function SubtractionToolbar({ term, handleChange }: SubtractionTo
         <Toolbar>
             <InputSearch value={term} onChange={handleChange} placeholder="Name" />
             {hasPermission && (
-                <LinkButton color="blue" to="subtractions/create">
+                <LinkButton color="blue" to={{ state: { createSubtraction: true } }}>
                     Create
                 </LinkButton>
             )}
+            <CreateSubtraction />
         </Toolbar>
     );
 }
