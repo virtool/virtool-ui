@@ -17,7 +17,7 @@ type FormValues = {
 /**
  * A form for creating a subtraction
  */
-export function CreateSubtractionForm({}) {
+export function CreateSubtractionForm() {
     const {
         hasRestored,
         formState: { errors },
@@ -34,7 +34,6 @@ export function CreateSubtractionForm({}) {
         isLoading,
         isFetchingNextPage,
         fetchNextPage,
-        hasNextPage,
     } = useInfiniteFindFiles(FileType.subtraction, 25);
     const mutation = useCreateSubtraction();
 
