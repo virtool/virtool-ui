@@ -9,7 +9,6 @@ function getScrollRatio(): number {
 }
 
 const StyledScrollList = styled.div`
-    margin-bottom: 20px;
     position: relative;
     z-index: 0;
 `;

@@ -1,15 +1,8 @@
+import { sizes } from "@app/theme";
+import { Icon } from "@base";
+import { ProgressCircle } from "@base/ProgressCircle";
+import { JobMinimal, JobState } from "@jobs/types";
 import React from "react";
-import styled from "styled-components";
-import { sizes } from "../../../app/theme";
-import { Icon } from "../../../base";
-import { ProgressCircle } from "../../../base/ProgressCircle";
-import { JobMinimal, JobState } from "../../../jobs/types";
-
-const StyledIndexItemIcon = styled.div`
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-`;
 
 type IndexItemIconProps = {
     activeId: string;
@@ -28,22 +21,18 @@ type IndexItemIconProps = {
  * @returns The index item's icon
  */
 export function IndexItemIcon({ activeId, id, ready, job }: IndexItemIconProps) {
-    if (ready) {
-        if (id === activeId) {
-            return (
-                <StyledIndexItemIcon>
-                    <Icon name="check" color="green" /> <span>Active</span>
-                </StyledIndexItemIcon>
-            );
-        }
-
+    if (ready && id !== activeId) {
         return null;
     }
 
     return (
-        <StyledIndexItemIcon>
-            <ProgressCircle progress={job?.progress || 0} state={job?.state || JobState.waiting} size={sizes.md} />
-            <span> Building</span>
-        </StyledIndexItemIcon>
+        <div className="flex items-center justify-end gap-1.5">
+            {ready ? (
+                <Icon name="check" color="green" />
+            ) : (
+                <ProgressCircle progress={job?.progress || 0} state={job?.state || JobState.waiting} size={sizes.md} />
+            )}
+            <span className="font-medium">{ready ? "Active" : "Building"}</span>
+        </div>
     );
 }

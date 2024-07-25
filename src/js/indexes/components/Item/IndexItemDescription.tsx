@@ -1,10 +1,4 @@
 import React from "react";
-import styled from "styled-components";
-import { fontWeight } from "../../../app/theme";
-
-const StyledIndexItemDescription = styled.span`
-    font-weight: ${fontWeight.normal};
-`;
 
 type IndexItemDescriptionProps = {
     changeCount: number;
@@ -28,9 +22,9 @@ export function IndexItemDescription({ changeCount, modifiedCount }: IndexItemDe
     }
 
     return (
-        <StyledIndexItemDescription>
+        <span>
             {changeCount} change{changeCount === 1 ? "" : "s"} made in {modifiedCount} OTU
             {modifiedCount === 1 ? "" : "s"}
-        </StyledIndexItemDescription>
+        </span>
     );
 }

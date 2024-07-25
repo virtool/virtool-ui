@@ -15,7 +15,6 @@ export { BoxGroupHeader } from "./BoxGroupHeader";
 export { BoxGroupSearch } from "./BoxGroupSearch";
 export { BoxGroupSection } from "./BoxGroupSection";
 export { SelectBoxGroupSection } from "./BoxGroupSectionSelect";
-export { BoxLink } from "./BoxLink";
 export { BoxSpaced } from "./BoxSpaced";
 export { BoxTitle } from "./BoxTitle";
 export { device } from "./Breakpoints";
