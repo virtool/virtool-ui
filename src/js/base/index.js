@@ -99,7 +99,6 @@ export { Tabs } from "./Tabs";
 export { TabsLink } from "./TabsLink";
 export { TextArea } from "./TextArea";
 export { Toolbar } from "./Toolbar";
-export { UploadBar } from "./UploadBar";
 export { ViewHeader } from "./ViewHeader";
 export { ViewHeaderAttribution } from "./ViewHeaderAttribution";
 export { ViewHeaderIcons } from "./ViewHeaderIcons";

@@ -8,14 +8,31 @@ import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
 interface UploaderState {
-    intervalId: number;
+    /** The ID of the interval that tracks the upload progress. */
+    intervalId?: number;
+
+    /** The list of uploads. */
     uploads: Upload[];
+
+    /** The remaining time for all uploads in seconds. */
     remaining: number;
+
+    /** The samples of the loaded bytes for the uploads. Used to estimate speed and time remaining. */
     samples: number[];
+
+    /** The current estimated upload speed in bytes per second. */
     speed: number;
+
+    /** Add an upload to the list of uploads. */
     addUpload: (file: Upload) => void;
+
+    /** Remove an upload from the list of uploads. */
     removeUpload: (localId: string) => void;
+
+    /** Set an upload as failed. */
     setFailure: (localId: string) => void;
+
+    /** Set the progress of an upload. */
     setProgress: (localId: string, loaded: number, progress: number) => void;
 }
 
@@ -60,6 +77,7 @@ export function upload(file: File, fileType: FileType) {
     const localId = createRandomString();
 
     useUploaderStore.getState().addUpload({
+        failed: false,
         fileType,
         loaded: 0,
         localId,

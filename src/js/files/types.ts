@@ -12,10 +12,6 @@ export type FileResponse = SearchResult & {
     items: Array<File>;
 };
 
-export type UnpaginatedFileResponse = {
-    documents: Array<File>;
-};
-
 export type File = {
     id: string;
     created_at: string;
@@ -32,6 +28,9 @@ export type File = {
 };
 
 export type Upload = {
+    /* Whether the upload failed */
+    failed: boolean;
+
     fileType: FileType;
 
     loaded: number;
