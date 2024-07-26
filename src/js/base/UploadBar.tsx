@@ -1,67 +1,8 @@
-import { getColor } from "@app/theme";
 import { Icon } from "@base/Icon";
 import { cn } from "@utils/utils";
 import React, { useCallback } from "react";
 import { FileError, useDropzone } from "react-dropzone";
-import styled, { DefaultTheme } from "styled-components";
 import { Button } from "./Button";
-import { DividerVertical } from "./DividerVertical";
-
-type getUploadBarColorProps = {
-    /* Whether the user is able to drag/select files */
-    active: boolean;
-    theme: DefaultTheme;
-};
-
-function getUploadBarBackgroundColor({ active, theme }: getUploadBarColorProps): string {
-    return active ? getColor({ color: "greyLightest", theme }) : "transparent";
-}
-
-function getUploadBarBorderColor({ active, theme }: getUploadBarColorProps): string {
-    return getColor({ theme, color: active ? "blue" : "greyLight" });
-}
-
-type StyledUploadBarProps = {
-    /* Whether the user is able to drag/select files */
-    active: boolean;
-};
-
-const StyledUploadBar = styled.div<StyledUploadBarProps>`
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-
-    background-color: ${getUploadBarBackgroundColor};
-    border: 1px solid ${getUploadBarBorderColor};
-
-    button {
-        margin: auto 0;
-    }
-`;
-
-const MessageContainer = styled.div`
-    display: flex;
-    flex: 1 0 50px;
-    justify-content: end;
-    align-items: center;
-    min-height: 60px;
-    margin: auto 0;
-`;
-
-const ButtonContainer = styled.div`
-    display: flex;
-    flex: 1 0 50px;
-`;
-
-const UploadBarDivider = styled(DividerVertical)`
-    margin: 0 40px;
-
-    span {
-        text-transform: uppercase;
-    }
-`;
 
 type UploadBarProps = {
     /* The message to display in the upload bar */
@@ -93,7 +34,7 @@ export function UploadBar({
         [onDrop]
     );
 
-    const { fileRejections, getRootProps, getInputProps, isDragAccept, open } = useDropzone({
+    const { fileRejections, getRootProps, getInputProps, open } = useDropzone({
         onDrop: handleDrop,
         validator,
     });
