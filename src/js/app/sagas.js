@@ -1,4 +1,3 @@
-import { watchAccount } from "@account/sagas";
 import { callWithAuthentication } from "@utils/sagas";
 import { get } from "lodash-es";
 import { all, put, takeLatest } from "redux-saga/effects";
@@ -41,7 +40,7 @@ export function* watchRouter() {
  * @generator
  */
 function* rootSaga() {
-    yield all([watchAccount(), watchRouter()]);
+    yield all([watchRouter()]);
 }
 
 export default rootSaga;

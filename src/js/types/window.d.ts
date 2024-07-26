@@ -1,3 +1,4 @@
+import { WebSocket } from "@/types/types";
 import { IPublicClientApplication } from "@azure/msal-browser";
 import { Store } from "redux";
 
@@ -7,5 +8,6 @@ export declare global {
         captureException?: (error: Error) => void;
         store: Store;
         msalInstance: IPublicClientApplication;
+        ws: WebSocket;
     }
 }

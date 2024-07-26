@@ -1,4 +1,3 @@
-import accountReducer from "@account/reducer";
 import { configureStore, createReducer } from "@reduxjs/toolkit";
 import { createReduxEnhancer } from "@sentry/react";
 import createSagaMiddleware from "redux-saga";
@@ -57,7 +56,6 @@ export function createAppStore() {
 
     const store = configureStore({
         reducer: {
-            account: accountReducer,
             analyses: analysesReducer,
             app: appReducer,
         },
