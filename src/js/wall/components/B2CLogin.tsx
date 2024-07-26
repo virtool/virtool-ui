@@ -21,6 +21,9 @@ const LoginDivider = styled(DividerHorizontal)`
     margin: 10px 5px 20px;
 `;
 
+/**
+ * Displays login process using Microsoft Authentication Library (MSAL)
+ */
 export default function B2CLogin() {
     const [reset, setReset] = useState<boolean>(true);
 

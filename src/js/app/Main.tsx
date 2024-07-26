@@ -44,6 +44,10 @@ const MainContainer = styled.div`
     padding-top: 80px;
 `;
 
+/**
+ * The main component of the application.
+ * Sets up the WebSocket connection, handles routing, and renders the main layout.
+ */
 export default function Main() {
     const queryClient = useQueryClient();
     const { data, isLoading } = useFetchAccount();
