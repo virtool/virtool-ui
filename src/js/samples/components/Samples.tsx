@@ -1,9 +1,9 @@
+import { Container, ContainerNarrow } from "@base";
 import { FileManager } from "@files/components/FileManager";
+import { FileType } from "@files/types";
+import { Labels } from "@labels/components/Labels";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { Container, ContainerNarrow } from "../../base";
-import { FileType } from "../../files/types";
-import { Labels } from "../../labels/components/Labels";
 import CreateSample from "./Create/CreateSample";
 import SampleDetail from "./Detail/SampleDetail";
 import SamplesSettings from "./SampleSettings";
@@ -15,7 +15,7 @@ import SamplesList from "./SamplesList";
 function SampleFileManager() {
     return (
         <ContainerNarrow>
-            <FileManager fileType={FileType.reads} message="" tip="" />
+            <FileManager fileType={FileType.reads} message="" />
         </ContainerNarrow>
     );
 }
