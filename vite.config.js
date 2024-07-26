@@ -5,42 +5,44 @@ import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
 
-export const pathAliases = {
-    "@": path.resolve(__dirname, "src/js"),
-    "@account": path.resolve(__dirname, "src/js/account"),
-    "@administration": path.resolve(__dirname, "src/js/administration"),
-    "@app": path.resolve(__dirname, "src/js/app"),
-    "@base": path.resolve(__dirname, "src/js/base"),
-    "@files": path.resolve(__dirname, "src/js/files"),
-    "@forms": path.resolve(__dirname, "src/js/forms"),
-    "@groups": path.resolve(__dirname, "src/js/groups"),
-    "@hmms": path.resolve(__dirname, "src/js/hmms"),
-    "@indexes": path.resolve(__dirname, "src/js/indexes"),
-    "@jobs": path.resolve(__dirname, "src/js/jobs"),
-    "@labels": path.resolve(__dirname, "src/js/labels"),
-    "@message": path.resolve(__dirname, "src/js/message"),
-    "@ml": path.resolve(__dirname, "src/js/ml"),
-    "@nav": path.resolve(__dirname, "src/js/nav"),
-    "@otus": path.resolve(__dirname, "src/js/otus"),
-    "@quality": path.resolve(__dirname, "src/js/quality"),
-    "@references": path.resolve(__dirname, "src/js/references"),
-    "@samples": path.resolve(__dirname, "src/js/samples"),
-    "@sequences": path.resolve(__dirname, "src/js/sequences"),
-    "@subtraction": path.resolve(__dirname, "src/js/subtraction"),
-    "@tests": path.resolve(__dirname, "src/tests"),
-    "@users": path.resolve(__dirname, "src/js/users"),
-    "@utils": path.resolve(__dirname, "src/js/utils"),
-    "@wall": path.resolve(__dirname, "src/js/wall"),
-};
-
 export default defineConfig({
-    resolve: {
-        alias: pathAliases,
-    },
-    root: "src",
     build: {
         outDir: "../dist",
         sourcemap: true,
+    },
+    css: {
+        postcss: {
+            plugins: [tailwindcss()],
+        },
+    },
+    resolve: {
+        alias: {
+            "@": path.resolve("src/js"),
+            "@account": path.resolve("src/js/account"),
+            "@administration": path.resolve("src/js/administration"),
+            "@app": path.resolve("src/js/app"),
+            "@base": path.resolve("src/js/base"),
+            "@files": path.resolve("src/js/files"),
+            "@forms": path.resolve("src/js/forms"),
+            "@groups": path.resolve("src/js/groups"),
+            "@hmms": path.resolve("src/js/hmms"),
+            "@indexes": path.resolve("src/js/indexes"),
+            "@jobs": path.resolve("src/js/jobs"),
+            "@labels": path.resolve("src/js/labels"),
+            "@message": path.resolve("src/js/message"),
+            "@ml": path.resolve("src/js/ml"),
+            "@nav": path.resolve("src/js/nav"),
+            "@otus": path.resolve("src/js/otus"),
+            "@quality": path.resolve("src/js/quality"),
+            "@references": path.resolve("src/js/references"),
+            "@samples": path.resolve("src/js/samples"),
+            "@sequences": path.resolve("src/js/sequences"),
+            "@subtraction": path.resolve("src/js/subtraction"),
+            "@tests": path.resolve("src/tests"),
+            "@users": path.resolve("src/js/users"),
+            "@utils": path.resolve("src/js/utils"),
+            "@wall": path.resolve("src/js/wall"),
+        },
     },
     plugins: [
         createHtmlPlugin({}),
@@ -52,9 +54,5 @@ export default defineConfig({
             project: "cloud-ui",
         }),
     ],
-    css: {
-        postcss: {
-            plugins: [tailwindcss()],
-        },
-    },
+    root: "src",
 });
