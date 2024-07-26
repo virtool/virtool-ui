@@ -52,7 +52,7 @@ describe("<SamplesList />", () => {
         expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
     });
 
-    it("should not render create button when [canModify=false]", async () => {
+    it("should not render create button when [canModify=false]", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithMemoryRouter(<SamplesList />, [{ key: "test", pathname: "/samples" }]);
 

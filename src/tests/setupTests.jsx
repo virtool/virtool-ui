@@ -30,7 +30,7 @@ export function wrapWithProviders(ui) {
 export function renderWithProviders(ui) {
     const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
 
-    function rerenderWithProviders(ui) {
+    function rerenderWithProviders() {
         return rerender(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
     }
 
