@@ -29,20 +29,14 @@ export default function B2CLogin() {
         setReset(false);
     }
 
-    return (
+    return reset ? (
         <>
-            {reset ? (
-                <>
-                    <StyledB2CLogin>
-                        <WallSubheader>Sign in with your work account</WallSubheader>
-                        <Button onClick={() => window.msalInstance.loginPopup(getLoginRequest()).then(onLogin)}>
-                            Sign in
-                        </Button>
-                        <BetaTag>Beta</BetaTag>
-                    </StyledB2CLogin>
-                    <LoginDivider text="or" />
-                </>
-            ) : null}
+            <StyledB2CLogin>
+                <WallSubheader>Sign in with your work account</WallSubheader>
+                <Button onClick={() => window.msalInstance.loginPopup(getLoginRequest()).then(onLogin)}>Sign in</Button>
+                <BetaTag>Beta</BetaTag>
+            </StyledB2CLogin>
+            <LoginDivider text="or" />
         </>
-    );
+    ) : null;
 }
