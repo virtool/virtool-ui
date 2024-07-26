@@ -14,7 +14,7 @@ const StyledB2CLogin = styled.div`
 const BetaTag = styled.span`
     color: ${props => getColor({ color: "greyDark", theme: props.theme })};
     margin-left: auto;
-    transform-text: uppercase;
+    text-transform: uppercase;
 `;
 
 const LoginDivider = styled(DividerHorizontal)`
