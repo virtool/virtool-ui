@@ -3,22 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import ResetForm from "../ResetForm";
 
-vi.mock("react-redux", () => ({
-    useDispatch: vi.fn(),
-}));
-
 describe("<ResetForm />", () => {
-    let mockDispatch;
-
-    beforeEach(() => {
-        mockDispatch = vi.fn();
-        (useDispatch as jest.Mock).mockReturnValue(mockDispatch);
-    });
-
     it("should call API with correct params and display error message on reset failure", async () => {
         const resetCode = "test_reset_code";
         const password = "P@ssword123";

@@ -1,8 +1,6 @@
-import { RESET_PASSWORD } from "@app/actionTypes";
 import { InputError, InputGroup, InputLabel, InputSimple } from "@base";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { useResetPasswordMutation } from "../queries";
 import { WallButton, WallHeader, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
@@ -15,18 +13,10 @@ type ResetFormProps = {
 /** Handles the password reset process. */
 export default function ResetForm({ resetCode }: ResetFormProps) {
     const { register, handleSubmit } = useForm({ defaultValues: { password: "" } });
-    const dispatch = useDispatch();
     const resetPasswordMutation = useResetPasswordMutation();
 
     function onSubmit({ password }) {
-        resetPasswordMutation.mutate(
-            { password, resetCode },
-            {
-                onSuccess: () => {
-                    dispatch({ type: RESET_PASSWORD.SUCCEEDED });
-                },
-            }
-        );
+        resetPasswordMutation.mutate({ password, resetCode });
     }
 
     const { error, isError } = resetPasswordMutation;

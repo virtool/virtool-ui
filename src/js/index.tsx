@@ -1,4 +1,3 @@
-import { createAppStore } from "@app/reducer";
 import * as Sentry from "@sentry/react";
 import { withProfiler } from "@sentry/react";
 import { createBrowserHistory } from "history";
@@ -23,10 +22,9 @@ if (window.virtool.sentryDsn !== "SENTRY_DSN") {
 const history = createBrowserHistory();
 
 window.virtool.b2c = { use: false };
-window.store = createAppStore();
 
 const AppWithProfiler = withProfiler(App);
 
 const container = document.getElementById("app-container");
 const root = createRoot(container);
-root.render(<AppWithProfiler store={window.store} history={history} />);
+root.render(<AppWithProfiler history={history} />);
