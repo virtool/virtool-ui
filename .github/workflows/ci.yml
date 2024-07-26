@@ -78,8 +78,8 @@ jobs:
       - name: Generate GitHub App Token
         id: generate-token
         run: |
-          app_id="${{ secrets.APP_ID }}"
-          private_key="${{ secrets.PRIVATE_KEY }}"
+          app_id="${{ secrets.GH_BOT_ID }}"
+          private_key="${{ secrets.GH_BOT_PRIVATE_KEY }}"
               
           # Generate a JWT token
           header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e -A | tr '+/' '-_' | tr -d '=')
