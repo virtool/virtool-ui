@@ -28,8 +28,8 @@ describe("<B2CLogin />", () => {
         myFunc = vi.fn();
 
         window.msalInstance = {
-            loginPopup: LoginRequestInfo => {
-                myFunc(LoginRequestInfo);
+            loginPopup: async LoginRequestInfo => {
+                await myFunc(LoginRequestInfo);
                 return { account: "test_account" };
             },
             setActiveAccount: vi.fn(),
