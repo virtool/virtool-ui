@@ -3,6 +3,7 @@
  *
  */
 import clsx from "clsx";
+import { formatDuration, intervalToDuration } from "date-fns";
 import Fuse from "fuse.js";
 import { capitalize, forEach, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
 import numbro from "numbro";
@@ -113,6 +114,26 @@ export function formatIsolateName(isolate) {
     const sourceName = get(isolate, "source_name") || get(isolate, "sourceName");
 
     return sourceType === "unknown" ? "Unnamed" : `${capitalize(sourceType)} ${sourceName}`;
+}
+
+/**
+ * Return an English string describing a duration given a number of seconds.
+ *
+ * @param seconds
+ * @returns {string}
+ */
+export function formatRoundedDuration(seconds) {
+    const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
+
+    const units = ["years", "months", "weeks", "days", "hours", "minutes", "seconds"];
+
+    for (const unit of units) {
+        if (duration[unit]) {
+            return formatDuration({ [unit]: duration[unit] }, { zero: false });
+        }
+    }
+
+    return "less than a second";
 }
 
 /**

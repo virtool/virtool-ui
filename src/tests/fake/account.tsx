@@ -15,17 +15,17 @@ const defaultSettings = {
     skip_quick_analyze_dialog: true,
 };
 
-type createFakeAccountArgs = {
-    permissions?: Permissions;
-    groups?: Array<GroupMinimal>;
-    primary_group?: GroupMinimal;
-    handle?: string;
+type CreateFakeAccountArgs = {
     administrator_role?: AdministratorRoles;
-    settings?: AccountSettings;
     email?: string;
+    groups?: GroupMinimal[];
+    handle?: string;
+    permissions?: Permissions;
+    primary_group?: GroupMinimal;
+    settings?: AccountSettings;
 };
 
-export function createFakeAccount(props?: createFakeAccountArgs): Account {
+export function createFakeAccount(props?: CreateFakeAccountArgs): Account {
     const { settings, email, ...userProps } = props || {};
 
     return {

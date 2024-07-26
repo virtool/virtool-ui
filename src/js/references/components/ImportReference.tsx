@@ -8,8 +8,8 @@ import {
     InputSimple,
     ProgressBarAffixed,
     SaveButton,
-    UploadBar,
 } from "@base";
+import { UploadBar } from "@files/components/UploadBar";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";

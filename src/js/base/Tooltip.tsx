@@ -79,7 +79,7 @@ const TooltipContent = styled(TooltipPrimitive.Content)`
 type TooltipProps = {
     children: React.ReactNode;
     position?: "top" | "right" | "bottom" | "left";
-    tip: string;
+    tip: React.ReactNode;
 };
 
 export function Tooltip({ children, position = "top", tip }: TooltipProps) {

@@ -26,8 +26,6 @@ describe("<FileManager>", () => {
             items: [1],
             fileType: "test_file_type",
             message: "",
-            tip: "",
-            validationRegex: "",
             onLoadNextPage: vi.fn(),
         };
     });
@@ -44,7 +42,7 @@ describe("<FileManager>", () => {
             </MemoryRouter>
         );
 
-        expect(await screen.findByText("Drag file here to upload.")).toBeInTheDocument();
+        expect(await screen.findByText("Drag file here to upload")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Browse Files" })).toBeInTheDocument();
 

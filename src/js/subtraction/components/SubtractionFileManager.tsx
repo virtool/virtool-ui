@@ -8,13 +8,15 @@ import React from "react";
 export function SubtractionFileManager() {
     return (
         <FileManager
+            accept={{
+                "application/gzip": [".fasta.gz", ".fa.gz"],
+                "application/text": [".fasta", ".fa"],
+            }}
             fileType={FileType.subtraction}
             message={
                 <div className="flex flex-col gap-1 items-center">
-                    <span className="font-medium text-base">Drag FASTA files here to upload</span>
-                    <span className="text-sm text-gray-600">
-                        Accepts files ending in fa, fasta, fa.gz, or fasta.gz.
-                    </span>
+                    <span className="font-medium text-base">Drag files here to upload</span>
+                    <span className="text-gray-600 text-sm">Supports plain or gzipped FASTA</span>
                 </div>
             }
             regex={/\.(?:fa|fasta)(?:\.gz|\.gzip)?$/}
