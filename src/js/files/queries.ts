@@ -32,10 +32,6 @@ export function useInfiniteFindFiles(type: FileType, per_page: number, term?: st
     );
 }
 
-function deleteFile(id: string) {
-    return Request.delete(`/uploads/${id}`);
-}
-
 export function useDeleteFile() {
-    return useMutation((id: string) => deleteFile(id));
+    return useMutation((id: string) => Request.delete(`/uploads/${id}`));
 }

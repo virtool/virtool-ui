@@ -3,7 +3,7 @@ import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
 import { createFakePermissions } from "../../../../../tests/fake/permissions";
 import { createFakeSubtraction, mockApiGetSubtractionDetail } from "../../../../../tests/fake/subtractions";
 import { renderWithProviders, renderWithRouter } from "../../../../../tests/setupTests";
@@ -56,7 +56,7 @@ describe("<SubtractionDetail />", () => {
     it("should not render icons when [canModify=true]", async () => {
         const permissions = createFakePermissions({ modify_subtraction: true });
         const account = createFakeAccount({ permissions });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
         renderWithRouter(<SubtractionDetail {...props} />, {}, history);
 
@@ -70,7 +70,7 @@ describe("<SubtractionDetail />", () => {
     it("should not render icons when [canModify=false]", async () => {
         const permissions = createFakePermissions({ modify_subtraction: false });
         const account = createFakeAccount({ permissions });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
         renderWithRouter(<SubtractionDetail {...props} />, {}, history);
 

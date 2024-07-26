@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
 import { createFakeGroup, mockApiListGroups } from "../../../../../tests/fake/groups";
 import { createFakeSample, mockApiGetSampleDetail, mockApiUpdateSampleRights } from "../../../../../tests/fake/samples";
 import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
@@ -28,7 +28,7 @@ describe("<SampleRights />", () => {
     afterEach(() => nock.cleanAll());
 
     it("should render", async () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         renderWithMemoryRouter(<SampleRights {...props} />);
 
         expect(await screen.findByText("Sample Rights")).toBeInTheDocument();
@@ -38,14 +38,14 @@ describe("<SampleRights />", () => {
     });
 
     it("should return Not allowed panel when[this.props.canModifyRights=false]", async () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithMemoryRouter(<SampleRights {...props} />);
 
         expect(await screen.findByText("Not allowed")).toBeInTheDocument();
     });
 
     it("should handle group change when input is changed", async () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const scope = mockApiUpdateSampleRights(sample, { group: group.id });
         renderWithMemoryRouter(<SampleRights {...props} />);
 
@@ -56,7 +56,7 @@ describe("<SampleRights />", () => {
     });
 
     it("should handle group rights change when input is changed", async () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const scope = mockApiUpdateSampleRights(sample, { group_read: true, group_write: true });
         renderWithMemoryRouter(<SampleRights {...props} />);
 
@@ -67,7 +67,7 @@ describe("<SampleRights />", () => {
     });
 
     it("should handle all users' rights change when input is changed", async () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const scope = mockApiUpdateSampleRights(sample, { all_read: true, all_write: true });
         renderWithMemoryRouter(<SampleRights {...props} />);
 

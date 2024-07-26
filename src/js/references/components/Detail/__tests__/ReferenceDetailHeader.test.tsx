@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
 import { renderWithMemoryRouter, renderWithRouter } from "../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../administration/types";
@@ -17,7 +17,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
     beforeEach(() => {
         reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         props = {
             createdAt: reference.created_at,
             isRemote: false,
@@ -51,7 +51,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
     });
 
     it("should render when [canModify=false]", () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithMemoryRouter(<ReferenceDetailHeader {...props} />, [{ pathname: `/refs/${reference.id}/manage` }]);
 
         expect(screen.queryByRole("button")).toBeNull();
@@ -59,21 +59,21 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 
     it("should render when [isRemote=true]", async () => {
         props.isRemote = true;
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         renderWithMemoryRouter(<ReferenceDetailHeader {...props} />, [{ pathname: `/refs/${reference.id}/manage` }]);
 
         expect(await screen.findByLabelText("lock")).toBeInTheDocument();
     });
 
     it("should render when [isRemote=false]", () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         renderWithMemoryRouter(<ReferenceDetailHeader {...props} />, [{ pathname: `/refs/${reference.id}/manage` }]);
 
         expect(screen.queryByLabelText("lock")).toBeNull();
     });
 
     it("should render when [both canModify=false, isRemote=false]", () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithMemoryRouter(<ReferenceDetailHeader {...props} />, [{ pathname: `/refs/${reference.id}/manage` }]);
 
         expect(screen.queryByLabelText("lock")).toBeNull();

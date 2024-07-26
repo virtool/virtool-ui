@@ -1,5 +1,4 @@
 import accountReducer from "@account/reducer";
-import filesReducer from "@files/reducer";
 import { configureStore, createReducer } from "@reduxjs/toolkit";
 import { createReduxEnhancer } from "@sentry/react";
 import createSagaMiddleware from "redux-saga";
@@ -61,7 +60,6 @@ export function createAppStore() {
             account: accountReducer,
             analyses: analysesReducer,
             app: appReducer,
-            files: filesReducer,
         },
         middleware: [sagaMiddleware],
         enhancers: [sentryReduxEnhancer],

@@ -5,7 +5,7 @@ import { times } from "lodash-es";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeGroupMinimal, mockApiListGroups } from "../../../../tests/fake/groups";
 import { createFakeUser, mockApiEditUser, mockApiGetUser } from "../../../../tests/fake/user";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
@@ -33,7 +33,7 @@ describe("<UserDetail />", () => {
     describe("<UserDetail />", () => {
         it("should render correctly when administrator_role = AdministratorRoles.FULL, canModifyUser=true and 5 groups exist", async () => {
             mockApiListGroups(groups);
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
 
             const userDetail = createFakeUser({ administrator_role: AdministratorRoles.FULL, groups });
             props.match.params.userId = userDetail.id;
@@ -80,7 +80,7 @@ describe("<UserDetail />", () => {
 
         it("should render correctly when [administrator_role=null] and canModifyUser=false", async () => {
             mockApiListGroups(groups);
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
             renderWithMemoryRouter(<UserDetail {...props} />);
@@ -97,7 +97,7 @@ describe("<UserDetail />", () => {
 
         it("should render correctly when user has insufficient permissions", async () => {
             const account = createFakeAccount({ administrator_role: null });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
             renderWithMemoryRouter(<UserDetail {...props} />);
@@ -116,7 +116,7 @@ describe("<UserDetail />", () => {
     describe("<UserGroups />", () => {
         it("should render correctly", async () => {
             mockApiListGroups(groups);
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
             renderWithMemoryRouter(<UserDetail {...props} />);
@@ -128,7 +128,7 @@ describe("<UserDetail />", () => {
             scope.done();
         });
         it("should render loading when groups haven't loaded", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
             renderWithMemoryRouter(<UserDetail {...props} />);
@@ -144,7 +144,7 @@ describe("<UserDetail />", () => {
             scope.done();
         });
         it("should render NoneFound when documents = []", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
 
             const userDetail = createFakeUser({ groups: [] });
             props.match.params.userId = userDetail.id;
@@ -166,7 +166,7 @@ describe("<UserDetail />", () => {
 
     describe("<Password />", () => {
         it("should render correctly when forceReset = false", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
 
@@ -184,7 +184,7 @@ describe("<UserDetail />", () => {
         });
 
         it("should render correctly when forceReset = false", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
 
             const userDetail = createFakeUser({ force_reset: true });
@@ -204,7 +204,7 @@ describe("<UserDetail />", () => {
         });
 
         it("should submit when password is long enough", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
             mockApiEditUser(props.match.params.userId, 200, { password: "newPassword" }, userDetail);
             const scope = mockApiGetUser(props.match.params.userId, userDetail);
@@ -220,7 +220,7 @@ describe("<UserDetail />", () => {
         });
 
         it("should display error when password is not long enough", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
             mockApiEditUser(props.match.params.userId, 400, {
                 id: "bad_request",
@@ -244,7 +244,7 @@ describe("<UserDetail />", () => {
 
     describe("<UserPermissions />", () => {
         it("should render permissions correctly", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
 
             const permissions = {
@@ -278,7 +278,7 @@ describe("<UserDetail />", () => {
 
     describe("<UserActivation />", () => {
         it("should render activation correctly", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
             mockApiGetUser(props.match.params.userId, userDetail);
             renderWithMemoryRouter(<UserDetail {...props} />);
@@ -288,7 +288,7 @@ describe("<UserDetail />", () => {
         });
 
         it("should handle user deactivation", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
             mockApiGetUser(props.match.params.userId, userDetail);
             const scope = mockApiEditUser(props.match.params.userId, 200, { active: true });
@@ -302,7 +302,7 @@ describe("<UserDetail />", () => {
         });
 
         it("should handle user reactivation", async () => {
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiListGroups(groups);
             const userDetail = createFakeUser({ force_reset: true, active: false });
             props.match.params.userId = userDetail.id;

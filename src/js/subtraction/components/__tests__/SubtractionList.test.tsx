@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeSubtractionMinimal, mockApiGetSubtractions } from "../../../../tests/fake/subtractions";
 import { renderWithRouter } from "../../../../tests/setupTests";
 import SubtractionList from "../SubtractionList";
@@ -49,7 +49,7 @@ describe("<SubtractionList />", () => {
     it("should render create button when [canModify=true]", async () => {
         const scope = mockApiGetSubtractions([subtractions]);
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         renderWithRouter(<SubtractionList />, {}, history);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
@@ -61,7 +61,7 @@ describe("<SubtractionList />", () => {
     it("should not render create button when [canModify=false]", async () => {
         const scope = mockApiGetSubtractions([subtractions]);
         const account = createFakeAccount({ administrator_role: null });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         renderWithRouter(<SubtractionList />, {}, history);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 

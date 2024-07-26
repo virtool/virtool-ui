@@ -1,8 +1,9 @@
+import { getBorder, getColor, theme } from "@app/theme";
+import { Icon, Loader, ProgressBarAffixed } from "@base";
+import { useUploaderStore } from "@files/uploader";
+import { byteSize } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { getBorder, getColor, getFontWeight, theme } from "../../app/theme";
-import { Icon, Loader, ProgressBarAffixed } from "../../base";
-import { byteSize } from "../../utils/utils";
 
 /**
  * Container for the upload item.
@@ -46,32 +47,25 @@ const UploadItemTitle = styled.div<UploadItemTitleProps>`
     }
 `;
 
-/**
- * Emphasized name of the upload item.
- */
-const UploadItemName = styled.span`
-    font-weight: ${getFontWeight("thick")};
-`;
-
 type UploadItemProps = {
+    /* Whether the upload failed */
+    failed: boolean;
+    /* Local id of the file being uploaded */
+    localId: string;
     /* Name of the file being uploaded */
     name: string;
     /* Progress of the upload in percentage */
     progress: number;
     /* Size of the file being uploaded */
     size: number;
-    /* Whether the upload failed */
-    failed: boolean;
-    /* Local id of the file being uploaded */
-    localId: string;
-    /* Function to remove the file from the upload list */
-    onRemove: (localId: string) => void;
 };
 
 /**
  * Progress tracker for a single uploaded file
  */
-export function UploadItem({ name, progress, size, failed, localId, onRemove }: UploadItemProps): JSX.Element {
+export function UploadItem({ failed, localId, name, progress, size }: UploadItemProps): JSX.Element {
+    const removeUpload = useUploaderStore(state => state.removeUpload);
+
     let uploadIcon = progress === 100 ? <Loader size="14px" /> : <Icon name="upload" />;
     let uploadBookend: React.ReactNode = byteSize(size, true);
 
@@ -79,7 +73,8 @@ export function UploadItem({ name, progress, size, failed, localId, onRemove }: 
         uploadIcon = <Icon name="times" color="red" hoverable={false} />;
         uploadBookend = (
             <>
-                Failed <Icon aria-label={`delete ${name}`} name="trash" color="red" onClick={() => onRemove(localId)} />
+                Failed{" "}
+                <Icon aria-label={`delete ${name}`} name="trash" color="red" onClick={() => removeUpload(localId)} />
             </>
         );
     }
@@ -89,7 +84,7 @@ export function UploadItem({ name, progress, size, failed, localId, onRemove }: 
             <ProgressBarAffixed now={failed ? 100 : progress} color={failed ? "red" : "blue"} />
             <UploadItemTitle failed={failed}>
                 {uploadIcon}
-                <UploadItemName>{name}</UploadItemName>
+                <span className="font-medium">{name}</span>
                 <span>{uploadBookend}</span>
             </UploadItemTitle>
         </StyledUploadItem>

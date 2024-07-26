@@ -1,7 +1,7 @@
+import { FileManager } from "@files/components/FileManager";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Container, ContainerNarrow } from "../../base";
-import { FileManager } from "../../files/components/Manager";
 import { FileType } from "../../files/types";
 import { Labels } from "../../labels/components/Labels";
 import CreateSample from "./Create/CreateSample";

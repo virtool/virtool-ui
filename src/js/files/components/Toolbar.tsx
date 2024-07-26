@@ -1,25 +1,25 @@
-import { forEach } from "lodash-es";
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { Alert, Icon, UploadBar } from "@base";
+import { FileType } from "@files/types";
+import { upload } from "@files/uploader";
+import { Permission } from "@groups/types";
 import React from "react";
-import { connect } from "react-redux";
-import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import { Alert, Icon, UploadBar } from "../../base";
-import { Permission } from "../../groups/types";
-import { createRandomString } from "../../utils/utils";
-import { upload } from "../actions";
 
 type UploadToolbarProps = {
-    onDrop: (fileType: string, acceptedFiles: File[]) => void;
-    fileType: string;
-    tip?: string;
+    fileType: FileType;
+    /* The type of file accepted. */
+
     message?: React.ReactNode;
-    /* For validating file type */
-    validationRegex?: RegExp;
+    /* A message to display in the upload toolbar. */
+
+    /* A regular expression to validate the filename against. */
+    regex?: RegExp;
 };
 
 /*
  * Renders an UploadBar if the user has permission to upload files.
  */
-export function UploadToolbar({ onDrop, fileType, message, validationRegex }: UploadToolbarProps) {
+export default function UploadToolbar({ fileType, message, regex }: UploadToolbarProps) {
     const { hasPermission: canUpload } = useCheckAdminRoleOrPermission(Permission.upload_file);
 
     if (!canUpload) {
@@ -34,32 +34,26 @@ export function UploadToolbar({ onDrop, fileType, message, validationRegex }: Up
         );
     }
 
-    function handleDrop(acceptedFiles: File[]) {
-        onDrop(fileType, acceptedFiles);
+    function validate(file: File) {
+        if (!regex.test(file.name)) {
+            return {
+                code: "invalid_file_name",
+                message: "Invalid file name",
+            };
+        }
     }
 
-    function validateExtensions(file: File) {
-        return validationRegex.test(file.name) ? null : { code: "Invalid file type", message: "File type not allowed" };
+    function handleDrop(acceptedFiles: File[]) {
+        for (const file of acceptedFiles) {
+            upload(file, fileType);
+        }
     }
 
     return (
         <UploadBar
             onDrop={handleDrop}
             message={message || "Drag file here to upload."}
-            validator={validationRegex ? validateExtensions : null}
+            validator={regex ? validate : null}
         />
     );
 }
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        onDrop: (fileType: string, acceptedFiles: File[]) => {
-            forEach(acceptedFiles, (file: File) => {
-                const localId = createRandomString();
-                dispatch(upload(localId, file, fileType));
-            });
-        },
-    };
-}
-
-export default connect(null, mapDispatchToProps)(UploadToolbar);

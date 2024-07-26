@@ -1,5 +1,5 @@
-import { UserNested } from "../users/types";
-import { SearchResult } from "../utils/types";
+import { UserNested } from "@users/types";
+import { SearchResult } from "@utils/types";
 
 export enum FileType {
     hmm = "hmm",
@@ -32,15 +32,17 @@ export type File = {
 };
 
 export type Upload = {
-    fileType: string;
+    fileType: FileType;
+
+    loaded: number;
+
     localId: string;
+
     name: string;
+
     /* Progress of the upload in percentage */
     progress: number;
+
     /* Size of the file in bytes */
     size: number;
-    /* Remaining time in seconds */
-    remaining: number;
-    /* Upload speed in bytes per second */
-    uploadSpeed: number;
 };

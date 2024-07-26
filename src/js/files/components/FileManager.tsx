@@ -11,19 +11,23 @@ import { File } from "./File";
 import UploadToolbar from "./Toolbar";
 
 type FileManagerProps = {
-    tip: string;
-    message: React.ReactNode;
+    /* The type of file accepted. */
     fileType: FileType;
-    validationRegex?: RegExp;
+
+    /* A message to display in the upload toolbar. */
+    message: React.ReactNode;
+
+    /* A tip to display in the upload toolbar. */
+    regex?: RegExp;
 };
 
-export function FileManager({ validationRegex, message, tip, fileType }: FileManagerProps) {
-    const URLPage = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
+export function FileManager({ fileType, message, regex }: FileManagerProps) {
+    const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
     const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
     const { data: files, isLoading: isLoadingFiles }: { data: FileResponse; isLoading: boolean } = useListFiles(
         fileType,
-        URLPage,
+        page,
         25
     );
 
@@ -32,7 +36,6 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
     }
 
     const canRemoveFiles = checkAdminRoleOrPermissionsFromAccount(account, Permission.remove_file);
-
     const title = `${fileType === "reads" ? "Read" : capitalize(fileType)} Files`;
 
     return (
@@ -41,17 +44,13 @@ export function FileManager({ validationRegex, message, tip, fileType }: FileMan
             <ViewHeaderTitle>
                 {title} <Badge>{files.found_count}</Badge>
             </ViewHeaderTitle>
-            <UploadToolbar fileType={fileType} message={message} validationRegex={validationRegex} tip={tip} />
+
+            <UploadToolbar fileType={fileType} message={message} regex={regex} />
 
             {files.found_count === 0 ? (
                 <NoneFoundBox noun="files" />
             ) : (
-                <Pagination
-                    items={files.items}
-                    storedPage={files.page}
-                    currentPage={URLPage}
-                    pageCount={files.page_count}
-                >
+                <Pagination items={files.items} storedPage={files.page} currentPage={page} pageCount={files.page_count}>
                     <BoxGroup>
                         {map(files.items, item => (
                             <File {...item} canRemove={canRemoveFiles} key={item.id} />

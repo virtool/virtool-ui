@@ -24,6 +24,7 @@
             "@samples/*": ["./js/samples/*"],
             "@sequences/*": ["./js/sequences/*"],
             "@subtraction/*": ["./js/subtraction/*"],
+            "@tests/*": ["./tests/*"],
             "@users/*": ["./js/users/*"],
             "@utils/*": ["./js/utils/*"],
             "@wall/*": ["./js/wall/*"]
