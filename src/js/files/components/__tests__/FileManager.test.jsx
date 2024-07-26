@@ -42,7 +42,7 @@ describe("<FileManager>", () => {
             </MemoryRouter>
         );
 
-        expect(await screen.findByText("Drag file here to uploadq")).toBeInTheDocument();
+        expect(await screen.findByText("Drag file here to upload")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Browse Files" })).toBeInTheDocument();
 
