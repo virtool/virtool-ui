@@ -1,4 +1,5 @@
 {
+    "type": "module",
     "dependencies": {
         "@azure/msal-browser": "^2.33.0",
         "@azure/msal-react": "^1.5.3",

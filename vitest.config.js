@@ -1,12 +1,8 @@
-import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
-import { pathAliases } from "./vite.config";
+import viteConfig from "./vite.config";
 
 export default defineConfig({
-    plugins: [react()],
-    resolve: {
-        alias: pathAliases,
-    },
+    ...viteConfig,
     test: {
         globals: true,
         environment: "jsdom",
