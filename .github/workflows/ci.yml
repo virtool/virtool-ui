@@ -75,6 +75,30 @@ jobs:
     needs: [test]
     if: github.event_name == 'push'
     steps:
+      - name: Generate GitHub App Token
+        id: generate-token
+        run: |
+          app_id="${{ secrets.APP_ID }}"
+          private_key="${{ secrets.PRIVATE_KEY }}"
+              
+          # Generate a JWT token
+          header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e -A | tr '+/' '-_' | tr -d '=')
+          now=$(date +%s)
+          iat=$now
+          exp=$((now + 600))  # Token expires in 10 minutes
+          payload=$(echo -n "{\"iat\":$iat,\"exp\":$exp,\"iss\":$app_id}" | openssl base64 -e -A | tr '+/' '-_' | tr -d '=')
+          signature=$(echo -n "$header.$payload" | openssl dgst -sha256 -sign <(echo "$private_key") -binary | openssl base64 -e -A | tr '+/' '-_' | tr -d '=')
+          jwt="$header.$payload.$signature"
+              
+          # Exchange JWT for an installation access token
+          token=$(curl -s -X POST \
+          -H "Authorization: Bearer $jwt" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/app/installations/${{ secrets.INSTALLATION_ID }}/access_tokens \
+          | jq -r .token)
+              
+          echo "::add-mask::$token"
+          echo "token=$token" >> $GITHUB_OUTPUT
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup NodeJS
@@ -85,6 +109,5 @@ jobs:
         run: npm i semantic-release@v23.0.7 conventional-changelog-conventionalcommits@7.0.2
       - name: Run semantic-release
         env:
-          GITHUB_USERNAME: ${{ secrets.GH_USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: npx semantic-release
