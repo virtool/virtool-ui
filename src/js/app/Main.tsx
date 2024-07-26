@@ -25,7 +25,7 @@ const ML = lazy(() => import("../ml/components/ML"));
 
 function setupWebSocket(queryClient) {
     if (!window.ws) {
-        window.ws = new WSConnection(window.store, queryClient);
+        window.ws = new WSConnection(queryClient);
     }
     if (includes([ABANDONED, INITIALIZING], window.ws.connectionStatus)) {
         window.ws.establishConnection();

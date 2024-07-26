@@ -27,8 +27,8 @@ export function wrapWithProviders(ui) {
     );
 }
 
-export function renderWithProviders(ui, createAppStore) {
-    const { rerender, ...rest } = rtlRender(wrapWithProviders(ui, createAppStore));
+export function renderWithProviders(ui) {
+    const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
 
     function rerenderWithProviders(ui) {
         return rerender(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);

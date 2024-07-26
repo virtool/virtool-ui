@@ -1,15 +1,15 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "@tests/fake/analyses";
+import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
+import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
+import { renderWithRouter } from "@tests/setupTests";
 import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
-import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "../../../../tests/fake/analyses";
-import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
-import { createFakeSample, mockApiGetSampleDetail } from "../../../../tests/fake/samples";
-import { renderWithRouter } from "../../../../tests/setupTests";
 import { Workflows } from "../../types";
 import AnalysesList from "../AnalysisList";
 
@@ -39,7 +39,7 @@ describe("<AnalysesList />", () => {
     describe("<AnalysesList />", () => {
         it("should render", async () => {
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, {}, history);
+            renderWithRouter(<AnalysesList {...props} />, history);
 
             expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
             expect(screen.getByText(`${analyses[0].user.handle} created`)).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, {}, history);
+            renderWithRouter(<AnalysesList {...props} />, history);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -63,7 +63,7 @@ describe("<AnalysesList />", () => {
             sample.user.id = account.id;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, {}, history);
+            renderWithRouter(<AnalysesList {...props} />, history);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -74,7 +74,7 @@ describe("<AnalysesList />", () => {
             sample.group_write = true;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, {}, history);
+            renderWithRouter(<AnalysesList {...props} />, history);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -86,7 +86,7 @@ describe("<AnalysesList />", () => {
             sample.all_write = true;
             mockApiGetSampleDetail(sample);
 
-            renderWithRouter(<AnalysesList {...props} />, {}, history);
+            renderWithRouter(<AnalysesList {...props} />, history);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -95,7 +95,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: null });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, {}, history);
+            renderWithRouter(<AnalysesList {...props} />, history);
 
             expect(await screen.queryByText("Create")).not.toBeInTheDocument();
         });
@@ -105,7 +105,7 @@ describe("<AnalysesList />", () => {
 
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, {}, history);
+            renderWithRouter(<AnalysesList {...props} />, history);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
             expect(history.location.state).toEqual(undefined);

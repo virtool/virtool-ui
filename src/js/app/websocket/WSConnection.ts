@@ -7,7 +7,7 @@ export const CONNECTED = "connected";
 export const ABANDONED = "abandoned";
 export const RECONNECTING = "reconnecting";
 
-export default function WSConnection(store, queryClient) {
+export default function WSConnection(queryClient) {
     // setup the respective handlers for supporting both redux and react-query data sources
     this.reactQueryHandler = reactQueryHandler(queryClient);
 
