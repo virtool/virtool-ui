@@ -1,10 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setupTests";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../tests/setupTests";
-import { LOGIN } from "../../app/actionTypes";
-import { B2CLogin, mapDispatchToProps } from "../B2CLogin";
+import B2CLogin from "../B2CLogin";
 
 describe("<B2CLogin />", () => {
     let props;
@@ -30,7 +29,7 @@ describe("<B2CLogin />", () => {
 
         window.msalInstance = {
             loginPopup: async LoginRequestInfo => {
-                myFunc(LoginRequestInfo);
+                await myFunc(LoginRequestInfo);
                 return { account: "test_account" };
             },
             setActiveAccount: vi.fn(),
@@ -49,20 +48,7 @@ describe("<B2CLogin />", () => {
             expect(myFunc).toHaveBeenCalledWith({
                 scopes: ["https://test_tenant.onmicrosoft.com/test_APIClientId/test_scope"],
             });
-            expect(props.onSetLogin).toHaveBeenCalled();
             expect(window.msalInstance.setActiveAccount).toHaveBeenCalledWith("test_account");
-        });
-    });
-});
-
-describe("mapDispatchToProps()", () => {
-    it("should return props with valid setLogin()", () => {
-        const dispatch = vi.fn();
-        const { onSetLogin } = mapDispatchToProps(dispatch);
-        onSetLogin();
-        expect(dispatch).toHaveBeenCalledWith({
-            type: LOGIN.SUCCEEDED,
-            payload: { reset: false },
         });
     });
 });

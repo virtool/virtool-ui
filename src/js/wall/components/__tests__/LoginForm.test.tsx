@@ -1,10 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../tests/setupTests";
 import LoginForm from "../LoginForm";
 
 vi.mock("react-redux", () => ({

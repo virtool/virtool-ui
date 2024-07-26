@@ -1,10 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
+import { getLoginRequest } from "@app/authConfig";
+import { getColor } from "@app/theme";
+import { Button, DividerHorizontal } from "@base";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { loginSucceeded } from "../account/actions";
-import { getLoginRequest } from "../app/authConfig";
-import { getColor } from "../app/theme";
-import { Button, DividerHorizontal } from "../base";
 import { WallSubheader } from "./Container";
 
 const StyledB2CLogin = styled.div`
@@ -16,19 +14,25 @@ const StyledB2CLogin = styled.div`
 const BetaTag = styled.span`
     color: ${props => getColor({ color: "greyDark", theme: props.theme })};
     margin-left: auto;
-    transform-text: uppercase;
+    text-transform: uppercase;
 `;
 
 const LoginDivider = styled(DividerHorizontal)`
     margin: 10px 5px 20px;
 `;
 
-export const B2CLogin = ({ onSetLogin }) => {
-    const onLogin = msal => {
+/**
+ * Displays login process using Microsoft Authentication Library (MSAL)
+ */
+export default function B2CLogin() {
+    const [reset, setReset] = useState<boolean>(true);
+
+    function onLogin(msal) {
         window.msalInstance.setActiveAccount(msal.account);
-        onSetLogin();
-    };
-    return (
+        setReset(false);
+    }
+
+    return reset ? (
         <>
             <StyledB2CLogin>
                 <WallSubheader>Sign in with your work account</WallSubheader>
@@ -37,13 +41,5 @@ export const B2CLogin = ({ onSetLogin }) => {
             </StyledB2CLogin>
             <LoginDivider text="or" />
         </>
-    );
-};
-
-export const mapDispatchToProps = dispatch => ({
-    onSetLogin: () => {
-        dispatch(loginSucceeded());
-    },
-});
-
-export default connect(null, mapDispatchToProps)(B2CLogin);
+    ) : null;
+}

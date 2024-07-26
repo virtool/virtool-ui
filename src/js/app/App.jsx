@@ -1,8 +1,8 @@
 import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { resetClient } from "@utils/utils";
-import { WallContainer } from "@wall/Container";
-import { useAuthentication, useRootQuery } from "@wall/Queries";
+import { WallContainer } from "@wall/components/Container";
+import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
@@ -11,8 +11,8 @@ import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
 
-const LazyFirstUser = React.lazy(() => import("../wall/FirstUser"));
-const LazyLoginWall = React.lazy(() => import("../wall/LoginWall"));
+const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
+const LazyLoginWall = React.lazy(() => import("@wall/components/LoginWall"));
 
 function ConnectedApp() {
     const { data: rootData, isLoading: isRootLoading } = useRootQuery();

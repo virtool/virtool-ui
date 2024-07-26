@@ -17,7 +17,7 @@ export const rootKeys = {
  * @returns A query for fetching the root document
  */
 export function useRootQuery() {
-    return useQuery(rootKeys.all(), async () => {
+    return useQuery(rootKeys.all(), () => {
         return Request.get("/");
     });
 }
@@ -44,7 +44,7 @@ export function useAuthentication() {
         }
     );
 
-    const authenticated = !!data;
+    const authenticated = Boolean(data);
 
     return { authenticated, isLoading, isError, refetch, ...queryInfo };
 }

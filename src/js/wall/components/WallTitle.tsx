@@ -1,6 +1,6 @@
+import { Logo } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { Logo } from "../base";
 
 const StyledWallTitle = styled.h1`
     align-items: center;
