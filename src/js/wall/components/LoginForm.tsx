@@ -1,11 +1,11 @@
 import { LOGIN } from "@app/actionTypes";
+import { BoxGroupSection, Checkbox, InputGroup, InputLabel, InputSimple } from "@base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { BoxGroupSection, Checkbox, InputGroup, InputLabel, InputSimple } from "../base";
+import { useLoginMutation } from "../queries";
 import { WallButton, WallHeader, WallSubheader } from "./Container";
-import { useLoginMutation } from "./Queries";
 import { WallTitle } from "./WallTitle";
 
 const LoginError = styled.div`

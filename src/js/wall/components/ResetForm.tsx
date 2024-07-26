@@ -1,10 +1,10 @@
 import { RESET_PASSWORD } from "@app/actionTypes";
+import { InputError, InputGroup, InputLabel, InputSimple } from "@base";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { InputError, InputGroup, InputLabel, InputSimple } from "../base";
+import { useResetPasswordMutation } from "../queries";
 import { WallButton, WallHeader, WallSubheader } from "./Container";
-import { useResetPasswordMutation } from "./Queries";
 import { WallTitle } from "./WallTitle";
 
 type ResetFormProps = {

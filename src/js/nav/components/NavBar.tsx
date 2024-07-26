@@ -3,7 +3,7 @@ import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import { Dropdown, DropdownMenuContent, DropdownMenuItem, DropdownMenuLink, Icon, InitialIcon, Logo } from "@base";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
-import { useRootQuery } from "@wall/Queries";
+import { useRootQuery } from "@wall/queries";
 import React from "react";
 import styled from "styled-components";
 import { NavBarItem } from "./NavBarItem";

@@ -1,5 +1,5 @@
-import { useCreateFirstUser } from "@/users/queries";
 import { InputError, InputGroup, InputLabel, InputPassword, InputSimple } from "@base";
+import { useCreateFirstUser } from "@users/queries";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { WallButton, WallContainer, WallDialog, WallHeader, WallLoginContainer, WallSubheader } from "./Container";

@@ -1,6 +1,6 @@
+import { getFontWeight } from "@app/theme";
+import { Button } from "@base";
 import styled from "styled-components";
-import { getFontWeight } from "../app/theme";
-import { Button } from "../base";
 
 export const WallContainer = styled.div`
     align-items: center;
