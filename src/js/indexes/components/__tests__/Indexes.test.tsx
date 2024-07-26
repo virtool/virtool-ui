@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
@@ -17,7 +17,7 @@ describe("<Indexes />", () => {
     beforeEach(() => {
         reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
-        mockAPIGetAccount(
+        mockApiGetAccount(
             createFakeAccount({
                 administrator_role: AdministratorRoles.FULL,
             })

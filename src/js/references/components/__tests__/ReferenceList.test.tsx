@@ -4,7 +4,7 @@ import { createMemoryHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakePermissions } from "../../../../tests/fake/permissions";
 import {
     createFakeReferenceMinimal,
@@ -28,7 +28,7 @@ describe("<ReferenceList />", () => {
     it("should render correctly", async () => {
         const permissions = createFakePermissions({ create_ref: true });
         const account = createFakeAccount({ permissions: permissions });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         const scope = mockApiGetReferences([references]);
         renderWithRouter(<ReferenceList />, {}, history);
 
@@ -63,7 +63,7 @@ describe("<ReferenceList />", () => {
         it("should not render creation button when [canCreate=false]", async () => {
             const permissions = createFakePermissions({ create_ref: false });
             const account = createFakeAccount({ permissions: permissions });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, {}, history);
 
@@ -95,7 +95,7 @@ describe("<ReferenceList />", () => {
         it("handleSubmit() should mutate with correct input", async () => {
             const permissions = createFakePermissions({ create_ref: true });
             const account = createFakeAccount({ permissions: permissions });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const getReferencesScope = mockApiGetReferences([references]);
             const cloneReferenceScope = mockApiCloneReference(
                 `Clone of ${references.name}`,
@@ -115,7 +115,7 @@ describe("<ReferenceList />", () => {
         it("handleSubmit() should mutate with changed input", async () => {
             const permissions = createFakePermissions({ create_ref: true });
             const account = createFakeAccount({ permissions: permissions });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const getReferencesScope = mockApiGetReferences([references]);
             const cloneReferenceScope = mockApiCloneReference("newName", `Cloned from ${references.name}`, references);
             renderWithRouter(<ReferenceList />, {}, history);
@@ -133,7 +133,7 @@ describe("<ReferenceList />", () => {
         it("should display an error when name input is cleared", async () => {
             const permissions = createFakePermissions({ create_ref: true });
             const account = createFakeAccount({ permissions: permissions });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             const scope = mockApiGetReferences([references]);
             renderWithRouter(<ReferenceList />, {}, history);
 

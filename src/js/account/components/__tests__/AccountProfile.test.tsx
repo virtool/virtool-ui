@@ -3,14 +3,14 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import AccountProfile from "../AccountProfile";
 
 describe("<AccountProfile />", () => {
     it("should render when administrator", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText(account.handle)).toBeInTheDocument();
@@ -19,7 +19,7 @@ describe("<AccountProfile />", () => {
 
     it("should render when not administrator", async () => {
         const account = createFakeAccount({ administrator_role: null });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText(account.handle)).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("<AccountProfile />", () => {
             administrator_role: AdministratorRoles.FULL,
             email: "virtool.devs@gmail.com",
         });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText("Email Address")).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("<AccountProfile />", () => {
 
     it("should handle email changes", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText("Email Address")).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe("<AccountProfile />", () => {
 
     it("should handle password changes", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText("Password")).toBeInTheDocument();

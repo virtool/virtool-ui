@@ -8,7 +8,7 @@ import {
     createFakeAccount,
     createFakeApiKey,
     mockApiCreateAPIKey,
-    mockAPIGetAccount,
+    mockApiGetAccount,
     mockApiGetAPIKeys,
 } from "../../../../../tests/fake/account";
 import { createFakePermissions } from "../../../../../tests/fake/permissions";
@@ -52,7 +52,7 @@ describe("<APIKeys />", () => {
 
     describe("<CreateAPIKey />", () => {
         beforeEach(() => {
-            mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
             mockApiGetAPIKeys(apiKeys);
         });
 
@@ -95,7 +95,7 @@ describe("<APIKeys />", () => {
 
         describe("<APIKeyAdministratorInfo />", () => {
             it("should render correctly when newKey is empty and state.administratorRole = AdministratorRoles.FULL", async () => {
-                mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+                mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
                 renderWithMemoryRouter(<APIKeys />, [{ state: { createAPIKey: true } }]);
 
                 expect(await screen.findByText(/You are an administrator/)).toBeInTheDocument();
@@ -105,7 +105,7 @@ describe("<APIKeys />", () => {
             });
 
             it("should render correctly when newKey is empty and state.administratorRole = null", () => {
-                mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
+                mockApiGetAccount(createFakeAccount({ administrator_role: null }));
                 renderWithMemoryRouter(<APIKeys />, [{ state: { createAPIKey: true } }]);
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
@@ -118,7 +118,7 @@ describe("<APIKeys />", () => {
 
     describe("<APIKey />", () => {
         beforeEach(() => {
-            mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
             mockApiGetAPIKeys(apiKeys);
         });
 
@@ -168,7 +168,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should render permissions correctly and check and uncheck permissions when clicked, administrator_role == full", async () => {
-            mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
             renderWithMemoryRouter(<APIKeys />);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
@@ -189,7 +189,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should not check and uncheck permissions when administrator_role = base", async () => {
-            mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.BASE }));
+            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.BASE }));
             renderWithMemoryRouter(<APIKeys />);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
@@ -214,7 +214,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should not check and uncheck permissions when administrator_role = null", async () => {
-            mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
+            mockApiGetAccount(createFakeAccount({ administrator_role: null }));
             renderWithMemoryRouter(<APIKeys />);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();

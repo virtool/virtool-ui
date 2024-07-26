@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "../../../../../tests/fake/files";
 import { mockApiListGroups } from "../../../../../tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../../tests/fake/labels";
@@ -26,7 +26,7 @@ describe("<CreateSample>", () => {
         window.sessionStorage.clear();
 
         mockApiGetLabels(labels);
-        mockAPIGetAccount(createFakeAccount({ primary_group: null }));
+        mockApiGetAccount(createFakeAccount({ primary_group: null }));
         mockApiListGroups([]);
     });
 

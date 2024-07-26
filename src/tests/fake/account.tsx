@@ -15,7 +15,7 @@ const defaultSettings = {
     skip_quick_analyze_dialog: true,
 };
 
-type createFakeAccountProps = {
+type createFakeAccountArgs = {
     permissions?: Permissions;
     groups?: Array<GroupMinimal>;
     primary_group?: GroupMinimal;
@@ -25,7 +25,7 @@ type createFakeAccountProps = {
     email?: string;
 };
 
-export function createFakeAccount(props?: createFakeAccountProps): Account {
+export function createFakeAccount(props?: createFakeAccountArgs): Account {
     const { settings, email, ...userProps } = props || {};
 
     return {
@@ -36,7 +36,7 @@ export function createFakeAccount(props?: createFakeAccountProps): Account {
     };
 }
 
-type CreateFakeApiKeysProps = {
+type CreateFakeApiKeysArgs = {
     name?: string;
     groups?: Array<GroupMinimal>;
     permissions?: Permissions;
@@ -47,16 +47,17 @@ type CreateFakeApiKeysProps = {
  *
  * @param props - optional properties for creating a fake API key with specific values
  */
-export function createFakeApiKey(props?: CreateFakeApiKeysProps): APIKeyMinimal {
-    const apiKeys = {
-        created_at: faker.date.past().toISOString(),
-        groups: [createFakeGroupMinimal()],
-        id: faker.random.alphaNumeric(8),
-        name: faker.random.word(),
-        permissions: createFakePermissions({ cancel_job: true, create_ref: true }),
-    };
-
-    return merge(apiKeys, props);
+export function createFakeApiKey(props?: CreateFakeApiKeysArgs): APIKeyMinimal {
+    return merge(
+        {
+            created_at: faker.date.past().toISOString(),
+            groups: [createFakeGroupMinimal()],
+            id: faker.random.alphaNumeric(8),
+            name: faker.random.word(),
+            permissions: createFakePermissions({ cancel_job: true, create_ref: true }),
+        },
+        props
+    );
 }
 
 /**
@@ -65,7 +66,7 @@ export function createFakeApiKey(props?: CreateFakeApiKeysProps): APIKeyMinimal 
  * @param account - The account to fetch
  * @returns A nock scope for the mocked API call
  */
-export function mockAPIGetAccount(account: Account) {
+export function mockApiGetAccount(account: Account) {
     return nock("http://localhost").get("/api/account").reply(200, account);
 }
 

@@ -1,26 +1,13 @@
-import { every, map, reject, reverse, sumBy } from "lodash-es";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Badge, BoxGroup, BoxGroupHeader } from "@base";
+import { useUploaderStore } from "@files/uploader";
+import { cn } from "@utils/utils";
+import { formatDuration, intervalToDuration } from "date-fns";
+import { map } from "lodash-es";
+import numbro from "numbro";
 import React from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
-import { Upload } from "../types";
 import { UploadItem } from "./UploadItem";
-import { UploadTime } from "./UploadTime";
-
-/**
- * @prop show - whether the overlay should be displayed
- */
-const StyledUploadOverlay = styled.div<{ show: boolean }>`
-    bottom: 0;
-    display: ${props => (props.show ? "block" : "none")};
-    max-width: 500px;
-    padding: 0 15px 15px 0;
-    position: fixed;
-    right: 0;
-    width: 35%;
-    z-index: 90;
-`;
 
 const UploadOverlayContent = styled(BoxGroup)`
     background-color: ${props => props.theme.color.white};
@@ -35,13 +22,6 @@ const UploadOverlayContent = styled(BoxGroup)`
     }
 `;
 
-const UploadOverlayList = styled(BoxGroupSection)`
-    height: auto;
-    max-height: 200px;
-    overflow-x: hidden;
-    padding: 0;
-`;
-
 const StyledUploadInformation = styled.div`
     display: flex;
     justify-content: space-between;
@@ -50,44 +30,45 @@ const StyledUploadInformation = styled.div`
     margin-top: 5px;
 `;
 
-type UploadOverlayProps = {
-    uploads: Upload[];
-};
-
 /**
  * Overlay uploads with their progress and speeds.
  */
-export function UploadOverlay({ uploads }: UploadOverlayProps): JSX.Element | null {
-    if (!uploads.length) {
+export default function UploadOverlay(): JSX.Element | null {
+    const uploads = useUploaderStore(state => state.uploads);
+    const remaining = useUploaderStore(state => state.remaining);
+    const speed = useUploaderStore(state => state.speed);
+
+    if (uploads.length === 0) {
         return null;
     }
 
-    const totalRemainingUploadTime: number = sumBy(uploads, "remaining");
-    const overallUploadSpeed: number = sumBy(uploads, "uploadSpeed");
     const uploadComponents = map(uploads, upload => <UploadItem key={upload.localId} {...upload} />);
-    const allUploadsComplete: boolean = every(uploads, ["progress", 100]);
+
+    const formattedRemaining = formatDuration(intervalToDuration({ start: 0, end: remaining * 1000 }));
+
+    const formattedSpeed = numbro(speed).format({
+        base: "decimal",
+        mantissa: 1,
+        output: "byte",
+        spaceSeparated: true,
+    });
 
     return (
-        <StyledUploadOverlay show={uploads.length > 0}>
+        <div className={cn("fixed bottom-0 right-0 w-96 pr-4 pb-4 z-50")}>
             <UploadOverlayContent>
                 <BoxGroupHeader>
                     Uploads <Badge>{uploadComponents.length}</Badge>
-                    {allUploadsComplete ? (
+                    {uploads.every(upload => upload.progress === 100) ? (
                         <StyledUploadInformation>Finishing uploads</StyledUploadInformation>
                     ) : (
-                        <UploadTime remaining={totalRemainingUploadTime} uploadSpeed={overallUploadSpeed} />
+                        <StyledUploadInformation>
+                            {formattedRemaining && <span>{formattedRemaining} remaining</span>}
+                            <span>{formattedSpeed}/s</span>
+                        </StyledUploadInformation>
                     )}
                 </BoxGroupHeader>
-                <UploadOverlayList>{uploadComponents}</UploadOverlayList>
+                <div className="max-h-96 overflow-y-scroll">{uploadComponents}</div>
             </UploadOverlayContent>
-        </StyledUploadOverlay>
+        </div>
     );
 }
-
-export function mapStateToProps(state) {
-    return {
-        uploads: reverse(reject(state.files.uploads, { type: "reference" })),
-    };
-}
-
-export default connect(mapStateToProps)(UploadOverlay);

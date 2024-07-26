@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import HMMList from "../HMMList";
@@ -46,7 +46,7 @@ describe("<HMMList />", () => {
             const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             renderWithMemoryRouter(<HMMList />);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe("<HMMList />", () => {
             const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: null });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             renderWithMemoryRouter(<HMMList />);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
@@ -94,7 +94,7 @@ describe("<HMMList />", () => {
             });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             renderWithMemoryRouter(<HMMList />);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();

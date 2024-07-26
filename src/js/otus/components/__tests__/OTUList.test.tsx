@@ -5,7 +5,7 @@ import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeOTUMinimal, mockApiGetOTUs } from "../../../../tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../tests/setupTests";
@@ -71,7 +71,7 @@ describe("<OTUsList />", () => {
             const account = createFakeAccount({
                 administrator_role: AdministratorRoles.FULL,
             });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
@@ -84,7 +84,7 @@ describe("<OTUsList />", () => {
             const account = createFakeAccount({
                 administrator_role: null,
             });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             renderWithRouter(<OTUList {...props} />, {}, history);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();

@@ -5,7 +5,7 @@ import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "../../../../tests/fake/analyses";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "../../../../tests/fake/samples";
@@ -51,7 +51,7 @@ describe("<AnalysesList />", () => {
     describe("<AnalysesToolbar />", () => {
         it("should show analysis creation when user is full admin", async () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
@@ -61,7 +61,7 @@ describe("<AnalysesList />", () => {
         it("should show analysis creation when user is the owner of the sample", async () => {
             const account = createFakeAccount({ administrator_role: null });
             sample.user.id = account.id;
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
@@ -72,7 +72,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: null });
             sample.group = account.groups[0].id;
             sample.group_write = true;
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
@@ -81,7 +81,7 @@ describe("<AnalysesList />", () => {
 
         it("should show analysis creation when all users editing a sample is permitted", async () => {
             const account = createFakeAccount({ administrator_role: null });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
 
             sample.all_write = true;
             mockApiGetSampleDetail(sample);
@@ -93,7 +93,7 @@ describe("<AnalysesList />", () => {
 
         it("should not render analysis creation option when user has no permissions", async () => {
             const account = createFakeAccount({ administrator_role: null });
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 
@@ -103,7 +103,7 @@ describe("<AnalysesList />", () => {
         it("should change state once create analysis is clicked", async () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
 
-            mockAPIGetAccount(account);
+            mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<AnalysesList {...props} />, {}, history);
 

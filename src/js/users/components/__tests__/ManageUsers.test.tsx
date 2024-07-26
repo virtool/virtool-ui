@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeUsers, mockApiFindUsers } from "../../../../tests/fake/user";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import { ManageUsers } from "../ManageUsers";
@@ -14,7 +14,7 @@ describe("<ManageUsers />", () => {
         users[0].administrator_role = AdministratorRoles.FULL;
         await mockApiFindUsers(users);
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
 
         renderWithMemoryRouter(<ManageUsers />);
 
@@ -28,7 +28,7 @@ describe("<ManageUsers />", () => {
 
     it("should render correctly when documents = null", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockAPIGetAccount(account);
+        mockApiGetAccount(account);
 
         renderWithMemoryRouter(<ManageUsers />);
 
@@ -42,7 +42,7 @@ describe("<ManageUsers />", () => {
         const users = createFakeUsers(3);
 
         mockApiFindUsers(users);
-        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: null }));
 
         renderWithMemoryRouter(<ManageUsers />);
 

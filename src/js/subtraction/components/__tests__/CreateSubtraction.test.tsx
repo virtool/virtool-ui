@@ -3,13 +3,21 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { getSessionStorage, setSessionStorage } from "@utils/utils";
 import React from "react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import CreateSubtraction from "../CreateSubtraction";
 
 describe("<CreateSubtraction />", () => {
+    afterEach(() => {
+        sessionStorage.clear();
+    });
+
+    beforeEach(() => {
+        sessionStorage.clear();
+    });
+
     it("should render when no files available", async () => {
         mockApiListFiles([]);
         renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
@@ -68,9 +76,9 @@ describe("<CreateSubtraction />", () => {
     });
 
     it("should persist values into session storage", async () => {
-        const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
-        const name = "testSubtractionname";
-        const nickname = "testSubtractionNickname";
+        const file = createFakeFile({ name: "ath.fa.gz", type: FileType.subtraction });
+        const name = "Arabidopsis thaliana";
+        const nickname = "Thale cress";
 
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
@@ -79,7 +87,7 @@ describe("<CreateSubtraction />", () => {
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
-        await userEvent.click(screen.getByText(/testsubtraction1/i));
+        await userEvent.click(screen.getByText(/ath/i));
 
         expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name, nickname, uploadId: [file.id] });
 

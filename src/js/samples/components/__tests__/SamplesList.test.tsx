@@ -5,7 +5,7 @@ import { createBrowserHistory } from "history";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockAPIGetAccount } from "../../../../tests/fake/account";
+import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
 import { createFakeIndexMinimal, mockApiListIndexes } from "../../../../tests/fake/indexes";
 import { createFakeLabelNested, mockApiGetLabels } from "../../../../tests/fake/labels";
@@ -62,14 +62,14 @@ describe("<SamplesList />", () => {
     });
 
     it("should render create button when [canModify=true]", async () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         renderWithRouter(<SamplesList />, {}, history);
 
         expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
     });
 
     it("should not render create button when [canModify=false]", async () => {
-        mockAPIGetAccount(createFakeAccount({ administrator_role: null }));
+        mockApiGetAccount(createFakeAccount({ administrator_role: null }));
 
         renderWithRouter(<SamplesList />, {}, history);
 
