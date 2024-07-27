@@ -15,12 +15,12 @@ async function main() {
 
     app.disable("x-powered-by");
     app.use([createCspMiddleware(options.b2cTenant), loggingMiddleware]);
-    app.set("views", path.join(__dirname, "dist"));
+    app.set("views", path.join("dist"));
     app.locals.delimiter = "#";
 
     app.get(
         /\.(?:js|map|ico|svg|css)$/,
-        express.static(path.join(__dirname, "dist"), {
+        express.static(path.join("dist"), {
             maxAge: 31536000000,
         })
     );

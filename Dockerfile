@@ -18,8 +18,7 @@ WORKDIR /ui
 COPY --from=build /build/dist ./dist
 COPY --from=build /build/package.json ./
 RUN npm install commander express superagent semver
-COPY src/server/run.ts ./
-COPY src/server ./server
+COPY src/server/ ./src/server
 EXPOSE 9900
 ENV VT_UI_HOST="0.0.0.0"
 ENTRYPOINT ["node", "run"]
