@@ -1,32 +1,22 @@
 import { ContainerSide } from "@base";
 import React from "react";
-import styled from "styled-components";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";
 
-const StyledSidebar = styled(ContainerSide)`
-    align-items: stretch;
-    flex-direction: column;
-    display: flex;
-    width: 320px;
-    z-index: 1;
-`;
-
 type sidebarProps = {
-    className?: string;
     sampleLabels: number[];
     defaultSubtractions: string[];
     onUpdate: (key: string, value: string[] | number[]) => void;
 };
 
-export function Sidebar({ className, sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) {
+export function Sidebar({ sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) {
     return (
-        <StyledSidebar className={className}>
+        <ContainerSide className="flex items-stretch flex-col w-80 z-10">
             <SampleLabels onUpdate={selection => onUpdate("sidebar.labels", selection)} sampleLabels={sampleLabels} />
             <DefaultSubtractions
                 onUpdate={selection => onUpdate("sidebar.subtractionIds", selection)}
                 defaultSubtractions={defaultSubtractions}
             />
-        </StyledSidebar>
+        </ContainerSide>
     );
 }
