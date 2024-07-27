@@ -1,13 +1,11 @@
-import PropTypes from "prop-types";
+import { cn } from "@utils/utils";
 import React from "react";
 
-export function ContainerSide({ children, className = "" }) {
-    return <div className={`flex-none ${className}`}>{children}</div>;
-}
-
-ContainerSide.propTypes = {
-    children: PropTypes.node.isRequired,
-    className: PropTypes.string,
+type ContainerSideProps = {
+    children: React.ReactNode;
+    className?: string;
 };
 
-ContainerSide.displayName = "ContainerSide";
+export function ContainerSide({ children, className }: ContainerSideProps) {
+    return <div className={cn("flex-none", className)}>{children}</div>;
+}

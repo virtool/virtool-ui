@@ -1,7 +1,11 @@
+import { cn } from "@utils/utils";
 import React from "react";
 
-export function Container({ children }) {
-    return <div className="max-w-full px-[35px] pl-[98px] w-screen">{children}</div>;
-}
+type ContainerProps = {
+    children: React.ReactNode;
+    className?: string;
+};
 
-Container.displayName = "Container";
+export function Container({ children, className }: ContainerProps) {
+    return <div className={cn("max-w-full", "px-9", "pl-24", "w-screen", className)}>{children}</div>;
+}

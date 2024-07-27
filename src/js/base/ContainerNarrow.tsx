@@ -1,7 +1,11 @@
+import { cn } from "@utils/utils";
 import React from "react";
 
-export function ContainerNarrow({ children }) {
-    return <div className="flex-grow flex-shrink-0 max-w-[1150px]">{children}</div>;
-}
+type ContainerNarrowProps = {
+    children: React.ReactNode;
+    className?: string;
+};
 
-ContainerNarrow.displayName = "ContainerNarrow";
+export function ContainerNarrow({ children, className }: ContainerNarrowProps) {
+    return <div className={cn("flex-grow", "flex-shrink-0", "max-w-6xl", className)}>{children}</div>;
+}
