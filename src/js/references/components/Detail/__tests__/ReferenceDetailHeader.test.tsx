@@ -1,12 +1,12 @@
+import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import { renderWithMemoryRouter, renderWithRouter } from "@tests/setupTests";
 import { createBrowserHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
-import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
-import { renderWithMemoryRouter, renderWithRouter } from "../../../../../tests/setupTests";
-import { AdministratorRoles } from "../../../../administration/types";
 import ReferenceDetailHeader from "../ReferenceDetailHeader";
 
 describe("<ReferenceDetailHeaderIcon />", () => {
@@ -81,7 +81,7 @@ describe("<ReferenceDetailHeaderIcon />", () => {
     });
 
     it("should call onEdit", async () => {
-        renderWithRouter(<ReferenceDetailHeader {...props} />, {}, history);
+        renderWithRouter(<ReferenceDetailHeader {...props} />, history);
 
         await userEvent.click(await screen.findByRole("button"));
         expect(history.location.state).toEqual({ editReference: true });

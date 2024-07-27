@@ -1,8 +1,6 @@
-import { LOGIN } from "@app/actionTypes";
 import { BoxGroupSection, Checkbox, InputGroup, InputLabel, InputSimple } from "@base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useLoginMutation } from "../queries";
 import { WallButton, WallHeader, WallSubheader } from "./Container";
@@ -34,7 +32,6 @@ type LoginFormProps = {
 /** Handles the user login process. */
 export default function LoginForm({ setResetCode }: LoginFormProps) {
     const { control, handleSubmit, register } = useForm();
-    const dispatch = useDispatch();
     const loginMutation = useLoginMutation();
 
     function onSubmit({ username, password, remember }) {
@@ -42,7 +39,6 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
             { username, password, remember },
             {
                 onSuccess: data => {
-                    dispatch({ type: LOGIN.SUCCEEDED, payload: data });
                     if (data.body.resetCode) {
                         setResetCode(data.body.resetCode);
                     }

@@ -28,8 +28,15 @@ export const subtractionQueryKeys = {
  * @returns A mutator for creating a subtraction
  */
 export function useCreateSubtraction() {
+    const queryClient = useQueryClient();
+
     return useMutation<Subtraction, unknown, { name: string; nickname: string; uploadId: string }>(
-        ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId)
+        ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(subtractionQueryKeys.lists());
+            },
+        }
     );
 }
 

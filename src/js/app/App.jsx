@@ -4,7 +4,6 @@ import { resetClient } from "@utils/utils";
 import { WallContainer } from "@wall/components/Container";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
-import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./GlobalStyles";
@@ -60,16 +59,14 @@ const queryClient = new QueryClient({
     },
 });
 
-export default function App({ store, history }) {
+export default function App({ history }) {
     return (
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-                <Provider store={store}>
-                    <Router history={history}>
-                        <GlobalStyles />
-                        <ConnectedApp />
-                    </Router>
-                </Provider>
+                <Router history={history}>
+                    <GlobalStyles />
+                    <ConnectedApp />
+                </Router>
             </QueryClientProvider>
         </ThemeProvider>
     );

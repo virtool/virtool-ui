@@ -1,4 +1,3 @@
-import AODPViewer from "@/analyses/components/AODP/Viewer";
 import { useGetAnalysis } from "@/analyses/queries";
 import {
     Box,
@@ -62,8 +61,6 @@ export default function AnalysisDetail({ match }: AnalysisDetailProps) {
         content = <PathoscopeViewer detail={analysis} sample={sample} />;
     } else if (analysis.workflow === "nuvs") {
         content = <NuVsViewer detail={analysis} sample={sample} />;
-    } else if (analysis.workflow === "aodp") {
-        content = <AODPViewer />;
     } else if (analysis.workflow === "iimi") {
         content = <IimiViewer detail={analysis} />;
     } else {
