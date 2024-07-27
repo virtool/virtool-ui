@@ -1,20 +1,13 @@
 import { JobState, workflows } from "@jobs/types";
 import { screen, waitFor } from "@testing-library/react";
-import { createBrowserHistory } from "history";
+import { createFakeJobMinimal, mockApiGetJobs } from "@tests/fake/jobs";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeJobMinimal, mockApiGetJobs } from "../../../../tests/fake/jobs";
-import { renderWithRouter } from "../../../../tests/setupTests";
 import JobsList from "../JobList";
 
 describe("<JobsList />", () => {
-    let history;
-
-    beforeEach(() => {
-        history = createBrowserHistory();
-    });
-
     afterEach(() => nock.cleanAll());
 
     it("should render", async () => {
@@ -25,7 +18,7 @@ describe("<JobsList />", () => {
             workflow: workflows.create_sample,
         });
         const scope = mockApiGetJobs([jobs]);
-        renderWithRouter(<JobsList />, {}, history);
+        renderWithMemoryRouter(<JobsList />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(screen.getByText("Create Sample")).toBeInTheDocument();
@@ -34,14 +27,14 @@ describe("<JobsList />", () => {
     });
 
     it("should show spinner while loading", () => {
-        renderWithRouter(<JobsList />, {}, history);
+        renderWithMemoryRouter(<JobsList />);
 
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
     });
 
     it("should show message when there are no unarchived jobs", async () => {
         const scope = mockApiGetJobs([]);
-        renderWithRouter(<JobsList />, {}, history);
+        renderWithMemoryRouter(<JobsList />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(screen.getByText("No jobs found")).toBeInTheDocument();
@@ -56,7 +49,7 @@ describe("<JobsList />", () => {
             state: JobState.complete,
         });
         const scope = mockApiGetJobs([jobs], 0);
-        renderWithRouter(<JobsList />, {}, history);
+        renderWithMemoryRouter(<JobsList />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(await screen.findByText("No jobs matching filters")).toBeInTheDocument();

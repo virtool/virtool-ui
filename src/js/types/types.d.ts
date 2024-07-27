@@ -1,5 +1,4 @@
 import { QueryClientConfig } from "@tanstack/react-query";
-import { Store } from "redux";
 
 export type ErrorResponse = {
     response: {
@@ -33,7 +32,6 @@ export type LocationType = {
 };
 
 export type WebSocket = {
-    store: Store;
     queryClient: QueryClientConfig;
     connectionStatus: string;
     establishConnection: () => void;
