@@ -36,8 +36,12 @@ type SubtractionFileItemProps = {
  * A condensed file for use in a list of subtraction files
  */
 export function SubtractionFileItem({ active, error, id, name, onClick, uploaded_at, user }: SubtractionFileItemProps) {
+    function handleSelect() {
+        active ? onClick([]) : onClick([id]);
+    }
+
     return (
-        <StyledSubtractionFileItem active={active} onClick={() => onClick([id])} error={error}>
+        <StyledSubtractionFileItem active={active} onClick={handleSelect} error={error}>
             <strong>{name}</strong>
             <Attribution user={user.handle} time={uploaded_at} />
         </StyledSubtractionFileItem>
