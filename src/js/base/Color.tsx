@@ -61,7 +61,9 @@ function ColorSquare({ color, onClick }: ColorSquareProps) {
             type="button"
             title={color}
             onClick={handleClick}
-            className={`flex-1 h-full transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300 focus:z-10 first:rounded-l-sm last:rounded-r-sm`}
+            className={
+                "flex-1 h-full transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300 focus:z-10 first:rounded-l-sm last:rounded-r-sm"
+            }
             style={{ backgroundColor: `#${color}` }}
         />
     );
