@@ -1,7 +1,4 @@
 import React, { useCallback } from "react";
-import styled from "styled-components";
-import { borderRadius } from "../app/theme";
-import { Box } from "./Box";
 import { Input } from "./Input";
 
 const colors: string[] = [
@@ -46,63 +43,53 @@ const colors: string[] = [
     "EC4899",
 ];
 
-const StyledColor = styled(Box)`
-    padding: 10px;
-`;
+type StyledColorProps = {
+    children: React.ReactNode;
+};
+
+function StyledColor({ children }: StyledColorProps) {
+    return <div className="flex flex-col w-full">{children}</div>;
+}
 
 type ColorSquareProps = {
-    className?: string;
+    // The color value of the square
     color: string;
+    // Callback function for color square click
     onClick: (color: string) => void;
 };
 
-const UnstyledColorSquare = ({ className, color, onClick }: ColorSquareProps) => {
+function ColorSquare({ color, onClick }: ColorSquareProps) {
     const handleClick = useCallback(() => onClick(color), [color, onClick]);
-    return <button className={className} type="button" title={color} onClick={handleClick} />;
+
+    return (
+        <button
+            className={`
+                bg-[#${color}] flex-1 flex-shrink-0 w-auto transform translate-y-0
+                hover:-translate-y-0.5 focus:shadow-lg focus:outline-white focus:outline-2 focus:z-10
+                first:rounded-l-sm last:rounded-r-sm
+                transition-transform duration-200 ease-in-out
+            `}
+            type="button"
+            title={color}
+            onClick={handleClick}
+        />
+    );
+}
+
+type ColorGridProps = {
+    children: React.ReactNode;
 };
 
-const ColorSquare = styled(UnstyledColorSquare)<ColorSquareProps>`
-    backface-visibility: hidden;
-    background-color: ${props => props.color};
-    background-image: none;
-    border: none;
-    cursor: pointer;
-    flex: 1 0 auto;
-    width: auto;
-    transform: translateY(0);
-
-    &:first-child {
-        border-bottom-left-radius: ${borderRadius.sm};
-        border-top-left-radius: ${borderRadius.sm};
-    }
-
-    &:last-child {
-        border-bottom-right-radius: ${borderRadius.sm};
-        border-top-right-radius: ${borderRadius.sm};
-    }
-
-    &:focus {
-        box-shadow: rgb(0 0 0 / 25%) 0 0 5px 2px;
-        outline: solid white 2px;
-        z-index: 2;
-    }
-
-    &:hover {
-        transform: translateY(-2px);
-    }
-`;
-
-const ColorGrid = styled.div`
-    align-items: stretch;
-    background-color: transparent;
-    display: flex;
-    height: 30px;
-    margin-top: 10px;
-`;
+function ColorGrid({ children }: ColorGridProps) {
+    return <div className="grid grid-cols-3 gap-2.5 mt-2.5">{children}</div>;
+}
 
 type ColorProps = {
+    // The unique identifier for the color input
     id: string;
+    // The value of the color input
     value: string;
+    // Callback function for color input value change
     onChange: (value: string) => void;
 };
 
@@ -116,7 +103,7 @@ export function Color({ id, value, onChange }: ColorProps) {
             />
             <ColorGrid>
                 {colors.map(color => (
-                    <ColorSquare key={color} color={`#${color}`} onClick={onChange} />
+                    <ColorSquare key={color} color={color} onClick={onChange} />
                 ))}
             </ColorGrid>
         </StyledColor>
