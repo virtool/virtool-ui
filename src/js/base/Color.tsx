@@ -43,69 +43,55 @@ const colors: string[] = [
     "EC4899",
 ];
 
-type StyledColorProps = {
-    children: React.ReactNode;
-};
-
-function StyledColor({ children }: StyledColorProps) {
-    return <div className="flex flex-col w-full">{children}</div>;
-}
-
 type ColorSquareProps = {
-    // The color value of the square
+    // The color in hex format
     color: string;
-    // Callback function for color square click
+    // The callback to be called when the color is clicked
     onClick: (color: string) => void;
 };
 
+/**
+ * A color square that updates the color input when clicked
+ */
 function ColorSquare({ color, onClick }: ColorSquareProps) {
     const handleClick = useCallback(() => onClick(color), [color, onClick]);
 
     return (
         <button
-            className={`
-                bg-[#${color}] flex-1 flex-shrink-0 w-auto transform translate-y-0
-                hover:-translate-y-0.5 focus:shadow-lg focus:outline-white focus:outline-2 focus:z-10
-                first:rounded-l-sm last:rounded-r-sm
-                transition-transform duration-200 ease-in-out
-            `}
             type="button"
             title={color}
             onClick={handleClick}
+            className={`flex-1 h-full transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300 focus:z-10 first:rounded-l-sm last:rounded-r-sm`}
+            style={{ backgroundColor: `#${color}` }}
         />
     );
 }
 
-type ColorGridProps = {
-    children: React.ReactNode;
-};
-
-function ColorGrid({ children }: ColorGridProps) {
-    return <div className="grid grid-cols-3 gap-2.5 mt-2.5">{children}</div>;
-}
-
 type ColorProps = {
-    // The unique identifier for the color input
+    // The id of the input
     id: string;
-    // The value of the color input
+    // The value of the input (color in hex format)
     value: string;
-    // Callback function for color input value change
+    // The callback to be called when the value changes
     onChange: (value: string) => void;
 };
 
+/**
+ * A color text input with a color picker below it
+ */
 export function Color({ id, value, onChange }: ColorProps) {
     return (
-        <StyledColor>
+        <div>
             <Input
                 id={id}
                 value={value}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
             />
-            <ColorGrid>
+            <div className="flex h-9 mt-2.5">
                 {colors.map(color => (
-                    <ColorSquare key={color} color={color} onClick={onChange} />
+                    <ColorSquare key={color} color={`#${color}`} onClick={onChange} />
                 ))}
-            </ColorGrid>
-        </StyledColor>
+            </div>
+        </div>
     );
 }
