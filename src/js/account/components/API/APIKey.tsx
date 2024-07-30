@@ -76,19 +76,17 @@ export default function APIKey({ apiKey }: APIKeyProps) {
                             name="permissions"
                         />
 
-                        <div className="flex items-center justify-end mb-2.5">
-                            <div className="space-x-1.5">
-                                <Button color="red" onClick={() => removeMutation.mutate({ keyId: apiKey.id })}>
-                                    Delete
-                                </Button>
-                                <Button
-                                    color="blue"
-                                    disabled={isEqual(watch("permissions"), apiKey.permissions)}
-                                    type="submit"
-                                >
-                                    Update
-                                </Button>
-                            </div>
+                        <div className="flex items-center justify-end mb-2.5 gap-1.5">
+                            <Button color="red" onClick={() => removeMutation.mutate({ keyId: apiKey.id })}>
+                                Delete
+                            </Button>
+                            <Button
+                                color="blue"
+                                disabled={isEqual(watch("permissions"), apiKey.permissions)}
+                                type="submit"
+                            >
+                                Update
+                            </Button>
                         </div>
                     </div>
                 )}
