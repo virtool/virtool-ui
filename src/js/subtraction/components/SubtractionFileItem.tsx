@@ -1,4 +1,4 @@
-import { Attribution, SelectBoxGroupSection } from "@base";
+import { Attribution, BoxGroupSectionSelect } from "@base";
 import { UserNested } from "@users/types";
 import React from "react";
 import styled from "styled-components";
@@ -7,7 +7,7 @@ type StyledSubtractionFileItemProps = {
     error: string;
 };
 
-const StyledSubtractionFileItem = styled(SelectBoxGroupSection)<StyledSubtractionFileItemProps>`
+const StyledSubtractionFileItem = styled(BoxGroupSectionSelect)<StyledSubtractionFileItemProps>`
     display: flex;
 
     ${Attribution} {

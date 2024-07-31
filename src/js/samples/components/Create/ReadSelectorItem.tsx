@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Icon, SelectBoxGroupSection } from "../../../base";
+import { BoxGroupSectionSelect, Icon } from "../../../base";
 import { byteSize } from "../../../utils/utils";
 
 const ReadIcon = styled.span`
@@ -29,7 +29,7 @@ const StyledReadOrientation = styled.div`
     width: 48px;
 `;
 
-const StyledReadSelectorItem = styled(SelectBoxGroupSection)`
+const StyledReadSelectorItem = styled(BoxGroupSectionSelect)`
     align-items: center;
     display: flex;
     justify-content: space-between;

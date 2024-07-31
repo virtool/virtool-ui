@@ -1,3 +1,4 @@
+import React from "react";
 import styled, { DefaultTheme } from "styled-components";
 import { BoxGroupSection } from "./BoxGroupSection";
 import { CheckboxLabel } from "./CheckboxLabel";
@@ -30,4 +31,29 @@ export const SelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSecti
     }
 `;
 
-SelectBoxGroupSection.displayName = "SelectBoxGroupSection";
+type BoxGroupSectionSelectProps = {
+    active?: boolean;
+    children: React.ReactNode;
+    className?: string;
+    onClick?: () => void;
+};
+
+export function BoxGroupSectionSelect({ active, children, className, onClick }: BoxGroupSectionSelectProps) {
+    function handleKeyDown(e) {
+        if (e.key === "Enter") {
+            onClick();
+        }
+    }
+    return (
+        <SelectBoxGroupSection
+            active={active}
+            className={className}
+            tabIndex={0}
+            role="button"
+            onClick={onClick}
+            onKeyDown={handleKeyDown}
+        >
+            {children}
+        </SelectBoxGroupSection>
+    );
+}

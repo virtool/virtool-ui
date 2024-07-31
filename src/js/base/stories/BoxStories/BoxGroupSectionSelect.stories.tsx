@@ -1,11 +1,11 @@
-import { BoxGroup, Checkbox, SelectBoxGroupSection } from "@base";
+import { BoxGroup, BoxGroupSectionSelect, Checkbox } from "@base";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
-const meta: Meta<typeof SelectBoxGroupSection> = {
-    title: "base/Box/SelectBoxGroupSection",
-    component: SelectBoxGroupSection,
+const meta: Meta<typeof BoxGroupSectionSelect> = {
+    title: "base/Box/BoxGroupSectionSelect",
+    component: BoxGroupSectionSelect,
     args: {
         active: false,
     },
@@ -23,33 +23,35 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-function Template(args) {
+function Template({ children }) {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <SelectBoxGroupSection {...args} checked={active} onClick={() => updateArgs({ active: !active })} />
+            <BoxGroupSectionSelect active={active} onClick={() => updateArgs({ active: !active })}>
+                {children}
+            </BoxGroupSectionSelect>
         </BoxGroup>
     );
 }
 
-export const TestSelectBoxGroupSection: Story = {
+export const TestBoxGroupSectionSelect: Story = {
     args: {
         children: "This is a SelectBoxGroupSection!",
     },
     render: Template,
 };
 
-function CheckboxTemplate(args) {
+function CheckboxTemplate() {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <SelectBoxGroupSection {...args} onClick={() => updateArgs({ active: !active })}>
+            <BoxGroupSectionSelect onClick={() => updateArgs({ active: !active })}>
                 <Checkbox checked={active} label="This is a SelectBoxGroupSection with a Checkbox!" />
-            </SelectBoxGroupSection>
+            </BoxGroupSectionSelect>
         </BoxGroup>
     );
 }
 
-export const SelectBoxGroupSectionWithCheckbox: Story = {
+export const BoxGroupSectionSelectWithCheckbox: Story = {
     render: CheckboxTemplate,
 };
