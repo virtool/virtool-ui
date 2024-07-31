@@ -1,6 +1,7 @@
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";
 import React from "react";
-import { Badge, ContainerNarrow, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
+import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useFindModels } from "../queries";
 import { MLModelMinimal } from "../types";
 import { MLModel } from "./MLModel";
@@ -27,7 +28,7 @@ export function MLModels() {
         <ContainerNarrow>
             <ViewHeader title="ML Models">
                 <ViewHeaderTitle>
-                    ML Models <Badge>{data.items.length}</Badge>
+                    ML Models <ViewHeaderTitleBadge>{data.items.length}</ViewHeaderTitleBadge>
                 </ViewHeaderTitle>
             </ViewHeader>
             {models}

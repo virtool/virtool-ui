@@ -26,10 +26,6 @@ const ReferenceBox = styled(Box)`
     display: flex;
     align-items: center;
 
-    ${Badge} {
-        margin-left: 5px;
-    }
-
     span:last-child {
         margin-left: auto;
     }
@@ -86,7 +82,8 @@ export default function CloneReference({ references }: CloneReferenceProps) {
                         <InputLabel htmlFor="selectedReference">Selected reference</InputLabel>
                         {reference && (
                             <ReferenceBox id="selectedReference">
-                                <strong>{reference.name}</strong> <Badge>{reference.otu_count} OTUs</Badge>
+                                <strong>{reference.name}</strong>
+                                <Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
                                 <Attribution time={reference.created_at} user={reference.user.handle} />
                             </ReferenceBox>
                         )}

@@ -1,14 +1,10 @@
+import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "@base";
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
 
 const HMMTaxonomyItem = styled(BoxGroupSection)`
     display: flex;
-
-    ${Badge} {
-        margin-left: auto;
-    }
 `;
 
 const StyledHMMTaxonomy = styled(BoxGroupSection)`
@@ -35,7 +31,7 @@ export function HMMTaxonomy({ counts, title }: HMMTaxonomyProps) {
 
     const components = map(sorted, ({ name, count }) => (
         <HMMTaxonomyItem key={name}>
-            {name} <Badge>{count}</Badge>
+            {name} <Badge className="ml-auto">{count}</Badge>
         </HMMTaxonomyItem>
     ));
 

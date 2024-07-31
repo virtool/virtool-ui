@@ -28,11 +28,6 @@ const IsolateEditorTitle = styled(SubviewHeaderTitle)`
         font-weight: ${getFontWeight("thick")};
         margin-left: auto;
     }
-
-    ${Badge} {
-        font-size: ${getFontSize("md")};
-        margin-left: 5px;
-    }
 `;
 
 const IsolateEditorListContainer = styled(Box)`
@@ -101,7 +96,7 @@ export default function IsolateEditor() {
         <>
             <SubviewHeader>
                 <IsolateEditorTitle>
-                    Isolates <Badge>{isolateComponents.length}</Badge>
+                    Isolates <Badge className="text-base ml-2">{isolateComponents.length}</Badge>
                     {addIsolateLink}
                 </IsolateEditorTitle>
             </SubviewHeader>
