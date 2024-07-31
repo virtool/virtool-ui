@@ -6,7 +6,10 @@ type TableProps = {
     className?: string;
 };
 
-export function Table({ children, className, ...props }: TableProps) {
+/**
+ * Replacement for the HTML table element
+ */
+export function Table({ children, className }: TableProps) {
     return (
         <table
             className={cn(
@@ -31,7 +34,6 @@ export function Table({ children, className, ...props }: TableProps) {
                 "[&_th:first-child]:border-gray-200",
                 className
             )}
-            {...props}
         >
             {children}
         </table>
