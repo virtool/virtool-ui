@@ -3,9 +3,9 @@ import React from "react";
 import styled from "styled-components";
 import { getBorder } from "../../app/theme";
 
+import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { match } from "react-router-dom";
 import {
-    Badge,
     BoxGroup,
     BoxGroupHeader,
     device,
@@ -144,7 +144,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
             <BoxGroup>
                 <BoxGroupHeader>
                     <h2>
-                        Cluster Members <Badge>{data.entries.length}</Badge>
+                        Cluster Members <BoxGroupHeaderBadge>{data.entries.length}</BoxGroupHeaderBadge>
                     </h2>
                 </BoxGroupHeader>
                 <ClusterTable>

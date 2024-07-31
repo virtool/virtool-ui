@@ -1,4 +1,5 @@
-import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
@@ -29,7 +30,7 @@ export default function SubtractionList() {
         <>
             <ViewHeader title="Subtractions">
                 <ViewHeaderTitle>
-                    Subtractions <Badge>{total_count}</Badge>
+                    Subtractions <ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
                 </ViewHeaderTitle>
             </ViewHeader>
 

@@ -1,15 +1,16 @@
+import { useListHmms } from "@/hmm/queries";
+import { LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
+import { useListIndexes } from "@indexes/queries";
+import { useFetchLabels } from "@labels/queries";
+import { useFindModels } from "@ml/queries";
+import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { useUrlSearchParams, useUrlSearchParamsList } from "@utils/hooks";
 import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
 import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
 import styled from "styled-components";
 import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
-import { Badge, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
-import { useListHmms } from "../../hmm/queries";
-import { useListIndexes } from "../../indexes/queries";
-import { useFetchLabels } from "../../labels/queries";
-import { useFindModels } from "../../ml/queries";
-import { useFetchSubtractionsShortlist } from "../../subtraction/queries";
 import { useListSamples } from "../queries";
 import { SampleMinimal } from "../types";
 import { SampleFilters } from "./Filter/SampleFilters";
@@ -108,7 +109,7 @@ export default function SamplesList() {
                 <SamplesListHeader>
                     <ViewHeader title="Samples">
                         <ViewHeaderTitle>
-                            Samples <Badge>{total_count}</Badge>
+                            Samples <ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
                         </ViewHeaderTitle>
                     </ViewHeader>
                     <SampleToolbar

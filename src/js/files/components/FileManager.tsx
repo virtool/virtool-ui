@@ -2,7 +2,6 @@ import { useFetchAccount } from "@account/queries";
 import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import {
     Alert,
-    Badge,
     BoxGroup,
     Icon,
     LoadingPlaceholder,
@@ -11,6 +10,7 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "@base";
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { UploadBar } from "@files/components/UploadBar";
 import { upload } from "@files/uploader";
 import { Permission } from "@groups/types";
@@ -65,7 +65,7 @@ export function FileManager({ accept, fileType, message, regex }: FileManagerPro
         <>
             <ViewHeader title={title} />
             <ViewHeaderTitle>
-                {title} <Badge>{files.found_count}</Badge>
+                {title} <ViewHeaderTitleBadge>{files.found_count}</ViewHeaderTitleBadge>
             </ViewHeaderTitle>
 
             {canUpload ? (

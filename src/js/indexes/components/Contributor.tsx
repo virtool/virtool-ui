@@ -8,9 +8,6 @@ const StyledContributor = styled(BoxGroupSection)`
     .InitialIcon {
         margin-right: 5px;
     }
-    ${Badge} {
-        margin-left: auto;
-    }
 `;
 
 type ContributorProps = {
@@ -27,7 +24,7 @@ export default function Contributor({ id, count, handle }: ContributorProps) {
         <StyledContributor key={id}>
             <InitialIcon handle={handle} size="md" />
             {handle}
-            <Badge>
+            <Badge className="ml-auto">
                 {count} change{count === 1 ? "" : "s"}
             </Badge>
         </StyledContributor>
