@@ -10,10 +10,6 @@ import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
 
-const SampleDetailSidebarContainer = styled(ContainerSide)`
-    padding-left: 15px;
-`;
-
 const StyledSampleDetailGeneral = styled.div`
     align-items: stretch;
     display: flex;
@@ -130,9 +126,9 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
                 )}
             </ContainerNarrow>
 
-            <SampleDetailSidebarContainer>
+            <ContainerSide className="pl-[15px]">
                 <Sidebar sampleId={data.id} sampleLabels={data.labels} defaultSubtractions={data.subtractions} />
-            </SampleDetailSidebarContainer>
+            </ContainerSide>
 
             <EditSample
                 sample={data}
