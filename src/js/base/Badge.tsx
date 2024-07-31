@@ -4,7 +4,7 @@ import React from "react";
 type BadgeProps = {
     children: React.ReactNode;
     className?: string;
-    color?: "blue" | "green" | "gray" | "grayDark" | "orange" | "purple" | "red";
+    color?: "blue" | "green" | "gray" | "orange" | "purple" | "red";
 };
 
 /**
@@ -29,7 +29,6 @@ export function Badge({ children, className, color = "gray" }: BadgeProps) {
                 {
                     "bg-blue-600": color === "blue",
                     "bg-green-600": color === "green",
-                    "bg-gray-600": color === "grayDark",
                     "bg-gray-500": color === "gray",
                     "bg-orange-600": color === "orange",
                     "bg-purple-600": color === "purple",

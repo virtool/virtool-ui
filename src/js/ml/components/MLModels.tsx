@@ -1,7 +1,7 @@
+import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";
 import React from "react";
-import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "../../base";
 import { useFindModels } from "../queries";
 import { MLModelMinimal } from "../types";
 import { MLModel } from "./MLModel";

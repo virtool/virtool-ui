@@ -23,7 +23,7 @@ const meta: Meta<typeof Badge> = {
     },
     argTypes: {
         color: {
-            options: ["grayDark", "blue", "orange", "purple", "red"],
+            options: ["gray", "blue", "orange", "purple", "red"],
             control: { type: "radio" },
         },
         children: {
@@ -45,6 +45,6 @@ export const SampleBadge: Story = {
     ),
     args: {
         children: 10,
-        color: "grayDark",
+        color: "gray",
     },
 };

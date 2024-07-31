@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const HMMTaxonomyItem = styled(BoxGroupSection)`
     display: flex;
+    justify-content: space-between;
 `;
 
 const StyledHMMTaxonomy = styled(BoxGroupSection)`
@@ -31,7 +32,7 @@ export function HMMTaxonomy({ counts, title }: HMMTaxonomyProps) {
 
     const components = map(sorted, ({ name, count }) => (
         <HMMTaxonomyItem key={name}>
-            {name} <Badge className="ml-auto">{count}</Badge>
+            {name} <Badge>{count}</Badge>
         </HMMTaxonomyItem>
     ));
 

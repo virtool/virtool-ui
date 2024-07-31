@@ -1,5 +1,6 @@
-import { Badge, Box, BoxGroup, NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@/base";
+import { Box, BoxGroup, NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useLocationState } from "@utils/hooks";
@@ -96,7 +97,7 @@ export default function IsolateEditor() {
         <>
             <SubviewHeader>
                 <IsolateEditorTitle>
-                    Isolates <Badge className="text-base ml-2">{isolateComponents.length}</Badge>
+                    Isolates <ViewHeaderTitleBadge>{isolateComponents.length}</ViewHeaderTitleBadge>
                     {addIsolateLink}
                 </IsolateEditorTitle>
             </SubviewHeader>

@@ -5,11 +5,11 @@ import React from "react";
 type ViewHeaderTitleBadge = {
     children?: React.ReactNode;
     className?: string;
-    color?: "blue" | "green" | "gray" | "grayDark" | "orange" | "purple" | "red";
+    color?: "blue" | "green" | "gray" | "orange" | "purple" | "red";
 };
 
 /**
- * A styled Badge component for use in a BoxGroupHeader
+ * A styled Badge component for use in view headers
  */
 export function ViewHeaderTitleBadge({ children, className, color }: ViewHeaderTitleBadge) {
     return (
