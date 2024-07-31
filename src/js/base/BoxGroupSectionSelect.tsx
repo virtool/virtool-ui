@@ -9,7 +9,7 @@ type SelectBoxGroupSectionProps = {
     theme: DefaultTheme;
 };
 
-export const SelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSectionProps>`
+const SelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSectionProps>`
     background-color: ${props => (props.active ? props.theme.color.blue : "transparent")};
     color: ${props => (props.active ? props.theme.color.white : "inherit")};
     cursor: pointer;
