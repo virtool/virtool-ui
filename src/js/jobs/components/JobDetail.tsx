@@ -1,5 +1,4 @@
 import {
-    Badge,
     ContainerNarrow,
     LoadingPlaceholder,
     NotFound,
@@ -7,6 +6,7 @@ import {
     ViewHeaderAttribution,
     ViewHeaderTitle,
 } from "@base";
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
@@ -16,7 +16,7 @@ import { JobArgs } from "./JobArgs";
 import JobError from "./JobError";
 import JobSteps from "./JobSteps";
 
-const JobDetailBadge = styled(Badge)`
+const JobDetailBadge = styled(ViewHeaderTitleBadge)`
     text-transform: capitalize;
 `;
 

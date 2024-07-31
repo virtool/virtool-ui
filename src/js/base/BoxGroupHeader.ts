@@ -1,6 +1,5 @@
 import styled, { DefaultTheme } from "styled-components";
 import { getFontSize, getFontWeight } from "../app/theme";
-import { Badge } from "./Badge";
 import { BoxGroupSection } from "./BoxGroupSection";
 
 type BoxGroupHeaderProps = {
@@ -21,10 +20,6 @@ export const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
         font-size: ${props => props.theme.fontSize.lg};
         font-weight: ${getFontWeight("thick")};
         margin: 0;
-
-        ${Badge} {
-            margin-left: 5px;
-        }
     }
 
     p {

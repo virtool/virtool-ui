@@ -1,9 +1,10 @@
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
 import { useUrlSearchParams } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Badge, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
+import { BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useInfiniteFindReferences } from "../queries";
 import { ReferenceMinimal, ReferenceSearchResult } from "../types";
@@ -40,7 +41,7 @@ export default function ReferenceList() {
             <ContainerNarrow>
                 <ViewHeader title="References">
                     <ViewHeaderTitle>
-                        References <Badge>{total_count}</Badge>
+                        References <ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
                     </ViewHeaderTitle>
                 </ViewHeader>
                 <ReferenceToolbar />

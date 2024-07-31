@@ -61,11 +61,6 @@ const NuVsDetailTitle = styled.div`
         font-size: ${props => props.theme.fontSize.md};
         font-weight: bold;
     }
-
-    ${Badge} {
-        font-size: ${props => props.theme.fontSize.md};
-        padding: 5px 10px;
-    }
 `;
 
 const StyledNuVsDetail = styled(Box)`
@@ -114,7 +109,7 @@ export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: N
             <NuVsDetailTitle>
                 <h3>
                     Sequence {index}
-                    <Badge>{sequence.length} bp</Badge>
+                    <Badge className="text-base py-2 px-3">{sequence.length} bp</Badge>
                 </h3>
                 <NuVsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
                 <NuVsFamilies families={families} />

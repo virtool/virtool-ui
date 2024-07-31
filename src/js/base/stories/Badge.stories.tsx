@@ -23,7 +23,7 @@ const meta: Meta<typeof Badge> = {
     },
     argTypes: {
         color: {
-            options: ["greyDark", "blue", "orange", "purple", "red"],
+            options: ["gray", "blue", "orange", "purple", "red"],
             control: { type: "radio" },
         },
         children: {
@@ -37,14 +37,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SampleBadge: Story = {
-    render: args => (
+    render: ({ children, color }) => (
         <StyledBadgeHeader>
             <strong>Files Uploaded</strong>
-            <Badge {...args} />
+            <Badge color={color}>{children}</Badge>
         </StyledBadgeHeader>
     ),
     args: {
         children: 10,
-        color: "greyDark",
+        color: "gray",
     },
 };
