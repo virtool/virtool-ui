@@ -1,10 +1,6 @@
-import { DialogPortal } from "@radix-ui/react-dialog";
-import { filter, flatMap, includes, map } from "lodash-es";
-import React, { useState } from "react";
-import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
 import {
     BoxGroup,
+    BoxGroupSectionSelect,
     Dialog,
     DialogContent,
     DialogOverlay,
@@ -12,15 +8,19 @@ import {
     InitialIcon,
     InputSearch,
     NoneFoundSection,
-    SelectBoxGroupSection,
     Toolbar,
-} from "../../../base";
-import { CompactScrollList } from "../../../base/CompactScrollList";
-import { useInfiniteFindGroups } from "../../../groups/queries";
+} from "@base";
+import { CompactScrollList } from "@base/CompactScrollList";
+import { useInfiniteFindGroups } from "@groups/queries";
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { filter, flatMap, includes, map } from "lodash-es";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { getBorder } from "../../../app/theme";
 import { useAddReferenceMember } from "../../queries";
 import { ReferenceGroup } from "../../types";
 
-const StyledAddGroupItem = styled(SelectBoxGroupSection)`
+const StyledAddGroupItem = styled(BoxGroupSectionSelect)`
     display: flex;
     align-items: center;
 

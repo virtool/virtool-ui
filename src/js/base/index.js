@@ -14,7 +14,7 @@ export { BoxGroupDisabled } from "./BoxGroupDisabled";
 export { BoxGroupHeader } from "./BoxGroupHeader";
 export { BoxGroupSearch } from "./BoxGroupSearch";
 export { BoxGroupSection } from "./BoxGroupSection";
-export { SelectBoxGroupSection } from "./BoxGroupSectionSelect";
+export { BoxGroupSectionSelect } from "./BoxGroupSectionSelect";
 export { BoxSpaced } from "./BoxSpaced";
 export { BoxTitle } from "./BoxTitle";
 export { device } from "./Breakpoints";
