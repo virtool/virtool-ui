@@ -27,13 +27,13 @@ export function Badge({ children, className, color = "gray" }: BadgeProps) {
                 "align-middle",
                 "whitespace-nowrap",
                 {
-                    "bg-blue-600": color == "blue",
-                    "bg-green-600": color == "green",
-                    "bg-gray-600": color == "grayDark",
-                    "bg-gray-500": color == "gray",
-                    "bg-orange-600": color == "orange",
-                    "bg-purple-600": color == "purple",
-                    "bg-red-600": color == "red",
+                    "bg-blue-600": color === "blue",
+                    "bg-green-600": color === "green",
+                    "bg-gray-600": color === "grayDark",
+                    "bg-gray-500": color === "gray",
+                    "bg-orange-600": color === "orange",
+                    "bg-purple-600": color === "purple",
+                    "bg-red-600": color === "red",
                 },
                 className
             )}
