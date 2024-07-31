@@ -1,6 +1,6 @@
 import { useRemoveAPIKey, useUpdateAPIKey } from "@account/queries";
 import { APIKeyMinimal } from "@account/types";
-import { Attribution, BoxGroupSection, Button, ButtonToolbar, Icon } from "@base";
+import { Attribution, BoxGroupSection, Button, Icon } from "@base";
 import { Permissions } from "@groups/types";
 import { isEqual, reduce } from "lodash-es";
 import React, { useState } from "react";
@@ -76,7 +76,7 @@ export default function APIKey({ apiKey }: APIKeyProps) {
                             name="permissions"
                         />
 
-                        <ButtonToolbar>
+                        <div className="flex items-center justify-end mb-2.5 gap-1.5">
                             <Button color="red" onClick={() => removeMutation.mutate({ keyId: apiKey.id })}>
                                 Delete
                             </Button>
@@ -87,7 +87,7 @@ export default function APIKey({ apiKey }: APIKeyProps) {
                             >
                                 Update
                             </Button>
-                        </ButtonToolbar>
+                        </div>
                     </div>
                 )}
             </form>
