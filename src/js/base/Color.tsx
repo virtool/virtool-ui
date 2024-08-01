@@ -76,7 +76,7 @@ function ColorSquare({ color, onClick }: ColorSquareProps) {
                 "first:rounded-l-sm",
                 "last:rounded-r-sm"
             )}
-            style={{ backgroundColor: `#${color}` }}
+            style={{ backgroundColor: color }}
         />
     );
 }
