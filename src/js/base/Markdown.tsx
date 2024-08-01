@@ -7,6 +7,9 @@ type MarkdownProps = {
     markdown?: string;
 };
 
+/**
+ * A styled markdown component
+ */
 export function Markdown({ markdown = "" }: MarkdownProps) {
     marked.use({
         gfm: true,
