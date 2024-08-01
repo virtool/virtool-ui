@@ -8,7 +8,7 @@ type MarkdownProps = {
 };
 
 /**
- * A styled markdown component
+ * A styled component that parses, formats, and displays markdown content
  */
 export function Markdown({ markdown = "" }: MarkdownProps) {
     marked.use({
