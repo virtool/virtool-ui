@@ -1,5 +1,6 @@
 import { cn } from "@/utils/utils";
 import React from "react";
+import { Table } from "./Table";
 
 type BoxGroupTableProps = {
     children: React.ReactNode;
@@ -11,7 +12,7 @@ type BoxGroupTableProps = {
  */
 export function BoxGroupTable({ children, className }: BoxGroupTableProps) {
     return (
-        <table
+        <Table
             className={cn(
                 "border-none",
                 "m-0",
@@ -24,6 +25,6 @@ export function BoxGroupTable({ children, className }: BoxGroupTableProps) {
             )}
         >
             {children}
-        </table>
+        </Table>
     );
 }

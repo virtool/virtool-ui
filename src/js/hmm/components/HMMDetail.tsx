@@ -1,8 +1,7 @@
 import { cn } from "@/utils/utils";
+import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { map } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
-import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { match } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -113,7 +112,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
                         "border-none",
                         "flex",
                         "flex-col",
-                        "h-82.5",
+                        "h-80",
                         "m-0",
                         "w-full",
                         "[&_thead]:flex-none",
