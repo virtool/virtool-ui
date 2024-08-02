@@ -1,3 +1,4 @@
+import { cn } from "@/utils/utils";
 import { Badge, Table } from "@base";
 import React from "react";
 import styled from "styled-components";
@@ -13,15 +14,6 @@ const SequenceCell = styled.td`
     }
 `;
 
-const StyledSequenceTable = styled(Table)`
-    margin-top: 10px;
-    table-layout: fixed;
-
-    th {
-        width: 130px;
-    }
-`;
-
 type SequenceTableProps = {
     children: React.ReactNode;
     definition: string;
@@ -34,7 +26,7 @@ type SequenceTableProps = {
  */
 export function SequenceTable({ children, definition, host, sequence }: SequenceTableProps) {
     return (
-        <StyledSequenceTable>
+        <Table className={cn("mt-2.5", "table-fixed", "[&_th]:w-32.5")}>
             <tbody>
                 <tr>
                     <th>Definition</th>
@@ -55,6 +47,6 @@ export function SequenceTable({ children, definition, host, sequence }: Sequence
                     </SequenceCell>
                 </tr>
             </tbody>
-        </StyledSequenceTable>
+        </Table>
     );
 }

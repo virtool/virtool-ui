@@ -1,5 +1,5 @@
 import { BlastHit } from "@/analyses/types";
-import { BoxGroup, BoxGroupHeader, Button, ExternalLink, Icon, Table } from "@base";
+import { BoxGroup, BoxGroupHeader, BoxGroupTable, Button, ExternalLink, Icon } from "@base";
 import { map } from "lodash";
 import numbro from "numbro";
 import React from "react";
@@ -51,7 +51,7 @@ export function BLASTResults({ hits, onBlast }: BLASTResultsProps) {
                     Retry
                 </Button>
             </StyledBLASTResultsHeader>
-            <Table>
+            <BoxGroupTable>
                 <thead>
                     <tr>
                         <th>Accession</th>
@@ -62,7 +62,7 @@ export function BLASTResults({ hits, onBlast }: BLASTResultsProps) {
                     </tr>
                 </thead>
                 <tbody>{components}</tbody>
-            </Table>
+            </BoxGroupTable>
         </BoxGroup>
     );
 }

@@ -2,7 +2,7 @@ import { map } from "lodash";
 import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, Table } from "../../base";
+import { BoxGroup, BoxGroupHeader, BoxGroupTable } from "../../base";
 import { workflows } from "../types";
 
 type JobArgsRowProps = {
@@ -165,11 +165,11 @@ export function JobArgs({ workflow, args }) {
                 <h2>Arguments</h2>
                 <p>Run arguments that make this job unique.</p>
             </BoxGroupHeader>
-            <Table>
+            <BoxGroupTable>
                 <tbody>
                     <JobArgsRows workflow={workflow} args={args} />
                 </tbody>
-            </Table>
+            </BoxGroupTable>
         </BoxGroup>
     );
 }

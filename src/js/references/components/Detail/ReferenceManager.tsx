@@ -1,23 +1,13 @@
-import { BoxGroup, BoxGroupHeader, ContainerNarrow, LoadingPlaceholder, Table } from "@base";
+import { cn } from "@/utils/utils";
+import { BoxGroup, BoxGroupHeader, BoxGroupTable, ContainerNarrow, LoadingPlaceholder } from "@base";
 import Contributors from "@indexes/components/Contributors";
 import React from "react";
 import { match } from "react-router-dom";
-import styled from "styled-components";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
 import Targets from "./Targets/Targets";
-
-const ReferenceManageTable = styled(Table)`
-    th {
-        width: 180px;
-    }
-
-    tr:not(:first-of-type) td {
-        text-transform: capitalize;
-    }
-`;
 
 type ReferenceManageProps = {
     /** Match object containing path information */
@@ -43,7 +33,7 @@ export default function ReferenceManager({ match }: ReferenceManageProps) {
                 <BoxGroupHeader>
                     <h2>General</h2>
                 </BoxGroupHeader>
-                <ReferenceManageTable>
+                <BoxGroupTable className={cn("[&_th]:w-45", "[&_tr:not(:first-of-type)_td]:capitalize")}>
                     <tbody>
                         <tr>
                             <th>Description</th>
@@ -58,7 +48,7 @@ export default function ReferenceManager({ match }: ReferenceManageProps) {
                             <td>{data_type}</td>
                         </tr>
                     </tbody>
-                </ReferenceManageTable>
+                </BoxGroupTable>
             </BoxGroup>
 
             {remotes_from && <RemoteReference detail={reference} />}

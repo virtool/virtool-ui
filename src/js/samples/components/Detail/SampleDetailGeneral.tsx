@@ -1,4 +1,12 @@
-import { BoxGroup, BoxGroupHeader, ContainerNarrow, ContainerSide, LoadingPlaceholder, Markdown, Table } from "@base";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    BoxGroupTable,
+    ContainerNarrow,
+    ContainerSide,
+    LoadingPlaceholder,
+    Markdown,
+} from "@base";
 import JobItem from "@jobs/components/Item/JobItem";
 import numbro from "numbro";
 import React from "react";
@@ -60,7 +68,7 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
                         <h2>Metadata</h2>
                         <p>User-defined information about the sample.</p>
                     </BoxGroupHeader>
-                    <Table>
+                    <BoxGroupTable>
                         <tbody>
                             <tr>
                                 <th>Host</th>
@@ -75,7 +83,7 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
                                 <td>{data.locale}</td>
                             </tr>
                         </tbody>
-                    </Table>
+                    </BoxGroupTable>
                 </BoxGroup>
 
                 {data.ready && (
@@ -84,7 +92,7 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
                             <h2>Library</h2>
                             <p>Information about the sequencing reads in this sample.</p>
                         </BoxGroupHeader>
-                        <Table>
+                        <BoxGroupTable>
                             <tbody>
                                 <tr>
                                     <th>Encoding</th>
@@ -111,7 +119,7 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
                                     <td>{data.paired ? "Yes" : "No"}</td>
                                 </tr>
                             </tbody>
-                        </Table>
+                        </BoxGroupTable>
                     </BoxGroup>
                 )}
 
