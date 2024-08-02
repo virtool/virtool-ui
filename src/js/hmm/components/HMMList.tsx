@@ -1,4 +1,5 @@
-import { Badge, BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
@@ -24,7 +25,9 @@ export default function HMMList() {
     return (
         <div>
             <ViewHeader title="HMMs">
-                <ViewHeaderTitle>HMMs {status.task?.complete && <Badge>{found_count}</Badge>}</ViewHeaderTitle>
+                <ViewHeaderTitle>
+                    HMMs {status.task?.complete && <ViewHeaderTitleBadge>{found_count}</ViewHeaderTitleBadge>}
+                </ViewHeaderTitle>
             </ViewHeader>
 
             {total_count ? (

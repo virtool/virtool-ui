@@ -20,7 +20,6 @@ export { BoxSpaced } from "./BoxSpaced";
 export { BoxTitle } from "./BoxTitle";
 export { device } from "./Breakpoints";
 export { Button } from "./Button";
-export { ButtonToolbar } from "./ButtonToolbar";
 export { Checkbox } from "./Checkbox";
 export { CheckboxLabel } from "./CheckboxLabel";
 export { Circle } from "./Circle";

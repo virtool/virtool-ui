@@ -1,14 +1,11 @@
+import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "@base";
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../base";
 
 const HMMTaxonomyItem = styled(BoxGroupSection)`
     display: flex;
-
-    ${Badge} {
-        margin-left: auto;
-    }
+    justify-content: space-between;
 `;
 
 const StyledHMMTaxonomy = styled(BoxGroupSection)`

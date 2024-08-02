@@ -1,7 +1,7 @@
+import { Badge, BoxGroupSection, Circle } from "@base";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import React from "react";
 import styled from "styled-components";
-import { Badge, BoxGroupSection, Circle } from "../../../base";
 
 const StateButtonCheckbox = styled(Checkbox.Root)`
     align-items: center;
@@ -29,10 +29,6 @@ const StyledStateButton = styled(BoxGroupSection)`
     position: relative;
     text-transform: capitalize;
     user-select: none;
-
-    ${Badge} {
-        margin-left: auto;
-    }
 `;
 
 type StateButtonProps = {
@@ -62,7 +58,7 @@ export function StateButton({ active, count = 0, color, label, onClick }: StateB
 
             <Circle color={color} />
             {label}
-            <Badge>{count}</Badge>
+            <Badge className="ml-auto">{count}</Badge>
         </StyledStateButton>
     );
 }

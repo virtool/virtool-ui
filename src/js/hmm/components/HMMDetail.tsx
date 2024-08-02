@@ -1,10 +1,11 @@
 import { cn } from "@/utils/utils";
 import { map } from "lodash-es";
 import React from "react";
+import styled from "styled-components";
+import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { match } from "react-router-dom";
 import styled from "styled-components";
 import {
-    Badge,
     BoxGroup,
     BoxGroupHeader,
     BoxGroupTable,
@@ -104,7 +105,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
             <BoxGroup>
                 <BoxGroupHeader>
                     <h2>
-                        Cluster Members <Badge>{data.entries.length}</Badge>
+                        Cluster Members <BoxGroupHeaderBadge>{data.entries.length}</BoxGroupHeaderBadge>
                     </h2>
                 </BoxGroupHeader>
                 <BoxGroupTable
