@@ -25,14 +25,14 @@ export function OTUHeaderEndIcons({ id, name, refId, abbreviation }: OTUHeaderEn
                 key="edit-icon"
                 color="grayDark"
                 name="pen"
-                tip="Edit OTU"
+                tip="edit OTU"
                 onClick={() => setLocationState({ editOTU: true })}
             />
             <IconButton
                 key="remove-icon"
                 color="red"
                 name="trash"
-                tip="Remove OTU"
+                tip="remove OTU"
                 onClick={() => setLocationState({ removeOTU: true })}
             />
 

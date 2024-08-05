@@ -126,8 +126,7 @@ export default function Change({ id, createdAt, description, methodName, otu, un
             {unbuilt && (
                 <IconButton
                     name="history"
-                    tip="Revert"
-                    color="blue"
+                    tip="revert"
                     onClick={() => (unbuilt ? mutation.mutate({ changeId: id }) : null)}
                 />
             )}

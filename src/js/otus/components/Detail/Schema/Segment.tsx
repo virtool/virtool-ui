@@ -45,13 +45,13 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
                     <IconButton
                         name="trash"
                         color="red"
-                        tip="Remove Segment"
+                        tip="remove segment"
                         onClick={() => history.push({ state: { removeSegment: segment.name } })}
                     />
                     <IconButton
                         name="pen"
                         color="grayDark"
-                        tip="Edit Segment"
+                        tip="edit segment"
                         onClick={() => history.push({ state: { editSegment: segment.name } })}
                     />
                 </div>
@@ -61,13 +61,13 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
                 <IconButton
                     className={cn("leading-none", { hidden: first, flex: !first })}
                     name="caret-up"
-                    tip="Move Up"
+                    tip="move up"
                     onClick={onMoveUp}
                 />
                 <IconButton
                     className={cn("leading-none", { hidden: last, flex: !last })}
                     name="caret-down"
-                    tip="Move Down"
+                    tip="move down"
                     onClick={onMoveDown}
                 />
             </div>

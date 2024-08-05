@@ -37,7 +37,7 @@ export function SampleItemEndIcon({ onClick, ready, job }: SampleItemEndIconProp
                     className="text-lg"
                     color="green"
                     name="chart-area"
-                    tip="Quick Analyze"
+                    tip="quick analyze"
                     tipPlacement="left"
                     onClick={onClick}
                 />

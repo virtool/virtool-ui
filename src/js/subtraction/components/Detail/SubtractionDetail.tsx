@@ -49,11 +49,11 @@ export default function SubtractionDetail({ match }: SubtractionDetailProps) {
                     {data.name}
                     {canModify && (
                         <ViewHeaderIcons>
-                            <IconButton name="pen" color="grayDark" tip="Edit" onClick={() => setShow(true)} />
+                            <IconButton name="pen" color="grayDark" tip="modify" onClick={() => setShow(true)} />
                             <IconButton
                                 name="trash"
                                 color="red"
-                                tip="Remove"
+                                tip="remove"
                                 onClick={() => history.push({ state: { removeSubtraction: true } })}
                             />
                         </ViewHeaderIcons>

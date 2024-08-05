@@ -33,7 +33,7 @@ export function UploaderItem({ failed, localId, name, progress, size }: UploadIt
         end = (
             <span className="flex font-medium gap-2">
                 <span>Failed</span>
-                <IconButton name="trash" color="red" tip="Remove" onClick={() => removeUpload(localId)} />
+                <IconButton name="trash" color="red" tip="remove" onClick={() => removeUpload(localId)} />
             </span>
         );
     } else if (progress === 100) {

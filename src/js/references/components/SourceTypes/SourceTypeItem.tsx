@@ -33,7 +33,7 @@ export function SourceTypeItem({ onRemove, sourceType, disabled = false }: Sourc
         <StyledSourceTypeItem disabled={disabled}>
             <span>{sourceType}</span>
             {disabled ? null : (
-                <IconButton name="trash" color="red" tip="Remove" onClick={() => onRemove(sourceType)} />
+                <IconButton name="trash" color="red" tip="remove" onClick={() => onRemove(sourceType)} />
             )}
         </StyledSourceTypeItem>
     );

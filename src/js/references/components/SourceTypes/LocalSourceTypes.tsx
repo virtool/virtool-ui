@@ -118,7 +118,7 @@ export function LocalSourceTypes() {
                             <span>
                                 The source type <strong>{lastRemoved}</strong> was just removed.
                             </span>
-                            <IconButton name="undo" tip="Undo" onClick={handleUndo} />
+                            <IconButton name="undo" tip="undo" onClick={handleUndo} />
                         </SourceTypesUndo>
                     )}
                     <SourceTypeBoxGroupSection>

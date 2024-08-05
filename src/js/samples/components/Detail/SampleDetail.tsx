@@ -33,7 +33,7 @@ type SampleDetailProps = {
  */
 export default function SampleDetail({ match }: SampleDetailProps) {
     const location = useLocation();
-    const [locationState, setLocationState] = useLocationState();
+    const [_, setLocationState] = useLocationState();
     const { sampleId } = match.params;
     const { data, isLoading, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
@@ -56,7 +56,7 @@ export default function SampleDetail({ match }: SampleDetailProps) {
                 <IconButton
                     color="grayDark"
                     name="pen"
-                    tip="Edit"
+                    tip="modify"
                     onClick={() => setLocationState({ editSample: true })}
                 />
             );
@@ -66,7 +66,7 @@ export default function SampleDetail({ match }: SampleDetailProps) {
             <IconButton
                 color="red"
                 name="trash"
-                tip="Remove"
+                tip="remove"
                 onClick={() => setLocationState({ removeSample: true })}
             />
         );

@@ -38,7 +38,7 @@ export default function FileItem({ canDelete, id, name, size, uploaded_at, user 
                 </div>
                 <div className="flex font-medium gap-6 justify-end text-lg">
                     <span>{byteSize(size, true)}</span>
-                    {canDelete && <IconButton color="red" name="trash" tip="Remove" onClick={handleDelete} />}
+                    {canDelete && <IconButton color="red" name="trash" tip="remove" onClick={handleDelete} />}
                 </div>
             </div>
         </BoxGroupSection>

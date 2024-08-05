@@ -64,7 +64,7 @@ export default function APIKey({ apiKey }: APIKeyProps) {
                         {permissionCount} permission{permissionCount === 1 ? null : "s"}
                     </APIKeyPermissionCount>
                     <APIKeyCloseContainer>
-                        {show && <IconButton name="times" tip="Close" onClick={() => setShow(!show)} />}
+                        {show && <IconButton name="times" tip="close" onClick={() => setShow(!show)} />}
                     </APIKeyCloseContainer>
                 </APIKeyHeader>
                 {show && (

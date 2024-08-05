@@ -21,7 +21,7 @@ const PopoverContent = styled(PopoverPrimitive.Content)`
     box-shadow: ${boxShadow.lg};
     margin: 5px;
     width: 320px;
-    z-index: 10;
+    z-index: 1;
 
     animation-duration: 400ms;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);

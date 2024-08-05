@@ -11,5 +11,5 @@ type CloseButtonProps = {
 };
 
 export function CloseButton({ onClick }: CloseButtonProps) {
-    return <StyledCloseButton name="times" tip="Close" onClick={onClick} />;
+    return <StyledCloseButton name="times" tip="close" onClick={onClick} />;
 }

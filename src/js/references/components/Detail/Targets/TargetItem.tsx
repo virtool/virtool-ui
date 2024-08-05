@@ -55,8 +55,8 @@ export function TargetItem({ canModify, description, name, onEdit, onRemove }: T
                 {name}
                 {canModify && (
                     <span>
-                        <IconButton name="edit" color="orange" tip="Modify" onClick={handleEdit} />
-                        <IconButton name="trash" color="red" tip="Remove" onClick={handleRemove} />
+                        <IconButton name="edit" color="orange" tip="modify" onClick={handleEdit} />
+                        <IconButton name="trash" color="red" tip="remove" onClick={handleRemove} />
                     </span>
                 )}
             </TargetItemHeader>

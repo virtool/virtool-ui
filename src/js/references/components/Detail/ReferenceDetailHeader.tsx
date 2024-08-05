@@ -41,7 +41,7 @@ export default function ReferenceDetailHeader({
                             <IconButton
                                 color="grayDark"
                                 name="pen"
-                                tip="Edit"
+                                tip="modify"
                                 onClick={() => history.push({ state: { editReference: true } })}
                             />
                         )}

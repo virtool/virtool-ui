@@ -102,21 +102,21 @@ export default function IsolateDetail({
                             <IconButton
                                 name="pen"
                                 color="grayDark"
-                                tip="Edit Isolate"
+                                tip="edit isolate"
                                 onClick={() => setLocationState(merge(locationState, { editIsolate: true }))}
                             />
                             {!activeIsolate.default && dataType !== "barcode" && (
                                 <IconButton
                                     name="star"
                                     color="green"
-                                    tip="Set as Default"
+                                    tip="set as default"
                                     onClick={() => mutation.mutate({ otuId, isolateId: activeIsolate.id })}
                                 />
                             )}
                             <IconButton
                                 name="trash"
                                 color="red"
-                                tip="Remove Isolate"
+                                tip="remove isolate"
                                 onClick={() => setLocationState(merge(locationState, { removeIsolate: true }))}
                             />
                         </>

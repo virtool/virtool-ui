@@ -46,7 +46,7 @@ export default function SequenceButtons({ id, onCollapse }) {
                 <IconButton
                     name="pen"
                     color="grayDark"
-                    tip="Edit Sequence"
+                    tip="edit sequence"
                     onClick={() => setLocationState(merge(locationState, { editSequence: id }))}
                 />
             )}
@@ -54,7 +54,7 @@ export default function SequenceButtons({ id, onCollapse }) {
                 <IconButton
                     name="trash"
                     color="red"
-                    tip="Remove Sequence"
+                    tip="remove sequence"
                     onClick={() => setLocationState(merge(locationState, { removeSequence: id }))}
                 />
             )}

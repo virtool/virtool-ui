@@ -58,7 +58,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
     const cloneButton = canCreate ? (
         <IconButton
             name="clone"
-            tip="Clone"
+            tip="clone"
             color="blue"
             onClick={() => history.push({ state: { cloneReference: id } })}
         />
