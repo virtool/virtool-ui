@@ -1,12 +1,11 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "@tests/fake/admin";
+import { createFakeUser, createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
+import { renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
-import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
-import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
-import { createFakeUser, createFakeUsers, mockApiFindUsers } from "../../../../../tests/fake/user";
-import { renderWithProviders } from "../../../../../tests/setupTests";
-
 import { AdministratorRoles } from "../../../types";
 import { ManageAdministrators } from "../Administrators";
 
@@ -28,11 +27,11 @@ describe("<Administrators>", () => {
 
         expect(screen.getByText(users[0].handle)).toBeInTheDocument();
         const user_1 = screen.getByText(users[0].handle).closest("div");
-        expect(within(user_1).getByRole("button", { name: "Remove administrator role" })).toBeInTheDocument();
+        expect(within(user_1).getByRole("button", { name: "remove administrator role" })).toBeInTheDocument();
         expect(within(user_1).getByText(`${AdministratorRoles.FULL} Administrator`)).toBeInTheDocument();
 
         const user_2 = screen.getByText(users[1].handle).closest("div");
-        expect(within(user_2).getByRole("button", { name: "Remove administrator role" })).toBeInTheDocument();
+        expect(within(user_2).getByRole("button", { name: "remove administrator role" })).toBeInTheDocument();
         expect(within(user_2).getByText(`${AdministratorRoles.BASE} Administrator`)).toBeInTheDocument();
 
         nock.cleanAll();
@@ -71,7 +70,7 @@ describe("<Administrators>", () => {
 
         renderWithProviders(<ManageAdministrators />);
 
-        await userEvent.click(await screen.findByRole("button", { name: "Remove administrator role" }));
+        await userEvent.click(await screen.findByRole("button", { name: "remove administrator role" }));
 
         set_role_scope.done();
 

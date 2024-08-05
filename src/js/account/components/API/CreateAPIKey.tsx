@@ -12,7 +12,7 @@ import {
     InputContainer,
     InputError,
     InputGroup,
-    InputIcon,
+    InputIconButton,
     InputLabel,
     InputSimple,
     SaveButton,
@@ -132,7 +132,12 @@ export default function CreateAPIKey() {
                             <CreateAPIKeyInputContainer align="right">
                                 <CreateAPIKeyInput value={newKey} readOnly />
                                 {window.isSecureContext && (
-                                    <InputIcon aria-label="copy" name="copy" onClick={copyToClipboard} />
+                                    <InputIconButton
+                                        aria-label="copy"
+                                        name="copy"
+                                        tip="Copy"
+                                        onClick={copyToClipboard}
+                                    />
                                 )}
                             </CreateAPIKeyInputContainer>
                             {copied && (

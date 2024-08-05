@@ -33,7 +33,7 @@ describe("<ReferenceList />", () => {
         expect(screen.getByText(`${references.user.handle} created`)).toBeInTheDocument();
         expect(screen.getByText(`${references.organism} ${references.data_type}s`)).toBeInTheDocument();
 
-        expect(await screen.findByRole("link", { name: "clone" })).toBeInTheDocument();
+        expect(await screen.findByRole("button", { name: "clone" })).toBeInTheDocument();
         expect(screen.getByLabelText("clone")).toBeInTheDocument();
 
         scope.done();
@@ -101,7 +101,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(await screen.findByRole("link", { name: "clone" }));
+            await userEvent.click(await screen.findByRole("button", { name: "clone" }));
             await userEvent.click(screen.getByRole("button", { name: "Clone" }));
 
             getReferencesScope.done();
@@ -117,7 +117,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(await screen.findByRole("link", { name: "clone" }));
+            await userEvent.click(await screen.findByRole("button", { name: "clone" }));
             await userEvent.clear(screen.getByRole("textbox"));
             await userEvent.type(screen.getByRole("textbox"), "newName");
             await userEvent.click(screen.getByRole("button", { name: "Clone" }));
@@ -134,7 +134,7 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />, history);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(await screen.findByRole("link", { name: "clone" }));
+            await userEvent.click(await screen.findByRole("button", { name: "clone" }));
             await userEvent.clear(screen.getByRole("textbox"));
             await userEvent.click(screen.getByRole("button", { name: "Clone" }));
             expect(screen.getByText("Required Field")).toBeInTheDocument();

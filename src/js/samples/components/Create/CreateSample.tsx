@@ -4,7 +4,7 @@ import {
     InputContainer,
     InputError,
     InputGroup,
-    InputIcon,
+    InputIconButton,
     InputLabel,
     InputSimple,
     LoadingPlaceholder,
@@ -199,9 +199,10 @@ export default function CreateSample() {
                     <InputContainer align="right">
                         <InputSimple id="name" {...register("name", { required: "Required Field" })} />
                         {Boolean(watch("readFiles").length) && (
-                            <InputIcon
+                            <InputIconButton
                                 name="magic"
                                 aria-label="Auto Fill"
+                                tip="Auto Fill"
                                 onClick={() => autofill(watch("readFiles"))}
                             />
                         )}

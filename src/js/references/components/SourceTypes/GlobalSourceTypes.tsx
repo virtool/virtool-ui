@@ -1,4 +1,5 @@
 import { settingsQueryKeys } from "@administration/queries";
+import { IconButton } from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
 import {
@@ -6,7 +7,6 @@ import {
     BoxGroupHeader,
     BoxGroupSection,
     Button,
-    Icon,
     InputContainer,
     InputError,
     InputGroup,
@@ -86,7 +86,7 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
                         <span>
                             The source type <strong>{lastRemoved}</strong> was just removed.
                         </span>
-                        <Icon aria-label="undo" name="undo" onClick={handleUndo} />
+                        <IconButton name="undo" tip="undo" onClick={handleUndo} />
                     </UndoSection>
                 )}
 

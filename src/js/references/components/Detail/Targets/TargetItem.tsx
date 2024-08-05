@@ -1,7 +1,8 @@
+import { IconButton } from "@base/IconButton";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../../app/theme";
-import { BoxGroupSection, Icon } from "../../../../base";
+import { BoxGroupSection } from "../../../../base";
 
 const TargetItemHeader = styled.h3`
     align-items: center;
@@ -54,8 +55,8 @@ export function TargetItem({ canModify, description, name, onEdit, onRemove }: T
                 {name}
                 {canModify && (
                     <span>
-                        <Icon name="edit" aria-label="edit" color="orange" tip="Modify" onClick={handleEdit} />
-                        <Icon name="trash" aria-label="remove" color="red" tip="Remove" onClick={handleRemove} />
+                        <IconButton name="edit" color="orange" tip="modify" onClick={handleEdit} />
+                        <IconButton name="trash" color="red" tip="remove" onClick={handleRemove} />
                     </span>
                 )}
             </TargetItemHeader>

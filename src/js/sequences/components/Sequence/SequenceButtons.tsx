@@ -1,4 +1,5 @@
-import { CloseButton, IconLink } from "@base";
+import { CloseButton } from "@base";
+import { IconButton } from "@base/IconButton";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
@@ -28,10 +29,6 @@ const SequenceHeaderButtons = styled.span`
     }
 `;
 
-const StyledButton = styled(IconLink)`
-    padding: 0 5px;
-`;
-
 /**
  * Displays icons for the sequence item to close, edit, or remove
  */
@@ -46,18 +43,18 @@ export default function SequenceButtons({ id, onCollapse }) {
     return (
         <SequenceHeaderButtons>
             {canModify && (
-                <IconLink
-                    name="pencil-alt"
-                    color="orange"
-                    tip="Edit Sequence"
+                <IconButton
+                    name="pen"
+                    color="grayDark"
+                    tip="edit sequence"
                     onClick={() => setLocationState(merge(locationState, { editSequence: id }))}
                 />
             )}
             {canModify && (
-                <StyledButton
+                <IconButton
                     name="trash"
                     color="red"
-                    tip="Remove Sequence"
+                    tip="remove sequence"
                     onClick={() => setLocationState(merge(locationState, { removeSequence: id }))}
                 />
             )}

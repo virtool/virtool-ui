@@ -1,3 +1,4 @@
+import { IconButton } from "@base/IconButton";
 import { endsWith } from "lodash-es";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -37,10 +38,10 @@ export default function ReferenceDetailHeader({
                     <ViewHeaderIcons>
                         {isRemote && <Icon color="grey" name="lock" aria-label="lock" />}
                         {!isRemote && canModify && (
-                            <Icon
-                                color="orange"
-                                name="pencil-alt"
-                                tip="Edit"
+                            <IconButton
+                                color="grayDark"
+                                name="pen"
+                                tip="modify"
                                 onClick={() => history.push({ state: { editReference: true } })}
                             />
                         )}

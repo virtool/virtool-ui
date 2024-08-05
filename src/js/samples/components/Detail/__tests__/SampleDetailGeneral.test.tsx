@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
+import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import numbro from "numbro";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeSample, mockApiGetSampleDetail } from "../../../../../tests/fake/samples";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import SampleDetailGeneral from "../SampleDetailGeneral";
 
 describe("<SampleDetailGeneral />", () => {

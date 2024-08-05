@@ -59,7 +59,7 @@ describe("<SubtractionDetail />", () => {
         renderWithMemoryRouter(<SubtractionDetail {...props} />);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "edit" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "modify" })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "remove" })).toBeInTheDocument();
 
         scope.done();
@@ -73,7 +73,7 @@ describe("<SubtractionDetail />", () => {
         renderWithMemoryRouter(<SubtractionDetail {...props} />);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "edit" })).toBeNull();
+        expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
         expect(screen.queryByRole("button", { name: "remove" })).toBeNull();
 
         scope.done();

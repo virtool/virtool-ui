@@ -1,8 +1,9 @@
+import { IconButton } from "@base/IconButton";
 import numbro from "numbro";
 import React, { useState } from "react";
 import { match, useHistory } from "react-router-dom";
 import { useCheckAdminRoleOrPermission } from "../../../administration/hooks";
-import { Icon, LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
+import { LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
 import { Permission } from "../../../groups/types";
 import { useFetchSubtraction } from "../../queries";
 import { NucleotideComposition } from "../../types";
@@ -48,11 +49,11 @@ export default function SubtractionDetail({ match }: SubtractionDetailProps) {
                     {data.name}
                     {canModify && (
                         <ViewHeaderIcons>
-                            <Icon aria-label="edit" name="pencil-alt" color="orange" onClick={() => setShow(true)} />
-                            <Icon
-                                aria-label="remove"
+                            <IconButton name="pen" color="grayDark" tip="modify" onClick={() => setShow(true)} />
+                            <IconButton
                                 name="trash"
                                 color="red"
+                                tip="remove"
                                 onClick={() => history.push({ state: { removeSubtraction: true } })}
                             />
                         </ViewHeaderIcons>

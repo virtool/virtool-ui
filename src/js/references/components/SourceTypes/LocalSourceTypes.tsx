@@ -1,3 +1,4 @@
+import { IconButton } from "@base/IconButton";
 import { get } from "lodash-es";
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
@@ -10,7 +11,6 @@ import {
     BoxGroupHeader,
     BoxGroupSection,
     Button,
-    Icon,
     InputContainer,
     InputError,
     InputSimple,
@@ -118,7 +118,7 @@ export function LocalSourceTypes() {
                             <span>
                                 The source type <strong>{lastRemoved}</strong> was just removed.
                             </span>
-                            <Icon name={"undo"} onClick={handleUndo} aria-label="undo" />
+                            <IconButton name="undo" tip="undo" onClick={handleUndo} />
                         </SourceTypesUndo>
                     )}
                     <SourceTypeBoxGroupSection>

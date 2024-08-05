@@ -1,18 +1,18 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import nock from "nock";
-import React from "react";
-import { beforeEach, describe, expect, it } from "vitest";
 import {
     createFakeAccount,
     createFakeApiKey,
     mockApiCreateAPIKey,
     mockApiGetAccount,
     mockApiGetAPIKeys,
-} from "../../../../../tests/fake/account";
-import { createFakePermissions } from "../../../../../tests/fake/permissions";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
+} from "@tests/fake/account";
+import { createFakePermissions } from "@tests/fake/permissions";
+import { renderWithMemoryRouter } from "@tests/setupTests";
+import nock from "nock";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import APIKeys from "../APIKeys";
 
 describe("<APIKeys />", () => {

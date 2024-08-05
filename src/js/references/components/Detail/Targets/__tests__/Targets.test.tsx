@@ -43,14 +43,14 @@ describe("<Targets />", () => {
     it("should render when [canModify=true]", async () => {
         renderWithRouter(<Targets {...props} />, history);
 
-        expect(await screen.findByRole("button", { name: "edit" })).toBeInTheDocument();
+        expect(await screen.findByRole("button", { name: "modify" })).toBeInTheDocument();
     });
 
     it("should render when [canModify=false]", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithRouter(<Targets {...props} />, history);
 
-        expect(screen.queryByRole("button", { name: "edit" })).toBeNull();
+        expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
     });
 
     it("should render null when [dataType!=barcode]", () => {
@@ -71,8 +71,8 @@ describe("<Targets />", () => {
     it("should show modal when edit target is called", async () => {
         renderWithRouter(<Targets {...props} />, history);
 
-        expect(await screen.findByRole("button", { name: "edit" })).toBeInTheDocument();
-        await userEvent.click(screen.getByRole("button", { name: "edit" }));
+        expect(await screen.findByRole("button", { name: "modify" })).toBeInTheDocument();
+        await userEvent.click(screen.getByRole("button", { name: "modify" }));
         expect(history.location.state.editTarget).toBe(props.reference.targets[0].name);
     });
 

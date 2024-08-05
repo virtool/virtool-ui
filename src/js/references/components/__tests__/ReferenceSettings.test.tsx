@@ -1,9 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { expect, test } from "vitest";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import { ReferenceSettings } from "../ReferenceSettings";
 
 const settings = {
@@ -46,7 +46,7 @@ test("GlobalSourceTypes", async () => {
 
     scope.get("/api/settings").reply(200, { ...settings, default_source_types: ["Genotype"] });
 
-    await userEvent.click((await screen.findAllByRole("button", { name: "trash" }))[0]);
+    await userEvent.click((await screen.findAllByRole("button", { name: "remove" }))[0]);
 
     await waitFor(() => {
         expect(screen.queryByText("The source type was just removed", { exact: false })).toBeInTheDocument();

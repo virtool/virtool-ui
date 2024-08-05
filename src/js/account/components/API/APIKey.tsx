@@ -1,6 +1,7 @@
 import { useRemoveAPIKey, useUpdateAPIKey } from "@account/queries";
 import { APIKeyMinimal } from "@account/types";
-import { Attribution, BoxGroupSection, Button, Icon } from "@base";
+import { Attribution, BoxGroupSection, Button } from "@base";
+import { IconButton } from "@base/IconButton";
 import { Permissions } from "@groups/types";
 import { isEqual, reduce } from "lodash-es";
 import React, { useState } from "react";
@@ -63,7 +64,7 @@ export default function APIKey({ apiKey }: APIKeyProps) {
                         {permissionCount} permission{permissionCount === 1 ? null : "s"}
                     </APIKeyPermissionCount>
                     <APIKeyCloseContainer>
-                        {show && <Icon name="times" aria-label="close" onClick={() => setShow(!show)} />}
+                        {show && <IconButton name="times" tip="close" onClick={() => setShow(!show)} />}
                     </APIKeyCloseContainer>
                 </APIKeyHeader>
                 {show && (
