@@ -1,5 +1,5 @@
 import { InputContainer } from "@base/InputContainer";
-import { InputIcon } from "@base/InputIcon";
+import { InputIconButton } from "@base/InputIconButton";
 import React, { useState } from "react";
 import { Input } from "./Input";
 
@@ -14,7 +14,11 @@ export const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordPro
     return (
         <InputContainer>
             <Input as="input" {...props} ref={ref} type={show ? "" : "password"} />
-            <InputIcon name={show ? "eye-slash" : "eye"} onClick={() => setShow(prevShow => !prevShow)} />
+            <InputIconButton
+                tip={show ? "Hide" : "Show"}
+                name={show ? "eye-slash" : "eye"}
+                onClick={() => setShow(prevShow => !prevShow)}
+            />
         </InputContainer>
     );
 });

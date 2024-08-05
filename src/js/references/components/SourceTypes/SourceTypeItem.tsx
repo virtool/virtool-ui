@@ -1,6 +1,7 @@
+import { IconButton } from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Icon } from "../../../base";
+import { BoxGroupSection } from "../../../base";
 
 interface StyledSourceTypeItemProps {
     disabled: boolean;
@@ -32,7 +33,7 @@ export function SourceTypeItem({ onRemove, sourceType, disabled = false }: Sourc
         <StyledSourceTypeItem disabled={disabled}>
             <span>{sourceType}</span>
             {disabled ? null : (
-                <Icon name="trash" aria-label="trash" color={"red"} onClick={() => onRemove(sourceType)} />
+                <IconButton name="trash" color="red" tip="Remove" onClick={() => onRemove(sourceType)} />
             )}
         </StyledSourceTypeItem>
     );

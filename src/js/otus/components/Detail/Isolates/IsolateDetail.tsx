@@ -1,4 +1,5 @@
 import { Box, Icon, Label } from "@base";
+import { IconButton } from "@base/IconButton";
 import { useSetIsolateAsDefault } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
@@ -98,27 +99,24 @@ export default function IsolateDetail({
                     {defaultIsolateLabel}
                     {canModify && (
                         <>
-                            <Icon
-                                name="pencil-alt"
-                                color="orange"
+                            <IconButton
+                                name="pen"
+                                color="grayDark"
                                 tip="Edit Isolate"
-                                tipPlacement="left"
                                 onClick={() => setLocationState(merge(locationState, { editIsolate: true }))}
                             />
                             {!activeIsolate.default && dataType !== "barcode" && (
-                                <Icon
+                                <IconButton
                                     name="star"
                                     color="green"
                                     tip="Set as Default"
-                                    tipPlacement="left"
                                     onClick={() => mutation.mutate({ otuId, isolateId: activeIsolate.id })}
                                 />
                             )}
-                            <Icon
+                            <IconButton
                                 name="trash"
                                 color="red"
                                 tip="Remove Isolate"
-                                tipPlacement="left"
                                 onClick={() => setLocationState(merge(locationState, { removeIsolate: true }))}
                             />
                         </>

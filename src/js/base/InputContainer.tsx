@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Input } from "./Input";
-import { InputIcon } from "./InputIcon";
+import { InputIconButton } from "./InputIconButton";
 
 type InputContainerProps = {
     align?: "left" | "right";
@@ -13,7 +13,7 @@ export const InputContainer = styled.div<InputContainerProps>`
     padding-${props => props.align}: 40px;
   }
 
-  ${InputIcon} {
+  ${InputIconButton} {
     ${props => props.align}: 0;
   }
 `;

@@ -1,5 +1,6 @@
 import { getColor } from "@app/theme";
-import { Alert, Icon } from "@base";
+import { Alert } from "@base";
+import { IconButton } from "@base/IconButton";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -45,8 +46,8 @@ export function RestoredAlert({ hasRestored, name, resetForm }: RestoredAlertPro
         show && (
             <StyledRestoredAlert>
                 <span>Resumed editing draft {name}.</span>
-                <Icon aria-label="undo restore" name="undo" color="grey" onClick={onUndoRestore} />
-                <Icon aria-label="close" name="times" color="grey" onClick={() => setDismissed(true)} />
+                <IconButton name="undo" color="gray" tip="Undo Restore" onClick={onUndoRestore} />
+                <IconButton name="times" color="gray" tip="Close" onClick={() => setDismissed(true)} />
             </StyledRestoredAlert>
         )
     );

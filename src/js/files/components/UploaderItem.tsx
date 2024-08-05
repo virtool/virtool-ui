@@ -1,4 +1,5 @@
-import { Icon, Loader, ProgressBarAffixed } from "@base";
+import { Loader, ProgressBarAffixed } from "@base";
+import { IconButton } from "@base/IconButton";
 import { useUploaderStore } from "@files/uploader";
 import { byteSize, cn } from "@utils/utils";
 import React from "react";
@@ -32,7 +33,7 @@ export function UploaderItem({ failed, localId, name, progress, size }: UploadIt
         end = (
             <span className="flex font-medium gap-2">
                 <span>Failed</span>
-                <Icon aria-label={`delete ${name}`} name="trash" color="red" onClick={() => removeUpload(localId)} />
+                <IconButton name="trash" color="red" tip="Remove" onClick={() => removeUpload(localId)} />
             </span>
         );
     } else if (progress === 100) {
