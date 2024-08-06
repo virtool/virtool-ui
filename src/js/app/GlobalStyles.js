@@ -1,5 +1,5 @@
 import { createGlobalStyle, css } from "styled-components";
-import "tailwindcss/tailwind.css";
+import "./globals.css";
 import { fontWeight } from "./theme";
 
 export const tabFocus = css`
