@@ -1,6 +1,6 @@
+import { useFuse } from "@base/hooks";
 import { differenceWith, intersectionWith, sortBy, xor } from "lodash-es";
 import React, { useMemo } from "react";
-import { useFuse } from "../../../base/hooks";
 import { CreateAnalysisField } from "./CreateAnalysisField";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelected } from "./CreateAnalysisSelected";
@@ -9,12 +9,18 @@ import { CreateAnalysisSelectorList } from "./CreateAnalysisSelectorList";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
 import { IndexSelectorItem } from "./IndexSelectorItem";
 
-interface IndexSelectorProps {
+type IndexSelectorProps = {
+    /** A list of indexes */
     indexes: object[];
+    /** A list of selected indexes */
     selected: string[];
+    /** A callback function to handle index selection */
     onChange: (selected: string[]) => void;
-}
+};
 
+/**
+ * Displays the index fields of selected and unselected indexes for analysis creation
+ */
 export function IndexSelector({ indexes, selected, onChange }: IndexSelectorProps) {
     const sortedIndexes = useMemo(() => sortBy(indexes, "reference.name"), [indexes]);
     const [results, term, setTerm] = useFuse(sortedIndexes, ["reference.name"], [1]);
@@ -37,7 +43,14 @@ export function IndexSelector({ indexes, selected, onChange }: IndexSelectorProp
                 <CreateAnalysisSelectorList
                     items={unselectedIndexes}
                     render={({ reference, version, id }) => (
-                        <IndexSelectorItem key={id} id={id} name={reference.name} version={version} onClick={toggle} />
+                        <IndexSelectorItem
+                            key={id}
+                            disabled={selectedIndexes.length === 1}
+                            id={id}
+                            name={reference.name}
+                            version={version}
+                            onClick={toggle}
+                        />
                     )}
                 />
             </CreateAnalysisSelector>

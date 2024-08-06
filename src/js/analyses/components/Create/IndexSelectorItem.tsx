@@ -1,7 +1,7 @@
+import { getFontWeight } from "@app/theme";
+import { BoxGroupSection, Label } from "@base";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { getFontWeight } from "../../../app/theme";
-import { BoxGroupSection, Label } from "../../../base";
 
 const StyledIndexSelectorItem = styled(BoxGroupSection)`
     background: white;
@@ -22,20 +22,26 @@ const StyledIndexSelectorItem = styled(BoxGroupSection)`
     }
 `;
 
-interface IndexSelectorItemProps {
+type IndexSelectorItemProps = {
+    /** Whether the index can be selected or not */
+    disabled?: boolean;
     id: string;
     name: string;
-    version: number;
+    /** A callback function to handle index selection */
     onClick: (id: string) => void;
-}
+    version: number;
+};
 
-export function IndexSelectorItem({ id, name, version, onClick }: IndexSelectorItemProps) {
+/**
+ * A condensed index selector item to be used in a list of index selectors
+ */
+export function IndexSelectorItem({ disabled, id, name, onClick, version }: IndexSelectorItemProps) {
     const handleClick = useCallback(() => {
         onClick(id);
     }, [id, onClick]);
 
     return (
-        <StyledIndexSelectorItem onClick={handleClick}>
+        <StyledIndexSelectorItem onClick={handleClick} disabled={disabled}>
             <span>{name}</span>
             <span>
                 Index Version <Label>{version}</Label>
