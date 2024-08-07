@@ -67,9 +67,14 @@ function draw(element, data, length, meta, yMax, xMin, graphWidth, graphRatio) {
         .attr("class", "y axis")
         .call(axisLeft(y).ticks(4).tickFormat(format(".0s")));
 
-    svg.append("text")
+    select(element)
+        .append("p")
         .attr("class", "coverage-label small")
-        .attr("transform", "translate(4,10)")
+        .style("position", "relative")
+        .style("bottom", `${height + margin.top + margin.bottom}px`)
+        .style("left", `${margin.left}px`)
+        .style("padding", "5px")
+        .style("margin", "0")
         .text(`${meta.accession} - ${meta.definition}`);
 }
 
