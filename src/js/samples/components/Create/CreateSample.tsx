@@ -147,7 +147,7 @@ export default function CreateSample() {
     }, [account]);
 
     if (isLoadingReads || isLoadingGroups || isLoadingAccount) {
-        return <LoadingPlaceholder margin="36px" />;
+        return <LoadingPlaceholder className="mt-9" />;
     }
 
     const reads = flatMap(readsResponse.pages, page => page.items);

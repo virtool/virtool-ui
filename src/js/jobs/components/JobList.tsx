@@ -28,10 +28,6 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
-const StyledScrollList = styled(ScrollList)`
-    margin-bottom: 0;
-`;
-
 const initialState = ["preparing", "running"];
 
 /**
@@ -65,7 +61,8 @@ export default function JobsList() {
     } else {
         inner = (
             <BoxGroup>
-                <StyledScrollList
+                <ScrollList
+                    className="mb-0"
                     fetchNextPage={fetchNextPage}
                     hasNextPage={hasNextPage}
                     isFetchingNextPage={isFetchingNextPage}

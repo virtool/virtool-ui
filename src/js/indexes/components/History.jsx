@@ -41,7 +41,7 @@ export default function RebuildHistory({ unbuilt }) {
     let content;
 
     if (unbuilt === null) {
-        content = <LoadingPlaceholder margin="22px" />;
+        content = <LoadingPlaceholder className="mt-5" />;
     } else {
         const historyComponents = map(sortBy(unbuilt.documents, "otu.name"), change => (
             <RebuildHistoryItem key={change.id} description={change.description} otuName={change.otu.name} />

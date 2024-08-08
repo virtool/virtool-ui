@@ -3,7 +3,6 @@ import { CreateReference } from "@references/components/CreateReference";
 import { useUrlSearchParams } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
 import { BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useInfiniteFindReferences } from "../queries";
@@ -16,10 +15,6 @@ import ReferenceToolbar from "./ReferenceToolbar";
 function renderRow(reference: ReferenceMinimal) {
     return <ReferenceItem key={reference.id} reference={reference} />;
 }
-
-const StyledScrollList = styled(ScrollList)`
-    margin-bottom: 0;
-`;
 
 /**
  * A list of references with filtering options
@@ -49,7 +44,8 @@ export default function ReferenceList() {
                 <ReferenceOfficial officialInstalled={official_installed} />
                 {total_count !== 0 && (
                     <BoxGroup>
-                        <StyledScrollList
+                        <ScrollList
+                            className="mb-0"
                             fetchNextPage={fetchNextPage}
                             hasNextPage={hasNextPage}
                             isFetchingNextPage={isFetchingNextPage}

@@ -50,7 +50,7 @@ export default function AnalysisDetail({ match }: AnalysisDetailProps) {
     if (!analysis.ready) {
         return (
             <Box>
-                <LoadingPlaceholder message="Analysis in progress" margin="1.2rem" />
+                <LoadingPlaceholder className="mt-5" message="Analysis in progress" />
             </Box>
         );
     }

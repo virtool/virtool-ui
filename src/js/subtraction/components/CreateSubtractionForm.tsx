@@ -40,7 +40,7 @@ export function CreateSubtractionForm() {
     const mutation = useCreateSubtraction();
 
     if (isLoading) {
-        return <LoadingPlaceholder margin="36px" />;
+        return <LoadingPlaceholder className="mt-9" />;
     }
 
     function onSubmit({ name, nickname, uploadId }: FormValues) {

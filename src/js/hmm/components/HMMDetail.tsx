@@ -85,7 +85,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
     }
 
     if (isLoading) {
-        return <LoadingPlaceholder margin="130px" />;
+        return <LoadingPlaceholder className="mt-32" />;
     }
 
     const clusterMembers = map(data.entries, ({ name, accession, organism }, index) => (

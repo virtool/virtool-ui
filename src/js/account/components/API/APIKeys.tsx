@@ -27,7 +27,7 @@ export default function APIKeys() {
     const { data, isLoading } = useFetchAPIKeys();
 
     if (isLoading) {
-        return <LoadingPlaceholder margin="150px" />;
+        return <LoadingPlaceholder className="mt-36" />;
     }
 
     const keyComponents = data.length && map(data, key => <APIKey key={key.id} apiKey={key} />);
