@@ -1,16 +1,34 @@
-import styled from "styled-components";
-import { getBorder } from "../app/theme";
+import { cn } from "@/utils/utils";
+import React from "react";
 
-export const Key = styled.kbd`
-    display: inline-block;
-    border: ${getBorder};
-    border-radius: ${props => props.theme.borderRadius.sm};
-    box-shadow: ${props => props.theme.boxShadow.inset};
-    height: 20px;
-    line-height: 10px;
-    padding: 3px 5px;
-    vertical-align: middle;
-    width: 20px;
-`;
+type KeyProps = {
+    className?: string;
+    children: React.ReactNode;
+};
 
-Key.displayName = "Key";
+/** A keyboard key */
+export function Key({ className, children }: KeyProps) {
+    return (
+        <kbd
+            className={cn(
+                "inline-block",
+                "bg-gray-200",
+                "border",
+                "border-gray-400",
+                "rounded-md",
+                "shadow-md",
+                "px-2",
+                "py-1",
+                "text-center",
+                "align-middle",
+                "font-bold",
+                "text-gray-600",
+                "hover:bg-gray-300",
+                "active:bg-gray-400",
+                className
+            )}
+        >
+            {children}
+        </kbd>
+    );
+}
