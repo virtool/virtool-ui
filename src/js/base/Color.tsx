@@ -1,7 +1,5 @@
+import { cn } from "@utils/utils";
 import React, { useCallback } from "react";
-import styled from "styled-components";
-import { borderRadius } from "../app/theme";
-import { Box } from "./Box";
 import { Input } from "./Input";
 
 const colors: string[] = [
@@ -46,79 +44,68 @@ const colors: string[] = [
     "EC4899",
 ];
 
-const StyledColor = styled(Box)`
-    padding: 10px;
-`;
-
 type ColorSquareProps = {
-    className?: string;
+    // The color in hex format
     color: string;
+    // The callback to be called when the color is clicked
     onClick: (color: string) => void;
 };
 
-const UnstyledColorSquare = ({ className, color, onClick }: ColorSquareProps) => {
+/**
+ * A color square that updates the color input when clicked
+ */
+function ColorSquare({ color, onClick }: ColorSquareProps) {
     const handleClick = useCallback(() => onClick(color), [color, onClick]);
-    return <button className={className} type="button" title={color} onClick={handleClick} />;
-};
 
-const ColorSquare = styled(UnstyledColorSquare)<ColorSquareProps>`
-    backface-visibility: hidden;
-    background-color: ${props => props.color};
-    background-image: none;
-    border: none;
-    cursor: pointer;
-    flex: 1 0 auto;
-    width: auto;
-    transform: translateY(0);
-
-    &:first-child {
-        border-bottom-left-radius: ${borderRadius.sm};
-        border-top-left-radius: ${borderRadius.sm};
-    }
-
-    &:last-child {
-        border-bottom-right-radius: ${borderRadius.sm};
-        border-top-right-radius: ${borderRadius.sm};
-    }
-
-    &:focus {
-        box-shadow: rgb(0 0 0 / 25%) 0 0 5px 2px;
-        outline: solid white 2px;
-        z-index: 2;
-    }
-
-    &:hover {
-        transform: translateY(-2px);
-    }
-`;
-
-const ColorGrid = styled.div`
-    align-items: stretch;
-    background-color: transparent;
-    display: flex;
-    height: 30px;
-    margin-top: 10px;
-`;
+    return (
+        <button
+            type="button"
+            title={color}
+            onClick={handleClick}
+            className={cn(
+                "flex-1",
+                "h-full",
+                "transition-transform",
+                "hover:-translate-y-0.5",
+                "focus:outline-none",
+                "focus:ring-2",
+                "focus:ring-white",
+                "focus:ring-offset-2",
+                "focus:ring-offset-gray-300",
+                "focus:z-10",
+                "first:rounded-l-sm",
+                "last:rounded-r-sm"
+            )}
+            style={{ backgroundColor: color }}
+        />
+    );
+}
 
 type ColorProps = {
+    // The id of the input
     id: string;
+    // The value of the input (color in hex format)
     value: string;
+    // The callback to be called when the value changes
     onChange: (value: string) => void;
 };
 
+/**
+ * A color text input with a color picker below it
+ */
 export function Color({ id, value, onChange }: ColorProps) {
     return (
-        <StyledColor>
+        <div>
             <Input
                 id={id}
                 value={value}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
             />
-            <ColorGrid>
+            <div className={cn("flex", "h-9", "mt-2.5")}>
                 {colors.map(color => (
                     <ColorSquare key={color} color={`#${color}`} onClick={onChange} />
                 ))}
-            </ColorGrid>
-        </StyledColor>
+            </div>
+        </div>
     );
 }
