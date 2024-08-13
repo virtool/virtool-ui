@@ -9,7 +9,7 @@ type TabsLinkProps = {
 };
 
 /**
- * A styled navigation link with active state styling
+ * A navigation link with active state styling
  */
 export function TabsLink({ children, to }: TabsLinkProps) {
     return (
