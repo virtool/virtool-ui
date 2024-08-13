@@ -1,8 +1,8 @@
-import { BoxGroupSectionSelect, Checkbox } from "@base";
+import { Checkbox, SelectBoxGroupSection } from "@base";
 import React from "react";
 import styled from "styled-components";
 
-const StyledGroupPermission = styled(BoxGroupSectionSelect)`
+const StyledGroupPermission = styled(SelectBoxGroupSection)`
     background-color: ${props => (props.active ? props.theme.color.blue : "white")};
     user-select: none;
 `;

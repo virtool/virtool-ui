@@ -1,7 +1,6 @@
 import { getBorder } from "@app/theme";
 import {
     BoxGroup,
-    BoxGroupSectionSelect,
     Dialog,
     DialogContent,
     DialogOverlay,
@@ -9,6 +8,7 @@ import {
     InitialIcon,
     InputSearch,
     NoneFoundSection,
+    SelectBoxGroupSection,
     Toolbar,
 } from "@base";
 import { CompactScrollList } from "@base/CompactScrollList";
@@ -20,7 +20,7 @@ import styled from "styled-components";
 import { useAddReferenceMember } from "../../queries";
 import { ReferenceUser } from "../../types";
 
-const StyledAddUserItem = styled(BoxGroupSectionSelect)`
+const StyledAddUserItem = styled(SelectBoxGroupSection)`
     display: flex;
     align-items: center;
 

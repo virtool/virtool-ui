@@ -9,7 +9,7 @@ type SelectBoxGroupSectionProps = {
     theme: DefaultTheme;
 };
 
-const SelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSectionProps>`
+const StyledSelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSectionProps>`
     background-color: ${props => (props.active ? props.theme.color.blue : "transparent")};
     color: ${props => (props.active ? props.theme.color.white : "inherit")};
     cursor: pointer;
@@ -38,14 +38,14 @@ type BoxGroupSectionSelectProps = {
     onClick?: () => void;
 };
 
-export function BoxGroupSectionSelect({ active, children, className, onClick }: BoxGroupSectionSelectProps) {
+export function SelectBoxGroupSection({ active, children, className, onClick }: BoxGroupSectionSelectProps) {
     function handleKeyDown(e) {
         if (e.key === "Enter") {
             onClick();
         }
     }
     return (
-        <SelectBoxGroupSection
+        <StyledSelectBoxGroupSection
             active={active}
             className={className}
             tabIndex={0}
@@ -54,6 +54,6 @@ export function BoxGroupSectionSelect({ active, children, className, onClick }: 
             onKeyDown={handleKeyDown}
         >
             {children}
-        </SelectBoxGroupSection>
+        </StyledSelectBoxGroupSection>
     );
 }

@@ -1,11 +1,11 @@
-import { BoxGroup, BoxGroupSectionSelect, Checkbox } from "@base";
+import { BoxGroup, Checkbox, SelectBoxGroupSection } from "@base";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
-const meta: Meta<typeof BoxGroupSectionSelect> = {
-    title: "base/Box/BoxGroupSectionSelect",
-    component: BoxGroupSectionSelect,
+const meta: Meta<typeof SelectBoxGroupSection> = {
+    title: "base/Box/SelectBoxGroupSection",
+    component: SelectBoxGroupSection,
     args: {
         active: false,
     },
@@ -27,9 +27,9 @@ function Template({ children }) {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <BoxGroupSectionSelect active={active} onClick={() => updateArgs({ active: !active })}>
+            <SelectBoxGroupSection active={active} onClick={() => updateArgs({ active: !active })}>
                 {children}
-            </BoxGroupSectionSelect>
+            </SelectBoxGroupSection>
         </BoxGroup>
     );
 }
@@ -45,9 +45,9 @@ function CheckboxTemplate() {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <BoxGroupSectionSelect onClick={() => updateArgs({ active: !active })}>
+            <SelectBoxGroupSection onClick={() => updateArgs({ active: !active })}>
                 <Checkbox checked={active} label="This is a SelectBoxGroupSection with a Checkbox!" />
-            </BoxGroupSectionSelect>
+            </SelectBoxGroupSection>
         </BoxGroup>
     );
 }
