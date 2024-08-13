@@ -1,7 +1,8 @@
+import { IconButton } from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { BoxSpaced, Icon, InitialIcon } from "../../../base";
+import { BoxSpaced, InitialIcon } from "../../../base";
 import { User } from "../../../users/types";
 import { useSetAdministratorRole } from "../../queries";
 import { AdministratorRoles } from "../../types";
@@ -49,7 +50,7 @@ export const AdministratorItem = ({ user, roles }: AdministratorItemProps) => {
             <InitialIcon handle={user.handle} size="lg" />
             <UserHandle>{user.handle}</UserHandle>
             <InlineRoleSelect value={user.administrator_role} roles={roles} onChange={onChange} />
-            <Icon name="trash" color="red" onClick={() => onChange(null)} aria-label="Remove administrator role" />
+            <IconButton name="trash" color="red" tip="remove administrator role" onClick={() => onChange(null)} />
         </StyledAdministrator>
     );
 };

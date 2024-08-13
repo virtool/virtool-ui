@@ -7,11 +7,6 @@ import { useLocationState } from "@utils/hooks";
 import { merge } from "lodash";
 import { compact, map } from "lodash-es/lodash";
 import React from "react";
-import styled from "styled-components";
-
-export const StyledContent = styled(DialogContent)`
-    top: 50%;
-`;
 
 type AddGenomeSequenceProps = {
     isolateId: string;
@@ -49,7 +44,7 @@ export default function AddGenomeSequence({ isolateId, otuId, refId, schema, seq
         >
             <DialogPortal>
                 <DialogOverlay />
-                <StyledContent>
+                <DialogContent className="top-1/2">
                     <DialogTitle>Add Sequence</DialogTitle>
                     <GenomeSequenceForm
                         hasSchema={schema.length > 0}
@@ -59,7 +54,7 @@ export default function AddGenomeSequence({ isolateId, otuId, refId, schema, seq
                         refId={refId}
                         segments={segments}
                     />
-                </StyledContent>
+                </DialogContent>
             </DialogPortal>
         </Dialog>
     );
