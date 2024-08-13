@@ -1,14 +1,14 @@
+import { IndexMinimal } from "@indexes/types";
+import { MLModelMinimal } from "@ml/types";
+import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
-import { IndexMinimal } from "../../../indexes/types";
-import { MLModelMinimal } from "../../../ml/types";
-import { SubtractionShortlist } from "../../../subtraction/types";
 import { Workflows } from "../../types";
 import { CreateIimiForm } from "./CreateIimiForm";
 import { CreateNuvsForm } from "./CreateNuvsForm";
 import { CreatePathoscopeForm } from "./CreatePathoscopeForm";
 
 export type CreateAnalysisFormValues = {
-    indexes: string[];
+    index: string;
     mlModel?: string;
     subtractions?: string[];
     workflow: Workflows;

@@ -1,16 +1,16 @@
+import { HMMSearchResults } from "@/hmm/types";
+import { Badge, Dialog, DialogOverlay, DialogTitle, Icon, Tabs, TabsLink } from "@base";
+import { IndexMinimal } from "@indexes/types";
+import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { SampleMinimal } from "@samples/types";
+import { SubtractionShortlist } from "@subtraction/types";
 import { HistoryType } from "@utils/hooks";
 import { merge } from "lodash";
-import { filter, forEach, uniqBy } from "lodash-es";
+import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Badge, Dialog, DialogOverlay, DialogTitle, Icon, Tabs, TabsLink } from "../../../base";
-import { HMMSearchResults } from "../../../hmm/types";
-import { IndexMinimal } from "../../../indexes/types";
-import { MLModelSearchResult } from "../../../ml/types";
-import { SampleMinimal } from "../../../samples/types";
-import { SubtractionShortlist } from "../../../subtraction/types";
 import { useCreateAnalysis } from "../../queries";
 import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
@@ -117,25 +117,20 @@ export default function QuickAnalyze({
         }
     }, [mode]);
 
-    function getReferenceId(selectedIndexes: string[]) {
-        const selectedCompatibleIndexes = indexes.filter(index => selectedIndexes.includes(index.id));
-        const referenceIds = selectedCompatibleIndexes.map(index => index.reference.id);
-
-        return uniqBy(referenceIds, "id");
+    function getReferenceId(selectedIndex: string) {
+        return indexes.find(index => index.reference.name === selectedIndex)?.reference.id;
     }
 
-    function handleSubmit({ indexes, subtractions, workflow, mlModel }: CreateAnalysisFormValues) {
-        const referenceIds = getReferenceId(indexes);
+    function handleSubmit({ index, subtractions, workflow, mlModel }: CreateAnalysisFormValues) {
+        const refId = getReferenceId(index);
 
         forEach(compatibleSamples, ({ id }) => {
-            forEach(referenceIds, (refId: string) => {
-                createAnalysis.mutate({
-                    refId,
-                    sampleId: id,
-                    subtractionIds: subtractions,
-                    mlModel,
-                    workflow,
-                });
+            createAnalysis.mutate({
+                refId,
+                sampleId: id,
+                subtractionIds: subtractions,
+                mlModel,
+                workflow,
             });
         });
         onClear();
