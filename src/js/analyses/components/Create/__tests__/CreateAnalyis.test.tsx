@@ -1,19 +1,16 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiCreateAnalysis } from "@tests/fake/analyses";
+import { createFakeHMMSearchResults } from "@tests/fake/hmm";
+import { createFakeIndexMinimal, mockApiListIndexes } from "@tests/fake/indexes";
+import { createFakeMLModel, mockApiGetModels } from "@tests/fake/ml";
+import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
+import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
+import { renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it } from "vitest";
-import { mockApiCreateAnalysis } from "../../../../../tests/fake/analyses";
-import { createFakeHMMSearchResults } from "../../../../../tests/fake/hmm";
-import { createFakeIndexMinimal, mockApiListIndexes } from "../../../../../tests/fake/indexes";
-import { createFakeMLModel, mockApiGetModels } from "../../../../../tests/fake/ml";
-import { createFakeSample, mockApiGetSampleDetail } from "../../../../../tests/fake/samples";
-import {
-    createFakeShortlistSubtraction,
-    mockApiGetShortlistSubtractions,
-} from "../../../../../tests/fake/subtractions";
-import { renderWithProviders } from "../../../../../tests/setupTests";
 import { Workflows } from "../../../types";
 import CreateAnalysis from "../CreateAnalysis";
 
@@ -97,7 +94,8 @@ describe("getCompatibleWorkflows()", () => {
 
         await userEvent.click(await screen.findByText(name));
         await userEvent.click(screen.getByText(subtractionShortlist.name));
-        await userEvent.click(screen.getByText(indexMinimal.reference.name));
+        await userEvent.click(await screen.findByRole("combobox"));
+        await userEvent.click(await screen.findByRole("option", { name: indexMinimal.reference.name }));
         await userEvent.click(await screen.findByRole("button", { name: "Start" }));
 
         await waitFor(() => {
@@ -120,10 +118,13 @@ describe("getCompatibleWorkflows()", () => {
             </MemoryRouter>
         );
 
+        const comboboxes = await screen.findAllByRole("combobox");
+
         await userEvent.click(await screen.findByText("Iimi"));
-        await userEvent.click(await screen.findByRole("combobox"));
+        await userEvent.click(comboboxes[0]);
         await userEvent.click(await screen.findByRole("option", { name: mlModel.name }));
-        await userEvent.click(screen.getByText(indexMinimal.reference.name));
+        await userEvent.click(comboboxes[1]);
+        await userEvent.click(await screen.findByRole("option", { name: indexMinimal.reference.name }));
         await userEvent.click(await screen.findByRole("button", { name: "Start" }));
 
         await waitFor(() => {
