@@ -5,13 +5,14 @@ import { NavLink } from "react-router-dom";
 type TabsLinkProps = {
     children: React.ReactNode;
     className?: string;
-    to: string;
+    isActive?: () => boolean;
+    to: string | object;
 };
 
 /**
  * A navigation link with active state styling
  */
-export function TabsLink({ children, to }: TabsLinkProps) {
+export function TabsLink({ children, className, isActive, to }: TabsLinkProps) {
     return (
         <NavLink
             className={cn(
@@ -22,8 +23,10 @@ export function TabsLink({ children, to }: TabsLinkProps) {
                 "px-4",
                 "-mb-[1px]",
                 "hover:border-b-2",
-                "hover:border-b-gray-400"
+                "hover:border-b-gray-400",
+                className
             )}
+            isActive={isActive}
             activeClassName={cn("border-b-2", "border-b-teal-700", "hover:border-b-teal-700")}
             to={to}
         >
