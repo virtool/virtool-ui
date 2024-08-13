@@ -58,6 +58,8 @@ const TooltipContent = styled(TooltipPrimitive.Content)`
     animation-duration: 400ms;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform, opacity;
+    text-transform: capitalize;
+    z-index: 20;
 
     &[data-state="delayed-open"][data-side="top"] {
         animation-name: ${slideDownAndFade};

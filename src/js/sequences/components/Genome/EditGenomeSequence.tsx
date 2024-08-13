@@ -1,4 +1,4 @@
-import { Dialog, DialogOverlay, DialogTitle } from "@base";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { useEditSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
@@ -6,7 +6,6 @@ import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm"
 import { useLocationState } from "@utils/hooks";
 import { merge } from "lodash";
 import React from "react";
-import { StyledContent } from "./AddGenomeSequence";
 
 type EditGenomeSequenceProps = {
     activeSequence: OTUSequence;
@@ -50,7 +49,7 @@ export default function EditGenomeSequence({
         >
             <DialogPortal>
                 <DialogOverlay />
-                <StyledContent>
+                <DialogContent className="top-1/2">
                     <DialogTitle>Edit Sequence</DialogTitle>
                     <GenomeSequenceForm
                         activeSequence={activeSequence}
@@ -61,7 +60,7 @@ export default function EditGenomeSequence({
                         refId={refId}
                         segments={segments}
                     />
-                </StyledContent>
+                </DialogContent>
             </DialogPortal>
         </Dialog>
     );
