@@ -3,9 +3,9 @@ import React from "react";
 import { Loader } from "./Loader";
 
 type LoadingPlaceholderProps = {
-    /** Tailwind CSS classes */
+    /* Tailwind CSS classes */
     className?: string;
-    // An optional message to show above the spinner
+    /* message to show above the spinner */
     message?: string;
 };
 
