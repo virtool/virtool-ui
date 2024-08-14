@@ -71,7 +71,7 @@ function draw(element, data, length, meta, yMax, xMin, graphWidth, graphRatio) {
         .append("p")
         .attr("class", "coverage-label small")
         .style("position", "relative")
-        .style("bottom", `${height + margin.top + margin.bottom}px`)
+        .style("bottom", `${height + margin.top + margin.bottom + 15}px`)
         .style("left", `${margin.left}px`)
         .style("padding", "5px")
         .style("margin", "0")
