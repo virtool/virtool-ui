@@ -74,7 +74,7 @@ export { NoneFound } from "./NoneFound";
 export { NoneFoundBox } from "./NoneFoundBox";
 export { NoneFoundSection } from "./NoneFoundSection";
 export { NotFound } from "./NotFound";
-export { Pagination } from "./Pagination";
+export { Pagination } from "./pagination/Pagination";
 export { ProgressBar } from "./ProgressBar";
 export { ProgressBarAffixed } from "./ProgressBarAffixed";
 export { RelativeTime } from "./RelativeTime";

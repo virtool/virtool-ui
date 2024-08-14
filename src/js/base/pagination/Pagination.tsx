@@ -1,10 +1,8 @@
-import {
-    PaginationContent,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-    PaginationRoot,
-} from "@base/ui/Pagination";
+import { PaginationContent } from "@base/pagination/PaginationContent";
+import { PaginationLink } from "@base/pagination/PaginationLink";
+import { PaginationNext } from "@base/pagination/PaginationNext";
+import { PaginationPrevious } from "@base/pagination/PaginationPrevious";
+import { PaginationRoot } from "@base/pagination/PaginationRoot";
 import { map, max, min, range } from "lodash-es";
 import React from "react";
 
