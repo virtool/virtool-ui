@@ -1,31 +1,38 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import styled, { keyframes } from "styled-components";
+import { cn } from "@utils/utils";
+import React from "react";
 
-const dialogContentOpen = keyframes`
-  from {
-    opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-`;
-
-interface DialogContentProps {
+type DialogContentProps = {
+    children: React.ReactNode;
+    className?: string;
     size?: "sm" | "lg";
-}
+};
 
-export const DialogContent = styled(DialogPrimitive.Content)<DialogContentProps>`
-    animation: ${dialogContentOpen} 150ms cubic-bezier(0.16, 1, 0.3, 1);
-    background-color: ${props => props.theme.color.white};
-    border-radius: ${props => props.theme.borderRadius.md};
-    box-shadow: ${props => props.theme.boxShadow.lg};
-    position: fixed;
-    top: 40%;
-    left: 50%;
-    padding: 25px;
-    transform: translate(-50%, -50%);
-    width: ${props => (props.size === "lg" ? "900px" : "600px")};
-    z-index: 110;
-`;
+/**
+ * A styled dialog content container with customizable sizes
+ */
+export function DialogContent({ children, className, size }: DialogContentProps) {
+    return (
+        <DialogPrimitive.Content
+            className={cn(
+                "data-[state=open]:animate-contentShow",
+                "fixed",
+                "top-[40%]",
+                "left-[50%]",
+                "-translate-x-1/2",
+                "-translate-y-1/2",
+                "rounded-lg",
+                "bg-white",
+                "p-8",
+                "shadow-2xl",
+                "focus:outline-none",
+                "z-50",
+                "w-[600px]",
+                { "w-[900px]": size === "lg" },
+                className
+            )}
+        >
+            {children}
+        </DialogPrimitive.Content>
+    );
+}

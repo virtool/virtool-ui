@@ -7,11 +7,6 @@ import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceFo
 import { useLocationState } from "@utils/hooks";
 import { merge } from "lodash";
 import React from "react";
-import styled from "styled-components";
-
-const CenteredDialogContent = styled(DialogContent)`
-    top: 50%;
-`;
 
 type EditBarcodeSequence = {
     activeSequence: OTUSequence;
@@ -46,7 +41,7 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
         >
             <DialogPortal>
                 <DialogOverlay />
-                <CenteredDialogContent>
+                <DialogContent className="top-1/2">
                     <DialogTitle>Edit Sequence</DialogTitle>
                     <BarcodeSequenceForm
                         activeSequence={activeSequence}
@@ -55,7 +50,7 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
                         otuId={otuId}
                         targets={targets}
                     />
-                </CenteredDialogContent>
+                </DialogContent>
             </DialogPortal>
         </Dialog>
     );
