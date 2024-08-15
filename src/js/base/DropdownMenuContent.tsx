@@ -1,28 +1,35 @@
-import { getBorder, getFontSize } from "@app/theme";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import styled, { keyframes } from "styled-components";
+import { cn } from "@utils/utils";
+import React from "react";
 
-const slideDown = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+type DropdownMenuContentProps = {
+    children: React.ReactNode;
+    className?: string;
+};
 
-export const DropdownMenuContent = styled(DropdownMenu.Content)`
-    all: unset;
-    animation: ${slideDown} ease-in 100ms;
-    background-color: white;
-    border: ${getBorder};
-    border-radius: ${props => props.theme.borderRadius.sm};
-    box-shadow: ${props => props.theme.boxShadow.lg};
-    display: flex;
-    flex-direction: column;
-    font-size: ${getFontSize("md")};
-    margin: 0 5px;
-    z-index: 1;
-`;
+/**
+ * Displays the content of the dropdown menu to the users
+ */
+export function DropdownMenuContent({ children, className }: DropdownMenuContentProps) {
+    return (
+        <DropdownMenu.Content
+            className={cn(
+                "animate-slideDown",
+                "bg-white",
+                "border",
+                "border-gray-300",
+                "rounded-md",
+                "shadow-lg",
+                "mx-2",
+                "my-0",
+                "flex",
+                "flex-col",
+                "text-base",
+                "z-10",
+                className
+            )}
+        >
+            {children}
+        </DropdownMenu.Content>
+    );
+}
