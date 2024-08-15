@@ -58,7 +58,7 @@ export default function Groups() {
     }, [groups, selectedGroupId]);
 
     if (isLoadingGroups || (groups.length && !selectedGroup)) {
-        return <LoadingPlaceholder margin="130px" />;
+        return <LoadingPlaceholder className="mt-32" />;
     }
 
     return (

@@ -44,9 +44,12 @@ export function CompactScrollList({
     const entries = map(items, item => renderRow(item));
 
     return (
-        <div className={cn(`mb-2 relative z-0 overflow-y-auto border rounded-md ${className}`)} onScroll={onScroll}>
+        <div
+            className={cn("mb-2", "relative", "z-0", "overflow-y-auto", "border", "rounded-md", className)}
+            onScroll={onScroll}
+        >
             {entries}
-            {isLoading && <LoadingPlaceholder margin="20px" />}
+            {isLoading && <LoadingPlaceholder className="mt-5" />}
         </div>
     );
 }
