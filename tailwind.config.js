@@ -1,5 +1,6 @@
 export default {
     content: ["./src/js/**/*.{html,js,jsx,ts,tsx}"],
+    prefix: "",
     theme: {
         extend: {
             keyframes: {
@@ -18,5 +19,5 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [require("tailwindcss-animate")],
 };
