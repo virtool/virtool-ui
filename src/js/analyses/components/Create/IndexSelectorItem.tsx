@@ -1,45 +1,45 @@
-import React, { useCallback } from "react";
-import styled from "styled-components";
-import { getFontWeight } from "../../../app/theme";
-import { BoxGroupSection, Label } from "../../../base";
+import { Label } from "@base";
+import * as RadixSelect from "@radix-ui/react-select";
+import { cn } from "@utils/utils";
+import React from "react";
 
-const StyledIndexSelectorItem = styled(BoxGroupSection)`
-    background: white;
-    display: flex;
-    gap: ${props => props.theme.gap.column};
-    justify-content: space-between;
-
-    span:first-child {
-        font-weight: ${getFontWeight("thick")};
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    span:last-child {
-        flex: 0 1 auto;
-        white-space: nowrap;
-    }
-`;
-
-interface IndexSelectorItemProps {
+type IndexSelectorItemProps = {
     id: string;
     name: string;
     version: number;
-    onClick: (id: string) => void;
-}
+};
 
-export function IndexSelectorItem({ id, name, version, onClick }: IndexSelectorItemProps) {
-    const handleClick = useCallback(() => {
-        onClick(id);
-    }, [id, onClick]);
-
+/**
+ * A condensed index selector item for use in a list of indexes
+ */
+export function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
     return (
-        <StyledIndexSelectorItem onClick={handleClick}>
-            <span>{name}</span>
-            <span>
+        <RadixSelect.Item
+            className={cn(
+                "flex",
+                "justify-between",
+                "items-center",
+                "text-base",
+                "cursor-pointer",
+                "capitalize",
+                "select-none",
+                "mb-1",
+                "py-1.5",
+                "px-6",
+                "hover:bg-blue-50",
+                "hover:border-0"
+            )}
+            value={name}
+            key={id}
+        >
+            <RadixSelect.ItemText>
+                <span className={cn("font-medium", "overflow-hidden", "text-ellipsis", "whitespace-nowrap")}>
+                    {name}
+                </span>
+            </RadixSelect.ItemText>
+            <span className={cn("flex-[0_1_auto]", "whitespace-nowrap", "font-normal")}>
                 Index Version <Label>{version}</Label>
             </span>
-        </StyledIndexSelectorItem>
+        </RadixSelect.Item>
     );
 }
