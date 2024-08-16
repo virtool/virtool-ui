@@ -53,6 +53,7 @@
         "react-hook-form": "^7.43.5",
         "react-redux": "^7.2.6",
         "react-router-dom": "^5.2.0",
+        "react-router-dom-v5-compat": "^6.26.1",
         "react-window": "^1.8.10",
         "redux": "^4.2.1",
         "redux-saga": "^1.2.2",
