@@ -3,21 +3,10 @@ import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { BoxGroupSection, Icon, InitialIcon, Label } from "@base";
 import { GroupMinimal } from "@groups/types";
+import { cn } from "@utils/utils";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-const StyledUserItem = styled(BoxGroupSection)`
-    display: grid;
-    grid-template-columns: 50% 25% 1fr auto;
-    align-items: center;
-
-    strong {
-        font-size: ${getFontSize("lg")};
-        font-weight: ${getFontWeight("thick")};
-        padding-left: 10px;
-    }
-`;
 
 const UserLink = styled(Link)`
     padding: 0 10px;
@@ -58,7 +47,7 @@ export function UserItem({ active, administrator_role, handle, id, primary_group
     );
 
     return (
-        <StyledUserItem>
+        <BoxGroupSection className={cn("grid", "grid-cols-[50%_25%_1fr_auto]", "items-center")}>
             <UserContainer>
                 <InitialIcon size="lg" handle={handle} />
                 {canEdit ? <UserLink to={`users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
@@ -72,6 +61,6 @@ export function UserItem({ active, administrator_role, handle, id, primary_group
             </TagContainer>
             <TagContainer>{primary_group && <Label>{primary_group.name}</Label>}</TagContainer>
             <TagContainer>{!active && <Label color="red">Deactivated</Label>}</TagContainer>
-        </StyledUserItem>
+        </BoxGroupSection>
     );
 }

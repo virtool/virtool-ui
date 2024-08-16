@@ -1,5 +1,5 @@
 import { getFontWeight } from "@app/theme";
-import { BoxGroup, BoxGroupSection } from "@base";
+import { BoxGroup } from "@base";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -18,10 +18,6 @@ const StyledStateCategory = styled(BoxGroup)`
         border-right: none;
         margin: 40px 0 0 10px;
         z-index: 10;
-    }
-
-    > ${BoxGroupSection}:first-of-type {
-        border-bottom: none;
     }
 `;
 

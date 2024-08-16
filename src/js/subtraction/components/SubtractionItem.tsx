@@ -1,22 +1,12 @@
+import { getFontSize, getFontWeight, sizes } from "@app/theme";
+import { BoxGroupSection, ProgressCircle } from "@base";
 import { JobState } from "@jobs/types";
+import { cn } from "@utils/utils";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { BoxGroupSection } from "../../base";
-import { ProgressCircle } from "../../base/ProgressCircle";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
-
-const StyledSubtractionItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 30% 30% 30% auto;
-    padding-bottom: 15px;
-    padding-top: 15px;
-    margin-left: auto;
-    line-height: 1;
-`;
 
 const SubtractionLink = styled(Link)`
     font-size: ${getFontSize("lg")};
@@ -44,7 +34,9 @@ const Attribution = styled.div`
  */
 export function SubtractionItem({ created_at, id, job, name, nickname, ready, user }: SubtractionMinimal) {
     return (
-        <StyledSubtractionItem>
+        <BoxGroupSection
+            className={cn("items-center", "grid", "grid-cols-[30%_30%_30%_auto]", "ml-auto", "leading-none", "py-4")}
+        >
             <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
             <div>{nickname}</div>
             <Attribution>
@@ -59,6 +51,6 @@ export function SubtractionItem({ created_at, id, job, name, nickname, ready, us
                     />
                 </ProgressTag>
             )}
-        </StyledSubtractionItem>
+        </BoxGroupSection>
     );
 }

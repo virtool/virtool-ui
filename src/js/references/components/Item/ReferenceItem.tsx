@@ -1,28 +1,15 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Attribution, BoxGroupSection, Icon } from "@base";
 import { IconButton } from "@base/IconButton";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
+import { cn } from "@utils/utils";
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Attribution, BoxGroupSection, Icon } from "../../../base";
-import { ProgressCircle } from "../../../base/ProgressCircle";
 import { ReferenceMinimal } from "../../types";
-
-const StyledReferenceItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 30% 35% 30% auto;
-    padding-bottom: 15px;
-    padding-top: 15px;
-    margin-left: auto;
-    line-height: 1;
-
-    i {
-        margin-right: 4px;
-    }
-`;
 
 const ReferenceLink = styled(Link)`
     font-size: ${getFontSize("lg")};
@@ -65,10 +52,12 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
     ) : null;
 
     return (
-        <StyledReferenceItem>
+        <BoxGroupSection
+            className={cn("items-center", "grid", "grid-cols-[30%_35%_30%_auto]", "ml-auto", "leading-none", "py-4")}
+        >
             <ReferenceLink to={`/refs/${id}`}>{name}</ReferenceLink>
             <ReferenceItemDataDescriptor>
-                <Icon name={data_type === "genome" ? "dna" : "barcode"} />
+                <Icon className={cn("mr-1")} name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s
             </ReferenceItemDataDescriptor>
             <ReferenceItemUser>
@@ -84,6 +73,6 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                     cloneButton
                 )}
             </ReferenceItemEndIcon>
-        </StyledReferenceItem>
+        </BoxGroupSection>
     );
 }

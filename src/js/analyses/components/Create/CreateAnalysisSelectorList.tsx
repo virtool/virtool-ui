@@ -1,7 +1,6 @@
+import { BoxGroup } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
-import { BoxGroup, BoxGroupSection } from "../../../base";
 
 const StyledCreateAnalysisSelectorList = styled(BoxGroup)`
     border: none;
@@ -9,10 +8,6 @@ const StyledCreateAnalysisSelectorList = styled(BoxGroup)`
     margin: 0;
     overflow-y: auto;
     height: 160px;
-
-    ${BoxGroupSection} {
-        outline: ${getBorder};
-    }
 `;
 
 interface CreateAnalysisSelectorListProps {

@@ -4,16 +4,6 @@ import { OTUSegment } from "@otus/types";
 import { cn } from "@utils/utils";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
-
-const StyledSegment = styled(BoxGroupSection)`
-    display: grid;
-    align-items: center;
-    grid-template-columns: 45fr 1fr 10fr 10fr;
-    padding: 0 16px;
-    line-height: 1;
-    height: 51px;
-`;
 
 type SegmentProps = {
     /** Whether the user has permission to modify the otu */
@@ -36,7 +26,17 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
     const history = useHistory();
 
     return (
-        <StyledSegment>
+        <BoxGroupSection
+            className={cn(
+                "grid",
+                "grid-cols-[45fr_1fr_10fr_10fr]",
+                "items-center",
+                "leading-0",
+                "py-0",
+                "px-4",
+                "h-12"
+            )}
+        >
             <strong>{segment.name}</strong>
 
             {segment.required ? <Label color="purple">Required</Label> : <Label>Optional</Label>}
@@ -71,6 +71,6 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
                     onClick={onMoveDown}
                 />
             </div>
-        </StyledSegment>
+        </BoxGroupSection>
     );
 }

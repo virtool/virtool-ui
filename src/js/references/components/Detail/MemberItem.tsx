@@ -1,6 +1,7 @@
+import { BoxGroupSection, Button, InitialIcon } from "@base";
+import { cn } from "@utils/utils";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Button, InitialIcon } from "../../../base";
 
 const StyledMemberItemIcon = styled.div`
     align-items: center;
@@ -21,11 +22,6 @@ const MemberItemButtons = styled.span`
     display: flex;
     gap: 4px;
     margin-left: auto;
-`;
-
-const StyledMemberItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
 `;
 
 type MemberItemProps = {
@@ -52,7 +48,7 @@ export default function MemberItem({ canModify, id, name, handle, onEdit, onRemo
     const handleRemove = useCallback(() => onRemove(id), [id]);
 
     return (
-        <StyledMemberItem>
+        <BoxGroupSection className={cn("items-center", "flex")}>
             <MemberItemIcon handle={displayName} />
             {displayName}
             {canModify && (
@@ -65,6 +61,6 @@ export default function MemberItem({ canModify, id, name, handle, onEdit, onRemo
                     </Button>
                 </MemberItemButtons>
             )}
-        </StyledMemberItem>
+        </BoxGroupSection>
     );
 }

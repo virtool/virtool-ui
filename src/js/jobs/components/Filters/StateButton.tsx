@@ -1,5 +1,6 @@
 import { Badge, BoxGroupSection, Circle } from "@base";
 import * as Checkbox from "@radix-ui/react-checkbox";
+import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 
@@ -17,18 +18,6 @@ const StateButtonCheckbox = styled(Checkbox.Root)`
 
 const StateButtonIndicator = styled(Checkbox.Indicator)`
     color: ${props => props.theme.color.greyDarkest};
-`;
-
-const StyledStateButton = styled(BoxGroupSection)`
-    align-items: center;
-    border-bottom: none;
-    color: black;
-    cursor: pointer;
-    display: flex;
-    gap: 10px;
-    position: relative;
-    text-transform: capitalize;
-    user-select: none;
 `;
 
 type StateButtonProps = {
@@ -49,7 +38,21 @@ type StateButtonProps = {
  */
 export function StateButton({ active, count = 0, color, label, onClick }: StateButtonProps) {
     return (
-        <StyledStateButton active={active} onClick={onClick}>
+        <BoxGroupSection
+            className={cn(
+                "items-center",
+                "border-b-0",
+                "text-black",
+                "cursor-pointer",
+                "flex",
+                "relative",
+                "capitalize",
+                "select-none",
+                "gap-2.5"
+            )}
+            active={active}
+            onClick={onClick}
+        >
             <StateButtonCheckbox checked={active}>
                 <StateButtonIndicator>
                     <i className="fas fa-check" />
@@ -59,6 +62,6 @@ export function StateButton({ active, count = 0, color, label, onClick }: StateB
             <Circle color={color} />
             {label}
             <Badge className="ml-auto">{count}</Badge>
-        </StyledStateButton>
+        </BoxGroupSection>
     );
 }

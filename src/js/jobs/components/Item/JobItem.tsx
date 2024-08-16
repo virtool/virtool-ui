@@ -1,25 +1,12 @@
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Attribution, BoxGroupSection } from "@base";
+import { UserNested } from "@users/types";
+import { cn, getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Attribution, BoxGroupSection } from "../../../base";
-import { UserNested } from "../../../users/types";
-import { getWorkflowDisplayName } from "../../../utils/utils";
 import { JobState, workflows } from "../../types";
 import { JobStatus } from "./JobStatus";
-
-const StyledJobItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    font-size: ${getFontSize("lg")};
-    line-height: 1;
-
-    ${Attribution} {
-        font-size: ${getFontSize("md")};
-    }
-`;
 
 const JobLink = styled(Link)`
     font-weight: ${getFontWeight("thick")};
@@ -32,6 +19,10 @@ const JobItemHeaderRight = styled.div`
     gap: 5px;
     margin-left: auto;
     font-weight: ${getFontWeight("thick")};
+`;
+
+const UserAttribution = styled(Attribution)`
+    font-size: ${getFontSize("md")};
 `;
 
 type JobItemProps = {
@@ -54,12 +45,12 @@ type JobItemProps = {
  */
 export default function JobItem({ id, workflow, state, progress, created_at, user }: JobItemProps) {
     return (
-        <StyledJobItem>
+        <BoxGroupSection className={cn("items-center", "flex", "py-4", "text-lg", "leading-none")}>
             <JobLink to={`/jobs/${id}`}>{getWorkflowDisplayName(workflow)}</JobLink>
-            <Attribution time={created_at} user={user.handle} />
+            <UserAttribution time={created_at} user={user.handle} />
             <JobItemHeaderRight>
                 <JobStatus state={state} progress={progress} />
             </JobItemHeaderRight>
-        </StyledJobItem>
+        </BoxGroupSection>
     );
 }

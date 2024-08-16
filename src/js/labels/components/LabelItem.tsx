@@ -1,14 +1,10 @@
 import { BoxGroupSection } from "@base";
 import { SampleLabel } from "@samples/components/Label/SampleLabel";
+import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 import { EditLabel } from "./EditLabel";
 import { RemoveLabel } from "./RemoveLabel";
-
-const LabelItemBox = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
-`;
 
 const LabelItemExampleContainer = styled.div`
     min-width: 30%;
@@ -42,7 +38,7 @@ type ItemProps = {
  */
 export function LabelItem({ name, color, description, id }: ItemProps) {
     return (
-        <LabelItemBox>
+        <BoxGroupSection className={cn("flex", "items-center")}>
             <LabelItemExampleContainer>
                 <SampleLabel name={name} color={color} />
             </LabelItemExampleContainer>
@@ -51,6 +47,6 @@ export function LabelItem({ name, color, description, id }: ItemProps) {
                 <EditLabel id={id} color={color} description={description} name={name} />
                 <RemoveLabel id={id} name={name} />
             </LabelItemButtons>
-        </LabelItemBox>
+        </BoxGroupSection>
     );
 }

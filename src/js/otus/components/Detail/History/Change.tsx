@@ -3,6 +3,7 @@ import { IconButton } from "@base/IconButton";
 import { useRevertOTU } from "@otus/queries";
 import { OTUNested } from "@otus/types";
 import { UserNested } from "@users/types";
+import { cn } from "@utils/utils";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -75,16 +76,6 @@ function getMethodIcon(methodName: string) {
     return <Icon {...props} />;
 }
 
-const StyledChange = styled(BoxGroupSection)`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 42px 2fr 1fr 15px;
-
-    div:first-child {
-        min-width: 42px;
-    }
-`;
-
 const Description = styled.div`
     align-items: center;
     display: flex;
@@ -111,7 +102,7 @@ export default function Change({ id, createdAt, description, methodName, otu, un
     const mutation = useRevertOTU(otu.id);
 
     return (
-        <StyledChange>
+        <BoxGroupSection className={cn("items-center", "grid", "grid-cols-[42px_2fr_1fr_15px]")}>
             <div>
                 <Label>{otu.version}</Label>
             </div>
@@ -130,6 +121,6 @@ export default function Change({ id, createdAt, description, methodName, otu, un
                     onClick={() => (unbuilt ? mutation.mutate({ changeId: id }) : null)}
                 />
             )}
-        </StyledChange>
+        </BoxGroupSection>
     );
 }

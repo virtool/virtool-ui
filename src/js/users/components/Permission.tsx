@@ -1,14 +1,10 @@
+import { BoxGroupSection, Icon } from "@base";
+import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Icon } from "../../base";
 
 const StyledPermissionIcon = styled(Icon)`
     margin-right: 15px;
-`;
-
-const StyledPermissionItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
 `;
 
 type PermissionItemProps = {
@@ -23,9 +19,9 @@ type PermissionItemProps = {
  */
 export function PermissionItem({ permission, value }: PermissionItemProps) {
     return (
-        <StyledPermissionItem aria-label={`${permission}:${value}`}>
+        <BoxGroupSection className={cn("items-center", "flex")} aria-label={`${permission}:${value}`}>
             <StyledPermissionIcon name={value ? "check" : "times"} color={value ? "green" : "red"} fixedWidth />
             <code>{permission}</code>
-        </StyledPermissionItem>
+        </BoxGroupSection>
     );
 }

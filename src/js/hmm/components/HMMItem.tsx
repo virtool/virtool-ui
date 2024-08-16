@@ -1,15 +1,11 @@
 import { getFontSize, getFontWeight } from "@app/theme";
 import { BoxGroupSection, Label } from "@base";
+import { cn } from "@utils/utils";
 import { keys, map, reject } from "lodash-es";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { HMMMinimal } from "../types";
-
-const StyledHMMItem = styled(BoxGroupSection)`
-    display: flex;
-    font-size: ${getFontSize("lg")};
-`;
 
 const HMMItemCluster = styled.strong`
     flex: 0 0 48px;
@@ -42,12 +38,12 @@ export default function HMMItem({ hmm }: HMMItemProps) {
     const labelComponents = map(filteredFamilies.slice(0, 3), (family, i) => <Label key={i}>{family}</Label>);
 
     return (
-        <StyledHMMItem>
+        <BoxGroupSection className={cn("flex", "text-lg")}>
             <HMMItemCluster>{hmm.cluster}</HMMItemCluster>
             <HMMItemName to={`/hmm/${hmm.id}`}>{hmm.names[0]}</HMMItemName>
             <HMMItemFamilies>
                 {labelComponents} {filteredFamilies.length > 3 ? "..." : null}
             </HMMItemFamilies>
-        </StyledHMMItem>
+        </BoxGroupSection>
     );
 }

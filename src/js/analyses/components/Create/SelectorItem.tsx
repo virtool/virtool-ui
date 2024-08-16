@@ -1,33 +1,34 @@
+import { BoxGroupSection, Label } from "@base";
+import { cn } from "@utils/utils";
 import React, { ReactNode } from "react";
-import styled from "styled-components";
-import { BoxGroupSection, Label } from "../../../base";
 
-const StyledSelectorItem = styled(BoxGroupSection)`
-    align-items: center;
-    background-color: white;
-    display: flex;
-    justify-content: space-between;
-    user-select: none;
-
-    span:first-child {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-`;
-
-interface SelectorItemProps {
+type SelectorItemProps = {
     children: ReactNode;
     className?: string;
     isDefault?: boolean;
     onClick: () => void;
-}
+};
 
-export function SelectorItem({ children, className = "", onClick, isDefault = false }: SelectorItemProps) {
+export function SelectorItem({ children, onClick, isDefault = false }: SelectorItemProps) {
     return (
-        <StyledSelectorItem as={onClick ? "button" : "div"} className={className} onClick={onClick}>
-            <span>{children}</span>
+        <BoxGroupSection
+            as={onClick ? "button" : "div"}
+            className={cn(
+                "items-center",
+                "bg-white",
+                "flex",
+                "justify-between",
+                "select-none",
+                "outline",
+                "outline-1",
+                "outline-gray-300"
+            )}
+            onClick={onClick}
+        >
+            <span className={cn("first:text-ellipsis", "first:whitespace-nowrap", "first:overflow-hidden")}>
+                {children}
+            </span>
             {isDefault ? <Label>Default</Label> : null}
-        </StyledSelectorItem>
+        </BoxGroupSection>
     );
 }

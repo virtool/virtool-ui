@@ -1,70 +1,36 @@
-import { IconButton } from "@base/IconButton";
-import { get } from "lodash-es";
-import React from "react";
-import { useRouteMatch } from "react-router-dom";
-import styled from "styled-components";
-import { SettingsCheckbox } from "../../../administration/components/SettingsCheckbox";
-import { getColor } from "../../../app/theme";
+import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
 import {
     BoxGroup,
     BoxGroupDisabled,
     BoxGroupHeader,
     BoxGroupSection,
     Button,
-    InputContainer,
     InputError,
+    InputGroup,
+    InputLabel,
+    InputLevel,
     InputSimple,
     LoadingPlaceholder,
     SectionHeader,
-} from "../../../base";
+} from "@base";
+import { IconButton } from "@base/IconButton";
+import { cn } from "@utils/utils";
+import { get } from "lodash-es";
+import React from "react";
+import { useRouteMatch } from "react-router-dom";
+import styled from "styled-components";
 import { useUpdateSourceTypes } from "../../hooks";
 import { referenceQueryKeys, useGetReference, useUpdateReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
 
-const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
-    button {
-        width: 60px;
-        height: 34px;
-        margin-left: auto;
-        text-align: center;
-        justify-content: center;
-        margin-right: 5px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 3px;
-    }
-
-    ${InputContainer} {
-        display: flex;
-        margin-bottom: 5px;
-    }
+const SourceTypesInputGroup = styled(InputGroup)`
+    margin-bottom: 0;
 `;
 
-const SourceTypeInput = styled.span`
-    display: flex;
-    flex: 1 0 auto;
-    margin-right: 10px;
-    flex-direction: column;
-`;
-
-const SourceTypesUndo = styled(BoxGroupSection)`
-    display: flex;
-    background: ${props => getColor({ color: "greyHover", theme: props.theme })};
-    align-items: center;
-    i.fas {
-        margin-left: auto;
-    }
-    span > strong {
-        text-transform: capitalize;
-    }
-`;
-
-interface MatchTypes {
+type MatchTypes = {
     /** The reference id */
     refId: string;
-}
+};
 
 export function LocalSourceTypes() {
     const match = useRouteMatch<MatchTypes>();
@@ -114,27 +80,28 @@ export function LocalSourceTypes() {
                 <BoxGroupDisabled disabled={!restrictSourceTypes}>
                     <SourceTypeList sourceTypes={sourceTypes} onRemove={handleRemove} />
                     {lastRemoved && (
-                        <SourceTypesUndo>
+                        <BoxGroupSection className={cn("items-center", "flex", "bg-gray-50")}>
                             <span>
-                                The source type <strong>{lastRemoved}</strong> was just removed.
+                                The source type <strong className={cn("capitalize")}>{lastRemoved}</strong> was just
+                                removed.
                             </span>
-                            <IconButton name="undo" tip="undo" onClick={handleUndo} />
-                        </SourceTypesUndo>
+                            <IconButton className={cn("ml-auto")} name="undo" tip="undo" onClick={handleUndo} />
+                        </BoxGroupSection>
                     )}
-                    <SourceTypeBoxGroupSection>
+                    <BoxGroupSection>
                         <form onSubmit={handleSubmit}>
-                            <label htmlFor="sourceType">Add Source Type </label>
-                            <InputContainer>
-                                <SourceTypeInput>
+                            <SourceTypesInputGroup>
+                                <InputLabel htmlFor="sourceType">Add Source Type </InputLabel>
+                                <InputLevel>
                                     <InputSimple id="sourceType" {...register("sourceType")} />
-                                    <InputError>{error}</InputError>
-                                </SourceTypeInput>
-                                <Button color="green" type="submit">
-                                    Add
-                                </Button>
-                            </InputContainer>
+                                    <Button color="green" type="submit">
+                                        Add
+                                    </Button>
+                                </InputLevel>
+                                <InputError>{error}</InputError>
+                            </SourceTypesInputGroup>
                         </form>
-                    </SourceTypeBoxGroupSection>
+                    </BoxGroupSection>
                 </BoxGroupDisabled>
             </BoxGroup>
         </section>

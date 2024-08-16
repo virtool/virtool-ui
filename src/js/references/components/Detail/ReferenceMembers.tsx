@@ -1,8 +1,9 @@
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "@base";
+import { cn } from "@utils/utils";
 import { find, map } from "lodash-es";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReferenceUser } from "../../queries";
 import { ReferenceGroup, ReferenceUser } from "../../types";
@@ -14,16 +15,6 @@ import MemberItem from "./MemberItem";
 const NewMemberLink = styled.a`
     cursor: pointer;
     margin-left: auto;
-`;
-
-const NoMembers = styled(BoxGroupSection)`
-    align-items: center;
-    justify-content: center;
-    display: flex;
-
-    i {
-        padding-right: 3px;
-    }
 `;
 
 const ReferenceMembersHeader = styled(BoxGroupHeader)`
@@ -84,9 +75,9 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                         />
                     ))
                 ) : (
-                    <NoMembers>
-                        <Icon name="exclamation-circle" /> None Found
-                    </NoMembers>
+                    <BoxGroupSection className={cn("items-center", "flex", "justify-center")}>
+                        <Icon className={cn("pr-1")} name="exclamation-circle" /> None Found
+                    </BoxGroupSection>
                 )}
             </BoxGroup>
             {noun === "user" ? (

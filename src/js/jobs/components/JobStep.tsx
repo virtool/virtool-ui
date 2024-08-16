@@ -1,7 +1,8 @@
+import { BoxGroupSection, Icon, Loader } from "@base";
+import { cn } from "@utils/utils";
 import { format } from "date-fns";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Icon, Loader } from "../../base";
 import { JobStatus } from "../types";
 import { getStepDescription } from "../utils";
 import { JobStateIcon } from "./JobStateIcon";
@@ -49,11 +50,6 @@ const JobStepIconContainer = styled.div`
     width: 16px;
 `;
 
-const StyledJobStep = styled(BoxGroupSection)`
-    align-items: flex-start;
-    display: flex;
-`;
-
 type JobStepProps = {
     complete: boolean;
     step: JobStatus;
@@ -66,7 +62,7 @@ export function JobStep({ complete, step }: JobStepProps) {
     const { description, title } = getStepDescription(step);
 
     return (
-        <StyledJobStep>
+        <BoxGroupSection className={cn("flex", "items-start")}>
             <JobStepIconContainer>
                 {complete ? (
                     <Icon name="arrow-circle-down" color="blue" title={step.state} fixedWidth />
@@ -88,6 +84,6 @@ export function JobStep({ complete, step }: JobStepProps) {
                     <span>{format(new Date(step.timestamp), "yyyy-MM-dd")}</span>
                 </StyledJobStepTimestamp>
             </StyledJobStepDescription>
-        </StyledJobStep>
+        </BoxGroupSection>
     );
 }

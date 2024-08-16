@@ -1,18 +1,7 @@
+import { BoxGroupSection, Icon } from "@base";
+import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize } from "../../../app/theme";
-import { BoxGroupSection, Icon } from "../../../base";
-
-const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`
-    align-items: stretch;
-    display: flex;
-    padding: 10px 10px 10px 5px;
-
-    p {
-        font-size: ${getFontSize("md")};
-        margin: 5px 0 0;
-    }
-`;
 
 const SampleSidebarSelectorItemCheck = styled.div`
     align-items: center;
@@ -50,11 +39,17 @@ export function SampleSidebarSelectorItem({
     selected,
 }: SampleSidebarSelectorItemProps) {
     return (
-        <StyledSampleSidebarSelectorItem as="button" type={"button"} onClick={() => onClick(id)} aria-label={name}>
+        <BoxGroupSection
+            className={cn("items-stretch", "flex", "pt-2.5", "pr-2.5", "pb-2.5", "pl-1.5")}
+            as="button"
+            type="button"
+            onClick={() => onClick(id)}
+            aria-label={name}
+        >
             <SampleSidebarSelectorItemCheck>
                 {selected && <Icon name={partiallySelected ? "minus" : "check"} />}
             </SampleSidebarSelectorItemCheck>
             <SampleSidebarSelectorItemContents>{children}</SampleSidebarSelectorItemContents>
-        </StyledSampleSidebarSelectorItem>
+        </BoxGroupSection>
     );
 }

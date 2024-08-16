@@ -1,7 +1,7 @@
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, ProgressCircle, RelativeTime } from "@base";
+import { cn } from "@utils/utils.js";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "../../../base";
-import { ProgressCircle } from "../../../base/ProgressCircle";
 import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../queries";
 
 const ReleaseButtonContainer = styled.div`
@@ -30,13 +30,11 @@ const ReleaseLastChecked = styled.span`
     }
 `;
 
-const StyledRelease = styled(BoxGroupSection)``;
-
 const Release = ({ release, checking, updating, onCheckUpdates, onUpdate }) => {
     const hasUpdate = !updating && release.newer;
 
     return (
-        <StyledRelease newer={release.newer}>
+        <BoxGroupSection newer={release.newer}>
             <ReleaseHeader>
                 <Icon name={release.newer ? "arrow-alt-circle-up" : "check"} />
                 <strong>{release.newer ? "Update Available" : "Up-to-date"}</strong>
@@ -69,25 +67,15 @@ const Release = ({ release, checking, updating, onCheckUpdates, onUpdate }) => {
                     </Button>
                 </ReleaseButtonContainer>
             )}
-        </StyledRelease>
+        </BoxGroupSection>
     );
 };
 
-const StyledUpgrade = styled(BoxGroupSection)`
-    align-items: center;
-    color: ${props => props.theme.color.blue};
-    display: flex;
-
-    strong {
-        margin-left: 3px;
-    }
-`;
-
 const Upgrade = ({ progress }) => (
-    <StyledUpgrade>
+    <BoxGroupSection className={cn("items-center", "flex", "text-blue-500")}>
         <ProgressCircle progress={progress} state={"running"} />
-        <strong>Updating</strong>
-    </StyledUpgrade>
+        <strong className={cn("ml-1")}>Updating</strong>
+    </BoxGroupSection>
 );
 
 const RemoteHeader = styled(BoxGroupHeader)`
@@ -95,12 +83,6 @@ const RemoteHeader = styled(BoxGroupHeader)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-`;
-
-const InstalledHeader = styled(BoxGroupSection)`
-    align-items: center;
-    display: flex;
-    gap: ${props => props.theme.gap.text};
 `;
 
 export default function Remote({ detail }) {
@@ -119,7 +101,7 @@ export default function Remote({ detail }) {
             </RemoteHeader>
 
             {installed && (
-                <InstalledHeader>
+                <BoxGroupSection className={cn("items-center", "flex", "gap-1.5")}>
                     <Icon name="hdd" />
                     <strong>Installed Version</strong>
                     <span>/</span>
@@ -127,7 +109,7 @@ export default function Remote({ detail }) {
                     <span>/</span>
                     <span>Published</span>
                     <RelativeTime time={installed.published_at} />
-                </InstalledHeader>
+                </BoxGroupSection>
             )}
 
             {updating ? (

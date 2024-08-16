@@ -1,16 +1,14 @@
-import PropTypes from "prop-types";
+import { cn } from "@utils/utils";
 import React from "react";
-import styled from "styled-components";
 import { BoxGroupSection } from "./BoxGroupSection";
 import { Icon } from "./Icon";
-import { noneFoundStyle } from "./noneFoundStyle";
 
-const StyledNoneFoundSection = styled(BoxGroupSection)`
-    ${noneFoundStyle}
-    justify-content: center;
-`;
+type NoneFoundSectionProps = {
+    children?: React.ReactNode;
+    noun: string;
+};
 
-export function NoneFoundSection({ children, noun }) {
+export function NoneFoundSection({ children, noun }: NoneFoundSectionProps) {
     let childrenContainer;
 
     if (children) {
@@ -18,13 +16,8 @@ export function NoneFoundSection({ children, noun }) {
     }
 
     return (
-        <StyledNoneFoundSection>
-            <Icon name="info-circle" /> No {noun} found{childrenContainer}
-        </StyledNoneFoundSection>
+        <BoxGroupSection className={cn("items-center", "flex", "justify-center")}>
+            <Icon className={cn("mr-1.5")} name="info-circle" /> No {noun} found{childrenContainer}
+        </BoxGroupSection>
     );
 }
-
-NoneFoundSection.propTypes = {
-    children: PropTypes.node,
-    noun: PropTypes.string.isRequired,
-};

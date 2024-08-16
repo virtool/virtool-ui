@@ -1,19 +1,11 @@
+import { BoxGroupSection } from "@base";
+import { byteSize, cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { fontWeight } from "../../../app/theme";
-import { BoxGroupSection } from "../../../base";
-import { byteSize } from "../../../utils/utils";
 
 const ReadItemMain = styled.div`
     align-items: center;
     display: flex;
-`;
-
-const StyledReadItem = styled(BoxGroupSection)`
-    align-items: flex-start;
-    display: flex;
-    font-weight: ${fontWeight.thick};
-    justify-content: space-between;
 `;
 
 type ReadItemProps = {
@@ -28,7 +20,7 @@ type ReadItemProps = {
  */
 export function ReadItem({ name, download_url, size }: ReadItemProps) {
     return (
-        <StyledReadItem>
+        <BoxGroupSection className={cn("flex", "items-start", "justify-between", "font-medium")}>
             <ReadItemMain>
                 <div>
                     <a href={`/api/${download_url}`} download>
@@ -37,6 +29,6 @@ export function ReadItem({ name, download_url, size }: ReadItemProps) {
                 </div>
             </ReadItemMain>
             {byteSize(size, true)}
-        </StyledReadItem>
+        </BoxGroupSection>
     );
 }

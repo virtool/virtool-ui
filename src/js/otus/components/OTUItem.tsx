@@ -1,8 +1,9 @@
+import { getFontSize, getFontWeight } from "@app/theme";
+import { BoxGroupSection } from "@base";
+import { cn } from "@utils/utils";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { BoxGroupSection } from "../../base";
 
 const OTUItemName = styled(Link)`
     font-size: ${getFontSize("lg")};
@@ -19,12 +20,6 @@ const OTUItemAbbreviation = styled.span`
     justify-content: flex-start;
 `;
 
-const StyledOTUItem = styled(BoxGroupSection)`
-    align-items: center;
-    display: grid;
-    grid-template-columns: 5fr 2fr 1fr;
-`;
-
 type OTUItemProps = {
     abbreviation: string;
     id: string;
@@ -38,10 +33,10 @@ type OTUItemProps = {
  */
 export default function OTUItem({ abbreviation, id, name, refId, verified }: OTUItemProps) {
     return (
-        <StyledOTUItem key={id}>
+        <BoxGroupSection className={cn("items-center", "grid", "grid-cols-[5fr_2fr_1fr]")} key={id}>
             <OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
             <OTUItemAbbreviation>{abbreviation}</OTUItemAbbreviation>
             {verified || <OTUItemUnverified>Unverified</OTUItemUnverified>}
-        </StyledOTUItem>
+        </BoxGroupSection>
     );
 }
