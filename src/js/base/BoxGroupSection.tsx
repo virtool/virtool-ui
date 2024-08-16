@@ -2,6 +2,7 @@ import { cn } from "@utils/utils";
 import React, { ComponentType } from "react";
 
 export type BoxGroupSectionProps = {
+    "aria-label"?: string;
     active?: boolean;
     as?: string | ComponentType<any>;
     children: React.ReactNode;
@@ -19,6 +20,7 @@ export function BoxGroupSection({
     disabled,
     onClick,
     type,
+    ...props
 }: BoxGroupSectionProps) {
     const As = as;
 
@@ -40,6 +42,7 @@ export function BoxGroupSection({
                 { "bg-gray-50 cursor-not-allowed text-gray-300 select-none": disabled },
                 className
             )}
+            aria-label={props["aria-label"]}
             onClick={onClick}
             type={type}
         >

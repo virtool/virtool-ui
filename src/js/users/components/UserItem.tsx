@@ -50,7 +50,11 @@ export function UserItem({ active, administrator_role, handle, id, primary_group
         <BoxGroupSection className={cn("grid", "grid-cols-[50%_25%_1fr_auto]", "items-center")}>
             <UserContainer>
                 <InitialIcon size="lg" handle={handle} />
-                {canEdit ? <UserLink to={`users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
+                {canEdit ? (
+                    <UserLink to={`users/${id}`}>{handle}</UserLink>
+                ) : (
+                    <strong className={cn("text-lg", "font-medium", "pl-2.5")}>{handle}</strong>
+                )}
             </UserContainer>
             <TagContainer>
                 {administrator_role && (
