@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 import { BoxGroupSection } from "./BoxGroupSection";
@@ -10,7 +9,12 @@ const StyledNoneFoundSection = styled(BoxGroupSection)`
     justify-content: center;
 `;
 
-export function NoneFoundSection({ children, noun }) {
+type NoneFoundSectionProps = {
+    children: React.ReactNode;
+    noun: string;
+};
+
+export function NoneFoundSection({ children, noun }: NoneFoundSectionProps) {
     let childrenContainer;
 
     if (children) {
@@ -23,8 +27,3 @@ export function NoneFoundSection({ children, noun }) {
         </StyledNoneFoundSection>
     );
 }
-
-NoneFoundSection.propTypes = {
-    children: PropTypes.node,
-    noun: PropTypes.string.isRequired,
-};
