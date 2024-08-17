@@ -2,7 +2,7 @@ import { Alert, Icon } from "@base";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useInfiniteFindIndexes } from "../queries";
+import { useFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
     refId: string;
@@ -12,16 +12,16 @@ type RebuildAlertProps = {
  * An alert that appears when the reference has unbuilt changes.
  */
 export default function RebuildAlert({ refId }: RebuildAlertProps) {
-    const { data, isLoading } = useInfiniteFindIndexes(refId);
+    const { data, isLoading } = useFindIndexes(1, 25, refId);
     const { hasPermission: hasRights } = useCheckReferenceRight(refId, ReferenceRight.build);
 
     if (isLoading) {
         return null;
     }
 
-    const indexes = data.pages[0];
+    const { total_otu_count, change_count } = data;
 
-    if (indexes.total_otu_count === 0 && hasRights) {
+    if (total_otu_count === 0 && hasRights) {
         return (
             <Alert color="orange" level>
                 <Icon name="exclamation-circle" />
@@ -30,7 +30,7 @@ export default function RebuildAlert({ refId }: RebuildAlertProps) {
         );
     }
 
-    if (indexes.change_count && hasRights) {
+    if (change_count && hasRights) {
         const to = {
             pathname: `/refs/${refId}/indexes`,
             state: { rebuild: true },

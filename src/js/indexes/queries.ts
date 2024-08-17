@@ -1,5 +1,5 @@
 import { ErrorResponse } from "@/types/types";
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createIndex, findIndexes, getIndex, getUnbuiltChanges, listIndexes } from "./api";
 import { Index, IndexMinimal, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
 
@@ -9,7 +9,7 @@ import { Index, IndexMinimal, IndexSearchResult, UnbuiltChangesSearchResults } f
 export const indexQueryKeys = {
     all: () => ["indexes"] as const,
     lists: () => ["indexes", "list"] as const,
-    list: (filters: Array<string | boolean>) => ["indexes", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) => ["indexes", "list", ...filters] as const,
     infiniteLists: () => ["indexes", "list", "infinite"] as const,
     infiniteList: (filters: Array<string | number | boolean>) => ["indexes", "list", "infinite", ...filters] as const,
     details: () => ["indexes", "details"] as const,
@@ -19,21 +19,18 @@ export const indexQueryKeys = {
 /**
  * Gets a paginated list of indexes.
  *
+ * @param page - The page to fetch
+ * @param per_page - The number of hmms to fetch per page
  * @param refId - The reference id to fetch the indexes of
  * @param term - The search term to filter indexes by
  * @returns The paginated list of indexes
  */
-export function useInfiniteFindIndexes(refId: string, term?: string) {
-    return useInfiniteQuery<IndexSearchResult>(
-        indexQueryKeys.infiniteList([refId]),
-        ({ pageParam }) => findIndexes({ page: pageParam, refId, term }),
+export function useFindIndexes(page: number, per_page: number, refId: string, term?: string) {
+    return useQuery<IndexSearchResult>(
+        indexQueryKeys.list([refId, page, per_page, term]),
+        () => findIndexes(page, per_page, refId, term),
         {
-            getNextPageParam: lastPage => {
-                if (lastPage.page >= lastPage.page_count) {
-                    return undefined;
-                }
-                return (lastPage.page || 1) + 1;
-            },
+            keepPreviousData: true,
         }
     );
 }
