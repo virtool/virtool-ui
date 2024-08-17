@@ -1,12 +1,10 @@
-import { ScrollList } from "@base/ScrollList";
-import { useInfiniteFindJobs } from "@jobs/queries";
-import { useUrlSearchParamsList } from "@utils/hooks";
-import { flatMap } from "lodash-es";
+import { getFontWeight } from "@app/theme";
+import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import { useFindJobs } from "@jobs/queries";
+import { useUrlSearchParams, useUrlSearchParamsList } from "@utils/hooks";
+import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { getFontWeight } from "../../app/theme";
-import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
-import { JobMinimal, JobSearchResult } from "../types";
 import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";
 
@@ -35,15 +33,14 @@ const initialState = ["preparing", "running"];
  */
 export default function JobsList() {
     const [states] = useUrlSearchParamsList("state", initialState);
-    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindJobs(states);
+    const [urlPage] = useUrlSearchParams<number>("page");
+    const { data, isLoading } = useFindJobs(Number(urlPage) || 1, 25, states);
 
     if (isLoading) {
         return <LoadingPlaceholder />;
     }
 
-    const jobs: JobMinimal[] = flatMap(data.pages, (page: JobSearchResult) => page.documents);
-
-    const { counts, found_count, total_count } = data.pages[0];
+    const { documents, page, page_count, counts, found_count, total_count } = data;
     let inner;
 
     if (total_count === 0) {
@@ -60,19 +57,13 @@ export default function JobsList() {
         );
     } else {
         inner = (
-            <BoxGroup>
-                <ScrollList
-                    className="mb-0"
-                    fetchNextPage={fetchNextPage}
-                    hasNextPage={hasNextPage}
-                    isFetchingNextPage={isFetchingNextPage}
-                    isLoading={isLoading}
-                    items={jobs}
-                    renderRow={(item: JobMinimal) => {
-                        return <Job key={item.id} {...item} />;
-                    }}
-                />
-            </BoxGroup>
+            <Pagination items={documents} storedPage={page} currentPage={Number(urlPage) || 1} pageCount={page_count}>
+                <BoxGroup>
+                    {map(documents, document => (
+                        <Job key={document.id} {...document} />
+                    ))}
+                </BoxGroup>
+            </Pagination>
         );
     }
 
