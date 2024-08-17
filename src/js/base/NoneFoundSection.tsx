@@ -10,7 +10,7 @@ const StyledNoneFoundSection = styled(BoxGroupSection)`
 `;
 
 type NoneFoundSectionProps = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     noun: string;
 };
 
