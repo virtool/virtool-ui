@@ -1,5 +1,4 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
 import { useUpdateLabel } from "../queries";
@@ -25,7 +24,6 @@ type EditLabelProps = {
 export function EditLabel({ id, color, name, description }: EditLabelProps) {
     const [show, setShow] = useState(false);
     const mutation = useUpdateLabel();
-    const queryClient = useQueryClient();
 
     function handleSubmit({ color, description, name }: UpdatedLabel) {
         mutation.mutate(

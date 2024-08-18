@@ -82,17 +82,15 @@ export type CreateAnalysisParams = {
 export function useCreateAnalysis() {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation<GenericAnalysis, unknown, CreateAnalysisParams>({
+    return useMutation<GenericAnalysis, unknown, CreateAnalysisParams>({
         mutationFn: ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
             createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
 
         onSuccess: () => {
-            void queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
-            void queryClient.invalidateQueries({ queryKey: samplesQueryKeys.lists() });
+            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
+            queryClient.invalidateQueries({ queryKey: samplesQueryKeys.lists() });
         },
     });
-
-    return mutation;
 }
 
 /**

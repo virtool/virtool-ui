@@ -1,5 +1,4 @@
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "@base";
-import { ProgressCircle } from "@base/ProgressCircle.js";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, ProgressCircle, RelativeTime } from "@base";
 import React from "react";
 import styled from "styled-components";
 import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../queries";

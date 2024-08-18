@@ -78,6 +78,7 @@ export { NotFound } from "./NotFound";
 export { Pagination } from "./pagination/Pagination";
 export { ProgressBar } from "./ProgressBar";
 export { ProgressBarAffixed } from "./ProgressBarAffixed";
+export { ProgressCircle } from "./ProgressCircle";
 export { RelativeTime } from "./RelativeTime";
 export { RemoveBanner } from "./RemoveBanner";
 export { SaveButton } from "./SaveButton";
