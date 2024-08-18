@@ -1,10 +1,9 @@
 import { getFontSize } from "@app/theme";
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { labelQueryKeys, useRemoveLabel } from "../queries";
+import { useRemoveLabel } from "../queries";
 
 const RemoveLabelQuestion = styled.p`
     font-size: ${getFontSize("lg")};
@@ -25,7 +24,6 @@ type RemoveLabelProps = {
  */
 export function RemoveLabel({ id, name }: RemoveLabelProps) {
     const [open, setOpen] = useState(false);
-    const queryClient = useQueryClient();
     const mutation = useRemoveLabel();
 
     function handleSubmit() {
@@ -34,7 +32,6 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
             {
                 onSuccess: () => {
                     setOpen(false);
-                    queryClient.invalidateQueries(labelQueryKeys.lists());
                 },
             }
         );

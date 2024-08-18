@@ -21,7 +21,7 @@ function ConnectedApp() {
         return <LoadingPlaceholder />;
     }
 
-    if (rootData.body.first_user) {
+    if (rootData.first_user) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyFirstUser />

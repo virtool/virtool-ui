@@ -8,5 +8,7 @@ import { useMutation } from "@tanstack/react-query";
  * @returns A mutator for executing developer commands
  */
 export function usePostDevCommand() {
-    return useMutation<unknown, ErrorResponse, { command: string }>(({ command }) => postDevCommand(command));
+    return useMutation<unknown, ErrorResponse, { command: string }>({
+        mutationFn: ({ command }) => postDevCommand(command),
+    });
 }

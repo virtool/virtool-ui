@@ -1,12 +1,12 @@
+import { useFetchAccount } from "@account/queries";
+import { AdministratorRoles } from "@administration/types";
+import { Request } from "@app/request";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
-import { useFetchAccount } from "../account/queries";
-import { AdministratorRoles } from "../administration/types";
-import { Request } from "../app/request";
 import { useGetReference } from "./queries";
 
 export function getValidationSchema(sourceTypes: string[]) {
@@ -43,24 +43,22 @@ export function useUpdateSourceTypes(
 
     const [lastRemoved, setLastRemoved] = useState("");
 
-    const mutation = useMutation(
-        (sourceTypes: string[]) => {
+    const mutation = useMutation({
+        mutationFn: (sourceTypes: string[]) => {
             return Request.patch(path).send({ [key]: sourceTypes });
         },
-        {
-            onSuccess: (data: Response) => {
-                const updatedSourceTypes = data.body[key];
+        onSuccess: (data: Response) => {
+            const updatedSourceTypes = data.body[key];
 
-                if (sourceTypes.length > updatedSourceTypes) {
-                    setLastRemoved(difference(sourceTypes, updatedSourceTypes)[0]);
-                } else {
-                    setLastRemoved("");
-                }
+            if (sourceTypes.length > updatedSourceTypes) {
+                setLastRemoved(difference(sourceTypes, updatedSourceTypes)[0]);
+            } else {
+                setLastRemoved("");
+            }
 
-                queryClient.invalidateQueries(queryKey);
-            },
-        }
-    );
+            queryClient.invalidateQueries({ queryKey });
+        },
+    });
 
     const { errors, handleSubmit, register, reset } = useSourceTypesForm(sourceTypes);
 

@@ -1,9 +1,8 @@
 import { BoxGroup, Button, LoadingPlaceholder, NoneFoundBox } from "@/base";
 import EditSegment from "@otus/components/Detail/Schema/EditSegment";
-import { OTUQueryKeys, useFetchOTU, useUpdateOTU } from "@otus/queries";
+import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useQueryClient } from "@tanstack/react-query";
 import { map } from "lodash";
 import React from "react";
 import { match, useHistory } from "react-router-dom";
@@ -33,8 +32,7 @@ export default function Schema({ match }: SchemaProps) {
     );
     const history = useHistory();
     const { data, isLoading } = useFetchOTU(otuId);
-    const mutation = useUpdateOTU();
-    const queryClient = useQueryClient();
+    const mutation = useUpdateOTU(otuId);
 
     if (isLoading || isLoadingPermission) {
         return <LoadingPlaceholder />;
@@ -55,14 +53,7 @@ export default function Schema({ match }: SchemaProps) {
     }
 
     function handleUpdate(updatedSchema: OTUSegment[]) {
-        mutation.mutate(
-            { otuId, schema: updatedSchema },
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
-                },
-            }
-        );
+        mutation.mutate({ otuId, schema: updatedSchema });
     }
 
     return (

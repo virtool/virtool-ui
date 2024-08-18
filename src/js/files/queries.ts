@@ -1,6 +1,6 @@
-import { Request } from "@app/request";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { findFiles } from "./api";
+import { ErrorResponse } from "@/types/types";
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { findFiles, removeFile } from "./api";
 import { FileResponse, FileType } from "./types";
 
 export const fileQueryKeys = {
@@ -12,26 +12,32 @@ export const fileQueryKeys = {
 };
 
 export function useListFiles(type: FileType, page = 1, per_page: number) {
-    return useQuery(fileQueryKeys.list(type, [page, per_page]), () => findFiles(type, page, per_page), {
-        keepPreviousData: true,
+    return useQuery<FileResponse, ErrorResponse>({
+        queryKey: fileQueryKeys.list(type, [page, per_page]),
+        queryFn: () => findFiles(type, page, per_page),
+        placeholderData: keepPreviousData,
     });
 }
 
 export function useInfiniteFindFiles(type: FileType, per_page: number, term?: string) {
-    return useInfiniteQuery<FileResponse>(
-        fileQueryKeys.infiniteList(type, [per_page]),
-        ({ pageParam }) => findFiles(type, pageParam, per_page, term),
-        {
-            getNextPageParam: lastPage => {
-                if (lastPage.page >= lastPage.page_count) {
-                    return undefined;
-                }
-                return (lastPage.page || 1) + 1;
-            },
-        }
-    );
+    return useInfiniteQuery<FileResponse>({
+        queryKey: fileQueryKeys.infiniteList(type, [per_page]),
+        queryFn: ({ pageParam }) => findFiles(type, pageParam as number, per_page, term),
+        initialPageParam: 0,
+        getNextPageParam: lastPage => {
+            if (lastPage.page >= lastPage.page_count) {
+                return undefined;
+            }
+            return (lastPage.page || 1) + 1;
+        },
+    });
 }
 
+/**
+ * Initializes a mutator for deleting a file
+ *
+ * @returns A mutator for deleting a file
+ */
 export function useDeleteFile() {
-    return useMutation((id: string) => Request.delete(`/uploads/${id}`));
+    return useMutation<null, unknown, { id: string }>({ mutationFn: ({ id }) => removeFile(id) });
 }

@@ -51,7 +51,7 @@ export default function SampleRights({ match }: SampleRightsProps) {
             { update: { group: e.target.value } },
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
+                    queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
                 },
             }
         );
@@ -67,7 +67,7 @@ export default function SampleRights({ match }: SampleRightsProps) {
             },
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
+                    queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
                 },
             }
         );

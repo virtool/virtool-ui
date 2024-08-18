@@ -46,10 +46,7 @@ export default function Groups() {
     const [selectedGroupId, setSelectedGroupId] = useState(null);
 
     const { data: groups, isLoading: isLoadingGroups } = useListGroups();
-    const { data: selectedGroup } = useFetchGroup(selectedGroupId, {
-        enabled: Boolean(selectedGroupId),
-        keepPreviousData: true,
-    });
+    const { data: selectedGroup } = useFetchGroup(selectedGroupId);
 
     useEffect(() => {
         if (groups && !find(groups, { id: selectedGroupId })) {

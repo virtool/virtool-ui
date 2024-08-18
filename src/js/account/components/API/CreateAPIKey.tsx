@@ -1,5 +1,5 @@
 import APIPermissions from "@account/components/API/APIPermissions";
-import { accountKeys, useCreateAPIKey } from "@account/queries";
+import { useCreateAPIKey } from "@account/queries";
 import { getFontSize } from "@app/theme";
 import {
     Dialog,
@@ -108,7 +108,6 @@ export default function CreateAPIKey() {
             {
                 onSuccess: data => {
                     setNewKey(data.key);
-                    queryClient.invalidateQueries(accountKeys.all());
                 },
             }
         );

@@ -1,4 +1,11 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+    useQueryClient,
+    UseQueryOptions,
+} from "@tanstack/react-query";
 import { createGroup, findGroups, getGroup, removeGroup, updateGroup } from "./api";
 import { Group, GroupMinimal, GroupSearchResults, GroupUpdate } from "./types";
 
@@ -23,19 +30,19 @@ export const groupQueryKeys = {
  * @returns An UseInfiniteQueryResult object containing the group search results
  */
 export function useInfiniteFindGroups(per_page: number, term: string) {
-    return useInfiniteQuery<GroupSearchResults>(
-        groupQueryKeys.infiniteList([per_page, term]),
-        ({ pageParam }) => findGroups(pageParam, per_page, term, true) as Promise<GroupSearchResults>,
-        {
-            getNextPageParam: lastPage => {
-                if (lastPage.page >= lastPage.page_count) {
-                    return undefined;
-                }
-                return (lastPage.page || 1) + 1;
-            },
-            keepPreviousData: true,
-        }
-    );
+    return useInfiniteQuery<GroupSearchResults>({
+        queryKey: groupQueryKeys.infiniteList([per_page, term]),
+        queryFn: ({ pageParam }) =>
+            findGroups(pageParam as number, per_page, term, true) as Promise<GroupSearchResults>,
+        initialPageParam: 0,
+        getNextPageParam: lastPage => {
+            if (lastPage.page >= lastPage.page_count) {
+                return undefined;
+            }
+            return (lastPage.page || 1) + 1;
+        },
+        placeholderData: keepPreviousData,
+    });
 }
 
 /**
@@ -44,7 +51,10 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
  * @returns {UseQueryResult} The non-paginated list of groups.
  */
 export function useListGroups() {
-    return useQuery<GroupMinimal[]>(groupQueryKeys.lists(), () => findGroups() as Promise<GroupMinimal[]>);
+    return useQuery<GroupMinimal[]>({
+        queryKey: groupQueryKeys.lists(),
+        queryFn: () => findGroups() as Promise<GroupMinimal[]>,
+    });
 }
 
 /**
@@ -55,8 +65,13 @@ export function useListGroups() {
  * @param {UseQueryOptions} options The react-query options to use.
  * @returns {UseQueryResult} The non-paginated list of groups.
  */
-export function useFetchGroup(id: string | number, options: UseQueryOptions<Group>) {
-    return useQuery<Group>(groupQueryKeys.detail(id), () => getGroup(id), options);
+export function useFetchGroup(id: string | number) {
+    return useQuery<Group>({
+        queryKey: groupQueryKeys.detail(id),
+        queryFn: () => getGroup(id),
+        enabled: Boolean(id),
+        placeholderData: keepPreviousData,
+    });
 }
 
 /**
@@ -66,9 +81,10 @@ export function useFetchGroup(id: string | number, options: UseQueryOptions<Grou
  */
 export function useUpdateGroup() {
     const queryClient = useQueryClient();
-    return useMutation<Group, unknown, GroupUpdate>(updateGroup, {
+    return useMutation<Group, unknown, GroupUpdate>({
+        mutationFn: updateGroup,
         onSuccess: data => {
-            queryClient.invalidateQueries(groupQueryKeys.lists());
+            queryClient.invalidateQueries({ queryKey: groupQueryKeys.lists() });
             queryClient.setQueryData(groupQueryKeys.detail(data.id), data);
         },
     });
@@ -81,9 +97,10 @@ export function useUpdateGroup() {
  */
 export function useRemoveGroup() {
     const queryClient = useQueryClient();
-    return useMutation(removeGroup, {
+    return useMutation({
+        mutationFn: removeGroup,
         onSuccess: () => {
-            queryClient.invalidateQueries(groupQueryKeys.all());
+            queryClient.invalidateQueries({ queryKey: groupQueryKeys.all() });
         },
     });
 }
@@ -95,9 +112,10 @@ export function useRemoveGroup() {
  */
 export function useCreateGroup() {
     const queryClient = useQueryClient();
-    return useMutation(createGroup, {
+    return useMutation({
+        mutationFn: createGroup,
         onSuccess: () => {
-            queryClient.invalidateQueries(groupQueryKeys.lists());
+            queryClient.invalidateQueries({ queryKey: groupQueryKeys.lists() });
         },
     });
 }

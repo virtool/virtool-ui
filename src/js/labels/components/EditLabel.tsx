@@ -2,7 +2,7 @@ import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
-import { labelQueryKeys, useUpdateLabel } from "../queries";
+import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 
 type UpdatedLabel = {
@@ -33,7 +33,6 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
             {
                 onSuccess: () => {
                     setShow(false);
-                    queryClient.invalidateQueries(labelQueryKeys.lists());
                 },
             }
         );

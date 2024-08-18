@@ -1,6 +1,6 @@
 import { ErrorResponse } from "@/types/types";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
-import { User } from "../users/types";
+import { keepPreviousData, useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { User } from "@users/types";
 import { createFirst, findUsers } from "./api";
 import { UserResponse } from "./types";
 
@@ -25,28 +25,30 @@ export const userQueryKeys = {
  * @returns An UseInfiniteQueryResult object containing the user search results
  */
 export function useInfiniteFindUsers(per_page: number, term: string) {
-    return useInfiniteQuery<UserResponse>(
-        userQueryKeys.infiniteList([per_page, term]),
-        ({ pageParam }) => findUsers(pageParam, per_page, term),
-        {
-            getNextPageParam: lastPage => {
-                if (lastPage.page >= lastPage.page_count) {
-                    return undefined;
-                }
-                return (lastPage.page || 1) + 1;
-            },
-            keepPreviousData: true,
-        }
-    );
+    return useInfiniteQuery<UserResponse>({
+        queryKey: userQueryKeys.infiniteList([per_page, term]),
+        queryFn: ({ pageParam }) => findUsers(pageParam as number, per_page, term),
+        initialPageParam: 0,
+        getNextPageParam: lastPage => {
+            if (lastPage.page >= lastPage.page_count) {
+                return undefined;
+            }
+            return (lastPage.page || 1) + 1;
+        },
+        placeholderData: keepPreviousData,
+    });
 }
 
+/**
+ * Initializes a mutator for creating the first instance user
+ *
+ * @returns A mutator for creating the first instance user
+ */
 export function useCreateFirstUser() {
-    return useMutation<User, ErrorResponse, { handle: string; password: string; forceReset: boolean }>(
-        ({ handle, password, forceReset }) => createFirst(handle, password, forceReset),
-        {
-            onSuccess: () => {
-                window.location.reload();
-            },
-        }
-    );
+    return useMutation<User, ErrorResponse, { handle: string; password: string; forceReset: boolean }>({
+        mutationFn: ({ handle, password, forceReset }) => createFirst(handle, password, forceReset),
+        onSuccess: () => {
+            window.location.reload();
+        },
+    });
 }

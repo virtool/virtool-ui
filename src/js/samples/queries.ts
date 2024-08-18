@@ -1,8 +1,8 @@
 import { ErrorResponse } from "@/types/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Label } from "@labels/types";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { forEach, map, reject, union } from "lodash-es/lodash";
 import { useHistory } from "react-router-dom";
-import { Label } from "../labels/types";
 import {
     createSample,
     getSample,
@@ -15,7 +15,7 @@ import {
     updateSample,
     updateSampleRights,
 } from "./api";
-import { Sample, SampleMinimal } from "./types";
+import { Sample, SampleMinimal, SampleSearchResult } from "./types";
 
 export type SampleLabel = Label & {
     /** Whether all selected samples contain the label */
@@ -43,13 +43,11 @@ export const samplesQueryKeys = {
  * @param workflows - The workflows to filter the samples by
  */
 export function useListSamples(page: number, per_page: number, term?: string, labels?: string[], workflows?: string[]) {
-    return useQuery(
-        samplesQueryKeys.list([page, per_page, term, labels, workflows]),
-        () => listSamples(page, per_page, term, labels, workflows),
-        {
-            keepPreviousData: true,
-        }
-    );
+    return useQuery<SampleSearchResult, ErrorResponse>({
+        queryKey: samplesQueryKeys.list([page, per_page, term, labels, workflows]),
+        queryFn: () => listSamples(page, per_page, term, labels, workflows),
+        placeholderData: keepPreviousData,
+    });
 }
 
 /**
@@ -59,7 +57,10 @@ export function useListSamples(page: number, per_page: number, term?: string, la
  * @returns A single sample
  */
 export function useFetchSample(sampleId: string) {
-    return useQuery<Sample, ErrorResponse>(samplesQueryKeys.detail(sampleId), () => getSample(sampleId));
+    return useQuery<Sample, ErrorResponse>({
+        queryKey: samplesQueryKeys.detail(sampleId),
+        queryFn: () => getSample(sampleId),
+    });
 }
 
 /**
@@ -84,15 +85,13 @@ export function useCreateSample() {
             labels: number[];
             group: string;
         }
-    >(
-        ({ name, isolate, host, locale, libraryType, subtractions, files, labels, group }) =>
+    >({
+        mutationFn: ({ name, isolate, host, locale, libraryType, subtractions, files, labels, group }) =>
             createSample(name, isolate, host, locale, libraryType, subtractions, files, labels, group),
-        {
-            onSuccess: () => {
-                history.push("/samples");
-            },
-        }
-    );
+        onSuccess: () => {
+            history.push("/samples");
+        },
+    });
 }
 
 /**
@@ -103,14 +102,12 @@ export function useCreateSample() {
 export function useUpdateSample(sampleId: string) {
     const queryClient = useQueryClient();
 
-    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>(
-        ({ update }) => updateSample(sampleId, update),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(samplesQueryKeys.detail(sampleId));
-            },
-        }
-    );
+    return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>({
+        mutationFn: ({ update }) => updateSample(sampleId, update),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
+        },
+    });
 }
 
 /**
@@ -119,7 +116,7 @@ export function useUpdateSample(sampleId: string) {
  * @returns A mutator for removing a sample
  */
 export function useRemoveSample() {
-    return useMutation<null, unknown, { sampleId: string }>(({ sampleId }) => removeSample(sampleId));
+    return useMutation<null, unknown, { sampleId: string }>({ mutationFn: ({ sampleId }) => removeSample(sampleId) });
 }
 
 /**
@@ -128,9 +125,9 @@ export function useRemoveSample() {
  * @returns A mutator for updating a samples rights
  */
 export function useUpdateSampleRights(sampleId: string) {
-    return useMutation<SampleRightsUpdateReturn, unknown, { update: SampleRightsUpdate }>(({ update }) =>
-        updateSampleRights(sampleId, update)
-    );
+    return useMutation<SampleRightsUpdateReturn, unknown, { update: SampleRightsUpdate }>({
+        mutationFn: ({ update }) => updateSampleRights(sampleId, update),
+    });
 }
 
 /**
@@ -141,9 +138,10 @@ export function useUpdateSampleRights(sampleId: string) {
  */
 export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: SampleMinimal[]) {
     const queryClient = useQueryClient();
-    const mutation = useMutation(update, {
+    const mutation = useMutation({
+        mutationFn: update,
         onSuccess: () => {
-            queryClient.invalidateQueries(samplesQueryKeys.lists());
+            queryClient.invalidateQueries({ queryKey: samplesQueryKeys.lists() });
         },
     });
 

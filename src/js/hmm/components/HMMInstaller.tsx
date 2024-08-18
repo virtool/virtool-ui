@@ -53,7 +53,7 @@ export function HMMInstaller() {
     } = data;
 
     if (task?.complete) {
-        queryClient.invalidateQueries(hmmQueryKeys.lists());
+        queryClient.invalidateQueries({ queryKey: hmmQueryKeys.lists() });
     }
 
     if (task && !installed) {
