@@ -48,6 +48,7 @@ export { DropdownMenuItem } from "./DropdownMenuItem";
 export { DropdownMenuLink } from "./DropdownMenuLink";
 export { ExternalLink } from "./ExternalLink";
 export { Icon } from "./Icon";
+export { IconButton } from "./IconButton";
 export { InitialIcon } from "./InitialIcon";
 export { Input } from "./Input";
 export { InputContainer } from "./InputContainer";

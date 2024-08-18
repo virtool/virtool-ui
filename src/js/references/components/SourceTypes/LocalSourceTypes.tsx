@@ -1,10 +1,5 @@
-import { IconButton } from "@base/IconButton";
-import { get } from "lodash-es";
-import React from "react";
-import { useRouteMatch } from "react-router-dom";
-import styled from "styled-components";
-import { SettingsCheckbox } from "../../../administration/components/SettingsCheckbox";
-import { getColor } from "../../../app/theme";
+import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
+import { getColor } from "@app/theme";
 import {
     BoxGroup,
     BoxGroupDisabled,
@@ -16,7 +11,12 @@ import {
     InputSimple,
     LoadingPlaceholder,
     SectionHeader,
-} from "../../../base";
+} from "@base";
+import { IconButton } from "@base/IconButton";
+import { get } from "lodash-es";
+import React from "react";
+import { useRouteMatch } from "react-router-dom";
+import styled from "styled-components";
 import { useUpdateSourceTypes } from "../../hooks";
 import { referenceQueryKeys, useGetReference, useUpdateReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
@@ -70,7 +70,7 @@ export function LocalSourceTypes() {
     const match = useRouteMatch<MatchTypes>();
     const refId = match.params.refId;
 
-    const { data, isLoading } = useGetReference(refId);
+    const { data, isPending } = useGetReference(refId);
 
     const { mutation: updateReferenceMutation } = useUpdateReference(refId);
 
@@ -84,7 +84,7 @@ export function LocalSourceTypes() {
         sourceTypes
     );
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

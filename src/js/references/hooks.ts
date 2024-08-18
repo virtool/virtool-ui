@@ -123,25 +123,25 @@ export enum ReferenceRight {
  * @returns Whether the right is possessed by the account
  */
 export function useCheckReferenceRight(referenceId: string, right: ReferenceRight) {
-    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(referenceId);
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
+    const { data: reference, isPending: isPendingReference } = useGetReference(referenceId);
 
-    if (isLoadingAccount || isLoadingReference) {
-        return { hasPermission: false, isLoading: true };
+    if (isPendingAccount || isPendingReference) {
+        return { hasPermission: false, isPending: true };
     }
 
     if (account.administrator_role === AdministratorRoles.FULL) {
-        return { hasPermission: true, isLoading: false };
+        return { hasPermission: true, isPending: false };
     }
 
     const user = find(reference.users, { id: account.id });
 
     if (user?.[right]) {
-        return { hasPermission: true, isLoading: false };
+        return { hasPermission: true, isPending: false };
     }
 
     // Groups in common between the user and the registered ref groups.
     const groups = filter(reference.groups, group => includes(account.groups, group.id));
 
-    return { hasPermission: groups && some(groups, { [right]: true }), isLoading: false };
+    return { hasPermission: groups && some(groups, { [right]: true }), isPending: false };
 }

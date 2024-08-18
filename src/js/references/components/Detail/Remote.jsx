@@ -1,7 +1,7 @@
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "@base";
+import { ProgressCircle } from "@base/ProgressCircle.js";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Icon, Loader, RelativeTime } from "../../../base";
-import { ProgressCircle } from "../../../base/ProgressCircle";
 import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../queries";
 
 const ReleaseButtonContainer = styled.div`
@@ -106,7 +106,7 @@ const InstalledHeader = styled(BoxGroupSection)`
 export default function Remote({ detail }) {
     const { id, installed, release, remotes_from, updating, task } = detail;
     const slug = remotes_from.slug;
-    const { mutate: checkReferenceUpdate, isLoading: isLoadingReferenceUpdate } = useCheckReferenceUpdates(id);
+    const { mutate: checkReferenceUpdate, isPending: isPendingReferenceUpdate } = useCheckReferenceUpdates(id);
     const { mutate: updateRemoteReference } = useUpdateRemoteReference(id);
 
     return (
@@ -135,7 +135,7 @@ export default function Remote({ detail }) {
             ) : (
                 <Release
                     release={release}
-                    checking={isLoadingReferenceUpdate}
+                    checking={isPendingReferenceUpdate}
                     updating={updating}
                     onCheckUpdates={checkReferenceUpdate}
                     onUpdate={updateRemoteReference}

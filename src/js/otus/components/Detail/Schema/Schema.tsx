@@ -26,15 +26,15 @@ type SchemaProps = {
  */
 export default function Schema({ match }: SchemaProps) {
     const { refId, otuId } = match.params;
-    const { hasPermission: canModify, isLoading: isLoadingPermission } = useCheckReferenceRight(
+    const { hasPermission: canModify, isPending: isPendingPermission } = useCheckReferenceRight(
         refId,
         ReferenceRight.modify_otu
     );
     const history = useHistory();
-    const { data, isLoading } = useFetchOTU(otuId);
+    const { data, isPending } = useFetchOTU(otuId);
     const mutation = useUpdateOTU(otuId);
 
-    if (isLoading || isLoadingPermission) {
+    if (isPending || isPendingPermission) {
         return <LoadingPlaceholder />;
     }
 

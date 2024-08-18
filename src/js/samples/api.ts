@@ -1,8 +1,6 @@
 import { Request } from "@app/request";
 import { Sample, SampleSearchResult } from "./types";
 
-export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
-
 /**
  * Fetch a page of samples
  *

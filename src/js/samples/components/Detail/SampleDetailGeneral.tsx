@@ -31,9 +31,9 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
     const { sampleId } = match.params;
     const history = useHistory<{ editSample: boolean }>();
 
-    const { data, isLoading } = useFetchSample(sampleId);
+    const { data, isPending } = useFetchSample(sampleId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

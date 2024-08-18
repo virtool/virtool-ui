@@ -303,10 +303,10 @@ type CurrentOtuContextProviderProps = {
  * @returns Element wrapping children components with the current OTU context
  */
 export function CurrentOTUContextProvider({ children, otuId, refId }: CurrentOtuContextProviderProps) {
-    const { data: otu, isLoading: isLoadingOTU } = useFetchOTU(otuId);
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
+    const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
+    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 
-    if (isLoadingOTU || isLoadingReference) {
+    if (isPendingOTU || isPendingReference) {
         return <LoadingPlaceholder />;
     }
 

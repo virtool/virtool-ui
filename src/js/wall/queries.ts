@@ -32,7 +32,7 @@ export function useRootQuery() {
 export function useAuthentication() {
     const queryClient = useQueryClient();
 
-    const { data, isLoading, isError, error, refetch, ...queryInfo } = useQuery<Account, ErrorResponse>({
+    const { data, isPending, isError, error, refetch, ...queryInfo } = useQuery<Account, ErrorResponse>({
         queryKey: accountKeys.all(),
         queryFn: fetchAccount,
         retry: false,
@@ -47,7 +47,7 @@ export function useAuthentication() {
 
     const authenticated = Boolean(data);
 
-    return { authenticated, isLoading, isError, refetch, ...queryInfo };
+    return { authenticated, isPending, isError, refetch, ...queryInfo };
 }
 
 /**

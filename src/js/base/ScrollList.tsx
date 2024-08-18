@@ -18,7 +18,7 @@ type ScrollListProps = {
     /** Whether a new page is being fetched */
     isFetchingNextPage: boolean;
     /** Whether the first page is being fetched */
-    isLoading: boolean;
+    isPending: boolean;
     /** The list of items */
     items: unknown[];
     /** A function which accepts an item and returns a React element */
@@ -33,7 +33,7 @@ export function ScrollList({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-    isLoading,
+    isPending,
     items,
     renderRow,
 }: ScrollListProps) {
@@ -55,7 +55,7 @@ export function ScrollList({
     return (
         <div className={cn("relative", "z-0", className)}>
             {entries}
-            {isLoading && <LoadingPlaceholder className="mt-5" />}
+            {isPending && <LoadingPlaceholder className="mt-5" />}
         </div>
     );
 }

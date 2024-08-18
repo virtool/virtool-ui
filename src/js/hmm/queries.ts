@@ -1,7 +1,7 @@
 import { ErrorResponse } from "@/types/types";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchHmm, install, listHmms } from "./api";
-import { HMM, HMMSearchResults } from "./types";
+import { fetchHmm, installHmm, listHmms } from "./api";
+import { HMM, HMMInstalled, HMMSearchResults } from "./types";
 
 /**
  * Factory object for generating hmm query keys
@@ -49,11 +49,16 @@ export function useFetchHmm(hmmId: string) {
     });
 }
 
+/**
+ * Initializes a mutator for installing hmms
+ *
+ * @returns A mutator for installing hmms
+ */
 export function useInstallHmm() {
     const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: install,
+    return useMutation<HMMInstalled, ErrorResponse>({
+        mutationFn: installHmm,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: hmmQueryKeys.lists() });
         },

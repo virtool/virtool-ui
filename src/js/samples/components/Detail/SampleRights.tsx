@@ -31,14 +31,14 @@ export default function SampleRights({ match }: SampleRightsProps) {
     const { sampleId } = match.params;
 
     const { hasPermission } = useCheckAdminRole(AdministratorRoles.FULL);
-    const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
-    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
-    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
+    const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
+    const { data: groups, isPending: isPendingGroups } = useListGroups();
 
     const queryClient = useQueryClient();
     const mutation = useUpdateSampleRights(sampleId);
 
-    if (isLoadingSample || isLoadingGroups || isLoadingAccount) {
+    if (isPendingSample || isPendingGroups || isPendingAccount) {
         return <LoadingPlaceholder />;
     }
 

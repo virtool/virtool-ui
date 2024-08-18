@@ -35,14 +35,14 @@ export default function SampleDetail({ match }: SampleDetailProps) {
     const location = useLocation();
     const [_, setLocationState] = useLocationState();
     const { sampleId } = match.params;
-    const { data, isLoading, isError } = useFetchSample(sampleId);
+    const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
 
     if (isError) {
         return <NotFound />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

@@ -24,6 +24,7 @@ import {
     Reference,
     ReferenceDataType,
     ReferenceGroup,
+    ReferenceInstalled,
     ReferenceMinimal,
     ReferenceSearchResult,
     ReferenceTarget,
@@ -280,7 +281,7 @@ export function useCheckReferenceUpdates(refId: string) {
  */
 export function useUpdateRemoteReference(refId: string) {
     const queryClient = useQueryClient();
-    return useMutation({
+    return useMutation<ReferenceInstalled, ErrorResponse>({
         mutationFn: () => updateRemoteReference(refId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) });

@@ -1,13 +1,7 @@
-import {
-    keepPreviousData,
-    useInfiniteQuery,
-    useMutation,
-    useQuery,
-    useQueryClient,
-    UseQueryOptions,
-} from "@tanstack/react-query";
+import { ErrorResponse } from "@/types/types";
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createGroup, findGroups, getGroup, removeGroup, updateGroup } from "./api";
-import { Group, GroupMinimal, GroupSearchResults, GroupUpdate } from "./types";
+import { Group, GroupMinimal, GroupSearchResults, PermissionsUpdate } from "./types";
 
 /**
  * Factory for generating react-query keys for group-related queries.
@@ -27,7 +21,7 @@ export const groupQueryKeys = {
  *
  * @param per_page - The number of groups to fetch per page
  * @param term - The search term to filter groups by
- * @returns An UseInfiniteQueryResult object containing the group search results
+ * @returns A paginated list of the group search results
  */
 export function useInfiniteFindGroups(per_page: number, term: string) {
     return useInfiniteQuery<GroupSearchResults>({
@@ -46,9 +40,9 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
 }
 
 /**
- * Gets a non-paginated list of all groups.
+ * Gets a non-paginated list of all groups
  *
- * @returns {UseQueryResult} The non-paginated list of groups.
+ * @returns A non-paginated list of groups
  */
 export function useListGroups() {
     return useQuery<GroupMinimal[]>({
@@ -58,12 +52,10 @@ export function useListGroups() {
 }
 
 /**
- * Fetches a single group.
+ * Fetches a single group
  *
- *
- * @param {string} id The id of the group to fetch.
- * @param {UseQueryOptions} options The react-query options to use.
- * @returns {UseQueryResult} The non-paginated list of groups.
+ * @param id - The id of the group to fetch
+ * @returns A non-paginated list of groups
  */
 export function useFetchGroup(id: string | number) {
     return useQuery<Group>({
@@ -75,14 +67,22 @@ export function useFetchGroup(id: string | number) {
 }
 
 /**
- * Initializes a mutator for updating a group.
+ * Initializes a mutator for updating a group
  *
- * @returns {UseMutationResult} mutator for updating a group.
+ * @returns A mutator for updating a group
  */
 export function useUpdateGroup() {
     const queryClient = useQueryClient();
-    return useMutation<Group, unknown, GroupUpdate>({
-        mutationFn: updateGroup,
+    return useMutation<
+        Group,
+        ErrorResponse,
+        {
+            id: string | number;
+            name?: string;
+            permissions?: PermissionsUpdate;
+        }
+    >({
+        mutationFn: ({ id, name, permissions }) => updateGroup(id, name, permissions),
         onSuccess: data => {
             queryClient.invalidateQueries({ queryKey: groupQueryKeys.lists() });
             queryClient.setQueryData(groupQueryKeys.detail(data.id), data);
@@ -91,14 +91,14 @@ export function useUpdateGroup() {
 }
 
 /**
- * Initializes a mutator for removing a group.
+ * Initializes a mutator for removing a group
  *
- * @returns {UseMutationResult} mutator for removing a group
+ * @returns A mutator for removing a group
  */
 export function useRemoveGroup() {
     const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: removeGroup,
+    return useMutation<null, ErrorResponse, { id: string | number }>({
+        mutationFn: ({ id }) => removeGroup(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: groupQueryKeys.all() });
         },
@@ -108,12 +108,12 @@ export function useRemoveGroup() {
 /**
  * Initializes a mutator for creating a group
  *
- * @returns {UseMutationResult} mutator for creating a group
+ * @returns A mutator for creating a group
  */
 export function useCreateGroup() {
     const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: createGroup,
+    return useMutation<Group, Error, { name: string }>({
+        mutationFn: ({ name }) => createGroup(name),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: groupQueryKeys.lists() });
         },

@@ -11,7 +11,6 @@ import {
     SampleRightsUpdate,
     SampleRightsUpdateReturn,
     SampleUpdate,
-    update,
     updateSample,
     updateSampleRights,
 } from "./api";
@@ -138,8 +137,8 @@ export function useUpdateSampleRights(sampleId: string) {
  */
 export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: SampleMinimal[]) {
     const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: update,
+    const mutation = useMutation<Sample, ErrorResponse, { sampleId: string; update: SampleUpdate }>({
+        mutationFn: ({ sampleId, update }) => updateSample(sampleId, update),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: samplesQueryKeys.lists() });
         },

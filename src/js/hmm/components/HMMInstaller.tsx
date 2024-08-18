@@ -1,8 +1,8 @@
+import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "@base";
 import { useQueryClient } from "@tanstack/react-query";
 import { replace } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "../../base";
 import { hmmQueryKeys, useListHmms } from "../queries";
 import InstallOption from "./InstallOption";
 
@@ -41,10 +41,10 @@ const StyledHMMInstaller = styled(Box)`
  * Displays the installation progress information or provides the option to install HMMs
  */
 export function HMMInstaller() {
-    const { data, isLoading } = useListHmms(1, 25);
+    const { data, isPending } = useListHmms(1, 25);
     const queryClient = useQueryClient();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

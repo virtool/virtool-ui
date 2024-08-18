@@ -9,6 +9,7 @@ import {
     findUsers,
     getUser,
     setAdministratorRole,
+    SettingsUpdate,
     updateSettings,
     updateUser,
     UserUpdate,
@@ -39,7 +40,7 @@ export function useFetchSettings() {
 export function useUpdateSettings() {
     const queryClient = useQueryClient();
 
-    return useMutation({
+    return useMutation<Settings, ErrorResponse, SettingsUpdate>({
         mutationFn: updateSettings,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: settingsQueryKeys.all() });
@@ -147,9 +148,8 @@ export function useUpdateUser() {
  */
 export function useSetAdministratorRole() {
     const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: ({ role, user_id }: { role: AdministratorRoles; user_id: string }) =>
-            setAdministratorRole(role, user_id),
+    return useMutation<User, ErrorResponse, { role: AdministratorRoles; user_id: string }>({
+        mutationFn: ({ role, user_id }) => setAdministratorRole(role, user_id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: userQueryKeys.all() });
         },

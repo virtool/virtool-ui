@@ -16,7 +16,7 @@ type CompactScrollListProps = {
     /** Whether a new page is being fetched */
     isFetchingNextPage: boolean;
     /** Whether the first page is being fetched */
-    isLoading: boolean;
+    isPending: boolean;
     /** The list of items */
     items: unknown[];
     /** A function which accepts an item and returns a React element */
@@ -30,7 +30,7 @@ export function CompactScrollList({
     className,
     fetchNextPage,
     isFetchingNextPage,
-    isLoading,
+    isPending,
     items,
     renderRow,
 }: CompactScrollListProps) {
@@ -49,7 +49,7 @@ export function CompactScrollList({
             onScroll={onScroll}
         >
             {entries}
-            {isLoading && <LoadingPlaceholder className="mt-5" />}
+            {isPending && <LoadingPlaceholder className="mt-5" />}
         </div>
     );
 }
