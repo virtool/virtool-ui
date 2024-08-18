@@ -34,7 +34,7 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
         queryKey: groupQueryKeys.infiniteList([per_page, term]),
         queryFn: ({ pageParam }) =>
             findGroups(pageParam as number, per_page, term, true) as Promise<GroupSearchResults>,
-        initialPageParam: 0,
+        initialPageParam: 1,
         getNextPageParam: lastPage => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;

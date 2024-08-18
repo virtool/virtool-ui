@@ -28,7 +28,7 @@ export function useInfiniteFindUsers(per_page: number, term: string) {
     return useInfiniteQuery<UserResponse>({
         queryKey: userQueryKeys.infiniteList([per_page, term]),
         queryFn: ({ pageParam }) => findUsers(pageParam as number, per_page, term),
-        initialPageParam: 0,
+        initialPageParam: 1,
         getNextPageParam: lastPage => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;

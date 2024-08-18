@@ -27,7 +27,7 @@ export function useInfiniteFindIndexes(refId: string, term?: string) {
     return useInfiniteQuery<IndexSearchResult>({
         queryKey: indexQueryKeys.infiniteList([refId]),
         queryFn: ({ pageParam }) => findIndexes({ page: pageParam as number, refId, term }),
-        initialPageParam: 0,
+        initialPageParam: 1,
         getNextPageParam: lastPage => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;

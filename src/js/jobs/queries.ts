@@ -24,7 +24,7 @@ export function useInfiniteFindJobs(states: string[]) {
     return useInfiniteQuery<JobSearchResult>({
         queryKey: jobQueryKeys.infiniteList([states]),
         queryFn: ({ pageParam }) => findJobs(pageParam as number, states),
-        initialPageParam: 0,
+        initialPageParam: 1,
         getNextPageParam: lastPage => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;

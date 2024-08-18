@@ -52,7 +52,7 @@ export function useInfiniteFindReferences(term: string) {
     return useInfiniteQuery<ReferenceSearchResult>({
         queryKey: referenceQueryKeys.infiniteList([term]),
         queryFn: ({ pageParam }) => findReferences({ page: pageParam, per_page: 25, term }),
-        initialPageParam: 0,
+        initialPageParam: 1,
         getNextPageParam: lastPage => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;

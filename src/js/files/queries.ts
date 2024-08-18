@@ -23,7 +23,7 @@ export function useInfiniteFindFiles(type: FileType, per_page: number, term?: st
     return useInfiniteQuery<FileResponse>({
         queryKey: fileQueryKeys.infiniteList(type, [per_page]),
         queryFn: ({ pageParam }) => findFiles(type, pageParam as number, per_page, term),
-        initialPageParam: 0,
+        initialPageParam: 1,
         getNextPageParam: lastPage => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;
