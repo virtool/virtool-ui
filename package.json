@@ -44,7 +44,6 @@
         "normalize.css": "^8.0.1",
         "numbro": "^2.3.6",
         "objectmodel": "^4.4.2",
-        "prop-types": "^15.8.1",
         "re-reselect": "^4.0.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
