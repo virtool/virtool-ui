@@ -49,7 +49,7 @@ export function SelectBoxGroupSection({ active, children, className, onClick }: 
             active={active}
             className={className}
             tabIndex={0}
-            role="button"
+            role="option"
             onClick={onClick}
             onKeyDown={handleKeyDown}
         >
