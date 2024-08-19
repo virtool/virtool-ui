@@ -147,16 +147,6 @@ export function getWorkflowDisplayName(workflow) {
     return get(workflowDisplayNames, workflow, startCase(workflow));
 }
 
-/**
- * Report a captured error to Sentry for logging.
- *
- * @param action - Redux action that contains the error
- */
-
-export function reportAPIError(action) {
-    window.captureException(action.payload.error);
-}
-
 export function routerLocationHasState(state, key, value) {
     return (
         Boolean(state.router.location.state) &&
