@@ -6,10 +6,10 @@ import Api from "./Api";
 import InstanceMessage from "./InstanceMessage";
 
 export function ServerSettings() {
-    const { data: message, isLoading: isLoadingMessage } = useFetchMessage();
-    const { data: settings, isLoading: isLoadingSettings } = useFetchSettings();
+    const { data: message, isPending: isPendingMessage } = useFetchMessage();
+    const { data: settings, isPending: isPendingSettings } = useFetchSettings();
 
-    if (isLoadingSettings || isLoadingMessage) {
+    if (isPendingSettings || isPendingMessage) {
         return <LoadingPlaceholder />;
     }
 

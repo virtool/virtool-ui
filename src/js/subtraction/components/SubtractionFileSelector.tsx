@@ -27,8 +27,8 @@ type SubtractionFileSelectorProps = {
     error: string;
     /** Fetches the next page of data */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
-    /** Whether the data is loading */
-    isLoading: boolean;
+    /** Whether the data is fetched */
+    isPending: boolean;
     /** Whether the next page is being fetched */
     isFetchingNextPage: boolean;
 };
@@ -43,7 +43,7 @@ export function SubtractionFileSelector({
     onClick,
     error,
     fetchNextPage,
-    isLoading,
+    isPending,
     isFetchingNextPage,
 }: SubtractionFileSelectorProps) {
     useValidateFiles(FileType.subtraction, selected, onClick);
@@ -72,7 +72,7 @@ export function SubtractionFileSelector({
                 className="max-h-96"
                 fetchNextPage={fetchNextPage}
                 isFetchingNextPage={isFetchingNextPage}
-                isLoading={isLoading}
+                isPending={isPending}
                 items={items}
                 renderRow={renderRow}
             />

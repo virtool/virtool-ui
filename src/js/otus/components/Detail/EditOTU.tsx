@@ -1,6 +1,5 @@
-import { OTUQueryKeys, useUpdateOTU } from "@otus/queries";
+import { useUpdateOTU } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../base";
@@ -18,8 +17,7 @@ type EditOTUProps = {
 export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
     const location = useLocation<{ editOTU: boolean }>();
     const history = useHistory();
-    const mutation = useUpdateOTU();
-    const queryClient = useQueryClient();
+    const mutation = useUpdateOTU(otuId);
 
     function handleSubmit({ name, abbreviation }) {
         mutation.mutate(
@@ -27,7 +25,6 @@ export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
             {
                 onSuccess: () => {
                     history.replace({ state: { editOTU: false } });
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
             }
         );

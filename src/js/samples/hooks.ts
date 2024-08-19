@@ -11,11 +11,11 @@ import { useFetchSample } from "./queries";
  * @returns whether the current user has permission to edit the sample
  */
 export function useCheckCanEditSample(sampleId: string) {
-    const { data: account, isLoading: isAccountLoading } = useFetchAccount();
-    const { data: sample, isLoading: isSampleLoading } = useFetchSample(sampleId);
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
+    const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
-    if (isSampleLoading || isAccountLoading) {
-        return { hasPermission: false, isLoading: true };
+    if (isPendingSample || isPendingAccount) {
+        return { hasPermission: false, isPending: true };
     }
 
     const hasPermission =
@@ -24,5 +24,5 @@ export function useCheckCanEditSample(sampleId: string) {
         sample.user.id === account.id ||
         (sample.group_write && some(account.groups, { id: sample.group }));
 
-    return { hasPermission, isLoading: false };
+    return { hasPermission, isPending: false };
 }

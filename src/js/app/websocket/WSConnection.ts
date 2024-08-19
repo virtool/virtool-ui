@@ -8,7 +8,6 @@ export const ABANDONED = "abandoned";
 export const RECONNECTING = "reconnecting";
 
 export default function WSConnection(queryClient) {
-    // setup the respective handlers for supporting both redux and react-query data sources
     this.reactQueryHandler = reactQueryHandler(queryClient);
 
     // When a websocket message is received, this method is called with the message as the sole argument. Every message

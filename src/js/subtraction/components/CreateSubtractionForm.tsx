@@ -33,13 +33,13 @@ export function CreateSubtractionForm() {
     });
     const {
         data: files,
-        isLoading,
+        isPending,
         isFetchingNextPage,
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.subtraction, 25);
     const mutation = useCreateSubtraction();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder className="mt-9" />;
     }
 
@@ -81,7 +81,7 @@ export function CreateSubtractionForm() {
                         files={files}
                         isFetchingNextPage={isFetchingNextPage}
                         fetchNextPage={fetchNextPage}
-                        isLoading={isLoading}
+                        isPending={isPending}
                         foundCount={files.pages[0].found_count}
                         selected={value}
                     />

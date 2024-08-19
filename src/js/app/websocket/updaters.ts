@@ -1,10 +1,10 @@
+import { hmmQueryKeys } from "@/hmm/queries";
+import { HMMSearchResults } from "@/hmm/types";
+import { Task } from "@/types";
+import { referenceQueryKeys } from "@references/queries";
+import { ReferenceSearchResult } from "@references/types";
 import { InfiniteData, QueryClient } from "@tanstack/react-query";
 import { assign, cloneDeep, forEach, get } from "lodash-es/lodash";
-import { hmmQueryKeys } from "../../hmm/queries";
-import { HMMSearchResults } from "../../hmm/types";
-import { referenceQueryKeys } from "../../references/queries";
-import { ReferenceSearchResult } from "../../references/types";
-import { Task } from "../../types";
 
 interface TaskObject {
     task: Task;
@@ -83,10 +83,10 @@ export const taskUpdaters = {
  */
 function referenceUpdater(queryClient: QueryClient, task: Task) {
     queryClient.setQueriesData(
-        referenceQueryKeys.infiniteList([]),
+        { queryKey: referenceQueryKeys.infiniteList([]) },
         infiniteListItemUpdater<ReferenceSearchResult>(task, taskSelector)
     );
-    queryClient.setQueriesData(referenceQueryKeys.details(), updater(task, taskSelector));
+    queryClient.setQueriesData({ queryKey: referenceQueryKeys.details() }, updater(task, taskSelector));
 }
 
 /**
@@ -97,7 +97,7 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
  */
 function HMMStatusUpdater(queryClient: QueryClient, task: Task) {
     queryClient.setQueriesData(
-        hmmQueryKeys.lists(),
+        { queryKey: hmmQueryKeys.lists() },
         updater<HMMSearchResults>(task, item => get(item, "status.task"))
     );
 }

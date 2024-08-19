@@ -17,9 +17,9 @@ export default function ReferenceList() {
     const [urlPage] = useUrlSearchParams<number>("page");
     const [term] = useUrlSearchParams<string>("find");
 
-    const { data, isLoading } = useListReferences(Number(urlPage) || 1, 25, term);
+    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -37,18 +37,17 @@ export default function ReferenceList() {
                 <CreateReference />
                 <ReferenceOfficial officialInstalled={official_installed} />
                 {total_count !== 0 && (
-                    <Pagination
-                        items={documents}
-                        storedPage={page}
-                        currentPage={Number(urlPage) || 1}
-                        pageCount={page_count}
-                    >
-                        <BoxGroup>
-                            {map(documents, document => (
-                                <ReferenceItem key={document.id} reference={document} />
-                            ))}
-                        </BoxGroup>
-                    </Pagination>
+                    <BoxGroup>
+                        <ScrollList
+                            className="mb-0"
+                            fetchNextPage={fetchNextPage}
+                            hasNextPage={hasNextPage}
+                            isFetchingNextPage={isFetchingNextPage}
+                            isPending={isPending}
+                            items={references}
+                            renderRow={renderRow}
+                        />
+                    </BoxGroup>
                 )}
             </ContainerNarrow>
             <Clone references={documents} />

@@ -1,6 +1,6 @@
+import { getColor, getFontWeight } from "@app/theme";
 import React from "react";
 import styled from "styled-components";
-import { getColor, getFontWeight } from "../../app/theme";
 import { useFetchMessage } from "../queries";
 
 export const StyledMessageBanner = styled.div`
@@ -14,9 +14,9 @@ export const StyledMessageBanner = styled.div`
  * Displays the banner containing the instance message
  */
 export default function MessageBanner() {
-    const { data, isLoading } = useFetchMessage();
+    const { data, isPending } = useFetchMessage();
 
-    return !isLoading && data?.message ? (
+    return !isPending && data?.message ? (
         <StyledMessageBanner color={data.color}>{data.message}</StyledMessageBanner>
     ) : null;
 }

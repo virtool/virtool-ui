@@ -1,9 +1,8 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import SegmentForm from "@otus/components/Detail/Schema/SegmentForm";
-import { OTUQueryKeys, useUpdateOTU } from "@otus/queries";
+import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import { map } from "lodash";
 import { find } from "lodash-es";
 import React from "react";
@@ -29,8 +28,7 @@ type EditSegmentProps = {
 export default function EditSegment({ abbreviation, otuId, name, schema }: EditSegmentProps) {
     const history = useHistory();
     const location = useLocation<{ editSegment: "" }>();
-    const mutation = useUpdateOTU();
-    const queryClient = useQueryClient();
+    const mutation = useUpdateOTU(otuId);
 
     const initialName = location.state?.editSegment;
     const segment = find(schema, { name: initialName });
@@ -45,7 +43,6 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
             {
                 onSuccess: () => {
                     history.replace({ state: { editSegment: "" } });
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
             }
         );

@@ -16,9 +16,9 @@ function renderRow({ created_at, name, latest_release, id }: MLModelMinimal) {
  * @returns A list of MLModels
  */
 export function MLModels() {
-    const { data, isLoading } = useFindModels();
+    const { data, isPending } = useFindModels();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

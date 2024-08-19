@@ -16,10 +16,10 @@ type RebuildIndexProps = {
 export default function RebuildIndex({ refId }: RebuildIndexProps) {
     const history = useHistory();
     const location = useLocation<{ rebuild: boolean }>();
-    const { data, isLoading } = useFetchUnbuiltChanges(refId);
+    const { data, isPending } = useFetchUnbuiltChanges(refId);
     const mutation = useCreateIndex();
 
-    if (isLoading) {
+    if (isPending) {
         return null;
     }
 

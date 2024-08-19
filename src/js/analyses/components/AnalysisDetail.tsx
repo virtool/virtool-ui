@@ -36,14 +36,14 @@ type AnalysisDetailProps = {
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail({ match }: AnalysisDetailProps) {
     const { analysisId, sampleId } = match.params;
-    const { data: analysis, isLoading, error } = useGetAnalysis(analysisId);
-    const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
+    const { data: analysis, isPending, error } = useGetAnalysis(analysisId);
+    const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 
     if (error?.response.status === 404) {
         return <NotFound />;
     }
 
-    if (isLoading || isLoadingSample) {
+    if (isPending || isPendingSample) {
         return <LoadingPlaceholder />;
     }
 
