@@ -107,11 +107,11 @@ type FormValues = {
  * A form for creating a sample
  */
 export default function CreateSample() {
-    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
-    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
+    const { data: groups, isPending: isPendingGroups } = useListGroups();
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
     const {
         data: readsResponse,
-        isLoading: isLoadingReads,
+        isPending: isPendingReads,
         isFetchingNextPage,
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.reads, 25);
@@ -146,7 +146,7 @@ export default function CreateSample() {
         setValue("group", toString(account?.primary_group?.id));
     }, [account]);
 
-    if (isLoadingReads || isLoadingGroups || isLoadingAccount) {
+    if (isPendingReads || isPendingGroups || isPendingAccount) {
         return <LoadingPlaceholder className="mt-9" />;
     }
 
@@ -249,7 +249,7 @@ export default function CreateSample() {
                                 data={readsResponse}
                                 isFetchingNextPage={isFetchingNextPage}
                                 fetchNextPage={fetchNextPage}
-                                isLoading={isLoadingReads}
+                                isPending={isPendingReads}
                                 selected={value}
                                 onSelect={onChange}
                                 error={errors.readFiles?.message}

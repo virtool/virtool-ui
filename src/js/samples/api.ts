@@ -1,7 +1,5 @@
 import { Request } from "@app/request";
-import { Sample } from "./types";
-
-export const update = ({ sampleId, update }) => Request.patch(`/samples/${sampleId}`).send(update);
+import { Sample, SampleSearchResult } from "./types";
 
 /**
  * Fetch a page of samples
@@ -12,7 +10,13 @@ export const update = ({ sampleId, update }) => Request.patch(`/samples/${sample
  * @param labels - Filter the samples by labels
  * @param workflows - Filter the samples by workflows
  */
-export function listSamples(page: number, per_page: number, term: string, labels: string[], workflows: string[]) {
+export function listSamples(
+    page: number,
+    per_page: number,
+    term: string,
+    labels: string[],
+    workflows: string[]
+): Promise<SampleSearchResult> {
     return Request.get("/samples")
         .query({ page, per_page, find: term, label: labels, workflows })
         .then(res => res.body);

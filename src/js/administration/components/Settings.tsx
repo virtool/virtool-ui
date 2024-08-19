@@ -12,7 +12,7 @@ import { AdministratorTabs } from "./AdministratorTabs";
 import { ServerSettings } from "./ServerSettings";
 
 export default function Settings() {
-    const { data: account, isLoading } = useFetchAccount();
+    const { data: account, isPending } = useFetchAccount();
 
     const redirect = hasSufficientAdminRole(AdministratorRoles.SETTINGS, account?.administrator_role)
         ? "settings"
@@ -24,7 +24,7 @@ export default function Settings() {
                 <ViewHeaderTitle>Administration</ViewHeaderTitle>
             </ViewHeader>
 
-            {isLoading ? (
+            {isPending ? (
                 <LoadingPlaceholder />
             ) : (
                 <>

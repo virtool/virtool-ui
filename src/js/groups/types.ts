@@ -30,7 +30,7 @@ export enum Permission {
     upload_file = "upload_file",
 }
 
-type PermissionsUpdate = {
+export type PermissionsUpdate = {
     cancel_job?: boolean;
     create_ref?: boolean;
     create_sample?: boolean;

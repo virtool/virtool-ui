@@ -1,8 +1,7 @@
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { labelQueryKeys, useCreateLabel } from "../queries";
+import { useCreateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 
 type NewLabel = {
@@ -17,14 +16,12 @@ type NewLabel = {
 export function CreateLabel() {
     const [open, setOpen] = useState(false);
     const mutation = useCreateLabel();
-    const queryClient = useQueryClient();
 
     function handleSubmit({ color, name, description }: NewLabel) {
         mutation.mutate(
             { color, description, name },
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries(labelQueryKeys.lists());
                     setOpen(false);
                 },
             }

@@ -78,13 +78,13 @@ type HMMDetailProps = {
  * The HMM detailed view
  */
 export default function HMMDetail({ match }: HMMDetailProps) {
-    const { data, isLoading, isError } = useFetchHmm(match.params["hmmId"]);
+    const { data, isPending, isError } = useFetchHmm(match.params["hmmId"]);
 
     if (isError) {
         return <NotFound />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder className="mt-32" />;
     }
 

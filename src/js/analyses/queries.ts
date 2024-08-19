@@ -1,7 +1,7 @@
 import { formatData } from "@/analyses/utils";
 import { ErrorResponse } from "@/types/types";
 import { samplesQueryKeys } from "@samples/queries";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { blastNuvs, createAnalysis, getAnalysis, listAnalyses, removeAnalysis } from "./api";
 import { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
@@ -27,13 +27,11 @@ export const analysesQueryKeys = {
  * @returns A page of analyses search results
  */
 export function useListAnalyses(sampleId: string, page: number, per_page: number, term?: string) {
-    return useQuery<AnalysisSearchResult>(
-        analysesQueryKeys.list([sampleId, page, per_page, term]),
-        () => listAnalyses(sampleId, page, per_page, term),
-        {
-            keepPreviousData: true,
-        }
-    );
+    return useQuery<AnalysisSearchResult>({
+        queryKey: analysesQueryKeys.list([sampleId, page, per_page, term]),
+        queryFn: () => listAnalyses(sampleId, page, per_page, term),
+        placeholderData: keepPreviousData,
+    });
 }
 
 /**
@@ -45,14 +43,13 @@ export function useListAnalyses(sampleId: string, page: number, per_page: number
 export function useRemoveAnalysis(analysisId: string) {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation<null, unknown, { analysisId: string }>(
-        ({ analysisId }) => removeAnalysis(analysisId),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(analysesQueryKeys.lists());
-            },
-        }
-    );
+    const mutation = useMutation<null, unknown, { analysisId: string }>({
+        mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
+        },
+    });
 
     return () => mutation.mutate({ analysisId });
 }
@@ -64,9 +61,10 @@ export function useRemoveAnalysis(analysisId: string) {
  * @returns A complete analysis
  */
 export function useGetAnalysis(analysisId: string) {
-    const queryResult = useQuery<Analysis, ErrorResponse>(analysesQueryKeys.detail(analysisId), () =>
-        getAnalysis({ analysisId })
-    );
+    const queryResult = useQuery<Analysis, ErrorResponse>({
+        queryKey: analysesQueryKeys.detail(analysisId),
+        queryFn: () => getAnalysis({ analysisId }),
+    });
     return useMemo(
         () => ({ ...queryResult, data: formatData(queryResult.data) as Analysis }),
         [queryResult.data, queryResult.error]
@@ -84,18 +82,15 @@ export type CreateAnalysisParams = {
 export function useCreateAnalysis() {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation<GenericAnalysis, unknown, CreateAnalysisParams>(
-        ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
+    return useMutation<GenericAnalysis, unknown, CreateAnalysisParams>({
+        mutationFn: ({ mlModel, refId, sampleId, subtractionIds, workflow }) =>
             createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
-        {
-            onSuccess: () => {
-                void queryClient.invalidateQueries(analysesQueryKeys.lists());
-                void queryClient.invalidateQueries(samplesQueryKeys.lists());
-            },
-        }
-    );
 
-    return mutation;
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
+            queryClient.invalidateQueries({ queryKey: samplesQueryKeys.lists() });
+        },
+    });
 }
 
 /**
@@ -107,14 +102,12 @@ export function useCreateAnalysis() {
 export function useSetAnalysis(analysisId: string) {
     const queryClient = useQueryClient();
 
-    const mutation = useMutation<null, unknown, { analysisId: string }>(
-        ({ analysisId }) => removeAnalysis(analysisId),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(analysesQueryKeys.lists());
-            },
-        }
-    );
+    const mutation = useMutation<null, unknown, { analysisId: string }>({
+        mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
+        },
+    });
 
     return () => mutation.mutate({ analysisId });
 }
@@ -128,12 +121,11 @@ export function useSetAnalysis(analysisId: string) {
 export function useBlastNuVs(analysisId: string) {
     const queryClient = useQueryClient();
 
-    return useMutation<null, unknown, { sequenceIndex: number }>(
-        ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(analysesQueryKeys.detail(analysisId));
-            },
-        }
-    );
+    return useMutation<null, unknown, { sequenceIndex: number }>({
+        mutationFn: ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.detail(analysisId) });
+        },
+    });
 }

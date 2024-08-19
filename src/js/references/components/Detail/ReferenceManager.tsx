@@ -29,9 +29,9 @@ type ReferenceManageProps = {
  */
 export default function ReferenceManager({ match }: ReferenceManageProps) {
     const { refId } = match.params;
-    const { data: reference, isLoading } = useGetReference(refId);
+    const { data: reference, isPending } = useGetReference(refId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

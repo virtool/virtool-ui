@@ -1,11 +1,10 @@
+import { useUpdateUser } from "@administration/queries";
+import { BoxGroup, LoadingPlaceholder, NoneFoundSection } from "@base";
+import { useListGroups } from "@groups/queries";
+import { GroupMinimal } from "@groups/types";
 import { map, some, xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-
-import { useUpdateUser } from "../../administration/queries";
-import { BoxGroup, LoadingPlaceholder, NoneFoundSection } from "../../base";
-import { useListGroups } from "../../groups/queries";
-import { GroupMinimal } from "../../groups/types";
 import { UserGroup } from "./UserGroup";
 
 const UserGroupsList = styled(BoxGroup)`
@@ -23,10 +22,10 @@ type UserGroupsType = {
  * A list of user groups
  */
 export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
-    const { data: documents, isLoading } = useListGroups();
+    const { data: documents, isPending } = useListGroups();
     const mutation = useUpdateUser();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

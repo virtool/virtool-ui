@@ -24,9 +24,9 @@ type IndexesProps = {
  */
 export default function Indexes({ match }: IndexesProps) {
     const { refId } = match.params;
-    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindIndexes(refId);
+    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindIndexes(refId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -43,7 +43,7 @@ export default function Indexes({ match }: IndexesProps) {
                         fetchNextPage={fetchNextPage}
                         hasNextPage={hasNextPage}
                         isFetchingNextPage={isFetchingNextPage}
-                        isLoading={isLoading}
+                        isPending={isPending}
                         items={items}
                         renderRow={renderRow(refId, get(find(items, { ready: true, has_files: true }), "id"))}
                     />

@@ -1,7 +1,7 @@
 import { ErrorResponse } from "@/types/types";
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { createContext, useContext } from "react";
 import {
     addIsolate,
@@ -47,13 +47,11 @@ export const OTUQueryKeys = {
  * @returns A page of OTU search results
  */
 export function useListOTUs(refId: string, page: number, per_page: number, term: string, verified?: boolean) {
-    return useQuery<OTUSearchResult>(
-        OTUQueryKeys.list([page, per_page, term]),
-        () => listOTUs(refId, page, per_page, term, verified),
-        {
-            keepPreviousData: true,
-        }
-    );
+    return useQuery<OTUSearchResult>({
+        queryKey: OTUQueryKeys.list([page, per_page, term]),
+        queryFn: () => listOTUs(refId, page, per_page, term, verified),
+        placeholderData: keepPreviousData,
+    });
 }
 
 /**
@@ -63,7 +61,9 @@ export function useListOTUs(refId: string, page: number, per_page: number, term:
  * @returns A single OTU
  */
 export function useFetchOTU(otuId: string) {
-    return useQuery<OTU, ErrorResponse>(OTUQueryKeys.detail(otuId), () => getOTU(otuId), {
+    return useQuery<OTU, ErrorResponse>({
+        queryKey: OTUQueryKeys.detail(otuId),
+        queryFn: () => getOTU(otuId),
         retry: (failureCount, error) => {
             if (error.response?.status === 404) {
                 return false;
@@ -80,7 +80,10 @@ export function useFetchOTU(otuId: string) {
  * @returns A history list of changes for a single OTU
  */
 export function useFetchOTUHistory(otuId: string) {
-    return useQuery<OTUHistory[], ErrorResponse>(OTUQueryKeys.history(otuId), () => getOTUHistory(otuId));
+    return useQuery<OTUHistory[], ErrorResponse>({
+        queryKey: OTUQueryKeys.history(otuId),
+        queryFn: () => getOTUHistory(otuId),
+    });
 }
 
 /**
@@ -89,9 +92,14 @@ export function useFetchOTUHistory(otuId: string) {
  * @returns A mutator for creating an OTU
  */
 export function useCreateOTU(refId: string) {
-    return useMutation<OTU, ErrorResponse, { name: string; abbreviation: string }>(({ name, abbreviation }) =>
-        createOTU(refId, name, abbreviation)
-    );
+    const queryClient = useQueryClient();
+
+    return useMutation<OTU, ErrorResponse, { name: string; abbreviation: string }>({
+        mutationFn: ({ name, abbreviation }) => createOTU(refId, name, abbreviation),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: OTUQueryKeys.lists() });
+        },
+    });
 }
 
 export type UpdateOTUProps = {
@@ -106,10 +114,15 @@ export type UpdateOTUProps = {
  *
  * @returns A mutator for editing an OTU
  */
-export function useUpdateOTU() {
-    return useMutation<OTU, ErrorResponse, UpdateOTUProps>(({ otuId, name, abbreviation, schema }) =>
-        editOTU(otuId, name, abbreviation, schema)
-    );
+export function useUpdateOTU(otuId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<OTU, ErrorResponse, UpdateOTUProps>({
+        mutationFn: ({ otuId, name, abbreviation, schema }) => editOTU(otuId, name, abbreviation, schema),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: OTUQueryKeys.detail(otuId) });
+        },
+    });
 }
 
 /**
@@ -118,7 +131,7 @@ export function useUpdateOTU() {
  * @returns A mutator for removing an OTU isolate
  */
 export function useRemoveOTU() {
-    return useMutation<null, ErrorResponse, { otuId: string }>(({ otuId }) => removeOTU(otuId));
+    return useMutation<null, ErrorResponse, { otuId: string }>({ mutationFn: ({ otuId }) => removeOTU(otuId) });
 }
 
 /**
@@ -129,9 +142,10 @@ export function useRemoveOTU() {
 export function useRevertOTU(otuId: string) {
     const queryClient = useQueryClient();
 
-    return useMutation<null, ErrorResponse, { changeId: string }>(({ changeId }) => revertOTU(changeId), {
+    return useMutation<null, ErrorResponse, { changeId: string }>({
+        mutationFn: ({ changeId }) => revertOTU(changeId),
         onSuccess: () => {
-            queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
+            queryClient.invalidateQueries({ queryKey: OTUQueryKeys.detail(otuId) });
         },
     });
 }
@@ -141,10 +155,15 @@ export function useRevertOTU(otuId: string) {
  *
  * @returns A mutator for creating an OTU isolate
  */
-export function useCreateIsolate() {
-    return useMutation<OTUIsolate, unknown, { otuId: string; sourceType: string; sourceName: string }>(
-        ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName)
-    );
+export function useCreateIsolate(otuId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<OTUIsolate, unknown, { otuId: string; sourceType: string; sourceName: string }>({
+        mutationFn: ({ otuId, sourceType, sourceName }) => addIsolate(otuId, sourceType, sourceName),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: OTUQueryKeys.detail(otuId) });
+        },
+    });
 }
 
 /**
@@ -153,9 +172,9 @@ export function useCreateIsolate() {
  * @returns A mutator for setting an isolate as the default resource for an OTU
  */
 export function useSetIsolateAsDefault() {
-    return useMutation<OTUIsolate, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
-        setIsolateAsDefault(otuId, isolateId)
-    );
+    return useMutation<OTUIsolate, ErrorResponse, { otuId: string; isolateId: string }>({
+        mutationFn: ({ otuId, isolateId }) => setIsolateAsDefault(otuId, isolateId),
+    });
 }
 
 /**
@@ -168,7 +187,10 @@ export function useUpdateIsolate() {
         OTUIsolate,
         unknown,
         { otuId: string; isolateId: string; sourceType: string; sourceName: string }
-    >(({ otuId, isolateId, sourceType, sourceName }) => editIsolate(otuId, isolateId, sourceType, sourceName));
+    >({
+        mutationFn: ({ otuId, isolateId, sourceType, sourceName }) =>
+            editIsolate(otuId, isolateId, sourceType, sourceName),
+    });
 }
 
 /**
@@ -177,9 +199,9 @@ export function useUpdateIsolate() {
  * @returns A mutator for removing an OTU isolate
  */
 export function useRemoveIsolate() {
-    return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>(({ otuId, isolateId }) =>
-        removeIsolate(otuId, isolateId)
-    );
+    return useMutation<null, ErrorResponse, { otuId: string; isolateId: string }>({
+        mutationFn: ({ otuId, isolateId }) => removeIsolate(otuId, isolateId),
+    });
 }
 
 /**
@@ -202,15 +224,14 @@ export function useAddSequence(otuId: string) {
             segment?: string;
             target?: string;
         }
-    >(
-        ({ isolateId, accession, definition, host, sequence, segment, target }) =>
+    >({
+        mutationFn: ({ isolateId, accession, definition, host, sequence, segment, target }) =>
             addSequence(otuId, isolateId, accession, definition, host, sequence, segment, target),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
-            },
-        }
-    );
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: OTUQueryKeys.detail(otuId) });
+        },
+    });
 }
 
 /**
@@ -234,15 +255,13 @@ export function useEditSequence(otuId: string) {
             segment?: string;
             target?: string;
         }
-    >(
-        ({ isolateId, sequenceId, accession, definition, host, sequence, segment, target }) =>
+    >({
+        mutationFn: ({ isolateId, sequenceId, accession, definition, host, sequence, segment, target }) =>
             editSequence(otuId, isolateId, sequenceId, accession, definition, host, sequence, segment, target),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
-            },
-        }
-    );
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: OTUQueryKeys.detail(otuId) });
+        },
+    });
 }
 
 /**
@@ -253,14 +272,12 @@ export function useEditSequence(otuId: string) {
 export function useRemoveSequence(otuId: string) {
     const queryClient = useQueryClient();
 
-    return useMutation<null, ErrorResponse, { otuId: string; isolateId: string; sequenceId: string }>(
-        ({ otuId, isolateId, sequenceId }) => removeSequence(otuId, isolateId, sequenceId),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
-            },
-        }
-    );
+    return useMutation<null, ErrorResponse, { otuId: string; isolateId: string; sequenceId: string }>({
+        mutationFn: ({ otuId, isolateId, sequenceId }) => removeSequence(otuId, isolateId, sequenceId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: OTUQueryKeys.detail(otuId) });
+        },
+    });
 }
 
 const CurrentOTUContext = createContext(null);
@@ -286,10 +303,10 @@ type CurrentOtuContextProviderProps = {
  * @returns Element wrapping children components with the current OTU context
  */
 export function CurrentOTUContextProvider({ children, otuId, refId }: CurrentOtuContextProviderProps) {
-    const { data: otu, isLoading: isLoadingOTU } = useFetchOTU(otuId);
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
+    const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
+    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 
-    if (isLoadingOTU || isLoadingReference) {
+    if (isPendingOTU || isPendingReference) {
         return <LoadingPlaceholder />;
     }
 

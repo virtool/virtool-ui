@@ -1,7 +1,7 @@
+import { LoadingPlaceholder } from "@base";
+import { useGetReference } from "@references/queries";
 import React from "react";
 import { match, useHistory, useLocation } from "react-router-dom";
-import { LoadingPlaceholder } from "../../../base";
-import { useGetReference } from "../../../references/queries";
 import { CurrentOTUContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
@@ -20,10 +20,10 @@ export default function OTUSection({ match }: OTUSectionProps) {
 
     const history = useHistory();
     const location = useLocation<{ addIsolate: boolean }>();
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
-    const { data: otu, isLoading: isLoadingOTU } = useFetchOTU(otuId);
+    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
+    const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
 
-    if (isLoadingReference || isLoadingOTU) {
+    if (isPendingReference || isPendingOTU) {
         return <LoadingPlaceholder />;
     }
 
