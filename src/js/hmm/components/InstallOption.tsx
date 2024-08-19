@@ -1,11 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { Alert, Button } from "@base";
+import { Permission } from "@groups/types";
 import React from "react";
 import styled from "styled-components";
-import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import { Alert, Button } from "../../base";
-import { Permission } from "../../groups/types";
-import { install } from "../api";
-import { hmmQueryKeys } from "../queries";
+import { useInstallHmm } from "../queries";
 
 const InstallOptionAlert = styled(Alert)`
     display: block;
@@ -17,12 +15,7 @@ const InstallOptionAlert = styled(Alert)`
  */
 export default function InstallOption() {
     const { hasPermission: canInstall } = useCheckAdminRoleOrPermission(Permission.modify_hmm);
-    const queryClient = useQueryClient();
-    const mutation = useMutation(install, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(hmmQueryKeys.lists());
-        },
-    });
+    const mutation = useInstallHmm();
 
     return canInstall ? (
         <Button color="blue" onClick={() => mutation.mutate()}>

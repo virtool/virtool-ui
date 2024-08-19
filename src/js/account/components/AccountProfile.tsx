@@ -32,9 +32,9 @@ const AccountProfileHeader = styled.div`
  * Displays information related to the users account with options to reset password and email
  */
 export default function AccountProfile() {
-    const { data, isLoading } = useFetchAccount();
+    const { data, isPending } = useFetchAccount();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

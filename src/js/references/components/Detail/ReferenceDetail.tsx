@@ -22,13 +22,13 @@ type ReferenceDetailProps = {
  */
 export default function ReferenceDetail({ match }: ReferenceDetailProps) {
     const { refId } = match.params;
-    const { data, isLoading, isError } = useGetReference(refId);
+    const { data, isPending, isError } = useGetReference(refId);
 
     if (isError) {
         return <NotFound />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

@@ -15,7 +15,7 @@ export const messageQueryKeys = {
  * @returns The instance message
  */
 export function useFetchMessage() {
-    return useQuery<Message>(messageQueryKeys.all(), getMessage);
+    return useQuery<Message>({ queryKey: messageQueryKeys.all(), queryFn: getMessage });
 }
 
 /**
@@ -25,9 +25,10 @@ export function useFetchMessage() {
  */
 export function useSetMessage() {
     const queryClient = useQueryClient();
-    return useMutation<Message, unknown, { message: string }>(({ message }) => setMessage(message), {
+    return useMutation<Message, unknown, { message: string }>({
+        mutationFn: ({ message }) => setMessage(message),
         onSuccess: () => {
-            queryClient.invalidateQueries(messageQueryKeys.all());
+            queryClient.invalidateQueries({ queryKey: messageQueryKeys.all() });
         },
     });
 }

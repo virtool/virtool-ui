@@ -10,10 +10,10 @@ import { FileType } from "./types";
  * @param setSelected - A callback function to handle file selection
  */
 export function useValidateFiles(type: FileType, selected: string[], setSelected: (selected: string[]) => void) {
-    const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteFindFiles(type, 25);
+    const { data, isPending, fetchNextPage, hasNextPage } = useInfiniteFindFiles(type, 25);
 
     useEffect(() => {
-        if (!isLoading && selected.length) {
+        if (!isPending && selected.length) {
             const documents = data.pages.flatMap(page => page.items);
             const selectedFilesExist = selected.every(itemId => documents.some(item => item.id === itemId));
 

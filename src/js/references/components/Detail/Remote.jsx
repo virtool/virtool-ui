@@ -88,7 +88,7 @@ const RemoteHeader = styled(BoxGroupHeader)`
 export default function Remote({ detail }) {
     const { id, installed, release, remotes_from, updating, task } = detail;
     const slug = remotes_from.slug;
-    const { mutate: checkReferenceUpdate, isLoading: isLoadingReferenceUpdate } = useCheckReferenceUpdates(id);
+    const { mutate: checkReferenceUpdate, isPending: isPendingReferenceUpdate } = useCheckReferenceUpdates(id);
     const { mutate: updateRemoteReference } = useUpdateRemoteReference(id);
 
     return (
@@ -117,7 +117,7 @@ export default function Remote({ detail }) {
             ) : (
                 <Release
                     release={release}
-                    checking={isLoadingReferenceUpdate}
+                    checking={isPendingReferenceUpdate}
                     updating={updating}
                     onCheckUpdates={checkReferenceUpdate}
                     onUpdate={updateRemoteReference}

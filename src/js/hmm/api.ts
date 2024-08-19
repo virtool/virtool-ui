@@ -3,8 +3,8 @@
  *
  * @module hmm/api
  */
-import { Request } from "../app/request";
-import { HMM, HMMSearchResults } from "./types";
+import { Request } from "@app/request";
+import { HMM, HMMInstalled, HMMSearchResults } from "./types";
 
 /**
  * Fetch a page of HMM search results from the API.
@@ -22,8 +22,8 @@ export function find({ term, page }: { term: string; page: number }): Promise<an
  *
  * @returns The promise which resolves to the servers response
  */
-export function install(): Promise<any> {
-    return Request.post("/hmms/status/updates");
+export function installHmm(): Promise<HMMInstalled> {
+    return Request.post("/hmms/status/updates").then(res => res.body);
 }
 
 /**

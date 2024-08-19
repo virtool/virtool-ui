@@ -36,7 +36,7 @@ export function LocalSourceTypes() {
     const match = useRouteMatch<MatchTypes>();
     const refId = match.params.refId;
 
-    const { data, isLoading } = useGetReference(refId);
+    const { data, isPending } = useGetReference(refId);
 
     const { mutation: updateReferenceMutation } = useUpdateReference(refId);
 
@@ -50,7 +50,7 @@ export function LocalSourceTypes() {
         sourceTypes
     );
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

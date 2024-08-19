@@ -1,9 +1,8 @@
+import { getBorder } from "@app/theme";
+import { Table } from "@base";
 import { replace } from "lodash-es";
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
-import { Table } from "../../../base";
 
 export const ExportPreviewCode = styled.div`
     background-color: ${props => props.theme.color.greyLightest};
@@ -16,7 +15,14 @@ export const ExportPreviewCode = styled.div`
     padding: 20px;
 `;
 
-export default function NuVsExportPreview({ mode }) {
+type NuVsExportPreviewProps = {
+    mode: string;
+};
+
+/**
+ * Displays a preview of the NuVs being exported
+ */
+export default function NuVsExportPreview({ mode }: NuVsExportPreviewProps) {
     let previewHeader = ">sequence_1|17SP002|RNA Polymerase";
     let previewSequence;
     let indexName;
@@ -91,7 +97,3 @@ export default function NuVsExportPreview({ mode }) {
         </div>
     );
 }
-
-NuVsExportPreview.propTypes = {
-    mode: PropTypes.string.isRequired,
-};

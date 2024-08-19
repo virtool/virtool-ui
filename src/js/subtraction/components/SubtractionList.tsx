@@ -14,9 +14,9 @@ export default function SubtractionList() {
     const [term, setTerm] = useUrlSearchParams<string>("find", "");
     const [urlPage] = useUrlSearchParams<number>("page", 1);
 
-    const { data, isLoading } = useFindSubtractions(Number(urlPage) || 1, 25, term);
+    const { data, isPending } = useFindSubtractions(Number(urlPage) || 1, 25, term);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

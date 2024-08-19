@@ -14,9 +14,9 @@ import HMMToolbar from "./HMMToolbar";
 export default function HMMList() {
     const [urlPage] = useUrlSearchParams<number>("page");
     const [term, setTerm] = useUrlSearchParams<string>("find");
-    const { data, isLoading } = useListHmms(Number(urlPage) || 1, 25, term);
+    const { data, isPending } = useListHmms(Number(urlPage) || 1, 25, term);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

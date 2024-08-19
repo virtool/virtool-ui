@@ -1,14 +1,22 @@
 import { BoxGroupSection, NoneFoundSection, RelativeTime } from "@base";
-import { cn } from "@utils/utils.js";
-import PropTypes from "prop-types";
+import { ReferenceBuild } from "@references/types";
+import { cn } from "@utils/utils";
 import React from "react";
 import { Link } from "react-router-dom";
-import { DownloadLink } from "./DownloadLink";
 
-export const LatestBuild = ({ id, latestBuild }) => {
+type LatestBuildProps = {
+    id: string;
+    /** Information related to the latest index build */
+    latestBuild: ReferenceBuild;
+};
+
+/**
+ * Displays the latest index build information associated with the reference
+ */
+export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
     if (latestBuild) {
         return (
-            <BoxGroupSection className={cn("items-center", "flex")}>
+            <BoxGroupSection className={cn("flex", "items-center")}>
                 <div>
                     <strong>
                         <Link to={`/refs/${id}/indexes/${latestBuild.id}`}>Index {latestBuild.version}</Link>
@@ -17,15 +25,9 @@ export const LatestBuild = ({ id, latestBuild }) => {
                         &nbsp;/ Created <RelativeTime time={latestBuild.created_at} /> by {latestBuild.user.handle}
                     </span>
                 </div>
-                {latestBuild.has_json && <DownloadLink id={latestBuild.id} />}
             </BoxGroupSection>
         );
     }
 
     return <NoneFoundSection noun="index builds" />;
-};
-
-LatestBuild.propTypes = {
-    id: PropTypes.string,
-    latestBuild: PropTypes.object,
-};
+}

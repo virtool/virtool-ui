@@ -1,3 +1,4 @@
+import { UserNested } from "@users/types";
 import { SearchResult } from "../utils/types";
 
 /** Minimal HMM used for websocket messages and resource listings */
@@ -24,6 +25,20 @@ export type HMM = HMMMinimal & {
     length: number;
     mean_entropy: number;
     total_entropy: number;
+};
+
+export type HMMInstalled = {
+    body: string;
+    created_at: string;
+    filename: string;
+    html_url: string;
+    id: number;
+    name: string;
+    newer: boolean;
+    published: string;
+    ready: boolean;
+    size: number;
+    user: UserNested;
 };
 
 /** HMM search results from the API */

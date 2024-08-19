@@ -1,7 +1,6 @@
 import { RemoveDialog } from "@base/RemoveDialog";
-import { OTUQueryKeys, useUpdateOTU } from "@otus/queries";
+import { useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
-import { useQueryClient } from "@tanstack/react-query";
 import { reject } from "lodash-es";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -20,8 +19,7 @@ type RemoveSegmentProps = {
 export default function RemoveSegment({ abbreviation, name, otuId, schema }: RemoveSegmentProps) {
     const history = useHistory();
     const location = useLocation<{ removeSegment: string }>();
-    const mutation = useUpdateOTU();
-    const queryClient = useQueryClient();
+    const mutation = useUpdateOTU(otuId);
 
     const activeName = location.state?.removeSegment;
 
@@ -31,7 +29,6 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
             {
                 onSuccess: () => {
                     history.replace({ state: { removeSegment: "" } });
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
             }
         );

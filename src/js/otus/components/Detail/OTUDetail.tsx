@@ -39,14 +39,14 @@ const OTUDetailSubtitle = styled.p`
  */
 export default function OTUDetail({ match }) {
     const { otuId, refId } = match.params;
-    const { data: otu, isLoading: isLoadingOTU, isError } = useFetchOTU(otuId);
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
+    const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
+    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 
     if (isError) {
         return <NotFound />;
     }
 
-    if (isLoadingOTU || isLoadingReference) {
+    if (isPendingOTU || isPendingReference) {
         return <LoadingPlaceholder />;
     }
 
