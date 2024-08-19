@@ -1,9 +1,10 @@
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
+import { IconButton } from "@base/IconButton";
+import { Permission } from "@groups/types";
 import numbro from "numbro";
 import React, { useState } from "react";
 import { match, useHistory } from "react-router-dom";
-import { useCheckAdminRoleOrPermission } from "../../../administration/hooks";
-import { Icon, LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
-import { Permission } from "../../../groups/types";
 import { useFetchSubtraction } from "../../queries";
 import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";
@@ -26,14 +27,14 @@ type SubtractionDetailProps = {
 export default function SubtractionDetail({ match }: SubtractionDetailProps) {
     const history = useHistory<{ removeSubtraction: boolean }>();
     const [show, setShow] = useState(false);
-    const { data, isLoading, isError } = useFetchSubtraction(match.params.subtractionId);
+    const { data, isPending, isError } = useFetchSubtraction(match.params.subtractionId);
     const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
 
     if (isError) {
         return <NotFound />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -48,11 +49,11 @@ export default function SubtractionDetail({ match }: SubtractionDetailProps) {
                     {data.name}
                     {canModify && (
                         <ViewHeaderIcons>
-                            <Icon aria-label="edit" name="pencil-alt" color="orange" onClick={() => setShow(true)} />
-                            <Icon
-                                aria-label="remove"
+                            <IconButton name="pen" color="grayDark" tip="modify" onClick={() => setShow(true)} />
+                            <IconButton
                                 name="trash"
                                 color="red"
+                                tip="remove"
                                 onClick={() => history.push({ state: { removeSubtraction: true } })}
                             />
                         </ViewHeaderIcons>

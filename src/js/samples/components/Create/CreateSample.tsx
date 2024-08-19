@@ -4,7 +4,7 @@ import {
     InputContainer,
     InputError,
     InputGroup,
-    InputIcon,
+    InputIconButton,
     InputLabel,
     InputSimple,
     LoadingPlaceholder,
@@ -107,11 +107,11 @@ type FormValues = {
  * A form for creating a sample
  */
 export default function CreateSample() {
-    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
-    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
+    const { data: groups, isPending: isPendingGroups } = useListGroups();
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
     const {
         data: readsResponse,
-        isLoading: isLoadingReads,
+        isPending: isPendingReads,
         isFetchingNextPage,
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.reads, 25);
@@ -146,8 +146,8 @@ export default function CreateSample() {
         setValue("group", toString(account?.primary_group?.id));
     }, [account]);
 
-    if (isLoadingReads || isLoadingGroups || isLoadingAccount) {
-        return <LoadingPlaceholder margin="36px" />;
+    if (isPendingReads || isPendingGroups || isPendingAccount) {
+        return <LoadingPlaceholder className="mt-9" />;
     }
 
     const reads = flatMap(readsResponse.pages, page => page.items);
@@ -199,9 +199,10 @@ export default function CreateSample() {
                     <InputContainer align="right">
                         <InputSimple id="name" {...register("name", { required: "Required Field" })} />
                         {Boolean(watch("readFiles").length) && (
-                            <InputIcon
+                            <InputIconButton
                                 name="magic"
                                 aria-label="Auto Fill"
+                                tip="Auto Fill"
                                 onClick={() => autofill(watch("readFiles"))}
                             />
                         )}
@@ -248,7 +249,7 @@ export default function CreateSample() {
                                 data={readsResponse}
                                 isFetchingNextPage={isFetchingNextPage}
                                 fetchNextPage={fetchNextPage}
-                                isLoading={isLoadingReads}
+                                isPending={isPendingReads}
                                 selected={value}
                                 onSelect={onChange}
                                 error={errors.readFiles?.message}

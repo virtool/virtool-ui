@@ -1,4 +1,4 @@
-import { InputContainer, InputError, InputGroup, InputIcon, InputLabel, InputLoading, InputSimple } from "@base";
+import { InputContainer, InputError, InputGroup, InputIconButton, InputLabel, InputLoading, InputSimple } from "@base";
 import { getGenbank } from "@otus/api";
 import { forEach } from "lodash-es";
 import React, { useEffect, useState } from "react";
@@ -65,7 +65,11 @@ export function Accession() {
                     id="accession"
                     {...register("accession", { required: "Required Field", onChange: () => setNotFound(false) })}
                 />
-                {pending ? <InputLoading /> : <InputIcon name="magic" onClick={() => setPending(true)} />}
+                {pending ? (
+                    <InputLoading />
+                ) : (
+                    <InputIconButton name="magic" tip="Auto Fill" onClick={() => setPending(true)} />
+                )}
             </InputContainer>
             <InputError>{notFound ? "Accession not found" : errors.accession?.message}</InputError>
         </InputGroup>

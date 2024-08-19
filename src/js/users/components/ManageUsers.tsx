@@ -16,9 +16,9 @@ type UserStatus = "active" | "deactivated";
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
     const [status, setStatus] = useUrlSearchParams<UserStatus>("status", "active");
-    const { hasPermission, isLoading } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { hasPermission, isPending } = useCheckAdminRole(AdministratorRoles.USERS);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

@@ -13,12 +13,12 @@ export const ManageAdministrators = () => {
 
     const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
-    const { data: users, isLoading: isLoadingUsers } = useFindUsers(page, 25, term, true);
+    const { data: users, isPending: isPendingUsers } = useFindUsers(page, 25, term, true);
 
-    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
-    const { data: roles, isLoading: isLoadingRoles } = useGetAdministratorRoles();
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
+    const { data: roles, isPending: isPendingRoles } = useGetAdministratorRoles();
 
-    if (isLoadingUsers || isLoadingRoles || isLoadingAccount) {
+    if (isPendingUsers || isPendingRoles || isPendingAccount) {
         return <LoadingPlaceholder />;
     }
 

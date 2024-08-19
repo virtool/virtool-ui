@@ -1,5 +1,5 @@
 import APIPermissions from "@account/components/API/APIPermissions";
-import { accountKeys, useCreateAPIKey } from "@account/queries";
+import { useCreateAPIKey } from "@account/queries";
 import { getFontSize } from "@app/theme";
 import {
     Dialog,
@@ -12,14 +12,13 @@ import {
     InputContainer,
     InputError,
     InputGroup,
-    InputIcon,
+    InputIconButton,
     InputLabel,
     InputSimple,
     SaveButton,
 } from "@base";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useHistory, useLocation } from "react-router-dom";
@@ -67,7 +66,6 @@ export default function CreateAPIKey() {
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
-    const queryClient = useQueryClient();
 
     const {
         formState: { errors },
@@ -108,7 +106,6 @@ export default function CreateAPIKey() {
             {
                 onSuccess: data => {
                     setNewKey(data.key);
-                    queryClient.invalidateQueries(accountKeys.all());
                 },
             }
         );
@@ -132,7 +129,12 @@ export default function CreateAPIKey() {
                             <CreateAPIKeyInputContainer align="right">
                                 <CreateAPIKeyInput value={newKey} readOnly />
                                 {window.isSecureContext && (
-                                    <InputIcon aria-label="copy" name="copy" onClick={copyToClipboard} />
+                                    <InputIconButton
+                                        aria-label="copy"
+                                        name="copy"
+                                        tip="Copy"
+                                        onClick={copyToClipboard}
+                                    />
                                 )}
                             </CreateAPIKeyInputContainer>
                             {copied && (

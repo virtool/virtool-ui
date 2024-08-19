@@ -3,7 +3,6 @@ import { CreateReference } from "@references/components/CreateReference";
 import { useUrlSearchParams } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
 import { BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { ScrollList } from "../../base/ScrollList";
 import { useInfiniteFindReferences } from "../queries";
@@ -17,19 +16,15 @@ function renderRow(reference: ReferenceMinimal) {
     return <ReferenceItem key={reference.id} reference={reference} />;
 }
 
-const StyledScrollList = styled(ScrollList)`
-    margin-bottom: 0;
-`;
-
 /**
  * A list of references with filtering options
  */
 export default function ReferenceList() {
     const [term] = useUrlSearchParams<string>("find");
 
-    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
+    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -49,11 +44,12 @@ export default function ReferenceList() {
                 <ReferenceOfficial officialInstalled={official_installed} />
                 {total_count !== 0 && (
                     <BoxGroup>
-                        <StyledScrollList
+                        <ScrollList
+                            className="mb-0"
                             fetchNextPage={fetchNextPage}
                             hasNextPage={hasNextPage}
                             isFetchingNextPage={isFetchingNextPage}
-                            isLoading={isLoading}
+                            isPending={isPending}
                             items={references}
                             renderRow={renderRow}
                         />

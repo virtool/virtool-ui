@@ -1,6 +1,6 @@
+import { IconButton } from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
-import { Icon } from "../../../base";
 import { ProgressCircle } from "../../../base/ProgressCircle";
 import { JobMinimal, JobState } from "../../../jobs/types";
 
@@ -33,11 +33,11 @@ export function SampleItemEndIcon({ onClick, ready, job }: SampleItemEndIconProp
     if (ready || job?.state === "complete") {
         return (
             <StyledSampleItemEndIcon>
-                <Icon
+                <IconButton
+                    className="text-lg"
                     color="green"
                     name="chart-area"
-                    style={{ fontSize: "17px" }}
-                    tip="Quick Analyze"
+                    tip="quick analyze"
                     tipPlacement="left"
                     onClick={onClick}
                 />

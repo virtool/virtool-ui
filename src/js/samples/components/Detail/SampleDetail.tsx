@@ -1,6 +1,5 @@
 import {
     Icon,
-    IconLink,
     LoadingPlaceholder,
     NotFound,
     Tabs,
@@ -10,11 +9,13 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "@base";
+import { IconButton } from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
+import { useLocationState } from "@utils/hooks";
 import { includes } from "lodash-es";
 import React from "react";
-import { Link, match, Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { match, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -32,15 +33,16 @@ type SampleDetailProps = {
  */
 export default function SampleDetail({ match }: SampleDetailProps) {
     const location = useLocation();
+    const [_, setLocationState] = useLocationState();
     const { sampleId } = match.params;
-    const { data, isLoading, isError } = useFetchSample(sampleId);
+    const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
 
     if (isError) {
         return <NotFound />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -51,13 +53,23 @@ export default function SampleDetail({ match }: SampleDetailProps) {
     if (canModify) {
         if (includes(location.pathname, "general")) {
             editIcon = (
-                <Link to={{ state: { editSample: true } }}>
-                    <Icon color="orange" name="pencil-alt" tip="Edit" hoverable />
-                </Link>
+                <IconButton
+                    color="grayDark"
+                    name="pen"
+                    tip="modify"
+                    onClick={() => setLocationState({ editSample: true })}
+                />
             );
         }
 
-        removeIcon = <IconLink color="red" to={{ state: { removeSample: true } }} name="trash" tip="Remove" />;
+        removeIcon = (
+            <IconButton
+                color="red"
+                name="trash"
+                tip="remove"
+                onClick={() => setLocationState({ removeSample: true })}
+            />
+        );
 
         rightsTabLink = (
             <TabsLink to={`/samples/${sampleId}/rights`}>

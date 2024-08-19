@@ -1,3 +1,4 @@
+import { getBorder } from "@app/theme";
 import {
     BoxGroup,
     Dialog,
@@ -16,7 +17,6 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { filter, flatMap, includes, map } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
 import { useAddReferenceMember } from "../../queries";
 import { ReferenceGroup } from "../../types";
 
@@ -55,9 +55,9 @@ type AddReferenceGroupProps = {
 export default function AddReferenceGroup({ groups, onHide, refId, show }: AddReferenceGroupProps) {
     const mutation = useAddReferenceMember(refId, "group");
     const [term, setTerm] = useState("");
-    const { data, isLoading, isFetchingNextPage, fetchNextPage } = useInfiniteFindGroups(25, term);
+    const { data, isPending, isFetchingNextPage, fetchNextPage } = useInfiniteFindGroups(25, term);
 
-    if (isLoading) {
+    if (isPending) {
         return null;
     }
 
@@ -92,7 +92,7 @@ export default function AddReferenceGroup({ groups, onHide, refId, show }: AddRe
                         <StyledScrollList
                             fetchNextPage={fetchNextPage}
                             isFetchingNextPage={isFetchingNextPage}
-                            isLoading={isLoading}
+                            isPending={isPending}
                             items={filteredItems}
                             renderRow={renderRow}
                         />

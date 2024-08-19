@@ -6,11 +6,6 @@ import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceFo
 import { useLocationState } from "@utils/hooks";
 import { merge } from "lodash";
 import React from "react";
-import styled from "styled-components";
-
-const CenteredDialogContent = styled(DialogContent)`
-    top: 50%;
-`;
 
 type AddBarcodeSequenceProps = {
     isolateId: string;
@@ -51,10 +46,10 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
         >
             <DialogPortal>
                 <DialogOverlay />
-                <CenteredDialogContent>
+                <DialogContent className="top-1/2">
                     <DialogTitle>Add Sequence</DialogTitle>
                     <BarcodeSequenceForm noun="add" onSubmit={onSubmit} otuId={otuId} targets={targets} />
-                </CenteredDialogContent>
+                </DialogContent>
             </DialogPortal>
         </Dialog>
     );

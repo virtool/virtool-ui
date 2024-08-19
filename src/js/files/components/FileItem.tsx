@@ -1,4 +1,5 @@
-import { Attribution, BoxGroupSection, Icon, RelativeTime } from "@base";
+import { Attribution, BoxGroupSection, RelativeTime } from "@base";
+import { IconButton } from "@base/IconButton";
 import { UserNested } from "@users/types";
 import { byteSize } from "@utils/utils";
 import React, { useCallback } from "react";
@@ -17,7 +18,7 @@ export default function FileItem({ canDelete, id, name, size, uploaded_at, user 
     const { mutate: handleRemove } = useDeleteFile();
 
     const handleDelete = useCallback(() => {
-        handleRemove(id);
+        handleRemove({ id });
     }, [handleRemove, id]);
 
     return (
@@ -37,7 +38,7 @@ export default function FileItem({ canDelete, id, name, size, uploaded_at, user 
                 </div>
                 <div className="flex font-medium gap-6 justify-end text-lg">
                     <span>{byteSize(size, true)}</span>
-                    {canDelete && <Icon aria-label="Delete" color="red" name="trash" onClick={handleDelete} />}
+                    {canDelete && <IconButton color="red" name="trash" tip="remove" onClick={handleDelete} />}
                 </div>
             </div>
         </BoxGroupSection>

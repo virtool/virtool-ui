@@ -30,9 +30,9 @@ type SampleLabelsProps = {
  * Displays a sidebar to manage sample labels
  */
 export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsProps) {
-    const { data, isLoading } = useFetchLabels();
+    const { data, isPending } = useFetchLabels();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

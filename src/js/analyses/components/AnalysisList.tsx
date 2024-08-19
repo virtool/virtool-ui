@@ -1,9 +1,9 @@
+import { useListHmms } from "@/hmm/queries";
+import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import { useFetchSample } from "@samples/queries";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import { match } from "react-router-dom";
-import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "../../base";
-import { useListHmms } from "../../hmm/queries";
-import { useFetchSample } from "../../samples/queries";
 import { useListAnalyses } from "../queries";
 import { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";
@@ -28,11 +28,11 @@ type AnalysisListProps = {
 export default function AnalysesList({ match }: AnalysisListProps) {
     const sampleId = match.params.sampleId;
     const [urlPage] = useUrlSearchParams<number>("page");
-    const { data: analyses, isLoading: isLoadingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
-    const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
-    const { isLoading: isLoadingSample } = useFetchSample(sampleId);
+    const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
+    const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
+    const { isPending: isPendingSample } = useFetchSample(sampleId);
 
-    if (isLoadingAnalyses || isLoadingHmms || isLoadingSample) {
+    if (isPendingAnalyses || isPendingHmms || isPendingSample) {
         return <LoadingPlaceholder />;
     }
 

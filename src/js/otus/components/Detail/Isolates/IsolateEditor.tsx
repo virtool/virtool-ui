@@ -1,5 +1,6 @@
-import { Box, BoxGroup, NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@/base";
+import { NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
+import { ScrollArea } from "@base/ScrollArea";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
@@ -29,21 +30,6 @@ const IsolateEditorTitle = styled(SubviewHeaderTitle)`
         font-weight: ${getFontWeight("thick")};
         margin-left: auto;
     }
-`;
-
-const IsolateEditorListContainer = styled(Box)`
-    flex: 0 0 auto;
-    height: 420px;
-    margin: 0 15px 0 0;
-    padding: 0;
-    overflow-y: scroll;
-    width: 240px;
-`;
-
-const IsolateEditorList = styled(BoxGroup)`
-    border: none;
-    box-shadow: ${props => props.theme.boxShadow.inset};
-    width: 100%;
 `;
 
 const AddIsolateLink = styled.a`
@@ -77,9 +63,7 @@ export default function IsolateEditor() {
 
     const body = isolateComponents.length ? (
         <IsolateEditorContainer>
-            <IsolateEditorListContainer>
-                <IsolateEditorList>{isolateComponents}</IsolateEditorList>
-            </IsolateEditorListContainer>
+            <ScrollArea>{isolateComponents}</ScrollArea>
             <IsolateDetail
                 canModify={canModify}
                 otuId={otu.id}

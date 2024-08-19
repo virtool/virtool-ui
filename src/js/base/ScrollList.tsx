@@ -1,20 +1,15 @@
+import { cn } from "@/utils/utils";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query";
 import { map } from "lodash-es";
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 function getScrollRatio(): number {
     return (window.innerHeight + window.scrollY) / document.documentElement.scrollHeight;
 }
 
-const StyledScrollList = styled.div`
-    position: relative;
-    z-index: 0;
-`;
-
 type ScrollListProps = {
-    /** The class name of the scroll list */
+    /** Tailwind CSS classes */
     className?: string;
     /** A function which initiates fetching the next page */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
@@ -23,7 +18,7 @@ type ScrollListProps = {
     /** Whether a new page is being fetched */
     isFetchingNextPage: boolean;
     /** Whether the first page is being fetched */
-    isLoading: boolean;
+    isPending: boolean;
     /** The list of items */
     items: unknown[];
     /** A function which accepts an item and returns a React element */
@@ -38,7 +33,7 @@ export function ScrollList({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-    isLoading,
+    isPending,
     items,
     renderRow,
 }: ScrollListProps) {
@@ -58,9 +53,9 @@ export function ScrollList({
     const entries = map(items, item => renderRow(item));
 
     return (
-        <StyledScrollList className={className}>
+        <div className={cn("relative", "z-0", className)}>
             {entries}
-            {isLoading && <LoadingPlaceholder margin="20px" />}
-        </StyledScrollList>
+            {isPending && <LoadingPlaceholder className="mt-5" />}
+        </div>
     );
 }

@@ -24,10 +24,10 @@ const APIKeysHeader = styled(Box)`
  * A component to manage and display API keys
  */
 export default function APIKeys() {
-    const { data, isLoading } = useFetchAPIKeys();
+    const { data, isPending } = useFetchAPIKeys();
 
-    if (isLoading) {
-        return <LoadingPlaceholder margin="150px" />;
+    if (isPending) {
+        return <LoadingPlaceholder className="mt-36" />;
     }
 
     const keyComponents = data.length && map(data, key => <APIKey key={key.id} apiKey={key} />);

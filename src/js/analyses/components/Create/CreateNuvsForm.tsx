@@ -1,8 +1,8 @@
+import { Button } from "@base";
+import { IndexMinimal } from "@indexes/types";
+import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "../../../base";
-import { IndexMinimal } from "../../../indexes/types";
-import { SubtractionShortlist } from "../../../subtraction/types";
 import { Workflows } from "../../types";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
@@ -12,26 +12,25 @@ import { SubtractionSelector } from "./SubtractionSelector";
 
 type createNuvsFormValues = {
     workflow: Workflows;
-    indexes: string[];
+    index: string;
     subtractions: string[];
 };
 
 type createNuvsFormProps = {
+    /** The indexes that are compatible with the selected sample */
     compatibleIndexes: IndexMinimal[];
+    /** The default subtractions to use */
     defaultSubtractions: string[];
+    /** The callback to call when the form is submitted */
     onSubmit: (values: createNuvsFormValues) => void;
+    /** The number of samples selected */
     sampleCount: number;
+    /** The available subtractions */
     subtractions: SubtractionShortlist[];
 };
 
 /**
  * Form for creating a new NuVs analysis.
- *
- * @param compatibleIndexes - The indexes that are compatible with the selected sample.
- * @param defaultSubtractions - The default subtractions to use.
- * @param onSubmit - The callback to call when the form is submitted.
- * @param sampleCount - The number of samples selected.
- * @param subtractions - The available subtractions.
  */
 export function CreateNuvsForm({
     compatibleIndexes,
@@ -56,7 +55,7 @@ export function CreateNuvsForm({
                 render={({ field: { onChange, value } }) => (
                     <SubtractionSelector subtractions={subtractions} selected={value} onChange={onChange} />
                 )}
-                name={"subtractions"}
+                name="subtractions"
             />
 
             <Controller
@@ -64,14 +63,13 @@ export function CreateNuvsForm({
                 render={({ field: { onChange, value } }) => (
                     <IndexSelector indexes={compatibleIndexes} selected={value} onChange={onChange} />
                 )}
-                name="indexes"
-                defaultValue={[]}
+                name="index"
                 rules={{ required: true }}
             />
-            <CreateAnalysisInputError>{errors.indexes && "A reference must be selected"}</CreateAnalysisInputError>
+            <CreateAnalysisInputError>{errors.index && "A reference must be selected"}</CreateAnalysisInputError>
 
             <CreateAnalysisFooter>
-                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("indexes")?.length ?? 0} />
+                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("index")?.length ?? 0} />
                 <Button type="submit" color="blue">
                     Start
                 </Button>

@@ -55,9 +55,9 @@ type AddReferenceUserProps = {
 export default function AddReferenceUser({ users, onHide, refId, show }: AddReferenceUserProps) {
     const mutation = useAddReferenceMember(refId, "user");
     const [term, setTerm] = useState("");
-    const { data, isLoading, isFetchingNextPage, fetchNextPage } = useInfiniteFindUsers(25, term);
+    const { data, isPending, isFetchingNextPage, fetchNextPage } = useInfiniteFindUsers(25, term);
 
-    if (isLoading) {
+    if (isPending) {
         return null;
     }
 
@@ -92,7 +92,7 @@ export default function AddReferenceUser({ users, onHide, refId, show }: AddRefe
                         <StyledScrollList
                             fetchNextPage={fetchNextPage}
                             isFetchingNextPage={isFetchingNextPage}
-                            isLoading={isLoading}
+                            isPending={isPending}
                             items={filteredItems}
                             renderRow={renderRow}
                         />

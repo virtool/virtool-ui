@@ -1,8 +1,8 @@
+import { Button } from "@base";
+import { IndexMinimal } from "@indexes/types";
+import { MLModelMinimal } from "@ml/types";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "../../../base";
-import { IndexMinimal } from "../../../indexes/types";
-import { MLModelMinimal } from "../../../ml/types";
 import { Workflows } from "../../types";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
@@ -11,24 +11,24 @@ import { IndexSelector } from "./IndexSelector";
 import { MLModelSelector } from "./MLModelSelector";
 
 type createIimiFormValues = {
-    indexes: string[];
+    index: string;
     mlModel: string;
     workflow: Workflows;
 };
 
 type createIimiFormProps = {
+    /** The indexes that are compatible with the selected sample */
     compatibleIndexes: IndexMinimal[];
+    /** The available ML models */
     mlModels: MLModelMinimal[];
+    /** The callback to call when the form is submitted */
     onSubmit: (values: createIimiFormValues) => void;
+    /** The number of samples selected */
     sampleCount: number;
 };
 
 /**
  * Form for creating a new IIMI analysis.
- *
- * @param compatibleIndexes - The indexes that are compatible with the selected sample.
- * @param mlModels - The available ML models.
- * @param onSubmit - The callback to call when the form is submitted.
  */
 export function CreateIimiForm({ compatibleIndexes, mlModels, onSubmit, sampleCount }: createIimiFormProps) {
     const {
@@ -57,14 +57,13 @@ export function CreateIimiForm({ compatibleIndexes, mlModels, onSubmit, sampleCo
                 render={({ field: { onChange, value } }) => (
                     <IndexSelector indexes={compatibleIndexes} selected={value} onChange={onChange} />
                 )}
-                name="indexes"
-                defaultValue={[]}
+                name="index"
                 rules={{ required: true }}
             />
-            <CreateAnalysisInputError>{errors.indexes && "A reference must be selected"}</CreateAnalysisInputError>
+            <CreateAnalysisInputError>{errors.index && "A reference must be selected"}</CreateAnalysisInputError>
 
             <CreateAnalysisFooter>
-                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("indexes")?.length ?? 0} />
+                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("index")?.length ?? 0} />
                 <Button type="submit" color="blue">
                     Start
                 </Button>

@@ -28,10 +28,6 @@ const JobsListEmpty = styled(Box)`
     }
 `;
 
-const StyledScrollList = styled(ScrollList)`
-    margin-bottom: 0;
-`;
-
 const initialState = ["preparing", "running"];
 
 /**
@@ -39,9 +35,9 @@ const initialState = ["preparing", "running"];
  */
 export default function JobsList() {
     const [states] = useUrlSearchParamsList("state", initialState);
-    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindJobs(states);
+    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindJobs(states);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -65,11 +61,12 @@ export default function JobsList() {
     } else {
         inner = (
             <BoxGroup>
-                <StyledScrollList
+                <ScrollList
+                    className="mb-0"
                     fetchNextPage={fetchNextPage}
                     hasNextPage={hasNextPage}
                     isFetchingNextPage={isFetchingNextPage}
-                    isLoading={isLoading}
+                    isPending={isPending}
                     items={jobs}
                     renderRow={(item: JobMinimal) => {
                         return <Job key={item.id} {...item} />;

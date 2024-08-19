@@ -1,8 +1,8 @@
+import { IconButton } from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
-import { Icon } from "./Icon";
 
-const StyledCloseButton = styled(Icon)`
+const StyledCloseButton = styled(IconButton)`
     color: inherit;
 `;
 
@@ -11,5 +11,5 @@ type CloseButtonProps = {
 };
 
 export function CloseButton({ onClick }: CloseButtonProps) {
-    return <StyledCloseButton aria-label="close" name="times" onClick={onClick} />;
+    return <StyledCloseButton name="times" tip="close" onClick={onClick} />;
 }

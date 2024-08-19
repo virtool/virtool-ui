@@ -45,11 +45,8 @@ export default function Groups() {
 
     const [selectedGroupId, setSelectedGroupId] = useState(null);
 
-    const { data: groups, isLoading: isLoadingGroups } = useListGroups();
-    const { data: selectedGroup } = useFetchGroup(selectedGroupId, {
-        enabled: Boolean(selectedGroupId),
-        keepPreviousData: true,
-    });
+    const { data: groups, isPending: isPendingGroups } = useListGroups();
+    const { data: selectedGroup } = useFetchGroup(selectedGroupId);
 
     useEffect(() => {
         if (groups && !find(groups, { id: selectedGroupId })) {
@@ -57,8 +54,8 @@ export default function Groups() {
         }
     }, [groups, selectedGroupId]);
 
-    if (isLoadingGroups || (groups.length && !selectedGroup)) {
-        return <LoadingPlaceholder margin="130px" />;
+    if (isPendingGroups || (groups.length && !selectedGroup)) {
+        return <LoadingPlaceholder className="mt-32" />;
     }
 
     return (

@@ -1,5 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { filter, forEach, groupBy, map, maxBy } from "lodash-es";
+import { groupBy, map, maxBy } from "lodash-es";
 import { includes, keysIn } from "lodash-es/lodash";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -35,13 +35,13 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
 
     const createAnalysis = useCreateAnalysis();
 
-    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } =
+    const { data: subtractionShortlist, isPending: isPendingSubtractionShortlist } =
         useFetchSubtractionsShortlist(true);
-    const { data: sample, isLoading: isLoadingSample } = useFetchSample(sampleId);
-    const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
-    const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
+    const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+    const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
+    const { data: mlModels, isPending: isPendingMLModels } = useFindModels();
 
-    if (isLoadingMLModels || isLoadingSubtractionShortlist || isLoadingSample || isLoadingIndexes) {
+    if (isPendingMLModels || isPendingSubtractionShortlist || isPendingSample || isPendingIndexes) {
         return null;
     }
 
@@ -57,16 +57,10 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
     const compatibleWorkflows = getCompatibleWorkflows(dataType, Boolean(hmms.total_count));
 
     function onSubmit(props: CreateAnalysisFormValues) {
-        const { indexes, subtractions, workflow, mlModel } = props;
+        const { index, subtractions, workflow, mlModel } = props;
+        const refId = compatibleIndexes.find(compatibleIndex => compatibleIndex.reference.name === index)?.reference.id;
 
-        const references = map(
-            filter(compatibleIndexes, index => indexes.includes(index.id)),
-            "reference.id"
-        );
-
-        forEach(references, refId => {
-            createAnalysis.mutate({ refId, subtractionIds: subtractions, sampleId, workflow, mlModel });
-        });
+        createAnalysis.mutate({ refId, subtractionIds: subtractions, sampleId, workflow, mlModel });
     }
 
     function onChangeWorkflow(workflow: Workflows) {

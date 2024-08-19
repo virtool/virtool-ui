@@ -1,8 +1,7 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../../base";
-import { OTUQueryKeys, useCreateIsolate } from "../../../queries";
+import { useCreateIsolate } from "../../../queries";
 import IsolateForm from "./IsolateForm";
 
 type AddIsolateProps = {
@@ -20,15 +19,13 @@ type AddIsolateProps = {
  * Displays dialog to add an OTU isolate
  */
 export default function AddIsolate({ allowedSourceTypes, onHide, otuId, restrictSourceTypes, show }: AddIsolateProps) {
-    const mutation = useCreateIsolate();
-    const queryClient = useQueryClient();
+    const mutation = useCreateIsolate(otuId);
 
     function handleSubmit({ sourceName, sourceType }) {
         mutation.mutate(
             { otuId, sourceType: sourceType || "unknown", sourceName },
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                     onHide();
                 },
             }
