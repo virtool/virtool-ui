@@ -1,5 +1,5 @@
 import APIPermissions from "@account/components/API/APIPermissions";
-import { accountKeys, useCreateAPIKey } from "@account/queries";
+import { useCreateAPIKey } from "@account/queries";
 import { getFontSize } from "@app/theme";
 import {
     Dialog,
@@ -19,7 +19,6 @@ import {
 } from "@base";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useHistory, useLocation } from "react-router-dom";
@@ -67,7 +66,6 @@ export default function CreateAPIKey() {
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
-    const queryClient = useQueryClient();
 
     const {
         formState: { errors },
@@ -108,7 +106,6 @@ export default function CreateAPIKey() {
             {
                 onSuccess: data => {
                     setNewKey(data.key);
-                    queryClient.invalidateQueries(accountKeys.all());
                 },
             }
         );

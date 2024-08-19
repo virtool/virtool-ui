@@ -1,6 +1,5 @@
 import "d3-transition";
-import PropTypes from "prop-types";
-import React, { useEffect, useRef } from "react";
+import React, { RefObject, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const StyledQualityChart = styled.div`
@@ -52,14 +51,22 @@ const StyledQualityChart = styled.div`
     }
 `;
 
-export const QualityChart = ({ createChart, data, width }) => {
-    const ref = useRef(null);
-    useEffect(() => createChart(ref.current, data, width), [width]);
-    return <StyledQualityChart ref={ref} />;
+type QualityChartProps = {
+    /** A callback function to create the sample quality chart */
+    createChart: (current: RefObject<HTMLDivElement>, data: number[], width: number) => void;
+    /** The data to be used in the chart */
+    data: number[];
+    /** The width of the chart */
+    width: number;
 };
 
-QualityChart.propTypes = {
-    createChart: PropTypes.func.isRequired,
-    data: PropTypes.array.isRequired,
-    width: PropTypes.number.isRequired,
-};
+/**
+ * Creates and displays charts for sample quality
+ */
+export function QualityChart({ createChart, data, width }: QualityChartProps) {
+    const ref = useRef(null);
+
+    useEffect(() => createChart(ref.current, data, width), [width]);
+
+    return <StyledQualityChart ref={ref} />;
+}

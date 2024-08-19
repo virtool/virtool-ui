@@ -33,10 +33,9 @@ const initialState = ["preparing", "running"];
  */
 export default function JobsList() {
     const [states] = useUrlSearchParamsList("state", initialState);
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const { data, isLoading } = useFindJobs(Number(urlPage) || 1, 25, states);
+    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindJobs(states);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -57,13 +56,19 @@ export default function JobsList() {
         );
     } else {
         inner = (
-            <Pagination items={documents} storedPage={page} currentPage={Number(urlPage) || 1} pageCount={page_count}>
-                <BoxGroup>
-                    {map(documents, document => (
-                        <Job key={document.id} {...document} />
-                    ))}
-                </BoxGroup>
-            </Pagination>
+            <BoxGroup>
+                <ScrollList
+                    className="mb-0"
+                    fetchNextPage={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    isPending={isPending}
+                    items={jobs}
+                    renderRow={(item: JobMinimal) => {
+                        return <Job key={item.id} {...item} />;
+                    }}
+                />
+            </BoxGroup>
         );
     }
 

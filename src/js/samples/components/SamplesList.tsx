@@ -42,29 +42,29 @@ export default function SamplesList() {
     const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
     const [filterWorkflows, setFilterWorkflows] = useUrlSearchParamsList("workflows");
 
-    const { data: samples, isLoading: isSamplesLoading } = useListSamples(
+    const { data: samples, isPending: isPendingSamples } = useListSamples(
         Number(urlPage) || 1,
         25,
         term,
         filterLabels,
         filterWorkflows
     );
-    const { data: labels, isLoading: isLabelsLoading } = useFetchLabels();
-    const { data: hmms, isLoading: isLoadingHmms } = useListHmms(1, 25);
-    const { data: indexes, isLoading: isLoadingIndexes } = useListIndexes(true);
-    const { data: subtractionShortlist, isLoading: isLoadingSubtractionShortlist } =
+    const { data: labels, isPending: isPendingLabels } = useFetchLabels();
+    const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
+    const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
+    const { data: subtractionShortlist, isPending: isPendingSubtractionShortlist } =
         useFetchSubtractionsShortlist(true);
-    const { data: mlModels, isLoading: isLoadingMLModels } = useFindModels();
+    const { data: mlModels, isPending: isPendingMLModels } = useFindModels();
 
     const [selected, setSelected] = useState([]);
 
     if (
-        isSamplesLoading ||
-        isLabelsLoading ||
-        isLoadingHmms ||
-        isLoadingIndexes ||
-        isLoadingSubtractionShortlist ||
-        isLoadingMLModels
+        isPendingSamples ||
+        isPendingLabels ||
+        isPendingHmms ||
+        isPendingIndexes ||
+        isPendingSubtractionShortlist ||
+        isPendingMLModels
     ) {
         return <LoadingPlaceholder />;
     }

@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
+import { BoxGroupSection, NoneFoundSection, RelativeTime } from "@base";
+import { ReferenceBuild } from "@references/types";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BoxGroupSection, NoneFoundSection, RelativeTime } from "../../../base";
-import { DownloadLink } from "./DownloadLink";
 
 const StyledLatestBuild = styled(BoxGroupSection)`
     align-items: center;
@@ -14,7 +13,16 @@ const StyledLatestBuild = styled(BoxGroupSection)`
     }
 `;
 
-export const LatestBuild = ({ id, latestBuild }) => {
+type LatestBuildProps = {
+    id: string;
+    /** Information related to the latest index build */
+    latestBuild: ReferenceBuild;
+};
+
+/**
+ * Displays the latest index build information associated with the reference
+ */
+export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
     if (latestBuild) {
         return (
             <StyledLatestBuild>
@@ -26,15 +34,9 @@ export const LatestBuild = ({ id, latestBuild }) => {
                         &nbsp;/ Created <RelativeTime time={latestBuild.created_at} /> by {latestBuild.user.handle}
                     </span>
                 </div>
-                {latestBuild.has_json && <DownloadLink id={latestBuild.id} />}
             </StyledLatestBuild>
         );
     }
 
     return <NoneFoundSection noun="index builds" />;
-};
-
-LatestBuild.propTypes = {
-    id: PropTypes.string,
-    latestBuild: PropTypes.object,
-};
+}

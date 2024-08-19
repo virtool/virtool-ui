@@ -1,6 +1,6 @@
 import { findJobs, getJob } from "@jobs/api";
 import { Job, JobSearchResult } from "@jobs/types";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 /**
  * Factory object for generating job query keys
@@ -22,14 +22,19 @@ export const jobQueryKeys = {
  * @param states - The states to filter jobs by
  * @returns A page of job search results
  */
-export function useFindJobs(page: number, per_page: number, states: string[]) {
-    return useQuery<JobSearchResult>(
-        jobQueryKeys.list([page, per_page, states]),
-        () => findJobs(page, per_page, states),
-        {
-            keepPreviousData: true,
-        }
-    );
+export function useInfiniteFindJobs(states: string[]) {
+    return useInfiniteQuery<JobSearchResult>({
+        queryKey: jobQueryKeys.infiniteList([states]),
+        queryFn: ({ pageParam }) => findJobs(pageParam as number, states),
+        initialPageParam: 1,
+        getNextPageParam: lastPage => {
+            if (lastPage.page >= lastPage.page_count) {
+                return undefined;
+            }
+            return (lastPage.page || 1) + 1;
+        },
+        placeholderData: keepPreviousData,
+    });
 }
 
 /**
@@ -39,5 +44,5 @@ export function useFindJobs(page: number, per_page: number, states: string[]) {
  * @returns Query results containing the job
  */
 export function useFetchJob(jobId: string) {
-    return useQuery<Job>(jobQueryKeys.detail(jobId), () => getJob(jobId));
+    return useQuery<Job>({ queryKey: jobQueryKeys.detail(jobId), queryFn: () => getJob(jobId) });
 }
