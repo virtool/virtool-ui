@@ -30,7 +30,7 @@ export const accountKeys = {
  * @returns UseQueryResult object containing the account data
  */
 export function useFetchAccount() {
-    return useQuery<Account>(accountKeys.all(), () => fetchAccount());
+    return useQuery<Account>({ queryKey: accountKeys.all(), queryFn: () => fetchAccount() });
 }
 
 /**
@@ -41,9 +41,10 @@ export function useFetchAccount() {
 export function useUpdateAccount() {
     const queryClient = useQueryClient();
 
-    return useMutation<User, ErrorResponse, { update: AccountUpdate }>(({ update }) => updateAccount(update), {
+    return useMutation<User, ErrorResponse, { update: AccountUpdate }>({
+        mutationFn: ({ update }) => updateAccount(update),
         onSuccess: () => {
-            queryClient.invalidateQueries(accountKeys.all());
+            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
         },
     });
 }
@@ -56,14 +57,12 @@ export function useUpdateAccount() {
 export function useChangePassword() {
     const queryClient = useQueryClient();
 
-    return useMutation<User, ErrorResponse, { old_password: string; password: string }>(
-        ({ old_password, password }) => changePassword(old_password, password),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(accountKeys.all());
-            },
-        }
-    );
+    return useMutation<User, ErrorResponse, { old_password: string; password: string }>({
+        mutationFn: ({ old_password, password }) => changePassword(old_password, password),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+        },
+    });
 }
 
 /**
@@ -72,7 +71,7 @@ export function useChangePassword() {
  * @returns A list of API keys for the current user
  */
 export function useFetchAPIKeys() {
-    return useQuery<APIKeyMinimal[]>(accountKeys.details(), () => getAPIKeys());
+    return useQuery<APIKeyMinimal[]>({ queryKey: accountKeys.details(), queryFn: () => getAPIKeys() });
 }
 
 /**
@@ -81,9 +80,14 @@ export function useFetchAPIKeys() {
  * @returns A mutator for creating a new API key
  */
 export function useCreateAPIKey() {
-    return useMutation<APIKeyMinimal, ErrorResponse, { name: string; permissions: Permissions }>(
-        ({ name, permissions }) => createAPIKey(name, permissions)
-    );
+    const queryClient = useQueryClient();
+
+    return useMutation<APIKeyMinimal, ErrorResponse, { name: string; permissions: Permissions }>({
+        mutationFn: ({ name, permissions }) => createAPIKey(name, permissions),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+        },
+    });
 }
 
 /**
@@ -94,14 +98,12 @@ export function useCreateAPIKey() {
 export function useUpdateAPIKey() {
     const queryClient = useQueryClient();
 
-    return useMutation<APIKeyMinimal, ErrorResponse, { keyId: string; permissions: Permissions }>(
-        ({ keyId, permissions }) => updateAPIKey(keyId, permissions),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(accountKeys.all());
-            },
-        }
-    );
+    return useMutation<APIKeyMinimal, ErrorResponse, { keyId: string; permissions: Permissions }>({
+        mutationFn: ({ keyId, permissions }) => updateAPIKey(keyId, permissions),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+        },
+    });
 }
 
 /**
@@ -112,9 +114,10 @@ export function useUpdateAPIKey() {
 export function useRemoveAPIKey() {
     const queryClient = useQueryClient();
 
-    return useMutation<null, ErrorResponse, { keyId: string }>(({ keyId }) => removeAPIKey(keyId), {
+    return useMutation<null, ErrorResponse, { keyId: string }>({
+        mutationFn: ({ keyId }) => removeAPIKey(keyId),
         onSuccess: () => {
-            queryClient.invalidateQueries(accountKeys.all());
+            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
         },
     });
 }
@@ -125,7 +128,8 @@ export function useRemoveAPIKey() {
  * @returns A mutator for logging out a user
  */
 export function useLogout() {
-    return useMutation<null, ErrorResponse>(logout, {
+    return useMutation<null, ErrorResponse>({
+        mutationFn: logout,
         onSuccess: () => {
             resetClient();
         },

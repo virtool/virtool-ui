@@ -19,7 +19,7 @@ import { capitalize } from "lodash-es";
 import React from "react";
 import { Accept } from "react-dropzone";
 import { useListFiles } from "../queries";
-import { FileResponse, FileType } from "../types";
+import { FileType } from "../types";
 import FileItem from "./FileItem";
 
 type FileManagerProps = {
@@ -39,14 +39,10 @@ type FileManagerProps = {
 export function FileManager({ accept, fileType, message, regex }: FileManagerProps) {
     const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
 
-    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
-    const { data: files, isLoading: isLoadingFiles }: { data: FileResponse; isLoading: boolean } = useListFiles(
-        fileType,
-        page,
-        25
-    );
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
+    const { data: files, isPending: isPendingFiles } = useListFiles(fileType, page, 25);
 
-    if (isLoadingFiles || isLoadingAccount) {
+    if (isPendingFiles || isPendingAccount) {
         return <LoadingPlaceholder />;
     }
 

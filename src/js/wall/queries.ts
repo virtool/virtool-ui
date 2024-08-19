@@ -2,11 +2,12 @@ import { fetchAccount, login, resetPassword } from "@/account/api";
 import { accountKeys } from "@/account/queries";
 import { Account } from "@/account/types";
 import { ErrorResponse } from "@/types/types";
-import { Request } from "@app/request";
+import { rootData } from "@app/api";
+import { Root } from "@app/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Response } from "superagent";
 
-// Key factory function for the root document
+/** Key factory function for the root document */
 export const rootKeys = {
     all: () => ["root"],
 };
@@ -17,8 +18,9 @@ export const rootKeys = {
  * @returns A query for fetching the root document
  */
 export function useRootQuery() {
-    return useQuery(rootKeys.all(), () => {
-        return Request.get("/");
+    return useQuery<Root, ErrorResponse>({
+        queryKey: rootKeys.all(),
+        queryFn: rootData,
     });
 }
 
@@ -30,23 +32,22 @@ export function useRootQuery() {
 export function useAuthentication() {
     const queryClient = useQueryClient();
 
-    const { data, isLoading, isError, refetch, ...queryInfo } = useQuery<Account, ErrorResponse>(
-        accountKeys.all(),
-        fetchAccount,
-        {
-            retry: false,
-            refetchOnWindowFocus: false,
-            onError: error => {
-                if (error.response?.status === 401) {
-                    queryClient.setQueryData(accountKeys.all(), null);
-                }
-            },
+    const { data, isPending, isError, error, refetch, ...queryInfo } = useQuery<Account, ErrorResponse>({
+        queryKey: accountKeys.all(),
+        queryFn: fetchAccount,
+        retry: false,
+        refetchOnWindowFocus: false,
+    });
+
+    if (isError) {
+        if (error.response?.status === 401) {
+            queryClient.setQueryData(accountKeys.all(), null);
         }
-    );
+    }
 
     const authenticated = Boolean(data);
 
-    return { authenticated, isLoading, isError, refetch, ...queryInfo };
+    return { authenticated, isPending, isError, refetch, ...queryInfo };
 }
 
 /**
@@ -57,14 +58,12 @@ export function useAuthentication() {
 export function useLoginMutation() {
     const queryClient = useQueryClient();
 
-    return useMutation<Response, ErrorResponse, { username: string; password: string; remember: boolean }>(
-        ({ username, password, remember }) => login({ username, password, remember }),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(accountKeys.all());
-            },
-        }
-    );
+    return useMutation<Response, ErrorResponse, { username: string; password: string; remember: boolean }>({
+        mutationFn: ({ username, password, remember }) => login({ username, password, remember }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+        },
+    });
 }
 
 /**
@@ -75,12 +74,10 @@ export function useLoginMutation() {
 export function useResetPasswordMutation() {
     const queryClient = useQueryClient();
 
-    return useMutation<Response, ErrorResponse, { password: string; resetCode: string }>(
-        ({ password, resetCode }) => resetPassword({ password, resetCode }),
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries(accountKeys.all());
-            },
-        }
-    );
+    return useMutation<Response, ErrorResponse, { password: string; resetCode: string }>({
+        mutationFn: ({ password, resetCode }) => resetPassword({ password, resetCode }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: accountKeys.all() });
+        },
+    });
 }

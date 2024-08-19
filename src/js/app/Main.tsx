@@ -50,7 +50,7 @@ const MainContainer = styled.div`
  */
 export default function Main() {
     const queryClient = useQueryClient();
-    const { data, isLoading } = useFetchAccount();
+    const { data, isPending } = useFetchAccount();
 
     useEffect(() => {
         if (data) {
@@ -58,7 +58,7 @@ export default function Main() {
         }
     }, [data]);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

@@ -22,9 +22,9 @@ function renderRow(reference: ReferenceMinimal) {
 export default function ReferenceList() {
     const [term] = useUrlSearchParams<string>("find");
 
-    const { data, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
+    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -49,7 +49,7 @@ export default function ReferenceList() {
                             fetchNextPage={fetchNextPage}
                             hasNextPage={hasNextPage}
                             isFetchingNextPage={isFetchingNextPage}
-                            isLoading={isLoading}
+                            isPending={isPending}
                             items={references}
                             renderRow={renderRow}
                         />

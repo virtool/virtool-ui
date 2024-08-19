@@ -17,9 +17,9 @@ type APIPermissionsProps = {
  * Manages permissions for creating/updating an API
  */
 export default function APIPermissions({ className, keyPermissions, onChange }: APIPermissionsProps) {
-    const { data, isLoading } = useFetchAccount();
+    const { data, isPending } = useFetchAccount();
 
-    if (isLoading) {
+    if (isPending) {
         return null;
     }
 

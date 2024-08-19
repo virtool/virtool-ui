@@ -10,9 +10,9 @@ import { ReferenceSettings } from "./ReferenceSettings";
  * The references view with routes to reference-related components
  */
 export default function References() {
-    const { isLoading } = useFetchSettings();
+    const { isPending } = useFetchSettings();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

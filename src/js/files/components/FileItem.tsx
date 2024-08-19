@@ -18,7 +18,7 @@ export default function FileItem({ canDelete, id, name, size, uploaded_at, user 
     const { mutate: handleRemove } = useDeleteFile();
 
     const handleDelete = useCallback(() => {
-        handleRemove(id);
+        handleRemove({ id });
     }, [handleRemove, id]);
 
     return (

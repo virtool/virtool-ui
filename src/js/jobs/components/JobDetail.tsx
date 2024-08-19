@@ -29,13 +29,13 @@ type JobDetailProps = {
  * The job detailed view
  */
 export default function JobDetail({ match }: JobDetailProps) {
-    const { data, isLoading, isError } = useFetchJob(match.params.jobId);
+    const { data, isPending, isError } = useFetchJob(match.params.jobId);
 
     if (isError) {
         return <NotFound />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

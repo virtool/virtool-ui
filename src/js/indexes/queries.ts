@@ -25,14 +25,18 @@ export const indexQueryKeys = {
  * @param term - The search term to filter indexes by
  * @returns The paginated list of indexes
  */
-export function useFindIndexes(page: number, per_page: number, refId: string, term?: string) {
-    return useQuery<IndexSearchResult>(
-        indexQueryKeys.list([refId, page, per_page, term]),
-        () => findIndexes(page, per_page, refId, term),
-        {
-            keepPreviousData: true,
-        }
-    );
+export function useInfiniteFindIndexes(refId: string, term?: string) {
+    return useInfiniteQuery<IndexSearchResult>({
+        queryKey: indexQueryKeys.infiniteList([refId]),
+        queryFn: ({ pageParam }) => findIndexes({ page: pageParam as number, refId, term }),
+        initialPageParam: 1,
+        getNextPageParam: lastPage => {
+            if (lastPage.page >= lastPage.page_count) {
+                return undefined;
+            }
+            return (lastPage.page || 1) + 1;
+        },
+    });
 }
 
 /**
@@ -41,7 +45,10 @@ export function useFindIndexes(page: number, per_page: number, refId: string, te
  * @returns A list of ready indexes
  */
 export function useListIndexes(ready: boolean, term?: string) {
-    return useQuery<IndexMinimal[]>(indexQueryKeys.list([ready]), () => listIndexes({ ready, term }));
+    return useQuery<IndexMinimal[]>({
+        queryKey: indexQueryKeys.list([ready]),
+        queryFn: () => listIndexes({ ready, term }),
+    });
 }
 
 /**
@@ -51,7 +58,10 @@ export function useListIndexes(ready: boolean, term?: string) {
  * @returns A single index
  */
 export function useFetchIndex(indexId: string) {
-    return useQuery<Index, ErrorResponse>(indexQueryKeys.detail(indexId), () => getIndex(indexId));
+    return useQuery<Index, ErrorResponse>({
+        queryKey: indexQueryKeys.detail(indexId),
+        queryFn: () => getIndex(indexId),
+    });
 }
 
 /**
@@ -61,7 +71,10 @@ export function useFetchIndex(indexId: string) {
  * @returns A list of unbuilt changes for a reference
  */
 export function useFetchUnbuiltChanges(refId: string) {
-    return useQuery<UnbuiltChangesSearchResults>(indexQueryKeys.detail(refId), () => getUnbuiltChanges(refId));
+    return useQuery<UnbuiltChangesSearchResults>({
+        queryKey: indexQueryKeys.detail(refId),
+        queryFn: () => getUnbuiltChanges(refId),
+    });
 }
 
 /**
@@ -71,9 +84,10 @@ export function useFetchUnbuiltChanges(refId: string) {
  */
 export function useCreateIndex() {
     const queryClient = useQueryClient();
-    return useMutation<Index, ErrorResponse, { refId: string }>(({ refId }) => createIndex(refId), {
+    return useMutation<Index, ErrorResponse, { refId: string }>({
+        mutationFn: ({ refId }) => createIndex(refId),
         onSuccess: () => {
-            queryClient.invalidateQueries(indexQueryKeys.infiniteLists());
+            queryClient.invalidateQueries({ queryKey: indexQueryKeys.infiniteLists() });
         },
     });
 }

@@ -1,8 +1,7 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
-import { OTUQueryKeys, useUpdateOTU } from "@otus/queries";
+import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import SegmentForm from "./SegmentForm";
@@ -27,8 +26,7 @@ type AddSegmentProps = {
 export default function AddSegment({ otuId, name, abbreviation, schema }: AddSegmentProps) {
     const history = useHistory();
     const location = useLocation<{ addSegment: boolean }>();
-    const mutation = useUpdateOTU();
-    const queryClient = useQueryClient();
+    const mutation = useUpdateOTU(otuId);
 
     function handleSubmit({ segmentName, molecule, required }: FormValues) {
         mutation.mutate(
@@ -36,7 +34,6 @@ export default function AddSegment({ otuId, name, abbreviation, schema }: AddSeg
             {
                 onSuccess: () => {
                     history.replace({ state: { addSegment: false } });
-                    queryClient.invalidateQueries(OTUQueryKeys.detail(otuId));
                 },
             }
         );

@@ -12,10 +12,10 @@ type RebuildAlertProps = {
  * An alert that appears when the reference has unbuilt changes.
  */
 export default function RebuildAlert({ refId }: RebuildAlertProps) {
-    const { data, isLoading } = useFindIndexes(1, 25, refId);
+    const { data, isPending } = useInfiniteFindIndexes(refId);
     const { hasPermission: hasRights } = useCheckReferenceRight(refId, ReferenceRight.build);
 
-    if (isLoading) {
+    if (isPending) {
         return null;
     }
 

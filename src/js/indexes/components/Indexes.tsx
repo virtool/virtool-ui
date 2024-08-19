@@ -19,10 +19,9 @@ type IndexesProps = {
  */
 export default function Indexes({ match }: IndexesProps) {
     const { refId } = match.params;
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const { data, isLoading } = useFindIndexes(Number(urlPage) || 1, 25, refId);
+    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindIndexes(refId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
@@ -32,23 +31,18 @@ export default function Indexes({ match }: IndexesProps) {
         <>
             <RebuildAlert refId={refId} />
             <RebuildIndex refId={refId} />
-            {documents.length ? (
-                <Pagination
-                    items={documents}
-                    storedPage={page}
-                    currentPage={Number(urlPage) || 1}
-                    pageCount={page_count}
-                >
-                    <BoxGroup>
-                        {map(documents, document => (
-                            <IndexItem
-                                index={document}
-                                refId={refId}
-                                activeId={get(find(documents, { ready: true, has_files: true }), "id")}
-                            />
-                        ))}
-                    </BoxGroup>
-                </Pagination>
+            {items.length ? (
+                <BoxGroup>
+                    <ScrollList
+                        className="my-0"
+                        fetchNextPage={fetchNextPage}
+                        hasNextPage={hasNextPage}
+                        isFetchingNextPage={isFetchingNextPage}
+                        isPending={isPending}
+                        items={items}
+                        renderRow={renderRow(refId, get(find(items, { ready: true, has_files: true }), "id"))}
+                    />
+                </BoxGroup>
             ) : (
                 <NoneFoundBox noun="indexes" />
             )}
