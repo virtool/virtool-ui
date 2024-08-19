@@ -39,9 +39,9 @@ function draw(element, data, length, meta, yMax, xMin, graphWidth, graphRatio) {
     const svg = select(element)
         .append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("height", height + margin.top + margin.bottom + 5)
         .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+        .attr("transform", `translate(${margin.left},${margin.top + 5})`);
 
     if (data) {
         const areaDrawer = area()
@@ -75,6 +75,7 @@ function draw(element, data, length, meta, yMax, xMin, graphWidth, graphRatio) {
         .style("left", `${margin.left}px`)
         .style("padding", "5px")
         .style("margin", "0")
+        .style("color", "#71717a")
         .text(`${meta.accession} - ${meta.definition}`);
 }
 
