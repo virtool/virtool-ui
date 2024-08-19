@@ -11,7 +11,7 @@ import { Job, JobSearchResult } from "@jobs/types";
  */
 export function findJobs(page: number, per_page: number, states: string[]): Promise<JobSearchResult> {
     return Request.get("/jobs")
-        .query({ page, state: states })
+        .query({ page, per_page, state: states })
         .then(res => res.body);
 }
 
