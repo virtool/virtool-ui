@@ -25,17 +25,10 @@ export const indexQueryKeys = {
  * @param term - The search term to filter indexes by
  * @returns The paginated list of indexes
  */
-export function useInfiniteFindIndexes(refId: string, term?: string) {
-    return useInfiniteQuery<IndexSearchResult>({
-        queryKey: indexQueryKeys.infiniteList([refId]),
-        queryFn: ({ pageParam }) => findIndexes({ page: pageParam as number, refId, term }),
-        initialPageParam: 1,
-        getNextPageParam: lastPage => {
-            if (lastPage.page >= lastPage.page_count) {
-                return undefined;
-            }
-            return (lastPage.page || 1) + 1;
-        },
+export function useFindIndexes(page: number, per_page: number, refId: string, term?: string) {
+    return useQuery<IndexSearchResult>({
+        queryKey: indexQueryKeys.infiniteList([page, per_page, refId, term]),
+        queryFn: () => findIndexes(page, per_page, refId, term),
     });
 }
 

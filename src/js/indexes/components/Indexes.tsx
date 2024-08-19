@@ -1,11 +1,11 @@
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import { IndexItem } from "@indexes/components/Item/IndexItem";
 import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import { find, get } from "lodash-es/lodash";
 import React from "react";
 import { match } from "react-router-dom";
 import { useFindIndexes } from "../queries";
-import { IndexItem } from "./Item/IndexItem";
 import RebuildAlert from "./RebuildAlert";
 import RebuildIndex from "./RebuildIndex";
 
@@ -19,7 +19,8 @@ type IndexesProps = {
  */
 export default function Indexes({ match }: IndexesProps) {
     const { refId } = match.params;
-    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindIndexes(refId);
+    const [urlPage] = useUrlSearchParams<number>("page");
+    const { data, isPending } = useFindIndexes(Number(urlPage) || 1, 25, refId);
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -31,18 +32,23 @@ export default function Indexes({ match }: IndexesProps) {
         <>
             <RebuildAlert refId={refId} />
             <RebuildIndex refId={refId} />
-            {items.length ? (
-                <BoxGroup>
-                    <ScrollList
-                        className="my-0"
-                        fetchNextPage={fetchNextPage}
-                        hasNextPage={hasNextPage}
-                        isFetchingNextPage={isFetchingNextPage}
-                        isPending={isPending}
-                        items={items}
-                        renderRow={renderRow(refId, get(find(items, { ready: true, has_files: true }), "id"))}
-                    />
-                </BoxGroup>
+            {documents.length ? (
+                <Pagination
+                    items={documents}
+                    storedPage={page}
+                    currentPage={Number(urlPage) || 1}
+                    pageCount={page_count}
+                >
+                    <BoxGroup>
+                        {map(documents, document => (
+                            <IndexItem
+                                index={document}
+                                refId={refId}
+                                activeId={get(find(documents, { ready: true, has_files: true }), "id")}
+                            />
+                        ))}
+                    </BoxGroup>
+                </Pagination>
             ) : (
                 <NoneFoundBox noun="indexes" />
             )}

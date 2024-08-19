@@ -1,5 +1,6 @@
 import { Alert, Icon } from "@base";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useFindIndexes } from "../queries";
@@ -12,7 +13,8 @@ type RebuildAlertProps = {
  * An alert that appears when the reference has unbuilt changes.
  */
 export default function RebuildAlert({ refId }: RebuildAlertProps) {
-    const { data, isPending } = useInfiniteFindIndexes(refId);
+    const [urlPage] = useUrlSearchParams<number>("page");
+    const { data, isPending } = useFindIndexes(Number(urlPage) || 1, 25, refId);
     const { hasPermission: hasRights } = useCheckReferenceRight(refId, ReferenceRight.build);
 
     if (isPending) {
