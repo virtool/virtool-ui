@@ -1,63 +1,23 @@
+import { cn } from "@/utils/utils";
+import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { map } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
-import { getBorder } from "../../app/theme";
-
-import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { match } from "react-router-dom";
+import styled from "styled-components";
 import {
     BoxGroup,
     BoxGroupHeader,
+    BoxGroupTable,
     device,
     Label,
     LoadingPlaceholder,
     NotFound,
-    Table,
     ViewHeader,
     ViewHeaderTitle,
 } from "../../base";
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";
-
-const ClusterTable = styled(Table)`
-    border: none;
-    display: flex;
-    flex-flow: column;
-    height: 330px !important;
-    margin: 0;
-    width: 100%;
-
-    thead {
-        flex: 0 0 auto;
-        width: calc(100% - 0.9em);
-
-        th {
-            border-bottom: none;
-        }
-    }
-
-    tbody {
-        flex: 1 1 auto;
-        display: block;
-        overflow-y: auto;
-        border-top: ${getBorder};
-
-        tr {
-            width: 100%;
-        }
-
-        tr:first-child td {
-            border-top: none;
-        }
-    }
-
-    thead,
-    tbody tr {
-        display: table;
-        table-layout: fixed;
-    }
-`;
 
 const TaxonomyGrid = styled.div`
     display: grid;
@@ -111,7 +71,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
                     <h2>General</h2>
                 </BoxGroupHeader>
 
-                <Table>
+                <BoxGroupTable>
                     <tbody>
                         <tr>
                             <th>Cluster</th>
@@ -138,7 +98,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
                             <td>{data.total_entropy}</td>
                         </tr>
                     </tbody>
-                </Table>
+                </BoxGroupTable>
             </BoxGroup>
 
             <BoxGroup>
@@ -147,7 +107,27 @@ export default function HMMDetail({ match }: HMMDetailProps) {
                         Cluster Members <BoxGroupHeaderBadge>{data.entries.length}</BoxGroupHeaderBadge>
                     </h2>
                 </BoxGroupHeader>
-                <ClusterTable>
+                <BoxGroupTable
+                    className={cn(
+                        "border-none",
+                        "flex",
+                        "flex-col",
+                        "h-80",
+                        "m-0",
+                        "w-full",
+                        "[&_thead]:flex-none",
+                        "[&_thead]:w-[calc(100%-0.9em)]",
+                        "[&_thead_th]:border-b-0",
+                        "[&_tbody]:flex-auto",
+                        "[&_tbody]:block",
+                        "[&_tbody]:overflow-y-auto",
+                        "[&_tbody]:border-t",
+                        "[&_tbody_tr]:w-full",
+                        "[&_tbody_tr:first-child_td]:border-t-0",
+                        "[&_thead,&_tbody_tr]:table",
+                        "[&_thead,&_tbody_tr]:table-fixed"
+                    )}
+                >
                     <thead>
                         <tr>
                             <th>Accession</th>
@@ -156,7 +136,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
                         </tr>
                     </thead>
                     <tbody>{clusterMembers}</tbody>
-                </ClusterTable>
+                </BoxGroupTable>
             </BoxGroup>
 
             <TaxonomyGrid>
