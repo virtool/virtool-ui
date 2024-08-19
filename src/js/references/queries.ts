@@ -1,6 +1,6 @@
 import { ErrorResponse } from "@/types/types";
 import { Request } from "@app/request";
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
@@ -51,17 +51,10 @@ export const referenceQueryKeys = {
  * @param term - The search term to filter references by
  * @returns The paginated list of references
  */
-export function useInfiniteFindReferences(term: string) {
-    return useInfiniteQuery<ReferenceSearchResult>({
-        queryKey: referenceQueryKeys.infiniteList([term]),
-        queryFn: ({ pageParam }) => findReferences({ page: pageParam, per_page: 25, term }),
-        initialPageParam: 1,
-        getNextPageParam: lastPage => {
-            if (lastPage.page >= lastPage.page_count) {
-                return undefined;
-            }
-            return (lastPage.page || 1) + 1;
-        },
+export function useFindReferences(page: number, per_page: number, term: string) {
+    return useQuery<ReferenceSearchResult>({
+        queryKey: referenceQueryKeys.list([page, per_page, term]),
+        queryFn: () => findReferences({ page, per_page, term }),
         placeholderData: keepPreviousData,
     });
 }

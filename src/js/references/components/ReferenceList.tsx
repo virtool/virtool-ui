@@ -1,12 +1,12 @@
+import { BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
+import { ReferenceItem } from "@references/components/Item/ReferenceItem";
 import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
-import { BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHeader, ViewHeaderTitle } from "../../base";
-import { useListReferences } from "../queries";
+import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
-import { ReferenceItem } from "./Item/ReferenceItem";
 import ReferenceOfficial from "./ReferenceOfficial";
 import ReferenceToolbar from "./ReferenceToolbar";
 
@@ -16,8 +16,7 @@ import ReferenceToolbar from "./ReferenceToolbar";
 export default function ReferenceList() {
     const [urlPage] = useUrlSearchParams<number>("page");
     const [term] = useUrlSearchParams<string>("find");
-
-    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
+    const { data, isPending } = useFindReferences(Number(urlPage) || 1, 25, term);
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -37,17 +36,18 @@ export default function ReferenceList() {
                 <CreateReference />
                 <ReferenceOfficial officialInstalled={official_installed} />
                 {total_count !== 0 && (
-                    <BoxGroup>
-                        <ScrollList
-                            className="mb-0"
-                            fetchNextPage={fetchNextPage}
-                            hasNextPage={hasNextPage}
-                            isFetchingNextPage={isFetchingNextPage}
-                            isPending={isPending}
-                            items={references}
-                            renderRow={renderRow}
-                        />
-                    </BoxGroup>
+                    <Pagination
+                        items={documents}
+                        storedPage={page}
+                        currentPage={Number(urlPage) || 1}
+                        pageCount={page_count}
+                    >
+                        <BoxGroup>
+                            {map(documents, document => (
+                                <ReferenceItem key={document.id} reference={document} />
+                            ))}
+                        </BoxGroup>
+                    </Pagination>
                 )}
             </ContainerNarrow>
             <Clone references={documents} />
