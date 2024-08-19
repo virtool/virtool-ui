@@ -34,7 +34,7 @@ function Template({ children }) {
     );
 }
 
-export const TestBoxGroupSectionSelect: Story = {
+export const TestSelectBoxGroupSection: Story = {
     args: {
         children: "This is a SelectBoxGroupSection!",
     },
@@ -52,6 +52,6 @@ function CheckboxTemplate() {
     );
 }
 
-export const BoxGroupSectionSelectWithCheckbox: Story = {
+export const SelectBoxGroupSectionWithCheckbox: Story = {
     render: CheckboxTemplate,
 };
