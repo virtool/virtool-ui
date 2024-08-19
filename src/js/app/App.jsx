@@ -5,6 +5,7 @@ import { WallContainer } from "@wall/components/Container";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
 import { Router } from "react-router-dom";
+import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
@@ -64,8 +65,10 @@ export default function App({ history }) {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Router history={history}>
-                    <GlobalStyles />
-                    <ConnectedApp />
+                    <CompatRouter>
+                        <GlobalStyles />
+                        <ConnectedApp />
+                    </CompatRouter>
                 </Router>
             </QueryClientProvider>
         </ThemeProvider>
