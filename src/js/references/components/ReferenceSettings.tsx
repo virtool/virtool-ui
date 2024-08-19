@@ -1,12 +1,12 @@
+import { useFetchSettings } from "@administration/queries";
+import { ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
 import React from "react";
-import { useFetchSettings } from "../../administration/queries";
-import { ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { GlobalSourceTypes } from "./SourceTypes/GlobalSourceTypes";
 
 export function ReferenceSettings() {
-    const { data, isLoading } = useFetchSettings();
+    const { data, isPending } = useFetchSettings();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

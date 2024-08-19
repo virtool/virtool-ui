@@ -1,4 +1,3 @@
-import { Request } from "@app/request";
 import {
     Alert,
     DialogFooter,
@@ -10,60 +9,18 @@ import {
     SaveButton,
 } from "@base";
 import { UploadBar } from "@files/components/UploadBar";
-import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useImportReference, useUploadReference } from "@references/queries";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const ImportReferenceUpload = styled.div`
     margin-bottom: 15px;
 `;
 
-interface ImportReferenceValues {
-    name: string;
-    description: string;
-    importFrom: string;
-}
-
-/**
- * Make the API call to import a reference.
- * @param name - name of the reference
- * @param description - description for the reference
- * @param importFrom - the ID of the file to import from
- */
-function importReference({ name, description, importFrom }: ImportReferenceValues) {
-    return Request.post("/refs").send({
-        name,
-        description,
-        import_from: importFrom,
-    });
-}
-
 export function ImportReference() {
-    const [fileName, setFileName] = useState("");
-    const [fileNameOnDisk, setFileNameOnDisk] = useState("");
-    const [progress, setProgress] = useState(0);
-
-    const history = useHistory();
-
-    const importMutation = useMutation(importReference, { onSuccess: () => history.push("/refs") });
-
-    const uploadMutation = useMutation((file: File) => {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        return Request.post("/uploads")
-            .query({ name: file.name, type: "reference" })
-            .send(formData)
-            .on("progress", event => {
-                setProgress(event.percent);
-            })
-            .then(response => {
-                setFileName(response.body.name);
-                setFileNameOnDisk(response.body.name_on_disk);
-            });
-    });
+    const importMutation = useImportReference();
+    const { uploadMutation, fileName, fileNameOnDisk, progress } = useUploadReference();
 
     const {
         control,

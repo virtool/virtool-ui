@@ -36,13 +36,13 @@ type IndexDetailProps = {
  */
 export default function IndexDetail({ match }: IndexDetailProps) {
     const { indexId, refId } = match.params;
-    const { data: index, isLoading: isLoadingIndex, isError } = useFetchIndex(indexId);
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
+    const { data: index, isPending: isPendingIndex, isError } = useFetchIndex(indexId);
+    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 
     if (isError) {
         return <NotFound />;
     }
-    if (isLoadingIndex || isLoadingReference) {
+    if (isPendingIndex || isPendingReference) {
         return <LoadingPlaceholder />;
     }
 

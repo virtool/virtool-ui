@@ -17,9 +17,9 @@ type UsersListProps = {
 export function UsersList({ term }: UsersListProps) {
     const [urlPage] = useUrlSearchParams<number>("page");
     const [status] = useUrlSearchParams<string>("status");
-    const { data, isLoading } = useFindUsers(Number(urlPage) || 1, 25, term, undefined, status === "active");
+    const { data, isPending } = useFindUsers(Number(urlPage) || 1, 25, term, undefined, status === "active");
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

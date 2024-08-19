@@ -31,9 +31,9 @@ type DefaultSubtractionsProps = {
  * Displays a sidebar to manage default subtractions
  */
 export default function DefaultSubtractions({ defaultSubtractions, onUpdate }: DefaultSubtractionsProps) {
-    const { data: subtractionOptions, isLoading } = useFetchSubtractionsShortlist();
+    const { data: subtractionOptions, isPending } = useFetchSubtractionsShortlist();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

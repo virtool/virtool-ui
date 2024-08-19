@@ -15,14 +15,14 @@ const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
 const LazyLoginWall = React.lazy(() => import("@wall/components/LoginWall"));
 
 function ConnectedApp() {
-    const { data: rootData, isLoading: isRootLoading } = useRootQuery();
-    const { authenticated, isLoading: isAuthLoading } = useAuthentication();
+    const { data: rootData, isPending: isRootPending } = useRootQuery();
+    const { authenticated, isPending: isAuthPending } = useAuthentication();
 
-    if (isRootLoading || isAuthLoading) {
+    if (isRootPending || isAuthPending) {
         return <LoadingPlaceholder />;
     }
 
-    if (rootData.body.first_user) {
+    if (rootData.first_user) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyFirstUser />

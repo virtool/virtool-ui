@@ -1,8 +1,4 @@
-import { DialogPortal } from "@radix-ui/react-dialog";
-import { filter, flatMap, includes, map } from "lodash-es";
-import React, { useState } from "react";
-import styled from "styled-components";
-import { getBorder } from "../../../app/theme";
+import { getBorder } from "@app/theme";
 import {
     BoxGroup,
     Dialog,
@@ -14,9 +10,13 @@ import {
     NoneFoundSection,
     SelectBoxGroupSection,
     Toolbar,
-} from "../../../base";
-import { CompactScrollList } from "../../../base/CompactScrollList";
-import { useInfiniteFindUsers } from "../../../users/queries";
+} from "@base";
+import { CompactScrollList } from "@base/CompactScrollList";
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { useInfiniteFindUsers } from "@users/queries";
+import { filter, flatMap, includes, map } from "lodash-es";
+import React, { useState } from "react";
+import styled from "styled-components";
 import { useAddReferenceMember } from "../../queries";
 import { ReferenceUser } from "../../types";
 
@@ -55,9 +55,9 @@ type AddReferenceUserProps = {
 export default function AddReferenceUser({ users, onHide, refId, show }: AddReferenceUserProps) {
     const mutation = useAddReferenceMember(refId, "user");
     const [term, setTerm] = useState("");
-    const { data, isLoading, isFetchingNextPage, fetchNextPage } = useInfiniteFindUsers(25, term);
+    const { data, isPending, isFetchingNextPage, fetchNextPage } = useInfiniteFindUsers(25, term);
 
-    if (isLoading) {
+    if (isPending) {
         return null;
     }
 
@@ -92,7 +92,7 @@ export default function AddReferenceUser({ users, onHide, refId, show }: AddRefe
                         <StyledScrollList
                             fetchNextPage={fetchNextPage}
                             isFetchingNextPage={isFetchingNextPage}
-                            isLoading={isLoading}
+                            isPending={isPending}
                             items={filteredItems}
                             renderRow={renderRow}
                         />

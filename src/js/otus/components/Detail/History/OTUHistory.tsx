@@ -15,9 +15,9 @@ type OTUHistoryProps = {
  */
 export default function OTUHistory({ match }: OTUHistoryProps) {
     const { otuId } = match.params;
-    const { data, isLoading } = useFetchOTUHistory(otuId);
+    const { data, isPending } = useFetchOTUHistory(otuId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

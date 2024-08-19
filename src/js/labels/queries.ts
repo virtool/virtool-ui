@@ -1,6 +1,6 @@
 import { ErrorResponse } from "@/types/types";
 import { Label } from "@labels/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createLabel, fetchLabels, removeLabel, updateLabel } from "./api";
 
 export const labelQueryKeys = {
@@ -15,7 +15,7 @@ export const labelQueryKeys = {
  * @returns A list of labels
  */
 export function useFetchLabels() {
-    return useQuery<Label[]>(labelQueryKeys.list([]), fetchLabels);
+    return useQuery<Label[]>({ queryKey: labelQueryKeys.list([]), queryFn: fetchLabels });
 }
 
 /**
@@ -24,9 +24,14 @@ export function useFetchLabels() {
  * @returns A mutator for creating a label
  */
 export function useCreateLabel() {
-    return useMutation<Label, ErrorResponse, { name: string; description: string; color: string }>(
-        ({ name, description, color }) => createLabel(name, description, color)
-    );
+    const queryClient = useQueryClient();
+
+    return useMutation<Label, ErrorResponse, { name: string; description: string; color: string }>({
+        mutationFn: ({ name, description, color }) => createLabel(name, description, color),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: labelQueryKeys.lists() });
+        },
+    });
 }
 
 /**
@@ -35,9 +40,14 @@ export function useCreateLabel() {
  * @returns A mutator for updating a label
  */
 export function useUpdateLabel() {
-    return useMutation<Label, unknown, { labelId: number; name: string; description: string; color: string }>(
-        ({ labelId, name, description, color }) => updateLabel(labelId, name, description, color)
-    );
+    const queryClient = useQueryClient();
+
+    return useMutation<Label, unknown, { labelId: number; name: string; description: string; color: string }>({
+        mutationFn: ({ labelId, name, description, color }) => updateLabel(labelId, name, description, color),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: labelQueryKeys.lists() });
+        },
+    });
 }
 
 /**
@@ -46,5 +56,12 @@ export function useUpdateLabel() {
  * @returns A mutator for removing a label
  */
 export function useRemoveLabel() {
-    return useMutation<null, unknown, { labelId: number }>(({ labelId }) => removeLabel(labelId));
+    const queryClient = useQueryClient();
+
+    return useMutation<null, unknown, { labelId: number }>({
+        mutationFn: ({ labelId }) => removeLabel(labelId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: labelQueryKeys.lists() });
+        },
+    });
 }

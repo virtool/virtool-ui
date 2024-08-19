@@ -21,7 +21,6 @@ certain dependencies are present as parents of the component.
 
 Most commonly a component will need one or more of:
 
--   Provider (react-redux)
 -   QueryClient (react-query)
 -   ThemeProvider (styled-components)
 -   MemoryRouter (react-router)
