@@ -1,12 +1,12 @@
+import { useFetchAccount } from "@account/queries";
+import { AdministratorRoles } from "@administration/types";
+import { Request } from "@app/request";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
-import { useFetchAccount } from "../account/queries";
-import { AdministratorRoles } from "../administration/types";
-import { Request } from "../app/request";
 import { useGetReference } from "./queries";
 
 export function getValidationSchema(sourceTypes: string[]) {
@@ -43,24 +43,22 @@ export function useUpdateSourceTypes(
 
     const [lastRemoved, setLastRemoved] = useState("");
 
-    const mutation = useMutation(
-        (sourceTypes: string[]) => {
+    const mutation = useMutation({
+        mutationFn: (sourceTypes: string[]) => {
             return Request.patch(path).send({ [key]: sourceTypes });
         },
-        {
-            onSuccess: (data: Response) => {
-                const updatedSourceTypes = data.body[key];
+        onSuccess: (data: Response) => {
+            const updatedSourceTypes = data.body[key];
 
-                if (sourceTypes.length > updatedSourceTypes) {
-                    setLastRemoved(difference(sourceTypes, updatedSourceTypes)[0]);
-                } else {
-                    setLastRemoved("");
-                }
+            if (sourceTypes.length > updatedSourceTypes) {
+                setLastRemoved(difference(sourceTypes, updatedSourceTypes)[0]);
+            } else {
+                setLastRemoved("");
+            }
 
-                queryClient.invalidateQueries(queryKey);
-            },
-        }
-    );
+            queryClient.invalidateQueries({ queryKey });
+        },
+    });
 
     const { errors, handleSubmit, register, reset } = useSourceTypesForm(sourceTypes);
 
@@ -125,25 +123,25 @@ export enum ReferenceRight {
  * @returns Whether the right is possessed by the account
  */
 export function useCheckReferenceRight(referenceId: string, right: ReferenceRight) {
-    const { data: account, isLoading: isLoadingAccount } = useFetchAccount();
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(referenceId);
+    const { data: account, isPending: isPendingAccount } = useFetchAccount();
+    const { data: reference, isPending: isPendingReference } = useGetReference(referenceId);
 
-    if (isLoadingAccount || isLoadingReference) {
-        return { hasPermission: false, isLoading: true };
+    if (isPendingAccount || isPendingReference) {
+        return { hasPermission: false, isPending: true };
     }
 
     if (account.administrator_role === AdministratorRoles.FULL) {
-        return { hasPermission: true, isLoading: false };
+        return { hasPermission: true, isPending: false };
     }
 
     const user = find(reference.users, { id: account.id });
 
     if (user?.[right]) {
-        return { hasPermission: true, isLoading: false };
+        return { hasPermission: true, isPending: false };
     }
 
     // Groups in common between the user and the registered ref groups.
     const groups = filter(reference.groups, group => includes(account.groups, group.id));
 
-    return { hasPermission: groups && some(groups, { [right]: true }), isLoading: false };
+    return { hasPermission: groups && some(groups, { [right]: true }), isPending: false };
 }

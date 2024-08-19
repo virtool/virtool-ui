@@ -22,10 +22,10 @@ export default function OTUList({ match }: OTUListProps) {
     const { refId } = match.params;
     const [term, setTerm] = useUrlSearchParams<string>("find");
     const [urlPage] = useUrlSearchParams<number>("page");
-    const { data: reference, isLoading: isLoadingReference } = useGetReference(refId);
-    const { data: otus, isLoading: isLoadingOTUs } = useListOTUs(refId, Number(urlPage) || 1, 25, term);
+    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
+    const { data: otus, isPending: isPendingOTUs } = useListOTUs(refId, Number(urlPage) || 1, 25, term);
 
-    if (isLoadingOTUs || isLoadingReference) {
+    if (isPendingOTUs || isPendingReference) {
         return <LoadingPlaceholder />;
     }
 

@@ -1,9 +1,8 @@
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
-import { OTUQueryKeys, useCreateOTU } from "../queries";
+import { useCreateOTU } from "../queries";
 import { OTUForm } from "./OTUForm";
 
 type CreateOTUProps = {
@@ -18,7 +17,6 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
     const location = useLocation<{ createOTU: boolean }>();
 
     const mutation = useCreateOTU(refId);
-    const queryClient = useQueryClient();
 
     function handleSubmit({ name, abbreviation }) {
         mutation.mutate(
@@ -26,7 +24,6 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
             {
                 onSuccess: () => {
                     history.replace({ state: { createOTU: false } });
-                    queryClient.invalidateQueries(OTUQueryKeys.lists());
                 },
             }
         );

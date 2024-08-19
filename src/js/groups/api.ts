@@ -1,7 +1,5 @@
-import { Request } from "../app/request";
-import { GroupMinimal, GroupSearchResults, GroupUpdate } from "./types";
-
-export const list = () => Request.get("/groups");
+import { Request } from "@app/request";
+import { Group, GroupMinimal, GroupSearchResults, PermissionsUpdate } from "./types";
 
 /**
  * Fetch a non-paginated list of groups or page of group search results
@@ -27,20 +25,20 @@ export function getGroup(id) {
     return Request.get(`/groups/${id}`).then(response => response.body);
 }
 
-export function updateGroup({ id, name, permissions }: GroupUpdate) {
+export function updateGroup(id: string | number, name?: string, permissions?: PermissionsUpdate): Promise<Group> {
     return Request.patch(`/groups/${id}`)
         .send({ name, permissions })
-        .then(response => response.body);
+        .then(res => res.body);
 }
 
-export function removeGroup({ id }) {
-    return Request.delete(`/groups/${id}`);
+export function removeGroup(id: string | number): Promise<null> {
+    return Request.delete(`/groups/${id}`).then(res => res.body);
 }
 
-export function createGroup({ name }) {
+export function createGroup(name: string): Promise<Group> {
     return Request.post("/groups")
         .send({
             name,
         })
-        .then(response => response.body);
+        .then(res => res.body);
 }

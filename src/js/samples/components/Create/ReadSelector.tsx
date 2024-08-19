@@ -50,8 +50,8 @@ type ReadSelectorProps = {
     isFetchingNextPage: boolean;
     /** Fetches the next page of data */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
-    /** Whether the data is loading */
-    isLoading: boolean;
+    /** Whether the data is fetched */
+    isPending: boolean;
     /** A callback function to handle file selection */
     onSelect: (selected: string[]) => void;
     /** Errors occurred on sample creation */
@@ -67,7 +67,7 @@ export default function ReadSelector({
     data,
     isFetchingNextPage,
     fetchNextPage,
-    isLoading,
+    isPending,
     onSelect,
     error,
     selected,
@@ -163,7 +163,7 @@ export default function ReadSelector({
                         <StyledScrollListElement
                             fetchNextPage={fetchNextPage}
                             isFetchingNextPage={isFetchingNextPage}
-                            isLoading={isLoading}
+                            isPending={isPending}
                             items={files}
                             renderRow={renderRow}
                         />

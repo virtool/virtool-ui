@@ -11,5 +11,5 @@ export const modelQueryKeys = {
 };
 
 export function useFindModels() {
-    return useQuery<MLModelSearchResult>(modelQueryKeys.list([]), findModels);
+    return useQuery<MLModelSearchResult>({ queryKey: modelQueryKeys.list([]), queryFn: findModels });
 }

@@ -1,6 +1,6 @@
+import { ContainerNarrow, LoadingPlaceholder } from "@base";
 import React from "react";
 import { match } from "react-router-dom";
-import { ContainerNarrow, LoadingPlaceholder } from "../../../base";
 import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";
@@ -15,9 +15,9 @@ type SampleDetailFilesProps = {
  * The files view in sample details
  */
 export function SampleDetailFiles({ match }: SampleDetailFilesProps) {
-    const { data, isLoading } = useFetchSample(match.params.sampleId);
+    const { data, isPending } = useFetchSample(match.params.sampleId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 
