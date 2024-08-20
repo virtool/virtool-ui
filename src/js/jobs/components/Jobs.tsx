@@ -1,6 +1,7 @@
 import { Container } from "@base";
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { Routes } from "react-router-dom-v5-compat";
 import JobDetail from "./JobDetail";
 import JobsList from "./JobList";
 
@@ -10,10 +11,10 @@ import JobsList from "./JobList";
 export default function Jobs() {
     return (
         <Container>
-            <Switch>
+            <Routes>
                 <Route path="/jobs" component={JobsList} exact />
                 <Route path="/jobs/:jobId" component={JobDetail} />
-            </Switch>
+            </Routes>
         </Container>
     );
 }

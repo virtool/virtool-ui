@@ -2,7 +2,8 @@ import { useFetchAccount } from "@account/queries";
 import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
 import { ManageUsers } from "@users/components/ManageUsers";
 import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
+import { Routes } from "react-router-dom-v5-compat";
 import Groups from "../../groups/components/Groups";
 import UserDetail from "../../users/components/UserDetail";
 import { AdministratorRoles } from "../types";
@@ -30,7 +31,7 @@ export default function Settings() {
                 <>
                     <AdministratorTabs administratorRole={account.administrator_role} />
                     <ContainerNarrow>
-                        <Switch>
+                        <Routes>
                             <Route
                                 path="/administration"
                                 render={() => <Redirect to={`/administration/${redirect}`} exact />}
@@ -40,7 +41,7 @@ export default function Settings() {
                             <Route path="/administration/users/:userId" component={UserDetail} />
                             <Route path="/administration/groups" component={Groups} />
                             <Route path="/administration/administrators" component={ManageAdministrators} />
-                        </Switch>
+                        </Routes>
                     </ContainerNarrow>
                 </>
             )}

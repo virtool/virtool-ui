@@ -2,7 +2,8 @@ import { ContainerNarrow, LoadingPlaceholder, NotFound } from "@base";
 import IndexDetail from "@indexes/components/IndexDetail";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { match, Redirect, Route, Switch } from "react-router-dom";
+import { match, Redirect, Route } from "react-router-dom";
+import { Routes } from "react-router-dom-v5-compat";
 import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/OTUDetail";
 import OTUList from "../../../otus/components/OTUList";
@@ -34,7 +35,7 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
 
     return (
         <>
-            <Switch>
+            <Routes>
                 <Route path="/refs/:refId/otus/:otuId" />
                 <Route path="/refs">
                     <ReferenceDetailHeader
@@ -46,10 +47,10 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
                     />
                     <ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
                 </Route>
-            </Switch>
+            </Routes>
 
             <ContainerNarrow>
-                <Switch>
+                <Routes>
                     <Route path="/refs/:refId" render={() => <Redirect to={`/refs/${refId}/manage`} exact />} />
                     <Route path="/refs/:refId/manage" component={ReferenceManager} />
                     <Route path="/refs/:refId/otus" component={OTUList} exact />
@@ -57,7 +58,7 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
                     <Route path="/refs/:refId/indexes" component={Indexes} exact />
                     <Route path="/refs/:refId/indexes/:indexId" component={IndexDetail} />
                     <Route path="/refs/:refId/settings" component={ReferenceSettings} />
-                </Switch>
+                </Routes>
             </ContainerNarrow>
 
             <EditReference detail={data} />

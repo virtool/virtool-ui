@@ -1,7 +1,8 @@
 import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { Routes } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import SidebarItem from "./SidebarItem";
 
@@ -28,7 +29,7 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
     const fullAdministrator = hasSufficientAdminRole(AdministratorRoles.FULL, administratorRole);
 
     return (
-        <Switch>
+        <Routes>
             <Route path="/jobs">
                 <StyledSidebar>
                     <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />
@@ -69,6 +70,6 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                     <SidebarItem title="Browse" link="/ml" icon="th-list" />
                 </StyledSidebar>
             </Route>
-        </Switch>
+        </Routes>
     );
 }

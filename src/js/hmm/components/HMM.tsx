@@ -1,5 +1,6 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { Routes } from "react-router-dom-v5-compat";
 import { Container, ContainerNarrow } from "../../base";
 import HMMDetail from "./HMMDetail";
 import HMMList from "./HMMList";
@@ -11,10 +12,10 @@ export default function HMM() {
     return (
         <Container>
             <ContainerNarrow>
-                <Switch>
+                <Routes>
                     <Route path="/hmm" component={HMMList} exact />
                     <Route path="/hmm/:hmmId" component={HMMDetail} />
-                </Switch>
+                </Routes>
             </ContainerNarrow>
         </Container>
     );
