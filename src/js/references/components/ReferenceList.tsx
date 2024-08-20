@@ -1,35 +1,28 @@
+import { BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
+import { ReferenceItem } from "@references/components/Item/ReferenceItem";
 import { useUrlSearchParams } from "@utils/hooks";
-import { flatMap } from "lodash-es";
+import { map } from "lodash";
 import React from "react";
-import { BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
-import { ScrollList } from "../../base/ScrollList";
-import { useInfiniteFindReferences } from "../queries";
-import { ReferenceMinimal, ReferenceSearchResult } from "../types";
+import { useFindReferences } from "../queries";
 import Clone from "./CloneReference";
-import { ReferenceItem } from "./Item/ReferenceItem";
 import ReferenceOfficial from "./ReferenceOfficial";
 import ReferenceToolbar from "./ReferenceToolbar";
-
-function renderRow(reference: ReferenceMinimal) {
-    return <ReferenceItem key={reference.id} reference={reference} />;
-}
 
 /**
  * A list of references with filtering options
  */
 export default function ReferenceList() {
+    const [urlPage] = useUrlSearchParams<number>("page");
     const [term] = useUrlSearchParams<string>("find");
-
-    const { data, isPending, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteFindReferences(term);
+    const { data, isPending } = useFindReferences(Number(urlPage) || 1, 25, term);
 
     if (isPending) {
         return <LoadingPlaceholder />;
     }
 
-    const { total_count, official_installed } = data.pages[0];
-    const references: ReferenceMinimal[] = flatMap(data.pages, (page: ReferenceSearchResult) => page.documents);
+    const { documents, page, page_count, total_count, official_installed } = data;
 
     return (
         <>
@@ -43,20 +36,21 @@ export default function ReferenceList() {
                 <CreateReference />
                 <ReferenceOfficial officialInstalled={official_installed} />
                 {total_count !== 0 && (
-                    <BoxGroup>
-                        <ScrollList
-                            className="mb-0"
-                            fetchNextPage={fetchNextPage}
-                            hasNextPage={hasNextPage}
-                            isFetchingNextPage={isFetchingNextPage}
-                            isPending={isPending}
-                            items={references}
-                            renderRow={renderRow}
-                        />
-                    </BoxGroup>
+                    <Pagination
+                        items={documents}
+                        storedPage={page}
+                        currentPage={Number(urlPage) || 1}
+                        pageCount={page_count}
+                    >
+                        <BoxGroup>
+                            {map(documents, document => (
+                                <ReferenceItem key={document.id} reference={document} />
+                            ))}
+                        </BoxGroup>
+                    </Pagination>
                 )}
             </ContainerNarrow>
-            <Clone references={references} />
+            <Clone references={documents} />
         </>
     );
 }
