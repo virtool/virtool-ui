@@ -24,7 +24,7 @@ export const jobQueryKeys = {
  */
 export function useFindJobs(page: number, per_page: number, states: string[]) {
     return useQuery<JobSearchResult>({
-        queryKey: jobQueryKeys.list([states]),
+        queryKey: jobQueryKeys.list([page, per_page, states]),
         queryFn: () => findJobs(page, per_page, states),
         placeholderData: keepPreviousData,
     });
