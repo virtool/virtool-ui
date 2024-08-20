@@ -41,10 +41,13 @@ export function Pagination({
 
     const entries = renderRow && map(items, item => renderRow(item));
 
+    const filters = new URLSearchParams(window.location.search);
+    filters.delete("page");
+
     const pageButtons = map(getPageRange(pageCount, storedPage), pageNumber => (
         <PaginationLink
             key={pageNumber}
-            to={`?page=${pageNumber}`}
+            to={`?page=${pageNumber}${filters.toString() ? `&${filters.toString()}` : ""}`}
             active={storedPage !== pageNumber}
             disabled={storedPage === pageNumber}
             onClick={() => onLoadNextPage(pageNumber)}
@@ -52,9 +55,6 @@ export function Pagination({
             {pageNumber}
         </PaginationLink>
     ));
-
-    const filters = new URLSearchParams(window.location.search);
-    filters.delete("page");
 
     return (
         <div>
