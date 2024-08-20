@@ -37,7 +37,7 @@ export default function JobsList() {
     const { data, isPending } = useFindJobs(Number(urlPage) || 1, 25, states);
 
     useEffect(() => {
-        if (page > page_count) {
+        if (data && page > page_count) {
             setUrlPage(page_count);
         }
     }, [data]);
