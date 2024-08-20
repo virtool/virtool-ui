@@ -79,7 +79,7 @@ export default function Main() {
             <MainContainer>
                 <Suspense fallback={<Fallback />}>
                     <Switch>
-                        <Redirect from="/" to="/samples" exact />
+                        <Route path="/" render={() => <Redirect to="/samples" exact />} />
                         <Route path="/jobs" component={Jobs} />
                         <Route path="/samples" component={Samples} />
                         <Route path="/refs" component={References} />
