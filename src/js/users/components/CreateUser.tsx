@@ -1,18 +1,8 @@
+import { useCreateUser } from "@administration/queries";
+import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useMutation } from "@tanstack/react-query";
 import React from "react";
-import { createUser } from "../../administration/api";
-import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../base";
-import { User } from "../types";
 import { CreateUserForm } from "./CreateUserForm";
-
-type ErrorResponse = {
-    response: {
-        body: {
-            message: string;
-        };
-    };
-};
 
 type NewUser = {
     /** The user's handle or username */
@@ -27,11 +17,7 @@ type NewUser = {
  * A dialog for creating a new user
  */
 export default function CreateUser() {
-    const mutation = useMutation<User, ErrorResponse, NewUser>(createUser, {
-        onSuccess: () => {
-            history.replaceState({ createUser: false }, "");
-        },
-    });
+    const mutation = useCreateUser();
 
     function handleSubmit({ handle, password, forceReset }: NewUser) {
         mutation.mutate({ handle, password, forceReset });

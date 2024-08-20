@@ -92,6 +92,24 @@ export function createReference(
 }
 
 /**
+ * Make the API call to import a reference.
+ *
+ * @param name - name of the reference
+ * @param description - description for the reference
+ * @param importFrom - the ID of the file to import from
+ * @returns A promise resolving to importing a reference
+ */
+export function importReference(name: string, description: string, importFrom: string) {
+    return Request.post("/refs")
+        .send({
+            name,
+            description,
+            import_from: importFrom,
+        })
+        .then(res => res.body);
+}
+
+/**
  * Remove a reference
  *
  * @param refId - The id of the reference to remove

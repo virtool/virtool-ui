@@ -1,8 +1,8 @@
+import { LoadingPlaceholder } from "@base";
+import { Quality } from "@quality/components/Quality";
 import React from "react";
 import { match } from "react-router-dom";
 import styled from "styled-components";
-import { LoadingPlaceholder } from "../../base";
-import { Quality } from "../../quality/components/Quality";
 import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
 
@@ -24,9 +24,9 @@ type SampleQualityProps = {
  * Samples quality view showing charts for bases, composition, and sequences
  */
 export default function SampleQuality({ match }: SampleQualityProps) {
-    const { data, isLoading } = useFetchSample(match.params.sampleId);
+    const { data, isPending } = useFetchSample(match.params.sampleId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

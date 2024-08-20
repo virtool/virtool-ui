@@ -1,7 +1,7 @@
+import { LoadingPlaceholder, SectionHeader } from "@base";
 import { sortBy } from "lodash-es";
 import React from "react";
 import { match } from "react-router-dom";
-import { LoadingPlaceholder, SectionHeader } from "../../../base";
 import { useGetReference } from "../../queries";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
@@ -17,9 +17,9 @@ type ReferenceSettingsProps = {
  */
 export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
     const { refId } = match.params;
-    const { data, isLoading } = useGetReference(refId);
+    const { data, isPending } = useGetReference(refId);
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

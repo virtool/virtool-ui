@@ -5,6 +5,7 @@ import { WallContainer } from "@wall/components/Container";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
 import { Router } from "react-router-dom";
+import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
@@ -14,14 +15,14 @@ const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
 const LazyLoginWall = React.lazy(() => import("@wall/components/LoginWall"));
 
 function ConnectedApp() {
-    const { data: rootData, isLoading: isRootLoading } = useRootQuery();
-    const { authenticated, isLoading: isAuthLoading } = useAuthentication();
+    const { data: rootData, isPending: isRootPending } = useRootQuery();
+    const { authenticated, isPending: isAuthPending } = useAuthentication();
 
-    if (isRootLoading || isAuthLoading) {
+    if (isRootPending || isAuthPending) {
         return <LoadingPlaceholder />;
     }
 
-    if (rootData.body.first_user) {
+    if (rootData.first_user) {
         return (
             <Suspense fallback={<WallContainer />}>
                 <LazyFirstUser />
@@ -64,8 +65,10 @@ export default function App({ history }) {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Router history={history}>
-                    <GlobalStyles />
-                    <ConnectedApp />
+                    <CompatRouter>
+                        <GlobalStyles />
+                        <ConnectedApp />
+                    </CompatRouter>
                 </Router>
             </QueryClientProvider>
         </ThemeProvider>

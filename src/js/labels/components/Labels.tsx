@@ -1,5 +1,3 @@
-import React from "react";
-import styled from "styled-components";
 import {
     BoxGroup,
     ContainerNarrow,
@@ -8,7 +6,9 @@ import {
     ViewHeader,
     ViewHeaderSubtitle,
     ViewHeaderTitle,
-} from "../../base";
+} from "@base";
+import React from "react";
+import styled from "styled-components";
 import { useFetchLabels } from "../queries";
 import { CreateLabel } from "./CreateLabel";
 import { LabelItem } from "./LabelItem";
@@ -23,9 +23,9 @@ const LabelsHeader = styled(ViewHeader)`
  * Display and manage a list of labels
  */
 export function Labels() {
-    const { data, isLoading } = useFetchLabels();
+    const { data, isPending } = useFetchLabels();
 
-    if (isLoading) {
+    if (isPending) {
         return <LoadingPlaceholder />;
     }
 

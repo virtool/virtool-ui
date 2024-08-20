@@ -96,7 +96,7 @@ export type ReferenceInstalled = {
 };
 
 export type ReferenceBuild = {
-    createdAt: Date;
+    created_at: string;
     id: string;
     user: UserNested;
     version: number;

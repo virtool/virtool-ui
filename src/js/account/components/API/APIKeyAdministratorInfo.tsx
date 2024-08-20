@@ -20,9 +20,9 @@ const StyledAPIKeyAdministratorInfo = styled(AlertOuter)`
  * Displays a banner with information for an admin user
  */
 export default function APIKeyAdministratorInfo() {
-    const { data, isLoading } = useFetchAccount();
+    const { data, isPending } = useFetchAccount();
 
-    if (isLoading) {
+    if (isPending) {
         return null;
     }
 
