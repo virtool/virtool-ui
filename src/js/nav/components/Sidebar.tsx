@@ -30,46 +30,71 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
 
     return (
         <Routes>
-            <Route path="/jobs">
-                <StyledSidebar>
-                    <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />
-                </StyledSidebar>
-            </Route>
-            <Route path="/samples">
-                <StyledSidebar>
-                    <SidebarItem
-                        exclude={["/samples/files", "/samples/labels", "/samples/settings"]}
-                        title="Browse"
-                        link="/samples"
-                        icon="th-list"
-                    />
-                    <SidebarItem title="Files" link="/samples/files?page=1" icon="folder-open" />
-                    <SidebarItem title="Labels" link="/samples/labels" icon="fas fa-tag" />
-                    {fullAdministrator ? <SidebarItem title="Settings" link="/samples/settings" icon="cogs" /> : null}
-                </StyledSidebar>
-            </Route>
-            <Route path="/refs">
-                <StyledSidebar>
-                    <SidebarItem exclude={["/refs/settings"]} title="Browse" link="/refs" icon="th-list" />
-                    {fullAdministrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
-                </StyledSidebar>
-            </Route>
-            <Route path="/subtractions">
-                <StyledSidebar>
-                    <SidebarItem exclude={["/subtractions/files"]} title="Browse" link="/subtractions" icon="th-list" />
-                    <SidebarItem title="Files" link="/subtractions/files?page=1" icon="folder-open" />
-                </StyledSidebar>
-            </Route>
-            <Route path="/hmm">
-                <StyledSidebar>
-                    <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
-                </StyledSidebar>
-            </Route>
-            <Route path="/ml">
-                <StyledSidebar>
-                    <SidebarItem title="Browse" link="/ml" icon="th-list" />
-                </StyledSidebar>
-            </Route>
+            <Route
+                path="/jobs"
+                render={() => (
+                    <StyledSidebar>
+                        <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />
+                    </StyledSidebar>
+                )}
+            />
+            <Route
+                path="/samples"
+                render={() => (
+                    <StyledSidebar>
+                        <SidebarItem
+                            exclude={["/samples/files", "/samples/labels", "/samples/settings"]}
+                            title="Browse"
+                            link="/samples"
+                            icon="th-list"
+                        />
+                        <SidebarItem title="Files" link="/samples/files?page=1" icon="folder-open" />
+                        <SidebarItem title="Labels" link="/samples/labels" icon="fas fa-tag" />
+                        {fullAdministrator ? (
+                            <SidebarItem title="Settings" link="/samples/settings" icon="cogs" />
+                        ) : null}
+                    </StyledSidebar>
+                )}
+            />
+            <Route
+                path="/refs"
+                render={() => (
+                    <StyledSidebar>
+                        <SidebarItem exclude={["/refs/settings"]} title="Browse" link="/refs" icon="th-list" />
+                        {fullAdministrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
+                    </StyledSidebar>
+                )}
+            />
+            <Route
+                path="/subtractions"
+                render={() => (
+                    <StyledSidebar>
+                        <SidebarItem
+                            exclude={["/subtractions/files"]}
+                            title="Browse"
+                            link="/subtractions"
+                            icon="th-list"
+                        />
+                        <SidebarItem title="Files" link="/subtractions/files?page=1" icon="folder-open" />
+                    </StyledSidebar>
+                )}
+            />
+            <Route
+                path="/hmm"
+                render={() => (
+                    <StyledSidebar>
+                        <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
+                    </StyledSidebar>
+                )}
+            />
+            <Route
+                path="/ml"
+                render={() => (
+                    <StyledSidebar>
+                        <SidebarItem title="Browse" link="/ml" icon="th-list" />
+                    </StyledSidebar>
+                )}
+            />
         </Routes>
     );
 }

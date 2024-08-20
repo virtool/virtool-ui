@@ -37,16 +37,21 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
         <>
             <Routes>
                 <Route path="/refs/:refId/otus/:otuId" />
-                <Route path="/refs">
-                    <ReferenceDetailHeader
-                        createdAt={data.created_at}
-                        isRemote={Boolean(data.remotes_from)}
-                        name={data.name}
-                        userHandle={data.user.handle}
-                        refId={refId}
-                    />
-                    <ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
-                </Route>
+                <Route
+                    path="/refs"
+                    render={() => (
+                        <>
+                            <ReferenceDetailHeader
+                                createdAt={data.created_at}
+                                isRemote={Boolean(data.remotes_from)}
+                                name={data.name}
+                                userHandle={data.user.handle}
+                                refId={refId}
+                            />
+                            <ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
+                        </>
+                    )}
+                />
             </Routes>
 
             <ContainerNarrow>
