@@ -1,7 +1,6 @@
 import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@base";
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
-import { Routes } from "react-router-dom-v5-compat";
+import { Redirect, Route, Switch } from "react-router-dom";
 import AccountProfile from "./AccountProfile";
 import APIKeys from "./API/APIKeys";
 
@@ -21,11 +20,11 @@ export default function Account() {
             </Tabs>
 
             <ContainerNarrow>
-                <Routes>
+                <Switch>
                     <Route path="/account" render={() => <Redirect to="/account/profile" exact />} />
                     <Route path="/account/profile" component={AccountProfile} />
                     <Route path="/account/api" component={APIKeys} />
-                </Routes>
+                </Switch>
             </ContainerNarrow>
         </ContainerWide>
     );

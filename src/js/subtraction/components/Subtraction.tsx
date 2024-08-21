@@ -1,7 +1,6 @@
 import { Container, ContainerNarrow } from "@base";
 import React from "react";
-import { Route } from "react-router-dom";
-import { Routes } from "react-router-dom-v5-compat";
+import { Route, Switch } from "react-router-dom";
 import SubtractionDetail from "./Detail/SubtractionDetail";
 import { SubtractionFileManager } from "./SubtractionFileManager";
 import SubtractionList from "./SubtractionList";
@@ -13,11 +12,11 @@ export default function Subtraction() {
     return (
         <Container>
             <ContainerNarrow>
-                <Routes>
+                <Switch>
                     <Route path="/subtractions" component={SubtractionList} exact />
                     <Route path="/subtractions/files" component={SubtractionFileManager} />
                     <Route path="/subtractions/:subtractionId" component={SubtractionDetail} />
-                </Routes>
+                </Switch>
             </ContainerNarrow>
         </Container>
     );

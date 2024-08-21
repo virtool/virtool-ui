@@ -15,8 +15,7 @@ import { useFetchSample } from "@samples/queries";
 import { useLocationState } from "@utils/hooks";
 import { includes } from "lodash-es";
 import React from "react";
-import { match, Redirect, Route, useLocation } from "react-router-dom";
-import { Routes } from "react-router-dom-v5-compat";
+import { match, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -107,7 +106,7 @@ export default function SampleDetail({ match }: SampleDetailProps) {
                 )}
             </Tabs>
 
-            <Routes>
+            <Switch>
                 <Route
                     path="/samples/:sampleId"
                     render={() => <Redirect to={`/samples/${sampleId}/general`} exact />}
@@ -117,7 +116,7 @@ export default function SampleDetail({ match }: SampleDetailProps) {
                 <Route path="/samples/:sampleId/quality" component={Quality} />
                 <Route path="/samples/:sampleId/analyses" component={Analyses} />
                 <Route path="/samples/:sampleId/rights" component={Rights} />
-            </Routes>
+            </Switch>
 
             <RemoveSample id={sampleId} name={name} />
         </>
