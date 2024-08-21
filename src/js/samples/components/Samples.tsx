@@ -3,8 +3,7 @@ import { FileManager } from "@files/components/FileManager";
 import { FileType } from "@files/types";
 import { Labels } from "@labels/components/Labels";
 import React from "react";
-import { Switch } from "react-router-dom";
-import { CompatRoute } from "react-router-dom-v5-compat";
+import { Route, Switch } from "react-router-dom";
 import CreateSample from "./Create/CreateSample";
 import SampleDetail from "./Detail/SampleDetail";
 import SamplesSettings from "./SampleSettings";
@@ -41,12 +40,12 @@ export default function Samples() {
     return (
         <Container>
             <Switch>
-                <CompatRoute path="/samples/settings" component={SamplesSettings} />
-                <CompatRoute path="/samples/files" component={SampleFileManager} />
-                <CompatRoute path="/samples/labels" component={Labels} />
-                <CompatRoute path="/samples/create" component={CreateSample} />
-                <CompatRoute path="/samples/:sampleId" component={SampleDetail} />
-                <CompatRoute path="/samples" component={SamplesList} />
+                <Route path="/samples/settings" component={SamplesSettings} />
+                <Route path="/samples/files" component={SampleFileManager} />
+                <Route path="/samples/labels" component={Labels} />
+                <Route path="/samples/create" component={CreateSample} />
+                <Route path="/samples/:sampleId" component={SampleDetail} />
+                <Route path="/samples" component={SamplesList} />
             </Switch>
         </Container>
     );

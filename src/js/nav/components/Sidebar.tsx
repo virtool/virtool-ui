@@ -1,8 +1,7 @@
 import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import React from "react";
-import { Switch } from "react-router-dom";
-import { CompatRoute } from "react-router-dom-v5-compat";
+import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import SidebarItem from "./SidebarItem";
 
@@ -30,12 +29,12 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
 
     return (
         <Switch>
-            <CompatRoute path="/jobs">
+            <Route path="/jobs">
                 <StyledSidebar>
                     <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />
                 </StyledSidebar>
-            </CompatRoute>
-            <CompatRoute path="/samples">
+            </Route>
+            <Route path="/samples">
                 <StyledSidebar>
                     <SidebarItem
                         exclude={["/samples/files", "/samples/labels", "/samples/settings"]}
@@ -47,29 +46,29 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
                     <SidebarItem title="Labels" link="/samples/labels" icon="fas fa-tag" />
                     {fullAdministrator ? <SidebarItem title="Settings" link="/samples/settings" icon="cogs" /> : null}
                 </StyledSidebar>
-            </CompatRoute>
-            <CompatRoute path="/refs">
+            </Route>
+            <Route path="/refs">
                 <StyledSidebar>
                     <SidebarItem exclude={["/refs/settings"]} title="Browse" link="/refs" icon="th-list" />
                     {fullAdministrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
                 </StyledSidebar>
-            </CompatRoute>
-            <CompatRoute path="/subtractions">
+            </Route>
+            <Route path="/subtractions">
                 <StyledSidebar>
                     <SidebarItem exclude={["/subtractions/files"]} title="Browse" link="/subtractions" icon="th-list" />
                     <SidebarItem title="Files" link="/subtractions/files?page=1" icon="folder-open" />
                 </StyledSidebar>
-            </CompatRoute>
-            <CompatRoute path="/hmm">
+            </Route>
+            <Route path="/hmm">
                 <StyledSidebar>
                     <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
                 </StyledSidebar>
-            </CompatRoute>
-            <CompatRoute path="/ml">
+            </Route>
+            <Route path="/ml">
                 <StyledSidebar>
                     <SidebarItem title="Browse" link="/ml" icon="th-list" />
                 </StyledSidebar>
-            </CompatRoute>
+            </Route>
         </Switch>
     );
 }

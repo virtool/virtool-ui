@@ -3,7 +3,6 @@ import IndexDetail from "@indexes/components/IndexDetail";
 import { useGetReference } from "@references/queries";
 import React from "react";
 import { match, Redirect, Route, Switch } from "react-router-dom";
-import { CompatRoute } from "react-router-dom-v5-compat";
 import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/OTUDetail";
 import OTUList from "../../../otus/components/OTUList";
@@ -37,7 +36,7 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
         <>
             <Switch>
                 <Route path="/refs/:refId/otus/:otuId" />
-                <CompatRoute path="/refs">
+                <Route path="/refs">
                     <ReferenceDetailHeader
                         createdAt={data.created_at}
                         isRemote={Boolean(data.remotes_from)}
@@ -46,7 +45,7 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
                         refId={refId}
                     />
                     <ReferenceDetailTabs id={refId} otuCount={data.otu_count} />
-                </CompatRoute>
+                </Route>
             </Switch>
 
             <ContainerNarrow>

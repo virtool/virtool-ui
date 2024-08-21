@@ -80,7 +80,7 @@ export default function Main() {
             <MainContainer>
                 <Suspense fallback={<Fallback />}>
                     <Switch>
-                        <CompatRoute path="/" render={() => <Redirect to="/samples" exact />} />
+                        <Redirect from="/" to="/samples" exact />
                         <CompatRoute path="/jobs" component={Jobs} />
                         <CompatRoute path="/samples" component={Samples} />
                         <CompatRoute path="/refs" component={References} />
