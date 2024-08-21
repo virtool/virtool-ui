@@ -7,8 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Redirect, Route } from "react-router-dom";
-import { Routes } from "react-router-dom-v5-compat";
+import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
@@ -79,7 +78,7 @@ export default function Main() {
 
             <MainContainer>
                 <Suspense fallback={<Fallback />}>
-                    <Routes>
+                    <Switch>
                         <Route path="/" render={() => <Redirect to="/samples" exact />} />
                         <Route path="/jobs" component={Jobs} />
                         <Route path="/samples" component={Samples} />
@@ -89,7 +88,7 @@ export default function Main() {
                         <Route path="/administration" component={Administration} />
                         <Route path="/account" component={Account} />
                         <Route path="/ml" component={ML} />
-                    </Routes>
+                    </Switch>
                 </Suspense>
             </MainContainer>
 

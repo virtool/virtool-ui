@@ -1,8 +1,8 @@
 import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import React from "react";
-import { Route } from "react-router-dom";
-import { Routes } from "react-router-dom-v5-compat";
+import { Switch } from "react-router-dom";
+import { CompatRoute } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import SidebarItem from "./SidebarItem";
 
@@ -29,72 +29,47 @@ export default function Sidebar({ administratorRole }: SidebarProps) {
     const fullAdministrator = hasSufficientAdminRole(AdministratorRoles.FULL, administratorRole);
 
     return (
-        <Routes>
-            <Route
-                path="/jobs"
-                render={() => (
-                    <StyledSidebar>
-                        <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />
-                    </StyledSidebar>
-                )}
-            />
-            <Route
-                path="/samples"
-                render={() => (
-                    <StyledSidebar>
-                        <SidebarItem
-                            exclude={["/samples/files", "/samples/labels", "/samples/settings"]}
-                            title="Browse"
-                            link="/samples"
-                            icon="th-list"
-                        />
-                        <SidebarItem title="Files" link="/samples/files?page=1" icon="folder-open" />
-                        <SidebarItem title="Labels" link="/samples/labels" icon="fas fa-tag" />
-                        {fullAdministrator ? (
-                            <SidebarItem title="Settings" link="/samples/settings" icon="cogs" />
-                        ) : null}
-                    </StyledSidebar>
-                )}
-            />
-            <Route
-                path="/refs"
-                render={() => (
-                    <StyledSidebar>
-                        <SidebarItem exclude={["/refs/settings"]} title="Browse" link="/refs" icon="th-list" />
-                        {fullAdministrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
-                    </StyledSidebar>
-                )}
-            />
-            <Route
-                path="/subtractions"
-                render={() => (
-                    <StyledSidebar>
-                        <SidebarItem
-                            exclude={["/subtractions/files"]}
-                            title="Browse"
-                            link="/subtractions"
-                            icon="th-list"
-                        />
-                        <SidebarItem title="Files" link="/subtractions/files?page=1" icon="folder-open" />
-                    </StyledSidebar>
-                )}
-            />
-            <Route
-                path="/hmm"
-                render={() => (
-                    <StyledSidebar>
-                        <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
-                    </StyledSidebar>
-                )}
-            />
-            <Route
-                path="/ml"
-                render={() => (
-                    <StyledSidebar>
-                        <SidebarItem title="Browse" link="/ml" icon="th-list" />
-                    </StyledSidebar>
-                )}
-            />
-        </Routes>
+        <Switch>
+            <CompatRoute path="/jobs">
+                <StyledSidebar>
+                    <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />
+                </StyledSidebar>
+            </CompatRoute>
+            <CompatRoute path="/samples">
+                <StyledSidebar>
+                    <SidebarItem
+                        exclude={["/samples/files", "/samples/labels", "/samples/settings"]}
+                        title="Browse"
+                        link="/samples"
+                        icon="th-list"
+                    />
+                    <SidebarItem title="Files" link="/samples/files?page=1" icon="folder-open" />
+                    <SidebarItem title="Labels" link="/samples/labels" icon="fas fa-tag" />
+                    {fullAdministrator ? <SidebarItem title="Settings" link="/samples/settings" icon="cogs" /> : null}
+                </StyledSidebar>
+            </CompatRoute>
+            <CompatRoute path="/refs">
+                <StyledSidebar>
+                    <SidebarItem exclude={["/refs/settings"]} title="Browse" link="/refs" icon="th-list" />
+                    {fullAdministrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
+                </StyledSidebar>
+            </CompatRoute>
+            <CompatRoute path="/subtractions">
+                <StyledSidebar>
+                    <SidebarItem exclude={["/subtractions/files"]} title="Browse" link="/subtractions" icon="th-list" />
+                    <SidebarItem title="Files" link="/subtractions/files?page=1" icon="folder-open" />
+                </StyledSidebar>
+            </CompatRoute>
+            <CompatRoute path="/hmm">
+                <StyledSidebar>
+                    <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
+                </StyledSidebar>
+            </CompatRoute>
+            <CompatRoute path="/ml">
+                <StyledSidebar>
+                    <SidebarItem title="Browse" link="/ml" icon="th-list" />
+                </StyledSidebar>
+            </CompatRoute>
+        </Switch>
     );
 }
