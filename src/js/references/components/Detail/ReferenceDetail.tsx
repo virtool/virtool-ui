@@ -50,7 +50,7 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
 
             <ContainerNarrow>
                 <Switch>
-                    <Redirect to={`/refs/${refId}/manage`} exact />
+                    <Redirect from="/refs/:refId" to={`/refs/${refId}/manage`} exact />
                     <Route path="/refs/:refId/manage" component={ReferenceManager} />
                     <Route path="/refs/:refId/otus" component={OTUList} exact />
                     <Route path="/refs/:refId/otus/:otuId" component={OTUDetail} />

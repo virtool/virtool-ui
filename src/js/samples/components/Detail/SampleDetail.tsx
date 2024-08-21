@@ -107,7 +107,7 @@ export default function SampleDetail({ match }: SampleDetailProps) {
             </Tabs>
 
             <Switch>
-                <Redirect to={`/samples/${sampleId}/general`} exact />
+                <Redirect from="/samples/:sampleId" to={`/samples/${sampleId}/general`} exact />
                 <Route path="/samples/:sampleId/general" component={General} />
                 <Route path="/samples/:sampleId/files" component={SampleDetailFiles} exact />
                 <Route path="/samples/:sampleId/quality" component={Quality} />
