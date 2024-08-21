@@ -21,7 +21,7 @@ export default function Account() {
 
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/account" render={() => <Redirect to="/account/profile" exact />} />
+                    <Redirect to="/account/profile" exact />
                     <Route path="/account/profile" component={AccountProfile} />
                     <Route path="/account/api" component={APIKeys} />
                 </Switch>

@@ -20,7 +20,7 @@ export default function References() {
         <Container>
             <Switch>
                 <Route path="/refs" component={ReferenceList} exact />
-                <Route path="/refs/settings/*" render={() => <Redirect to="/refs/settings" />} />
+                <Redirect to="/refs/settings" />
                 <Route path="/refs/settings" component={ReferenceSettings} />
                 <Route path="/refs/:refId" component={ReferenceDetail} />
             </Switch>

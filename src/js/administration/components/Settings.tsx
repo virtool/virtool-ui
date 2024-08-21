@@ -31,10 +31,7 @@ export default function Settings() {
                     <AdministratorTabs administratorRole={account.administrator_role} />
                     <ContainerNarrow>
                         <Switch>
-                            <Route
-                                path="/administration"
-                                render={() => <Redirect to={`/administration/${redirect}`} exact />}
-                            />
+                            <Redirect to={`/administration/${redirect}`} exact />
                             <Route path="/administration/settings" component={ServerSettings} />
                             <Route path="/administration/users" component={ManageUsers} exact />
                             <Route path="/administration/users/:userId" component={UserDetail} />

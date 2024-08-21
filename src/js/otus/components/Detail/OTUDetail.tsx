@@ -79,10 +79,7 @@ export default function OTUDetail({ match }) {
             </Tabs>
 
             <Switch>
-                <Route
-                    path="/refs/:refId/otus/:otuId"
-                    render={() => <Redirect to={`/refs/${refId}/otus/${id}/otu`} exact />}
-                />
+                <Redirect to={`/refs/${refId}/otus/${id}/otu`} exact />
                 <Route path="/refs/:refId/otus/:otuId/otu" component={OTUSection} />
                 <Route path="/refs/:refId/otus/:otuId/history" component={History} />
                 <Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />
