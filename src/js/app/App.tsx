@@ -1,6 +1,5 @@
 import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { resetClient } from "@utils/utils";
 import { WallContainer } from "@wall/components/Container";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import { History } from "history";
@@ -48,11 +47,6 @@ function ConnectedApp(): React.ReactElement {
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            onError: (error: any) => {
-                if (error.response?.status === 401) {
-                    resetClient();
-                }
-            },
             retry: (failureCount: number, error: any) => {
                 if ([401, 403, 404].includes(error.response?.status)) {
                     return false;
@@ -66,7 +60,7 @@ const queryClient = new QueryClient({
 
 type AppProps = {
     // React Router history object
-    history: History,
+    history: History;
 };
 
 /** The root App component that provides theme, query client, and routing setup */
