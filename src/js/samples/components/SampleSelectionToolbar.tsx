@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";
 import { Button, Icon } from "../../base";
@@ -33,10 +33,16 @@ type SampleSelectionToolbarProps = {
  * A toolbar allowing users to create an analysis for selected samples
  */
 export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToolbarProps) {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     function onQuickAnalyze() {
-        history.push({ ...history.location, state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } });
+        navigate(
+            {
+                pathname: location.pathname,
+                search: location.search,
+            },
+            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } }
+        );
     }
 
     return (

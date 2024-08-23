@@ -1,9 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { MemoryRouter, Route, Routes } from "react-router-dom-v5-compat";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeSample, mockApiEditSample } from "../../../../tests/fake/samples";
-import { renderWithProviders } from "../../../../tests/setupTests";
+import { renderWithRouter } from "../../../../tests/setupTests";
 import EditSample from "../EditSample";
 
 describe("<Editsample />", () => {
@@ -20,7 +21,14 @@ describe("<Editsample />", () => {
 
     it("should render when [show=false]", () => {
         props.show = false;
-        renderWithProviders(<EditSample {...props} />);
+
+        renderWithRouter(
+            <MemoryRouter initialEntries={["/"]}>
+                <Routes>
+                    <Route path="samples/:id/general" element={<EditSample {...props} />} />
+                </Routes>
+            </MemoryRouter>
+        );
 
         expect(screen.queryByRole("textbox", { name: "Name" })).toBeNull();
         expect(screen.queryByRole("textbox", { name: "Isolate" })).toBeNull();
@@ -31,7 +39,13 @@ describe("<Editsample />", () => {
     });
 
     it.each(["Name", "Isolate", "Host", "Locale", "Notes"])("should render changed data for", async inputLabel => {
-        renderWithProviders(<EditSample {...props} />);
+        renderWithRouter(
+            <MemoryRouter initialEntries={["/"]}>
+                <Routes>
+                    <Route path="samples/:id/general" element={<EditSample {...props} />} />
+                </Routes>
+            </MemoryRouter>
+        );
 
         const inputBox = screen.getByLabelText(inputLabel);
         expect(inputBox).toBeInTheDocument();
@@ -46,7 +60,13 @@ describe("<Editsample />", () => {
 
     it("should update sample when form is submitted", async () => {
         const scope = mockApiEditSample(sample, "newName", "newIsolate", "newHost", "newLocale", "newNotes");
-        renderWithProviders(<EditSample {...props} />);
+        renderWithRouter(
+            <MemoryRouter initialEntries={["/"]}>
+                <Routes>
+                    <Route path="samples/:id/general" element={<EditSample {...props} />} />
+                </Routes>
+            </MemoryRouter>
+        );
 
         const nameInput = screen.getByLabelText("Name");
         await userEvent.clear(nameInput);
