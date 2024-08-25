@@ -2,6 +2,9 @@ import { createGlobalStyle, css } from "styled-components";
 import "tailwindcss/tailwind.css";
 import { fontWeight } from "./theme";
 
+/**
+ * CSS to apply when an element is focused via keyboard (tab) navigation.
+ */
 export const tabFocus = css`
     // WebKit-specific. Other browsers will keep their default outline style.
     // (Initially tried to also force default via \`outline: initial\`,
@@ -10,6 +13,9 @@ export const tabFocus = css`
     outline-offset: -2px;
 `;
 
+/**
+ * A component that applies CSS resets, font settings, and global styles across the entire app.
+ */
 export const GlobalStyles = createGlobalStyle`
     * {
         -webkit-font-smoothing: antialiased;

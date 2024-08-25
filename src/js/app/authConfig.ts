@@ -1,6 +1,12 @@
-import { LogLevel } from "@azure/msal-browser";
+import { Configuration, LogLevel } from "@azure/msal-browser";
 
-export const getMsalConfig = () => {
+/**
+ * Returns the configuration object required by MSAL (Microsoft Authentication Library)
+ * to authenticate users against Azure AD B2C.
+ *
+ * @returns A Configuration object containing the MSAL configuration.
+ */
+export function getMsalConfig(): Configuration {
     return {
         auth: {
             clientId: window.virtool.b2c.clientId,
@@ -15,7 +21,7 @@ export const getMsalConfig = () => {
         },
         system: {
             loggerOptions: {
-                loggerCallback: (level, message, containsPii) => {
+                loggerCallback: (level: LogLevel, message: string, containsPii: boolean): void => {
                     if (containsPii) {
                         return;
                     }
@@ -39,19 +45,41 @@ export const getMsalConfig = () => {
             },
         },
     };
+}
+
+type ProtectedResources = {
+    backendApi: {
+        scopes: string[];
+    };
 };
 
-export const getProtectedResources = () => ({
-    backendApi: {
-        scopes: [
-            `https://${window.virtool.b2c.tenant}.onmicrosoft.com/${window.virtool.b2c.APIClientId}/${window.virtool.b2c.scope}`,
-        ],
-    },
-});
+/**
+ * Retrieves the API scope required to access backend services securely.
+ *
+ * @returns An object containing the protected resources and their scopes.
+ */
+export function getProtectedResources(): ProtectedResources {
+    return {
+        backendApi: {
+            scopes: [
+                `https://${window.virtool.b2c.tenant}.onmicrosoft.com/${window.virtool.b2c.APIClientId}/${window.virtool.b2c.scope}`,
+            ],
+        },
+    };
+}
 
-export const getLoginRequest = () => {
+type LoginRequest = {
+    scopes: string[];
+};
+
+/**
+ * Creates a login request object with the necessary scopes for authentication.
+ *
+ * @returns An object containing the scopes for the login request.
+ */
+export function getLoginRequest(): LoginRequest {
     const protectedResources = getProtectedResources();
     return {
         scopes: [...protectedResources.backendApi.scopes],
     };
-};
+}
