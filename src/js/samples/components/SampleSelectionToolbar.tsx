@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";
 import { Button, Icon } from "../../base";
@@ -34,6 +34,7 @@ type SampleSelectionToolbarProps = {
  */
 export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToolbarProps) {
     const navigate = useNavigate();
+    const location = useLocation();
 
     function onQuickAnalyze() {
         navigate(

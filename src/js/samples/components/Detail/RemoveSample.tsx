@@ -1,6 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import { RemoveDialog } from "../../../base/RemoveDialog";
 import { useRemoveSample } from "../../queries";
 
@@ -16,7 +15,7 @@ type RemoveSampleProps = {
  */
 export default function RemoveSample({ id, name }: RemoveSampleProps) {
     const navigate = useNavigate();
-    const location = useLocation<{ removeSample: boolean }>();
+    const location = useLocation();
     const mutation = useRemoveSample();
 
     return (
