@@ -15,7 +15,7 @@ import { useFetchSample } from "@samples/queries";
 import { useLocationState } from "@utils/hooks";
 import { includes } from "lodash-es";
 import React from "react";
-import { Route, Routes, useLocation, useMatch } from "react-router-dom-v5-compat";
+import { Navigate, Route, Routes, useLocation, useMatch } from "react-router-dom-v5-compat";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -103,8 +103,7 @@ export default function SampleDetail() {
             </Tabs>
 
             <Routes>
-                {/* TODO: Fix the redirect to insert the actual sample id instead of the literal `:sampleId` */}
-                {/*<Route path=":sampleId" element={<Navigate to="/samples/:sampleId/general" replace />} />*/}
+                <Route path="" element={<Navigate to={`/samples/${sampleId}/general`} replace />} />
                 <Route path="/general" element={<General />} />
                 <Route path="/files" element={<SampleDetailFiles />} />
                 <Route path="/quality" element={<Quality />} />
