@@ -15,7 +15,7 @@ import { useFetchSample } from "@samples/queries";
 import { useLocationState } from "@utils/hooks";
 import { includes } from "lodash-es";
 import React from "react";
-import { Navigate, Route, Routes, useLocation, useMatch } from "react-router-dom-v5-compat";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom-v5-compat";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -29,8 +29,7 @@ import Rights from "./SampleRights";
 export default function SampleDetail() {
     const location = useLocation();
     const [_, setLocationState] = useLocationState();
-    const match = useMatch("/samples/:sampleId/*");
-    const sampleId = match.params.sampleId;
+    const { sampleId } = useParams();
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
 
