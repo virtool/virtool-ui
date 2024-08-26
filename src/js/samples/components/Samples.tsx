@@ -44,7 +44,7 @@ export default function Samples() {
                 <Route path="/samples/files" element={<SampleFileManager />} />
                 <Route path="/samples/labels" element={<Labels />} />
                 <Route path="/samples/create" element={<CreateSample />} />
-                <Route path="/samples/:sampleId" element={<SampleDetail />} />
+                <Route path="/samples/:sampleId/*" element={<SampleDetail />} />
                 <Route path="/samples" element={<SamplesList />} />
             </Routes>
         </Container>
