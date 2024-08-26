@@ -16,19 +16,16 @@ import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { find, includes, map } from "lodash-es";
 import React from "react";
-import { match } from "react-router-dom";
+import { useMatch } from "react-router-dom-v5-compat";
 import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../queries";
-
-type SampleRightsProps = {
-    /** Match object containing path information */
-    match: match<{ sampleId: string }>;
-};
 
 /**
  * A component managing a samples rights
  */
-export default function SampleRights({ match }: SampleRightsProps) {
-    const { sampleId } = match.params;
+export default function SampleRights() {
+    const match = useMatch("/samples/:sampleId/*");
+    const sampleId = match.params.sampleId;
+    console.log("sampleId", sampleId);
 
     const { hasPermission } = useCheckAdminRole(AdministratorRoles.FULL);
     const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);

@@ -1,20 +1,16 @@
 import { ContainerNarrow, LoadingPlaceholder } from "@base";
 import React from "react";
-import { match } from "react-router-dom";
+import { useMatch } from "react-router-dom-v5-compat";
 import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
 
-type SampleDetailFilesProps = {
-    /** Match object containing path information */
-    match: match<{ sampleId: string }>;
-};
-
 /**
  * The files view in sample details
  */
-export function SampleDetailFiles({ match }: SampleDetailFilesProps) {
+export function SampleDetailFiles() {
+    const match = useMatch("/samples/:sampleId/files");
     const { data, isPending } = useFetchSample(match.params.sampleId);
 
     if (isPending) {
