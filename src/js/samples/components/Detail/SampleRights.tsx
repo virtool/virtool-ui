@@ -25,7 +25,6 @@ import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../q
 export default function SampleRights() {
     const match = useMatch("/samples/:sampleId/*");
     const sampleId = match.params.sampleId;
-    console.log("sampleId", sampleId);
 
     const { hasPermission } = useCheckAdminRole(AdministratorRoles.FULL);
     const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
