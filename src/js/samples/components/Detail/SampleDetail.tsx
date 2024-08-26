@@ -15,8 +15,7 @@ import { useFetchSample } from "@samples/queries";
 import { useLocationState } from "@utils/hooks";
 import { includes } from "lodash-es";
 import React from "react";
-import { Redirect, Switch } from "react-router-dom";
-import { CompatRoute, useLocation, useMatch } from "react-router-dom-v5-compat";
+import { Navigate, Route, Routes, useLocation, useMatch } from "react-router-dom-v5-compat";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -103,14 +102,14 @@ export default function SampleDetail() {
                 )}
             </Tabs>
 
-            <Switch>
-                <Redirect from="/samples/:sampleId" to={`/samples/${sampleId}/general`} exact />
-                <CompatRoute path="/samples/:sampleId/general" component={General} />
-                <CompatRoute path="/samples/:sampleId/files" component={SampleDetailFiles} exact />
-                <CompatRoute path="/samples/:sampleId/quality" component={Quality} />
-                <CompatRoute path="/samples/:sampleId/analyses" component={Analyses} />
-                <CompatRoute path="/samples/:sampleId/rights" component={Rights} />
-            </Switch>
+            <Routes>
+                <Route path="/samples/:sampleId" element={<Navigate to="/samples/:sampleId/general" replace />} />
+                <Route path="/samples/:sampleId/general" element={<General />} />
+                <Route path="/samples/:sampleId/files" element={<SampleDetailFiles />} />
+                <Route path="/samples/:sampleId/quality" element={<Quality />} />
+                <Route path="/samples/:sampleId/analyses" element={<Analyses />} />
+                <Route path="/samples/:sampleId/rights" element={<Rights />} />
+            </Routes>
 
             <RemoveSample id={sampleId} name={name} />
         </>
