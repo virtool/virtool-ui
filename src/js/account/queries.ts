@@ -30,7 +30,7 @@ export const accountKeys = {
  * @returns UseQueryResult object containing the account data
  */
 export function useFetchAccount() {
-    return useQuery<Account>({ queryKey: accountKeys.all(), queryFn: () => fetchAccount() });
+    return useQuery<Account>({ queryKey: accountKeys.all(), queryFn: fetchAccount });
 }
 
 /**

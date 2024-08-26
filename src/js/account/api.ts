@@ -176,7 +176,5 @@ export function resetPassword({ password, resetCode }: { password: string; reset
  * @returns A Promise resolving to the current user's account data
  */
 export function fetchAccount(): Promise<Account> {
-    return Request.get("/account")
-        .query()
-        .then(response => response.body);
+    return Request.get("/account").then(response => response.body);
 }
