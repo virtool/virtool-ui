@@ -7,7 +7,6 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<SampleDetailGeneral />", () => {
-    let props;
     let sample;
 
     beforeEach(() => {
