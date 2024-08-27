@@ -1,27 +1,24 @@
-import { screen } from "@testing-library/react";
+import Samples from "@samples/components/Samples";
+import { screen, waitFor } from "@testing-library/react";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithMemoryRouter } from "@tests/setupTests";
 import numbro from "numbro";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import SampleDetailGeneral from "../SampleDetailGeneral";
 
 describe("<SampleDetailGeneral />", () => {
-    let props;
     let sample;
 
     beforeEach(() => {
         sample = createFakeSample({ paired: true });
-        props = {
-            match: { params: { sampleId: sample.id } },
-        };
     });
 
     it("should render properly when data is installing", async () => {
         const unreadySample = createFakeSample({ paired: true, ready: false });
-        props.match.params.sampleId = unreadySample.id;
         const scope = mockApiGetSampleDetail(unreadySample);
-        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
+        renderWithMemoryRouter(<Samples />, [`/${unreadySample.id}/general`]);
+
+        await waitFor(() => scope.done());
 
         expect(await screen.findByText("Metadata")).toBeInTheDocument();
 
@@ -45,7 +42,7 @@ describe("<SampleDetailGeneral />", () => {
 
     it("should render properly", async () => {
         const scope = mockApiGetSampleDetail(sample);
-        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
+        renderWithMemoryRouter(<Samples />, [`/${sample.id}/general`]);
 
         expect(await screen.findByText("Metadata")).toBeInTheDocument();
 
@@ -81,7 +78,7 @@ describe("<SampleDetailGeneral />", () => {
 
     it("should render with [paired=true]", async () => {
         const scope = mockApiGetSampleDetail(sample);
-        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
+        renderWithMemoryRouter(<Samples />, [`/${sample.id}/general`]);
 
         expect(await screen.findByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("Yes")).toBeInTheDocument();
@@ -91,9 +88,8 @@ describe("<SampleDetailGeneral />", () => {
 
     it("should render with [paired=false]", async () => {
         sample = createFakeSample({ paired: false });
-        props.match.params.sampleId = sample.id;
         const scope = mockApiGetSampleDetail(sample);
-        renderWithMemoryRouter(<SampleDetailGeneral {...props} />);
+        renderWithMemoryRouter(<Samples />, [`/${sample.id}/general`]);
 
         expect(await screen.findByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("No")).toBeInTheDocument();

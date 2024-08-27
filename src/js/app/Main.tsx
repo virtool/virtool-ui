@@ -8,6 +8,7 @@ import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { CompatRoute } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
@@ -81,7 +82,7 @@ export default function Main() {
                     <Switch>
                         <Redirect from="/" to="/samples" exact />
                         <Route path="/jobs" component={Jobs} />
-                        <Route path="/samples" component={Samples} />
+                        <CompatRoute path="/samples" component={Samples} />
                         <Route path="/refs" component={References} />
                         <Route path="/hmm" component={HMM} />
                         <Route path="/subtractions" component={Subtraction} />
