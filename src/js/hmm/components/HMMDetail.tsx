@@ -2,7 +2,7 @@ import { cn } from "@/utils/utils";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { map } from "lodash-es";
 import React from "react";
-import { match } from "react-router-dom";
+import { useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import {
     BoxGroup,
@@ -29,16 +29,12 @@ const TaxonomyGrid = styled.div`
     }
 `;
 
-type HMMDetailProps = {
-    /** Match object containing path information */
-    match: match<string>;
-};
-
 /**
  * The HMM detailed view
  */
-export default function HMMDetail({ match }: HMMDetailProps) {
-    const { data, isPending, isError } = useFetchHmm(match.params["hmmId"]);
+export default function HMMDetail() {
+    const { hmmId } = useParams();
+    const { data, isPending, isError } = useFetchHmm(hmmId);
 
     if (isError) {
         return <NotFound />;
