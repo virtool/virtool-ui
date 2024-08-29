@@ -3,7 +3,7 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "@base";
 import { map } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import APIKey from "./APIKey";
 import CreateAPIKey from "./CreateAPIKey";
@@ -40,7 +40,9 @@ export default function APIKeys() {
                     <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">Virtool API</ExternalLink>
                     <span>.</span>
                 </div>
-                <Link to={{ state: { createAPIKey: true } }}>Create</Link>
+                <Link to="" state={{ createAPIKey: true }}>
+                    Create
+                </Link>
             </APIKeysHeader>
 
             {keyComponents.length ? <BoxGroup>{keyComponents}</BoxGroup> : <NoneFoundBox noun="API keys" />}
