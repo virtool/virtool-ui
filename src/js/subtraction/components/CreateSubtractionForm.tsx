@@ -7,7 +7,7 @@ import { SubtractionFileSelector } from "@subtraction/components/SubtractionFile
 import { useCreateSubtraction } from "@subtraction/queries";
 import React from "react";
 import { Controller } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
 
 type FormValues = {
     name: string;
@@ -19,7 +19,7 @@ type FormValues = {
  * A form for creating a subtraction
  */
 export function CreateSubtractionForm() {
-    const history = useHistory();
+    const navigate = useNavigate();
     const {
         hasRestored,
         formState: { errors },
@@ -48,7 +48,7 @@ export function CreateSubtractionForm() {
             { name, nickname, uploadId: uploadId[0] },
             {
                 onSuccess: () => {
-                    history.push({ state: { createSubtraction: false } });
+                    navigate(".", { state: { createSubtraction: false } });
                     reset();
                 },
             }
