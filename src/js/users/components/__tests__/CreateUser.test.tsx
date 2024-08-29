@@ -1,10 +1,10 @@
+import Settings from "@/administration/components/Settings";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../../../../tests/setupTests";
-import CreateUser from "../CreateUser";
+import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 
 describe("<CreateUser />", () => {
     it("creates user once form is submitted", async () => {
@@ -17,7 +17,7 @@ describe("<CreateUser />", () => {
                 password: passwordInput,
                 forceReset: false,
             });
-        renderWithProviders(<CreateUser />);
+        renderWithMemoryRouter(<Settings />, [`/users`]);
 
         await userEvent.click(screen.getByRole("button"));
 
@@ -34,7 +34,7 @@ describe("<CreateUser />", () => {
     });
 
     it("should render correct username error message", async () => {
-        renderWithProviders(<CreateUser />);
+        renderWithMemoryRouter(<Settings />, [`/users`]);
         await userEvent.click(screen.getByRole("button"));
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));

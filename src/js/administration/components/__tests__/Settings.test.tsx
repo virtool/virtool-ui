@@ -22,7 +22,7 @@ describe("<Settings />", () => {
     it("should render", async () => {
         account.administrator_role = AdministratorRoles.FULL;
         scope = nock("http://localhost").get("/api/account").reply(200, account);
-        renderWithMemoryRouter(<Settings />, [{ pathname: "/administration/settings" }]);
+        renderWithMemoryRouter(<Settings />, ["/settings"]);
 
         await waitFor(() => expect(screen.getByText("Instance Message")).toBeInTheDocument());
         expect(screen.getByText("Settings")).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("<Settings />", () => {
     it("should render all options for full administrators", async () => {
         account.administrator_role = AdministratorRoles.FULL;
         scope = nock("http://localhost").get("/api/account").reply(200, account);
-        renderWithMemoryRouter(<Settings />, [{ pathname: "/administration/settings" }]);
+        renderWithMemoryRouter(<Settings />, ["/settings"]);
 
         await waitFor(() => expect(screen.getByText("Users")).toBeInTheDocument());
         expect(screen.getByText("Settings")).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("<Settings />", () => {
     it("should render only groups and users for users administrators", async () => {
         account.administrator_role = AdministratorRoles.USERS;
         scope = nock("http://localhost").get("/api/account").reply(200, account);
-        renderWithMemoryRouter(<Settings />, [{ pathname: "/administration/settings" }]);
+        renderWithMemoryRouter(<Settings />, ["/settings"]);
 
         await waitFor(() => expect(screen.getByText("Users")).toBeInTheDocument());
         expect(screen.queryByText("Settings")).not.toBeInTheDocument();

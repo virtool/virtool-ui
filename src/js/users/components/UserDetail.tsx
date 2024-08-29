@@ -2,7 +2,8 @@ import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
 import { useLocationState } from "@utils/hooks";
 import React from "react";
-import { Link, match } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { useFetchUser } from "../../administration/queries";
@@ -49,17 +50,13 @@ const UserDetailTitle = styled.div`
     }
 `;
 
-type UserDetailProps = {
-    /** Match object containing path information */
-    match: match<string>;
-};
-
 /**
  * The detailed view of a user
  */
-export default function UserDetail({ match }: UserDetailProps) {
+export default function UserDetail() {
     const [locationState, setLocationState] = useLocationState();
-    const { data, isPending } = useFetchUser(match.params["userId"]);
+    const { userId } = useParams();
+    const { data, isPending } = useFetchUser(userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL
     );

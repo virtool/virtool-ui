@@ -2,7 +2,7 @@ import { useFetchAccount } from "@account/queries";
 import { ContainerNarrow, ContainerWide, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
 import { ManageUsers } from "@users/components/ManageUsers";
 import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom-v5-compat";
 import Groups from "../../groups/components/Groups";
 import UserDetail from "../../users/components/UserDetail";
 import { AdministratorRoles } from "../types";
@@ -30,14 +30,14 @@ export default function Settings() {
                 <>
                     <AdministratorTabs administratorRole={account.administrator_role} />
                     <ContainerNarrow>
-                        <Switch>
-                            <Redirect from="/administration" to={`/administration/${redirect}`} exact />
-                            <Route path="/administration/settings" component={ServerSettings} />
-                            <Route path="/administration/users" component={ManageUsers} exact />
-                            <Route path="/administration/users/:userId" component={UserDetail} />
-                            <Route path="/administration/groups" component={Groups} />
-                            <Route path="/administration/administrators" component={ManageAdministrators} />
-                        </Switch>
+                        <Routes>
+                            <Route path="" element={<Navigate to={`/administration/${redirect}`} replace />} />
+                            <Route path="/settings" element={<ServerSettings />} />
+                            <Route path="/users" element={<ManageUsers />} />
+                            <Route path="/users/:userId" element={<UserDetail />} />
+                            <Route path="/groups" element={<Groups />} />
+                            <Route path="/administrators" element={<ManageAdministrators />} />
+                        </Routes>
                     </ContainerNarrow>
                 </>
             )}

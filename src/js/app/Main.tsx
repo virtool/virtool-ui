@@ -86,7 +86,7 @@ export default function Main() {
                         <Route path="/refs" component={References} />
                         <Route path="/hmm" component={HMM} />
                         <CompatRoute path="/subtractions" component={Subtraction} />
-                        <Route path="/administration" component={Administration} />
+                        <CompatRoute path="/administration" component={Administration} />
                         <Route path="/account" component={Account} />
                         <Route path="/ml" component={ML} />
                     </Switch>
