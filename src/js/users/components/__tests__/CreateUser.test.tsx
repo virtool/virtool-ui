@@ -17,7 +17,7 @@ describe("<CreateUser />", () => {
                 password: passwordInput,
                 forceReset: false,
             });
-        renderWithMemoryRouter(<Settings />, [`/users`]);
+        renderWithMemoryRouter(<Settings />, ["/users"]);
 
         await userEvent.click(screen.getByRole("button"));
 
@@ -34,7 +34,7 @@ describe("<CreateUser />", () => {
     });
 
     it("should render correct username error message", async () => {
-        renderWithMemoryRouter(<Settings />, [`/users`]);
+        renderWithMemoryRouter(<Settings />, ["/users"]);
         await userEvent.click(screen.getByRole("button"));
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
