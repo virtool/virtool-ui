@@ -13,9 +13,9 @@ export default function Subtraction() {
         <Container>
             <ContainerNarrow>
                 <Routes>
-                    <Route path="/subtractions" element={<SubtractionList />} />
-                    <Route path="/subtractions/files" element={<SubtractionFileManager />} />
-                    <Route path="/subtractions/:subtractionId" element={<SubtractionDetail />} />
+                    <Route path="/" element={<SubtractionList />} />
+                    <Route path="/files" element={<SubtractionFileManager />} />
+                    <Route path="/:subtractionId" element={<SubtractionDetail />} />
                 </Routes>
             </ContainerNarrow>
         </Container>
