@@ -1,6 +1,6 @@
 import { RemoveDialog } from "@base/RemoveDialog";
 import React from "react";
-import { useNavigate } from "react-router-dom-v5-compat";
+import { useHistory } from "react-router-dom";
 import { useRemoveSubtraction } from "../../queries";
 import { Subtraction } from "../../types";
 
@@ -18,7 +18,7 @@ type RemoveSubtractionProps = {
  */
 export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveSubtractionProps) {
     const mutation = useRemoveSubtraction();
-    const navigate = useNavigate();
+    const history = useHistory();
 
     return (
         <RemoveDialog
@@ -31,7 +31,7 @@ export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveS
                     { subtractionId: subtraction.id },
                     {
                         onSuccess: () => {
-                            navigate("/subtractions");
+                            history.push("/subtractions");
                         },
                     }
                 )

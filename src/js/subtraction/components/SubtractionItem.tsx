@@ -1,6 +1,6 @@
 import { JobState } from "@jobs/types";
 import React from "react";
-import { Link } from "react-router-dom-v5-compat";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { BoxGroupSection } from "../../base";
@@ -45,7 +45,7 @@ const Attribution = styled.div`
 export function SubtractionItem({ created_at, id, job, name, nickname, ready, user }: SubtractionMinimal) {
     return (
         <StyledSubtractionItem>
-            <SubtractionLink to={`${id}`}>{name}</SubtractionLink>
+            <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
             <div>{nickname}</div>
             <Attribution>
                 <SubtractionAttribution handle={user.handle} time={created_at} />
