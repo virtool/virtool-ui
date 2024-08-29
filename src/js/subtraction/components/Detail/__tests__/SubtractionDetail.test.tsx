@@ -5,24 +5,17 @@ import { createFakeSubtraction, mockApiGetSubtractionDetail } from "@tests/fake/
 import { renderWithMemoryRouter } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
-import { beforeEach, describe, expect, it } from "vitest";
-import SubtractionDetail from "../SubtractionDetail";
+import { describe, expect, it } from "vitest";
+import Subtraction from "../../Subtraction";
 
 describe("<SubtractionDetail />", () => {
     const subtractionDetail = createFakeSubtraction();
-    let props;
-
-    beforeEach(() => {
-        props = {
-            match: { params: { subtractionId: subtractionDetail.id } },
-        };
-    });
 
     afterEach(() => nock.cleanAll());
 
     it("should render", async () => {
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<SubtractionDetail {...props} />);
+        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
         expect(await screen.findByText(subtractionDetail.nickname)).toBeInTheDocument();
@@ -34,7 +27,7 @@ describe("<SubtractionDetail />", () => {
     });
 
     it("should render loading when [detail=null]", () => {
-        renderWithMemoryRouter(<SubtractionDetail {...props} />);
+        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
 
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText(subtractionDetail.name)).not.toBeInTheDocument();
@@ -42,9 +35,8 @@ describe("<SubtractionDetail />", () => {
 
     it("should render pending message when subtraction is not ready", async () => {
         const subtractionDetail = createFakeSubtraction({ ready: false });
-        props.match.params.subtractionId = subtractionDetail.id;
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<SubtractionDetail {...props} />);
+        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
 
         expect(await screen.findByText("Subtraction is still being imported")).toBeInTheDocument();
 
@@ -56,7 +48,7 @@ describe("<SubtractionDetail />", () => {
         const account = createFakeAccount({ permissions });
         mockApiGetAccount(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<SubtractionDetail {...props} />);
+        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "modify" })).toBeInTheDocument();
@@ -70,7 +62,7 @@ describe("<SubtractionDetail />", () => {
         const account = createFakeAccount({ permissions });
         mockApiGetAccount(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<SubtractionDetail {...props} />);
+        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
@@ -81,9 +73,8 @@ describe("<SubtractionDetail />", () => {
 
     it("should render file id when name not defined", async () => {
         const subtractionDetail = createFakeSubtraction({ file: { id: "test", name: null } });
-        props.match.params.subtractionId = subtractionDetail.id;
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<SubtractionDetail {...props} />);
+        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
 
         expect(await screen.findByText("test")).toBeInTheDocument();
 

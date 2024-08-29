@@ -21,7 +21,7 @@ import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
 
@@ -60,8 +60,8 @@ type FormValues = {
  * Displays a dialog to create an API key
  */
 export default function CreateAPIKey() {
-    const history = useHistory();
-    const location = useLocation<{ createAPIKey: boolean }>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [newKey, setNewKey] = useState("");
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
@@ -97,7 +97,7 @@ export default function CreateAPIKey() {
     function handleHide() {
         setCopied(false);
         setShowCreated(false);
-        history.push({ state: { createAPIKey: false } });
+        navigate(".", { state: { createAPIKey: false } });
     }
 
     function onSubmit({ name, permissions }: FormValues) {
