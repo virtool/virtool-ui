@@ -3,7 +3,7 @@ import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHea
 import { useFindJobs } from "@jobs/queries";
 import { useUrlSearchParams, useUrlSearchParamsList } from "@utils/hooks";
 import { map } from "lodash";
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";
@@ -33,14 +33,8 @@ const initialState = ["preparing", "running"];
  */
 export default function JobsList() {
     const [states] = useUrlSearchParamsList("state", initialState);
-    const [urlPage, setUrlPage] = useUrlSearchParams<number>("page");
+    const [urlPage] = useUrlSearchParams<number>("page");
     const { data, isPending } = useFindJobs(Number(urlPage) || 1, 25, states);
-
-    useEffect(() => {
-        if (data && page > page_count) {
-            setUrlPage(page_count);
-        }
-    }, [data]);
 
     if (isPending) {
         return <LoadingPlaceholder />;
