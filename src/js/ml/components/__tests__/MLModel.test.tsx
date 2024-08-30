@@ -2,8 +2,8 @@ import { screen } from "@testing-library/react";
 import React from "react";
 import { describe, it } from "vitest";
 import { createFakeMLModelMinimal, mockApiGetModels } from "../../../../tests/fake/ml";
-import { renderWithProviders } from "../../../../tests/setupTests";
-import { MLModels } from "../MLModels";
+import { renderWithMemoryRouter } from "../../../../tests/setupTests";
+import ML from "../ML";
 
 describe("<MLModels/>", () => {
     it("should render", async () => {
@@ -15,7 +15,7 @@ describe("<MLModels/>", () => {
         });
         const model_scope = mockApiGetModels([mlModel]);
 
-        renderWithProviders(<MLModels />);
+        renderWithMemoryRouter(<ML />, ["/"]);
 
         expect(await screen.findByText(mlModel.name)).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: `${mlModel.latest_release.name}` })).toHaveAttribute(
@@ -29,7 +29,7 @@ describe("<MLModels/>", () => {
 
     it("should render NoneFound when no models exist", async () => {
         const model_scope = mockApiGetModels([]);
-        renderWithProviders(<MLModels />);
+        renderWithMemoryRouter(<ML />, ["/"]);
 
         expect(await screen.findByText("No machine learning models found.")).toBeInTheDocument();
         model_scope.done();
