@@ -1,7 +1,17 @@
+import { Icon } from "@/base";
+import { borderRadius, boxShadow, getBorder } from "@app/theme";
+import { Command } from "@base/command/Command";
+import { CommandEmpty } from "@base/command/CommandEmpty";
+import { CommandGroup } from "@base/command/CommandGroup";
+import { CommandInput } from "@base/command/CommandInput";
+import { CommandItem } from "@base/command/CommandItem";
+import { CommandList } from "@base/command/CommandList";
+import { Popover } from "@base/Popover";
+import { cn } from "@utils/utils";
 import { useCombobox } from "downshift";
+import { map } from "lodash";
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { borderRadius, boxShadow, getBorder } from "../../app/theme";
 import { WrapRow } from "./ComboBoxItem";
 import { ComboBoxSearch } from "./ComboBoxSearch";
 import { ComboboxTriggerButton } from "./ComboboxTrigger";
@@ -50,9 +60,9 @@ const ComboBoxContainer = styled.div`
 type ComboBoxProps = {
     items: unknown[];
     selectedItem?: unknown;
-    term: string;
+    term?: string;
     renderRow: (item: unknown) => JSX.Element;
-    onFilter: (term: string) => void;
+    onFilter?: (term: string) => void;
     onChange: (item: unknown) => void;
     itemToString?: (item: unknown) => string;
     id?: string;
@@ -103,3 +113,45 @@ export const ComboBox = ({
         </ComboBoxContainer>
     );
 };
+
+export function ComboboxDemo({ items, selectedItem, renderRow, onChange, id }: ComboBoxProps) {
+    const entries =
+        renderRow && map(items, item => <CommandItem onSelect={() => onChange(item)}>{renderRow(item)}</CommandItem>);
+
+    return (
+        <Popover
+            className={cn("w-[545px]", "rounded-sm")}
+            align={"center"}
+            sideOffset={0}
+            trigger={
+                <button
+                    className={cn(
+                        "flex",
+                        "justify-between",
+                        "items-center",
+                        "bg-white",
+                        "border",
+                        "border-gray-300",
+                        "rounded-sm",
+                        "font-medium",
+                        "capitalize",
+                        "w-full"
+                    )}
+                    id={id}
+                    type="button"
+                >
+                    {selectedItem ? renderRow(selectedItem) : "Select user"}
+                    <Icon name="chevron-down" />
+                </button>
+            }
+        >
+            <Command>
+                <CommandInput />
+                <CommandList>
+                    <CommandEmpty>No users found.</CommandEmpty>
+                    <CommandGroup>{entries}</CommandGroup>
+                </CommandList>
+            </Command>
+        </Popover>
+    );
+}

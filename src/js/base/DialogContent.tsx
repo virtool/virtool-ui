@@ -26,7 +26,7 @@ export function DialogContent({ children, className, size }: DialogContentProps)
                 "p-8",
                 "shadow-2xl",
                 "focus:outline-none",
-                "z-50",
+                "z-40",
                 "w-[600px]",
                 { "w-[900px]": size === "lg" },
                 className

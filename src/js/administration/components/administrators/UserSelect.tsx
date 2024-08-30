@@ -1,8 +1,8 @@
+import { ComboboxDemo } from "@base/combobox/ComboBox";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { ComboBox, InitialIcon } from "../../../base";
-
+import { InitialIcon } from "../../../base";
 import { User } from "../../../users/types";
 
 const UserItem = styled.div`
@@ -41,7 +41,7 @@ type UserSelectProps = {
 };
 export const UserSelect = ({ term, users, value, onChange, onTermChange, id }: UserSelectProps) => {
     return (
-        <ComboBox
+        <ComboboxDemo
             items={users}
             term={term}
             selectedItem={value || null}

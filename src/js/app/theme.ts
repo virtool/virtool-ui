@@ -82,7 +82,7 @@ export const theme: DefaultTheme = {
         yellowDarkest: "#B79A18",
     },
     fontFamily: {
-        monospace: "ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace",
+        monospace: "command-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace",
     },
     fontSize: {
         xs: "10px",

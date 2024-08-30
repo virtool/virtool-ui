@@ -51,7 +51,7 @@ export default defineConfig({
         }),
         sentryVitePlugin({
             org: "cfia-virtool",
-            project: "cloud-ui",
+            project: "cloud-command",
         }),
     ],
     root: "src",
