@@ -13,33 +13,17 @@ export function getIndex(indexId: string) {
 }
 
 /**
- * Get a list of indexes that are ready to use
- *
- * @returns A promise resolving to the API response containing the list of ready indexes
- */
-export function listReady() {
-    return Request.get("/indexes").query({ ready: true });
-}
-
-/**
  * Get a paginated list of indexes.
  *
+ * @param page - The page to fetch
+ * @param per_page -The number of indexes to fetch per page
  * @param refId - The reference id to fetch the indexes of
  * @param term - The search term to filter indexes by
- * @param page - The page to fetch
  * @returns  A promise resolving to a paginated list of indexes
  */
-export function findIndexes({
-    refId,
-    term,
-    page,
-}: {
-    refId: string;
-    term: string;
-    page: number;
-}): Promise<IndexSearchResult> {
+export function findIndexes(page: number, per_page: number, refId: string, term: string): Promise<IndexSearchResult> {
     return Request.get(`/refs/${refId}/indexes`)
-        .query({ find: term, page })
+        .query({ find: term, page, per_page })
         .then(res => res.body);
 }
 

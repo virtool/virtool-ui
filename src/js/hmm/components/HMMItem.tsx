@@ -3,7 +3,7 @@ import { BoxGroupSection, Label } from "@base";
 import { cn } from "@utils/utils";
 import { keys, map, reject } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { HMMMinimal } from "../types";
 
@@ -40,7 +40,7 @@ export default function HMMItem({ hmm }: HMMItemProps) {
     return (
         <BoxGroupSection className={cn("flex", "text-lg")}>
             <HMMItemCluster>{hmm.cluster}</HMMItemCluster>
-            <HMMItemName to={`/hmm/${hmm.id}`}>{hmm.names[0]}</HMMItemName>
+            <HMMItemName to={`/${hmm.id}`}>{hmm.names[0]}</HMMItemName>
             <HMMItemFamilies>
                 {labelComponents} {filteredFamilies.length > 3 ? "..." : null}
             </HMMItemFamilies>

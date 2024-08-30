@@ -10,7 +10,7 @@ import {
 import JobItem from "@jobs/components/Item/JobItem";
 import numbro from "numbro";
 import React from "react";
-import { match, useHistory } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { useFetchSample } from "../../queries";
 import { getLibraryTypeDisplayName } from "../../utils";
@@ -27,17 +27,13 @@ const StyledSampleDetailGeneral = styled.div`
     }
 `;
 
-type SampleDetailGeneralProps = {
-    /** Match object containing path information */
-    match: match<{ sampleId: string }>;
-};
-
 /**
  * The general view in sample details
  */
-export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps) {
-    const { sampleId } = match.params;
-    const history = useHistory<{ editSample: boolean }>();
+export default function SampleDetailGeneral() {
+    const { sampleId } = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const { data, isPending } = useFetchSample(sampleId);
 
@@ -140,8 +136,8 @@ export default function SampleDetailGeneral({ match }: SampleDetailGeneralProps)
 
             <EditSample
                 sample={data}
-                show={history.location.state?.editSample}
-                onHide={() => history.push({ state: { editSample: false } })}
+                show={location.state?.editSample}
+                onHide={() => navigate(".", { state: { editSample: false } })}
             />
         </StyledSampleDetailGeneral>
     );

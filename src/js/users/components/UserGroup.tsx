@@ -1,6 +1,6 @@
+import { Checkbox, SelectBoxGroupSection } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { Checkbox, SelectBoxGroupSection } from "../../base";
 
 const StyledUserGroup = styled(SelectBoxGroupSection)`
     text-transform: capitalize;

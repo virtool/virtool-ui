@@ -2,7 +2,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { pick } from "lodash";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
 import {
     Dialog,
     DialogContent,
@@ -31,7 +31,7 @@ type EditSampleProps = {
  * Displays a dialog for editing the sample
  */
 export default function EditSample({ sample, show, onHide }: EditSampleProps) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const mutation = useUpdateSample(sample.id);
 
     const { register, handleSubmit } = useForm({
@@ -58,9 +58,7 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                                 },
                                 {
                                     onSuccess: () => {
-                                        history.replace({
-                                            state: { editSample: false },
-                                        });
+                                        navigate(".", { replace: true, state: { editSample: false } });
                                     },
                                 }
                             )

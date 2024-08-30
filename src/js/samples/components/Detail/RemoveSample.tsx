@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import { RemoveDialog } from "../../../base/RemoveDialog";
 import { useRemoveSample } from "../../queries";
 
@@ -14,8 +14,8 @@ type RemoveSampleProps = {
  * Displays a dialog for removing a sample
  */
 export default function RemoveSample({ id, name }: RemoveSampleProps) {
-    const history = useHistory();
-    const location = useLocation<{ removeSample: boolean }>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const mutation = useRemoveSample();
 
     return (
@@ -28,12 +28,12 @@ export default function RemoveSample({ id, name }: RemoveSampleProps) {
                     { sampleId: id },
                     {
                         onSuccess: () => {
-                            history.push("/samples");
+                            navigate("/samples");
                         },
                     }
                 )
             }
-            onHide={() => history.replace({ state: { removeSample: false } })}
+            onHide={() => navigate(".", { replace: true, state: { removeSample: false } })}
         />
     );
 }

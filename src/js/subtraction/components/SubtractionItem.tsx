@@ -3,7 +3,7 @@ import { BoxGroupSection, ProgressCircle } from "@base";
 import { JobState } from "@jobs/types";
 import { cn } from "@utils/utils";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
@@ -37,7 +37,7 @@ export function SubtractionItem({ created_at, id, job, name, nickname, ready, us
         <BoxGroupSection
             className={cn("items-center", "grid", "grid-cols-[30%_30%_30%_auto]", "ml-auto", "leading-none", "py-4")}
         >
-            <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
+            <SubtractionLink to={`${id}`}>{name}</SubtractionLink>
             <div>{nickname}</div>
             <Attribution>
                 <SubtractionAttribution handle={user.handle} time={created_at} />

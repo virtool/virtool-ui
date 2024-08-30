@@ -2,7 +2,7 @@ import { ErrorResponse } from "@/types/types";
 import { Label } from "@labels/types";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { forEach, map, reject, union } from "lodash-es/lodash";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom-v5-compat";
 import {
     createSample,
     getSample,
@@ -68,7 +68,7 @@ export function useFetchSample(sampleId: string) {
  * @returns A mutator for creating a sample
  */
 export function useCreateSample() {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return useMutation<
         Sample,
@@ -88,7 +88,7 @@ export function useCreateSample() {
         mutationFn: ({ name, isolate, host, locale, libraryType, subtractions, files, labels, group }) =>
             createSample(name, isolate, host, locale, libraryType, subtractions, files, labels, group),
         onSuccess: () => {
-            history.push("/samples");
+            navigate("/samples");
         },
     });
 }

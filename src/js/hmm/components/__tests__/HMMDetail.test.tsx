@@ -1,31 +1,20 @@
 import { screen } from "@testing-library/react";
 import nock from "nock";
 import React from "react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createFakeHMM, mockApiGetHmmDetail } from "../../../../tests/fake/hmm";
-import { renderWithProviders } from "../../../../tests/setupTests";
-import HMMDetail from "../HMMDetail";
+import { renderWithMemoryRouter } from "../../../../tests/setupTests";
+import HMM from "../HMM";
 
 describe("<HMMDetail />", () => {
     const hmmDetail = createFakeHMM();
-    let props;
-
-    beforeEach(() => {
-        props = {
-            match: {
-                params: {
-                    hmmId: hmmDetail.id,
-                },
-            },
-        };
-    });
 
     afterEach(() => nock.cleanAll());
 
     describe("<HMMDetail />", () => {
         it("should render correctly when query has an error", async () => {
             const scope = mockApiGetHmmDetail(hmmDetail, 404);
-            renderWithProviders(<HMMDetail {...props} />);
+            renderWithMemoryRouter(<HMM />, [`/${hmmDetail.id}`]);
 
             expect(await screen.findByText("404")).toBeInTheDocument();
             expect(screen.getByText("Not found")).toBeInTheDocument();
@@ -34,7 +23,7 @@ describe("<HMMDetail />", () => {
         });
 
         it("should render loading when props.detail = null", () => {
-            renderWithProviders(<HMMDetail {...props} />);
+            renderWithMemoryRouter(<HMM />, [`/${hmmDetail.id}`]);
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
             expect(screen.queryByText("General")).not.toBeInTheDocument();
@@ -43,7 +32,7 @@ describe("<HMMDetail />", () => {
 
         it("should render General table correctly", async () => {
             const scope = mockApiGetHmmDetail(hmmDetail);
-            renderWithProviders(<HMMDetail {...props} />);
+            renderWithMemoryRouter(<HMM />, [`/${hmmDetail.id}`]);
 
             expect(await screen.findByText("General")).toBeInTheDocument();
 
@@ -63,7 +52,7 @@ describe("<HMMDetail />", () => {
 
         it("should render Cluster table correctly", async () => {
             const scope = mockApiGetHmmDetail(hmmDetail);
-            renderWithProviders(<HMMDetail {...props} />);
+            renderWithMemoryRouter(<HMM />, [`/${hmmDetail.id}`]);
 
             expect(await screen.findByText("General")).toBeInTheDocument();
 
@@ -89,7 +78,7 @@ describe("<HMMDetail />", () => {
     describe("HMMTaxonomy", () => {
         it("should render Families correctly", async () => {
             const scope = mockApiGetHmmDetail(hmmDetail);
-            renderWithProviders(<HMMDetail {...props} />);
+            renderWithMemoryRouter(<HMM />, [`/${hmmDetail.id}`]);
 
             expect(await screen.findByText("Families")).toBeInTheDocument();
 
@@ -103,7 +92,7 @@ describe("<HMMDetail />", () => {
 
         it("should render Genera correctly", async () => {
             const scope = mockApiGetHmmDetail(hmmDetail);
-            renderWithProviders(<HMMDetail {...props} />);
+            renderWithMemoryRouter(<HMM />, [`/${hmmDetail.id}`]);
 
             expect(await screen.findByText("Genera")).toBeInTheDocument();
 
