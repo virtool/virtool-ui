@@ -88,7 +88,7 @@ export default function Main() {
                         <CompatRoute path="/subtractions" component={Subtraction} />
                         <Route path="/administration" component={Administration} />
                         <CompatRoute path="/account" component={Account} />
-                        <Route path="/ml" component={ML} />
+                        <CompatRoute path="/ml" component={ML} />
                     </Switch>
                 </Suspense>
             </MainContainer>
