@@ -47,6 +47,7 @@ export function CompactScrollList({
         <div
             className={cn("mb-2", "relative", "z-0", "overflow-y-auto", "border", "rounded-md", className)}
             onScroll={onScroll}
+            role="listbox"
         >
             {entries}
             {isPending && <LoadingPlaceholder className="mt-5" />}

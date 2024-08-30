@@ -1,5 +1,6 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { Workflows } from "../../../analyses/types";
 import { getFontSize, getFontWeight } from "../../../app/theme";
@@ -87,10 +88,17 @@ type SampleItemProps = {
  * A condensed sample item for use in a list of samples
  */
 export default function SampleItem({ sample, checked, handleSelect, selectOnQuickAnalyze }: SampleItemProps) {
-    const history = useHistory();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     function handleQuickAnalyze() {
-        history.push({ ...history.location, state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } });
+        navigate(
+            {
+                pathname: location.pathname,
+                search: location.search,
+            },
+            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } }
+        );
         selectOnQuickAnalyze();
     }
 

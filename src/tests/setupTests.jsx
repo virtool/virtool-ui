@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event";
 import { noop } from "lodash-es";
 import React from "react";
 import { MemoryRouter, Router } from "react-router-dom";
+import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
 
@@ -38,12 +39,20 @@ export function renderWithProviders(ui) {
 }
 
 export function renderWithRouter(ui, history) {
-    const wrappedUI = <Router history={history}>{ui}</Router>;
+    const wrappedUI = (
+        <Router history={history}>
+            <CompatRouter>{ui}</CompatRouter>
+        </Router>
+    );
     renderWithProviders(wrappedUI);
 }
 
 export function renderWithMemoryRouter(ui, initialEntries) {
-    renderWithProviders(<MemoryRouter initialEntries={initialEntries}>{ui}</MemoryRouter>);
+    renderWithProviders(
+        <MemoryRouter initialEntries={initialEntries}>
+            <CompatRouter>{ui}</CompatRouter>
+        </MemoryRouter>
+    );
 }
 
 //mocks HTML element prototypes that are not implemented in jsdom

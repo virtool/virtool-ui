@@ -1,8 +1,8 @@
+import { getColor } from "@app/theme";
+import { BoxGroup, SelectBoxGroupSection } from "@base";
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { getColor } from "../../app/theme";
-import { BoxGroup, SelectBoxGroupSection } from "../../base";
 import { GroupMinimal } from "../types";
 
 type GroupsSelectBoxGroupSectionProps = {
@@ -13,7 +13,7 @@ export const GroupsSelectBoxGroupSection = styled(SelectBoxGroupSection)<GroupsS
     outline: 1px solid ${props => getColor({ color: "greyLight", theme: props.theme })};
     background-color: ${props => getColor({ color: props.active ? "blue" : "white", theme: props.theme })};
     cursor: ${props => (props.selectable ? "pointer" : "default")};
-    hover {
+    &:hover {
         background-color: ${props =>
             getColor({ theme: props.theme, color: props.selectable ? "greyLightest" : "white" })};
     }

@@ -15,7 +15,7 @@ import { useFetchSample } from "@samples/queries";
 import { useLocationState } from "@utils/hooks";
 import { includes } from "lodash-es";
 import React from "react";
-import { match, Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom-v5-compat";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -23,18 +23,13 @@ import RemoveSample from "./RemoveSample";
 import General from "./SampleDetailGeneral";
 import Rights from "./SampleRights";
 
-type SampleDetailProps = {
-    /** Match object containing path information */
-    match: match<{ sampleId: string }>;
-};
-
 /**
  * The detailed view for managing samples
  */
-export default function SampleDetail({ match }: SampleDetailProps) {
+export default function SampleDetail() {
     const location = useLocation();
     const [_, setLocationState] = useLocationState();
-    const { sampleId } = match.params;
+    const { sampleId } = useParams();
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
 
@@ -106,14 +101,14 @@ export default function SampleDetail({ match }: SampleDetailProps) {
                 )}
             </Tabs>
 
-            <Switch>
-                <Redirect from="/samples/:sampleId" to={`/samples/${sampleId}/general`} exact />
-                <Route path="/samples/:sampleId/general" component={General} />
-                <Route path="/samples/:sampleId/files" component={SampleDetailFiles} exact />
-                <Route path="/samples/:sampleId/quality" component={Quality} />
-                <Route path="/samples/:sampleId/analyses" component={Analyses} />
-                <Route path="/samples/:sampleId/rights" component={Rights} />
-            </Switch>
+            <Routes>
+                <Route path="" element={<Navigate to={`/samples/${sampleId}/general`} replace />} />
+                <Route path="/general" element={<General />} />
+                <Route path="/files" element={<SampleDetailFiles />} />
+                <Route path="/quality" element={<Quality />} />
+                <Route path="/analyses" element={<Analyses />} />
+                <Route path="/rights" element={<Rights />} />
+            </Routes>
 
             <RemoveSample id={sampleId} name={name} />
         </>
