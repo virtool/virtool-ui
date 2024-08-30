@@ -10,11 +10,12 @@ const StyledNoneFoundSection = styled(BoxGroupSection)`
 `;
 
 type NoneFoundSectionProps = {
+    as?: React.ElementType;
     children?: React.ReactNode;
     noun: string;
 };
 
-export function NoneFoundSection({ children, noun }: NoneFoundSectionProps) {
+export function NoneFoundSection({ as, children, noun }: NoneFoundSectionProps) {
     let childrenContainer;
 
     if (children) {
@@ -22,7 +23,7 @@ export function NoneFoundSection({ children, noun }: NoneFoundSectionProps) {
     }
 
     return (
-        <StyledNoneFoundSection>
+        <StyledNoneFoundSection as={as}>
             <Icon name="info-circle" /> No {noun} found{childrenContainer}
         </StyledNoneFoundSection>
     );

@@ -6,6 +6,8 @@ type PopoverProps = {
     align?: "center" | "start" | "end";
     children: React.ReactNode;
     className?: string;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
     sideOffset?: number;
     trigger: React.ReactNode;
 };
@@ -13,9 +15,17 @@ type PopoverProps = {
 /**
  * A styled popover component
  */
-export function Popover({ align = "end", children, className, sideOffset = 15, trigger }: PopoverProps) {
+export function Popover({
+    align = "end",
+    children,
+    className,
+    open,
+    onOpenChange,
+    sideOffset = 15,
+    trigger,
+}: PopoverProps) {
     return (
-        <PopoverPrimitive.Root>
+        <PopoverPrimitive.Root open={open} onOpenChange={onOpenChange}>
             <PopoverPrimitive.Trigger asChild>{trigger}</PopoverPrimitive.Trigger>
             <PopoverPrimitive.Content
                 className={cn(

@@ -25,7 +25,7 @@ export { CheckboxLabel } from "./CheckboxLabel";
 export { Circle } from "./Circle";
 export { CloseButton } from "./CloseButton";
 export { Color } from "./Color";
-export { ComboBox } from "./combobox/ComboBox";
+export { Combobox } from "./Combobox.tsx";
 export { Container } from "./Container";
 export { ContainerNarrow } from "./ContainerNarrow";
 export { ContainerSide } from "./ContainerSide";
