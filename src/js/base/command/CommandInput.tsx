@@ -9,7 +9,7 @@ import { forwardRef } from "react";
 export const CommandInput = forwardRef<
     React.ElementRef<typeof CommandPrimitive.Input>,
     React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => {
+>(({ ...props }, ref) => {
     return (
         <div className="m-2">
             <InputContainer align="left">

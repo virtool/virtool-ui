@@ -13,7 +13,6 @@ import React, { useState } from "react";
 type ComboBoxProps = {
     id?: string;
     items: unknown[];
-    noun: string;
     onChange: (item: unknown) => void;
     renderRow: (item: unknown) => JSX.Element;
     selectedItem?: unknown;
@@ -22,7 +21,7 @@ type ComboBoxProps = {
 /**
  * A styled combobox displaying a list of items with built-in input search
  */
-export function Combobox({ id, items, noun, onChange, renderRow, selectedItem }: ComboBoxProps) {
+export function Combobox({ id, items, onChange, renderRow, selectedItem }: ComboBoxProps) {
     const [open, setOpen] = useState(false);
 
     const entries =
@@ -62,7 +61,7 @@ export function Combobox({ id, items, noun, onChange, renderRow, selectedItem }:
                     id={id}
                     type="button"
                 >
-                    {selectedItem ? renderRow(selectedItem) : `Select ${noun}`}
+                    {selectedItem ? renderRow(selectedItem) : `Select ${id}`}
                     <Icon name="chevron-down" />
                 </button>
             }
@@ -70,7 +69,7 @@ export function Combobox({ id, items, noun, onChange, renderRow, selectedItem }:
             <Command>
                 <CommandInput />
                 <CommandList>
-                    <CommandEmpty noun={noun} />
+                    <CommandEmpty id={id} />
                     <CommandGroup>{entries}</CommandGroup>
                 </CommandList>
             </Command>

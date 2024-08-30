@@ -17,23 +17,12 @@ function renderRow(user: User) {
 }
 
 type UserSelectProps = {
-    term: string;
+    id: string;
+    onChange: (value: string) => void;
     users: User[];
     value: User;
-    onChange: (value: string) => void;
-    onTermChange: (value: string) => void;
-    id: string;
 };
 
-export function UserSelect({ users, value, onChange, id }: UserSelectProps) {
-    return (
-        <Combobox
-            id={id}
-            items={users}
-            noun="user"
-            onChange={onChange}
-            renderRow={renderRow}
-            selectedItem={value || null}
-        />
-    );
+export function UserSelect({ id, onChange, users, value }: UserSelectProps) {
+    return <Combobox id={id} items={users} onChange={onChange} renderRow={renderRow} selectedItem={value || null} />;
 }

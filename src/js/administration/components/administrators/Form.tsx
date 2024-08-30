@@ -42,19 +42,14 @@ export function AdministratorForm({ onClose }: AdministratorFormProps): JSX.Elem
         handleSubmit,
         control,
     } = useForm<FormInputValues>();
-
-    const [userSearchTerm, setUserSearchTerm] = React.useState("");
-
-    const { data: users } = useFindUsers(1, 25, userSearchTerm, false);
-
+    const { data: users } = useFindUsers(1, 25, "", false);
     const { data: roles } = useGetAdministratorRoles();
-
     const administratorRoleMutator = useSetAdministratorRole();
 
-    const onSubmit = ({ user, role }: FormInputValues) => {
+    function onSubmit({ user, role }: FormInputValues) {
         administratorRoleMutator.mutate({ user_id: user.id, role });
         onClose();
-    };
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,14 +58,7 @@ export function AdministratorForm({ onClose }: AdministratorFormProps): JSX.Elem
                 <UserSelectContainer>
                     <Controller
                         render={({ field: { onChange, value } }) => (
-                            <UserSelect
-                                onChange={onChange}
-                                value={value}
-                                users={users?.items || []}
-                                onTermChange={setUserSearchTerm}
-                                term={userSearchTerm}
-                                id="user"
-                            />
+                            <UserSelect id="user" onChange={onChange} users={users?.items || []} value={value} />
                         )}
                         name="user"
                         control={control}
