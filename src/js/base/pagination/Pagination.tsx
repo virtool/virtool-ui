@@ -62,7 +62,7 @@ export function Pagination({
         if (currentPage > pageCount) {
             setUrlPage(pageCount);
         }
-    }, [items]);
+    }, [currentPage, pageCount]);
 
     return (
         <div>
