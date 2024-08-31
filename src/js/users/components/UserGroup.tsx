@@ -1,4 +1,5 @@
 import { Checkbox, SelectBoxGroupSection } from "@base";
+import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 
@@ -24,7 +25,7 @@ type UserGroupTypes = {
 export function UserGroup({ id, name, toggled, onClick }: UserGroupTypes) {
     return (
         <StyledUserGroup active={toggled} onClick={() => onClick(id)}>
-            <Checkbox checked={toggled} label={name} />
+            <Checkbox className={cn("m-0")} checked={toggled} label={name} />
         </StyledUserGroup>
     );
 }

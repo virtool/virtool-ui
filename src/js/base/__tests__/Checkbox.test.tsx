@@ -1,9 +1,9 @@
+import { Checkbox } from "@base";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setupTests";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../tests/setupTests";
-import { Checkbox } from "../Checkbox";
 
 describe("Checkbox", () => {
     let props;
