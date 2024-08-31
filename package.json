@@ -33,7 +33,6 @@
         "d3-shape": "^3.2.0",
         "d3-transition": "^3.0.1",
         "date-fns": "^2.29.3",
-        "downshift": "^7.6.0",
         "express": "^4.18.2",
         "fuse.js": "^6.6.2",
         "history": "^4.10.1",
