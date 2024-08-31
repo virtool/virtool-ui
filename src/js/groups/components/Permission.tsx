@@ -1,4 +1,5 @@
 import { Checkbox, SelectBoxGroupSection } from "@base";
+import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 
@@ -22,7 +23,7 @@ type GroupPermissionProps = {
 export function GroupPermission({ active, permission, onClick }: GroupPermissionProps) {
     return (
         <StyledGroupPermission active={active} onClick={onClick}>
-            <Checkbox checked={active} label={permission} />
+            <Checkbox className={cn("m-0")} checked={active} label={permission} />
         </StyledGroupPermission>
     );
 }

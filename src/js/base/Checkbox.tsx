@@ -1,24 +1,21 @@
 import * as RadixCheckbox from "@radix-ui/react-checkbox";
+import { cn } from "@utils/utils";
 import React from "react";
-import styled from "styled-components";
 import { CheckboxLabel } from "./CheckboxLabel";
 import { Icon } from "./Icon";
 import { StyledCheckbox } from "./styled/StyledCheckbox";
 
-const CheckboxContainer = styled.div`
-    display: inline-flex;
-`;
-
 type CheckboxProps = {
+    className?: string;
     checked?: boolean;
     label?: string;
     disabled?: boolean;
     onClick?: () => void;
 };
 
-export function Checkbox({ checked = false, label, onClick, disabled = false }: CheckboxProps) {
+export function Checkbox({ className, checked = false, label, onClick, disabled = false }: CheckboxProps) {
     return (
-        <CheckboxContainer>
+        <div className={cn("inline-flex")}>
             <StyledCheckbox
                 disabled={disabled}
                 checked={checked}
@@ -28,9 +25,11 @@ export function Checkbox({ checked = false, label, onClick, disabled = false }: 
                 <Icon name="check" />
                 <RadixCheckbox.Indicator />
             </StyledCheckbox>
-            {label ? <CheckboxLabel onClick={disabled ? null : onClick}>{label}</CheckboxLabel> : null}
-        </CheckboxContainer>
+            {label ? (
+                <CheckboxLabel className={className} onClick={disabled ? null : onClick}>
+                    {label}
+                </CheckboxLabel>
+            ) : null}
+        </div>
     );
 }
-
-Checkbox.displayName = "Checkbox";

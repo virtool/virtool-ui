@@ -1,7 +1,6 @@
 import React from "react";
 import styled, { DefaultTheme } from "styled-components";
 import { BoxGroupSection } from "./BoxGroupSection";
-import { CheckboxLabel } from "./CheckboxLabel";
 import { StyledCheckbox } from "./styled/StyledCheckbox";
 
 type SelectBoxGroupSectionProps = {
@@ -24,10 +23,6 @@ const StyledSelectBoxGroupSection = styled(BoxGroupSection)<SelectBoxGroupSectio
         background-color: ${props => (props.active ? props.theme.color.white : "transparent")};
         color: ${props => props.theme.color[props.active ? "blueDark" : "greyLight"]};
         margin-right: 10px;
-    }
-
-    ${CheckboxLabel} {
-        margin: 0;
     }
 `;
 
