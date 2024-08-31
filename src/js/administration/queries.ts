@@ -84,7 +84,7 @@ export const userQueryKeys = {
  * @param active - Filter the users by whether they are active
  * @returns A page of user search results
  */
-export function useFindUsers(page: number, per_page: number, term: string, administrator?: boolean, active?: boolean) {
+export function useFindUsers(page: number, per_page: number, term?: string, administrator?: boolean, active?: boolean) {
     return useQuery<UserResponse>({
         queryKey: userQueryKeys.list([page, per_page, term, administrator, active]),
         queryFn: () => findUsers(page, per_page, term, administrator, active),

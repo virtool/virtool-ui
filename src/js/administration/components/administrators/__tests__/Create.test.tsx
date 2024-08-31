@@ -1,24 +1,21 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "@tests/fake/admin";
+import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
+import { renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
-import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
-import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "../../../../../tests/fake/admin";
-import { createFakeUsers, mockApiFindUsers } from "../../../../../tests/fake/user";
-import { renderWithProviders } from "../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../types";
 import { CreateAdministrator } from "../Create";
 
 describe("<CreateAdministrator>", () => {
     it("should render form", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockApiGetAccount(account);
-
         const users = createFakeUsers(2);
+        mockApiGetAccount(account);
         mockApiFindUsers(users);
-
         mockGetAdministratorRoles();
-
         renderWithProviders(<CreateAdministrator />);
 
         await userEvent.click(await screen.findByRole("button"));
@@ -38,22 +35,19 @@ describe("<CreateAdministrator>", () => {
 
     it("should promote admin when correct", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockApiGetAccount(account);
-
         const users = createFakeUsers(2);
-
+        mockApiGetAccount(account);
         mockApiFindUsers(users);
         mockGetAdministratorRoles();
-
         const set_role_scope = mockSetAdministratorRoleAPI({ user: users[0], new_role: AdministratorRoles.FULL });
-
         renderWithProviders(<CreateAdministrator />);
 
         await userEvent.click(await screen.findByRole("button", { name: "Create" }));
 
         //Check user dropdown
-        await userEvent.click(await screen.findByRole("option", { name: users[0].handle }));
         const userTrigger = screen.getByRole("button", { name: "User" });
+        await userEvent.click(await userTrigger);
+        await userEvent.click(await screen.findByRole("option", { name: users[0].handle }));
         expect(within(userTrigger).getByText(users[0].handle)).toBeInTheDocument();
 
         //Check role dropdown
@@ -70,35 +64,26 @@ describe("<CreateAdministrator>", () => {
 
     it("should filter users", async () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
-        mockApiGetAccount(account);
-
         const users = createFakeUsers(2);
-
+        mockApiGetAccount(account);
         mockApiFindUsers(users);
-
         mockGetAdministratorRoles();
-
         renderWithProviders(<CreateAdministrator />);
 
         await userEvent.click(await screen.findByRole("button", { name: "Create" }));
 
+        await userEvent.click(await screen.getByRole("button", { name: "User" }));
         expect(await screen.findByRole("option", { name: users[0].handle })).toBeInTheDocument();
         expect(await screen.findByRole("option", { name: users[1].handle })).toBeInTheDocument();
 
-        const findUsersScope = mockApiFindUsers([users[0]], {
-            page: 1,
-            per_page: 25,
-            term: users[0].handle,
-            administrator: false,
-        });
-        await userEvent.type(screen.getByRole("textbox"), users[0].handle);
+        await userEvent.type(screen.getByRole("combobox", { name: "" }), users[0].handle);
 
         expect(await screen.findByRole("option", { name: users[0].handle })).toBeInTheDocument();
         await waitFor(() => expect(screen.queryByRole("option", { name: users[1].handle })).not.toBeInTheDocument());
+        await userEvent.click(await screen.findByRole("option", { name: users[0].handle }));
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        findUsersScope.done();
         await nock.cleanAll();
     });
 });
