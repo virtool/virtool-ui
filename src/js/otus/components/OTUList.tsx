@@ -3,23 +3,18 @@ import { useGetReference } from "@references/queries";
 import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
-import { match } from "react-router-dom";
+import { useParams } from "react-router-dom-v5-compat";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
 import { useListOTUs } from "../queries";
 import CreateOTU from "./CreateOTU";
 import OTUItem from "./OTUItem";
 import OTUToolbar from "./OTUToolbar";
 
-type OTUListProps = {
-    /** Match object containing path information */
-    match: match<{ refId: string }>;
-};
-
 /**
  * A list of OTUs with filtering
  */
-export default function OTUList({ match }: OTUListProps) {
-    const { refId } = match.params;
+export default function OTUList() {
+    const { refId } = useParams();
     const [term, setTerm] = useUrlSearchParams<string>("find");
     const [urlPage] = useUrlSearchParams<number>("page");
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);

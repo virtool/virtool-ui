@@ -83,7 +83,7 @@ export default function Main() {
                         <Redirect from="/" to="/samples" exact />
                         <Route path="/jobs" component={Jobs} />
                         <CompatRoute path="/samples" component={Samples} />
-                        <Route path="/refs" component={References} />
+                        <CompatRoute path="/refs" component={References} />
                         <CompatRoute path="/hmm" component={HMM} />
                         <CompatRoute path="/subtractions" component={Subtraction} />
                         <Route path="/administration" component={Administration} />

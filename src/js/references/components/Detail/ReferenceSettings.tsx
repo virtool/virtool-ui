@@ -1,22 +1,17 @@
 import { LoadingPlaceholder, SectionHeader } from "@base";
 import { sortBy } from "lodash-es";
 import React from "react";
-import { match } from "react-router-dom";
+import { useParams } from "react-router-dom-v5-compat";
 import { useGetReference } from "../../queries";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";
 
-type ReferenceSettingsProps = {
-    /** Match object containing path information */
-    match: match<{ refId: string }>;
-};
-
 /**
  * The reference settings view allowing users to manage the reference
  */
-export default function ReferenceSettings({ match }: ReferenceSettingsProps) {
-    const { refId } = match.params;
+export default function ReferenceSettings() {
+    const { refId } = useParams();
     const { data, isPending } = useGetReference(refId);
 
     if (isPending) {

@@ -3,7 +3,7 @@ import { LoadingPlaceholder, NotFound, Tabs, TabsLink, ViewHeader, ViewHeaderIco
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
@@ -37,8 +37,8 @@ const OTUDetailSubtitle = styled.p`
 /**
  * Displays detailed otu view allowing users to manage otus
  */
-export default function OTUDetail({ match }) {
-    const { otuId, refId } = match.params;
+export default function OTUDetail() {
+    const { otuId, refId } = useParams();
     const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 
@@ -78,12 +78,12 @@ export default function OTUDetail({ match }) {
                 <TabsLink to={`/refs/${refId}/otus/${id}/history`}>History</TabsLink>
             </Tabs>
 
-            <Switch>
-                <Redirect from="/refs/:refId/otus/:otuId" to={`/refs/${refId}/otus/${id}/otu`} exact />
-                <Route path="/refs/:refId/otus/:otuId/otu" component={OTUSection} />
-                <Route path="/refs/:refId/otus/:otuId/history" component={History} />
-                <Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />
-            </Switch>
+            <Routes>
+                <Route path="/" element={<Navigate replace to={`/refs/${refId}/otus/${id}/otu`} />} />
+                <Route path="/otu" element={<OTUSection />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/schema" element={<Schema />} />
+            </Routes>
         </>
     );
 }

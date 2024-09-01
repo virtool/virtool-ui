@@ -4,21 +4,16 @@ import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import { find, get } from "lodash-es/lodash";
 import React from "react";
-import { match } from "react-router-dom";
+import { useParams } from "react-router-dom-v5-compat";
 import { useFindIndexes } from "../queries";
 import RebuildAlert from "./RebuildAlert";
 import RebuildIndex from "./RebuildIndex";
 
-type IndexesProps = {
-    /** Match object containing path information */
-    match: match<{ refId: string }>;
-};
-
 /**
  * Displays a list of reference indexes
  */
-export default function Indexes({ match }: IndexesProps) {
-    const { refId } = match.params;
+export default function Indexes() {
+    const { refId } = useParams();
     const [urlPage] = useUrlSearchParams<number>("page");
     const { data, isPending } = useFindIndexes(Number(urlPage) || 1, 25, refId);
 

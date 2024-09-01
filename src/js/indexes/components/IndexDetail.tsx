@@ -14,7 +14,7 @@ import { useFetchIndex } from "@indexes/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { match } from "react-router-dom";
+import { useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 
 const IndexDetailSubtitle = styled.div`
@@ -26,16 +26,11 @@ const IndexDetailSubtitle = styled.div`
     }
 `;
 
-type IndexDetailProps = {
-    /** Match object containing path information */
-    match: match<{ indexId: string; refId: string }>;
-};
-
 /**
  * The index detailed view
  */
-export default function IndexDetail({ match }: IndexDetailProps) {
-    const { indexId, refId } = match.params;
+export default function IndexDetail() {
+    const { indexId, refId } = useParams();
     const { data: index, isPending: isPendingIndex, isError } = useFetchIndex(indexId);
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 

@@ -5,7 +5,8 @@ import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { map } from "lodash";
 import React from "react";
-import { match, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import AddSegment from "./AddSegment";
 import RemoveSegment from "./RemoveSegment";
@@ -16,16 +17,11 @@ const AddButton = styled(Button)`
     width: 100%;
 `;
 
-type SchemaProps = {
-    /** Match object containing path information */
-    match: match<{ otuId: string; refId: string }>;
-};
-
 /**
  * Displays a component allowing users to manage the otu schema
  */
-export default function Schema({ match }: SchemaProps) {
-    const { refId, otuId } = match.params;
+export default function Schema() {
+    const { refId, otuId } = useParams();
     const { hasPermission: canModify, isPending: isPendingPermission } = useCheckReferenceRight(
         refId,
         ReferenceRight.modify_otu
