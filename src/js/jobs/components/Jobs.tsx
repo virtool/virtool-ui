@@ -11,8 +11,8 @@ export default function Jobs() {
     return (
         <Container>
             <Routes>
-                <Route path="/jobs" element={<JobsList />} />
-                <Route path="/jobs/:jobId" element={<JobDetail />} />
+                <Route path="/" element={<JobsList />} />
+                <Route path="/:jobId/*" element={<JobDetail />} />
             </Routes>
         </Container>
     );
