@@ -1,8 +1,8 @@
+import { getFontSize, getFontWeight } from "@app/theme";
+import { BoxGroupSection } from "@base";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { BoxGroupSection } from "../../base";
 
 const OTUItemName = styled(Link)`
     font-size: ${getFontSize("lg")};
@@ -29,17 +29,16 @@ type OTUItemProps = {
     abbreviation: string;
     id: string;
     name: string;
-    refId: string;
     verified: boolean;
 };
 
 /**
  * A condensed OTU item for use in a list of OTUs
  */
-export default function OTUItem({ abbreviation, id, name, refId, verified }: OTUItemProps) {
+export default function OTUItem({ abbreviation, id, name, verified }: OTUItemProps) {
     return (
         <StyledOTUItem key={id}>
-            <OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
+            <OTUItemName to={id}>{name}</OTUItemName>
             <OTUItemAbbreviation>{abbreviation}</OTUItemAbbreviation>
             {verified || <OTUItemUnverified>Unverified</OTUItemUnverified>}
         </StyledOTUItem>

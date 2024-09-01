@@ -5,8 +5,7 @@ import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { map } from "lodash";
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { useParams } from "react-router-dom-v5-compat";
+import { useNavigate, useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import AddSegment from "./AddSegment";
 import RemoveSegment from "./RemoveSegment";
@@ -26,7 +25,7 @@ export default function Schema() {
         refId,
         ReferenceRight.modify_otu
     );
-    const history = useHistory();
+    const navigate = useNavigate();
     const { data, isPending } = useFetchOTU(otuId);
     const mutation = useUpdateOTU(otuId);
 
@@ -55,7 +54,7 @@ export default function Schema() {
     return (
         <div>
             {canModify && (
-                <AddButton color="blue" onClick={() => history.push({ state: { addSegment: true } })}>
+                <AddButton color="blue" onClick={() => navigate(".", { state: { addSegment: true } })}>
                     Add Segment
                 </AddButton>
             )}

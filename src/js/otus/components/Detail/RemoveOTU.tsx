@@ -1,6 +1,6 @@
+import { RemoveDialog } from "@base/RemoveDialog";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { RemoveDialog } from "../../../base/RemoveDialog";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import { useRemoveOTU } from "../../queries";
 
 type RemoveOTUProps = {
@@ -13,8 +13,8 @@ type RemoveOTUProps = {
  * Displays a dialog for removing an OTU
  */
 export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
-    const history = useHistory();
-    const location = useLocation<{ removeOTU: boolean }>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const mutation = useRemoveOTU();
 
     function handleConfirm() {
@@ -22,8 +22,8 @@ export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
             { otuId: id },
             {
                 onSuccess: () => {
-                    history.push(`/refs/${refId}/otus/`);
-                    history.replace({ state: { removeOTU: false } });
+                    navigate(`/refs/${refId}/otus/`);
+                    navigate(".", { replace: true, state: { removeOTU: false } });
                 },
             }
         );
@@ -34,7 +34,7 @@ export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
             name={name}
             noun="OTU"
             onConfirm={handleConfirm}
-            onHide={() => history.replace({ state: { removeOTU: false } })}
+            onHide={() => navigate(".", { replace: true, state: { removeOTU: false } })}
             show={location.state?.removeOTU}
         />
     );

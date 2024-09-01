@@ -1,8 +1,8 @@
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { useUpdateOTU } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../base";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import { OTUForm } from "../OTUForm";
 
 type EditOTUProps = {
@@ -15,8 +15,8 @@ type EditOTUProps = {
  * Displays a dialog for editing an OTU
  */
 export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
-    const location = useLocation<{ editOTU: boolean }>();
-    const history = useHistory();
+    const location = useLocation();
+    const navigate = useNavigate();
     const mutation = useUpdateOTU(otuId);
 
     function handleSubmit({ name, abbreviation }) {
@@ -24,14 +24,14 @@ export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
             { otuId, name, abbreviation },
             {
                 onSuccess: () => {
-                    history.replace({ state: { editOTU: false } });
+                    navigate(".", { replace: true, state: { editOTU: false } });
                 },
             }
         );
     }
 
     function onHide() {
-        history.replace({ state: { editOTU: false } });
+        navigate(".", { replace: true, state: { editOTU: false } });
         mutation.reset();
     }
 

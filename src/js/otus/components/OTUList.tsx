@@ -46,7 +46,7 @@ export default function OTUList() {
                 >
                     <BoxGroup>
                         {map(documents, document => (
-                            <OTUItem key={document.id} {...document} refId={refId} />
+                            <OTUItem key={document.id} {...document} />
                         ))}
                     </BoxGroup>
                 </Pagination>

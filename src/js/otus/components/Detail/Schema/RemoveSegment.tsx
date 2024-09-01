@@ -3,7 +3,7 @@ import { useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
 import { reject } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 
 type RemoveSegmentProps = {
     abbreviation: string;
@@ -17,8 +17,8 @@ type RemoveSegmentProps = {
  * Displays a dialog for removing a segment
  */
 export default function RemoveSegment({ abbreviation, name, otuId, schema }: RemoveSegmentProps) {
-    const history = useHistory();
-    const location = useLocation<{ removeSegment: string }>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const mutation = useUpdateOTU(otuId);
 
     const activeName = location.state?.removeSegment;
@@ -28,7 +28,7 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
             { otuId, name, abbreviation, schema: reject(schema, { name: activeName }) },
             {
                 onSuccess: () => {
-                    history.replace({ state: { removeSegment: "" } });
+                    navigate(".", { replace: true, state: { removeSegment: "" } });
                 },
             }
         );
@@ -39,7 +39,7 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
             name={activeName}
             noun="Segment"
             onConfirm={handleSubmit}
-            onHide={() => history.replace({ state: { removeSegment: "" } })}
+            onHide={() => navigate(".", { replace: true, state: { removeSegment: "" } })}
             show={Boolean(location.state?.removeSegment)}
         />
     );

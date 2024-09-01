@@ -6,7 +6,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { map } from "lodash";
 import { find } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 
 type FormValues = {
     segmentName: string;
@@ -26,8 +26,8 @@ type EditSegmentProps = {
  * Displays a dialog to edit a segment
  */
 export default function EditSegment({ abbreviation, otuId, name, schema }: EditSegmentProps) {
-    const history = useHistory();
-    const location = useLocation<{ editSegment: "" }>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const mutation = useUpdateOTU(otuId);
 
     const initialName = location.state?.editSegment;
@@ -42,7 +42,7 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
             { otuId, name, abbreviation, schema: newArray },
             {
                 onSuccess: () => {
-                    history.replace({ state: { editSegment: "" } });
+                    navigate(".", { replace: true, state: { editSegment: "" } });
                 },
             }
         );
@@ -51,7 +51,7 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
     return (
         <Dialog
             open={Boolean(location.state?.editSegment)}
-            onOpenChange={() => history.replace({ state: { editSegment: "" } })}
+            onOpenChange={() => navigate(".", { replace: true, state: { editSegment: "" } })}
         >
             <DialogPortal>
                 <DialogOverlay />

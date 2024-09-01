@@ -1,8 +1,7 @@
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom-v5-compat";
+import { useLocation, useNavigate, useParams } from "react-router-dom-v5-compat";
 import { CurrentOTUContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
@@ -14,8 +13,8 @@ import General from "./OTUGeneral";
 export default function OTUSection() {
     const { otuId, refId } = useParams();
 
-    const history = useHistory();
-    const location = useLocation<{ addIsolate: boolean }>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
     const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
 
@@ -32,7 +31,7 @@ export default function OTUSection() {
                 otuId={otuId}
                 restrictSourceTypes={reference.restrict_source_types}
                 show={location.state?.addIsolate}
-                onHide={() => history.replace({ state: { addIsolate: false } })}
+                onHide={() => navigate(".", { replace: true, state: { addIsolate: false } })}
             />
         </CurrentOTUContextProvider>
     );
