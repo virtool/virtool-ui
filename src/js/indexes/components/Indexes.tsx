@@ -38,7 +38,6 @@ export default function Indexes() {
                         {map(documents, document => (
                             <IndexItem
                                 index={document}
-                                refId={refId}
                                 activeId={get(find(documents, { ready: true, has_files: true }), "id")}
                             />
                         ))}

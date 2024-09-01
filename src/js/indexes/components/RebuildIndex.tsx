@@ -2,7 +2,7 @@ import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle
 import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import RebuildHistory from "./History";
 import RebuildIndexError from "./RebuildIndexError";
 
@@ -14,8 +14,8 @@ type RebuildIndexProps = {
  * Displays a dialog to rebuild an index
  */
 export default function RebuildIndex({ refId }: RebuildIndexProps) {
-    const history = useHistory();
-    const location = useLocation<{ rebuild: boolean }>();
+    const navigate = useNavigate();
+    const location = useLocation();
     const { data, isPending } = useFetchUnbuiltChanges(refId);
     const mutation = useCreateIndex();
 
@@ -29,14 +29,17 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
             { refId },
             {
                 onSuccess: () => {
-                    history.push({ state: { rebuild: false } });
+                    navigate(".", { replace: true, state: { rebuild: false } });
                 },
             }
         );
     }
 
     return (
-        <Dialog open={location.state?.rebuild} onOpenChange={() => history.push({ state: { rebuild: false } })}>
+        <Dialog
+            open={location.state?.rebuild}
+            onOpenChange={() => navigate(".", { replace: true, state: { rebuild: false } })}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

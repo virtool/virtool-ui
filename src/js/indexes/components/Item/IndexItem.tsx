@@ -1,6 +1,6 @@
+import { Attribution, BoxGroupSection } from "@base";
 import React from "react";
-import { Link } from "react-router-dom";
-import { Attribution, BoxGroupSection } from "../../../base";
+import { Link } from "react-router-dom-v5-compat";
 import { IndexMinimal } from "../../types";
 import { IndexItemDescription } from "./IndexItemDescription";
 import { IndexItemIcon } from "./IndexItemIcon";
@@ -8,7 +8,6 @@ import { IndexItemIcon } from "./IndexItemIcon";
 type IndexItemProps = {
     activeId: string;
     index: IndexMinimal;
-    refId: string;
 };
 
 /**
@@ -20,11 +19,11 @@ type IndexItemProps = {
  * @return The index item
  */
 
-export function IndexItem({ activeId, index, refId }: IndexItemProps) {
+export function IndexItem({ activeId, index }: IndexItemProps) {
     return (
         <BoxGroupSection>
             <h3 className="grid grid-cols-3 mb-2 text-lg">
-                <Link className="font-medium" to={`/refs/${refId}/indexes/${index.id}`}>
+                <Link className="font-medium" to={index.id}>
                     Version {index.version}
                 </Link>
                 <IndexItemDescription changeCount={index.change_count} modifiedCount={index.modified_otu_count} />

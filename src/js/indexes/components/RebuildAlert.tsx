@@ -2,7 +2,7 @@ import { Alert, Icon } from "@base";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom-v5-compat";
 import { useFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
@@ -33,17 +33,14 @@ export default function RebuildAlert({ refId }: RebuildAlertProps) {
     }
 
     if (change_count && hasRights) {
-        const to = {
-            pathname: `/refs/${refId}/indexes`,
-            state: { rebuild: true },
-        };
-
         return (
             <Alert color="orange" level>
                 <Icon name="info-circle" />
                 <span>
                     <span>There are unbuilt changes. </span>
-                    <Link to={to}>Rebuild the index</Link>
+                    <Link to="" state={{ rebuild: true }}>
+                        Rebuild the index
+                    </Link>
                     <span> to use the changes in future analyses.</span>
                 </span>
             </Alert>
