@@ -1,8 +1,8 @@
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "@base";
 import { find, map } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReferenceUser } from "../../queries";
 import { ReferenceGroup, ReferenceUser } from "../../types";
@@ -46,15 +46,15 @@ type ReferenceMembersProps = {
  * Displays a component for managing who can access a reference by users or groups
  */
 export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
-    const history = useHistory();
-    const location = useLocation<{ addgroup: boolean; adduser: boolean }>();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const mutation = useRemoveReferenceUser(refId, noun);
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
     function handleHide() {
-        history.replace({ state: { [`add${noun}`]: false } });
-        history.replace({ state: { [`edit${noun}`]: false } });
+        navigate(".", { replace: true, state: { [`add${noun}`]: false } });
+        navigate(".", { replace: true, state: { [`edit${noun}`]: false } });
     }
 
     const plural = `${noun}s`;
@@ -66,7 +66,7 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                     <h2>
                         {plural}
                         {canModify && (
-                            <NewMemberLink onClick={() => history.push({ state: { [`add${noun}`]: true } })}>
+                            <NewMemberLink onClick={() => navigate(".", { state: { [`add${noun}`]: true } })}>
                                 Add {noun}
                             </NewMemberLink>
                         )}
@@ -79,7 +79,7 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                             key={member.id}
                             {...member}
                             canModify={canModify}
-                            onEdit={id => history.push({ state: { [`edit${noun}`]: id } })}
+                            onEdit={id => navigate(".", { state: { [`edit${noun}`]: id } })}
                             onRemove={id => mutation.mutate({ id })}
                         />
                     ))

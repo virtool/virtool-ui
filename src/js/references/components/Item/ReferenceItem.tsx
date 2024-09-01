@@ -1,13 +1,12 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Attribution, BoxGroupSection, Icon, ProgressCircle } from "@base";
 import { IconButton } from "@base/IconButton";
 import { JobState } from "@jobs/types";
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Attribution, BoxGroupSection, Icon } from "../../../base";
-import { ProgressCircle } from "../../../base/ProgressCircle";
 import { ReferenceMinimal } from "../../types";
 
 const StyledReferenceItem = styled(BoxGroupSection)`
@@ -51,7 +50,7 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ reference }: ReferenceItemProps) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { id, data_type, name, organism, user, created_at, task } = reference;
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
@@ -60,13 +59,13 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
             name="clone"
             tip="clone"
             color="blue"
-            onClick={() => history.push({ state: { cloneReference: id } })}
+            onClick={() => navigate(".", { state: { cloneReference: id } })}
         />
     ) : null;
 
     return (
         <StyledReferenceItem>
-            <ReferenceLink to={`/refs/${id}`}>{name}</ReferenceLink>
+            <ReferenceLink to={id}>{name}</ReferenceLink>
             <ReferenceItemDataDescriptor>
                 <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s

@@ -1,8 +1,8 @@
+import { Icon, ViewHeader, ViewHeaderAttribution, ViewHeaderIcons, ViewHeaderTitle } from "@base";
 import { IconButton } from "@base/IconButton";
 import { endsWith } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { Icon, ViewHeader, ViewHeaderAttribution, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 
 type ReferenceDetailHeaderProps = {
@@ -25,7 +25,7 @@ export default function ReferenceDetailHeader({
     userHandle,
 }: ReferenceDetailHeaderProps) {
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
     const showIcons = endsWith(location.pathname, "/manage");
@@ -42,7 +42,7 @@ export default function ReferenceDetailHeader({
                                 color="grayDark"
                                 name="pen"
                                 tip="modify"
-                                onClick={() => history.push({ state: { editReference: true } })}
+                                onClick={() => navigate(".", { state: { editReference: true } })}
                             />
                         )}
                     </ViewHeaderIcons>

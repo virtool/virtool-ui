@@ -5,7 +5,7 @@ import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { map } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import { MemberRight } from "./MemberRight";
 
 const rights = ["modify_otu", "build", "modify", "remove"];
@@ -20,7 +20,7 @@ type EditReferenceMemberProps = {
  * Displays a dialog to modify rights for a member
  */
 export default function EditReferenceMember({ noun, refId, member }: EditReferenceMemberProps) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const location = useLocation();
     const mutation = useUpdateReferenceMember(noun);
     const queryClient = useQueryClient();
@@ -49,7 +49,7 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
     return (
         <Dialog
             open={location.state?.[`edit${noun}`]}
-            onOpenChange={() => history.push({ state: { [`edit${noun}`]: false } })}
+            onOpenChange={() => navigate(".", { replace: true, state: { [`edit${noun}`]: false } })}
         >
             <DialogPortal>
                 <DialogOverlay />
