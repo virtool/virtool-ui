@@ -1,10 +1,9 @@
-import { LocationType } from "@/types/types";
 import { useGetActiveIsolate } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
 import sortSequencesBySegment from "@otus/utils";
 import { compact, filter, find, map, reject } from "lodash-es";
 import { useCallback, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom-v5-compat";
 
 /**
  * A hook for managing sequence detail visibility.
@@ -36,7 +35,7 @@ export function useExpanded() {
  * @returns The active sequence
  */
 export function useGetActiveSequence() {
-    const location = useLocation<LocationType>();
+    const location = useLocation();
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
@@ -60,7 +59,7 @@ export function useGetActiveSequence() {
  * @returns A list of inactive sequences
  */
 export function useGetInactiveSequences() {
-    const location = useLocation<LocationType>();
+    const location = useLocation();
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);

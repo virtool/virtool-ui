@@ -7,7 +7,7 @@ import RemoveSequence from "@sequences/components/RemoveSequence";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
 import { map } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import AddSequenceLink from "./AddSequenceLink";
 import AddBarcodeSequence from "./Barcode/AddBarcodeSequence";

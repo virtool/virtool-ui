@@ -4,7 +4,7 @@ import { OTUSegment } from "@otus/types";
 import { map } from "lodash-es";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { SequenceSegment } from "./SequenceSegment";
 

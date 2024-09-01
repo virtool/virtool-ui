@@ -1,8 +1,7 @@
-import { LocationType } from "@/types/types";
 import { useCurrentOTUContext } from "@otus/queries";
 import { useGetActiveSequence, useGetUnreferencedSegments, useGetUnreferencedTargets } from "@sequences/hooks";
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom-v5-compat";
 import EditBarcodeSequence from "./Barcode/EditBarcodeSequence";
 import EditGenomeSequence from "./Genome/EditGenomeSequence";
 
@@ -10,7 +9,7 @@ import EditGenomeSequence from "./Genome/EditGenomeSequence";
  * A component to manage the editing of sequences
  */
 export default function EditSequence() {
-    const location = useLocation<LocationType>();
+    const location = useLocation();
     const { otu, reference } = useCurrentOTUContext();
     const { data_type } = reference;
 
