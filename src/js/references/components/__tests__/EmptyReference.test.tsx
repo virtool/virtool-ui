@@ -1,14 +1,14 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiCreateReference } from "@tests/fake/references";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { mockApiCreateReference } from "../../../../tests/fake/references";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import EmptyReference from "../EmptyReference";
 
 describe("<EmptyReference />", () => {
     it("should display error and block submission when name textbox is empty", async () => {
-        renderWithProviders(<EmptyReference />);
+        renderWithMemoryRouter(<EmptyReference />);
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -17,7 +17,7 @@ describe("<EmptyReference />", () => {
 
     it("handleSubmit should call onSubmit when [name.length!=0] and [dataType.length!=0]", async () => {
         const scope = mockApiCreateReference("test_name", "", "genome", "");
-        renderWithProviders(<EmptyReference />);
+        renderWithMemoryRouter(<EmptyReference />);
 
         await userEvent.type(screen.getByRole("textbox", { name: "Name" }), "test_name");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -27,7 +27,7 @@ describe("<EmptyReference />", () => {
 
     it("handleSubmit should submit correct dataType when changed", async () => {
         const scope = mockApiCreateReference("test_name", "", "barcode", "");
-        renderWithProviders(<EmptyReference />);
+        renderWithMemoryRouter(<EmptyReference />);
 
         await userEvent.type(screen.getByRole("textbox", { name: "Name" }), "test_name");
         await userEvent.click(screen.getByRole("button", { name: "Barcode Target sequences for barcode analysis" }));
@@ -43,7 +43,7 @@ describe("<EmptyReference />", () => {
         const description = "test_description";
 
         const scope = mockApiCreateReference(name, description, dataType, organism);
-        renderWithProviders(<EmptyReference />);
+        renderWithMemoryRouter(<EmptyReference />);
 
         await userEvent.type(screen.getByRole("textbox", { name: "Name" }), name);
         await userEvent.type(screen.getByRole("textbox", { name: "Organism" }), organism);

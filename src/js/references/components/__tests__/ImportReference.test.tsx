@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import { ImportReference } from "../ImportReference";
 
 describe("<ImportReference />", () => {
@@ -22,7 +22,7 @@ describe("<ImportReference />", () => {
             })
             .reply(201, { id: "foo", name: "External", description: "External reference" });
 
-        renderWithProviders(<ImportReference />);
+        renderWithMemoryRouter(<ImportReference />);
 
         await userEvent.upload(
             screen.getByLabelText("Upload file"),
@@ -36,7 +36,7 @@ describe("<ImportReference />", () => {
     });
 
     it("should display errors when file or name missing", async () => {
-        renderWithProviders(<ImportReference />);
+        renderWithMemoryRouter(<ImportReference />);
 
         expect(screen.queryByText("A reference file must be uploaded")).not.toBeInTheDocument();
         expect(screen.queryByText("A name is required.")).not.toBeInTheDocument();
