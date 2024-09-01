@@ -6,13 +6,11 @@ import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeOTUMinimal, mockApiGetOTUs } from "@tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
 import { renderWithMemoryRouter } from "@tests/setupTests";
-import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<OTUsList />", () => {
-    let history;
     let reference;
     let OTUs;
 
@@ -20,7 +18,6 @@ describe("<OTUsList />", () => {
         mockApiGetSettings(createFakeSettings());
         reference = createFakeReference();
         OTUs = [createFakeOTUMinimal(), createFakeOTUMinimal()];
-        history = createBrowserHistory();
         mockApiGetReferenceDetail(reference);
     });
 
