@@ -5,7 +5,7 @@ import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { SubtractionShortlist } from "@subtraction/types";
-import { HistoryType } from "@utils/hooks";
+import { History } from "history";
 import { merge } from "lodash";
 import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
@@ -25,7 +25,7 @@ const QuickAnalyzeSelected = styled.span`
     margin: 0 15px 0 auto;
 `;
 
-type History = HistoryType & {
+type analysisHistory = History & {
     location: {
         state: {
             quickAnalysis?: boolean;
@@ -40,7 +40,7 @@ type History = HistoryType & {
  * @param history - The history object
  * @returns The quick analysis mode
  */
-export function getQuickAnalysisMode(libraryType: string, history: History) {
+export function getQuickAnalysisMode(libraryType: string, history: analysisHistory) {
     if (history.location.state?.quickAnalysis === true) {
         if (libraryType === "amplicon") {
             return "barcode";

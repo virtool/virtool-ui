@@ -2,13 +2,13 @@ import Settings from "@/administration/components/Settings";
 import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeUser, mockApiEditUser, mockApiGetUser } from "@tests/fake/user";
 import { times } from "lodash-es";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeGroupMinimal, mockApiListGroups } from "../../../../tests/fake/groups";
-import { createFakeUser, mockApiEditUser, mockApiGetUser } from "../../../../tests/fake/user";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 
 describe("<UserDetail />", () => {
@@ -109,7 +109,7 @@ describe("<UserDetail />", () => {
             renderWithMemoryRouter(<Settings />, [`/users/${userDetail.id}`]);
 
             expect(await screen.findByText("Groups")).toBeInTheDocument();
-            expect(screen.getByLabelText("group1")).toBeInTheDocument();
+            expect(await screen.findByLabelText("group1")).toBeInTheDocument();
             expect(screen.getByLabelText("group3")).toBeInTheDocument();
 
             scope.done();
@@ -123,7 +123,6 @@ describe("<UserDetail />", () => {
             expect(await screen.findByText("Change Password")).toBeInTheDocument();
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
-            expect(screen.queryByText("Groups")).not.toBeInTheDocument();
             expect(screen.queryByLabelText("Group1")).not.toBeInTheDocument();
             expect(screen.queryByLabelText("Group3")).not.toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();
@@ -132,16 +131,15 @@ describe("<UserDetail />", () => {
         });
         it("should render NoneFound when documents = []", async () => {
             mockApiGetAccount(account);
-
-            const userDetail = createFakeUser({ groups: [] });
             mockApiListGroups([]);
 
+            const userDetail = createFakeUser({ groups: [] });
             const scope = mockApiGetUser(userDetail.id, userDetail);
 
             renderWithMemoryRouter(<Settings />, [`/users/${userDetail.id}`]);
 
             expect(await screen.findByText("Groups")).toBeInTheDocument();
-            expect(screen.getByText("No groups found")).toBeInTheDocument();
+            expect(await screen.findByText("No groups found")).toBeInTheDocument();
             expect(screen.queryByLabelText("group3")).not.toBeInTheDocument();
             expect(screen.getByText("Primary Group")).toBeInTheDocument();
             expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();

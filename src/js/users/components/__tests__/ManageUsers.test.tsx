@@ -1,10 +1,10 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
-import { createFakeUsers, mockApiFindUsers } from "../../../../tests/fake/user";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import { ManageUsers } from "../ManageUsers";
 

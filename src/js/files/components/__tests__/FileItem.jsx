@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { mockApiDeleteFile } from "@tests/fake/files";
+import { mockApiDeleteFile } from "@tests/fake/files.js";
 import { renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";

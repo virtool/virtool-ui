@@ -1,9 +1,8 @@
 import { LocationType } from "@/types/types";
+import { History, Location } from "history";
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
-
-export type HistoryType = RouteComponentProps["history"];
+import { useHistory, useLocation } from "react-router-dom";
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -33,16 +32,6 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
     return [ref, size];
 }
 
-export const useDidUpdateEffect = (onUpdate, deps) => {
-    const firstRef = useRef(false);
-    useEffect(() => {
-        if (firstRef.current) {
-            onUpdate();
-        }
-        firstRef.current = true;
-    }, deps);
-};
-
 type SearchParamValue = string | boolean | number;
 
 /**
@@ -51,9 +40,15 @@ type SearchParamValue = string | boolean | number;
  * @param value - The value to be used in the search parameter
  * @param key - The search parameter key to be managed
  * @param history - The history object
+ * @param location - The location object
  */
-function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string, history: HistoryType) {
-    const params = new URLSearchParams(window.location.search);
+function updateUrlSearchParams<T extends SearchParamValue>(
+    value: T,
+    key: string,
+    history: History,
+    location: Location
+) {
+    const params = new URLSearchParams(location.search);
 
     if (value) {
         params.set(key, String(value));
@@ -63,7 +58,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
 
     history?.replace({
         ...history.location,
-        pathname: window.location.pathname,
+        pathname: location.pathname,
         search: params.toString() ? `?${params.toString()}` : null,
     });
 }
@@ -80,19 +75,19 @@ export function useUrlSearchParams<T extends SearchParamValue>(
     defaultValue?: T
 ): [T, (newValue: T) => void] {
     const history = useHistory();
-    const location = useLocation();
+    const location = useLocation() as Location;
     const firstRender = useRef(true);
 
     let value = new URLSearchParams(location.search).get(key) as T;
 
     if (firstRender.current && defaultValue && !value) {
         value = defaultValue;
-        updateUrlSearchParams(String(defaultValue), key, history);
+        updateUrlSearchParams(String(defaultValue), key, history, location);
     }
 
     firstRender.current = false;
 
-    return [value, (value: T) => updateUrlSearchParams(value, key, history)];
+    return [value, (value: T) => updateUrlSearchParams(value, key, history, location)];
 }
 
 /**
@@ -101,15 +96,16 @@ export function useUrlSearchParams<T extends SearchParamValue>(
  * @param values - The values to be used in the search parameter
  * @param key - The search parameter key to be managed
  * @param history - The history object
+ * @param location - The location object
  */
-function updateUrlSearchParamsList(values: string[], key: string, history: HistoryType) {
-    const params = new URLSearchParams(window.location.search);
+function updateUrlSearchParamsList(values: string[], key: string, history: History, location: Location) {
+    const params = new URLSearchParams(location.search);
 
     params.delete(key);
     forEach(values, value => params.append(key, value));
 
     history?.replace({
-        pathname: window.location.pathname,
+        pathname: location.pathname,
         search: params.toString() ? `?${params.toString()}` : null,
     });
 }
@@ -130,12 +126,12 @@ export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [s
 
     if (firstRender.current && defaultValue && !value.length) {
         value = defaultValue;
-        updateUrlSearchParamsList(value, key, history);
+        updateUrlSearchParamsList(value, key, history, location);
     }
 
     firstRender.current = false;
 
-    return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history)];
+    return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history, location)];
 }
 
 type ScrollSyncProps = {

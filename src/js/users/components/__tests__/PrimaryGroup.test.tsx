@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeUser, mockApiEditUser } from "@tests/fake/user";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeUser, mockApiEditUser } from "../../../../tests/fake/user";
 import { renderWithProviders } from "../../../../tests/setupTests";
 import PrimaryGroup from "../PrimaryGroup";
 

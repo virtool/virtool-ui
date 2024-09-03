@@ -31,7 +31,7 @@ export default function Settings() {
                     <AdministratorTabs administratorRole={account.administrator_role} />
                     <ContainerNarrow>
                         <Routes>
-                            <Route path="" element={<Navigate to={`/administration/${redirect}`} replace />} />
+                            <Route path="/" element={<Navigate to={`${redirect}`} replace />} />
                             <Route path="/settings" element={<ServerSettings />} />
                             <Route path="/users" element={<ManageUsers />} />
                             <Route path="/users/:userId" element={<UserDetail />} />

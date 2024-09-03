@@ -1,10 +1,10 @@
 import { FileType } from "@files/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { getSessionStorage, setSessionStorage } from "@utils/utils";
 import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import CreateSubtraction from "../CreateSubtraction";

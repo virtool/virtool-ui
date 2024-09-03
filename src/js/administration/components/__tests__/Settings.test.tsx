@@ -1,8 +1,8 @@
 import { screen, waitFor } from "@testing-library/react";
+import { createFakeAccount } from "@tests/fake/account";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount } from "../../../../tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "../../../../tests/fake/admin";
 import { createFakeMessage, mockApiGetMessage } from "../../../../tests/fake/message";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
