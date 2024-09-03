@@ -4,7 +4,7 @@ import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
 import numbro from "numbro";
 import React, { useState } from "react";
-import { match, useHistory } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom-v5-compat";
 import { useFetchSubtraction } from "../../queries";
 import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";
@@ -16,18 +16,15 @@ function calculateGc(nucleotides: NucleotideComposition) {
     return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
 }
 
-type SubtractionDetailProps = {
-    /** Match object containing path information */
-    match: match<{ subtractionId: string }>;
-};
-
 /**
  * The subtraction detailed view
  */
-export default function SubtractionDetail({ match }: SubtractionDetailProps) {
-    const history = useHistory<{ removeSubtraction: boolean }>();
+export default function SubtractionDetail() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [show, setShow] = useState(false);
-    const { data, isPending, isError } = useFetchSubtraction(match.params.subtractionId);
+    const { subtractionId } = useParams();
+    const { data, isPending, isError } = useFetchSubtraction(subtractionId);
     const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
 
     if (isError) {
@@ -54,7 +51,7 @@ export default function SubtractionDetail({ match }: SubtractionDetailProps) {
                                 name="trash"
                                 color="red"
                                 tip="remove"
-                                onClick={() => history.push({ state: { removeSubtraction: true } })}
+                                onClick={() => navigate(".", { state: { removeSubtraction: true } })}
                             />
                         </ViewHeaderIcons>
                     )}
@@ -89,8 +86,8 @@ export default function SubtractionDetail({ match }: SubtractionDetailProps) {
             <EditSubtraction show={show} onHide={() => setShow(false)} subtraction={data} />
             <RemoveSubtraction
                 subtraction={data}
-                show={history.location.state?.removeSubtraction}
-                onHide={() => history.push({ state: { removeSubtraction: false } })}
+                show={location.state?.removeSubtraction}
+                onHide={() => navigate(".", { state: { removeSubtraction: false } })}
             />
         </>
     );

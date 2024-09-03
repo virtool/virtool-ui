@@ -84,11 +84,11 @@ export default function Main() {
                         <Route path="/jobs" component={Jobs} />
                         <CompatRoute path="/samples" component={Samples} />
                         <Route path="/refs" component={References} />
-                        <Route path="/hmm" component={HMM} />
-                        <Route path="/subtractions" component={Subtraction} />
+                        <CompatRoute path="/hmm" component={HMM} />
+                        <CompatRoute path="/subtractions" component={Subtraction} />
                         <CompatRoute path="/administration" component={Administration} />
-                        <Route path="/account" component={Account} />
-                        <Route path="/ml" component={ML} />
+                        <CompatRoute path="/account" component={Account} />
+                        <CompatRoute path="/ml" component={ML} />
                     </Switch>
                 </Suspense>
             </MainContainer>

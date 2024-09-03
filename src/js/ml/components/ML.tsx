@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom-v5-compat";
 import { Container } from "../../base";
 import { MLModels } from "./MLModels";
 
@@ -11,9 +11,9 @@ import { MLModels } from "./MLModels";
 export default function ML() {
     return (
         <Container>
-            <Switch>
-                <Route path="/ml" component={MLModels} />
-            </Switch>
+            <Routes>
+                <Route path="/" element={<MLModels />} />
+            </Routes>
         </Container>
     );
 }
