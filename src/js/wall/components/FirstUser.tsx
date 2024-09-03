@@ -29,8 +29,8 @@ export default function FirstUser() {
     return (
         <WallContainer>
             <WallTitle
-                title="Setup First User"
-                subtitle="Create an administrative user that can be used to configure your new Virtool instance"
+                title="Create First User"
+                subtitle="Create an administrative user that can be used to configure your new Virtool instance."
             />
 
             <form onSubmit={handleSubmit(onSubmit)}>

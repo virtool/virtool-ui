@@ -22,7 +22,7 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
 
     return (
         <>
-            <WallTitle title="Password Reset" subtitle="You are required to set a new password before proceeding." />
+            <WallTitle title="Password Reset" subtitle="You must set a new password before proceeding." />
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputGroup>
                     <InputLabel htmlFor="password">Password</InputLabel>

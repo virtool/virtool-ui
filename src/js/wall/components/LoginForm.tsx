@@ -31,7 +31,7 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
 
     return (
         <>
-            <WallTitle title="Login" subtitle="Sign in with your Virtool account" />
+            <WallTitle title="Login" subtitle="Login with your Virtool account." />
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputGroup>
