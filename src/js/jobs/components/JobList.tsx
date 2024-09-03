@@ -1,11 +1,11 @@
+import { getFontWeight } from "@app/theme";
+import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
 import { ScrollList } from "@base/ScrollList";
 import { useInfiniteFindJobs } from "@jobs/queries";
 import { useUrlSearchParamsList } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { getFontWeight } from "../../app/theme";
-import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "../../base";
 import { JobMinimal, JobSearchResult } from "../types";
 import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";

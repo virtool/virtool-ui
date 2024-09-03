@@ -81,7 +81,7 @@ export default function Main() {
                 <Suspense fallback={<Fallback />}>
                     <Switch>
                         <Redirect from="/" to="/samples" exact />
-                        <Route path="/jobs" component={Jobs} />
+                        <CompatRoute path="/jobs" component={Jobs} />
                         <CompatRoute path="/samples" component={Samples} />
                         <Route path="/refs" component={References} />
                         <CompatRoute path="/hmm" component={HMM} />
