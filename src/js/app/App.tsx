@@ -1,6 +1,5 @@
 import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WallContainer } from "@wall/components/Container";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import { History } from "history";
 import React, { Suspense } from "react";
@@ -26,7 +25,7 @@ function ConnectedApp(): React.ReactElement {
 
     if (rootData.first_user) {
         return (
-            <Suspense fallback={<WallContainer />}>
+            <Suspense fallback={<div />}>
                 <LazyFirstUser />
             </Suspense>
         );
@@ -34,7 +33,7 @@ function ConnectedApp(): React.ReactElement {
 
     if (!authenticated) {
         return (
-            <Suspense fallback={<WallContainer />}>
+            <Suspense fallback={<div />}>
                 <LazyLoginWall />
             </Suspense>
         );
