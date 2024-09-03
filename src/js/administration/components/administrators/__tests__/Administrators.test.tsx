@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "@tests/fake/admin";
 import { createFakeUser, createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { AdministratorRoles } from "../../../types";
@@ -21,7 +21,7 @@ describe("<Administrators>", () => {
 
         mockGetAdministratorRoles();
 
-        renderWithProviders(<ManageAdministrators />);
+        renderWithMemoryRouter(<ManageAdministrators />);
 
         expect(await screen.findByRole("textbox", { name: "search" })).toBeInTheDocument();
 
@@ -48,7 +48,7 @@ describe("<Administrators>", () => {
 
         const set_role_scope = mockSetAdministratorRoleAPI({ user, new_role: AdministratorRoles.BASE });
 
-        renderWithProviders(<ManageAdministrators />);
+        renderWithMemoryRouter(<ManageAdministrators />);
 
         await userEvent.click(await screen.findByRole("combobox"));
         await userEvent.click(await screen.findByRole("option", { name: `${AdministratorRoles.BASE} Administrator` }));
@@ -68,7 +68,7 @@ describe("<Administrators>", () => {
 
         const set_role_scope = mockSetAdministratorRoleAPI({ user, new_role: null });
 
-        renderWithProviders(<ManageAdministrators />);
+        renderWithMemoryRouter(<ManageAdministrators />);
 
         await userEvent.click(await screen.findByRole("button", { name: "remove administrator role" }));
 

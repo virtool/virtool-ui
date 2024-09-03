@@ -3,8 +3,9 @@ import { PaginationLink } from "@base/pagination/PaginationLink";
 import { PaginationNext } from "@base/pagination/PaginationNext";
 import { PaginationPrevious } from "@base/pagination/PaginationPrevious";
 import { PaginationRoot } from "@base/pagination/PaginationRoot";
+import { useUrlSearchParams } from "@utils/hooks";
 import { map, max, min, range } from "lodash-es";
-import React from "react";
+import React, { useEffect } from "react";
 
 function getPageRange(pageCount, storedPage, leftButtons = 1, rightButtons = 2) {
     const totalButtons = leftButtons + rightButtons;
@@ -38,13 +39,17 @@ export function Pagination({
     onLoadNextPage,
 }: PaginationProps) {
     onLoadNextPage = onLoadNextPage || (() => {});
+    const [_, setUrlPage] = useUrlSearchParams<number>("page");
 
     const entries = renderRow && map(items, item => renderRow(item));
+
+    const filters = new URLSearchParams(window.location.search);
+    filters.delete("page");
 
     const pageButtons = map(getPageRange(pageCount, storedPage), pageNumber => (
         <PaginationLink
             key={pageNumber}
-            to={`?page=${pageNumber}`}
+            to={`?page=${pageNumber}${filters.toString() ? `&${filters.toString()}` : ""}`}
             active={storedPage !== pageNumber}
             disabled={storedPage === pageNumber}
             onClick={() => onLoadNextPage(pageNumber)}
@@ -53,8 +58,11 @@ export function Pagination({
         </PaginationLink>
     ));
 
-    const filters = new URLSearchParams(window.location.search);
-    filters.delete("page");
+    useEffect(() => {
+        if (currentPage > pageCount) {
+            setUrlPage(pageCount);
+        }
+    }, [currentPage, pageCount]);
 
     return (
         <div>
