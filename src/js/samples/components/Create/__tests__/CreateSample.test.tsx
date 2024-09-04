@@ -6,7 +6,7 @@ import { mockApiListGroups } from "@tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
 import { mockApiCreateSample } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";

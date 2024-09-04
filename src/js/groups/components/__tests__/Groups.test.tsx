@@ -1,10 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeGroup, mockApiGetGroup, mockApiListGroups } from "../../../../tests/fake/groups";
 import { createFakePermissions } from "../../../../tests/fake/permissions";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import Groups from "../Groups";
 
 describe("Groups", () => {

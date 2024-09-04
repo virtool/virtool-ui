@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUSequence, mockApiEditSequence } from "../../../../../tests/fake/otus";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import EditBarcodeSequence from "../EditBarcodeSequence";
 
 describe("<EditBarcodeSequence>", () => {

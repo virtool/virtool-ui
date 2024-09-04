@@ -3,7 +3,7 @@ import React from "react";
 import { useExpanded } from "../../hooks";
 import SequenceButtons from "../Sequence/SequenceButtons";
 import { SequenceHeader } from "../Sequence/SequenceHeader";
-import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/Values";
+import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/SequenceValues";
 import GenomeSequenceTable from "./GenomeSequenceTable";
 
 type GenomeSequenceProps = {

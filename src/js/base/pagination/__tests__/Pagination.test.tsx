@@ -1,6 +1,6 @@
 import { Pagination } from "@base";
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "@tests/setupTests.jsx";
+import { renderWithProviders } from "@tests/setup.js";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";

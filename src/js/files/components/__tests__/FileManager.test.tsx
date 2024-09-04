@@ -1,17 +1,18 @@
 import { AdministratorRoles } from "@administration/types";
+import { FileType } from "@files/types";
 import { upload } from "@files/uploader";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FileManager } from "../FileManager";
+import { FileManager, FileManagerProps } from "../FileManager";
 
 describe("<FileManager>", () => {
-    let props;
+    let props: FileManagerProps;
 
     afterEach(() => {
         vi.restoreAllMocks();
@@ -19,19 +20,30 @@ describe("<FileManager>", () => {
 
     beforeEach(() => {
         props = {
-            found_count: 6,
-            page: 1,
-            page_count: 1,
-            total_count: 1,
-            items: [1],
-            fileType: "test_file_type",
+            accept: {
+                "application/gzip": [".fasta.gz", ".fa.gz", ".fastq.gz", ".fq.gz"],
+            },
+            fileType: FileType.reads,
             message: "",
-            onLoadNextPage: vi.fn(),
         };
     });
 
     it("should upload with validation based on passed regex", async () => {
-        mockApiGetAccount(createFakeAccount({ administrator_role: null, permissions: { upload_file: true } }));
+        mockApiGetAccount(
+            createFakeAccount({
+                administrator_role: null,
+                permissions: {
+                    cancel_job: false,
+                    create_ref: false,
+                    create_sample: false,
+                    modify_hmm: false,
+                    modify_subtraction: false,
+                    remove_file: false,
+                    remove_job: false,
+                    upload_file: true,
+                },
+            })
+        );
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
         vi.mock("@files/uploader");

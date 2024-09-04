@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import ReferenceManager from "../ReferenceManager";
 
 describe("<ReferenceManager />", () => {

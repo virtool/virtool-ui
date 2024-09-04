@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom/extend-expect";
 import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { renderWithProviders } from "../../../../../tests/setupTests";
-import SubtractionFiles from "../Files";
+import SubtractionFiles, { SubtractionFilesProps } from "../SubtractionFiles";
 
 describe("<SubtractionFiles />", () => {
-    let props;
+    let props: SubtractionFilesProps;
 
     beforeEach(() => {
         props = {

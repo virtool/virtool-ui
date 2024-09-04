@@ -1,10 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockApiCreateIsolate } from "../../../../../../tests/fake/otus";
-import { renderWithProviders } from "../../../../../../tests/setupTests";
 import AddIsolate from "../AddIsolate";
 
 describe("<AddIsolate />", () => {

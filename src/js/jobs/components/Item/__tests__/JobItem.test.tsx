@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { createFakeUserNested } from "@tests/fake/user";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import JobItem from "../JobItem";

@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUIsolate } from "../../../../../tests/fake/otus";
-import { renderWithProviders } from "../../../../../tests/setupTests";
 import OTUGeneral from "../OTUGeneral";
 
 describe("<OTUGeneral />", () => {

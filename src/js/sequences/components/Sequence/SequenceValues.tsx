@@ -26,21 +26,25 @@ export const StyledSequenceTitleValue = styled(SequenceValue)`
     flex: 1;
 `;
 
-export const SequenceTitleValue = ({ label, value }) => (
-    <StyledSequenceTitleValue>
-        <p>{value}</p>
-        <small>{label}</small>
-    </StyledSequenceTitleValue>
-);
+export function SequenceTitleValue({ label, value }) {
+    return (
+        <StyledSequenceTitleValue>
+            <p>{value}</p>
+            <small>{label}</small>
+        </StyledSequenceTitleValue>
+    );
+}
 
 const StyledSequenceAccessionValue = styled(SequenceValue)`
     width: 100px;
     margin-right: 20px;
 `;
 
-export const SequenceAccessionValue = ({ accession }) => (
-    <StyledSequenceAccessionValue>
-        <p>{accession}</p>
-        <small>ACCESSION</small>
-    </StyledSequenceAccessionValue>
-);
+export function SequenceAccessionValue({ accession }) {
+    return (
+        <StyledSequenceAccessionValue>
+            <p>{accession}</p>
+            <small>ACCESSION</small>
+        </StyledSequenceAccessionValue>
+    );
+}
