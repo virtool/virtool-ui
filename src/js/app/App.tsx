@@ -6,6 +6,8 @@ import React, { Suspense } from "react";
 import { Router } from "react-router-dom";
 import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
+import { Router as Wouter } from "wouter";
+import { useBrowserLocation } from "wouter/use-browser-location";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
@@ -67,12 +69,14 @@ export default function App({ history }: AppProps): React.ReactElement {
     return (
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-                <Router history={history}>
-                    <CompatRouter>
-                        <GlobalStyles />
-                        <ConnectedApp />
-                    </CompatRouter>
-                </Router>
+                <Wouter hook={useBrowserLocation}>
+                    <Router history={history}>
+                        <CompatRouter>
+                            <GlobalStyles />
+                            <ConnectedApp />
+                        </CompatRouter>
+                    </Router>
+                </Wouter>
             </QueryClientProvider>
         </ThemeProvider>
     );

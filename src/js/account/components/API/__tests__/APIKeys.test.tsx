@@ -9,10 +9,12 @@ import {
     mockApiGetAPIKeys,
 } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter, renderWithProviders } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
+import { Router } from "wouter";
+import { memoryLocation } from "wouter/memory-location";
 import APIKeys from "../APIKeys";
 
 describe("<APIKeys />", () => {
@@ -57,8 +59,17 @@ describe("<APIKeys />", () => {
         });
 
         it("should render correctly when newKey = empty", async () => {
-            renderWithMemoryRouter(<APIKeys />, [{ state: { createAPIKey: true } }]);
+            const { hook, history } = memoryLocation({ path: "/", record: true });
+            console.log("memory history", history);
+            renderWithProviders(
+                <Router hook={hook}>
+                    <APIKeys />
+                </Router>
+            );
 
+            await userEvent.click(await screen.findByRole("link", { name: "Create" }));
+            await new Promise(r => setTimeout(r, 1000));
+            console.log("memory history", history);
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
             expect(screen.getByText("Name")).toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();

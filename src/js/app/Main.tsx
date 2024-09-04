@@ -10,6 +10,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { CompatRoute } from "react-router-dom-v5-compat";
 import styled from "styled-components";
+import { Route as WouterRoute } from "wouter";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
@@ -86,9 +87,9 @@ export default function Main() {
                         <Route path="/refs" component={References} />
                         <CompatRoute path="/hmm" component={HMM} />
                         <CompatRoute path="/subtractions" component={Subtraction} />
-                        <Route path="/administration" component={Administration} />
-                        <CompatRoute path="/account" component={Account} />
-                        <CompatRoute path="/ml" component={ML} />
+                        <WouterRoute path="/administration" component={Administration} nest />
+                        <WouterRoute path="/account" component={Account} nest />
+                        <WouterRoute path="/ml" component={ML} />
                     </Switch>
                 </Suspense>
             </MainContainer>

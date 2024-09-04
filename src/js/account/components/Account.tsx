@@ -1,6 +1,6 @@
 import { ContainerNarrow, ContainerWide, Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@base";
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom-v5-compat";
+import { Redirect, Route, Switch } from "wouter";
 import AccountProfile from "./AccountProfile";
 import APIKeys from "./API/APIKeys";
 
@@ -20,11 +20,11 @@ export default function Account() {
             </Tabs>
 
             <ContainerNarrow>
-                <Routes>
-                    <Route path="" element={<Navigate to="/account/profile" replace />} />
-                    <Route path="/account/profile" element={<AccountProfile />} />
-                    <Route path="/account/api" element={<APIKeys />} />
-                </Routes>
+                <Switch>
+                    <Route path="/" component={() => <Redirect to="/profile" replace />} />
+                    <Route path="/profile" component={AccountProfile} nest />
+                    <Route path="/api" component={APIKeys} nest />
+                </Switch>
             </ContainerNarrow>
         </ContainerWide>
     );

@@ -19,10 +19,12 @@ import {
 } from "@base";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUrlSearchParams } from "@utils/hooks";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
+import { useRouter } from "wouter";
+import { useHistoryState } from "wouter/use-browser-location";
 import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
 
 const CreateAPIKeyCopied = styled.p`
@@ -56,17 +58,23 @@ type FormValues = {
     permissions: Permissions;
 };
 
+export function useLocationState() {
+    const router = useRouter();
+    const derp = useHistoryState();
+
+    console.log(derp);
+}
+
 /**
  * Displays a dialog to create an API key
  */
 export default function CreateAPIKey() {
-    const navigate = useNavigate();
-    const location = useLocation();
     const [newKey, setNewKey] = useState("");
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
-
+    const [openCreateKey, setOpenCreateKey] = useUrlSearchParams<boolean>("openCreateKey");
+    console.log(openCreateKey);
     const {
         formState: { errors },
         handleSubmit,
@@ -97,7 +105,7 @@ export default function CreateAPIKey() {
     function handleHide() {
         setCopied(false);
         setShowCreated(false);
-        navigate(".", { state: { createAPIKey: false } });
+        setOpenCreateKey(false);
     }
 
     function onSubmit({ name, permissions }: FormValues) {
@@ -116,7 +124,7 @@ export default function CreateAPIKey() {
     }
 
     return (
-        <Dialog open={location.state?.createAPIKey} onOpenChange={handleHide}>
+        <Dialog open={openCreateKey} onOpenChange={handleHide}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

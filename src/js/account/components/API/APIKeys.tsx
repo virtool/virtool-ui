@@ -1,10 +1,11 @@
 import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "@base";
+import { formatSearchParams } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
+import { Link, useSearch } from "wouter";
 import APIKey from "./APIKey";
 import CreateAPIKey from "./CreateAPIKey";
 
@@ -12,6 +13,7 @@ const APIKeysHeader = styled(Box)`
     align-items: center;
     display: flex;
     font-size: ${getFontSize("lg")};
+    font-size: ${getFontSize("lg")}
     font-weight: ${getFontWeight("thick")};
     margin-bottom: 15px;
 
@@ -25,6 +27,7 @@ const APIKeysHeader = styled(Box)`
  */
 export default function APIKeys() {
     const { data, isPending } = useFetchAPIKeys();
+    const search = useSearch();
 
     if (isPending) {
         return <LoadingPlaceholder className="mt-36" />;
@@ -40,7 +43,7 @@ export default function APIKeys() {
                     <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">Virtool API</ExternalLink>
                     <span>.</span>
                 </div>
-                <Link to="" state={{ createAPIKey: true }}>
+                <Link to={formatSearchParams("openCreateKey", true, search)} replace>
                     Create
                 </Link>
             </APIKeysHeader>

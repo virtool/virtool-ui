@@ -1,7 +1,8 @@
 import { LocationType } from "@/types/types";
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
+import { useLocation, useSearch } from "wouter";
 
 export type HistoryType = RouteComponentProps["history"];
 
@@ -33,15 +34,24 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
     return [ref, size];
 }
 
-export const useDidUpdateEffect = (onUpdate, deps) => {
-    const firstRef = useRef(false);
-    useEffect(() => {
-        if (firstRef.current) {
-            onUpdate();
-        }
-        firstRef.current = true;
-    }, deps);
-};
+/**
+ * create a modified search param string with an updated key:value based on the existing search string
+ *
+ * @param value - The value to be used in the search parameter
+ * @param key - The search parameter key to be managed
+ * @param search - The current search string
+ */
+export function formatSearchParams(key: string, value: string, search: string) {
+    const params = new URLSearchParams(search);
+
+    if (value) {
+        params.set(key, String(value));
+    } else {
+        params.delete(key);
+    }
+
+    return `?${params.toString()}`;
+}
 
 type SearchParamValue = string | boolean | number;
 
@@ -52,8 +62,8 @@ type SearchParamValue = string | boolean | number;
  * @param key - The search parameter key to be managed
  * @param history - The history object
  */
-function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string, history: HistoryType) {
-    const params = new URLSearchParams(window.location.search);
+function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string, navigate, search) {
+    const params = new URLSearchParams(search);
 
     if (value) {
         params.set(key, String(value));
@@ -61,11 +71,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
         params.delete(key);
     }
 
-    history?.replace({
-        ...history.location,
-        pathname: window.location.pathname,
-        search: params.toString() ? `?${params.toString()}` : null,
-    });
+    navigate(`?${params.toString()}`, { replace: true });
 }
 
 /**
@@ -79,20 +85,20 @@ export function useUrlSearchParams<T extends SearchParamValue>(
     key: string,
     defaultValue?: T
 ): [T, (newValue: T) => void] {
-    const history = useHistory();
-    const location = useLocation();
+    const search = useSearch();
+    const [_, navigate] = useLocation();
     const firstRender = useRef(true);
 
-    let value = new URLSearchParams(location.search).get(key) as T;
+    let value = new URLSearchParams(search).get(key) as T;
 
     if (firstRender.current && defaultValue && !value) {
         value = defaultValue;
-        updateUrlSearchParams(String(defaultValue), key, history);
+        updateUrlSearchParams(String(defaultValue), key, navigate, search);
     }
 
     firstRender.current = false;
 
-    return [value, (value: T) => updateUrlSearchParams(value, key, history)];
+    return [value, (value: T) => updateUrlSearchParams(value, key, navigate, search)];
 }
 
 /**
