@@ -3,8 +3,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { noop } from "lodash-es";
-import React from "react";
+import { LocationDescriptor } from "history";
+import React, { ReactNode } from "react";
 import { MemoryRouter, Router } from "react-router-dom";
 import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
@@ -12,14 +12,8 @@ import { vi } from "vitest";
 
 process.env.TZ = "UTC";
 
-export function wrapWithProviders(ui) {
-    const queryClient = new QueryClient({
-        logger: {
-            log: console.log,
-            warn: console.warn,
-            error: noop,
-        },
-    });
+export function wrapWithProviders(ui: ReactNode) {
+    const queryClient = new QueryClient();
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -28,26 +22,25 @@ export function wrapWithProviders(ui) {
     );
 }
 
-export function renderWithProviders(ui) {
+export function renderWithProviders(ui: ReactNode) {
     const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
 
-    function rerenderWithProviders(updatedUI) {
-        return rerender(<ThemeProvider theme={theme}>{updatedUI}</ThemeProvider>);
+    function rerenderWithProviders(updatedUi: ReactNode) {
+        return rerender(<ThemeProvider theme={theme}>{updatedUi}</ThemeProvider>);
     }
 
     return { ...rest, rerender: rerenderWithProviders };
 }
 
 export function renderWithRouter(ui, history) {
-    const wrappedUI = (
+    renderWithProviders(
         <Router history={history}>
             <CompatRouter>{ui}</CompatRouter>
         </Router>
     );
-    renderWithProviders(wrappedUI);
 }
 
-export function renderWithMemoryRouter(ui, initialEntries) {
+export function renderWithMemoryRouter(ui: ReactNode, initialEntries: LocationDescriptor[] = ["/"]) {
     renderWithProviders(
         <MemoryRouter initialEntries={initialEntries}>
             <CompatRouter>{ui}</CompatRouter>
@@ -66,7 +59,7 @@ class ResizeObserver {
     disconnect() {}
 }
 
-export function attachResizeObserver() {
+function attachResizeObserver() {
     window.ResizeObserver = ResizeObserver;
 }
 

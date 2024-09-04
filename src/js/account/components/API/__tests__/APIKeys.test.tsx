@@ -9,7 +9,7 @@ import {
     mockApiGetAPIKeys,
 } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";

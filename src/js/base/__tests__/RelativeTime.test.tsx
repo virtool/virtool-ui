@@ -1,6 +1,6 @@
 import { RelativeTime } from "@base";
 import { act, screen } from "@testing-library/react";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 

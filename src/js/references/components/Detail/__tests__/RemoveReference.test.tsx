@@ -1,14 +1,14 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../../tests/fake/account";
 import {
     createFakeReference,
     mockApiGetReferenceDetail,
     mockApiRemoveReference,
 } from "../../../../../tests/fake/references";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import { AdministratorRoles } from "../../../../administration/types";
 import RemoveReference from "../RemoveReference";
 

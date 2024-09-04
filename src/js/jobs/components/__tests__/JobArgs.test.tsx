@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { renderWithMemoryRouter } from "@tests/setup";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import { JobArgs } from "../JobArgs";
 
 const sample_id = "test_sample_id";

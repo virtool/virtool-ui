@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeReference, mockApiEditReference, mockApiGetReferenceDetail } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setupTests";
+import { renderWithRouter } from "@tests/setup";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";

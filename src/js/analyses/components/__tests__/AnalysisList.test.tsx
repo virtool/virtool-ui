@@ -5,7 +5,7 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "@tests/fake/analyses";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { renderWithRouter } from "@tests/setupTests";
+import { renderWithRouter } from "@tests/setup";
 import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";

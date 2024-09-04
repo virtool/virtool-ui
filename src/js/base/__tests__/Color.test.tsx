@@ -1,6 +1,6 @@
 import { Color } from "@base";
 import userEvent from "@testing-library/user-event";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 

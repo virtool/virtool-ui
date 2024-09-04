@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
+import { createFakeSampleRead } from "@tests/fake/samples";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeSampleRead } from "../../../../../tests/fake/samples";
-import { renderWithProviders } from "../../../../../tests/setupTests";
 import SampleFileSizeWarning from "../SampleFileSizeWarning";
 
 describe("<SampleFileSizeWarning />", () => {

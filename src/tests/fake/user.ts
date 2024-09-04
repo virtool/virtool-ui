@@ -1,9 +1,9 @@
+import { AdministratorRoles } from "@administration/types";
 import { faker } from "@faker-js/faker";
+import { GroupMinimal, Permissions } from "@groups/types";
+import { User, UserNested } from "@users/types";
 import { merge, times } from "lodash-es";
 import nock from "nock";
-import { AdministratorRoles } from "../../js/administration/types";
-import { GroupMinimal, Permissions } from "../../js/groups/types";
-import { User, UserNested } from "../../js/users/types";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 
@@ -29,13 +29,13 @@ export function createFakeUserNested(props?: CreateFakeUserNestedProps): UserNes
 
 type CreateFakeUserProps = {
     active?: boolean;
-    permissions?: Permissions;
-    groups?: Array<GroupMinimal>;
-    primary_group?: GroupMinimal;
-    id?: string;
-    handle?: string;
     administrator_role?: AdministratorRoles;
     force_reset?: boolean;
+    groups?: Array<GroupMinimal>;
+    handle?: string;
+    id?: string;
+    permissions?: Permissions;
+    primary_group?: GroupMinimal;
 };
 
 /**
@@ -50,7 +50,7 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
     groups = groups === undefined ? [createFakeGroupMinimal()] : groups;
     primary_group = primary_group === undefined ? groups[0] : primary_group;
 
-    const BaseUser = {
+    const user = {
         id: faker.random.alphaNumeric(8),
         handle: faker.internet.userName(),
         active: true,
@@ -62,7 +62,7 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
         administrator_role: null,
     };
 
-    return merge(BaseUser, userProps);
+    return merge(user, userProps);
 }
 
 /**
@@ -95,11 +95,11 @@ export function mockApiFindUsers(users: Array<User>, query?: FindUsersQuery) {
         .query(query || true)
         .reply(200, {
             found_count: users.length,
+            items: users,
             page: 1,
             page_count: 1,
             per_page: 25,
             total_count: users.length,
-            items: users,
         });
 }
 
@@ -124,7 +124,7 @@ export function mockApiGetUser(userId: string, user: User) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiEditUser(userId: string, statusCode: number, update: any, user?: User) {
-    const userDetail = { ...user, ...update };
-
-    return nock("http://localhost").patch(`/api/admin/users/${userId}`).reply(statusCode, userDetail);
+    return nock("http://localhost")
+        .patch(`/api/admin/users/${userId}`)
+        .reply(statusCode, { ...user, ...update });
 }

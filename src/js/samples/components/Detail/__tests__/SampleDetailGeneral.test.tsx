@@ -1,7 +1,7 @@
 import Samples from "@samples/components/Samples";
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import numbro from "numbro";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";

@@ -1,9 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import { CreateLabel } from "../CreateLabel";
 
 describe("<CreateLabel>", () => {

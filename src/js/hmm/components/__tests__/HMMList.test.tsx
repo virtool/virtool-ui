@@ -1,11 +1,11 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import HMM from "../HMM";
 
 describe("<HMMList />", () => {

@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeOTUMinimal, mockApiGetOTUs } from "@tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
-import { renderWithRouter } from "@tests/setupTests";
+import { renderWithRouter } from "@tests/setup";
 import { createBrowserHistory } from "history";
 import nock from "nock";
 import React from "react";
