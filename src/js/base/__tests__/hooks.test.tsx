@@ -3,9 +3,9 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { useFuse } from "../hooks";
 
 describe("useFuseHook", () => {
-    let collection;
-    let keys;
-    let deps;
+    let collection: { name: string }[];
+    let deps: string[] = [];
+    let keys: string[] = [];
 
     beforeEach(() => {
         collection = [{ name: "nan" }, { name: "test1" }, { name: "aaaaa" }, { name: "zzzzz" }];

@@ -9,8 +9,8 @@ import { useFetchSubtraction } from "../../queries";
 import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";
 import EditSubtraction from "./EditSubtraction";
-import SubtractionFiles from "./Files";
 import RemoveSubtraction from "./RemoveSubtraction";
+import SubtractionFiles from "./SubtractionFiles";
 
 function calculateGc(nucleotides: NucleotideComposition) {
     return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");

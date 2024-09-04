@@ -1,15 +1,14 @@
+import { Color } from "@base";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setupTests";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../tests/setupTests";
-import { Color } from "../Color";
 
 describe("<Color />", () => {
     it("should call onChange when color clicked or input changed", async () => {
-        const value = "#DDDDDD";
         const onChange = vi.fn();
 
-        const { getByRole, getByTitle } = renderWithProviders(<Color value={value} onChange={onChange} />);
+        const { getByRole, getByTitle } = renderWithProviders(<Color id="color" value="#DDDDDD" onChange={onChange} />);
 
         const textbox = getByRole("textbox");
 
