@@ -172,7 +172,7 @@ export default function CreateSample() {
                 subtractions: subtractionIds,
                 files: readFiles,
                 labels,
-                group: !group ? null : group,
+                group: group || null,
             },
             {
                 onSuccess: () => {

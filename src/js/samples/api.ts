@@ -57,7 +57,6 @@ export function createSample(
     labels: number[],
     group: string
 ): Promise<Sample> {
-    console.log(group);
     return Request.post("/samples")
         .send({
             name,
