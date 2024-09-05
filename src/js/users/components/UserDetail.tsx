@@ -1,14 +1,15 @@
+import { useCheckAdminRole } from "@administration/hooks";
+import { useFetchUser } from "@administration/queries";
+import { AdministratorRoles } from "@administration/types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "@base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
 import { useLocationState } from "@utils/hooks";
 import React from "react";
-import { Link, match } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { useFetchUser } from "../../administration/queries";
-import { AdministratorRoles } from "../../administration/types";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "../../base";
+import { useParams } from "wouter";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import UserGroups from "./UserGroups";
@@ -49,17 +50,13 @@ const UserDetailTitle = styled.div`
     }
 `;
 
-type UserDetailProps = {
-    /** Match object containing path information */
-    match: match<string>;
-};
-
 /**
  * The detailed view of a user
  */
-export default function UserDetail({ match }: UserDetailProps) {
+export default function UserDetail() {
+    const params = useParams<string>();
     const [locationState, setLocationState] = useLocationState();
-    const { data, isPending } = useFetchUser(match.params["userId"]);
+    const { data, isPending } = useFetchUser(params.userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL
     );

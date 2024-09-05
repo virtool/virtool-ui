@@ -15,8 +15,8 @@ export default function Account() {
             </ViewHeader>
 
             <Tabs>
-                <TabsLink to="/account/profile">Profile</TabsLink>
-                <TabsLink to="/account/api">API</TabsLink>
+                <TabsLink to="/profile">Profile</TabsLink>
+                <TabsLink to="/api">API</TabsLink>
             </Tabs>
 
             <ContainerNarrow>

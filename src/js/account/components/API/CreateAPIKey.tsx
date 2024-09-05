@@ -74,7 +74,7 @@ export default function CreateAPIKey() {
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
     const [openCreateKey, setOpenCreateKey] = useUrlSearchParams<boolean>("openCreateKey");
-    console.log(openCreateKey);
+
     const {
         formState: { errors },
         handleSubmit,
