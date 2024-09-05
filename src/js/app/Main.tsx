@@ -85,8 +85,8 @@ export default function Main() {
                         <CompatRoute path="/jobs" component={Jobs} />
                         <CompatRoute path="/samples" component={Samples} />
                         <Route path="/refs" component={References} />
-                        <CompatRoute path="/hmm" component={HMM} />
-                        <CompatRoute path="/subtractions" component={Subtraction} />
+                        <WouterRoute path="/hmm" component={HMM} nest />
+                        <WouterRoute path="/subtractions" component={Subtraction} nest />
                         <WouterRoute path="/administration" component={Administration} nest />
                         <WouterRoute path="/account" component={Account} nest />
                         <WouterRoute path="/ml" component={ML} />

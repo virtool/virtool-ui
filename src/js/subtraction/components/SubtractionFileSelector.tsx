@@ -6,8 +6,8 @@ import { InfiniteData } from "@tanstack/react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { flatMap } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`
@@ -64,7 +64,7 @@ export function SubtractionFileSelector({
 
     return foundCount === 0 ? (
         <NoneFoundBox noun="files">
-            <Link to="files">Upload some</Link>
+            <Link to="/files">Upload some</Link>
         </NoneFoundBox>
     ) : (
         <>
