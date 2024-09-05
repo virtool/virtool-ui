@@ -1,10 +1,10 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeGroup, mockApiGetGroup, mockApiListGroups } from "@tests/fake/groups";
+import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeGroup, mockApiGetGroup, mockApiListGroups } from "../../../../tests/fake/groups";
-import { createFakePermissions } from "../../../../tests/fake/permissions";
 import Groups from "../Groups";
 
 describe("Groups", () => {
@@ -65,23 +65,24 @@ describe("Groups", () => {
     });
 
     it("should render correctly when more than one group exists", async () => {
-        const group_1 = createFakeGroup({
-            users: [{ handle: "testUser1", id: "test_id" }],
+        const group1 = createFakeGroup({
+            users: [{ handle: "bob", id: "abcd1234" }],
             permissions: createFakePermissions({ create_sample: true, modify_hmm: true }),
-            name: "testName",
+            name: "Group 1",
         });
-        const group_2 = createFakeGroup({
+        const group2 = createFakeGroup({
             users: [{ handle: "testUser2", id: "test_id2" }],
             permissions: createFakePermissions({ create_sample: true, modify_hmm: true, remove_job: true }),
-            name: "testName2",
+            name: "Group 2",
         });
-        mockApiListGroups([group_1, group_2]);
-        mockApiGetGroup(group_1);
+
+        mockApiListGroups([group1, group2]);
+        mockApiGetGroup(group1);
 
         renderWithMemoryRouter(<Groups />);
 
-        expect(await screen.findByText("testName")).toBeInTheDocument();
-        expect(screen.getByText("testName2")).toBeInTheDocument();
-        expect(screen.getByText("testUser1")).toBeInTheDocument();
+        expect(await screen.findByText("Group 1")).toBeInTheDocument();
+        expect(screen.getByText("Group 2")).toBeInTheDocument();
+        expect(screen.getByText("bob")).toBeInTheDocument();
     });
 });
