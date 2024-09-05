@@ -70,7 +70,7 @@ describe("<CreateSample>", () => {
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
 
-        const scope = mockApiCreateSample("Sample A", "", "", "", LibraryType.normal, [file.id], [], [], "");
+        const scope = mockApiCreateSample("Sample A", "", "", "", LibraryType.normal, [file.id], [], [], null);
 
         renderWithMemoryRouter(<CreateSample />);
 
@@ -101,7 +101,7 @@ describe("<CreateSample>", () => {
             [files[0].id, files[1].id],
             [labels[0].id],
             [subtractionShortlist.id],
-            ""
+            null
         );
 
         renderWithMemoryRouter(<CreateSample />);
