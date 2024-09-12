@@ -1,18 +1,18 @@
 import { cn } from "@utils/utils";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "wouter";
 
 interface LinkButtonProps {
     children?: React.ReactNode;
     className?: string;
     color?: "blue" | "gray" | "red";
     replace?: boolean;
-    to: string | object;
+    to: string;
 }
 
 export function LinkButton({ children, className, color = "gray", replace = false, to }: LinkButtonProps) {
     return (
-        <NavLink
+        <Link
             className={cn(
                 className,
                 "items-center",
@@ -38,6 +38,6 @@ export function LinkButton({ children, className, color = "gray", replace = fals
             to={to}
         >
             {children}
-        </NavLink>
+        </Link>
     );
 }

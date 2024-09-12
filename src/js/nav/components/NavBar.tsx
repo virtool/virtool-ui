@@ -82,7 +82,7 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
         <StyledNavBar>
             <NavBarLeft>
                 <NavBarLogo color="white" />
-                <NavBarItem to="/jobs">Jobs</NavBarItem>
+                <NavBarItem to="/jobs?state=preparing&state=running">Jobs</NavBarItem>
                 <NavBarItem to="/samples">Samples</NavBarItem>
                 <NavBarItem to="/refs">References</NavBarItem>
                 <NavBarItem to="/hmm">HMM</NavBarItem>

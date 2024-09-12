@@ -23,8 +23,6 @@ import { useUrlSearchParams } from "@utils/hooks";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useRouter } from "wouter";
-import { useHistoryState } from "wouter/use-browser-location";
 import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
 
 const CreateAPIKeyCopied = styled.p`
@@ -57,13 +55,6 @@ type FormValues = {
     name: string;
     permissions: Permissions;
 };
-
-export function useLocationState() {
-    const router = useRouter();
-    const derp = useHistoryState();
-
-    console.log(derp);
-}
 
 /**
  * Displays a dialog to create an API key

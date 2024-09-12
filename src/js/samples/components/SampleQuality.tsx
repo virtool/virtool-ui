@@ -1,8 +1,8 @@
 import { LoadingPlaceholder } from "@base";
 import { Quality } from "@quality/components/Quality";
 import React from "react";
-import { useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
+import { useParams } from "wouter";
 import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
 

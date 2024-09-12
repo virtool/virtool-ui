@@ -1,6 +1,6 @@
 import { ContainerNarrow, LoadingPlaceholder } from "@base";
 import React from "react";
-import { useParams } from "react-router-dom-v5-compat";
+import { useParams } from "wouter";
 import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";

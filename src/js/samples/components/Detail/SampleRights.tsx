@@ -16,7 +16,7 @@ import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { find, includes, map } from "lodash-es";
 import React from "react";
-import { useParams } from "react-router-dom-v5-compat";
+import { useParams } from "wouter";
 import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../queries";
 
 /**

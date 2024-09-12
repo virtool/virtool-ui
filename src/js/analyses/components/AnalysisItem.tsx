@@ -1,7 +1,7 @@
 import { JobState } from "@jobs/types";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
@@ -75,19 +75,18 @@ const UnsupportedAnalysisTitle = styled.div`
 
 type AnalysisItemProps = {
     analysis: AnalysisMinimal;
-    sampleId: string;
 };
 
 /**
  * Condensed analysis item for use in a list of analyses
  */
-export default function AnalysisItem({ analysis, sampleId }: AnalysisItemProps) {
+export default function AnalysisItem({ analysis }: AnalysisItemProps) {
     const { id, workflow, ready, job, user, reference, index, subtractions, created_at } = analysis;
     const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
     const onRemove = useRemoveAnalysis(id);
 
     const title = checkSupportedWorkflow(workflow) ? (
-        <Link to={`/samples/${sampleId}/analyses/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
+        <Link to={`/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
     ) : (
         <UnsupportedAnalysisTitle>
             {getWorkflowDisplayName(workflow)}
@@ -117,17 +116,17 @@ export default function AnalysisItem({ analysis, sampleId }: AnalysisItemProps) 
                     <Icon name="equals" />
                     <SlashList>
                         <li>
-                            <Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+                            <Link to={`/../../../refs/${reference.id}`}>{reference.name}</Link>
                         </li>
                         <li>
-                            <Link to={`/refs/${reference.id}/indexes/${index.id}`}>Index {index.version}</Link>
+                            <Link to={`/../../../refs/${reference.id}/indexes/${index.id}`}>Index {index.version}</Link>
                         </li>
                     </SlashList>
                 </AnalysisItemTag>
                 {subtractions.map(subtraction => (
                     <AnalysisItemTag key={subtraction.id}>
                         <Icon name="not-equal" />
-                        <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+                        <Link to={`/../../../subtractions/${subtraction.id}`}>{subtraction.name}</Link>
                     </AnalysisItemTag>
                 ))}
             </AnalysisItemTags>

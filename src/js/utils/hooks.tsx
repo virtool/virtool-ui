@@ -1,6 +1,7 @@
 import { LocationType } from "@/types/types";
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { useLocation, useSearch } from "wouter";
 
@@ -71,7 +72,11 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
         params.delete(key);
     }
 
-    navigate(`?${params.toString()}`, { replace: true });
+    search = params.toString();
+
+    navigate(`?${search}`, { replace: true });
+
+    return search;
 }
 
 /**
@@ -81,7 +86,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
  * @param defaultValue - The default value to use when the search parameter key is not present in the URL
  * @returns Object - An object containing the current value and a function to set the URL search parameter
  */
-export function useUrlSearchParams<T extends SearchParamValue>(
+export function useUrlSearchParams2<T extends SearchParamValue>(
     key: string,
     defaultValue?: T
 ): [T, (newValue: T) => void] {
@@ -98,8 +103,37 @@ export function useUrlSearchParams<T extends SearchParamValue>(
 
     firstRender.current = false;
 
-    return [value, (value: T) => updateUrlSearchParams(value, key, navigate, search)];
+    return [value, (value: T) => flushSync(() => updateUrlSearchParams(value, key, navigate, search))];
 }
+
+function createUseUrlSearchParams2() {
+    let cache = { search: "" };
+
+    return function useURLSearchParams(key: string, defaultValue?: T) {
+        cache.search = useSearch();
+
+        const [_, navigate] = useLocation();
+        const firstRender = useRef(true);
+
+        let value = new URLSearchParams(cache.search).get(key) as T;
+
+        if (firstRender.current && defaultValue && !value) {
+            value = defaultValue;
+            cache.search = updateUrlSearchParams(String(defaultValue), key, navigate, cache.search);
+        }
+
+        firstRender.current = false;
+
+        function setURLSearchParam(value) {
+            console.log(cache);
+            cache.search = updateUrlSearchParams(value, key, navigate, cache.search);
+        }
+
+        return [value, (value: T) => setURLSearchParam(value)];
+    };
+}
+
+export const useUrlSearchParams = createUseUrlSearchParams2();
 
 /**
  * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
@@ -108,16 +142,13 @@ export function useUrlSearchParams<T extends SearchParamValue>(
  * @param key - The search parameter key to be managed
  * @param history - The history object
  */
-function updateUrlSearchParamsList(values: string[], key: string, history: HistoryType) {
-    const params = new URLSearchParams(window.location.search);
+function updateUrlSearchParamsList(key: string, navigate, search: string, values: string[]) {
+    const params = new URLSearchParams(search);
 
     params.delete(key);
     forEach(values, value => params.append(key, value));
 
-    history?.replace({
-        pathname: window.location.pathname,
-        search: params.toString() ? `?${params.toString()}` : null,
-    });
+    navigate(`?${params.toString()}`);
 }
 
 /**
@@ -128,20 +159,20 @@ function updateUrlSearchParamsList(values: string[], key: string, history: Histo
  * @returns Object - An object containing the current values and a function to set the URL search parameter
  */
 export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [string[], (newValue: string[]) => void] {
-    const history = useHistory();
-    const location = useLocation();
+    const search = useSearch();
+    const [_, navigate] = useLocation();
     const firstRender = useRef(true);
 
-    let value = new URLSearchParams(location.search).getAll(key);
+    let values = new URLSearchParams(search).getAll(key);
 
-    if (firstRender.current && defaultValue && !value.length) {
-        value = defaultValue;
-        updateUrlSearchParamsList(value, key, history);
+    if (firstRender.current && defaultValue && !values.length) {
+        values = defaultValue;
+        updateUrlSearchParamsList(key, navigate, search, values);
     }
 
     firstRender.current = false;
 
-    return [value, (value: string[]) => updateUrlSearchParamsList(value, key, history)];
+    return [values, (values: string[]) => updateUrlSearchParamsList(key, navigate, search, values)];
 }
 
 type ScrollSyncProps = {

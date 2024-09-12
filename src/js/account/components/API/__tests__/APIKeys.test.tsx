@@ -60,7 +60,6 @@ describe("<APIKeys />", () => {
 
         it("should render correctly when newKey = empty", async () => {
             const { hook, history } = memoryLocation({ path: "/", record: true });
-            console.log("memory history", history);
             renderWithProviders(
                 <Router hook={hook}>
                     <APIKeys />
@@ -69,7 +68,7 @@ describe("<APIKeys />", () => {
 
             await userEvent.click(await screen.findByRole("link", { name: "Create" }));
             await new Promise(r => setTimeout(r, 1000));
-            console.log("memory history", history);
+
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
             expect(screen.getByText("Name")).toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();

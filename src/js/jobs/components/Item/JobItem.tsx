@@ -3,8 +3,8 @@ import { Attribution, BoxGroupSection } from "@base";
 import { UserNested } from "@users/types";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
-import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { JobState, workflows } from "../../types";
 import { JobStatus } from "./JobStatus";
 
@@ -55,7 +55,7 @@ type JobItemProps = {
 export default function JobItem({ id, workflow, state, progress, created_at, user }: JobItemProps) {
     return (
         <StyledJobItem>
-            <JobLink to={id}>{getWorkflowDisplayName(workflow)}</JobLink>
+            <JobLink to={`/${id}`}>{getWorkflowDisplayName(workflow)}</JobLink>
             <Attribution time={created_at} user={user.handle} />
             <JobItemHeaderRight>
                 <JobStatus state={state} progress={progress} />

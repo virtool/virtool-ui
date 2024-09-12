@@ -1,5 +1,5 @@
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";
 import { Button, Icon } from "../../base";
@@ -33,17 +33,12 @@ type SampleSelectionToolbarProps = {
  * A toolbar allowing users to create an analysis for selected samples
  */
 export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToolbarProps) {
-    const navigate = useNavigate();
-    const location = useLocation();
+    const [, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
+    const [, setWorkflow] = useUrlSearchParams("workflow");
 
     function onQuickAnalyze() {
-        navigate(
-            {
-                pathname: location.pathname,
-                search: location.search,
-            },
-            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } }
-        );
+        setOpenQuickAnalysis(true);
+        setWorkflow(Workflows.pathoscope_bowtie);
     }
 
     return (

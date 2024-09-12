@@ -9,7 +9,6 @@ import React from "react";
  */
 export default function CreateSubtraction() {
     const [openCreateSubtraction, setOpenCreateSubtraction] = useUrlSearchParams("openCreateSubtraction");
-    console.log(openCreateSubtraction);
 
     return (
         <Dialog open={openCreateSubtraction} onOpenChange={() => setOpenCreateSubtraction(false)}>

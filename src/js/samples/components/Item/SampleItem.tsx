@@ -1,8 +1,8 @@
+import { Workflows } from "@/analyses/types";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { Link } from "react-router-dom";
-import { useLocation, useNavigate } from "react-router-dom-v5-compat";
 import styled from "styled-components";
-import { Workflows } from "../../../analyses/types";
+import { Link } from "wouter";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Attribution, Box, Checkbox } from "../../../base";
 import { SampleMinimal } from "../../types";
@@ -88,17 +88,12 @@ type SampleItemProps = {
  * A condensed sample item for use in a list of samples
  */
 export default function SampleItem({ sample, checked, handleSelect, selectOnQuickAnalyze }: SampleItemProps) {
-    const navigate = useNavigate();
-    const location = useLocation();
+    const [, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
+    const [, setWorkflow] = useUrlSearchParams("workflow");
 
-    function handleQuickAnalyze() {
-        navigate(
-            {
-                pathname: location.pathname,
-                search: location.search,
-            },
-            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } }
-        );
+    function onQuickAnalyze() {
+        setOpenQuickAnalysis(true);
+        setWorkflow(Workflows.pathoscope_bowtie);
         selectOnQuickAnalyze();
     }
 
@@ -111,7 +106,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
             <SampleItemData>
                 <SampleItemMain>
                     <SampleItemTitle>
-                        <Link to={`/samples/${sample.id}`}>{sample.name}</Link>
+                        <Link to={`/${sample.id}`}>{sample.name}</Link>
                         <Attribution time={sample.created_at} user={sample.user.handle} />
                     </SampleItemTitle>
                 </SampleItemMain>
@@ -126,7 +121,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
                 <WorkflowTags id={sample.id} workflows={sample.workflows} />
             </SampleItemWorkflows>
             <SampleItemIcon>
-                <EndIcon ready={sample.ready} onClick={handleQuickAnalyze} job={sample.job} />
+                <EndIcon ready={sample.ready} onClick={onQuickAnalyze} job={sample.job} />
             </SampleItemIcon>
         </StyledSampleItem>
     );

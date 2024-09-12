@@ -8,9 +8,8 @@ import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { CompatRoute } from "react-router-dom-v5-compat";
 import styled from "styled-components";
-import { Route as WouterRoute } from "wouter";
+import { Route as WouterRoute, Switch as WouterSwitch } from "wouter";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
@@ -82,15 +81,18 @@ export default function Main() {
                 <Suspense fallback={<Fallback />}>
                     <Switch>
                         <Redirect from="/" to="/samples" exact />
-                        <CompatRoute path="/jobs" component={Jobs} />
-                        <CompatRoute path="/samples" component={Samples} />
+
                         <Route path="/refs" component={References} />
+                    </Switch>
+                    <WouterSwitch>
+                        <WouterRoute path="/samples" component={Samples} nest />
+                        <WouterRoute path="/jobs" component={Jobs} nest />
                         <WouterRoute path="/hmm" component={HMM} nest />
                         <WouterRoute path="/subtractions" component={Subtraction} nest />
                         <WouterRoute path="/administration" component={Administration} nest />
                         <WouterRoute path="/account" component={Account} nest />
                         <WouterRoute path="/ml" component={ML} />
-                    </Switch>
+                    </WouterSwitch>
                 </Suspense>
             </MainContainer>
 

@@ -1,14 +1,14 @@
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParams } from "@utils/hooks";
 import { createFuse } from "@utils/utils";
 import { find, map, reject, sortBy } from "lodash-es/lodash";
 import { useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useSearch } from "wouter";
 
 /** Sort and filter a list of pathoscope hits  */
 export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
     let hits = detail.results.hits;
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
+    const search = useSearch();
+    const searchParams = new URLSearchParams(search);
 
     const fuse = useMemo(() => {
         return createFuse(hits, ["name", "abbreviation"]);
@@ -36,8 +36,8 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
 /** Sort and filter a list of NuVs hits  */
 export function useSortAndFilterNuVsHits(detail) {
     let hits = detail.results.hits;
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
+    const search = useSearch();
+    const searchParams = new URLSearchParams(search);
 
     const fuse = useMemo(() => {
         return createFuse(hits, ["name", "families"]);
@@ -63,17 +63,16 @@ export function useSortAndFilterNuVsHits(detail) {
 }
 
 export function useGetActiveHit(matches) {
-    const [locationState, setLocationState] = useLocationState();
-    const activeId = locationState?.activeHitId;
+    const [activeHit, setActiveHit] = useUrlSearchParams("activeHit");
 
-    if (activeId !== null) {
-        const hit = find(matches, { id: activeId });
+    if (activeHit !== null) {
+        const hit = find(matches, { id: Number(activeHit) });
 
         if (hit) {
             return hit;
         }
     }
 
-    setLocationState({ activeHitId: matches[0].id });
+    setActiveHit(matches[0].id);
     return matches[0] || null;
 }
