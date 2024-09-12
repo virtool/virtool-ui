@@ -35,7 +35,7 @@ export default function AddSegment({ otuId, name, abbreviation, schema }: AddSeg
                 onSuccess: () => {
                     history.replace({ state: { addSegment: false } });
                 },
-            }
+            },
         );
     }
 

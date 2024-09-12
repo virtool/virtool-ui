@@ -42,7 +42,7 @@ export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToo
                 pathname: location.pathname,
                 search: location.search,
             },
-            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } }
+            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } },
         );
     }
 

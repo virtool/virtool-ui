@@ -40,7 +40,7 @@ describe("<EditGenomeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             null,
-            "ACGRYKM"
+            "ACGRYKM",
         );
         renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 
@@ -85,7 +85,7 @@ describe("<EditGenomeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             null,
-            "ACGRYKM"
+            "ACGRYKM",
         );
         renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
 

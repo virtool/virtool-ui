@@ -21,7 +21,7 @@ export function BoxGroupTable({ children, className }: BoxGroupTableProps) {
                 "[&_td]:min-w-0 [&_th]:min-w-0",
                 "[&_td]:px-4 [&_th]:px-4",
                 "[&_td]:py-2 [&_th]:py-2",
-                className
+                className,
             )}
         >
             {children}

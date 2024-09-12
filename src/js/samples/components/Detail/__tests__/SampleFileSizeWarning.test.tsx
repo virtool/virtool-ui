@@ -21,7 +21,7 @@ describe("<SampleFileSizeWarning />", () => {
         renderWithProviders(
             <MemoryRouter>
                 <SampleFileSizeWarning {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(screen.getByText("The read files in this sample are smaller than expected.")).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe("<SampleFileSizeWarning />", () => {
         renderWithProviders(
             <MemoryRouter>
                 <SampleFileSizeWarning {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(screen.queryByText("The read files in this sample are smaller than expected.")).toBeNull();
@@ -46,7 +46,7 @@ describe("<SampleFileSizeWarning />", () => {
         renderWithProviders(
             <MemoryRouter>
                 <SampleFileSizeWarning {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(screen.getByText("The read files in this sample are smaller than expected.")).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe("<SampleFileSizeWarning />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/test/files" }]}>
                 <SampleFileSizeWarning {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(screen.getByText("The read files in this sample are smaller than expected.")).toBeInTheDocument();

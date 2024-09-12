@@ -121,7 +121,7 @@ export default function HMMDetail() {
                         "[&_tbody_tr]:w-full",
                         "[&_tbody_tr:first-child_td]:border-t-0",
                         "[&_thead,&_tbody_tr]:table",
-                        "[&_thead,&_tbody_tr]:table-fixed"
+                        "[&_thead,&_tbody_tr]:table-fixed",
                     )}
                 >
                     <thead>

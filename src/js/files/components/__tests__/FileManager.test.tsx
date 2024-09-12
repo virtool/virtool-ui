@@ -42,7 +42,7 @@ describe("<FileManager>", () => {
                     remove_job: false,
                     upload_file: true,
                 },
-            })
+            }),
         );
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
@@ -51,7 +51,7 @@ describe("<FileManager>", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <FileManager {...props} regex={/.(?:fa|fasta)(?:.gz|.gzip)?$/} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(await screen.findByText("Drag file here to upload")).toBeInTheDocument();
@@ -76,7 +76,7 @@ describe("<FileManager>", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <FileManager {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(await screen.findByText("You do not have permission to upload files.")).toBeInTheDocument();
@@ -90,7 +90,7 @@ describe("<FileManager>", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <FileManager {...props} message="Test Message" />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(await screen.findByText("Test Message")).toBeInTheDocument();

@@ -25,7 +25,7 @@ export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
                     history.push(`/refs/${refId}/otus/`);
                     history.replace({ state: { removeOTU: false } });
                 },
-            }
+            },
         );
     }
 

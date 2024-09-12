@@ -65,7 +65,7 @@ export default function CloneReference({ references }: CloneReferenceProps) {
                 onSuccess: () => {
                     setLocationState({ cloneReference: false });
                 },
-            }
+            },
         );
     }
 

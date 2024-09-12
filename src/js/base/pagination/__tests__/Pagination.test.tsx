@@ -21,7 +21,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.getByRole("link", { name: "Previous" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.getByRole("link", { name: "Previous" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.queryByRole("link", { name: "Previous" })).not.toBeInTheDocument();
         expect(screen.queryByRole("link", { name: "Next" })).not.toBeInTheDocument();
@@ -65,7 +65,7 @@ describe("<Pagination />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
                 <Pagination {...props} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(screen.getByRole("link", { name: "Previous" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();

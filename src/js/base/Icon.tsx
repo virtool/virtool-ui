@@ -33,7 +33,7 @@ export function Icon({ color, faStyle = "fas", fixedWidth = false, style, title,
                     "text-purple-500": color === "purple",
                 },
                 { "w-2 text-center inline-block": fixedWidth },
-                className
+                className,
             )}
             aria-label={props["aria-label"]}
             style={style}

@@ -67,7 +67,7 @@ export function useGetAnalysis(analysisId: string) {
     });
     return useMemo(
         () => ({ ...queryResult, data: formatData(queryResult.data) as Analysis }),
-        [queryResult.data, queryResult.error]
+        [queryResult.data, queryResult.error],
     );
 }
 

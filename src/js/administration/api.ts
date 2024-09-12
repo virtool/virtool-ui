@@ -67,7 +67,7 @@ export function findUsers(
     per_page: number,
     term: string,
     administrator: boolean,
-    active: boolean
+    active: boolean,
 ): Promise<UserResponse> {
     return Request.get("/admin/users")
         .query({ page, per_page, term, administrator, active })

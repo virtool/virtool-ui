@@ -125,7 +125,7 @@ export default function CoverageChart({
             yMax,
             chartEl.current.offsetWidth,
             graphWidth,
-            graphRatio
+            graphRatio,
         );
     }, [id]);
 

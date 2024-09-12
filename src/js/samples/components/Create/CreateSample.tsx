@@ -178,7 +178,7 @@ export default function CreateSample() {
                 onSuccess: () => {
                     reset();
                 },
-            }
+            },
         );
     }
 

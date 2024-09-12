@@ -24,7 +24,7 @@ export function TabsLink({ children, className, isActive, to }: TabsLinkProps) {
                 "-mb-[1px]",
                 "hover:border-b-2",
                 "hover:border-b-gray-400",
-                className
+                className,
             )}
             isActive={isActive}
             activeClassName={cn("border-b-2", "border-b-teal-700", "hover:border-b-teal-700")}

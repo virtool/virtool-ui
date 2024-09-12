@@ -36,7 +36,7 @@ export function renderWithRouter(ui, history) {
     renderWithProviders(
         <Router history={history}>
             <CompatRouter>{ui}</CompatRouter>
-        </Router>
+        </Router>,
     );
 }
 
@@ -44,7 +44,7 @@ export function renderWithMemoryRouter(ui: ReactNode, initialEntries: LocationDe
     renderWithProviders(
         <MemoryRouter initialEntries={initialEntries}>
             <CompatRouter>{ui}</CompatRouter>
-        </MemoryRouter>
+        </MemoryRouter>,
     );
 }
 

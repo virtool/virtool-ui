@@ -95,7 +95,7 @@ describe("<CreateSubtraction />", () => {
         await waitFor(() => createSubtractionScope.done());
 
         await waitFor(() =>
-            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] })
+            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] }),
         );
     });
 });

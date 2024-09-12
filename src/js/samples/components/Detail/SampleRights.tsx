@@ -48,7 +48,7 @@ export default function SampleRights() {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
                 },
-            }
+            },
         );
     }
 
@@ -64,7 +64,7 @@ export default function SampleRights() {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
                 },
-            }
+            },
         );
     }
 

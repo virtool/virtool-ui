@@ -38,7 +38,7 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) });
                 },
-            }
+            },
         );
     }
 

@@ -74,7 +74,7 @@ function ColorSquare({ color, onClick }: ColorSquareProps) {
                 "focus:ring-offset-gray-300",
                 "focus:z-10",
                 "first:rounded-l-sm",
-                "last:rounded-r-sm"
+                "last:rounded-r-sm",
             )}
             style={{ backgroundColor: color }}
         />

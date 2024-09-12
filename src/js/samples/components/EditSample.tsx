@@ -60,8 +60,8 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                                     onSuccess: () => {
                                         navigate(".", { replace: true, state: { editSample: false } });
                                     },
-                                }
-                            )
+                                },
+                            ),
                         )}
                     >
                         <InputGroup>

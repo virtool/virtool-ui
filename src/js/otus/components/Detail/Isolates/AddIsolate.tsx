@@ -28,7 +28,7 @@ export default function AddIsolate({ allowedSourceTypes, onHide, otuId, restrict
                 onSuccess: () => {
                     onHide();
                 },
-            }
+            },
         );
     }
 

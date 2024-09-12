@@ -51,7 +51,7 @@ export function CreateSubtractionForm() {
                     navigate(".", { state: { createSubtraction: false } });
                     reset();
                 },
-            }
+            },
         );
     }
 

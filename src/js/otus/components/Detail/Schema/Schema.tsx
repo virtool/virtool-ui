@@ -28,7 +28,7 @@ export default function Schema({ match }: SchemaProps) {
     const { refId, otuId } = match.params;
     const { hasPermission: canModify, isPending: isPendingPermission } = useCheckReferenceRight(
         refId,
-        ReferenceRight.modify_otu
+        ReferenceRight.modify_otu,
     );
     const history = useHistory();
     const { data, isPending } = useFetchOTU(otuId);

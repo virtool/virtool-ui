@@ -37,7 +37,7 @@ export default function UserPermissions({ permissions }: UserPermissionsProps) {
                     permissions,
                     (acc, value, permission) =>
                         acc.push(<PermissionItem key={permission} permission={permission} value={value} />),
-                    []
+                    [],
                 )}
             </BoxGroup>
         </div>

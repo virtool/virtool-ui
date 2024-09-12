@@ -97,7 +97,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
                 pathname: location.pathname,
                 search: location.search,
             },
-            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } }
+            { state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } },
         );
         selectOnQuickAnalyze();
     }
