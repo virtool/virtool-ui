@@ -28,7 +28,7 @@ import Rights from "./SampleRights";
  */
 export default function SampleDetail() {
     const location = useLocation();
-    const [_, setLocationState] = useLocationState();
+    const [, setLocationState] = useLocationState();
     const { sampleId } = useParams();
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
