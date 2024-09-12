@@ -56,7 +56,7 @@ export function createFakeApiKey(props?: CreateFakeApiKeysArgs): APIKeyMinimal {
             name: faker.random.word(),
             permissions: createFakePermissions({ cancel_job: true, create_ref: true }),
         },
-        props
+        props,
     );
 }
 

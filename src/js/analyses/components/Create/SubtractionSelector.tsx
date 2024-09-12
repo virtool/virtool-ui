@@ -19,7 +19,7 @@ export function SubtractionSelector({ subtractions, selected, onChange }: Subtra
 
     const unselectedSubtractions = filter(
         results.map(result => result.item || result),
-        subtraction => !selected.includes(subtraction.id)
+        subtraction => !selected.includes(subtraction.id),
     );
     const selectedSubtractions = intersectionWith(subtractions, selected, (subtraction, id) => subtraction.id === id);
 

@@ -25,7 +25,7 @@ export function Popover({ align = "end", children, trigger }: PopoverProps) {
                         "shadow-lg",
                         "m-1.5",
                         "w-[320px]",
-                        "z-10"
+                        "z-10",
                     )}
                     sideOffset={15}
                     align={align}

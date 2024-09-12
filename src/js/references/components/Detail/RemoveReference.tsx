@@ -30,9 +30,9 @@ export default function RemoveReference({ id, name }: RemoveReferenceProps) {
                     onSuccess: () => {
                         history.push("/refs");
                     },
-                }
+                },
             ),
-        ["id"]
+        ["id"],
     );
 
     return (

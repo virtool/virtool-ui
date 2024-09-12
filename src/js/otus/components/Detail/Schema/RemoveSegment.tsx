@@ -30,7 +30,7 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
                 onSuccess: () => {
                     history.replace({ state: { removeSegment: "" } });
                 },
-            }
+            },
         );
     }
 

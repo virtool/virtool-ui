@@ -29,7 +29,7 @@ export function DialogContent({ children, className, size }: DialogContentProps)
                 "z-50",
                 "w-[600px]",
                 { "w-[900px]": size === "lg" },
-                className
+                className,
             )}
         >
             {children}

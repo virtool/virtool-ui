@@ -20,7 +20,7 @@ export function PathoscopeDetail({ hit, mappedCount }: PathoscopeDetailProps) {
     const filtered = filter(isolates, isolate => !filterIsolates || isolate.pi >= 0.03 * pi);
     const graphWidth = maxBy(filtered, item => item.filled.length).filled.length;
 
-    const isolateComponents = map(filtered, (isolate, index) => {
+    const isolateComponents = map(filtered, isolate => {
         const graphRatios =
             isolate.sequences.length > 1 ? isolate.sequences.map(sequence => sequence.filled.length / graphWidth) : 1;
 

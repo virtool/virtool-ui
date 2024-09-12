@@ -25,7 +25,7 @@ export function PaginationLink({ active, children, className, disabled, onClick,
                     "text-blue-500",
                     { "text-blue-900": !active, "pointer-events-none": disabled },
 
-                    className
+                    className,
                 )}
                 to={to}
                 onClick={onClick}

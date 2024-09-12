@@ -44,7 +44,7 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
                 onSuccess: () => {
                     history.replace({ state: { editSegment: "" } });
                 },
-            }
+            },
         );
     }
 

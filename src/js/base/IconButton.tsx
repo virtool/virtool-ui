@@ -55,7 +55,7 @@ export function IconButton({
                     "text-orange-500 hover:bg-orange-500 focus:bg-orange-400": color === "orange",
                     "text-purple-500 hover:bg-purple-500 focus:bg-purple-400": color === "purple",
                 },
-                className
+                className,
             )}
             aria-label={tip}
             type="button"

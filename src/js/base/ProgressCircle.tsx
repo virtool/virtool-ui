@@ -88,7 +88,9 @@ const ProgressCircleBase = styled.circle<ProgressCircleBaseProps>`
     stroke-width: ${calculateStrokeWidth}px;
     stroke: ${getColor};
     stroke-dasharray: ${calculateCircumference}px;
-    transition: stroke-dashoffset 1s, stroke 1s;
+    transition:
+        stroke-dashoffset 1s,
+        stroke 1s;
 `;
 
 type ProgressCircleIndicatorProps = ProgressCircleBaseProps & {

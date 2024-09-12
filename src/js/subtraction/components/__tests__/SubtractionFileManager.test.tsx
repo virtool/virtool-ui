@@ -21,7 +21,7 @@ describe("<SubtractionFileManager />", () => {
         renderWithProviders(
             <MemoryRouter initialEntries={[{ pathname: "/subtractions/files", search: "?page=1" }]}>
                 <SubtractionFileManager />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
 
         expect(await screen.findByText("Drag files here to upload")).toBeInTheDocument();

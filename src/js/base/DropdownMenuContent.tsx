@@ -26,7 +26,7 @@ export function DropdownMenuContent({ children, className }: DropdownMenuContent
                 "flex-col",
                 "text-base",
                 "z-10",
-                className
+                className,
             )}
         >
             {children}

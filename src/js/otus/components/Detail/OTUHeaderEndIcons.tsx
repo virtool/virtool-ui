@@ -16,7 +16,7 @@ type OTUHeaderEndIconsProps = {
  * Displays end icons to edit or remove an OTU
  */
 export function OTUHeaderEndIcons({ id, name, refId, abbreviation }: OTUHeaderEndIconsProps) {
-    const [_, setLocationState] = useLocationState();
+    const [, setLocationState] = useLocationState();
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
 
     return canModify ? (

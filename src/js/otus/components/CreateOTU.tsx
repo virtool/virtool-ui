@@ -25,7 +25,7 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
                 onSuccess: () => {
                     history.replace({ state: { createOTU: false } });
                 },
-            }
+            },
         );
     }
 

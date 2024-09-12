@@ -27,7 +27,7 @@ export function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps)
                 "py-1.5",
                 "px-6",
                 "hover:bg-blue-50",
-                "hover:border-0"
+                "hover:border-0",
             )}
             value={name}
             key={id}

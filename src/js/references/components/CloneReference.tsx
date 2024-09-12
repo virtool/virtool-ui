@@ -55,8 +55,10 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     const reference = find(references, { id: locationState?.cloneReference || "" });
 
     useEffect(() => {
-        reference && setValue("name", `Clone of ${reference.name}`);
-    }, [reference]);
+        if (reference) {
+            setValue("name", `Clone of ${reference.name}`);
+        }
+    }, [reference, setValue]);
 
     function onSubmit({ name }: FormValues) {
         mutation.mutate(
@@ -65,7 +67,7 @@ export default function CloneReference({ references }: CloneReferenceProps) {
                 onSuccess: () => {
                     setLocationState({ cloneReference: false });
                 },
-            }
+            },
         );
     }
 

@@ -33,7 +33,7 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
                 onSuccess: () => {
                     setOpen(false);
                 },
-            }
+            },
         );
     }
 

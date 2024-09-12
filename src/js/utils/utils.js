@@ -221,8 +221,8 @@ export function resetClient() {
 export function setSessionStorage(key, data) {
     try {
         window.sessionStorage.setItem(key, JSON.stringify(data));
-    } catch (e) {
-        //continue running regardless of error
+    } catch (error) {
+        console.warn(`Failed to save data to sessionStorage for key "${key}":`, error);
     }
 }
 
@@ -234,11 +234,13 @@ export function setSessionStorage(key, data) {
  * @returns {object}
  */
 export function getSessionStorage(key) {
-    try {
-        return JSON.parse(window.sessionStorage.getItem(key));
-    } catch (e) {
+    const item = window.sessionStorage.getItem(key);
+
+    if (item === null) {
         return null;
     }
+
+    return JSON.parse(item);
 }
 
 /**

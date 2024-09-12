@@ -32,7 +32,7 @@ export function Table({ children, className }: TableProps) {
                 "[&_td:first-child]:border-gray-200",
                 "[&_th:first-child]:border-r",
                 "[&_th:first-child]:border-gray-200",
-                className
+                className,
             )}
         >
             {children}

@@ -23,7 +23,7 @@ export function PaginationNext({ className, disabled, to }: PaginationNextProps)
                     "w-18",
                     "text-white",
                     { "pointer-events-none": disabled },
-                    className
+                    className,
                 )}
                 to={to}
                 color="blue"

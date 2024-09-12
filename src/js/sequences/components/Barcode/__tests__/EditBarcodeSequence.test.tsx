@@ -38,7 +38,7 @@ describe("<EditBarcodeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "ACGRM",
-            "test_target_name_2"
+            "test_target_name_2",
         );
         renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
 
@@ -82,7 +82,7 @@ describe("<EditBarcodeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "ACGRM",
-            "test_target_name_2"
+            "test_target_name_2",
         );
         renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
 

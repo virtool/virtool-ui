@@ -18,7 +18,7 @@ describe("<LibraryTypeSelector>", () => {
         renderWithProviders(<LibraryTypeSelector {...props} />);
 
         await userEvent.click(
-            screen.getByRole("button", { name: "Normal Search against whole genome references using normal reads." })
+            screen.getByRole("button", { name: "Normal Search against whole genome references using normal reads." }),
         );
         expect(props.onSelect).toHaveBeenCalledWith("normal");
     });
@@ -27,7 +27,7 @@ describe("<LibraryTypeSelector>", () => {
         renderWithProviders(<LibraryTypeSelector {...props} />);
 
         await userEvent.click(
-            screen.getByRole("button", { name: "sRNA Search against whole genome references using sRNA reads" })
+            screen.getByRole("button", { name: "sRNA Search against whole genome references using sRNA reads" }),
         );
         expect(props.onSelect).toHaveBeenCalledWith("srna");
     });
@@ -38,7 +38,7 @@ describe("<LibraryTypeSelector>", () => {
         await userEvent.click(
             screen.getByRole("button", {
                 name: "Amplicon Search against barcode references using amplicon reads.",
-            })
+            }),
         );
         expect(props.onSelect).toHaveBeenCalledWith("amplicon");
     });

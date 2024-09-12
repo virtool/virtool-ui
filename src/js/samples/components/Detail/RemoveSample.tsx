@@ -30,7 +30,7 @@ export default function RemoveSample({ id, name }: RemoveSampleProps) {
                         onSuccess: () => {
                             navigate("/samples");
                         },
-                    }
+                    },
                 )
             }
             onHide={() => navigate(".", { replace: true, state: { removeSample: false } })}

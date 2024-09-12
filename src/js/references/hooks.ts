@@ -37,7 +37,7 @@ export function useUpdateSourceTypes(
     key: "default_source_types" | "source_types",
     path: string,
     queryKey: readonly string[],
-    sourceTypes: string[]
+    sourceTypes: string[],
 ) {
     const queryClient = useQueryClient();
 
@@ -80,7 +80,7 @@ export function useUpdateSourceTypes(
                 onSuccess: () => {
                     setLastRemoved(sourceType);
                 },
-            }
+            },
         );
     }
 
