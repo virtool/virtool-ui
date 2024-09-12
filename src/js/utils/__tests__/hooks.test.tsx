@@ -1,7 +1,7 @@
-import { renderHook } from "@testing-library/react-hooks";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { useUrlSearchParams } from "../hooks";
+import { renderHook } from "@testing-library/react";
 
 describe("useUrlSearchParams", () => {
     it("should render empty with no default value given", () => {
