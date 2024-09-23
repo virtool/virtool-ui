@@ -15,7 +15,7 @@ describe("<SubtractionDetail />", () => {
 
     it("should render", async () => {
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
+        renderWithMemoryRouter(<Subtraction />, `/${subtractionDetail.id}`);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
         expect(await screen.findByText(subtractionDetail.nickname)).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe("<SubtractionDetail />", () => {
     });
 
     it("should render loading when [detail=null]", () => {
-        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
+        renderWithMemoryRouter(<Subtraction />, `/${subtractionDetail.id}`);
 
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText(subtractionDetail.name)).not.toBeInTheDocument();
@@ -36,7 +36,7 @@ describe("<SubtractionDetail />", () => {
     it("should render pending message when subtraction is not ready", async () => {
         const subtractionDetail = createFakeSubtraction({ ready: false });
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
+        renderWithMemoryRouter(<Subtraction />, `/${subtractionDetail.id}`);
 
         expect(await screen.findByText("Subtraction is still being imported")).toBeInTheDocument();
 
@@ -48,7 +48,7 @@ describe("<SubtractionDetail />", () => {
         const account = createFakeAccount({ permissions });
         mockApiGetAccount(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
+        renderWithMemoryRouter(<Subtraction />, `/${subtractionDetail.id}`);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "modify" })).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe("<SubtractionDetail />", () => {
         const account = createFakeAccount({ permissions });
         mockApiGetAccount(account);
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
+        renderWithMemoryRouter(<Subtraction />, `/${subtractionDetail.id}`);
 
         expect(await screen.findByText(subtractionDetail.name)).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
@@ -74,7 +74,7 @@ describe("<SubtractionDetail />", () => {
     it("should render file id when name not defined", async () => {
         const subtractionDetail = createFakeSubtraction({ file: { id: "test", name: null } });
         const scope = mockApiGetSubtractionDetail(subtractionDetail);
-        renderWithMemoryRouter(<Subtraction />, [`/${subtractionDetail.id}`]);
+        renderWithMemoryRouter(<Subtraction />, `/${subtractionDetail.id}`);
 
         expect(await screen.findByText("test")).toBeInTheDocument();
 

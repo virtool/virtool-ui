@@ -10,22 +10,22 @@ import { AnalysisViewerSort } from "../Viewer/Sort";
  * Displays a toolbar for managing and filtering NuVs
  */
 export default function NuVsToolbar({ analysisId, results, sampleName }: NuVsExportProps) {
-    const [filterORFs, setFilterORFs] = useUrlSearchParams<boolean>("filterOrfs", true);
-    const [filterSequences, setFilterSequences] = useUrlSearchParams<boolean>("filterSequences", true);
-    const [find, setFind] = useUrlSearchParams<string>("find", "");
-    const [sortKey, setSortKey] = useUrlSearchParams<string>("sort", "length");
+    const [filterORFs, setFilterORFs] = useUrlSearchParams("filterOrfs", true);
+    const [filterSequences, setFilterSequences] = useUrlSearchParams("filterSequences", true);
+    const [find, setFind] = useUrlSearchParams("find", "");
+    const [sortKey, setSortKey] = useUrlSearchParams("sort", "length");
 
     return (
         <Toolbar>
             <InputSearch value={find} onChange={e => setFind(e.target.value)} placeholder="Name or family" />
             <AnalysisViewerSort workflow="nuvs" sortKey={sortKey} onSelect={setSortKey} />
             <Tooltip tip="Hide sequences that have no HMM hits">
-                <ButtonToggle onPressedChange={setFilterSequences} pressed={filterSequences}>
+                <ButtonToggle onPressedChange={setFilterSequences} pressed={Boolean(filterSequences)}>
                     Filter Sequences
                 </ButtonToggle>
             </Tooltip>
             <Tooltip tip="Hide ORFs that have no HMM hits">
-                <ButtonToggle pressed={filterORFs} onPressedChange={setFilterORFs}>
+                <ButtonToggle pressed={Boolean(filterORFs)} onPressedChange={setFilterORFs}>
                     Filter ORFs
                 </ButtonToggle>
             </Tooltip>

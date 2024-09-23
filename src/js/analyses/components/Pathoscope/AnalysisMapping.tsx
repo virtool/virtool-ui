@@ -1,8 +1,8 @@
 import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { Box, Label } from "../../../base";
 import { toThousand } from "../../../utils/utils";
 import { Bars } from "../Viewer/Bars";
@@ -19,7 +19,7 @@ const StyledAnalysisMappingReferenceTitle = styled.div`
 export function AnalysisMappingReferenceTitle({ index, reference }) {
     return (
         <StyledAnalysisMappingReferenceTitle>
-            <Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+            <Link to={`~/refs/${reference.id}`}>{reference.name}</Link>
             <Label>{index.version}</Label>
         </StyledAnalysisMappingReferenceTitle>
     );
@@ -28,7 +28,7 @@ export function AnalysisMappingReferenceTitle({ index, reference }) {
 export function AnalysisMappingSubtractionTitle({ subtractions }) {
     return map(subtractions, (subtraction, index) => (
         <span key={subtraction.id}>
-            <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+            <Link to={`~/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
             {index !== subtractions.length - 1 ? ", " : ""}
         </span>
     ));

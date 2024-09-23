@@ -5,11 +5,10 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "@base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useParams } from "wouter";
+import { Link, useParams } from "wouter";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import UserGroups from "./UserGroups";
@@ -54,12 +53,14 @@ const UserDetailTitle = styled.div`
  * The detailed view of a user
  */
 export default function UserDetail() {
-    const params = useParams<string>();
-    const [locationState, setLocationState] = useLocationState();
-    const { data, isPending } = useFetchUser(params.userId);
+    const { userId } = useParams<{ userId: string }>();
+    const { data, isPending } = useFetchUser(userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL
     );
+
+    const [openActivateUser, setOpenActivateUser] = useUrlSearchParams("openActivateUser");
+    const [openDeactivateUser, setOpenDeactivateUser] = useUrlSearchParams("openDeactivateUser");
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -87,7 +88,7 @@ export default function UserDetail() {
                     <InitialIcon size="xl" handle={handle} />
                     <span>{handle}</span>
                     {administrator_role ? <AdminIcon aria-label="admin" name="user-shield" color="blue" /> : null}
-                    <Link to="/administration/users">Back To List</Link>
+                    <Link to="/..">Back To List</Link>
                 </UserDetailTitle>
             </UserDetailHeader>
 
@@ -105,13 +106,13 @@ export default function UserDetail() {
                 <UserActivationBanner
                     buttonText="Deactivate"
                     noun="deactivate"
-                    onClick={() => setLocationState({ deactivateUser: true })}
+                    onClick={() => setOpenDeactivateUser("true")}
                 />
             ) : (
                 <UserActivationBanner
                     buttonText="Activate"
                     noun="activate"
-                    onClick={() => setLocationState({ reactivateUser: true })}
+                    onClick={() => setOpenActivateUser("true")}
                 />
             )}
 
@@ -119,15 +120,15 @@ export default function UserDetail() {
                 handle={data.handle}
                 id={data.id}
                 noun="deactivate"
-                onHide={() => setLocationState({ deactivateUser: false })}
-                show={locationState?.deactivateUser}
+                onHide={() => setOpenDeactivateUser("")}
+                show={Boolean(openDeactivateUser)}
             />
             <UserActivation
                 handle={data.handle}
                 id={data.id}
                 noun="activate"
-                onHide={() => setLocationState({ reactivateUser: false })}
-                show={locationState?.reactivateUser}
+                onHide={() => setOpenActivateUser("")}
+                show={Boolean(openActivateUser)}
             />
         </div>
     );

@@ -5,10 +5,12 @@ import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { noop } from "lodash-es";
 import React from "react";
-import { MemoryRouter, Router } from "react-router-dom";
+import { Router } from "react-router-dom";
 import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
+import { Router as Wouter } from "wouter";
+import { memoryLocation } from "wouter/memory-location";
 
 process.env.TZ = "UTC";
 
@@ -47,12 +49,36 @@ export function renderWithRouter(ui, history) {
     renderWithProviders(wrappedUI);
 }
 
-export function renderWithMemoryRouter(ui, initialEntries) {
+export function renderWithMemoryRouter(ui, path) {
+    console.log(path);
+    const { hook, navigate } = memoryLocation({ path });
+
     renderWithProviders(
-        <MemoryRouter initialEntries={initialEntries}>
-            <CompatRouter>{ui}</CompatRouter>
-        </MemoryRouter>
+        <Wouter hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
+            {ui}
+        </Wouter>
     );
+}
+
+export function useMemoryLocation(baseHook) {
+    let [location, navigate] = baseHook();
+    console.log("base location", location);
+
+    try {
+        location = location.split("?")[0] || "";
+    } catch (error) {}
+
+    return [location, navigate];
+}
+
+export function useMemorySearch(baseHook) {
+    const [location] = baseHook();
+
+    try {
+        return location.split("?")[1] || "";
+    } catch (error) {
+        return null;
+    }
 }
 
 //mocks HTML element prototypes that are not implemented in jsdom

@@ -3,8 +3,7 @@ import { useAddSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReferenceTarget } from "@references/types";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 
 type AddBarcodeSequenceProps = {
@@ -18,7 +17,7 @@ type AddBarcodeSequenceProps = {
  * Displays dialog to add a barcode sequence
  */
 export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBarcodeSequenceProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [openAddSequence, setOpenAddSequence] = useUrlSearchParams("openAddSequence");
     const mutation = useAddSequence(otuId);
 
     function onSubmit({ accession, definition, host, sequence, target }) {
@@ -33,17 +32,14 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
             },
             {
                 onSuccess: () => {
-                    setLocationState(merge(locationState, { addSequence: false }));
+                    setOpenAddSequence("");
                 },
             }
         );
     }
 
     return (
-        <Dialog
-            open={locationState?.addSequence}
-            onOpenChange={() => setLocationState(merge(locationState, { addSequence: false }))}
-        >
+        <Dialog open={Boolean(openAddSequence)} onOpenChange={() => setOpenAddSequence("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

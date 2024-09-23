@@ -1,8 +1,9 @@
 import { useUpdateReference } from "@references/queries";
+import { useUrlSearchParams } from "@utils/hooks";
 import { find, map, reject } from "lodash-es";
 import React from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "../../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../../hooks";
 import { Reference } from "../../../types";
@@ -28,8 +29,9 @@ type TargetsProps = {
 export default function Targets({ reference }: TargetsProps) {
     const { data_type, targets, id } = reference;
 
-    const history = useHistory();
-    const location = useLocation<{ addTarget: boolean; editTarget: boolean }>();
+    const [openAddTarget, setOpenAddTarget] = useUrlSearchParams("openAddTarget");
+    const [editTarget, setEditTarget] = useUrlSearchParams("openEditTarget");
+
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);
     const { mutation } = useUpdateReference(id);
 
@@ -42,7 +44,7 @@ export default function Targets({ reference }: TargetsProps) {
             key={target.name}
             {...target}
             canModify={canModify}
-            onEdit={name => history.push({ state: { editTarget: name } })}
+            onEdit={name => setEditTarget(name)}
             onRemove={name => mutation.mutate({ targets: reject(targets, { name }) })}
         />
     ));
@@ -52,7 +54,7 @@ export default function Targets({ reference }: TargetsProps) {
             <TargetsHeader>
                 <h2>
                     <span>Targets</span>
-                    {canModify && <Link to={{ state: { addTarget: true } }}>Add Target</Link>}
+                    {canModify && <Link to="?openAddTarget=true">Add Target</Link>}
                 </h2>
                 <p>Manage the allowable sequence targets for this barcode reference.</p>
             </TargetsHeader>
@@ -64,15 +66,15 @@ export default function Targets({ reference }: TargetsProps) {
                     <AddTarget
                         refId={id}
                         targets={targets}
-                        show={location.state?.addTarget}
-                        onHide={() => history.replace({ state: { addTarget: false } })}
+                        show={Boolean(openAddTarget)}
+                        onHide={() => setOpenAddTarget("")}
                     />
                     <EditTarget
                         targets={targets}
                         refId={id}
-                        target={location.state?.editTarget && find(targets, { name: location.state.editTarget })}
-                        show={location.state?.editTarget}
-                        onHide={() => history.replace({ state: { editTarget: false } })}
+                        target={editTarget && find(targets, { name: editTarget })}
+                        show={Boolean(editTarget)}
+                        onHide={() => setEditTarget("")}
                     />
                 </>
             )}

@@ -7,9 +7,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import { Route as WouterRoute, Switch as WouterSwitch } from "wouter";
+import { Redirect, Route as WouterRoute, Switch as WouterSwitch } from "wouter";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
@@ -79,19 +78,16 @@ export default function Main() {
 
             <MainContainer>
                 <Suspense fallback={<Fallback />}>
-                    <Switch>
-                        <Redirect from="/" to="/samples" exact />
-
-                        <Route path="/refs" component={References} />
-                    </Switch>
                     <WouterSwitch>
-                        <WouterRoute path="/samples" component={Samples} nest />
-                        <WouterRoute path="/jobs" component={Jobs} nest />
-                        <WouterRoute path="/hmm" component={HMM} nest />
-                        <WouterRoute path="/subtractions" component={Subtraction} nest />
+                        <WouterRoute path="/" component={() => <Redirect to="/samples" />} />
                         <WouterRoute path="/administration" component={Administration} nest />
                         <WouterRoute path="/account" component={Account} nest />
-                        <WouterRoute path="/ml" component={ML} />
+                        <WouterRoute path="/hmm" component={HMM} nest />
+                        <WouterRoute path="/jobs" component={Jobs} nest />
+                        <WouterRoute path="/ml" component={ML} nest />
+                        <WouterRoute path="/refs" component={References} nest />
+                        <WouterRoute path="/samples" component={Samples} nest />
+                        <WouterRoute path="/subtractions" component={Subtraction} nest />
                     </WouterSwitch>
                 </Suspense>
             </MainContainer>

@@ -2,23 +2,18 @@ import { cn } from "@/utils/utils";
 import { BoxGroup, BoxGroupHeader, BoxGroupTable, ContainerNarrow, LoadingPlaceholder } from "@base";
 import Contributors from "@indexes/components/Contributors";
 import React from "react";
-import { match } from "react-router-dom";
+import { useParams } from "wouter";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
 import Targets from "./Targets/Targets";
 
-type ReferenceManageProps = {
-    /** Match object containing path information */
-    match: match<{ refId: string }>;
-};
-
 /**
  * Display and edit information for a reference
  */
-export default function ReferenceManager({ match }: ReferenceManageProps) {
-    const { refId } = match.params;
+export default function ReferenceManager() {
+    const { refId } = useParams<{ refId: string }>();
     const { data: reference, isPending } = useGetReference(refId);
 
     if (isPending) {

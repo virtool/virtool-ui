@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 import { Alert, Icon } from "../../base";
 
 interface AnalysisHMMAlertProps {
@@ -18,7 +18,7 @@ export default function AnalysisHMMAlert({ installed }: AnalysisHMMAlertProps) {
             <Icon name="info-circle" />
             <span>
                 <strong>HMM data is not installed. </strong>
-                <Link to="/hmm">Install HMMs</Link>
+                <Link to="~/hmm">Install HMMs</Link>
                 <span> to run NuV analyses.</span>
             </span>
         </Alert>

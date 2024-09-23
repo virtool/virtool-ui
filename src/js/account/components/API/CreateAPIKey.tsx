@@ -64,7 +64,7 @@ export default function CreateAPIKey() {
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
-    const [openCreateKey, setOpenCreateKey] = useUrlSearchParams<boolean>("openCreateKey");
+    const [openCreateKey, setOpenCreateKey] = useUrlSearchParams("openCreateKey");
 
     const {
         formState: { errors },
@@ -96,7 +96,7 @@ export default function CreateAPIKey() {
     function handleHide() {
         setCopied(false);
         setShowCreated(false);
-        setOpenCreateKey(false);
+        setOpenCreateKey("");
     }
 
     function onSubmit({ name, permissions }: FormValues) {
@@ -115,7 +115,7 @@ export default function CreateAPIKey() {
     }
 
     return (
-        <Dialog open={openCreateKey} onOpenChange={handleHide}>
+        <Dialog open={Boolean(openCreateKey)} onOpenChange={handleHide}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

@@ -21,18 +21,18 @@ export default function RemoveSample({ id, name }: RemoveSampleProps) {
         <RemoveDialog
             noun="Sample"
             name={name}
-            show={openRemoveSample}
+            show={Boolean(openRemoveSample)}
             onConfirm={() =>
                 mutation.mutate(
                     { sampleId: id },
                     {
                         onSuccess: () => {
-                            setOpenRemoveSample(false);
+                            setOpenRemoveSample("");
                         },
                     }
                 )
             }
-            onHide={() => setOpenRemoveSample(true)}
+            onHide={() => setOpenRemoveSample("true")}
         />
     );
 }

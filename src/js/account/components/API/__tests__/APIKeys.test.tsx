@@ -9,12 +9,10 @@ import {
     mockApiGetAPIKeys,
 } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
-import { renderWithMemoryRouter, renderWithProviders } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { Router } from "wouter";
-import { memoryLocation } from "wouter/memory-location";
 import APIKeys from "../APIKeys";
 
 describe("<APIKeys />", () => {
@@ -59,12 +57,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should render correctly when newKey = empty", async () => {
-            const { hook, history } = memoryLocation({ path: "/", record: true });
-            renderWithProviders(
-                <Router hook={hook}>
-                    <APIKeys />
-                </Router>
-            );
+            renderWithMemoryRouter(<APIKeys />, "/");
 
             await userEvent.click(await screen.findByRole("link", { name: "Create" }));
             await new Promise(r => setTimeout(r, 1000));
@@ -80,7 +73,7 @@ describe("<APIKeys />", () => {
 
         it("should render correctly when newKey is set", async () => {
             const scope = mockApiCreateAPIKey("test", createFakePermissions({ remove_job: true }));
-            renderWithMemoryRouter(<APIKeys />, [{ state: { createAPIKey: true } }]);
+            renderWithMemoryRouter(<APIKeys />, "?openCreateKey=true");
 
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
             await userEvent.type(screen.getByLabelText("Name"), "test");
@@ -96,7 +89,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should fail to submit and display errors when no name provided", async () => {
-            renderWithMemoryRouter(<APIKeys />, [{ state: { createAPIKey: true } }]);
+            renderWithMemoryRouter(<APIKeys />, "?openCreateKey=true");
 
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -106,7 +99,7 @@ describe("<APIKeys />", () => {
         describe("<APIKeyAdministratorInfo />", () => {
             it("should render correctly when newKey is empty and state.administratorRole = AdministratorRoles.FULL", async () => {
                 mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-                renderWithMemoryRouter(<APIKeys />, [{ state: { createAPIKey: true } }]);
+                renderWithMemoryRouter(<APIKeys />, "?openCreateKey=true");
 
                 expect(await screen.findByText(/You are an administrator/)).toBeInTheDocument();
                 expect(
@@ -116,7 +109,7 @@ describe("<APIKeys />", () => {
 
             it("should render correctly when newKey is empty and state.administratorRole = null", () => {
                 mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-                renderWithMemoryRouter(<APIKeys />, [{ state: { createAPIKey: true } }]);
+                renderWithMemoryRouter(<APIKeys />, "?openCreateKey=true");
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
                 expect(

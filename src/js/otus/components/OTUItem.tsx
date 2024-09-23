@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import { BoxGroupSection } from "../../base";
 
@@ -39,7 +39,7 @@ type OTUItemProps = {
 export default function OTUItem({ abbreviation, id, name, refId, verified }: OTUItemProps) {
     return (
         <StyledOTUItem key={id}>
-            <OTUItemName to={`/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
+            <OTUItemName to={`~/refs/${refId}/otus/${id}`}>{name}</OTUItemName>
             <OTUItemAbbreviation>{abbreviation}</OTUItemAbbreviation>
             {verified || <OTUItemUnverified>Unverified</OTUItemUnverified>}
         </StyledOTUItem>

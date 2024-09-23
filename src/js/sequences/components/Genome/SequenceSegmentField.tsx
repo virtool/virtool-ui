@@ -4,8 +4,8 @@ import { OTUSegment } from "@otus/types";
 import { map } from "lodash-es";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { SequenceSegment } from "./SequenceSegment";
 
 const SegmentSelectContainer = styled.div`
@@ -101,7 +101,7 @@ export default function SequenceSegmentField({ hasSchema, otuId, refId, segments
                     <p>A schema defines the sequence segments that should be present in isolates of the OTU. </p>
                 </div>
                 <div>
-                    <Link to={`/refs/${refId}/otus/${otuId}/schema`}>Add a Schema</Link>
+                    <Link to={`/../schema`}>Add a Schema</Link>
                 </div>
             </NoSchema>
         </InputGroup>

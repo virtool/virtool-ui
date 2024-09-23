@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 import { Attribution, BoxGroupSection } from "../../../base";
 import { IndexMinimal } from "../../types";
 import { IndexItemDescription } from "./IndexItemDescription";
@@ -24,7 +24,7 @@ export function IndexItem({ activeId, index, refId }: IndexItemProps) {
     return (
         <BoxGroupSection>
             <h3 className="grid grid-cols-3 mb-2 text-lg">
-                <Link className="font-medium" to={`/refs/${refId}/indexes/${index.id}`}>
+                <Link className="font-medium" to={`/${index.id}`}>
                     Version {index.version}
                 </Link>
                 <IndexItemDescription changeCount={index.change_count} modifiedCount={index.modified_otu_count} />

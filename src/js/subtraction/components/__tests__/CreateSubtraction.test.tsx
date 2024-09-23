@@ -20,7 +20,7 @@ describe("<CreateSubtraction />", () => {
 
     it("should render when no files available", async () => {
         mockApiListFiles([]);
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithMemoryRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
 
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
     });
@@ -28,7 +28,7 @@ describe("<CreateSubtraction />", () => {
     it("should render error when submitted with no name or file entered", async () => {
         const file = createFakeFile({ name: "subtraction.fq.gz", type: FileType.subtraction });
         mockApiListFiles([file]);
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithMemoryRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
 
         expect(await screen.findByText(file.name)).toBeInTheDocument();
         await userEvent.click(await screen.findByText(/save/i));
@@ -45,7 +45,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithMemoryRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -65,7 +65,7 @@ describe("<CreateSubtraction />", () => {
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
         mockApiListFiles([file]);
 
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithMemoryRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
 
         expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
         expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithMemoryRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);

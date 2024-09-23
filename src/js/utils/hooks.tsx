@@ -1,11 +1,6 @@
-import { LocationType } from "@/types/types";
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
-import { RouteComponentProps, useHistory } from "react-router-dom";
 import { useLocation, useSearch } from "wouter";
-
-export type HistoryType = RouteComponentProps["history"];
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -63,7 +58,7 @@ type SearchParamValue = string | boolean | number;
  * @param key - The search parameter key to be managed
  * @param history - The history object
  */
-function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string, navigate, search) {
+function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string, navigate, search, location) {
     const params = new URLSearchParams(search);
 
     if (value) {
@@ -73,67 +68,48 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
     }
 
     search = params.toString();
-
-    navigate(`?${search}`, { replace: true });
+    if (search && location !== "/") {
+        navigate(`${location}?${search}`, { replace: true });
+    } else if (search) {
+        navigate(`?${search}`, { replace: true });
+    } else {
+        navigate(location, { replace: true });
+    }
+    console.log({ search, location });
 
     return search;
 }
 
-/**
- * Hook for managing and synchronizing URL search parameters with a component's state
- *
- * @param key - The search parameter key to be managed
- * @param defaultValue - The default value to use when the search parameter key is not present in the URL
- * @returns Object - An object containing the current value and a function to set the URL search parameter
- */
-export function useUrlSearchParams2<T extends SearchParamValue>(
-    key: string,
-    defaultValue?: T
-): [T, (newValue: T) => void] {
-    const search = useSearch();
-    const [_, navigate] = useLocation();
-    const firstRender = useRef(true);
-
-    let value = new URLSearchParams(search).get(key) as T;
-
-    if (firstRender.current && defaultValue && !value) {
-        value = defaultValue;
-        updateUrlSearchParams(String(defaultValue), key, navigate, search);
-    }
-
-    firstRender.current = false;
-
-    return [value, (value: T) => flushSync(() => updateUrlSearchParams(value, key, navigate, search))];
-}
-
-function createUseUrlSearchParams2() {
+function createUseUrlSearchParams() {
     let cache = { search: "" };
 
-    return function useURLSearchParams(key: string, defaultValue?: T) {
+    return function useURLSearchParams(key: string, defaultValue?: T): [string, (newValue: string) => void] {
         cache.search = useSearch();
+        const [location] = useLocation();
+        console.log(cache, key);
 
-        const [_, navigate] = useLocation();
+        const [, navigate] = useLocation();
         const firstRender = useRef(true);
 
         let value = new URLSearchParams(cache.search).get(key) as T;
 
         if (firstRender.current && defaultValue && !value) {
+            firstRender.current = false;
             value = defaultValue;
-            cache.search = updateUrlSearchParams(String(defaultValue), key, navigate, cache.search);
+            cache.search = updateUrlSearchParams(String(defaultValue), key, navigate, cache.search, location);
         }
 
         firstRender.current = false;
 
         function setURLSearchParam(value) {
-            console.log(cache);
-            cache.search = updateUrlSearchParams(value, key, navigate, cache.search);
+            cache.search = updateUrlSearchParams(value, key, navigate, cache.search, location);
         }
 
-        return [value, (value: T) => setURLSearchParam(value)];
+        return [value, (value: string) => setURLSearchParam(value)];
     };
 }
 
-export const useUrlSearchParams = createUseUrlSearchParams2();
+export const useUrlSearchParams = createUseUrlSearchParams();
 
 /**
  * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
@@ -225,21 +201,4 @@ export function ScrollSync({ children }: ScrollSyncProps) {
             {children}
         </div>
     );
-}
-
-/**
- * Hook for managing the location state
- */
-export function useLocationState(): [
-    locationState: LocationType,
-    setLocationState: (state: { [key: string]: boolean | string | number }) => void
-] {
-    const location = useLocation();
-    const history = useHistory();
-
-    function setLocationState(state: { [key: string]: boolean | string }) {
-        history.push({ ...history.location, state });
-    }
-
-    return [location.state, setLocationState];
 }

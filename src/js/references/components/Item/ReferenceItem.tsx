@@ -2,9 +2,10 @@ import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
 import { IconButton } from "@base/IconButton";
 import { JobState } from "@jobs/types";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { getFontSize, getFontWeight } from "../../../app/theme";
 import { Attribution, BoxGroupSection, Icon } from "../../../base";
 import { ProgressCircle } from "../../../base/ProgressCircle";
@@ -51,22 +52,17 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ reference }: ReferenceItemProps) {
-    const history = useHistory();
+    const [, setCloneReference] = useUrlSearchParams("cloneReference");
     const { id, data_type, name, organism, user, created_at, task } = reference;
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
     const cloneButton = canCreate ? (
-        <IconButton
-            name="clone"
-            tip="clone"
-            color="blue"
-            onClick={() => history.push({ state: { cloneReference: id } })}
-        />
+        <IconButton name="clone" tip="clone" color="blue" onClick={() => setCloneReference(id)} />
     ) : null;
 
     return (
         <StyledReferenceItem>
-            <ReferenceLink to={`/refs/${id}`}>{name}</ReferenceLink>
+            <ReferenceLink to={`/${id}`}>{name}</ReferenceLink>
             <ReferenceItemDataDescriptor>
                 <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s

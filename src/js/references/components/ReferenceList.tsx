@@ -14,8 +14,8 @@ import ReferenceToolbar from "./ReferenceToolbar";
  * A list of references with filtering options
  */
 export default function ReferenceList() {
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const [term] = useUrlSearchParams<string>("find");
+    const [urlPage] = useUrlSearchParams("page");
+    const [term] = useUrlSearchParams("find");
     const { data, isPending } = useFindReferences(Number(urlPage) || 1, 25, term);
 
     if (isPending) {

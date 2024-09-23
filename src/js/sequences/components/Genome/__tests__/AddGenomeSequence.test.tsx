@@ -31,7 +31,7 @@ describe("<AddGenomeSequence>", () => {
             "ATGRYKM",
             otu.schema[0].name
         );
-        renderWithMemoryRouter(<AddGenomeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithMemoryRouter(<AddGenomeSequence {...props} />, "?openAddSequence=true");
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("<AddGenomeSequence>", () => {
         scope.done();
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithMemoryRouter(<AddGenomeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithMemoryRouter(<AddGenomeSequence {...props} />, "?openAddSequence=true");
 
         await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -60,7 +60,7 @@ describe("<AddGenomeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithMemoryRouter(<AddGenomeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithMemoryRouter(<AddGenomeSequence {...props} />, "?openAddSequence=true");
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 0" }), "atbcq");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -78,7 +78,7 @@ describe("<AddGenomeSequence>", () => {
             "ATGRYKM",
             otu.schema[0].name
         );
-        renderWithMemoryRouter(<AddGenomeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithMemoryRouter(<AddGenomeSequence {...props} />, "?openAddSequence=true");
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe("<AddGenomeSequence>", () => {
 
         scope.done();
 
-        renderWithMemoryRouter(<AddGenomeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithMemoryRouter(<AddGenomeSequence {...props} />, "?openAddSequence=true");
         expect(screen.getByText("Resumed editing draft sequence.")).toBeInTheDocument();
     });
 });

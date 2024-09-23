@@ -1,12 +1,22 @@
 import { useLogout } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
-import { Dropdown, DropdownMenuContent, DropdownMenuItem, DropdownMenuLink, Icon, InitialIcon, Logo } from "@base";
+import {
+    Dropdown,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLink,
+    Icon,
+    IconButton,
+    InitialIcon,
+    Logo,
+} from "@base";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
+import { useUrlSearchParams } from "@utils/hooks";
 import { useRootQuery } from "@wall/queries";
 import React from "react";
 import styled from "styled-components";
-import { NavBarItem } from "./NavBarItem";
+import { NavBarLink } from "./NavBarLink";
 
 const NavBarLeft = styled.div`
     display: flex;
@@ -69,6 +79,7 @@ type NavBarProps = {
  * Displays the navigation bar with routes to available components
  */
 export default function NavBar({ administrator_role, handle }: NavBarProps) {
+    const [openDev, setOpenDev] = useUrlSearchParams("openDev");
     const mutation = useLogout();
     const { data } = useRootQuery();
 
@@ -82,20 +93,16 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
         <StyledNavBar>
             <NavBarLeft>
                 <NavBarLogo color="white" />
-                <NavBarItem to="/jobs?state=preparing&state=running">Jobs</NavBarItem>
-                <NavBarItem to="/samples">Samples</NavBarItem>
-                <NavBarItem to="/refs">References</NavBarItem>
-                <NavBarItem to="/hmm">HMM</NavBarItem>
-                <NavBarItem to="/subtractions">Subtractions</NavBarItem>
-                <NavBarItem to="/ml">ML</NavBarItem>
+                <NavBarLink to="/jobs?state=preparing&state=running">Jobs</NavBarLink>
+                <NavBarLink to="/samples">Samples</NavBarLink>
+                <NavBarLink to="/refs">References</NavBarLink>
+                <NavBarLink to="/hmm">HMM</NavBarLink>
+                <NavBarLink to="/subtractions">Subtractions</NavBarLink>
+                <NavBarLink to="/ml">ML</NavBarLink>
             </NavBarLeft>
 
             <NavBarRight>
-                {data?.dev && (
-                    <NavBarItem to={{ state: { devCommands: true } }}>
-                        <Icon color="red" name="bug" />
-                    </NavBarItem>
-                )}
+                {data?.dev && <IconButton onClick={() => setOpenDev("true")} name="bug" tip="dev tools" color="red" />}
 
                 <Dropdown>
                     <DropdownMenuTrigger>
@@ -114,13 +121,16 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
                         {hasSufficientAdminRole(AdministratorRoles.USERS, administrator_role) && (
                             <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>
                         )}
-                        <DropdownMenuLink
-                            target="_blank"
-                            to="//virtool.ca/docs/manual/start/installation/"
-                            rel="noopener noreferrer"
-                        >
-                            Documentation
-                        </DropdownMenuLink>
+                        <DropdownMenuItem>
+                            <a
+                                target="_blank"
+                                href="https://virtool.ca/docs/manual/start/installation/"
+                                rel="noopener noreferrer"
+                                className="text-black hover:text-black"
+                            >
+                                Documentation
+                            </a>
+                        </DropdownMenuItem>
                         <DropdownMenuItem onSelect={onLogout}>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
                 </Dropdown>

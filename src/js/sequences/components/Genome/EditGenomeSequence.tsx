@@ -3,8 +3,7 @@ import { useEditSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 
 type EditGenomeSequenceProps = {
@@ -28,7 +27,7 @@ export default function EditGenomeSequence({
     refId,
     segments,
 }: EditGenomeSequenceProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [openEditSequence, setOpenEditSequence] = useUrlSearchParams("openEditSequence");
     const mutation = useEditSequence(otuId);
 
     function onSubmit({ accession, definition, host, sequence, segment }) {
@@ -36,17 +35,14 @@ export default function EditGenomeSequence({
             { isolateId, sequenceId: activeSequence.id, accession, definition, host, segment, sequence },
             {
                 onSuccess: () => {
-                    setLocationState(merge(locationState, { editSequence: false }));
+                    setOpenEditSequence("");
                 },
             }
         );
     }
 
     return (
-        <Dialog
-            open={locationState?.editSequence}
-            onOpenChange={() => setLocationState(merge(locationState, { editSequence: false }))}
-        >
+        <Dialog open={Boolean(openEditSequence)} onOpenChange={() => setOpenEditSequence(false)}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

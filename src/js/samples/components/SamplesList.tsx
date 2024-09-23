@@ -37,8 +37,8 @@ const StyledSamplesList = styled.div`
  * A list of samples with filtering
  */
 export default function SamplesList() {
-    const [urlPage] = useUrlSearchParams<string>("page");
-    const [term, setTerm] = useUrlSearchParams<string>("find");
+    const [urlPage] = useUrlSearchParams("page");
+    const [term, setTerm] = useUrlSearchParams("find");
     const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
     const [filterWorkflows, setFilterWorkflows] = useUrlSearchParamsList("workflows");
 

@@ -3,8 +3,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import { History } from "history";
 import React, { Suspense } from "react";
-import { Router } from "react-router-dom";
-import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
 import { Router as Wouter } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
@@ -70,12 +68,8 @@ export default function App({ history }: AppProps): React.ReactElement {
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Wouter hook={useBrowserLocation}>
-                    <Router history={history}>
-                        <CompatRouter>
-                            <GlobalStyles />
-                            <ConnectedApp />
-                        </CompatRouter>
-                    </Router>
+                    <GlobalStyles />
+                    <ConnectedApp />
                 </Wouter>
             </QueryClientProvider>
         </ThemeProvider>

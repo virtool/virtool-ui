@@ -3,8 +3,8 @@ import { LoadingPlaceholder, NotFound, Tabs, TabsLink, ViewHeader, ViewHeaderIco
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
+import { Link, Redirect, Route, Switch, useParams } from "wouter";
 import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
 import OTUSection from "./OTUSection";
@@ -37,8 +37,8 @@ const OTUDetailSubtitle = styled.p`
 /**
  * Displays detailed otu view allowing users to manage otus
  */
-export default function OTUDetail({ match }) {
-    const { otuId, refId } = match.params;
+export default function OTUDetail() {
+    const { otuId, refId } = useParams<{ otuId: string; refId: string }>();
     const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 
@@ -66,23 +66,21 @@ export default function OTUDetail({ match }) {
                 </OTUDetailTitle>
                 <OTUDetailSubtitle>
                     <strong>From Reference / </strong>
-                    <Link to={`/refs/${refId}`}>{reference.name}</Link>
+                    <Link to={`~/refs/${refId}`}>{reference.name}</Link>
                 </OTUDetailSubtitle>
             </ViewHeader>
 
             <Tabs>
-                <TabsLink to={`/refs/${refId}/otus/${id}/otu`}>OTU</TabsLink>
-                {reference.data_type !== "barcode" && (
-                    <TabsLink to={`/refs/${refId}/otus/${id}/schema`}>Schema</TabsLink>
-                )}
-                <TabsLink to={`/refs/${refId}/otus/${id}/history`}>History</TabsLink>
+                <TabsLink to={`/otu`}>OTU</TabsLink>
+                {reference.data_type !== "barcode" && <TabsLink to={`/schema`}>Schema</TabsLink>}
+                <TabsLink to={`/history`}>History</TabsLink>
             </Tabs>
 
             <Switch>
-                <Redirect from="/refs/:refId/otus/:otuId" to={`/refs/${refId}/otus/${id}/otu`} exact />
-                <Route path="/refs/:refId/otus/:otuId/otu" component={OTUSection} />
-                <Route path="/refs/:refId/otus/:otuId/history" component={History} />
-                <Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />
+                <Route path="/" component={() => <Redirect to={`/otu`} replace />} />
+                <Route path="/otu" component={OTUSection} nest />
+                <Route path="/history" component={History} nest />
+                <Route path="/schema" component={Schema} nest />
             </Switch>
         </>
     );

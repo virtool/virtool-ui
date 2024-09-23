@@ -34,7 +34,7 @@ export default function NuVsItem({ hit }: NuVsItemProps) {
     const { id, e, annotatedOrfCount, sequence, index } = hit;
 
     return (
-        <StyledNuVsItem active={activeHit === id} onClick={() => setActiveHit(id)}>
+        <StyledNuVsItem active={activeHit === String(id)} onClick={() => setActiveHit(String(id))}>
             <NuVsItemHeader>
                 <strong>Sequence {index}</strong>
                 <Badge>{sequence.length}</Badge>

@@ -5,8 +5,8 @@ import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { xor } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
@@ -50,13 +50,13 @@ export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsPro
                         onUpdate(xor(sampleLabels, [labelId]));
                     }}
                     selectionType="labels"
-                    manageLink={"/samples/labels"}
+                    manageLink={"~/samples/labels"}
                 />
             </SidebarHeader>
             <SampleSidebarList items={data.filter(item => sampleLabels.includes(item.id))} />
             {Boolean(data.length) || (
                 <SampleLabelsFooter>
-                    No labels found. <Link to="/samples/labels">Create one</Link>.
+                    No labels found. <Link to="~/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
             )}
         </SideBarSection>

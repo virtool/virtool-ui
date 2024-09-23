@@ -15,7 +15,7 @@ describe("<MLModels/>", () => {
         });
         const model_scope = mockApiGetModels([mlModel]);
 
-        renderWithMemoryRouter(<ML />, ["/"]);
+        renderWithMemoryRouter(<ML />, "/ml");
 
         expect(await screen.findByText(mlModel.name)).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: `${mlModel.latest_release.name}` })).toHaveAttribute(
@@ -29,7 +29,7 @@ describe("<MLModels/>", () => {
 
     it("should render NoneFound when no models exist", async () => {
         const model_scope = mockApiGetModels([]);
-        renderWithMemoryRouter(<ML />, ["/"]);
+        renderWithMemoryRouter(<ML />, "/ml");
 
         expect(await screen.findByText("No machine learning models found.")).toBeInTheDocument();
         model_scope.done();

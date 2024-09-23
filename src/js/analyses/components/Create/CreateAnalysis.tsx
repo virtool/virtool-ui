@@ -1,3 +1,4 @@
+import { Workflows } from "@/analyses/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUrlSearchParams } from "@utils/hooks";
 import { groupBy, map, maxBy } from "lodash-es";
@@ -68,7 +69,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
     }
 
     return (
-        <Dialog open={openCreateAnalysis} onOpenChange={onOpenChange}>
+        <Dialog open={Boolean(openCreateAnalysis)} onOpenChange={onOpenChange}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
@@ -82,7 +83,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
                         onSubmit={onSubmit}
                         sampleCount={1}
                         subtractions={subtractionOptions}
-                        workflow={workflow}
+                        workflow={Workflows[workflow]}
                     />
                 </CreateAnalysisDialogContent>
             </DialogPortal>

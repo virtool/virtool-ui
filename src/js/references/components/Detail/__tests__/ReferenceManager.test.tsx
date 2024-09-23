@@ -1,9 +1,10 @@
+import References from "@references/components/References";
 import { screen } from "@testing-library/react";
+import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
 import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
-import ReferenceManager from "../ReferenceManager";
 
 describe("<ReferenceManager />", () => {
     let props;
@@ -12,13 +13,15 @@ describe("<ReferenceManager />", () => {
     beforeEach(() => {
         reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
+        mockApiGetSettings(createFakeSettings());
+
         props = {
             match: { params: { refId: reference.id } },
         };
     });
 
     it("should render properly", async () => {
-        renderWithMemoryRouter(<ReferenceManager {...props} />);
+        renderWithMemoryRouter(<References {...props} />, `/${reference.id}/manage`);
 
         expect(await screen.findByText("General")).toBeInTheDocument();
         expect(screen.getByText("Description")).toBeInTheDocument();
@@ -31,14 +34,14 @@ describe("<ReferenceManager />", () => {
     });
 
     it("should render when [remotes_from=null]", async () => {
-        renderWithMemoryRouter(<ReferenceManager {...props} />);
+        renderWithMemoryRouter(<References {...props} />, `/${reference.id}/manage`);
 
         expect(await screen.findByText("General")).toBeInTheDocument();
         expect(screen.queryByText("Remote Reference")).toBeNull();
     });
 
     it("should render when [cloned_from={ Bar: 'Bee' }]", async () => {
-        renderWithMemoryRouter(<ReferenceManager {...props} />);
+        renderWithMemoryRouter(<References {...props} />, `/${reference.id}/manage`);
 
         expect(await screen.findByText("Clone Reference")).toBeInTheDocument();
         expect(screen.getByText("Source Reference"));

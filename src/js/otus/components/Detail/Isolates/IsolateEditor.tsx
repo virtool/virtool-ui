@@ -4,8 +4,7 @@ import { ScrollArea } from "@base/ScrollArea";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParams } from "@utils/hooks";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -41,24 +40,22 @@ const AddIsolateLink = styled.a`
  * Displays a component for managing the isolates
  */
 export default function IsolateEditor() {
-    const [locationState, setLocationState] = useLocationState();
     const { otu, reference } = useCurrentOTUContext();
     const { isolates } = otu;
+    const [activeIsolateId] = useUrlSearchParams("activeIsolate", isolates[0]?.id);
+    const [, setOpenAddIsolate] = useUrlSearchParams("openAddIsolate");
     const { data_type, restrict_source_types, source_types } = reference;
 
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);
 
-    const activeIsolateId = locationState?.activeIsolateId || otu.isolates[0]?.id;
-    const activeIsolate = isolates.length ? find(isolates, { id: activeIsolateId }) : null;
+    const activeIsolate = isolates.length ? find(isolates, { id: activeIsolateId || isolates[0]?.id }) : null;
 
     const isolateComponents = map(isolates, (isolate, index) => (
         <IsolateItem key={index} isolate={isolate} active={isolate.id === activeIsolate.id} dataType={data_type} />
     ));
 
     const addIsolateLink = canModify ? (
-        <AddIsolateLink onClick={() => setLocationState(merge(locationState, { addIsolate: true }))}>
-            Add Isolate
-        </AddIsolateLink>
+        <AddIsolateLink onClick={() => setOpenAddIsolate("true")}>Add Isolate</AddIsolateLink>
     ) : null;
 
     const body = isolateComponents.length ? (

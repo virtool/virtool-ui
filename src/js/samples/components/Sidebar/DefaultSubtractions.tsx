@@ -4,8 +4,8 @@ import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { xor } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SubtractionInner = ({ name }) => name;
@@ -49,7 +49,7 @@ export default function DefaultSubtractions({ defaultSubtractions, onUpdate }: D
                         onUpdate(xor(defaultSubtractions, [subtractionId]));
                     }}
                     selectionType="default subtractions"
-                    manageLink={"/subtractions"}
+                    manageLink={"~/subtractions"}
                 />
             </SidebarHeader>
             <SampleSidebarList
@@ -57,7 +57,7 @@ export default function DefaultSubtractions({ defaultSubtractions, onUpdate }: D
             />
             {Boolean(subtractionOptions.length) || (
                 <SampleSubtractionFooter>
-                    No subtractions found. <Link to="/subtractions">Create one</Link>.
+                    No subtractions found. <Link to="~/subtractions">Create one</Link>.
                 </SampleSubtractionFooter>
             )}
         </SideBarSection>

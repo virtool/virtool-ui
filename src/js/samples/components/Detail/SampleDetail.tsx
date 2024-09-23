@@ -26,9 +26,10 @@ import Rights from "./SampleRights";
  */
 export default function SampleDetail() {
     const [location, navigate] = useLocation();
-    const { sampleId } = useParams();
+    const { sampleId } = useParams<{ sampleId: string }>();
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
+    console.log({ sampleId });
 
     if (isError) {
         return <NotFound />;

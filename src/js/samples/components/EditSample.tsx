@@ -41,7 +41,7 @@ export default function EditSample({ sample }: EditSampleProps) {
     });
 
     return (
-        <Dialog open={openEditSample} onOpenChange={() => setOpenEditSample("")}>
+        <Dialog open={Boolean(openEditSample)} onOpenChange={() => setOpenEditSample("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

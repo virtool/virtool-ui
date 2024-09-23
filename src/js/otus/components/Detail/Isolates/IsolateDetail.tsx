@@ -5,9 +5,8 @@ import { OTUIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceDataType } from "@references/types";
 import IsolateSequences from "@sequences/components/IsolateSequences";
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParams } from "@utils/hooks";
 import { formatIsolateName } from "@utils/utils";
-import { merge } from "lodash";
 import React from "react";
 import styled from "styled-components";
 import EditIsolate from "./EditIsolate";
@@ -62,7 +61,9 @@ export default function IsolateDetail({
     otuId,
     restrictSourceTypes,
 }: IsolateDetailProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [openEditIsolate, setOpenEditIsolate] = useUrlSearchParams("openEditIsolate");
+    const [openRemoveIsolate, setOpenRemoveIsolate] = useUrlSearchParams("openRemoveIsolate");
+
     const mutation = useSetIsolateAsDefault();
 
     const defaultIsolateLabel = activeIsolate.default && dataType !== "barcode" && (
@@ -81,16 +82,16 @@ export default function IsolateDetail({
                 sourceName={activeIsolate.source_name}
                 allowedSourceTypes={allowedSourceTypes}
                 restrictSourceTypes={restrictSourceTypes}
-                show={locationState?.editIsolate}
-                onHide={() => setLocationState(merge(locationState, { editIsolate: false }))}
+                show={openEditIsolate}
+                onHide={() => setOpenEditIsolate(false)}
             />
 
             <RemoveIsolate
                 id={activeIsolate.id}
                 name={formatIsolateName(activeIsolate)}
-                onHide={() => setLocationState(merge(locationState, { removeIsolate: false }))}
+                onHide={() => setOpenRemoveIsolate(false)}
                 otuId={otuId}
-                show={locationState?.removeIsolate}
+                show={openRemoveIsolate}
             />
 
             <IsolateDetailHeader>
@@ -103,7 +104,7 @@ export default function IsolateDetail({
                                 name="pen"
                                 color="grayDark"
                                 tip="edit isolate"
-                                onClick={() => setLocationState(merge(locationState, { editIsolate: true }))}
+                                onClick={() => setOpenEditIsolate(true)}
                             />
                             {!activeIsolate.default && dataType !== "barcode" && (
                                 <IconButton
@@ -117,7 +118,7 @@ export default function IsolateDetail({
                                 name="trash"
                                 color="red"
                                 tip="remove isolate"
-                                onClick={() => setLocationState(merge(locationState, { removeIsolate: true }))}
+                                onClick={() => setOpenRemoveIsolate(true)}
                             />
                         </>
                     )}

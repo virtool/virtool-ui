@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 import { SidebarHeader, SideBarSection } from "../../../base";
 import { Label } from "../../../labels/types";
 import { LabelFilterItem } from "./LabelFilterItem";
@@ -20,7 +20,7 @@ export default function LabelFilter({ labels, onClick, selected }: LabelFilterPr
     return (
         <SideBarSection>
             <SidebarHeader>
-                Labels <Link to="/samples/labels">Manage</Link>
+                Labels <Link to="~/samples/labels">Manage</Link>
             </SidebarHeader>
             {labels.map(label => (
                 <LabelFilterItem

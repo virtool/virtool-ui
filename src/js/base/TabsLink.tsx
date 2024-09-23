@@ -5,7 +5,7 @@ import { Link } from "wouter";
 type TabsLinkProps = {
     children: React.ReactNode;
     className?: string;
-    isActive?: () => boolean;
+    isActive?: boolean;
     to: string;
 };
 

@@ -22,7 +22,7 @@ function renderRow(sampleId: string) {
  */
 export default function AnalysesList() {
     const { sampleId } = useParams();
-    const [urlPage] = useUrlSearchParams<number>("page");
+    const [urlPage] = useUrlSearchParams("page");
     const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
     const { isPending: isPendingSample } = useFetchSample(sampleId);

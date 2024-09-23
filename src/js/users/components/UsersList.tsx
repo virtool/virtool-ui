@@ -15,8 +15,8 @@ type UsersListProps = {
  * A paginated list of users
  */
 export function UsersList({ term }: UsersListProps) {
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const [status] = useUrlSearchParams<string>("status");
+    const [urlPage] = useUrlSearchParams("page");
+    const [status] = useUrlSearchParams("status");
     const { data, isPending } = useFindUsers(Number(urlPage) || 1, 25, term, undefined, status === "active");
 
     if (isPending) {

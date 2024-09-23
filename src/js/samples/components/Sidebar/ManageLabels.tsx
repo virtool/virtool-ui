@@ -5,8 +5,8 @@ import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import { SampleMinimal } from "@samples/types";
 import { filter, flatMap, groupBy, map } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { useUpdateLabel } from "../../queries";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
@@ -64,13 +64,13 @@ export default function ManageLabels({ labels, selectedSamples }: ManageLabelsPr
                     partiallySelectedItems={map(partiallySelectedLabels, label => label.id)}
                     onUpdate={onUpdateLabel}
                     selectionType="labels"
-                    manageLink={"/samples/labels"}
+                    manageLink={"~/samples/labels"}
                 />
             </SidebarHeader>
             <SampleSidebarMultiselectList items={selectedLabels} />
             {Boolean(labels.length) || (
                 <SampleLabelsFooter>
-                    No labels found. <Link to="/samples/labels">Create one</Link>.
+                    No labels found. <Link to="~/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
             )}
         </StyledSideBarSection>

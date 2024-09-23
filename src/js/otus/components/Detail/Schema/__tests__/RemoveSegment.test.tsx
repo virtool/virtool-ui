@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -21,7 +21,7 @@ describe("<RemoveSegment />", () => {
     });
 
     it("should render when [show=true]", () => {
-        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: props.schema[0].name } }]);
+        renderWithMemoryRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
 
         expect(screen.getByText("Remove Segment")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("<RemoveSegment />", () => {
     });
 
     it("should render when [show=false]", () => {
-        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: "" } }]);
+        renderWithMemoryRouter(<RemoveSegment {...props} />, "");
 
         expect(screen.queryByText("Remove Segment")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
@@ -45,18 +45,18 @@ describe("<RemoveSegment />", () => {
             otuId: otu.d,
             schema: [props.schema[1]],
         });
-        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: props.schema[0].name } }]);
+        renderWithMemoryRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
 
         await userEvent.click(screen.getByRole("button"));
 
         scope.done();
     });
 
-    it("should call onHide() when onHide() called on <RemoveDialog />", () => {
-        renderWithMemoryRouter(<RemoveSegment {...props} />, [{ state: { removeSegment: props.schema[0].name } }]);
+    it("should call onHide() when onHide() called on <RemoveDialog />", async () => {
+        renderWithMemoryRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
 
         fireEvent.keyDown(document, { key: "Escape" });
 
-        expect(screen.queryByText("Remove Segment")).toBeNull();
+        await waitFor(() => expect(screen.queryByText("Remove Segment")).toBeNull());
     });
 });

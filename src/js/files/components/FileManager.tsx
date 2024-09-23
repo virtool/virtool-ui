@@ -14,6 +14,7 @@ import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { UploadBar } from "@files/components/UploadBar";
 import { upload } from "@files/uploader";
 import { Permission } from "@groups/types";
+import { useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import { capitalize } from "lodash-es";
 import React from "react";
@@ -37,7 +38,8 @@ type FileManagerProps = {
 };
 
 export function FileManager({ accept, fileType, message, regex }: FileManagerProps) {
-    const page = parseInt(new URLSearchParams(window.location.search).get("page")) || 1;
+    const [pageParam] = useUrlSearchParams("page");
+    const page = parseInt(pageParam) || 1;
 
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
     const { data: files, isPending: isPendingFiles } = useListFiles(fileType, page, 25);

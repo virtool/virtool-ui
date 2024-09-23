@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Tabs, TabsLink } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import EmptyReference from "./EmptyReference";
 import { ImportReference } from "./ImportReference";
@@ -9,30 +9,37 @@ import { ImportReference } from "./ImportReference";
  * The create reference view with options to create an empty reference or import a reference
  */
 export function CreateReference() {
-    const [locationState, setLocationState] = useLocationState();
+    const [createReference, setCreateReference] = useUrlSearchParams("createReference");
+    const [createReferenceType, setCreateReferenceType] = useUrlSearchParams("createReferenceType");
 
     return (
-        <Dialog open={locationState?.createReference} onOpenChange={() => setLocationState({ createReference: false })}>
+        <Dialog
+            open={createReference}
+            onOpenChange={() => {
+                setCreateReference(false);
+                setCreateReferenceType("");
+            }}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent size="lg">
                     <DialogTitle>Create Reference</DialogTitle>
                     <Tabs>
                         <TabsLink
-                            to={{ state: { createReference: true, emptyReference: true } }}
-                            isActive={() => locationState?.emptyReference}
+                            to="?createReference=true&createReferenceType=empty"
+                            isActive={createReferenceType === "empty"}
                         >
                             Empty
                         </TabsLink>
                         <TabsLink
-                            to={{ state: { createReference: true, importReference: true } }}
-                            isActive={() => locationState?.importReference}
+                            to="?createReference=true&createReferenceType=import"
+                            isActive={createReferenceType === "import"}
                         >
                             Import
                         </TabsLink>
                     </Tabs>
 
-                    {locationState?.importReference ? <ImportReference /> : <EmptyReference />}
+                    {createReferenceType === "import" ? <ImportReference /> : <EmptyReference />}
                 </DialogContent>
             </DialogPortal>
         </Dialog>

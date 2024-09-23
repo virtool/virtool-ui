@@ -5,10 +5,11 @@ import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { SubtractionShortlist } from "@subtraction/types";
-import { formatSearchParams, HistoryType, useUrlSearchParams } from "@utils/hooks";
+import { formatSearchParams, useUrlSearchParams } from "@utils/hooks";
 import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
 
+import { Workflows } from "@/analyses/types";
 import styled from "styled-components";
 import { useLocation, useSearch } from "wouter";
 import { useCreateAnalysis } from "../../queries";
@@ -23,14 +24,6 @@ const QuickAnalyzeSelected = styled.span`
     align-self: center;
     margin: 0 15px 0 auto;
 `;
-
-type History = HistoryType & {
-    location: {
-        state: {
-            quickAnalysis?: boolean;
-        };
-    };
-};
 
 /**
  * Gets the compatible samples
@@ -128,7 +121,7 @@ export default function QuickAnalyze({
     const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
 
     return (
-        <Dialog open={openQuickAnalysis} onOpenChange={() => onHide()}>
+        <Dialog open={Boolean(openQuickAnalysis)} onOpenChange={() => onHide()}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
@@ -137,7 +130,7 @@ export default function QuickAnalyze({
                         {genome.length > 0 && (
                             <TabsLink
                                 to={formatSearchParams("workflow", "genome", search)}
-                                isActive={() => mode === "genome"}
+                                isActive={mode === "genome"}
                             >
                                 <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
                             </TabsLink>
@@ -145,7 +138,7 @@ export default function QuickAnalyze({
                         {barcode.length > 0 && (
                             <TabsLink
                                 to={formatSearchParams("workflow", "barcode", search)}
-                                isActive={() => mode === "barcode"}
+                                isActive={mode === "barcode"}
                             >
                                 <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
                             </TabsLink>
@@ -164,7 +157,7 @@ export default function QuickAnalyze({
                         onSubmit={handleSubmit}
                         sampleCount={samples.length}
                         subtractions={subtractionOptions}
-                        workflow={workflow}
+                        workflow={Workflows[workflow]}
                     />
                 </CreateAnalysisDialogContent>
             </DialogPortal>

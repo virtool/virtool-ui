@@ -17,7 +17,7 @@ describe("<RemoveSample />", () => {
     });
 
     it("renders when [show=true]", () => {
-        renderWithMemoryRouter(<RemoveSample {...props} />, [{ state: { removeSample: true } }]);
+        renderWithMemoryRouter(<RemoveSample {...props} />, "?openRemoveSample=true");
 
         expect(screen.getByText("Remove Sample")).toBeInTheDocument();
         expect(screen.getByText("test")).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe("<RemoveSample />", () => {
     });
 
     it("renders when [show=false]", () => {
-        renderWithMemoryRouter(<RemoveSample {...props} />, [{ state: { removeSample: false } }]);
+        renderWithMemoryRouter(<RemoveSample {...props} />, "");
 
         expect(screen.queryByText("Remove Sample")).toBeNull();
         expect(screen.queryByText("test")).toBeNull();
@@ -34,7 +34,7 @@ describe("<RemoveSample />", () => {
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
         const scope = mockApiRemoveSample(props.id);
-        renderWithMemoryRouter(<RemoveSample {...props} />, [{ state: { removeSample: true } }]);
+        renderWithMemoryRouter(<RemoveSample {...props} />, "?openRemoveSample=true");
 
         await userEvent.click(screen.getByRole("button"));
 

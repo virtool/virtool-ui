@@ -4,8 +4,7 @@ import { OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReferenceTarget } from "@references/types";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 
 type EditBarcodeSequence = {
@@ -20,7 +19,7 @@ type EditBarcodeSequence = {
  * Displays dialog to edit a barcode sequence
  */
 export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, targets }: EditBarcodeSequence) {
-    const [locationState, setLocationState] = useLocationState();
+    const [openEditSequence, setOpenEditSequence] = useUrlSearchParams("openEditSequence");
     const mutation = useEditSequence(otuId);
 
     function onSubmit({ accession, definition, host, sequence, target }) {
@@ -28,17 +27,14 @@ export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, 
             { isolateId, sequenceId: activeSequence.id, accession, definition, host, sequence, target },
             {
                 onSuccess: () => {
-                    setLocationState(merge(locationState, { editSequence: false }));
+                    setOpenEditSequence("");
                 },
             }
         );
     }
 
     return (
-        <Dialog
-            open={locationState?.editSequence}
-            onOpenChange={() => setLocationState(merge(locationState, { editSequence: false }))}
-        >
+        <Dialog open={Boolean(openEditSequence)} onOpenChange={() => setOpenEditSequence("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

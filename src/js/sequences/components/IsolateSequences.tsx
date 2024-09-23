@@ -7,8 +7,8 @@ import RemoveSequence from "@sequences/components/RemoveSequence";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
 import { map } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import AddSequenceLink from "./AddSequenceLink";
 import AddBarcodeSequence from "./Barcode/AddBarcodeSequence";
 import BarcodeSequence from "./Barcode/BarcodeSequence";
@@ -54,7 +54,7 @@ export default function IsolateSequences({ activeIsolate, otuId }: IsolateSequen
         if (data_type === "barcode" && !hasTargets) {
             sequenceComponents = [
                 <NoneFoundSection noun="targets" key="noTargets">
-                    <Link to={`/refs/${id}/manage`}>Create one</Link>
+                    <Link to={`/../../../manage`}>Create one</Link>
                 </NoneFoundSection>,
             ];
         } else {

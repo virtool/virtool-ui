@@ -11,7 +11,7 @@ export default function CreateSubtraction() {
     const [openCreateSubtraction, setOpenCreateSubtraction] = useUrlSearchParams("openCreateSubtraction");
 
     return (
-        <Dialog open={openCreateSubtraction} onOpenChange={() => setOpenCreateSubtraction(false)}>
+        <Dialog open={Boolean(openCreateSubtraction)} onOpenChange={() => setOpenCreateSubtraction("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent size="lg">

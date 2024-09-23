@@ -4,8 +4,7 @@ import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceDataType } from "@references/types";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 
@@ -28,7 +27,7 @@ type AddSequenceLinkProps = {
  * Displays a link to add a sequence
  */
 export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [, setOpenAddSequence] = useUrlSearchParams("openAddSequence");
     const { reference } = useCurrentOTUContext();
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
     const unreferencedTargets = useGetUnreferencedTargets();
@@ -48,11 +47,7 @@ export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProp
             }
         }
 
-        return (
-            <StyledAddSequenceLink onClick={() => setLocationState(merge(locationState, { addSequence: true }))}>
-                Add Sequence
-            </StyledAddSequenceLink>
-        );
+        return <StyledAddSequenceLink onClick={() => setOpenAddSequence(true)}>Add Sequence</StyledAddSequenceLink>;
     }
 
     return null;
