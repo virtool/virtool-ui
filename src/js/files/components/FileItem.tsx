@@ -5,7 +5,7 @@ import { byteSize } from "@utils/utils";
 import React, { useCallback } from "react";
 import { useDeleteFile } from "../queries";
 
-type FileItemProps = {
+export type FileItemProps = {
     canDelete: boolean;
     id: string;
     name: string;

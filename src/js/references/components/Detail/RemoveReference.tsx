@@ -31,9 +31,9 @@ export default function RemoveReference({ id, name }: RemoveReferenceProps) {
                     onSuccess: () => {
                         navigate("/refs");
                     },
-                }
+                },
             ),
-        ["id"]
+        ["id"],
     );
 
     return (

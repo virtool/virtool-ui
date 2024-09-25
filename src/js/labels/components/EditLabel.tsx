@@ -32,7 +32,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
                 onSuccess: () => {
                     setShow(false);
                 },
-            }
+            },
         );
     }
 

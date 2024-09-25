@@ -11,14 +11,8 @@ import { Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 process.env.TZ = "UTC";
 
-export function wrapWithProviders(ui) {
-    const queryClient = new QueryClient({
-        logger: {
-            log: console.log,
-            warn: console.warn,
-            error: noop,
-        },
-    });
+export function wrapWithProviders(ui: ReactNode) {
+    const queryClient = new QueryClient();
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -27,11 +21,11 @@ export function wrapWithProviders(ui) {
     );
 }
 
-export function renderWithProviders(ui) {
+export function renderWithProviders(ui: ReactNode) {
     const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
 
-    function rerenderWithProviders(updatedUI) {
-        return rerender(<ThemeProvider theme={theme}>{updatedUI}</ThemeProvider>);
+    function rerenderWithProviders(updatedUi: ReactNode) {
+        return rerender(<ThemeProvider theme={theme}>{updatedUi}</ThemeProvider>);
     }
 
     return { ...rest, rerender: rerenderWithProviders };
@@ -82,7 +76,7 @@ class ResizeObserver {
     disconnect() {}
 }
 
-export function attachResizeObserver() {
+function attachResizeObserver() {
     window.ResizeObserver = ResizeObserver;
 }
 

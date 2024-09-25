@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeSample, mockApiEditSample } from "@tests/fake/samples";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeSample, mockApiEditSample } from "../../../../tests/fake/samples";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import EditSample from "../EditSample";
 
 describe("<Editsample />", () => {

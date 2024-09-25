@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { renderWithProviders } from "../../../../../tests/setupTests";
 import OTUIssues from "../OTUIssues";
 
 describe("<OTUIssues />", () => {
@@ -21,8 +21,8 @@ describe("<OTUIssues />", () => {
 
         expect(
             screen.getByText(
-                "There are some issues that must be resolved before this OTU can be included in the next index build"
-            )
+                "There are some issues that must be resolved before this OTU can be included in the next index build",
+            ),
         ).toBeInTheDocument();
     });
 
@@ -51,12 +51,12 @@ describe("<OTUIssues />", () => {
 
         expect(
             screen.getByText(
-                "There are some issues that must be resolved before this OTU can be included in the next index build"
-            )
+                "There are some issues that must be resolved before this OTU can be included in the next index build",
+            ),
         ).toBeInTheDocument();
         expect(screen.getByText("There are no isolates associated with this OTU")).toBeInTheDocument();
         expect(
-            screen.getByText("Some isolates have different numbers of sequences than other isolates")
+            screen.getByText("Some isolates have different numbers of sequences than other isolates"),
         ).toBeInTheDocument();
         expect(screen.getByText("There are no sequences associated with the following isolates:")).toBeInTheDocument();
 

@@ -52,7 +52,7 @@ export function CreateSubtractionForm() {
                     setOpenCreateSubtraction("");
                     reset();
                 },
-            }
+            },
         );
     }
 

@@ -106,7 +106,7 @@ export default function CreateAPIKey() {
                 onSuccess: data => {
                     setNewKey(data.key);
                 },
-            }
+            },
         );
     }
 

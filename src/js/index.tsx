@@ -11,8 +11,8 @@ if (window.virtool.sentryDsn !== "SENTRY_DSN") {
 
     Sentry.init({
         dsn: window.virtool.sentryDsn,
-        integrations: [new Sentry.BrowserTracing()],
-        tracesSampleRate: 0.5,
+        integrations: [Sentry.browserTracingIntegration()],
+        tracesSampleRate: 0.3,
     });
 } else {
     window.captureException = error => console.error(error);

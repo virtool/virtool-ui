@@ -56,8 +56,8 @@ export default function EditSample({ sample }: EditSampleProps) {
                                     onSuccess: () => {
                                         setOpenEditSample("");
                                     },
-                                }
-                            )
+                                },
+                            ),
                         )}
                     >
                         <InputGroup>

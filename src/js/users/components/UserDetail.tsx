@@ -56,7 +56,7 @@ export default function UserDetail() {
     const { userId } = useParams<{ userId: string }>();
     const { data, isPending } = useFetchUser(userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
-        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL
+        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
 
     const [openActivateUser, setOpenActivateUser] = useUrlSearchParams("openActivateUser");

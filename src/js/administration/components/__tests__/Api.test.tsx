@@ -1,9 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeSettings, mockApiUpdateSettings } from "../../../../tests/fake/admin";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import Api from "../Api";
 
 describe("<Api />", () => {

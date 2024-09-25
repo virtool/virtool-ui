@@ -24,7 +24,7 @@ export default function Schema() {
     const { refId, otuId } = useParams<{ otuId: string; refId: string }>();
     const { hasPermission: canModify, isPending: isPendingPermission } = useCheckReferenceRight(
         refId,
-        ReferenceRight.modify_otu
+        ReferenceRight.modify_otu,
     );
 
     const [, setOpenAddSegment] = useUrlSearchParams("openAddSegment");

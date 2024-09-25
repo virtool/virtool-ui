@@ -1,9 +1,9 @@
 import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeSubtraction, mockApiRemoveSubtraction } from "../../../../../tests/fake/subtractions";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import RemoveSubtraction from "../RemoveSubtraction";
 
 describe("<RemoveSubtraction />", () => {

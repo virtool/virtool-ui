@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUSequence, mockApiEditSequence } from "../../../../../tests/fake/otus";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import EditBarcodeSequence from "../EditBarcodeSequence";
 
 describe("<EditBarcodeSequence>", () => {
@@ -38,7 +38,7 @@ describe("<EditBarcodeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "ACGRM",
-            "test_target_name_2"
+            "test_target_name_2",
         );
         renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
 
@@ -82,7 +82,7 @@ describe("<EditBarcodeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             "ACGRM",
-            "test_target_name_2"
+            "test_target_name_2",
         );
         renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
 

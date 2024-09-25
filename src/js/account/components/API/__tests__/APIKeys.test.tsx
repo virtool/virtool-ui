@@ -9,7 +9,7 @@ import {
     mockApiGetAPIKeys,
 } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -103,7 +103,7 @@ describe("<APIKeys />", () => {
 
                 expect(await screen.findByText(/You are an administrator/)).toBeInTheDocument();
                 expect(
-                    screen.getByText(/If your administrator role is reduced or removed, this API/)
+                    screen.getByText(/If your administrator role is reduced or removed, this API/),
                 ).toBeInTheDocument();
             });
 
@@ -113,7 +113,7 @@ describe("<APIKeys />", () => {
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
                 expect(
-                    screen.queryByText(/If your administrator role is reduced or removed, this API/)
+                    screen.queryByText(/If your administrator role is reduced or removed, this API/),
                 ).not.toBeInTheDocument();
             });
         });

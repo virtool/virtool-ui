@@ -1,11 +1,11 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import HMM from "../HMM";
 
 describe("<HMMList />", () => {
@@ -53,7 +53,7 @@ describe("<HMMList />", () => {
 
             expect(screen.getByText("No HMM data available.")).toBeInTheDocument();
             expect(
-                screen.getByText(/You can download and install the official HMM data automatically from our/)
+                screen.getByText(/You can download and install the official HMM data automatically from our/),
             ).toBeInTheDocument();
             expect(screen.getByText("GitHub repository")).toBeInTheDocument();
 

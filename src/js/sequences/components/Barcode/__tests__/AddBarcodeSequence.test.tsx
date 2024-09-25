@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiAddSequence } from "@tests/fake/otus";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import AddBarcodeSequence from "../AddBarcodeSequence";
@@ -40,7 +40,7 @@ describe("<AddBarcodeSequence>", () => {
             "user_typed_definition",
             "ATGRYK",
             undefined,
-            "test_target_name_2"
+            "test_target_name_2",
         );
         renderWithMemoryRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
 
@@ -83,7 +83,7 @@ describe("<AddBarcodeSequence>", () => {
             "user_typed_definition",
             "ATGRYK",
             undefined,
-            "test_target_name_2"
+            "test_target_name_2",
         );
         renderWithMemoryRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
 

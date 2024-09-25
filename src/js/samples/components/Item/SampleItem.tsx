@@ -91,9 +91,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
     const [, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
     const [, setWorkflow] = useUrlSearchParams("workflow");
 
-    function onQuickAnalyze() {
         setOpenQuickAnalysis("true");
-        setWorkflow(Workflows.pathoscope_bowtie);
         selectOnQuickAnalyze();
     }
 

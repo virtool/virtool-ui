@@ -16,5 +16,5 @@ export const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>(
                 {children}
             </Input>
         );
-    }
+    },
 );

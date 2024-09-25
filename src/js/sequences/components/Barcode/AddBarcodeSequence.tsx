@@ -34,7 +34,7 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
                 onSuccess: () => {
                     setOpenAddSequence("");
                 },
-            }
+            },
         );
     }
 

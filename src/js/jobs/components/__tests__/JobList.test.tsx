@@ -1,7 +1,7 @@
 import { JobState, workflows } from "@jobs/types";
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeJobMinimal, mockApiGetJobs } from "@tests/fake/jobs";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";

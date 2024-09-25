@@ -84,9 +84,11 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
     const { data } = useRootQuery();
 
     function onLogout() {
-        window.virtool.b2c.enabled && window.msalInstance.getActiveAccount()
-            ? window.msalInstance.logoutRedirect()
-            : mutation.mutate();
+        if (window.virtool.b2c.enabled && window.msalInstance.getActiveAccount()) {
+            window.msalInstance.logoutRedirect();
+        } else {
+            mutation.mutate();
+        }
     }
 
     return (

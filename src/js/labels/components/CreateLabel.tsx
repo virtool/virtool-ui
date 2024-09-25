@@ -24,7 +24,7 @@ export function CreateLabel() {
                 onSuccess: () => {
                     setOpen(false);
                 },
-            }
+            },
         );
     }
 

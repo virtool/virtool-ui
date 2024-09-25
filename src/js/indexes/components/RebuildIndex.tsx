@@ -30,7 +30,7 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
                 onSuccess: () => {
                     setOpenRebuild("");
                 },
-            }
+            },
         );
     }
 

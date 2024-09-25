@@ -14,7 +14,7 @@ export function findGroups(
     page?: number,
     per_page?: number,
     term?: string,
-    paginate?: boolean
+    paginate?: boolean,
 ): Promise<GroupSearchResults | GroupMinimal[]> {
     return Request.get("/groups")
         .query({ page, per_page, term, paginate })

@@ -24,7 +24,7 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
                 onSuccess: () => {
                     setOpenCreateOtu("");
                 },
-            }
+            },
         );
     }
 

@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeOTU, mockApiAddSequence } from "@tests/fake/otus";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import AddGenomeSequence from "../AddGenomeSequence";
@@ -29,7 +29,7 @@ describe("<AddGenomeSequence>", () => {
             "user_typed_host",
             "user_typed_definition",
             "ATGRYKM",
-            otu.schema[0].name
+            otu.schema[0].name,
         );
         renderWithMemoryRouter(<AddGenomeSequence {...props} />, "?openAddSequence=true");
 
@@ -76,7 +76,7 @@ describe("<AddGenomeSequence>", () => {
             "user_typed_host",
             "user_typed_definition",
             "ATGRYKM",
-            otu.schema[0].name
+            otu.schema[0].name,
         );
         renderWithMemoryRouter(<AddGenomeSequence {...props} />, "?openAddSequence=true");
 

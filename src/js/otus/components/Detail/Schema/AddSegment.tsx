@@ -34,7 +34,7 @@ export default function AddSegment({ otuId, name, abbreviation, schema }: AddSeg
                 onSuccess: () => {
                     setOpenAddSegment("");
                 },
-            }
+            },
         );
     }
 

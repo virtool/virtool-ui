@@ -2,6 +2,10 @@ import Settings from "@administration/components/Settings";
 import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeGroupMinimal, mockApiListGroups } from "@tests/fake/groups";
+import { createFakeUser, mockApiEditUser, mockApiGetUser } from "@tests/fake/user";
+import { renderWithMemoryRouter } from "@tests/setup";
 import { times } from "lodash-es";
 import nock from "nock";
 import React from "react";
@@ -222,7 +226,7 @@ describe("<UserDetail />", () => {
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
             await waitFor(() =>
-                expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument()
+                expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument(),
             );
 
             scope.done();

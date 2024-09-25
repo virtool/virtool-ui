@@ -6,7 +6,6 @@ import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
 import { renderWithMemoryRouter } from "../../../../tests/setupTests";
@@ -20,7 +19,7 @@ describe("<Indexes />", () => {
         mockApiGetAccount(
             createFakeAccount({
                 administrator_role: AdministratorRoles.FULL,
-            })
+            }),
         );
         mockApiGetSettings(createFakeSettings());
     });
@@ -41,7 +40,7 @@ describe("<Indexes />", () => {
         expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
         expect(await screen.findByText(new RegExp(index.user.handle))).toBeInTheDocument();
         expect(
-            await screen.findByText(`${index.change_count} changes made in ${index.modified_otu_count} OTUs`)
+            await screen.findByText(`${index.change_count} changes made in ${index.modified_otu_count} OTUs`),
         ).toBeInTheDocument();
         expect(await screen.findByText("There are unbuilt changes.")).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: "Rebuild the index" })).toHaveAttribute(

@@ -26,7 +26,7 @@ export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
                 onSuccess: () => {
                     setOpenEditOTU("");
                 },
-            }
+            },
         );
     }
 

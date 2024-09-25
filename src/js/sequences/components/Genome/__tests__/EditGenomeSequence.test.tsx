@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUSequence, mockApiEditSequence } from "../../../../../tests/fake/otus";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import EditGenomeSequence from "../EditGenomeSequence";
 
 describe("<EditGenomeSequence>", () => {
@@ -40,7 +40,7 @@ describe("<EditGenomeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             null,
-            "ACGRYKM"
+            "ACGRYKM",
         );
         renderWithMemoryRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
 
@@ -85,7 +85,7 @@ describe("<EditGenomeSequence>", () => {
             "user_typed_definition",
             "user_typed_host",
             null,
-            "ACGRYKM"
+            "ACGRYKM",
         );
         renderWithMemoryRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
 

@@ -8,7 +8,7 @@ import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
 import { createFakeMLModelMinimal, mockApiGetModels } from "@tests/fake/ml";
 import { createFakeSampleMinimal, mockApiGetSamples } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";

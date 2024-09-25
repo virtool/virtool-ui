@@ -1,9 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
-import { renderWithProviders } from "../../../../../../tests/setupTests";
 import EditTarget from "../EditTarget";
 
 describe("<EditTarget />", () => {

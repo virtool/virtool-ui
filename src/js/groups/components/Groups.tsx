@@ -7,9 +7,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../queries";
 import Create from "./CreateGroup";
+import { GroupMembers } from "./GroupMembers";
+import { GroupPermissions } from "./GroupPermissions";
 import { GroupSelector } from "./GroupSelector";
-import { Members } from "./Members";
-import { Permissions } from "./Permissions";
 
 const ManageGroupsContainer = styled.div`
     display: grid;
@@ -82,8 +82,8 @@ export default function Groups() {
                             value={selectedGroup.name}
                             onSubmit={name => updateGroupMutation.mutate({ id: selectedGroup.id, name })}
                         />
-                        <Permissions selectedGroup={selectedGroup} />
-                        <Members members={selectedGroup.users} />
+                        <GroupPermissions selectedGroup={selectedGroup} />
+                        <GroupMembers members={selectedGroup.users} />
                         <RemoveBanner
                             message="Permanently delete this group."
                             buttonText="Delete"

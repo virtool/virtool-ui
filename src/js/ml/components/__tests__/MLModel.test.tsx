@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { describe, it } from "vitest";
 import { createFakeMLModelMinimal, mockApiGetModels } from "../../../../tests/fake/ml";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import ML from "../ML";
 
 describe("<MLModels/>", () => {
@@ -20,7 +20,7 @@ describe("<MLModels/>", () => {
         expect(await screen.findByText(mlModel.name)).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: `${mlModel.latest_release.name}` })).toHaveAttribute(
             "href",
-            mlModel.latest_release.github_url
+            mlModel.latest_release.github_url,
         );
         expect(await screen.findByText("1 year ago")).toBeInTheDocument();
 

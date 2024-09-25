@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import { JobStep } from "../JobStep";
 
 describe("<JobStep />", () => {
@@ -42,6 +42,6 @@ describe("<JobStep />", () => {
             renderWithProviders(<JobStep {...props} />);
 
             expect(screen.getByTitle(state)).toBeInTheDocument();
-        }
+        },
     );
 });

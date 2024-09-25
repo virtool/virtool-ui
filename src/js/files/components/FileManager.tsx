@@ -23,7 +23,7 @@ import { useListFiles } from "../queries";
 import { FileType } from "../types";
 import FileItem from "./FileItem";
 
-type FileManagerProps = {
+export type FileManagerProps = {
     /* The MIME-types and extensions to accept. */
     accept: Accept;
 

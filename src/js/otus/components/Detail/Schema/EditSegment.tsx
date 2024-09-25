@@ -42,7 +42,7 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
                 onSuccess: () => {
                     setEditSegmentName("");
                 },
-            }
+            },
         );
     }
 

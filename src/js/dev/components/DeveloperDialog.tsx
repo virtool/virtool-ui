@@ -54,7 +54,7 @@ export default function DeveloperDialog() {
                                                 setOpenDev("");
                                                 location.reload();
                                             },
-                                        }
+                                        },
                                     )
                                 }
                             >

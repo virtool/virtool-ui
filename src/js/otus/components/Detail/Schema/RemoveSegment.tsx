@@ -27,7 +27,7 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
                 onSuccess: () => {
                     setRemoveSegmentName("");
                 },
-            }
+            },
         );
     }
 

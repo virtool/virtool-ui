@@ -32,7 +32,7 @@ export default function AddGenomeSequence({ isolateId, otuId, refId, schema, seq
                 onSuccess: () => {
                     setOpenAddSequence("");
                 },
-            }
+            },
         );
     }
 

@@ -1,5 +1,5 @@
+import { getFontSize, getFontWeight } from "@app/theme";
 import styled, { DefaultTheme } from "styled-components";
-import { getFontSize, getFontWeight } from "../app/theme";
 import { BoxGroupSection } from "./BoxGroupSection";
 
 type BoxGroupHeaderProps = {

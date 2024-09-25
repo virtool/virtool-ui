@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import { AnalysisItemRightIcon } from "../AnalysisItemRightIcon";
 
 describe("<AnalysisItemRightIcon />", () => {

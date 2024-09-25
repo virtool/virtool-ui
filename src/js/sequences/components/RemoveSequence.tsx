@@ -27,7 +27,7 @@ export default function RemoveSequence({ isolateName, isolateId, otuId, sequence
                 onSuccess: () => {
                     setRemoveSequence("");
                 },
-            }
+            },
         );
     }
 

@@ -25,7 +25,7 @@ export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
                 onSuccess: () => {
                     navigate(`/refs/${refId}/otus/`);
                 },
-            }
+            },
         );
     }
 

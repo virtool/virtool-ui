@@ -37,7 +37,7 @@ export default function EditGenomeSequence({
                 onSuccess: () => {
                     setOpenEditSequence("");
                 },
-            }
+            },
         );
     }
 
