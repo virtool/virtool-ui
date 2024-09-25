@@ -17,7 +17,7 @@ type PathoscopeViewerProps = {
 
 /** Detailed breakdown of the results of a pathoscope analysis */
 export function PathoscopeViewer({ detail, sample }: PathoscopeViewerProps) {
-    const [showReads] = useUrlSearchParams<boolean>("reads");
+    const [showReads] = useUrlSearchParams("reads");
 
     return (
         <>

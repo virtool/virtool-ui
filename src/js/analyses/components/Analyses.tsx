@@ -6,8 +6,8 @@ import AnalysesList from "./AnalysisList";
 export default function Analyses() {
     return (
         <Switch>
-            <Route path="/:analysisId" component={AnalysisDetail} nest />
-            <Route path="/" component={AnalysesList} nest />
+            <Route path="/samples/:sampleId/analyses/:analysisId" component={AnalysisDetail} />
+            <Route path="/samples/:sampleId/analyses" component={AnalysesList} />
         </Switch>
     );
 }

@@ -80,14 +80,14 @@ export default function Main() {
                 <Suspense fallback={<Fallback />}>
                     <WouterSwitch>
                         <WouterRoute path="/" component={() => <Redirect to="/samples" />} />
-                        <WouterRoute path="/administration" component={Administration} nest />
-                        <WouterRoute path="/account" component={Account} nest />
-                        <WouterRoute path="/hmm" component={HMM} nest />
-                        <WouterRoute path="/jobs" component={Jobs} nest />
-                        <WouterRoute path="/ml" component={ML} nest />
-                        <WouterRoute path="/refs" component={References} nest />
-                        <WouterRoute path="/samples" component={Samples} nest />
-                        <WouterRoute path="/subtractions" component={Subtraction} nest />
+                        <WouterRoute path="/administration/*?" component={Administration} />
+                        <WouterRoute path="/account/*?" component={Account} />
+                        <WouterRoute path="/hmm/*?" component={HMM} />
+                        <WouterRoute path="/jobs/*?" component={Jobs} />
+                        <WouterRoute path="/ml/*?" component={ML} />
+                        <WouterRoute path="/refs/*?" component={References} />
+                        <WouterRoute path="/samples/*?" component={Samples} />
+                        <WouterRoute path="/subtractions/*?" component={Subtraction} />
                     </WouterSwitch>
                 </Suspense>
             </MainContainer>

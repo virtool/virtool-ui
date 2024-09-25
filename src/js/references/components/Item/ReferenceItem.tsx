@@ -62,7 +62,7 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
 
     return (
         <StyledReferenceItem>
-            <ReferenceLink to={`/${id}`}>{name}</ReferenceLink>
+            <ReferenceLink to={`/refs/${id}`}>{name}</ReferenceLink>
             <ReferenceItemDataDescriptor>
                 <Icon name={data_type === "genome" ? "dna" : "barcode"} />
                 {organism || "unknown"} {data_type || "genome"}s

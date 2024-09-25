@@ -49,7 +49,7 @@ export default function DefaultSubtractions({ defaultSubtractions, onUpdate }: D
                         onUpdate(xor(defaultSubtractions, [subtractionId]));
                     }}
                     selectionType="default subtractions"
-                    manageLink={"~/subtractions"}
+                    manageLink={"/subtractions"}
                 />
             </SidebarHeader>
             <SampleSidebarList
@@ -57,7 +57,7 @@ export default function DefaultSubtractions({ defaultSubtractions, onUpdate }: D
             />
             {Boolean(subtractionOptions.length) || (
                 <SampleSubtractionFooter>
-                    No subtractions found. <Link to="~/subtractions">Create one</Link>.
+                    No subtractions found. <Link to="/subtractions">Create one</Link>.
                 </SampleSubtractionFooter>
             )}
         </SideBarSection>

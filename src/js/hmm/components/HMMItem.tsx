@@ -44,7 +44,7 @@ export default function HMMItem({ hmm }: HMMItemProps) {
     return (
         <StyledHMMItem>
             <HMMItemCluster>{hmm.cluster}</HMMItemCluster>
-            <HMMItemName to={`/${hmm.id}`}>{hmm.names[0]}</HMMItemName>
+            <HMMItemName to={`/hmm/${hmm.id}`}>{hmm.names[0]}</HMMItemName>
             <HMMItemFamilies>
                 {labelComponents} {filteredFamilies.length > 3 ? "..." : null}
             </HMMItemFamilies>

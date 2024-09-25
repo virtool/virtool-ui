@@ -36,10 +36,10 @@ function AnalysisRows({ sample_id, analysis_id }: AnalysisRowsProps) {
     return (
         <>
             <JobArgsRow title="Sample">
-                <Link to={`/../../samples/${sample_id}`}>{sample_id}</Link>
+                <Link to={`/samples/${sample_id}`}>{sample_id}</Link>
             </JobArgsRow>
             <JobArgsRow title="Analysis">
-                <Link to={`/../../samples/${sample_id}/analyses/${analysis_id}`}>{analysis_id}</Link>
+                <Link to={`/samples/${sample_id}/analyses/${analysis_id}`}>{analysis_id}</Link>
             </JobArgsRow>
         </>
     );
@@ -57,10 +57,10 @@ function BuildIndexRows({ index_id, ref_id }: BuildIndexRowsProps) {
     return (
         <>
             <JobArgsRow title="Reference">
-                <Link to={`/../../refs/${ref_id}`}>{ref_id}</Link>
+                <Link to={`/refs/${ref_id}`}>{ref_id}</Link>
             </JobArgsRow>
             <JobArgsRow title="Index">
-                <Link to={`/../../refs/${ref_id}/indexes/${index_id}`}>{index_id}</Link>
+                <Link to={`/refs/${ref_id}/indexes/${index_id}`}>{index_id}</Link>
             </JobArgsRow>
         </>
     );
@@ -75,7 +75,7 @@ type CreateSampleRowsProps = {
 function CreateSampleRows({ sample_id }: CreateSampleRowsProps) {
     return (
         <JobArgsRow title="Sample">
-            <Link to={`/../../samples/${sample_id}`}>{sample_id}</Link>
+            <Link to={`/samples/${sample_id}`}>{sample_id}</Link>
         </JobArgsRow>
     );
 }
@@ -89,7 +89,7 @@ type CreateSubtractionRowsProps = {
 function CreateSubtractionRows({ subtraction_id }: CreateSubtractionRowsProps) {
     return (
         <JobArgsRow title="Subtraction">
-            <Link to={`/../../subtractions/${subtraction_id}`}>{subtraction_id}</Link>
+            <Link to={`/subtractions/${subtraction_id}`}>{subtraction_id}</Link>
         </JobArgsRow>
     );
 }

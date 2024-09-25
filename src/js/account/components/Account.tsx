@@ -15,15 +15,15 @@ export default function Account() {
             </ViewHeader>
 
             <Tabs>
-                <TabsLink to="/profile">Profile</TabsLink>
-                <TabsLink to="/api">API</TabsLink>
+                <TabsLink to="/account/profile">Profile</TabsLink>
+                <TabsLink to="/account/api">API</TabsLink>
             </Tabs>
 
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/" component={() => <Redirect to="/profile" replace />} />
-                    <Route path="/profile" component={AccountProfile} nest />
-                    <Route path="/api" component={APIKeys} nest />
+                    <Route path="/account" component={() => <Redirect to="/account/profile" replace />} />
+                    <Route path="/account/profile" component={AccountProfile} />
+                    <Route path="/account/api" component={APIKeys} />
                 </Switch>
             </ContainerNarrow>
         </ContainerWide>

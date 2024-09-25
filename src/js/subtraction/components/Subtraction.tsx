@@ -13,9 +13,9 @@ export default function Subtraction() {
         <Container>
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/files/" component={SubtractionFileManager} nest />
-                    <Route path="/:subtractionId" component={SubtractionDetail} nest />
-                    <Route path="/" component={SubtractionList} nest />
+                    <Route path="/subtractions/files" component={SubtractionFileManager} />
+                    <Route path="/subtractions/:subtractionId" component={SubtractionDetail} />
+                    <Route path="/subtractions" component={SubtractionList} />
                 </Switch>
             </ContainerNarrow>
         </Container>

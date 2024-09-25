@@ -30,15 +30,14 @@ export default function AddGenomeSequence({ isolateId, otuId, refId, schema, seq
             { isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
                 onSuccess: () => {
-                    setOpenAddSequence(false);
-                    setOpenAddSequence(false);
+                    setOpenAddSequence("");
                 },
             }
         );
     }
 
     return (
-        <Dialog open={openAddSequence} onOpenChange={() => setOpenAddSequence(false)}>
+        <Dialog open={Boolean(openAddSequence)} onOpenChange={() => setOpenAddSequence("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

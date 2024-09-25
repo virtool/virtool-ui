@@ -88,7 +88,7 @@ export default function UserDetail() {
                     <InitialIcon size="xl" handle={handle} />
                     <span>{handle}</span>
                     {administrator_role ? <AdminIcon aria-label="admin" name="user-shield" color="blue" /> : null}
-                    <Link to="/..">Back To List</Link>
+                    <Link to="/administration/users">Back To List</Link>
                 </UserDetailTitle>
             </UserDetailHeader>
 

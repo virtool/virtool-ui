@@ -33,7 +33,7 @@ const TaxonomyGrid = styled.div`
  * The HMM detailed view
  */
 export default function HMMDetail() {
-    const { hmmId } = useParams();
+    const { hmmId } = useParams<{ hmmId: string }>();
     const { data, isPending, isError } = useFetchHmm(hmmId);
 
     if (isError) {

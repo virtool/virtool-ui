@@ -23,7 +23,7 @@ import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../q
  * A component managing a samples rights
  */
 export default function SampleRights() {
-    const { sampleId } = useParams();
+    const { sampleId } = useParams<{ sampleId: string }>();
 
     const { hasPermission } = useCheckAdminRole(AdministratorRoles.FULL);
     const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);

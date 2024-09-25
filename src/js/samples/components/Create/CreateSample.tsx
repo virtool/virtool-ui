@@ -180,7 +180,7 @@ export default function CreateSample() {
             {
                 onSuccess: () => {
                     reset();
-                    navigate("~/samples");
+                    navigate("/samples");
                 },
             }
         );

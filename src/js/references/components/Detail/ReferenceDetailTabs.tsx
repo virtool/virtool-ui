@@ -12,12 +12,12 @@ type ReferenceDetailTabsProps = {
 export default function ReferenceDetailTabs({ id, otuCount }: ReferenceDetailTabsProps) {
     return (
         <Tabs>
-            <TabsLink to={`/manage`}>Manage</TabsLink>
-            <TabsLink to={`/otus`}>
+            <TabsLink to={`/refs/${id}/manage`}>Manage</TabsLink>
+            <TabsLink to={`/refs/${id}/otus`}>
                 OTUs <Badge>{otuCount}</Badge>
             </TabsLink>
-            <TabsLink to={`/indexes`}>Indexes</TabsLink>
-            <TabsLink to={`/settings`}>Settings</TabsLink>
+            <TabsLink to={`/refs/${id}/indexes`}>Indexes</TabsLink>
+            <TabsLink to={`/refs/${id}/settings`}>Settings</TabsLink>
         </Tabs>
     );
 }

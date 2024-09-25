@@ -12,7 +12,7 @@ import SubtractionToolbar from "./SubtractionToolbar";
  */
 export default function SubtractionList() {
     const [term, setTerm] = useUrlSearchParams("find", "");
-    const [urlPage] = useUrlSearchParams("page", 1);
+    const [urlPage] = useUrlSearchParams("page", "1");
 
     const { data, isPending } = useFindSubtractions(Number(urlPage) || 1, 25, term);
 

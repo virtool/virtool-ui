@@ -123,7 +123,7 @@ export default function ReadSelector({
     const noneFound = total_count === 0 && (
         <BoxGroup>
             <NoneFoundSection noun="files">
-                <Link to="~/samples/files">Upload some</Link>
+                <Link to="/samples/files">Upload some</Link>
             </NoneFoundSection>
         </BoxGroup>
     );

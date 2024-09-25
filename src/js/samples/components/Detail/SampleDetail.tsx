@@ -12,6 +12,7 @@ import {
 import { IconButton } from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import { Redirect, Route, Switch, useLocation, useParams } from "wouter";
 import Analyses from "../../../analyses/components/Analyses";
@@ -25,11 +26,12 @@ import Rights from "./SampleRights";
  * The detailed view for managing samples
  */
 export default function SampleDetail() {
-    const [location, navigate] = useLocation();
+    const [location] = useLocation();
     const { sampleId } = useParams<{ sampleId: string }>();
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
-    console.log({ sampleId });
+    const [, setOpenEditSample] = useUrlSearchParams("openEditSample");
+    const [, setOpenRemoveSample] = useUrlSearchParams("openRemoveSample");
 
     if (isError) {
         return <NotFound />;
@@ -44,28 +46,18 @@ export default function SampleDetail() {
     let rightsTabLink;
 
     if (canModify) {
-        if (location === "/general") {
+        if (location.endsWith("/general")) {
             editIcon = (
-                <IconButton
-                    color="grayDark"
-                    name="pen"
-                    tip="modify"
-                    onClick={() => navigate("/general?openEditSample=true")}
-                />
+                <IconButton color="grayDark" name="pen" tip="modify" onClick={() => setOpenEditSample("true")} />
             );
 
             removeIcon = (
-                <IconButton
-                    color="red"
-                    name="trash"
-                    tip="remove"
-                    onClick={() => navigate("/general?openRemoveSample=true")}
-                />
+                <IconButton color="red" name="trash" tip="remove" onClick={() => setOpenRemoveSample("true")} />
             );
         }
 
         rightsTabLink = (
-            <TabsLink to={`/rights`}>
+            <TabsLink to={`/samples/${sampleId}/rights`}>
                 <Icon name="key" />
             </TabsLink>
         );
@@ -87,24 +79,27 @@ export default function SampleDetail() {
             </ViewHeader>
 
             <Tabs>
-                <TabsLink to={"/general"}>General</TabsLink>
+                <TabsLink to={`/samples/${sampleId}/general`}>General</TabsLink>
                 {data.ready && (
                     <>
-                        <TabsLink to={"/files"}>Files</TabsLink>
-                        <TabsLink to={"/quality"}>Quality</TabsLink>
-                        <TabsLink to={"/analyses"}>Analyses</TabsLink>
+                        <TabsLink to={`/samples/${sampleId}/files`}>Files</TabsLink>
+                        <TabsLink to={`/samples/${sampleId}/quality`}>Quality</TabsLink>
+                        <TabsLink to={`/samples/${sampleId}/analyses`}>Analyses</TabsLink>
                         {rightsTabLink}
                     </>
                 )}
             </Tabs>
 
             <Switch>
-                <Route path="/general" component={General} nest />
-                <Route path="/files" component={SampleDetailFiles} nest />
-                <Route path="/quality" component={Quality} nest />
-                <Route path="/analyses" component={Analyses} nest />
-                <Route path="/rights" component={Rights} nest />
-                <Route path="/" component={() => <Redirect to={`/general`} replace />} nest />
+                <Route path="/samples/:sampleId/general" component={General} />
+                <Route path="/samples/:sampleId/files" component={SampleDetailFiles} />
+                <Route path="/samples/:sampleId/quality" component={Quality} />
+                <Route path="/samples/:sampleId/analyses/*?" component={Analyses} />
+                <Route path="/samples/:sampleId/rights" component={Rights} />
+                <Route
+                    path="/samples/:sampleId/"
+                    component={() => <Redirect to={`/samples/${sampleId}/general`} replace />}
+                />
             </Switch>
 
             <RemoveSample id={sampleId} name={name} />

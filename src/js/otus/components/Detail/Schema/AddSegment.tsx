@@ -32,14 +32,14 @@ export default function AddSegment({ otuId, name, abbreviation, schema }: AddSeg
             { otuId, name, abbreviation, schema: [...schema, { name: segmentName, molecule, required }] },
             {
                 onSuccess: () => {
-                    setOpenAddSegment(false);
+                    setOpenAddSegment("");
                 },
             }
         );
     }
 
     return (
-        <Dialog open={openAddSegment} onOpenChange={() => setOpenAddSegment(false)}>
+        <Dialog open={Boolean(openAddSegment)} onOpenChange={() => setOpenAddSegment("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

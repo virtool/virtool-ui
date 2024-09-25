@@ -49,7 +49,7 @@ export function CreateSubtractionForm() {
             { name, nickname, uploadId: uploadId[0] },
             {
                 onSuccess: () => {
-                    setOpenCreateSubtraction(false);
+                    setOpenCreateSubtraction("");
                     reset();
                 },
             }

@@ -29,7 +29,7 @@ export default function RemoveReference({ id, name }: RemoveReferenceProps) {
                 { refId: id },
                 {
                     onSuccess: () => {
-                        navigate("~/refs");
+                        navigate("/refs");
                     },
                 }
             ),

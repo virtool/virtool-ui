@@ -8,14 +8,12 @@ import React from "react";
 import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";
 
-type UserStatus = "active" | "deactivated";
-
 /**
  * Displays a list of editable users and tools for sorting through and creating users
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
-    const [status, setStatus] = useUrlSearchParams<UserStatus>("status", "active");
+    const [status, setStatus] = useUrlSearchParams("status", "active");
     const { hasPermission, isPending } = useCheckAdminRole(AdministratorRoles.USERS);
 
     if (isPending) {

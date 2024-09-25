@@ -18,32 +18,41 @@ type PathoscopeToolbarProps = {
 
 /** A selection of filters and toggles for pathoscope data presentation */
 export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
-    const [filterOTUs, setFilterOtus] = useUrlSearchParams<boolean>("filterOtus", true);
-    const [filterIsolates, setFilterIsolates] = useUrlSearchParams<boolean>("filterIsolates", true);
-    const [find, setFind] = useUrlSearchParams<string>("find", "");
-    const [showReads, setShowReads] = useUrlSearchParams<boolean>("reads", false);
-    const [sortKey, setSortKey] = useUrlSearchParams<string>("sort", "coverage");
-    const [sortDesc, setSortDesc] = useUrlSearchParams<boolean>("sortDesc", true);
+    const [filterOTUs, setFilterOtus] = useUrlSearchParams("filterOtus", "true");
+    const [filterIsolates, setFilterIsolates] = useUrlSearchParams("filterIsolates", "true");
+    const [find, setFind] = useUrlSearchParams("find", "");
+    const [showReads, setShowReads] = useUrlSearchParams("reads", "");
+    const [sortKey, setSortKey] = useUrlSearchParams("sort", "coverage");
+    const [sortDesc, setSortDesc] = useUrlSearchParams("sortDesc", "true");
 
     return (
         <StyledPathoscopeToolbar>
             <InputSearch value={find} onChange={e => setFind(e.target.value)} />
             <AnalysisViewerSort workflow="pathoscope" sortKey={sortKey} onSelect={setSortKey} />
-            <ButtonToggle onPressedChange={setSortDesc} pressed={sortDesc}>
+            <ButtonToggle onPressedChange={active => setSortDesc(active ? "true" : "")} pressed={Boolean(sortDesc)}>
                 <Icon name={sortDesc ? "sort-amount-down" : "sort-amount-up"} />
             </ButtonToggle>
             <Tooltip tip="Show read pseudo-counts instead of weight">
-                <ButtonToggle onPressedChange={setShowReads} pressed={showReads}>
+                <ButtonToggle
+                    onPressedChange={active => setShowReads(active ? "true" : "")}
+                    pressed={Boolean(showReads)}
+                >
                     Show Reads
                 </ButtonToggle>
             </Tooltip>
             <Tooltip tip="Hide OTUs with low coverage support">
-                <ButtonToggle onPressedChange={setFilterOtus} pressed={filterOTUs}>
+                <ButtonToggle
+                    onPressedChange={active => setFilterOtus(active ? "true" : "")}
+                    pressed={Boolean(filterOTUs)}
+                >
                     Filter OTUs
                 </ButtonToggle>
             </Tooltip>
             <Tooltip tip="Hide isolates with low coverage support">
-                <ButtonToggle onPressedChange={setFilterIsolates} pressed={filterIsolates}>
+                <ButtonToggle
+                    onPressedChange={active => setFilterIsolates(active ? "true" : "")}
+                    pressed={Boolean(filterIsolates)}
+                >
                     Filter Isolates
                 </ButtonToggle>
             </Tooltip>

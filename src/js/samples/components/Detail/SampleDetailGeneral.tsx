@@ -31,7 +31,7 @@ const StyledSampleDetailGeneral = styled.div`
  * The general view in sample details
  */
 export default function SampleDetailGeneral() {
-    const { sampleId } = useParams();
+    const { sampleId } = useParams<{ sampleId: string }>();
 
     const { data, isPending } = useFetchSample(sampleId);
 

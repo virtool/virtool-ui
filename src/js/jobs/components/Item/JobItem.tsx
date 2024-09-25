@@ -55,7 +55,7 @@ type JobItemProps = {
 export default function JobItem({ id, workflow, state, progress, created_at, user }: JobItemProps) {
     return (
         <StyledJobItem>
-            <JobLink to={`/${id}`}>{getWorkflowDisplayName(workflow)}</JobLink>
+            <JobLink to={`/jobs/${id}`}>{getWorkflowDisplayName(workflow)}</JobLink>
             <Attribution time={created_at} user={user.handle} />
             <JobItemHeaderRight>
                 <JobStatus state={state} progress={progress} />

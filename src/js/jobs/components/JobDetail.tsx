@@ -24,7 +24,7 @@ const JobDetailBadge = styled(ViewHeaderTitleBadge)`
  * The job detailed view
  */
 export default function JobDetail() {
-    const { jobId } = useParams();
+    const { jobId } = useParams<{ jobId: string }>();
     const { data, isPending, isError } = useFetchJob(jobId);
 
     if (isError) {

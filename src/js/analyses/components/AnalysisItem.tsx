@@ -86,7 +86,7 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
     const onRemove = useRemoveAnalysis(id);
 
     const title = checkSupportedWorkflow(workflow) ? (
-        <Link to={`/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
+        <Link to={`/samples/${analysis.sample.id}/analyses/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
     ) : (
         <UnsupportedAnalysisTitle>
             {getWorkflowDisplayName(workflow)}
@@ -116,17 +116,17 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
                     <Icon name="equals" />
                     <SlashList>
                         <li>
-                            <Link to={`/../../../refs/${reference.id}`}>{reference.name}</Link>
+                            <Link to={`/refs/${reference.id}`}>{reference.name}</Link>
                         </li>
                         <li>
-                            <Link to={`/../../../refs/${reference.id}/indexes/${index.id}`}>Index {index.version}</Link>
+                            <Link to={`/refs/${reference.id}/indexes/${index.id}`}>Index {index.version}</Link>
                         </li>
                     </SlashList>
                 </AnalysisItemTag>
                 {subtractions.map(subtraction => (
                     <AnalysisItemTag key={subtraction.id}>
                         <Icon name="not-equal" />
-                        <Link to={`/../../../subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+                        <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
                     </AnalysisItemTag>
                 ))}
             </AnalysisItemTags>

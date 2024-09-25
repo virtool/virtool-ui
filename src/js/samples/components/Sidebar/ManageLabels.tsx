@@ -64,13 +64,13 @@ export default function ManageLabels({ labels, selectedSamples }: ManageLabelsPr
                     partiallySelectedItems={map(partiallySelectedLabels, label => label.id)}
                     onUpdate={onUpdateLabel}
                     selectionType="labels"
-                    manageLink={"~/samples/labels"}
+                    manageLink={"/samples/labels"}
                 />
             </SidebarHeader>
             <SampleSidebarMultiselectList items={selectedLabels} />
             {Boolean(labels.length) || (
                 <SampleLabelsFooter>
-                    No labels found. <Link to="~/samples/labels">Create one</Link>.
+                    No labels found. <Link to="/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
             )}
         </StyledSideBarSection>

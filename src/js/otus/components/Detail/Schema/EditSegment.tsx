@@ -40,14 +40,14 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
             { otuId, name, abbreviation, schema: newArray },
             {
                 onSuccess: () => {
-                    setEditSegmentName(false);
+                    setEditSegmentName("");
                 },
             }
         );
     }
 
     return (
-        <Dialog open={Boolean(editSegmentName)} onOpenChange={() => setEditSegmentName(false)}>
+        <Dialog open={Boolean(editSegmentName)} onOpenChange={() => setEditSegmentName("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

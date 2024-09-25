@@ -54,7 +54,7 @@ export default function IsolateSequences({ activeIsolate, otuId }: IsolateSequen
         if (data_type === "barcode" && !hasTargets) {
             sequenceComponents = [
                 <NoneFoundSection noun="targets" key="noTargets">
-                    <Link to={`/../../../manage`}>Create one</Link>
+                    <Link to={`/refs/${id}/manage`}>Create one</Link>
                 </NoneFoundSection>,
             ];
         } else {

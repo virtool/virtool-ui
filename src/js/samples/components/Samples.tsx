@@ -40,12 +40,12 @@ export default function Samples() {
     return (
         <Container>
             <Switch>
-                <Route path="/settings" component={SamplesSettings} nest />
-                <Route path="/files" component={SampleFileManager} nest />
-                <Route path="/labels" component={Labels} nest />
-                <Route path="/create" component={CreateSample} nest />
-                <Route path="/:sampleId/" component={SampleDetail} nest />
-                <Route path="/" component={SamplesList} nest />
+                <Route path="/samples/settings" component={SamplesSettings} />
+                <Route path="/samples/files" component={SampleFileManager} />
+                <Route path="/samples/labels" component={Labels} />
+                <Route path="/samples/create" component={CreateSample} />
+                <Route path="/samples/:sampleId/*?" component={SampleDetail} />
+                <Route path="/samples/" component={SamplesList} />
             </Switch>
         </Container>
     );

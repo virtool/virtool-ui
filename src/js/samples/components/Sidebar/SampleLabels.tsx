@@ -50,13 +50,13 @@ export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsPro
                         onUpdate(xor(sampleLabels, [labelId]));
                     }}
                     selectionType="labels"
-                    manageLink={"~/samples/labels"}
+                    manageLink={"/samples/labels"}
                 />
             </SidebarHeader>
             <SampleSidebarList items={data.filter(item => sampleLabels.includes(item.id))} />
             {Boolean(data.length) || (
                 <SampleLabelsFooter>
-                    No labels found. <Link to="~/samples/labels">Create one</Link>.
+                    No labels found. <Link to="/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
             )}
         </SideBarSection>

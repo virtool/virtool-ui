@@ -23,7 +23,7 @@ export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
             { otuId: id },
             {
                 onSuccess: () => {
-                    navigate(`~/refs/${refId}/otus/`);
+                    navigate(`/refs/${refId}/otus/`);
                 },
             }
         );

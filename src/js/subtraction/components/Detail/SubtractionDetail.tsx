@@ -21,13 +21,13 @@ function calculateGc(nucleotides: NucleotideComposition) {
  * The subtraction detailed view
  */
 export default function SubtractionDetail() {
-    const { subtractionId } = useParams();
+    const { subtractionId } = useParams<{ subtractionId: string }>();
 
     const { data, isPending, isError } = useFetchSubtraction(subtractionId);
     const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
 
-    const [openRemoveSubtraction, setOpenRemoveSubtraction] = useUrlSearchParams<boolean>("openRemoveSubtraction");
-    const [openEditSubtraction, setOpenEditSubtraction] = useUrlSearchParams<boolean>("openEditSubtraction");
+    const [openRemoveSubtraction, setOpenRemoveSubtraction] = useUrlSearchParams("openRemoveSubtraction");
+    const [openEditSubtraction, setOpenEditSubtraction] = useUrlSearchParams("openEditSubtraction");
 
     if (isError) {
         return <NotFound />;
@@ -48,12 +48,17 @@ export default function SubtractionDetail() {
                     {data.name}
                     {canModify && (
                         <ViewHeaderIcons>
-                            <IconButton name="pen" color="grayDark" tip="modify" onClick={() => setShow(true)} />
+                            <IconButton
+                                name="pen"
+                                color="grayDark"
+                                tip="modify"
+                                onClick={() => setOpenEditSubtraction("true")}
+                            />
                             <IconButton
                                 name="trash"
                                 color="red"
                                 tip="remove"
-                                onClick={() => setOpenRemoveSubtraction(true)}
+                                onClick={() => setOpenRemoveSubtraction("true")}
                             />
                         </ViewHeaderIcons>
                     )}
@@ -86,14 +91,14 @@ export default function SubtractionDetail() {
             </Table>
             <SubtractionFiles files={data.files} />
             <EditSubtraction
-                show={openEditSubtraction}
-                onHide={() => setOpenEditSubtraction(true)}
+                show={Boolean(openEditSubtraction)}
+                onHide={() => setOpenEditSubtraction("")}
                 subtraction={data}
             />
             <RemoveSubtraction
                 subtraction={data}
-                show={openRemoveSubtraction}
-                onHide={() => setOpenRemoveSubtraction(false)}
+                show={Boolean(openRemoveSubtraction)}
+                onHide={() => setOpenRemoveSubtraction("")}
             />
         </>
     );

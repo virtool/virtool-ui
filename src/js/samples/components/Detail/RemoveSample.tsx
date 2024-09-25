@@ -32,7 +32,7 @@ export default function RemoveSample({ id, name }: RemoveSampleProps) {
                     }
                 )
             }
-            onHide={() => setOpenRemoveSample("true")}
+            onHide={() => setOpenRemoveSample("")}
         />
     );
 }

@@ -5,13 +5,10 @@ import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { noop } from "lodash-es";
 import React from "react";
-import { Router } from "react-router-dom";
-import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
-import { Router as Wouter } from "wouter";
+import { Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
-
 process.env.TZ = "UTC";
 
 export function wrapWithProviders(ui) {
@@ -40,33 +37,26 @@ export function renderWithProviders(ui) {
     return { ...rest, rerender: rerenderWithProviders };
 }
 
-export function renderWithRouter(ui, history) {
-    const wrappedUI = (
-        <Router history={history}>
-            <CompatRouter>{ui}</CompatRouter>
+export function renderWithMemoryRouter(ui, path) {
+    const { hook, history } = memoryLocation({ path, record: true });
+
+    const result = renderWithProviders(
+        <Router hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
+            {ui}
         </Router>
     );
-    renderWithProviders(wrappedUI);
-}
 
-export function renderWithMemoryRouter(ui, path) {
-    console.log(path);
-    const { hook, navigate } = memoryLocation({ path });
-
-    renderWithProviders(
-        <Wouter hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
-            {ui}
-        </Wouter>
-    );
+    return { ...result, history: history };
 }
 
 export function useMemoryLocation(baseHook) {
     let [location, navigate] = baseHook();
-    console.log("base location", location);
 
     try {
         location = location.split("?")[0] || "";
-    } catch (error) {}
+    } catch (error) {
+        noop();
+    }
 
     return [location, navigate];
 }
@@ -104,4 +94,3 @@ global.userEvent = userEvent;
 global.React = React;
 global.renderWithProviders = renderWithProviders;
 global.wrapWithProviders = wrapWithProviders;
-global.renderWithRouter = renderWithRouter;

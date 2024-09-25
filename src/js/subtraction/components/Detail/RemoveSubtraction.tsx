@@ -31,7 +31,7 @@ export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveS
                     { subtractionId: subtraction.id },
                     {
                         onSuccess: () => {
-                            navigate("/..");
+                            navigate("/subtractions");
                         },
                     }
                 )

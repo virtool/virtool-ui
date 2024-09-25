@@ -6,7 +6,6 @@ import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { Route } from "wouter";
 import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
@@ -36,7 +35,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithMemoryRouter(<References />, `/${reference.id}/indexes`);
+        renderWithMemoryRouter(<References />, `/refs/${reference.id}/indexes`);
 
         await waitFor(() => findIndexesScope.done());
         expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
@@ -60,12 +59,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithMemoryRouter(
-            <Route path="/refs" nest>
-                <References />
-            </Route>,
-            `/refs/${reference.id}/indexes`
-        );
+        renderWithMemoryRouter(<References />, `/refs/${reference.id}/indexes`);
 
         await waitFor(() => scope.done());
 

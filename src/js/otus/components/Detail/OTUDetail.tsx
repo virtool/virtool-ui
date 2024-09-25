@@ -66,21 +66,26 @@ export default function OTUDetail() {
                 </OTUDetailTitle>
                 <OTUDetailSubtitle>
                     <strong>From Reference / </strong>
-                    <Link to={`~/refs/${refId}`}>{reference.name}</Link>
+                    <Link to={`/refs/${refId}`}>{reference.name}</Link>
                 </OTUDetailSubtitle>
             </ViewHeader>
 
             <Tabs>
-                <TabsLink to={`/otu`}>OTU</TabsLink>
-                {reference.data_type !== "barcode" && <TabsLink to={`/schema`}>Schema</TabsLink>}
-                <TabsLink to={`/history`}>History</TabsLink>
+                <TabsLink to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</TabsLink>
+                {reference.data_type !== "barcode" && (
+                    <TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>Schema</TabsLink>
+                )}
+                <TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>History</TabsLink>
             </Tabs>
 
             <Switch>
-                <Route path="/" component={() => <Redirect to={`/otu`} replace />} />
-                <Route path="/otu" component={OTUSection} nest />
-                <Route path="/history" component={History} nest />
-                <Route path="/schema" component={Schema} nest />
+                <Route
+                    path="/refs/:refId/otus/:otuId/"
+                    component={() => <Redirect to={`/refs/${refId}/otus/${otuId}/otu`} replace />}
+                />
+                <Route path="/refs/:refId/otus/:otuId/otu" component={OTUSection} />
+                <Route path="/refs/:refId/otus/:otuId/history" component={History} />
+                <Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />
             </Switch>
         </>
     );

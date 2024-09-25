@@ -1,16 +1,7 @@
 import { Icon } from "@base";
 import { cn } from "@utils/utils";
 import React from "react";
-import styled from "styled-components";
 import { Link } from "wouter";
-
-const StyledSidebarItem = styled(Link)`
-    color: ${props => props.theme.color.greyDark};
-    cursor: pointer;
-    padding-bottom: 1.4rem;
-    text-align: center;
-    width: 100%;
-`;
 
 type SidebarItemProps = {
     /** A list of routes to exclude from the sidebar */

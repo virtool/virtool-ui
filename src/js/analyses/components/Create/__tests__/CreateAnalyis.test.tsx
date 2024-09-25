@@ -6,12 +6,10 @@ import { createFakeIndexMinimal, mockApiListIndexes } from "@tests/fake/indexes"
 import { createFakeMLModel, mockApiGetModels } from "@tests/fake/ml";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { describe, it } from "vitest";
-import { Workflows } from "../../../types";
 import CreateAnalysis from "../CreateAnalysis";
 
 describe("getCompatibleWorkflows()", () => {
@@ -39,10 +37,9 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
+        renderWithMemoryRouter(
+            <CreateAnalysis {...props} />,
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`
         );
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
@@ -63,10 +60,9 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
+        renderWithMemoryRouter(
+            <CreateAnalysis {...props} />,
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`
         );
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
@@ -86,10 +82,9 @@ describe("getCompatibleWorkflows()", () => {
             workflow: id,
         });
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
+        renderWithMemoryRouter(
+            <CreateAnalysis {...props} />,
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=${id}`
         );
 
         await userEvent.click(await screen.findByText(name));
@@ -112,10 +107,9 @@ describe("getCompatibleWorkflows()", () => {
             workflow: "iimi",
         });
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.iimi } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
+        renderWithMemoryRouter(
+            <CreateAnalysis {...props} />,
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=iimi`
         );
 
         const comboboxes = await screen.findAllByRole("combobox");

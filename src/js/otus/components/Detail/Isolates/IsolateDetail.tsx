@@ -82,16 +82,16 @@ export default function IsolateDetail({
                 sourceName={activeIsolate.source_name}
                 allowedSourceTypes={allowedSourceTypes}
                 restrictSourceTypes={restrictSourceTypes}
-                show={openEditIsolate}
-                onHide={() => setOpenEditIsolate(false)}
+                show={Boolean(openEditIsolate)}
+                onHide={() => setOpenEditIsolate("")}
             />
 
             <RemoveIsolate
                 id={activeIsolate.id}
                 name={formatIsolateName(activeIsolate)}
-                onHide={() => setOpenRemoveIsolate(false)}
+                onHide={() => setOpenRemoveIsolate("")}
                 otuId={otuId}
-                show={openRemoveIsolate}
+                show={Boolean(openRemoveIsolate)}
             />
 
             <IsolateDetailHeader>
@@ -104,7 +104,7 @@ export default function IsolateDetail({
                                 name="pen"
                                 color="grayDark"
                                 tip="edit isolate"
-                                onClick={() => setOpenEditIsolate(true)}
+                                onClick={() => setOpenEditIsolate("true")}
                             />
                             {!activeIsolate.default && dataType !== "barcode" && (
                                 <IconButton
@@ -118,7 +118,7 @@ export default function IsolateDetail({
                                 name="trash"
                                 color="red"
                                 tip="remove isolate"
-                                onClick={() => setOpenRemoveIsolate(true)}
+                                onClick={() => setOpenRemoveIsolate("true")}
                             />
                         </>
                     )}

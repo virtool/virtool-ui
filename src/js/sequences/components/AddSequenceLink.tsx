@@ -47,7 +47,7 @@ export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProp
             }
         }
 
-        return <StyledAddSequenceLink onClick={() => setOpenAddSequence(true)}>Add Sequence</StyledAddSequenceLink>;
+        return <StyledAddSequenceLink onClick={() => setOpenAddSequence("true")}>Add Sequence</StyledAddSequenceLink>;
     }
 
     return null;

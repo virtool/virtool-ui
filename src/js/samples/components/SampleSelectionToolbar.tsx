@@ -37,7 +37,7 @@ export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToo
     const [, setWorkflow] = useUrlSearchParams("workflow");
 
     function onQuickAnalyze() {
-        setOpenQuickAnalysis(true);
+        setOpenQuickAnalysis("true");
         setWorkflow(Workflows.pathoscope_bowtie);
     }
 

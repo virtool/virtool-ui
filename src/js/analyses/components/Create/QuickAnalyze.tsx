@@ -11,7 +11,7 @@ import React, { useEffect } from "react";
 
 import { Workflows } from "@/analyses/types";
 import styled from "styled-components";
-import { useLocation, useSearch } from "wouter";
+import { useSearch } from "wouter";
 import { useCreateAnalysis } from "../../queries";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
@@ -69,9 +69,8 @@ export default function QuickAnalyze({
     subtractionOptions,
 }: QuickAnalyzeProps) {
     const search = useSearch();
-    const [_, navigate] = useLocation();
     const [workflow, setWorkflow] = useUrlSearchParams("workflow");
-    const [openQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
+    const [openQuickAnalysis, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
 
     const mode = samples[0]?.library_type == "amplicon" ? "barcode" : "genome";
 
@@ -83,12 +82,8 @@ export default function QuickAnalyze({
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
 
     function onHide() {
-        const searchParams = new URLSearchParams(search);
-        searchParams.delete("openQuickAnalysis");
-        searchParams.delete("workflow");
-
-        const searchString = searchParams.toString();
-        navigate(searchString ? `?${searchParams.toString()}` : "");
+        setOpenQuickAnalysis("");
+        setWorkflow("");
     }
 
     // The dialog should close when all selected samples have been analyzed and deselected.

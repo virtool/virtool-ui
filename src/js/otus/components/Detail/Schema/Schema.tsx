@@ -27,7 +27,7 @@ export default function Schema() {
         ReferenceRight.modify_otu
     );
 
-    const [openAddSegment, setOpenAddSegment] = useUrlSearchParams("openAddSegment");
+    const [, setOpenAddSegment] = useUrlSearchParams("openAddSegment");
 
     const { data, isPending } = useFetchOTU(otuId);
     const mutation = useUpdateOTU(otuId);
@@ -57,7 +57,7 @@ export default function Schema() {
     return (
         <div>
             {canModify && (
-                <AddButton color="blue" onClick={() => setOpenAddSegment(true)}>
+                <AddButton color="blue" onClick={() => setOpenAddSegment("true")}>
                     Add Segment
                 </AddButton>
             )}

@@ -64,7 +64,7 @@ export function SubtractionFileSelector({
 
     return foundCount === 0 ? (
         <NoneFoundBox noun="files">
-            <Link to="/files">Upload some</Link>
+            <Link to="/subtractions/files">Upload some</Link>
         </NoneFoundBox>
     ) : (
         <>

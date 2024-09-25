@@ -30,7 +30,7 @@ const UnsupportedAnalysis = styled(Box)`
 
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
-    const { analysisId, sampleId } = useParams();
+    const { analysisId, sampleId } = useParams<{ analysisId: string; sampleId: string }>();
     const { data: analysis, isPending, error } = useGetAnalysis(analysisId);
     const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 

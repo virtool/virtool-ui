@@ -25,7 +25,7 @@ export default function SubtractionToolbar({ term, handleChange }: SubtractionTo
         <Toolbar>
             <InputSearch value={term} onChange={handleChange} placeholder="Name" />
             {hasPermission && (
-                <LinkButton color="blue" to={formatSearchParams("openCreateSubtraction", true, search)}>
+                <LinkButton color="blue" to={formatSearchParams("openCreateSubtraction", "true", search)}>
                     Create
                 </LinkButton>
             )}

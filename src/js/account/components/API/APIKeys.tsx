@@ -43,7 +43,7 @@ export default function APIKeys() {
                     <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">Virtool API</ExternalLink>
                     <span>.</span>
                 </div>
-                <Link to={`/${formatSearchParams("openCreateKey", "true", search)}`} replace>
+                <Link to={`/account/api/${formatSearchParams("openCreateKey", "true", search)}`} replace>
                     Create
                 </Link>
             </APIKeysHeader>

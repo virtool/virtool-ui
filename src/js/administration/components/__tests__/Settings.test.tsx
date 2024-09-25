@@ -22,7 +22,7 @@ describe("<Settings />", () => {
     it("should render", async () => {
         account.administrator_role = AdministratorRoles.FULL;
         scope = nock("http://localhost").get("/api/account").reply(200, account);
-        renderWithMemoryRouter(<Settings />, "/settings");
+        renderWithMemoryRouter(<Settings />, "/administration/settings");
 
         await waitFor(() => expect(screen.getByText("Instance Message")).toBeInTheDocument());
         expect(screen.getByText("Settings")).toBeInTheDocument();

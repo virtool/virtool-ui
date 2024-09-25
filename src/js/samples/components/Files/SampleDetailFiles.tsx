@@ -10,7 +10,7 @@ import SampleReads from "./SampleReads";
  * The files view in sample details
  */
 export function SampleDetailFiles() {
-    const { sampleId } = useParams();
+    const { sampleId } = useParams<{ sampleId: string }>();
     const { data, isPending } = useFetchSample(sampleId);
 
     if (isPending) {

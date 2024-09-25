@@ -1,7 +1,7 @@
 import { Alert, Icon } from "@base";
 import { endsWith, some } from "lodash-es";
 import React from "react";
-import { Link, Route, useRouter } from "wouter";
+import { Link, Route, useLocation } from "wouter";
 import { Read } from "../../types";
 
 type SampleFileSizeWarningProps = {
@@ -13,15 +13,14 @@ type SampleFileSizeWarningProps = {
  * Displays a warning if any sample files are under 10 megabytes
  */
 export default function SampleFileSizeWarning({ reads, sampleId }: SampleFileSizeWarningProps) {
-    const location = useRouter().base;
+    const [location] = useLocation();
     const show = some(reads, file => file.size < 10000000);
-    console.log({ location });
 
     if (show) {
         const showLink = !endsWith(location, "/files");
 
         const link = showLink ? (
-            <Link to={`~/samples/${sampleId}/files`}>Check the file sizes</Link>
+            <Link to={`/samples/${sampleId}/files`}>Check the file sizes</Link>
         ) : (
             "Check the file sizes"
         );

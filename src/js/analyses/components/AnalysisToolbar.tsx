@@ -22,7 +22,7 @@ export default function AnalysesToolbar({ sampleId }: AnalysesToolbarProps) {
                 <Button
                     color="blue"
                     onClick={() => {
-                        setOpenCreateAnalysis(true);
+                        setOpenCreateAnalysis("true");
                         setWorkflow(Workflows.pathoscope_bowtie);
                     }}
                 >

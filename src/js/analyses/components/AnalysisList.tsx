@@ -11,7 +11,7 @@ import AnalysesToolbar from "./AnalysisToolbar";
 import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
 
-function renderRow(sampleId: string) {
+function renderRow() {
     return function (document: AnalysisMinimal) {
         return <AnalysisItem key={document.id} analysis={document} />;
     };
@@ -21,7 +21,7 @@ function renderRow(sampleId: string) {
  * A list of analyses with filtering options
  */
 export default function AnalysesList() {
-    const { sampleId } = useParams();
+    const { sampleId } = useParams<{ sampleId: string }>();
     const [urlPage] = useUrlSearchParams("page");
     const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
@@ -39,7 +39,7 @@ export default function AnalysesList() {
             {analyses.found_count ? (
                 <Pagination
                     items={analyses.documents}
-                    renderRow={renderRow(sampleId)}
+                    renderRow={renderRow()}
                     storedPage={analyses.page}
                     currentPage={Number(urlPage) || 1}
                     pageCount={analyses.page_count}

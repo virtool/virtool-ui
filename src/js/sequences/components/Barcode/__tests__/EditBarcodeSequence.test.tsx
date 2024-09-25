@@ -19,7 +19,7 @@ describe("<EditBarcodeSequence>", () => {
     });
 
     it("should render all fields with current sequence data", () => {
-        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
 
         expect(screen.getByText("Target")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe("<EditBarcodeSequence>", () => {
             "ACGRM",
             "test_target_name_2"
         );
-        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: /test_target_name_2/ }));
@@ -54,7 +54,7 @@ describe("<EditBarcodeSequence>", () => {
         scope.done();
     });
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
@@ -65,7 +65,7 @@ describe("<EditBarcodeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -84,7 +84,7 @@ describe("<EditBarcodeSequence>", () => {
             "ACGRM",
             "test_target_name_2"
         );
-        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: /test_target_name_2/ }));
@@ -97,7 +97,7 @@ describe("<EditBarcodeSequence>", () => {
 
         scope.done();
 
-        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithMemoryRouter(<EditBarcodeSequence {...props} />, "?openEditSequence=true");
         expect(screen.getByText("Resumed editing draft sequence.")).toBeInTheDocument();
     });
 });

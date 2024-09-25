@@ -12,8 +12,8 @@ export default function HMM() {
         <Container>
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/:hmmId" component={HMMDetail} nest />
-                    <Route path="/" component={HMMList} nest />
+                    <Route path="/hmm/:hmmId" component={HMMDetail} />
+                    <Route path="/hmm/" component={HMMList} />
                 </Switch>
             </ContainerNarrow>
         </Container>

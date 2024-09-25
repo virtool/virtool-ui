@@ -42,7 +42,7 @@ export default function EditGenomeSequence({
     }
 
     return (
-        <Dialog open={Boolean(openEditSequence)} onOpenChange={() => setOpenEditSequence(false)}>
+        <Dialog open={Boolean(openEditSequence)} onOpenChange={() => setOpenEditSequence("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

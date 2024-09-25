@@ -28,7 +28,7 @@ export function LatestBuild({ id, latestBuild }: LatestBuildProps) {
             <StyledLatestBuild>
                 <div>
                     <strong>
-                        <Link to={`~/refs/${id}/indexes/${latestBuild.id}`}>Index {latestBuild.version}</Link>
+                        <Link to={`/refs/${id}/indexes/${latestBuild.id}`}>Index {latestBuild.version}</Link>
                     </strong>
                     <span>
                         &nbsp;/ Created <RelativeTime time={latestBuild.created_at} /> by {latestBuild.user.handle}

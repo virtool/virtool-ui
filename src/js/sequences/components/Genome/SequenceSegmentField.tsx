@@ -101,7 +101,7 @@ export default function SequenceSegmentField({ hasSchema, otuId, refId, segments
                     <p>A schema defines the sequence segments that should be present in isolates of the OTU. </p>
                 </div>
                 <div>
-                    <Link to={`/../schema`}>Add a Schema</Link>
+                    <Link to={`/refs/${refId}/otus/${otuId}/schema`}>Add a Schema</Link>
                 </div>
             </NoSchema>
         </InputGroup>

@@ -11,8 +11,8 @@ export default function Jobs() {
     return (
         <Container>
             <Switch>
-                <Route path="/:jobId" component={JobDetail} nest />
-                <Route path="/" component={JobsList} nest />
+                <Route path="/jobs/:jobId" component={JobDetail} />
+                <Route path="/jobs" component={JobsList} />
             </Switch>
         </Container>
     );

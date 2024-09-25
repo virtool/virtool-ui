@@ -36,7 +36,7 @@ export default function EmptyReference() {
                     { ...values },
                     {
                         onSuccess: () => {
-                            navigate("~/refs");
+                            navigate("/refs");
                         },
                     }
                 )

@@ -30,8 +30,8 @@ export default function ReferenceDetail() {
     return (
         <>
             <Switch>
-                <Route path="/otus/:otuId/*" />
-                <Route path="">
+                <Route path="/refs/:refId/otus/:otuId/*?" />
+                <Route path="/refs/:refId/*?">
                     <ReferenceDetailHeader
                         createdAt={data.created_at}
                         isRemote={Boolean(data.remotes_from)}
@@ -45,13 +45,13 @@ export default function ReferenceDetail() {
 
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/" component={() => <Redirect to={`/manage`} replace />} />
-                    <Route path="manage" component={ReferenceManager} nest />
-                    <Route path="otus/:otuId" component={OTUDetail} nest />
-                    <Route path="otus" component={OTUList} nest />
-                    <Route path="indexes/:indexId" component={IndexDetail} nest />
-                    <Route path="indexes" component={Indexes} nest />
-                    <Route path="settings" component={ReferenceSettings} nest />
+                    <Route path="/refs/:refId/" component={() => <Redirect to={`/refs/${refId}/manage`} replace />} />
+                    <Route path="/refs/:refId/manage" component={ReferenceManager} />
+                    <Route path="/refs/:refId/otus/:otuId/*?" component={OTUDetail} />
+                    <Route path="/refs/:refId/otus" component={OTUList} />
+                    <Route path="/refs/:refId/indexes/:indexId" component={IndexDetail} />
+                    <Route path="/refs/:refId/indexes" component={Indexes} />
+                    <Route path="/refs/:refId/settings" component={ReferenceSettings} />
                 </Switch>
             </ContainerNarrow>
 

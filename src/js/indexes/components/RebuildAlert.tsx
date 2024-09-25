@@ -38,7 +38,7 @@ export default function RebuildAlert({ refId }: RebuildAlertProps) {
                 <Icon name="info-circle" />
                 <span>
                     <span>There are unbuilt changes. </span>
-                    <Link to={`~/refs/${refId}/indexes?openRebuild=true`}>Rebuild the index</Link>
+                    <Link to={`/refs/${refId}/indexes?openRebuild=true`}>Rebuild the index</Link>
                     <span> to use the changes in future analyses.</span>
                 </span>
             </Alert>

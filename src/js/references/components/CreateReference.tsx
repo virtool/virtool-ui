@@ -14,9 +14,9 @@ export function CreateReference() {
 
     return (
         <Dialog
-            open={createReference}
+            open={Boolean(createReference)}
             onOpenChange={() => {
-                setCreateReference(false);
+                setCreateReference("");
                 setCreateReferenceType("");
             }}
         >

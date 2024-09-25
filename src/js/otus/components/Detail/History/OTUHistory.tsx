@@ -9,7 +9,7 @@ import { useParams } from "wouter";
  * Display and manage the history for the OTU
  */
 export default function OTUHistory() {
-    const { otuId } = useParams();
+    const { otuId } = useParams<{ otuId: string }>();
     const { data, isPending } = useFetchOTUHistory(otuId);
 
     if (isPending) {

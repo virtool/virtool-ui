@@ -1,23 +1,19 @@
+import Analyses from "@/analyses/components/Analyses";
 import { AdministratorRoles } from "@administration/types";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "@tests/fake/analyses";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { renderWithRouter } from "@tests/setupTests";
-import { createBrowserHistory } from "history";
+import { renderWithMemoryRouter } from "@tests/setupTests";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { Workflows } from "../../types";
-import AnalysesList from "../AnalysisList";
 
 describe("<AnalysesList />", () => {
     let analyses;
-    let history;
     let sample;
-    let props;
 
     beforeEach(() => {
         sample = createFakeSample();
@@ -28,10 +24,6 @@ describe("<AnalysesList />", () => {
         ];
         mockApiGetAnalyses(analyses);
         mockApiGetHmms(createFakeHMMSearchResults());
-        props = {
-            match: { params: { sampleId: analyses[0].sample.id } },
-        };
-        history = createBrowserHistory();
     });
 
     afterEach(() => nock.cleanAll());
@@ -39,7 +31,7 @@ describe("<AnalysesList />", () => {
     describe("<AnalysesList />", () => {
         it("should render", async () => {
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, history);
+            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
             expect(screen.getByText(`${analyses[0].user.handle} created`)).toBeInTheDocument();
@@ -53,7 +45,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, history);
+            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -63,7 +55,7 @@ describe("<AnalysesList />", () => {
             sample.user.id = account.id;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, history);
+            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -74,7 +66,7 @@ describe("<AnalysesList />", () => {
             sample.group_write = true;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, history);
+            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -86,7 +78,7 @@ describe("<AnalysesList />", () => {
             sample.all_write = true;
             mockApiGetSampleDetail(sample);
 
-            renderWithRouter(<AnalysesList {...props} />, history);
+            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -95,7 +87,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: null });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, history);
+            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.queryByText("Create")).not.toBeInTheDocument();
         });
@@ -105,14 +97,18 @@ describe("<AnalysesList />", () => {
 
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<AnalysesList {...props} />, history);
+            const { history } = renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
-            expect(history.location.state).toEqual(undefined);
+            expect(history[0]).toEqual(`/samples/${sample.id}/analyses/`);
 
             await userEvent.click(screen.getByText("Create"));
 
-            expect(history.location.state).toEqual({ createAnalysis: Workflows.pathoscope_bowtie });
+            await waitFor(() =>
+                expect(history[0]).toEqual(
+                    `/samples/${sample.id}/analyses/?openCreateAnalysis=true&workflow=pathoscope_bowtie`
+                )
+            );
         });
     });
 });

@@ -61,7 +61,7 @@ export function UserItem({ active, administrator_role, handle, id, primary_group
         <StyledUserItem>
             <UserContainer>
                 <InitialIcon size="lg" handle={handle} />
-                {canEdit ? <UserLink to={`/../users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
+                {canEdit ? <UserLink to={`/administration/users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
             </UserContainer>
             <TagContainer>
                 {administrator_role && (

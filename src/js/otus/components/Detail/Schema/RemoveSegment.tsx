@@ -19,7 +19,6 @@ type RemoveSegmentProps = {
 export default function RemoveSegment({ abbreviation, name, otuId, schema }: RemoveSegmentProps) {
     const [removeSegmentName, setRemoveSegmentName] = useUrlSearchParams("removeSegmentName");
     const mutation = useUpdateOTU(otuId);
-    console.log("removeSegmentName");
 
     function handleSubmit() {
         mutation.mutate(
@@ -34,7 +33,6 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
 
     function onHide() {
         setRemoveSegmentName("");
-        console.log("attempted to hide");
     }
 
     return (

@@ -19,7 +19,7 @@ const StyledSampleQuality = styled.div`
  * Samples quality view showing charts for bases, composition, and sequences
  */
 export default function SampleQuality() {
-    const { sampleId } = useParams();
+    const { sampleId } = useParams<{ sampleId: string }>();
     const { data, isPending } = useFetchSample(sampleId);
 
     if (isPending) {

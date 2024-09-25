@@ -45,7 +45,7 @@ const Attribution = styled.div`
 export function SubtractionItem({ created_at, id, job, name, nickname, ready, user }: SubtractionMinimal) {
     return (
         <StyledSubtractionItem>
-            <SubtractionLink to={`/${id}`}>{name}</SubtractionLink>
+            <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
             <div>{nickname}</div>
             <Attribution>
                 <SubtractionAttribution handle={user.handle} time={created_at} />

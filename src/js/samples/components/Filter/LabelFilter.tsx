@@ -20,7 +20,7 @@ export default function LabelFilter({ labels, onClick, selected }: LabelFilterPr
     return (
         <SideBarSection>
             <SidebarHeader>
-                Labels <Link to="~/samples/labels">Manage</Link>
+                Labels <Link to="/samples/labels">Manage</Link>
             </SidebarHeader>
             {labels.map(label => (
                 <LabelFilterItem

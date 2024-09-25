@@ -16,7 +16,7 @@ describe("<SampleDetailGeneral />", () => {
     it("should render properly when data is installing", async () => {
         const unreadySample = createFakeSample({ paired: true, ready: false });
         const scope = mockApiGetSampleDetail(unreadySample);
-        renderWithMemoryRouter(<Samples />, `/${unreadySample.id}/general`);
+        renderWithMemoryRouter(<Samples />, `/samples/${unreadySample.id}/general`);
 
         await waitFor(() => scope.done());
 
@@ -42,7 +42,7 @@ describe("<SampleDetailGeneral />", () => {
 
     it("should render properly", async () => {
         const scope = mockApiGetSampleDetail(sample);
-        renderWithMemoryRouter(<Samples />, `/${sample.id}/general`);
+        renderWithMemoryRouter(<Samples />, `/samples/${sample.id}/general`);
 
         expect(await screen.findByText("Metadata")).toBeInTheDocument();
 
@@ -78,7 +78,7 @@ describe("<SampleDetailGeneral />", () => {
 
     it("should render with [paired=true]", async () => {
         const scope = mockApiGetSampleDetail(sample);
-        renderWithMemoryRouter(<Samples />, `/${sample.id}/general`);
+        renderWithMemoryRouter(<Samples />, `/samples/${sample.id}/general`);
 
         expect(await screen.findByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("Yes")).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe("<SampleDetailGeneral />", () => {
     it("should render with [paired=false]", async () => {
         sample = createFakeSample({ paired: false });
         const scope = mockApiGetSampleDetail(sample);
-        renderWithMemoryRouter(<Samples />, `/${sample.id}/general`);
+        renderWithMemoryRouter(<Samples />, `/samples/${sample.id}/general`);
 
         expect(await screen.findByText("Paired")).toBeInTheDocument();
         expect(screen.getByText("No")).toBeInTheDocument();

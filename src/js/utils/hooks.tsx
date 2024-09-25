@@ -75,7 +75,6 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
     } else {
         navigate(location, { replace: true });
     }
-    console.log({ search, location });
 
     return search;
 }
@@ -83,15 +82,14 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
 function createUseUrlSearchParams() {
     let cache = { search: "" };
 
-    return function useURLSearchParams(key: string, defaultValue?: T): [string, (newValue: string) => void] {
+    return function useURLSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
         cache.search = useSearch();
         const [location] = useLocation();
-        console.log(cache, key);
 
         const [, navigate] = useLocation();
         const firstRender = useRef(true);
 
-        let value = new URLSearchParams(cache.search).get(key) as T;
+        let value = new URLSearchParams(cache.search).get(key);
 
         if (firstRender.current && defaultValue && !value) {
             firstRender.current = false;

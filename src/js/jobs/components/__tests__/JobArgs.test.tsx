@@ -11,16 +11,16 @@ const ref_id = "test_reference-id";
 const index_id = "test_index-id";
 const subtraction_id = "test_subtraction-id";
 
-const sample_url = { id: sample_id, url: `/../../samples/${sample_id}` };
+const sample_url = { id: sample_id, url: `/samples/${sample_id}` };
 const analysis_url = {
     id: analysis_id,
-    url: `/../../samples/${sample_id}/analyses/${analysis_id}`,
+    url: `/samples/${sample_id}/analyses/${analysis_id}`,
 };
-const reference_url = { id: ref_id, url: `/../../refs/${ref_id}` };
-const index_url = { id: index_id, url: `/../../refs/${ref_id}/indexes/${index_id}` };
+const reference_url = { id: ref_id, url: `/refs/${ref_id}` };
+const index_url = { id: index_id, url: `/refs/${ref_id}/indexes/${index_id}` };
 const subtraction_url = {
     id: subtraction_id,
-    url: `/../../subtractions/${subtraction_id}`,
+    url: `/subtractions/${subtraction_id}`,
 };
 
 const workflowTests = [

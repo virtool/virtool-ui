@@ -92,7 +92,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
     const [, setWorkflow] = useUrlSearchParams("workflow");
 
     function onQuickAnalyze() {
-        setOpenQuickAnalysis(true);
+        setOpenQuickAnalysis("true");
         setWorkflow(Workflows.pathoscope_bowtie);
         selectOnQuickAnalyze();
     }
@@ -106,7 +106,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
             <SampleItemData>
                 <SampleItemMain>
                     <SampleItemTitle>
-                        <Link to={`/${sample.id}`}>{sample.name}</Link>
+                        <Link to={`/samples/${sample.id}`}>{sample.name}</Link>
                         <Attribution time={sample.created_at} user={sample.user.handle} />
                     </SampleItemTitle>
                 </SampleItemMain>
