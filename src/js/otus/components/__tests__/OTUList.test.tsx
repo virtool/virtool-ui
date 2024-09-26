@@ -6,7 +6,7 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeOTUMinimal, mockApiGetOTUs } from "@tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";

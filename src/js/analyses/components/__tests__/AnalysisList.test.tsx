@@ -6,7 +6,7 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "@tests/fake/analyses";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -106,8 +106,8 @@ describe("<AnalysesList />", () => {
 
             await waitFor(() =>
                 expect(history[0]).toEqual(
-                    `/samples/${sample.id}/analyses/?openCreateAnalysis=true&workflow=pathoscope_bowtie`
-                )
+                    `/samples/${sample.id}/analyses/?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
+                ),
             );
         });
     });

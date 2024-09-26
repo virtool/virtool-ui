@@ -6,7 +6,7 @@ import { createFakeIndexMinimal, mockApiListIndexes } from "@tests/fake/indexes"
 import { createFakeMLModel, mockApiGetModels } from "@tests/fake/ml";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, it } from "vitest";
@@ -39,7 +39,7 @@ describe("getCompatibleWorkflows()", () => {
 
         renderWithMemoryRouter(
             <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
         );
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe("getCompatibleWorkflows()", () => {
 
         renderWithMemoryRouter(
             <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
         );
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
@@ -84,7 +84,7 @@ describe("getCompatibleWorkflows()", () => {
 
         renderWithMemoryRouter(
             <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=${id}`
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=${id}`,
         );
 
         await userEvent.click(await screen.findByText(name));
@@ -109,7 +109,7 @@ describe("getCompatibleWorkflows()", () => {
 
         renderWithMemoryRouter(
             <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=iimi`
+            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=iimi`,
         );
 
         const comboboxes = await screen.findAllByRole("combobox");

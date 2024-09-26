@@ -8,7 +8,8 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
+import { renderWithMemoryRouter } from "../../../../tests/setup";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 
 describe("<Indexes />", () => {
     let reference;
@@ -45,7 +46,7 @@ describe("<Indexes />", () => {
         expect(await screen.findByText("There are unbuilt changes.")).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: "Rebuild the index" })).toHaveAttribute(
             "href",
-            `/refs/${reference.id}/indexes?openRebuild=true`
+            `/refs/${reference.id}/indexes?openRebuild=true`,
         );
     });
 

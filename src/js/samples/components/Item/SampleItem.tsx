@@ -90,8 +90,9 @@ type SampleItemProps = {
 export default function SampleItem({ sample, checked, handleSelect, selectOnQuickAnalyze }: SampleItemProps) {
     const [, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
     const [, setWorkflow] = useUrlSearchParams("workflow");
-
+    function onQuickAnalyze() {
         setOpenQuickAnalysis("true");
+        setWorkflow(Workflows.pathoscope_bowtie);
         selectOnQuickAnalyze();
     }
 
@@ -111,7 +112,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
                 <SampleItemLabels>
                     <SampleLibraryTypeLabel libraryType={sample.library_type} />
                     {sample.labels.map(label => (
-                        <SmallSampleLabel key={label.id} {...label} />
+                        <SmallSampleLabel {...label} />
                     ))}
                 </SampleItemLabels>
             </SampleItemData>

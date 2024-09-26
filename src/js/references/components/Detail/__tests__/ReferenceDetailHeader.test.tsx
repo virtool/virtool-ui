@@ -2,7 +2,7 @@ import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import ReferenceDetailHeader from "../ReferenceDetailHeader";

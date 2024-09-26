@@ -4,11 +4,12 @@ import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { noop } from "lodash-es";
-import React from "react";
+import React, { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
-import { Router } from "wouter";
+import { BaseLocationHook, Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
+import { Path } from "wouter/types/location-hook";
 process.env.TZ = "UTC";
 
 export function wrapWithProviders(ui: ReactNode) {
@@ -31,38 +32,27 @@ export function renderWithProviders(ui: ReactNode) {
     return { ...rest, rerender: rerenderWithProviders };
 }
 
-export function renderWithMemoryRouter(ui, path) {
+export function renderWithMemoryRouter(ui: ReactNode, path?: string) {
     const { hook, history } = memoryLocation({ path, record: true });
 
     const result = renderWithProviders(
         <Router hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
             {ui}
-        </Router>
+        </Router>,
     );
 
     return { ...result, history: history };
 }
 
-export function useMemoryLocation(baseHook) {
-    let [location, navigate] = baseHook();
-
-    try {
-        location = location.split("?")[0] || "";
-    } catch (error) {
-        noop();
-    }
-
-    return [location, navigate];
+export function useMemoryLocation(baseHook: BaseLocationHook): [string, (path: Path, ...args: any[]) => any] {
+    let [location, rest] = baseHook();
+    location = location.split("?")[0] || "";
+    return [location, rest];
 }
 
 export function useMemorySearch(baseHook) {
     const [location] = baseHook();
-
-    try {
-        return location.split("?")[1] || "";
-    } catch (error) {
-        return null;
-    }
+    return location.split("?")[1] || "";
 }
 
 //mocks HTML element prototypes that are not implemented in jsdom

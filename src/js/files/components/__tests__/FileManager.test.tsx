@@ -5,7 +5,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { renderWithMemoryRouter, renderWithProviders } from "@tests/setupTests";
+import { renderWithMemoryRouter, renderWithProviders } from "@tests/setup";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FileManager, FileManagerProps } from "../FileManager";
@@ -49,7 +49,7 @@ describe("<FileManager>", () => {
 
         renderWithMemoryRouter(
             <FileManager {...props} regex={/.(?:fa|fasta)(?:.gz|.gzip)?$/} />,
-            "/samples/files?page=1"
+            "/samples/files?page=1",
         );
 
         expect(await screen.findByText("Drag file here to upload")).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe("<FileManager>", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
-        renderWithProviders(<FileManager {...props} message="Test Message" />, "/samples/files?page=1");
+        renderWithMemoryRouter(<FileManager {...props} message="Test Message" />, "/samples/files?page=1");
 
         expect(await screen.findByText("Test Message")).toBeInTheDocument();
     });

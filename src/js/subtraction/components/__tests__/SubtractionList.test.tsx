@@ -3,7 +3,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSubtractionMinimal, mockApiGetSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import SubtractionList from "../SubtractionList";

@@ -17,7 +17,7 @@ const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`
  */
 export function WorkflowTagLink({ id }: { id: string }) {
     return (
-        <StyledSampleItemWorkflowTagLink as={Link} to={`/${id}/analyses`}>
+        <StyledSampleItemWorkflowTagLink as={Link} to={`/samples/${id}/analyses`}>
             View
         </StyledSampleItemWorkflowTagLink>
     );

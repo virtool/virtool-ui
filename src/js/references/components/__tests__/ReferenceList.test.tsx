@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { createFakeReferenceMinimal, mockApiCloneReference, mockApiGetReferences } from "@tests/fake/references";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithMemoryRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";

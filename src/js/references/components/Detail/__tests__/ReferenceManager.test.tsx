@@ -4,7 +4,7 @@ import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
+import { renderWithMemoryRouter } from "../../../../../tests/setup";
 
 describe("<ReferenceManager />", () => {
     let reference;
