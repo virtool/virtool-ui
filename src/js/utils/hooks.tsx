@@ -134,7 +134,7 @@ function updateUrlSearchParamsList(key: string, navigate, search: string, values
  */
 export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [string[], (newValue: string[]) => void] {
     const search = useSearch();
-    const [_, navigate] = useLocation();
+    const [, navigate] = useLocation();
     const firstRender = useRef(true);
 
     let values = new URLSearchParams(search).getAll(key);

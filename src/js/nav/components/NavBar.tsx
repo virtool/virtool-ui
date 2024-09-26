@@ -79,7 +79,7 @@ type NavBarProps = {
  * Displays the navigation bar with routes to available components
  */
 export default function NavBar({ administrator_role, handle }: NavBarProps) {
-    const [openDev, setOpenDev] = useUrlSearchParams("openDev");
+    const [, setOpenDev] = useUrlSearchParams("openDev");
     const mutation = useLogout();
     const { data } = useRootQuery();
 

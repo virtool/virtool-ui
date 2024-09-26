@@ -112,7 +112,7 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
                 <SampleItemLabels>
                     <SampleLibraryTypeLabel libraryType={sample.library_type} />
                     {sample.labels.map(label => (
-                        <SmallSampleLabel {...label} />
+                        <SmallSampleLabel {...label} key={label.id} />
                     ))}
                 </SampleItemLabels>
             </SampleItemData>

@@ -61,11 +61,6 @@ const SourceTypesUndo = styled(BoxGroupSection)`
     }
 `;
 
-interface MatchTypes {
-    /** The reference id */
-    refId: string;
-}
-
 export function LocalSourceTypes() {
     const { refId } = useParams<{ refId: string }>();
 

@@ -10,7 +10,6 @@ import Targets from "../Targets";
 
 describe("<Targets />", () => {
     let props;
-    let history;
 
     beforeEach(() => {
         const reference = createFakeReference({ data_type: "barcode" });

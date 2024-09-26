@@ -12,7 +12,6 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<OTUsList />", () => {
-    let history;
     let reference;
     let OTUs;
 

@@ -19,7 +19,7 @@ type FormValues = {
  * A form for creating a subtraction
  */
 export function CreateSubtractionForm() {
-    const [_, setOpenCreateSubtraction] = useUrlSearchParams("openCreateSubtraction");
+    const [, setOpenCreateSubtraction] = useUrlSearchParams("openCreateSubtraction");
 
     const {
         hasRestored,
