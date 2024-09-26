@@ -22,7 +22,7 @@ export default function SidebarItem({ icon, link, title }: SidebarItemProps) {
         "text-primary",
         "font-medium",
         "hover:text-primary",
-        "focus:text-primary"
+        "focus:text-primary",
     );
 
     return (

@@ -77,7 +77,7 @@ export function ImportReference() {
                 onSubmit={handleSubmit(values => {
                     importMutation.mutate(
                         { ...values, importFrom: fileNameOnDisk },
-                        { onSuccess: () => navigate("~/refs") }
+                        { onSuccess: () => navigate("~/refs") },
                     );
                 })}
             >

@@ -22,7 +22,7 @@ export function TabsLink({ children, className, isActive, to }: TabsLinkProps) {
         "-mb-[1px]",
         "hover:border-b-2",
         "hover:border-b-gray-400",
-        className
+        className,
     );
 
     return (

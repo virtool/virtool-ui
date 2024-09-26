@@ -28,7 +28,7 @@ export default function CreateUser() {
                 onSuccess: () => {
                     setOpenCreateUser("");
                 },
-            }
+            },
         );
     }
 

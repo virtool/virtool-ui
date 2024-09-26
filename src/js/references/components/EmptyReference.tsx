@@ -38,8 +38,8 @@ export default function EmptyReference() {
                         onSuccess: () => {
                             navigate("/refs");
                         },
-                    }
-                )
+                    },
+                ),
             )}
         >
             <ReferenceForm errors={errors} mode={ReferenceFormMode.empty} register={register} />

@@ -11,7 +11,7 @@ const navBarkLinkClassName = cn(
     "justify-center",
     "items-center",
     "px-5",
-    "hover:text-primary-darkest"
+    "hover:text-primary-darkest",
 );
 
 export function NavBarLink({ children, to }) {
