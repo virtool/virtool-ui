@@ -80,7 +80,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
 }
 
 function createUseUrlSearchParams() {
-    let cache = { search: "" };
+    const cache = { search: "" };
 
     return function useURLSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
         cache.search = useSearch();

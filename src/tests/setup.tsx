@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { noop } from "lodash-es";
 import React, { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
@@ -41,7 +40,7 @@ export function renderWithMemoryRouter(ui: ReactNode, path?: string) {
         </Router>,
     );
 
-    return { ...result, history: history };
+    return { ...result, history };
 }
 
 export function useMemoryLocation(baseHook: BaseLocationHook): [string, (path: Path, ...args: any[]) => any] {

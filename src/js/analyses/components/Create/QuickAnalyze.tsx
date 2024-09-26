@@ -72,7 +72,7 @@ export default function QuickAnalyze({
     const [workflow, setWorkflow] = useUrlSearchParams("workflow");
     const [openQuickAnalysis, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
 
-    const mode = samples[0]?.library_type == "amplicon" ? "barcode" : "genome";
+    const mode = samples[0]?.library_type === "amplicon" ? "barcode" : "genome";
 
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
