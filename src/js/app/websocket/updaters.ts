@@ -23,23 +23,22 @@ function taskSelector<T extends TaskObject>(cache: T): Task {
 type Document = { items: TaskObject[] } | { documents: TaskObject[] };
 
 /**
- * Update `Task`s in the list of items contained in an infinite list query
+ * Update `Task`s in the list of items
  *
  * @param data - The task data to update
  * @param selector - A function that returns the task from an instance of the cached item
  * @returns A function that updates the task in the cache
  */
-function infiniteListItemUpdater<T extends Document>(task: Task, selector: (cache: TaskObject) => Task) {
+function listItemUpdater<T extends Document>(task: Task, selector: (cache: TaskObject) => Task) {
     return function (cache: InfiniteData<T>): InfiniteData<T> {
         const newCache = cloneDeep(cache);
-        forEach(newCache.pages, (page: T) => {
-            const items = "items" in page ? page.items : page.documents;
-            forEach(items, (item: { task: Task }) => {
-                const previousTask = selector(item);
-                if (previousTask && item.task.id === task.id) {
-                    assign(previousTask, task);
-                }
-            });
+
+        const items = "items" in newCache ? newCache.items : newCache.documents;
+        forEach(items, (item: { task: Task }) => {
+            const previousTask = selector(item);
+            if (previousTask && item.task.id === task.id) {
+                assign(previousTask, task);
+            }
         });
 
         return newCache;
@@ -83,8 +82,8 @@ export const taskUpdaters = {
  */
 function referenceUpdater(queryClient: QueryClient, task: Task) {
     queryClient.setQueriesData(
-        { queryKey: referenceQueryKeys.infiniteList([]) },
-        infiniteListItemUpdater<ReferenceSearchResult>(task, taskSelector),
+        { queryKey: referenceQueryKeys.lists() },
+        listItemUpdater<ReferenceSearchResult>(task, taskSelector),
     );
     queryClient.setQueriesData({ queryKey: referenceQueryKeys.details() }, updater(task, taskSelector));
 }
