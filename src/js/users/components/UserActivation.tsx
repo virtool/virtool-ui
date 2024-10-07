@@ -8,10 +8,23 @@ const CapitalizedTitle = styled(DialogTitle)`
     text-transform: capitalize;
 `;
 
+type UserActivationProps = {
+    /** The human interpretable name of the user */
+    handle: string;
+    /** The users unique identifier */
+    id: string;
+    /** noun indicating if the user is being activated or deactivated */
+    noun: string;
+    /** callback for closing the dialog */
+    onHide: () => void;
+    /** whether the dialog should be displayed */
+    show: boolean;
+};
+
 /**
  * A dialog that requests confirmation for deactivating or reactivating a user
  */
-export function UserActivation({ handle, id, noun, onHide, show }) {
+export function UserActivation({ handle, id, noun, onHide, show }: UserActivationProps) {
     const mutation = useUpdateUser();
 
     return (

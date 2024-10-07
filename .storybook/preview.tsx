@@ -1,8 +1,8 @@
 import { fn } from "@storybook/test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import { Router } from "wouter";
 import { GlobalStyles } from "../src/js/app/GlobalStyles";
 import { theme } from "../src/js/app/theme";
 
@@ -16,14 +16,14 @@ const queryClient = new QueryClient({
 
 export const decorators = [
     Story => (
-        <MemoryRouter>
+        <Router>
             <ThemeProvider theme={theme}>
                 <QueryClientProvider client={queryClient}>
                     <GlobalStyles />
                     <Story />
                 </QueryClientProvider>
             </ThemeProvider>
-        </MemoryRouter>
+        </Router>
     ),
 ];
 

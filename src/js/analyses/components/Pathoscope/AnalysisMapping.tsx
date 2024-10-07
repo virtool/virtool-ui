@@ -1,8 +1,8 @@
 import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { Box, Label } from "../../../base";
 import { toThousand } from "../../../utils/utils";
 import { Bars } from "../Viewer/Bars";

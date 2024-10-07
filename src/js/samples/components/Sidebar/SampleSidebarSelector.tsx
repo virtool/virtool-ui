@@ -5,8 +5,8 @@ import { Popover } from "@base/Popover";
 import { Label } from "@labels/types";
 import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { SampleSidebarSelectorItem } from "./SampleSidebarSelectorItem";
 
 const SampleSidebarSelectorButton = styled.div`

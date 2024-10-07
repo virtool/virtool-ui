@@ -6,8 +6,8 @@ import { FileResponse, FileType } from "@files/types";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { flatMap, includes, indexOf, toLower } from "lodash-es";
 import React, { ReactNode, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import ReadSelectorItem from "./ReadSelectorItem";
 
 type ReadSelectorBoxProps = {

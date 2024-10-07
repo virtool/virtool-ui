@@ -2,7 +2,6 @@ import { ErrorResponse } from "@/types/types";
 import { Request } from "@app/request";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
 import {
     addReferenceGroup,
     addReferenceUser,
@@ -91,8 +90,6 @@ export function useRemoteReference() {
  * @returns A mutator for importing a reference
  */
 export function useImportReference() {
-    const history = useHistory();
-
     return useMutation<
         unknown,
         unknown,
@@ -103,7 +100,6 @@ export function useImportReference() {
         }
     >({
         mutationFn: ({ name, description, importFrom }) => importReference(name, description, importFrom),
-        onSuccess: () => history.push("/refs"),
     });
 }
 
@@ -144,8 +140,6 @@ export function useUploadReference() {
  * @returns A mutator for creating an empty reference
  */
 export function useCreateReference() {
-    const history = useHistory();
-
     return useMutation<
         Reference,
         unknown,
@@ -153,9 +147,6 @@ export function useCreateReference() {
     >({
         mutationFn: ({ name, description, dataType, organism }) =>
             createReference(name, description, dataType, organism),
-        onSuccess: () => {
-            history.push("/refs", { emptyReference: false });
-        },
     });
 }
 

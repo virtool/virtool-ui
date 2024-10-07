@@ -32,7 +32,7 @@ describe("<Editsample />", () => {
     });
 
     it.each(["Name", "Isolate", "Host", "Locale", "Notes"])("should render changed data for", async inputLabel => {
-        renderWithMemoryRouter(<EditSample {...props} />);
+        renderWithMemoryRouter(<EditSample {...props} />, "?openEditSample=true");
 
         const inputBox = screen.getByLabelText(inputLabel);
         expect(inputBox).toBeInTheDocument();
@@ -47,7 +47,7 @@ describe("<Editsample />", () => {
 
     it("should update sample when form is submitted", async () => {
         const scope = mockApiEditSample(sample, "newName", "newIsolate", "newHost", "newLocale", "newNotes");
-        renderWithMemoryRouter(<EditSample {...props} />);
+        renderWithMemoryRouter(<EditSample {...props} />, "?openEditSample=true");
 
         const nameInput = screen.getByLabelText("Name");
         await userEvent.clear(nameInput);

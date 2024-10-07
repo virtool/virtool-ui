@@ -5,14 +5,14 @@ import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { SubtractionShortlist } from "@subtraction/types";
-import { HistoryType } from "@utils/hooks";
-import { merge } from "lodash";
+import { formatSearchParams, useUrlSearchParams } from "@utils/hooks";
 import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+
+import { Workflows } from "@/analyses/types";
 import styled from "styled-components";
+import { useSearch } from "wouter";
 import { useCreateAnalysis } from "../../queries";
-import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
 import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisForm";
@@ -24,31 +24,6 @@ const QuickAnalyzeSelected = styled.span`
     align-self: center;
     margin: 0 15px 0 auto;
 `;
-
-type History = HistoryType & {
-    location: {
-        state: {
-            quickAnalysis?: boolean;
-        };
-    };
-};
-
-/**
- * Gets the quick analysis mode
- *
- * @param libraryType - The library type of the sample
- * @param history - The history object
- * @returns The quick analysis mode
- */
-export function getQuickAnalysisMode(libraryType: string, history: History) {
-    if (history.location.state?.quickAnalysis === true) {
-        if (libraryType === "amplicon") {
-            return "barcode";
-        }
-
-        return "genome";
-    }
-}
 
 /**
  * Gets the compatible samples
@@ -93,12 +68,12 @@ export default function QuickAnalyze({
     samples,
     subtractionOptions,
 }: QuickAnalyzeProps) {
-    const history = useHistory();
-    const location = useLocation<{ quickAnalysis: string; workflow: Workflows }>();
-    const mode = getQuickAnalysisMode(samples[0]?.library_type, history);
-    const workflow = location.state?.workflow;
+    const search = useSearch();
+    const [workflow, setWorkflow] = useUrlSearchParams("workflow");
+    const [openQuickAnalysis, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
 
-    const show = Boolean(mode);
+    const mode = samples[0]?.library_type === "amplicon" ? "barcode" : "genome";
+
     const compatibleSamples = getCompatibleSamples(mode, samples);
 
     const createAnalysis = useCreateAnalysis();
@@ -107,15 +82,16 @@ export default function QuickAnalyze({
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
 
     function onHide() {
-        history.push({ ...history.location, state: { quickAnalysis: false } });
+        setOpenQuickAnalysis("");
+        setWorkflow("");
     }
 
     // The dialog should close when all selected samples have been analyzed and deselected.
     useEffect(() => {
-        if (show && compatibleSamples.length === 0) {
+        if (openQuickAnalysis && compatibleSamples.length === 0) {
             onHide();
         }
-    }, [mode]);
+    }, [openQuickAnalysis, compatibleSamples.length]);
 
     function getReferenceId(selectedIndex: string) {
         return indexes.find(index => index.reference.name === selectedIndex)?.reference.id;
@@ -139,24 +115,26 @@ export default function QuickAnalyze({
 
     const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
 
-    function onChangeWorkflow(workflow: Workflows) {
-        history.push(merge(location, { state: { workflow } }));
-    }
-
     return (
-        <Dialog open={show} onOpenChange={() => onHide()}>
+        <Dialog open={Boolean(openQuickAnalysis)} onOpenChange={() => onHide()}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
                     <DialogTitle>Quick Analyze</DialogTitle>
                     <Tabs>
                         {genome.length > 0 && (
-                            <TabsLink to={{ state: { quickAnalysis: "genome" } }} isActive={() => mode === "genome"}>
+                            <TabsLink
+                                to={formatSearchParams("workflow", "genome", search)}
+                                isActive={mode === "genome"}
+                            >
                                 <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
                             </TabsLink>
                         )}
                         {barcode.length > 0 && (
-                            <TabsLink to={{ state: { quickAnalysis: "barcode" } }} isActive={() => mode === "barcode"}>
+                            <TabsLink
+                                to={formatSearchParams("workflow", "barcode", search)}
+                                isActive={mode === "barcode"}
+                            >
                                 <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
                             </TabsLink>
                         )}
@@ -166,11 +144,7 @@ export default function QuickAnalyze({
                     </Tabs>
                     <SelectedSamples samples={compatibleSamples} />
                     {mode === "genome" && <HMMAlert installed={hmms.status.task?.complete} />}
-                    <WorkflowSelector
-                        onSelect={onChangeWorkflow}
-                        selected={location.state?.workflow}
-                        workflows={compatibleWorkflows}
-                    />
+                    <WorkflowSelector onSelect={setWorkflow} selected={workflow} workflows={compatibleWorkflows} />
                     <CreateAnalysisForm
                         compatibleIndexes={indexes}
                         defaultSubtractions={[]}
@@ -178,7 +152,7 @@ export default function QuickAnalyze({
                         onSubmit={handleSubmit}
                         sampleCount={samples.length}
                         subtractions={subtractionOptions}
-                        workflow={workflow}
+                        workflow={Workflows[workflow]}
                     />
                 </CreateAnalysisDialogContent>
             </DialogPortal>

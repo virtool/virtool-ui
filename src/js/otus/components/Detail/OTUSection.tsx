@@ -1,25 +1,20 @@
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
+import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { match, useHistory, useLocation } from "react-router-dom";
+import { useParams } from "wouter";
 import { CurrentOTUContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
 import General from "./OTUGeneral";
 
-type OTUSectionProps = {
-    /** Match object containing path information */
-    match: match<{ otuId: string; refId: string }>;
-};
-
 /**
  * Displays a component for managing the OTU
  */
-export default function OTUSection({ match }: OTUSectionProps) {
-    const { otuId, refId } = match.params;
+export default function OTUSection() {
+    const { otuId, refId } = useParams<{ otuId: string; refId: string }>();
+    const [openAddIsolate, setOpenAddIsolate] = useUrlSearchParams("openAddIsolate");
 
-    const history = useHistory();
-    const location = useLocation<{ addIsolate: boolean }>();
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
     const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
 
@@ -35,8 +30,8 @@ export default function OTUSection({ match }: OTUSectionProps) {
                 allowedSourceTypes={reference.source_types}
                 otuId={otuId}
                 restrictSourceTypes={reference.restrict_source_types}
-                show={location.state?.addIsolate}
-                onHide={() => history.replace({ state: { addIsolate: false } })}
+                show={Boolean(openAddIsolate)}
+                onHide={() => setOpenAddIsolate("")}
             />
         </CurrentOTUContextProvider>
     );

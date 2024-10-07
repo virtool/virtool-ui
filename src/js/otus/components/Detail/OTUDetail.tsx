@@ -3,8 +3,8 @@ import { LoadingPlaceholder, NotFound, Tabs, TabsLink, ViewHeader, ViewHeaderIco
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
+import { Link, Redirect, Route, Switch, useParams } from "wouter";
 import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
 import OTUSection from "./OTUSection";
@@ -37,8 +37,8 @@ const OTUDetailSubtitle = styled.p`
 /**
  * Displays detailed otu view allowing users to manage otus
  */
-export default function OTUDetail({ match }) {
-    const { otuId, refId } = match.params;
+export default function OTUDetail() {
+    const { otuId, refId } = useParams<{ otuId: string; refId: string }>();
     const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 
@@ -71,15 +71,18 @@ export default function OTUDetail({ match }) {
             </ViewHeader>
 
             <Tabs>
-                <TabsLink to={`/refs/${refId}/otus/${id}/otu`}>OTU</TabsLink>
+                <TabsLink to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</TabsLink>
                 {reference.data_type !== "barcode" && (
-                    <TabsLink to={`/refs/${refId}/otus/${id}/schema`}>Schema</TabsLink>
+                    <TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>Schema</TabsLink>
                 )}
-                <TabsLink to={`/refs/${refId}/otus/${id}/history`}>History</TabsLink>
+                <TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>History</TabsLink>
             </Tabs>
 
             <Switch>
-                <Redirect from="/refs/:refId/otus/:otuId" to={`/refs/${refId}/otus/${id}/otu`} exact />
+                <Route
+                    path="/refs/:refId/otus/:otuId/"
+                    component={() => <Redirect to={`/refs/${refId}/otus/${otuId}/otu`} replace />}
+                />
                 <Route path="/refs/:refId/otus/:otuId/otu" component={OTUSection} />
                 <Route path="/refs/:refId/otus/:otuId/history" component={History} />
                 <Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />

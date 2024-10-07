@@ -5,7 +5,7 @@
 import clsx from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
 import Fuse from "fuse.js";
-import { capitalize, forEach, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
+import { capitalize, forEach, get, replace, sampleSize, split, startCase } from "lodash-es";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
 
@@ -145,21 +145,6 @@ export function formatRoundedDuration(seconds) {
  */
 export function getWorkflowDisplayName(workflow) {
     return get(workflowDisplayNames, workflow, startCase(workflow));
-}
-
-export function routerLocationHasState(state, key, value) {
-    return (
-        Boolean(state.router.location.state) &&
-        (value ? state.router.location.state[key] === value : Boolean(state.router.location.state[key]))
-    );
-}
-
-export function getTargetChange(target) {
-    return {
-        name: target.name,
-        value: target.value,
-        error: `error${upperFirst(target.name)}`,
-    };
 }
 
 /**

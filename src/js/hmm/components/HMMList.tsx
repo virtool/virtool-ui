@@ -12,8 +12,8 @@ import HMMToolbar from "./HMMToolbar";
  * A list of HMMs with filtering options
  */
 export default function HMMList() {
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const [term, setTerm] = useUrlSearchParams<string>("find");
+    const [urlPage] = useUrlSearchParams("page");
+    const [term, setTerm] = useUrlSearchParams("find");
     const { data, isPending } = useListHmms(Number(urlPage) || 1, 25, term);
 
     if (isPending) {

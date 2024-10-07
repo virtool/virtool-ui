@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "wouter";
 import { SidebarHeader, SideBarSection } from "../../../base";
 import { Label } from "../../../labels/types";
 import { LabelFilterItem } from "./LabelFilterItem";

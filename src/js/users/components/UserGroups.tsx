@@ -22,7 +22,7 @@ type UserGroupsType = {
  * A list of user groups
  */
 export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
-    const { data: documents, isPending } = useListGroups();
+    const { data, isPending } = useListGroups();
     const mutation = useUpdateUser();
 
     if (isPending) {
@@ -37,8 +37,8 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
         <div>
             <label>Groups</label>
             <UserGroupsList>
-                {documents.length ? (
-                    map(documents, ({ id, name }) => (
+                {data.length ? (
+                    map(data, ({ id, name }) => (
                         <UserGroup
                             key={id}
                             id={id}

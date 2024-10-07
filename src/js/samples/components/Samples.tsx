@@ -3,7 +3,7 @@ import { FileManager } from "@files/components/FileManager";
 import { FileType } from "@files/types";
 import { Labels } from "@labels/components/Labels";
 import React from "react";
-import { Route, Routes } from "react-router-dom-v5-compat";
+import { Route, Switch } from "wouter";
 import CreateSample from "./Create/CreateSample";
 import SampleDetail from "./Detail/SampleDetail";
 import SamplesSettings from "./SampleSettings";
@@ -39,14 +39,14 @@ function SampleFileManager() {
 export default function Samples() {
     return (
         <Container>
-            <Routes>
-                <Route path="settings" element={<SamplesSettings />} />
-                <Route path="files" element={<SampleFileManager />} />
-                <Route path="/labels" element={<Labels />} />
-                <Route path="/create" element={<CreateSample />} />
-                <Route path="/:sampleId/*" element={<SampleDetail />} />
-                <Route path="/" element={<SamplesList />} />
-            </Routes>
+            <Switch>
+                <Route path="/samples/settings" component={SamplesSettings} />
+                <Route path="/samples/files" component={SampleFileManager} />
+                <Route path="/samples/labels" component={Labels} />
+                <Route path="/samples/create" component={CreateSample} />
+                <Route path="/samples/:sampleId/*?" component={SampleDetail} />
+                <Route path="/samples/" component={SamplesList} />
+            </Switch>
         </Container>
     );
 }

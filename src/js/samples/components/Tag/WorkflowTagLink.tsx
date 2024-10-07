@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 
 const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`

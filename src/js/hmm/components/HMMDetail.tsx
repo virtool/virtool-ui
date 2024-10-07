@@ -2,8 +2,8 @@ import { cn } from "@/utils/utils";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { map } from "lodash-es";
 import React from "react";
-import { useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
+import { useParams } from "wouter";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -33,7 +33,7 @@ const TaxonomyGrid = styled.div`
  * The HMM detailed view
  */
 export default function HMMDetail() {
-    const { hmmId } = useParams();
+    const { hmmId } = useParams<{ hmmId: string }>();
     const { data, isPending, isError } = useFetchHmm(hmmId);
 
     if (isError) {

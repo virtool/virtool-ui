@@ -1,8 +1,8 @@
 import { BoxGroupSection, NoneFoundSection, RelativeTime } from "@base";
 import { ReferenceBuild } from "@references/types";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "wouter";
 
 const StyledLatestBuild = styled(BoxGroupSection)`
     align-items: center;

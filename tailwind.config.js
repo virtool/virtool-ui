@@ -3,6 +3,15 @@ export default {
     prefix: "",
     theme: {
         extend: {
+            colors: {
+                primary: {
+                    DEFAULT: "#3C8786",
+                    dark: "#2B6E74",
+                    darkest: "#1E5661",
+                    light: "#6AB7AF",
+                    lightest: "#E8F5F5",
+                },
+            },
             keyframes: {
                 overlayShow: {
                     from: { opacity: "0" },
