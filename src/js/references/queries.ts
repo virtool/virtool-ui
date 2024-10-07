@@ -38,7 +38,6 @@ export const referenceQueryKeys = {
     all: () => ["reference"] as const,
     lists: () => ["reference", "list"] as const,
     list: (filters: Array<string | number | boolean>) => ["reference", "list", "single", ...filters] as const,
-    infiniteList: (filters: Array<string | number | boolean>) => ["reference", "list", "infinite", ...filters] as const,
     details: () => ["reference", "detail"] as const,
     detail: (refId: string) => ["reference", "detail", refId] as const,
 };
