@@ -19,6 +19,7 @@ import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisFo
 import { SelectedSamples } from "./SelectedSamples";
 import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
+import { includes } from "lodash-es/lodash";
 
 const QuickAnalyzeSelected = styled.span`
     align-self: center;
@@ -69,8 +70,7 @@ export default function QuickAnalyze({
     subtractionOptions,
 }: QuickAnalyzeProps) {
     const search = useSearch();
-    const [workflow, setWorkflow] = useUrlSearchParam("workflow");
-    const [openQuickAnalysis, setOpenQuickAnalysis] = useUrlSearchParam("openQuickAnalysis");
+    const [quickAnalysisType, setQuickAnalysisType] = useUrlSearchParam("quickAnalysisType");
 
     const mode = samples[0]?.library_type === "amplicon" ? "barcode" : "genome";
 
@@ -82,16 +82,15 @@ export default function QuickAnalyze({
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
 
     function onHide() {
-        setOpenQuickAnalysis("");
-        setWorkflow("");
+        setQuickAnalysisType("");
     }
 
     // The dialog should close when all selected samples have been analyzed and deselected.
     useEffect(() => {
-        if (openQuickAnalysis && compatibleSamples.length === 0) {
+        if (quickAnalysisType && compatibleSamples.length === 0) {
             onHide();
         }
-    }, [openQuickAnalysis, compatibleSamples.length]);
+    }, [quickAnalysisType, compatibleSamples.length]);
 
     function getReferenceId(selectedIndex: string) {
         return indexes.find(index => index.reference.name === selectedIndex)?.reference.id;
@@ -116,7 +115,7 @@ export default function QuickAnalyze({
     const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
 
     return (
-        <Dialog open={Boolean(openQuickAnalysis)} onOpenChange={() => onHide()}>
+        <Dialog open={includes(Workflows, quickAnalysisType)} onOpenChange={() => onHide()}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
@@ -124,7 +123,7 @@ export default function QuickAnalyze({
                     <Tabs>
                         {genome.length > 0 && (
                             <TabsLink
-                                to={formatSearchParams("workflow", "genome", search)}
+                                to={formatSearchParams("quickAnalysisType", "genome", search)}
                                 isActive={mode === "genome"}
                             >
                                 <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
@@ -132,7 +131,7 @@ export default function QuickAnalyze({
                         )}
                         {barcode.length > 0 && (
                             <TabsLink
-                                to={formatSearchParams("workflow", "barcode", search)}
+                                to={formatSearchParams("quickAnalysisType", "barcode", search)}
                                 isActive={mode === "barcode"}
                             >
                                 <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
@@ -144,7 +143,11 @@ export default function QuickAnalyze({
                     </Tabs>
                     <SelectedSamples samples={compatibleSamples} />
                     {mode === "genome" && <HMMAlert installed={hmms.status.task?.complete} />}
-                    <WorkflowSelector onSelect={setWorkflow} selected={workflow} workflows={compatibleWorkflows} />
+                    <WorkflowSelector
+                        onSelect={setQuickAnalysisType}
+                        selected={quickAnalysisType}
+                        workflows={compatibleWorkflows}
+                    />
                     <CreateAnalysisForm
                         compatibleIndexes={indexes}
                         defaultSubtractions={[]}
@@ -152,7 +155,7 @@ export default function QuickAnalyze({
                         onSubmit={handleSubmit}
                         sampleCount={samples.length}
                         subtractions={subtractionOptions}
-                        workflow={Workflows[workflow]}
+                        workflow={Workflows[quickAnalysisType]}
                     />
                 </CreateAnalysisDialogContent>
             </DialogPortal>

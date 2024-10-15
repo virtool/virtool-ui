@@ -28,8 +28,7 @@ type CreateAnalysisProps = {
  * Dialog for creating an analysis
  */
 export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) {
-    const [openCreateAnalysis, setOpenCreateAnalysis] = useUrlSearchParam("openCreateAnalysis");
-    const [workflow, setWorkflow] = useUrlSearchParam("workflow");
+    const [createAnalysisType, setCreateAnalysisType] = useUrlSearchParam("createAnalysisType");
 
     const createAnalysis = useCreateAnalysis();
 
@@ -62,20 +61,24 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
     }
 
     function onOpenChange(open) {
-        setOpenCreateAnalysis(open);
+        setCreateAnalysisType(open);
         if (!open) {
-            setWorkflow("");
+            setCreateAnalysisType("");
         }
     }
 
     return (
-        <Dialog open={Boolean(openCreateAnalysis)} onOpenChange={onOpenChange}>
+        <Dialog open={includes(Workflows, createAnalysisType)} onOpenChange={onOpenChange}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
                     <DialogTitle>Analyze</DialogTitle>
                     <HMMAlert installed={hmms.status.task?.complete} />
-                    <WorkflowSelector onSelect={setWorkflow} selected={workflow} workflows={compatibleWorkflows} />
+                    <WorkflowSelector
+                        onSelect={setCreateAnalysisType}
+                        selected={createAnalysisType}
+                        workflows={compatibleWorkflows}
+                    />
                     <CreateAnalysisForm
                         compatibleIndexes={compatibleIndexes}
                         defaultSubtractions={defaultSubtractions}
@@ -83,7 +86,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
                         onSubmit={onSubmit}
                         sampleCount={1}
                         subtractions={subtractionOptions}
-                        workflow={Workflows[workflow]}
+                        workflow={Workflows[createAnalysisType]}
                     />
                 </CreateAnalysisDialogContent>
             </DialogPortal>

@@ -13,8 +13,7 @@ type AnalysesToolbarProps = {
  */
 export default function AnalysesToolbar({ sampleId }: AnalysesToolbarProps) {
     const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
-    const [, setOpenCreateAnalysis] = useUrlSearchParam("openCreateAnalysis");
-    const [, setWorkflow] = useUrlSearchParam("workflow");
+    const [, setCreateAnalysisType] = useUrlSearchParam("createAnalysisType");
 
     return (
         <div className="flex justify-end pb-4">
@@ -22,8 +21,7 @@ export default function AnalysesToolbar({ sampleId }: AnalysesToolbarProps) {
                 <Button
                     color="blue"
                     onClick={() => {
-                        setOpenCreateAnalysis("true");
-                        setWorkflow(Workflows.pathoscope_bowtie);
+                        setCreateAnalysisType(Workflows.pathoscope_bowtie);
                     }}
                 >
                     <span className="font-medium">Create</span>

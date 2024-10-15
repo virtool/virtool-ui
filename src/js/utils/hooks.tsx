@@ -54,8 +54,6 @@ export function formatSearchParams(key: string, value: string, search: string) {
     return `?${params.toString()}`;
 }
 
-type SearchParamValue = string | boolean | number;
-
 /**
  * Updates the URL search parameters by either setting a new value for a given key or removing the key-value pair
  *
@@ -63,7 +61,7 @@ type SearchParamValue = string | boolean | number;
  * @param key - The search parameter key to be managed
  * @param history - The history object
  */
-function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string, navigate, search, location) {
+function updateUrlSearchParams(value: string, key: string, navigate, search, location) {
     const params = new URLSearchParams(search);
 
     if (value) {
