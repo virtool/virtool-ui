@@ -3,7 +3,6 @@ import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useParams } from "wouter";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -18,6 +17,7 @@ import {
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";
+import { useSearchParams } from "@utils/hooks";
 
 const TaxonomyGrid = styled.div`
     display: grid;
@@ -33,7 +33,7 @@ const TaxonomyGrid = styled.div`
  * The HMM detailed view
  */
 export default function HMMDetail() {
-    const { hmmId } = useParams<{ hmmId: string }>();
+    const { hmmId } = useSearchParams<{ hmmId: string }>();
     const { data, isPending, isError } = useFetchHmm(hmmId);
 
     if (isError) {

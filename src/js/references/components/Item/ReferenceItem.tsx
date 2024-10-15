@@ -5,10 +5,9 @@ import { JobState } from "@jobs/types";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
-import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Attribution, BoxGroupSection, Icon } from "../../../base";
-import { ProgressCircle } from "../../../base/ProgressCircle";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Attribution, BoxGroupSection, Icon, Link } from "@base";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { ReferenceMinimal } from "../../types";
 
 const StyledReferenceItem = styled(BoxGroupSection)`

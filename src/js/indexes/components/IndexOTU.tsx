@@ -1,7 +1,6 @@
-import { Badge, BoxGroupSection } from "@base";
+import { Badge, BoxGroupSection, Link } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 
 const StyledIndexOTU = styled(BoxGroupSection)`
     display: flex;

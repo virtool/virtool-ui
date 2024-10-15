@@ -16,10 +16,10 @@ import { IconButton } from "@base/IconButton";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useParams } from "wouter";
 import { useUpdateSourceTypes } from "../../hooks";
 import { referenceQueryKeys, useGetReference, useUpdateReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
+import { useSearchParams } from "@utils/hooks";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
     button {
@@ -62,7 +62,7 @@ const SourceTypesUndo = styled(BoxGroupSection)`
 `;
 
 export function LocalSourceTypes() {
-    const { refId } = useParams<{ refId: string }>();
+    const { refId } = useSearchParams<{ refId: string }>();
 
     const { data, isPending } = useGetReference(refId);
 

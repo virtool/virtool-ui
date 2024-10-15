@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "wouter";
-import { Attribution, BoxGroupSection } from "../../../base";
+import { Attribution, BoxGroupSection, Link } from "@base";
 import { IndexMinimal } from "../../types";
 import { IndexItemDescription } from "./IndexItemDescription";
 import { IndexItemIcon } from "./IndexItemIcon";

@@ -1,8 +1,7 @@
-import { BoxGroup, BoxGroupHeader, BoxGroupTable } from "@base";
+import { BoxGroup, BoxGroupHeader, BoxGroupTable, Link } from "@base";
 import { map } from "lodash";
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 import { workflows } from "../types";
 
 type JobArgsRowProps = {

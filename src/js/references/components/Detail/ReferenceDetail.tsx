@@ -2,7 +2,7 @@ import { ContainerNarrow, LoadingPlaceholder, NotFound } from "@base";
 import IndexDetail from "@indexes/components/IndexDetail";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { Redirect, Route, Switch, useParams } from "wouter";
+import { Redirect, Route, Switch } from "wouter";
 import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/OTUDetail";
 import OTUList from "../../../otus/components/OTUList";
@@ -11,12 +11,13 @@ import ReferenceDetailHeader from "./ReferenceDetailHeader";
 import ReferenceDetailTabs from "./ReferenceDetailTabs";
 import ReferenceManager from "./ReferenceManager";
 import ReferenceSettings from "./ReferenceSettings";
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * The detailed view for a reference
  */
 export default function ReferenceDetail() {
-    const { refId } = useParams<{ refId: string }>();
+    const { refId } = useSearchParams<{ refId: string }>();
     const { data, isPending, isError } = useGetReference(refId);
 
     if (isError) {

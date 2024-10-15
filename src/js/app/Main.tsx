@@ -8,7 +8,7 @@ import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import styled from "styled-components";
-import { Redirect, Route as WouterRoute, Switch as WouterSwitch } from "wouter";
+import { Redirect, Route, Switch } from "wouter";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
@@ -78,17 +78,17 @@ export default function Main() {
 
             <MainContainer>
                 <Suspense fallback={<Fallback />}>
-                    <WouterSwitch>
-                        <WouterRoute path="/" component={() => <Redirect to="/samples" />} />
-                        <WouterRoute path="/administration/*?" component={Administration} />
-                        <WouterRoute path="/account/*?" component={Account} />
-                        <WouterRoute path="/hmm/*?" component={HMM} />
-                        <WouterRoute path="/jobs/*?" component={Jobs} />
-                        <WouterRoute path="/ml/*?" component={ML} />
-                        <WouterRoute path="/refs/*?" component={References} />
-                        <WouterRoute path="/samples/*?" component={Samples} />
-                        <WouterRoute path="/subtractions/*?" component={Subtraction} />
-                    </WouterSwitch>
+                    <Switch>
+                        <Route path="/" component={() => <Redirect to="/samples" />} />
+                        <Route path="/administration/*?" component={Administration} />
+                        <Route path="/account/*?" component={Account} />
+                        <Route path="/hmm/*?" component={HMM} />
+                        <Route path="/jobs/*?" component={Jobs} />
+                        <Route path="/ml/*?" component={ML} />
+                        <Route path="/refs/*?" component={References} />
+                        <Route path="/samples/*?" component={Samples} />
+                        <Route path="/subtractions/*?" component={Subtraction} />
+                    </Switch>
                 </Suspense>
             </MainContainer>
 

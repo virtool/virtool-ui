@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
 import { ThemeProvider } from "styled-components";
-import { Router as Wouter } from "wouter";
+import { Router } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
@@ -61,10 +61,10 @@ export default function App(): React.ReactElement {
     return (
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-                <Wouter hook={useBrowserLocation}>
+                <Router hook={useBrowserLocation}>
                     <GlobalStyles />
                     <ConnectedApp />
-                </Wouter>
+                </Router>
             </QueryClientProvider>
         </ThemeProvider>
     );

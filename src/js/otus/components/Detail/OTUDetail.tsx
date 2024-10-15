@@ -1,14 +1,24 @@
 import { getFontWeight } from "@app/theme";
-import { LoadingPlaceholder, NotFound, Tabs, TabsLink, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
+import {
+    Link,
+    LoadingPlaceholder,
+    NotFound,
+    Tabs,
+    TabsLink,
+    ViewHeader,
+    ViewHeaderIcons,
+    ViewHeaderTitle,
+} from "@base";
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
 import React from "react";
 import styled from "styled-components";
-import { Link, Redirect, Route, Switch, useParams } from "wouter";
+import { Redirect, Route, Switch } from "wouter";
 import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
 import OTUSection from "./OTUSection";
 import Schema from "./Schema/Schema";
+import { useSearchParams } from "@utils/hooks";
 
 const OTUDetailTitle = styled(ViewHeaderTitle)`
     align-items: baseline;
@@ -38,7 +48,7 @@ const OTUDetailSubtitle = styled.p`
  * Displays detailed otu view allowing users to manage otus
  */
 export default function OTUDetail() {
-    const { otuId, refId } = useParams<{ otuId: string; refId: string }>();
+    const { otuId, refId } = useSearchParams<{ otuId: string; refId: string }>();
     const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 

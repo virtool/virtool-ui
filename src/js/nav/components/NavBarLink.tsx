@@ -1,6 +1,6 @@
 import { cn } from "@utils/utils";
 import React from "react";
-import { Link } from "wouter";
+import { Link } from "@base";
 
 const navBarkLinkClassName = cn(
     "text-white",

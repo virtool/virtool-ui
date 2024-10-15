@@ -2,18 +2,18 @@ import { cn } from "@/utils/utils";
 import { BoxGroup, BoxGroupHeader, BoxGroupTable, ContainerNarrow, LoadingPlaceholder } from "@base";
 import Contributors from "@indexes/components/Contributors";
 import React from "react";
-import { useParams } from "wouter";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
 import Targets from "./Targets/Targets";
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * Display and edit information for a reference
  */
 export default function ReferenceManager() {
-    const { refId } = useParams<{ refId: string }>();
+    const { refId } = useSearchParams<{ refId: string }>();
     const { data: reference, isPending } = useGetReference(refId);
 
     if (isPending) {

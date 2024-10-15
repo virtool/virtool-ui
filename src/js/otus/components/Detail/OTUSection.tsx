@@ -1,8 +1,7 @@
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { useParams } from "wouter";
 import { CurrentOTUContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
@@ -12,7 +11,7 @@ import General from "./OTUGeneral";
  * Displays a component for managing the OTU
  */
 export default function OTUSection() {
-    const { otuId, refId } = useParams<{ otuId: string; refId: string }>();
+    const { otuId, refId } = useSearchParams<{ otuId: string; refId: string }>();
     const [openAddIsolate, setOpenAddIsolate] = useUrlSearchParams("openAddIsolate");
 
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);

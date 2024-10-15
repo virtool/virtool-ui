@@ -1,7 +1,6 @@
-import { Icon } from "@base";
+import { Icon, Link } from "@base";
 import { cn } from "@utils/utils";
 import React from "react";
-import { Link } from "wouter";
 
 type SidebarItemProps = {
     /** A list of routes to exclude from the sidebar */

@@ -15,7 +15,7 @@ import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useGetReference } from "@references/queries";
 import React from "react";
 import styled from "styled-components";
-import { useParams } from "wouter";
+import { useSearchParams } from "@utils/hooks";
 
 const IndexDetailSubtitle = styled.div`
     align-items: center;
@@ -30,7 +30,7 @@ const IndexDetailSubtitle = styled.div`
  * The index detailed view
  */
 export default function IndexDetail() {
-    const { indexId, refId } = useParams<{ indexId: string; refId: string }>();
+    const { indexId, refId } = useSearchParams<{ indexId: string; refId: string }>();
     const { data: index, isPending: isPendingIndex, isError } = useFetchIndex(indexId);
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 

@@ -1,8 +1,7 @@
-import { Alert, Icon } from "@base";
+import { Alert, Icon, Link } from "@base";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { Link } from "wouter";
 import { useFindIndexes } from "../queries";
 
 type RebuildAlertProps = {

@@ -1,17 +1,17 @@
 import { LoadingPlaceholder, SectionHeader } from "@base";
 import { sortBy } from "lodash-es";
 import React from "react";
-import { useParams } from "wouter";
 import { useGetReference } from "../../queries";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * The reference settings view allowing users to manage the reference
  */
 export default function ReferenceSettings() {
-    const { refId } = useParams<{ refId: string }>();
+    const { refId } = useSearchParams<{ refId: string }>();
     const { data, isPending } = useGetReference(refId);
 
     if (isPending) {

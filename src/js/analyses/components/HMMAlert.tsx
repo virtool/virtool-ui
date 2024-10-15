@@ -1,7 +1,5 @@
 import React from "react";
-
-import { Link } from "wouter";
-import { Alert, Icon } from "../../base";
+import { Alert, Icon, Link } from "@base";
 
 interface AnalysisHMMAlertProps {
     installed: boolean;

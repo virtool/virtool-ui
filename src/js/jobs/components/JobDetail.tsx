@@ -11,10 +11,10 @@ import { useFetchJob } from "@jobs/queries";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { useParams } from "wouter";
 import { JobArgs } from "./JobArgs";
 import JobError from "./JobError";
 import JobSteps from "./JobSteps";
+import { useSearchParams } from "@utils/hooks";
 
 const JobDetailBadge = styled(ViewHeaderTitleBadge)`
     text-transform: capitalize;
@@ -24,7 +24,7 @@ const JobDetailBadge = styled(ViewHeaderTitleBadge)`
  * The job detailed view
  */
 export default function JobDetail() {
-    const { jobId } = useParams<{ jobId: string }>();
+    const { jobId } = useSearchParams<{ jobId: string }>();
     const { data, isPending, isError } = useFetchJob(jobId);
 
     if (isError) {

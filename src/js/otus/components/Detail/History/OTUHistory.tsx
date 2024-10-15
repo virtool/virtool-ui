@@ -3,13 +3,13 @@ import HistoryList from "@otus/components/Detail/History/HistoryList";
 import { useFetchOTUHistory } from "@otus/queries";
 import { groupBy } from "lodash-es";
 import React from "react";
-import { useParams } from "wouter";
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * Display and manage the history for the OTU
  */
 export default function OTUHistory() {
-    const { otuId } = useParams<{ otuId: string }>();
+    const { otuId } = useSearchParams<{ otuId: string }>();
     const { data, isPending } = useFetchOTUHistory(otuId);
 
     if (isPending) {

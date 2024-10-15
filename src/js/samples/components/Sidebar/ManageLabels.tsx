@@ -1,12 +1,11 @@
 import { fontWeight, getColor, getFontSize } from "@app/theme";
-import { SidebarHeader, SideBarSection } from "@base";
+import { Link, SidebarHeader, SideBarSection } from "@base";
 import { Label } from "@labels/types";
 import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import { SampleMinimal } from "@samples/types";
 import { filter, flatMap, groupBy, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 import { useUpdateLabel } from "../../queries";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";

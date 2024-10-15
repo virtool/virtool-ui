@@ -1,6 +1,6 @@
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { useLocation, useSearch } from "wouter";
+import { useLocation, useParams, useSearch } from "wouter";
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -28,6 +28,13 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
     }, []);
 
     return [ref, size];
+}
+
+/**
+ * Get
+ */
+export function useSearchParams<T>(): T {
+    return useParams<T>();
 }
 
 /**
@@ -82,7 +89,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
 function createUseUrlSearchParams() {
     const cache = { search: "" };
 
-    return function useURLSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
+    return function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
         cache.search = useSearch();
         const [location] = useLocation();
 

@@ -2,10 +2,9 @@ import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import { LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
 import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";
-import { useParams } from "wouter";
 import { useFetchSubtraction } from "../../queries";
 import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";
@@ -21,7 +20,7 @@ function calculateGc(nucleotides: NucleotideComposition) {
  * The subtraction detailed view
  */
 export default function SubtractionDetail() {
-    const { subtractionId } = useParams<{ subtractionId: string }>();
+    const { subtractionId } = useSearchParams<{ subtractionId: string }>();
 
     const { data, isPending, isError } = useFetchSubtraction(subtractionId);
     const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);

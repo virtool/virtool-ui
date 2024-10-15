@@ -13,10 +13,10 @@ import { useFetchSample } from "@samples/queries";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { useParams } from "wouter";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/NuVsViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
+import { useSearchParams } from "@utils/hooks";
 
 const UnsupportedAnalysis = styled(Box)`
     display: flex;
@@ -30,7 +30,7 @@ const UnsupportedAnalysis = styled(Box)`
 
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
-    const { analysisId, sampleId } = useParams<{ analysisId: string; sampleId: string }>();
+    const { analysisId, sampleId } = useSearchParams<{ analysisId: string; sampleId: string }>();
     const { data: analysis, isPending, error } = useGetAnalysis(analysisId);
     const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
 

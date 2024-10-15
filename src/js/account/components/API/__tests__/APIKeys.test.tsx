@@ -60,7 +60,6 @@ describe("<APIKeys />", () => {
             renderWithMemoryRouter(<APIKeys />, "/");
 
             await userEvent.click(await screen.findByRole("link", { name: "Create" }));
-            await new Promise(r => setTimeout(r, 1000));
 
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
             expect(screen.getByText("Name")).toBeInTheDocument();

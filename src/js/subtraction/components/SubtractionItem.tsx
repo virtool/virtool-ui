@@ -1,10 +1,9 @@
 import { JobState } from "@jobs/types";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
-import { getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { BoxGroupSection } from "../../base";
-import { ProgressCircle } from "../../base/ProgressCircle";
+import { BoxGroupSection, Link } from "@base";
+import { getFontSize, getFontWeight, sizes } from "@app/theme";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 

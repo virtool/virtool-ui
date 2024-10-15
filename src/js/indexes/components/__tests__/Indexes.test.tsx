@@ -6,9 +6,9 @@ import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "../../../../tests/fake/indexes";
-import { createFakeReference, mockApiGetReferenceDetail } from "../../../../tests/fake/references";
-import { renderWithMemoryRouter } from "../../../../tests/setup";
+import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "@tests/fake/indexes";
+import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import { renderWithMemoryRouter } from "@tests/setup";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 
 describe("<Indexes />", () => {

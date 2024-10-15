@@ -1,11 +1,10 @@
 import { JobState } from "@jobs/types";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { Attribution, Box, Icon, SlashList } from "../../base";
+import { Attribution, Box, Icon, Link, SlashList } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
 import { getWorkflowDisplayName } from "../../utils/utils";
 import { useRemoveAnalysis } from "../queries";

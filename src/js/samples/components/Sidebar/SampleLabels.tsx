@@ -1,12 +1,11 @@
 import { fontWeight, getColor, getFontSize } from "@app/theme";
-import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
+import { Link, LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
 import { useFetchLabels } from "@labels/queries";
 import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`

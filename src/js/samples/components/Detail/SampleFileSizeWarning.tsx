@@ -1,7 +1,7 @@
-import { Alert, Icon } from "@base";
+import { Alert, Icon, Link } from "@base";
 import { endsWith, some } from "lodash-es";
 import React from "react";
-import { Link, Route, useLocation } from "wouter";
+import { Route, useLocation } from "wouter";
 import { Read } from "../../types";
 
 type SampleFileSizeWarningProps = {

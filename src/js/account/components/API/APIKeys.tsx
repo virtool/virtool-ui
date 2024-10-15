@@ -1,11 +1,11 @@
 import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox } from "@base";
+import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox, Link } from "@base";
 import { formatSearchParams } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Link, useSearch } from "wouter";
+import { useSearch } from "wouter";
 import APIKey from "./APIKey";
 import CreateAPIKey from "./CreateAPIKey";
 
@@ -13,7 +13,6 @@ const APIKeysHeader = styled(Box)`
     align-items: center;
     display: flex;
     font-size: ${getFontSize("lg")};
-    font-size: ${getFontSize("lg")}
     font-weight: ${getFontWeight("thick")};
     margin-bottom: 15px;
 

@@ -1,10 +1,9 @@
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
 import { IndexItem } from "@indexes/components/Item/IndexItem";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
 import { map } from "lodash";
 import { find, get } from "lodash-es/lodash";
 import React from "react";
-import { useParams } from "wouter";
 import { useFindIndexes } from "../queries";
 import RebuildAlert from "./RebuildAlert";
 import RebuildIndex from "./RebuildIndex";
@@ -13,7 +12,7 @@ import RebuildIndex from "./RebuildIndex";
  * Displays a list of reference indexes
  */
 export default function Indexes() {
-    const { refId } = useParams<{ refId: string }>();
+    const { refId } = useSearchParams<{ refId: string }>();
     const [urlPage] = useUrlSearchParams("page");
     const { data, isPending } = useFindIndexes(Number(urlPage) || 1, 25, refId);
 

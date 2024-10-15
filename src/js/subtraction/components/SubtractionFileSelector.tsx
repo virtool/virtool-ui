@@ -1,4 +1,4 @@
-import { InputError, NoneFoundBox } from "@base";
+import { InputError, Link, NoneFoundBox } from "@base";
 import { CompactScrollList } from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { File, FileResponse, FileType } from "@files/types";
@@ -7,7 +7,6 @@ import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/rea
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`

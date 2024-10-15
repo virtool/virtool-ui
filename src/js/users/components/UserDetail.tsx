@@ -2,13 +2,12 @@ import { useCheckAdminRole } from "@administration/hooks";
 import { useFetchUser } from "@administration/queries";
 import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "@base";
+import { Alert, device, Icon, InitialIcon, Link, LoadingPlaceholder } from "@base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
-import { Link, useParams } from "wouter";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import UserGroups from "./UserGroups";
@@ -53,7 +52,7 @@ const UserDetailTitle = styled.div`
  * The detailed view of a user
  */
 export default function UserDetail() {
-    const { userId } = useParams<{ userId: string }>();
+    const { userId } = useSearchParams<{ userId: string }>();
     const { data, isPending } = useFetchUser(userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,

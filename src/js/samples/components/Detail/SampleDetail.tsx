@@ -12,9 +12,9 @@ import {
 import { IconButton } from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
 import React from "react";
-import { Redirect, Route, Switch, useLocation, useParams } from "wouter";
+import { Redirect, Route, Switch, useLocation } from "wouter";
 import Analyses from "../../../analyses/components/Analyses";
 import { SampleDetailFiles } from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
@@ -27,7 +27,7 @@ import Rights from "./SampleRights";
  */
 export default function SampleDetail() {
     const [location] = useLocation();
-    const { sampleId } = useParams<{ sampleId: string }>();
+    const { sampleId } = useSearchParams<{ sampleId: string }>();
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
     const [, setOpenEditSample] = useUrlSearchParams("openEditSample");

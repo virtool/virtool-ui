@@ -1,10 +1,9 @@
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Attribution, BoxGroupSection } from "@base";
+import { Attribution, BoxGroupSection, Link } from "@base";
 import { UserNested } from "@users/types";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 import { JobState, workflows } from "../../types";
 import { JobStatus } from "./JobStatus";
 

@@ -2,9 +2,9 @@ import { LoadingPlaceholder } from "@base";
 import { Quality } from "@quality/components/Quality";
 import React from "react";
 import styled from "styled-components";
-import { useParams } from "wouter";
 import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
+import { useSearchParams } from "@utils/hooks";
 
 const SampleQualityLegacyAlert = styled(LegacyAlert)`
     margin-bottom: 20px;
@@ -19,7 +19,7 @@ const StyledSampleQuality = styled.div`
  * Samples quality view showing charts for bases, composition, and sequences
  */
 export default function SampleQuality() {
-    const { sampleId } = useParams<{ sampleId: string }>();
+    const { sampleId } = useSearchParams<{ sampleId: string }>();
     const { data, isPending } = useFetchSample(sampleId);
 
     if (isPending) {

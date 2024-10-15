@@ -1,11 +1,10 @@
 import { fontWeight, getColor, getFontSize } from "@app/theme";
-import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
+import { Link, LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "wouter";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SubtractionInner = ({ name }) => name;
