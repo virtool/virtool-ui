@@ -5,7 +5,7 @@ import { OTUIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceDataType } from "@references/types";
 import IsolateSequences from "@sequences/components/IsolateSequences";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { formatIsolateName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
@@ -61,8 +61,8 @@ export default function IsolateDetail({
     otuId,
     restrictSourceTypes,
 }: IsolateDetailProps) {
-    const [openEditIsolate, setOpenEditIsolate] = useUrlSearchParams("openEditIsolate");
-    const [openRemoveIsolate, setOpenRemoveIsolate] = useUrlSearchParams("openRemoveIsolate");
+    const [openEditIsolate, setOpenEditIsolate] = useUrlSearchParam("openEditIsolate");
+    const [openRemoveIsolate, setOpenRemoveIsolate] = useUrlSearchParam("openRemoveIsolate");
 
     const mutation = useSetIsolateAsDefault();
 

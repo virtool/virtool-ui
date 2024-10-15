@@ -14,7 +14,7 @@ import {
     SaveButton,
 } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -51,7 +51,7 @@ export default function CloneReference({ references }: CloneReferenceProps) {
         setValue,
     } = useForm<FormValues>();
     const mutation = useCloneReference();
-    const [cloneReference, setCloneReference] = useUrlSearchParams("cloneReference");
+    const [cloneReference, setCloneReference] = useUrlSearchParam("cloneReference");
     const reference = find(references, { id: cloneReference || "" });
 
     useEffect(() => {

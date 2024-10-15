@@ -1,13 +1,13 @@
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { Router } from "wouter";
-import { useUrlSearchParams } from "../hooks";
+import { useUrlSearchParam } from "../hooks";
 import { renderHook } from "@testing-library/react";
 
 describe("useUrlSearchParams", () => {
     it("should render empty with no default value given", () => {
         const key = "find";
-        const { result } = renderHook(() => useUrlSearchParams(key), {
+        const { result } = renderHook(() => useUrlSearchParam(key), {
             wrapper: ({ children }) => <Router>{children}</Router>,
         });
 
@@ -17,7 +17,7 @@ describe("useUrlSearchParams", () => {
     });
 
     it("should render with default value", () => {
-        const { result } = renderHook(() => useUrlSearchParams("find", "test"), {
+        const { result } = renderHook(() => useUrlSearchParam("find", "test"), {
             wrapper: ({ children }) => <Router>{children}</Router>,
         });
 

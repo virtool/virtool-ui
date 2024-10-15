@@ -1,6 +1,6 @@
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import { useListHmms } from "../queries";
@@ -12,8 +12,8 @@ import HMMToolbar from "./HMMToolbar";
  * A list of HMMs with filtering options
  */
 export default function HMMList() {
-    const [urlPage] = useUrlSearchParams("page");
-    const [term, setTerm] = useUrlSearchParams("find");
+    const [urlPage] = useUrlSearchParam("page");
+    const [term, setTerm] = useUrlSearchParam("find");
     const { data, isPending } = useListHmms(Number(urlPage) || 1, 25, term);
 
     if (isPending) {

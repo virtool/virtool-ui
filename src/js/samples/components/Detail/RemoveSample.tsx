@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { RemoveDialog } from "../../../base/RemoveDialog";
 import { useRemoveSample } from "../../queries";
@@ -14,7 +14,7 @@ type RemoveSampleProps = {
  * Displays a dialog for removing a sample
  */
 export default function RemoveSample({ id, name }: RemoveSampleProps) {
-    const [openRemoveSample, setOpenRemoveSample] = useUrlSearchParams("openRemoveSample");
+    const [openRemoveSample, setOpenRemoveSample] = useUrlSearchParam("openRemoveSample");
     const mutation = useRemoveSample();
 
     return (

@@ -3,7 +3,7 @@ import { useEditSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 
 type EditGenomeSequenceProps = {
@@ -27,7 +27,7 @@ export default function EditGenomeSequence({
     refId,
     segments,
 }: EditGenomeSequenceProps) {
-    const [openEditSequence, setOpenEditSequence] = useUrlSearchParams("openEditSequence");
+    const [openEditSequence, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
     const mutation = useEditSequence(otuId);
 
     function onSubmit({ accession, definition, host, sequence, segment }) {

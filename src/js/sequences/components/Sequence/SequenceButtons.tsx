@@ -4,7 +4,7 @@ import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 
@@ -32,8 +32,8 @@ const SequenceHeaderButtons = styled.span`
  * Displays icons for the sequence item to close, edit, or remove
  */
 export default function SequenceButtons({ id, onCollapse }) {
-    const [, setOpenEditSequence] = useUrlSearchParams("openEditSequence");
-    const [, setOpenRemoveSequence] = useUrlSearchParams("removeSequence");
+    const [, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
+    const [, setOpenRemoveSequence] = useUrlSearchParam("removeSequence");
     const { otu, reference } = useCurrentOTUContext();
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify_otu);
     const isolateId = useGetActiveIsolateId(otu);

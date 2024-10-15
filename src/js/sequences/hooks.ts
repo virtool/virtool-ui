@@ -1,7 +1,7 @@
 import { useGetActiveIsolate } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
 import sortSequencesBySegment from "@otus/utils";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { compact, filter, find, map, reject } from "lodash-es";
 import { useCallback, useState } from "react";
 
@@ -35,7 +35,7 @@ export function useExpanded() {
  * @returns The active sequence
  */
 export function useGetActiveSequence() {
-    const [openEditSequence] = useUrlSearchParams("openEditSequence");
+    const [openEditSequence] = useUrlSearchParam("openEditSequence");
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
@@ -58,7 +58,7 @@ export function useGetActiveSequence() {
  * @returns A list of inactive sequences
  */
 export function useGetInactiveSequences() {
-    const [openEditSequence] = useUrlSearchParams("openEditSequence");
+    const [openEditSequence] = useUrlSearchParam("openEditSequence");
 
     const { otu } = useCurrentOTUContext();
 

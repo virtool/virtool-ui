@@ -5,7 +5,7 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { SubtractionFileSelector } from "@subtraction/components/SubtractionFileSelector";
 import { useCreateSubtraction } from "@subtraction/queries";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { Controller } from "react-hook-form";
 
@@ -19,7 +19,7 @@ type FormValues = {
  * A form for creating a subtraction
  */
 export function CreateSubtractionForm() {
-    const [, setOpenCreateSubtraction] = useUrlSearchParams("openCreateSubtraction");
+    const [, setOpenCreateSubtraction] = useUrlSearchParam("openCreateSubtraction");
 
     const {
         hasRestored,

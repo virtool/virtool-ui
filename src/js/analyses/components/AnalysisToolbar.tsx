@@ -1,7 +1,7 @@
 import { Workflows } from "@/analyses/types";
 import { Button } from "@base";
 import { useCheckCanEditSample } from "@samples/hooks";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 
 type AnalysesToolbarProps = {
@@ -13,8 +13,8 @@ type AnalysesToolbarProps = {
  */
 export default function AnalysesToolbar({ sampleId }: AnalysesToolbarProps) {
     const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
-    const [, setOpenCreateAnalysis] = useUrlSearchParams("openCreateAnalysis");
-    const [, setWorkflow] = useUrlSearchParams("workflow");
+    const [, setOpenCreateAnalysis] = useUrlSearchParam("openCreateAnalysis");
+    const [, setWorkflow] = useUrlSearchParam("workflow");
 
     return (
         <div className="flex justify-end pb-4">

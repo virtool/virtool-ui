@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { filter } from "lodash-es";
 import React, { useState } from "react";
 import { useFetchAccount } from "../../../account/queries";
@@ -11,7 +11,7 @@ const renderRow = roles => item => <AdministratorItem key={item.id} user={item} 
 
 export const ManageAdministrators = () => {
     const [term, setTerm] = useState("");
-    const [pageParam] = useUrlSearchParams("page");
+    const [pageParam] = useUrlSearchParam("page");
 
     const page = parseInt(pageParam) || 1;
 

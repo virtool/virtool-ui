@@ -1,5 +1,5 @@
 import { useUpdateReference } from "@references/queries";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find, map, reject } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -28,8 +28,8 @@ type TargetsProps = {
 export default function Targets({ reference }: TargetsProps) {
     const { data_type, targets, id } = reference;
 
-    const [openAddTarget, setOpenAddTarget] = useUrlSearchParams("openAddTarget");
-    const [editTarget, setEditTarget] = useUrlSearchParams("openEditTarget");
+    const [openAddTarget, setOpenAddTarget] = useUrlSearchParam("openAddTarget");
+    const [editTarget, setEditTarget] = useUrlSearchParam("openEditTarget");
 
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);
     const { mutation } = useUpdateReference(id);

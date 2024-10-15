@@ -3,7 +3,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { referenceQueryKeys, useUpdateReferenceMember } from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
 import { MemberRight } from "./MemberRight";
@@ -20,7 +20,7 @@ type EditReferenceMemberProps = {
  * Displays a dialog to modify rights for a member
  */
 export default function EditReferenceMember({ noun, refId, member }: EditReferenceMemberProps) {
-    const [openEdit, setOpenEdit] = useUrlSearchParams(`openEdit${noun}`);
+    const [openEdit, setOpenEdit] = useUrlSearchParam(`openEdit${noun}`);
     const mutation = useUpdateReferenceMember(noun);
     const queryClient = useQueryClient();
 

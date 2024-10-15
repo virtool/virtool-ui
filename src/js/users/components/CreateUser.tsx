@@ -1,7 +1,7 @@
 import { useCreateUser } from "@administration/queries";
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { CreateUserForm } from "./CreateUserForm";
 
@@ -19,7 +19,7 @@ type NewUser = {
  */
 export default function CreateUser() {
     const mutation = useCreateUser();
-    const [openCreateUser, setOpenCreateUser] = useUrlSearchParams("openCreateUser");
+    const [openCreateUser, setOpenCreateUser] = useUrlSearchParam("openCreateUser");
 
     function handleSubmit({ handle, password, forceReset }: NewUser) {
         mutation.mutate(

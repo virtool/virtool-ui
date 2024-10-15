@@ -1,5 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { pick } from "lodash";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -27,7 +27,7 @@ type EditSampleProps = {
  * Displays a dialog for editing the sample
  */
 export default function EditSample({ sample }: EditSampleProps) {
-    const [openEditSample, setOpenEditSample] = useUrlSearchParams("openEditSample");
+    const [openEditSample, setOpenEditSample] = useUrlSearchParam("openEditSample");
     const mutation = useUpdateSample(sample.id);
 
     const { register, handleSubmit } = useForm({

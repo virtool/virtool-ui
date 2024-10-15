@@ -3,7 +3,7 @@ import { useAddSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { compact, map } from "lodash-es/lodash";
 import React from "react";
 
@@ -19,7 +19,7 @@ type AddGenomeSequenceProps = {
  * Displays dialog to add a genome sequence
  */
 export default function AddGenomeSequence({ isolateId, otuId, refId, schema, sequences }: AddGenomeSequenceProps) {
-    const [openAddSequence, setOpenAddSequence] = useUrlSearchParams("openAddSequence");
+    const [openAddSequence, setOpenAddSequence] = useUrlSearchParam("openAddSequence");
     const mutation = useAddSequence(otuId);
 
     const referencedSegmentNames = compact(map(sequences, "segment"));

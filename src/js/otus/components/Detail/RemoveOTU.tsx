@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { useLocation } from "wouter";
 import { RemoveDialog } from "../../../base/RemoveDialog";
@@ -15,7 +15,7 @@ type RemoveOTUProps = {
  */
 export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
     const [, navigate] = useLocation();
-    const [openRemoveOTU, setOpenRemoveOTU] = useUrlSearchParams("openRemoveOTU");
+    const [openRemoveOTU, setOpenRemoveOTU] = useUrlSearchParam("openRemoveOTU");
     const mutation = useRemoveOTU();
 
     function handleConfirm() {

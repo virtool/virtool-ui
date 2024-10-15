@@ -1,6 +1,6 @@
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
 import { IndexItem } from "@indexes/components/Item/IndexItem";
-import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import { find, get } from "lodash-es/lodash";
 import React from "react";
@@ -13,7 +13,7 @@ import RebuildIndex from "./RebuildIndex";
  */
 export default function Indexes() {
     const { refId } = useSearchParams<{ refId: string }>();
-    const [urlPage] = useUrlSearchParams("page");
+    const [urlPage] = useUrlSearchParam("page");
     const { data, isPending } = useFindIndexes(Number(urlPage) || 1, 25, refId);
 
     if (isPending) {

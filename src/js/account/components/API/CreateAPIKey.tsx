@@ -19,7 +19,7 @@ import {
 } from "@base";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -64,7 +64,7 @@ export default function CreateAPIKey() {
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
-    const [openCreateKey, setOpenCreateKey] = useUrlSearchParams("openCreateKey");
+    const [openCreateKey, setOpenCreateKey] = useUrlSearchParam("openCreateKey");
 
     const {
         formState: { errors },

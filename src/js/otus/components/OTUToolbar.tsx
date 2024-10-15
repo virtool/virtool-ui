@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React, { ChangeEvent } from "react";
 import { Button, InputSearch, Toolbar } from "../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
@@ -19,7 +19,7 @@ type OTUToolbarProps = {
  */
 export default function OTUToolbar({ term, onChange, refId, remotesFrom }: OTUToolbarProps) {
     const { hasPermission: canCreate } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
-    const [, setOpenCreateOtu] = useUrlSearchParams("openCreateOTU");
+    const [, setOpenCreateOtu] = useUrlSearchParam("openCreateOTU");
 
     return (
         <Toolbar>

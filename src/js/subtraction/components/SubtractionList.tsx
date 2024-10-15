@@ -1,6 +1,6 @@
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import { useFindSubtractions } from "../queries";
@@ -11,8 +11,8 @@ import SubtractionToolbar from "./SubtractionToolbar";
  * A list of subtractions.
  */
 export default function SubtractionList() {
-    const [term, setTerm] = useUrlSearchParams("find", "");
-    const [urlPage] = useUrlSearchParams("page", "1");
+    const [term, setTerm] = useUrlSearchParam("find", "");
+    const [urlPage] = useUrlSearchParam("page", "1");
 
     const { data, isPending } = useFindSubtractions(Number(urlPage) || 1, 25, term);
 

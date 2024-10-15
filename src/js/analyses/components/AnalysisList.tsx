@@ -1,7 +1,7 @@
 import { useListHmms } from "@/hmm/queries";
 import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
 import { useFetchSample } from "@samples/queries";
-import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { useListAnalyses } from "../queries";
 import { AnalysisMinimal } from "../types";
@@ -21,7 +21,7 @@ function renderRow() {
  */
 export default function AnalysesList() {
     const { sampleId } = useSearchParams<{ sampleId: string }>();
-    const [urlPage] = useUrlSearchParams("page");
+    const [urlPage] = useUrlSearchParam("page");
     const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
     const { isPending: isPendingSample } = useFetchSample(sampleId);

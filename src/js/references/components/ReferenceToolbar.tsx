@@ -1,14 +1,14 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import { InputSearch, LinkButton, Toolbar } from "@base";
 import { Permission } from "@groups/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 
 /**
  * A toolbar which allows the references to be filtered by name
  */
 export default function ReferenceToolbar() {
-    const [term, setTerm] = useUrlSearchParams("find", "");
+    const [term, setTerm] = useUrlSearchParam("find", "");
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
     return (

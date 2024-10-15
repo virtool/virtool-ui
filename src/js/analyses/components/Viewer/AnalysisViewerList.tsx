@@ -2,7 +2,7 @@ import { useGetActiveHit } from "@/analyses/hooks";
 import { FormattedNuvsHit } from "@/analyses/types";
 import { getBorder, getFontSize } from "@app/theme";
 import { Key } from "@base";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { findIndex } from "lodash-es";
 import React from "react";
 import { FixedSizeList } from "react-window";
@@ -56,7 +56,7 @@ type AnalysisViewerListProps = {
  * Displays a list of hits for an analysis
  */
 export default function AnalysisViewerList({ children, itemSize, matches, total, width }: AnalysisViewerListProps) {
-    const [activeHit, setActiveHit] = useUrlSearchParams("activeHit");
+    const [activeHit, setActiveHit] = useUrlSearchParam("activeHit");
     const activeId = Number(activeHit);
     const active = useGetActiveHit(matches);
 

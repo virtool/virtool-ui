@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -46,8 +46,8 @@ type ReferenceMembersProps = {
  * Displays a component for managing who can access a reference by users or groups
  */
 export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
-    const [openAdd, setOpenAdd] = useUrlSearchParams(`openAdd${noun}`);
-    const [openEdit, setOpenEdit] = useUrlSearchParams(`openEdit${noun}`);
+    const [openAdd, setOpenAdd] = useUrlSearchParam(`openAdd${noun}`);
+    const [openEdit, setOpenEdit] = useUrlSearchParam(`openEdit${noun}`);
 
     const mutation = useRemoveReferenceUser(refId, noun);
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);

@@ -1,5 +1,5 @@
 import { Workflows } from "@/analyses/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "@app/theme";
@@ -87,8 +87,8 @@ type SampleItemProps = {
  * A condensed sample item for use in a list of samples
  */
 export default function SampleItem({ sample, checked, handleSelect, selectOnQuickAnalyze }: SampleItemProps) {
-    const [, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
-    const [, setWorkflow] = useUrlSearchParams("workflow");
+    const [, setOpenQuickAnalysis] = useUrlSearchParam("openQuickAnalysis");
+    const [, setWorkflow] = useUrlSearchParam("workflow");
     function onQuickAnalyze() {
         setOpenQuickAnalysis("true");
         setWorkflow(Workflows.pathoscope_bowtie);

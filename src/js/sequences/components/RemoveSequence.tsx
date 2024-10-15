@@ -1,7 +1,7 @@
 import { RemoveDialog } from "@base/RemoveDialog";
 import { useRemoveSequence } from "@otus/queries";
 import { OTUSequence } from "@otus/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";
 import React from "react";
 
@@ -16,7 +16,7 @@ type RemoveSequenceProps = {
  * Displays a dialog for removing a sequence
  */
 export default function RemoveSequence({ isolateName, isolateId, otuId, sequences }: RemoveSequenceProps) {
-    const [removeSequenceId, setRemoveSequence] = useUrlSearchParams("removeSequence");
+    const [removeSequenceId, setRemoveSequence] = useUrlSearchParam("removeSequence");
     const mutation = useRemoveSequence(otuId);
     const sequence = find(sequences, { id: removeSequenceId });
 

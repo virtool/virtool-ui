@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { useCreateOTU } from "../queries";
 import { OTUForm } from "./OTUForm";
@@ -13,7 +13,7 @@ type CreateOTUProps = {
  * Displays a dialog to create an OTU
  */
 export default function CreateOTU({ refId }: CreateOTUProps) {
-    const [openCreateOtu, setOpenCreateOtu] = useUrlSearchParams("openCreateOTU");
+    const [openCreateOtu, setOpenCreateOtu] = useUrlSearchParam("openCreateOTU");
 
     const mutation = useCreateOTU(refId);
 

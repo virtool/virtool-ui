@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";
@@ -33,8 +33,8 @@ type SampleSelectionToolbarProps = {
  * A toolbar allowing users to create an analysis for selected samples
  */
 export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToolbarProps) {
-    const [, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
-    const [, setWorkflow] = useUrlSearchParams("workflow");
+    const [, setOpenQuickAnalysis] = useUrlSearchParam("openQuickAnalysis");
+    const [, setWorkflow] = useUrlSearchParam("workflow");
 
     function onQuickAnalyze() {
         setOpenQuickAnalysis("true");

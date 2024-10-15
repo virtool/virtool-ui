@@ -1,7 +1,7 @@
 import { RemoveDialog } from "@base/RemoveDialog";
 import { useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { reject } from "lodash-es";
 import React from "react";
 
@@ -17,7 +17,7 @@ type RemoveSegmentProps = {
  * Displays a dialog for removing a segment
  */
 export default function RemoveSegment({ abbreviation, name, otuId, schema }: RemoveSegmentProps) {
-    const [removeSegmentName, setRemoveSegmentName] = useUrlSearchParams("removeSegmentName");
+    const [removeSegmentName, setRemoveSegmentName] = useUrlSearchParam("removeSegmentName");
     const mutation = useUpdateOTU(otuId);
 
     function handleSubmit() {

@@ -2,7 +2,7 @@ import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
 import { IconButton } from "@base/IconButton";
 import { JobState } from "@jobs/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "@app/theme";
@@ -51,7 +51,7 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ reference }: ReferenceItemProps) {
-    const [, setCloneReference] = useUrlSearchParams("cloneReference");
+    const [, setCloneReference] = useUrlSearchParam("cloneReference");
     const { id, data_type, name, organism, user, created_at, task } = reference;
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 

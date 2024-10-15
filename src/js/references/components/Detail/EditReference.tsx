@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, SaveButton } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Reference, ReferenceDataType } from "../../types";
@@ -23,7 +23,7 @@ type EditReferenceProps = {
  * A dialog for editing a reference
  */
 export default function EditReference({ detail }: EditReferenceProps) {
-    const [openEditReference, setOpenEditReference] = useUrlSearchParams("openEditReference");
+    const [openEditReference, setOpenEditReference] = useUrlSearchParam("openEditReference");
     const {
         formState: { errors },
         handleSubmit,

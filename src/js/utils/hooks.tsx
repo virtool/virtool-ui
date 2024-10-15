@@ -31,11 +31,9 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
 }
 
 /**
- * Get
+ * Aliased useParams from wouter
  */
-export function useSearchParams<T>(): T {
-    return useParams<T>();
-}
+export const useSearchParams = useParams;
 
 /**
  * create a modified search param string with an updated key:value based on the existing search string
@@ -86,7 +84,7 @@ function updateUrlSearchParams<T extends SearchParamValue>(value: T, key: string
     return search;
 }
 
-function createUseUrlSearchParams() {
+function createUseUrlSearchParam() {
     const cache = { search: "" };
 
     return function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
@@ -114,7 +112,7 @@ function createUseUrlSearchParams() {
     };
 }
 
-export const useUrlSearchParams = createUseUrlSearchParams();
+export const useUrlSearchParam = createUseUrlSearchParam();
 
 /**
  * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair

@@ -12,7 +12,7 @@ import {
     Logo,
 } from "@base";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { useRootQuery } from "@wall/queries";
 import React from "react";
 import styled from "styled-components";
@@ -79,7 +79,7 @@ type NavBarProps = {
  * Displays the navigation bar with routes to available components
  */
 export default function NavBar({ administrator_role, handle }: NavBarProps) {
-    const [, setOpenDev] = useUrlSearchParams("openDev");
+    const [, setOpenDev] = useUrlSearchParam("openDev");
     const mutation = useLogout();
     const { data } = useRootQuery();
 

@@ -5,7 +5,7 @@ import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
 import { useFindModels } from "@ml/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
-import { useUrlSearchParams, useUrlSearchParamsList } from "@utils/hooks";
+import { useUrlSearchParam, useUrlSearchParamsList } from "@utils/hooks";
 import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
 import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
@@ -37,8 +37,8 @@ const StyledSamplesList = styled.div`
  * A list of samples with filtering
  */
 export default function SamplesList() {
-    const [urlPage] = useUrlSearchParams("page");
-    const [term, setTerm] = useUrlSearchParams("find");
+    const [urlPage] = useUrlSearchParam("page");
+    const [term, setTerm] = useUrlSearchParam("find");
     const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
     const [filterWorkflows, setFilterWorkflows] = useUrlSearchParamsList("workflows");
 

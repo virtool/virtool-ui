@@ -1,6 +1,6 @@
 import { useUpdateOTU } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../base";
 import { OTUForm } from "../OTUForm";
@@ -15,7 +15,7 @@ type EditOTUProps = {
  * Displays a dialog for editing an OTU
  */
 export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
-    const [openEditOTU, setOpenEditOTU] = useUrlSearchParams("openEditOTU");
+    const [openEditOTU, setOpenEditOTU] = useUrlSearchParam("openEditOTU");
 
     const mutation = useUpdateOTU(otuId);
 

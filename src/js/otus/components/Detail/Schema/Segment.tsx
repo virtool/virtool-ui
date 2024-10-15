@@ -1,7 +1,7 @@
 import { BoxGroupSection, Label } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { OTUSegment } from "@otus/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
@@ -33,8 +33,8 @@ type SegmentProps = {
  * A condensed segment item for use in a list of segments
  */
 export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, segment }: SegmentProps) {
-    const [, setRemoveSegmentName] = useUrlSearchParams("removeSegmentName");
-    const [, setEditSegmentName] = useUrlSearchParams("editSegmentName");
+    const [, setRemoveSegmentName] = useUrlSearchParam("removeSegmentName");
+    const [, setEditSegmentName] = useUrlSearchParam("editSegmentName");
 
     return (
         <StyledSegment>

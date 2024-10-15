@@ -3,7 +3,7 @@ import EditSegment from "@otus/components/Detail/Schema/EditSegment";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
@@ -26,7 +26,7 @@ export default function Schema() {
         ReferenceRight.modify_otu,
     );
 
-    const [, setOpenAddSegment] = useUrlSearchParams("openAddSegment");
+    const [, setOpenAddSegment] = useUrlSearchParam("openAddSegment");
 
     const { data, isPending } = useFetchOTU(otuId);
     const mutation = useUpdateOTU(otuId);

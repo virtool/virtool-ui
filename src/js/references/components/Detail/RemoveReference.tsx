@@ -1,6 +1,6 @@
 import { RemoveBanner } from "@base";
 import { RemoveDialog } from "@base/RemoveDialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React, { useCallback } from "react";
 import { useLocation } from "wouter";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
@@ -17,7 +17,7 @@ type RemoveReferenceProps = {
  * Displays a banner for removing a reference
  */
 export default function RemoveReference({ id, name }: RemoveReferenceProps) {
-    const [openRemoveReference, setOpenRemoveReference] = useUrlSearchParams("openRemoveReference");
+    const [openRemoveReference, setOpenRemoveReference] = useUrlSearchParam("openRemoveReference");
     const [, navigate] = useLocation();
 
     const { hasPermission: canRemove } = useCheckReferenceRight(id, ReferenceRight.remove);

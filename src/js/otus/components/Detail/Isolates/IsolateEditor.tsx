@@ -4,7 +4,7 @@ import { ScrollArea } from "@base/ScrollArea";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -42,8 +42,8 @@ const AddIsolateLink = styled.a`
 export default function IsolateEditor() {
     const { otu, reference } = useCurrentOTUContext();
     const { isolates } = otu;
-    const [activeIsolateId] = useUrlSearchParams("activeIsolate", isolates[0]?.id);
-    const [, setOpenAddIsolate] = useUrlSearchParams("openAddIsolate");
+    const [activeIsolateId] = useUrlSearchParam("activeIsolate", isolates[0]?.id);
+    const [, setOpenAddIsolate] = useUrlSearchParam("openAddIsolate");
     const { data_type, restrict_source_types, source_types } = reference;
 
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);

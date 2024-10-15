@@ -1,6 +1,6 @@
 import { BoxGroup, ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
 import { useGetReference } from "@references/queries";
-import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import RebuildAlert from "../../indexes/components/RebuildAlert";
@@ -14,8 +14,8 @@ import OTUToolbar from "./OTUToolbar";
  */
 export default function OTUList() {
     const { refId } = useSearchParams<{ refId: string }>();
-    const [term, setTerm] = useUrlSearchParams("find");
-    const [urlPage] = useUrlSearchParams("page");
+    const [term, setTerm] = useUrlSearchParam("find");
+    const [urlPage] = useUrlSearchParam("page");
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
     const { data: otus, isPending: isPendingOTUs } = useListOTUs(refId, Number(urlPage) || 1, 25, term);
 

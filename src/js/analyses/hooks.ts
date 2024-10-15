@@ -1,4 +1,4 @@
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { createFuse } from "@utils/utils";
 import { find, map, reject, sortBy } from "lodash-es/lodash";
 import { useMemo } from "react";
@@ -63,7 +63,7 @@ export function useSortAndFilterNuVsHits(detail) {
 }
 
 export function useGetActiveHit(matches) {
-    const [activeHit, setActiveHit] = useUrlSearchParams("activeHit");
+    const [activeHit, setActiveHit] = useUrlSearchParam("activeHit");
 
     if (activeHit !== null) {
         const hit = find(matches, { id: Number(activeHit) });

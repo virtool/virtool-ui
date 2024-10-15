@@ -4,7 +4,7 @@ import { OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReferenceTarget } from "@references/types";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 
 type EditBarcodeSequence = {
@@ -19,7 +19,7 @@ type EditBarcodeSequence = {
  * Displays dialog to edit a barcode sequence
  */
 export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, targets }: EditBarcodeSequence) {
-    const [openEditSequence, setOpenEditSequence] = useUrlSearchParams("openEditSequence");
+    const [openEditSequence, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
     const mutation = useEditSequence(otuId);
 
     function onSubmit({ accession, definition, host, sequence, target }) {

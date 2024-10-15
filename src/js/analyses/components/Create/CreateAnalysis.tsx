@@ -1,6 +1,6 @@
 import { Workflows } from "@/analyses/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { groupBy, map, maxBy } from "lodash-es";
 import { includes, keysIn } from "lodash-es/lodash";
 import React from "react";
@@ -28,8 +28,8 @@ type CreateAnalysisProps = {
  * Dialog for creating an analysis
  */
 export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) {
-    const [openCreateAnalysis, setOpenCreateAnalysis] = useUrlSearchParams("openCreateAnalysis");
-    const [workflow, setWorkflow] = useUrlSearchParams("workflow");
+    const [openCreateAnalysis, setOpenCreateAnalysis] = useUrlSearchParam("openCreateAnalysis");
+    const [workflow, setWorkflow] = useUrlSearchParam("workflow");
 
     const createAnalysis = useCreateAnalysis();
 

@@ -5,7 +5,7 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import { Alert, device, Icon, InitialIcon, Link, LoadingPlaceholder } from "@base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
-import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import Password from "./Password";
@@ -58,8 +58,8 @@ export default function UserDetail() {
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
 
-    const [openActivateUser, setOpenActivateUser] = useUrlSearchParams("openActivateUser");
-    const [openDeactivateUser, setOpenDeactivateUser] = useUrlSearchParams("openDeactivateUser");
+    const [openActivateUser, setOpenActivateUser] = useUrlSearchParam("openActivateUser");
+    const [openDeactivateUser, setOpenDeactivateUser] = useUrlSearchParam("openDeactivateUser");
 
     if (isPending) {
         return <LoadingPlaceholder />;

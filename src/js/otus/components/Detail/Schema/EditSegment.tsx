@@ -3,7 +3,7 @@ import SegmentForm from "@otus/components/Detail/Schema/SegmentForm";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import { find } from "lodash-es";
 import React from "react";
@@ -26,7 +26,7 @@ type EditSegmentProps = {
  * Displays a dialog to edit a segment
  */
 export default function EditSegment({ abbreviation, otuId, name, schema }: EditSegmentProps) {
-    const [editSegmentName, setEditSegmentName] = useUrlSearchParams("editSegmentName");
+    const [editSegmentName, setEditSegmentName] = useUrlSearchParam("editSegmentName");
     const mutation = useUpdateOTU(otuId);
 
     const segment = find(schema, { name: editSegmentName });

@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "@base";
 import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import RebuildHistory from "./History";
 import RebuildIndexError from "./RebuildIndexError";
@@ -14,7 +14,7 @@ type RebuildIndexProps = {
  * Displays a dialog to rebuild an index
  */
 export default function RebuildIndex({ refId }: RebuildIndexProps) {
-    const [openRebuild, setOpenRebuild] = useUrlSearchParams("openRebuild");
+    const [openRebuild, setOpenRebuild] = useUrlSearchParam("openRebuild");
     const { data, isPending } = useFetchUnbuiltChanges(refId);
     const mutation = useCreateIndex();
 

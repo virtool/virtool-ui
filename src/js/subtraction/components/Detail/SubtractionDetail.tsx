@@ -2,7 +2,7 @@ import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import { LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
 import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
-import { useSearchParams, useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";
 import { useFetchSubtraction } from "../../queries";
@@ -25,8 +25,8 @@ export default function SubtractionDetail() {
     const { data, isPending, isError } = useFetchSubtraction(subtractionId);
     const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
 
-    const [openRemoveSubtraction, setOpenRemoveSubtraction] = useUrlSearchParams("openRemoveSubtraction");
-    const [openEditSubtraction, setOpenEditSubtraction] = useUrlSearchParams("openEditSubtraction");
+    const [openRemoveSubtraction, setOpenRemoveSubtraction] = useUrlSearchParam("openRemoveSubtraction");
+    const [openEditSubtraction, setOpenEditSubtraction] = useUrlSearchParam("openEditSubtraction");
 
     if (isError) {
         return <NotFound />;

@@ -1,7 +1,7 @@
 import { Dropdown, DropdownButton, DropdownMenuContent, DropdownMenuDownload, Icon, InputSearch, Toolbar } from "@base";
 import { ButtonToggle } from "@base/ButtonToggle";
 import { Tooltip } from "@base/Tooltip";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { AnalysisViewerSort } from "../Viewer/Sort";
@@ -18,12 +18,12 @@ type PathoscopeToolbarProps = {
 
 /** A selection of filters and toggles for pathoscope data presentation */
 export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
-    const [filterOTUs, setFilterOtus] = useUrlSearchParams("filterOtus", "true");
-    const [filterIsolates, setFilterIsolates] = useUrlSearchParams("filterIsolates", "true");
-    const [find, setFind] = useUrlSearchParams("find", "");
-    const [showReads, setShowReads] = useUrlSearchParams("reads", "");
-    const [sortKey, setSortKey] = useUrlSearchParams("sort", "coverage");
-    const [sortDesc, setSortDesc] = useUrlSearchParams("sortDesc", "true");
+    const [filterOTUs, setFilterOtus] = useUrlSearchParam("filterOtus", "true");
+    const [filterIsolates, setFilterIsolates] = useUrlSearchParam("filterIsolates", "true");
+    const [find, setFind] = useUrlSearchParam("find", "");
+    const [showReads, setShowReads] = useUrlSearchParam("reads", "");
+    const [sortKey, setSortKey] = useUrlSearchParam("sort", "coverage");
+    const [sortDesc, setSortDesc] = useUrlSearchParam("sortDesc", "true");
 
     return (
         <StyledPathoscopeToolbar>

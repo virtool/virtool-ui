@@ -3,7 +3,7 @@ import { AdministratorRoles } from "@administration/types";
 import { Alert, Icon, InputSearch, LoadingPlaceholder } from "@base";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";
@@ -13,7 +13,7 @@ import { UsersList } from "./UsersList";
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
-    const [status, setStatus] = useUrlSearchParams("status", "active");
+    const [status, setStatus] = useUrlSearchParam("status", "active");
     const { hasPermission, isPending } = useCheckAdminRole(AdministratorRoles.USERS);
 
     if (isPending) {

@@ -5,7 +5,7 @@ import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { SubtractionShortlist } from "@subtraction/types";
-import { formatSearchParams, useUrlSearchParams } from "@utils/hooks";
+import { formatSearchParams, useUrlSearchParam } from "@utils/hooks";
 import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
 
@@ -69,8 +69,8 @@ export default function QuickAnalyze({
     subtractionOptions,
 }: QuickAnalyzeProps) {
     const search = useSearch();
-    const [workflow, setWorkflow] = useUrlSearchParams("workflow");
-    const [openQuickAnalysis, setOpenQuickAnalysis] = useUrlSearchParams("openQuickAnalysis");
+    const [workflow, setWorkflow] = useUrlSearchParam("workflow");
+    const [openQuickAnalysis, setOpenQuickAnalysis] = useUrlSearchParam("openQuickAnalysis");
 
     const mode = samples[0]?.library_type === "amplicon" ? "barcode" : "genome";
 

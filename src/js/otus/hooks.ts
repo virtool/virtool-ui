@@ -1,5 +1,5 @@
 import { OTU } from "@otus/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";
 
 /**
@@ -9,7 +9,7 @@ import { find } from "lodash-es";
  * @returns The active isolate
  */
 export function useGetActiveIsolate(otu: OTU) {
-    const [activeIsolate] = useUrlSearchParams("activeIsolate");
+    const [activeIsolate] = useUrlSearchParam("activeIsolate");
 
     const activeIsolateId = activeIsolate || otu.isolates[0]?.id;
     return otu.isolates.length ? find(otu.isolates, { id: activeIsolateId }) : null;
@@ -22,7 +22,7 @@ export function useGetActiveIsolate(otu: OTU) {
  * @returns The unique identifier of the active isolate
  */
 export function useGetActiveIsolateId(otu: OTU) {
-    const [activeIsolate] = useUrlSearchParams("activeIsolate");
+    const [activeIsolate] = useUrlSearchParam("activeIsolate");
 
     return activeIsolate || otu.isolates[0]?.id;
 }

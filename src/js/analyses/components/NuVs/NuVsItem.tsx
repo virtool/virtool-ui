@@ -1,7 +1,7 @@
 import { AnalysisViewerItem } from "@/analyses/components/Viewer/Item";
 import { FormattedNuvsHit } from "@/analyses/types";
 import { Badge } from "@base";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";
@@ -29,7 +29,7 @@ type NuVsItemProps = {
  * A condensed NuVs item for use in a list of NuVs
  */
 export default function NuVsItem({ hit }: NuVsItemProps) {
-    const [activeHit, setActiveHit] = useUrlSearchParams("activeHit");
+    const [activeHit, setActiveHit] = useUrlSearchParam("activeHit");
 
     const { id, e, annotatedOrfCount, sequence, index } = hit;
 

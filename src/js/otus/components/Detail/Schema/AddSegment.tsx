@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import SegmentForm from "./SegmentForm";
 
@@ -24,7 +24,7 @@ type AddSegmentProps = {
  * Displays a dialog for adding a segment
  */
 export default function AddSegment({ otuId, name, abbreviation, schema }: AddSegmentProps) {
-    const [openAddSegment, setOpenAddSegment] = useUrlSearchParams("openAddSegment");
+    const [openAddSegment, setOpenAddSegment] = useUrlSearchParam("openAddSegment");
     const mutation = useUpdateOTU(otuId);
 
     function handleSubmit({ segmentName, molecule, required }: FormValues) {

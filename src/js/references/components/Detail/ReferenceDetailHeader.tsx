@@ -1,5 +1,5 @@
 import { IconButton } from "@base/IconButton";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { endsWith } from "lodash-es";
 import React from "react";
 import { useLocation } from "wouter";
@@ -26,7 +26,7 @@ export default function ReferenceDetailHeader({
     userHandle,
 }: ReferenceDetailHeaderProps) {
     const [location] = useLocation();
-    const [, setOpenEditReference] = useUrlSearchParams("openEditReference");
+    const [, setOpenEditReference] = useUrlSearchParam("openEditReference");
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
     const showIcons = endsWith(location, "/manage");

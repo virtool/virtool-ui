@@ -1,5 +1,5 @@
 import { FormattedPathoscopeHit } from "@/analyses/types";
-import { ScrollSyncContext, useUrlSearchParams } from "@utils/hooks";
+import { ScrollSyncContext, useUrlSearchParam } from "@utils/hooks";
 import { filter, map, maxBy } from "lodash-es";
 import React from "react";
 import { PathoscopeIsolate } from "./Isolate";
@@ -13,8 +13,8 @@ type PathoscopeDetailProps = {
 
 /** Detailed coverage for a single OTU hits from pathoscope analysis*/
 export function PathoscopeDetail({ hit, mappedCount }: PathoscopeDetailProps) {
-    const [filterIsolates] = useUrlSearchParams("filterIsolates");
-    const [showReads] = useUrlSearchParams("reads");
+    const [filterIsolates] = useUrlSearchParam("filterIsolates");
+    const [showReads] = useUrlSearchParam("reads");
     const { isolates, pi } = hit;
 
     const filtered = filter(isolates, isolate => !filterIsolates || isolate.pi >= 0.03 * pi);
