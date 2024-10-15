@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample, mockApiEditSample } from "@tests/fake/samples";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import EditSample from "../EditSample";
@@ -21,7 +21,7 @@ describe("<Editsample />", () => {
     it("should render when [show=false]", () => {
         props.show = false;
 
-        renderWithMemoryRouter(<EditSample {...props} />);
+        renderWithRouter(<EditSample {...props} />);
 
         expect(screen.queryByRole("textbox", { name: "Name" })).toBeNull();
         expect(screen.queryByRole("textbox", { name: "Isolate" })).toBeNull();
@@ -32,7 +32,7 @@ describe("<Editsample />", () => {
     });
 
     it.each(["Name", "Isolate", "Host", "Locale", "Notes"])("should render changed data for", async inputLabel => {
-        renderWithMemoryRouter(<EditSample {...props} />, "?openEditSample=true");
+        renderWithRouter(<EditSample {...props} />, "?openEditSample=true");
 
         const inputBox = screen.getByLabelText(inputLabel);
         expect(inputBox).toBeInTheDocument();
@@ -47,7 +47,7 @@ describe("<Editsample />", () => {
 
     it("should update sample when form is submitted", async () => {
         const scope = mockApiEditSample(sample, "newName", "newIsolate", "newHost", "newLocale", "newNotes");
-        renderWithMemoryRouter(<EditSample {...props} />, "?openEditSample=true");
+        renderWithRouter(<EditSample {...props} />, "?openEditSample=true");
 
         const nameInput = screen.getByLabelText("Name");
         await userEvent.clear(nameInput);

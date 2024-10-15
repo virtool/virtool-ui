@@ -1,6 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeAccount } from "@tests/fake/account";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -22,7 +22,7 @@ describe("<Settings />", () => {
     it("should render", async () => {
         account.administrator_role = AdministratorRoles.FULL;
         scope = nock("http://localhost").get("/api/account").reply(200, account);
-        renderWithMemoryRouter(<Settings />, "/administration/settings");
+        renderWithRouter(<Settings />, "/administration/settings");
 
         await waitFor(() => expect(screen.getByText("Instance Message")).toBeInTheDocument());
         expect(screen.getByText("Settings")).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("<Settings />", () => {
     it("should render all options for full administrators", async () => {
         account.administrator_role = AdministratorRoles.FULL;
         scope = nock("http://localhost").get("/api/account").reply(200, account);
-        renderWithMemoryRouter(<Settings />, "/settings");
+        renderWithRouter(<Settings />, "/settings");
 
         await waitFor(() => expect(screen.getByText("Users")).toBeInTheDocument());
         expect(screen.getByText("Settings")).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("<Settings />", () => {
     it("should render only groups and users for users administrators", async () => {
         account.administrator_role = AdministratorRoles.USERS;
         scope = nock("http://localhost").get("/api/account").reply(200, account);
-        renderWithMemoryRouter(<Settings />, "/settings");
+        renderWithRouter(<Settings />, "/settings");
 
         await waitFor(() => expect(screen.getByText("Users")).toBeInTheDocument());
         expect(screen.queryByText("Settings")).not.toBeInTheDocument();

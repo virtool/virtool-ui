@@ -3,7 +3,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeReference, mockApiEditReference, mockApiGetReferenceDetail } from "@tests/fake/references";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import Targets from "../Targets";
@@ -32,33 +32,33 @@ describe("<Targets />", () => {
                 },
             ],
         });
-        renderWithMemoryRouter(<Targets {...props} />);
+        renderWithRouter(<Targets {...props} />);
 
         expect(screen.getByText("No description")).toBeInTheDocument();
     });
 
     it("should render when [canModify=true]", async () => {
-        renderWithMemoryRouter(<Targets {...props} />);
+        renderWithRouter(<Targets {...props} />);
 
         expect(await screen.findByRole("button", { name: "modify" })).toBeInTheDocument();
     });
 
     it("should render when [canModify=false]", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-        renderWithMemoryRouter(<Targets {...props} />);
+        renderWithRouter(<Targets {...props} />);
 
         expect(screen.queryByRole("button", { name: "modify" })).toBeNull();
     });
 
     it("should render null when [dataType!=barcode]", () => {
         props.reference = createFakeReference({ data_type: "genome" });
-        renderWithMemoryRouter(<Targets {...props} />);
+        renderWithRouter(<Targets {...props} />);
 
         expect(screen.queryByText("Targets")).toBeNull();
     });
 
     it("should show modal when add target is called", async () => {
-        renderWithMemoryRouter(<Targets {...props} />);
+        renderWithRouter(<Targets {...props} />);
 
         expect(await screen.findByText("Add Target")).toBeInTheDocument();
         await userEvent.click(screen.getByRole("link", { name: "Add Target" }));
@@ -69,7 +69,7 @@ describe("<Targets />", () => {
     });
 
     it("should show modal when edit target is called", async () => {
-        renderWithMemoryRouter(<Targets {...props} />);
+        renderWithRouter(<Targets {...props} />);
 
         expect(await screen.findByRole("button", { name: "modify" })).toBeInTheDocument();
         await userEvent.click(screen.getByRole("button", { name: "modify" }));
@@ -81,7 +81,7 @@ describe("<Targets />", () => {
 
     it("should call onRemove() when TargetItem removed", async () => {
         const scope = mockApiEditReference(props.reference, { targets: [] });
-        renderWithMemoryRouter(<Targets {...props} />);
+        renderWithRouter(<Targets {...props} />);
 
         expect(await screen.findByRole("button", { name: "remove" })).toBeInTheDocument();
         await userEvent.click(screen.getByRole("button", { name: "remove" }));

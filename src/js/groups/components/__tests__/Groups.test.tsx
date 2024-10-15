@@ -2,14 +2,14 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeGroup, mockApiGetGroup, mockApiListGroups } from "@tests/fake/groups";
 import { createFakePermissions } from "@tests/fake/permissions";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import Groups from "../Groups";
 
 describe("Groups", () => {
     it("should render correctly when loading = true", () => {
-        renderWithMemoryRouter(<Groups />);
+        renderWithRouter(<Groups />);
 
         expect(screen.queryByText("No Groups Found")).not.toBeInTheDocument();
         expect(screen.queryByText("cancel_job")).not.toBeInTheDocument();
@@ -19,7 +19,7 @@ describe("Groups", () => {
 
     it("should render correctly when no groups exist", async () => {
         mockApiListGroups([]);
-        renderWithMemoryRouter(<Groups />);
+        renderWithRouter(<Groups />);
 
         expect(await screen.findByText("No Groups Found")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("Groups", () => {
         const group = createFakeGroup();
         mockApiListGroups([group]);
         mockApiGetGroup(group);
-        renderWithMemoryRouter(<Groups />);
+        renderWithRouter(<Groups />);
 
         expect(await screen.findByRole("button", { name: "Delete" })).toBeInTheDocument();
         expect(screen.queryByText("No groups found")).not.toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("Groups", () => {
 
     it("should render create new group view correctly", async () => {
         mockApiListGroups([]);
-        renderWithMemoryRouter(<Groups />);
+        renderWithRouter(<Groups />);
 
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
         await userEvent.click(await screen.findByText("Create"));
@@ -57,7 +57,7 @@ describe("Groups", () => {
         const group = createFakeGroup({ users: [{ handle: "testUser1", id: "test_id" }] });
         mockApiListGroups([group]);
         mockApiGetGroup(group);
-        renderWithMemoryRouter(<Groups />);
+        renderWithRouter(<Groups />);
 
         expect(await screen.findByText("Members")).toBeInTheDocument();
         expect(screen.getByText("testUser1")).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe("Groups", () => {
         mockApiListGroups([group1, group2]);
         mockApiGetGroup(group1);
 
-        renderWithMemoryRouter(<Groups />);
+        renderWithRouter(<Groups />);
 
         expect(await screen.findByText("Group 1")).toBeInTheDocument();
         expect(screen.getByText("Group 2")).toBeInTheDocument();

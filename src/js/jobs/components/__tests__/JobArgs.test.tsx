@@ -1,5 +1,5 @@
 import { screen } from "@testing-library/react";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
@@ -54,14 +54,14 @@ const workflowTests = [
 
 describe("<JobArgs />", () => {
     it("Should render basics correctly", () => {
-        renderWithMemoryRouter(<JobArgs workflow={"create_sample"} args={{ sample_id: "test_sample_id" }} />);
+        renderWithRouter(<JobArgs workflow={"create_sample"} args={{ sample_id: "test_sample_id" }} />);
 
         expect(screen.getByText("Arguments")).toBeInTheDocument();
         expect(screen.getByText("Run arguments that make this job unique.")).toBeInTheDocument();
     });
 
     it.each(workflowTests)("Should render $workflow jobs correctly", ({ workflow, args, urls }) => {
-        renderWithMemoryRouter(<JobArgs workflow={workflow} args={{ ...args, extra_param: "extra_param" }} />);
+        renderWithRouter(<JobArgs workflow={workflow} args={{ ...args, extra_param: "extra_param" }} />);
 
         forEach(urls, ({ id, url }) => {
             expect(screen.getByRole("link", { name: id })).toHaveAttribute("href", url);
@@ -70,7 +70,7 @@ describe("<JobArgs />", () => {
     });
 
     it("Should render correctly render unknown workflows", () => {
-        renderWithMemoryRouter(
+        renderWithRouter(
             <JobArgs
                 workflow={"unknown_workflow"}
                 args={{

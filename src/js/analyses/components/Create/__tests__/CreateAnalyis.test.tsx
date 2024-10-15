@@ -6,7 +6,7 @@ import { createFakeIndexMinimal, mockApiListIndexes } from "@tests/fake/indexes"
 import { createFakeMLModel, mockApiGetModels } from "@tests/fake/ml";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, it } from "vitest";
@@ -37,7 +37,7 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithMemoryRouter(
+        renderWithRouter(
             <CreateAnalysis {...props} />,
             `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
         );
@@ -60,7 +60,7 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithMemoryRouter(
+        renderWithRouter(
             <CreateAnalysis {...props} />,
             `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
         );
@@ -82,7 +82,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: id,
         });
 
-        renderWithMemoryRouter(
+        renderWithRouter(
             <CreateAnalysis {...props} />,
             `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=${id}`,
         );
@@ -107,7 +107,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: "iimi",
         });
 
-        renderWithMemoryRouter(
+        renderWithRouter(
             <CreateAnalysis {...props} />,
             `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=iimi`,
         );

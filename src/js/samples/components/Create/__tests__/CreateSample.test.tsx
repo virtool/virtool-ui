@@ -6,7 +6,7 @@ import { mockApiListGroups } from "@tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
 import { mockApiCreateSample } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -35,14 +35,14 @@ describe("<CreateSample>", () => {
         const file = createFakeFile();
         const filesScope = mockApiListFiles([file]);
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
         expect(await screen.findByLabelText("loading")).toBeInTheDocument();
 
         filesScope.done();
     });
 
     it("should show loader when there are no sample files to read", async () => {
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
         expect(await screen.findByLabelText("loading")).toBeInTheDocument();
     });
 
@@ -52,7 +52,7 @@ describe("<CreateSample>", () => {
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
         expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
@@ -72,7 +72,7 @@ describe("<CreateSample>", () => {
 
         const scope = mockApiCreateSample("Sample A", "", "", "", LibraryType.normal, [file.id], [], [], null);
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         // Wait for the data to load.
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -104,7 +104,7 @@ describe("<CreateSample>", () => {
             null,
         );
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         // Wait for the data to load.
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
@@ -140,7 +140,7 @@ describe("<CreateSample>", () => {
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         const field = await screen.findByRole("textbox", { name: "Name" });
         expect(field).toHaveValue("");
@@ -157,7 +157,7 @@ describe("<CreateSample>", () => {
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -174,7 +174,7 @@ describe("<CreateSample>", () => {
         mockApiListFiles(files);
         mockApiGetShortlistSubtractions([]);
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 
@@ -192,7 +192,7 @@ describe("<CreateSample>", () => {
         mockApiListFiles(files);
         mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
 
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         await userEvent.type(await screen.findByLabelText("Name"), "Sample B");
 
@@ -214,7 +214,7 @@ describe("<CreateSample>", () => {
         const file = createFakeFile({ name: "large.fastq.gz" });
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
-        renderWithMemoryRouter(<CreateSample />);
+        renderWithRouter(<CreateSample />);
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
 

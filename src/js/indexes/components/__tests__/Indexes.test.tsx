@@ -8,7 +8,7 @@ import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "@tests/fake/indexes";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 
 describe("<Indexes />", () => {
@@ -35,7 +35,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithMemoryRouter(<References />, `/refs/${reference.id}/indexes`);
+        renderWithRouter(<References />, `/refs/${reference.id}/indexes`);
 
         await waitFor(() => findIndexesScope.done());
         expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithMemoryRouter(<References />, `/refs/${reference.id}/indexes`);
+        renderWithRouter(<References />, `/refs/${reference.id}/indexes`);
 
         await waitFor(() => scope.done());
 

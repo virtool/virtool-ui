@@ -6,7 +6,7 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "@tests/fake/analyses";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -31,7 +31,7 @@ describe("<AnalysesList />", () => {
     describe("<AnalysesList />", () => {
         it("should render", async () => {
             mockApiGetSampleDetail(sample);
-            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
             expect(screen.getByText(`${analyses[0].user.handle} created`)).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -55,7 +55,7 @@ describe("<AnalysesList />", () => {
             sample.user.id = account.id;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -66,7 +66,7 @@ describe("<AnalysesList />", () => {
             sample.group_write = true;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -78,7 +78,7 @@ describe("<AnalysesList />", () => {
             sample.all_write = true;
             mockApiGetSampleDetail(sample);
 
-            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -87,7 +87,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: null });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.queryByText("Create")).not.toBeInTheDocument();
         });
@@ -97,7 +97,7 @@ describe("<AnalysesList />", () => {
 
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            const { history } = renderWithMemoryRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            const { history } = renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
             expect(history[0]).toEqual(`/samples/${sample.id}/analyses/`);

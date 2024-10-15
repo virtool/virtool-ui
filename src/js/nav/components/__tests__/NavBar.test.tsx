@@ -1,7 +1,7 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import NavBar from "../NavBar";
@@ -14,7 +14,7 @@ describe("<NavBar />", () => {
     };
 
     it("should render", async () => {
-        renderWithMemoryRouter(<NavBar {...props} />);
+        renderWithRouter(<NavBar {...props} />);
         expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "Samples" })).toBeInTheDocument();
         expect(screen.getByRole("link", { name: "References" })).toBeInTheDocument();

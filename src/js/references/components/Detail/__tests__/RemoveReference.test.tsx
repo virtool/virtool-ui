@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -27,14 +27,14 @@ describe("<RemoveReference />", () => {
 
     it("should render when user has permission", async () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-        renderWithMemoryRouter(<RemoveReference {...props} />);
+        renderWithRouter(<RemoveReference {...props} />);
 
         expect(await screen.findByText("Permanently delete this reference")).toBeInTheDocument();
     });
 
     it("should not render when user does not have permission", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-        renderWithMemoryRouter(<RemoveReference {...props} />);
+        renderWithRouter(<RemoveReference {...props} />);
 
         expect(screen.queryByText("Permanently delete this reference")).toBeNull();
     });
@@ -42,7 +42,7 @@ describe("<RemoveReference />", () => {
     it("should call onConfirm() when confirmed", async () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const scope = mockApiRemoveReference(reference.id);
-        renderWithMemoryRouter(<RemoveReference {...props} />);
+        renderWithRouter(<RemoveReference {...props} />);
 
         expect(await screen.findByText("Permanently delete this reference")).toBeInTheDocument();
         await userEvent.click(screen.getByRole("button"));

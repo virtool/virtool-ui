@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTU, mockApiEditOTU } from "../../../../../../tests/fake/otus";
@@ -21,7 +21,7 @@ describe("<RemoveSegment />", () => {
     });
 
     it("should render when [show=true]", () => {
-        renderWithMemoryRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
+        renderWithRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
 
         expect(screen.getByText("Remove Segment")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("<RemoveSegment />", () => {
     });
 
     it("should render when [show=false]", () => {
-        renderWithMemoryRouter(<RemoveSegment {...props} />, "");
+        renderWithRouter(<RemoveSegment {...props} />, "");
 
         expect(screen.queryByText("Remove Segment")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
@@ -45,7 +45,7 @@ describe("<RemoveSegment />", () => {
             otuId: otu.d,
             schema: [props.schema[1]],
         });
-        renderWithMemoryRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
+        renderWithRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
 
         await userEvent.click(screen.getByRole("button"));
 
@@ -53,7 +53,7 @@ describe("<RemoveSegment />", () => {
     });
 
     it("should call onHide() when onHide() called on <RemoveDialog />", async () => {
-        renderWithMemoryRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
+        renderWithRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
 
         fireEvent.keyDown(document, { key: "Escape" });
 

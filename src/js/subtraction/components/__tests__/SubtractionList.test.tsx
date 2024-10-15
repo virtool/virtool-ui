@@ -3,7 +3,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSubtractionMinimal, mockApiGetSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import SubtractionList from "../SubtractionList";
@@ -17,7 +17,7 @@ describe("<SubtractionList />", () => {
 
     it("renders correctly", async () => {
         const scope = mockApiGetSubtractions([subtractions]);
-        renderWithMemoryRouter(<SubtractionList />);
+        renderWithRouter(<SubtractionList />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
@@ -30,7 +30,7 @@ describe("<SubtractionList />", () => {
 
     it("should call handleChange when search input changes in toolbar", async () => {
         const scope = mockApiGetSubtractions([subtractions]);
-        renderWithMemoryRouter(<SubtractionList />);
+        renderWithRouter(<SubtractionList />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
         const inputElement = screen.getByPlaceholderText("Name");
@@ -47,7 +47,7 @@ describe("<SubtractionList />", () => {
         const scope = mockApiGetSubtractions([subtractions]);
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockApiGetAccount(account);
-        renderWithMemoryRouter(<SubtractionList />);
+        renderWithRouter(<SubtractionList />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
         expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe("<SubtractionList />", () => {
         const scope = mockApiGetSubtractions([subtractions]);
         const account = createFakeAccount({ administrator_role: null });
         mockApiGetAccount(account);
-        renderWithMemoryRouter(<SubtractionList />);
+        renderWithRouter(<SubtractionList />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
         const createButton = screen.queryByLabelText("Create");
@@ -70,7 +70,7 @@ describe("<SubtractionList />", () => {
 
     it("should handle toolbar updates correctly", async () => {
         const scope = mockApiGetSubtractions([subtractions]);
-        const { history } = renderWithMemoryRouter(<SubtractionList />);
+        const { history } = renderWithRouter(<SubtractionList />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
         const inputElement = screen.getByPlaceholderText("Name");

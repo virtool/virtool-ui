@@ -31,7 +31,7 @@ export function renderWithProviders(ui: ReactNode) {
     return { ...rest, rerender: rerenderWithProviders };
 }
 
-export function renderWithMemoryRouter(ui: ReactNode, path?: string) {
+export function renderWithRouter(ui: ReactNode, path?: string) {
     const { hook, history } = memoryLocation({ path, record: true });
 
     const result = renderWithProviders(

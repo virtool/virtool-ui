@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import { createFakeUserNested } from "@tests/fake/user";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import JobItem from "../JobItem";
@@ -19,7 +19,7 @@ describe("<JobItem />", () => {
 
     describe("<JobItem />", () => {
         it("should render properly", () => {
-            renderWithMemoryRouter(<JobItem {...props} />);
+            renderWithRouter(<JobItem {...props} />);
 
             expect(screen.getByText("Build Index")).toBeInTheDocument();
             expect(screen.getByText(`${props.user.handle} created`)).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("<JobItem />", () => {
             props.state = state;
             props.progress = progress;
             const capitalizedState = state.charAt(0).toUpperCase() + state.slice(1);
-            renderWithMemoryRouter(<JobItem {...props} />);
+            renderWithRouter(<JobItem {...props} />);
 
             expect(screen.getByText(capitalizedState)).toBeInTheDocument();
             expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", `${progress}`);
@@ -47,7 +47,7 @@ describe("<JobItem />", () => {
             props.state = "complete";
             props.progress = 100;
             const capitalizedState = props.state.charAt(0).toUpperCase() + props.state.slice(1);
-            renderWithMemoryRouter(<JobItem {...props} />);
+            renderWithRouter(<JobItem {...props} />);
 
             expect(screen.getByText(capitalizedState)).toBeInTheDocument();
             expect(screen.queryByRole("progressbar")).toBeNull();
