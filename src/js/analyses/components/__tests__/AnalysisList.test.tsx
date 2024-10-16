@@ -105,9 +105,7 @@ describe("<AnalysesList />", () => {
             await userEvent.click(screen.getByText("Create"));
 
             await waitFor(() =>
-                expect(history[0]).toEqual(
-                    `/samples/${sample.id}/analyses/?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
-                ),
+                expect(history[0]).toEqual(`/samples/${sample.id}/analyses/?createAnalysisType=pathoscope_bowtie`),
             );
         });
     });

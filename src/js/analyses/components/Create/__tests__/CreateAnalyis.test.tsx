@@ -39,7 +39,7 @@ describe("getCompatibleWorkflows()", () => {
 
         renderWithRouter(
             <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
+            `/samples/${sample.id}/analyses?createAnalysisType=pathoscope_bowtie`,
         );
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe("getCompatibleWorkflows()", () => {
 
         renderWithRouter(
             <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=pathoscope_bowtie`,
+            `/samples/${sample.id}/analyses?createAnalysisType=pathoscope_bowtie`,
         );
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
@@ -82,10 +82,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: id,
         });
 
-        renderWithRouter(
-            <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=${id}`,
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, `/samples/${sample.id}/analyses?createAnalysisType=${id}`);
 
         await userEvent.click(await screen.findByText(name));
         await userEvent.click(screen.getByText(subtractionShortlist.name));
@@ -107,10 +104,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: "iimi",
         });
 
-        renderWithRouter(
-            <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?openCreateAnalysis=true&workflow=iimi`,
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, `/samples/${sample.id}/analyses?createAnalysisType=iimi`);
 
         const comboboxes = await screen.findAllByRole("combobox");
 
