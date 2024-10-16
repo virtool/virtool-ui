@@ -19,8 +19,8 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
             { username, password, remember },
             {
                 onSuccess: data => {
-                    if (data.reset_code) {
-                        setResetCode(data.reset_code);
+                    if (data.body.reset_code) {
+                        setResetCode(data.body.reset_code);
                     }
                 },
             },

@@ -61,7 +61,7 @@ export function useLoginMutation() {
     return useMutation<Response, ErrorResponse, { username: string; password: string; remember: boolean }>({
         mutationFn: ({ username, password, remember }) => login({ username, password, remember }),
         onSuccess: data => {
-            if (!data.reset) {
+            if (!data.body.reset) {
                 queryClient.invalidateQueries({ queryKey: accountKeys.all() });
             }
         },

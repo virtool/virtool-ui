@@ -145,9 +145,7 @@ export function login({
     password: string;
     remember: boolean;
 }): Promise<Response> {
-    return Request.post("/account/login")
-        .send({ username, password, remember })
-        .then(res => res.body);
+    return Request.post("/account/login").send({ username, password, remember });
 }
 
 /**
