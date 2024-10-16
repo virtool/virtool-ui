@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { mockApiRemoveOTU } from "../../../../../tests/fake/otus";
@@ -18,7 +18,7 @@ describe("<RemoveOTU />", () => {
     });
 
     it("should render when [show=true]", () => {
-        renderWithMemoryRouter(<RemoveOTU {...props} />, [{ state: { removeOTU: true } }]);
+        renderWithRouter(<RemoveOTU {...props} />, "?openRemoveOTU=true");
 
         expect(screen.getByText("Remove OTU")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe("<RemoveOTU />", () => {
     });
 
     it("should render when [show=false]", () => {
-        renderWithMemoryRouter(<RemoveOTU {...props} />, [{ state: { removeOTU: false } }]);
+        renderWithRouter(<RemoveOTU {...props} />, "");
 
         expect(screen.queryByText("Remove OTU")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
@@ -37,7 +37,7 @@ describe("<RemoveOTU />", () => {
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
         const scope = mockApiRemoveOTU(props.id);
-        renderWithMemoryRouter(<RemoveOTU {...props} />, [{ state: { removeOTU: true } }]);
+        renderWithRouter(<RemoveOTU {...props} />, "?openRemoveOTU=true");
 
         await userEvent.click(screen.getByRole("button"));
 

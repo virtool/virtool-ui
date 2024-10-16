@@ -3,9 +3,8 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { renderWithProviders } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 import { SubtractionFileManager } from "../SubtractionFileManager";
 
@@ -18,11 +17,7 @@ describe("<SubtractionFileManager />", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })]);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/subtractions/files", search: "?page=1" }]}>
-                <SubtractionFileManager />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<SubtractionFileManager />, "/subtractions/files?page=1");
 
         expect(await screen.findByText("Drag files here to upload")).toBeInTheDocument();
 

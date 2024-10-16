@@ -1,8 +1,7 @@
 import { RemoveDialog } from "@base/RemoveDialog";
 import { useRemoveSequence } from "@otus/queries";
 import { OTUSequence } from "@otus/types";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";
 import React from "react";
 
@@ -17,18 +16,16 @@ type RemoveSequenceProps = {
  * Displays a dialog for removing a sequence
  */
 export default function RemoveSequence({ isolateName, isolateId, otuId, sequences }: RemoveSequenceProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [removeSequenceId, setRemoveSequence] = useUrlSearchParam("removeSequence");
     const mutation = useRemoveSequence(otuId);
-
-    const sequenceId = locationState?.removeSequence;
-    const sequence = find(sequences, { id: sequenceId });
+    const sequence = find(sequences, { id: removeSequenceId });
 
     function handleConfirm() {
         mutation.mutate(
-            { otuId, isolateId, sequenceId },
+            { otuId, isolateId, sequenceId: removeSequenceId },
             {
                 onSuccess: () => {
-                    setLocationState(merge(locationState, { removeSequence: false }));
+                    setRemoveSequence("");
                 },
             },
         );
@@ -44,11 +41,11 @@ export default function RemoveSequence({ isolateName, isolateId, otuId, sequence
 
     return (
         <RemoveDialog
-            name={`${sequenceId}`}
+            name={`${removeSequenceId}`}
             noun="Sequence"
             onConfirm={handleConfirm}
-            onHide={() => setLocationState(merge(locationState, { removeSequence: false }))}
-            show={Boolean(locationState?.removeSequence)}
+            onHide={() => setRemoveSequence("")}
+            show={Boolean(removeSequenceId)}
             message={removeMessage}
         />
     );

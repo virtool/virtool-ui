@@ -1,7 +1,7 @@
 import { ErrorResponse } from "@/types/types";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { User, UserResponse } from "@users/types";
-import { useHistory } from "react-router-dom";
+import { useUrlSearchParam } from "@utils/hooks";
 import {
     createUser,
     fetchAdministratorRoles,
@@ -98,8 +98,8 @@ export function useFindUsers(page: number, per_page: number, term: string, admin
  * @returns A mutator for creating a user
  */
 export function useCreateUser() {
-    const history = useHistory();
-
+    const queryClient = useQueryClient();
+    const [, setOpenCreateUser] = useUrlSearchParam("openCreateUser");
     return useMutation<
         User,
         ErrorResponse,
@@ -111,7 +111,8 @@ export function useCreateUser() {
     >({
         mutationFn: createUser,
         onSuccess: () => {
-            history.push({ state: { createUser: false } });
+            setOpenCreateUser("");
+            queryClient.invalidateQueries({ queryKey: userQueryKeys.lists() });
         },
     });
 }

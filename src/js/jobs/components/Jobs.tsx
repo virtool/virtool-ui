@@ -1,6 +1,6 @@
 import { Container } from "@base";
 import React from "react";
-import { Route, Routes } from "react-router-dom-v5-compat";
+import { Route, Switch } from "wouter";
 import JobDetail from "./JobDetail";
 import JobsList from "./JobList";
 
@@ -10,10 +10,10 @@ import JobsList from "./JobList";
 export default function Jobs() {
     return (
         <Container>
-            <Routes>
-                <Route path="/" element={<JobsList />} />
-                <Route path="/:jobId/*" element={<JobDetail />} />
-            </Routes>
+            <Switch>
+                <Route path="/jobs/:jobId" component={JobDetail} />
+                <Route path="/jobs" component={JobsList} />
+            </Switch>
         </Container>
     );
 }

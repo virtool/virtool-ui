@@ -1,8 +1,8 @@
 import { NuVsList } from "@/analyses/components/NuVs/NuVsList";
+import NuVsToolbar from "@/analyses/components/NuVs/NuVsToolbar";
 import { FormattedNuvsAnalysis } from "@/analyses/types";
 import { Sample } from "@samples/types";
 import React from "react";
-import NuVsToolbar from "./NuVsToolbar";
 
 type NuVsViewerProps = {
     /** Complete NuVs analysis details */

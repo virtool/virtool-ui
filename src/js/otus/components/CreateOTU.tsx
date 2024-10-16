@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import { useCreateOTU } from "../queries";
 import { OTUForm } from "./OTUForm";
 
@@ -13,8 +13,7 @@ type CreateOTUProps = {
  * Displays a dialog to create an OTU
  */
 export default function CreateOTU({ refId }: CreateOTUProps) {
-    const history = useHistory();
-    const location = useLocation<{ createOTU: boolean }>();
+    const [openCreateOtu, setOpenCreateOtu] = useUrlSearchParam("openCreateOTU");
 
     const mutation = useCreateOTU(refId);
 
@@ -23,19 +22,19 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
             { name, abbreviation },
             {
                 onSuccess: () => {
-                    history.replace({ state: { createOTU: false } });
+                    setOpenCreateOtu("");
                 },
             },
         );
     }
 
     function onHide() {
-        history.replace({ state: { createOTU: false } });
+        setOpenCreateOtu("");
         mutation.reset();
     }
 
     return (
-        <Dialog open={location.state?.createOTU} onOpenChange={onHide}>
+        <Dialog open={Boolean(openCreateOtu)} onOpenChange={onHide}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

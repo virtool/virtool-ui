@@ -1,8 +1,7 @@
-import { Alert, Icon } from "@base";
+import { Alert, Icon, Link } from "@base";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { Link } from "react-router-dom";
 import { useFindIndexes } from "../queries";
 
 type RebuildAlertProps = {
@@ -13,7 +12,7 @@ type RebuildAlertProps = {
  * An alert that appears when the reference has unbuilt changes.
  */
 export default function RebuildAlert({ refId }: RebuildAlertProps) {
-    const [urlPage] = useUrlSearchParams<number>("page");
+    const [urlPage] = useUrlSearchParam("page");
     const { data, isPending } = useFindIndexes(Number(urlPage) || 1, 25, refId);
     const { hasPermission: hasRights } = useCheckReferenceRight(refId, ReferenceRight.build);
 
@@ -33,17 +32,12 @@ export default function RebuildAlert({ refId }: RebuildAlertProps) {
     }
 
     if (change_count && hasRights) {
-        const to = {
-            pathname: `/refs/${refId}/indexes`,
-            state: { rebuild: true },
-        };
-
         return (
             <Alert color="orange" level>
                 <Icon name="info-circle" />
                 <span>
                     <span>There are unbuilt changes. </span>
-                    <Link to={to}>Rebuild the index</Link>
+                    <Link to={`/refs/${refId}/indexes?openRebuild=true`}>Rebuild the index</Link>
                     <span> to use the changes in future analyses.</span>
                 </span>
             </Alert>

@@ -8,7 +8,7 @@ import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
 import { createFakeMLModelMinimal, mockApiGetModels } from "@tests/fake/ml";
 import { createFakeSampleMinimal, mockApiGetSamples } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import SamplesList from "../SamplesList";
@@ -27,7 +27,7 @@ describe("<SamplesList />", () => {
     });
 
     it("should render correctly", async () => {
-        renderWithMemoryRouter(<SamplesList />, [{ key: "test", pathname: "/samples" }]);
+        renderWithRouter(<SamplesList />, "/samples");
         expect(await screen.findByText("Samples")).toBeInTheDocument();
 
         expect(screen.getByText(samples[0].name)).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe("<SamplesList />", () => {
     });
 
     it("should call onChange when search input changes in toolbar", async () => {
-        renderWithMemoryRouter(<SamplesList />, [{ key: "test", pathname: "/samples" }]);
+        renderWithRouter(<SamplesList />, "/samples");
         expect(await screen.findByText("Samples")).toBeInTheDocument();
 
         const inputElement = screen.getByPlaceholderText("Sample name");
@@ -47,14 +47,14 @@ describe("<SamplesList />", () => {
 
     it("should render create button when [canModify=true]", async () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-        renderWithMemoryRouter(<SamplesList />, [{ key: "test", pathname: "/samples" }]);
+        renderWithRouter(<SamplesList />, "/samples");
 
         expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
     });
 
     it("should not render create button when [canModify=false]", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-        renderWithMemoryRouter(<SamplesList />, [{ key: "test", pathname: "/samples" }]);
+        renderWithRouter(<SamplesList />, "/samples");
 
         expect(screen.queryByRole("link", { name: "Create" })).not.toBeInTheDocument();
     });

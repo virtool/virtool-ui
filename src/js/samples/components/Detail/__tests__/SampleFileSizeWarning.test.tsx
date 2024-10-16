@@ -1,9 +1,8 @@
 import { screen } from "@testing-library/react";
 import { createFakeSampleRead } from "@tests/fake/samples";
-import { renderWithProviders } from "@tests/setup";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
+import { renderWithRouter } from "@tests/setup";
 import SampleFileSizeWarning from "../SampleFileSizeWarning";
 
 describe("<SampleFileSizeWarning />", () => {
@@ -18,11 +17,7 @@ describe("<SampleFileSizeWarning />", () => {
 
     it("should render", () => {
         props.reads = [createFakeSampleRead({ size: 5 })];
-        renderWithProviders(
-            <MemoryRouter>
-                <SampleFileSizeWarning {...props} />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<SampleFileSizeWarning {...props} />);
 
         expect(screen.getByText("The read files in this sample are smaller than expected.")).toBeInTheDocument();
         expect(screen.getByText("Check the file sizes")).toBeInTheDocument();
@@ -32,22 +27,14 @@ describe("<SampleFileSizeWarning />", () => {
 
     it("should render when [show=false]", () => {
         props.reads = [createFakeSampleRead({ size: 10000000 })];
-        renderWithProviders(
-            <MemoryRouter>
-                <SampleFileSizeWarning {...props} />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<SampleFileSizeWarning {...props} />);
 
         expect(screen.queryByText("The read files in this sample are smaller than expected.")).toBeNull();
     });
 
     it("should render link when [showLink=true]", () => {
         props.reads = [createFakeSampleRead({ size: 5 })];
-        renderWithProviders(
-            <MemoryRouter>
-                <SampleFileSizeWarning {...props} />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<SampleFileSizeWarning {...props} />);
 
         expect(screen.getByText("The read files in this sample are smaller than expected.")).toBeInTheDocument();
         expect(screen.getByText("Check the file sizes")).toBeInTheDocument();
@@ -56,11 +43,7 @@ describe("<SampleFileSizeWarning />", () => {
 
     it("should render link when [showLink=false]", () => {
         props.reads = [createFakeSampleRead({ size: 5 })];
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/samples/test/files" }]}>
-                <SampleFileSizeWarning {...props} />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<SampleFileSizeWarning {...props} />, "/samples/test/files");
 
         expect(screen.getByText("The read files in this sample are smaller than expected.")).toBeInTheDocument();
         expect(screen.getByText("Check the file sizes and ensure they are correct.")).toBeInTheDocument();

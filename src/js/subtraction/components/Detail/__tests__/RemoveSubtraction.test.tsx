@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeSubtraction, mockApiRemoveSubtraction } from "../../../../../tests/fake/subtractions";
@@ -20,20 +20,20 @@ describe("<RemoveSubtraction />", () => {
 
     it("should render when [show=false]", () => {
         props.show = false;
-        renderWithMemoryRouter(<RemoveSubtraction {...props} />);
+        renderWithRouter(<RemoveSubtraction {...props} />);
 
         expect(screen.queryByText("Remove Subtraction")).toBeNull();
     });
 
     it("should render when [show=true]", () => {
-        renderWithMemoryRouter(<RemoveSubtraction {...props} />);
+        renderWithRouter(<RemoveSubtraction {...props} />);
 
         expect(screen.getByText("Remove Subtraction")).toBeInTheDocument();
     });
 
     it("should call onConfirm() when onConfirm() on <RemoveModal /> is called", async () => {
         const scope = mockApiRemoveSubtraction(subtraction.id);
-        renderWithMemoryRouter(<RemoveSubtraction {...props} />);
+        renderWithRouter(<RemoveSubtraction {...props} />);
 
         await userEvent.click(screen.getByRole("button", { name: "Confirm" }));
 
@@ -41,7 +41,7 @@ describe("<RemoveSubtraction />", () => {
     });
 
     it("should call onHide() when onHide() on <RemoveModal /> is called", async () => {
-        renderWithMemoryRouter(<RemoveSubtraction {...props} />);
+        renderWithRouter(<RemoveSubtraction {...props} />);
 
         fireEvent.keyDown(document, { key: "Escape" });
         expect(props.onHide).toHaveBeenCalled();

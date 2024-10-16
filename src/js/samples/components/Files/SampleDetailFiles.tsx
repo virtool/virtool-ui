@@ -1,16 +1,16 @@
 import { ContainerNarrow, LoadingPlaceholder } from "@base";
 import React from "react";
-import { useParams } from "react-router-dom-v5-compat";
 import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * The files view in sample details
  */
 export function SampleDetailFiles() {
-    const { sampleId } = useParams();
+    const { sampleId } = useSearchParams<{ sampleId: string }>();
     const { data, isPending } = useFetchSample(sampleId);
 
     if (isPending) {

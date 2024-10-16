@@ -3,8 +3,7 @@ import { useAddSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParam } from "@utils/hooks";
 import { compact, map } from "lodash-es/lodash";
 import React from "react";
 
@@ -20,7 +19,7 @@ type AddGenomeSequenceProps = {
  * Displays dialog to add a genome sequence
  */
 export default function AddGenomeSequence({ isolateId, otuId, refId, schema, sequences }: AddGenomeSequenceProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [openAddSequence, setOpenAddSequence] = useUrlSearchParam("openAddSequence");
     const mutation = useAddSequence(otuId);
 
     const referencedSegmentNames = compact(map(sequences, "segment"));
@@ -31,17 +30,14 @@ export default function AddGenomeSequence({ isolateId, otuId, refId, schema, seq
             { isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
             {
                 onSuccess: () => {
-                    setLocationState(merge(locationState, { addSequence: false }));
+                    setOpenAddSequence("");
                 },
             },
         );
     }
 
     return (
-        <Dialog
-            open={locationState?.addSequence}
-            onOpenChange={() => setLocationState(merge(locationState, { addSequence: false }))}
-        >
+        <Dialog open={Boolean(openAddSequence)} onOpenChange={() => setOpenAddSequence("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

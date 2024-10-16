@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUSequence, mockApiRemoveSequence } from "../../../../tests/fake/otus";
@@ -19,7 +19,7 @@ describe("<RemoveSequence />", () => {
     });
 
     it("should render when [show=true]", () => {
-        renderWithMemoryRouter(<RemoveSequence {...props} />, [{ state: { removeSequence: props.sequences[0].id } }]);
+        renderWithRouter(<RemoveSequence {...props} />, `?removeSequence=${props.sequences[0].id}`);
 
         expect(screen.getByText("Remove Sequence")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove the sequence/)).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("<RemoveSequence />", () => {
     });
 
     it("should render when [show=false]", () => {
-        renderWithMemoryRouter(<RemoveSequence {...props} />, [{ state: { removeSequence: "" } }]);
+        renderWithRouter(<RemoveSequence {...props} />, "");
 
         expect(screen.queryByText("Remove Sequence")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove the sequence from/)).toBeNull();
@@ -40,7 +40,7 @@ describe("<RemoveSequence />", () => {
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
         const scope = mockApiRemoveSequence(props.otuId, props.isolateId, props.sequences[0].id);
-        renderWithMemoryRouter(<RemoveSequence {...props} />, [{ state: { removeSequence: props.sequences[0].id } }]);
+        renderWithRouter(<RemoveSequence {...props} />, `?removeSequence=${props.sequences[0].id}`);
 
         await userEvent.click(screen.getByRole("button"));
 

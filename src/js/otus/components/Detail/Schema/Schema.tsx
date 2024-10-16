@@ -3,9 +3,9 @@ import EditSegment from "@otus/components/Detail/Schema/EditSegment";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
-import { match, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import AddSegment from "./AddSegment";
 import RemoveSegment from "./RemoveSegment";
@@ -16,21 +16,18 @@ const AddButton = styled(Button)`
     width: 100%;
 `;
 
-type SchemaProps = {
-    /** Match object containing path information */
-    match: match<{ otuId: string; refId: string }>;
-};
-
 /**
  * Displays a component allowing users to manage the otu schema
  */
-export default function Schema({ match }: SchemaProps) {
-    const { refId, otuId } = match.params;
+export default function Schema() {
+    const { refId, otuId } = useSearchParams<{ otuId: string; refId: string }>();
     const { hasPermission: canModify, isPending: isPendingPermission } = useCheckReferenceRight(
         refId,
         ReferenceRight.modify_otu,
     );
-    const history = useHistory();
+
+    const [, setOpenAddSegment] = useUrlSearchParam("openAddSegment");
+
     const { data, isPending } = useFetchOTU(otuId);
     const mutation = useUpdateOTU(otuId);
 
@@ -59,7 +56,7 @@ export default function Schema({ match }: SchemaProps) {
     return (
         <div>
             {canModify && (
-                <AddButton color="blue" onClick={() => history.push({ state: { addSegment: true } })}>
+                <AddButton color="blue" onClick={() => setOpenAddSegment("true")}>
                     Add Segment
                 </AddButton>
             )}

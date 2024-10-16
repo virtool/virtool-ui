@@ -15,11 +15,11 @@ import {
 import { IconButton } from "@base/IconButton";
 import { get } from "lodash-es";
 import React from "react";
-import { useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import { useUpdateSourceTypes } from "../../hooks";
 import { referenceQueryKeys, useGetReference, useUpdateReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
+import { useSearchParams } from "@utils/hooks";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
     button {
@@ -61,14 +61,8 @@ const SourceTypesUndo = styled(BoxGroupSection)`
     }
 `;
 
-interface MatchTypes {
-    /** The reference id */
-    refId: string;
-}
-
 export function LocalSourceTypes() {
-    const match = useRouteMatch<MatchTypes>();
-    const refId = match.params.refId;
+    const { refId } = useSearchParams<{ refId: string }>();
 
     const { data, isPending } = useGetReference(refId);
 

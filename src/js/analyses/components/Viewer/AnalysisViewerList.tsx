@@ -2,8 +2,7 @@ import { useGetActiveHit } from "@/analyses/hooks";
 import { FormattedNuvsHit } from "@/analyses/types";
 import { getBorder, getFontSize } from "@app/theme";
 import { Key } from "@base";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParam } from "@utils/hooks";
 import { findIndex } from "lodash-es";
 import React from "react";
 import { FixedSizeList } from "react-window";
@@ -57,8 +56,8 @@ type AnalysisViewerListProps = {
  * Displays a list of hits for an analysis
  */
 export default function AnalysisViewerList({ children, itemSize, matches, total, width }: AnalysisViewerListProps) {
-    const [locationState, setLocationState] = useLocationState();
-    const activeId = locationState?.activeHitId;
+    const [activeHit, setActiveHit] = useUrlSearchParam("activeHit");
+    const activeId = Number(activeHit);
     const active = useGetActiveHit(matches);
 
     const shown = matches.length;
@@ -82,9 +81,7 @@ export default function AnalysisViewerList({ children, itemSize, matches, total,
         }
     }
 
-    const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, id =>
-        setLocationState(merge(locationState, { activeHitId: id })),
-    );
+    const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, id => setActiveHit(id));
 
     return (
         <StyledAnalysisViewerList width={width}>

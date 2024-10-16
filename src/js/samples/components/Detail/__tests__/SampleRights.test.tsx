@@ -2,7 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -27,7 +27,7 @@ describe("<SampleRights />", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const unreadySample = createFakeSample({ paired: true, ready: false });
         const scope = mockApiGetSampleDetail(unreadySample);
-        renderWithMemoryRouter(<Samples />, [`/${unreadySample.id}/rights`]);
+        renderWithRouter(<Samples />, `/samples/${unreadySample.id}/rights`);
 
         await waitFor(() => scope.done());
 
@@ -41,7 +41,7 @@ describe("<SampleRights />", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         const unreadySample = createFakeSample({ paired: true, ready: false });
         const scope = mockApiGetSampleDetail(unreadySample);
-        renderWithMemoryRouter(<Samples />, [`/${unreadySample.id}/rights`]);
+        renderWithRouter(<Samples />, `/samples/${unreadySample.id}/rights`);
 
         await waitFor(() => scope.done());
 
@@ -52,7 +52,7 @@ describe("<SampleRights />", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const unreadySample = createFakeSample({ paired: true, ready: false });
         const scope = mockApiGetSampleDetail(unreadySample);
-        renderWithMemoryRouter(<Samples />, [`/${unreadySample.id}/rights`]);
+        renderWithRouter(<Samples />, `/samples/${unreadySample.id}/rights`);
 
         await waitFor(() => scope.done());
 
@@ -66,7 +66,7 @@ describe("<SampleRights />", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const unreadySample = createFakeSample({ paired: true, ready: false });
         const scope = mockApiGetSampleDetail(unreadySample);
-        renderWithMemoryRouter(<Samples />, [`/${unreadySample.id}/rights`]);
+        renderWithRouter(<Samples />, `/samples/${unreadySample.id}/rights`);
 
         await waitFor(() => scope.done());
 
@@ -80,7 +80,7 @@ describe("<SampleRights />", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         const unreadySample = createFakeSample({ paired: true, ready: false });
         const scope = mockApiGetSampleDetail(unreadySample);
-        renderWithMemoryRouter(<Samples />, [`/${unreadySample.id}/rights`]);
+        renderWithRouter(<Samples />, `/samples/${unreadySample.id}/rights`);
 
         await waitFor(() => scope.done());
 

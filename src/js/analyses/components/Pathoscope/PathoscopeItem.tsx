@@ -3,7 +3,7 @@ import { getColor } from "@app/theme";
 import { AccordionTrigger } from "@base";
 import { AccordionContent } from "@base/accordion/AccordionContent";
 import { ScrollingAccordionItem } from "@base/accordion/ScrollingAccordionItem";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { toScientificNotation } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
@@ -84,7 +84,7 @@ type PathoscopeItemProps = {
 /** Results for a single pathoscope analysis hit  */
 export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
     const { abbreviation, coverage, depth, filled, name, pi, id } = hit;
-    const [showReads] = useUrlSearchParams<boolean>("reads");
+    const [showReads] = useUrlSearchParam("reads");
 
     const piValue = showReads ? Math.round(pi * mappedCount) : toScientificNotation(pi);
 

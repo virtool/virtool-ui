@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom-v5-compat";
+import { Route, Switch } from "wouter";
 import { Container, ContainerNarrow } from "../../base";
 import HMMDetail from "./HMMDetail";
 import HMMList from "./HMMList";
@@ -11,10 +11,10 @@ export default function HMM() {
     return (
         <Container>
             <ContainerNarrow>
-                <Routes>
-                    <Route path="" element={<HMMList />} />
-                    <Route path=":hmmId" element={<HMMDetail />} />
-                </Routes>
+                <Switch>
+                    <Route path="/hmm/:hmmId" component={HMMDetail} />
+                    <Route path="/hmm/" component={HMMList} />
+                </Switch>
             </ContainerNarrow>
         </Container>
     );

@@ -1,4 +1,4 @@
-import { InputError, NoneFoundBox } from "@base";
+import { InputError, Link, NoneFoundBox } from "@base";
 import { CompactScrollList } from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { File, FileResponse, FileType } from "@files/types";
@@ -6,7 +6,6 @@ import { InfiniteData } from "@tanstack/react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { flatMap } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
@@ -71,7 +70,7 @@ export function SubtractionFileSelector({
 
     return foundCount === 0 ? (
         <NoneFoundBox noun="files">
-            <Link to="files">Upload some</Link>
+            <Link to="/subtractions/files">Upload some</Link>
         </NoneFoundBox>
     ) : (
         <>

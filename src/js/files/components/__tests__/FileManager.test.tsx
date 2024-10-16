@@ -5,9 +5,8 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { renderWithProviders } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FileManager, FileManagerProps } from "../FileManager";
 
@@ -48,11 +47,7 @@ describe("<FileManager>", () => {
 
         vi.mock("@files/uploader");
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
-                <FileManager {...props} regex={/.(?:fa|fasta)(?:.gz|.gzip)?$/} />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<FileManager {...props} regex={/.(?:fa|fasta)(?:.gz|.gzip)?$/} />, "/samples/files?page=1");
 
         expect(await screen.findByText("Drag file here to upload")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
@@ -73,11 +68,7 @@ describe("<FileManager>", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
-                <FileManager {...props} />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<FileManager {...props} />, "/samples/files?page=1");
 
         expect(await screen.findByText("You do not have permission to upload files.")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
@@ -87,11 +78,7 @@ describe("<FileManager>", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
-                <FileManager {...props} message="Test Message" />
-            </MemoryRouter>,
-        );
+        renderWithRouter(<FileManager {...props} message="Test Message" />, "/samples/files?page=1");
 
         expect(await screen.findByText("Test Message")).toBeInTheDocument();
     });

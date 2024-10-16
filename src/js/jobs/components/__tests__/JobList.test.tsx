@@ -1,7 +1,7 @@
 import { JobState, workflows } from "@jobs/types";
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeJobMinimal, mockApiGetJobs } from "@tests/fake/jobs";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
@@ -18,7 +18,7 @@ describe("<JobsList />", () => {
             workflow: workflows.create_sample,
         });
         const scope = mockApiGetJobs([jobs]);
-        renderWithMemoryRouter(<JobsList />);
+        renderWithRouter(<JobsList />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(screen.getByText("Create Sample")).toBeInTheDocument();
@@ -27,14 +27,14 @@ describe("<JobsList />", () => {
     });
 
     it("should show spinner while loading", () => {
-        renderWithMemoryRouter(<JobsList />);
+        renderWithRouter(<JobsList />);
 
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
     });
 
     it("should show message when there are no unarchived jobs", async () => {
         const scope = mockApiGetJobs([]);
-        renderWithMemoryRouter(<JobsList />);
+        renderWithRouter(<JobsList />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(screen.getByText("No jobs found")).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe("<JobsList />", () => {
             state: JobState.complete,
         });
         const scope = mockApiGetJobs([jobs], 0);
-        renderWithMemoryRouter(<JobsList />);
+        renderWithRouter(<JobsList />);
 
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
         expect(await screen.findByText("No jobs matching filters")).toBeInTheDocument();

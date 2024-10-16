@@ -13,12 +13,15 @@ import { useImportReference, useUploadReference } from "@references/queries";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
+import { useLocation } from "wouter";
 
 const ImportReferenceUpload = styled.div`
     margin-bottom: 15px;
 `;
 
 export function ImportReference() {
+    const [, navigate] = useLocation();
+
     const importMutation = useImportReference();
     const { uploadMutation, fileName, fileNameOnDisk, progress } = useUploadReference();
 
@@ -72,7 +75,10 @@ export function ImportReference() {
 
             <form
                 onSubmit={handleSubmit(values => {
-                    importMutation.mutate({ ...values, importFrom: fileNameOnDisk });
+                    importMutation.mutate(
+                        { ...values, importFrom: fileNameOnDisk },
+                        { onSuccess: () => navigate("~/refs") },
+                    );
                 })}
             >
                 <InputGroup>

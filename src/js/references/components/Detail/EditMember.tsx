@@ -3,9 +3,9 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { referenceQueryKeys, useUpdateReferenceMember } from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import { MemberRight } from "./MemberRight";
 
 const rights = ["modify_otu", "build", "modify", "remove"];
@@ -20,8 +20,7 @@ type EditReferenceMemberProps = {
  * Displays a dialog to modify rights for a member
  */
 export default function EditReferenceMember({ noun, refId, member }: EditReferenceMemberProps) {
-    const history = useHistory();
-    const location = useLocation();
+    const [openEdit, setOpenEdit] = useUrlSearchParam(`openEdit${noun}`);
     const mutation = useUpdateReferenceMember(noun);
     const queryClient = useQueryClient();
 
@@ -29,7 +28,7 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
         mutation.mutate(
             {
                 refId,
-                id: location.state?.[`edit${noun}`],
+                id: openEdit,
                 update: {
                     [key]: enabled,
                 },
@@ -47,10 +46,7 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
     ));
 
     return (
-        <Dialog
-            open={location.state?.[`edit${noun}`]}
-            onOpenChange={() => history.push({ state: { [`edit${noun}`]: false } })}
-        >
+        <Dialog open={Boolean(openEdit)} onOpenChange={() => setOpenEdit("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

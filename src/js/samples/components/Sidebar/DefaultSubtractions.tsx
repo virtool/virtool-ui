@@ -1,10 +1,9 @@
 import { fontWeight, getColor, getFontSize } from "@app/theme";
-import { LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
+import { Link, LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { xor } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { SampleSidebarSelector } from "./SampleSidebarSelector";
 

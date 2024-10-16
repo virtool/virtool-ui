@@ -5,6 +5,7 @@ import { PaginationPrevious } from "@base/pagination/PaginationPrevious";
 import { PaginationRoot } from "@base/pagination/PaginationRoot";
 import { map, max, min, range } from "lodash-es";
 import React from "react";
+import { useSearch } from "wouter";
 
 function getPageRange(pageCount, storedPage, leftButtons = 1, rightButtons = 2) {
     const totalButtons = leftButtons + rightButtons;
@@ -37,6 +38,7 @@ export function Pagination({
     pageCount,
     onLoadNextPage,
 }: PaginationProps) {
+    const search = useSearch();
     onLoadNextPage = onLoadNextPage || (() => {});
 
     const entries = renderRow && map(items, item => renderRow(item));
@@ -53,7 +55,7 @@ export function Pagination({
         </PaginationLink>
     ));
 
-    const filters = new URLSearchParams(window.location.search);
+    const filters = new URLSearchParams(search);
     filters.delete("page");
 
     return (

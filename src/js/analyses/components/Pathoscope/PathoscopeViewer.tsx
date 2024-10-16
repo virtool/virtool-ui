@@ -2,7 +2,7 @@ import { PathoscopeViewerScroller } from "@/analyses/components/Pathoscope/Patho
 import { FormattedPathoscopeAnalysis } from "@/analyses/types";
 import { Alert } from "@base";
 import { Sample } from "@samples/types";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { AnalysisMapping } from "./AnalysisMapping";
 import { PathoscopeList } from "./PathoscopeList";
@@ -17,7 +17,7 @@ type PathoscopeViewerProps = {
 
 /** Detailed breakdown of the results of a pathoscope analysis */
 export function PathoscopeViewer({ detail, sample }: PathoscopeViewerProps) {
-    const [showReads] = useUrlSearchParams<boolean>("reads");
+    const [showReads] = useUrlSearchParam("reads");
 
     return (
         <>

@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiAddSequence } from "@tests/fake/otus";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import AddBarcodeSequence from "../AddBarcodeSequence";
@@ -21,7 +21,7 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should render all fields", () => {
-        renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
 
         expect(screen.getByText("Target")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("<AddBarcodeSequence>", () => {
             undefined,
             "test_target_name_2",
         );
-        renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
 
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByText("test_target_name_2"));
@@ -57,7 +57,7 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
 
         await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -66,7 +66,7 @@ describe("<AddBarcodeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
 
         await userEvent.type(screen.getByRole("textbox", { name: /Sequence/ }), "atbcq");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -85,7 +85,7 @@ describe("<AddBarcodeSequence>", () => {
             undefined,
             "test_target_name_2",
         );
-        renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
 
         await userEvent.click(screen.getByRole("button", { name: "undo restore" }));
         await userEvent.click(screen.getByRole("combobox"));
@@ -99,7 +99,7 @@ describe("<AddBarcodeSequence>", () => {
 
         scope.done();
 
-        renderWithMemoryRouter(<AddBarcodeSequence {...props} />, [{ state: { addSequence: true } }]);
+        renderWithRouter(<AddBarcodeSequence {...props} />, "?openAddSequence=true");
         expect(screen.getByText("Resumed editing draft sequence.")).toBeInTheDocument();
     });
 });

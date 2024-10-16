@@ -1,11 +1,10 @@
 import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthentication, useRootQuery } from "@wall/queries";
-import { History } from "history";
 import React, { Suspense } from "react";
-import { Router } from "react-router-dom";
-import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
+import { Router } from "wouter";
+import { useBrowserLocation } from "wouter/use-browser-location";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
@@ -57,21 +56,14 @@ const queryClient = new QueryClient({
     },
 });
 
-type AppProps = {
-    // React Router history object
-    history: History;
-};
-
 /** The root App component that provides theme, query client, and routing setup */
-export default function App({ history }: AppProps): React.ReactElement {
+export default function App(): React.ReactElement {
     return (
         <ThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-                <Router history={history}>
-                    <CompatRouter>
-                        <GlobalStyles />
-                        <ConnectedApp />
-                    </CompatRouter>
+                <Router hook={useBrowserLocation}>
+                    <GlobalStyles />
+                    <ConnectedApp />
                 </Router>
             </QueryClientProvider>
         </ThemeProvider>

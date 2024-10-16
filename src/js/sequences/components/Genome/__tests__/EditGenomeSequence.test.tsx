@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUSequence, mockApiEditSequence } from "../../../../../tests/fake/otus";
@@ -21,7 +21,7 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should render all fields with current sequence data", () => {
-        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
 
         expect(screen.getByText("Segment")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("<EditGenomeSequence>", () => {
             null,
             "ACGRYKM",
         );
-        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
@@ -57,7 +57,7 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
@@ -68,7 +68,7 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -87,7 +87,7 @@ describe("<EditGenomeSequence>", () => {
             null,
             "ACGRYKM",
         );
-        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
 
         await userEvent.click(screen.getByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
@@ -100,7 +100,7 @@ describe("<EditGenomeSequence>", () => {
 
         scope.done();
 
-        renderWithMemoryRouter(<EditGenomeSequence {...props} />, [{ state: { editSequence: true } }]);
+        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
         expect(screen.getByText("Resumed editing draft sequence.")).toBeInTheDocument();
     });
 });

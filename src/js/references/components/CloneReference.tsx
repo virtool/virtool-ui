@@ -14,7 +14,7 @@ import {
     SaveButton,
 } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -51,8 +51,8 @@ export default function CloneReference({ references }: CloneReferenceProps) {
         setValue,
     } = useForm<FormValues>();
     const mutation = useCloneReference();
-    const [locationState, setLocationState] = useLocationState();
-    const reference = find(references, { id: locationState?.cloneReference || "" });
+    const [cloneReference, setCloneReference] = useUrlSearchParam("cloneReference");
+    const reference = find(references, { id: cloneReference || "" });
 
     useEffect(() => {
         if (reference) {
@@ -65,17 +65,14 @@ export default function CloneReference({ references }: CloneReferenceProps) {
             { name, description: `Cloned from ${reference.name}`, refId: reference.id },
             {
                 onSuccess: () => {
-                    setLocationState({ cloneReference: false });
+                    setCloneReference("");
                 },
             },
         );
     }
 
     return (
-        <Dialog
-            onOpenChange={() => setLocationState({ cloneReference: false })}
-            open={Boolean(locationState?.cloneReference)}
-        >
+        <Dialog onOpenChange={() => setCloneReference("")} open={Boolean(cloneReference)}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

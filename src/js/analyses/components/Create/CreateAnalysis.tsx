@@ -1,8 +1,9 @@
+import { Workflows } from "@/analyses/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUrlSearchParam } from "@utils/hooks";
 import { groupBy, map, maxBy } from "lodash-es";
 import { includes, keysIn } from "lodash-es/lodash";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import { Dialog, DialogOverlay, DialogTitle } from "../../../base";
 import { HMMSearchResults } from "../../../hmm/types";
 import { useListIndexes } from "../../../indexes/queries";
@@ -10,7 +11,6 @@ import { useFindModels } from "../../../ml/queries";
 import { useFetchSample } from "../../../samples/queries";
 import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
 import { useCreateAnalysis } from "../../queries";
-import { Workflows } from "../../types";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
 import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisForm";
@@ -28,10 +28,7 @@ type CreateAnalysisProps = {
  * Dialog for creating an analysis
  */
 export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) {
-    const history = useHistory();
-    const location = useLocation<{ createAnalysis: Workflows }>();
-    const workflow = location.state?.createAnalysis;
-    const open = Boolean(workflow);
+    const [createAnalysisType, setCreateAnalysisType] = useUrlSearchParam("createAnalysisType");
 
     const createAnalysis = useCreateAnalysis();
 
@@ -63,20 +60,23 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
         createAnalysis.mutate({ refId, subtractionIds: subtractions, sampleId, workflow, mlModel });
     }
 
-    function onChangeWorkflow(workflow: Workflows) {
-        history.push({ state: { createAnalysis: workflow } });
+    function onOpenChange(open) {
+        setCreateAnalysisType(open);
+        if (!open) {
+            setCreateAnalysisType("");
+        }
     }
 
     return (
-        <Dialog open={open} onOpenChange={open => history.push({ state: { createAnalysis: open } })}>
+        <Dialog open={includes(Workflows, createAnalysisType)} onOpenChange={onOpenChange}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
                     <DialogTitle>Analyze</DialogTitle>
                     <HMMAlert installed={hmms.status.task?.complete} />
                     <WorkflowSelector
-                        onSelect={onChangeWorkflow}
-                        selected={location.state?.createAnalysis}
+                        onSelect={setCreateAnalysisType}
+                        selected={createAnalysisType}
                         workflows={compatibleWorkflows}
                     />
                     <CreateAnalysisForm
@@ -86,7 +86,7 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
                         onSubmit={onSubmit}
                         sampleCount={1}
                         subtractions={subtractionOptions}
-                        workflow={workflow}
+                        workflow={Workflows[createAnalysisType]}
                     />
                 </CreateAnalysisDialogContent>
             </DialogPortal>

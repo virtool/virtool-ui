@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderWithMemoryRouter } from "@tests/setup";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mockApiCreateOTU } from "../../../../tests/fake/otus";
@@ -18,7 +18,7 @@ describe("<OTUForm />", () => {
     });
 
     it("should render", () => {
-        renderWithMemoryRouter(<CreateOTU {...props} />, [{ state: { createOTU: true } }]);
+        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
 
         expect(screen.getByText("Create OTU")).toBeInTheDocument();
         expect(screen.getByLabelText("Name")).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe("<OTUForm />", () => {
     });
 
     it("should render error once submitted with no name", async () => {
-        renderWithMemoryRouter(<CreateOTU {...props} />, [{ state: { createOTU: true } }]);
+        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
 
         await userEvent.click(screen.getByRole("button"));
         expect(screen.getByText("Name required")).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe("<OTUForm />", () => {
 
     it("should create OTU without abbreviation", async () => {
         const scope = mockApiCreateOTU(props.refId, "TestName", "");
-        renderWithMemoryRouter(<CreateOTU {...props} />, [{ state: { createOTU: true } }]);
+        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
 
         await userEvent.type(screen.getByLabelText("Name"), "TestName");
         await userEvent.click(screen.getByRole("button"));
@@ -45,7 +45,7 @@ describe("<OTUForm />", () => {
 
     it("should create OTU with abbreviation", async () => {
         const scope = mockApiCreateOTU(props.refId, "TestName", "TestAbbreviation");
-        renderWithMemoryRouter(<CreateOTU {...props} />, [{ state: { createOTU: true } }]);
+        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
 
         await userEvent.type(screen.getByLabelText("Name"), "TestName");
         await userEvent.type(screen.getByLabelText("Abbreviation"), "TestAbbreviation");

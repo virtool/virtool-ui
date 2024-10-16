@@ -1,10 +1,9 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { BoxGroupSection, Icon, InitialIcon, Label } from "@base";
+import { BoxGroupSection, Icon, InitialIcon, Label, Link } from "@base";
 import { GroupMinimal } from "@groups/types";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledUserItem = styled(BoxGroupSection)`
@@ -61,7 +60,7 @@ export function UserItem({ active, administrator_role, handle, id, primary_group
         <StyledUserItem>
             <UserContainer>
                 <InitialIcon size="lg" handle={handle} />
-                {canEdit ? <UserLink to={`users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
+                {canEdit ? <UserLink to={`/administration/users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
             </UserContainer>
             <TagContainer>
                 {administrator_role && (

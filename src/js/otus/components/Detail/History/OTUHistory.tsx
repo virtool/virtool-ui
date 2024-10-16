@@ -3,18 +3,13 @@ import HistoryList from "@otus/components/Detail/History/HistoryList";
 import { useFetchOTUHistory } from "@otus/queries";
 import { groupBy } from "lodash-es";
 import React from "react";
-import { match } from "react-router-dom";
-
-type OTUHistoryProps = {
-    /** Match object containing path information */
-    match: match<{ otuId: string }>;
-};
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * Display and manage the history for the OTU
  */
-export default function OTUHistory({ match }: OTUHistoryProps) {
-    const { otuId } = match.params;
+export default function OTUHistory() {
+    const { otuId } = useSearchParams<{ otuId: string }>();
     const { data, isPending } = useFetchOTUHistory(otuId);
 
     if (isPending) {
