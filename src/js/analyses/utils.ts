@@ -89,6 +89,10 @@ function getIdentities(data) {
 const getSequenceIdentities = sequence => flatMap(sequence.hits, hit => hit.identity);
 
 export const formatAODPData = detail => {
+    if (detail.results === null) {
+        return detail;
+    }
+
     const results = map(detail.results, result => {
         const isolates = map(result.isolates, isolate => {
             const sequences = map(isolate.sequences, sequence => {
@@ -119,6 +123,10 @@ export const formatAODPData = detail => {
 };
 
 export const formatNuVsData = detail => {
+    if (detail.results === null) {
+        return detail;
+    }
+
     const hits = map(detail.results.hits, hit => ({
         ...hit,
         id: toNumber(hit.index),
@@ -188,7 +196,7 @@ export const formatSequence = (sequence, readCount) => ({
 });
 
 export const formatPathoscopeData = detail => {
-    if (detail.results.hits.length === 0) {
+    if (detail.results === null || detail.results.hits.length === 0) {
         return detail;
     }
 
