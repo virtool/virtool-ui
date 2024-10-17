@@ -8,6 +8,7 @@ import { useBrowserLocation } from "wouter/use-browser-location";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
+import { resetClient } from "@utils/utils";
 
 // Lazy load components
 const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
@@ -46,8 +47,11 @@ const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             retry: (failureCount: number, error: any) => {
-                if ([401, 403, 404].includes(error.response?.status)) {
+                if ([403, 404].includes(error.response?.status)) {
                     return false;
+                }
+                if (error.response?.status === 401) {
+                    resetClient();
                 }
                 return failureCount <= 3;
             },
