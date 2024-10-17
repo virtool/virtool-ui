@@ -13,6 +13,7 @@ import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 
 describe("<Indexes />", () => {
     let reference;
+    let path;
 
     beforeEach(() => {
         reference = createFakeReference();
@@ -23,6 +24,7 @@ describe("<Indexes />", () => {
             }),
         );
         mockApiGetSettings(createFakeSettings());
+        path = `/refs/${reference.id}/indexes`;
     });
 
     afterEach(() => nock.cleanAll());
@@ -35,7 +37,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithRouter(<References />, `/refs/${reference.id}/indexes`);
+        renderWithRouter(<References />, path);
 
         await waitFor(() => findIndexesScope.done());
         expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
@@ -59,7 +61,7 @@ describe("<Indexes />", () => {
             total_otu_count: 1,
             change_count: 1,
         });
-        renderWithRouter(<References />, `/refs/${reference.id}/indexes`);
+        renderWithRouter(<References />, path);
 
         await waitFor(() => scope.done());
 

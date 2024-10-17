@@ -15,6 +15,7 @@ import SamplesList from "../SamplesList";
 
 describe("<SamplesList />", () => {
     let samples;
+    const path = "/samples";
 
     beforeEach(() => {
         samples = [createFakeSampleMinimal(), createFakeSampleMinimal()];
@@ -27,7 +28,7 @@ describe("<SamplesList />", () => {
     });
 
     it("should render correctly", async () => {
-        renderWithRouter(<SamplesList />, "/samples");
+        renderWithRouter(<SamplesList />, path);
         expect(await screen.findByText("Samples")).toBeInTheDocument();
 
         expect(screen.getByText(samples[0].name)).toBeInTheDocument();
@@ -35,7 +36,7 @@ describe("<SamplesList />", () => {
     });
 
     it("should call onChange when search input changes in toolbar", async () => {
-        renderWithRouter(<SamplesList />, "/samples");
+        renderWithRouter(<SamplesList />, path);
         expect(await screen.findByText("Samples")).toBeInTheDocument();
 
         const inputElement = screen.getByPlaceholderText("Sample name");
@@ -47,14 +48,14 @@ describe("<SamplesList />", () => {
 
     it("should render create button when [canModify=true]", async () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-        renderWithRouter(<SamplesList />, "/samples");
+        renderWithRouter(<SamplesList />, path);
 
         expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
     });
 
     it("should not render create button when [canModify=false]", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-        renderWithRouter(<SamplesList />, "/samples");
+        renderWithRouter(<SamplesList />, path);
 
         expect(screen.queryByRole("link", { name: "Create" })).not.toBeInTheDocument();
     });

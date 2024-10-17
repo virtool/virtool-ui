@@ -8,15 +8,17 @@ import { renderWithRouter } from "../../../../../tests/setup";
 
 describe("<ReferenceManager />", () => {
     let reference;
+    let path;
 
     beforeEach(() => {
         reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
         mockApiGetSettings(createFakeSettings());
+        path = `/refs/${reference.id}/manage`;
     });
 
     it("should render properly", async () => {
-        renderWithRouter(<References />, `/refs/${reference.id}/manage`);
+        renderWithRouter(<References />, path);
 
         expect(await screen.findByText("General")).toBeInTheDocument();
         expect(screen.getByText("Description")).toBeInTheDocument();
@@ -29,14 +31,14 @@ describe("<ReferenceManager />", () => {
     });
 
     it("should render when [remotes_from=null]", async () => {
-        renderWithRouter(<References />, `/refs/${reference.id}/manage`);
+        renderWithRouter(<References />, path);
 
         expect(await screen.findByText("General")).toBeInTheDocument();
         expect(screen.queryByText("Remote Reference")).toBeNull();
     });
 
     it("should render when [cloned_from={ Bar: 'Bee' }]", async () => {
-        renderWithRouter(<References />, `/refs/${reference.id}/manage`);
+        renderWithRouter(<References />, path);
 
         expect(await screen.findByText("Clone Reference")).toBeInTheDocument();
         expect(screen.getByText("Source Reference"));

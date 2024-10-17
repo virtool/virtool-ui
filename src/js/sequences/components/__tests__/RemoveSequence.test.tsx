@@ -1,48 +1,72 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeOTUSequence, mockApiRemoveSequence } from "../../../../tests/fake/otus";
+import {
+    createFakeOTU,
+    createFakeOTUSequence,
+    mockApiGetOTU,
+    mockApiRemoveSequence,
+} from "../../../../tests/fake/otus";
 import RemoveSequence from "../RemoveSequence";
+import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { AdministratorRoles } from "@administration/types";
+import References from "@references/components/References";
+import { formatPath } from "@utils/hooks";
+import nock from "nock";
 
 describe("<RemoveSequence />", () => {
-    let props;
+    let path;
+    let searchParams;
+    let reference;
+    let otu;
+    let otuScope;
+    let sourceType;
 
     beforeEach(() => {
-        props = {
-            otuId: "foo",
-            isolateId: "bar",
-            isolateName: "baz",
-            sequences: [createFakeOTUSequence()],
-        };
+        reference = createFakeReference({ name: "Foo" });
+        mockApiGetReferenceDetail(reference);
+        otu = createFakeOTU();
+        otuScope = mockApiGetOTU(otu);
+        mockApiGetSettings(createFakeSettings());
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+
+        path = `/refs/${reference.id}/otus/${otu.id}/otu`;
+        searchParams = { removeSequence: otu.isolates[0].sequences[0].id };
+
+        sourceType = otu.isolates[0].source_type[0].toUpperCase() + otu.isolates[0].source_type.slice(1);
     });
 
-    it("should render when [show=true]", () => {
-        renderWithRouter(<RemoveSequence {...props} />, `?removeSequence=${props.sequences[0].id}`);
+    it("should render when [show=true]", async () => {
+        renderWithRouter(<References />, formatPath(path, searchParams));
 
-        expect(screen.getByText("Remove Sequence")).toBeInTheDocument();
+        expect(await screen.findByText("Remove Sequence")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove the sequence/)).toBeInTheDocument();
-        expect(screen.getByText(`${props.sequences[0].accession}`)).toBeInTheDocument();
-        expect(screen.getByText(/baz?/)).toBeInTheDocument();
+        expect(screen.getAllByText(`${otu.isolates[0].sequences[0].accession}`)).toHaveLength(2);
+        expect(screen.getAllByText(`${sourceType} ${otu.isolates[0].source_name}`)).toHaveLength(3);
         expect(screen.getByRole("button")).toBeInTheDocument();
     });
 
-    it("should render when [show=false]", () => {
-        renderWithRouter(<RemoveSequence {...props} />, "");
+    it("should render when [show=false]", async () => {
+        renderWithRouter(<References />, path);
+
+        await waitFor(() => otuScope.done());
 
         expect(screen.queryByText("Remove Sequence")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove the sequence from/)).toBeNull();
-        expect(screen.queryByText(`${props.sequences[0].accession}`)).toBeNull();
-        expect(screen.queryByText(/baz?/)).toBeNull();
+        expect(screen.getAllByText(`${otu.isolates[0].sequences[0].accession}`)).toHaveLength(1);
+        expect(screen.getAllByText(`${sourceType} ${otu.isolates[0].source_name}`)).toHaveLength(2);
         expect(screen.queryByRole("button")).toBeNull();
     });
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
-        const scope = mockApiRemoveSequence(props.otuId, props.isolateId, props.sequences[0].id);
-        renderWithRouter(<RemoveSequence {...props} />, `?removeSequence=${props.sequences[0].id}`);
+        const scope = mockApiRemoveSequence(otu.id, otu.isolates[0].id, otu.isolates[0].sequences[0].id);
+        renderWithRouter(<References />, formatPath(path, searchParams));
 
-        await userEvent.click(screen.getByRole("button"));
+        await userEvent.click(await screen.findByRole("button", { name: "Confirm" }));
 
         scope.done();
     });

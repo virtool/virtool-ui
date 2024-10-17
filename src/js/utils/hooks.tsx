@@ -35,6 +35,23 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
  */
 export const useSearchParams = useParams;
 
+export function formatPath(basePath: string, searchParams: object) {
+    return basePath + formatSearchParams(searchParams);
+}
+
+/**
+ * create a new search string based on a collection of key:value pairs
+ *
+ * @param params -
+ */
+export function formatSearchParams(params: object) {
+    const searchParams = new URLSearchParams();
+    forEach(params, (value, key) => {
+        searchParams.append(key, value);
+    });
+    return `?${searchParams.toString()}`;
+}
+
 /**
  * create a modified search param string with an updated key:value based on the existing search string
  *
@@ -42,7 +59,7 @@ export const useSearchParams = useParams;
  * @param key - The search parameter key to be managed
  * @param search - The current search string
  */
-export function formatSearchParams(key: string, value: string, search: string) {
+export function formatSearchParam(key: string, value: string, search: string) {
     const params = new URLSearchParams(search);
 
     if (value) {

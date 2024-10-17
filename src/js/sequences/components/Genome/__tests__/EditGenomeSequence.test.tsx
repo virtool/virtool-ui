@@ -3,13 +3,37 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeOTUSequence, mockApiEditSequence } from "../../../../../tests/fake/otus";
+import {
+    createFakeOTU,
+    createFakeOTUSequence,
+    mockApiEditSequence,
+    mockApiGetOTU,
+} from "../../../../../tests/fake/otus";
 import EditGenomeSequence from "../EditGenomeSequence";
+import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { AdministratorRoles } from "@administration/types";
+import { formatPath } from "@utils/hooks";
+import References from "@references/components/References";
 
 describe("<EditGenomeSequence>", () => {
     let props;
+    let reference;
+    let otu;
+    let activeSequence;
+    let path;
 
     beforeEach(() => {
+        reference = createFakeReference({ data_type: "genome" });
+        mockApiGetReferenceDetail(reference);
+        otu = createFakeOTU();
+        activeSequence = otu.isolates[0].sequences[0];
+        mockApiGetOTU(otu);
+        mockApiGetSettings(createFakeSettings());
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, { openEditSequence: activeSequence.id });
+
         props = {
             activeSequence: createFakeOTUSequence({ sequence: "ACGY" }),
             isolateId: "test_isolate_id",
@@ -20,36 +44,42 @@ describe("<EditGenomeSequence>", () => {
         };
     });
 
-    it("should render all fields with current sequence data", () => {
-        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
+    afterEach(() => window.sessionStorage.clear());
 
-        expect(screen.getByText("Segment")).toBeInTheDocument();
+    it("should render all fields with current sequence data", async () => {
+        renderWithRouter(<References />, path);
+
+        expect(await screen.findByText("Segment")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toBeInTheDocument();
         expect(screen.getByRole("textbox", { name: "Accession (ID)" })).toHaveValue(props.initialAccession);
         expect(screen.getByRole("textbox", { name: "Host" })).toHaveValue(props.initialHost);
         expect(screen.getByRole("textbox", { name: "Definition" })).toHaveValue(props.initialDefinition);
-        expect(screen.getByRole("textbox", { name: "Sequence 4" })).toHaveValue(props.initialSequence);
+        expect(screen.getByRole("textbox", { name: /Sequence [0-9]/ })).toHaveValue(props.initialSequence);
     });
 
     it("should submit correct data when all fields changed", async () => {
         const scope = mockApiEditSequence(
-            props.otuId,
-            props.isolateId,
-            props.activeSequence.id,
+            otu.id,
+            otu.isolates[0].id,
+            activeSequence.id,
             "user_typed_accession",
             "user_typed_definition",
             "user_typed_host",
-            null,
             "ACGRYKM",
+            null,
         );
-        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
+        renderWithRouter(<References />, path);
 
-        await userEvent.click(screen.getByRole("combobox"));
+        await userEvent.click(await screen.findByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
+        await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
+        await userEvent.clear(screen.getByRole("textbox", { name: "Host" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
+        await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
-        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "ACGRYKM");
+        await userEvent.clear(screen.getByRole("textbox", { name: /Sequence [0-9]/ }));
+        await userEvent.type(screen.getByRole("textbox", { name: /Sequence [0-9]/ }), "ACGRYKM");
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
@@ -57,50 +87,54 @@ describe("<EditGenomeSequence>", () => {
     });
 
     it("should display errors when accession, definition, or sequence not defined", async () => {
-        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
+        renderWithRouter(<References />, path);
 
-        await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
+        await userEvent.clear(await screen.findByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
-        await userEvent.clear(screen.getByRole("textbox", { name: "Sequence 4" }));
+        await userEvent.clear(screen.getByRole("textbox", { name: /Sequence [0-9]/ }));
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(screen.getAllByText("Required Field").length).toBe(3);
     });
 
     it("should display specific error when sequence contains chars !== ATCGNRYKM", async () => {
-        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
+        renderWithRouter(<References />, path);
 
-        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "q");
+        await userEvent.type(await screen.findByRole("textbox", { name: /Sequence [0-9]/ }), "q");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(screen.getByText("Sequence should only contain the characters: ATCGNRYKM")).toBeInTheDocument();
     });
 
-    it("should resume editing once form opened after submitting", async () => {
+    it("should clear form cache submitting", async () => {
         const scope = mockApiEditSequence(
-            props.otuId,
-            props.isolateId,
-            props.activeSequence.id,
+            otu.id,
+            otu.isolates[0].id,
+            activeSequence.id,
             "user_typed_accession",
             "user_typed_definition",
             "user_typed_host",
-            null,
             "ACGRYKM",
+            null,
         );
-        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
+        renderWithRouter(<References />, path);
 
-        await userEvent.click(screen.getByRole("combobox"));
+        await userEvent.click(await screen.findByRole("combobox"));
         await userEvent.click(screen.getByRole("option", { name: "None" }));
+        await userEvent.clear(screen.getByRole("textbox", { name: "Accession (ID)" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Accession (ID)" }), "user_typed_accession");
+        await userEvent.clear(screen.getByRole("textbox", { name: "Host" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Host" }), "user_typed_host");
+        await userEvent.clear(screen.getByRole("textbox", { name: "Definition" }));
         await userEvent.type(screen.getByRole("textbox", { name: "Definition" }), "user_typed_definition");
-        await userEvent.type(screen.getByRole("textbox", { name: "Sequence 4" }), "ACGRYKM");
+        await userEvent.clear(screen.getByRole("textbox", { name: /Sequence [0-9]/ }));
+        await userEvent.type(screen.getByRole("textbox", { name: /Sequence [0-9]/ }), "ACGRYKM");
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         scope.done();
 
-        renderWithRouter(<EditGenomeSequence {...props} />, "?openEditSequence=true");
-        expect(screen.getByText("Resumed editing draft sequence.")).toBeInTheDocument();
+        renderWithRouter(<References />, path);
+        expect(screen.queryByText("Resumed editing draft sequence.")).toBeNull();
     });
 });

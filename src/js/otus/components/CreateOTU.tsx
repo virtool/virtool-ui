@@ -39,7 +39,10 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Create OTU</DialogTitle>
-                    <OTUForm onSubmit={handleSubmit} error={mutation.isError && mutation.error.response.body.message} />
+                    <OTUForm
+                        onSubmit={handleSubmit}
+                        error={mutation.isError && mutation.error.response?.body?.message}
+                    />
                 </DialogContent>
             </DialogPortal>
         </Dialog>

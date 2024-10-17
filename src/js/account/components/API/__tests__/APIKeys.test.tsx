@@ -14,18 +14,21 @@ import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import APIKeys from "../APIKeys";
+import { formatPath } from "@utils/hooks";
 
 describe("<APIKeys />", () => {
     let apiKeys;
+    let basePath;
 
     beforeEach(() => {
         apiKeys = [createFakeApiKey()];
+        basePath = "/account/api";
     });
 
     afterEach(() => nock.cleanAll());
 
     it("should render correctly when keys === null", () => {
-        renderWithRouter(<APIKeys />);
+        renderWithRouter(<APIKeys />, basePath);
 
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
         expect(screen.queryByText("Manage API keys for accessing the")).not.toBeInTheDocument();
@@ -33,7 +36,7 @@ describe("<APIKeys />", () => {
 
     it("should render correctly when apiKey exists", async () => {
         mockApiGetAPIKeys(apiKeys);
-        renderWithRouter(<APIKeys />);
+        renderWithRouter(<APIKeys />, basePath);
 
         expect(await screen.findByText("Manage API keys for accessing the")).toBeInTheDocument();
         expect(screen.getByText("Virtool API")).toBeInTheDocument();
@@ -43,7 +46,7 @@ describe("<APIKeys />", () => {
 
     it("should render correctly when no apiKeys exist", async () => {
         mockApiGetAPIKeys([]);
-        renderWithRouter(<APIKeys />);
+        renderWithRouter(<APIKeys />, basePath);
 
         expect(await screen.findByText("Manage API keys for accessing the")).toBeInTheDocument();
         expect(screen.getByText("Virtool API")).toBeInTheDocument();
@@ -51,13 +54,17 @@ describe("<APIKeys />", () => {
     });
 
     describe("<CreateAPIKey />", () => {
+        let basePath;
+        let searchParams;
         beforeEach(() => {
             mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
             mockApiGetAPIKeys(apiKeys);
+            basePath = "/account/api";
+            searchParams = { openCreateKey: true };
         });
 
         it("should render correctly when newKey = empty", async () => {
-            renderWithRouter(<APIKeys />, "/");
+            renderWithRouter(<APIKeys />, basePath);
 
             await userEvent.click(await screen.findByRole("link", { name: "Create" }));
 
@@ -72,7 +79,7 @@ describe("<APIKeys />", () => {
 
         it("should render correctly when newKey is set", async () => {
             const scope = mockApiCreateAPIKey("test", createFakePermissions({ remove_job: true }));
-            renderWithRouter(<APIKeys />, "?openCreateKey=true");
+            renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
 
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
             await userEvent.type(screen.getByLabelText("Name"), "test");
@@ -88,7 +95,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should fail to submit and display errors when no name provided", async () => {
-            renderWithRouter(<APIKeys />, "?openCreateKey=true");
+            renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
 
             expect(await screen.findByText("Create API Key")).toBeInTheDocument();
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -98,7 +105,7 @@ describe("<APIKeys />", () => {
         describe("<APIKeyAdministratorInfo />", () => {
             it("should render correctly when newKey is empty and state.administratorRole = AdministratorRoles.FULL", async () => {
                 mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-                renderWithRouter(<APIKeys />, "?openCreateKey=true");
+                renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
 
                 expect(await screen.findByText(/You are an administrator/)).toBeInTheDocument();
                 expect(
@@ -108,7 +115,7 @@ describe("<APIKeys />", () => {
 
             it("should render correctly when newKey is empty and state.administratorRole = null", () => {
                 mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-                renderWithRouter(<APIKeys />, "?openCreateKey=true");
+                renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
 
                 expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
                 expect(
@@ -119,13 +126,15 @@ describe("<APIKeys />", () => {
     });
 
     describe("<APIKey />", () => {
+        let basePath;
         beforeEach(() => {
             mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
             mockApiGetAPIKeys(apiKeys);
+            basePath = "/account/api";
         });
 
         it("should render correctly when collapsed", async () => {
-            renderWithRouter(<APIKeys />);
+            renderWithRouter(<APIKeys />, basePath);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
             expect(screen.getByText(/Created/)).toBeInTheDocument();
@@ -133,7 +142,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should render correctly when expanded", async () => {
-            renderWithRouter(<APIKeys />);
+            renderWithRouter(<APIKeys />, basePath);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
@@ -149,7 +158,7 @@ describe("<APIKeys />", () => {
         });
 
         it("should collapse view when close button clicked", async () => {
-            renderWithRouter(<APIKeys />);
+            renderWithRouter(<APIKeys />, basePath);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
@@ -165,13 +174,15 @@ describe("<APIKeys />", () => {
     });
 
     describe("<APIPermissions />", () => {
+        let basePath;
         beforeEach(() => {
             mockApiGetAPIKeys(apiKeys);
+            basePath = "/account/api";
         });
 
         it("should render permissions correctly and check and uncheck permissions when clicked, administrator_role == full", async () => {
             mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-            renderWithRouter(<APIKeys />);
+            renderWithRouter(<APIKeys />, basePath);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
@@ -192,7 +203,7 @@ describe("<APIKeys />", () => {
 
         it("should not check and uncheck permissions when administrator_role = base", async () => {
             mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.BASE }));
-            renderWithRouter(<APIKeys />);
+            renderWithRouter(<APIKeys />, basePath);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
@@ -217,7 +228,7 @@ describe("<APIKeys />", () => {
 
         it("should not check and uncheck permissions when administrator_role = null", async () => {
             mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-            renderWithRouter(<APIKeys />);
+            renderWithRouter(<APIKeys />, basePath);
 
             expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));

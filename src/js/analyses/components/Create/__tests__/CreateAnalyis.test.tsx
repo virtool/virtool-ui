@@ -11,12 +11,16 @@ import nock from "nock";
 import React from "react";
 import { describe, it } from "vitest";
 import CreateAnalysis from "../CreateAnalysis";
+import { Workflows } from "@/analyses/types";
+import { formatPath } from "@utils/hooks";
 
 describe("getCompatibleWorkflows()", () => {
     let sample;
     let subtractionShortlist;
     let indexMinimal;
     let props;
+    let basePath;
+    let searchParams;
 
     beforeEach(() => {
         sample = createFakeSample();
@@ -29,6 +33,8 @@ describe("getCompatibleWorkflows()", () => {
         mockApiGetSampleDetail(sample);
         mockApiGetShortlistSubtractions([subtractionShortlist], true);
         mockApiListIndexes([indexMinimal]);
+        basePath = `/samples/${sample.id}/analyses`;
+        searchParams = { createAnalysisType: Workflows.pathoscope_bowtie };
     });
 
     afterEach(() => nock.cleanAll());
@@ -37,10 +43,7 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithRouter(
-            <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?createAnalysisType=pathoscope_bowtie`,
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, searchParams));
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
@@ -60,10 +63,7 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithRouter(
-            <CreateAnalysis {...props} />,
-            `/samples/${sample.id}/analyses?createAnalysisType=pathoscope_bowtie`,
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, searchParams));
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
         await userEvent.click(await screen.findByRole("button", { name: "Start" }));
@@ -82,7 +82,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: id,
         });
 
-        renderWithRouter(<CreateAnalysis {...props} />, `/samples/${sample.id}/analyses?createAnalysisType=${id}`);
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, { createAnalysisType: id }));
 
         await userEvent.click(await screen.findByText(name));
         await userEvent.click(screen.getByText(subtractionShortlist.name));
@@ -104,7 +104,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: "iimi",
         });
 
-        renderWithRouter(<CreateAnalysis {...props} />, `/samples/${sample.id}/analyses?createAnalysisType=iimi`);
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, { createAnalysisType: "iimi" }));
 
         const comboboxes = await screen.findAllByRole("combobox");
 

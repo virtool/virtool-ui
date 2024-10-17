@@ -5,23 +5,29 @@ import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import EditSample from "../EditSample";
+import { formatPath } from "@utils/hooks";
 
 describe("<Editsample />", () => {
-    const sample = createFakeSample();
+    let sample;
     let props;
+    let path;
+    let searchParams;
 
     beforeEach(() => {
+        sample = createFakeSample();
         props = {
             sample,
             show: true,
             onHide: vi.fn(),
         };
+        path = `/samples/${props.sample.id}/general`;
+        searchParams = { openEditSample: true };
     });
 
     it("should render when [show=false]", () => {
         props.show = false;
 
-        renderWithRouter(<EditSample {...props} />);
+        renderWithRouter(<EditSample {...props} />, path);
 
         expect(screen.queryByRole("textbox", { name: "Name" })).toBeNull();
         expect(screen.queryByRole("textbox", { name: "Isolate" })).toBeNull();
@@ -32,7 +38,7 @@ describe("<Editsample />", () => {
     });
 
     it.each(["Name", "Isolate", "Host", "Locale", "Notes"])("should render changed data for", async inputLabel => {
-        renderWithRouter(<EditSample {...props} />, "?openEditSample=true");
+        renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
 
         const inputBox = screen.getByLabelText(inputLabel);
         expect(inputBox).toBeInTheDocument();
@@ -47,7 +53,7 @@ describe("<Editsample />", () => {
 
     it("should update sample when form is submitted", async () => {
         const scope = mockApiEditSample(sample, "newName", "newIsolate", "newHost", "newLocale", "newNotes");
-        renderWithRouter(<EditSample {...props} />, "?openEditSample=true");
+        renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
 
         const nameInput = screen.getByLabelText("Name");
         await userEvent.clear(nameInput);

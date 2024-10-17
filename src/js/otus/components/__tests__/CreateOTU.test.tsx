@@ -2,52 +2,57 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { mockApiCreateOTU } from "../../../../tests/fake/otus";
-import CreateOTU from "../CreateOTU";
+import { beforeEach, describe, expect, it } from "vitest";
+import { createFakeOTUMinimal, mockApiCreateOTU, mockApiGetOTUs } from "../../../../tests/fake/otus";
+import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import { formatPath } from "@utils/hooks";
+import References from "@references/components/References";
+import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 
 describe("<OTUForm />", () => {
-    let props;
+    let path;
+    let reference;
 
     beforeEach(() => {
-        props = {
-            refId: "foo",
-            show: true,
-            onHide: vi.fn(),
-        };
+        reference = createFakeReference();
+        mockApiGetReferenceDetail(reference);
+        mockApiGetOTUs([createFakeOTUMinimal()], reference.id);
+        mockApiGetSettings(createFakeSettings());
+
+        path = formatPath(`/refs/${reference.id}/otus`, { openCreateOTU: true });
     });
 
-    it("should render", () => {
-        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
+    it("should render", async () => {
+        renderWithRouter(<References />, path);
 
-        expect(screen.getByText("Create OTU")).toBeInTheDocument();
+        expect(await screen.findByText("Create OTU")).toBeInTheDocument();
         expect(screen.getByLabelText("Name")).toBeInTheDocument();
         expect(screen.getByLabelText("Abbreviation")).toBeInTheDocument();
         expect(screen.getByRole("button")).toBeInTheDocument();
     });
 
     it("should render error once submitted with no name", async () => {
-        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
+        renderWithRouter(<References />, path);
 
-        await userEvent.click(screen.getByRole("button"));
+        await userEvent.click(await screen.findByRole("button"));
         expect(screen.getByText("Name required")).toBeInTheDocument();
     });
 
     it("should create OTU without abbreviation", async () => {
-        const scope = mockApiCreateOTU(props.refId, "TestName", "");
-        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
+        const scope = mockApiCreateOTU(reference.id, "TestName", "");
+        renderWithRouter(<References />, path);
 
-        await userEvent.type(screen.getByLabelText("Name"), "TestName");
+        await userEvent.type(await screen.findByLabelText("Name"), "TestName");
         await userEvent.click(screen.getByRole("button"));
 
         scope.done();
     });
 
     it("should create OTU with abbreviation", async () => {
-        const scope = mockApiCreateOTU(props.refId, "TestName", "TestAbbreviation");
-        renderWithRouter(<CreateOTU {...props} />, "?openCreateOTU=true");
+        const scope = mockApiCreateOTU(reference.id, "TestName", "TestAbbreviation");
+        renderWithRouter(<References />, path);
 
-        await userEvent.type(screen.getByLabelText("Name"), "TestName");
+        await userEvent.type(await screen.findByLabelText("Name"), "TestName");
         await userEvent.type(screen.getByLabelText("Abbreviation"), "TestAbbreviation");
         await userEvent.click(screen.getByRole("button"));
 
