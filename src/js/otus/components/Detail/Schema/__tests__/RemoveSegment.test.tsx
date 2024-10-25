@@ -4,7 +4,6 @@ import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTU, mockApiEditOTU, mockApiGetOTU } from "../../../../../../tests/fake/otus";
-import RemoveSegment from "../RemoveSegment";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";

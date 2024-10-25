@@ -3,20 +3,13 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-    createFakeOTU,
-    createFakeOTUSequence,
-    mockApiEditSequence,
-    mockApiGetOTU,
-} from "../../../../../tests/fake/otus";
-import EditBarcodeSequence from "../EditBarcodeSequence";
+import { createFakeOTU, mockApiEditSequence, mockApiGetOTU } from "../../../../../tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { AdministratorRoles } from "@administration/types";
 import { formatPath } from "@utils/hooks";
 import References from "@references/components/References";
-import nock from "nock";
 
 describe("<EditBarcodeSequence>", () => {
     let props;

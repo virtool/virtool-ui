@@ -9,7 +9,7 @@ import { vi } from "vitest";
 import { BaseLocationHook, Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 import { Path } from "wouter/types/location-hook";
-import { formatSearchParams } from "@utils/hooks";
+
 process.env.TZ = "UTC";
 
 export function wrapWithProviders(ui: ReactNode) {

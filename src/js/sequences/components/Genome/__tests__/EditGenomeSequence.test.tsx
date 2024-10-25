@@ -9,7 +9,6 @@ import {
     mockApiEditSequence,
     mockApiGetOTU,
 } from "../../../../../tests/fake/otus";
-import EditGenomeSequence from "../EditGenomeSequence";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";

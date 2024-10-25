@@ -1,6 +1,6 @@
 import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox, Link } from "@base";
+import { Box, BoxGroup, ExternalLink, Link, LoadingPlaceholder, NoneFoundBox } from "@base";
 import { formatSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";

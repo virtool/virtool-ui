@@ -14,7 +14,6 @@ import { formatPath } from "@utils/hooks";
 describe("<FileManager>", () => {
     let props: FileManagerProps;
     let path;
-    let searchParams;
 
     afterEach(() => {
         vi.restoreAllMocks();

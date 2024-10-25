@@ -4,7 +4,6 @@ import { createFakeOTU, mockApiAddSequence, mockApiGetOTU } from "@tests/fake/ot
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import AddGenomeSequence from "../AddGenomeSequence";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";

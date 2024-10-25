@@ -3,20 +3,13 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-    createFakeOTU,
-    createFakeOTUSequence,
-    mockApiGetOTU,
-    mockApiRemoveSequence,
-} from "../../../../tests/fake/otus";
-import RemoveSequence from "../RemoveSequence";
+import { createFakeOTU, mockApiGetOTU, mockApiRemoveSequence } from "../../../../tests/fake/otus";
 import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { AdministratorRoles } from "@administration/types";
 import References from "@references/components/References";
 import { formatPath } from "@utils/hooks";
-import nock from "nock";
 
 describe("<RemoveSequence />", () => {
     let path;
