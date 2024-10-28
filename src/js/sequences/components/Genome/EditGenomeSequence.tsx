@@ -1,34 +1,27 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { useEditSequence } from "@otus/queries";
-import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
+import { useGetActiveSequence, useGetUnreferencedSegments } from "@sequences/hooks";
 
 type EditGenomeSequenceProps = {
-    activeSequence: OTUSequence;
     hasSchema: boolean;
     isolateId: string;
     otuId: string;
     refId: string;
-    /** A list of unreferenced segments */
-    segments: OTUSegment[];
 };
 
 /**
  * Displays dialog to edit a genome sequence
  */
-export default function EditGenomeSequence({
-    activeSequence,
-    hasSchema,
-    isolateId,
-    otuId,
-    refId,
-    segments,
-}: EditGenomeSequenceProps) {
+export default function EditGenomeSequence({ hasSchema, isolateId, otuId, refId }: EditGenomeSequenceProps) {
     const [openEditSequence, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
     const mutation = useEditSequence(otuId);
+
+    const segments = useGetUnreferencedSegments();
+    const activeSequence = useGetActiveSequence();
 
     function onSubmit({ accession, definition, host, sequence, segment }) {
         mutation.mutate(
