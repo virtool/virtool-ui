@@ -9,6 +9,7 @@ import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
 import { resetClient } from "@utils/utils";
+import { ErrorBoundary } from "@app/ErrorBoundary";
 
 // Lazy load components
 const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
@@ -64,12 +65,14 @@ const queryClient = new QueryClient({
 export default function App(): React.ReactElement {
     return (
         <ThemeProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-                <Router hook={useBrowserLocation}>
-                    <GlobalStyles />
-                    <ConnectedApp />
-                </Router>
-            </QueryClientProvider>
+            <ErrorBoundary>
+                <QueryClientProvider client={queryClient}>
+                    <Router hook={useBrowserLocation}>
+                        <GlobalStyles />
+                        <ConnectedApp />
+                    </Router>
+                </QueryClientProvider>
+            </ErrorBoundary>
         </ThemeProvider>
     );
 }
