@@ -1,14 +1,20 @@
 import React from "react";
 
 type ErrorBoundryState = {
+    /* Indicates if any error has occured */
     hasError: boolean;
+    /* the most recent error detected */
     error: Error;
 };
 
 type ErrorBoundryProps = {
+    /* UI to render when no error is detected */
     children: React.ReactNode;
 };
 
+/**
+ * Error handling that refreshes the website when an old client version is detected
+ */
 export class ErrorBoundary extends React.Component<ErrorBoundryProps, ErrorBoundryState> {
     constructor(props) {
         super(props);
