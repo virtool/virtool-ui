@@ -13,7 +13,7 @@ type ErrorBoundryProps = {
 };
 
 /**
- * Error handling that refreshes the website when an old client version is detected
+ * Error handling component that refreshes the website when an old client version is detected
  */
 export class ErrorBoundary extends React.Component<ErrorBoundryProps, ErrorBoundryState> {
     constructor(props) {
