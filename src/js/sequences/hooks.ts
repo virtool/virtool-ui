@@ -87,7 +87,7 @@ export function useGetUnreferencedTargets() {
 }
 
 /**
- * Get a list of targets that have not already been assigned to a sequence
+ * Get a list of targets that are valid selections for the active sequence
  *
  * @returns A list of unreferenced targets
  */
