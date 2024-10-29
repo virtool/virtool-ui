@@ -10,16 +10,18 @@ import HMM from "../HMM";
 
 describe("<HMMList />", () => {
     let fakeHMMData;
+    let path;
 
     beforeEach(() => {
         fakeHMMData = createFakeHMMSearchResults();
+        path = "/hmm";
     });
 
     afterEach(() => nock.cleanAll());
 
     it("should render correctly", async () => {
         const scope = mockApiGetHmms(fakeHMMData);
-        renderWithRouter(<HMM />, "/hmm");
+        renderWithRouter(<HMM />, path);
 
         expect(await screen.findByText("HMMs")).toBeInTheDocument();
         expect(screen.getByPlaceholderText("Definition")).toBeInTheDocument();
@@ -33,7 +35,7 @@ describe("<HMMList />", () => {
     it("should render correctly when no documents exist", async () => {
         const fakeHMMData = createFakeHMMSearchResults({ documents: [] });
         const scope = mockApiGetHmms(fakeHMMData);
-        renderWithRouter(<HMM />, "/hmm");
+        renderWithRouter(<HMM />, path);
 
         expect(await screen.findByText("HMMs")).toBeInTheDocument();
         expect(screen.getByText("No HMMs found.")).toBeInTheDocument();
@@ -47,7 +49,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
-            renderWithRouter(<HMM />, "/hmm");
+            renderWithRouter(<HMM />, path);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
@@ -67,7 +69,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: null });
             mockApiGetAccount(account);
-            renderWithRouter(<HMM />, "/hmm");
+            renderWithRouter(<HMM />, path);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
@@ -95,7 +97,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
-            renderWithRouter(<HMM />, "/hmm");
+            renderWithRouter(<HMM />, path);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 

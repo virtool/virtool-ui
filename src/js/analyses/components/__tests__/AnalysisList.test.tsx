@@ -10,10 +10,13 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
+import { Workflows } from "@/analyses/types";
+import { formatPath } from "@utils/hooks";
 
 describe("<AnalysesList />", () => {
     let analyses;
     let sample;
+    let basePath;
 
     beforeEach(() => {
         sample = createFakeSample();
@@ -24,6 +27,7 @@ describe("<AnalysesList />", () => {
         ];
         mockApiGetAnalyses(analyses);
         mockApiGetHmms(createFakeHMMSearchResults());
+        basePath = `/samples/${sample.id}/analyses/`;
     });
 
     afterEach(() => nock.cleanAll());
@@ -31,7 +35,7 @@ describe("<AnalysesList />", () => {
     describe("<AnalysesList />", () => {
         it("should render", async () => {
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, basePath);
 
             expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
             expect(screen.getByText(`${analyses[0].user.handle} created`)).toBeInTheDocument();
@@ -45,7 +49,7 @@ describe("<AnalysesList />", () => {
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, basePath);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -55,7 +59,7 @@ describe("<AnalysesList />", () => {
             sample.user.id = account.id;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, basePath);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -66,7 +70,7 @@ describe("<AnalysesList />", () => {
             sample.group_write = true;
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, basePath);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -78,7 +82,7 @@ describe("<AnalysesList />", () => {
             sample.all_write = true;
             mockApiGetSampleDetail(sample);
 
-            renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            renderWithRouter(<Analyses />, basePath);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
         });
@@ -105,7 +109,11 @@ describe("<AnalysesList />", () => {
             await userEvent.click(screen.getByText("Create"));
 
             await waitFor(() =>
-                expect(history[0]).toEqual(`/samples/${sample.id}/analyses/?createAnalysisType=pathoscope_bowtie`),
+                expect(history[0]).toEqual(
+                    formatPath(basePath, {
+                        createAnalysisType: Workflows.pathoscope_bowtie,
+                    }),
+                ),
             );
         });
     });

@@ -1,45 +1,59 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { mockApiRemoveOTU } from "../../../../../tests/fake/otus";
-import RemoveOTU from "../RemoveOTU";
+import { createFakeOTU, mockApiGetOTU, mockApiRemoveOTU } from "../../../../../tests/fake/otus";
+import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import { formatPath } from "@utils/hooks";
+import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import References from "@references/components/References";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { AdministratorRoles } from "@administration/types";
 
 describe("<RemoveOTU />", () => {
-    let props;
+    let path;
+    let reference;
+    let searchParams;
+    let otu;
+    let otuScope;
 
     beforeEach(() => {
-        props = {
-            id: "foo",
-            name: "Foo",
-            refId: "baz",
-        };
+        reference = createFakeReference({ name: "Foo" });
+        mockApiGetReferenceDetail(reference);
+        otu = createFakeOTU();
+        otuScope = mockApiGetOTU(otu);
+        mockApiGetSettings(createFakeSettings());
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+
+        path = `/refs/${reference.id}/otus/${otu.id}/otu`;
+        searchParams = { openRemoveOTU: true };
     });
 
-    it("should render when [show=true]", () => {
-        renderWithRouter(<RemoveOTU {...props} />, "?openRemoveOTU=true");
+    it("should render when [show=true]", async () => {
+        renderWithRouter(<References />, formatPath(path, searchParams));
 
-        expect(screen.getByText("Remove OTU")).toBeInTheDocument();
+        expect(await screen.findByText("Remove OTU")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
         expect(screen.getByText(/Foo?/)).toBeInTheDocument();
-        expect(screen.getByRole("button")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
     });
 
-    it("should render when [show=false]", () => {
-        renderWithRouter(<RemoveOTU {...props} />, "");
+    it("should render when [show=false]", async () => {
+        renderWithRouter(<References />, path);
+
+        await waitFor(() => otuScope.done());
 
         expect(screen.queryByText("Remove OTU")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
-        expect(screen.queryByText(/Foo?/)).toBeNull();
-        expect(screen.queryByRole("button")).toBeNull();
+        expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
     });
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
-        const scope = mockApiRemoveOTU(props.id);
-        renderWithRouter(<RemoveOTU {...props} />, "?openRemoveOTU=true");
+        const scope = mockApiRemoveOTU(otu.id);
+        renderWithRouter(<References />, formatPath(path, searchParams));
 
-        await userEvent.click(screen.getByRole("button"));
+        await userEvent.click(await screen.findByRole("button", { name: "Confirm" }));
 
         scope.done();
     });

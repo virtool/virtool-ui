@@ -8,19 +8,21 @@ import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
 import CreateSubtraction from "../CreateSubtraction";
+import { formatPath } from "@utils/hooks";
 
 describe("<CreateSubtraction />", () => {
+    let path;
     afterEach(() => {
         sessionStorage.clear();
     });
 
     beforeEach(() => {
-        sessionStorage.clear();
+        path = formatPath("/subtractions", { openCreateSubtraction: true });
     });
 
     it("should render when no files available", async () => {
         mockApiListFiles([]);
-        renderWithRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
+        renderWithRouter(<CreateSubtraction />, path);
 
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
     });
@@ -28,7 +30,7 @@ describe("<CreateSubtraction />", () => {
     it("should render error when submitted with no name or file entered", async () => {
         const file = createFakeFile({ name: "subtraction.fq.gz", type: FileType.subtraction });
         mockApiListFiles([file]);
-        renderWithRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
+        renderWithRouter(<CreateSubtraction />, path);
 
         expect(await screen.findByText(file.name)).toBeInTheDocument();
         await userEvent.click(await screen.findByText(/save/i));
@@ -45,7 +47,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        renderWithRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
+        renderWithRouter(<CreateSubtraction />, path);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -65,7 +67,7 @@ describe("<CreateSubtraction />", () => {
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
         mockApiListFiles([file]);
 
-        renderWithRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
+        renderWithRouter(<CreateSubtraction />, path);
 
         expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
         expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -83,7 +85,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        renderWithRouter(<CreateSubtraction />, "?openCreateSubtraction=true");
+        renderWithRouter(<CreateSubtraction />, path);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);

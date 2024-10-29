@@ -1,7 +1,7 @@
 import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Box, BoxGroup, ExternalLink, LoadingPlaceholder, NoneFoundBox, Link } from "@base";
-import { formatSearchParams } from "@utils/hooks";
+import { Box, BoxGroup, ExternalLink, Link, LoadingPlaceholder, NoneFoundBox } from "@base";
+import { formatSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -42,7 +42,7 @@ export default function APIKeys() {
                     <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">Virtool API</ExternalLink>
                     <span>.</span>
                 </div>
-                <Link to={`/account/api/${formatSearchParams("openCreateKey", "true", search)}`} replace>
+                <Link to={`/account/api/${formatSearchParam("openCreateKey", "true", search)}`} replace>
                     Create
                 </Link>
             </APIKeysHeader>

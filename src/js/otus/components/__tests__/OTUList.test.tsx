@@ -14,12 +14,14 @@ import { beforeEach, describe, expect, it } from "vitest";
 describe("<OTUsList />", () => {
     let reference;
     let OTUs;
+    let path;
 
     beforeEach(() => {
         reference = createFakeReference();
         OTUs = [createFakeOTUMinimal(), createFakeOTUMinimal()];
         mockApiGetReferenceDetail(reference);
         mockApiGetSettings(createFakeSettings());
+        path = `/refs/${reference.id}/otus`;
     });
 
     afterEach(() => nock.cleanAll());
@@ -27,7 +29,7 @@ describe("<OTUsList />", () => {
     describe("<OTUList />", () => {
         it("should render correctly", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            renderWithRouter(<References />, path);
 
             expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
             expect(screen.getByText(OTUs[0].abbreviation)).toBeInTheDocument();
@@ -40,7 +42,7 @@ describe("<OTUsList />", () => {
 
         it("should render when no documents are found", async () => {
             const scope = mockApiGetOTUs([], reference.id);
-            renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            renderWithRouter(<References />, path);
 
             expect(await screen.findByText("No OTUs found.")).toBeInTheDocument();
             expect(screen.queryByText(OTUs[0].name)).toBeNull();
@@ -53,7 +55,7 @@ describe("<OTUsList />", () => {
     describe("<OTUToolbar />", () => {
         it("should render properly", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            renderWithRouter(<References />, path);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
 
@@ -66,7 +68,7 @@ describe("<OTUsList />", () => {
                 administrator_role: AdministratorRoles.FULL,
             });
             mockApiGetAccount(account);
-            renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            renderWithRouter(<References />, path);
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
 
@@ -79,7 +81,7 @@ describe("<OTUsList />", () => {
                 administrator_role: null,
             });
             mockApiGetAccount(account);
-            renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            renderWithRouter(<References />, path);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
             expect(screen.queryByText("Create")).toBeNull();
@@ -89,7 +91,7 @@ describe("<OTUsList />", () => {
 
         it("should handle toolbar updates correctly", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            const { history } = renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            const { history } = renderWithRouter(<References />, path);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
             const inputElement = screen.getByPlaceholderText("Name or abbreviation");
@@ -108,7 +110,7 @@ describe("<OTUsList />", () => {
     describe("<OTUItem />", () => {
         it("should render when [verified=true]", async () => {
             const scope = mockApiGetOTUs(OTUs, reference.id);
-            renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            renderWithRouter(<References />, path);
 
             expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
             expect(screen.queryByText("Unverified")).toBeNull();
@@ -118,7 +120,7 @@ describe("<OTUsList />", () => {
 
         it("should render when [verified=false]", async () => {
             const scope = mockApiGetOTUs([createFakeOTUMinimal({ verified: false })], reference.id);
-            renderWithRouter(<References />, `/refs/${reference.id}/otus`);
+            renderWithRouter(<References />, path);
 
             expect(await screen.findByText("Unverified")).toBeInTheDocument();
             scope.done();

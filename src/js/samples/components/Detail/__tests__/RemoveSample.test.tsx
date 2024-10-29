@@ -5,19 +5,24 @@ import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import RemoveSample from "../RemoveSample";
+import { formatPath } from "@utils/hooks";
 
 describe("<RemoveSample />", () => {
     let props;
+    let path;
+    let searchParams;
 
     beforeEach(() => {
         props = {
             id: "foo",
             name: "test",
         };
+        path = `/samples/${props.id}/general`;
+        searchParams = { openRemoveSample: true };
     });
 
     it("renders when [show=true]", () => {
-        renderWithRouter(<RemoveSample {...props} />, "?openRemoveSample=true");
+        renderWithRouter(<RemoveSample {...props} />, formatPath(path, searchParams));
 
         expect(screen.getByText("Remove Sample")).toBeInTheDocument();
         expect(screen.getByText("test")).toBeInTheDocument();
@@ -25,7 +30,7 @@ describe("<RemoveSample />", () => {
     });
 
     it("renders when [show=false]", () => {
-        renderWithRouter(<RemoveSample {...props} />, "");
+        renderWithRouter(<RemoveSample {...props} />, path);
 
         expect(screen.queryByText("Remove Sample")).toBeNull();
         expect(screen.queryByText("test")).toBeNull();
@@ -34,7 +39,7 @@ describe("<RemoveSample />", () => {
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
         const scope = mockApiRemoveSample(props.id);
-        renderWithRouter(<RemoveSample {...props} />, "?openRemoveSample=true");
+        renderWithRouter(<RemoveSample {...props} />, formatPath(path, searchParams));
 
         await userEvent.click(screen.getByRole("button"));
 

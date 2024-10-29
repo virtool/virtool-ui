@@ -3,15 +3,33 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeOTU, mockApiEditOTU } from "../../../../../../tests/fake/otus";
-import RemoveSegment from "../RemoveSegment";
+import { createFakeOTU, mockApiEditOTU, mockApiGetOTU } from "../../../../../../tests/fake/otus";
+import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { AdministratorRoles } from "@administration/types";
+import { formatPath } from "@utils/hooks";
+import References from "@references/components/References";
 
 describe("<RemoveSegment />", () => {
     let props;
+    let path;
+    let reference;
+    let searchParams;
     let otu;
+    let otuScope;
 
     beforeEach(() => {
+        reference = createFakeReference({ name: "Foo" });
+        mockApiGetReferenceDetail(reference);
         otu = createFakeOTU();
+        otuScope = mockApiGetOTU(otu);
+        mockApiGetSettings(createFakeSettings());
+        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+
+        path = `/refs/${reference.id}/otus/${otu.id}/schema`;
+        searchParams = { removeSegmentName: otu.schema[0].name };
+
         props = {
             abbreviation: otu.abbreviation,
             name: otu.name,
@@ -20,40 +38,45 @@ describe("<RemoveSegment />", () => {
         };
     });
 
-    it("should render when [show=true]", () => {
-        renderWithRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
+    it("should render when [show=true]", async () => {
+        renderWithRouter(<References />, formatPath(path, searchParams));
 
-        expect(screen.getByText("Remove Segment")).toBeInTheDocument();
+        expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
         expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
-        expect(screen.getByText(`${props.schema[0].name}`)).toBeInTheDocument();
-        expect(screen.getByRole("button")).toBeInTheDocument();
+        expect(screen.getAllByText(`${otu.schema[0].name}`)).toHaveLength(2);
+        expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
     });
 
-    it("should render when [show=false]", () => {
-        renderWithRouter(<RemoveSegment {...props} />, "");
+    it("should render when [show=false]", async () => {
+        renderWithRouter(<References />, path);
+
+        await waitFor(() => otuScope.done());
+
+        expect(await screen.findByText(`${otu.schema[0].name}`)).toBeInTheDocument();
 
         expect(screen.queryByText("Remove Segment")).toBeNull();
         expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
-        expect(screen.queryByText(`${props.schema[0].name}`)).toBeNull();
-        expect(screen.queryByRole("button")).toBeNull();
+        expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
     });
 
     it("should call onSubmit() when onConfirm() called on <RemoveDialog />", async () => {
         const scope = mockApiEditOTU(otu, {
             abbreviation: otu.abbreviation,
             name: otu.name,
-            otuId: otu.d,
+            otuId: otu.id,
             schema: [props.schema[1]],
         });
-        renderWithRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
+        renderWithRouter(<References />, formatPath(path, searchParams));
 
-        await userEvent.click(screen.getByRole("button"));
+        await userEvent.click(await screen.findByRole("button", { name: "Confirm" }));
 
         scope.done();
     });
 
     it("should call onHide() when onHide() called on <RemoveDialog />", async () => {
-        renderWithRouter(<RemoveSegment {...props} />, `?removeSegmentName=${props.schema[0].name}`);
+        renderWithRouter(<References />, formatPath(path, searchParams));
+
+        expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
 
         fireEvent.keyDown(document, { key: "Escape" });
 
