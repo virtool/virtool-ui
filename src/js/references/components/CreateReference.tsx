@@ -9,15 +9,14 @@ import { ImportReference } from "./ImportReference";
  * The create reference view with options to create an empty reference or import a reference
  */
 export function CreateReference() {
-    const [createReference, setCreateReference] = useUrlSearchParam("createReference");
-    const [createReferenceType, setCreateReferenceType] = useUrlSearchParam("createReferenceType");
+    const { value: createReferenceType, unsetValue: unsetCreateReferenceType } =
+        useUrlSearchParam("createReferenceType");
 
     return (
         <Dialog
-            open={Boolean(createReference)}
+            open={Boolean(createReferenceType)}
             onOpenChange={() => {
-                setCreateReference("");
-                setCreateReferenceType("");
+                unsetCreateReferenceType();
             }}
         >
             <DialogPortal>
@@ -25,16 +24,10 @@ export function CreateReference() {
                 <DialogContent size="lg">
                     <DialogTitle>Create Reference</DialogTitle>
                     <Tabs>
-                        <TabsLink
-                            to="?createReference=true&createReferenceType=empty"
-                            isActive={createReferenceType === "empty"}
-                        >
+                        <TabsLink to="?createReferenceType=empty" isActive={createReferenceType === "empty"}>
                             Empty
                         </TabsLink>
-                        <TabsLink
-                            to="?createReference=true&createReferenceType=import"
-                            isActive={createReferenceType === "import"}
-                        >
+                        <TabsLink to="?createReferenceType=import" isActive={createReferenceType === "import"}>
                             Import
                         </TabsLink>
                     </Tabs>

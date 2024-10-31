@@ -32,15 +32,15 @@ type MemberItemProps = {
     /** Whether the current user can modify members in the list */
     canModify: boolean;
     /** The unique identifier for the member */
-    id: number | string;
+    id: number;
     /** The name of the member */
     name?: string;
     /** The handle of the member */
     handle?: string;
     /** Callback to initiate editing the member */
-    onEdit: (id: number | string) => void;
+    onEdit: (id: number) => void;
     /** Callback to initiate removing the member */
-    onRemove: (id: number | string) => void;
+    onRemove: (id: number) => void;
 };
 
 /**

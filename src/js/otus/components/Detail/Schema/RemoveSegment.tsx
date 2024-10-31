@@ -17,7 +17,8 @@ type RemoveSegmentProps = {
  * Displays a dialog for removing a segment
  */
 export default function RemoveSegment({ abbreviation, name, otuId, schema }: RemoveSegmentProps) {
-    const [removeSegmentName, setRemoveSegmentName] = useUrlSearchParam("removeSegmentName");
+    const { value: removeSegmentName, unsetValue: unsetRemoveSegmentName } =
+        useUrlSearchParam<string>("removeSegmentName");
     const mutation = useUpdateOTU(otuId);
 
     function handleSubmit() {
@@ -25,14 +26,14 @@ export default function RemoveSegment({ abbreviation, name, otuId, schema }: Rem
             { otuId, name, abbreviation, schema: reject(schema, { name: removeSegmentName }) },
             {
                 onSuccess: () => {
-                    setRemoveSegmentName("");
+                    unsetRemoveSegmentName();
                 },
             },
         );
     }
 
     function onHide() {
-        setRemoveSegmentName("");
+        unsetRemoveSegmentName();
     }
 
     return (

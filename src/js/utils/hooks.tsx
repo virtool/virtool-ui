@@ -33,7 +33,7 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
 /**
  * Aliased useParams from wouter
  */
-export const useSearchParams = useParams;
+export const usePathParams = useParams;
 
 export function formatPath(basePath: string, searchParams: object) {
     return basePath + formatSearchParams(searchParams);
@@ -76,16 +76,14 @@ export function formatSearchParam(key: string, value: string, search: string) {
  *
  * @param value - The value to be used in the search parameter
  * @param key - The search parameter key to be managed
- * @param history - The history object
+ * @param navigate - navigate the URL to the passed string
+ * @param search - URL search string containing the search params
+ * @param location - the base URL
  */
 function updateUrlSearchParams(value: string, key: string, navigate, search, location) {
     const params = new URLSearchParams(search);
 
-    if (value) {
-        params.set(key, String(value));
-    } else {
-        params.delete(key);
-    }
+    params.set(key, String(value));
 
     search = params.toString();
     if (search && location !== "/") {
@@ -99,10 +97,67 @@ function updateUrlSearchParams(value: string, key: string, navigate, search, loc
     return search;
 }
 
+/**
+ * Updates the URL search parameters by either setting a new value for a given key or removing the key-value pair
+ *
+ * @param key - The search parameter key to be managed
+ * @param navigate - navigate the URL to the passed string
+ * @param search - URL search string containing the search params
+ * @param location - the base URL
+ */
+function unsetUrlSearchParam(key, navigate, search, location) {
+    const params = new URLSearchParams(search);
+    params.delete(key);
+
+    search = params.toString();
+    if (search && location !== "/") {
+        navigate(`${location}?${search}`, { replace: true });
+    } else if (search) {
+        navigate(`?${search}`, { replace: true });
+    } else {
+        navigate(location, { replace: true });
+    }
+
+    return search;
+}
+
+type searchParamType = string | boolean | number | null;
+
+/**
+ * Attempt to cast a search param value into the correct type
+ *
+ * @param value - search param value to be converted
+ */
+function castSearchParamValue(value: string) {
+    if (value === null) {
+        return undefined;
+    }
+
+    const trimValue = value.trim();
+    const numValue = Number(trimValue);
+    if (value.trim().length > 0 && !isNaN(numValue)) {
+        return numValue;
+    }
+
+    switch (value) {
+        case "true":
+            return true;
+        case "false":
+            return false;
+        case "null":
+            return null;
+    }
+
+    return value;
+}
+
 function createUseUrlSearchParam() {
     const cache = { search: "" };
 
-    return function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
+    return function useUrlSearchParams<T extends searchParamType>(
+        key: string,
+        defaultValue?: T,
+    ): { value: T; setValue: (value: T) => void; unsetValue: () => void } {
         cache.search = useSearch();
         const [location] = useLocation();
 
@@ -113,7 +168,7 @@ function createUseUrlSearchParam() {
 
         if (firstRender.current && defaultValue && !value) {
             firstRender.current = false;
-            value = defaultValue;
+            value = String(defaultValue);
             cache.search = updateUrlSearchParams(String(defaultValue), key, navigate, cache.search, location);
         }
 
@@ -123,11 +178,42 @@ function createUseUrlSearchParam() {
             cache.search = updateUrlSearchParams(value, key, navigate, cache.search, location);
         }
 
-        return [value, (value: string) => setURLSearchParam(value)];
+        function unsetValue() {
+            cache.search = unsetUrlSearchParam(key, navigate, cache.search, location);
+        }
+
+        return {
+            value: castSearchParamValue(value) as T,
+            setValue: (value: T) => setURLSearchParam(String(value)),
+            unsetValue,
+        };
     };
 }
 
 export const useUrlSearchParam = createUseUrlSearchParam();
+
+/**
+ * Store dialog visibility in within the URL search params
+ *
+ * @param key - the key that the dialog visiblity state is stored under
+ */
+export function useDialogParam(key: string) {
+    const { value: open, setValue, unsetValue } = useUrlSearchParam<boolean>(key);
+
+    function setDialogValue(value: boolean) {
+        value ? setValue(value) : unsetValue();
+    }
+
+    return { open, setOpen: setDialogValue };
+}
+
+/**
+ * Store the current page of a resources into the URL search params
+ */
+export function usePageParam() {
+    const { value: page, setValue: setPage, unsetValue: unsetPage } = useUrlSearchParam<number>("page");
+    return { page: page || 1, setPage, unsetPage };
+}
 
 /**
  * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair

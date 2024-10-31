@@ -10,28 +10,25 @@ import { AnalysisViewerSort } from "../Viewer/Sort";
  * Displays a toolbar for managing and filtering NuVs
  */
 export default function NuVsToolbar({ analysisId, results, sampleName }: NuVsExportProps) {
-    const [filterORFs, setFilterORFs] = useUrlSearchParam("filterOrfs", "true");
-    const [filterSequences, setFilterSequences] = useUrlSearchParam("filterSequences", "true");
-    const [find, setFind] = useUrlSearchParam("find", "");
-    const [sortKey, setSortKey] = useUrlSearchParam("sort", "length");
+    const { value: filterORFs, setValue: setFilterORFs } = useUrlSearchParam<boolean>("filterOrfs", "true");
+    const { value: filterSequences, setValue: setFilterSequences } = useUrlSearchParam<boolean>(
+        "filterSequences",
+        "true",
+    );
+    const { value: find, setValue: setFind } = useUrlSearchParam<string>("find", "");
+    const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>("sort", "length");
 
     return (
         <Toolbar>
             <InputSearch value={find} onChange={e => setFind(e.target.value)} placeholder="Name or family" />
             <AnalysisViewerSort workflow="nuvs" sortKey={sortKey} onSelect={setSortKey} />
             <Tooltip tip="Hide sequences that have no HMM hits">
-                <ButtonToggle
-                    onPressedChange={active => setFilterSequences(active ? "true" : "")}
-                    pressed={Boolean(filterSequences)}
-                >
+                <ButtonToggle onPressedChange={active => setFilterSequences(active)} pressed={filterSequences}>
                     Filter Sequences
                 </ButtonToggle>
             </Tooltip>
             <Tooltip tip="Hide ORFs that have no HMM hits">
-                <ButtonToggle
-                    pressed={Boolean(filterORFs)}
-                    onPressedChange={active => setFilterORFs(active ? "true" : "")}
-                >
+                <ButtonToggle pressed={filterORFs} onPressedChange={active => setFilterORFs(active)}>
                     Filter ORFs
                 </ButtonToggle>
             </Tooltip>

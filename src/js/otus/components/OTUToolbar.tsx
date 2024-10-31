@@ -1,8 +1,8 @@
-import { useUrlSearchParam } from "@utils/hooks";
 import React, { ChangeEvent } from "react";
 import { Button, InputSearch, Toolbar } from "../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
 import { ReferenceRemotesFrom } from "../../references/types";
+import { useDialogParam } from "@utils/hooks";
 
 type OTUToolbarProps = {
     /** Current search term used for filtering */
@@ -19,14 +19,14 @@ type OTUToolbarProps = {
  */
 export default function OTUToolbar({ term, onChange, refId, remotesFrom }: OTUToolbarProps) {
     const { hasPermission: canCreate } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
-    const [, setOpenCreateOtu] = useUrlSearchParam("openCreateOTU");
+    const { setOpen: setOpenCreateOtu } = useDialogParam("openCreateOTU");
 
     return (
         <Toolbar>
             <InputSearch placeholder="Name or abbreviation" value={term} onChange={onChange} />
 
             {canCreate && !remotesFrom && (
-                <Button onClick={() => setOpenCreateOtu("true")} color="blue">
+                <Button onClick={() => setOpenCreateOtu(true)} color="blue">
                     Create
                 </Button>
             )}

@@ -70,7 +70,11 @@ export default function QuickAnalyze({
     subtractionOptions,
 }: QuickAnalyzeProps) {
     const search = useSearch();
-    const [quickAnalysisType, setQuickAnalysisType] = useUrlSearchParam("quickAnalysisType");
+    const {
+        value: quickAnalysisType,
+        setValue: setQuickAnalysisType,
+        unsetValue: unsetQuickAnalysisType,
+    } = useUrlSearchParam<string>("quickAnalysisType");
 
     const mode = samples[0]?.library_type === "amplicon" ? "barcode" : "genome";
 
@@ -82,7 +86,7 @@ export default function QuickAnalyze({
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
 
     function onHide() {
-        setQuickAnalysisType("");
+        unsetQuickAnalysisType();
     }
 
     // The dialog should close when all selected samples have been analyzed and deselected.

@@ -1,5 +1,5 @@
 import { useUpdateReference } from "@references/queries";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, useUrlSearchParam } from "@utils/hooks";
 import { find, map, reject } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -28,8 +28,12 @@ type TargetsProps = {
 export default function Targets({ reference }: TargetsProps) {
     const { data_type, targets, id } = reference;
 
-    const [openAddTarget, setOpenAddTarget] = useUrlSearchParam("openAddTarget");
-    const [editTarget, setEditTarget] = useUrlSearchParam("openEditTarget");
+    const { open: openAddTarget, setOpen: setOpenAddTarget } = useDialogParam("openAddTarget");
+    const {
+        value: editTargetId,
+        setValue: setEditTargetId,
+        unsetValue: unsetEditTargetId,
+    } = useUrlSearchParam<string>("openEditTargetId");
 
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);
     const { mutation } = useUpdateReference(id);
@@ -43,7 +47,7 @@ export default function Targets({ reference }: TargetsProps) {
             key={target.name}
             {...target}
             canModify={canModify}
-            onEdit={name => setEditTarget(name)}
+            onEdit={name => setEditTargetId(name)}
             onRemove={name => mutation.mutate({ targets: reject(targets, { name }) })}
         />
     ));
@@ -65,15 +69,15 @@ export default function Targets({ reference }: TargetsProps) {
                     <AddTarget
                         refId={id}
                         targets={targets}
-                        show={Boolean(openAddTarget)}
-                        onHide={() => setOpenAddTarget("")}
+                        show={openAddTarget}
+                        onHide={() => setOpenAddTarget(false)}
                     />
                     <EditTarget
                         targets={targets}
                         refId={id}
-                        target={editTarget && find(targets, { name: editTarget })}
-                        show={Boolean(editTarget)}
-                        onHide={() => setEditTarget("")}
+                        target={editTargetId && find(targets, { name: editTargetId })}
+                        show={Boolean(editTargetId)}
+                        onHide={unsetEditTargetId}
                     />
                 </>
             )}

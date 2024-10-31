@@ -18,7 +18,7 @@ import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
 import OTUSection from "./OTUSection";
 import Schema from "./Schema/Schema";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 const OTUDetailTitle = styled(ViewHeaderTitle)`
     align-items: baseline;
@@ -48,7 +48,7 @@ const OTUDetailSubtitle = styled.p`
  * Displays detailed otu view allowing users to manage otus
  */
 export default function OTUDetail() {
-    const { otuId, refId } = useSearchParams<{ otuId: string; refId: string }>();
+    const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
     const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
 

@@ -12,7 +12,7 @@ import {
 import { IconButton } from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
-import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@utils/hooks";
 import React from "react";
 import { Redirect, Route, Switch, useLocation } from "wouter";
 import Analyses from "../../../analyses/components/Analyses";
@@ -27,11 +27,11 @@ import Rights from "./SampleRights";
  */
 export default function SampleDetail() {
     const [location] = useLocation();
-    const { sampleId } = useSearchParams<{ sampleId: string }>();
+    const { sampleId } = usePathParams<{ sampleId: string }>();
     const { data, isPending, isError } = useFetchSample(sampleId);
     const { hasPermission: canModify } = useCheckCanEditSample(sampleId);
-    const [, setOpenEditSample] = useUrlSearchParam("openEditSample");
-    const [, setOpenRemoveSample] = useUrlSearchParam("openRemoveSample");
+    const { setOpen: setOpenEditSample } = useDialogParam("openEditSample");
+    const { setOpen: setOpenRemoveSample } = useDialogParam("openRemoveSample");
 
     if (isError) {
         return <NotFound />;
@@ -47,13 +47,9 @@ export default function SampleDetail() {
 
     if (canModify) {
         if (location.endsWith("/general")) {
-            editIcon = (
-                <IconButton color="grayDark" name="pen" tip="modify" onClick={() => setOpenEditSample("true")} />
-            );
+            editIcon = <IconButton color="grayDark" name="pen" tip="modify" onClick={() => setOpenEditSample(true)} />;
 
-            removeIcon = (
-                <IconButton color="red" name="trash" tip="remove" onClick={() => setOpenRemoveSample("true")} />
-            );
+            removeIcon = <IconButton color="red" name="trash" tip="remove" onClick={() => setOpenRemoveSample(true)} />;
         }
 
         rightsTabLink = (

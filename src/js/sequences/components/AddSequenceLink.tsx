@@ -4,9 +4,9 @@ import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceDataType } from "@references/types";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
-import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
+import { useDialogParam } from "@utils/hooks";
 
 const AddSequenceLinkMessage = styled.span`
     color: ${getColor};
@@ -27,7 +27,7 @@ type AddSequenceLinkProps = {
  * Displays a link to add a sequence
  */
 export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProps) {
-    const [, setOpenAddSequence] = useUrlSearchParam("openAddSequence");
+    const { setOpen: setOpenAddSequence } = useDialogParam("openAddSequence");
     const { reference } = useCurrentOTUContext();
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
     const unreferencedTargets = useGetUnreferencedTargets();
@@ -47,7 +47,7 @@ export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProp
             }
         }
 
-        return <StyledAddSequenceLink onClick={() => setOpenAddSequence("true")}>Add Sequence</StyledAddSequenceLink>;
+        return <StyledAddSequenceLink onClick={() => setOpenAddSequence(true)}>Add Sequence</StyledAddSequenceLink>;
     }
 
     return null;

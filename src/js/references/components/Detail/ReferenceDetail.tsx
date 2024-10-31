@@ -11,13 +11,13 @@ import ReferenceDetailHeader from "./ReferenceDetailHeader";
 import ReferenceDetailTabs from "./ReferenceDetailTabs";
 import ReferenceManager from "./ReferenceManager";
 import ReferenceSettings from "./ReferenceSettings";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 /**
  * The detailed view for a reference
  */
 export default function ReferenceDetail() {
-    const { refId } = useSearchParams<{ refId: string }>();
+    const { refId } = usePathParams<{ refId: string }>();
     const { data, isPending, isError } = useGetReference(refId);
 
     if (isError) {

@@ -1,6 +1,6 @@
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
-import { useUrlSearchParam } from "@utils/hooks";
+import { usePageParam, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import { useFindSubtractions } from "../queries";
@@ -11,10 +11,10 @@ import SubtractionToolbar from "./SubtractionToolbar";
  * A list of subtractions.
  */
 export default function SubtractionList() {
-    const [term, setTerm] = useUrlSearchParam("find", "");
-    const [urlPage] = useUrlSearchParam("page", "1");
+    const { value: term, setValue: setTerm } = useUrlSearchParam<string>("find");
+    const { page } = usePageParam();
 
-    const { data, isPending } = useFindSubtractions(Number(urlPage) || 1, 25, term);
+    const { data, isPending } = useFindSubtractions(page, 25, term);
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -24,7 +24,7 @@ export default function SubtractionList() {
         setTerm(e.target.value);
     }
 
-    const { documents, total_count, page, page_count } = data;
+    const { documents, total_count, page: storedPage, page_count } = data;
 
     return (
         <>
@@ -39,12 +39,7 @@ export default function SubtractionList() {
             {!documents.length ? (
                 <NoneFoundBox key="subtractions" noun="subtractions" />
             ) : (
-                <Pagination
-                    items={documents}
-                    storedPage={page}
-                    currentPage={Number(urlPage) || 1}
-                    pageCount={page_count}
-                >
+                <Pagination items={documents} storedPage={storedPage} currentPage={page} pageCount={page_count}>
                     <BoxGroup>
                         {map(documents, document => (
                             <SubtractionItem key={document.id} {...document} />

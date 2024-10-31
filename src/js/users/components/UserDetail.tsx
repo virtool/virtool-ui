@@ -5,7 +5,7 @@ import { getFontSize, getFontWeight } from "@app/theme";
 import { Alert, device, Icon, InitialIcon, Link, LoadingPlaceholder } from "@base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
-import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import Password from "./Password";
@@ -52,14 +52,14 @@ const UserDetailTitle = styled.div`
  * The detailed view of a user
  */
 export default function UserDetail() {
-    const { userId } = useSearchParams<{ userId: string }>();
+    const { userId } = usePathParams<{ userId: string }>();
     const { data, isPending } = useFetchUser(userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
         data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
 
-    const [openActivateUser, setOpenActivateUser] = useUrlSearchParam("openActivateUser");
-    const [openDeactivateUser, setOpenDeactivateUser] = useUrlSearchParam("openDeactivateUser");
+    const { open: openActivateUser, setOpen: setOpenActivateUser } = useDialogParam("openActivateUser");
+    const { open: openDeactivateUser, setOpen: setOpenDeactivateUser } = useDialogParam("openDeactivateUser");
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -119,15 +119,15 @@ export default function UserDetail() {
                 handle={data.handle}
                 id={data.id}
                 noun="deactivate"
-                onHide={() => setOpenDeactivateUser("")}
-                show={Boolean(openDeactivateUser)}
+                onHide={() => setOpenDeactivateUser(false)}
+                show={openDeactivateUser}
             />
             <UserActivation
                 handle={data.handle}
                 id={data.id}
                 noun="activate"
-                onHide={() => setOpenActivateUser("")}
-                show={Boolean(openActivateUser)}
+                onHide={() => setOpenActivateUser(false)}
+                show={openActivateUser}
             />
         </div>
     );

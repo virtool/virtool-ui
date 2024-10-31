@@ -3,7 +3,7 @@ import EditSegment from "@otus/components/Detail/Schema/EditSegment";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
@@ -20,13 +20,13 @@ const AddButton = styled(Button)`
  * Displays a component allowing users to manage the otu schema
  */
 export default function Schema() {
-    const { refId, otuId } = useSearchParams<{ otuId: string; refId: string }>();
+    const { refId, otuId } = usePathParams<{ otuId: string; refId: string }>();
     const { hasPermission: canModify, isPending: isPendingPermission } = useCheckReferenceRight(
         refId,
         ReferenceRight.modify_otu,
     );
 
-    const [, setOpenAddSegment] = useUrlSearchParam("openAddSegment");
+    const { setOpen: setOpenAddSegment } = useDialogParam("openAddSegment");
 
     const { data, isPending } = useFetchOTU(otuId);
     const mutation = useUpdateOTU(otuId);

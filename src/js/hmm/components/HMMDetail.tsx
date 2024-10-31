@@ -17,7 +17,7 @@ import {
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 const TaxonomyGrid = styled.div`
     display: grid;
@@ -33,7 +33,7 @@ const TaxonomyGrid = styled.div`
  * The HMM detailed view
  */
 export default function HMMDetail() {
-    const { hmmId } = useSearchParams<{ hmmId: string }>();
+    const { hmmId } = usePathParams<{ hmmId: string }>();
     const { data, isPending, isError } = useFetchHmm(hmmId);
 
     if (isError) {
