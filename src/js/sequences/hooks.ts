@@ -75,6 +75,23 @@ export function useGetInactiveSequences() {
  * @returns A list of unreferenced targets
  */
 export function useGetUnreferencedTargets() {
+    const {
+        otu,
+        reference: { targets },
+    } = useCurrentOTUContext();
+
+    const { sequences } = useGetActiveIsolate(otu);
+    const referencedTargetNames = map(sequences, sequence => sequence.target);
+
+    return filter(targets, target => !referencedTargetNames.includes(target.name));
+}
+
+/**
+ * Get a list of targets that are valid selections for the active sequence
+ *
+ * @returns A list of unreferenced targets
+ */
+export function useGetSelectableTargets() {
     const { reference } = useCurrentOTUContext();
     const { targets } = reference;
 
