@@ -1,6 +1,7 @@
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
+import { map } from "lodash";
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -173,7 +174,14 @@ function castSearchParamValue(value: string) {
 function createUseUrlSearchParam() {
     const cache = { search: "" };
 
-    return function useUrlSearchParams<T extends searchParamType>(
+    /**
+     * Store and retrieve component state in a URL search parameter
+     *
+     * @param key - The search parameter key to be managed
+     * @param defaultValue - The default value to use when the search parameter key is not present in the URL
+     * @returns The current value and a functions for setting the URL search parameter
+     */
+    function useUrlSearchParam<T extends searchParamType>(
         key: string,
         defaultValue?: T,
     ): { value: T; setValue: (value: T) => void; unsetValue: () => void } {
@@ -206,10 +214,46 @@ function createUseUrlSearchParam() {
             setValue: (value: T) => setURLSearchParam(String(value)),
             unsetValue,
         };
-    };
+    }
+
+    /**
+     * Hook for managing and synchronizing a list of URL search parameters with a component's state
+     *
+     * @param key - The search parameter key to be managed
+     * @param defaultValues - The default values to use when the search parameter key is not present in the URL
+     * @returns The current values and a function to set the URL search parameter
+     */
+    function useListSearchParam<T extends searchParamType>(
+        key: string,
+        defaultValues?: T[],
+    ): { values: T[]; setValues: (newValue: T[]) => void } {
+        cache.search = useSearch();
+        const [, navigate] = useLocation();
+        const firstRender = useRef(true);
+
+        let values = new URLSearchParams(cache.search).getAll(key);
+
+        if (firstRender.current && defaultValues && !values.length) {
+            values = defaultValues as string[];
+            cache.search = updateUrlSearchParamsList(key, navigate, cache.search, values);
+        }
+
+        firstRender.current = false;
+
+        function setValues(values: T[]) {
+            cache.search = updateUrlSearchParamsList(key, navigate, cache.search, values);
+        }
+
+        return {
+            values: map(values, castSearchParamValue) as T[],
+            setValues,
+        };
+    }
+
+    return [useUrlSearchParam, useListSearchParam];
 }
 
-export const useUrlSearchParam = createUseUrlSearchParam();
+export const [useUrlSearchParam, useListSearchParam] = createUseUrlSearchParam();
 
 /**
  * Store dialog visibility in within the URL search params
@@ -247,31 +291,9 @@ function updateUrlSearchParamsList(key: string, navigate, search: string, values
     params.delete(key);
     forEach(values, value => params.append(key, value));
 
-    navigate(`?${params.toString()}`);
-}
-
-/**
- * Hook for managing and synchronizing a list of URL search parameters with a component's state
- *
- * @param key - The search parameter key to be managed
- * @param defaultValue - The default values to use when the search parameter key is not present in the URL
- * @returns Object - An object containing the current values and a function to set the URL search parameter
- */
-export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [string[], (newValue: string[]) => void] {
-    const search = useSearch();
-    const [, navigate] = useLocation();
-    const firstRender = useRef(true);
-
-    let values = new URLSearchParams(search).getAll(key);
-
-    if (firstRender.current && defaultValue && !values.length) {
-        values = defaultValue;
-        updateUrlSearchParamsList(key, navigate, search, values);
-    }
-
-    firstRender.current = false;
-
-    return [values, (values: string[]) => updateUrlSearchParamsList(key, navigate, search, values)];
+    search = `?${params.toString()}`;
+    navigate(search);
+    return search;
 }
 
 type ScrollSyncProps = {

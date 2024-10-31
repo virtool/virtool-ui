@@ -1,6 +1,6 @@
 import { SidebarHeader, SideBarSection } from "@base";
 import { JobCounts } from "@jobs/types";
-import { useUrlSearchParamsList } from "@utils/hooks";
+import { useListSearchParam } from "@utils/hooks";
 import { difference, union, xor } from "lodash-es";
 import { mapValues, reduce } from "lodash-es/lodash";
 import React from "react";
@@ -37,7 +37,7 @@ type StateFilterProps = {
  * Displays the categories of state filtering for jobs
  */
 export default function StateFilter({ counts }: StateFilterProps) {
-    const [states, setStates] = useUrlSearchParamsList("state");
+    const { values: states, setValues: setStates } = useListSearchParam("state");
     const availableCounts = mapValues(counts, workflowCounts =>
         reduce(workflowCounts, (result, value) => (result += value), 0),
     );
