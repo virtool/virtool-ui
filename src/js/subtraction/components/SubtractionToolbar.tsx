@@ -1,5 +1,5 @@
 import CreateSubtraction from "@subtraction/components/CreateSubtraction";
-import { formatSearchParam } from "@utils/hooks";
+import { updateSearchParam } from "@utils/hooks";
 import React from "react";
 import { useSearch } from "wouter";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
@@ -25,7 +25,7 @@ export default function SubtractionToolbar({ term, handleChange }: SubtractionTo
         <Toolbar>
             <InputSearch value={term} onChange={handleChange} placeholder="Name" />
             {hasPermission && (
-                <LinkButton color="blue" to={formatSearchParam("openCreateSubtraction", "true", search)}>
+                <LinkButton color="blue" to={updateSearchParam("openCreateSubtraction", "true", search)}>
                     Create
                 </LinkButton>
             )}

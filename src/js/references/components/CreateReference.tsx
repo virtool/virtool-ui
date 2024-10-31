@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, Tabs, TabsLink } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParam } from "@utils/hooks";
+import { formatSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import EmptyReference from "./EmptyReference";
 import { ImportReference } from "./ImportReference";
@@ -24,10 +24,16 @@ export function CreateReference() {
                 <DialogContent size="lg">
                     <DialogTitle>Create Reference</DialogTitle>
                     <Tabs>
-                        <TabsLink to="?createReferenceType=empty" isActive={createReferenceType === "empty"}>
+                        <TabsLink
+                            to={formatSearchParams({ createReferenceType: "empty" })}
+                            isActive={createReferenceType === "empty"}
+                        >
                             Empty
                         </TabsLink>
-                        <TabsLink to="?createReferenceType=import" isActive={createReferenceType === "import"}>
+                        <TabsLink
+                            to={formatSearchParams({ createReferenceType: "import" })}
+                            isActive={createReferenceType === "import"}
+                        >
                             Import
                         </TabsLink>
                     </Tabs>

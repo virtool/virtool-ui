@@ -53,13 +53,32 @@ export function formatSearchParams(params: object) {
 }
 
 /**
- * create a modified search param string with an updated key:value based on the existing search string
+ * Format a collection of search parameters into a search string
+ *
+ * @param params - the collection of values to be written to the URL
+ */
+export function formatSearchParams(params: Record<string, string | number | boolean | null>) {
+    const searchParams = new URLSearchParams();
+
+    forEach(params, (value, key) => {
+        if (Array.isArray(value)) {
+            forEach(value, arrayValue => searchParams.append(key, arrayValue));
+        } else {
+            searchParams.set(key, value);
+        }
+    });
+
+    return `?${searchParams.toString()}`;
+}
+
+/**
+ * create a modified search string with an updated key:value based on the existing search string
  *
  * @param value - The value to be used in the search parameter
  * @param key - The search parameter key to be managed
  * @param search - The current search string
  */
-export function formatSearchParam(key: string, value: string, search: string) {
+export function updateSearchParam(key: string, value: string, search: string) {
     const params = new URLSearchParams(search);
 
     if (value) {

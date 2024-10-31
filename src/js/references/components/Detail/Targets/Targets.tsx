@@ -1,5 +1,5 @@
 import { useUpdateReference } from "@references/queries";
-import { useDialogParam, useUrlSearchParam } from "@utils/hooks";
+import { formatSearchParams, useDialogParam, useUrlSearchParam } from "@utils/hooks";
 import { find, map, reject } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -57,7 +57,7 @@ export default function Targets({ reference }: TargetsProps) {
             <TargetsHeader>
                 <h2>
                     <span>Targets</span>
-                    {canModify && <Link to="?openAddTarget=true">Add Target</Link>}
+                    {canModify && <Link to={formatSearchParams({ openAddTarget: true })}>Add Target</Link>}
                 </h2>
                 <p>Manage the allowable sequence targets for this barcode reference.</p>
             </TargetsHeader>

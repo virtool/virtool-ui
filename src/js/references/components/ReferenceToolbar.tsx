@@ -1,7 +1,7 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import { InputSearch, LinkButton, Toolbar } from "@base";
 import { Permission } from "@groups/types";
-import { useUrlSearchParam } from "@utils/hooks";
+import { formatSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 
 /**
@@ -15,7 +15,7 @@ export default function ReferenceToolbar() {
         <Toolbar>
             <InputSearch placeholder="Reference name" value={term} onChange={e => setTerm(e.target.value)} />
             {canCreate && (
-                <LinkButton to="?createReferenceType=empty" color="blue">
+                <LinkButton to={formatSearchParams({ createReferenceType: "empty" })} color="blue">
                     Create
                 </LinkButton>
             )}

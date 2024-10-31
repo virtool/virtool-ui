@@ -5,7 +5,7 @@ import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { SubtractionShortlist } from "@subtraction/types";
-import { formatSearchParam, useUrlSearchParam } from "@utils/hooks";
+import { updateSearchParam, useUrlSearchParam } from "@utils/hooks";
 import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
 
@@ -127,7 +127,7 @@ export default function QuickAnalyze({
                     <Tabs>
                         {genome.length > 0 && (
                             <TabsLink
-                                to={formatSearchParam("quickAnalysisType", "genome", search)}
+                                to={updateSearchParam("quickAnalysisType", "genome", search)}
                                 isActive={mode === "genome"}
                             >
                                 <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
@@ -135,7 +135,7 @@ export default function QuickAnalyze({
                         )}
                         {barcode.length > 0 && (
                             <TabsLink
-                                to={formatSearchParam("quickAnalysisType", "barcode", search)}
+                                to={updateSearchParam("quickAnalysisType", "barcode", search)}
                                 isActive={mode === "barcode"}
                             >
                                 <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
