@@ -181,6 +181,8 @@ function castSearchParamValue(value: string) {
             return false;
         case "null":
             return null;
+        default:
+            break;
     }
 
     return value;
@@ -289,7 +291,11 @@ export function useDialogParam(key: string) {
     const { value: open, setValue, unsetValue } = useUrlSearchParam<boolean>(key);
 
     function setDialogValue(value: boolean) {
-        value ? setValue(value) : unsetValue();
+        if (value) {
+            setValue(value);
+        } else {
+            unsetValue();
+        }
     }
 
     return { open, setOpen: setDialogValue };
