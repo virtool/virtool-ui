@@ -25,9 +25,9 @@ import { find, flatMap, toString } from "lodash-es";
 import React, { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
-import { useLocation } from "wouter";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import { SampleUserGroup } from "./SampleUserGroup";
+import { useNavigate } from "@utils/hooks";
 
 const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
 
@@ -108,7 +108,7 @@ type FormValues = {
  * A form for creating a sample
  */
 export default function CreateSample() {
-    const [, navigate] = useLocation();
+    const navigate = useNavigate();
 
     const { data: groups, isPending: isPendingGroups } = useListGroups();
     const { data: account, isPending: isPendingAccount } = useFetchAccount();

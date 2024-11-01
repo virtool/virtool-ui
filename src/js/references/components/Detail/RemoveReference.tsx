@@ -1,8 +1,7 @@
 import { RemoveBanner } from "@base";
 import { RemoveDialog } from "@base/RemoveDialog";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam, useNavigate } from "@utils/hooks";
 import React, { useCallback } from "react";
-import { useLocation } from "wouter";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReference } from "../../queries";
 
@@ -18,7 +17,7 @@ type RemoveReferenceProps = {
  */
 export default function RemoveReference({ id, name }: RemoveReferenceProps) {
     const { open: openRemoveReference, setOpen: setOpenRemoveReference } = useDialogParam("openRemoveReference");
-    const [, navigate] = useLocation();
+    const navigate = useNavigate();
 
     const { hasPermission: canRemove } = useCheckReferenceRight(id, ReferenceRight.remove);
     const mutation = useRemoveReference();

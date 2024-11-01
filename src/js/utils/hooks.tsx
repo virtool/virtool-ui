@@ -36,6 +36,14 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
  */
 export const usePathParams = useParams;
 
+/**
+ * get a function for programmatic internal navigation
+ */
+export function useNavigate() {
+    const [, navigate] = useLocation();
+
+    return navigate;
+}
 export function formatPath(basePath: string, searchParams: Record<string, string | number | boolean | null>) {
     return basePath + formatSearchParams(searchParams);
 }
@@ -205,7 +213,7 @@ function createUseUrlSearchParam(): [
         cache.search = useSearch();
         const [location] = useLocation();
 
-        const [, navigate] = useLocation();
+        const navigate = useNavigate();
         const firstRender = useRef(true);
 
         let value = new URLSearchParams(cache.search).get(key);
@@ -245,7 +253,7 @@ function createUseUrlSearchParam(): [
         defaultValues?: T[],
     ): { values: T[]; setValues: (newValue: T[]) => void } {
         cache.search = useSearch();
-        const [, navigate] = useLocation();
+        const navigate = useNavigate();
         const firstRender = useRef(true);
 
         let values = new URLSearchParams(cache.search).getAll(key);
