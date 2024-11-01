@@ -1,10 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeSettings, mockApiGetSettings, mockApiUpdateSettings } from "../../../../tests/fake/admin";
-import { renderWithProviders } from "../../../../tests/setupTests";
 import SampleSettings from "../SampleSettings";
 
 describe("<SampleSettings />", () => {

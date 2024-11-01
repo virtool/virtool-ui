@@ -3,23 +3,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { noop } from "lodash-es";
-import React from "react";
-import { MemoryRouter, Router } from "react-router-dom";
-import { CompatRouter } from "react-router-dom-v5-compat";
+import React, { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 import { vi } from "vitest";
+import { BaseLocationHook, Router } from "wouter";
+import { memoryLocation } from "wouter/memory-location";
+import { Path } from "wouter/types/location-hook";
 
 process.env.TZ = "UTC";
 
-export function wrapWithProviders(ui) {
-    const queryClient = new QueryClient({
-        logger: {
-            log: console.log,
-            warn: console.warn,
-            error: noop,
-        },
-    });
+export function wrapWithProviders(ui: ReactNode) {
+    const queryClient = new QueryClient();
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -28,31 +22,37 @@ export function wrapWithProviders(ui) {
     );
 }
 
-export function renderWithProviders(ui) {
+export function renderWithProviders(ui: ReactNode) {
     const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
 
-    function rerenderWithProviders(updatedUI) {
-        return rerender(<ThemeProvider theme={theme}>{updatedUI}</ThemeProvider>);
+    function rerenderWithProviders(updatedUi: ReactNode) {
+        return rerender(<ThemeProvider theme={theme}>{updatedUi}</ThemeProvider>);
     }
 
     return { ...rest, rerender: rerenderWithProviders };
 }
 
-export function renderWithRouter(ui, history) {
-    const wrappedUI = (
-        <Router history={history}>
-            <CompatRouter>{ui}</CompatRouter>
-        </Router>
+export function renderWithRouter(ui: ReactNode, path?: string) {
+    const { hook, history } = memoryLocation({ path, record: true });
+
+    const result = renderWithProviders(
+        <Router hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
+            {ui}
+        </Router>,
     );
-    renderWithProviders(wrappedUI);
+
+    return { ...result, history };
 }
 
-export function renderWithMemoryRouter(ui, initialEntries) {
-    renderWithProviders(
-        <MemoryRouter initialEntries={initialEntries}>
-            <CompatRouter>{ui}</CompatRouter>
-        </MemoryRouter>
-    );
+export function useMemoryLocation(baseHook: BaseLocationHook): [string, (path: Path, ...args: any[]) => any] {
+    let [location, rest] = baseHook();
+    location = location.split("?")[0] || "";
+    return [location, rest];
+}
+
+export function useMemorySearch(baseHook) {
+    const [location] = baseHook();
+    return location.split("?")[1] || "";
 }
 
 //mocks HTML element prototypes that are not implemented in jsdom
@@ -66,7 +66,7 @@ class ResizeObserver {
     disconnect() {}
 }
 
-export function attachResizeObserver() {
+function attachResizeObserver() {
     window.ResizeObserver = ResizeObserver;
 }
 
@@ -78,4 +78,3 @@ global.userEvent = userEvent;
 global.React = React;
 global.renderWithProviders = renderWithProviders;
 global.wrapWithProviders = wrapWithProviders;
-global.renderWithRouter = renderWithRouter;

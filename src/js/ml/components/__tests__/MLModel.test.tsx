@@ -1,11 +1,13 @@
 import { screen } from "@testing-library/react";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, it } from "vitest";
 import { createFakeMLModelMinimal, mockApiGetModels } from "../../../../tests/fake/ml";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import ML from "../ML";
 
 describe("<MLModels/>", () => {
+    const path = "/ml";
+
     it("should render", async () => {
         const created_at = new Date();
         created_at.setFullYear(created_at.getFullYear() - 1);
@@ -15,12 +17,12 @@ describe("<MLModels/>", () => {
         });
         const model_scope = mockApiGetModels([mlModel]);
 
-        renderWithMemoryRouter(<ML />, ["/"]);
+        renderWithRouter(<ML />, path);
 
         expect(await screen.findByText(mlModel.name)).toBeInTheDocument();
         expect(await screen.findByRole("link", { name: `${mlModel.latest_release.name}` })).toHaveAttribute(
             "href",
-            mlModel.latest_release.github_url
+            mlModel.latest_release.github_url,
         );
         expect(await screen.findByText("1 year ago")).toBeInTheDocument();
 
@@ -29,7 +31,7 @@ describe("<MLModels/>", () => {
 
     it("should render NoneFound when no models exist", async () => {
         const model_scope = mockApiGetModels([]);
-        renderWithMemoryRouter(<ML />, ["/"]);
+        renderWithRouter(<ML />, path);
 
         expect(await screen.findByText("No machine learning models found.")).toBeInTheDocument();
         model_scope.done();

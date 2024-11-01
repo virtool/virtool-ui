@@ -32,7 +32,7 @@ export default function APIPermissions({ className, keyPermissions, onChange }: 
         const disabled =
             !hasSufficientAdminRole(
                 AdministratorPermissions[permission.name] as AdministratorRoles,
-                data.administrator_role
+                data.administrator_role,
             ) && !data.permissions[permission.name];
 
         return (

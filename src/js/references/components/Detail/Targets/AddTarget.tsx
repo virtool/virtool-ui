@@ -40,7 +40,7 @@ export default function AddTarget({ refId, targets, show, onHide }: AddTargetPro
                 onSuccess: () => {
                     onHide();
                 },
-            }
+            },
         );
     }
 

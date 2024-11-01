@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeReferenceMinimal } from "../../../../../tests/fake/references";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import { ReferenceItem } from "../ReferenceItem";
 
 describe("<ReferenceItem />", () => {
@@ -28,7 +28,7 @@ describe("<ReferenceItem />", () => {
             },
             organism: "virus",
         });
-        renderWithMemoryRouter(<ReferenceItem {...props} />);
+        renderWithRouter(<ReferenceItem {...props} />);
 
         expect(screen.getByText(/virus/)).toBeInTheDocument();
         expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "32");
@@ -47,7 +47,7 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        renderWithMemoryRouter(<ReferenceItem {...props} />);
+        renderWithRouter(<ReferenceItem {...props} />);
 
         expect(screen.getByText(/unknown/)).toBeInTheDocument();
     });
@@ -65,7 +65,7 @@ describe("<ReferenceItem />", () => {
             },
             organism: null,
         });
-        renderWithMemoryRouter(<ReferenceItem {...props} />);
+        renderWithRouter(<ReferenceItem {...props} />);
 
         expect(screen.queryByRole("progressbar")).toBeNull();
     });

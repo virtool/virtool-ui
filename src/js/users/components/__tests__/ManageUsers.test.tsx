@@ -1,11 +1,11 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
+import { renderWithRouter } from "@tests/setup";
 import { forEach } from "lodash-es";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
-import { createFakeUsers, mockApiFindUsers } from "../../../../tests/fake/user";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import { ManageUsers } from "../ManageUsers";
 
 describe("<ManageUsers />", () => {
@@ -16,7 +16,7 @@ describe("<ManageUsers />", () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockApiGetAccount(account);
 
-        renderWithMemoryRouter(<ManageUsers />);
+        renderWithRouter(<ManageUsers />);
 
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("<ManageUsers />", () => {
         const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
         mockApiGetAccount(account);
 
-        renderWithMemoryRouter(<ManageUsers />);
+        renderWithRouter(<ManageUsers />);
 
         expect(await screen.findByLabelText("search")).toBeInTheDocument();
         expect(screen.getByRole("button")).toBeInTheDocument();
@@ -44,7 +44,7 @@ describe("<ManageUsers />", () => {
         mockApiFindUsers(users);
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
 
-        renderWithMemoryRouter(<ManageUsers />);
+        renderWithRouter(<ManageUsers />);
 
         expect(await screen.findByText("You do not have permission to manage users.")).toBeInTheDocument();
         expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();

@@ -1,11 +1,11 @@
-import { act, renderHook } from "@testing-library/react-hooks";
 import { beforeEach, describe, expect, it } from "vitest";
 import { useFuse } from "../hooks";
+import { act, renderHook } from "@testing-library/react";
 
 describe("useFuseHook", () => {
-    let collection;
-    let keys;
-    let deps;
+    let collection: { name: string }[];
+    let deps: string[] = [];
+    let keys: string[] = [];
 
     beforeEach(() => {
         collection = [{ name: "nan" }, { name: "test1" }, { name: "aaaaa" }, { name: "zzzzz" }];

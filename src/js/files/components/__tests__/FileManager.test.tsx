@@ -1,17 +1,19 @@
 import { AdministratorRoles } from "@administration/types";
+import { FileType } from "@files/types";
 import { upload } from "@files/uploader";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FileManager } from "../FileManager";
+import { FileManager, FileManagerProps } from "../FileManager";
+import { formatPath } from "@utils/hooks";
 
 describe("<FileManager>", () => {
-    let props;
+    let props: FileManagerProps;
+    let path;
 
     afterEach(() => {
         vi.restoreAllMocks();
@@ -19,28 +21,36 @@ describe("<FileManager>", () => {
 
     beforeEach(() => {
         props = {
-            found_count: 6,
-            page: 1,
-            page_count: 1,
-            total_count: 1,
-            items: [1],
-            fileType: "test_file_type",
+            accept: {
+                "application/gzip": [".fasta.gz", ".fa.gz", ".fastq.gz", ".fq.gz"],
+            },
+            fileType: FileType.reads,
             message: "",
-            onLoadNextPage: vi.fn(),
         };
+        path = formatPath("/samples/files", { page: 1 });
     });
 
     it("should upload with validation based on passed regex", async () => {
-        mockApiGetAccount(createFakeAccount({ administrator_role: null, permissions: { upload_file: true } }));
+        mockApiGetAccount(
+            createFakeAccount({
+                administrator_role: null,
+                permissions: {
+                    cancel_job: false,
+                    create_ref: false,
+                    create_sample: false,
+                    modify_hmm: false,
+                    modify_subtraction: false,
+                    remove_file: false,
+                    remove_job: false,
+                    upload_file: true,
+                },
+            }),
+        );
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
         vi.mock("@files/uploader");
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
-                <FileManager {...props} regex={/.(?:fa|fasta)(?:.gz|.gzip)?$/} />
-            </MemoryRouter>
-        );
+        renderWithRouter(<FileManager {...props} regex={/.(?:fa|fasta)(?:.gz|.gzip)?$/} />, path);
 
         expect(await screen.findByText("Drag file here to upload")).toBeInTheDocument();
         expect(screen.getByText("subtraction.fq.gz")).toBeInTheDocument();
@@ -61,11 +71,7 @@ describe("<FileManager>", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
-                <FileManager {...props} />
-            </MemoryRouter>
-        );
+        renderWithRouter(<FileManager {...props} />, path);
 
         expect(await screen.findByText("You do not have permission to upload files.")).toBeInTheDocument();
         expect(screen.queryByRole("button", { name: "Upload" })).not.toBeInTheDocument();
@@ -75,11 +81,7 @@ describe("<FileManager>", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })], true);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ pathname: "/samples/files", search: "?page=1" }]}>
-                <FileManager {...props} message="Test Message" />
-            </MemoryRouter>
-        );
+        renderWithRouter(<FileManager {...props} message="Test Message" />, path);
 
         expect(await screen.findByText("Test Message")).toBeInTheDocument();
     });

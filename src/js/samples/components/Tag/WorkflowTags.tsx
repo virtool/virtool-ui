@@ -42,7 +42,7 @@ export function WorkflowTags({ id, workflows }: SampleItemWorkflowTagsProps) {
             }
             return tags;
         },
-        []
+        [],
     );
     return (
         <StyledSampleWorkflowTags>

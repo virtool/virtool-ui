@@ -22,7 +22,7 @@ async function main() {
         /\.(?:js|map|ico|svg|css)$/,
         express.static(path.join("dist"), {
             maxAge: 31536000000,
-        })
+        }),
     );
 
     app.get("*", createDefaultRouteHandler(options));

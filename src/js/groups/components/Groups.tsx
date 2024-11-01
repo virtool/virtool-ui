@@ -1,14 +1,15 @@
 import { getColor } from "@app/theme";
-import { BoxGroup, LinkButton, LoadingPlaceholder, RemoveBanner } from "@base";
+import { BoxGroup, Button, LoadingPlaceholder, RemoveBanner } from "@base";
 import { InputHeader } from "@base/InputHeader";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find, sortBy } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../queries";
 import Create from "./CreateGroup";
+import { GroupMembers } from "./GroupMembers";
+import { GroupPermissions } from "./GroupPermissions";
 import { GroupSelector } from "./GroupSelector";
-import { Members } from "./Members";
-import { Permissions } from "./Permissions";
 
 const ManageGroupsContainer = styled.div`
     display: grid;
@@ -43,6 +44,7 @@ export default function Groups() {
     const updateGroupMutation = useUpdateGroup();
     const removeMutation = useRemoveGroup();
 
+    const [, setOpenCreateGroup] = useUrlSearchParam("openCreateGroup");
     const [selectedGroupId, setSelectedGroupId] = useState(null);
 
     const { data: groups, isPending: isPendingGroups } = useListGroups();
@@ -62,9 +64,9 @@ export default function Groups() {
         <>
             <GroupsHeader>
                 <h2>Groups</h2>
-                <LinkButton color="blue" to={{ state: { createGroup: true } }}>
+                <Button color="blue" onClick={() => setOpenCreateGroup("true")}>
                     Create
-                </LinkButton>
+                </Button>
             </GroupsHeader>
 
             {groups.length ? (
@@ -80,8 +82,8 @@ export default function Groups() {
                             value={selectedGroup.name}
                             onSubmit={name => updateGroupMutation.mutate({ id: selectedGroup.id, name })}
                         />
-                        <Permissions selectedGroup={selectedGroup} />
-                        <Members members={selectedGroup.users} />
+                        <GroupPermissions selectedGroup={selectedGroup} />
+                        <GroupMembers members={selectedGroup.users} />
                         <RemoveBanner
                             message="Permanently delete this group."
                             buttonText="Delete"

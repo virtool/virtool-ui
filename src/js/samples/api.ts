@@ -15,7 +15,7 @@ export function listSamples(
     per_page: number,
     term: string,
     labels: string[],
-    workflows: string[]
+    workflows: string[],
 ): Promise<SampleSearchResult> {
     return Request.get("/samples")
         .query({ page, per_page, find: term, label: labels, workflows })
@@ -55,7 +55,7 @@ export function createSample(
     subtractions: string[],
     files: string[],
     labels: number[],
-    group: string
+    group: string,
 ): Promise<Sample> {
     return Request.post("/samples")
         .send({

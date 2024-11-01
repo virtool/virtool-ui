@@ -2,7 +2,7 @@ import { ContainerNarrow, LoadingPlaceholder, NotFound } from "@base";
 import IndexDetail from "@indexes/components/IndexDetail";
 import { useGetReference } from "@references/queries";
 import React from "react";
-import { match, Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "wouter";
 import Indexes from "../../../indexes/components/Indexes";
 import OTUDetail from "../../../otus/components/Detail/OTUDetail";
 import OTUList from "../../../otus/components/OTUList";
@@ -11,17 +11,13 @@ import ReferenceDetailHeader from "./ReferenceDetailHeader";
 import ReferenceDetailTabs from "./ReferenceDetailTabs";
 import ReferenceManager from "./ReferenceManager";
 import ReferenceSettings from "./ReferenceSettings";
-
-type ReferenceDetailProps = {
-    /** Match object containing path information */
-    match: match<{ refId: string }>;
-};
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * The detailed view for a reference
  */
-export default function ReferenceDetail({ match }: ReferenceDetailProps) {
-    const { refId } = match.params;
+export default function ReferenceDetail() {
+    const { refId } = useSearchParams<{ refId: string }>();
     const { data, isPending, isError } = useGetReference(refId);
 
     if (isError) {
@@ -35,8 +31,8 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
     return (
         <>
             <Switch>
-                <Route path="/refs/:refId/otus/:otuId" />
-                <Route path="/refs">
+                <Route path="/refs/:refId/otus/:otuId/*?" />
+                <Route path="/refs/:refId/*?">
                     <ReferenceDetailHeader
                         createdAt={data.created_at}
                         isRemote={Boolean(data.remotes_from)}
@@ -50,12 +46,12 @@ export default function ReferenceDetail({ match }: ReferenceDetailProps) {
 
             <ContainerNarrow>
                 <Switch>
-                    <Redirect from="/refs/:refId" to={`/refs/${refId}/manage`} exact />
+                    <Route path="/refs/:refId/" component={() => <Redirect to={`/refs/${refId}/manage`} replace />} />
                     <Route path="/refs/:refId/manage" component={ReferenceManager} />
-                    <Route path="/refs/:refId/otus" component={OTUList} exact />
-                    <Route path="/refs/:refId/otus/:otuId" component={OTUDetail} />
-                    <Route path="/refs/:refId/indexes" component={Indexes} exact />
+                    <Route path="/refs/:refId/otus/:otuId/*?" component={OTUDetail} />
+                    <Route path="/refs/:refId/otus" component={OTUList} />
                     <Route path="/refs/:refId/indexes/:indexId" component={IndexDetail} />
+                    <Route path="/refs/:refId/indexes" component={Indexes} />
                     <Route path="/refs/:refId/settings" component={ReferenceSettings} />
                 </Switch>
             </ContainerNarrow>

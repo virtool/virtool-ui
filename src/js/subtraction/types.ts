@@ -15,13 +15,21 @@ export type NucleotideComposition = {
 
 /** A Subtraction file */
 export type SubtractionFile = {
+    /** The URL the file can be downloaded at. */
     download_url: string;
+
+    /** The unique ID for the file. */
     id: number;
+
+    /** The display name. */
     name: string;
-    /** The size of file (bytes) */
+
+    /** The size in (bytes) */
     size: number;
+
     /** The subtraction ID */
     subtraction: string;
+
     type: string;
 };
 

@@ -1,16 +1,20 @@
 import { RelativeTime } from "@base";
 import { act, screen } from "@testing-library/react";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../tests/setupTests";
 
 const fakeTime = "2019-02-10T17:11:00.000000Z";
 const RealDate = Date;
 
 describe("<RelativeTime />", () => {
     beforeAll(() => {
-        Date.now = vi.fn();
-        Date.now.mockReturnValue(new Date("2019-04-22T10:20:30Z"));
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date("2019-04-22T10:20:30Z"));
+    });
+
+    afterAll(() => {
+        vi.useRealTimers();
     });
 
     it("should render 2 months ago", () => {

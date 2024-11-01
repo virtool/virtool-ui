@@ -16,14 +16,14 @@ import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { find, includes, map } from "lodash-es";
 import React from "react";
-import { useParams } from "react-router-dom-v5-compat";
 import { samplesQueryKeys, useFetchSample, useUpdateSampleRights } from "../../queries";
+import { useSearchParams } from "@utils/hooks";
 
 /**
  * A component managing a samples rights
  */
 export default function SampleRights() {
-    const { sampleId } = useParams();
+    const { sampleId } = useSearchParams<{ sampleId: string }>();
 
     const { hasPermission } = useCheckAdminRole(AdministratorRoles.FULL);
     const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
@@ -48,7 +48,7 @@ export default function SampleRights() {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
                 },
-            }
+            },
         );
     }
 
@@ -64,7 +64,7 @@ export default function SampleRights() {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
                 },
-            }
+            },
         );
     }
 

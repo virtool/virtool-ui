@@ -14,7 +14,7 @@ export function AdministratorTabs({ administratorRole }: AdministratorTabsProps)
     }
 
     if (hasSufficientAdminRole(AdministratorRoles.USERS, administratorRole)) {
-        tabs.push(<TabsLink to="/administration/users">Users</TabsLink>);
+        tabs.push(<TabsLink to="/administration/users?status=active">Users</TabsLink>);
     }
 
     if (hasSufficientAdminRole(AdministratorRoles.FULL, administratorRole)) {

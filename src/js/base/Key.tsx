@@ -25,7 +25,7 @@ export function Key({ className, children }: KeyProps) {
                 "text-gray-600",
                 "hover:bg-gray-300",
                 "active:bg-gray-400",
-                className
+                className,
             )}
         >
             {children}

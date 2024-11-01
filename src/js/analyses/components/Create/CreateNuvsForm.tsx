@@ -69,7 +69,7 @@ export function CreateNuvsForm({
             <CreateAnalysisInputError>{errors.index && "A reference must be selected"}</CreateAnalysisInputError>
 
             <CreateAnalysisFooter>
-                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("index")?.length ?? 0} />
+                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("index") ? 1 : 0} />
                 <Button type="submit" color="blue">
                     Start
                 </Button>

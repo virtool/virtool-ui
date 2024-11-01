@@ -1,6 +1,6 @@
+import { useUrlSearchParam } from "@utils/hooks";
 import { find, map } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
@@ -46,15 +46,15 @@ type ReferenceMembersProps = {
  * Displays a component for managing who can access a reference by users or groups
  */
 export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
-    const history = useHistory();
-    const location = useLocation<{ addgroup: boolean; adduser: boolean }>();
+    const [openAdd, setOpenAdd] = useUrlSearchParam(`openAdd${noun}`);
+    const [openEdit, setOpenEdit] = useUrlSearchParam(`openEdit${noun}`);
 
     const mutation = useRemoveReferenceUser(refId, noun);
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
     function handleHide() {
-        history.replace({ state: { [`add${noun}`]: false } });
-        history.replace({ state: { [`edit${noun}`]: false } });
+        setOpenAdd("");
+        setOpenEdit("");
     }
 
     const plural = `${noun}s`;
@@ -65,11 +65,7 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 <ReferenceMembersHeader>
                     <h2>
                         {plural}
-                        {canModify && (
-                            <NewMemberLink onClick={() => history.push({ state: { [`add${noun}`]: true } })}>
-                                Add {noun}
-                            </NewMemberLink>
-                        )}
+                        {canModify && <NewMemberLink onClick={() => setOpenAdd("true")}>Add {noun}</NewMemberLink>}
                     </h2>
                     <p>Manage membership and rights for reference {plural}.</p>
                 </ReferenceMembersHeader>
@@ -79,7 +75,7 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                             key={member.id}
                             {...member}
                             canModify={canModify}
-                            onEdit={id => history.push({ state: { [`edit${noun}`]: id } })}
+                            onEdit={id => setOpenEdit(String(id))}
                             onRemove={id => mutation.mutate({ id })}
                         />
                     ))
@@ -94,18 +90,18 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                     users={members as ReferenceUser[]}
                     onHide={handleHide}
                     refId={refId}
-                    show={location.state?.adduser}
+                    show={Boolean(openAdd)}
                 />
             ) : (
                 <AddReferenceGroup
                     groups={members as ReferenceGroup[]}
                     onHide={handleHide}
                     refId={refId}
-                    show={location.state?.addgroup}
+                    show={Boolean(openAdd)}
                 />
             )}
             <EditReferenceMember
-                member={find(members, { id: location.state?.[`edit${noun}`] })}
+                member={find(members, member => String(member.id) === openEdit)}
                 noun={noun}
                 refId={refId}
             />

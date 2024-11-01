@@ -5,7 +5,7 @@
 import clsx from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
 import Fuse from "fuse.js";
-import { capitalize, forEach, get, replace, sampleSize, split, startCase, upperFirst } from "lodash-es";
+import { capitalize, forEach, get, replace, sampleSize, split, startCase } from "lodash-es";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
 
@@ -147,21 +147,6 @@ export function getWorkflowDisplayName(workflow) {
     return get(workflowDisplayNames, workflow, startCase(workflow));
 }
 
-export function routerLocationHasState(state, key, value) {
-    return (
-        Boolean(state.router.location.state) &&
-        (value ? state.router.location.state[key] === value : Boolean(state.router.location.state[key]))
-    );
-}
-
-export function getTargetChange(target) {
-    return {
-        name: target.name,
-        value: target.value,
-        error: `error${upperFirst(target.name)}`,
-    };
-}
-
 /**
  * Object that maps workflow IDs to human-readable names.
  *
@@ -221,8 +206,8 @@ export function resetClient() {
 export function setSessionStorage(key, data) {
     try {
         window.sessionStorage.setItem(key, JSON.stringify(data));
-    } catch (e) {
-        //continue running regardless of error
+    } catch (error) {
+        console.warn(`Failed to save data to sessionStorage for key "${key}":`, error);
     }
 }
 
@@ -234,11 +219,13 @@ export function setSessionStorage(key, data) {
  * @returns {object}
  */
 export function getSessionStorage(key) {
-    try {
-        return JSON.parse(window.sessionStorage.getItem(key));
-    } catch (e) {
+    const item = window.sessionStorage.getItem(key);
+
+    if (item === null) {
         return null;
     }
+
+    return JSON.parse(item);
 }
 
 /**

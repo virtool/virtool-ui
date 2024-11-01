@@ -1,6 +1,6 @@
 import { Markdown } from "@base";
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, it } from "vitest";
 

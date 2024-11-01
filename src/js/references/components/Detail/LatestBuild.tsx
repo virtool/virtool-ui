@@ -1,7 +1,6 @@
-import { BoxGroupSection, NoneFoundSection, RelativeTime } from "@base";
+import { BoxGroupSection, Link, NoneFoundSection, RelativeTime } from "@base";
 import { ReferenceBuild } from "@references/types";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledLatestBuild = styled(BoxGroupSection)`

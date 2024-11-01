@@ -1,5 +1,6 @@
+import { useUrlSearchParam } from "@utils/hooks";
 import React, { ChangeEvent } from "react";
-import { InputSearch, LinkButton, Toolbar } from "../../base";
+import { Button, InputSearch, Toolbar } from "../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
 import { ReferenceRemotesFrom } from "../../references/types";
 
@@ -18,15 +19,16 @@ type OTUToolbarProps = {
  */
 export default function OTUToolbar({ term, onChange, refId, remotesFrom }: OTUToolbarProps) {
     const { hasPermission: canCreate } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+    const [, setOpenCreateOtu] = useUrlSearchParam("openCreateOTU");
 
     return (
         <Toolbar>
             <InputSearch placeholder="Name or abbreviation" value={term} onChange={onChange} />
 
             {canCreate && !remotesFrom && (
-                <LinkButton to={{ state: { createOTU: true } }} color="blue" replace>
+                <Button onClick={() => setOpenCreateOtu("true")} color="blue">
                     Create
-                </LinkButton>
+                </Button>
             )}
         </Toolbar>
     );

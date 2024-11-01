@@ -1,9 +1,9 @@
 import { BoxGroupSection, Label } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { OTUSegment } from "@otus/types";
+import { useUrlSearchParam } from "@utils/hooks";
 import { cn } from "@utils/utils";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledSegment = styled(BoxGroupSection)`
@@ -33,7 +33,8 @@ type SegmentProps = {
  * A condensed segment item for use in a list of segments
  */
 export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, segment }: SegmentProps) {
-    const history = useHistory();
+    const [, setRemoveSegmentName] = useUrlSearchParam("removeSegmentName");
+    const [, setEditSegmentName] = useUrlSearchParam("editSegmentName");
 
     return (
         <StyledSegment>
@@ -46,13 +47,13 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
                         name="trash"
                         color="red"
                         tip="remove segment"
-                        onClick={() => history.push({ state: { removeSegment: segment.name } })}
+                        onClick={() => setRemoveSegmentName(segment.name)}
                     />
                     <IconButton
                         name="pen"
                         color="grayDark"
                         tip="edit segment"
-                        onClick={() => history.push({ state: { editSegment: segment.name } })}
+                        onClick={() => setEditSegmentName(segment.name)}
                     />
                 </div>
             )}

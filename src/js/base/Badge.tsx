@@ -34,7 +34,7 @@ export function Badge({ children, className, color = "gray" }: BadgeProps) {
                     "bg-purple-600": color === "purple",
                     "bg-red-600": color === "red",
                 },
-                className
+                className,
             )}
         >
             {children}

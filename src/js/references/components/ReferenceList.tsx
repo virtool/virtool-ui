@@ -2,7 +2,7 @@ import { BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHeader, 
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
 import { ReferenceItem } from "@references/components/Item/ReferenceItem";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import { useFindReferences } from "../queries";
@@ -14,8 +14,8 @@ import ReferenceToolbar from "./ReferenceToolbar";
  * A list of references with filtering options
  */
 export default function ReferenceList() {
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const [term] = useUrlSearchParams<string>("find");
+    const [urlPage] = useUrlSearchParam("page");
+    const [term] = useUrlSearchParam("find");
     const { data, isPending } = useFindReferences(Number(urlPage) || 1, 25, term);
 
     if (isPending) {

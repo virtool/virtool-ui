@@ -1,10 +1,9 @@
 import { JobState } from "@jobs/types";
 import React from "react";
-import { Link } from "react-router-dom-v5-compat";
 import styled from "styled-components";
-import { getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { BoxGroupSection } from "../../base";
-import { ProgressCircle } from "../../base/ProgressCircle";
+import { BoxGroupSection, Link } from "@base";
+import { getFontSize, getFontWeight, sizes } from "@app/theme";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { SubtractionMinimal } from "../types";
 import { SubtractionAttribution } from "./Attribution";
 
@@ -45,7 +44,7 @@ const Attribution = styled.div`
 export function SubtractionItem({ created_at, id, job, name, nickname, ready, user }: SubtractionMinimal) {
     return (
         <StyledSubtractionItem>
-            <SubtractionLink to={`${id}`}>{name}</SubtractionLink>
+            <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
             <div>{nickname}</div>
             <Attribution>
                 <SubtractionAttribution handle={user.handle} time={created_at} />

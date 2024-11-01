@@ -23,7 +23,7 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
                 "mr-[15px]",
                 "border",
                 "border-gray-300",
-                className
+                className,
             )}
         >
             <ScrollAreaPrimitive.Viewport className={cn("w-full", "h-full rounded")}>
@@ -42,7 +42,7 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
                     "hover:bg-gray-200",
                     "data-[orientation=vertical]:w-2.5",
                     "data-[orientation=horizontal]:flex-col",
-                    "data-[orientation=horizontal]:h-2.5"
+                    "data-[orientation=horizontal]:h-2.5",
                 )}
                 orientation="vertical"
             >
@@ -61,7 +61,7 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
                         "before:w-full",
                         "before:h-full",
                         "before:min-w-[44px]",
-                        "before:min-h-[44px]"
+                        "before:min-h-[44px]",
                     )}
                 />
             </ScrollAreaPrimitive.Scrollbar>
@@ -78,7 +78,7 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
                     "hover:bg-gray-200",
                     "data-[orientation=vertical]:w-2.5",
                     "data-[orientation=horizontal]:flex-col",
-                    "data-[orientation=horizontal]:h-2.5"
+                    "data-[orientation=horizontal]:h-2.5",
                 )}
                 orientation="horizontal"
             >
@@ -97,7 +97,7 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
                         "before:w-full",
                         "before:h-full",
                         "before:min-w-[44px]",
-                        "before:min-h-[44px]"
+                        "before:min-h-[44px]",
                     )}
                 />
             </ScrollAreaPrimitive.Scrollbar>

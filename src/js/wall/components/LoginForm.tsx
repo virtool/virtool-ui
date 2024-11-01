@@ -1,28 +1,8 @@
-import { BoxGroupSection, Checkbox, InputGroup, InputLabel, InputSimple } from "@base";
+import { Button, Checkbox, InputGroup, InputLabel, InputSimple } from "@base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
 import { useLoginMutation } from "../queries";
-import { WallButton, WallHeader, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
-
-const LoginError = styled.div`
-    color: red;
-    margin-left: auto;
-    margin-bottom: 10px;
-    font-size: 12px;
-    height: 10px;
-`;
-
-const LoginButton = styled(WallButton)`
-    margin-top: 20px;
-`;
-
-const LoginContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-`;
 
 type LoginFormProps = {
     /** Callback to set the reset code in the parent component state. */
@@ -39,11 +19,11 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
             { username, password, remember },
             {
                 onSuccess: data => {
-                    if (data.body.resetCode) {
-                        setResetCode(data.body.resetCode);
+                    if (data.body.reset_code) {
+                        setResetCode(data.body.reset_code);
                     }
                 },
-            }
+            },
         );
     }
 
@@ -51,38 +31,37 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
 
     return (
         <>
-            <WallTitle />
-            <WallHeader>Login</WallHeader>
-            <BoxGroupSection>
-                <WallSubheader>Sign in with your Virtool account</WallSubheader>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <InputGroup>
-                        <InputLabel htmlFor="username">Username</InputLabel>
-                        <InputSimple id="username" {...register("username", { required: true })} autoFocus />
-                    </InputGroup>
-                    <InputGroup>
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <InputSimple id="password" type="password" {...register("password", { required: true })} />
-                    </InputGroup>
-                    <LoginContainer>
-                        <Controller
-                            name="remember"
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <Checkbox checked={value} onClick={() => onChange(!value)} label="Remember Me" />
-                            )}
-                        />
-                        {isError && (
-                            <LoginError>
-                                {error?.response?.body?.message || "An error occurred during login"}
-                            </LoginError>
+            <WallTitle title="Login" subtitle="Login with your Virtool account." />
+
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <InputGroup>
+                    <InputLabel htmlFor="username">Username</InputLabel>
+                    <InputSimple id="username" {...register("username", { required: true })} autoFocus />
+                </InputGroup>
+                <InputGroup>
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <InputSimple id="password" type="password" {...register("password", { required: true })} />
+                </InputGroup>
+                <div className="flex justify-between my-4">
+                    <Controller
+                        name="remember"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                            <Checkbox checked={value} onClick={() => onChange(!value)} label="Remember Me" />
                         )}
-                    </LoginContainer>
-                    <LoginButton type="submit" color="blue">
+                    />
+                    {isError && (
+                        <div className="flex text-red-500">
+                            {error?.response?.body?.message || "An error occurred during login"}
+                        </div>
+                    )}
+                </div>
+                <div className="flex justify-end">
+                    <Button type="submit" color="blue">
                         Login
-                    </LoginButton>
-                </form>
-            </BoxGroupSection>
+                    </Button>
+                </div>
+            </form>
         </>
     );
 }

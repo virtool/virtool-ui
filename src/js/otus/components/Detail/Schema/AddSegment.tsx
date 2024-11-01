@@ -2,8 +2,8 @@ import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import SegmentForm from "./SegmentForm";
 
 type FormValues = {
@@ -24,8 +24,7 @@ type AddSegmentProps = {
  * Displays a dialog for adding a segment
  */
 export default function AddSegment({ otuId, name, abbreviation, schema }: AddSegmentProps) {
-    const history = useHistory();
-    const location = useLocation<{ addSegment: boolean }>();
+    const [openAddSegment, setOpenAddSegment] = useUrlSearchParam("openAddSegment");
     const mutation = useUpdateOTU(otuId);
 
     function handleSubmit({ segmentName, molecule, required }: FormValues) {
@@ -33,17 +32,14 @@ export default function AddSegment({ otuId, name, abbreviation, schema }: AddSeg
             { otuId, name, abbreviation, schema: [...schema, { name: segmentName, molecule, required }] },
             {
                 onSuccess: () => {
-                    history.replace({ state: { addSegment: false } });
+                    setOpenAddSegment("");
                 },
-            }
+            },
         );
     }
 
     return (
-        <Dialog
-            open={location.state?.addSegment}
-            onOpenChange={() => history.replace({ state: { addSegment: false } })}
-        >
+        <Dialog open={Boolean(openAddSegment)} onOpenChange={() => setOpenAddSegment("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

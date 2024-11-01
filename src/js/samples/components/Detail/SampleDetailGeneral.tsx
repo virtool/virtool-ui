@@ -10,13 +10,13 @@ import {
 import JobItem from "@jobs/components/Item/JobItem";
 import numbro from "numbro";
 import React from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom-v5-compat";
 import styled from "styled-components";
 import { useFetchSample } from "../../queries";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
+import { useSearchParams } from "@utils/hooks";
 
 const StyledSampleDetailGeneral = styled.div`
     align-items: stretch;
@@ -31,9 +31,7 @@ const StyledSampleDetailGeneral = styled.div`
  * The general view in sample details
  */
 export default function SampleDetailGeneral() {
-    const { sampleId } = useParams();
-    const navigate = useNavigate();
-    const location = useLocation();
+    const { sampleId } = useSearchParams<{ sampleId: string }>();
 
     const { data, isPending } = useFetchSample(sampleId);
 
@@ -134,11 +132,7 @@ export default function SampleDetailGeneral() {
                 <Sidebar sampleId={data.id} sampleLabels={data.labels} defaultSubtractions={data.subtractions} />
             </ContainerSide>
 
-            <EditSample
-                sample={data}
-                show={location.state?.editSample}
-                onHide={() => navigate(".", { state: { editSample: false } })}
-            />
+            <EditSample sample={data} />
         </StyledSampleDetailGeneral>
     );
 }

@@ -1,8 +1,7 @@
-import { InputError, InputGroup, InputLabel, InputSimple } from "@base";
+import { Button, InputError, InputGroup, InputLabel, InputSimple } from "@base";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useResetPasswordMutation } from "../queries";
-import { WallButton, WallHeader, WallSubheader } from "./Container";
 import { WallTitle } from "./WallTitle";
 
 type ResetFormProps = {
@@ -23,9 +22,7 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
 
     return (
         <>
-            <WallTitle />
-            <WallHeader>Password Reset</WallHeader>
-            <WallSubheader>You are required to set a new password before proceeding.</WallSubheader>
+            <WallTitle title="Password Reset" subtitle="You must set a new password before proceeding." />
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputGroup>
                     <InputLabel htmlFor="password">Password</InputLabel>
@@ -36,9 +33,9 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
                         </InputError>
                     )}
                 </InputGroup>
-                <WallButton type="submit" color="blue">
+                <Button type="submit" color="blue">
                     Reset
-                </WallButton>
+                </Button>
             </form>
         </>
     );

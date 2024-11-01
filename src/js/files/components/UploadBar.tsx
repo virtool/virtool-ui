@@ -38,7 +38,7 @@ export function UploadBar({
         (acceptedFiles: File[]) => {
             onDrop(acceptedFiles);
         },
-        [onDrop]
+        [onDrop],
     );
 
     function validator(file: File): FileError {
@@ -83,7 +83,7 @@ export function UploadBar({
                 "mb-4",
                 "p-2",
                 "pt-10",
-                "rounded-md"
+                "rounded-md",
             )}
             {...rootProps}
         >

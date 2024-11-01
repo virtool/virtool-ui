@@ -67,6 +67,7 @@ export { InputSimple } from "./InputSimple";
 export { Key } from "./Key";
 export { Label } from "./Label";
 export { LinkButton } from "./LinkButton";
+export { Link } from "wouter";
 export { Loader } from "./Loader";
 export { LoadingPlaceholder } from "./LoadingPlaceholder";
 export { Logo } from "./Logo";

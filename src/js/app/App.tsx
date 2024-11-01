@@ -1,15 +1,15 @@
 import { LoadingPlaceholder } from "@/base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WallContainer } from "@wall/components/Container";
 import { useAuthentication, useRootQuery } from "@wall/queries";
-import { History } from "history";
 import React, { Suspense } from "react";
-import { Router } from "react-router-dom";
-import { CompatRouter } from "react-router-dom-v5-compat";
 import { ThemeProvider } from "styled-components";
+import { Router } from "wouter";
+import { useBrowserLocation } from "wouter/use-browser-location";
 import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
+import { resetClient } from "@utils/utils";
+import { ErrorBoundary } from "@app/ErrorBoundary";
 
 // Lazy load components
 const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));
@@ -26,7 +26,7 @@ function ConnectedApp(): React.ReactElement {
 
     if (rootData.first_user) {
         return (
-            <Suspense fallback={<WallContainer />}>
+            <Suspense fallback={<div />}>
                 <LazyFirstUser />
             </Suspense>
         );
@@ -34,7 +34,7 @@ function ConnectedApp(): React.ReactElement {
 
     if (!authenticated) {
         return (
-            <Suspense fallback={<WallContainer />}>
+            <Suspense fallback={<div />}>
                 <LazyLoginWall />
             </Suspense>
         );
@@ -48,8 +48,11 @@ const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             retry: (failureCount: number, error: any) => {
-                if ([401, 403, 404].includes(error.response?.status)) {
+                if ([403, 404].includes(error.response?.status)) {
                     return false;
+                }
+                if (error.response?.status === 401) {
+                    resetClient();
                 }
                 return failureCount <= 3;
             },
@@ -58,23 +61,18 @@ const queryClient = new QueryClient({
     },
 });
 
-type AppProps = {
-    // React Router history object
-    history: History;
-};
-
 /** The root App component that provides theme, query client, and routing setup */
-export default function App({ history }: AppProps): React.ReactElement {
+export default function App(): React.ReactElement {
     return (
         <ThemeProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-                <Router history={history}>
-                    <CompatRouter>
+            <ErrorBoundary>
+                <QueryClientProvider client={queryClient}>
+                    <Router hook={useBrowserLocation}>
                         <GlobalStyles />
                         <ConnectedApp />
-                    </CompatRouter>
-                </Router>
-            </QueryClientProvider>
+                    </Router>
+                </QueryClientProvider>
+            </ErrorBoundary>
         </ThemeProvider>
     );
 }

@@ -1,7 +1,8 @@
 import { IconButton } from "@base/IconButton";
+import { useUrlSearchParam } from "@utils/hooks";
 import { endsWith } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "wouter";
 import { Icon, ViewHeader, ViewHeaderAttribution, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 
@@ -24,11 +25,11 @@ export default function ReferenceDetailHeader({
     refId,
     userHandle,
 }: ReferenceDetailHeaderProps) {
-    const location = useLocation();
-    const history = useHistory();
+    const [location] = useLocation();
+    const [, setOpenEditReference] = useUrlSearchParam("openEditReference");
     const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
 
-    const showIcons = endsWith(location.pathname, "/manage");
+    const showIcons = endsWith(location, "/manage");
 
     return (
         <ViewHeader title={name}>
@@ -42,7 +43,7 @@ export default function ReferenceDetailHeader({
                                 color="grayDark"
                                 name="pen"
                                 tip="modify"
-                                onClick={() => history.push({ state: { editReference: true } })}
+                                onClick={() => setOpenEditReference("true")}
                             />
                         )}
                     </ViewHeaderIcons>

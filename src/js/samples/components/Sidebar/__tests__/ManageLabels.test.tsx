@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import ManageLabels from "../ManageLabels";
 
 describe("<ManageLabels>", () => {
@@ -21,7 +21,7 @@ describe("<ManageLabels>", () => {
 
     it("should be disabled if no labels exist", async () => {
         props.labels = [];
-        renderWithMemoryRouter(<ManageLabels {...props} />);
+        renderWithRouter(<ManageLabels {...props} />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
         expect(screen.getByText("Create one")).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe("<ManageLabels>", () => {
                 labels: [{ color: "#C4B5FD", description: "", id: 1, name: "test" }],
             },
         ];
-        renderWithMemoryRouter(<ManageLabels {...props} />);
+        renderWithRouter(<ManageLabels {...props} />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
         expect(screen.getByText("test")).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("<ManageLabels>", () => {
                 labels: [{ color: "#FCA5A5", description: "", id: 2, name: "label" }],
             },
         ];
-        renderWithMemoryRouter(<ManageLabels {...props} />);
+        renderWithRouter(<ManageLabels {...props} />);
         await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
 
         expect(screen.getByText("test")).toBeInTheDocument();

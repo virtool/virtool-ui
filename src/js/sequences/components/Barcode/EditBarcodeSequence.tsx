@@ -1,44 +1,39 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { useEditSequence } from "@otus/queries";
-import { OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { ReferenceTarget } from "@references/types";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
-import { useLocationState } from "@utils/hooks";
-import { merge } from "lodash";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
+import { useGetActiveSequence, useGetSelectableTargets } from "@sequences/hooks";
 
 type EditBarcodeSequence = {
-    activeSequence: OTUSequence;
     isolateId: string;
     otuId: string;
-    /** A list of unreferenced targets */
-    targets: ReferenceTarget[];
 };
 
 /**
  * Displays dialog to edit a barcode sequence
  */
-export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, targets }: EditBarcodeSequence) {
-    const [locationState, setLocationState] = useLocationState();
+export default function EditBarcodeSequence({ isolateId, otuId }: EditBarcodeSequence) {
+    const [openEditSequence, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
     const mutation = useEditSequence(otuId);
+
+    const targets = useGetSelectableTargets();
+    const activeSequence = useGetActiveSequence();
 
     function onSubmit({ accession, definition, host, sequence, target }) {
         mutation.mutate(
             { isolateId, sequenceId: activeSequence.id, accession, definition, host, sequence, target },
             {
                 onSuccess: () => {
-                    setLocationState(merge(locationState, { editSequence: false }));
+                    setOpenEditSequence("");
                 },
-            }
+            },
         );
     }
 
     return (
-        <Dialog
-            open={locationState?.editSequence}
-            onOpenChange={() => setLocationState(merge(locationState, { editSequence: false }))}
-        >
+        <Dialog open={Boolean(openEditSequence)} onOpenChange={() => setOpenEditSequence("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

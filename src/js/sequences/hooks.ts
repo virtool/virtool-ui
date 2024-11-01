@@ -1,10 +1,9 @@
-import { LocationType } from "@/types/types";
 import { useGetActiveIsolate } from "@otus/hooks";
 import { useCurrentOTUContext } from "@otus/queries";
 import sortSequencesBySegment from "@otus/utils";
+import { useUrlSearchParam } from "@utils/hooks";
 import { compact, filter, find, map, reject } from "lodash-es";
 import { useCallback, useState } from "react";
-import { useLocation } from "react-router-dom";
 
 /**
  * A hook for managing sequence detail visibility.
@@ -36,15 +35,14 @@ export function useExpanded() {
  * @returns The active sequence
  */
 export function useGetActiveSequence() {
-    const location = useLocation<LocationType>();
+    const [openEditSequence] = useUrlSearchParam("openEditSequence");
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
-    const activeSequenceId = location.state?.editSequence;
     const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
-    if (activeSequenceId) {
-        const sequence = find(sequences, { id: activeSequenceId });
+    if (openEditSequence) {
+        const sequence = find(sequences, { id: openEditSequence });
 
         if (sequence) {
             return sequence;
@@ -60,11 +58,12 @@ export function useGetActiveSequence() {
  * @returns A list of inactive sequences
  */
 export function useGetInactiveSequences() {
-    const location = useLocation<LocationType>();
+    const [openEditSequence] = useUrlSearchParam("openEditSequence");
+
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
-    const activeSequenceId = location.state?.editSequence || undefined;
+    const activeSequenceId = openEditSequence || undefined;
     const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
     return reject(sequences, { id: activeSequenceId });
@@ -76,6 +75,23 @@ export function useGetInactiveSequences() {
  * @returns A list of unreferenced targets
  */
 export function useGetUnreferencedTargets() {
+    const {
+        otu,
+        reference: { targets },
+    } = useCurrentOTUContext();
+
+    const { sequences } = useGetActiveIsolate(otu);
+    const referencedTargetNames = map(sequences, sequence => sequence.target);
+
+    return filter(targets, target => !referencedTargetNames.includes(target.name));
+}
+
+/**
+ * Get a list of targets that are valid selections for the active sequence
+ *
+ * @returns A list of unreferenced targets
+ */
+export function useGetSelectableTargets() {
     const { reference } = useCurrentOTUContext();
     const { targets } = reference;
 

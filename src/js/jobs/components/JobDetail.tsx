@@ -10,26 +10,22 @@ import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
-import { match } from "react-router-dom";
 import styled from "styled-components";
 import { JobArgs } from "./JobArgs";
 import JobError from "./JobError";
 import JobSteps from "./JobSteps";
+import { useSearchParams } from "@utils/hooks";
 
 const JobDetailBadge = styled(ViewHeaderTitleBadge)`
     text-transform: capitalize;
 `;
 
-type JobDetailProps = {
-    /** Match object containing path information */
-    match: match<{ jobId: string }>;
-};
-
 /**
  * The job detailed view
  */
-export default function JobDetail({ match }: JobDetailProps) {
-    const { data, isPending, isError } = useFetchJob(match.params.jobId);
+export default function JobDetail() {
+    const { jobId } = useSearchParams<{ jobId: string }>();
+    const { data, isPending, isError } = useFetchJob(jobId);
 
     if (isError) {
         return <NotFound />;

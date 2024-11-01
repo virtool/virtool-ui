@@ -67,7 +67,7 @@ export default function TargetField({ targets }: TargetFieldProps) {
                     render={({ field: { onChange, value } }) => {
                         const targetExists = targets.some(target => target.name === value);
 
-                        if (value && !targetExists) {
+                        if (value && !targetExists && !disabled) {
                             setValue("target", targets[0]?.name);
                         }
 

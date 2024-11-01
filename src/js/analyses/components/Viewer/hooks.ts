@@ -21,7 +21,7 @@ export function useKeyNavigation(activeId, nextId, nextIndex, previousId, previo
                 onSetActiveId(nextId);
             }
         },
-        [activeId, nextId, previousId]
+        [activeId, nextId, previousId],
     );
 
     useEffect(() => {

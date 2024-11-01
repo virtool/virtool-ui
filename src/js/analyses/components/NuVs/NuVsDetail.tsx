@@ -4,7 +4,7 @@ import { FormattedNuvsHit } from "@/analyses/types";
 import { calculateAnnotatedOrfCount } from "@/analyses/utils";
 import { getBorder } from "@app/theme";
 import { Badge, Box } from "@base";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -83,7 +83,7 @@ type NuVsDetailProps = {
  * The detailed view of a NuVs sequence
  */
 export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: NuVsDetailProps) {
-    const [filterORFs] = useUrlSearchParams("filterOrfs");
+    const [filterORFs] = useUrlSearchParam("filterOrfs");
     const hit = useGetActiveHit(matches);
 
     if (!hit) {

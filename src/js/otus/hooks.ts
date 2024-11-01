@@ -1,7 +1,6 @@
-import { LocationType } from "@/types/types";
 import { OTU } from "@otus/types";
+import { useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";
-import { useLocation } from "react-router-dom";
 
 /**
  * A hook to get the active isolate
@@ -10,9 +9,9 @@ import { useLocation } from "react-router-dom";
  * @returns The active isolate
  */
 export function useGetActiveIsolate(otu: OTU) {
-    const location = useLocation<LocationType>();
+    const [activeIsolate] = useUrlSearchParam("activeIsolate");
 
-    const activeIsolateId = location.state?.activeIsolateId || otu.isolates[0]?.id;
+    const activeIsolateId = activeIsolate || otu.isolates[0]?.id;
     return otu.isolates.length ? find(otu.isolates, { id: activeIsolateId }) : null;
 }
 
@@ -23,7 +22,7 @@ export function useGetActiveIsolate(otu: OTU) {
  * @returns The unique identifier of the active isolate
  */
 export function useGetActiveIsolateId(otu: OTU) {
-    const location = useLocation<LocationType>();
+    const [activeIsolate] = useUrlSearchParam("activeIsolate");
 
-    return location.state?.activeIsolateId || otu.isolates[0]?.id;
+    return activeIsolate || otu.isolates[0]?.id;
 }

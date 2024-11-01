@@ -1,10 +1,9 @@
 import { fontWeight } from "@app/theme";
-import { Box, InputGroup, InputLabel, Select, SelectButton, SelectContent, SelectItem } from "@base";
+import { Box, InputGroup, InputLabel, Link, Select, SelectButton, SelectContent, SelectItem } from "@base";
 import { OTUSegment } from "@otus/types";
 import { map } from "lodash-es";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { SequenceSegment } from "./SequenceSegment";
 

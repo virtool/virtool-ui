@@ -1,8 +1,7 @@
 import { BoxGroup, BoxGroupHeader } from "@base";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { IndexFile } from "@indexes/types";
-import { File } from "@subtraction/components/Detail/File";
-import { map } from "lodash-es";
+import { SubtractionFileItem } from "@subtraction/components/Detail/SubtractionFileItem";
 import React from "react";
 
 type IndexFilesProps = {
@@ -13,8 +12,6 @@ type IndexFilesProps = {
  * A list of the files associated with the index
  */
 export default function IndexFiles({ files }: IndexFilesProps) {
-    const fileComponents = map(files, file => <File file={file} key={file.id} />);
-
     return (
         <BoxGroup>
             <BoxGroupHeader>
@@ -24,7 +21,9 @@ export default function IndexFiles({ files }: IndexFilesProps) {
                 </h2>
                 Data files available to workflows using this index.
             </BoxGroupHeader>
-            {fileComponents}
+            {files.map((file: IndexFile) => (
+                <SubtractionFileItem key={file.id} downloadUrl={file.download_url} name={file.name} size={file.size} />
+            ))}
         </BoxGroup>
     );
 }
