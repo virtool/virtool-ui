@@ -16,14 +16,7 @@ type EditGenomeSequenceProps = {
 /**
  * Displays dialog to edit a genome sequence
  */
-export default function EditGenomeSequence({
-    activeSequence,
-    hasSchema,
-    isolateId,
-    otuId,
-    refId,
-    segments,
-}: EditGenomeSequenceProps) {
+export default function EditGenomeSequence({ hasSchema, isolateId, otuId, refId }: EditGenomeSequenceProps) {
     const { value: editSequenceId, unsetValue: unsetEditSequenceId } = useUrlSearchParam("editSequenceId");
     const mutation = useEditSequence(otuId);
 

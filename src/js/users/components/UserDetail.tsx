@@ -105,14 +105,10 @@ export default function UserDetail() {
                 <UserActivationBanner
                     buttonText="Deactivate"
                     noun="deactivate"
-                    onClick={() => setOpenDeactivateUser("true")}
+                    onClick={() => setOpenDeactivateUser(true)}
                 />
             ) : (
-                <UserActivationBanner
-                    buttonText="Activate"
-                    noun="activate"
-                    onClick={() => setOpenActivateUser("true")}
-                />
+                <UserActivationBanner buttonText="Activate" noun="activate" onClick={() => setOpenActivateUser(true)} />
             )}
 
             <UserActivation

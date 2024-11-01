@@ -10,10 +10,10 @@ import { AnalysisViewerSort } from "../Viewer/Sort";
  * Displays a toolbar for managing and filtering NuVs
  */
 export default function NuVsToolbar({ analysisId, results, sampleName }: NuVsExportProps) {
-    const { value: filterORFs, setValue: setFilterORFs } = useUrlSearchParam<boolean>("filterOrfs", "true");
+    const { value: filterORFs, setValue: setFilterORFs } = useUrlSearchParam<boolean>("filterOrfs", true);
     const { value: filterSequences, setValue: setFilterSequences } = useUrlSearchParam<boolean>(
         "filterSequences",
-        "true",
+        true,
     );
     const { value: find, setValue: setFind } = useUrlSearchParam<string>("find", "");
     const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>("sort", "length");

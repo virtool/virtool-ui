@@ -14,7 +14,7 @@ type EditBarcodeSequence = {
 /**
  * Displays dialog to edit a barcode sequence
  */
-export default function EditBarcodeSequence({ activeSequence, isolateId, otuId, targets }: EditBarcodeSequence) {
+export default function EditBarcodeSequence({ isolateId, otuId }: EditBarcodeSequence) {
     const { value: editSequenceId, unsetValue: unsetEditSequenceId } = useUrlSearchParam<string>("editSequenceId");
     const mutation = useEditSequence(otuId);
 

@@ -33,7 +33,7 @@ describe("<EditBarcodeSequence>", () => {
         mockApiGetSettings(createFakeSettings());
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
 
-        path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, { openEditSequence: activeSequence.id });
+        path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, { editSequenceId: activeSequence.id });
         props = {
             activeSequence: "derp",
             isolateId: "test_isolate_id",

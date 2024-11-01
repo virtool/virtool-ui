@@ -36,21 +36,8 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
  */
 export const usePathParams = useParams;
 
-export function formatPath(basePath: string, searchParams: object) {
+export function formatPath(basePath: string, searchParams: Record<string, string | number | boolean | null>) {
     return basePath + formatSearchParams(searchParams);
-}
-
-/**
- * create a new search string based on a collection of key:value pairs
- *
- * @param params -
- */
-export function formatSearchParams(params: object) {
-    const searchParams = new URLSearchParams();
-    forEach(params, (value, key) => {
-        searchParams.append(key, value);
-    });
-    return `?${searchParams.toString()}`;
 }
 
 /**
@@ -100,7 +87,7 @@ export function updateSearchParam(key: string, value: string, search: string) {
  * @param search - URL search string containing the search params
  * @param location - the base URL
  */
-function updateUrlSearchParams(value: string, key: string, navigate, search, location) {
+function updateUrlSearchParams(value: string, key: string, navigate: navigate, search: string, location: string) {
     const params = new URLSearchParams(search);
 
     params.set(key, String(value));
@@ -117,6 +104,24 @@ function updateUrlSearchParams(value: string, key: string, navigate, search, loc
     return search;
 }
 
+/**
+ * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
+ *
+ * @param key - The search parameter key to be managed
+ * @param navigate - navigate the URL to the passed string
+ * @param search - URL search string containing the search params
+ * @param values - The values to be used in the search parameter
+ */
+function updateUrlSearchParamsList(key: string, navigate: navigate, search: string, values: SearchParam[]) {
+    const params = new URLSearchParams(search);
+
+    params.delete(key);
+    forEach(values, value => params.append(key, value));
+
+    search = `?${params.toString()}`;
+    navigate(search);
+    return search;
+}
 /**
  * Updates the URL search parameters by either setting a new value for a given key or removing the key-value pair
  *
@@ -141,7 +146,9 @@ function unsetUrlSearchParam(key, navigate, search, location) {
     return search;
 }
 
-type searchParamType = string | boolean | number | null;
+type SearchParam = string | boolean | number | null;
+
+type navigate = <S>(to: string | URL, options?: { replace?: boolean; state?: S }) => void;
 
 /**
  * Attempt to cast a search param value into the correct type
@@ -171,7 +178,17 @@ function castSearchParamValue(value: string) {
     return value;
 }
 
-function createUseUrlSearchParam() {
+function createUseUrlSearchParam(): [
+    <T extends SearchParam>(
+        key: string,
+        defaultValue?: T,
+    ) => {
+        value: T;
+        setValue: (value: T) => void;
+        unsetValue: () => void;
+    },
+    <T extends SearchParam>(key: string, defaultValues?: T[]) => { values: T[]; setValues: (newValue: T[]) => void },
+] {
     const cache = { search: "" };
 
     /**
@@ -181,7 +198,7 @@ function createUseUrlSearchParam() {
      * @param defaultValue - The default value to use when the search parameter key is not present in the URL
      * @returns The current value and a functions for setting the URL search parameter
      */
-    function useUrlSearchParam<T extends searchParamType>(
+    function useUrlSearchParam<T extends SearchParam>(
         key: string,
         defaultValue?: T,
     ): { value: T; setValue: (value: T) => void; unsetValue: () => void } {
@@ -223,7 +240,7 @@ function createUseUrlSearchParam() {
      * @param defaultValues - The default values to use when the search parameter key is not present in the URL
      * @returns The current values and a function to set the URL search parameter
      */
-    function useListSearchParam<T extends searchParamType>(
+    function useListSearchParam<T extends SearchParam>(
         key: string,
         defaultValues?: T[],
     ): { values: T[]; setValues: (newValue: T[]) => void } {
@@ -276,24 +293,6 @@ export function useDialogParam(key: string) {
 export function usePageParam() {
     const { value: page, setValue: setPage, unsetValue: unsetPage } = useUrlSearchParam<number>("page");
     return { page: page || 1, setPage, unsetPage };
-}
-
-/**
- * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
- *
- * @param values - The values to be used in the search parameter
- * @param key - The search parameter key to be managed
- * @param history - The history object
- */
-function updateUrlSearchParamsList(key: string, navigate, search: string, values: string[]) {
-    const params = new URLSearchParams(search);
-
-    params.delete(key);
-    forEach(values, value => params.append(key, value));
-
-    search = `?${params.toString()}`;
-    navigate(search);
-    return search;
 }
 
 type ScrollSyncProps = {

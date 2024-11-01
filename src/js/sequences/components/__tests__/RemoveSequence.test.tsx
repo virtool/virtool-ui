@@ -28,7 +28,7 @@ describe("<RemoveSequence />", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
 
         path = `/refs/${reference.id}/otus/${otu.id}/otu`;
-        searchParams = { removeSequence: otu.isolates[0].sequences[0].id };
+        searchParams = { removeSequenceId: otu.isolates[0].sequences[0].id };
 
         sourceType = otu.isolates[0].source_type[0].toUpperCase() + otu.isolates[0].source_type.slice(1);
     });

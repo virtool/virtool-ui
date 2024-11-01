@@ -56,7 +56,7 @@ export default function Schema() {
     return (
         <div>
             {canModify && (
-                <AddButton color="blue" onClick={() => setOpenAddSegment("true")}>
+                <AddButton color="blue" onClick={() => setOpenAddSegment(true)}>
                     Add Segment
                 </AddButton>
             )}

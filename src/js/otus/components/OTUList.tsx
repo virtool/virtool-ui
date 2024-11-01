@@ -23,7 +23,7 @@ export default function OTUList() {
         return <LoadingPlaceholder />;
     }
 
-    const { documents, storedPage, page_count } = otus;
+    const { documents, page: storedPage, page_count } = otus;
 
     return (
         <ContainerNarrow>

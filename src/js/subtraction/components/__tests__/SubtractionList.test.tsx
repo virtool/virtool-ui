@@ -80,7 +80,7 @@ describe("<SubtractionList />", () => {
         expect(inputElement).toHaveValue("Foobar");
         expect(screen.getByPlaceholderText("Name")).toHaveValue("Foobar");
 
-        expect(history[0]).toEqual("?page=1&find=Foobar");
+        expect(history[0]).toEqual("?find=Foobar");
 
         scope.done();
     });
