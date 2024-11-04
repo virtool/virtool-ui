@@ -20,7 +20,7 @@ type EditReferenceMemberProps = {
  * Displays a dialog to modify rights for a member
  */
 export default function EditReferenceMember({ noun, refId, member }: EditReferenceMemberProps) {
-    const [openEdit, setOpenEdit] = useUrlSearchParam(`openEdit${noun}`);
+    const { value: editId, unsetValue: unsetEditId } = useUrlSearchParam<string>(`edit${noun}Id`);
     const mutation = useUpdateReferenceMember(noun);
     const queryClient = useQueryClient();
 
@@ -28,7 +28,7 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
         mutation.mutate(
             {
                 refId,
-                id: openEdit,
+                id: editId,
                 update: {
                     [key]: enabled,
                 },
@@ -46,7 +46,7 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
     ));
 
     return (
-        <Dialog open={Boolean(openEdit)} onOpenChange={() => setOpenEdit("")}>
+        <Dialog open={Boolean(editId)} onOpenChange={() => unsetEditId()}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

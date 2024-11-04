@@ -9,7 +9,7 @@ import { find } from "lodash-es";
  * @returns The active isolate
  */
 export function useGetActiveIsolate(otu: OTU) {
-    const [activeIsolate] = useUrlSearchParam("activeIsolate");
+    const { value: activeIsolate } = useUrlSearchParam<string>("activeIsolate");
 
     const activeIsolateId = activeIsolate || otu.isolates[0]?.id;
     return otu.isolates.length ? find(otu.isolates, { id: activeIsolateId }) : null;
@@ -22,7 +22,7 @@ export function useGetActiveIsolate(otu: OTU) {
  * @returns The unique identifier of the active isolate
  */
 export function useGetActiveIsolateId(otu: OTU) {
-    const [activeIsolate] = useUrlSearchParam("activeIsolate");
+    const { value: activeIsolate } = useUrlSearchParam("activeIsolate");
 
     return activeIsolate || otu.isolates[0]?.id;
 }

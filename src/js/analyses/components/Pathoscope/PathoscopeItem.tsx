@@ -84,7 +84,7 @@ type PathoscopeItemProps = {
 /** Results for a single pathoscope analysis hit  */
 export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
     const { abbreviation, coverage, depth, filled, name, pi, id } = hit;
-    const [showReads] = useUrlSearchParam("reads");
+    const { value: showReads } = useUrlSearchParam<boolean>("reads");
 
     const piValue = showReads ? Math.round(pi * mappedCount) : toScientificNotation(pi);
 

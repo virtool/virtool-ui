@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 const SampleQualityLegacyAlert = styled(LegacyAlert)`
     margin-bottom: 20px;
@@ -19,7 +19,7 @@ const StyledSampleQuality = styled.div`
  * Samples quality view showing charts for bases, composition, and sequences
  */
 export default function SampleQuality() {
-    const { sampleId } = useSearchParams<{ sampleId: string }>();
+    const { sampleId } = usePathParams<{ sampleId: string }>();
     const { data, isPending } = useFetchSample(sampleId);
 
     if (isPending) {

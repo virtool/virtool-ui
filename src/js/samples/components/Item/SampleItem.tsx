@@ -87,7 +87,7 @@ type SampleItemProps = {
  * A condensed sample item for use in a list of samples
  */
 export default function SampleItem({ sample, checked, handleSelect, selectOnQuickAnalyze }: SampleItemProps) {
-    const [, setQuickAnalysisType] = useUrlSearchParam("quickAnalysisType");
+    const { setValue: setQuickAnalysisType } = useUrlSearchParam<string>("quickAnalysisType");
 
     function onQuickAnalyze() {
         setQuickAnalysisType(Workflows.pathoscope_bowtie);

@@ -12,7 +12,7 @@ import {
     Logo,
 } from "@base";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam } from "@utils/hooks";
 import { useRootQuery } from "@wall/queries";
 import React from "react";
 import styled from "styled-components";
@@ -79,7 +79,7 @@ type NavBarProps = {
  * Displays the navigation bar with routes to available components
  */
 export default function NavBar({ administrator_role, handle }: NavBarProps) {
-    const [, setOpenDev] = useUrlSearchParam("openDev");
+    const { setOpen: setOpenDev } = useDialogParam("openDev");
     const mutation = useLogout();
     const { data } = useRootQuery();
 
@@ -104,7 +104,7 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
             </NavBarLeft>
 
             <NavBarRight>
-                {data?.dev && <IconButton onClick={() => setOpenDev("true")} name="bug" tip="dev tools" color="red" />}
+                {data?.dev && <IconButton onClick={() => setOpenDev(true)} name="bug" tip="dev tools" color="red" />}
 
                 <Dropdown>
                     <DropdownMenuTrigger>

@@ -5,7 +5,7 @@ import { OTUIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceDataType } from "@references/types";
 import IsolateSequences from "@sequences/components/IsolateSequences";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam } from "@utils/hooks";
 import { formatIsolateName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
@@ -61,8 +61,8 @@ export default function IsolateDetail({
     otuId,
     restrictSourceTypes,
 }: IsolateDetailProps) {
-    const [openEditIsolate, setOpenEditIsolate] = useUrlSearchParam("openEditIsolate");
-    const [openRemoveIsolate, setOpenRemoveIsolate] = useUrlSearchParam("openRemoveIsolate");
+    const { open: openEditIsolate, setOpen: setOpenEditIsolate } = useDialogParam("openEditIsolate");
+    const { open: openRemoveIsolate, setOpen: setOpenRemoveIsolate } = useDialogParam("openRemoveIsolate");
 
     const mutation = useSetIsolateAsDefault();
 
@@ -82,16 +82,16 @@ export default function IsolateDetail({
                 sourceName={activeIsolate.source_name}
                 allowedSourceTypes={allowedSourceTypes}
                 restrictSourceTypes={restrictSourceTypes}
-                show={Boolean(openEditIsolate)}
-                onHide={() => setOpenEditIsolate("")}
+                show={openEditIsolate}
+                onHide={() => setOpenEditIsolate(false)}
             />
 
             <RemoveIsolate
                 id={activeIsolate.id}
                 name={formatIsolateName(activeIsolate)}
-                onHide={() => setOpenRemoveIsolate("")}
+                onHide={() => setOpenRemoveIsolate(false)}
                 otuId={otuId}
-                show={Boolean(openRemoveIsolate)}
+                show={openRemoveIsolate}
             />
 
             <IsolateDetailHeader>
@@ -104,7 +104,7 @@ export default function IsolateDetail({
                                 name="pen"
                                 color="grayDark"
                                 tip="edit isolate"
-                                onClick={() => setOpenEditIsolate("true")}
+                                onClick={() => setOpenEditIsolate(true)}
                             />
                             {!activeIsolate.default && dataType !== "barcode" && (
                                 <IconButton
@@ -118,7 +118,7 @@ export default function IsolateDetail({
                                 name="trash"
                                 color="red"
                                 tip="remove isolate"
-                                onClick={() => setOpenRemoveIsolate("true")}
+                                onClick={() => setOpenRemoveIsolate(true)}
                             />
                         </>
                     )}

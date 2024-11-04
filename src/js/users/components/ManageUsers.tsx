@@ -13,7 +13,7 @@ import { UsersList } from "./UsersList";
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
-    const [status, setStatus] = useUrlSearchParam("status", "active");
+    const { value: status, setValue: setStatus } = useUrlSearchParam<string>("status", "active");
     const { hasPermission, isPending } = useCheckAdminRole(AdministratorRoles.USERS);
 
     if (isPending) {

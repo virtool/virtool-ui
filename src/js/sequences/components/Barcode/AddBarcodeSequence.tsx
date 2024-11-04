@@ -3,7 +3,7 @@ import { useAddSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { ReferenceTarget } from "@references/types";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam } from "@utils/hooks";
 import React from "react";
 
 type AddBarcodeSequenceProps = {
@@ -17,7 +17,7 @@ type AddBarcodeSequenceProps = {
  * Displays dialog to add a barcode sequence
  */
 export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBarcodeSequenceProps) {
-    const [openAddSequence, setOpenAddSequence] = useUrlSearchParam("openAddSequence");
+    const { open: openAddSequence, setOpen: setOpenAddSequence } = useDialogParam("openAddSequence");
     const mutation = useAddSequence(otuId);
 
     function onSubmit({ accession, definition, host, sequence, target }) {
@@ -32,14 +32,14 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
             },
             {
                 onSuccess: () => {
-                    setOpenAddSequence("");
+                    setOpenAddSequence(false);
                 },
             },
         );
     }
 
     return (
-        <Dialog open={Boolean(openAddSequence)} onOpenChange={() => setOpenAddSequence("")}>
+        <Dialog open={openAddSequence} onOpenChange={() => setOpenAddSequence(false)}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

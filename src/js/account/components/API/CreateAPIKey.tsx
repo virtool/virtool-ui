@@ -19,7 +19,7 @@ import {
 } from "@base";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam } from "@utils/hooks";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -64,7 +64,7 @@ export default function CreateAPIKey() {
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
-    const [openCreateKey, setOpenCreateKey] = useUrlSearchParam("openCreateKey");
+    const { open: openCreateKey, setOpen: setOpenCreateKey } = useDialogParam("openCreateKey");
 
     const {
         formState: { errors },
@@ -96,7 +96,7 @@ export default function CreateAPIKey() {
     function handleHide() {
         setCopied(false);
         setShowCreated(false);
-        setOpenCreateKey("");
+        setOpenCreateKey(false);
     }
 
     function onSubmit({ name, permissions }: FormValues) {
@@ -115,7 +115,7 @@ export default function CreateAPIKey() {
     }
 
     return (
-        <Dialog open={Boolean(openCreateKey)} onOpenChange={handleHide}>
+        <Dialog open={openCreateKey} onOpenChange={handleHide}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

@@ -5,13 +5,13 @@ import { useGetReference } from "../../queries";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 /**
  * The reference settings view allowing users to manage the reference
  */
 export default function ReferenceSettings() {
-    const { refId } = useSearchParams<{ refId: string }>();
+    const { refId } = usePathParams<{ refId: string }>();
     const { data, isPending } = useGetReference(refId);
 
     if (isPending) {

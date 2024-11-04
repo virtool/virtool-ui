@@ -7,13 +7,13 @@ import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
 import Targets from "./Targets/Targets";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 /**
  * Display and edit information for a reference
  */
 export default function ReferenceManager() {
-    const { refId } = useSearchParams<{ refId: string }>();
+    const { refId } = usePathParams<{ refId: string }>();
     const { data: reference, isPending } = useGetReference(refId);
 
     if (isPending) {

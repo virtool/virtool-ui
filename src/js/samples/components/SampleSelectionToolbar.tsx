@@ -33,12 +33,10 @@ type SampleSelectionToolbarProps = {
  * A toolbar allowing users to create an analysis for selected samples
  */
 export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToolbarProps) {
-    const [, setOpenQuickAnalysis] = useUrlSearchParam("openQuickAnalysis");
-    const [, setWorkflow] = useUrlSearchParam("workflow");
+    const { setValue: setQuickAnalysisType } = useUrlSearchParam<string>("quickAnalysisType");
 
     function onQuickAnalyze() {
-        setOpenQuickAnalysis("true");
-        setWorkflow(Workflows.pathoscope_bowtie);
+        setQuickAnalysisType(Workflows.pathoscope_bowtie);
     }
 
     return (

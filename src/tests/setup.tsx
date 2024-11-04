@@ -9,8 +9,11 @@ import { vi } from "vitest";
 import { BaseLocationHook, Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 import { Path } from "wouter/types/location-hook";
+import { faker } from "@faker-js/faker";
 
 process.env.TZ = "UTC";
+
+faker.seed(1);
 
 export function wrapWithProviders(ui: ReactNode) {
     const queryClient = new QueryClient();
@@ -35,13 +38,29 @@ export function renderWithProviders(ui: ReactNode) {
 export function renderWithRouter(ui: ReactNode, path?: string) {
     const { hook, history } = memoryLocation({ path, record: true });
 
-    const result = renderWithProviders(
-        <Router hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
-            {ui}
-        </Router>,
-    );
+    const result = renderWithProviders(<MemoryRouter hook={hook}>{ui}</MemoryRouter>);
 
     return { ...result, history };
+}
+
+export function MemoryRouter({
+    children,
+    path,
+    hook,
+}: {
+    children: React.ReactNode;
+    path?: string;
+    hook?: BaseLocationHook;
+}) {
+    if (!hook) {
+        hook = memoryLocation({ path }).hook;
+    }
+
+    return (
+        <Router hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
+            {children}
+        </Router>
+    );
 }
 
 export function useMemoryLocation(baseHook: BaseLocationHook): [string, (path: Path, ...args: any[]) => any] {

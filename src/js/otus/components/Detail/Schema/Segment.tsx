@@ -33,8 +33,8 @@ type SegmentProps = {
  * A condensed segment item for use in a list of segments
  */
 export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, segment }: SegmentProps) {
-    const [, setRemoveSegmentName] = useUrlSearchParam("removeSegmentName");
-    const [, setEditSegmentName] = useUrlSearchParam("editSegmentName");
+    const { setValue: setRemoveSegmentName } = useUrlSearchParam<string>("removeSegmentName");
+    const { setValue: setEditSegmentName } = useUrlSearchParam<string>("editSegmentName");
 
     return (
         <StyledSegment>

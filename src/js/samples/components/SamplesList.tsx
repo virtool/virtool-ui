@@ -5,7 +5,7 @@ import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
 import { useFindModels } from "@ml/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
-import { useUrlSearchParam, useUrlSearchParamsList } from "@utils/hooks";
+import { useListSearchParam, usePageParam, useUrlSearchParam } from "@utils/hooks";
 import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
 import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
@@ -37,13 +37,13 @@ const StyledSamplesList = styled.div`
  * A list of samples with filtering
  */
 export default function SamplesList() {
-    const [urlPage] = useUrlSearchParam("page");
-    const [term, setTerm] = useUrlSearchParam("find");
-    const [filterLabels, setFilterLabels] = useUrlSearchParamsList("labels");
-    const [filterWorkflows, setFilterWorkflows] = useUrlSearchParamsList("workflows");
+    const { page: urlPage } = usePageParam();
+    const { value: term, setValue: setTerm } = useUrlSearchParam<string>("term");
+    const { values: filterLabels, setValues: setFilterLabels } = useListSearchParam<string>("labels");
+    const { values: filterWorkflows, setValues: setFilterWorkflows } = useListSearchParam<string>("workflows");
 
     const { data: samples, isPending: isPendingSamples } = useListSamples(
-        Number(urlPage) || 1,
+        urlPage,
         25,
         term,
         filterLabels,
@@ -126,7 +126,7 @@ export default function SamplesList() {
                         <Pagination
                             items={documents}
                             storedPage={page}
-                            currentPage={Number(urlPage) || 1}
+                            currentPage={urlPage}
                             renderRow={renderRow}
                             pageCount={page_count}
                         />

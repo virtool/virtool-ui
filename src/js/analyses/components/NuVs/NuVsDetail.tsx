@@ -83,7 +83,7 @@ type NuVsDetailProps = {
  * The detailed view of a NuVs sequence
  */
 export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: NuVsDetailProps) {
-    const [filterORFs] = useUrlSearchParam("filterOrfs");
+    const { value: filterORFs } = useUrlSearchParam<boolean>("filterOrfs");
     const hit = useGetActiveHit(matches);
 
     if (!hit) {

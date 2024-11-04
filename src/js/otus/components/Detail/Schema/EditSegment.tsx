@@ -26,7 +26,7 @@ type EditSegmentProps = {
  * Displays a dialog to edit a segment
  */
 export default function EditSegment({ abbreviation, otuId, name, schema }: EditSegmentProps) {
-    const [editSegmentName, setEditSegmentName] = useUrlSearchParam("editSegmentName");
+    const { value: editSegmentName, unsetValue: unsetEditSegmentName } = useUrlSearchParam<string>("editSegmentName");
     const mutation = useUpdateOTU(otuId);
 
     const segment = find(schema, { name: editSegmentName });
@@ -40,14 +40,14 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
             { otuId, name, abbreviation, schema: newArray },
             {
                 onSuccess: () => {
-                    setEditSegmentName("");
+                    unsetEditSegmentName();
                 },
             },
         );
     }
 
     return (
-        <Dialog open={Boolean(editSegmentName)} onOpenChange={() => setEditSegmentName("")}>
+        <Dialog open={Boolean(editSegmentName)} onOpenChange={() => unsetEditSegmentName()}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

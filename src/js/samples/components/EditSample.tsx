@@ -1,5 +1,4 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParam } from "@utils/hooks";
 import { pick } from "lodash";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -17,6 +16,7 @@ import {
 } from "../../base";
 import { useUpdateSample } from "../queries";
 import { Sample } from "../types";
+import { useDialogParam } from "@utils/hooks";
 
 type EditSampleProps = {
     /** The sample data */
@@ -27,7 +27,7 @@ type EditSampleProps = {
  * Displays a dialog for editing the sample
  */
 export default function EditSample({ sample }: EditSampleProps) {
-    const [openEditSample, setOpenEditSample] = useUrlSearchParam("openEditSample");
+    const { open: openEditSample, setOpen: setOpenEditSample } = useDialogParam("openEditSample");
     const mutation = useUpdateSample(sample.id);
 
     const { register, handleSubmit } = useForm({
@@ -41,7 +41,7 @@ export default function EditSample({ sample }: EditSampleProps) {
     });
 
     return (
-        <Dialog open={Boolean(openEditSample)} onOpenChange={() => setOpenEditSample("")}>
+        <Dialog open={openEditSample} onOpenChange={() => setOpenEditSample(false)}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
@@ -54,7 +54,7 @@ export default function EditSample({ sample }: EditSampleProps) {
                                 },
                                 {
                                     onSuccess: () => {
-                                        setOpenEditSample("");
+                                        setOpenEditSample(false);
                                     },
                                 },
                             ),

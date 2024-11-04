@@ -4,13 +4,13 @@ import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 /**
  * The files view in sample details
  */
 export function SampleDetailFiles() {
-    const { sampleId } = useSearchParams<{ sampleId: string }>();
+    const { sampleId } = usePathParams<{ sampleId: string }>();
     const { data, isPending } = useFetchSample(sampleId);
 
     if (isPending) {

@@ -18,7 +18,7 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
         hits = map(fuse.search(searchParams.get("find")), "item");
     }
 
-    if (searchParams.get("filterOtus")) {
+    if (searchParams.get("filterOtus") === "true") {
         hits = reject(hits, hit => {
             return hit.pi * detail.results.readCount < (hit.length * 0.8) / maxReadLength;
         });
@@ -26,7 +26,7 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
 
     const sortedHits = sortBy(hits, searchParams.get("sort"));
 
-    if (searchParams.get("sortDesc")) {
+    if (searchParams.get("sortDesc") === "true") {
         sortedHits.reverse();
     }
 
@@ -47,7 +47,7 @@ export function useSortAndFilterNuVsHits(detail) {
         hits = map(fuse.search(searchParams.get("find")), "item");
     }
 
-    if (searchParams.get("filterSequences")) {
+    if (searchParams.get("filterSequences") === "true") {
         hits = reject(hits, hit => hit.e === undefined);
     }
 
@@ -63,7 +63,7 @@ export function useSortAndFilterNuVsHits(detail) {
 }
 
 export function useGetActiveHit(matches) {
-    const [activeHit, setActiveHit] = useUrlSearchParam("activeHit");
+    const { value: activeHit, setValue: setActiveHit } = useUrlSearchParam<string>("activeHit");
 
     if (activeHit !== null) {
         const hit = find(matches, { id: Number(activeHit) });

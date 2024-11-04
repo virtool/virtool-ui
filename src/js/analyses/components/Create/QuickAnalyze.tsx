@@ -5,7 +5,7 @@ import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { SubtractionShortlist } from "@subtraction/types";
-import { formatSearchParam, useUrlSearchParam } from "@utils/hooks";
+import { updateSearchParam, useUrlSearchParam } from "@utils/hooks";
 import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
 
@@ -70,7 +70,11 @@ export default function QuickAnalyze({
     subtractionOptions,
 }: QuickAnalyzeProps) {
     const search = useSearch();
-    const [quickAnalysisType, setQuickAnalysisType] = useUrlSearchParam("quickAnalysisType");
+    const {
+        value: quickAnalysisType,
+        setValue: setQuickAnalysisType,
+        unsetValue: unsetQuickAnalysisType,
+    } = useUrlSearchParam<string>("quickAnalysisType");
 
     const mode = samples[0]?.library_type === "amplicon" ? "barcode" : "genome";
 
@@ -82,7 +86,7 @@ export default function QuickAnalyze({
     const genome = samples.filter(sample => sample.library_type !== "amplicon");
 
     function onHide() {
-        setQuickAnalysisType("");
+        unsetQuickAnalysisType();
     }
 
     // The dialog should close when all selected samples have been analyzed and deselected.
@@ -123,7 +127,7 @@ export default function QuickAnalyze({
                     <Tabs>
                         {genome.length > 0 && (
                             <TabsLink
-                                to={formatSearchParam("quickAnalysisType", "genome", search)}
+                                to={updateSearchParam("quickAnalysisType", "genome", search)}
                                 isActive={mode === "genome"}
                             >
                                 <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
@@ -131,7 +135,7 @@ export default function QuickAnalyze({
                         )}
                         {barcode.length > 0 && (
                             <TabsLink
-                                to={formatSearchParam("quickAnalysisType", "barcode", search)}
+                                to={updateSearchParam("quickAnalysisType", "barcode", search)}
                                 isActive={mode === "barcode"}
                             >
                                 <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>

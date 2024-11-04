@@ -32,8 +32,8 @@ const SequenceHeaderButtons = styled.span`
  * Displays icons for the sequence item to close, edit, or remove
  */
 export default function SequenceButtons({ id, onCollapse }) {
-    const [, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
-    const [, setOpenRemoveSequence] = useUrlSearchParam("removeSequence");
+    const { setValue: setOpenEditSequence } = useUrlSearchParam<string>("editSequenceId");
+    const { setValue: setOpenRemoveSequence } = useUrlSearchParam<string>("removeSequenceId");
     const { otu, reference } = useCurrentOTUContext();
     const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify_otu);
     const isolateId = useGetActiveIsolateId(otu);

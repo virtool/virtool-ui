@@ -11,7 +11,7 @@ export const fileQueryKeys = {
         ["files", "list", "infinite", type, ...filters] as const,
 };
 
-export function useListFiles(type: FileType, page = 1, per_page: number) {
+export function useListFiles(type: FileType, page, per_page: number) {
     return useQuery<FileResponse, ErrorResponse>({
         queryKey: fileQueryKeys.list(type, [page, per_page]),
         queryFn: () => findFiles(type, page, per_page),

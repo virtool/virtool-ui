@@ -35,7 +35,7 @@ type IsolateItemProps = {
  * A condensed isolate item for use in a list of isolates
  */
 export default function IsolateItem({ active, dataType, isolate }: IsolateItemProps) {
-    const [, setActiveIsolate] = useUrlSearchParam("activeIsolate");
+    const { setValue: setActiveIsolate } = useUrlSearchParam<string>("activeIsolate");
 
     return (
         <StyledIsolateItem active={active} onClick={() => setActiveIsolate(isolate.id)}>

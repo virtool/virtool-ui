@@ -35,14 +35,14 @@ export function useExpanded() {
  * @returns The active sequence
  */
 export function useGetActiveSequence() {
-    const [openEditSequence] = useUrlSearchParam("openEditSequence");
+    const { value: editSequenceId } = useUrlSearchParam("editSequenceId");
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
     const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
-    if (openEditSequence) {
-        const sequence = find(sequences, { id: openEditSequence });
+    if (editSequenceId) {
+        const sequence = find(sequences, { id: editSequenceId });
 
         if (sequence) {
             return sequence;
@@ -58,12 +58,12 @@ export function useGetActiveSequence() {
  * @returns A list of inactive sequences
  */
 export function useGetInactiveSequences() {
-    const [openEditSequence] = useUrlSearchParam("openEditSequence");
+    const { value: editSequenceId } = useUrlSearchParam("editSequenceId");
 
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
-    const activeSequenceId = openEditSequence || undefined;
+    const activeSequenceId = editSequenceId || undefined;
     const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
 
     return reject(sequences, { id: activeSequenceId });

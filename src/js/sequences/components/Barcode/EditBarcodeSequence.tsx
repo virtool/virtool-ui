@@ -15,7 +15,7 @@ type EditBarcodeSequence = {
  * Displays dialog to edit a barcode sequence
  */
 export default function EditBarcodeSequence({ isolateId, otuId }: EditBarcodeSequence) {
-    const [openEditSequence, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
+    const { value: editSequenceId, unsetValue: unsetEditSequenceId } = useUrlSearchParam<string>("editSequenceId");
     const mutation = useEditSequence(otuId);
 
     const targets = useGetSelectableTargets();
@@ -26,14 +26,14 @@ export default function EditBarcodeSequence({ isolateId, otuId }: EditBarcodeSeq
             { isolateId, sequenceId: activeSequence.id, accession, definition, host, sequence, target },
             {
                 onSuccess: () => {
-                    setOpenEditSequence("");
+                    unsetEditSequenceId();
                 },
             },
         );
     }
 
     return (
-        <Dialog open={Boolean(openEditSequence)} onOpenChange={() => setOpenEditSequence("")}>
+        <Dialog open={Boolean(editSequenceId)} onOpenChange={() => unsetEditSequenceId()}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">
