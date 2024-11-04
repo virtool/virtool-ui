@@ -1,6 +1,7 @@
 import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
+import { map } from "lodash";
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -33,33 +34,47 @@ export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject
 /**
  * Aliased useParams from wouter
  */
-export const useSearchParams = useParams;
+export const usePathParams = useParams;
 
-export function formatPath(basePath: string, searchParams: object) {
+/**
+ * get a function for programmatic internal navigation
+ */
+export function useNavigate() {
+    const [, navigate] = useLocation();
+
+    return navigate;
+}
+export function formatPath(basePath: string, searchParams: Record<string, string | number | boolean | null>) {
     return basePath + formatSearchParams(searchParams);
 }
 
 /**
- * create a new search string based on a collection of key:value pairs
+ * Format a collection of search parameters into a search string
  *
- * @param params -
+ * @param params - the collection of values to be written to the URL
  */
-export function formatSearchParams(params: object) {
+export function formatSearchParams(params: Record<string, string | number | boolean | null>) {
     const searchParams = new URLSearchParams();
+
     forEach(params, (value, key) => {
-        searchParams.append(key, value);
+        if (Array.isArray(value)) {
+            forEach(value, arrayValue => searchParams.append(key, arrayValue));
+        } else {
+            searchParams.set(key, value);
+        }
     });
+
     return `?${searchParams.toString()}`;
 }
 
 /**
- * create a modified search param string with an updated key:value based on the existing search string
+ * create a modified search string with an updated key:value based on the existing search string
  *
  * @param value - The value to be used in the search parameter
  * @param key - The search parameter key to be managed
  * @param search - The current search string
  */
-export function formatSearchParam(key: string, value: string, search: string) {
+export function updateSearchParam(key: string, value: string, search: string) {
     const params = new URLSearchParams(search);
 
     if (value) {
@@ -76,16 +91,14 @@ export function formatSearchParam(key: string, value: string, search: string) {
  *
  * @param value - The value to be used in the search parameter
  * @param key - The search parameter key to be managed
- * @param history - The history object
+ * @param navigate - navigate the URL to the passed string
+ * @param search - URL search string containing the search params
+ * @param location - the base URL
  */
-function updateUrlSearchParams(value: string, key: string, navigate, search, location) {
+function updateUrlSearchParams(value: string, key: string, navigate: navigate, search: string, location: string) {
     const params = new URLSearchParams(search);
 
-    if (value) {
-        params.set(key, String(value));
-    } else {
-        params.delete(key);
-    }
+    params.set(key, String(value));
 
     search = params.toString();
     if (search && location !== "/") {
@@ -99,21 +112,117 @@ function updateUrlSearchParams(value: string, key: string, navigate, search, loc
     return search;
 }
 
-function createUseUrlSearchParam() {
+/**
+ * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
+ *
+ * @param key - The search parameter key to be managed
+ * @param navigate - navigate the URL to the passed string
+ * @param search - URL search string containing the search params
+ * @param values - The values to be used in the search parameter
+ */
+function updateUrlSearchParamsList(key: string, navigate: navigate, search: string, values: SearchParam[]) {
+    const params = new URLSearchParams(search);
+
+    params.delete(key);
+    forEach(values, value => params.append(key, value));
+
+    search = `?${params.toString()}`;
+    navigate(search);
+    return search;
+}
+/**
+ * Updates the URL search parameters by either setting a new value for a given key or removing the key-value pair
+ *
+ * @param key - The search parameter key to be managed
+ * @param navigate - navigate the URL to the passed string
+ * @param search - URL search string containing the search params
+ * @param location - the base URL
+ */
+function unsetUrlSearchParam(key, navigate, search, location) {
+    const params = new URLSearchParams(search);
+    params.delete(key);
+
+    search = params.toString();
+    if (search && location !== "/") {
+        navigate(`${location}?${search}`, { replace: true });
+    } else if (search) {
+        navigate(`?${search}`, { replace: true });
+    } else {
+        navigate(location, { replace: true });
+    }
+
+    return search;
+}
+
+type SearchParam = string | boolean | number | null;
+
+type navigate = <S>(to: string | URL, options?: { replace?: boolean; state?: S }) => void;
+
+/**
+ * Attempt to cast a search param value into the correct type
+ *
+ * @param value - search param value to be converted
+ */
+function castSearchParamValue(value: string) {
+    if (value === null) {
+        return undefined;
+    }
+
+    const trimValue = value.trim();
+    const numValue = Number(trimValue);
+    if (value.trim().length > 0 && !isNaN(numValue)) {
+        return numValue;
+    }
+
+    switch (value) {
+        case "true":
+            return true;
+        case "false":
+            return false;
+        case "null":
+            return null;
+        default:
+            break;
+    }
+
+    return value;
+}
+
+function createUseUrlSearchParam(): [
+    <T extends SearchParam>(
+        key: string,
+        defaultValue?: T,
+    ) => {
+        value: T;
+        setValue: (value: T) => void;
+        unsetValue: () => void;
+    },
+    <T extends SearchParam>(key: string, defaultValues?: T[]) => { values: T[]; setValues: (newValue: T[]) => void },
+] {
     const cache = { search: "" };
 
-    return function useUrlSearchParams(key: string, defaultValue?: string): [string, (newValue: string) => void] {
+    /**
+     * Store and retrieve component state in a URL search parameter
+     *
+     * @param key - The search parameter key to be managed
+     * @param defaultValue - The default value to use when the search parameter key is not present in the URL
+     * @returns The current value and a functions for setting the URL search parameter
+     */
+    function useUrlSearchParam<T extends SearchParam>(
+        key: string,
+        defaultValue?: T,
+    ): { value: T; setValue: (value: T) => void; unsetValue: () => void } {
         cache.search = useSearch();
         const [location] = useLocation();
 
-        const [, navigate] = useLocation();
+        const navigate = useNavigate();
         const firstRender = useRef(true);
 
         let value = new URLSearchParams(cache.search).get(key);
 
         if (firstRender.current && defaultValue && !value) {
             firstRender.current = false;
-            value = defaultValue;
+            value = String(defaultValue);
             cache.search = updateUrlSearchParams(String(defaultValue), key, navigate, cache.search, location);
         }
 
@@ -123,50 +232,81 @@ function createUseUrlSearchParam() {
             cache.search = updateUrlSearchParams(value, key, navigate, cache.search, location);
         }
 
-        return [value, (value: string) => setURLSearchParam(value)];
-    };
-}
+        function unsetValue() {
+            cache.search = unsetUrlSearchParam(key, navigate, cache.search, location);
+        }
 
-export const useUrlSearchParam = createUseUrlSearchParam();
-
-/**
- * Updates the URL search parameters by either adding a new value for a given key or removing the key-value pair
- *
- * @param values - The values to be used in the search parameter
- * @param key - The search parameter key to be managed
- * @param history - The history object
- */
-function updateUrlSearchParamsList(key: string, navigate, search: string, values: string[]) {
-    const params = new URLSearchParams(search);
-
-    params.delete(key);
-    forEach(values, value => params.append(key, value));
-
-    navigate(`?${params.toString()}`);
-}
-
-/**
- * Hook for managing and synchronizing a list of URL search parameters with a component's state
- *
- * @param key - The search parameter key to be managed
- * @param defaultValue - The default values to use when the search parameter key is not present in the URL
- * @returns Object - An object containing the current values and a function to set the URL search parameter
- */
-export function useUrlSearchParamsList(key: string, defaultValue?: string[]): [string[], (newValue: string[]) => void] {
-    const search = useSearch();
-    const [, navigate] = useLocation();
-    const firstRender = useRef(true);
-
-    let values = new URLSearchParams(search).getAll(key);
-
-    if (firstRender.current && defaultValue && !values.length) {
-        values = defaultValue;
-        updateUrlSearchParamsList(key, navigate, search, values);
+        return {
+            value: castSearchParamValue(value) as T,
+            setValue: (value: T) => setURLSearchParam(String(value)),
+            unsetValue,
+        };
     }
 
-    firstRender.current = false;
+    /**
+     * Hook for managing and synchronizing a list of URL search parameters with a component's state
+     *
+     * @param key - The search parameter key to be managed
+     * @param defaultValues - The default values to use when the search parameter key is not present in the URL
+     * @returns The current values and a function to set the URL search parameter
+     */
+    function useListSearchParam<T extends SearchParam>(
+        key: string,
+        defaultValues?: T[],
+    ): { values: T[]; setValues: (newValue: T[]) => void } {
+        cache.search = useSearch();
+        const navigate = useNavigate();
+        const firstRender = useRef(true);
 
-    return [values, (values: string[]) => updateUrlSearchParamsList(key, navigate, search, values)];
+        let values = new URLSearchParams(cache.search).getAll(key);
+
+        if (firstRender.current && defaultValues && !values.length) {
+            values = defaultValues as string[];
+            cache.search = updateUrlSearchParamsList(key, navigate, cache.search, values);
+        }
+
+        firstRender.current = false;
+
+        function setValues(values: T[]) {
+            cache.search = updateUrlSearchParamsList(key, navigate, cache.search, values);
+        }
+
+        return {
+            values: map(values, castSearchParamValue) as T[],
+            setValues,
+        };
+    }
+
+    return [useUrlSearchParam, useListSearchParam];
+}
+
+export const [useUrlSearchParam, useListSearchParam] = createUseUrlSearchParam();
+
+/**
+ * Store dialog visibility in within the URL search params
+ *
+ * @param key - the key that the dialog visiblity state is stored under
+ */
+export function useDialogParam(key: string) {
+    const { value: open, setValue, unsetValue } = useUrlSearchParam<boolean>(key);
+
+    function setDialogValue(value: boolean) {
+        if (value) {
+            setValue(value);
+        } else {
+            unsetValue();
+        }
+    }
+
+    return { open, setOpen: setDialogValue };
+}
+
+/**
+ * Store the current page of a resources into the URL search params
+ */
+export function usePageParam() {
+    const { value: page, setValue: setPage, unsetValue: unsetPage } = useUrlSearchParam<number>("page");
+    return { page: page || 1, setPage, unsetPage };
 }
 
 type ScrollSyncProps = {

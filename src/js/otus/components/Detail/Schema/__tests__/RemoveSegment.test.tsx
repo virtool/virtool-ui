@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
@@ -78,7 +78,7 @@ describe("<RemoveSegment />", () => {
 
         expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
 
-        fireEvent.keyDown(document, { key: "Escape" });
+        await userEvent.keyboard("{Escape}");
 
         await waitFor(() => expect(screen.queryByText("Remove Segment")).toBeNull());
     });

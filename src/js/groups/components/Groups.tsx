@@ -1,7 +1,7 @@
 import { getColor } from "@app/theme";
 import { BoxGroup, Button, LoadingPlaceholder, RemoveBanner } from "@base";
 import { InputHeader } from "@base/InputHeader";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam } from "@utils/hooks";
 import { find, sortBy } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -44,7 +44,7 @@ export default function Groups() {
     const updateGroupMutation = useUpdateGroup();
     const removeMutation = useRemoveGroup();
 
-    const [, setOpenCreateGroup] = useUrlSearchParam("openCreateGroup");
+    const { setOpen: setOpenCreateGroup } = useDialogParam("openCreateGroup");
     const [selectedGroupId, setSelectedGroupId] = useState(null);
 
     const { data: groups, isPending: isPendingGroups } = useListGroups();
@@ -64,7 +64,7 @@ export default function Groups() {
         <>
             <GroupsHeader>
                 <h2>Groups</h2>
-                <Button color="blue" onClick={() => setOpenCreateGroup("true")}>
+                <Button color="blue" onClick={() => setOpenCreateGroup(true)}>
                     Create
                 </Button>
             </GroupsHeader>

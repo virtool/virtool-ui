@@ -39,7 +39,7 @@ const StyledPathoscopeIsolateWeight = styled.strong`
 `;
 
 export function PathoscopeIsolateWeight({ pi, reads }) {
-    const [showReads] = useUrlSearchParam("reads");
+    const { value: showReads } = useUrlSearchParam<boolean>("showReads");
     return (
         <StyledPathoscopeIsolateWeight>{showReads ? reads : toScientificNotation(pi)}</StyledPathoscopeIsolateWeight>
     );

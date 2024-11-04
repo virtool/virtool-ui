@@ -1,6 +1,6 @@
 import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
-import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@utils/hooks";
 import React from "react";
 import { CurrentOTUContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
@@ -11,8 +11,8 @@ import General from "./OTUGeneral";
  * Displays a component for managing the OTU
  */
 export default function OTUSection() {
-    const { otuId, refId } = useSearchParams<{ otuId: string; refId: string }>();
-    const [openAddIsolate, setOpenAddIsolate] = useUrlSearchParam("openAddIsolate");
+    const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
+    const { open: openAddIsolate, setOpen: setOpenAddIsolate } = useDialogParam("openAddIsolate");
 
     const { data: reference, isPending: isPendingReference } = useGetReference(refId);
     const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
@@ -29,8 +29,8 @@ export default function OTUSection() {
                 allowedSourceTypes={reference.source_types}
                 otuId={otuId}
                 restrictSourceTypes={reference.restrict_source_types}
-                show={Boolean(openAddIsolate)}
-                onHide={() => setOpenAddIsolate("")}
+                show={openAddIsolate}
+                onHide={() => setOpenAddIsolate(false)}
             />
         </CurrentOTUContextProvider>
     );

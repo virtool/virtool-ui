@@ -1,17 +1,17 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { CreateSubtractionForm } from "@subtraction/components/CreateSubtractionForm";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam } from "@utils/hooks";
 import React from "react";
 
 /**
  * Displays a dialog for creating a subtraction
  */
 export default function CreateSubtraction() {
-    const [openCreateSubtraction, setOpenCreateSubtraction] = useUrlSearchParam("openCreateSubtraction");
+    const { open: openCreateSubtraction, setOpen: setOpenCreateSubtraction } = useDialogParam("openCreateSubtraction");
 
     return (
-        <Dialog open={Boolean(openCreateSubtraction)} onOpenChange={() => setOpenCreateSubtraction("")}>
+        <Dialog open={openCreateSubtraction} onOpenChange={() => setOpenCreateSubtraction(false)}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent size="lg">

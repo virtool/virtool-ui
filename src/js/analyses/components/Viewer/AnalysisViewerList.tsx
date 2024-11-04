@@ -56,7 +56,7 @@ type AnalysisViewerListProps = {
  * Displays a list of hits for an analysis
  */
 export default function AnalysisViewerList({ children, itemSize, matches, total, width }: AnalysisViewerListProps) {
-    const [activeHit, setActiveHit] = useUrlSearchParam("activeHit");
+    const { value: activeHit, setValue: setActiveHit } = useUrlSearchParam<string>("activeHit");
     const activeId = Number(activeHit);
     const active = useGetActiveHit(matches);
 

@@ -8,7 +8,7 @@ import EditGenomeSequence from "./Genome/EditGenomeSequence";
  * A component to manage the editing of sequences
  */
 export default function EditSequence() {
-    const [activeIsolate] = useUrlSearchParam("activeIsolate");
+    const { value: activeIsolate } = useUrlSearchParam<string>("activeIsolate");
     const { otu, reference } = useCurrentOTUContext();
     const { data_type } = reference;
 

@@ -51,8 +51,8 @@ export default function CloneReference({ references }: CloneReferenceProps) {
         setValue,
     } = useForm<FormValues>();
     const mutation = useCloneReference();
-    const [cloneReference, setCloneReference] = useUrlSearchParam("cloneReference");
-    const reference = find(references, { id: cloneReference || "" });
+    const { value: cloneReferenceId, unsetValue: unsetCloneReferenceId } = useUrlSearchParam("cloneReferenceId");
+    const reference = find(references, { id: cloneReferenceId || "" });
 
     useEffect(() => {
         if (reference) {
@@ -65,14 +65,14 @@ export default function CloneReference({ references }: CloneReferenceProps) {
             { name, description: `Cloned from ${reference.name}`, refId: reference.id },
             {
                 onSuccess: () => {
-                    setCloneReference("");
+                    unsetCloneReferenceId();
                 },
             },
         );
     }
 
     return (
-        <Dialog onOpenChange={() => setCloneReference("")} open={Boolean(cloneReference)}>
+        <Dialog onOpenChange={() => unsetCloneReferenceId()} open={Boolean(cloneReferenceId)}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

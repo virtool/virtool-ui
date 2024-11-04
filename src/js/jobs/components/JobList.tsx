@@ -2,7 +2,7 @@ import { getFontWeight } from "@app/theme";
 import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
 import { ScrollList } from "@base/ScrollList";
 import { useInfiniteFindJobs } from "@jobs/queries";
-import { useUrlSearchParamsList } from "@utils/hooks";
+import { useListSearchParam } from "@utils/hooks";
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -34,7 +34,7 @@ const initialState = ["preparing", "running"];
  * A list of jobs with filtering options
  */
 export default function JobsList() {
-    const [states] = useUrlSearchParamsList("state", initialState);
+    const { values: states } = useListSearchParam("state", initialState);
     const [urlPage] = useUrlSearchParams<number>("page");
     const { data, isPending } = useFindJobs(Number(urlPage) || 1, 25, states);
 

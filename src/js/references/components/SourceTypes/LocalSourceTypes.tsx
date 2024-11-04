@@ -19,7 +19,7 @@ import styled from "styled-components";
 import { useUpdateSourceTypes } from "../../hooks";
 import { referenceQueryKeys, useGetReference, useUpdateReference } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
     button {
@@ -62,7 +62,7 @@ const SourceTypesUndo = styled(BoxGroupSection)`
 `;
 
 export function LocalSourceTypes() {
-    const { refId } = useSearchParams<{ refId: string }>();
+    const { refId } = usePathParams<{ refId: string }>();
 
     const { data, isPending } = useGetReference(refId);
 

@@ -2,7 +2,7 @@ import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import { LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
 import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
-import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";
 import { useFetchSubtraction } from "../../queries";
@@ -20,13 +20,13 @@ function calculateGc(nucleotides: NucleotideComposition) {
  * The subtraction detailed view
  */
 export default function SubtractionDetail() {
-    const { subtractionId } = useSearchParams<{ subtractionId: string }>();
+    const { subtractionId } = usePathParams<{ subtractionId: string }>();
 
     const { data, isPending, isError } = useFetchSubtraction(subtractionId);
     const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
 
-    const [openRemoveSubtraction, setOpenRemoveSubtraction] = useUrlSearchParam("openRemoveSubtraction");
-    const [openEditSubtraction, setOpenEditSubtraction] = useUrlSearchParam("openEditSubtraction");
+    const { open: openRemoveSubtraction, setOpen: setOpenRemoveSubtraction } = useDialogParam("openRemoveSubtraction");
+    const { open: openEditSubtraction, setOpen: setOpenEditSubtraction } = useDialogParam("openEditSubtraction");
 
     if (isError) {
         return <NotFound />;
@@ -51,13 +51,13 @@ export default function SubtractionDetail() {
                                 name="pen"
                                 color="grayDark"
                                 tip="modify"
-                                onClick={() => setOpenEditSubtraction("true")}
+                                onClick={() => setOpenEditSubtraction(true)}
                             />
                             <IconButton
                                 name="trash"
                                 color="red"
                                 tip="remove"
-                                onClick={() => setOpenRemoveSubtraction("true")}
+                                onClick={() => setOpenRemoveSubtraction(true)}
                             />
                         </ViewHeaderIcons>
                     )}
@@ -90,14 +90,14 @@ export default function SubtractionDetail() {
             </Table>
             <SubtractionFiles files={data.files} />
             <EditSubtraction
-                show={Boolean(openEditSubtraction)}
-                onHide={() => setOpenEditSubtraction("")}
+                show={openEditSubtraction}
+                onHide={() => setOpenEditSubtraction(false)}
                 subtraction={data}
             />
             <RemoveSubtraction
                 subtraction={data}
-                show={Boolean(openRemoveSubtraction)}
-                onHide={() => setOpenRemoveSubtraction("")}
+                show={openRemoveSubtraction}
+                onHide={() => setOpenRemoveSubtraction(false)}
             />
         </>
     );

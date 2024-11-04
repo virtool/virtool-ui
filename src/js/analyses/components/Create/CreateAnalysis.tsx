@@ -28,7 +28,11 @@ type CreateAnalysisProps = {
  * Dialog for creating an analysis
  */
 export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) {
-    const [createAnalysisType, setCreateAnalysisType] = useUrlSearchParam("createAnalysisType");
+    const {
+        value: createAnalysisType,
+        setValue: setCreateAnalysisType,
+        unsetValue: unsetCreateAnalysisType,
+    } = useUrlSearchParam<string>("createAnalysisType");
 
     const createAnalysis = useCreateAnalysis();
 
@@ -61,9 +65,8 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
     }
 
     function onOpenChange(open) {
-        setCreateAnalysisType(open);
         if (!open) {
-            setCreateAnalysisType("");
+            unsetCreateAnalysisType();
         }
     }
 

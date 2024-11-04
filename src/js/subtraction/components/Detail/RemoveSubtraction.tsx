@@ -1,8 +1,8 @@
 import { RemoveDialog } from "@base/RemoveDialog";
 import React from "react";
-import { useLocation } from "wouter";
 import { useRemoveSubtraction } from "../../queries";
 import { Subtraction } from "../../types";
+import { useNavigate } from "@utils/hooks";
 
 type RemoveSubtractionProps = {
     /** The subtraction data */
@@ -18,7 +18,7 @@ type RemoveSubtractionProps = {
  */
 export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveSubtractionProps) {
     const mutation = useRemoveSubtraction();
-    const [, navigate] = useLocation();
+    const navigate = useNavigate();
 
     return (
         <RemoveDialog

@@ -16,7 +16,7 @@ import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 const StyledSampleDetailGeneral = styled.div`
     align-items: stretch;
@@ -31,7 +31,7 @@ const StyledSampleDetailGeneral = styled.div`
  * The general view in sample details
  */
 export default function SampleDetailGeneral() {
-    const { sampleId } = useSearchParams<{ sampleId: string }>();
+    const { sampleId } = usePathParams<{ sampleId: string }>();
 
     const { data, isPending } = useFetchSample(sampleId);
 

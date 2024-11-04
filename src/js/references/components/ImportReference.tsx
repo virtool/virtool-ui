@@ -13,14 +13,14 @@ import { useImportReference, useUploadReference } from "@references/queries";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useLocation } from "wouter";
+import { useNavigate } from "@utils/hooks";
 
 const ImportReferenceUpload = styled.div`
     margin-bottom: 15px;
 `;
 
 export function ImportReference() {
-    const [, navigate] = useLocation();
+    const navigate = useNavigate();
 
     const importMutation = useImportReference();
     const { uploadMutation, fileName, fileNameOnDisk, progress } = useUploadReference();

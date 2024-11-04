@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { JobArgs } from "./JobArgs";
 import JobError from "./JobError";
 import JobSteps from "./JobSteps";
-import { useSearchParams } from "@utils/hooks";
+import { usePathParams } from "@utils/hooks";
 
 const JobDetailBadge = styled(ViewHeaderTitleBadge)`
     text-transform: capitalize;
@@ -24,7 +24,7 @@ const JobDetailBadge = styled(ViewHeaderTitleBadge)`
  * The job detailed view
  */
 export default function JobDetail() {
-    const { jobId } = useSearchParams<{ jobId: string }>();
+    const { jobId } = usePathParams<{ jobId: string }>();
     const { data, isPending, isError } = useFetchJob(jobId);
 
     if (isError) {

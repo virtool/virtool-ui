@@ -7,6 +7,7 @@ import { useUrlSearchParams } from "@utils/hooks";
 import { map, max, min, range } from "lodash-es";
 import React from "react";
 import { useSearch } from "wouter";
+import { updateSearchParam } from "@utils/hooks";
 import React, { useEffect } from "react";
 
 function getPageRange(pageCount, storedPage, leftButtons = 1, rightButtons = 2) {
@@ -52,7 +53,7 @@ export function Pagination({
     const pageButtons = map(getPageRange(pageCount, storedPage), pageNumber => (
         <PaginationLink
             key={pageNumber}
-            to={`?page=${pageNumber}${filters.toString() ? `&${filters.toString()}` : ""}`}
+            to={updateSearchParam("page", pageNumber, search)}
             active={storedPage !== pageNumber}
             disabled={storedPage === pageNumber}
             onClick={() => onLoadNextPage(pageNumber)}
@@ -60,9 +61,6 @@ export function Pagination({
             {pageNumber}
         </PaginationLink>
     ));
-
-    const filters = new URLSearchParams(window.location.search);
-    filters.delete("page");
 
     return (
         <div>
@@ -74,14 +72,14 @@ export function Pagination({
                 <PaginationRoot>
                     <PaginationContent>
                         <PaginationPrevious
-                            to={`?page=${currentPage - 1}${filters.toString() ? `&${filters.toString()}` : ""}`}
+                            to={updateSearchParam("page", String(currentPage - 1), search)}
                             disabled={currentPage === 1}
                             active={currentPage !== 1}
                             onClick={() => onLoadNextPage(currentPage - 1)}
                         />
                         {pageButtons}
                         <PaginationNext
-                            to={`?page=${currentPage + 1}${filters.toString() ? `&${filters.toString()}` : ""}`}
+                            to={updateSearchParam("page", String(currentPage + 1), search)}
                             disabled={currentPage === pageCount}
                         />
                     </PaginationContent>

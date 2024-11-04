@@ -12,8 +12,8 @@ const WorkflowFilterLabel = styled.div`
 
 const StyledWorkflowFilterControlButton = styled.button`
     align-items: center;
-    background-color: ${props => props.theme.color[props["aria-pressed"] === "true" ? "purple" : "purpleLightest"]};
-    color: ${props => props.theme.color[props["aria-pressed"] === "true" ? "white" : "purpleDark"]};
+    background-color: ${props => props.theme.color[props["aria-pressed"] === true ? "purple" : "purpleLightest"]};
+    color: ${props => props.theme.color[props["aria-pressed"] === true ? "white" : "purpleDark"]};
 
     border: 2px solid ${props => props.theme.color.purple};
     border-radius: 20px;

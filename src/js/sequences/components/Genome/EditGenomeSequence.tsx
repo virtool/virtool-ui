@@ -17,7 +17,7 @@ type EditGenomeSequenceProps = {
  * Displays dialog to edit a genome sequence
  */
 export default function EditGenomeSequence({ hasSchema, isolateId, otuId, refId }: EditGenomeSequenceProps) {
-    const [openEditSequence, setOpenEditSequence] = useUrlSearchParam("openEditSequence");
+    const { value: editSequenceId, unsetValue: unsetEditSequenceId } = useUrlSearchParam("editSequenceId");
     const mutation = useEditSequence(otuId);
 
     const segments = useGetUnreferencedSegments();
@@ -28,14 +28,14 @@ export default function EditGenomeSequence({ hasSchema, isolateId, otuId, refId 
             { isolateId, sequenceId: activeSequence.id, accession, definition, host, segment, sequence },
             {
                 onSuccess: () => {
-                    setOpenEditSequence("");
+                    unsetEditSequenceId();
                 },
             },
         );
     }
 
     return (
-        <Dialog open={Boolean(openEditSequence)} onOpenChange={() => setOpenEditSequence("")}>
+        <Dialog open={Boolean(editSequenceId)} onOpenChange={() => unsetEditSequenceId()}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

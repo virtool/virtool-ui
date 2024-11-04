@@ -1,8 +1,7 @@
 import { RemoveBanner } from "@base";
 import { RemoveDialog } from "@base/RemoveDialog";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, useNavigate } from "@utils/hooks";
 import React, { useCallback } from "react";
-import { useLocation } from "wouter";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReference } from "../../queries";
 
@@ -17,8 +16,8 @@ type RemoveReferenceProps = {
  * Displays a banner for removing a reference
  */
 export default function RemoveReference({ id, name }: RemoveReferenceProps) {
-    const [openRemoveReference, setOpenRemoveReference] = useUrlSearchParam("openRemoveReference");
-    const [, navigate] = useLocation();
+    const { open: openRemoveReference, setOpen: setOpenRemoveReference } = useDialogParam("openRemoveReference");
+    const navigate = useNavigate();
 
     const { hasPermission: canRemove } = useCheckReferenceRight(id, ReferenceRight.remove);
     const mutation = useRemoveReference();
@@ -42,14 +41,14 @@ export default function RemoveReference({ id, name }: RemoveReferenceProps) {
                 <RemoveBanner
                     message="Permanently delete this reference"
                     buttonText="Delete"
-                    onClick={() => setOpenRemoveReference("true")}
+                    onClick={() => setOpenRemoveReference(true)}
                 />
                 <RemoveDialog
                     name={name}
                     noun="Reference"
-                    show={Boolean(openRemoveReference)}
+                    show={openRemoveReference}
                     onConfirm={handleClick}
-                    onHide={() => setOpenRemoveReference("")}
+                    onHide={() => setOpenRemoveReference(false)}
                 />
             </>
         )
