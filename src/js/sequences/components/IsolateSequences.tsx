@@ -1,5 +1,5 @@
 import { getFontSize } from "@app/theme";
-import { Badge, BoxGroup, NoneFoundSection } from "@base";
+import { Badge, BoxGroup, Link, NoneFoundSection } from "@base";
 import { useCurrentOTUContext } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";
@@ -7,7 +7,6 @@ import RemoveSequence from "@sequences/components/RemoveSequence";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
 import { map } from "lodash";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AddSequenceLink from "./AddSequenceLink";
 import AddBarcodeSequence from "./Barcode/AddBarcodeSequence";

@@ -22,7 +22,7 @@ export function listAnalyses(
     sampleId: string,
     page: number,
     per_page: number,
-    term: string
+    term: string,
 ): Promise<AnalysisSearchResult> {
     return Request.get(`/samples/${sampleId}/analyses`)
         .query({ page, per_page, find: term })
@@ -44,7 +44,7 @@ export function createAnalysis(
     refId: string,
     sampleId: string,
     subtractionIds: string[],
-    workflow: string
+    workflow: string,
 ): Promise<GenericAnalysis> {
     return Request.post(`/samples/${sampleId}/analyses`)
         .send({

@@ -1,26 +1,28 @@
 import { FileType } from "@files/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
+import { renderWithRouter } from "@tests/setup";
 import { getSessionStorage, setSessionStorage } from "@utils/utils";
 import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { createFakeFile, mockApiListFiles } from "../../../../tests/fake/files";
 import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
 import CreateSubtraction from "../CreateSubtraction";
+import { formatPath } from "@utils/hooks";
 
 describe("<CreateSubtraction />", () => {
+    let path;
     afterEach(() => {
         sessionStorage.clear();
     });
 
     beforeEach(() => {
-        sessionStorage.clear();
+        path = formatPath("/subtractions", { openCreateSubtraction: true });
     });
 
     it("should render when no files available", async () => {
         mockApiListFiles([]);
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithRouter(<CreateSubtraction />, path);
 
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
     });
@@ -28,7 +30,7 @@ describe("<CreateSubtraction />", () => {
     it("should render error when submitted with no name or file entered", async () => {
         const file = createFakeFile({ name: "subtraction.fq.gz", type: FileType.subtraction });
         mockApiListFiles([file]);
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithRouter(<CreateSubtraction />, path);
 
         expect(await screen.findByText(file.name)).toBeInTheDocument();
         await userEvent.click(await screen.findByText(/save/i));
@@ -45,7 +47,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithRouter(<CreateSubtraction />, path);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -65,7 +67,7 @@ describe("<CreateSubtraction />", () => {
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
         mockApiListFiles([file]);
 
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithRouter(<CreateSubtraction />, path);
 
         expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
         expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -83,7 +85,7 @@ describe("<CreateSubtraction />", () => {
         mockApiListFiles([file]);
         const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
 
-        renderWithMemoryRouter(<CreateSubtraction />, [{ state: { createSubtraction: true } }]);
+        renderWithRouter(<CreateSubtraction />, path);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -95,7 +97,7 @@ describe("<CreateSubtraction />", () => {
         await waitFor(() => createSubtractionScope.done());
 
         await waitFor(() =>
-            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] })
+            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] }),
         );
     });
 });

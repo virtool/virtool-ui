@@ -117,6 +117,16 @@ export function createFakeOTU(overrides?: CreateFakeOTU): OTU {
 }
 
 /**
+ * Sets up a mocked API route for fetching a single complete otu
+ *
+ * @param otu - The complete otu
+ * @returns The nock scope for the mocked API call
+ */
+export function mockApiGetOTU(otu: OTU) {
+    return nock("http://localhost").get(`/api/otus/${otu.id}`).query(true).reply(200, otu);
+}
+
+/**
  * Sets up a mocked API route for fetching a list of OTUs
  *
  * @param OTUMinimal - The OTU documents
@@ -265,7 +275,14 @@ export function mockApiEditSequence(
     const OTUSequence = createFakeOTUSequence({ accession, definition, host, sequence, segment, target });
 
     return nock("http://localhost")
-        .patch(`/api/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
+        .patch(`/api/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`, {
+            accession,
+            definition,
+            host,
+            segment,
+            sequence,
+            target,
+        })
         .query(true)
         .reply(201, OTUSequence);
 }

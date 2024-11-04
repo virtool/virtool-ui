@@ -1,5 +1,5 @@
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";
 import { Button, Icon } from "../../base";
@@ -33,10 +33,12 @@ type SampleSelectionToolbarProps = {
  * A toolbar allowing users to create an analysis for selected samples
  */
 export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToolbarProps) {
-    const history = useHistory();
+    const [, setOpenQuickAnalysis] = useUrlSearchParam("openQuickAnalysis");
+    const [, setWorkflow] = useUrlSearchParam("workflow");
 
     function onQuickAnalyze() {
-        history.push({ ...history.location, state: { quickAnalysis: true, workflow: Workflows.pathoscope_bowtie } });
+        setOpenQuickAnalysis("true");
+        setWorkflow(Workflows.pathoscope_bowtie);
     }
 
     return (

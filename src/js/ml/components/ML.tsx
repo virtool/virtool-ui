@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch } from "wouter";
 import { Container } from "../../base";
 import { MLModels } from "./MLModels";
 

@@ -2,7 +2,6 @@ import { cn } from "@/utils/utils";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { map } from "lodash-es";
 import React from "react";
-import { match } from "react-router-dom";
 import styled from "styled-components";
 import {
     BoxGroup,
@@ -18,6 +17,7 @@ import {
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";
+import { useSearchParams } from "@utils/hooks";
 
 const TaxonomyGrid = styled.div`
     display: grid;
@@ -29,16 +29,12 @@ const TaxonomyGrid = styled.div`
     }
 `;
 
-type HMMDetailProps = {
-    /** Match object containing path information */
-    match: match<string>;
-};
-
 /**
  * The HMM detailed view
  */
-export default function HMMDetail({ match }: HMMDetailProps) {
-    const { data, isPending, isError } = useFetchHmm(match.params["hmmId"]);
+export default function HMMDetail() {
+    const { hmmId } = useSearchParams<{ hmmId: string }>();
+    const { data, isPending, isError } = useFetchHmm(hmmId);
 
     if (isError) {
         return <NotFound />;
@@ -125,7 +121,7 @@ export default function HMMDetail({ match }: HMMDetailProps) {
                         "[&_tbody_tr]:w-full",
                         "[&_tbody_tr:first-child_td]:border-t-0",
                         "[&_thead,&_tbody_tr]:table",
-                        "[&_thead,&_tbody_tr]:table-fixed"
+                        "[&_thead,&_tbody_tr]:table-fixed",
                     )}
                 >
                     <thead>

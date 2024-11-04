@@ -1,7 +1,7 @@
 import { usePostDevCommand } from "@/dev/queries";
 import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 
@@ -29,11 +29,11 @@ export const DeveloperCommandControl = styled.div`
  * Displays a dialog for developer commands
  */
 export default function DeveloperDialog() {
-    const [locationState, setLocationState] = useLocationState();
+    const [openDev, setOpenDev] = useUrlSearchParam("openDev");
     const mutation = usePostDevCommand();
 
     return (
-        <Dialog open={locationState?.devCommands} onOpenChange={() => setLocationState({ devCommands: false })}>
+        <Dialog open={Boolean(openDev)} onOpenChange={() => setOpenDev("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent size="lg">
@@ -51,10 +51,10 @@ export default function DeveloperDialog() {
                                         { command: "clear_users" },
                                         {
                                             onSuccess: () => {
-                                                setLocationState({ devCommands: false });
+                                                setOpenDev("");
                                                 location.reload();
                                             },
-                                        }
+                                        },
                                     )
                                 }
                             >

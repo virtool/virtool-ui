@@ -23,11 +23,13 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-function Template(args) {
+function Template({ children }) {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <SelectBoxGroupSection {...args} checked={active} onClick={() => updateArgs({ active: !active })} />
+            <SelectBoxGroupSection active={active} onClick={() => updateArgs({ active: !active })}>
+                {children}
+            </SelectBoxGroupSection>
         </BoxGroup>
     );
 }
@@ -39,11 +41,11 @@ export const TestSelectBoxGroupSection: Story = {
     render: Template,
 };
 
-function CheckboxTemplate(args) {
+function CheckboxTemplate() {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <SelectBoxGroupSection {...args} onClick={() => updateArgs({ active: !active })}>
+            <SelectBoxGroupSection onClick={() => updateArgs({ active: !active })}>
                 <Checkbox checked={active} label="This is a SelectBoxGroupSection with a Checkbox!" />
             </SelectBoxGroupSection>
         </BoxGroup>

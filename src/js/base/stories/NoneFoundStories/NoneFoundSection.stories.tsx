@@ -1,7 +1,6 @@
-import { NoneFoundSection } from "@base";
+import { Link, NoneFoundSection } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { Link } from "react-router-dom";
 
 const meta: Meta<typeof NoneFoundSection> = {
     title: "base/NoneFound/NoneFoundSection",

@@ -5,6 +5,8 @@ import { PaginationPrevious } from "@base/pagination/PaginationPrevious";
 import { PaginationRoot } from "@base/pagination/PaginationRoot";
 import { useUrlSearchParams } from "@utils/hooks";
 import { map, max, min, range } from "lodash-es";
+import React from "react";
+import { useSearch } from "wouter";
 import React, { useEffect } from "react";
 
 function getPageRange(pageCount, storedPage, leftButtons = 1, rightButtons = 2) {
@@ -38,6 +40,7 @@ export function Pagination({
     pageCount,
     onLoadNextPage,
 }: PaginationProps) {
+    const search = useSearch();
     onLoadNextPage = onLoadNextPage || (() => {});
     const [_, setUrlPage] = useUrlSearchParams<number>("page");
 
@@ -58,11 +61,8 @@ export function Pagination({
         </PaginationLink>
     ));
 
-    useEffect(() => {
-        if (currentPage > pageCount) {
-            setUrlPage(pageCount);
-        }
-    }, [currentPage, pageCount]);
+    const filters = new URLSearchParams(window.location.search);
+    filters.delete("page");
 
     return (
         <div>

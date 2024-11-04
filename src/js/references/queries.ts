@@ -1,8 +1,7 @@
 import { ErrorResponse } from "@/types/types";
 import { Request } from "@app/request";
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
 import {
     addReferenceGroup,
     addReferenceUser,
@@ -38,7 +37,6 @@ export const referenceQueryKeys = {
     all: () => ["reference"] as const,
     lists: () => ["reference", "list"] as const,
     list: (filters: Array<string | number | boolean>) => ["reference", "list", "single", ...filters] as const,
-    infiniteList: (filters: Array<string | number | boolean>) => ["reference", "list", "infinite", ...filters] as const,
     details: () => ["reference", "detail"] as const,
     detail: (refId: string) => ["reference", "detail", refId] as const,
 };
@@ -46,20 +44,15 @@ export const referenceQueryKeys = {
 /**
  * Gets a paginated list of references
  *
+ * @param page - The page to fetch
+ * @param per_page - The number of references to fetch per page
  * @param term - The search term to filter references by
  * @returns The paginated list of references
  */
-export function useInfiniteFindReferences(term: string) {
-    return useInfiniteQuery<ReferenceSearchResult>({
-        queryKey: referenceQueryKeys.infiniteList([term]),
-        queryFn: ({ pageParam }) => findReferences({ page: pageParam, per_page: 25, term }),
-        initialPageParam: 1,
-        getNextPageParam: lastPage => {
-            if (lastPage.page >= lastPage.page_count) {
-                return undefined;
-            }
-            return (lastPage.page || 1) + 1;
-        },
+export function useFindReferences(page: number, per_page: number, term: string) {
+    return useQuery<ReferenceSearchResult>({
+        queryKey: referenceQueryKeys.list([page, per_page, term]),
+        queryFn: () => findReferences({ page, per_page, term }),
         placeholderData: keepPreviousData,
     });
 }
@@ -97,8 +90,6 @@ export function useRemoteReference() {
  * @returns A mutator for importing a reference
  */
 export function useImportReference() {
-    const history = useHistory();
-
     return useMutation<
         unknown,
         unknown,
@@ -109,7 +100,6 @@ export function useImportReference() {
         }
     >({
         mutationFn: ({ name, description, importFrom }) => importReference(name, description, importFrom),
-        onSuccess: () => history.push("/refs"),
     });
 }
 
@@ -150,8 +140,6 @@ export function useUploadReference() {
  * @returns A mutator for creating an empty reference
  */
 export function useCreateReference() {
-    const history = useHistory();
-
     return useMutation<
         Reference,
         unknown,
@@ -159,9 +147,6 @@ export function useCreateReference() {
     >({
         mutationFn: ({ name, description, dataType, organism }) =>
             createReference(name, description, dataType, organism),
-        onSuccess: () => {
-            history.push("/refs", { emptyReference: false });
-        },
     });
 }
 

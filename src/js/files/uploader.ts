@@ -55,16 +55,16 @@ export const useUploaderStore = create<UploaderState>()(
         setFailure: localId =>
             set(state => ({
                 uploads: state.uploads.map(upload =>
-                    upload.localId === localId ? { ...upload, failed: true } : upload
+                    upload.localId === localId ? { ...upload, failed: true } : upload,
                 ),
             })),
         setProgress: (localId, loaded, progress) =>
             set(state => ({
                 uploads: state.uploads.map(upload =>
-                    upload.localId === localId ? { ...upload, loaded, progress } : upload
+                    upload.localId === localId ? { ...upload, loaded, progress } : upload,
                 ),
             })),
-    }))
+    })),
 );
 
 /**
@@ -118,7 +118,7 @@ function watchUploadTiming(): void {
             loaded: acc.loaded + upload.loaded,
             total: acc.total + upload.size,
         }),
-        { loaded: 0, total: 0 }
+        { loaded: 0, total: 0 },
     );
 
     const newSamples = [...samples.slice(-9), loaded];
@@ -149,5 +149,5 @@ useUploaderStore.subscribe(
 
             setState({ intervalId });
         }
-    }
+    },
 );

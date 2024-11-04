@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export class Settings {
     default_source_types: string[];
     enable_api: boolean;
@@ -34,4 +36,8 @@ export type Task = {
     progress: number;
     step: string;
     type: string;
+};
+
+export type OnlyChildrenProps = {
+    children: ReactNode;
 };

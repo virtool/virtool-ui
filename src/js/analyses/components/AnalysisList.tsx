@@ -1,9 +1,8 @@
 import { useListHmms } from "@/hmm/queries";
 import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
 import { useFetchSample } from "@samples/queries";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { match } from "react-router-dom";
 import { useListAnalyses } from "../queries";
 import { AnalysisMinimal } from "../types";
 import AnalysisItem from "./AnalysisItem";
@@ -11,23 +10,18 @@ import AnalysesToolbar from "./AnalysisToolbar";
 import CreateAnalysis from "./Create/CreateAnalysis";
 import AnalysisHMMAlert from "./HMMAlert";
 
-function renderRow(sampleId: string) {
+function renderRow() {
     return function (document: AnalysisMinimal) {
-        return <AnalysisItem key={document.id} analysis={document} sampleId={sampleId} />;
+        return <AnalysisItem key={document.id} analysis={document} />;
     };
 }
-
-type AnalysisListProps = {
-    /** Match object containing path information */
-    match: match<{ sampleId: string }>;
-};
 
 /**
  * A list of analyses with filtering options
  */
-export default function AnalysesList({ match }: AnalysisListProps) {
-    const sampleId = match.params.sampleId;
-    const [urlPage] = useUrlSearchParams<number>("page");
+export default function AnalysesList() {
+    const { sampleId } = useSearchParams<{ sampleId: string }>();
+    const [urlPage] = useUrlSearchParam("page");
     const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(sampleId, Number(urlPage) || 1, 25);
     const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
     const { isPending: isPendingSample } = useFetchSample(sampleId);
@@ -44,7 +38,7 @@ export default function AnalysesList({ match }: AnalysisListProps) {
             {analyses.found_count ? (
                 <Pagination
                     items={analyses.documents}
-                    renderRow={renderRow(sampleId)}
+                    renderRow={renderRow()}
                     storedPage={analyses.page}
                     currentPage={Number(urlPage) || 1}
                     pageCount={analyses.page_count}

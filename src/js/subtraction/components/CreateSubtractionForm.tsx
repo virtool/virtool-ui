@@ -5,9 +5,9 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { SubtractionFileSelector } from "@subtraction/components/SubtractionFileSelector";
 import { useCreateSubtraction } from "@subtraction/queries";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { Controller } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 
 type FormValues = {
     name: string;
@@ -19,7 +19,8 @@ type FormValues = {
  * A form for creating a subtraction
  */
 export function CreateSubtractionForm() {
-    const history = useHistory();
+    const [, setOpenCreateSubtraction] = useUrlSearchParam("openCreateSubtraction");
+
     const {
         hasRestored,
         formState: { errors },
@@ -48,10 +49,10 @@ export function CreateSubtractionForm() {
             { name, nickname, uploadId: uploadId[0] },
             {
                 onSuccess: () => {
-                    history.push({ state: { createSubtraction: false } });
+                    setOpenCreateSubtraction("");
                     reset();
                 },
-            }
+            },
         );
     }
 

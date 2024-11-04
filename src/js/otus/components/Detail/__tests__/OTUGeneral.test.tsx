@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUIsolate } from "../../../../../tests/fake/otus";
-import { renderWithProviders } from "../../../../../tests/setupTests";
 import OTUGeneral from "../OTUGeneral";
 
 describe("<OTUGeneral />", () => {
@@ -28,8 +28,8 @@ describe("<OTUGeneral />", () => {
 
         expect(
             screen.getByText(
-                "There are some issues that must be resolved before this OTU can be included in the next index build"
-            )
+                "There are some issues that must be resolved before this OTU can be included in the next index build",
+            ),
         ).toBeInTheDocument();
         expect(screen.getByText("There are no sequences associated with the following isolates:")).toBeInTheDocument();
         expect(screen.getByText(`${isolate.source_type} ${isolate.source_name}`, { exact: false })).toBeInTheDocument();
@@ -41,8 +41,8 @@ describe("<OTUGeneral />", () => {
 
         expect(
             screen.queryByText(
-                "There are some issues that must be resolved before this OTU can be included in the next index build"
-            )
+                "There are some issues that must be resolved before this OTU can be included in the next index build",
+            ),
         ).toBeNull();
     });
 });

@@ -1,8 +1,7 @@
 import { getFontSize, getFontWeight } from "@app/theme";
-import { BoxGroupSection, Label } from "@base";
+import { BoxGroupSection, Label, Link } from "@base";
 import { keys, map, reject } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { HMMMinimal } from "../types";
 

@@ -1,6 +1,6 @@
 import { useFindUsers } from "@administration/queries";
 import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
-import { useUrlSearchParams } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import { User } from "../types";
@@ -15,8 +15,8 @@ type UsersListProps = {
  * A paginated list of users
  */
 export function UsersList({ term }: UsersListProps) {
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const [status] = useUrlSearchParams<string>("status");
+    const [urlPage] = useUrlSearchParam("page");
+    const [status] = useUrlSearchParam("status");
     const { data, isPending } = useFindUsers(Number(urlPage) || 1, 25, term, undefined, status === "active");
 
     if (isPending) {

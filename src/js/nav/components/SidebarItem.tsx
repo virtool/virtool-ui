@@ -1,36 +1,6 @@
-import { getFontSize, getFontWeight } from "@app/theme";
-import { Icon } from "@base";
+import { Icon, Link } from "@base";
+import { cn } from "@utils/utils";
 import React from "react";
-import { NavLink } from "react-router-dom";
-import styled from "styled-components";
-import { excludePaths } from "../utils";
-
-const StyledSidebarItem = styled(NavLink)`
-    color: ${props => props.theme.color.greyDark};
-    cursor: pointer;
-    padding-bottom: 1.4rem;
-    text-align: center;
-    width: 100%;
-
-    &:hover {
-        color: ${props => props.theme.color.greyDarkest};
-    }
-
-    &.active {
-        color: ${props => props.theme.color.primary};
-        font-weight: ${getFontWeight("thick")};
-    }
-
-    i {
-        font-size: 16px;
-    }
-
-    p {
-        display: block;
-        font-size: ${getFontSize("md")};
-        margin: 0.4rem 0;
-    }
-`;
 
 type SidebarItemProps = {
     /** A list of routes to exclude from the sidebar */
@@ -40,14 +10,24 @@ type SidebarItemProps = {
     title: string;
 };
 
+const baseClassName = cn("text-gray-500", "cursor-pointer", "pb-5", "text-center", "w-full", "hover:text-gray-700");
+
 /**
  * Displays a styled sidebar item for use in the sidebar component
  */
-export default function SidebarItem({ exclude, icon, link, title }: SidebarItemProps) {
+export default function SidebarItem({ icon, link, title }: SidebarItemProps) {
+    const activeClassName = cn(
+        baseClassName,
+        "text-primary",
+        "font-medium",
+        "hover:text-primary",
+        "focus:text-primary",
+    );
+
     return (
-        <StyledSidebarItem to={link} activeClassName="active" isActive={excludePaths(exclude)}>
-            <Icon name={icon} />
-            <p>{title}</p>
-        </StyledSidebarItem>
+        <Link to={link} className={active => (active ? activeClassName : baseClassName)}>
+            <Icon name={icon} className="text-lg" />
+            <p className="block text-md my-2">{title}</p>
+        </Link>
     );
 }

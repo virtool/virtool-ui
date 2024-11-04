@@ -1,4 +1,4 @@
-import { ScrollSync, useUrlSearchParams } from "@utils/hooks";
+import { ScrollSync, useUrlSearchParam } from "@utils/hooks";
 import { toScientificNotation } from "@utils/utils";
 import { map } from "lodash-es";
 import React from "react";
@@ -39,7 +39,7 @@ const StyledPathoscopeIsolateWeight = styled.strong`
 `;
 
 export function PathoscopeIsolateWeight({ pi, reads }) {
-    const [showReads] = useUrlSearchParams<boolean>("reads");
+    const [showReads] = useUrlSearchParam("reads");
     return (
         <StyledPathoscopeIsolateWeight>{showReads ? reads : toScientificNotation(pi)}</StyledPathoscopeIsolateWeight>
     );

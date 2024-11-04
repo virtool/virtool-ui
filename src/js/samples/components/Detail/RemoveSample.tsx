@@ -1,5 +1,5 @@
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 import { RemoveDialog } from "../../../base/RemoveDialog";
 import { useRemoveSample } from "../../queries";
 
@@ -14,26 +14,25 @@ type RemoveSampleProps = {
  * Displays a dialog for removing a sample
  */
 export default function RemoveSample({ id, name }: RemoveSampleProps) {
-    const history = useHistory();
-    const location = useLocation<{ removeSample: boolean }>();
+    const [openRemoveSample, setOpenRemoveSample] = useUrlSearchParam("openRemoveSample");
     const mutation = useRemoveSample();
 
     return (
         <RemoveDialog
             noun="Sample"
             name={name}
-            show={location.state?.removeSample}
+            show={Boolean(openRemoveSample)}
             onConfirm={() =>
                 mutation.mutate(
                     { sampleId: id },
                     {
                         onSuccess: () => {
-                            history.push("/samples");
+                            setOpenRemoveSample("");
                         },
-                    }
+                    },
                 )
             }
-            onHide={() => history.replace({ state: { removeSample: false } })}
+            onHide={() => setOpenRemoveSample("")}
         />
     );
 }

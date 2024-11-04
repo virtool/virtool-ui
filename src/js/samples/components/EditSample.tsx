@@ -1,8 +1,8 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUrlSearchParam } from "@utils/hooks";
 import { pick } from "lodash";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import {
     Dialog,
     DialogContent,
@@ -21,17 +21,13 @@ import { Sample } from "../types";
 type EditSampleProps = {
     /** The sample data */
     sample: Sample;
-    /** Indicates whether the modal for editing a sample is visible */
-    show: boolean;
-    /** A callback function to hide the modal */
-    onHide: () => void;
 };
 
 /**
  * Displays a dialog for editing the sample
  */
-export default function EditSample({ sample, show, onHide }: EditSampleProps) {
-    const history = useHistory();
+export default function EditSample({ sample }: EditSampleProps) {
+    const [openEditSample, setOpenEditSample] = useUrlSearchParam("openEditSample");
     const mutation = useUpdateSample(sample.id);
 
     const { register, handleSubmit } = useForm({
@@ -45,7 +41,7 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
     });
 
     return (
-        <Dialog open={show} onOpenChange={onHide}>
+        <Dialog open={Boolean(openEditSample)} onOpenChange={() => setOpenEditSample("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
@@ -58,12 +54,10 @@ export default function EditSample({ sample, show, onHide }: EditSampleProps) {
                                 },
                                 {
                                     onSuccess: () => {
-                                        history.replace({
-                                            state: { editSample: false },
-                                        });
+                                        setOpenEditSample("");
                                     },
-                                }
-                            )
+                                },
+                            ),
                         )}
                     >
                         <InputGroup>

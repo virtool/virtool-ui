@@ -23,7 +23,7 @@ Most commonly a component will need one or more of:
 
 -   QueryClient (react-query)
 -   ThemeProvider (styled-components)
--   MemoryRouter (react-router)
+-   MemoryRouter (wouter)
 
 To make providing these less cumbersome our test setup exports helper functions
 which will wrap the components in the providers prior to rendering.

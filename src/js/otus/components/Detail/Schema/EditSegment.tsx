@@ -3,10 +3,10 @@ import SegmentForm from "@otus/components/Detail/Schema/SegmentForm";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import { find } from "lodash-es";
 import React from "react";
-import { useHistory, useLocation } from "react-router-dom";
 
 type FormValues = {
     segmentName: string;
@@ -26,39 +26,34 @@ type EditSegmentProps = {
  * Displays a dialog to edit a segment
  */
 export default function EditSegment({ abbreviation, otuId, name, schema }: EditSegmentProps) {
-    const history = useHistory();
-    const location = useLocation<{ editSegment: "" }>();
+    const [editSegmentName, setEditSegmentName] = useUrlSearchParam("editSegmentName");
     const mutation = useUpdateOTU(otuId);
 
-    const initialName = location.state?.editSegment;
-    const segment = find(schema, { name: initialName });
+    const segment = find(schema, { name: editSegmentName });
 
     function handleSubmit({ segmentName, molecule, required }: FormValues) {
         const newArray = map(schema, item => {
-            return item.name === initialName ? { name: segmentName, molecule, required } : item;
+            return item.name === editSegmentName ? { name: segmentName, molecule, required } : item;
         });
 
         mutation.mutate(
             { otuId, name, abbreviation, schema: newArray },
             {
                 onSuccess: () => {
-                    history.replace({ state: { editSegment: "" } });
+                    setEditSegmentName("");
                 },
-            }
+            },
         );
     }
 
     return (
-        <Dialog
-            open={Boolean(location.state?.editSegment)}
-            onOpenChange={() => history.replace({ state: { editSegment: "" } })}
-        >
+        <Dialog open={Boolean(editSegmentName)} onOpenChange={() => setEditSegmentName("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Edit Segment</DialogTitle>
                     <SegmentForm
-                        segmentName={initialName}
+                        segmentName={editSegmentName}
                         molecule={segment?.molecule}
                         required={segment?.required}
                         onSubmit={handleSubmit}

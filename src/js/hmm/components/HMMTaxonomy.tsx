@@ -27,7 +27,7 @@ type HMMTaxonomyProps = {
 export function HMMTaxonomy({ counts, title }: HMMTaxonomyProps) {
     const sorted = sortBy(
         map(counts, (count, name) => ({ name, count })),
-        "name"
+        "name",
     );
 
     const components = map(sorted, ({ name, count }) => (

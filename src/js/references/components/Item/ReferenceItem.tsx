@@ -2,12 +2,12 @@ import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
 import { IconButton } from "@base/IconButton";
 import { JobState } from "@jobs/types";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Attribution, BoxGroupSection, Icon } from "../../../base";
-import { ProgressCircle } from "../../../base/ProgressCircle";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Attribution, BoxGroupSection, Icon, Link } from "@base";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { ReferenceMinimal } from "../../types";
 
 const StyledReferenceItem = styled(BoxGroupSection)`
@@ -51,17 +51,12 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ reference }: ReferenceItemProps) {
-    const history = useHistory();
+    const [, setCloneReference] = useUrlSearchParam("cloneReference");
     const { id, data_type, name, organism, user, created_at, task } = reference;
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
 
     const cloneButton = canCreate ? (
-        <IconButton
-            name="clone"
-            tip="clone"
-            color="blue"
-            onClick={() => history.push({ state: { cloneReference: id } })}
-        />
+        <IconButton name="clone" tip="clone" color="blue" onClick={() => setCloneReference(id)} />
     ) : null;
 
     return (

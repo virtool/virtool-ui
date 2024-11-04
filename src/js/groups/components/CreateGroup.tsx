@@ -11,9 +11,9 @@ import {
     SaveButton,
 } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useHistory, useLocation } from "react-router-dom";
 import { useCreateGroup } from "../queries";
 
 type FormValues = {
@@ -24,8 +24,7 @@ type FormValues = {
  * A dialog for creating a new group
  */
 export default function CreateGroup() {
-    const history = useHistory();
-    const location = useLocation<{ createGroup: boolean }>();
+    const [openCreateGroup, setOpenCreateGroup] = useUrlSearchParam("openCreateGroup");
     const createGroupMutation = useCreateGroup();
     const {
         formState: { errors },
@@ -38,17 +37,14 @@ export default function CreateGroup() {
             { name },
             {
                 onSuccess: () => {
-                    history.replace({ state: { createGroup: false } });
+                    setOpenCreateGroup("");
                 },
-            }
+            },
         );
     }
 
     return (
-        <Dialog
-            open={location.state?.createGroup}
-            onOpenChange={() => history.replace({ state: { createGroup: false } })}
-        >
+        <Dialog open={Boolean(openCreateGroup)} onOpenChange={() => setOpenCreateGroup("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

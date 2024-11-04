@@ -25,6 +25,7 @@ import { find, flatMap, toString } from "lodash-es";
 import React, { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
+import { useLocation } from "wouter";
 import { LibraryTypeSelector } from "./LibraryTypeSelector";
 import { SampleUserGroup } from "./SampleUserGroup";
 
@@ -107,6 +108,8 @@ type FormValues = {
  * A form for creating a sample
  */
 export default function CreateSample() {
+    const [, navigate] = useLocation();
+
     const { data: groups, isPending: isPendingGroups } = useListGroups();
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
     const {
@@ -172,13 +175,14 @@ export default function CreateSample() {
                 subtractions: subtractionIds,
                 files: readFiles,
                 labels,
-                group: group === "none" ? "" : group,
+                group: group || null,
             },
             {
                 onSuccess: () => {
                     reset();
+                    navigate("/samples");
                 },
-            }
+            },
         );
     }
 

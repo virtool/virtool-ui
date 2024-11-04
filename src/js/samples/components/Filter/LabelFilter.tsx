@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { SidebarHeader, SideBarSection } from "../../../base";
-import { Label } from "../../../labels/types";
+import { Link, SidebarHeader, SideBarSection } from "@base";
+import { Label } from "@labels/types";
 import { LabelFilterItem } from "./LabelFilterItem";
 
 type LabelFilterProps = {

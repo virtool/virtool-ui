@@ -2,7 +2,6 @@ import { ErrorResponse } from "@/types/types";
 import { Label } from "@labels/types";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { forEach, map, reject, union } from "lodash-es/lodash";
-import { useHistory } from "react-router-dom";
 import {
     createSample,
     getSample,
@@ -68,8 +67,6 @@ export function useFetchSample(sampleId: string) {
  * @returns A mutator for creating a sample
  */
 export function useCreateSample() {
-    const history = useHistory();
-
     return useMutation<
         Sample,
         ErrorResponse,
@@ -87,9 +84,6 @@ export function useCreateSample() {
     >({
         mutationFn: ({ name, isolate, host, locale, libraryType, subtractions, files, labels, group }) =>
             createSample(name, isolate, host, locale, libraryType, subtractions, files, labels, group),
-        onSuccess: () => {
-            history.push("/samples");
-        },
     });
 }
 

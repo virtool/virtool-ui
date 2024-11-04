@@ -7,8 +7,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
 import React, { lazy, Suspense, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Redirect, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
+import { Redirect, Route, Switch } from "wouter";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
@@ -79,15 +79,15 @@ export default function Main() {
             <MainContainer>
                 <Suspense fallback={<Fallback />}>
                     <Switch>
-                        <Redirect from="/" to="/samples" exact />
-                        <Route path="/jobs" component={Jobs} />
-                        <Route path="/samples" component={Samples} />
-                        <Route path="/refs" component={References} />
-                        <Route path="/hmm" component={HMM} />
-                        <Route path="/subtractions" component={Subtraction} />
-                        <Route path="/administration" component={Administration} />
-                        <Route path="/account" component={Account} />
-                        <Route path="/ml" component={ML} />
+                        <Route path="/" component={() => <Redirect to="/samples" />} />
+                        <Route path="/administration/*?" component={Administration} />
+                        <Route path="/account/*?" component={Account} />
+                        <Route path="/hmm/*?" component={HMM} />
+                        <Route path="/jobs/*?" component={Jobs} />
+                        <Route path="/ml/*?" component={ML} />
+                        <Route path="/refs/*?" component={References} />
+                        <Route path="/samples/*?" component={Samples} />
+                        <Route path="/subtractions/*?" component={Subtraction} />
                     </Switch>
                 </Suspense>
             </MainContainer>

@@ -1,4 +1,4 @@
-import { InputError, NoneFoundBox } from "@base";
+import { InputError, Link, NoneFoundBox } from "@base";
 import { CompactScrollList } from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { File, FileResponse, FileType } from "@files/types";
@@ -6,7 +6,6 @@ import { InfiniteData } from "@tanstack/react-query";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
 import { flatMap } from "lodash-es";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
@@ -17,18 +16,25 @@ const SubtractionFileSelectorError = styled(InputError)`
 type SubtractionFileSelectorProps = {
     /** The subtraction files */
     files: InfiniteData<FileResponse>;
+
     /** The number of subtraction files */
     foundCount: number;
+
     /** The selected file id */
     selected: string[];
+
     /** A callback function to handle file selection */
     onClick: (selected: string[]) => void;
+
     /** Errors occurred on sample creation */
     error: string;
+
     /** Fetches the next page of data */
     fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+
     /** Whether the data is fetched */
     isPending: boolean;
+
     /** Whether the next page is being fetched */
     isFetchingNextPage: boolean;
 };

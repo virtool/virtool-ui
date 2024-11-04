@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { mockGetAdministratorRoles, mockSetAdministratorRoleAPI } from "@tests/fake/admin";
 import { createFakeUser, createFakeUsers, mockApiFindUsers } from "@tests/fake/user";
-import { renderWithMemoryRouter } from "@tests/setupTests";
+import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { AdministratorRoles } from "../../../types";

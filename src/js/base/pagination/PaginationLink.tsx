@@ -1,7 +1,7 @@
 import { PaginationItem } from "@base/pagination/PaginationItem";
 import { cn } from "@utils/utils";
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@base";
 
 type PaginationLinkProps = {
     active?: boolean;
@@ -25,7 +25,7 @@ export function PaginationLink({ active, children, className, disabled, onClick,
                     "text-blue-500",
                     { "text-blue-900": !active, "pointer-events-none": disabled },
 
-                    className
+                    className,
                 )}
                 to={to}
                 onClick={onClick}

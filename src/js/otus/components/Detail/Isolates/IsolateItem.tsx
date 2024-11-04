@@ -2,9 +2,8 @@ import { BoxGroupSection, Icon } from "@/base";
 import { getActiveShadow } from "@app/theme";
 import { OTUIsolate } from "@otus/types";
 import { ReferenceDataType } from "@references/types";
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import { formatIsolateName } from "@utils/utils";
-import { merge } from "lodash";
 import React from "react";
 import styled from "styled-components";
 
@@ -36,13 +35,10 @@ type IsolateItemProps = {
  * A condensed isolate item for use in a list of isolates
  */
 export default function IsolateItem({ active, dataType, isolate }: IsolateItemProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [, setActiveIsolate] = useUrlSearchParam("activeIsolate");
 
     return (
-        <StyledIsolateItem
-            active={active}
-            onClick={() => setLocationState(merge(locationState, { activeIsolateId: isolate.id }))}
-        >
+        <StyledIsolateItem active={active} onClick={() => setActiveIsolate(isolate.id)}>
             <span>{formatIsolateName(isolate)}</span>
             {isolate.default && dataType !== "barcode" && <Icon name="star" />}
         </StyledIsolateItem>

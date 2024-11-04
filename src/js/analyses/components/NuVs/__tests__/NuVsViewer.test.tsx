@@ -1,12 +1,12 @@
 import NuVsViewer from "@/analyses/components/NuVs/NuVsViewer";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeSample } from "@tests/fake/samples";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeFormattedNuVsAnalysis, mockApiBlastNuVs } from "../../../../../tests/fake/analyses";
-import { createFakeSample } from "../../../../../tests/fake/samples";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 
 describe("<NuVsViewer />", () => {
     let props;
@@ -26,7 +26,7 @@ describe("<NuVsViewer />", () => {
 
     describe("<NuVsDetail />", () => {
         it("should render correctly", () => {
-            renderWithMemoryRouter(<NuVsViewer {...props} />);
+            renderWithRouter(<NuVsViewer {...props} />);
 
             expect(screen.getByText("This sequence has no BLAST information attached to it.")).toBeInTheDocument();
             expect(screen.getByText("Families")).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe("<NuVsViewer />", () => {
 
         it("should render blast when clicked", async () => {
             const scope = mockApiBlastNuVs(nuvs.id, nuvs.results.hits[0].index);
-            renderWithMemoryRouter(<NuVsViewer {...props} />);
+            renderWithRouter(<NuVsViewer {...props} />);
 
             await userEvent.click(screen.getByRole("button", { name: "BLAST at NCBI" }));
             scope.done();
@@ -44,7 +44,7 @@ describe("<NuVsViewer />", () => {
 
     describe("<NuVsExport />", () => {
         it("should render export dialog when exporting", async () => {
-            renderWithMemoryRouter(<NuVsViewer {...props} />);
+            renderWithRouter(<NuVsViewer {...props} />);
 
             await userEvent.click(screen.getByRole("button", { name: "Export" }));
             expect(screen.getByText("Export Analysis")).toBeInTheDocument();

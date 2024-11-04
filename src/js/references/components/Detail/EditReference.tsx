@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, SaveButton } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
-import { useLocationState } from "@utils/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Reference, ReferenceDataType } from "../../types";
@@ -23,7 +23,7 @@ type EditReferenceProps = {
  * A dialog for editing a reference
  */
 export default function EditReference({ detail }: EditReferenceProps) {
-    const [locationState, setLocationState] = useLocationState();
+    const [openEditReference, setOpenEditReference] = useUrlSearchParam("openEditReference");
     const {
         formState: { errors },
         handleSubmit,
@@ -35,11 +35,11 @@ export default function EditReference({ detail }: EditReferenceProps) {
 
     function handleEdit({ name, description, organism }) {
         mutation.mutate({ name, description, organism });
-        setLocationState({ editReference: false });
+        setOpenEditReference("");
     }
 
     return (
-        <Dialog open={locationState?.editReference} onOpenChange={() => setLocationState({ editReference: false })}>
+        <Dialog open={Boolean(openEditReference)} onOpenChange={() => setOpenEditReference("")}>
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

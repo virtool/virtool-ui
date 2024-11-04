@@ -28,7 +28,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function Template(args) {
-    const [_, updateArgs] = useArgs();
+    const [, updateArgs] = useArgs();
     const items = useMemo(() => fakeUserListFactory(args.storedPage, 7), [args.storedPage]);
     function onLoadNextPage(page) {
         updateArgs({ currentPage: page, storedPage: page });

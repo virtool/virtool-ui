@@ -1,23 +1,28 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiRemoveSample } from "@tests/fake/samples";
+import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { mockApiRemoveSample } from "../../../../../tests/fake/samples";
-import { renderWithMemoryRouter } from "../../../../../tests/setupTests";
 import RemoveSample from "../RemoveSample";
+import { formatPath } from "@utils/hooks";
 
 describe("<RemoveSample />", () => {
     let props;
+    let path;
+    let searchParams;
 
     beforeEach(() => {
         props = {
             id: "foo",
             name: "test",
         };
+        path = `/samples/${props.id}/general`;
+        searchParams = { openRemoveSample: true };
     });
 
     it("renders when [show=true]", () => {
-        renderWithMemoryRouter(<RemoveSample {...props} />, [{ state: { removeSample: true } }]);
+        renderWithRouter(<RemoveSample {...props} />, formatPath(path, searchParams));
 
         expect(screen.getByText("Remove Sample")).toBeInTheDocument();
         expect(screen.getByText("test")).toBeInTheDocument();
@@ -25,7 +30,7 @@ describe("<RemoveSample />", () => {
     });
 
     it("renders when [show=false]", () => {
-        renderWithMemoryRouter(<RemoveSample {...props} />, [{ state: { removeSample: false } }]);
+        renderWithRouter(<RemoveSample {...props} />, path);
 
         expect(screen.queryByText("Remove Sample")).toBeNull();
         expect(screen.queryByText("test")).toBeNull();
@@ -34,7 +39,7 @@ describe("<RemoveSample />", () => {
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
         const scope = mockApiRemoveSample(props.id);
-        renderWithMemoryRouter(<RemoveSample {...props} />, [{ state: { removeSample: true } }]);
+        renderWithRouter(<RemoveSample {...props} />, formatPath(path, searchParams));
 
         await userEvent.click(screen.getByRole("button"));
 

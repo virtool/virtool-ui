@@ -6,19 +6,21 @@ import { createFakeIndexMinimal, mockApiListIndexes } from "@tests/fake/indexes"
 import { createFakeMLModel, mockApiGetModels } from "@tests/fake/ml";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
-import { renderWithProviders } from "@tests/setupTests";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
 import { describe, it } from "vitest";
-import { Workflows } from "../../../types";
 import CreateAnalysis from "../CreateAnalysis";
+import { Workflows } from "@/analyses/types";
+import { formatPath } from "@utils/hooks";
 
 describe("getCompatibleWorkflows()", () => {
     let sample;
     let subtractionShortlist;
     let indexMinimal;
     let props;
+    let basePath;
+    let searchParams;
 
     beforeEach(() => {
         sample = createFakeSample();
@@ -31,6 +33,8 @@ describe("getCompatibleWorkflows()", () => {
         mockApiGetSampleDetail(sample);
         mockApiGetShortlistSubtractions([subtractionShortlist], true);
         mockApiListIndexes([indexMinimal]);
+        basePath = `/samples/${sample.id}/analyses`;
+        searchParams = { createAnalysisType: Workflows.pathoscope_bowtie };
     });
 
     afterEach(() => nock.cleanAll());
@@ -39,11 +43,7 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, searchParams));
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
@@ -63,11 +63,7 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, searchParams));
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
         await userEvent.click(await screen.findByRole("button", { name: "Start" }));
@@ -86,11 +82,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: id,
         });
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.pathoscope_bowtie } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, { createAnalysisType: id }));
 
         await userEvent.click(await screen.findByText(name));
         await userEvent.click(screen.getByText(subtractionShortlist.name));
@@ -112,11 +104,7 @@ describe("getCompatibleWorkflows()", () => {
             workflow: "iimi",
         });
 
-        renderWithProviders(
-            <MemoryRouter initialEntries={[{ state: { createAnalysis: Workflows.iimi } }]}>
-                <CreateAnalysis {...props} />
-            </MemoryRouter>
-        );
+        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, { createAnalysisType: "iimi" }));
 
         const comboboxes = await screen.findAllByRole("combobox");
 

@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders } from "@tests/setup.tsx";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { renderWithProviders } from "../../../../../tests/setupTests";
 import { BLASTError } from "../BLASTError";
 
 describe("<BLASTError />", () => {

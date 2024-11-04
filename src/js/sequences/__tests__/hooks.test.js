@@ -1,6 +1,6 @@
-import { act, renderHook } from "@testing-library/react-hooks";
 import { describe, expect, it } from "vitest";
 import { useExpanded } from "../hooks";
+import { act, renderHook } from "@testing-library/react";
 
 describe("useExpanded()", () => {
     it("should be collapsed (false) initially and expand and collapse", () => {

@@ -1,25 +1,27 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeAccount, mockApiGetAccount } from "../../../../tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
-import { renderWithMemoryRouter } from "../../../../tests/setupTests";
-import HMMList from "../HMMList";
+import HMM from "../HMM";
 
 describe("<HMMList />", () => {
     let fakeHMMData;
+    let path;
 
     beforeEach(() => {
         fakeHMMData = createFakeHMMSearchResults();
+        path = "/hmm";
     });
 
     afterEach(() => nock.cleanAll());
 
     it("should render correctly", async () => {
         const scope = mockApiGetHmms(fakeHMMData);
-        renderWithMemoryRouter(<HMMList />);
+        renderWithRouter(<HMM />, path);
 
         expect(await screen.findByText("HMMs")).toBeInTheDocument();
         expect(screen.getByPlaceholderText("Definition")).toBeInTheDocument();
@@ -33,7 +35,7 @@ describe("<HMMList />", () => {
     it("should render correctly when no documents exist", async () => {
         const fakeHMMData = createFakeHMMSearchResults({ documents: [] });
         const scope = mockApiGetHmms(fakeHMMData);
-        renderWithMemoryRouter(<HMMList />);
+        renderWithRouter(<HMM />, path);
 
         expect(await screen.findByText("HMMs")).toBeInTheDocument();
         expect(screen.getByText("No HMMs found.")).toBeInTheDocument();
@@ -47,13 +49,13 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
-            renderWithMemoryRouter(<HMMList />);
+            renderWithRouter(<HMM />, path);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
             expect(screen.getByText("No HMM data available.")).toBeInTheDocument();
             expect(
-                screen.getByText(/You can download and install the official HMM data automatically from our/)
+                screen.getByText(/You can download and install the official HMM data automatically from our/),
             ).toBeInTheDocument();
             expect(screen.getByText("GitHub repository")).toBeInTheDocument();
 
@@ -67,7 +69,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: null });
             mockApiGetAccount(account);
-            renderWithMemoryRouter(<HMMList />);
+            renderWithRouter(<HMM />, path);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
@@ -95,7 +97,7 @@ describe("<HMMList />", () => {
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
             mockApiGetAccount(account);
-            renderWithMemoryRouter(<HMMList />);
+            renderWithRouter(<HMM />, path);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 

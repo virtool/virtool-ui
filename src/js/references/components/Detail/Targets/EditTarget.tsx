@@ -31,7 +31,7 @@ export default function EditTarget({ show, onHide, refId, targets, target }: Edi
         const updatedTargets = map(targets, target =>
             initialTargetName === target.name
                 ? { ...target, name, description, length: toNumber(length), required }
-                : target
+                : target,
         );
 
         mutation.mutate(
@@ -40,7 +40,7 @@ export default function EditTarget({ show, onHide, refId, targets, target }: Edi
                 onSuccess: () => {
                     onHide();
                 },
-            }
+            },
         );
     }
 

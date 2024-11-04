@@ -1,14 +1,13 @@
+import { useCheckAdminRole } from "@administration/hooks";
+import { useFetchUser } from "@administration/queries";
+import { AdministratorRoles } from "@administration/types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Alert, device, Icon, InitialIcon, Link, LoadingPlaceholder } from "@base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
-import { useLocationState } from "@utils/hooks";
+import { useSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { Link, match } from "react-router-dom";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { useFetchUser } from "../../administration/queries";
-import { AdministratorRoles } from "../../administration/types";
-import { getFontSize, getFontWeight } from "../../app/theme";
-import { Alert, device, Icon, InitialIcon, LoadingPlaceholder } from "../../base";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
 import UserGroups from "./UserGroups";
@@ -49,20 +48,18 @@ const UserDetailTitle = styled.div`
     }
 `;
 
-type UserDetailProps = {
-    /** Match object containing path information */
-    match: match<string>;
-};
-
 /**
  * The detailed view of a user
  */
-export default function UserDetail({ match }: UserDetailProps) {
-    const [locationState, setLocationState] = useLocationState();
-    const { data, isPending } = useFetchUser(match.params["userId"]);
+export default function UserDetail() {
+    const { userId } = useSearchParams<{ userId: string }>();
+    const { data, isPending } = useFetchUser(userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
-        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL
+        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
     );
+
+    const [openActivateUser, setOpenActivateUser] = useUrlSearchParam("openActivateUser");
+    const [openDeactivateUser, setOpenDeactivateUser] = useUrlSearchParam("openDeactivateUser");
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -108,13 +105,13 @@ export default function UserDetail({ match }: UserDetailProps) {
                 <UserActivationBanner
                     buttonText="Deactivate"
                     noun="deactivate"
-                    onClick={() => setLocationState({ deactivateUser: true })}
+                    onClick={() => setOpenDeactivateUser("true")}
                 />
             ) : (
                 <UserActivationBanner
                     buttonText="Activate"
                     noun="activate"
-                    onClick={() => setLocationState({ reactivateUser: true })}
+                    onClick={() => setOpenActivateUser("true")}
                 />
             )}
 
@@ -122,15 +119,15 @@ export default function UserDetail({ match }: UserDetailProps) {
                 handle={data.handle}
                 id={data.id}
                 noun="deactivate"
-                onHide={() => setLocationState({ deactivateUser: false })}
-                show={locationState?.deactivateUser}
+                onHide={() => setOpenDeactivateUser("")}
+                show={Boolean(openDeactivateUser)}
             />
             <UserActivation
                 handle={data.handle}
                 id={data.id}
                 noun="activate"
-                onHide={() => setLocationState({ reactivateUser: false })}
-                show={locationState?.reactivateUser}
+                onHide={() => setOpenActivateUser("")}
+                show={Boolean(openActivateUser)}
             />
         </div>
     );
