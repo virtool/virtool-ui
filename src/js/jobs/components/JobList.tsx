@@ -1,14 +1,12 @@
 import { getFontWeight } from "@app/theme";
-import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
-import { ScrollList } from "@base/ScrollList";
-import { useInfiniteFindJobs } from "@jobs/queries";
-import { useListSearchParam } from "@utils/hooks";
-import { flatMap } from "lodash-es";
+import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import { useListSearchParam, usePageParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
-import { JobMinimal, JobSearchResult } from "../types";
 import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";
+import { useFindJobs } from "@jobs/queries";
+import { map } from "lodash";
 
 const JobsListViewContainer = styled.div`
     display: flex;
@@ -35,14 +33,14 @@ const initialState = ["preparing", "running"];
  */
 export default function JobsList() {
     const { values: states } = useListSearchParam("state", initialState);
-    const [urlPage] = useUrlSearchParams<number>("page");
-    const { data, isPending } = useFindJobs(Number(urlPage) || 1, 25, states);
+    const { page } = usePageParam();
+    const { data, isPending } = useFindJobs(page, 5, states);
 
     if (isPending) {
         return <LoadingPlaceholder />;
     }
 
-    const { documents, page, page_count, counts, found_count, total_count } = data;
+    const { documents, page: storedPage, page_count, counts, found_count, total_count } = data;
 
     let inner;
 
@@ -60,7 +58,7 @@ export default function JobsList() {
         );
     } else {
         inner = (
-            <Pagination items={documents} storedPage={page} currentPage={Number(urlPage) || 1} pageCount={page_count}>
+            <Pagination items={documents} storedPage={storedPage} currentPage={page} pageCount={page_count}>
                 <BoxGroup>
                     {map(documents, document => (
                         <Job key={document.id} {...document} />
