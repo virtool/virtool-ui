@@ -8,8 +8,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 export const jobQueryKeys = {
     all: () => ["job"] as const,
     lists: () => ["job", "list"] as const,
-    list: (filters: Array<string | number | string[] | boolean>) => ["job", "list", ...filters] as const,
-    infiniteList: (filters: Array<string[] | string | number>) => ["job", "list", "infinite", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) => ["job", "list", ...filters] as const,
     details: () => ["job", "details"] as const,
     detail: (jobId: string) => ["job", "details", jobId] as const,
 };
@@ -24,7 +23,7 @@ export const jobQueryKeys = {
  */
 export function useFindJobs(page: number, per_page: number, states: string[]) {
     return useQuery<JobSearchResult>({
-        queryKey: jobQueryKeys.list([page, per_page, states]),
+        queryKey: jobQueryKeys.list([page, per_page, ...states]),
         queryFn: () => findJobs(page, per_page, states),
         placeholderData: keepPreviousData,
     });
