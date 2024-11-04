@@ -13,10 +13,6 @@ describe("<RelativeTime />", () => {
         vi.setSystemTime(new Date("2019-04-22T10:20:30Z"));
     });
 
-    afterAll(() => {
-        vi.useRealTimers();
-    });
-
     it("should render 2 months ago", () => {
         renderWithProviders(<RelativeTime time={fakeTime} />);
         expect(screen.getByText("2 months ago")).toHaveTextContent("2 months ago");
@@ -49,6 +45,7 @@ describe("<RelativeTime />", () => {
     });
 
     afterAll(() => {
+        vi.useRealTimers();
         Date = RealDate;
     });
 });
