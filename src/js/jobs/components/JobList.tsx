@@ -34,7 +34,7 @@ const initialState = ["preparing", "running"];
 export default function JobsList() {
     const { values: states } = useListSearchParam("state", initialState);
     const { page } = usePageParam();
-    const { data, isPending } = useFindJobs(page, 5, states);
+    const { data, isPending } = useFindJobs(page, 25, states);
 
     if (isPending) {
         return <LoadingPlaceholder />;
