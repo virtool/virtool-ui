@@ -72,8 +72,10 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   release:
     runs-on: ubuntu-22.04
-    needs: [test]
+    needs: [test, build]
     if: github.event_name == 'push'
+    outputs:
+      git-tag: ${{ steps.semantic.outputs.git-tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -85,6 +87,35 @@ jobs:
         run: npm i semantic-release@v23.0.7 conventional-changelog-conventionalcommits@7.0.2
       - name: Run semantic-release
         env:
-          GITHUB_USERNAME: ${{ secrets.GH_USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
+  ghcr:
+    runs-on: ubuntu-22.04
+    if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag
+    needs: [release]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release.outputs.git-tag }}
+      - name: Write VERSION file
+        run: echo ${{ needs.release.outputs.git-tag }} > VERSION
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract Metadata
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/virtool/ui
+      - name: Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          target: dist
+          labels: ${{ steps.meta.outputs.labels }}
