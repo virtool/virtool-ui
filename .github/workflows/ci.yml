@@ -99,6 +99,9 @@ jobs:
     runs-on: ubuntu-22.04
     if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag != ''
     needs: [release]
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -114,8 +117,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract Metadata
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v5
         with:
+          context: git
           images: ${{ env.REGISTRY }}/virtool/ui
       - name: Build & Push
         uses: docker/build-push-action@v5
