@@ -8,6 +8,9 @@ on:
         branches:
             - "main"
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
   commitlint:
     runs-on: ubuntu-22.04
@@ -93,7 +96,7 @@ jobs:
         run: npx semantic-release
   ghcr:
     runs-on: ubuntu-22.04
-    if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag
+    if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag != ''
     needs: [release]
     steps:
       - name: Checkout
