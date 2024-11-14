@@ -2,6 +2,7 @@ import { forEach } from "lodash-es/lodash";
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 import { map } from "lodash";
+import { split, trimEnd } from "lodash-es";
 
 const getSize = ref => ({
     height: ref.current ? ref.current.offsetHeight : 0,
@@ -307,6 +308,25 @@ export function useDialogParam(key: string) {
 export function usePageParam() {
     const { value: page, setValue: setPage, unsetValue: unsetPage } = useUrlSearchParam<number>("page");
     return { page: page || 1, setPage, unsetPage };
+}
+
+/**
+ * Determine if the pass path matches the start of the URL path
+ *
+ * Note: ignores search params
+ *
+ * @param path - the path to check against the current URL
+ * @param exclude - A list of paths to never match
+ * @returns flag indicating if the passed path matches the current URL
+ */
+export function useMatchPartialPath(path: string, exclude?: string[]) {
+    const [location] = useLocation();
+
+    if (exclude && exclude.includes(location)) {
+        return false;
+    }
+
+    return location.startsWith(trimEnd(split(path, "?")[0], "/"));
 }
 
 type ScrollSyncProps = {

@@ -1,7 +1,7 @@
 import { cn } from "@utils/utils";
 import React from "react";
-import { Link, useLocation } from "wouter";
-import { split, trimEnd } from "lodash-es";
+import { Link } from "wouter";
+import { useMatchPartialPath } from "@utils/hooks";
 
 type TabsLinkProps = {
     children: React.ReactNode;
@@ -14,7 +14,7 @@ type TabsLinkProps = {
  * A navigation link with active state styling
  */
 export function TabsLink({ children, className, isActive, to }: TabsLinkProps) {
-    const [location] = useLocation();
+    isActive = useMatchPartialPath(to) || isActive;
 
     const classname = cn(
         "text-lg",
@@ -31,9 +31,7 @@ export function TabsLink({ children, className, isActive, to }: TabsLinkProps) {
     return (
         <Link
             className={
-                location === trimEnd(split(to, "?")[0], "/") || isActive
-                    ? cn(classname, "border-b-2", "border-b-teal-700", "hover:border-b-teal-700")
-                    : classname
+                isActive ? cn(classname, "border-b-2", "border-b-teal-700", "hover:border-b-teal-700") : classname
             }
             to={to}
         >
