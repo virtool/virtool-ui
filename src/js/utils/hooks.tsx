@@ -322,7 +322,7 @@ export function usePageParam() {
 export function useMatchPartialPath(path: string, exclude?: string[]) {
     const [location] = useLocation();
 
-    if (exclude && exclude.includes(location)) {
+    if (exclude?.includes(location)) {
         return false;
     }
 
