@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "@base";
 import { useMatchPartialPath } from "@utils/hooks";
 
-const navBarkLinkClassName = cn(
+const navBarLinkClassName = cn(
     "text-white",
     "cursor-pointer",
     "flex",
@@ -22,8 +22,8 @@ export function NavBarLink({ children, to }) {
             to={to}
             className={active =>
                 isActive || active
-                    ? cn(navBarkLinkClassName, "text-white", "bg-primary-dark", "hover:text-white")
-                    : navBarkLinkClassName
+                    ? cn(navBarLinkClassName, "text-white", "bg-primary-dark", "hover:text-white", "focus:text-white")
+                    : navBarLinkClassName
             }
         >
             {children}
