@@ -289,7 +289,7 @@ export const [useUrlSearchParam, useListSearchParam] = createUseUrlSearchParam()
  * @param key - the key that the dialog visiblity state is stored under
  */
 export function useDialogParam(key: string) {
-    const { value: open, setValue, unsetValue } = useUrlSearchParam<boolean>(key);
+    const { value: open, setValue, unsetValue } = useUrlSearchParam<boolean | undefined>(key);
 
     function setDialogValue(value: boolean) {
         if (value) {
@@ -299,7 +299,7 @@ export function useDialogParam(key: string) {
         }
     }
 
-    return { open, setOpen: setDialogValue };
+    return { open: open || false, setOpen: setDialogValue };
 }
 
 /**
