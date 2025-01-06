@@ -1,5 +1,5 @@
 import { OTU } from "@otus/types";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useNaiveUrlSearchParam, useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";
 
 /**
@@ -9,7 +9,7 @@ import { find } from "lodash-es";
  * @returns The active isolate
  */
 export function useGetActiveIsolate(otu: OTU) {
-    const { value: activeIsolate } = useUrlSearchParam<string>("activeIsolate");
+    const { value: activeIsolate } = useNaiveUrlSearchParam("activeIsolate");
 
     const activeIsolateId = activeIsolate || otu.isolates[0]?.id;
     return otu.isolates.length ? find(otu.isolates, { id: activeIsolateId }) : null;
