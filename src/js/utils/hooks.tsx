@@ -190,12 +190,12 @@ function castSearchParamValue(value: string) {
 }
 
 function createUseUrlSearchParam(): [
-    <T extends SearchParam>(
+    (
         key: string,
-        defaultValue?: T,
+        defaultValue?: SearchParam,
     ) => {
-        value: T;
-        setValue: (value: T) => void;
+        value: string;
+        setValue: (value: SearchParam) => void;
         unsetValue: () => void;
     },
     <T extends SearchParam>(key: string, defaultValues?: T[]) => { values: T[]; setValues: (newValue: T[]) => void },
@@ -203,16 +203,16 @@ function createUseUrlSearchParam(): [
     const cache = { search: "" };
 
     /**
-     * Store and retrieve component state in a URL search parameter
+     * Store and retrieve stringified component state in a URL search parameter
      *
      * @param key - The search parameter key to be managed
      * @param defaultValue - The default value to use when the search parameter key is not present in the URL
      * @returns The current value and a functions for setting the URL search parameter
      */
-    function useUrlSearchParam<T extends SearchParam>(
+    function useNaiveUrlSearchParam(
         key: string,
-        defaultValue?: T,
-    ): { value: T; setValue: (value: T) => void; unsetValue: () => void } {
+        defaultValue?: SearchParam,
+    ): { value: string; setValue: (value: SearchParam) => void; unsetValue: () => void } {
         cache.search = useSearch();
         const [location] = useLocation();
 
@@ -238,8 +238,8 @@ function createUseUrlSearchParam(): [
         }
 
         return {
-            value: castSearchParamValue(value) as T,
-            setValue: (value: T) => setURLSearchParam(String(value)),
+            value,
+            setValue: (value: SearchParam) => setURLSearchParam(String(value)),
             unsetValue,
         };
     }
@@ -278,15 +278,29 @@ function createUseUrlSearchParam(): [
         };
     }
 
-    return [useUrlSearchParam, useListSearchParam];
+    return [useNaiveUrlSearchParam, useListSearchParam];
 }
 
-export const [useUrlSearchParam, useListSearchParam] = createUseUrlSearchParam();
+export const [useNaiveUrlSearchParam, useListSearchParam] = createUseUrlSearchParam();
+
+/**
+ * Store and retrieve component state in a URL search parameter
+ *
+ * @param key - The search parameter key to be managed
+ * @param defaultValue - The default value to use when the search parameter key is not present in the URL
+ * @returns The current value and a functions for setting the URL search parameter
+ */
+export function useUrlSearchParam<T extends SearchParam>(key: string, defaultValue?: T) {
+    const { value, ...rest } = useNaiveUrlSearchParam(key, defaultValue);
+
+    return { value: castSearchParamValue(value) as T, ...rest };
+}
 
 /**
  * Store dialog visibility in within the URL search params
  *
- * @param key - the key that the dialog visiblity state is stored under
+ * @param key - the key that the dialog visibility state is stored under
+ * @returns Whether the dialog is open and a callback to set the dialog state
  */
 export function useDialogParam(key: string) {
     const { value: open, setValue, unsetValue } = useUrlSearchParam<boolean | undefined>(key);
@@ -304,6 +318,7 @@ export function useDialogParam(key: string) {
 
 /**
  * Store the current page of a resources into the URL search params
+ * @returns The current page and a function to change the page
  */
 export function usePageParam() {
     const { value: page, setValue: setPage, unsetValue: unsetPage } = useUrlSearchParam<number>("page");
