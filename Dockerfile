@@ -7,7 +7,6 @@ COPY src /build/src
 
 FROM base AS dev
 WORKDIR /build
-CMD ["npx", "vite", "serve"]
 
 FROM base AS build
 WORKDIR /build

@@ -55,4 +55,7 @@ export default defineConfig({
         }),
     ],
     root: "src",
+    server: {
+        allowedHosts: ["virtool.local"],
+    },
 });
