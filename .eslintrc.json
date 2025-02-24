@@ -48,7 +48,7 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "plugins": ["react", "react-hooks", "@typescript-eslint", "vitest"],
+    "plugins": ["react", "react-hooks", "@typescript-eslint", "@vitest/eslint-plugin"],
     "settings": {
         "react": {
             "version": "detect"
