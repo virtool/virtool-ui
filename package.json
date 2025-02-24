@@ -81,7 +81,7 @@
         "eslint-plugin-react": "^7.37.4",
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-vitest": "^0.5.4",
-        "jsdom": "^21.1.0",
+        "jsdom": "^26.0.0",
         "nock": "^13.5.5",
         "postcss": "^8.4.45",
         "prettier": "^3.5.2",
