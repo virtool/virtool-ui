@@ -1,5 +1,6 @@
 import React from "react";
-import { InputSearch, Toolbar } from "../../base";
+import { InputSearch } from "@base";
+import Toolbar from "@base/Toolbar";
 
 type HMMToolbarProps = {
     /** Current search term used for filtering */
@@ -14,7 +15,9 @@ type HMMToolbarProps = {
 export default function HMMToolbar({ term, onChange }: HMMToolbarProps) {
     return (
         <Toolbar>
-            <InputSearch placeholder="Definition" onChange={onChange} value={term} />
+            <div className="flex-grow">
+                <InputSearch placeholder="Definition" onChange={onChange} value={term} />
+            </div>
         </Toolbar>
     );
 }

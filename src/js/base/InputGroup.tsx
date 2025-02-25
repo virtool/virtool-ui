@@ -1,11 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import { InputContext } from "./InputContext";
-
-export const StyledInputGroup = styled.div`
-    margin: 0 0 15px;
-    padding-bottom: 10px;
-`;
+import { cn } from "@utils/utils";
 
 type InputGroupProps = {
     children: React.ReactNode;
@@ -13,8 +8,10 @@ type InputGroupProps = {
     error?: string;
 };
 
-export const InputGroup = ({ children, className, error }: InputGroupProps) => (
-    <InputContext.Provider value={error}>
-        <StyledInputGroup className={className}>{children}</StyledInputGroup>
-    </InputContext.Provider>
-);
+export default function InputGroup({ children, className, error }: InputGroupProps) {
+    return (
+        <InputContext.Provider value={error}>
+            <div className={cn(className, "mb-4", "pb-2")}>{children}</div>
+        </InputContext.Provider>
+    );
+}

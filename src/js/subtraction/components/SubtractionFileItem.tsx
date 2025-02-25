@@ -9,10 +9,7 @@ type StyledSubtractionFileItemProps = {
 
 const StyledSubtractionFileItem = styled(SelectBoxGroupSection)<StyledSubtractionFileItemProps>`
     display: flex;
-
-    ${Attribution} {
-        margin-left: auto;
-    }
+    justify-content: space-between;
 `;
 
 type SubtractionFileItemProps = {

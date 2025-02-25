@@ -1,5 +1,5 @@
 import styled, { DefaultTheme } from "styled-components";
-import { getBorder } from "../app/theme";
+import { getBorder } from "@app/theme";
 
 export type BoxGroupSectionProps = {
     active?: boolean;

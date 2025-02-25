@@ -1,6 +1,6 @@
 FROM node:20-alpine AS base
 WORKDIR /build
-COPY package.json package-lock.json postcss.config.js tailwind.config.js tsconfig.json vite.config.js ./
+COPY package.json package-lock.json tailwind.config.js tsconfig.json vite.config.js ./
 RUN npm i
 COPY src/server /build/server
 COPY src /build/src

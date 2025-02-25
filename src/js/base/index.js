@@ -1,3 +1,8 @@
+import InputGroup from "@base/InputGroup.js";
+import InputLabel from "@base/InputLabel.js";
+
+export { InputLabel, InputGroup };
+
 export { Accordion } from "./accordion/Accordion";
 export { AccordionContent } from "./accordion/AccordionContent";
 export { AccordionTrigger } from "./accordion/AccordionTrigger";
@@ -54,11 +59,8 @@ export { Input } from "./Input";
 export { InputContainer } from "./InputContainer";
 export { InputContext } from "./InputContext";
 export { InputError } from "./InputError";
-export { InputGroup } from "./InputGroup";
 export { InputIcon } from "./InputIcon";
 export { InputIconButton } from "./InputIconButton";
-export { InputLabel } from "./InputLabel";
-export { InputLevel } from "./InputLevel";
 export { InputLoading } from "./InputLoading";
 export { InputPassword } from "./InputPassword";
 export { InputSearch } from "./InputSearch";
@@ -101,7 +103,6 @@ export { Table } from "./Table";
 export { Tabs } from "./Tabs";
 export { TabsLink } from "./TabsLink";
 export { TextArea } from "./TextArea";
-export { Toolbar } from "./Toolbar";
 export { ViewHeader } from "./ViewHeader";
 export { ViewHeaderAttribution } from "./ViewHeaderAttribution";
 export { ViewHeaderIcons } from "./ViewHeaderIcons";

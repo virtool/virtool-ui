@@ -1,8 +1,9 @@
 import { usePageParam } from "@utils/hooks";
 import { filter } from "lodash-es";
 import React, { useState } from "react";
-import { useFetchAccount } from "../../../account/queries";
-import { InputSearch, LoadingPlaceholder, NoneFoundBox, Pagination, Toolbar } from "../../../base";
+import { useFetchAccount } from "@account/queries";
+import { InputSearch, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import Toolbar from "@base/Toolbar";
 import { useFindUsers, useGetAdministratorRoles } from "../../queries";
 import { CreateAdministrator } from "./Create";
 import { AdministratorItem } from "./Item";
@@ -27,7 +28,14 @@ export const ManageAdministrators = () => {
     return (
         <>
             <Toolbar>
-                <InputSearch name="search" aria-label="search" value={term} onChange={e => setTerm(e.target.value)} />
+                <div className="flex-grow">
+                    <InputSearch
+                        name="search"
+                        aria-label="search"
+                        value={term}
+                        onChange={e => setTerm(e.target.value)}
+                    />
+                </div>
                 <CreateAdministrator />
             </Toolbar>
             <Pagination

@@ -1,6 +1,7 @@
-import { Dropdown, DropdownButton, DropdownMenuContent, DropdownMenuDownload, Icon, InputSearch, Toolbar } from "@base";
+import { Dropdown, DropdownButton, DropdownMenuContent, DropdownMenuDownload, Icon, InputSearch } from "@base";
 import { ButtonToggle } from "@base/ButtonToggle";
 import { Tooltip } from "@base/Tooltip";
+import Toolbar from "@base/Toolbar";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";

@@ -1,19 +1,16 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import tailwindcss from "tailwindcss";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
+import { resolve } from "path";
 import { createHtmlPlugin } from "vite-plugin-html";
+import EntryShakingPlugin from "vite-plugin-entry-shaking";
 
 export default defineConfig({
     build: {
         outDir: "../dist",
         sourcemap: true,
-    },
-    css: {
-        postcss: {
-            plugins: [tailwindcss()],
-        },
     },
     resolve: {
         alias: {
@@ -46,6 +43,9 @@ export default defineConfig({
     },
     plugins: [
         createHtmlPlugin({}),
+        EntryShakingPlugin({
+            targets: [{ glob: "src/base/index.ts" }],
+        }),
         react({
             include: "**/*.{jsx,tsx}",
         }),
@@ -53,6 +53,7 @@ export default defineConfig({
             org: "cfia-virtool",
             project: "cloud-ui",
         }),
+        tailwindcss(),
     ],
     root: "src",
     server: {
