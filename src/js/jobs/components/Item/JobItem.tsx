@@ -10,14 +10,10 @@ import { JobStatus } from "./JobStatus";
 const StyledJobItem = styled(BoxGroupSection)`
     align-items: center;
     display: flex;
-    padding-top: 15px;
-    padding-bottom: 15px;
     font-size: ${getFontSize("lg")};
     line-height: 1;
-
-    ${Attribution} {
-        font-size: ${getFontSize("md")};
-    }
+    padding-bottom: 15px;
+    padding-top: 15px;
 `;
 
 const JobLink = styled(Link)`
