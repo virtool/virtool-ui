@@ -26,11 +26,11 @@ export function Label({ children, className, color = "gray" }: LabelProps) {
                 "whitespace-nowrap",
                 "last-of-type:m-0",
                 {
-                    "bg-blue-600": color == "blue",
-                    "bg-green-600": color == "green",
-                    "bg-gray-500": color == "gray",
-                    "bg-purple-600": color == "purple",
-                    "bg-red-600": color == "red",
+                    "bg-blue-600": color === "blue",
+                    "bg-green-600": color === "green",
+                    "bg-gray-500": color === "gray",
+                    "bg-purple-600": color === "purple",
+                    "bg-red-600": color === "red",
                 },
                 className,
             )}
