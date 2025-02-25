@@ -1,6 +1,7 @@
 import fs from "fs";
 import semver from "semver/preload.js";
 import superagent from "superagent";
+import { logger } from "./logging";
 
 const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
 const minApiVersion = packageJson.virtool.minApiVersion;
@@ -16,10 +17,12 @@ export async function verifyApiVersion(apiUrl: string) {
 
     if (!semver.gte(response.version, minApiVersion)) {
         console.error(
-            `Found incompatible API version ${response.version}. Require ${minApiVersion}.`,
+            `found incompatible API version ${response.version}. Require ${minApiVersion}.`,
         );
         process.exit(1);
     }
 
-    console.log(`Found compatible API version ${response.version}`);
+    logger.log("info", "found compatible api version", {
+        version: response.version,
+    });
 }
