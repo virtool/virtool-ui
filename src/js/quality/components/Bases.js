@@ -72,13 +72,13 @@ export function drawBasesChart(element, data, baseWidth) {
     ];
 
     // Append the areas to the chart.
-    forEach(areas, (area) => {
+    forEach(areas, (a) => {
         svg.append("path")
-            .attr("d", area.func(data))
+            .attr("d", a.func(data))
             .attr("class", "graph-line")
             .attr(
                 "class",
-                `quality-area quality-area-${area.name === "quartile" ? "green" : "yellow"}`,
+                `quality-area quality-area-${a.name === "quartile" ? "green" : "yellow"}`,
             );
     });
 
