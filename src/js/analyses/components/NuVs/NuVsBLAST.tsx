@@ -30,7 +30,12 @@ export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
 
         if (blast.ready) {
             if (blast.result.hits.length) {
-                return <BLASTResults hits={blast.result.hits} onBlast={handleBlast} />;
+                return (
+                    <BLASTResults
+                        hits={blast.result.hits}
+                        onBlast={handleBlast}
+                    />
+                );
             }
 
             return (
@@ -41,7 +46,13 @@ export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
             );
         }
 
-        return <BLASTInProgress interval={blast.interval} lastCheckedAt={blast.last_checked_at} rid={blast.rid} />;
+        return (
+            <BLASTInProgress
+                interval={blast.interval}
+                lastCheckedAt={blast.last_checked_at}
+                rid={blast.rid}
+            />
+        );
     }
 
     return (

@@ -12,7 +12,10 @@ import {
 import { JobState } from "@jobs/types";
 import { cn } from "@utils/utils";
 import React from "react";
-import { useCheckReferenceUpdates, useUpdateRemoteReference } from "../../queries";
+import {
+    useCheckReferenceUpdates,
+    useUpdateRemoteReference,
+} from "../../queries";
 
 function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
     const hasUpdate = !updating && release.newer;
@@ -26,8 +29,13 @@ function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
         <BoxGroupSection>
             <div className="flex items-center justify-between gap-1.5">
                 <div className="flex items-center gap-1.5">
-                    <Icon className={colorClassname} name={release.newer ? "arrow-alt-circle-up" : "check"} />
-                    <strong className={colorClassname}>{release.newer ? "Update Available" : "Up-to-date"}</strong>
+                    <Icon
+                        className={colorClassname}
+                        name={release.newer ? "arrow-alt-circle-up" : "check"}
+                    />
+                    <strong className={colorClassname}>
+                        {release.newer ? "Update Available" : "Up-to-date"}
+                    </strong>
 
                     {hasUpdate && (
                         <>
@@ -35,7 +43,8 @@ function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
                             <span>{release.name}</span>
                             <span>/</span>
                             <span>
-                                Published <RelativeTime time={release.published_at} />
+                                Published{" "}
+                                <RelativeTime time={release.published_at} />
                             </span>
                         </>
                     )}
@@ -44,13 +53,18 @@ function Release({ release, checking, updating, onCheckUpdates, onUpdate }) {
                 <div className="flex items-center">
                     {release.retrieved_at && (
                         <span>
-                            Last checked <RelativeTime time={release.retrieved_at} />
+                            Last checked{" "}
+                            <RelativeTime time={release.retrieved_at} />
                         </span>
                     )}
                     {checking ? (
                         <Loader size="14px" />
                     ) : (
-                        <IconButton name="sync" onClick={onCheckUpdates} tip="Refresh" />
+                        <IconButton
+                            name="sync"
+                            onClick={onCheckUpdates}
+                            tip="Refresh"
+                        />
                     )}
                 </div>
             </div>
@@ -80,7 +94,10 @@ export default function Remote({ detail }) {
 
     const slug = remotes_from.slug;
 
-    const { mutate: checkReferenceUpdate, isPending: isPendingReferenceUpdate } = useCheckReferenceUpdates(id);
+    const {
+        mutate: checkReferenceUpdate,
+        isPending: isPendingReferenceUpdate,
+    } = useCheckReferenceUpdates(id);
     const { mutate: updateRemoteReference } = useUpdateRemoteReference(id);
 
     return (

@@ -3,7 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
+import {
+    createFakeReference,
+    mockApiEditReference,
+} from "../../../../../../tests/fake/references";
 import AddTarget from "../AddTarget";
 
 describe("<AddTarget />", () => {
@@ -32,9 +35,15 @@ describe("<AddTarget />", () => {
     it("should render required when clicked", async () => {
         renderWithProviders(<AddTarget {...props} />);
 
-        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "unchecked");
+        expect(screen.getByRole("checkbox")).toHaveAttribute(
+            "data-state",
+            "unchecked",
+        );
         await userEvent.click(screen.getByRole("checkbox"));
-        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "checked");
+        expect(screen.getByRole("checkbox")).toHaveAttribute(
+            "data-state",
+            "checked",
+        );
     });
 
     it("should render error when submitted without name", async () => {
@@ -59,7 +68,10 @@ describe("<AddTarget />", () => {
         renderWithProviders(<AddTarget {...props} />);
 
         await userEvent.type(screen.getByLabelText("Name"), "Foo");
-        await userEvent.type(screen.getByLabelText("Description"), "Foo description");
+        await userEvent.type(
+            screen.getByLabelText("Description"),
+            "Foo description",
+        );
         await userEvent.clear(screen.getByLabelText("Length"));
         await userEvent.type(screen.getByLabelText("Length"), "10");
         await userEvent.click(screen.getByRole("checkbox"));

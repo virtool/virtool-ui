@@ -14,15 +14,22 @@ type IndexOTUsProps = {
  * A list of OTUs associated with the index
  */
 export default function IndexOTUs({ otus, refId }: IndexOTUsProps) {
-    const otuComponents = map(otus, otu => (
-        <IndexOTU key={otu.id} refId={refId} name={otu.name} id={otu.id} changeCount={otu.change_count} />
+    const otuComponents = map(otus, (otu) => (
+        <IndexOTU
+            key={otu.id}
+            refId={refId}
+            name={otu.name}
+            id={otu.id}
+            changeCount={otu.change_count}
+        />
     ));
 
     return (
         <BoxGroup>
             <BoxGroupHeader>
                 <h2>
-                    OTUs <BoxGroupHeaderBadge>{otus.length}</BoxGroupHeaderBadge>
+                    OTUs{" "}
+                    <BoxGroupHeaderBadge>{otus.length}</BoxGroupHeaderBadge>
                 </h2>
             </BoxGroupHeader>
             {otuComponents}

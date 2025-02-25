@@ -1,5 +1,10 @@
 import { ErrorResponse } from "@/types/types";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { fetchHmm, installHmm, listHmms } from "./api";
 import { HMM, HMMInstalled, HMMSearchResults } from "./types";
 
@@ -9,7 +14,8 @@ import { HMM, HMMInstalled, HMMSearchResults } from "./types";
 export const hmmQueryKeys = {
     all: () => ["hmm"] as const,
     lists: () => ["hmm", "list"] as const,
-    list: (filters: Array<string | number | boolean | string[]>) => ["hmm", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean | string[]>) =>
+        ["hmm", "list", ...filters] as const,
     details: () => ["hmm", "details"] as const,
     detail: (hmmId: string) => ["hmm", "details", hmmId] as const,
 };

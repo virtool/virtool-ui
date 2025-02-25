@@ -62,7 +62,8 @@ export default function Email({ email }: EmailProps) {
                                 {...register("email", {
                                     pattern: {
                                         value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                                        message: "Please provide a valid email address",
+                                        message:
+                                            "Please provide a valid email address",
                                     },
                                 })}
                             />

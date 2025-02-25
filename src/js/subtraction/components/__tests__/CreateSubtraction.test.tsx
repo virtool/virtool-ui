@@ -28,7 +28,10 @@ describe("<CreateSubtraction />", () => {
     });
 
     it("should render error when submitted with no name or file entered", async () => {
-        const file = createFakeFile({ name: "subtraction.fq.gz", type: FileType.subtraction });
+        const file = createFakeFile({
+            name: "subtraction.fq.gz",
+            type: FileType.subtraction,
+        });
         mockApiListFiles([file]);
         renderWithRouter(<CreateSubtraction />, path);
 
@@ -40,12 +43,19 @@ describe("<CreateSubtraction />", () => {
     });
 
     it("should submit correct values when all fields selected", async () => {
-        const file = createFakeFile({ name: "testsubtraction1", type: FileType.subtraction });
+        const file = createFakeFile({
+            name: "testsubtraction1",
+            type: FileType.subtraction,
+        });
         const name = "testSubtractionname";
         const nickname = "testSubtractionNickname";
 
         mockApiListFiles([file]);
-        const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
+        const createSubtractionScope = mockApiCreateSubtraction(
+            name,
+            nickname,
+            file.id,
+        );
 
         renderWithRouter(<CreateSubtraction />, path);
 
@@ -58,13 +68,24 @@ describe("<CreateSubtraction />", () => {
     });
 
     it("should restore form values from session storage", async () => {
-        const file = createFakeFile({ name: "testSubtraction1", type: FileType.subtraction });
+        const file = createFakeFile({
+            name: "testSubtraction1",
+            type: FileType.subtraction,
+        });
         const name = "testSubtractionName";
         const nickname = "testSubtractionNickname";
 
-        setSessionStorage("createSubtractionFormValues", { name, nickname, uploadId: [file.id] });
+        setSessionStorage("createSubtractionFormValues", {
+            name,
+            nickname,
+            uploadId: [file.id],
+        });
 
-        const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
+        const createSubtractionScope = mockApiCreateSubtraction(
+            name,
+            nickname,
+            file.id,
+        );
         mockApiListFiles([file]);
 
         renderWithRouter(<CreateSubtraction />, path);
@@ -78,12 +99,19 @@ describe("<CreateSubtraction />", () => {
     });
 
     it("should persist values into session storage", async () => {
-        const file = createFakeFile({ name: "ath.fa.gz", type: FileType.subtraction });
+        const file = createFakeFile({
+            name: "ath.fa.gz",
+            type: FileType.subtraction,
+        });
         const name = "Arabidopsis thaliana";
         const nickname = "Thale cress";
 
         mockApiListFiles([file]);
-        const createSubtractionScope = mockApiCreateSubtraction(name, nickname, file.id);
+        const createSubtractionScope = mockApiCreateSubtraction(
+            name,
+            nickname,
+            file.id,
+        );
 
         renderWithRouter(<CreateSubtraction />, path);
 
@@ -91,13 +119,21 @@ describe("<CreateSubtraction />", () => {
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
         await userEvent.click(screen.getByText(/ath/i));
 
-        expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name, nickname, uploadId: [file.id] });
+        expect(getSessionStorage("createSubtractionFormValues")).toEqual({
+            name,
+            nickname,
+            uploadId: [file.id],
+        });
 
         await userEvent.click(screen.getByText(/save/i));
         await waitFor(() => createSubtractionScope.done());
 
         await waitFor(() =>
-            expect(getSessionStorage("createSubtractionFormValues")).toEqual({ name: "", nickname: "", uploadId: [] }),
+            expect(getSessionStorage("createSubtractionFormValues")).toEqual({
+                name: "",
+                nickname: "",
+                uploadId: [],
+            }),
         );
     });
 });

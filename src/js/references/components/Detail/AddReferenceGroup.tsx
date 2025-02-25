@@ -34,8 +34,8 @@ const AddReferenceGroupHeader = styled(DialogTitle)`
 `;
 
 const StyledScrollList = styled(CompactScrollList)`
-    border: ${props => getBorder(props)};
-    border-radius: ${props => props.theme.borderRadius.sm};
+    border: ${(props) => getBorder(props)};
+    border-radius: ${(props) => props.theme.borderRadius.sm};
     overflow-y: auto;
     height: 320px;
 `;
@@ -52,22 +52,31 @@ type AddReferenceGroupProps = {
 /**
  * Displays a dialog for adding a reference member
  */
-export default function AddReferenceGroup({ groups, onHide, refId, show }: AddReferenceGroupProps) {
+export default function AddReferenceGroup({
+    groups,
+    onHide,
+    refId,
+    show,
+}: AddReferenceGroupProps) {
     const mutation = useAddReferenceMember(refId, "group");
     const [term, setTerm] = useState("");
-    const { data, isPending, isFetchingNextPage, fetchNextPage } = useInfiniteFindGroups(25, term);
+    const { data, isPending, isFetchingNextPage, fetchNextPage } =
+        useInfiniteFindGroups(25, term);
 
     if (isPending) {
         return null;
     }
 
     const groupIds = map(groups, "id");
-    const items = flatMap(data.pages, page => page.items);
-    const filteredItems = filter(items, item => !includes(groupIds, item.id));
+    const items = flatMap(data.pages, (page) => page.items);
+    const filteredItems = filter(items, (item) => !includes(groupIds, item.id));
 
     function renderRow(item) {
         return (
-            <StyledAddGroupItem key={item.id} onClick={() => mutation.mutate({ id: item.id })}>
+            <StyledAddGroupItem
+                key={item.id}
+                onClick={() => mutation.mutate({ id: item.id })}
+            >
                 <InitialIcon size="md" handle={item.name} />
                 {item.name}
             </StyledAddGroupItem>
@@ -86,7 +95,11 @@ export default function AddReferenceGroup({ groups, onHide, refId, show }: AddRe
                 <DialogContent>
                     <AddReferenceGroupHeader>Add Group</AddReferenceGroupHeader>
                     <Toolbar>
-                        <InputSearch name="search" value={term} onChange={e => setTerm(e.target.value)} />
+                        <InputSearch
+                            name="search"
+                            value={term}
+                            onChange={(e) => setTerm(e.target.value)}
+                        />
                     </Toolbar>
                     {filteredItems.length ? (
                         <StyledScrollList

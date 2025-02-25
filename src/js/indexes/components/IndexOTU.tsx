@@ -18,7 +18,12 @@ type IndexOTUProps = {
 /**
  * A condensed index OTU item for use in a list of index OTUs
  */
-export default function IndexOTU({ refId, changeCount, id, name }: IndexOTUProps) {
+export default function IndexOTU({
+    refId,
+    changeCount,
+    id,
+    name,
+}: IndexOTUProps) {
     return (
         <StyledIndexOTU>
             <Link to={`/refs/${refId}/otus/${id}`}>{name}</Link>

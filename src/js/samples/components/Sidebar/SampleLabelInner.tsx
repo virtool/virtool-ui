@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledParagraph = styled.div`
-    color: ${props => getColor({ theme: props.theme, color: "greyDarkest" })};
+    color: ${(props) => getColor({ theme: props.theme, color: "greyDarkest" })};
     font-size: ${getFontSize("sm")};
 `;
 
@@ -17,7 +17,11 @@ type SampleLabelInnerProps = {
 /**
  * Styled label item for use in dropdown list of labels
  */
-export default function SampleLabelInner({ color, description, name }: SampleLabelInnerProps) {
+export default function SampleLabelInner({
+    color,
+    description,
+    name,
+}: SampleLabelInnerProps) {
     return (
         <div>
             <SmallSampleLabel color={color} name={name} />

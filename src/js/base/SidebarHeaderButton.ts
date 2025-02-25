@@ -3,10 +3,10 @@ import { boxShadow, getFontSize } from "../app/theme";
 
 export const SidebarHeaderButton = styled.button`
     align-items: center;
-    background-color: ${props => props.theme.color.greyLightest};
+    background-color: ${(props) => props.theme.color.greyLightest};
     border: none;
     border-radius: 50%;
-    color: ${props => props.theme.color.greyDark};
+    color: ${(props) => props.theme.color.greyDark};
     cursor: pointer;
     display: flex;
     font-size: ${getFontSize("md")};
@@ -16,14 +16,14 @@ export const SidebarHeaderButton = styled.button`
 
     &:hover,
     &:focus {
-        background-color: ${props => props.theme.color.greyDark};
+        background-color: ${(props) => props.theme.color.greyDark};
         box-shadow: ${boxShadow.sm};
-        color: ${props => props.theme.color.white};
+        color: ${(props) => props.theme.color.white};
         outline: none;
     }
 
     &:focus {
-        background-color: ${props => props.theme.color.grey};
+        background-color: ${(props) => props.theme.color.grey};
     }
 `;
 

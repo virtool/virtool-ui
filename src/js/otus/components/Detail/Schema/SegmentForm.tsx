@@ -27,7 +27,7 @@ const moleculeTypes = [
 const SegmentFormBody = styled.div`
     display: grid;
     grid-template-columns: 3fr 1fr;
-    grid-column-gap: ${props => props.theme.gap.column};
+    grid-column-gap: ${(props) => props.theme.gap.column};
 `;
 
 type FormValues = {
@@ -49,24 +49,34 @@ type SegmentFormProps = {
 /**
  * Form for creating a segment
  */
-export default function SegmentForm({ segmentName, molecule, required, onSubmit, schema }: SegmentFormProps) {
+export default function SegmentForm({
+    segmentName,
+    molecule,
+    required,
+    onSubmit,
+    schema,
+}: SegmentFormProps) {
     const {
         formState: { errors },
         control,
         register,
         handleSubmit,
     } = useForm<FormValues>({
-        defaultValues: { segmentName: segmentName || "", molecule: molecule || "", required: required !== false },
+        defaultValues: {
+            segmentName: segmentName || "",
+            molecule: molecule || "",
+            required: required !== false,
+        },
     });
 
-    const molecules = map(moleculeTypes, molecule => (
+    const molecules = map(moleculeTypes, (molecule) => (
         <option key={molecule} value={molecule}>
             {molecule || "None"}
         </option>
     ));
 
     return (
-        <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
+        <form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
             <SegmentFormBody>
                 <InputGroup>
                     <InputLabel htmlFor="name">Name</InputLabel>
@@ -74,7 +84,7 @@ export default function SegmentForm({ segmentName, molecule, required, onSubmit,
                         id="name"
                         {...register("segmentName", {
                             required: "Name required",
-                            validate: value =>
+                            validate: (value) =>
                                 find(schema, { name: value }) &&
                                 "Segment names must be unique. This name is currently in use.",
                         })}
@@ -93,7 +103,11 @@ export default function SegmentForm({ segmentName, molecule, required, onSubmit,
                     name="required"
                     control={control}
                     render={({ field: { onChange, value } }) => (
-                        <Checkbox label="Segment Required" checked={value} onClick={() => onChange(!value)} />
+                        <Checkbox
+                            label="Segment Required"
+                            checked={value}
+                            onClick={() => onChange(!value)}
+                        />
                     )}
                 />
 

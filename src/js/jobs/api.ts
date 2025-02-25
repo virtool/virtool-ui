@@ -9,10 +9,14 @@ import { Job, JobSearchResult } from "@jobs/types";
  * @param states - The states to filter the jobs by
  * @returns A promise resolving to a page of job search results
  */
-export function findJobs(page: number, per_page: number, states: string[]): Promise<JobSearchResult> {
+export function findJobs(
+    page: number,
+    per_page: number,
+    states: string[],
+): Promise<JobSearchResult> {
     return Request.get("/jobs")
         .query({ page, per_page, state: states })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -22,5 +26,5 @@ export function findJobs(page: number, per_page: number, states: string[]): Prom
  * @returns A promise resolving to a single job
  */
 export function getJob(jobId: string): Promise<Job> {
-    return Request.get(`/jobs/${jobId}`).then(res => res.body);
+    return Request.get(`/jobs/${jobId}`).then((res) => res.body);
 }

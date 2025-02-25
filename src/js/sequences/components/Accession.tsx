@@ -1,4 +1,12 @@
-import { InputContainer, InputError, InputGroup, InputIconButton, InputLabel, InputLoading, InputSimple } from "@base";
+import {
+    InputContainer,
+    InputError,
+    InputGroup,
+    InputIconButton,
+    InputLabel,
+    InputLoading,
+    InputSimple,
+} from "@base";
 import { getGenbank } from "@otus/api";
 import { forEach } from "lodash-es";
 import React, { useEffect, useState } from "react";
@@ -32,7 +40,7 @@ export function Accession() {
             setSent(true);
 
             getGenbank(accession).then(
-                resp => {
+                (resp) => {
                     const { accession, definition, host, sequence } = resp;
 
                     onAutofill({
@@ -46,7 +54,7 @@ export function Accession() {
                     setSent(false);
                     setNotFound(false);
                 },
-                err => {
+                (err) => {
                     setPending(false);
                     setSent(true);
                     setNotFound(err.status === 404);
@@ -63,15 +71,24 @@ export function Accession() {
             <InputContainer align="right">
                 <InputSimple
                     id="accession"
-                    {...register("accession", { required: "Required Field", onChange: () => setNotFound(false) })}
+                    {...register("accession", {
+                        required: "Required Field",
+                        onChange: () => setNotFound(false),
+                    })}
                 />
                 {pending ? (
                     <InputLoading />
                 ) : (
-                    <InputIconButton name="magic" tip="Auto Fill" onClick={() => setPending(true)} />
+                    <InputIconButton
+                        name="magic"
+                        tip="Auto Fill"
+                        onClick={() => setPending(true)}
+                    />
                 )}
             </InputContainer>
-            <InputError>{notFound ? "Accession not found" : errors.accession?.message}</InputError>
+            <InputError>
+                {notFound ? "Accession not found" : errors.accession?.message}
+            </InputError>
         </InputGroup>
     );
 }

@@ -1,5 +1,12 @@
 import { fontWeight, getFontSize } from "@app/theme";
-import { Icon, InputGroup, InputLabel, Select, SelectButton, SelectContent } from "@base";
+import {
+    Icon,
+    InputGroup,
+    InputLabel,
+    Select,
+    SelectButton,
+    SelectContent,
+} from "@base";
 import { ReferenceTarget } from "@references/types";
 import { map } from "lodash-es";
 import React from "react";
@@ -23,7 +30,7 @@ const TargetFieldLabel = styled(InputLabel)`
 `;
 
 const TargetFieldLabelLock = styled.span`
-    color: ${props => props.theme.color.grey};
+    color: ${(props) => props.theme.color.grey};
     font-weight: ${fontWeight.thick};
     font-size: ${getFontSize("sm")};
     margin-left: auto;
@@ -44,8 +51,12 @@ type TargetFieldProps = {
 export default function TargetField({ targets }: TargetFieldProps) {
     const { control, setValue } = useFormContext();
 
-    const targetSelectOptions = map(targets, target => (
-        <SequenceTarget key={target.name} name={target.name} description={target.description} />
+    const targetSelectOptions = map(targets, (target) => (
+        <SequenceTarget
+            key={target.name}
+            name={target.name}
+            description={target.description}
+        />
     ));
 
     const disabled = targets.length === 0;
@@ -65,7 +76,9 @@ export default function TargetField({ targets }: TargetFieldProps) {
                 <Controller
                     control={control}
                     render={({ field: { onChange, value } }) => {
-                        const targetExists = targets.some(target => target.name === value);
+                        const targetExists = targets.some(
+                            (target) => target.name === value,
+                        );
 
                         if (value && !targetExists && !disabled) {
                             setValue("target", targets[0]?.name);
@@ -75,7 +88,9 @@ export default function TargetField({ targets }: TargetFieldProps) {
                             <Select
                                 disabled={disabled}
                                 value={value}
-                                onValueChange={value => value !== "" && onChange(value)}
+                                onValueChange={(value) =>
+                                    value !== "" && onChange(value)
+                                }
                             >
                                 <SelectButton icon="chevron-down" />
                                 <SelectContent position="popper" align="start">

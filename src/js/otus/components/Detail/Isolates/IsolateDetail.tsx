@@ -15,7 +15,7 @@ import RemoveIsolate from "./RemoveIsolate";
 const IsolateDetailHeader = styled(Box)`
     align-items: center;
     display: flex;
-    font-size: ${props => props.theme.fontSize.lg};
+    font-size: ${(props) => props.theme.fontSize.lg};
     flex-direction: row;
     justify-content: space-between;
 
@@ -61,16 +61,19 @@ export default function IsolateDetail({
     otuId,
     restrictSourceTypes,
 }: IsolateDetailProps) {
-    const { open: openEditIsolate, setOpen: setOpenEditIsolate } = useDialogParam("openEditIsolate");
-    const { open: openRemoveIsolate, setOpen: setOpenRemoveIsolate } = useDialogParam("openRemoveIsolate");
+    const { open: openEditIsolate, setOpen: setOpenEditIsolate } =
+        useDialogParam("openEditIsolate");
+    const { open: openRemoveIsolate, setOpen: setOpenRemoveIsolate } =
+        useDialogParam("openRemoveIsolate");
 
     const mutation = useSetIsolateAsDefault();
 
-    const defaultIsolateLabel = activeIsolate.default && dataType !== "barcode" && (
-        <Label color="green">
-            <Icon name="star" /> Default Isolate
-        </Label>
-    );
+    const defaultIsolateLabel = activeIsolate.default &&
+        dataType !== "barcode" && (
+            <Label color="green">
+                <Icon name="star" /> Default Isolate
+            </Label>
+        );
 
     return (
         <StyledIsolateDetail>
@@ -106,14 +109,20 @@ export default function IsolateDetail({
                                 tip="edit isolate"
                                 onClick={() => setOpenEditIsolate(true)}
                             />
-                            {!activeIsolate.default && dataType !== "barcode" && (
-                                <IconButton
-                                    name="star"
-                                    color="green"
-                                    tip="set as default"
-                                    onClick={() => mutation.mutate({ otuId, isolateId: activeIsolate.id })}
-                                />
-                            )}
+                            {!activeIsolate.default &&
+                                dataType !== "barcode" && (
+                                    <IconButton
+                                        name="star"
+                                        color="green"
+                                        tip="set as default"
+                                        onClick={() =>
+                                            mutation.mutate({
+                                                otuId,
+                                                isolateId: activeIsolate.id,
+                                            })
+                                        }
+                                    />
+                                )}
                             <IconButton
                                 name="trash"
                                 color="red"
@@ -122,7 +131,11 @@ export default function IsolateDetail({
                             />
                         </>
                     )}
-                    <DownloadLink href={`/api/otus/${otuId}/isolates/${activeIsolate.id}.fa`}>FASTA</DownloadLink>
+                    <DownloadLink
+                        href={`/api/otus/${otuId}/isolates/${activeIsolate.id}.fa`}
+                    >
+                        FASTA
+                    </DownloadLink>
                 </div>
             </IsolateDetailHeader>
 

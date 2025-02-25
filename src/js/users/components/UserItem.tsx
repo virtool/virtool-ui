@@ -51,26 +51,45 @@ type UserItemProps = {
 /**
  * A condensed user item for use in a list of users
  */
-export function UserItem({ active, administrator_role, handle, id, primary_group }: UserItemProps): JSX.Element {
+export function UserItem({
+    active,
+    administrator_role,
+    handle,
+    id,
+    primary_group,
+}: UserItemProps): JSX.Element {
     const { hasPermission: canEdit } = useCheckAdminRole(
-        administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+        administrator_role === null
+            ? AdministratorRoles.USERS
+            : AdministratorRoles.FULL,
     );
 
     return (
         <StyledUserItem>
             <UserContainer>
                 <InitialIcon size="lg" handle={handle} />
-                {canEdit ? <UserLink to={`/administration/users/${id}`}>{handle}</UserLink> : <strong>{handle}</strong>}
+                {canEdit ? (
+                    <UserLink to={`/administration/users/${id}`}>
+                        {handle}
+                    </UserLink>
+                ) : (
+                    <strong>{handle}</strong>
+                )}
             </UserContainer>
             <TagContainer>
                 {administrator_role && (
                     <Label color="purple">
-                        <Icon name="user-shield" /> {administrator_role} Administrator
+                        <Icon name="user-shield" /> {administrator_role}{" "}
+                        Administrator
                     </Label>
                 )}
             </TagContainer>
-            <TagContainer>{primary_group && <Label>{primary_group.name}</Label>}</TagContainer>
-            <TagContainer>{!active && <Label color="red">Deactivated</Label>}</TagContainer>
+            <TagContainer>
+                {primary_group && <Label>{primary_group.name}</Label>}
+            </TagContainer>
+            <TagContainer>
+                {!active && <Label color="red">Deactivated</Label>}
+            </TagContainer>
         </StyledUserItem>
     );
 }

@@ -2,7 +2,11 @@ import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeReference, mockApiEditReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import {
+    createFakeReference,
+    mockApiEditReference,
+    mockApiGetReferenceDetail,
+} from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -13,7 +17,9 @@ describe("<Targets />", () => {
 
     beforeEach(() => {
         const reference = createFakeReference({ data_type: "barcode" });
-        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(
+            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+        );
         mockApiGetReferenceDetail(reference);
         props = {
             reference: reference,
@@ -40,7 +46,9 @@ describe("<Targets />", () => {
     it("should render when [canModify=true]", async () => {
         renderWithRouter(<Targets {...props} />);
 
-        expect(await screen.findByRole("button", { name: "modify" })).toBeInTheDocument();
+        expect(
+            await screen.findByRole("button", { name: "modify" }),
+        ).toBeInTheDocument();
     });
 
     it("should render when [canModify=false]", () => {
@@ -71,7 +79,9 @@ describe("<Targets />", () => {
     it("should show modal when edit target is called", async () => {
         renderWithRouter(<Targets {...props} />);
 
-        expect(await screen.findByRole("button", { name: "modify" })).toBeInTheDocument();
+        expect(
+            await screen.findByRole("button", { name: "modify" }),
+        ).toBeInTheDocument();
         await userEvent.click(screen.getByRole("button", { name: "modify" }));
         expect(await screen.findByRole("textbox", { name: "Name" }));
         expect(await screen.findByRole("textbox", { name: "Description" }));
@@ -83,7 +93,9 @@ describe("<Targets />", () => {
         const scope = mockApiEditReference(props.reference, { targets: [] });
         renderWithRouter(<Targets {...props} />);
 
-        expect(await screen.findByRole("button", { name: "remove" })).toBeInTheDocument();
+        expect(
+            await screen.findByRole("button", { name: "remove" }),
+        ).toBeInTheDocument();
         await userEvent.click(screen.getByRole("button", { name: "remove" }));
 
         scope.done();

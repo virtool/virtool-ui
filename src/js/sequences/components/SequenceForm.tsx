@@ -29,7 +29,10 @@ export function SequenceForm() {
 
             <InputGroup>
                 <InputLabel htmlFor="definition">Definition</InputLabel>
-                <InputSimple id="definition" {...register("definition", { required: "Required Field" })} />
+                <InputSimple
+                    id="definition"
+                    {...register("definition", { required: "Required Field" })}
+                />
                 <InputError>{errors.definition?.message}</InputError>
             </InputGroup>
 

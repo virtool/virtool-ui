@@ -29,7 +29,10 @@ type Document = { items: TaskObject[] } | { documents: TaskObject[] };
  * @param selector - A function that returns the task from an instance of the cached item
  * @returns A function that updates the task in the cache
  */
-function listItemUpdater<T extends Document>(task: Task, selector: (cache: TaskObject) => Task) {
+function listItemUpdater<T extends Document>(
+    task: Task,
+    selector: (cache: TaskObject) => Task,
+) {
     return function (cache: InfiniteData<T>): InfiniteData<T> {
         const newCache = cloneDeep(cache);
 
@@ -85,7 +88,10 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
         { queryKey: referenceQueryKeys.lists() },
         listItemUpdater<ReferenceSearchResult>(task, taskSelector),
     );
-    queryClient.setQueriesData({ queryKey: referenceQueryKeys.details() }, updater(task, taskSelector));
+    queryClient.setQueriesData(
+        { queryKey: referenceQueryKeys.details() },
+        updater(task, taskSelector),
+    );
 }
 
 /**
@@ -97,6 +103,6 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
 function HMMStatusUpdater(queryClient: QueryClient, task: Task) {
     queryClient.setQueriesData(
         { queryKey: hmmQueryKeys.lists() },
-        updater<HMMSearchResults>(task, item => get(item, "status.task")),
+        updater<HMMSearchResults>(task, (item) => get(item, "status.task")),
     );
 }

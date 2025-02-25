@@ -11,7 +11,11 @@ describe("<CreateUser />", () => {
         const usernameInput = "Username";
         const passwordInput = "Password";
         const scope = nock("http://localhost")
-            .post("/api/users", { handle: usernameInput, password: passwordInput, forceReset: false })
+            .post("/api/users", {
+                handle: usernameInput,
+                password: passwordInput,
+                forceReset: false,
+            })
             .reply(201, {
                 handle: usernameInput,
                 password: passwordInput,
@@ -39,7 +43,13 @@ describe("<CreateUser />", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        expect(screen.getByText("Please specify a username")).toBeInTheDocument();
-        expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument();
+        expect(
+            screen.getByText("Please specify a username"),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Password does not meet minimum length requirement (8)",
+            ),
+        ).toBeInTheDocument();
     });
 });

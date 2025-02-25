@@ -16,10 +16,14 @@ type RemoveReferenceProps = {
  * Displays a banner for removing a reference
  */
 export default function RemoveReference({ id, name }: RemoveReferenceProps) {
-    const { open: openRemoveReference, setOpen: setOpenRemoveReference } = useDialogParam("openRemoveReference");
+    const { open: openRemoveReference, setOpen: setOpenRemoveReference } =
+        useDialogParam("openRemoveReference");
     const navigate = useNavigate();
 
-    const { hasPermission: canRemove } = useCheckReferenceRight(id, ReferenceRight.remove);
+    const { hasPermission: canRemove } = useCheckReferenceRight(
+        id,
+        ReferenceRight.remove,
+    );
     const mutation = useRemoveReference();
 
     const handleClick = useCallback(

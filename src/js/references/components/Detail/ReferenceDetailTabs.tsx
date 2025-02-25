@@ -9,7 +9,10 @@ type ReferenceDetailTabsProps = {
 /**
  * Displays tabs to navigate through the detailed view of a reference
  */
-export default function ReferenceDetailTabs({ id, otuCount }: ReferenceDetailTabsProps) {
+export default function ReferenceDetailTabs({
+    id,
+    otuCount,
+}: ReferenceDetailTabsProps) {
     return (
         <Tabs>
             <TabsLink to={`/refs/${id}/manage`}>Manage</TabsLink>

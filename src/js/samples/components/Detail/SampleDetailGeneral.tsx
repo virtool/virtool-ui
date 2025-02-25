@@ -84,7 +84,10 @@ export default function SampleDetailGeneral() {
                     <BoxGroup>
                         <BoxGroupHeader>
                             <h2>Library</h2>
-                            <p>Information about the sequencing reads in this sample.</p>
+                            <p>
+                                Information about the sequencing reads in this
+                                sample.
+                            </p>
                         </BoxGroupHeader>
                         <BoxGroupTable>
                             <tbody>
@@ -94,11 +97,17 @@ export default function SampleDetailGeneral() {
                                 </tr>
                                 <tr>
                                     <th>Read Count</th>
-                                    <td>{numbro(quality.count).format("0.0 a")}</td>
+                                    <td>
+                                        {numbro(quality.count).format("0.0 a")}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Library Type</th>
-                                    <td>{getLibraryTypeDisplayName(data.library_type)}</td>
+                                    <td>
+                                        {getLibraryTypeDisplayName(
+                                            data.library_type,
+                                        )}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Length Range</th>
@@ -106,7 +115,11 @@ export default function SampleDetailGeneral() {
                                 </tr>
                                 <tr>
                                     <th>GC Content</th>
-                                    <td>{numbro(quality.gc / 100).format("0.0 %")}</td>
+                                    <td>
+                                        {numbro(quality.gc / 100).format(
+                                            "0.0 %",
+                                        )}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Paired</th>
@@ -129,7 +142,11 @@ export default function SampleDetailGeneral() {
             </ContainerNarrow>
 
             <ContainerSide className="pl-[15px]">
-                <Sidebar sampleId={data.id} sampleLabels={data.labels} defaultSubtractions={data.subtractions} />
+                <Sidebar
+                    sampleId={data.id}
+                    sampleLabels={data.labels}
+                    defaultSubtractions={data.subtractions}
+                />
             </ContainerSide>
 
             <EditSample sample={data} />

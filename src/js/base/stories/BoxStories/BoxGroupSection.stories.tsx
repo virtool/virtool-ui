@@ -34,7 +34,9 @@ function Template(args) {
 function ClickableTemplate(args) {
     return (
         <BoxGroup>
-            <BoxGroupHeader>These are clickable BoxGroupSections!</BoxGroupHeader>
+            <BoxGroupHeader>
+                These are clickable BoxGroupSections!
+            </BoxGroupHeader>
             <BoxGroupSection {...args}>First BoxGroupSection</BoxGroupSection>
             <BoxGroupSection {...args}>Second BoxGroupSection</BoxGroupSection>
             <BoxGroupSection {...args}>Third BoxGroupSection</BoxGroupSection>

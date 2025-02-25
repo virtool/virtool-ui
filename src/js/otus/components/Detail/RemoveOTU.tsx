@@ -14,7 +14,8 @@ type RemoveOTUProps = {
  */
 export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
     const navigate = useNavigate();
-    const { open: openRemoveOTU, setOpen: setOpenRemoveOTU } = useDialogParam("openRemoveOTU");
+    const { open: openRemoveOTU, setOpen: setOpenRemoveOTU } =
+        useDialogParam("openRemoveOTU");
     const mutation = useRemoveOTU();
 
     function handleConfirm() {

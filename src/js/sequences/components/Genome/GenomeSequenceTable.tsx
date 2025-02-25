@@ -11,7 +11,12 @@ type GenomeSequenceTableProps = {
 /**
  * Displays information about the genome sequence in the form of a table
  */
-export default function GenomeSequenceTable({ definition, host, segment, sequence }: GenomeSequenceTableProps) {
+export default function GenomeSequenceTable({
+    definition,
+    host,
+    segment,
+    sequence,
+}: GenomeSequenceTableProps) {
     return (
         <SequenceTable definition={definition} host={host} sequence={sequence}>
             <tr>

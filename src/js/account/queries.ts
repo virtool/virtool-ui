@@ -30,7 +30,10 @@ export const accountKeys = {
  * @returns UseQueryResult object containing the account data
  */
 export function useFetchAccount() {
-    return useQuery<Account>({ queryKey: accountKeys.all(), queryFn: () => fetchAccount() });
+    return useQuery<Account>({
+        queryKey: accountKeys.all(),
+        queryFn: () => fetchAccount(),
+    });
 }
 
 /**
@@ -57,8 +60,13 @@ export function useUpdateAccount() {
 export function useChangePassword() {
     const queryClient = useQueryClient();
 
-    return useMutation<User, ErrorResponse, { old_password: string; password: string }>({
-        mutationFn: ({ old_password, password }) => changePassword(old_password, password),
+    return useMutation<
+        User,
+        ErrorResponse,
+        { old_password: string; password: string }
+    >({
+        mutationFn: ({ old_password, password }) =>
+            changePassword(old_password, password),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: accountKeys.all() });
         },
@@ -71,7 +79,10 @@ export function useChangePassword() {
  * @returns A list of API keys for the current user
  */
 export function useFetchAPIKeys() {
-    return useQuery<APIKeyMinimal[]>({ queryKey: accountKeys.details(), queryFn: () => getAPIKeys() });
+    return useQuery<APIKeyMinimal[]>({
+        queryKey: accountKeys.details(),
+        queryFn: () => getAPIKeys(),
+    });
 }
 
 /**
@@ -82,7 +93,11 @@ export function useFetchAPIKeys() {
 export function useCreateAPIKey() {
     const queryClient = useQueryClient();
 
-    return useMutation<APIKeyMinimal, ErrorResponse, { name: string; permissions: Permissions }>({
+    return useMutation<
+        APIKeyMinimal,
+        ErrorResponse,
+        { name: string; permissions: Permissions }
+    >({
         mutationFn: ({ name, permissions }) => createAPIKey(name, permissions),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: accountKeys.all() });
@@ -98,8 +113,13 @@ export function useCreateAPIKey() {
 export function useUpdateAPIKey() {
     const queryClient = useQueryClient();
 
-    return useMutation<APIKeyMinimal, ErrorResponse, { keyId: string; permissions: Permissions }>({
-        mutationFn: ({ keyId, permissions }) => updateAPIKey(keyId, permissions),
+    return useMutation<
+        APIKeyMinimal,
+        ErrorResponse,
+        { keyId: string; permissions: Permissions }
+    >({
+        mutationFn: ({ keyId, permissions }) =>
+            updateAPIKey(keyId, permissions),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: accountKeys.all() });
         },

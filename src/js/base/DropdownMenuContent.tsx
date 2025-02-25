@@ -10,7 +10,10 @@ type DropdownMenuContentProps = {
 /**
  * Displays the content of the dropdown menu to the users
  */
-export function DropdownMenuContent({ children, className }: DropdownMenuContentProps) {
+export function DropdownMenuContent({
+    children,
+    className,
+}: DropdownMenuContentProps) {
     return (
         <DropdownMenu.Content
             className={cn(

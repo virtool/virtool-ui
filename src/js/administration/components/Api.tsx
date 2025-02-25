@@ -16,9 +16,14 @@ export default function Api({ settings: { enable_api } }: ApiProps) {
     const mutation = useUpdateSettings();
 
     return (
-        <SettingsCheckbox enabled={enable_api} onToggle={() => mutation.mutate({ enable_api: !enable_api })}>
+        <SettingsCheckbox
+            enabled={enable_api}
+            onToggle={() => mutation.mutate({ enable_api: !enable_api })}
+        >
             <h2>JSON API</h2>
-            <small>Enable API access for clients other than Virtool. See </small>
+            <small>
+                Enable API access for clients other than Virtool. See{" "}
+            </small>
             <ExternalLink href="https://www.virtool.ca/docs/api/overview/authentication/">
                 API documentation
             </ExternalLink>

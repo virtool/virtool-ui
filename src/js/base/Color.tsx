@@ -99,11 +99,17 @@ export function Color({ id, value, onChange }: ColorProps) {
             <Input
                 id={id}
                 value={value}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onChange(e.target.value)
+                }
             />
             <div className={cn("flex", "h-9", "mt-2.5")}>
-                {colors.map(color => (
-                    <ColorSquare key={color} color={`#${color}`} onClick={onChange} />
+                {colors.map((color) => (
+                    <ColorSquare
+                        key={color}
+                        color={`#${color}`}
+                        onClick={onChange}
+                    />
                 ))}
             </div>
         </div>

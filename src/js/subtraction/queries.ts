@@ -1,5 +1,10 @@
 import { ErrorResponse } from "@/types/types";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import {
     createSubtraction,
     fetchSubtractionShortlist,
@@ -8,7 +13,11 @@ import {
     removeSubtraction,
     updateSubtraction,
 } from "./api";
-import { Subtraction, SubtractionSearchResult, SubtractionShortlist } from "./types";
+import {
+    Subtraction,
+    SubtractionSearchResult,
+    SubtractionShortlist,
+} from "./types";
 
 /**
  * Factory object for generating subtraction query keys
@@ -16,9 +25,11 @@ import { Subtraction, SubtractionSearchResult, SubtractionShortlist } from "./ty
 export const subtractionQueryKeys = {
     all: () => ["subtraction"] as const,
     lists: () => ["subtraction", "list"] as const,
-    list: (filters: Array<string | number | boolean>) => ["subtraction", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) =>
+        ["subtraction", "list", ...filters] as const,
     details: () => ["subtraction", "details"] as const,
-    detail: (subtractionId: string) => ["subtraction", "details", subtractionId] as const,
+    detail: (subtractionId: string) =>
+        ["subtraction", "details", subtractionId] as const,
     shortlist: () => ["subtraction", "list", "short"] as const,
 };
 
@@ -30,10 +41,17 @@ export const subtractionQueryKeys = {
 export function useCreateSubtraction() {
     const queryClient = useQueryClient();
 
-    return useMutation<Subtraction, unknown, { name: string; nickname: string; uploadId: string }>({
-        mutationFn: ({ name, nickname, uploadId }) => createSubtraction(name, nickname, uploadId),
+    return useMutation<
+        Subtraction,
+        unknown,
+        { name: string; nickname: string; uploadId: string }
+    >({
+        mutationFn: ({ name, nickname, uploadId }) =>
+            createSubtraction(name, nickname, uploadId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: subtractionQueryKeys.lists() });
+            queryClient.invalidateQueries({
+                queryKey: subtractionQueryKeys.lists(),
+            });
         },
     });
 }
@@ -46,7 +64,11 @@ export function useCreateSubtraction() {
  * @param term - The search term to filter the hmms by
  * @returns A page of subtraction search results
  */
-export function useFindSubtractions(page: number, per_page: number, term: string) {
+export function useFindSubtractions(
+    page: number,
+    per_page: number,
+    term: string,
+) {
     return useQuery<SubtractionSearchResult>({
         queryKey: subtractionQueryKeys.list([page, per_page, term]),
         queryFn: () => findSubtractions(page, per_page, term),
@@ -75,10 +97,17 @@ export function useFetchSubtraction(subtractionId: string) {
  */
 export function useUpdateSubtraction(subtractionId: string) {
     const queryClient = useQueryClient();
-    return useMutation<Subtraction, unknown, { name: string; nickname: string }>({
-        mutationFn: ({ name, nickname }) => updateSubtraction(subtractionId, name, nickname),
+    return useMutation<
+        Subtraction,
+        unknown,
+        { name: string; nickname: string }
+    >({
+        mutationFn: ({ name, nickname }) =>
+            updateSubtraction(subtractionId, name, nickname),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: subtractionQueryKeys.detail(subtractionId) });
+            queryClient.invalidateQueries({
+                queryKey: subtractionQueryKeys.detail(subtractionId),
+            });
         },
     });
 }

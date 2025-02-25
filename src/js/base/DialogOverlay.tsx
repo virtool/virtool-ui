@@ -8,7 +8,13 @@ import React from "react";
 export function DialogOverlay() {
     return (
         <DialogPrimitive.Overlay
-            className={cn("data-[state=open]:animate-overlayShow", "bg-gray-500/60", "fixed", "inset-0", "z-40")}
+            className={cn(
+                "data-[state=open]:animate-overlayShow",
+                "bg-gray-500/60",
+                "fixed",
+                "inset-0",
+                "z-40",
+            )}
         />
     );
 }

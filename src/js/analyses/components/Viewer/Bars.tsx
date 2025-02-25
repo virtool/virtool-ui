@@ -6,7 +6,7 @@ import { BarsLegendItem } from "./BarsLegendItem";
 
 const Bar = styled.div`
     border: ${getBorder};
-    border-radius: ${props => props.theme.borderRadius.md};
+    border-radius: ${(props) => props.theme.borderRadius.md};
     display: flex;
     height: 32px;
     margin-bottom: 15px;
@@ -20,12 +20,12 @@ type BarItemProps = {
 
 const BarItem = styled.div<BarItemProps>`
     background-color: ${getColor};
-    flex: ${props => props.size / 100} 0 auto;
+    flex: ${(props) => props.size / 100} 0 auto;
 `;
 
 const EmptyBarItem = styled(BarItem)`
-    background-color: ${props => props.theme.color.white};
-    box-shadow: ${props => props.theme.boxShadow.inset};
+    background-color: ${(props) => props.theme.color.white};
+    box-shadow: ${(props) => props.theme.boxShadow.inset};
 `;
 
 const StyledBars = styled.div`
@@ -40,11 +40,18 @@ export function Bars({ empty, items }) {
                 {map(items, ({ color, count }) => (
                     <BarItem key={color} color={color} size={count} />
                 ))}
-                {empty && <EmptyBarItem key="empty" color="white" size={empty} />}
+                {empty && (
+                    <EmptyBarItem key="empty" color="white" size={empty} />
+                )}
             </Bar>
             <div>
                 {map(items, ({ color, count, title }) => (
-                    <BarsLegendItem key={color} color={color} count={count} title={title} />
+                    <BarsLegendItem
+                        key={color}
+                        color={color}
+                        count={count}
+                        title={title}
+                    />
                 ))}
             </div>
         </StyledBars>

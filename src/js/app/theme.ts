@@ -82,7 +82,8 @@ export const theme: DefaultTheme = {
         yellowDarkest: "#B79A18",
     },
     fontFamily: {
-        monospace: "ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace",
+        monospace:
+            "ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace",
     },
     fontSize: {
         xs: "10px",
@@ -114,7 +115,8 @@ export const theme: DefaultTheme = {
  * @returns a callable for formatting a solid ring of the correct color
  */
 export function getRing(color: string) {
-    return ({ theme }: { theme: DefaultTheme }) => `${theme.ring.sm} ${theme.color[color]}`;
+    return ({ theme }: { theme: DefaultTheme }) =>
+        `${theme.ring.sm} ${theme.color[color]}`;
 }
 
 /**
@@ -124,7 +126,13 @@ export function getRing(color: string) {
  * @param theme - the theme to use
  * @returns css for rendering a dropshadow when active
  */
-export function getActiveShadow({ active, theme }: { active: boolean; theme: DefaultTheme }) {
+export function getActiveShadow({
+    active,
+    theme,
+}: {
+    active: boolean;
+    theme: DefaultTheme;
+}) {
     return active ? `inset 3px 0 0 ${theme.color.primary}` : "none";
 }
 

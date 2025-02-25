@@ -22,7 +22,10 @@ describe("<RemoveSample />", () => {
     });
 
     it("renders when [show=true]", () => {
-        renderWithRouter(<RemoveSample {...props} />, formatPath(path, searchParams));
+        renderWithRouter(
+            <RemoveSample {...props} />,
+            formatPath(path, searchParams),
+        );
 
         expect(screen.getByText("Remove Sample")).toBeInTheDocument();
         expect(screen.getByText("test")).toBeInTheDocument();
@@ -39,7 +42,10 @@ describe("<RemoveSample />", () => {
 
     it("should handle submit when onConfirm() on RemoveDialog is called", async () => {
         const scope = mockApiRemoveSample(props.id);
-        renderWithRouter(<RemoveSample {...props} />, formatPath(path, searchParams));
+        renderWithRouter(
+            <RemoveSample {...props} />,
+            formatPath(path, searchParams),
+        );
 
         await userEvent.click(screen.getByRole("button"));
 

@@ -21,7 +21,11 @@ export function getMsalConfig(): Configuration {
         },
         system: {
             loggerOptions: {
-                loggerCallback: (level: LogLevel, message: string, containsPii: boolean): void => {
+                loggerCallback: (
+                    level: LogLevel,
+                    message: string,
+                    containsPii: boolean,
+                ): void => {
                     if (containsPii) {
                         return;
                     }

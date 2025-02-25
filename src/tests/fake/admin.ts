@@ -22,7 +22,8 @@ export const administratorRoles = [
         name: "Spaces",
     },
     {
-        description: "Create user accounts. Control activation of user accounts.",
+        description:
+            "Create user accounts. Control activation of user accounts.",
         id: "users",
         name: "Users",
     },
@@ -67,15 +68,22 @@ export function createFakeSettings(overrides?: CreateFakeSettings): Settings {
 }
 
 export function mockGetAdministratorRoles() {
-    return nock("http://localhost").get("/api/admin/roles").reply(200, administratorRoles);
+    return nock("http://localhost")
+        .get("/api/admin/roles")
+        .reply(200, administratorRoles);
 }
 
 type mockSetAdministratorRoleAPIProps = {
     user: User;
     new_role: AdministratorRoles;
 };
-export function mockSetAdministratorRoleAPI({ user, new_role }: mockSetAdministratorRoleAPIProps) {
-    return nock("http://localhost").put(`/api/admin/users/${user.id}/role`, { role: new_role }).reply(200);
+export function mockSetAdministratorRoleAPI({
+    user,
+    new_role,
+}: mockSetAdministratorRoleAPIProps) {
+    return nock("http://localhost")
+        .put(`/api/admin/users/${user.id}/role`, { role: new_role })
+        .reply(200);
 }
 
 /**

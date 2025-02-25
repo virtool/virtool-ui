@@ -11,7 +11,10 @@ interface CreateAnalysisSummaryProps {
     sampleCount: number;
 }
 
-export function CreateAnalysisSummary({ indexCount, sampleCount }: CreateAnalysisSummaryProps) {
+export function CreateAnalysisSummary({
+    indexCount,
+    sampleCount,
+}: CreateAnalysisSummaryProps) {
     const product = indexCount * sampleCount;
 
     if (product === 0) {

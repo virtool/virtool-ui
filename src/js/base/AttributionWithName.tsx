@@ -9,10 +9,15 @@ type UnstyledAttributionWithNameProps = {
     verb?: string;
 };
 
-function UnstyledAttributionWithName({ className = "", user, verb = "created" }: UnstyledAttributionWithNameProps) {
+function UnstyledAttributionWithName({
+    className = "",
+    user,
+    verb = "created",
+}: UnstyledAttributionWithNameProps) {
     return (
         <span className={className}>
-            {capitalize(verb)} by {user ? <InitialIcon size="md" handle={user} /> : null} {user}
+            {capitalize(verb)} by{" "}
+            {user ? <InitialIcon size="md" handle={user} /> : null} {user}
         </span>
     );
 }

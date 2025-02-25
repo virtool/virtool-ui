@@ -10,5 +10,11 @@ type ContainerProps = {
  * Main page content container
  */
 export function Container({ children, className }: ContainerProps) {
-    return <div className={cn("max-w-full", "px-9", "pl-28", "w-screen", className)}>{children}</div>;
+    return (
+        <div
+            className={cn("max-w-full", "px-9", "pl-28", "w-screen", className)}
+        >
+            {children}
+        </div>
+    );
 }

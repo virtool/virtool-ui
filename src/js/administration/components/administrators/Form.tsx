@@ -2,8 +2,12 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { InputError, InputGroup, InputLabel, SaveButton } from "../../../base";
-import { User } from "../../../users/types";
-import { useFindUsers, useGetAdministratorRoles, useSetAdministratorRole } from "../../queries";
+import { User } from "@users/types";
+import {
+    useFindUsers,
+    useGetAdministratorRoles,
+    useSetAdministratorRole,
+} from "../../queries";
 import { AdministratorRoles } from "../../types";
 import { RoleSelect } from "./RoleSelect";
 import { UserSelect } from "./UserSelect";
@@ -36,7 +40,9 @@ type AdministratorFormProps = {
     onClose: () => void;
 };
 
-export function AdministratorForm({ onClose }: AdministratorFormProps): JSX.Element {
+export function AdministratorForm({
+    onClose,
+}: AdministratorFormProps): JSX.Element {
     const {
         formState: { errors },
         handleSubmit,
@@ -84,7 +90,12 @@ export function AdministratorForm({ onClose }: AdministratorFormProps): JSX.Elem
                 <RoleSelectContainer>
                     <Controller
                         render={({ field: { onChange, value } }) => (
-                            <RoleSelect onChange={onChange} value={value} roles={roles || []} id="role" />
+                            <RoleSelect
+                                onChange={onChange}
+                                value={value}
+                                roles={roles || []}
+                                id="role"
+                            />
                         )}
                         name="role"
                         control={control}

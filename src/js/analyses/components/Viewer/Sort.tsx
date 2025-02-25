@@ -1,7 +1,13 @@
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Dropdown, DropdownButton, DropdownMenuContent, DropdownMenuItem, Icon } from "../../../base";
+import {
+    Dropdown,
+    DropdownButton,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    Icon,
+} from "../../../base";
 
 const sortKeys = {
     aodp: ["identity"],
@@ -32,7 +38,7 @@ type SortDropdownButtonProps = {
 const SortDropdownButton = styled(DropdownButton)<SortDropdownButtonProps>`
     align-items: center;
     display: flex;
-    width: ${props => sortWidths[props.workflow]};
+    width: ${(props) => sortWidths[props.workflow]};
 
     i {
         margin-left: auto;
@@ -44,7 +50,11 @@ interface AnalysisViewerSortProps {
     sortKey: string;
     onSelect: (key: string) => void;
 }
-export function AnalysisViewerSort({ workflow, sortKey, onSelect }: AnalysisViewerSortProps) {
+export function AnalysisViewerSort({
+    workflow,
+    sortKey,
+    onSelect,
+}: AnalysisViewerSortProps) {
     return (
         <Dropdown>
             <SortDropdownButton workflow={workflow}>
@@ -54,7 +64,7 @@ export function AnalysisViewerSort({ workflow, sortKey, onSelect }: AnalysisView
                 <Icon name="caret-down" />
             </SortDropdownButton>
             <DropdownMenuContent>
-                {map(sortKeys[workflow], key => (
+                {map(sortKeys[workflow], (key) => (
                     <DropdownMenuItem key={key} onSelect={() => onSelect(key)}>
                         {sortTitles[key]}
                     </DropdownMenuItem>

@@ -27,7 +27,8 @@ type EditSampleProps = {
  * Displays a dialog for editing the sample
  */
 export default function EditSample({ sample }: EditSampleProps) {
-    const { open: openEditSample, setOpen: setOpenEditSample } = useDialogParam("openEditSample");
+    const { open: openEditSample, setOpen: setOpenEditSample } =
+        useDialogParam("openEditSample");
     const mutation = useUpdateSample(sample.id);
 
     const { register, handleSubmit } = useForm({
@@ -41,16 +42,25 @@ export default function EditSample({ sample }: EditSampleProps) {
     });
 
     return (
-        <Dialog open={openEditSample} onOpenChange={() => setOpenEditSample(false)}>
+        <Dialog
+            open={openEditSample}
+            onOpenChange={() => setOpenEditSample(false)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Edit Sample</DialogTitle>
                     <form
-                        onSubmit={handleSubmit(values =>
+                        onSubmit={handleSubmit((values) =>
                             mutation.mutate(
                                 {
-                                    update: pick(values, ["name", "isolate", "host", "locale", "notes"]),
+                                    update: pick(values, [
+                                        "name",
+                                        "isolate",
+                                        "host",
+                                        "locale",
+                                        "notes",
+                                    ]),
                                 },
                                 {
                                     onSuccess: () => {
@@ -64,12 +74,17 @@ export default function EditSample({ sample }: EditSampleProps) {
                             <InputLabel htmlFor="name">Name</InputLabel>
                             <InputSimple id="name" {...register("name")} />
                             <InputError>
-                                {mutation.isError && (mutation.error.response.body.message || "Required Field")}
+                                {mutation.isError &&
+                                    (mutation.error.response.body.message ||
+                                        "Required Field")}
                             </InputError>
                         </InputGroup>
                         <InputGroup>
                             <InputLabel htmlFor="isolate">Isolate</InputLabel>
-                            <InputSimple id="isolate" {...register("isolate")} />
+                            <InputSimple
+                                id="isolate"
+                                {...register("isolate")}
+                            />
                         </InputGroup>
                         <InputGroup>
                             <InputLabel htmlFor="host">Host</InputLabel>

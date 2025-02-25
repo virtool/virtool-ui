@@ -1,18 +1,26 @@
 import { cn } from "@/utils/utils";
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query";
+import {
+    FetchNextPageOptions,
+    InfiniteQueryObserverResult,
+} from "@tanstack/react-query";
 import { map } from "lodash-es";
 import React, { useEffect } from "react";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 
 function getScrollRatio(): number {
-    return (window.innerHeight + window.scrollY) / document.documentElement.scrollHeight;
+    return (
+        (window.innerHeight + window.scrollY) /
+        document.documentElement.scrollHeight
+    );
 }
 
 type ScrollListProps = {
     /** Tailwind CSS classes */
     className?: string;
     /** A function which initiates fetching the next page */
-    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    fetchNextPage: (
+        options?: FetchNextPageOptions,
+    ) => Promise<InfiniteQueryObserverResult>;
     /** Whether there is another page of data available */
     hasNextPage: boolean;
     /** Whether a new page is being fetched */
@@ -50,7 +58,7 @@ export function ScrollList({
         return () => window.removeEventListener("scroll", handleFetchNextPage);
     }, [isFetchingNextPage, fetchNextPage]);
 
-    const entries = map(items, item => renderRow(item));
+    const entries = map(items, (item) => renderRow(item));
 
     return (
         <div className={cn("relative", "z-0", className)}>

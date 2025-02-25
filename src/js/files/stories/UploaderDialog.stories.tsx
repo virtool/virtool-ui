@@ -8,7 +8,8 @@ const meta: Meta<typeof UploaderDialog> = {
     parameters: {
         docs: {
             description: {
-                component: "A dialog that displays the progress of file uploads.",
+                component:
+                    "A dialog that displays the progress of file uploads.",
             },
             story: {
                 iframeHeight: 500,
@@ -59,7 +60,11 @@ const Template: Story = {
     render: ({ remaining, speed, uploads }) => {
         return (
             <div className="w-96">
-                <UploaderDialog remaining={remaining} speed={speed} uploads={uploads} />
+                <UploaderDialog
+                    remaining={remaining}
+                    speed={speed}
+                    uploads={uploads}
+                />
             </div>
         );
     },

@@ -2,7 +2,12 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
 import { toNumber } from "lodash-es";
 import React from "react";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../../base";
+import {
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+} from "../../../../base";
 import { ReferenceTarget } from "../../../types";
 import { TargetForm } from "./TargetForm";
 
@@ -19,7 +24,12 @@ type AddTargetProps = {
 /**
  * Displays a dialog for adding a target
  */
-export default function AddTarget({ refId, targets, show, onHide }: AddTargetProps) {
+export default function AddTarget({
+    refId,
+    targets,
+    show,
+    onHide,
+}: AddTargetProps) {
     const { mutation } = useUpdateReference(refId);
     const { reset } = mutation;
 
@@ -55,7 +65,13 @@ export default function AddTarget({ refId, targets, show, onHide }: AddTargetPro
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Add Target</DialogTitle>
-                    <TargetForm onSubmit={onSubmit} error={mutation.isError && mutation.error.response.body[0].msg} />
+                    <TargetForm
+                        onSubmit={onSubmit}
+                        error={
+                            mutation.isError &&
+                            mutation.error.response.body[0].msg
+                        }
+                    />
                 </DialogContent>
             </DialogPortal>
         </Dialog>

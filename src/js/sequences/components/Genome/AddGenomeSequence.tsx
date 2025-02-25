@@ -18,16 +18,32 @@ type AddGenomeSequenceProps = {
 /**
  * Displays dialog to add a genome sequence
  */
-export default function AddGenomeSequence({ isolateId, otuId, refId, schema, sequences }: AddGenomeSequenceProps) {
-    const { open: openAddSequence, setOpen: setOpenAddSequence } = useDialogParam("openAddSequence");
+export default function AddGenomeSequence({
+    isolateId,
+    otuId,
+    refId,
+    schema,
+    sequences,
+}: AddGenomeSequenceProps) {
+    const { open: openAddSequence, setOpen: setOpenAddSequence } =
+        useDialogParam("openAddSequence");
     const mutation = useAddSequence(otuId);
 
     const referencedSegmentNames = compact(map(sequences, "segment"));
-    const segments = schema.filter(segment => !referencedSegmentNames.includes(segment.name));
+    const segments = schema.filter(
+        (segment) => !referencedSegmentNames.includes(segment.name),
+    );
 
     function onSubmit({ accession, definition, host, sequence, segment }) {
         mutation.mutate(
-            { isolateId, accession, definition, host, segment, sequence: sequence.toUpperCase() },
+            {
+                isolateId,
+                accession,
+                definition,
+                host,
+                segment,
+                sequence: sequence.toUpperCase(),
+            },
             {
                 onSuccess: () => {
                     setOpenAddSequence(false);
@@ -37,7 +53,10 @@ export default function AddGenomeSequence({ isolateId, otuId, refId, schema, seq
     }
 
     return (
-        <Dialog open={openAddSequence} onOpenChange={() => setOpenAddSequence(false)}>
+        <Dialog
+            open={openAddSequence}
+            onOpenChange={() => setOpenAddSequence(false)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

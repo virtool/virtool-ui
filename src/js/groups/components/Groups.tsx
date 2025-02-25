@@ -5,7 +5,12 @@ import { useDialogParam } from "@utils/hooks";
 import { find, sortBy } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useFetchGroup, useListGroups, useRemoveGroup, useUpdateGroup } from "../queries";
+import {
+    useFetchGroup,
+    useListGroups,
+    useRemoveGroup,
+    useUpdateGroup,
+} from "../queries";
 import Create from "./CreateGroup";
 import { GroupMembers } from "./GroupMembers";
 import { GroupPermissions } from "./GroupPermissions";
@@ -27,13 +32,14 @@ const GroupsHeader = styled.div`
 const NoneSelectedContainer = styled(BoxGroup)`
     display: flex;
     flex-direction: column;
-    background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
+    background-color: ${(props) =>
+        getColor({ theme: props.theme, color: "greyLightest" })};
     flex: 1 1 auto;
     height: 300px;
 `;
 
 export const NoneSelected = styled.div`
-    color: ${props => props.theme.color.greyDarkest};
+    color: ${(props) => props.theme.color.greyDarkest};
     position: absolute;
     top: 50%;
     left: 50%;
@@ -80,14 +86,21 @@ export default function Groups() {
                         <InputHeader
                             id="name"
                             value={selectedGroup.name}
-                            onSubmit={name => updateGroupMutation.mutate({ id: selectedGroup.id, name })}
+                            onSubmit={(name) =>
+                                updateGroupMutation.mutate({
+                                    id: selectedGroup.id,
+                                    name,
+                                })
+                            }
                         />
                         <GroupPermissions selectedGroup={selectedGroup} />
                         <GroupMembers members={selectedGroup.users} />
                         <RemoveBanner
                             message="Permanently delete this group."
                             buttonText="Delete"
-                            onClick={() => removeMutation.mutate({ id: selectedGroup.id })}
+                            onClick={() =>
+                                removeMutation.mutate({ id: selectedGroup.id })
+                            }
                         />
                     </div>
                 </ManageGroupsContainer>

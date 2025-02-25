@@ -3,7 +3,10 @@ import { CompactScrollList } from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { File, FileResponse, FileType } from "@files/types";
 import { InfiniteData } from "@tanstack/react-query";
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from "@tanstack/react-query/";
+import {
+    FetchNextPageOptions,
+    InfiniteQueryObserverResult,
+} from "@tanstack/react-query/";
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -30,7 +33,9 @@ type SubtractionFileSelectorProps = {
     error: string;
 
     /** Fetches the next page of data */
-    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    fetchNextPage: (
+        options?: FetchNextPageOptions,
+    ) => Promise<InfiniteQueryObserverResult>;
 
     /** Whether the data is fetched */
     isPending: boolean;
@@ -54,7 +59,7 @@ export function SubtractionFileSelector({
 }: SubtractionFileSelectorProps) {
     useValidateFiles(FileType.subtraction, selected, onClick);
 
-    const items = flatMap(files.pages, page => page.items);
+    const items = flatMap(files.pages, (page) => page.items);
 
     function renderRow(item: File) {
         return (

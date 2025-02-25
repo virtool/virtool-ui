@@ -9,5 +9,5 @@ import { Request } from "@app/request";
 export function postDevCommand(command: string) {
     return Request.post("/dev")
         .send({ command })
-        .then(res => res.body);
+        .then((res) => res.body);
 }

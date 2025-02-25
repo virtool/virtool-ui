@@ -12,7 +12,8 @@ describe("<SubtractionFiles />", () => {
         props = {
             files: [
                 {
-                    download_url: "/api/subtractions/xl8faqqz/files/subtraction.fa.gz",
+                    download_url:
+                        "/api/subtractions/xl8faqqz/files/subtraction.fa.gz",
                     id: 1,
                     name: "foo",
                     size: 36461731,
@@ -20,7 +21,8 @@ describe("<SubtractionFiles />", () => {
                     type: "fasta",
                 },
                 {
-                    download_url: "/api/subtractions/k66fpdyy/files/subtraction.3.bt2",
+                    download_url:
+                        "/api/subtractions/k66fpdyy/files/subtraction.3.bt2",
                     id: 2,
                     name: "bar",
                     size: 3257,
@@ -35,13 +37,19 @@ describe("<SubtractionFiles />", () => {
         props.files = [];
         renderWithProviders(<SubtractionFiles {...props} />);
 
-        expect(screen.getByText("No subtraction files found")).toBeInTheDocument();
+        expect(
+            screen.getByText("No subtraction files found"),
+        ).toBeInTheDocument();
     });
 
     it("should render", () => {
         renderWithProviders(<SubtractionFiles {...props} />);
 
         expect(screen.getByText("Files")).toBeInTheDocument();
-        expect(screen.getByText("Data files available to workflows using this subtraction.")).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Data files available to workflows using this subtraction.",
+            ),
+        ).toBeInTheDocument();
     });
 });

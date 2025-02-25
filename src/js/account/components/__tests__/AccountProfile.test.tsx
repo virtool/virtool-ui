@@ -9,7 +9,9 @@ import AccountProfile from "../AccountProfile";
 
 describe("<AccountProfile />", () => {
     it("should render when administrator", async () => {
-        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        const account = createFakeAccount({
+            administrator_role: AdministratorRoles.FULL,
+        });
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
@@ -40,7 +42,9 @@ describe("<AccountProfile />", () => {
     });
 
     it("should handle email changes", async () => {
-        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        const account = createFakeAccount({
+            administrator_role: AdministratorRoles.FULL,
+        });
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
@@ -53,7 +57,9 @@ describe("<AccountProfile />", () => {
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(emailInput).toHaveValue("invalid");
-        expect(screen.getByText("Please provide a valid email address")).toBeInTheDocument();
+        expect(
+            screen.getByText("Please provide a valid email address"),
+        ).toBeInTheDocument();
 
         await userEvent.clear(emailInput);
         await userEvent.type(emailInput, "virtool.devs@gmail.com");
@@ -61,7 +67,9 @@ describe("<AccountProfile />", () => {
     });
 
     it("should handle password changes", async () => {
-        const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        const account = createFakeAccount({
+            administrator_role: AdministratorRoles.FULL,
+        });
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
@@ -74,7 +82,9 @@ describe("<AccountProfile />", () => {
         await userEvent.type(newPasswordInput, "long_enough_password");
         await userEvent.click(screen.getByRole("button", { name: "Change" }));
 
-        expect(screen.getByText("Please provide your old password")).toBeInTheDocument();
+        expect(
+            screen.getByText("Please provide your old password"),
+        ).toBeInTheDocument();
 
         await userEvent.clear(newPasswordInput);
         await userEvent.type(oldPasswordInput, "expected_password");
@@ -84,6 +94,10 @@ describe("<AccountProfile />", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Change" }));
 
-        expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Password does not meet minimum length requirement (8)",
+            ),
+        ).toBeInTheDocument();
     });
 });

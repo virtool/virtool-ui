@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { aodpWorkflow, getCompatibleWorkflows, iimiWorkflow, nuvsWorkflow, pathoscopeWorkflow } from "../workflows";
+import {
+    aodpWorkflow,
+    getCompatibleWorkflows,
+    iimiWorkflow,
+    nuvsWorkflow,
+    pathoscopeWorkflow,
+} from "../workflows";
 
 describe("getCompatibleWorkflows()", () => {
     it("should return aodp when [dataType='barcode']", () => {
@@ -14,6 +20,10 @@ describe("getCompatibleWorkflows()", () => {
 
     it("should return pathoscope_bowtie and nuvs when [dataType='genome'] and [hasHmm=true]", () => {
         const result = getCompatibleWorkflows("genome", true);
-        expect(result).toEqual([pathoscopeWorkflow, nuvsWorkflow, iimiWorkflow]);
+        expect(result).toEqual([
+            pathoscopeWorkflow,
+            nuvsWorkflow,
+            iimiWorkflow,
+        ]);
     });
 });

@@ -1,3 +1,5 @@
+import tailwindcssAnimate from "tailwindcss-animate";
+
 export default {
     content: ["./src/js/**/*.{html,js,jsx,ts,tsx}"],
     prefix: "",
@@ -18,8 +20,14 @@ export default {
                     to: { opacity: "1" },
                 },
                 contentShow: {
-                    from: { opacity: "0", transform: "translate(-50%, -48%) scale(0.96)" },
-                    to: { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
+                    from: {
+                        opacity: "0",
+                        transform: "translate(-50%, -48%) scale(0.96)",
+                    },
+                    to: {
+                        opacity: "1",
+                        transform: "translate(-50%, -50%) scale(1)",
+                    },
                 },
                 slideDown: {
                     "0%": { opacity: "0", transform: "translateY(-10px)" },
@@ -33,5 +41,5 @@ export default {
             },
         },
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [tailwindcssAnimate],
 };

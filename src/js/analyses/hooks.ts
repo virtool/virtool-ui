@@ -19,8 +19,11 @@ export function useSortAndFilterPathoscopeHits(detail, maxReadLength) {
     }
 
     if (searchParams.get("filterOtus") === "true") {
-        hits = reject(hits, hit => {
-            return hit.pi * detail.results.readCount < (hit.length * 0.8) / maxReadLength;
+        hits = reject(hits, (hit) => {
+            return (
+                hit.pi * detail.results.readCount <
+                (hit.length * 0.8) / maxReadLength
+            );
         });
     }
 
@@ -48,7 +51,7 @@ export function useSortAndFilterNuVsHits(detail) {
     }
 
     if (searchParams.get("filterSequences") === "true") {
-        hits = reject(hits, hit => hit.e === undefined);
+        hits = reject(hits, (hit) => hit.e === undefined);
     }
 
     let sortedHits;
@@ -63,7 +66,8 @@ export function useSortAndFilterNuVsHits(detail) {
 }
 
 export function useGetActiveHit(matches) {
-    const { value: activeHit, setValue: setActiveHit } = useUrlSearchParam<string>("activeHit");
+    const { value: activeHit, setValue: setActiveHit } =
+        useUrlSearchParam<string>("activeHit");
 
     if (activeHit !== null) {
         const hit = find(matches, { id: Number(activeHit) });

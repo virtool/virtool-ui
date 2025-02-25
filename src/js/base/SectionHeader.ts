@@ -10,7 +10,7 @@ export const SectionHeader = styled.header`
     }
 
     p {
-        color: ${props => props.theme.color.greyDarkest};
+        color: ${(props) => props.theme.color.greyDarkest};
         font-size: ${getFontSize("lg")};
         font-weight: ${getFontWeight("thick")};
     }

@@ -16,7 +16,12 @@ type SampleMultiSelectLabel = {
 /**
  * Displays labels for the selected samples and indicate whether each label applies to all selected samples
  */
-export function SampleMultiSelectLabel({ className, color, name, partiallySelected }: SampleMultiSelectLabel) {
+export function SampleMultiSelectLabel({
+    className,
+    color,
+    name,
+    partiallySelected,
+}: SampleMultiSelectLabel) {
     return (
         <BaseSampleLabel className={className} color={color}>
             {color && <Icon name={partiallySelected ? "adjust" : "circle"} />}

@@ -20,7 +20,12 @@ type IndexItemIconProps = {
  * @param job - The related job object
  * @returns The index item's icon
  */
-export function IndexItemIcon({ activeId, id, ready, job }: IndexItemIconProps) {
+export function IndexItemIcon({
+    activeId,
+    id,
+    ready,
+    job,
+}: IndexItemIconProps) {
     if (ready && id !== activeId) {
         return null;
     }
@@ -30,7 +35,11 @@ export function IndexItemIcon({ activeId, id, ready, job }: IndexItemIconProps) 
             {ready ? (
                 <Icon name="check" color="green" />
             ) : (
-                <ProgressCircle progress={job?.progress || 0} state={job?.state || JobState.waiting} size={sizes.md} />
+                <ProgressCircle
+                    progress={job?.progress || 0}
+                    state={job?.state || JobState.waiting}
+                    size={sizes.md}
+                />
             )}
             <span className="font-medium">{ready ? "Active" : "Building"}</span>
         </div>

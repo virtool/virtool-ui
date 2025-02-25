@@ -7,7 +7,7 @@ import "./nonce";
 import "./style.css";
 
 if (window.virtool.sentryDsn !== "SENTRY_DSN") {
-    window.captureException = error => Sentry.captureException(error);
+    window.captureException = (error) => Sentry.captureException(error);
 
     Sentry.init({
         dsn: window.virtool.sentryDsn,
@@ -15,7 +15,7 @@ if (window.virtool.sentryDsn !== "SENTRY_DSN") {
         tracesSampleRate: 0.3,
     });
 } else {
-    window.captureException = error => console.error(error);
+    window.captureException = (error) => console.error(error);
 }
 
 window.virtool.b2c = { use: false };

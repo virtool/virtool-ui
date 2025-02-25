@@ -7,5 +7,5 @@ import { Request } from "./request";
  * @returns The root data information
  */
 export function rootData(): Promise<Root> {
-    return Request.get("/").then(res => res.body);
+    return Request.get("/").then((res) => res.body);
 }

@@ -24,7 +24,11 @@ type PermissionItemProps = {
 export function PermissionItem({ permission, value }: PermissionItemProps) {
     return (
         <StyledPermissionItem aria-label={`${permission}:${value}`}>
-            <StyledPermissionIcon name={value ? "check" : "times"} color={value ? "green" : "red"} fixedWidth />
+            <StyledPermissionIcon
+                name={value ? "check" : "times"}
+                color={value ? "green" : "red"}
+                fixedWidth
+            />
             <code>{permission}</code>
         </StyledPermissionItem>
     );

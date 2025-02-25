@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import styled from "styled-components";
 
 const SequenceFieldTextArea = styled(TextArea)`
-    font-family: ${props => props.theme.fontFamily.monospace};
+    font-family: ${(props) => props.theme.fontFamily.monospace};
     text-transform: uppercase;
 `;
 
@@ -29,7 +29,8 @@ export default function SequenceField() {
                     required: "Required Field",
                     pattern: {
                         value: /^[ATCGNRYKM]*$/,
-                        message: "Sequence should only contain the characters: ATCGNRYKM",
+                        message:
+                            "Sequence should only contain the characters: ATCGNRYKM",
                     },
                 })}
             />

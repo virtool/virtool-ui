@@ -27,13 +27,24 @@ export default function Indexes() {
             <RebuildAlert refId={refId} />
             <RebuildIndex refId={refId} />
             {documents.length ? (
-                <Pagination items={documents} storedPage={storedPage} currentPage={page} pageCount={page_count}>
+                <Pagination
+                    items={documents}
+                    storedPage={storedPage}
+                    currentPage={page}
+                    pageCount={page_count}
+                >
                     <BoxGroup>
-                        {map(documents, document => (
+                        {map(documents, (document) => (
                             <IndexItem
                                 index={document}
                                 refId={refId}
-                                activeId={get(find(documents, { ready: true, has_files: true }), "id")}
+                                activeId={get(
+                                    find(documents, {
+                                        ready: true,
+                                        has_files: true,
+                                    }),
+                                    "id",
+                                )}
                             />
                         ))}
                     </BoxGroup>

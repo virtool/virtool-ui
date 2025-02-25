@@ -45,12 +45,25 @@ type ReferenceMembersProps = {
 /**
  * Displays a component for managing who can access a reference by users or groups
  */
-export default function ReferenceMembers({ members, noun, refId }: ReferenceMembersProps) {
-    const { open: openAdd, setOpen: setOpenAdd } = useDialogParam(`openAdd${noun}`);
-    const { value: editId, setValue: setEditId, unsetValue: unsetEditId } = useUrlSearchParam<string>(`edit${noun}Id`);
+export default function ReferenceMembers({
+    members,
+    noun,
+    refId,
+}: ReferenceMembersProps) {
+    const { open: openAdd, setOpen: setOpenAdd } = useDialogParam(
+        `openAdd${noun}`,
+    );
+    const {
+        value: editId,
+        setValue: setEditId,
+        unsetValue: unsetEditId,
+    } = useUrlSearchParam<string>(`edit${noun}Id`);
 
     const mutation = useRemoveReferenceUser(refId, noun);
-    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
+    const { hasPermission: canModify } = useCheckReferenceRight(
+        refId,
+        ReferenceRight.modify,
+    );
 
     function handleHide() {
         setOpenAdd(false);
@@ -65,18 +78,22 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 <ReferenceMembersHeader>
                     <h2>
                         {plural}
-                        {canModify && <NewMemberLink onClick={() => setOpenAdd(true)}>Add {noun}</NewMemberLink>}
+                        {canModify && (
+                            <NewMemberLink onClick={() => setOpenAdd(true)}>
+                                Add {noun}
+                            </NewMemberLink>
+                        )}
                     </h2>
                     <p>Manage membership and rights for reference {plural}.</p>
                 </ReferenceMembersHeader>
                 {members.length ? (
-                    map(members, member => (
+                    map(members, (member) => (
                         <MemberItem
                             key={member.id}
                             {...member}
                             canModify={canModify}
-                            onEdit={id => setEditId(String(id))}
-                            onRemove={id => mutation.mutate({ id })}
+                            onEdit={(id) => setEditId(String(id))}
+                            onRemove={(id) => mutation.mutate({ id })}
                         />
                     ))
                 ) : (
@@ -86,7 +103,12 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 )}
             </BoxGroup>
             {noun === "user" ? (
-                <AddReferenceUser users={members as ReferenceUser[]} onHide={handleHide} refId={refId} show={openAdd} />
+                <AddReferenceUser
+                    users={members as ReferenceUser[]}
+                    onHide={handleHide}
+                    refId={refId}
+                    show={openAdd}
+                />
             ) : (
                 <AddReferenceGroup
                     groups={members as ReferenceGroup[]}
@@ -96,7 +118,7 @@ export default function ReferenceMembers({ members, noun, refId }: ReferenceMemb
                 />
             )}
             <EditReferenceMember
-                member={find(members, member => String(member.id) === editId)}
+                member={find(members, (member) => String(member.id) === editId)}
                 noun={noun}
                 refId={refId}
             />

@@ -13,7 +13,10 @@ import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
 import { useCreateAnalysis } from "../../queries";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
-import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisForm";
+import {
+    CreateAnalysisForm,
+    CreateAnalysisFormValues,
+} from "./CreateAnalysisForm";
 import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
 
@@ -27,7 +30,10 @@ type CreateAnalysisProps = {
 /**
  * Dialog for creating an analysis
  */
-export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) {
+export default function CreateAnalysis({
+    hmms,
+    sampleId,
+}: CreateAnalysisProps) {
     const {
         value: createAnalysisType,
         setValue: setCreateAnalysisType,
@@ -36,32 +42,58 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
 
     const createAnalysis = useCreateAnalysis();
 
-    const { data: subtractionShortlist, isPending: isPendingSubtractionShortlist } =
-        useFetchSubtractionsShortlist(true);
-    const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+    const {
+        data: subtractionShortlist,
+        isPending: isPendingSubtractionShortlist,
+    } = useFetchSubtractionsShortlist(true);
+    const { data: sample, isPending: isPendingSample } =
+        useFetchSample(sampleId);
     const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
     const { data: mlModels, isPending: isPendingMLModels } = useFindModels();
 
-    if (isPendingMLModels || isPendingSubtractionShortlist || isPendingSample || isPendingIndexes) {
+    if (
+        isPendingMLModels ||
+        isPendingSubtractionShortlist ||
+        isPendingSample ||
+        isPendingIndexes
+    ) {
         return null;
     }
 
     const dataType = sample.library_type === "amplicon" ? "barcode" : "genome";
-    const defaultSubtractions = sample.subtractions.map(subtraction => subtraction.id);
-    const subtractionOptions = map(keysIn(subtractionShortlist), key => {
+    const defaultSubtractions = sample.subtractions.map(
+        (subtraction) => subtraction.id,
+    );
+    const subtractionOptions = map(keysIn(subtractionShortlist), (key) => {
         return {
             ...subtractionShortlist[key],
-            isDefault: includes(defaultSubtractions, subtractionShortlist[key].id),
+            isDefault: includes(
+                defaultSubtractions,
+                subtractionShortlist[key].id,
+            ),
         };
     });
-    const compatibleIndexes = map(groupBy(indexes, "reference.id"), group => maxBy(group, "version"));
-    const compatibleWorkflows = getCompatibleWorkflows(dataType, Boolean(hmms.total_count));
+    const compatibleIndexes = map(groupBy(indexes, "reference.id"), (group) =>
+        maxBy(group, "version"),
+    );
+    const compatibleWorkflows = getCompatibleWorkflows(
+        dataType,
+        Boolean(hmms.total_count),
+    );
 
     function onSubmit(props: CreateAnalysisFormValues) {
         const { index, subtractions, workflow, mlModel } = props;
-        const refId = compatibleIndexes.find(compatibleIndex => compatibleIndex.reference.name === index)?.reference.id;
+        const refId = compatibleIndexes.find(
+            (compatibleIndex) => compatibleIndex.reference.name === index,
+        )?.reference.id;
 
-        createAnalysis.mutate({ refId, subtractionIds: subtractions, sampleId, workflow, mlModel });
+        createAnalysis.mutate({
+            refId,
+            subtractionIds: subtractions,
+            sampleId,
+            workflow,
+            mlModel,
+        });
     }
 
     function onOpenChange(open) {
@@ -71,7 +103,10 @@ export default function CreateAnalysis({ hmms, sampleId }: CreateAnalysisProps) 
     }
 
     return (
-        <Dialog open={includes(Workflows, createAnalysisType)} onOpenChange={onOpenChange}>
+        <Dialog
+            open={includes(Workflows, createAnalysisType)}
+            onOpenChange={onOpenChange}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>

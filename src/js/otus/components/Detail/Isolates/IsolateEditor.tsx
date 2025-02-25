@@ -42,20 +42,35 @@ const AddIsolateLink = styled.a`
 export default function IsolateEditor() {
     const { otu, reference } = useCurrentOTUContext();
     const { isolates } = otu;
-    const { value: activeIsolateId } = useNaiveUrlSearchParam("activeIsolate", isolates[0]?.id);
+    const { value: activeIsolateId } = useNaiveUrlSearchParam(
+        "activeIsolate",
+        isolates[0]?.id,
+    );
     const { setOpen: setOpenAddIsolate } = useDialogParam("openAddIsolate");
     const { data_type, restrict_source_types, source_types } = reference;
 
-    const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify);
+    const { hasPermission: canModify } = useCheckReferenceRight(
+        reference.id,
+        ReferenceRight.modify,
+    );
 
-    const activeIsolate = isolates.length ? find(isolates, { id: activeIsolateId || isolates[0]?.id }) : null;
+    const activeIsolate = isolates.length
+        ? find(isolates, { id: activeIsolateId || isolates[0]?.id })
+        : null;
 
     const isolateComponents = map(isolates, (isolate, index) => (
-        <IsolateItem key={index} isolate={isolate} active={isolate.id === activeIsolate.id} dataType={data_type} />
+        <IsolateItem
+            key={index}
+            isolate={isolate}
+            active={isolate.id === activeIsolate.id}
+            dataType={data_type}
+        />
     ));
 
     const addIsolateLink = canModify ? (
-        <AddIsolateLink onClick={() => setOpenAddIsolate(true)}>Add Isolate</AddIsolateLink>
+        <AddIsolateLink onClick={() => setOpenAddIsolate(true)}>
+            Add Isolate
+        </AddIsolateLink>
     ) : null;
 
     const body = isolateComponents.length ? (
@@ -78,7 +93,10 @@ export default function IsolateEditor() {
         <>
             <SubviewHeader>
                 <IsolateEditorTitle>
-                    Isolates <ViewHeaderTitleBadge>{isolateComponents.length}</ViewHeaderTitleBadge>
+                    Isolates{" "}
+                    <ViewHeaderTitleBadge>
+                        {isolateComponents.length}
+                    </ViewHeaderTitleBadge>
                     {addIsolateLink}
                 </IsolateEditorTitle>
             </SubviewHeader>

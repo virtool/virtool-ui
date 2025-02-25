@@ -11,7 +11,7 @@ const ImportantList = styled.ul`
 `;
 
 export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
-    const hits = sortBy(detail.results.hits, hit => !hit.result);
+    const hits = sortBy(detail.results.hits, (hit) => !hit.result);
 
     return (
         <>
@@ -20,15 +20,19 @@ export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
                 <ImportantList>
                     <li>Iimi is an experimental workflow.</li>
                     <li>We do not guarantee the accuracy of the results.</li>
-                    <li>This analysis could become inaccessbile at any time as the workflow changes.</li>
                     <li>
-                        This analysis viewer is a work in progress. Some features may not be present as we continue to
-                        improve the viewer.
+                        This analysis could become inaccessbile at any time as
+                        the workflow changes.
+                    </li>
+                    <li>
+                        This analysis viewer is a work in progress. Some
+                        features may not be present as we continue to improve
+                        the viewer.
                     </li>
                 </ImportantList>
             </Box>
             <Accordion type="single" collapsible>
-                {hits.map(hit => (
+                {hits.map((hit) => (
                     <IimiOTU hit={hit} key={hit.id} />
                 ))}
             </Accordion>

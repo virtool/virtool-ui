@@ -24,7 +24,8 @@ type FormValues = {
  * A dialog for creating a new group
  */
 export default function CreateGroup() {
-    const { open: openCreateGroup, setOpen: setOpenCreateGroup } = useDialogParam("openCreateGroup");
+    const { open: openCreateGroup, setOpen: setOpenCreateGroup } =
+        useDialogParam("openCreateGroup");
     const createGroupMutation = useCreateGroup();
     const {
         formState: { errors },
@@ -44,7 +45,10 @@ export default function CreateGroup() {
     }
 
     return (
-        <Dialog open={openCreateGroup} onOpenChange={() => setOpenCreateGroup(false)}>
+        <Dialog
+            open={openCreateGroup}
+            onOpenChange={() => setOpenCreateGroup(false)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
@@ -54,7 +58,9 @@ export default function CreateGroup() {
                             <InputLabel>Name</InputLabel>
                             <InputSimple
                                 id="name"
-                                {...register("name", { required: "Provide a name for the group" })}
+                                {...register("name", {
+                                    required: "Provide a name for the group",
+                                })}
                             />
                             <InputError>{errors.name?.message}</InputError>
                         </InputGroup>

@@ -39,20 +39,20 @@ type StyledInitialIconProps = {
 };
 
 const StyledInitialIcon = styled.svg<StyledInitialIconProps>`
-    height: ${props => getIconSize(props.size)};
-    width: ${props => getIconSize(props.size)};
+    height: ${(props) => getIconSize(props.size)};
+    width: ${(props) => getIconSize(props.size)};
     overflow: visible;
 
     circle {
-        cx: ${props => getFontSize(props.size)};
-        cy: ${props => getFontSize(props.size)};
-        r: ${props => getFontSize(props.size)};
-        fill: ${props => `hsl(${props.hash}, 83%, 21%);`};
+        cx: ${(props) => getFontSize(props.size)};
+        cy: ${(props) => getFontSize(props.size)};
+        r: ${(props) => getFontSize(props.size)};
+        fill: ${(props) => `hsl(${props.hash}, 83%, 21%);`};
     }
     text {
         text-anchor: middle;
         fill: ${getColor({ color: "white", theme })};
-        font-size: ${props => getFontSize(props.size)};
+        font-size: ${(props) => getFontSize(props.size)};
         font-weight: ${getFontWeight("bold")};
     }
 `;
@@ -63,7 +63,10 @@ type InitialIconProps = {
 };
 
 export function InitialIcon({ handle, size }: InitialIconProps) {
-    const hash = useMemo(() => reduce(handle.split(""), hashColor, 0) % 360, [handle]);
+    const hash = useMemo(
+        () => reduce(handle.split(""), hashColor, 0) % 360,
+        [handle],
+    );
 
     return (
         <StyledInitialIcon size={size} hash={hash} className="InitialIcon">

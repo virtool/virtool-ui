@@ -4,7 +4,7 @@ import { getBorder } from "../app/theme";
 
 export const DialogTrigger = styled(DialogPrimitive.Trigger)`
     all: unset;
-    background: ${props => props.theme.color.white};
+    background: ${(props) => props.theme.color.white};
     border: ${getBorder};
     display: flex;
     cursor: pointer;

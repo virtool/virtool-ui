@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const SequenceCell = styled.td`
     padding: 0 !important;
-    font-family: ${props => props.theme.fontFamily.monospace};
+    font-family: ${(props) => props.theme.fontFamily.monospace};
 
     textarea {
         width: 100%;
@@ -24,7 +24,12 @@ type SequenceTableProps = {
 /**
  * Displays the styled table components for sequence items
  */
-export function SequenceTable({ children, definition, host, sequence }: SequenceTableProps) {
+export function SequenceTable({
+    children,
+    definition,
+    host,
+    sequence,
+}: SequenceTableProps) {
     return (
         <Table className={cn("mt-2.5", "table-fixed", "[&_th]:w-32.5")}>
             <tbody>

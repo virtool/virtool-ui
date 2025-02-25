@@ -10,7 +10,13 @@ type DropdownMenuLinkProps = {
     rel?: string;
 };
 
-export function DropdownMenuLink({ children, className, to, target, rel }: DropdownMenuLinkProps) {
+export function DropdownMenuLink({
+    children,
+    className,
+    to,
+    target,
+    rel,
+}: DropdownMenuLinkProps) {
     return (
         <DropdownMenuItem className={className} asChild>
             <Link to={to} target={target} rel={rel}>

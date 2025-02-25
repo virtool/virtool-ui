@@ -26,7 +26,9 @@ describe("<SampleDetailGeneral />", () => {
         expect(await screen.findByText("Metadata")).toBeInTheDocument();
 
         expect(screen.getByText("Create Sample")).toBeInTheDocument();
-        expect(screen.getByText(new RegExp(unreadySample.job.state, "i"))).toBeInTheDocument();
+        expect(
+            screen.getByText(new RegExp(unreadySample.job.state, "i")),
+        ).toBeInTheDocument();
 
         expect(screen.getByText("Host")).toBeInTheDocument();
         expect(screen.getByText(unreadySample.host)).toBeInTheDocument();
@@ -50,7 +52,9 @@ describe("<SampleDetailGeneral />", () => {
         expect(await screen.findByText("Metadata")).toBeInTheDocument();
 
         expect(screen.queryByText("Create Sample")).not.toBeInTheDocument();
-        expect(screen.queryByText(new RegExp(sample.job.state, "i"))).not.toBeInTheDocument();
+        expect(
+            screen.queryByText(new RegExp(sample.job.state, "i")),
+        ).not.toBeInTheDocument();
 
         expect(screen.getByText("Host")).toBeInTheDocument();
         expect(screen.getByText(sample.host)).toBeInTheDocument();
@@ -65,16 +69,22 @@ describe("<SampleDetailGeneral />", () => {
         expect(screen.getByText("Sanger / Illumina 1.9")).toBeInTheDocument();
 
         expect(screen.getByText("Read Count")).toBeInTheDocument();
-        expect(screen.getByText(numbro(sample.quality.count).format("0.0 a"))).toBeInTheDocument();
+        expect(
+            screen.getByText(numbro(sample.quality.count).format("0.0 a")),
+        ).toBeInTheDocument();
 
         expect(screen.getByText("Library Type")).toBeInTheDocument();
         expect(screen.getByText("Normal")).toBeInTheDocument();
 
         expect(screen.getByText("Length Range")).toBeInTheDocument();
-        expect(screen.getByText(sample.quality.length.join(" - "))).toBeInTheDocument();
+        expect(
+            screen.getByText(sample.quality.length.join(" - ")),
+        ).toBeInTheDocument();
 
         expect(screen.getByText("GC Content")).toBeInTheDocument();
-        expect(screen.getByText(numbro(sample.quality.gc / 100).format("0.0 %"))).toBeInTheDocument();
+        expect(
+            screen.getByText(numbro(sample.quality.gc / 100).format("0.0 %")),
+        ).toBeInTheDocument();
 
         scope.done();
     });

@@ -32,13 +32,27 @@ export const aodpWorkflow = {
     compatability: { genome: false, barcode: true },
 };
 
-export const workflows = [pathoscopeWorkflow, nuvsWorkflow, iimiWorkflow, aodpWorkflow] as workflow[];
+export const workflows = [
+    pathoscopeWorkflow,
+    nuvsWorkflow,
+    iimiWorkflow,
+    aodpWorkflow,
+] as workflow[];
 
-export function getCompatibleWorkflows(dataType: ReferenceDataType, hasHmm: boolean): workflow[] {
-    const compatibleWorkflows = filter(workflows, (workflow: workflow) => workflow.compatability[dataType]);
+export function getCompatibleWorkflows(
+    dataType: ReferenceDataType,
+    hasHmm: boolean,
+): workflow[] {
+    const compatibleWorkflows = filter(
+        workflows,
+        (workflow: workflow) => workflow.compatability[dataType],
+    );
 
     if (!hasHmm) {
-        remove(compatibleWorkflows, (workflow: workflow) => workflow.id === nuvsWorkflow.id);
+        remove(
+            compatibleWorkflows,
+            (workflow: workflow) => workflow.id === nuvsWorkflow.id,
+        );
     }
 
     return compatibleWorkflows;

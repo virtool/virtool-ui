@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
-import { resolve } from "path";
 import { createHtmlPlugin } from "vite-plugin-html";
 import EntryShakingPlugin from "vite-plugin-entry-shaking";
 

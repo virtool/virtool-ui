@@ -35,44 +35,77 @@ describe("<AddIsolate />", () => {
             renderWithProviders(<AddIsolate {...props} />);
 
             expect(screen.getByRole("combobox")).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "Unknown" })).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "Isolate" })).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "Genotype" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("option", { name: "Unknown" }),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("option", { name: "Isolate" }),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("option", { name: "Genotype" }),
+            ).toBeInTheDocument();
         });
 
         it("should render with source types unrestricted", () => {
             props.restrictSourceTypes = false;
             renderWithProviders(<AddIsolate {...props} />);
 
-            expect(screen.getByRole("textbox", { name: "Source Type" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("textbox", { name: "Source Type" }),
+            ).toBeInTheDocument();
             expect(screen.queryByRole("combobox")).toBeNull();
         });
 
         it.each([
             ["Genotype", "A"],
             ["unknown", ""],
-        ])("should handle submit when source type changes to %p", async (sourceType, sourceName) => {
-            const scope = mockApiCreateIsolate(props.otuId, sourceName, sourceType);
-            renderWithProviders(<AddIsolate {...props} />);
+        ])(
+            "should handle submit when source type changes to %p",
+            async (sourceType, sourceName) => {
+                const scope = mockApiCreateIsolate(
+                    props.otuId,
+                    sourceName,
+                    sourceType,
+                );
+                renderWithProviders(<AddIsolate {...props} />);
 
-            await userEvent.selectOptions(screen.getByLabelText("Source Type"), `${sourceType}`);
+                await userEvent.selectOptions(
+                    screen.getByLabelText("Source Type"),
+                    `${sourceType}`,
+                );
 
-            if (sourceType !== "Unknown") {
-                await userEvent.type(screen.getByRole("textbox", { name: "Source Name" }), `${sourceName}`);
-            }
+                if (sourceType !== "Unknown") {
+                    await userEvent.type(
+                        screen.getByRole("textbox", { name: "Source Name" }),
+                        `${sourceName}`,
+                    );
+                }
 
-            await userEvent.click(screen.getByRole("button"));
-            scope.done();
-        });
+                await userEvent.click(screen.getByRole("button"));
+                scope.done();
+            },
+        );
 
         it("should handle submit with unrestricted source types", async () => {
             props.restrictSourceTypes = false;
-            const scope = mockApiCreateIsolate(props.otuId, "testName", "Test type");
+            const scope = mockApiCreateIsolate(
+                props.otuId,
+                "testName",
+                "Test type",
+            );
             renderWithProviders(<AddIsolate {...props} />);
 
-            await userEvent.type(screen.getByRole("textbox", { name: "Source Type" }), "Test type");
-            await userEvent.type(screen.getByRole("textbox", { name: "Source Name" }), "testName");
-            expect(screen.getByRole("textbox", { name: "Isolate Name" })).toHaveValue("Test type testName");
+            await userEvent.type(
+                screen.getByRole("textbox", { name: "Source Type" }),
+                "Test type",
+            );
+            await userEvent.type(
+                screen.getByRole("textbox", { name: "Source Name" }),
+                "testName",
+            );
+            expect(
+                screen.getByRole("textbox", { name: "Isolate Name" }),
+            ).toHaveValue("Test type testName");
 
             await userEvent.click(screen.getByRole("button"));
             scope.done();

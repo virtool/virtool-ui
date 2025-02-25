@@ -37,7 +37,7 @@ const Content = styled.ul<Content>`
     border: ${getBorder};
     border-radius: ${borderRadius.md};
     z-index: 110;
-    display: ${props => (props.$isOpen ? "block" : "none")};
+    display: ${(props) => (props.$isOpen ? "block" : "none")};
 `;
 
 const ComboBoxContainer = styled.div`
@@ -72,7 +72,13 @@ export const ComboBox = ({
 }: ComboBoxProps) => {
     itemToString = itemToString || defaultToString;
 
-    const { getToggleButtonProps, getMenuProps, getItemProps, getInputProps, isOpen } = useCombobox({
+    const {
+        getToggleButtonProps,
+        getMenuProps,
+        getItemProps,
+        getInputProps,
+        isOpen,
+    } = useCombobox({
         items,
         selectedItem,
         inputValue: term,

@@ -2,7 +2,12 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
 import { map, toNumber } from "lodash-es";
 import React from "react";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../../base";
+import {
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+} from "../../../../base";
 import { ReferenceTarget } from "../../../types";
 import { TargetForm } from "./TargetForm";
 
@@ -21,16 +26,28 @@ type EditTargetProps = {
 /**
  * Displays a dialog for editing a target
  */
-export default function EditTarget({ show, onHide, refId, targets, target }: EditTargetProps) {
+export default function EditTarget({
+    show,
+    onHide,
+    refId,
+    targets,
+    target,
+}: EditTargetProps) {
     const initialTargetName = target?.name;
 
     const { mutation } = useUpdateReference(refId);
     const { reset } = mutation;
 
     function onSubmit({ description, name, length, required }) {
-        const updatedTargets = map(targets, target =>
+        const updatedTargets = map(targets, (target) =>
             initialTargetName === target.name
-                ? { ...target, name, description, length: toNumber(length), required }
+                ? {
+                      ...target,
+                      name,
+                      description,
+                      length: toNumber(length),
+                      required,
+                  }
                 : target,
         );
 
@@ -61,7 +78,10 @@ export default function EditTarget({ show, onHide, refId, targets, target }: Edi
                         length={target?.length}
                         required={target?.required}
                         onSubmit={onSubmit}
-                        error={mutation.isError && mutation.error.response.body[0].msg}
+                        error={
+                            mutation.isError &&
+                            mutation.error.response.body[0].msg
+                        }
                     />
                 </DialogContent>
             </DialogPortal>

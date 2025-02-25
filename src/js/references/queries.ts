@@ -1,6 +1,11 @@
 import { ErrorResponse } from "@/types/types";
 import { Request } from "@app/request";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { useState } from "react";
 import {
     addReferenceGroup,
@@ -36,7 +41,8 @@ import {
 export const referenceQueryKeys = {
     all: () => ["reference"] as const,
     lists: () => ["reference", "list"] as const,
-    list: (filters: Array<string | number | boolean>) => ["reference", "list", "single", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) =>
+        ["reference", "list", "single", ...filters] as const,
     details: () => ["reference", "detail"] as const,
     detail: (refId: string) => ["reference", "detail", refId] as const,
 };
@@ -49,7 +55,11 @@ export const referenceQueryKeys = {
  * @param term - The search term to filter references by
  * @returns The paginated list of references
  */
-export function useFindReferences(page: number, per_page: number, term: string) {
+export function useFindReferences(
+    page: number,
+    per_page: number,
+    term: string,
+) {
     return useQuery<ReferenceSearchResult>({
         queryKey: referenceQueryKeys.list([page, per_page, term]),
         queryFn: () => findReferences({ page, per_page, term }),
@@ -63,7 +73,11 @@ export function useFindReferences(page: number, per_page: number, term: string) 
  * @returns A mutator for cloning a reference
  */
 export function useCloneReference() {
-    return useMutation<ReferenceMinimal, unknown, { name: string; description: string; refId: string }>({
+    return useMutation<
+        ReferenceMinimal,
+        unknown,
+        { name: string; description: string; refId: string }
+    >({
         mutationFn: cloneReference,
     });
 }
@@ -79,7 +93,9 @@ export function useRemoteReference() {
     return useMutation<Reference, unknown, { remotes_from: string }>({
         mutationFn: ({ remotes_from }) => remoteReference(remotes_from),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: referenceQueryKeys.lists() });
+            queryClient.invalidateQueries({
+                queryKey: referenceQueryKeys.lists(),
+            });
         },
     });
 }
@@ -99,7 +115,8 @@ export function useImportReference() {
             importFrom: string;
         }
     >({
-        mutationFn: ({ name, description, importFrom }) => importReference(name, description, importFrom),
+        mutationFn: ({ name, description, importFrom }) =>
+            importReference(name, description, importFrom),
     });
 }
 
@@ -121,10 +138,10 @@ export function useUploadReference() {
             return Request.post("/uploads")
                 .query({ name: file.name, type: "reference" })
                 .send(formData)
-                .on("progress", event => {
+                .on("progress", (event) => {
                     setProgress(event.percent);
                 })
-                .then(response => {
+                .then((response) => {
                     setFileName(response.body.name);
                     setFileNameOnDisk(response.body.name_on_disk);
                 });
@@ -143,7 +160,12 @@ export function useCreateReference() {
     return useMutation<
         Reference,
         unknown,
-        { name: string; description: string; dataType: ReferenceDataType; organism: string }
+        {
+            name: string;
+            description: string;
+            dataType: ReferenceDataType;
+            organism: string;
+        }
     >({
         mutationFn: ({ name, description, dataType, organism }) =>
             createReference(name, description, dataType, organism),
@@ -156,7 +178,9 @@ export function useCreateReference() {
  * @returns A mutator for removing a reference
  */
 export function useRemoveReference() {
-    return useMutation<null, unknown, { refId: string }>({ mutationFn: ({ refId }) => removeReference(refId) });
+    return useMutation<null, unknown, { refId: string }>({
+        mutationFn: ({ refId }) => removeReference(refId),
+    });
 }
 
 /**
@@ -168,13 +192,20 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
     const queryClient = useQueryClient();
 
     const mutation = useMutation<Reference, ErrorResponse, unknown>({
-        mutationFn: (data: { restrict_source_types?: boolean; targets?: ReferenceTarget[] }) => {
+        mutationFn: (data: {
+            restrict_source_types?: boolean;
+            targets?: ReferenceTarget[];
+        }) => {
             return Request.patch(`/refs/${refId}`)
                 .send(data)
-                .then(res => res.body);
+                .then((res) => res.body);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) }).then(() => onSuccess?.());
+            queryClient
+                .invalidateQueries({
+                    queryKey: referenceQueryKeys.detail(refId),
+                })
+                .then(() => onSuccess?.());
         },
     });
 
@@ -191,10 +222,19 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
 export function useAddReferenceMember(refId: string, noun: string) {
     const queryClient = useQueryClient();
 
-    return useMutation<ReferenceUser | ReferenceGroup, unknown, { id: string | number }>({
-        mutationFn: ({ id }) => (noun === "user" ? addReferenceUser(refId, id) : addReferenceGroup(refId, id)),
+    return useMutation<
+        ReferenceUser | ReferenceGroup,
+        unknown,
+        { id: string | number }
+    >({
+        mutationFn: ({ id }) =>
+            noun === "user"
+                ? addReferenceUser(refId, id)
+                : addReferenceGroup(refId, id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) });
+            queryClient.invalidateQueries({
+                queryKey: referenceQueryKeys.detail(refId),
+            });
         },
     });
 }
@@ -209,10 +249,16 @@ export function useUpdateReferenceMember(noun: string) {
     return useMutation<
         ReferenceUser | ReferenceGroup,
         unknown,
-        { refId: string; id: string | number; update: { [key: string]: boolean } }
+        {
+            refId: string;
+            id: string | number;
+            update: { [key: string]: boolean };
+        }
     >({
         mutationFn: ({ refId, id, update }) =>
-            noun === "user" ? editReferenceUser(refId, id, update) : editReferenceGroup(refId, id, update),
+            noun === "user"
+                ? editReferenceUser(refId, id, update)
+                : editReferenceGroup(refId, id, update),
     });
 }
 
@@ -227,9 +273,14 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
     const queryClient = useQueryClient();
 
     return useMutation<Response, unknown, { id: string | number }>({
-        mutationFn: ({ id }) => (noun === "user" ? removeReferenceUser(refId, id) : removeReferenceGroup(refId, id)),
+        mutationFn: ({ id }) =>
+            noun === "user"
+                ? removeReferenceUser(refId, id)
+                : removeReferenceGroup(refId, id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) });
+            queryClient.invalidateQueries({
+                queryKey: referenceQueryKeys.detail(refId),
+            });
         },
     });
 }
@@ -241,7 +292,10 @@ export function useRemoveReferenceUser(refId: string, noun: string) {
  * @returns Query results containing the reference
  */
 export function useGetReference(refId: string) {
-    return useQuery<Reference>({ queryKey: referenceQueryKeys.detail(refId), queryFn: () => getReference(refId) });
+    return useQuery<Reference>({
+        queryKey: referenceQueryKeys.detail(refId),
+        queryFn: () => getReference(refId),
+    });
 }
 
 /**
@@ -254,7 +308,9 @@ export function useCheckReferenceUpdates(refId: string) {
     return useMutation({
         mutationFn: () => checkRemoteReferenceUpdates(refId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) });
+            queryClient.invalidateQueries({
+                queryKey: referenceQueryKeys.detail(refId),
+            });
         },
     });
 }
@@ -269,7 +325,9 @@ export function useUpdateRemoteReference(refId: string) {
     return useMutation<ReferenceInstalled, ErrorResponse>({
         mutationFn: () => updateRemoteReference(refId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) });
+            queryClient.invalidateQueries({
+                queryKey: referenceQueryKeys.detail(refId),
+            });
         },
     });
 }

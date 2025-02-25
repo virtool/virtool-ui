@@ -27,9 +27,14 @@ function Template(args) {
                     </a>
                 }
             >
-                <BoxGroupSearch placeholder="Filter items" label="Filter items" value={term} onChange={setTerm} />
+                <BoxGroupSearch
+                    placeholder="Filter items"
+                    label="Filter items"
+                    value={term}
+                    onChange={setTerm}
+                />
                 <div className="overflow-y-auto flex flex-col">
-                    {map(items, item => (
+                    {map(items, (item) => (
                         <BoxGroupSection>{item}</BoxGroupSection>
                     ))}
                 </div>

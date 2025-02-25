@@ -46,7 +46,14 @@ type MemberItemProps = {
 /**
  * A condensed user or group item for display in the reference members list
  */
-export default function MemberItem({ canModify, id, name, handle, onEdit, onRemove }: MemberItemProps) {
+export default function MemberItem({
+    canModify,
+    id,
+    name,
+    handle,
+    onEdit,
+    onRemove,
+}: MemberItemProps) {
     const displayName = handle || name || "";
     const handleEdit = useCallback(() => onEdit(id), [id]);
     const handleRemove = useCallback(() => onRemove(id), [id]);

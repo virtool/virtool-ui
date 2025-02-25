@@ -16,7 +16,11 @@ export default function HMMToolbar({ term, onChange }: HMMToolbarProps) {
     return (
         <Toolbar>
             <div className="flex-grow">
-                <InputSearch placeholder="Definition" onChange={onChange} value={term} />
+                <InputSearch
+                    placeholder="Definition"
+                    onChange={onChange}
+                    value={term}
+                />
             </div>
         </Toolbar>
     );

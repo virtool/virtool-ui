@@ -34,11 +34,19 @@ type IsolateItemProps = {
 /**
  * A condensed isolate item for use in a list of isolates
  */
-export default function IsolateItem({ active, dataType, isolate }: IsolateItemProps) {
-    const { setValue: setActiveIsolate } = useUrlSearchParam<string>("activeIsolate");
+export default function IsolateItem({
+    active,
+    dataType,
+    isolate,
+}: IsolateItemProps) {
+    const { setValue: setActiveIsolate } =
+        useUrlSearchParam<string>("activeIsolate");
 
     return (
-        <StyledIsolateItem active={active} onClick={() => setActiveIsolate(isolate.id)}>
+        <StyledIsolateItem
+            active={active}
+            onClick={() => setActiveIsolate(isolate.id)}
+        >
             <span>{formatIsolateName(isolate)}</span>
             {isolate.default && dataType !== "barcode" && <Icon name="star" />}
         </StyledIsolateItem>

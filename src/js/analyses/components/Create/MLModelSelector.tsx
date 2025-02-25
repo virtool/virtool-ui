@@ -25,17 +25,27 @@ export type MLModelSelectorProps = {
 };
 
 export function MLModelSelector({ models, selected, onChange }) {
-    const mlModelItems = map(models, ({ latest_release, name, description }) => (
-        <SelectItem value={latest_release.id.toString()} key={latest_release.id} description={description}>
-            {name}
-        </SelectItem>
-    ));
+    const mlModelItems = map(
+        models,
+        ({ latest_release, name, description }) => (
+            <SelectItem
+                value={latest_release.id.toString()}
+                key={latest_release.id}
+                description={description}
+            >
+                {name}
+            </SelectItem>
+        ),
+    );
 
     return (
         <StyledMLModelSelector>
             <CreateAnalysisFieldTitle>MLModel</CreateAnalysisFieldTitle>
             <Select value={selected} onValueChange={onChange}>
-                <MLModelSelectButton placeholder="Select a model" icon="chevron-down" />
+                <MLModelSelectButton
+                    placeholder="Select a model"
+                    icon="chevron-down"
+                />
                 <SelectContent position="popper" align="start">
                     {mlModelItems}
                 </SelectContent>

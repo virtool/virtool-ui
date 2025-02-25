@@ -51,7 +51,8 @@ export default function CloneReference({ references }: CloneReferenceProps) {
         setValue,
     } = useForm<FormValues>();
     const mutation = useCloneReference();
-    const { value: cloneReferenceId, unsetValue: unsetCloneReferenceId } = useUrlSearchParam("cloneReferenceId");
+    const { value: cloneReferenceId, unsetValue: unsetCloneReferenceId } =
+        useUrlSearchParam("cloneReferenceId");
     const reference = find(references, { id: cloneReferenceId || "" });
 
     useEffect(() => {
@@ -62,7 +63,11 @@ export default function CloneReference({ references }: CloneReferenceProps) {
 
     function onSubmit({ name }: FormValues) {
         mutation.mutate(
-            { name, description: `Cloned from ${reference.name}`, refId: reference.id },
+            {
+                name,
+                description: `Cloned from ${reference.name}`,
+                refId: reference.id,
+            },
             {
                 onSuccess: () => {
                     unsetCloneReferenceId();
@@ -72,27 +77,45 @@ export default function CloneReference({ references }: CloneReferenceProps) {
     }
 
     return (
-        <Dialog onOpenChange={() => unsetCloneReferenceId()} open={Boolean(cloneReferenceId)}>
+        <Dialog
+            onOpenChange={() => unsetCloneReferenceId()}
+            open={Boolean(cloneReferenceId)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Clone Reference</DialogTitle>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <InputLabel htmlFor="selectedReference">Selected reference</InputLabel>
+                        <InputLabel htmlFor="selectedReference">
+                            Selected reference
+                        </InputLabel>
                         {reference && (
                             <ReferenceBox id="selectedReference">
                                 <strong>{reference.name}</strong>
-                                <Badge className="ml-1.5">{reference.otu_count} OTUs</Badge>
-                                <Attribution time={reference.created_at} user={reference.user.handle} />
+                                <Badge className="ml-1.5">
+                                    {reference.otu_count} OTUs
+                                </Badge>
+                                <Attribution
+                                    time={reference.created_at}
+                                    user={reference.user.handle}
+                                />
                             </ReferenceBox>
                         )}
                         <InputGroup>
                             <InputLabel htmlFor="name">Name</InputLabel>
-                            <InputSimple id="name" {...register("name", { required: "Required Field" })} />
+                            <InputSimple
+                                id="name"
+                                {...register("name", {
+                                    required: "Required Field",
+                                })}
+                            />
                             <InputError>{errors.name?.message}</InputError>
                         </InputGroup>
                         <DialogFooter>
-                            <SaveButton disabled={!references.length} altText="Clone" />
+                            <SaveButton
+                                disabled={!references.length}
+                                altText="Clone"
+                            />
                         </DialogFooter>
                     </form>
                 </DialogContent>

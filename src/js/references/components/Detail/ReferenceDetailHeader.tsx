@@ -3,7 +3,13 @@ import { useDialogParam } from "@utils/hooks";
 import { endsWith } from "lodash-es";
 import React from "react";
 import { useLocation } from "wouter";
-import { Icon, ViewHeader, ViewHeaderAttribution, ViewHeaderIcons, ViewHeaderTitle } from "../../../base";
+import {
+    Icon,
+    ViewHeader,
+    ViewHeaderAttribution,
+    ViewHeaderIcons,
+    ViewHeaderTitle,
+} from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 
 type ReferenceDetailHeaderProps = {
@@ -26,8 +32,12 @@ export default function ReferenceDetailHeader({
     userHandle,
 }: ReferenceDetailHeaderProps) {
     const [location] = useLocation();
-    const { setOpen: setOpenEditReference } = useDialogParam("openEditReference");
-    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify);
+    const { setOpen: setOpenEditReference } =
+        useDialogParam("openEditReference");
+    const { hasPermission: canModify } = useCheckReferenceRight(
+        refId,
+        ReferenceRight.modify,
+    );
 
     const showIcons = endsWith(location, "/manage");
 
@@ -37,7 +47,9 @@ export default function ReferenceDetailHeader({
                 {name}
                 {showIcons && (
                     <ViewHeaderIcons>
-                        {isRemote && <Icon color="grey" name="lock" aria-label="lock" />}
+                        {isRemote && (
+                            <Icon color="grey" name="lock" aria-label="lock" />
+                        )}
                         {!isRemote && canModify && (
                             <IconButton
                                 color="grayDark"

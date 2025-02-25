@@ -15,18 +15,34 @@ type IndexSelectorProps = {
 /**
  * A list of indexes available for analysis creation
  */
-export function IndexSelector({ indexes, selected, onChange }: IndexSelectorProps) {
-    const sortedIndexes = useMemo(() => sortBy(indexes, "reference.name"), [indexes]);
+export function IndexSelector({
+    indexes,
+    selected,
+    onChange,
+}: IndexSelectorProps) {
+    const sortedIndexes = useMemo(
+        () => sortBy(indexes, "reference.name"),
+        [indexes],
+    );
 
     const indexItems = map(sortedIndexes, ({ reference, version, id }) => (
-        <IndexSelectorItem key={id} id={id} name={reference.name} version={version} />
+        <IndexSelectorItem
+            key={id}
+            id={id}
+            name={reference.name}
+            version={version}
+        />
     ));
 
     return (
         <div className="mb-8">
             <CreateAnalysisFieldTitle>References</CreateAnalysisFieldTitle>
             <Select value={selected} onValueChange={onChange}>
-                <SelectButton className={cn("flex", "w-full")} placeholder="Select a reference" icon="chevron-down" />
+                <SelectButton
+                    className={cn("flex", "w-full")}
+                    placeholder="Select a reference"
+                    icon="chevron-down"
+                />
                 <SelectContent position="popper" align="start">
                     {indexItems}
                 </SelectContent>

@@ -8,8 +8,8 @@ import { borderRadius, getFontSize } from "../../../app/theme";
  */
 export const BaseWorkflowTag = styled.div`
     align-items: center;
-    background-color: ${props => props.theme.color.purpleDarkest};
-    color: ${props => props.theme.color.white};
+    background-color: ${(props) => props.theme.color.purpleDarkest};
+    color: ${(props) => props.theme.color.white};
     display: flex;
     font-size: ${getFontSize("sm")};
     font-weight: bold;
@@ -26,7 +26,7 @@ export const BaseWorkflowTag = styled.div`
     }
 
     &:not(:last-child) {
-        border-right: 2px solid ${props => props.theme.color.purple};
+        border-right: 2px solid ${(props) => props.theme.color.purple};
     }
 
     i.fas {

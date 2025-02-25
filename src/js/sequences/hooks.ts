@@ -39,7 +39,10 @@ export function useGetActiveSequence() {
     const { otu } = useCurrentOTUContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
-    const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
+    const sequences = sortSequencesBySegment(
+        activeIsolate.sequences,
+        otu.schema,
+    );
 
     if (editSequenceId) {
         const sequence = find(sequences, { id: editSequenceId });
@@ -64,7 +67,10 @@ export function useGetInactiveSequences() {
 
     const activeIsolate = useGetActiveIsolate(otu);
     const activeSequenceId = editSequenceId || undefined;
-    const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
+    const sequences = sortSequencesBySegment(
+        activeIsolate.sequences,
+        otu.schema,
+    );
 
     return reject(sequences, { id: activeSequenceId });
 }
@@ -81,9 +87,12 @@ export function useGetUnreferencedTargets() {
     } = useCurrentOTUContext();
 
     const { sequences } = useGetActiveIsolate(otu);
-    const referencedTargetNames = map(sequences, sequence => sequence.target);
+    const referencedTargetNames = map(sequences, (sequence) => sequence.target);
 
-    return filter(targets, target => !referencedTargetNames.includes(target.name));
+    return filter(
+        targets,
+        (target) => !referencedTargetNames.includes(target.name),
+    );
 }
 
 /**
@@ -96,9 +105,15 @@ export function useGetSelectableTargets() {
     const { targets } = reference;
 
     const inactiveSequences = useGetInactiveSequences();
-    const referencedTargetNames = map(inactiveSequences, sequence => sequence.target);
+    const referencedTargetNames = map(
+        inactiveSequences,
+        (sequence) => sequence.target,
+    );
 
-    return filter(targets, target => !referencedTargetNames.includes(target.name));
+    return filter(
+        targets,
+        (target) => !referencedTargetNames.includes(target.name),
+    );
 }
 
 /**
@@ -112,5 +127,7 @@ export function useGetUnreferencedSegments() {
     const inactiveSequences = useGetInactiveSequences();
     const referencedSegmentNames = compact(map(inactiveSequences, "segment"));
 
-    return otu.schema.filter(segment => !referencedSegmentNames.includes(segment.name));
+    return otu.schema.filter(
+        (segment) => !referencedSegmentNames.includes(segment.name),
+    );
 }

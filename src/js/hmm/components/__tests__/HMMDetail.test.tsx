@@ -50,7 +50,9 @@ describe("<HMMDetail />", () => {
             expect(screen.getByText(hmmDetail.length)).toBeInTheDocument();
 
             expect(screen.getByText("Mean Entropy")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.mean_entropy)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.mean_entropy),
+            ).toBeInTheDocument();
 
             scope.done();
         });
@@ -62,19 +64,33 @@ describe("<HMMDetail />", () => {
             expect(await screen.findByText("General")).toBeInTheDocument();
 
             expect(screen.getByText("Cluster Members")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.entries.length)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.entries.length),
+            ).toBeInTheDocument();
 
             expect(screen.getByText("Accession")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.entries[0].accession)).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.entries[1].accession)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.entries[0].accession),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.entries[1].accession),
+            ).toBeInTheDocument();
 
             expect(screen.getByText("Name")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.entries[0].name)).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.entries[1].name)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.entries[0].name),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.entries[1].name),
+            ).toBeInTheDocument();
 
             expect(screen.getByText("Organism")).toBeInTheDocument();
-            expect(screen.queryByText(hmmDetail.entries[0].organism)).toBeInTheDocument();
-            expect(screen.queryByText(hmmDetail.entries[1].organism)).toBeInTheDocument();
+            expect(
+                screen.queryByText(hmmDetail.entries[0].organism),
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByText(hmmDetail.entries[1].organism),
+            ).toBeInTheDocument();
 
             scope.done();
         });
@@ -88,9 +104,13 @@ describe("<HMMDetail />", () => {
             expect(await screen.findByText("Families")).toBeInTheDocument();
 
             expect(screen.getByText("Papillomaviridae")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.families.Papillomaviridae)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.families.Papillomaviridae),
+            ).toBeInTheDocument();
             expect(screen.getByText("None")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.families.None)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.families.None),
+            ).toBeInTheDocument();
 
             scope.done();
         });
@@ -102,9 +122,13 @@ describe("<HMMDetail />", () => {
             expect(await screen.findByText("Genera")).toBeInTheDocument();
 
             expect(screen.getByText("Begomovirus")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.genera.Begomovirus)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.genera.Begomovirus),
+            ).toBeInTheDocument();
             expect(screen.getByText("Curtovirus")).toBeInTheDocument();
-            expect(screen.getByText(hmmDetail.genera.Curtovirus)).toBeInTheDocument();
+            expect(
+                screen.getByText(hmmDetail.genera.Curtovirus),
+            ).toBeInTheDocument();
 
             scope.done();
         });

@@ -48,7 +48,11 @@ type StepDescriptionProps = {
     step_name?: string | null;
 };
 
-export function getStepDescription({ state, step_name, step_description }: StepDescriptionProps) {
+export function getStepDescription({
+    state,
+    step_name,
+    step_description,
+}: StepDescriptionProps) {
     if (step_name && step_description) {
         return {
             title: step_name,

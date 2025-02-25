@@ -8,7 +8,9 @@ it("<InputHeader />", async () => {
     const value = "Hello";
     const onSubmit = vi.fn();
 
-    const { getByRole } = renderWithProviders(<InputHeader id="name" value={value} onSubmit={onSubmit} />);
+    const { getByRole } = renderWithProviders(
+        <InputHeader id="name" value={value} onSubmit={onSubmit} />,
+    );
 
     const input = getByRole("textbox");
     expect(input).toHaveValue(value);

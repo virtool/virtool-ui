@@ -32,8 +32,12 @@ type SampleSelectionToolbarProps = {
 /**
  * A toolbar allowing users to create an analysis for selected samples
  */
-export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToolbarProps) {
-    const { setValue: setQuickAnalysisType } = useUrlSearchParam<string>("quickAnalysisType");
+export function SampleSelectionToolbar({
+    onClear,
+    selected,
+}: SampleSelectionToolbarProps) {
+    const { setValue: setQuickAnalysisType } =
+        useUrlSearchParam<string>("quickAnalysisType");
 
     function onQuickAnalyze() {
         setQuickAnalysisType(Workflows.pathoscope_bowtie);
@@ -41,7 +45,9 @@ export function SampleSelectionToolbar({ onClear, selected }: SampleSelectionToo
 
     return (
         <SampleSelectionToolbarTop>
-            <Button onClick={onClear}>Clear selection of {selected.length} samples</Button>
+            <Button onClick={onClear}>
+                Clear selection of {selected.length} samples
+            </Button>
             <Button color="green" onClick={() => onQuickAnalyze()}>
                 <Icon name="chart-area" /> Quick Analyze
             </Button>

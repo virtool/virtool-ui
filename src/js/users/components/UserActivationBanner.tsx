@@ -7,10 +7,10 @@ const ActivationBanner = styled(Alert)`
     justify-content: space-between;
 
     span:first-child {
-        font-weight: ${props => props.theme.fontWeight.thick};
+        font-weight: ${(props) => props.theme.fontWeight.thick};
 
         strong {
-            font-weight: ${props => props.theme.fontWeight.bold};
+            font-weight: ${(props) => props.theme.fontWeight.bold};
         }
     }
 `;
@@ -26,7 +26,11 @@ type UserActivationBannerProps = {
 /**
  * A styled banner for deactivating or reactivating a user
  */
-export function UserActivationBanner({ buttonText, noun, onClick }: UserActivationBannerProps) {
+export function UserActivationBanner({
+    buttonText,
+    noun,
+    onClick,
+}: UserActivationBannerProps) {
     return (
         <ActivationBanner color={noun === "deactivate" ? "red" : "green"}>
             <div>
@@ -36,7 +40,10 @@ export function UserActivationBanner({ buttonText, noun, onClick }: UserActivati
                         : "Restore access to Virtool for this user. Their account is currently deactivated."}
                 </div>
             </div>
-            <Button color={noun === "deactivate" ? "red" : "green"} onClick={onClick}>
+            <Button
+                color={noun === "deactivate" ? "red" : "green"}
+                onClick={onClick}
+            >
                 {buttonText}
             </Button>
         </ActivationBanner>

@@ -8,7 +8,11 @@ export default function LoginWall() {
 
     return (
         <WallContainer>
-            {resetCode ? <ResetForm resetCode={resetCode} /> : <LoginForm setResetCode={setResetCode} />}
+            {resetCode ? (
+                <ResetForm resetCode={resetCode} />
+            ) : (
+                <LoginForm setResetCode={setResetCode} />
+            )}
         </WallContainer>
     );
 }

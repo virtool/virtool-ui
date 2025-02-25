@@ -31,7 +31,10 @@ describe("<ReferenceItem />", () => {
         renderWithRouter(<ReferenceItem {...props} />);
 
         expect(screen.getByText(/virus/)).toBeInTheDocument();
-        expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "32");
+        expect(screen.getByRole("progressbar")).toHaveAttribute(
+            "data-value",
+            "32",
+        );
     });
 
     it("should render when [organism=null]", () => {

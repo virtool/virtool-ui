@@ -12,9 +12,9 @@ function getAlertTextColor({ color, theme }: getColorProps) {
 
 export const AlertOuter = styled.div`
     background-color: ${getAlertBackgroundColor};
-    border-radius: ${props => props.theme.borderRadius.md};
+    border-radius: ${(props) => props.theme.borderRadius.md};
     border: none;
-    box-shadow: ${props => props.theme.boxShadow.sm};
+    box-shadow: ${(props) => props.theme.boxShadow.sm};
     color: ${getAlertTextColor};
     font-weight: ${getFontWeight("thick")};
     margin-bottom: 16px;

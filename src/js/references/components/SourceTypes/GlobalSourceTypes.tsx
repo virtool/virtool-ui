@@ -20,7 +20,14 @@ type GlobalSourceTypesProps = {
 };
 
 export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
-    const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
+    const {
+        error,
+        lastRemoved,
+        handleRemove,
+        handleSubmit,
+        handleUndo,
+        register,
+    } = useUpdateSourceTypes(
         "default_source_types",
         "/settings",
         settingsQueryKeys.all(),
@@ -31,7 +38,10 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
         <section>
             <SectionHeader>
                 <h2>Default Source Types</h2>
-                <p>Configure a list of allowable source types that will be set automatically for new references.</p>
+                <p>
+                    Configure a list of allowable source types that will be set
+                    automatically for new references.
+                </p>
             </SectionHeader>
             <BoxGroup>
                 <BoxGroupHeader>
@@ -39,23 +49,39 @@ export function GlobalSourceTypes({ sourceTypes }: GlobalSourceTypesProps) {
                     <p>Add or remove default source types.</p>
                 </BoxGroupHeader>
 
-                <SourceTypeList sourceTypes={sourceTypes} onRemove={handleRemove} />
+                <SourceTypeList
+                    sourceTypes={sourceTypes}
+                    onRemove={handleRemove}
+                />
 
                 {lastRemoved && (
                     <BoxGroupSection className="bg-stone-100! flex! items-center justify-between!">
                         <span>
-                            The source type <strong className="capitalize">{lastRemoved}</strong> was just removed.
+                            The source type{" "}
+                            <strong className="capitalize">
+                                {lastRemoved}
+                            </strong>{" "}
+                            was just removed.
                         </span>
-                        <IconButton name="undo" tip="undo" onClick={handleUndo} />
+                        <IconButton
+                            name="undo"
+                            tip="undo"
+                            onClick={handleUndo}
+                        />
                     </BoxGroupSection>
                 )}
 
                 <BoxGroupSection>
                     <form onSubmit={handleSubmit}>
-                        <InputLabel htmlFor="SourceType">Add Source Type</InputLabel>
+                        <InputLabel htmlFor="SourceType">
+                            Add Source Type
+                        </InputLabel>
                         <Toolbar>
                             <div className="flex-grow">
-                                <InputSimple id="SourceType" {...register("sourceType")} />
+                                <InputSimple
+                                    id="SourceType"
+                                    {...register("sourceType")}
+                                />
                             </div>
                             <Button color="green" type="submit">
                                 Add

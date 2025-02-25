@@ -34,8 +34,15 @@ export function SampleFilters({
 }: SampleFilterProps) {
     return (
         <StyledSampleFilters>
-            <LabelFilter labels={labels} onClick={onClickLabels} selected={selectedLabels} />
-            <WorkflowFilter selected={selectedWorkflows} onClick={onClickWorkflows} />
+            <LabelFilter
+                labels={labels}
+                onClick={onClickLabels}
+                selected={selectedLabels}
+            />
+            <WorkflowFilter
+                selected={selectedWorkflows}
+                onClick={onClickWorkflows}
+            />
         </StyledSampleFilters>
     );
 }

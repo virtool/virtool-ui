@@ -8,7 +8,11 @@ import React from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeGroupMinimal, mockApiListGroups } from "@tests/fake/groups";
-import { createFakeUser, mockApiEditUser, mockApiGetUser } from "@tests/fake/user";
+import {
+    createFakeUser,
+    mockApiEditUser,
+    mockApiGetUser,
+} from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { User } from "@users/types";
 
@@ -22,9 +26,13 @@ describe("<UserDetail />", () => {
     let account;
 
     beforeEach(() => {
-        groups = times(5, index => createFakeGroupMinimal({ name: `group${index}` }));
+        groups = times(5, (index) =>
+            createFakeGroupMinimal({ name: `group${index}` }),
+        );
         user = createFakeUser({ groups, active: true });
-        account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+        account = createFakeAccount({
+            administrator_role: AdministratorRoles.FULL,
+        });
     });
 
     afterEach(() => nock.cleanAll());
@@ -34,19 +42,26 @@ describe("<UserDetail />", () => {
             mockApiListGroups(groups);
             mockApiGetAccount(account);
 
-            const userDetail = createFakeUser({ administrator_role: AdministratorRoles.FULL, groups });
+            const userDetail = createFakeUser({
+                administrator_role: AdministratorRoles.FULL,
+                groups,
+            });
 
             const scope = mockApiGetUser(userDetail.id, userDetail);
 
             renderWithRouter(<Settings />, formatUserPath(userDetail));
 
-            expect(await screen.findByText("Change Password")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Change Password"),
+            ).toBeInTheDocument();
 
             expect(screen.getByText(userDetail.handle)).toBeInTheDocument();
             expect(screen.getByLabelText("admin")).toBeInTheDocument();
             expect(screen.getByText("Back To List")).toBeInTheDocument();
 
-            expect(screen.getByText("Force user to reset password on next login")).toBeInTheDocument();
+            expect(
+                screen.getByText("Force user to reset password on next login"),
+            ).toBeInTheDocument();
             expect(screen.getByText("Change Password")).toBeInTheDocument();
 
             expect(await screen.findByText("Groups")).toBeInTheDocument();
@@ -56,12 +71,22 @@ describe("<UserDetail />", () => {
             expect(screen.getByText("Group3")).toBeInTheDocument();
 
             expect(screen.getByText("Primary Group")).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "Group1" })).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "Group4" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("option", { name: "None" }),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("option", { name: "Group1" }),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("option", { name: "Group4" }),
+            ).toBeInTheDocument();
 
             expect(screen.getByText("Permissions")).toBeInTheDocument();
-            expect(screen.getByText("Change group membership to modify permissions")).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    "Change group membership to modify permissions",
+                ),
+            ).toBeInTheDocument();
             expect(screen.getByText("cancel_job")).toBeInTheDocument();
             expect(screen.getByText("create_sample")).toBeInTheDocument();
 
@@ -83,7 +108,9 @@ describe("<UserDetail />", () => {
 
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("Change Password")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Change Password"),
+            ).toBeInTheDocument();
 
             expect(screen.queryByLabelText("admin")).not.toBeInTheDocument();
             expect(screen.queryByText("User Role")).not.toBeInTheDocument();
@@ -100,9 +127,15 @@ describe("<UserDetail />", () => {
 
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("You do not have permission to manage this user.")).toBeInTheDocument();
+            expect(
+                await screen.findByText(
+                    "You do not have permission to manage this user.",
+                ),
+            ).toBeInTheDocument();
 
-            expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
+            expect(
+                screen.getByText("Contact an administrator."),
+            ).toBeInTheDocument();
             expect(screen.queryByText(user.handle)).not.toBeInTheDocument();
             expect(screen.queryByText("Groups")).not.toBeInTheDocument();
             expect(screen.queryByText("Permissions")).not.toBeInTheDocument();
@@ -133,7 +166,9 @@ describe("<UserDetail />", () => {
 
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("Change Password")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Change Password"),
+            ).toBeInTheDocument();
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
             expect(screen.queryByLabelText("Group1")).not.toBeInTheDocument();
@@ -154,10 +189,14 @@ describe("<UserDetail />", () => {
             renderWithRouter(<Settings />, formatUserPath(user));
 
             expect(await screen.findByText("Groups")).toBeInTheDocument();
-            expect(await screen.findByText("No groups found")).toBeInTheDocument();
+            expect(
+                await screen.findByText("No groups found"),
+            ).toBeInTheDocument();
             expect(screen.queryByLabelText("group3")).not.toBeInTheDocument();
             expect(screen.getByText("Primary Group")).toBeInTheDocument();
-            expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("option", { name: "None" }),
+            ).toBeInTheDocument();
 
             scope.done();
         });
@@ -171,13 +210,19 @@ describe("<UserDetail />", () => {
 
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("Change Password")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Change Password"),
+            ).toBeInTheDocument();
 
             expect(screen.getByText("Change Password")).toBeInTheDocument();
             expect(screen.getByText(/Last changed/)).toBeInTheDocument();
-            expect(screen.getByText("Force user to reset password on next login")).toBeInTheDocument();
+            expect(
+                screen.getByText("Force user to reset password on next login"),
+            ).toBeInTheDocument();
             expect(screen.getByLabelText("password")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "Save" }),
+            ).toBeInTheDocument();
 
             scope.done();
         });
@@ -192,11 +237,17 @@ describe("<UserDetail />", () => {
 
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("Change Password")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Change Password"),
+            ).toBeInTheDocument();
             expect(screen.getByText("Last changed")).toBeInTheDocument();
             expect(screen.getByLabelText("password")).toBeInTheDocument();
-            expect(screen.getByText("Force user to reset password on next login")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+            expect(
+                screen.getByText("Force user to reset password on next login"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "Save" }),
+            ).toBeInTheDocument();
 
             scope.done();
         });
@@ -209,9 +260,14 @@ describe("<UserDetail />", () => {
 
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("Change Password")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Change Password"),
+            ).toBeInTheDocument();
 
-            await userEvent.type(screen.getByLabelText("password"), "newPassword");
+            await userEvent.type(
+                screen.getByLabelText("password"),
+                "newPassword",
+            );
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
             scope.done();
@@ -222,18 +278,25 @@ describe("<UserDetail />", () => {
             mockApiListGroups(groups);
             mockApiEditUser(user.id, 400, {
                 id: "bad_request",
-                message: "Password does not meet minimum length requirement (8)",
+                message:
+                    "Password does not meet minimum length requirement (8)",
             });
             const scope = mockApiGetUser(user.id, user);
 
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("Change Password")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Change Password"),
+            ).toBeInTheDocument();
 
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
             await waitFor(() =>
-                expect(screen.getByText("Password does not meet minimum length requirement (8)")).toBeInTheDocument(),
+                expect(
+                    screen.getByText(
+                        "Password does not meet minimum length requirement (8)",
+                    ),
+                ).toBeInTheDocument(),
             );
 
             scope.done();
@@ -263,11 +326,23 @@ describe("<UserDetail />", () => {
             renderWithRouter(<Settings />, formatUserPath(user));
 
             expect(await screen.findByText("Permissions")).toBeInTheDocument();
-            expect(await screen.findByText("Change group membership to modify permissions")).toBeInTheDocument();
-            expect(screen.getByLabelText("cancel_job:true")).toBeInTheDocument();
-            expect(screen.getByLabelText("create_sample:true")).toBeInTheDocument();
-            expect(screen.getByLabelText("remove_file:false")).toBeInTheDocument();
-            expect(screen.getByLabelText("upload_file:false")).toBeInTheDocument();
+            expect(
+                await screen.findByText(
+                    "Change group membership to modify permissions",
+                ),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByLabelText("cancel_job:true"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByLabelText("create_sample:true"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByLabelText("remove_file:false"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByLabelText("upload_file:false"),
+            ).toBeInTheDocument();
 
             scope.done();
         });
@@ -280,8 +355,14 @@ describe("<UserDetail />", () => {
             mockApiGetUser(user.id, user);
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByText("Disable access to the application for this user.")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "Deactivate" })).toBeInTheDocument();
+            expect(
+                await screen.findByText(
+                    "Disable access to the application for this user.",
+                ),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "Deactivate" }),
+            ).toBeInTheDocument();
         });
 
         it("should handle user deactivation", async () => {
@@ -291,8 +372,12 @@ describe("<UserDetail />", () => {
             const scope = mockApiEditUser(user.id, 200, { active: true });
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByRole("button", { name: "Deactivate" })).toBeInTheDocument();
-            await userEvent.click(screen.getByRole("button", { name: "Deactivate" }));
+            expect(
+                await screen.findByRole("button", { name: "Deactivate" }),
+            ).toBeInTheDocument();
+            await userEvent.click(
+                screen.getByRole("button", { name: "Deactivate" }),
+            );
             await userEvent.click(screen.getByText("Confirm"));
 
             scope.done();
@@ -306,8 +391,12 @@ describe("<UserDetail />", () => {
             const scope = mockApiEditUser(user.id, 200, { active: false });
             renderWithRouter(<Settings />, formatUserPath(user));
 
-            expect(await screen.findByRole("button", { name: "Activate" })).toBeInTheDocument();
-            await userEvent.click(screen.getByRole("button", { name: "Activate" }));
+            expect(
+                await screen.findByRole("button", { name: "Activate" }),
+            ).toBeInTheDocument();
+            await userEvent.click(
+                screen.getByRole("button", { name: "Activate" }),
+            );
             await userEvent.click(screen.getByText("Confirm"));
 
             scope.done();

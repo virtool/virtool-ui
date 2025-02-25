@@ -21,20 +21,30 @@ type PrimaryGroupProps = {
 /**
  * A dropdown showing the primary group and its options
  */
-export default function PrimaryGroup({ groups, id, primaryGroup }: PrimaryGroupProps) {
+export default function PrimaryGroup({
+    groups,
+    id,
+    primaryGroup,
+}: PrimaryGroupProps) {
     const mutation = useUpdateUser();
 
     function handleSetPrimaryGroup(e) {
         mutation.mutate({
             userId: id,
-            update: { primary_group: e.target.value === "none" ? null : e.target.value },
+            update: {
+                primary_group:
+                    e.target.value === "none" ? null : e.target.value,
+            },
         });
     }
 
     return (
         <InputGroup>
             <InputLabel>Primary Group</InputLabel>
-            <InputSelect value={primaryGroup?.id || "none"} onChange={handleSetPrimaryGroup}>
+            <InputSelect
+                value={primaryGroup?.id || "none"}
+                onChange={handleSetPrimaryGroup}
+            >
                 <option key="none" value="none">
                     None
                 </option>

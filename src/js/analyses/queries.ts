@@ -1,9 +1,20 @@
 import { formatData } from "@/analyses/utils";
 import { ErrorResponse } from "@/types/types";
 import { samplesQueryKeys } from "@samples/queries";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { useMemo } from "react";
-import { blastNuvs, createAnalysis, getAnalysis, listAnalyses, removeAnalysis } from "./api";
+import {
+    blastNuvs,
+    createAnalysis,
+    getAnalysis,
+    listAnalyses,
+    removeAnalysis,
+} from "./api";
 import { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 
 /**
@@ -12,9 +23,11 @@ import { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
 export const analysesQueryKeys = {
     all: () => ["analyses"] as const,
     lists: () => ["analyses", "list"] as const,
-    list: (filters: Array<string | number | boolean | string[]>) => ["analyses", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean | string[]>) =>
+        ["analyses", "list", ...filters] as const,
     details: () => ["analyses", "details"] as const,
-    detail: (analysesId: string) => ["analyses", "details", analysesId] as const,
+    detail: (analysesId: string) =>
+        ["analyses", "details", analysesId] as const,
 };
 
 /**
@@ -26,7 +39,12 @@ export const analysesQueryKeys = {
  * @param term - The search term to filter the analyses by
  * @returns A page of analyses search results
  */
-export function useListAnalyses(sampleId: string, page: number, per_page: number, term?: string) {
+export function useListAnalyses(
+    sampleId: string,
+    page: number,
+    per_page: number,
+    term?: string,
+) {
     return useQuery<AnalysisSearchResult>({
         queryKey: analysesQueryKeys.list([sampleId, page, per_page, term]),
         queryFn: () => listAnalyses(sampleId, page, per_page, term),
@@ -47,7 +65,9 @@ export function useRemoveAnalysis(analysisId: string) {
         mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
 
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
+            queryClient.invalidateQueries({
+                queryKey: analysesQueryKeys.lists(),
+            });
         },
     });
 
@@ -66,7 +86,10 @@ export function useGetAnalysis(analysisId: string) {
         queryFn: () => getAnalysis({ analysisId }),
     });
     return useMemo(
-        () => ({ ...queryResult, data: formatData(queryResult.data) as Analysis }),
+        () => ({
+            ...queryResult,
+            data: formatData(queryResult.data) as Analysis,
+        }),
         [queryResult.data, queryResult.error],
     );
 }
@@ -87,8 +110,12 @@ export function useCreateAnalysis() {
             createAnalysis(mlModel, refId, sampleId, subtractionIds, workflow),
 
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
-            queryClient.invalidateQueries({ queryKey: samplesQueryKeys.lists() });
+            queryClient.invalidateQueries({
+                queryKey: analysesQueryKeys.lists(),
+            });
+            queryClient.invalidateQueries({
+                queryKey: samplesQueryKeys.lists(),
+            });
         },
     });
 }
@@ -105,7 +132,9 @@ export function useSetAnalysis(analysisId: string) {
     const mutation = useMutation<null, unknown, { analysisId: string }>({
         mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.lists() });
+            queryClient.invalidateQueries({
+                queryKey: analysesQueryKeys.lists(),
+            });
         },
     });
 
@@ -125,7 +154,9 @@ export function useBlastNuVs(analysisId: string) {
         mutationFn: ({ sequenceIndex }) => blastNuvs(analysisId, sequenceIndex),
 
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: analysesQueryKeys.detail(analysisId) });
+            queryClient.invalidateQueries({
+                queryKey: analysesQueryKeys.detail(analysisId),
+            });
         },
     });
 }

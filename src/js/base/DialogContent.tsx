@@ -11,7 +11,11 @@ type DialogContentProps = {
 /**
  * A styled dialog content container with customizable sizes
  */
-export function DialogContent({ children, className, size }: DialogContentProps) {
+export function DialogContent({
+    children,
+    className,
+    size,
+}: DialogContentProps) {
     return (
         <DialogPrimitive.Content
             className={cn(

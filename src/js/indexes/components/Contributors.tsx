@@ -15,7 +15,9 @@ type ContributorsProps = {
 export default function Contributors({ contributors }: ContributorsProps) {
     const sorted = sortBy(contributors, ["id", "count"]);
 
-    let contributorComponents = map(sorted, contributor => <Contributor key={contributor.id} {...contributor} />);
+    let contributorComponents = map(sorted, (contributor) => (
+        <Contributor key={contributor.id} {...contributor} />
+    ));
 
     if (contributorComponents.length === 0) {
         contributorComponents = <NoneFoundSection noun="contributors" />;
@@ -25,7 +27,10 @@ export default function Contributors({ contributors }: ContributorsProps) {
         <BoxGroup>
             <BoxGroupHeader>
                 <h2>
-                    Contributors <BoxGroupHeaderBadge>{contributors.length}</BoxGroupHeaderBadge>
+                    Contributors{" "}
+                    <BoxGroupHeaderBadge>
+                        {contributors.length}
+                    </BoxGroupHeaderBadge>
                 </h2>
             </BoxGroupHeader>
             {contributorComponents}

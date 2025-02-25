@@ -10,22 +10,34 @@ import { SubtractionFileManager } from "../SubtractionFileManager";
 import { formatPath } from "@utils/hooks";
 
 function createFiles(fileNames) {
-    return fileNames.map(fileName => new File(["test"], fileName, { type: "application/gzip" }));
+    return fileNames.map(
+        (fileName) =>
+            new File(["test"], fileName, { type: "application/gzip" }),
+    );
 }
 
 describe("<SubtractionFileManager />", () => {
     const path = formatPath("/subtractions/files", { page: 1 });
 
     it("should reject files that don't pass validation", async () => {
-        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(
+            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+        );
         mockApiListFiles([createFakeFile({ name: "subtraction.fq.gz" })]);
 
         renderWithRouter(<SubtractionFileManager />, path);
 
-        expect(await screen.findByText("Drag files here to upload")).toBeInTheDocument();
+        expect(
+            await screen.findByText("Drag files here to upload"),
+        ).toBeInTheDocument();
 
-        await userEvent.upload(await screen.findByLabelText("Upload file"), createFiles(["test.txt"]));
+        await userEvent.upload(
+            await screen.findByLabelText("Upload file"),
+            createFiles(["test.txt"]),
+        );
 
-        expect(await screen.findByText("Invalid file names: test.txt")).toBeInTheDocument();
+        expect(
+            await screen.findByText("Invalid file names: test.txt"),
+        ).toBeInTheDocument();
     });
 });

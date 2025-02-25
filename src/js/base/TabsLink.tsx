@@ -31,7 +31,14 @@ export function TabsLink({ children, className, isActive, to }: TabsLinkProps) {
     return (
         <Link
             className={
-                isActive ? cn(classname, "border-b-2", "border-b-teal-700", "hover:border-b-teal-700") : classname
+                isActive
+                    ? cn(
+                          classname,
+                          "border-b-2",
+                          "border-b-teal-700",
+                          "hover:border-b-teal-700",
+                      )
+                    : classname
             }
             to={to}
         >

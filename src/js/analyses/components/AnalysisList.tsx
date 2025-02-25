@@ -1,5 +1,10 @@
 import { useListHmms } from "@/hmm/queries";
-import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import {
+    ContainerNarrow,
+    LoadingPlaceholder,
+    NoneFoundBox,
+    Pagination,
+} from "@base";
 import { useFetchSample } from "@samples/queries";
 import { usePageParam, usePathParams } from "@utils/hooks";
 import React from "react";
@@ -22,7 +27,11 @@ function renderRow() {
 export default function AnalysesList() {
     const { sampleId } = usePathParams<{ sampleId: string }>();
     const { page } = usePageParam();
-    const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(sampleId, page, 25);
+    const { data: analyses, isPending: isPendingAnalyses } = useListAnalyses(
+        sampleId,
+        page,
+        25,
+    );
     const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
     const { isPending: isPendingSample } = useFetchSample(sampleId);
 

@@ -17,7 +17,11 @@ type NuVsViewerProps = {
 export default function NuVsViewer({ detail, sample }: NuVsViewerProps) {
     return (
         <div>
-            <NuVsToolbar analysisId={detail.id} results={detail.results} sampleName={sample.name} />
+            <NuVsToolbar
+                analysisId={detail.id}
+                results={detail.results}
+                sampleName={sample.name}
+            />
             <NuVsList detail={detail} />
         </div>
     );

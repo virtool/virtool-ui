@@ -1,5 +1,12 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { LoadingPlaceholder, NotFound, Table, ViewHeader, ViewHeaderIcons, ViewHeaderTitle } from "@base";
+import {
+    LoadingPlaceholder,
+    NotFound,
+    Table,
+    ViewHeader,
+    ViewHeaderIcons,
+    ViewHeaderTitle,
+} from "@base";
 import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
 import { useDialogParam, usePathParams } from "@utils/hooks";
@@ -13,7 +20,9 @@ import RemoveSubtraction from "./RemoveSubtraction";
 import SubtractionFiles from "./SubtractionFiles";
 
 function calculateGc(nucleotides: NucleotideComposition) {
-    return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format("0.000");
+    return numbro(1 - nucleotides.a - nucleotides.t - nucleotides.n).format(
+        "0.000",
+    );
 }
 
 /**
@@ -23,10 +32,14 @@ export default function SubtractionDetail() {
     const { subtractionId } = usePathParams<{ subtractionId: string }>();
 
     const { data, isPending, isError } = useFetchSubtraction(subtractionId);
-    const { hasPermission: canModify } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
+    const { hasPermission: canModify } = useCheckAdminRoleOrPermission(
+        Permission.modify_subtraction,
+    );
 
-    const { open: openRemoveSubtraction, setOpen: setOpenRemoveSubtraction } = useDialogParam("openRemoveSubtraction");
-    const { open: openEditSubtraction, setOpen: setOpenEditSubtraction } = useDialogParam("openEditSubtraction");
+    const { open: openRemoveSubtraction, setOpen: setOpenRemoveSubtraction } =
+        useDialogParam("openRemoveSubtraction");
+    const { open: openEditSubtraction, setOpen: setOpenEditSubtraction } =
+        useDialogParam("openEditSubtraction");
 
     if (isError) {
         return <NotFound />;
@@ -37,7 +50,9 @@ export default function SubtractionDetail() {
     }
 
     if (!data.ready) {
-        return <LoadingPlaceholder message="Subtraction is still being imported" />;
+        return (
+            <LoadingPlaceholder message="Subtraction is still being imported" />
+        );
     }
 
     return (
@@ -62,7 +77,12 @@ export default function SubtractionDetail() {
                         </ViewHeaderIcons>
                     )}
                 </ViewHeaderTitle>
-                {data.user ? <SubtractionAttribution handle={data.user.handle} time={data.created_at} /> : null}
+                {data.user ? (
+                    <SubtractionAttribution
+                        handle={data.user.handle}
+                        time={data.created_at}
+                    />
+                ) : null}
             </ViewHeader>
             <Table>
                 <tbody>

@@ -44,7 +44,9 @@ describe("Checkbox", () => {
 
         const checkbox = screen.getByRole("checkbox", { name: "checkbox" });
         expect(checkbox).toBeInTheDocument();
-        expect(screen.queryByRole("checkbox", { name: "foo" })).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("checkbox", { name: "foo" }),
+        ).not.toBeInTheDocument();
         expect(checkbox).not.toBeChecked();
     });
 

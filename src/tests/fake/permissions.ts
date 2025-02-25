@@ -28,7 +28,9 @@ type CreateFakePermissionsProps = {
  * @param {CreateFakePermissionsProps} permissions values to override the default automatically generated values
  * @returns {Permissions} Permissions object with fake data
  */
-export function createFakePermissions(permissions?: CreateFakePermissionsProps): Permissions {
+export function createFakePermissions(
+    permissions?: CreateFakePermissionsProps,
+): Permissions {
     return {
         ...defaultPermissions,
         ...permissions,

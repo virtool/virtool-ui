@@ -26,10 +26,14 @@ describe("<File />", () => {
     it("should render", () => {
         renderWithProviders(<FileItem {...props} />);
 
-        expect(screen.getByText(new RegExp(props.user.handle))).toBeInTheDocument();
+        expect(
+            screen.getByText(new RegExp(props.user.handle)),
+        ).toBeInTheDocument();
         expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
         expect(screen.getByText("10.0 B")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "delete" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "delete" }),
+        ).toBeInTheDocument();
     });
 
     it("should render when [user=null]", () => {
@@ -39,7 +43,9 @@ describe("<File />", () => {
 
         expect(screen.getByText(new RegExp(props.name))).toBeInTheDocument();
         expect(screen.getByText("10.0 B")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "delete" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "delete" }),
+        ).toBeInTheDocument();
     });
 
     it("should have [props.onRemove] called when trash icon clicked", async () => {

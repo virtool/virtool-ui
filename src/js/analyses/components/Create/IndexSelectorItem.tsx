@@ -12,7 +12,11 @@ type IndexSelectorItemProps = {
 /**
  * A condensed index selector item for use in a list of indexes
  */
-export function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
+export function IndexSelectorItem({
+    id,
+    name,
+    version,
+}: IndexSelectorItemProps) {
     return (
         <RadixSelect.Item
             className={cn(
@@ -33,11 +37,24 @@ export function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps)
             key={id}
         >
             <RadixSelect.ItemText>
-                <span className={cn("font-medium", "overflow-hidden", "text-ellipsis", "whitespace-nowrap")}>
+                <span
+                    className={cn(
+                        "font-medium",
+                        "overflow-hidden",
+                        "text-ellipsis",
+                        "whitespace-nowrap",
+                    )}
+                >
                     {name}
                 </span>
             </RadixSelect.ItemText>
-            <span className={cn("flex-[0_1_auto]", "whitespace-nowrap", "font-normal")}>
+            <span
+                className={cn(
+                    "flex-[0_1_auto]",
+                    "whitespace-nowrap",
+                    "font-normal",
+                )}
+            >
                 Index Version <Label>{version}</Label>
             </span>
         </RadixSelect.Item>

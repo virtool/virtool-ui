@@ -13,8 +13,14 @@ export default function Subtraction() {
         <Container>
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/subtractions/files" component={SubtractionFileManager} />
-                    <Route path="/subtractions/:subtractionId" component={SubtractionDetail} />
+                    <Route
+                        path="/subtractions/files"
+                        component={SubtractionFileManager}
+                    />
+                    <Route
+                        path="/subtractions/:subtractionId"
+                        component={SubtractionDetail}
+                    />
                     <Route path="/subtractions" component={SubtractionList} />
                 </Switch>
             </ContainerNarrow>

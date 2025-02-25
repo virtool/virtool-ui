@@ -20,15 +20,23 @@ describe("<MemberItem />", () => {
     it("should render", () => {
         renderWithProviders(<MemberItem {...props} />);
         expect(screen.getByText("bob")).toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Edit" })).not.toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: "Remove" })).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("button", { name: "Edit" }),
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("button", { name: "Remove" }),
+        ).not.toBeInTheDocument();
     });
 
     it("should show modification button when [canModify=true]", () => {
         props.canModify = true;
         renderWithProviders(<MemberItem {...props} />);
-        expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "Edit" }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "Remove" }),
+        ).toBeInTheDocument();
     });
 
     it("should call onEdit when edit icon is clicked", async () => {

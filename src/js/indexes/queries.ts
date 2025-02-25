@@ -1,7 +1,18 @@
 import { ErrorResponse } from "@/types/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createIndex, findIndexes, getIndex, getUnbuiltChanges, listIndexes } from "./api";
-import { Index, IndexMinimal, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
+import {
+    createIndex,
+    findIndexes,
+    getIndex,
+    getUnbuiltChanges,
+    listIndexes,
+} from "./api";
+import {
+    Index,
+    IndexMinimal,
+    IndexSearchResult,
+    UnbuiltChangesSearchResults,
+} from "./types";
 
 /**
  * Factory for generating react-query keys for index related queries.
@@ -9,9 +20,11 @@ import { Index, IndexMinimal, IndexSearchResult, UnbuiltChangesSearchResults } f
 export const indexQueryKeys = {
     all: () => ["indexes"] as const,
     lists: () => ["indexes", "list"] as const,
-    list: (filters: Array<string | number | boolean>) => ["indexes", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) =>
+        ["indexes", "list", ...filters] as const,
     infiniteLists: () => ["indexes", "list", "infinite"] as const,
-    infiniteList: (filters: Array<string | number | boolean>) => ["indexes", "list", "infinite", ...filters] as const,
+    infiniteList: (filters: Array<string | number | boolean>) =>
+        ["indexes", "list", "infinite", ...filters] as const,
     details: () => ["indexes", "details"] as const,
     detail: (id: string) => ["indexes", "detail", id] as const,
 };
@@ -25,7 +38,12 @@ export const indexQueryKeys = {
  * @param term - The search term to filter indexes by
  * @returns The paginated list of indexes
  */
-export function useFindIndexes(page: number, per_page: number, refId: string, term?: string) {
+export function useFindIndexes(
+    page: number,
+    per_page: number,
+    refId: string,
+    term?: string,
+) {
     return useQuery<IndexSearchResult>({
         queryKey: indexQueryKeys.infiniteList([page, per_page, refId, term]),
         queryFn: () => findIndexes(page, per_page, refId, term),
@@ -80,7 +98,9 @@ export function useCreateIndex() {
     return useMutation<Index, ErrorResponse, { refId: string }>({
         mutationFn: ({ refId }) => createIndex(refId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: indexQueryKeys.infiniteLists() });
+            queryClient.invalidateQueries({
+                queryKey: indexQueryKeys.infiniteLists(),
+            });
         },
     });
 }

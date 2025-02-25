@@ -13,7 +13,7 @@ import { checkSupportedWorkflow } from "../utils";
 import { AnalysisItemRightIcon } from "./AnalysisItemRightIcon";
 
 const StyledAnalysisItem = styled(Box)`
-    color: ${props => props.theme.color.greyDarkest};
+    color: ${(props) => props.theme.color.greyDarkest};
     margin-bottom: 10px;
 `;
 
@@ -60,12 +60,13 @@ const AnalysisAttribution = styled(Attribution)`
 `;
 
 const UnsupportedAnalysisTitle = styled.div`
-    color: ${props => props.theme.color.black};
+    color: ${(props) => props.theme.color.black};
     i.fas {
         margin-left: 5px;
     }
     span {
-        color: ${props => getColor({ color: "greyDark", theme: props.theme })};
+        color: ${(props) =>
+            getColor({ color: "greyDark", theme: props.theme })};
         font-size: ${getFontSize("md")};
         margin-left: 5px;
         font-weight: ${getFontWeight("normal")};
@@ -80,12 +81,26 @@ type AnalysisItemProps = {
  * Condensed analysis item for use in a list of analyses
  */
 export default function AnalysisItem({ analysis }: AnalysisItemProps) {
-    const { id, workflow, ready, job, user, reference, index, subtractions, created_at } = analysis;
-    const { hasPermission: canModify } = useCheckAdminRole(AdministratorRoles.USERS);
+    const {
+        id,
+        workflow,
+        ready,
+        job,
+        user,
+        reference,
+        index,
+        subtractions,
+        created_at,
+    } = analysis;
+    const { hasPermission: canModify } = useCheckAdminRole(
+        AdministratorRoles.USERS,
+    );
     const onRemove = useRemoveAnalysis(id);
 
     const title = checkSupportedWorkflow(workflow) ? (
-        <Link to={`/samples/${analysis.sample.id}/analyses/${id}`}>{getWorkflowDisplayName(workflow)}</Link>
+        <Link to={`/samples/${analysis.sample.id}/analyses/${id}`}>
+            {getWorkflowDisplayName(workflow)}
+        </Link>
     ) : (
         <UnsupportedAnalysisTitle>
             {getWorkflowDisplayName(workflow)}
@@ -100,7 +115,10 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
                 <AnalysisAttribution user={user.handle} time={created_at} />
                 <AnalysisItemEndIcon>
                     {ready ? (
-                        <AnalysisItemRightIcon canModify={canModify} onRemove={onRemove} />
+                        <AnalysisItemRightIcon
+                            canModify={canModify}
+                            onRemove={onRemove}
+                        />
                     ) : (
                         <ProgressCircle
                             progress={job?.progress || 0}
@@ -115,17 +133,25 @@ export default function AnalysisItem({ analysis }: AnalysisItemProps) {
                     <Icon name="equals" />
                     <SlashList>
                         <li>
-                            <Link to={`/refs/${reference.id}`}>{reference.name}</Link>
+                            <Link to={`/refs/${reference.id}`}>
+                                {reference.name}
+                            </Link>
                         </li>
                         <li>
-                            <Link to={`/refs/${reference.id}/indexes/${index.id}`}>Index {index.version}</Link>
+                            <Link
+                                to={`/refs/${reference.id}/indexes/${index.id}`}
+                            >
+                                Index {index.version}
+                            </Link>
                         </li>
                     </SlashList>
                 </AnalysisItemTag>
-                {subtractions.map(subtraction => (
+                {subtractions.map((subtraction) => (
                     <AnalysisItemTag key={subtraction.id}>
                         <Icon name="not-equal" />
-                        <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+                        <Link to={`/subtractions/${subtraction.id}`}>
+                            {subtraction.name}
+                        </Link>
                     </AnalysisItemTag>
                 ))}
             </AnalysisItemTags>

@@ -11,7 +11,7 @@ const margin = {
 };
 
 export const appendLegend = (svg, width, series, legendCircleRadius) => {
-    map(keysIn(series), index => {
+    map(keysIn(series), (index) => {
         svg.append("circle")
             .attr("cy", index * 25)
             .attr("r", legendCircleRadius)

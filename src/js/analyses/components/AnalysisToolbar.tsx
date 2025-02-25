@@ -13,7 +13,8 @@ type AnalysesToolbarProps = {
  */
 export default function AnalysesToolbar({ sampleId }: AnalysesToolbarProps) {
     const { hasPermission: canCreate } = useCheckCanEditSample(sampleId);
-    const { setValue: setCreateAnalysisType } = useUrlSearchParam<string>("createAnalysisType");
+    const { setValue: setCreateAnalysisType } =
+        useUrlSearchParam<string>("createAnalysisType");
 
     return (
         <div className="flex justify-end pb-4">

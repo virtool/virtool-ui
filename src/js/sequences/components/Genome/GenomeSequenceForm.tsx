@@ -40,7 +40,8 @@ export default function GenomeSequenceForm({
     refId,
     segments,
 }: GenomeSequenceFormProps) {
-    const { accession, definition, host, id, segment, sequence } = activeSequence || {};
+    const { accession, definition, host, id, segment, sequence } =
+        activeSequence || {};
     const methods = usePersistentForm<FormValues>({
         formName: `${noun}GenomeSequence${id}`,
         defaultValues: {
@@ -57,8 +58,17 @@ export default function GenomeSequenceForm({
     return (
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <RestoredAlert hasRestored={hasRestored} name="sequence" resetForm={reset} />
-                <SequenceSegmentField hasSchema={hasSchema} otuId={otuId} refId={refId} segments={segments} />
+                <RestoredAlert
+                    hasRestored={hasRestored}
+                    name="sequence"
+                    resetForm={reset}
+                />
+                <SequenceSegmentField
+                    hasSchema={hasSchema}
+                    otuId={otuId}
+                    refId={refId}
+                    segments={segments}
+                />
                 <SequenceForm />
                 <SaveButton />
             </form>

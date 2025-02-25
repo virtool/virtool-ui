@@ -26,10 +26,13 @@ export const drawSequencesChart = (element, data, baseWidth) => {
     // Build a d3 line function for rendering the plot line.
     const lineDrawer = line()
         .x((d, i) => x(i))
-        .y(d => y(d));
+        .y((d) => y(d));
 
     // Append the plot line to the SVG.
-    svg.append("path").attr("d", lineDrawer(data)).attr("class", "graph-line").attr("stroke", theme.color.greyDark);
+    svg.append("path")
+        .attr("d", lineDrawer(data))
+        .attr("class", "graph-line")
+        .attr("stroke", theme.color.greyDark);
 
     // Append a labelled x-axis to the SVG.
     svg.append("g")

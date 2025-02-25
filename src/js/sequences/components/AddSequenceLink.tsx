@@ -16,9 +16,15 @@ type AddSequenceLinkProps = {
 /**
  * Displays a link to add a sequence
  */
-export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProps) {
+export default function AddSequenceLink({
+    dataType,
+    refId,
+}: AddSequenceLinkProps) {
     const { reference } = useCurrentOTUContext();
-    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+    const { hasPermission: canModify } = useCheckReferenceRight(
+        refId,
+        ReferenceRight.modify_otu,
+    );
     const unreferencedTargets = useGetUnreferencedTargets();
     const hasUnreferencedTargets = Boolean(unreferencedTargets?.length);
     const hasTargets = Boolean(reference.targets?.length);
@@ -29,7 +35,10 @@ export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProp
 
             if (!hasUnreferencedTargets) {
                 return (
-                    <span color="green" className={cn("ml-auto", "text-green-600")}>
+                    <span
+                        color="green"
+                        className={cn("ml-auto", "text-green-600")}
+                    >
                         <Icon name="check-double" /> All targets defined
                     </span>
                 );
@@ -37,7 +46,10 @@ export default function AddSequenceLink({ dataType, refId }: AddSequenceLinkProp
         }
 
         return (
-            <Link className={cn("ml-auto", "cursor-pointer")} to={formatSearchParams({ openAddSequence: true })}>
+            <Link
+                className={cn("ml-auto", "cursor-pointer")}
+                to={formatSearchParams({ openAddSequence: true })}
+            >
                 Add Sequence
             </Link>
         );

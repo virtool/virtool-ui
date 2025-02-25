@@ -1,5 +1,13 @@
 import { HMMSearchResults } from "@/hmm/types";
-import { Badge, Dialog, DialogOverlay, DialogTitle, Icon, Tabs, TabsLink } from "@base";
+import {
+    Badge,
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    Icon,
+    Tabs,
+    TabsLink,
+} from "@base";
 import { IndexMinimal } from "@indexes/types";
 import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
@@ -15,7 +23,10 @@ import { useSearch } from "wouter";
 import { useCreateAnalysis } from "../../queries";
 import HMMAlert from "../HMMAlert";
 import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
-import { CreateAnalysisForm, CreateAnalysisFormValues } from "./CreateAnalysisForm";
+import {
+    CreateAnalysisForm,
+    CreateAnalysisFormValues,
+} from "./CreateAnalysisForm";
 import { SelectedSamples } from "./SelectedSamples";
 import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
@@ -39,7 +50,9 @@ export function getCompatibleSamples(mode: string, samples: SampleMinimal[]) {
             return sample.library_type === "amplicon";
         }
 
-        return sample.library_type === "normal" || sample.library_type === "srna";
+        return (
+            sample.library_type === "normal" || sample.library_type === "srna"
+        );
     });
 }
 
@@ -82,8 +95,12 @@ export default function QuickAnalyze({
 
     const createAnalysis = useCreateAnalysis();
 
-    const barcode = samples.filter(sample => sample.library_type === "amplicon");
-    const genome = samples.filter(sample => sample.library_type !== "amplicon");
+    const barcode = samples.filter(
+        (sample) => sample.library_type === "amplicon",
+    );
+    const genome = samples.filter(
+        (sample) => sample.library_type !== "amplicon",
+    );
 
     function onHide() {
         unsetQuickAnalysisType();
@@ -97,10 +114,16 @@ export default function QuickAnalyze({
     }, [quickAnalysisType, compatibleSamples.length]);
 
     function getReferenceId(selectedIndex: string) {
-        return indexes.find(index => index.reference.name === selectedIndex)?.reference.id;
+        return indexes.find((index) => index.reference.name === selectedIndex)
+            ?.reference.id;
     }
 
-    function handleSubmit({ index, subtractions, workflow, mlModel }: CreateAnalysisFormValues) {
+    function handleSubmit({
+        index,
+        subtractions,
+        workflow,
+        mlModel,
+    }: CreateAnalysisFormValues) {
         const refId = getReferenceId(index);
 
         forEach(compatibleSamples, ({ id }) => {
@@ -116,10 +139,16 @@ export default function QuickAnalyze({
         onHide();
     }
 
-    const compatibleWorkflows = getCompatibleWorkflows(mode ?? "genome", Boolean(hmms.total_count));
+    const compatibleWorkflows = getCompatibleWorkflows(
+        mode ?? "genome",
+        Boolean(hmms.total_count),
+    );
 
     return (
-        <Dialog open={includes(Workflows, quickAnalysisType)} onOpenChange={() => onHide()}>
+        <Dialog
+            open={includes(Workflows, quickAnalysisType)}
+            onOpenChange={() => onHide()}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
@@ -127,26 +156,39 @@ export default function QuickAnalyze({
                     <Tabs>
                         {genome.length > 0 && (
                             <TabsLink
-                                to={updateSearchParam("quickAnalysisType", "genome", search)}
+                                to={updateSearchParam(
+                                    "quickAnalysisType",
+                                    "genome",
+                                    search,
+                                )}
                                 isActive={mode === "genome"}
                             >
-                                <Icon name="dna" /> Genome <Badge>{genome.length}</Badge>
+                                <Icon name="dna" /> Genome{" "}
+                                <Badge>{genome.length}</Badge>
                             </TabsLink>
                         )}
                         {barcode.length > 0 && (
                             <TabsLink
-                                to={updateSearchParam("quickAnalysisType", "barcode", search)}
+                                to={updateSearchParam(
+                                    "quickAnalysisType",
+                                    "barcode",
+                                    search,
+                                )}
                                 isActive={mode === "barcode"}
                             >
-                                <Icon name="barcode" /> Barcode <Badge>{barcode.length}</Badge>
+                                <Icon name="barcode" /> Barcode{" "}
+                                <Badge>{barcode.length}</Badge>
                             </TabsLink>
                         )}
                         <QuickAnalyzeSelected>
-                            {samples.length} sample{samples.length > 1 ? "s" : ""} selected
+                            {samples.length} sample
+                            {samples.length > 1 ? "s" : ""} selected
                         </QuickAnalyzeSelected>
                     </Tabs>
                     <SelectedSamples samples={compatibleSamples} />
-                    {mode === "genome" && <HMMAlert installed={hmms.status.task?.complete} />}
+                    {mode === "genome" && (
+                        <HMMAlert installed={hmms.status.task?.complete} />
+                    )}
                     <WorkflowSelector
                         onSelect={setQuickAnalysisType}
                         selected={quickAnalysisType}

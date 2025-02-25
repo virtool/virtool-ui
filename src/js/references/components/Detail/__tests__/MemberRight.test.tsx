@@ -20,8 +20,13 @@ describe("<MemberRight />", () => {
         renderWithProviders(<MemberRight {...props} />);
 
         expect(screen.getByText("build")).toBeInTheDocument();
-        expect(screen.getByText("Can build new indexes for the reference.")).toBeInTheDocument();
-        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "checked");
+        expect(
+            screen.getByText("Can build new indexes for the reference."),
+        ).toBeInTheDocument();
+        expect(screen.getByRole("checkbox")).toHaveAttribute(
+            "data-state",
+            "checked",
+        );
     });
 
     it("should render when right is modify_otu", () => {
@@ -35,14 +40,20 @@ describe("<MemberRight />", () => {
         props.enabled = false;
         renderWithProviders(<MemberRight {...props} />);
 
-        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "unchecked");
+        expect(screen.getByRole("checkbox")).toHaveAttribute(
+            "data-state",
+            "unchecked",
+        );
     });
 
-    it.each([true, false])("should have onToggle called on Checkbox click when [enabled=%p]", async enabled => {
-        props.enabled = enabled;
-        renderWithProviders(<MemberRight {...props} />);
+    it.each([true, false])(
+        "should have onToggle called on Checkbox click when [enabled=%p]",
+        async (enabled) => {
+            props.enabled = enabled;
+            renderWithProviders(<MemberRight {...props} />);
 
-        await userEvent.click(screen.getByRole("checkbox"));
-        expect(props.onToggle).toHaveBeenCalledWith(props.right, !enabled);
-    });
+            await userEvent.click(screen.getByRole("checkbox"));
+            expect(props.onToggle).toHaveBeenCalledWith(props.right, !enabled);
+        },
+    );
 });

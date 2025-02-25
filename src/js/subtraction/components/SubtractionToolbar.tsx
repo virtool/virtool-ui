@@ -18,17 +18,33 @@ type SubtractionToolbarProps = {
 /**
  * A search filtering toolbar
  */
-export default function SubtractionToolbar({ term, handleChange }: SubtractionToolbarProps) {
-    const { hasPermission } = useCheckAdminRoleOrPermission(Permission.modify_subtraction);
+export default function SubtractionToolbar({
+    term,
+    handleChange,
+}: SubtractionToolbarProps) {
+    const { hasPermission } = useCheckAdminRoleOrPermission(
+        Permission.modify_subtraction,
+    );
     const search = useSearch();
 
     return (
         <Toolbar>
             <div className="flex-grow">
-                <InputSearch value={term} onChange={handleChange} placeholder="Name" />
+                <InputSearch
+                    value={term}
+                    onChange={handleChange}
+                    placeholder="Name"
+                />
             </div>
             {hasPermission && (
-                <LinkButton color="blue" to={updateSearchParam("openCreateSubtraction", "true", search)}>
+                <LinkButton
+                    color="blue"
+                    to={updateSearchParam(
+                        "openCreateSubtraction",
+                        "true",
+                        search,
+                    )}
+                >
                     Create
                 </LinkButton>
             )}

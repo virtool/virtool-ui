@@ -1,5 +1,11 @@
 import { cn } from "@/utils/utils";
-import { BoxGroup, BoxGroupHeader, BoxGroupTable, ContainerNarrow, LoadingPlaceholder } from "@base";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    BoxGroupTable,
+    ContainerNarrow,
+    LoadingPlaceholder,
+} from "@base";
 import Contributors from "@indexes/components/Contributors";
 import React from "react";
 import { useGetReference } from "../../queries";
@@ -20,7 +26,15 @@ export default function ReferenceManager() {
         return <LoadingPlaceholder />;
     }
 
-    const { cloned_from, contributors, data_type, description, latest_build, organism, remotes_from } = reference;
+    const {
+        cloned_from,
+        contributors,
+        data_type,
+        description,
+        latest_build,
+        organism,
+        remotes_from,
+    } = reference;
 
     return (
         <ContainerNarrow>
@@ -28,7 +42,12 @@ export default function ReferenceManager() {
                 <BoxGroupHeader>
                     <h2>General</h2>
                 </BoxGroupHeader>
-                <BoxGroupTable className={cn("[&_th]:w-45", "[&_tr:not(:first-of-type)_td]:capitalize")}>
+                <BoxGroupTable
+                    className={cn(
+                        "[&_th]:w-45",
+                        "[&_tr:not(:first-of-type)_td]:capitalize",
+                    )}
+                >
                     <tbody>
                         <tr>
                             <th>Description</th>

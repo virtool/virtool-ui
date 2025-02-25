@@ -11,7 +11,11 @@ type ViewHeaderTitleBadge = {
 /**
  * A styled Badge component for use in view headers
  */
-export function ViewHeaderTitleBadge({ children, className, color }: ViewHeaderTitleBadge) {
+export function ViewHeaderTitleBadge({
+    children,
+    className,
+    color,
+}: ViewHeaderTitleBadge) {
     return (
         <Badge className={cn("text-base ml-2", className)} color={color}>
             {children}

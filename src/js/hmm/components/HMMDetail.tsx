@@ -22,7 +22,7 @@ import { usePathParams } from "@utils/hooks";
 const TaxonomyGrid = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-column-gap: ${props => props.theme.gap.column};
+    grid-column-gap: ${(props) => props.theme.gap.column};
 
     @media (max-width: ${device.tablet}) {
         grid-template-columns: 1fr;
@@ -44,9 +44,18 @@ export default function HMMDetail() {
         return <LoadingPlaceholder className="mt-32" />;
     }
 
-    const clusterMembers = map(data.entries, ({ name, accession, organism }, index) => (
-        <ClusterMember name={name} accession={accession} organism={organism} key={index} index={index} />
-    ));
+    const clusterMembers = map(
+        data.entries,
+        ({ name, accession, organism }, index) => (
+            <ClusterMember
+                name={name}
+                accession={accession}
+                organism={organism}
+                key={index}
+                index={index}
+            />
+        ),
+    );
 
     const names = map(data.names, (name, index) => (
         <Label className="mr-1" key={index}>
@@ -100,7 +109,10 @@ export default function HMMDetail() {
             <BoxGroup>
                 <BoxGroupHeader>
                     <h2>
-                        Cluster Members <BoxGroupHeaderBadge>{data.entries.length}</BoxGroupHeaderBadge>
+                        Cluster Members{" "}
+                        <BoxGroupHeaderBadge>
+                            {data.entries.length}
+                        </BoxGroupHeaderBadge>
                     </h2>
                 </BoxGroupHeader>
                 <BoxGroupTable

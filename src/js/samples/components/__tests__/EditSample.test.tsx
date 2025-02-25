@@ -37,23 +37,39 @@ describe("<Editsample />", () => {
         expect(screen.queryByText("Save")).toBeNull();
     });
 
-    it.each(["Name", "Isolate", "Host", "Locale", "Notes"])("should render changed data for", async inputLabel => {
-        renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
+    it.each(["Name", "Isolate", "Host", "Locale", "Notes"])(
+        "should render changed data for",
+        async (inputLabel) => {
+            renderWithRouter(
+                <EditSample {...props} />,
+                formatPath(path, searchParams),
+            );
 
-        const inputBox = screen.getByLabelText(inputLabel);
-        expect(inputBox).toBeInTheDocument();
-        expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
+            const inputBox = screen.getByLabelText(inputLabel);
+            expect(inputBox).toBeInTheDocument();
+            expect(inputBox).toHaveValue(sample[inputLabel.toLowerCase()]);
 
-        await userEvent.clear(inputBox);
-        expect(inputBox).toHaveValue("");
+            await userEvent.clear(inputBox);
+            expect(inputBox).toHaveValue("");
 
-        await userEvent.type(inputBox, "test");
-        expect(inputBox).toHaveValue("test");
-    });
+            await userEvent.type(inputBox, "test");
+            expect(inputBox).toHaveValue("test");
+        },
+    );
 
     it("should update sample when form is submitted", async () => {
-        const scope = mockApiEditSample(sample, "newName", "newIsolate", "newHost", "newLocale", "newNotes");
-        renderWithRouter(<EditSample {...props} />, formatPath(path, searchParams));
+        const scope = mockApiEditSample(
+            sample,
+            "newName",
+            "newIsolate",
+            "newHost",
+            "newLocale",
+            "newNotes",
+        );
+        renderWithRouter(
+            <EditSample {...props} />,
+            formatPath(path, searchParams),
+        );
 
         const nameInput = screen.getByLabelText("Name");
         await userEvent.clear(nameInput);

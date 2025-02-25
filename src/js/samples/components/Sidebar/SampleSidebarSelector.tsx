@@ -11,7 +11,7 @@ import { SampleSidebarSelectorItem } from "./SampleSidebarSelectorItem";
 const SampleSidebarSelectorButton = styled.div`
     display: flex;
     border-top: 1px solid;
-    border-color: ${props => props.theme.color.greyLight};
+    border-color: ${(props) => props.theme.color.greyLight};
     width: 100%;
     align-items: flex-end;
 
@@ -36,7 +36,11 @@ type SampleSidebarSelectorProps = {
     /** List of label ids applied to some, but not all selected samples */
     partiallySelectedItems?: number[];
     /** The styled component for the list items */
-    render: (result: { color?: string; description?: string; name: string }) => React.ReactNode;
+    render: (result: {
+        color?: string;
+        description?: string;
+        name: string;
+    }) => React.ReactNode;
     /** A list of labels or default subtractions */
     sampleItems: Label[] | SubtractionShortlist[];
     /** A list of selected items by their ids */
@@ -58,30 +62,44 @@ export function SampleSidebarSelector({
     manageLink,
 }: SampleSidebarSelectorProps) {
     const [results, term, setTerm] = useFuse(sampleItems, ["name"], []);
-    const sampleItemComponents = results.map((item: Label | SubtractionShortlist) => (
-        <SampleSidebarSelectorItem
-            key={item.id}
-            selected={selectedItems.includes(item.id)}
-            partiallySelected={partiallySelectedItems.includes(item.id as number)}
-            {...item}
-            onClick={onUpdate}
-        >
-            {render(item)}
-        </SampleSidebarSelectorItem>
-    ));
+    const sampleItemComponents = results.map(
+        (item: Label | SubtractionShortlist) => (
+            <SampleSidebarSelectorItem
+                key={item.id}
+                selected={selectedItems.includes(item.id)}
+                partiallySelected={partiallySelectedItems.includes(
+                    item.id as number,
+                )}
+                {...item}
+                onClick={onUpdate}
+            >
+                {render(item)}
+            </SampleSidebarSelectorItem>
+        ),
+    );
 
     return (
         <Popover
             trigger={
                 !sampleItems.length || (
-                    <SidebarHeaderButton aria-label={`select ${selectionType}`} type="button">
+                    <SidebarHeaderButton
+                        aria-label={`select ${selectionType}`}
+                        type="button"
+                    >
                         <Icon name="pen" />
                     </SidebarHeaderButton>
                 )
             }
         >
-            <BoxGroupSearch placeholder="Filter items" label="Filter items" value={term} onChange={setTerm} />
-            <SampleItemComponentsContainer>{sampleItemComponents}</SampleItemComponentsContainer>
+            <BoxGroupSearch
+                placeholder="Filter items"
+                label="Filter items"
+                value={term}
+                onChange={setTerm}
+            />
+            <SampleItemComponentsContainer>
+                {sampleItemComponents}
+            </SampleItemComponentsContainer>
             <SampleSidebarSelectorButton>
                 <Link to={manageLink}> Manage</Link>
             </SampleSidebarSelectorButton>

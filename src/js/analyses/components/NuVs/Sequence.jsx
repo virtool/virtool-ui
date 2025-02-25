@@ -15,14 +15,26 @@ function draw(element, maxLength, sequenceLength) {
         .domain([0, maxLength]);
 
     // Construct the SVG canvas.
-    const svg = select(element).append("svg").attr("width", width).attr("height", 30);
+    const svg = select(element)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", 30);
 
     // Create a group that will hold all chart elements.
     const group = svg.append("g").attr("transform", "translate(15,3)");
 
-    group.append("rect").attr("x", 0).attr("y", 18).attr("width", x(sequenceLength)).attr("height", 8);
+    group
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 18)
+        .attr("width", x(sequenceLength))
+        .attr("height", 8);
 
-    group.append("g").attr("class", "x axis").attr("transform", "translate(0,16)").call(axisTop(x));
+    group
+        .append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0,16)")
+        .call(axisTop(x));
 }
 
 const StyledNuVsSequence = styled.div`
@@ -33,7 +45,10 @@ const StyledNuVsSequence = styled.div`
 export const NuVsSequence = ({ maxSequenceLength, sequence }) => {
     const chartEl = useRef(null);
 
-    useEffect(() => draw(chartEl.current, maxSequenceLength, sequence.length), [sequence]);
+    useEffect(
+        () => draw(chartEl.current, maxSequenceLength, sequence.length),
+        [sequence],
+    );
 
     return (
         <div style={{ overflow: "hidden" }}>

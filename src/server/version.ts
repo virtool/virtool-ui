@@ -12,10 +12,12 @@ const minApiVersion = packageJson.virtool.minApiVersion;
  * @param {string} apiUrl - the base url for the API
  */
 export async function verifyApiVersion(apiUrl: string) {
-    const response = await superagent.get(apiUrl).then(res => res.body);
+    const response = await superagent.get(apiUrl).then((res) => res.body);
 
     if (!semver.gte(response.version, minApiVersion)) {
-        console.error(`Found incompatible API version ${response.version}. Require ${minApiVersion}.`);
+        console.error(
+            `Found incompatible API version ${response.version}. Require ${minApiVersion}.`,
+        );
         process.exit(1);
     }
 

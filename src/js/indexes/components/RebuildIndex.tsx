@@ -1,4 +1,11 @@
-import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "@base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
+} from "@base";
 import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
@@ -14,7 +21,8 @@ type RebuildIndexProps = {
  * Displays a dialog to rebuild an index
  */
 export default function RebuildIndex({ refId }: RebuildIndexProps) {
-    const { open: openRebuild, setOpen: setOpenRebuild } = useDialogParam("openRebuild");
+    const { open: openRebuild, setOpen: setOpenRebuild } =
+        useDialogParam("openRebuild");
     const { data, isPending } = useFetchUnbuiltChanges(refId);
     const mutation = useCreateIndex();
 
@@ -41,7 +49,12 @@ export default function RebuildIndex({ refId }: RebuildIndexProps) {
                 <DialogContent>
                     <DialogTitle>Rebuild Index</DialogTitle>
                     <form onSubmit={handleSubmit}>
-                        <RebuildIndexError error={mutation.isError && mutation.error.response.body.message} />
+                        <RebuildIndexError
+                            error={
+                                mutation.isError &&
+                                mutation.error.response.body.message
+                            }
+                        />
                         <RebuildHistory unbuilt={data} />
                         <DialogFooter>
                             <Button type="submit" color="blue">

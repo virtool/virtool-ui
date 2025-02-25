@@ -11,12 +11,18 @@ type AttributionProps = {
     verb?: string;
 };
 
-export function Attribution({ className = "", time, user, verb = "created" }: AttributionProps) {
+export function Attribution({
+    className = "",
+    time,
+    user,
+    verb = "created",
+}: AttributionProps) {
     return (
         <span className={cn(className, "inline-flex", "items-center gap-2")}>
             {user ? <InitialIcon size="md" handle={user} /> : null}
             <span>
-                {user} {user ? verb : capitalize(verb)} <RelativeTime time={time} />
+                {user} {user ? verb : capitalize(verb)}{" "}
+                <RelativeTime time={time} />
             </span>
         </span>
     );

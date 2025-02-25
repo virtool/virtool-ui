@@ -22,7 +22,9 @@ describe("<JobItem />", () => {
             renderWithRouter(<JobItem {...props} />);
 
             expect(screen.getByText("Build Index")).toBeInTheDocument();
-            expect(screen.getByText(`${props.user.handle} created`)).toBeInTheDocument();
+            expect(
+                screen.getByText(`${props.user.handle} created`),
+            ).toBeInTheDocument();
         });
     });
 
@@ -36,17 +38,22 @@ describe("<JobItem />", () => {
         ])("and [state=%p]", (state, progress) => {
             props.state = state;
             props.progress = progress;
-            const capitalizedState = state.charAt(0).toUpperCase() + state.slice(1);
+            const capitalizedState =
+                state.charAt(0).toUpperCase() + state.slice(1);
             renderWithRouter(<JobItem {...props} />);
 
             expect(screen.getByText(capitalizedState)).toBeInTheDocument();
-            expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", `${progress}`);
+            expect(screen.getByRole("progressbar")).toHaveAttribute(
+                "data-value",
+                `${progress}`,
+            );
         });
 
         it("should render properly when job is complete", () => {
             props.state = "complete";
             props.progress = 100;
-            const capitalizedState = props.state.charAt(0).toUpperCase() + props.state.slice(1);
+            const capitalizedState =
+                props.state.charAt(0).toUpperCase() + props.state.slice(1);
             renderWithRouter(<JobItem {...props} />);
 
             expect(screen.getByText(capitalizedState)).toBeInTheDocument();

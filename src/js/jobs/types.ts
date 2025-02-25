@@ -12,7 +12,16 @@ export enum JobState {
     waiting = "waiting",
 }
 
-export type IconColor = "black" | "blue" | "green" | "gray" | "grayDark" | "grey" | "red" | "orange" | "purple";
+export type IconColor =
+    | "black"
+    | "blue"
+    | "green"
+    | "gray"
+    | "grayDark"
+    | "grey"
+    | "red"
+    | "orange"
+    | "purple";
 
 /** A Job with essential information */
 export type JobNested = {

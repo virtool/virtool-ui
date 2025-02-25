@@ -5,7 +5,7 @@ import React from "react";
 import styled from "styled-components";
 
 const SampleSidebarListItem = styled(SampleLabel)`
-    background-color: ${props => props.theme.color.white};
+    background-color: ${(props) => props.theme.color.white};
     display: inline;
     margin: 0 5px 5px 0;
 `;
@@ -24,9 +24,17 @@ type SampleSidebarListProps = {
  * A sidebar to list labels or subtractions associated with a sample
  */
 export default function SampleSidebarList({ items }: SampleSidebarListProps) {
-    const sampleItemComponents = items.map(item => (
-        <SampleSidebarListItem key={item.id} color={item.color} name={item.name} />
+    const sampleItemComponents = items.map((item) => (
+        <SampleSidebarListItem
+            key={item.id}
+            color={item.color}
+            name={item.name}
+        />
     ));
 
-    return <StyledSampleSidebarList>{sampleItemComponents}</StyledSampleSidebarList>;
+    return (
+        <StyledSampleSidebarList>
+            {sampleItemComponents}
+        </StyledSampleSidebarList>
+    );
 }

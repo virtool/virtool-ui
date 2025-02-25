@@ -29,12 +29,16 @@ type NuVsItemProps = {
  * A condensed NuVs item for use in a list of NuVs
  */
 export default function NuVsItem({ hit }: NuVsItemProps) {
-    const { value: activeHit, setValue: setActiveHit } = useUrlSearchParam<string>("activeHit");
+    const { value: activeHit, setValue: setActiveHit } =
+        useUrlSearchParam<string>("activeHit");
 
     const { id, e, annotatedOrfCount, sequence, index } = hit;
 
     return (
-        <StyledNuVsItem active={activeHit === String(id)} onClick={() => setActiveHit(String(id))}>
+        <StyledNuVsItem
+            active={activeHit === String(id)}
+            onClick={() => setActiveHit(String(id))}
+        >
             <NuVsItemHeader>
                 <strong>Sequence {index}</strong>
                 <Badge>{sequence.length}</Badge>

@@ -1,5 +1,14 @@
 import { getFontWeight } from "@app/theme";
-import { Box, Button, Color, DialogFooter, InputError, InputGroup, InputLabel, InputSimple } from "@base";
+import {
+    Box,
+    Button,
+    Color,
+    DialogFooter,
+    InputError,
+    InputGroup,
+    InputLabel,
+    InputSimple,
+} from "@base";
 import { SampleLabel } from "@samples/components/Label/SampleLabel";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,13 +27,23 @@ type LabelFormProps = {
     description?: string;
     error?: string;
     name?: string;
-    onSubmit: (data: { color: string; name: string; description: string }) => void;
+    onSubmit: (data: {
+        color: string;
+        name: string;
+        description: string;
+    }) => void;
 };
 
 /**
  * A form for creating or updating a label
  */
-export function LabelForm({ color = "#D1D5DB", description = "", error = "", name = "", onSubmit }: LabelFormProps) {
+export function LabelForm({
+    color = "#D1D5DB",
+    description = "",
+    error = "",
+    name = "",
+    onSubmit,
+}: LabelFormProps) {
     const [newColor, setColor] = useState(color);
 
     const {
@@ -35,7 +54,11 @@ export function LabelForm({ color = "#D1D5DB", description = "", error = "", nam
     } = useForm({ defaultValues: { color, description, name } });
 
     return (
-        <form onSubmit={handleSubmit(values => onSubmit({ ...values, color: newColor || "#D1D5DB" }))}>
+        <form
+            onSubmit={handleSubmit((values) =>
+                onSubmit({ ...values, color: newColor || "#D1D5DB" }),
+            )}
+        >
             <InputGroup>
                 <InputLabel htmlFor="name">Name</InputLabel>
                 <InputSimple
@@ -55,11 +78,18 @@ export function LabelForm({ color = "#D1D5DB", description = "", error = "", nam
             </InputGroup>
             <InputGroup>
                 <InputLabel htmlFor="color">Color</InputLabel>
-                <Color id="color" value={newColor} onChange={color => setColor(color)} />
+                <Color
+                    id="color"
+                    value={newColor}
+                    onChange={(color) => setColor(color)}
+                />
             </InputGroup>
             <LabelFormPreviewLabel>Preview</LabelFormPreviewLabel>
             <LabelFormPreview>
-                <SampleLabel color={newColor || "#D1D5DB"} name={watch("name") || "Preview"} />
+                <SampleLabel
+                    color={newColor || "#D1D5DB"}
+                    name={watch("name") || "Preview"}
+                />
             </LabelFormPreview>
             <DialogFooter>
                 <Button color="blue" type="submit">

@@ -1,10 +1,18 @@
 import { useCallback, useEffect, useRef } from "react";
 
-export function useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, scroll, onSetActiveId) {
+export function useKeyNavigation(
+    activeId,
+    nextId,
+    nextIndex,
+    previousId,
+    previousIndex,
+    scroll,
+    onSetActiveId,
+) {
     const ref = useRef(null);
 
     const handleKeyPress = useCallback(
-        e => {
+        (e) => {
             if (e.target !== window.document.body) {
                 return;
             }

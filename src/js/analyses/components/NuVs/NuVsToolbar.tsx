@@ -1,4 +1,6 @@
-import NuVsExport, { NuVsExportProps } from "@/analyses/components/NuVs/NuVsExport";
+import NuVsExport, {
+    NuVsExportProps,
+} from "@/analyses/components/NuVs/NuVsExport";
 import { InputSearch } from "@base";
 import Toolbar from "@base/Toolbar";
 import { ButtonToggle } from "@base/ButtonToggle";
@@ -10,32 +12,59 @@ import { AnalysisViewerSort } from "../Viewer/Sort";
 /**
  * Displays a toolbar for managing and filtering NuVs
  */
-export default function NuVsToolbar({ analysisId, results, sampleName }: NuVsExportProps) {
-    const { value: filterORFs, setValue: setFilterORFs } = useUrlSearchParam<boolean>("filterOrfs", true);
-    const { value: filterSequences, setValue: setFilterSequences } = useUrlSearchParam<boolean>(
-        "filterSequences",
-        true,
+export default function NuVsToolbar({
+    analysisId,
+    results,
+    sampleName,
+}: NuVsExportProps) {
+    const { value: filterORFs, setValue: setFilterORFs } =
+        useUrlSearchParam<boolean>("filterOrfs", true);
+    const { value: filterSequences, setValue: setFilterSequences } =
+        useUrlSearchParam<boolean>("filterSequences", true);
+    const { value: find, setValue: setFind } = useUrlSearchParam<string>(
+        "find",
+        "",
     );
-    const { value: find, setValue: setFind } = useUrlSearchParam<string>("find", "");
-    const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>("sort", "length");
+    const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>(
+        "sort",
+        "length",
+    );
 
     return (
         <Toolbar>
             <div className="flex-grow">
-                <InputSearch value={find} onChange={e => setFind(e.target.value)} placeholder="Name or family" />
+                <InputSearch
+                    value={find}
+                    onChange={(e) => setFind(e.target.value)}
+                    placeholder="Name or family"
+                />
             </div>
-            <AnalysisViewerSort workflow="nuvs" sortKey={sortKey} onSelect={setSortKey} />
+            <AnalysisViewerSort
+                workflow="nuvs"
+                sortKey={sortKey}
+                onSelect={setSortKey}
+            />
             <Tooltip tip="Hide sequences that have no HMM hits">
-                <ButtonToggle onPressedChange={active => setFilterSequences(active)} pressed={filterSequences}>
+                <ButtonToggle
+                    onPressedChange={(active) => setFilterSequences(active)}
+                    pressed={filterSequences}
+                >
                     Filter Sequences
                 </ButtonToggle>
             </Tooltip>
             <Tooltip tip="Hide ORFs that have no HMM hits">
-                <ButtonToggle pressed={filterORFs} onPressedChange={active => setFilterORFs(active)}>
+                <ButtonToggle
+                    pressed={filterORFs}
+                    onPressedChange={(active) => setFilterORFs(active)}
+                >
                     Filter ORFs
                 </ButtonToggle>
             </Tooltip>
-            <NuVsExport analysisId={analysisId} results={results} sampleName={sampleName} />
+            <NuVsExport
+                analysisId={analysisId}
+                results={results}
+                sampleName={sampleName}
+            />
         </Toolbar>
     );
 }

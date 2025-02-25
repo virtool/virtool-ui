@@ -11,16 +11,31 @@ type RoleSelectProps = {
     id?: string;
 };
 
-export const RoleSelect = ({ value, roles, onChange, className, id }: RoleSelectProps) => {
-    const roleItems = map(roles, role => (
-        <SelectItem value={role.id} key={role.id} description={role.description}>
+export const RoleSelect = ({
+    value,
+    roles,
+    onChange,
+    className,
+    id,
+}: RoleSelectProps) => {
+    const roleItems = map(roles, (role) => (
+        <SelectItem
+            value={role.id}
+            key={role.id}
+            description={role.description}
+        >
             {`${role.id} Administrator`}
         </SelectItem>
     ));
 
     return (
         <Select value={value} onValueChange={onChange}>
-            <SelectButton placeholder="Select administrator role" icon="chevron-down" className={className} id={id} />
+            <SelectButton
+                placeholder="Select administrator role"
+                icon="chevron-down"
+                className={className}
+                id={id}
+            />
             <SelectContent position="popper" align="start">
                 {roleItems}
             </SelectContent>

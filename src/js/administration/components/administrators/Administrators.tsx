@@ -2,28 +2,41 @@ import { usePageParam } from "@utils/hooks";
 import { filter } from "lodash-es";
 import React, { useState } from "react";
 import { useFetchAccount } from "@account/queries";
-import { InputSearch, LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import {
+    InputSearch,
+    LoadingPlaceholder,
+    NoneFoundBox,
+    Pagination,
+} from "@base";
 import Toolbar from "@base/Toolbar";
 import { useFindUsers, useGetAdministratorRoles } from "../../queries";
 import { CreateAdministrator } from "./Create";
 import { AdministratorItem } from "./Item";
 
-const renderRow = roles => item => <AdministratorItem key={item.id} user={item} roles={roles} />;
+const renderRow = (roles) => (item) => (
+    <AdministratorItem key={item.id} user={item} roles={roles} />
+);
 
-export const ManageAdministrators = () => {
+export function ManageAdministrators() {
     const [term, setTerm] = useState("");
     const { page } = usePageParam();
 
-    const { data: users, isPending: isPendingUsers } = useFindUsers(page, 25, term, true);
+    const { data: users, isPending: isPendingUsers } = useFindUsers(
+        page,
+        25,
+        term,
+        true,
+    );
 
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
-    const { data: roles, isPending: isPendingRoles } = useGetAdministratorRoles();
+    const { data: roles, isPending: isPendingRoles } =
+        useGetAdministratorRoles();
 
     if (isPendingUsers || isPendingRoles || isPendingAccount) {
         return <LoadingPlaceholder />;
     }
 
-    const filteredUsers = filter(users.items, user => user.id !== account.id);
+    const filteredUsers = filter(users.items, (user) => user.id !== account.id);
 
     return (
         <>
@@ -33,7 +46,7 @@ export const ManageAdministrators = () => {
                         name="search"
                         aria-label="search"
                         value={term}
-                        onChange={e => setTerm(e.target.value)}
+                        onChange={(e) => setTerm(e.target.value)}
                     />
                 </div>
                 <CreateAdministrator />
@@ -48,4 +61,4 @@ export const ManageAdministrators = () => {
             {!filteredUsers.length && <NoneFoundBox noun="administrators" />}
         </>
     );
-};
+}

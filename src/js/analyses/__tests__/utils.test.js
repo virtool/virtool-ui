@@ -1,5 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { fillAlign, formatPathoscopeData, formatSequence, median, mergeCoverage } from "../utils";
+import {
+    fillAlign,
+    formatPathoscopeData,
+    formatSequence,
+    median,
+    mergeCoverage,
+} from "../utils";
 
 describe("fillAlign()", () => {
     const align = [
@@ -16,12 +22,16 @@ describe("fillAlign()", () => {
 
     it("should return array of twenty zeros when align is undefined", () => {
         const result = fillAlign({ length });
-        expect(result).toEqual([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        expect(result).toEqual([
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ]);
     });
 
     it("should return array filled based on align when it is defined", () => {
         const result = fillAlign({ align, length });
-        expect(result).toEqual([0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2]);
+        expect(result).toEqual([
+            0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 2, 2, 2, 2,
+        ]);
     });
 });
 
@@ -94,12 +104,14 @@ describe("mergeCoverage()", () => {
             [7, 5, 5, 1, 1, 2, 1, 5, 6, 2, 1, 0, 0, 0, 1, 3, 2],
             [1, 1, 2, 3, 4, 4, 4, 4, 2, 2, 2, 3, 2, 1, 0, 1, 0],
         ];
-        isolates = coverages.map(c => ({ filled: c }));
+        isolates = coverages.map((c) => ({ filled: c }));
     });
 
     it("should return merged coverage when all isolates have same length", () => {
         const merged = mergeCoverage(isolates);
-        expect(merged).toEqual([7, 5, 5, 6, 6, 7, 9, 5, 6, 2, 2, 3, 2, 1, 1, 3, 2]);
+        expect(merged).toEqual([
+            7, 5, 5, 6, 6, 7, 9, 5, 6, 2, 2, 3, 2, 1, 1, 3, 2,
+        ]);
     });
 
     it("should return merged coverage when isolate lengths differ", () => {
@@ -107,6 +119,8 @@ describe("mergeCoverage()", () => {
         isolates[0].filled.push(5);
         isolates[2].filled.push(1);
         const merged = mergeCoverage(isolates);
-        expect(merged).toEqual([7, 5, 5, 6, 6, 7, 9, 5, 6, 2, 2, 3, 2, 1, 1, 3, 2, 3, 5]);
+        expect(merged).toEqual([
+            7, 5, 5, 6, 6, 7, 9, 5, 6, 2, 2, 3, 2, 1, 1, 3, 2, 3, 5,
+        ]);
     });
 });

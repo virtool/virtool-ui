@@ -18,7 +18,9 @@ type CreateFakeUserNestedProps = {
  * @param props - values to override automatically generated values
  * @returns a UserNested object with fake data
  */
-export function createFakeUserNested(props?: CreateFakeUserNestedProps): UserNested {
+export function createFakeUserNested(
+    props?: CreateFakeUserNestedProps,
+): UserNested {
     let { handle, id } = props || {};
 
     return {
@@ -111,7 +113,9 @@ export function mockApiFindUsers(users: Array<User>, query?: FindUsersQuery) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetUser(userId: string, user: User) {
-    return nock("http://localhost").get(`/api/admin/users/${userId}`).reply(200, user);
+    return nock("http://localhost")
+        .get(`/api/admin/users/${userId}`)
+        .reply(200, user);
 }
 
 /**
@@ -123,7 +127,12 @@ export function mockApiGetUser(userId: string, user: User) {
  * @param user - The user details
  * @returns A nock scope for the mocked API call
  */
-export function mockApiEditUser(userId: string, statusCode: number, update: any, user?: User) {
+export function mockApiEditUser(
+    userId: string,
+    statusCode: number,
+    update: any,
+    user?: User,
+) {
     return nock("http://localhost")
         .patch(`/api/admin/users/${userId}`)
         .reply(statusCode, { ...user, ...update });

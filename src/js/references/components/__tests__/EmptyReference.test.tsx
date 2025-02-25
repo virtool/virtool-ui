@@ -19,7 +19,10 @@ describe("<EmptyReference />", () => {
         const scope = mockApiCreateReference("test_name", "", "genome", "");
         renderWithProviders(<EmptyReference />);
 
-        await userEvent.type(screen.getByRole("textbox", { name: "Name" }), "test_name");
+        await userEvent.type(
+            screen.getByRole("textbox", { name: "Name" }),
+            "test_name",
+        );
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         scope.done();
@@ -29,8 +32,15 @@ describe("<EmptyReference />", () => {
         const scope = mockApiCreateReference("test_name", "", "barcode", "");
         renderWithProviders(<EmptyReference />);
 
-        await userEvent.type(screen.getByRole("textbox", { name: "Name" }), "test_name");
-        await userEvent.click(screen.getByRole("button", { name: "Barcode Target sequences for barcode analysis" }));
+        await userEvent.type(
+            screen.getByRole("textbox", { name: "Name" }),
+            "test_name",
+        );
+        await userEvent.click(
+            screen.getByRole("button", {
+                name: "Barcode Target sequences for barcode analysis",
+            }),
+        );
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         scope.done();
@@ -42,12 +52,26 @@ describe("<EmptyReference />", () => {
         const dataType = "genome";
         const description = "test_description";
 
-        const scope = mockApiCreateReference(name, description, dataType, organism);
+        const scope = mockApiCreateReference(
+            name,
+            description,
+            dataType,
+            organism,
+        );
         renderWithProviders(<EmptyReference />);
 
-        await userEvent.type(screen.getByRole("textbox", { name: "Name" }), name);
-        await userEvent.type(screen.getByRole("textbox", { name: "Organism" }), organism);
-        await userEvent.type(screen.getByRole("textbox", { name: "Description" }), description);
+        await userEvent.type(
+            screen.getByRole("textbox", { name: "Name" }),
+            name,
+        );
+        await userEvent.type(
+            screen.getByRole("textbox", { name: "Organism" }),
+            organism,
+        );
+        await userEvent.type(
+            screen.getByRole("textbox", { name: "Description" }),
+            description,
+        );
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         scope.done();

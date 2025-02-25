@@ -8,7 +8,9 @@ describe("<Color />", () => {
     it("should call onChange when color clicked or input changed", async () => {
         const onChange = vi.fn();
 
-        const { getByRole, getByTitle } = renderWithProviders(<Color id="color" value="#DDDDDD" onChange={onChange} />);
+        const { getByRole, getByTitle } = renderWithProviders(
+            <Color id="color" value="#DDDDDD" onChange={onChange} />,
+        );
 
         const textbox = getByRole("textbox");
 

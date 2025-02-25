@@ -41,5 +41,11 @@ interface JobStateIconProps {
 }
 
 export function JobStateIcon({ state }: JobStateIconProps) {
-    return <Icon name={getIconName(state)} color={getIconColor(state)} title={state} />;
+    return (
+        <Icon
+            name={getIconName(state)}
+            color={getIconColor(state)}
+            title={state}
+        />
+    );
 }

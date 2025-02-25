@@ -25,7 +25,10 @@ type DividerVerticalProps = {
     text?: string;
 };
 
-export const DividerVertical = ({ className = "", text = "" }: DividerVerticalProps) => (
+export const DividerVertical = ({
+    className = "",
+    text = "",
+}: DividerVerticalProps) => (
     <StyledDividerVertical className={className}>
         <DividerVerticalBorder color="greyLight" />
         {text && <DividerVerticalText color="grey">{text}</DividerVerticalText>}

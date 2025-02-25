@@ -6,7 +6,10 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeFormattedNuVsAnalysis, mockApiBlastNuVs } from "../../../../../tests/fake/analyses";
+import {
+    createFakeFormattedNuVsAnalysis,
+    mockApiBlastNuVs,
+} from "../../../../../tests/fake/analyses";
 
 describe("<NuVsViewer />", () => {
     let props;
@@ -28,16 +31,24 @@ describe("<NuVsViewer />", () => {
         it("should render correctly", () => {
             renderWithRouter(<NuVsViewer {...props} />);
 
-            expect(screen.getByText("This sequence has no BLAST information attached to it.")).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    "This sequence has no BLAST information attached to it.",
+                ),
+            ).toBeInTheDocument();
             expect(screen.getByText("Families")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "BLAST at NCBI" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "BLAST at NCBI" }),
+            ).toBeInTheDocument();
         });
 
         it("should render blast when clicked", async () => {
             const scope = mockApiBlastNuVs(nuvs.id, nuvs.results.hits[0].index);
             renderWithRouter(<NuVsViewer {...props} />);
 
-            await userEvent.click(screen.getByRole("button", { name: "BLAST at NCBI" }));
+            await userEvent.click(
+                screen.getByRole("button", { name: "BLAST at NCBI" }),
+            );
             scope.done();
         });
     });
@@ -46,9 +57,13 @@ describe("<NuVsViewer />", () => {
         it("should render export dialog when exporting", async () => {
             renderWithRouter(<NuVsViewer {...props} />);
 
-            await userEvent.click(screen.getByRole("button", { name: "Export" }));
+            await userEvent.click(
+                screen.getByRole("button", { name: "Export" }),
+            );
             expect(screen.getByText("Export Analysis")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "Download" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "Download" }),
+            ).toBeInTheDocument();
         });
     });
 });

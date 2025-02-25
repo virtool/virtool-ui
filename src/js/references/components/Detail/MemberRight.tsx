@@ -49,7 +49,11 @@ export function MemberRight({ right, enabled, onToggle }: MemberRightProps) {
 
     return (
         <StyledMemberRight>
-            <MemberRightCheckbox key={right} checked={enabled} onClick={handleClick} />
+            <MemberRightCheckbox
+                key={right}
+                checked={enabled}
+                onClick={handleClick}
+            />
             <MemberRightDescription>
                 <strong>{right}</strong>
                 <small>{descriptions[right]}</small>

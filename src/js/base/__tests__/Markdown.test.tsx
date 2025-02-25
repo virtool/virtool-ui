@@ -23,9 +23,15 @@ describe("<Markdown />", () => {
     it("should render markdown", () => {
         renderWithProviders(<Markdown markdown={markdown} />);
 
-        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Heading 1");
-        expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Heading 2");
-        expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent("Table Example");
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+            "Heading 1",
+        );
+        expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+            "Heading 2",
+        );
+        expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
+            "Table Example",
+        );
     });
 
     it("should render table", () => {

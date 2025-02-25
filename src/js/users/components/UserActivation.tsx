@@ -1,5 +1,12 @@
 import { useUpdateUser } from "@administration/queries";
-import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle } from "@base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
+} from "@base";
 import { DialogClose, DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import styled from "styled-components";
@@ -24,7 +31,13 @@ type UserActivationProps = {
 /**
  * A dialog that requests confirmation for deactivating or reactivating a user
  */
-export function UserActivation({ handle, id, noun, onHide, show }: UserActivationProps) {
+export function UserActivation({
+    handle,
+    id,
+    noun,
+    onHide,
+    show,
+}: UserActivationProps) {
     const mutation = useUpdateUser();
 
     return (
@@ -34,7 +47,8 @@ export function UserActivation({ handle, id, noun, onHide, show }: UserActivatio
                 <DialogContent>
                     <CapitalizedTitle>{noun} User</CapitalizedTitle>
                     <span>
-                        Are you sure you want to {noun} <strong>{handle}</strong>?
+                        Are you sure you want to {noun}{" "}
+                        <strong>{handle}</strong>?
                     </span>
 
                     <DialogFooter>
@@ -44,7 +58,9 @@ export function UserActivation({ handle, id, noun, onHide, show }: UserActivatio
                                 onClick={() =>
                                     mutation.mutate({
                                         userId: id,
-                                        update: { active: noun !== "deactivate" },
+                                        update: {
+                                            active: noun !== "deactivate",
+                                        },
                                     })
                                 }
                             >

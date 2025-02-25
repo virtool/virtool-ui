@@ -1,4 +1,12 @@
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, InputGroup, InputLabel, InputSimple, SaveButton } from "@base";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    BoxGroupSection,
+    InputGroup,
+    InputLabel,
+    InputSimple,
+    SaveButton,
+} from "@base";
 import { useSetMessage } from "@message/queries";
 import { Message } from "@message/types";
 import React from "react";
@@ -24,7 +32,11 @@ export default function InstanceMessage({ message }: InstanceMessageProps) {
                 <p>Display a message to all users above the navigation bar.</p>
             </BoxGroupHeader>
             <BoxGroupSection>
-                <form onSubmit={handleSubmit(({ message }) => mutation.mutate({ message }))}>
+                <form
+                    onSubmit={handleSubmit(({ message }) =>
+                        mutation.mutate({ message }),
+                    )}
+                >
                     <InputGroup>
                         <InputLabel htmlFor="message">Message</InputLabel>
                         <InputSimple id="message" {...register("message")} />

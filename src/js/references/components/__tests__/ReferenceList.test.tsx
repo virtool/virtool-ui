@@ -2,7 +2,11 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
-import { createFakeReferenceMinimal, mockApiCloneReference, mockApiGetReferences } from "@tests/fake/references";
+import {
+    createFakeReferenceMinimal,
+    mockApiCloneReference,
+    mockApiGetReferences,
+} from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
@@ -27,10 +31,16 @@ describe("<ReferenceList />", () => {
 
         expect(await screen.findByText("References")).toBeInTheDocument();
         expect(screen.getByText(references.name)).toBeInTheDocument();
-        expect(screen.getByText(`${references.user.handle} created`)).toBeInTheDocument();
-        expect(screen.getByText(`${references.organism} ${references.data_type}s`)).toBeInTheDocument();
+        expect(
+            screen.getByText(`${references.user.handle} created`),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(`${references.organism} ${references.data_type}s`),
+        ).toBeInTheDocument();
 
-        expect(await screen.findByRole("button", { name: "clone" })).toBeInTheDocument();
+        expect(
+            await screen.findByRole("button", { name: "clone" }),
+        ).toBeInTheDocument();
         expect(screen.getByLabelText("clone")).toBeInTheDocument();
 
         scope.done();
@@ -98,8 +108,12 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(await screen.findByRole("button", { name: "clone" }));
-            await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+            await userEvent.click(
+                await screen.findByRole("button", { name: "clone" }),
+            );
+            await userEvent.click(
+                screen.getByRole("button", { name: "Clone" }),
+            );
 
             getReferencesScope.done();
             cloneReferenceScope.done();
@@ -110,14 +124,22 @@ describe("<ReferenceList />", () => {
             const account = createFakeAccount({ permissions: permissions });
             mockApiGetAccount(account);
             const getReferencesScope = mockApiGetReferences([references]);
-            const cloneReferenceScope = mockApiCloneReference("newName", `Cloned from ${references.name}`, references);
+            const cloneReferenceScope = mockApiCloneReference(
+                "newName",
+                `Cloned from ${references.name}`,
+                references,
+            );
             renderWithRouter(<ReferenceList />);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(await screen.findByRole("button", { name: "clone" }));
+            await userEvent.click(
+                await screen.findByRole("button", { name: "clone" }),
+            );
             await userEvent.clear(screen.getByRole("textbox"));
             await userEvent.type(screen.getByRole("textbox"), "newName");
-            await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+            await userEvent.click(
+                screen.getByRole("button", { name: "Clone" }),
+            );
 
             getReferencesScope.done();
             cloneReferenceScope.done();
@@ -131,9 +153,13 @@ describe("<ReferenceList />", () => {
             renderWithRouter(<ReferenceList />);
 
             expect(await screen.findByText("References")).toBeInTheDocument();
-            await userEvent.click(await screen.findByRole("button", { name: "clone" }));
+            await userEvent.click(
+                await screen.findByRole("button", { name: "clone" }),
+            );
             await userEvent.clear(screen.getByRole("textbox"));
-            await userEvent.click(screen.getByRole("button", { name: "Clone" }));
+            await userEvent.click(
+                screen.getByRole("button", { name: "Clone" }),
+            );
             expect(screen.getByText("Required Field")).toBeInTheDocument();
 
             scope.done();

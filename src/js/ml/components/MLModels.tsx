@@ -1,4 +1,10 @@
-import { ContainerNarrow, LoadingPlaceholder, NoneFoundBox, ViewHeader, ViewHeaderTitle } from "@base";
+import {
+    ContainerNarrow,
+    LoadingPlaceholder,
+    NoneFoundBox,
+    ViewHeader,
+    ViewHeaderTitle,
+} from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";
 import React from "react";
@@ -7,7 +13,14 @@ import { MLModelMinimal } from "../types";
 import { MLModel } from "./MLModel";
 
 function renderRow({ created_at, name, latest_release, id }: MLModelMinimal) {
-    return <MLModel created_at={created_at} name={name} latest_release={latest_release} key={id} />;
+    return (
+        <MLModel
+            created_at={created_at}
+            name={name}
+            latest_release={latest_release}
+            key={id}
+        />
+    );
 }
 
 /**
@@ -22,13 +35,20 @@ export function MLModels() {
         return <LoadingPlaceholder />;
     }
 
-    const models = data.items.length ? map(data.items, renderRow) : <NoneFoundBox noun={"machine learning models"} />;
+    const models = data.items.length ? (
+        map(data.items, renderRow)
+    ) : (
+        <NoneFoundBox noun={"machine learning models"} />
+    );
 
     return (
         <ContainerNarrow>
             <ViewHeader title="ML Models">
                 <ViewHeaderTitle>
-                    ML Models <ViewHeaderTitleBadge>{data.items.length}</ViewHeaderTitleBadge>
+                    ML Models{" "}
+                    <ViewHeaderTitleBadge>
+                        {data.items.length}
+                    </ViewHeaderTitleBadge>
                 </ViewHeaderTitle>
             </ViewHeader>
             {models}

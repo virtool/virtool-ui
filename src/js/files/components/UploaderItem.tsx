@@ -24,8 +24,14 @@ type UploadItemProps = {
 /**
  * Progress tracker for a single uploaded file
  */
-export function UploaderItem({ failed, localId, name, progress, size }: UploadItemProps): JSX.Element {
-    const removeUpload = useUploaderStore(state => state.removeUpload);
+export function UploaderItem({
+    failed,
+    localId,
+    name,
+    progress,
+    size,
+}: UploadItemProps): JSX.Element {
+    const removeUpload = useUploaderStore((state) => state.removeUpload);
 
     let end: React.ReactNode;
 
@@ -33,7 +39,12 @@ export function UploaderItem({ failed, localId, name, progress, size }: UploadIt
         end = (
             <span className="flex font-medium gap-2">
                 <span>Failed</span>
-                <IconButton name="trash" color="red" tip="remove" onClick={() => removeUpload(localId)} />
+                <IconButton
+                    name="trash"
+                    color="red"
+                    tip="remove"
+                    onClick={() => removeUpload(localId)}
+                />
             </span>
         );
     } else if (progress === 100) {
@@ -44,7 +55,10 @@ export function UploaderItem({ failed, localId, name, progress, size }: UploadIt
 
     return (
         <div className="relative p-0">
-            <ProgressBarAffixed now={progress} color={failed ? "red" : "blue"} />
+            <ProgressBarAffixed
+                now={progress}
+                color={failed ? "red" : "blue"}
+            />
             <div className="flex justify-between p-4">
                 <span className="font-medium">{name}</span>
                 <span

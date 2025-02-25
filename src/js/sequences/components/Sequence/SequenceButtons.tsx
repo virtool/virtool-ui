@@ -19,7 +19,7 @@ const SequenceHeaderButtons = styled.span`
     }
 
     i.fas {
-        font-size: ${props => props.theme.fontSize.lg};
+        font-size: ${(props) => props.theme.fontSize.lg};
         margin-right: 5px;
     }
 
@@ -32,10 +32,15 @@ const SequenceHeaderButtons = styled.span`
  * Displays icons for the sequence item to close, edit, or remove
  */
 export default function SequenceButtons({ id, onCollapse }) {
-    const { setValue: setOpenEditSequence } = useUrlSearchParam<string>("editSequenceId");
-    const { setValue: setOpenRemoveSequence } = useUrlSearchParam<string>("removeSequenceId");
+    const { setValue: setOpenEditSequence } =
+        useUrlSearchParam<string>("editSequenceId");
+    const { setValue: setOpenRemoveSequence } =
+        useUrlSearchParam<string>("removeSequenceId");
     const { otu, reference } = useCurrentOTUContext();
-    const { hasPermission: canModify } = useCheckReferenceRight(reference.id, ReferenceRight.modify_otu);
+    const { hasPermission: canModify } = useCheckReferenceRight(
+        reference.id,
+        ReferenceRight.modify_otu,
+    );
     const isolateId = useGetActiveIsolateId(otu);
 
     const href = `/api/otus/${otu.id}/isolates/${isolateId}/sequences/${id}.fa`;
@@ -43,10 +48,20 @@ export default function SequenceButtons({ id, onCollapse }) {
     return (
         <SequenceHeaderButtons>
             {canModify && (
-                <IconButton name="pen" color="grayDark" tip="edit sequence" onClick={() => setOpenEditSequence(id)} />
+                <IconButton
+                    name="pen"
+                    color="grayDark"
+                    tip="edit sequence"
+                    onClick={() => setOpenEditSequence(id)}
+                />
             )}
             {canModify && (
-                <IconButton name="trash" color="red" tip="remove sequence" onClick={() => setOpenRemoveSequence(id)} />
+                <IconButton
+                    name="trash"
+                    color="red"
+                    tip="remove sequence"
+                    onClick={() => setOpenRemoveSequence(id)}
+                />
             )}
             <DownloadLink href={href}>FASTA</DownloadLink>
             <CloseButton onClick={onCollapse} />

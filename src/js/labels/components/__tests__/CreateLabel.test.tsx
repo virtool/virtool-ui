@@ -9,7 +9,11 @@ import { CreateLabel } from "../CreateLabel";
 describe("<CreateLabel>", () => {
     it("creates label with color", async () => {
         const scope = nock("http://localhost")
-            .post("/api/labels", { name: "Foo", description: "This is a description", color: "#6B7280" })
+            .post("/api/labels", {
+                name: "Foo",
+                description: "This is a description",
+                color: "#6B7280",
+            })
             .reply(201, {
                 id: 1,
                 name: "Foo",
@@ -38,7 +42,11 @@ describe("<CreateLabel>", () => {
 
     it("creates label without color", async () => {
         const scope = nock("http://localhost")
-            .post("/api/labels", { name: "Foo", description: "This is a description", color: "#D1D5DB" })
+            .post("/api/labels", {
+                name: "Foo",
+                description: "This is a description",
+                color: "#D1D5DB",
+            })
             .reply(201, {
                 id: 1,
                 name: "Foo",
@@ -72,7 +80,10 @@ describe("<CreateLabel>", () => {
         expect(screen.queryByText("Name is required.")).not.toBeInTheDocument();
 
         await userEvent.type(screen.getByLabelText("Color"), "#1DAD57");
-        await userEvent.type(screen.getByLabelText("Description"), "This is a description");
+        await userEvent.type(
+            screen.getByLabelText("Description"),
+            "This is a description",
+        );
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         expect(screen.queryByText("Name is required.")).toBeInTheDocument();
@@ -88,12 +99,18 @@ describe("<CreateLabel>", () => {
 
         await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
-        expect(screen.queryByText("Label name already exists")).not.toBeInTheDocument();
+        expect(
+            screen.queryByText("Label name already exists"),
+        ).not.toBeInTheDocument();
 
         await userEvent.type(screen.getByLabelText("Name"), "Foo");
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
-        await waitFor(() => expect(screen.queryByText("Label name already exists")).toBeInTheDocument());
+        await waitFor(() =>
+            expect(
+                screen.queryByText("Label name already exists"),
+            ).toBeInTheDocument(),
+        );
 
         expect(scope.isDone()).toBeTruthy();
     });

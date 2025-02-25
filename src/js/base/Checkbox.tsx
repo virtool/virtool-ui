@@ -16,7 +16,12 @@ type CheckboxProps = {
     onClick?: () => void;
 };
 
-export function Checkbox({ checked = false, label, onClick, disabled = false }: CheckboxProps) {
+export function Checkbox({
+    checked = false,
+    label,
+    onClick,
+    disabled = false,
+}: CheckboxProps) {
     return (
         <CheckboxContainer>
             <StyledCheckbox
@@ -28,7 +33,11 @@ export function Checkbox({ checked = false, label, onClick, disabled = false }: 
                 <Icon name="check" />
                 <RadixCheckbox.Indicator />
             </StyledCheckbox>
-            {label ? <CheckboxLabel onClick={disabled ? null : onClick}>{label}</CheckboxLabel> : null}
+            {label ? (
+                <CheckboxLabel onClick={disabled ? null : onClick}>
+                    {label}
+                </CheckboxLabel>
+            ) : null}
         </CheckboxContainer>
     );
 }

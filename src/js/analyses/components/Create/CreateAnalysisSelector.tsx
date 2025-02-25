@@ -15,7 +15,10 @@ interface CreateAnalysisSelectorProps {
     error?: string;
 }
 
-export function CreateAnalysisSelector({ children, error = "" }: CreateAnalysisSelectorProps) {
+export function CreateAnalysisSelector({
+    children,
+    error = "",
+}: CreateAnalysisSelectorProps) {
     return (
         <StyledCreateAnalysisSelector>
             <label>Available</label>

@@ -23,22 +23,28 @@ type SidebarProps = {
 /**
  * Displays the sidebar for managing labels and subtractions associated with sample
  */
-export default function Sidebar({ sampleId, sampleLabels, defaultSubtractions }: SidebarProps) {
+export default function Sidebar({
+    sampleId,
+    sampleLabels,
+    defaultSubtractions,
+}: SidebarProps) {
     const mutation = useUpdateSample(sampleId);
 
     return (
         <StyledSidebar>
             <SampleLabels
-                onUpdate={labels => {
+                onUpdate={(labels) => {
                     mutation.mutate({ update: { labels } });
                 }}
-                sampleLabels={sampleLabels.map(label => label.id)}
+                sampleLabels={sampleLabels.map((label) => label.id)}
             />
             <DefaultSubtractions
-                onUpdate={subtractions => {
+                onUpdate={(subtractions) => {
                     mutation.mutate({ update: { subtractions } });
                 }}
-                defaultSubtractions={defaultSubtractions.map(subtraction => subtraction.id)}
+                defaultSubtractions={defaultSubtractions.map(
+                    (subtraction) => subtraction.id,
+                )}
             />
         </StyledSidebar>
     );

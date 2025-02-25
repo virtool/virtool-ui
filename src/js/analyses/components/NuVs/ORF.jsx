@@ -58,18 +58,21 @@ const NuVsORFValues = styled.span`
     }
 
     span:first-child {
-        color: ${props => props.theme.color.blue};
+        color: ${(props) => props.theme.color.blue};
     }
 
     span:last-child {
-        color: ${props => props.theme.color.red};
+        color: ${(props) => props.theme.color.red};
     }
 `;
 
 export const NuVsORF = ({ hits, index, maxSequenceLength, pos, strand }) => {
     const chartEl = useRef(null);
 
-    useEffect(() => draw(chartEl.current, maxSequenceLength, pos, strand), [index]);
+    useEffect(
+        () => draw(chartEl.current, maxSequenceLength, pos, strand),
+        [index],
+    );
 
     const hmm = hits[0];
 

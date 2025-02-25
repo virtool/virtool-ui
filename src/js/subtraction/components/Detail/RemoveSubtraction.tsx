@@ -16,7 +16,11 @@ type RemoveSubtractionProps = {
 /**
  * Dialog for removing an existing subtraction
  */
-export default function RemoveSubtraction({ subtraction, show, onHide }: RemoveSubtractionProps) {
+export default function RemoveSubtraction({
+    subtraction,
+    show,
+    onHide,
+}: RemoveSubtractionProps) {
     const mutation = useRemoveSubtraction();
     const navigate = useNavigate();
 

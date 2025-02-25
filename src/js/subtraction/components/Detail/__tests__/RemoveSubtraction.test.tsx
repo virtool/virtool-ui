@@ -3,7 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeSubtraction, mockApiRemoveSubtraction } from "../../../../../tests/fake/subtractions";
+import {
+    createFakeSubtraction,
+    mockApiRemoveSubtraction,
+} from "../../../../../tests/fake/subtractions";
 import RemoveSubtraction from "../RemoveSubtraction";
 
 describe("<RemoveSubtraction />", () => {

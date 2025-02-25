@@ -15,11 +15,15 @@ describe("<RelativeTime />", () => {
 
     it("should render 2 months ago", () => {
         renderWithProviders(<RelativeTime time={fakeTime} />);
-        expect(screen.getByText("2 months ago")).toHaveTextContent("2 months ago");
+        expect(screen.getByText("2 months ago")).toHaveTextContent(
+            "2 months ago",
+        );
     });
 
     it("should re-render when time prop changes", () => {
-        const { rerender } = renderWithProviders(<RelativeTime time={fakeTime} />);
+        const { rerender } = renderWithProviders(
+            <RelativeTime time={fakeTime} />,
+        );
         expect(screen.getByText("2 months ago")).toBeInTheDocument();
 
         // Add one month to the time prop.

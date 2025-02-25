@@ -32,5 +32,7 @@ export function createFakeMessage(overrides?: CreateFakeMessage) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetMessage(message) {
-    return nock("http://localhost").get("/api/instance_message").reply(200, message);
+    return nock("http://localhost")
+        .get("/api/instance_message")
+        .reply(200, message);
 }

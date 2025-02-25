@@ -23,7 +23,9 @@ describe("<RemoveIsolate />", () => {
         renderWithProviders(<RemoveIsolate {...props} />);
 
         expect(screen.getByText("Remove Isolate")).toBeInTheDocument();
-        expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
+        expect(
+            screen.getByText(/Are you sure you want to remove/),
+        ).toBeInTheDocument();
         expect(screen.getByText(/Foo?/)).toBeInTheDocument();
         expect(screen.getByRole("button")).toBeInTheDocument();
     });
@@ -33,7 +35,9 @@ describe("<RemoveIsolate />", () => {
         renderWithProviders(<RemoveIsolate {...props} />);
 
         expect(screen.queryByText("Remove Isolate")).toBeNull();
-        expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
+        expect(
+            screen.queryByText(/Are you sure you want to remove/),
+        ).toBeNull();
         expect(screen.queryByText(/Foo?/)).toBeNull();
         expect(screen.queryByRole("button")).toBeNull();
     });

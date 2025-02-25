@@ -18,8 +18,12 @@ type SampleUserGroupProps = {
 /**
  * A dropdown showing the user groups and its options
  */
-export function SampleUserGroup({ selected, groups, onChange }: SampleUserGroupProps) {
-    const groupComponents = map(groups, group => (
+export function SampleUserGroup({
+    selected,
+    groups,
+    onChange,
+}: SampleUserGroupProps) {
+    const groupComponents = map(groups, (group) => (
         <SampleUserGroupItem key={group.id} value={group.id}>
             {group.name}
         </SampleUserGroupItem>

@@ -29,7 +29,9 @@ export function renderWithProviders(ui: ReactNode) {
     const { rerender, ...rest } = rtlRender(wrapWithProviders(ui));
 
     function rerenderWithProviders(updatedUi: ReactNode) {
-        return rerender(<ThemeProvider theme={theme}>{updatedUi}</ThemeProvider>);
+        return rerender(
+            <ThemeProvider theme={theme}>{updatedUi}</ThemeProvider>,
+        );
     }
 
     return { ...rest, rerender: rerenderWithProviders };
@@ -38,7 +40,9 @@ export function renderWithProviders(ui: ReactNode) {
 export function renderWithRouter(ui: ReactNode, path?: string) {
     const { hook, history } = memoryLocation({ path, record: true });
 
-    const result = renderWithProviders(<MemoryRouter hook={hook}>{ui}</MemoryRouter>);
+    const result = renderWithProviders(
+        <MemoryRouter hook={hook}>{ui}</MemoryRouter>,
+    );
 
     return { ...result, history };
 }
@@ -57,13 +61,18 @@ export function MemoryRouter({
     }
 
     return (
-        <Router hook={() => useMemoryLocation(hook)} searchHook={() => useMemorySearch(hook)}>
+        <Router
+            hook={() => useMemoryLocation(hook)}
+            searchHook={() => useMemorySearch(hook)}
+        >
             {children}
         </Router>
     );
 }
 
-export function useMemoryLocation(baseHook: BaseLocationHook): [string, (path: Path, ...args: any[]) => any] {
+export function useMemoryLocation(
+    baseHook: BaseLocationHook,
+): [string, (path: Path, ...args: any[]) => any] {
     let [location, rest] = baseHook();
     location = location.split("?")[0] || "";
     return [location, rest];

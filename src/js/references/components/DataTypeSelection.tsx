@@ -6,7 +6,7 @@ import { ReferenceDataType } from "../types";
 const SelectBoxContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: ${props => props.theme.gap.column};
+    grid-gap: ${(props) => props.theme.gap.column};
 `;
 
 type DataTypeSelectionProps = {
@@ -19,16 +19,25 @@ type DataTypeSelectionProps = {
 /**
  * Form input field for data type selection
  */
-export function DataTypeSelection({ onSelect, dataType }: DataTypeSelectionProps) {
+export function DataTypeSelection({
+    onSelect,
+    dataType,
+}: DataTypeSelectionProps) {
     return (
         <div>
             <label>Data Type</label>
             <SelectBoxContainer>
-                <SelectBox onClick={() => onSelect("genome")} active={dataType === "genome"}>
+                <SelectBox
+                    onClick={() => onSelect("genome")}
+                    active={dataType === "genome"}
+                >
                     <div>Genome</div>
                     <span>Whole genomes for mapping-based detection</span>
                 </SelectBox>
-                <SelectBox onClick={() => onSelect("barcode")} active={dataType === "barcode"}>
+                <SelectBox
+                    onClick={() => onSelect("barcode")}
+                    active={dataType === "barcode"}
+                >
                     <div>Barcode</div>
                     <span>Target sequences for barcode analysis</span>
                 </SelectBox>

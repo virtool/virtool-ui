@@ -48,7 +48,12 @@ export function LabelItem({ name, color, description, id }: ItemProps) {
             </LabelItemExampleContainer>
             {description}
             <LabelItemButtons>
-                <EditLabel id={id} color={color} description={description} name={name} />
+                <EditLabel
+                    id={id}
+                    color={color}
+                    description={description}
+                    name={name}
+                />
                 <RemoveLabel id={id} name={name} />
             </LabelItemButtons>
         </LabelItemBox>

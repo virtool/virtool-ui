@@ -29,11 +29,13 @@ interface InputProps {
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-export const InputSearch = React.forwardRef<InputHandle, InputProps>((props, ref) => (
-    <InputContainer align="left">
-        <Input {...props} ref={ref} />
-        <InputIcon name="search" />
-    </InputContainer>
-));
+export const InputSearch = React.forwardRef<InputHandle, InputProps>(
+    (props, ref) => (
+        <InputContainer align="left">
+            <Input {...props} ref={ref} />
+            <InputIcon name="search" />
+        </InputContainer>
+    ),
+);
 
 InputSearch.displayName = "InputSearch";

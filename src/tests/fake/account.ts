@@ -1,4 +1,9 @@
-import { Account, AccountSettings, APIKeyMinimal, QuickAnalyzeWorkflow } from "@account/types";
+import {
+    Account,
+    AccountSettings,
+    APIKeyMinimal,
+    QuickAnalyzeWorkflow,
+} from "@account/types";
 import { AdministratorRoles } from "@administration/types";
 import { faker } from "@faker-js/faker";
 import { GroupMinimal, Permissions } from "@groups/types";
@@ -54,7 +59,10 @@ export function createFakeApiKey(props?: CreateFakeApiKeysArgs): APIKeyMinimal {
             groups: [createFakeGroupMinimal()],
             id: faker.random.alphaNumeric(8),
             name: faker.random.word(),
-            permissions: createFakePermissions({ cancel_job: true, create_ref: true }),
+            permissions: createFakePermissions({
+                cancel_job: true,
+                create_ref: true,
+            }),
         },
         props,
     );
@@ -77,7 +85,9 @@ export function mockApiGetAccount(account: Account) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetAPIKeys(apiKeys: APIKeyMinimal[]) {
-    return nock("http://localhost").get("/api/account/keys").reply(200, apiKeys);
+    return nock("http://localhost")
+        .get("/api/account/keys")
+        .reply(200, apiKeys);
 }
 
 /**
@@ -96,5 +106,8 @@ export function mockApiCreateAPIKey(name: string, permissions: Permissions) {
         permissions,
     };
 
-    return nock("http://localhost").post("/api/account/keys").query(true).reply(201, createApiKeyResponse);
+    return nock("http://localhost")
+        .post("/api/account/keys")
+        .query(true)
+        .reply(201, createApiKeyResponse);
 }

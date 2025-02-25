@@ -18,7 +18,13 @@ type RemoveIsolateProps = {
 /**
  * Displays a dialog for removing an OTU isolate
  */
-export default function RemoveIsolate({ id, name, onHide, otuId, show }: RemoveIsolateProps) {
+export default function RemoveIsolate({
+    id,
+    name,
+    onHide,
+    otuId,
+    show,
+}: RemoveIsolateProps) {
     const mutation = useRemoveIsolate();
 
     const handleConfirm = useCallback(() => {
@@ -32,5 +38,13 @@ export default function RemoveIsolate({ id, name, onHide, otuId, show }: RemoveI
         );
     }, [otuId, id]);
 
-    return <RemoveDialog name={name} noun="Isolate" onConfirm={handleConfirm} onHide={onHide} show={show} />;
+    return (
+        <RemoveDialog
+            name={name}
+            noun="Isolate"
+            onConfirm={handleConfirm}
+            onHide={onHide}
+            show={show}
+        />
+    );
 }

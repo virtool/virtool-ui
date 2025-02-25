@@ -1,8 +1,9 @@
 import Superagent from "superagent";
 
-const createRequest = method => slug => {
-    return Superagent[method](`/api${slug}`).set("Accept", "application/json");
-};
+function createRequest(method) {
+    return (slug) =>
+        Superagent[method](`/api${slug}`).set("Accept", "application/json");
+}
 
 export const Request = {
     get: createRequest("get"),

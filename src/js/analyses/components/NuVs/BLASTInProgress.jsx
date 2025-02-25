@@ -26,18 +26,22 @@ export const RIDLink = ({ rid }) => {
 };
 
 const StyledRIDTiming = styled.div`
-    font-size: ${props => props.theme.fontSize.sm};
+    font-size: ${(props) => props.theme.fontSize.sm};
     margin-left: auto;
 `;
 
 export const RIDTiming = ({ interval, lastCheckedAt }) => {
     if (lastCheckedAt) {
         const nextCheckAt = addSeconds(new Date(lastCheckedAt), interval);
-        const relativeNext = formatDistanceStrict(new Date(nextCheckAt), Date.now());
+        const relativeNext = formatDistanceStrict(
+            new Date(nextCheckAt),
+            Date.now(),
+        );
 
         return (
             <StyledRIDTiming>
-                Last checked <RelativeTime time={lastCheckedAt} />. Checking again in {relativeNext}
+                Last checked <RelativeTime time={lastCheckedAt} />. Checking
+                again in {relativeNext}
             </StyledRIDTiming>
         );
     }

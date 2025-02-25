@@ -47,9 +47,23 @@ export default function SampleDetail() {
 
     if (canModify) {
         if (location.endsWith("/general")) {
-            editIcon = <IconButton color="grayDark" name="pen" tip="modify" onClick={() => setOpenEditSample(true)} />;
+            editIcon = (
+                <IconButton
+                    color="grayDark"
+                    name="pen"
+                    tip="modify"
+                    onClick={() => setOpenEditSample(true)}
+                />
+            );
 
-            removeIcon = <IconButton color="red" name="trash" tip="remove" onClick={() => setOpenRemoveSample(true)} />;
+            removeIcon = (
+                <IconButton
+                    color="red"
+                    name="trash"
+                    tip="remove"
+                    onClick={() => setOpenRemoveSample(true)}
+                />
+            );
         }
 
         rightsTabLink = (
@@ -78,9 +92,15 @@ export default function SampleDetail() {
                 <TabsLink to={`/samples/${sampleId}/general`}>General</TabsLink>
                 {data.ready && (
                     <>
-                        <TabsLink to={`/samples/${sampleId}/files`}>Files</TabsLink>
-                        <TabsLink to={`/samples/${sampleId}/quality`}>Quality</TabsLink>
-                        <TabsLink to={`/samples/${sampleId}/analyses`}>Analyses</TabsLink>
+                        <TabsLink to={`/samples/${sampleId}/files`}>
+                            Files
+                        </TabsLink>
+                        <TabsLink to={`/samples/${sampleId}/quality`}>
+                            Quality
+                        </TabsLink>
+                        <TabsLink to={`/samples/${sampleId}/analyses`}>
+                            Analyses
+                        </TabsLink>
                         {rightsTabLink}
                     </>
                 )}
@@ -88,13 +108,21 @@ export default function SampleDetail() {
 
             <Switch>
                 <Route path="/samples/:sampleId/general" component={General} />
-                <Route path="/samples/:sampleId/files" component={SampleDetailFiles} />
+                <Route
+                    path="/samples/:sampleId/files"
+                    component={SampleDetailFiles}
+                />
                 <Route path="/samples/:sampleId/quality" component={Quality} />
-                <Route path="/samples/:sampleId/analyses/*?" component={Analyses} />
+                <Route
+                    path="/samples/:sampleId/analyses/*?"
+                    component={Analyses}
+                />
                 <Route path="/samples/:sampleId/rights" component={Rights} />
                 <Route
                     path="/samples/:sampleId/"
-                    component={() => <Redirect to={`/samples/${sampleId}/general`} replace />}
+                    component={() => (
+                        <Redirect to={`/samples/${sampleId}/general`} replace />
+                    )}
                 />
             </Switch>
 

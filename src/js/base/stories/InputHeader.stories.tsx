@@ -13,7 +13,13 @@ type Story = StoryObj<typeof meta>;
 
 function Template(args) {
     const [value, setValue] = useState(args.value);
-    return <InputHeader id="name" value={value} onSubmit={value => setValue(value)} />;
+    return (
+        <InputHeader
+            id="name"
+            value={value}
+            onSubmit={(value) => setValue(value)}
+        />
+    );
 }
 
 export const inputHeader: Story = {

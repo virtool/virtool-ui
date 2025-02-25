@@ -13,7 +13,7 @@ export const BoxGroupSection = styled.div<BoxGroupSectionProps>`
     border: none;
     border-radius: 0;
     color: inherit;
-    cursor: ${props => (props.onClick && !props.active ? "pointer" : "auto")};
+    cursor: ${(props) => (props.onClick && !props.active ? "pointer" : "auto")};
     display: block;
     padding: 10px 15px;
     position: relative;
@@ -21,14 +21,17 @@ export const BoxGroupSection = styled.div<BoxGroupSectionProps>`
     width: 100%;
 
     &[disabled] {
-        background-color: ${props => props.theme.color.greyHover};
+        background-color: ${(props) => props.theme.color.greyHover};
         cursor: not-allowed;
-        color: ${props => props.theme.color.grey};
+        color: ${(props) => props.theme.color.grey};
         user-select: none;
     }
 
     &:hover {
-        ${props => (props.onClick && !props.active ? `background-color: ${props.theme.color.greyHover};` : "")}
+        ${(props) =>
+            props.onClick && !props.active
+                ? `background-color: ${props.theme.color.greyHover};`
+                : ""}
     }
 
     &:not(:last-child) {

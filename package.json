@@ -105,8 +105,6 @@
         "fsevents": "^2.3.3"
     },
     "prettier": {
-        "arrowParens": "avoid",
-        "printWidth": 120,
         "tabWidth": 4
     },
     "virtool": {

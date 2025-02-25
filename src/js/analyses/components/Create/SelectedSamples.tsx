@@ -19,7 +19,16 @@ export function SelectedSamples({ samples }: SelectedSamplesProps) {
             <CreateAnalysisFieldTitle>
                 Compatible Samples <Badge>{samples.length}</Badge>
             </CreateAnalysisFieldTitle>
-            <div className={cn("border", "border-gray-300", "mb-2", "max-h-32", "overflow-y-scroll", "rounded-sm")}>
+            <div
+                className={cn(
+                    "border",
+                    "border-gray-300",
+                    "mb-2",
+                    "max-h-32",
+                    "overflow-y-scroll",
+                    "rounded-sm",
+                )}
+            >
                 {samples.map(({ id, name }) => (
                     <BoxGroupSection key={id} disabled>
                         {name}

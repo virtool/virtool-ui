@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { BoxGroup } from "../../../base";
 
 const NoneSelected = styled.span`
-    color: ${props => props.theme.color.greyDarkest};
+    color: ${(props) => props.theme.color.greyDarkest};
     position: absolute;
     top: 50%;
     left: 50%;
@@ -15,9 +15,10 @@ type SelectedContainer = {
 };
 
 const SelectedContainer = styled(BoxGroup)<SelectedContainer>`
-    background-color: ${props => props.theme.color.greyLightest};
+    background-color: ${(props) => props.theme.color.greyLightest};
     flex: 1 1 auto;
-    ${props => (props.error ? `border-color: ${props.theme.color.red};` : "")};
+    ${(props) =>
+        props.error ? `border-color: ${props.theme.color.red};` : ""};
     overflow-y: auto;
     height: 160px;
     margin-bottom: 0px;
@@ -25,7 +26,7 @@ const SelectedContainer = styled(BoxGroup)<SelectedContainer>`
 
 const SelectedItemsContainer = styled.div`
     background-color: white;
-    outline: 1px solid ${props => props.theme.color.greyLight};
+    outline: 1px solid ${(props) => props.theme.color.greyLight};
 `;
 
 const StyledCreateAnalysisSelected = styled.div`
@@ -39,7 +40,9 @@ export function CreateAnalysisSelected({ items, render }) {
             <label>Selected</label>
             <SelectedContainer>
                 {items.length ? (
-                    <SelectedItemsContainer>{items.map(item => render(item))}</SelectedItemsContainer>
+                    <SelectedItemsContainer>
+                        {items.map((item) => render(item))}
+                    </SelectedItemsContainer>
                 ) : (
                     <NoneSelected>Nothing selected</NoneSelected>
                 )}

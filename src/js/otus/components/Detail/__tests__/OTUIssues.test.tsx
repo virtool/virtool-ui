@@ -54,11 +54,19 @@ describe("<OTUIssues />", () => {
                 "There are some issues that must be resolved before this OTU can be included in the next index build",
             ),
         ).toBeInTheDocument();
-        expect(screen.getByText("There are no isolates associated with this OTU")).toBeInTheDocument();
         expect(
-            screen.getByText("Some isolates have different numbers of sequences than other isolates"),
+            screen.getByText("There are no isolates associated with this OTU"),
         ).toBeInTheDocument();
-        expect(screen.getByText("There are no sequences associated with the following isolates:")).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "Some isolates have different numbers of sequences than other isolates",
+            ),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "There are no sequences associated with the following isolates:",
+            ),
+        ).toBeInTheDocument();
 
         expect(screen.getByText("test-sequence")).toBeInTheDocument();
         expect(screen.getByText("in isolate")).toBeInTheDocument();

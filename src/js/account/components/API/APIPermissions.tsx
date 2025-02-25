@@ -1,6 +1,9 @@
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
-import { AdministratorPermissions, hasSufficientAdminRole } from "@administration/utils";
+import {
+    AdministratorPermissions,
+    hasSufficientAdminRole,
+} from "@administration/utils";
 import { BoxGroup, BoxGroupSection, Checkbox } from "@base";
 import { Permissions } from "@groups/types";
 import { map, sortBy } from "lodash-es";
@@ -16,7 +19,11 @@ type APIPermissionsProps = {
 /**
  * Manages permissions for creating/updating an API
  */
-export default function APIPermissions({ className, keyPermissions, onChange }: APIPermissionsProps) {
+export default function APIPermissions({
+    className,
+    keyPermissions,
+    onChange,
+}: APIPermissionsProps) {
     const { data, isPending } = useFetchAccount();
 
     if (isPending) {
@@ -28,7 +35,7 @@ export default function APIPermissions({ className, keyPermissions, onChange }: 
         allowed: value,
     }));
 
-    const rowComponents = map(sortBy(permissions, "name"), permission => {
+    const rowComponents = map(sortBy(permissions, "name"), (permission) => {
         const disabled =
             !hasSufficientAdminRole(
                 AdministratorPermissions[permission.name] as AdministratorRoles,
@@ -40,7 +47,13 @@ export default function APIPermissions({ className, keyPermissions, onChange }: 
                 <Checkbox
                     checked={permission.allowed}
                     onClick={
-                        disabled ? null : () => onChange({ ...keyPermissions, [permission.name]: !permission.allowed })
+                        disabled
+                            ? null
+                            : () =>
+                                  onChange({
+                                      ...keyPermissions,
+                                      [permission.name]: !permission.allowed,
+                                  })
                     }
                     label={permission.name}
                 />

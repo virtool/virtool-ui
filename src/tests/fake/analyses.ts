@@ -1,4 +1,10 @@
-import { AnalysisMinimal, AnalysisSample, Blast, FormattedNuvsResults, Workflows } from "@/analyses/types";
+import {
+    AnalysisMinimal,
+    AnalysisSample,
+    Blast,
+    FormattedNuvsResults,
+    Workflows,
+} from "@/analyses/types";
 import { faker } from "@faker-js/faker";
 import { JobMinimal } from "@jobs/types";
 import { assign, merge } from "lodash";
@@ -20,7 +26,9 @@ export type CreateFakeAnalysisMinimal = {
  *
  * @param overrides - optional properties for creating an analysis minimal with specific values
  */
-export function createFakeAnalysisMinimal(overrides?: CreateFakeAnalysisMinimal): AnalysisMinimal {
+export function createFakeAnalysisMinimal(
+    overrides?: CreateFakeAnalysisMinimal,
+): AnalysisMinimal {
     const defaultAnalysisMinimal = {
         id: faker.random.alphaNumeric(8),
         created_at: faker.date.past().toISOString(),
@@ -47,7 +55,9 @@ type FakeFormattedNuVsAnalysis = FakeFormattedNuVsHit & {
  *
  * @param overrides - optional properties for creating an fake formatted nuvs analysis with specific values
  */
-export function createFakeFormattedNuVsAnalysis(overrides?: FakeFormattedNuVsAnalysis) {
+export function createFakeFormattedNuVsAnalysis(
+    overrides?: FakeFormattedNuVsAnalysis,
+) {
     const defaultAnalysis = {
         ...createFakeAnalysisMinimal(),
         files: [],
@@ -114,14 +124,17 @@ export function createFakeFormattedNuVsHit(overrides?: FakeFormattedNuVsHit) {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetAnalyses(analyses: AnalysisMinimal[]) {
-    return nock("http://localhost").get(`/api/samples/${analyses[0].sample.id}/analyses`).query(true).reply(200, {
-        page: 1,
-        page_count: 1,
-        per_page: 25,
-        total_count: analyses.length,
-        found_count: analyses.length,
-        documents: analyses,
-    });
+    return nock("http://localhost")
+        .get(`/api/samples/${analyses[0].sample.id}/analyses`)
+        .query(true)
+        .reply(200, {
+            page: 1,
+            page_count: 1,
+            per_page: 25,
+            total_count: analyses.length,
+            found_count: analyses.length,
+            documents: analyses,
+        });
 }
 
 type CreateAnalysisRequestBody = {
@@ -138,8 +151,13 @@ type CreateAnalysisRequestBody = {
  * @param requestBody - The request body for creating an analysis
  * @returns The nock scope for the mocked API call
  */
-export function mockApiCreateAnalysis(sampleId: string, requestBody: CreateAnalysisRequestBody) {
-    return nock("http://localhost").post(`/api/samples/${sampleId}/analyses`, requestBody).reply(201);
+export function mockApiCreateAnalysis(
+    sampleId: string,
+    requestBody: CreateAnalysisRequestBody,
+) {
+    return nock("http://localhost")
+        .post(`/api/samples/${sampleId}/analyses`, requestBody)
+        .reply(201);
 }
 
 /**
@@ -150,5 +168,7 @@ export function mockApiCreateAnalysis(sampleId: string, requestBody: CreateAnaly
  * @returns The nock scope for the mocked API call
  */
 export function mockApiBlastNuVs(analysisId: string, sequenceIndex: string) {
-    return nock("http://localhost").put(`/api/analyses/${analysisId}/${sequenceIndex}/blast`).reply(200);
+    return nock("http://localhost")
+        .put(`/api/analyses/${analysisId}/${sequenceIndex}/blast`)
+        .reply(200);
 }

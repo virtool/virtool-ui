@@ -28,12 +28,21 @@ interface SourceTypeItemProps {
     onRemove: (sourceType: string) => void;
 }
 
-export function SourceTypeItem({ onRemove, sourceType, disabled = false }: SourceTypeItemProps) {
+export function SourceTypeItem({
+    onRemove,
+    sourceType,
+    disabled = false,
+}: SourceTypeItemProps) {
     return (
         <StyledSourceTypeItem disabled={disabled}>
             <span>{sourceType}</span>
             {disabled ? null : (
-                <IconButton name="trash" color="red" tip="remove" onClick={() => onRemove(sourceType)} />
+                <IconButton
+                    name="trash"
+                    color="red"
+                    tip="remove"
+                    onClick={() => onRemove(sourceType)}
+                />
             )}
         </StyledSourceTypeItem>
     );

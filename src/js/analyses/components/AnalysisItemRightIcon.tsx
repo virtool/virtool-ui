@@ -11,6 +11,11 @@ type AnalysisItemRightIconProps = {
 /**
  * Displays icon for removing an analysis
  */
-export function AnalysisItemRightIcon({ canModify, onRemove }: AnalysisItemRightIconProps) {
-    return canModify ? <IconButton name="trash" color="red" tip="remove" onClick={onRemove} /> : null;
+export function AnalysisItemRightIcon({
+    canModify,
+    onRemove,
+}: AnalysisItemRightIconProps) {
+    return canModify ? (
+        <IconButton name="trash" color="red" tip="remove" onClick={onRemove} />
+    ) : null;
 }

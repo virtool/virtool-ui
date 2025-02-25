@@ -17,7 +17,8 @@ const meta: Meta<typeof Badge> = {
     parameters: {
         docs: {
             description: {
-                component: "Useful for highlighting the status or quantity of an item.",
+                component:
+                    "Useful for highlighting the status or quantity of an item.",
             },
         },
     },

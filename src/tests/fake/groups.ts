@@ -16,7 +16,9 @@ type CreateFakeGroupMinimalProps = {
  * @param {CreateFakeGroupMinimalProps} props values to override the default automatically generated values
  * @returns {GroupMinimal} GroupMinimal object with fake data
  */
-export function createFakeGroupMinimal(props?: CreateFakeGroupMinimalProps): GroupMinimal {
+export function createFakeGroupMinimal(
+    props?: CreateFakeGroupMinimalProps,
+): GroupMinimal {
     const defaultGroupMinimal = {
         id: faker.random.alphaNumeric(8),
         name: `${faker.random.word()}_group`,
@@ -54,7 +56,9 @@ export function createFakeGroup(props?: CreateFakeGroupProps): Group {
  * @returns {nock.Scope} nock scope for the mocked API call
  */
 export function mockApiGetGroup(group: Group) {
-    return nock("http://localhost").get(`/api/groups/${group.id}`).reply(200, group);
+    return nock("http://localhost")
+        .get(`/api/groups/${group.id}`)
+        .reply(200, group);
 }
 
 /**

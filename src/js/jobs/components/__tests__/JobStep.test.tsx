@@ -34,14 +34,19 @@ describe("<JobStep />", () => {
         expect(screen.getByText(step.step_name)).toBeInTheDocument();
     });
 
-    it.each(["timeout", "terminated", "complete", "error", "preparing", "waiting", "timeout"])(
-        "should render text and icon when state is special case",
-        state => {
-            props.step.state = state;
+    it.each([
+        "timeout",
+        "terminated",
+        "complete",
+        "error",
+        "preparing",
+        "waiting",
+        "timeout",
+    ])("should render text and icon when state is special case", (state) => {
+        props.step.state = state;
 
-            renderWithProviders(<JobStep {...props} />);
+        renderWithProviders(<JobStep {...props} />);
 
-            expect(screen.getByTitle(state)).toBeInTheDocument();
-        },
-    );
+        expect(screen.getByTitle(state)).toBeInTheDocument();
+    });
 });

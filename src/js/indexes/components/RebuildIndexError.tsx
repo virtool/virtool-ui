@@ -19,7 +19,12 @@ export default function RebuildIndexError({ error }: RebuildIndexErrorProps) {
                         {error}
                         {unverified && "."}
                     </strong>
-                    {unverified && <span> Fix the unverified OTUs before rebuilding the index.</span>}
+                    {unverified && (
+                        <span>
+                            {" "}
+                            Fix the unverified OTUs before rebuilding the index.
+                        </span>
+                    )}
                 </span>
             </Alert>
         );

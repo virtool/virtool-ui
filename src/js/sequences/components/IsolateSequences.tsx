@@ -35,16 +35,24 @@ type IsolateSequencesProps = {
 /**
  * Display and manage a list sequences for a specific isolate
  */
-export default function IsolateSequences({ activeIsolate, otuId }: IsolateSequencesProps) {
+export default function IsolateSequences({
+    activeIsolate,
+    otuId,
+}: IsolateSequencesProps) {
     const { otu, reference } = useCurrentOTUContext();
     const { data_type, id, targets } = reference;
     const unreferencedTargets = useGetUnreferencedTargets();
     const hasTargets = Boolean(targets?.length);
 
-    const sequences = sortSequencesBySegment(activeIsolate.sequences, otu.schema);
+    const sequences = sortSequencesBySegment(
+        activeIsolate.sequences,
+        otu.schema,
+    );
 
     const Sequence = data_type === "barcode" ? BarcodeSequence : GenomeSequence;
-    let sequenceComponents = map(sequences, sequence => <Sequence key={sequence.id} {...sequence} />);
+    let sequenceComponents = map(sequences, (sequence) => (
+        <Sequence key={sequence.id} {...sequence} />
+    ));
 
     let isolateName = `${activeIsolate.source_type} ${activeIsolate.source_name}`;
     isolateName = isolateName[0].toUpperCase() + isolateName.slice(1);
@@ -57,7 +65,9 @@ export default function IsolateSequences({ activeIsolate, otuId }: IsolateSequen
                 </NoneFoundSection>,
             ];
         } else {
-            sequenceComponents = [<NoneFoundSection noun="sequences" key="noSequences" />];
+            sequenceComponents = [
+                <NoneFoundSection noun="sequences" key="noSequences" />,
+            ];
         }
     }
 
@@ -66,13 +76,20 @@ export default function IsolateSequences({ activeIsolate, otuId }: IsolateSequen
             <IsolateSequencesHeader>
                 <strong>Sequences</strong>
                 <Badge>{sequences.length}</Badge>
-                <AddSequenceLink dataType={reference.data_type} refId={reference.id} />
+                <AddSequenceLink
+                    dataType={reference.data_type}
+                    refId={reference.id}
+                />
             </IsolateSequencesHeader>
 
             <BoxGroup>{sequenceComponents}</BoxGroup>
 
             {data_type === "barcode" ? (
-                <AddBarcodeSequence otuId={otuId} isolateId={activeIsolate.id} targets={unreferencedTargets} />
+                <AddBarcodeSequence
+                    otuId={otuId}
+                    isolateId={activeIsolate.id}
+                    targets={unreferencedTargets}
+                />
             ) : (
                 <AddGenomeSequence
                     isolateId={activeIsolate.id}

@@ -15,10 +15,14 @@ const JobErrorDetails = styled.span`
 export default function JobError({ error }) {
     if (error) {
         // Traceback from a Python exception.
-        const tracebackLines = map(error.traceback, (line, index) => <div key={index}>{line}</div>);
+        const tracebackLines = map(error.traceback, (line, index) => (
+            <div key={index}>{line}</div>
+        ));
 
         // Only show a colon and exception detail after the exception name if there is detail present.
-        const details = error.details.length ? <JobErrorDetails>: {error.details}</JobErrorDetails> : null;
+        const details = error.details.length ? (
+            <JobErrorDetails>: {error.details}</JobErrorDetails>
+        ) : null;
 
         // Content replicates format of Python exceptions shown in Python console.
         return (

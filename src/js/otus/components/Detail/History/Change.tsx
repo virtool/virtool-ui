@@ -107,7 +107,15 @@ type ChangeProps = {
 /**
  * A condensed change item for use in a list of changes
  */
-export default function Change({ id, createdAt, description, methodName, otu, unbuilt, user }: ChangeProps) {
+export default function Change({
+    id,
+    createdAt,
+    description,
+    methodName,
+    otu,
+    unbuilt,
+    user,
+}: ChangeProps) {
     const mutation = useRevertOTU(otu.id);
 
     return (
@@ -127,7 +135,9 @@ export default function Change({ id, createdAt, description, methodName, otu, un
                 <IconButton
                     name="history"
                     tip="revert"
-                    onClick={() => (unbuilt ? mutation.mutate({ changeId: id }) : null)}
+                    onClick={() =>
+                        unbuilt ? mutation.mutate({ changeId: id }) : null
+                    }
                 />
             )}
         </StyledChange>

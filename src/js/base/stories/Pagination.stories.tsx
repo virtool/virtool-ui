@@ -12,7 +12,13 @@ const queryClient = new QueryClient();
 const meta: Meta<typeof Pagination> = {
     title: "base/Pagination",
     component: Pagination,
-    decorators: [Story => <QueryClientProvider client={queryClient}>{Story()}</QueryClientProvider>],
+    decorators: [
+        (Story) => (
+            <QueryClientProvider client={queryClient}>
+                {Story()}
+            </QueryClientProvider>
+        ),
+    ],
     parameters: {
         docs: {
             description: {
@@ -29,14 +35,22 @@ type Story = StoryObj<typeof meta>;
 
 function Template(args) {
     const [, updateArgs] = useArgs();
-    const items = useMemo(() => fakeUserListFactory(args.storedPage, 7), [args.storedPage]);
+    const items = useMemo(
+        () => fakeUserListFactory(args.storedPage, 7),
+        [args.storedPage],
+    );
     function onLoadNextPage(page) {
         updateArgs({ currentPage: page, storedPage: page });
     }
 
     return (
         <Box>
-            <Pagination onLoadNextPage={onLoadNextPage} renderRow={UserItem} items={items} {...args} />
+            <Pagination
+                onLoadNextPage={onLoadNextPage}
+                renderRow={UserItem}
+                items={items}
+                {...args}
+            />
         </Box>
     );
 }

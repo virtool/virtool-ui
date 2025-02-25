@@ -1,5 +1,14 @@
 import { fontWeight } from "@app/theme";
-import { Box, InputGroup, InputLabel, Link, Select, SelectButton, SelectContent, SelectItem } from "@base";
+import {
+    Box,
+    InputGroup,
+    InputLabel,
+    Link,
+    Select,
+    SelectButton,
+    SelectContent,
+    SelectItem,
+} from "@base";
 import { OTUSegment } from "@otus/types";
 import { map } from "lodash-es";
 import React from "react";
@@ -48,12 +57,21 @@ type SequenceSegmentFieldProps = {
 /**
  * Displays a dropdown list of available segments in adding/editing dialogs or provides option to create schema
  */
-export default function SequenceSegmentField({ hasSchema, otuId, refId, segments }: SequenceSegmentFieldProps) {
+export default function SequenceSegmentField({
+    hasSchema,
+    otuId,
+    refId,
+    segments,
+}: SequenceSegmentFieldProps) {
     const { control, setValue } = useFormContext<{ segment: string }>();
 
     if (hasSchema) {
-        const segmentOptions = map(segments, segment => (
-            <SequenceSegment key={segment.name} name={segment.name} required={segment.required} />
+        const segmentOptions = map(segments, (segment) => (
+            <SequenceSegment
+                key={segment.name}
+                name={segment.name}
+                required={segment.required}
+            />
         ));
 
         return (
@@ -63,7 +81,9 @@ export default function SequenceSegmentField({ hasSchema, otuId, refId, segments
                     <Controller
                         control={control}
                         render={({ field: { onChange, value } }) => {
-                            const segmentExists = segments.some(segment => segment.name === value);
+                            const segmentExists = segments.some(
+                                (segment) => segment.name === value,
+                            );
 
                             if (value && !segmentExists) {
                                 setValue("segment", null);
@@ -72,11 +92,23 @@ export default function SequenceSegmentField({ hasSchema, otuId, refId, segments
                             return (
                                 <Select
                                     value={value || "None"}
-                                    onValueChange={value => value !== "" && onChange(value === "None" ? null : value)}
+                                    onValueChange={(value) =>
+                                        value !== "" &&
+                                        onChange(
+                                            value === "None" ? null : value,
+                                        )
+                                    }
                                 >
                                     <SelectButton icon="chevron-down" />
-                                    <SelectContent position="popper" align="start">
-                                        <SelectItem key="None" value="None" description="">
+                                    <SelectContent
+                                        position="popper"
+                                        align="start"
+                                    >
+                                        <SelectItem
+                                            key="None"
+                                            value="None"
+                                            description=""
+                                        >
                                             None
                                         </SelectItem>
                                         {segmentOptions}
@@ -97,10 +129,15 @@ export default function SequenceSegmentField({ hasSchema, otuId, refId, segments
             <NoSchema>
                 <div>
                     <h5>No schema is defined for this OTU.</h5>
-                    <p>A schema defines the sequence segments that should be present in isolates of the OTU. </p>
+                    <p>
+                        A schema defines the sequence segments that should be
+                        present in isolates of the OTU.{" "}
+                    </p>
                 </div>
                 <div>
-                    <Link to={`/refs/${refId}/otus/${otuId}/schema`}>Add a Schema</Link>
+                    <Link to={`/refs/${refId}/otus/${otuId}/schema`}>
+                        Add a Schema
+                    </Link>
                 </div>
             </NoSchema>
         </InputGroup>

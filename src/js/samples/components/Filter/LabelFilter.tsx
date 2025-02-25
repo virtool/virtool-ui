@@ -15,13 +15,17 @@ type LabelFilterProps = {
 /**
  * Sidebar for filtering samples by labels
  */
-export default function LabelFilter({ labels, onClick, selected }: LabelFilterProps) {
+export default function LabelFilter({
+    labels,
+    onClick,
+    selected,
+}: LabelFilterProps) {
     return (
         <SideBarSection>
             <SidebarHeader>
                 Labels <Link to="/samples/labels">Manage</Link>
             </SidebarHeader>
-            {labels.map(label => (
+            {labels.map((label) => (
                 <LabelFilterItem
                     key={label.id}
                     {...label}

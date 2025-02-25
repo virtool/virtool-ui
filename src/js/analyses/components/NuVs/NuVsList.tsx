@@ -25,12 +25,21 @@ export function NuVsList({ detail }: NuVsListProps) {
 
     return (
         <NuVsPanes>
-            <AnalysisViewerList matches={sortedHits} total={detail.results.hits.length} itemSize={58} width={230}>
-                {map(sortedHits, hit => (
+            <AnalysisViewerList
+                matches={sortedHits}
+                total={detail.results.hits.length}
+                itemSize={58}
+                width={230}
+            >
+                {map(sortedHits, (hit) => (
                     <NuVsItem key={hit.id} hit={hit} />
                 ))}
             </AnalysisViewerList>
-            <NuVsDetail analysisId={detail.id} matches={sortedHits} maxSequenceLength={detail.maxSequenceLength} />
+            <NuVsDetail
+                analysisId={detail.id}
+                matches={sortedHits}
+                maxSequenceLength={detail.maxSequenceLength}
+            />
         </NuVsPanes>
     );
 }

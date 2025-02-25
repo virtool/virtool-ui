@@ -1,4 +1,11 @@
-import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import {
+    BoxGroup,
+    LoadingPlaceholder,
+    NoneFoundBox,
+    Pagination,
+    ViewHeader,
+    ViewHeaderTitle,
+} from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { usePageParam, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
@@ -11,7 +18,8 @@ import SubtractionToolbar from "./SubtractionToolbar";
  * A list of subtractions.
  */
 export default function SubtractionList() {
-    const { value: term, setValue: setTerm } = useUrlSearchParam<string>("find");
+    const { value: term, setValue: setTerm } =
+        useUrlSearchParam<string>("find");
     const { page } = usePageParam();
 
     const { data, isPending } = useFindSubtractions(page, 25, term);
@@ -30,7 +38,8 @@ export default function SubtractionList() {
         <>
             <ViewHeader title="Subtractions">
                 <ViewHeaderTitle>
-                    Subtractions <ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
+                    Subtractions{" "}
+                    <ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
                 </ViewHeaderTitle>
             </ViewHeader>
 
@@ -39,9 +48,14 @@ export default function SubtractionList() {
             {!documents.length ? (
                 <NoneFoundBox key="subtractions" noun="subtractions" />
             ) : (
-                <Pagination items={documents} storedPage={storedPage} currentPage={page} pageCount={page_count}>
+                <Pagination
+                    items={documents}
+                    storedPage={storedPage}
+                    currentPage={page}
+                    pageCount={page_count}
+                >
                     <BoxGroup>
-                        {map(documents, document => (
+                        {map(documents, (document) => (
                             <SubtractionItem key={document.id} {...document} />
                         ))}
                     </BoxGroup>

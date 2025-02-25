@@ -5,7 +5,16 @@ import { merge } from "lodash";
 import nock from "nock";
 import { createFakeUserNested } from "./user";
 
-const jobStates = ["complete", "cancelled", "error", "preparing", "running", "terminated", "timeout", "waiting"];
+const jobStates = [
+    "complete",
+    "cancelled",
+    "error",
+    "preparing",
+    "running",
+    "terminated",
+    "timeout",
+    "waiting",
+];
 
 type CreateJobNestedProps = {
     id?: string;
@@ -27,7 +36,9 @@ type CreateJobMinimalProps = {
     workflow?: string;
 };
 
-export function createFakeJobMinimal(props?: CreateJobMinimalProps): JobMinimal {
+export function createFakeJobMinimal(
+    props?: CreateJobMinimalProps,
+): JobMinimal {
     const defaultJobMinimal = {
         ...createFakeJobNested(),
         archived: false,

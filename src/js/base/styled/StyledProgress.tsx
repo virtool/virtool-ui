@@ -11,7 +11,7 @@ function getProgressColor({ color, theme }: StyledProgressProps) {
 }
 
 export const StyledProgress = styled.progress<StyledProgressProps>`
-    background-color: ${props => props.theme.color.grey};
+    background-color: ${(props) => props.theme.color.grey};
     border: 0;
     -webkit-appearance: none;
     height: 20px;
@@ -26,6 +26,6 @@ export const StyledProgress = styled.progress<StyledProgressProps>`
     }
 
     &::-webkit-progress-bar {
-        background-color: ${props => props.theme.color.grey};
+        background-color: ${(props) => props.theme.color.grey};
     }
 `;

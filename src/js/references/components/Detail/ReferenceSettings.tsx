@@ -25,8 +25,16 @@ export default function ReferenceSettings() {
                 <h2>Access</h2>
                 <p>Manage who can access this reference.</p>
             </SectionHeader>
-            <ReferenceMembers noun="user" members={sortBy(data.users, "id")} refId={refId} />
-            <ReferenceMembers noun="group" members={sortBy(data.groups, "id")} refId={refId} />
+            <ReferenceMembers
+                noun="user"
+                members={sortBy(data.users, "id")}
+                refId={refId}
+            />
+            <ReferenceMembers
+                noun="group"
+                members={sortBy(data.groups, "id")}
+                refId={refId}
+            />
             <RemoveReference id={data.id} name={data.name} />
         </>
     );

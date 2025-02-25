@@ -21,7 +21,8 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
 
     const height = 100 - margin.top - margin.bottom;
 
-    const width = (length > 800 ? length / 5 : length) - margin.left - margin.right;
+    const width =
+        (length > 800 ? length / 5 : length) - margin.left - margin.right;
 
     const x = scaleLinear().range([1, width]).domain([0, length]);
     const y = scaleLinear().range([height, 0]).domain([0, yMax]).nice(5);
@@ -38,10 +39,13 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const trustworthyRanges = deriveTrustworthyRegions(length, untrustworthyRanges);
+    const trustworthyRanges = deriveTrustworthyRegions(
+        length,
+        untrustworthyRanges,
+    );
 
     if (trustworthyRanges.length) {
-        trustworthyRanges.forEach(range => {
+        trustworthyRanges.forEach((range) => {
             svg.append("rect")
                 .attr("x", x(range[0]))
                 .attr("y", 0)
@@ -53,7 +57,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
     }
 
     if (untrustworthyRanges.length) {
-        untrustworthyRanges.forEach(range => {
+        untrustworthyRanges.forEach((range) => {
             svg.append("rect")
                 .attr("x", x(range[0]))
                 .attr("y", 0)
@@ -67,13 +71,22 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
     if (data) {
         const areaDrawer = area()
             .x((d, i) => x(i))
-            .y0(d => y(d))
+            .y0((d) => y(d))
             .y1(height);
 
-        svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
+        svg.append("path")
+            .datum(data)
+            .attr("class", "depth-area")
+            .attr("d", areaDrawer);
 
-        svg.append("g").attr("transform", "translate(0,0)").call(yAxis).attr("class", "axis");
-        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis).attr("class", "axis");
+        svg.append("g")
+            .attr("transform", "translate(0,0)")
+            .call(yAxis)
+            .attr("class", "axis");
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(xAxis)
+            .attr("class", "axis");
     }
 }
 
@@ -86,12 +99,12 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
     margin-top: 5px;
 
     path.untrustworthy-range {
-        stroke: ${props => props.theme.color.red};
+        stroke: ${(props) => props.theme.color.red};
         stroke-width: 1;
     }
 
     path.depth-area {
-        fill: ${props => props.theme.color.blue};
+        fill: ${(props) => props.theme.color.blue};
     }
 `;
 
@@ -102,7 +115,12 @@ interface IimiCoverageChartProps {
     untrustworthyRanges: UntrustworthyRange[];
 }
 
-export function CoverageChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {
+export function CoverageChart({
+    data,
+    id,
+    yMax,
+    untrustworthyRanges,
+}: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {

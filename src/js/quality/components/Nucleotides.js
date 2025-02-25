@@ -25,7 +25,7 @@ export const drawNucleotidesChart = (element, data, baseWidth) => {
     // Create a d3 line function for generating the four lines showing nucleotide frequency.
     const lineDrawer = line()
         .x((d, i) => x(i))
-        .y(d => y(d));
+        .y((d) => y(d));
 
     // Append the four plot lines to the SVG.
     forEach(unzip(data), (set, index) => {

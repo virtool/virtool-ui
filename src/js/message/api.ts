@@ -7,7 +7,7 @@ import { Message } from "./types";
  * @returns A promise resolving to an instance message
  */
 export function getMessage(): Promise<Message> {
-    return Request.get("/instance_message").then(res => res.body);
+    return Request.get("/instance_message").then((res) => res.body);
 }
 
 /**
@@ -19,5 +19,5 @@ export function getMessage(): Promise<Message> {
 export function setMessage(message: string): Promise<Message> {
     return Request.put("/instance_message")
         .send({ color: "red", message })
-        .then(res => res.body);
+        .then((res) => res.body);
 }

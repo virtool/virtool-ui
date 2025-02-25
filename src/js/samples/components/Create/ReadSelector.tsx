@@ -1,10 +1,23 @@
 import { getBorder, getFontWeight, theme } from "@app/theme";
-import { Box, BoxGroup, Button, Icon, InputError, InputSearch, Link, NoneFoundSection } from "@base";
+import {
+    Box,
+    BoxGroup,
+    Button,
+    Icon,
+    InputError,
+    InputSearch,
+    Link,
+    NoneFoundSection,
+} from "@base";
 import Toolbar from "@base/Toolbar";
 import { CompactScrollList } from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { FileResponse, FileType } from "@files/types";
-import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query/";
+import {
+    FetchNextPageOptions,
+    InfiniteData,
+    InfiniteQueryObserverResult,
+} from "@tanstack/react-query/";
 import { flatMap, includes, indexOf, toLower } from "lodash-es";
 import React, { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -15,7 +28,7 @@ type ReadSelectorBoxProps = {
 };
 
 const ReadSelectorBox = styled(Box)<ReadSelectorBoxProps>`
-    ${props => (props.error ? `border-color: ${theme.color.red};` : "")};
+    ${(props) => (props.error ? `border-color: ${theme.color.red};` : "")};
 `;
 
 const ReadSelectorError = styled(InputError)`
@@ -38,8 +51,8 @@ const ReadSelectorHeader = styled.label`
 `;
 
 const StyledScrollListElement = styled(CompactScrollList)`
-    border: ${props => getBorder(props)};
-    border-radius: ${props => props.theme.borderRadius.sm};
+    border: ${(props) => getBorder(props)};
+    border-radius: ${(props) => props.theme.borderRadius.sm};
     height: 400px;
 `;
 
@@ -49,7 +62,9 @@ type ReadSelectorProps = {
     /** Whether the next page is being fetched */
     isFetchingNextPage: boolean;
     /** Fetches the next page of data */
-    fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult>;
+    fetchNextPage: (
+        options?: FetchNextPageOptions,
+    ) => Promise<InfiniteQueryObserverResult>;
     /** Whether the data is fetched */
     isPending: boolean;
     /** A callback function to handle file selection */
@@ -80,9 +95,9 @@ export default function ReadSelector({
     const { total_count } = data.pages[0];
 
     function handleSelect(selectedId: string) {
-        setSelectedFiles(prevArray => {
+        setSelectedFiles((prevArray) => {
             if (prevArray.includes(selectedId)) {
-                const newArray = prevArray.filter(id => id !== selectedId);
+                const newArray = prevArray.filter((id) => id !== selectedId);
                 onSelect(newArray);
                 return newArray;
             } else {
@@ -111,13 +126,23 @@ export default function ReadSelector({
 
     const loweredFilter = toLower(term);
 
-    const items = flatMap(data.pages, page => page.items);
-    const files = items.filter(file => !term || includes(toLower(file.name), loweredFilter));
+    const items = flatMap(data.pages, (page) => page.items);
+    const files = items.filter(
+        (file) => !term || includes(toLower(file.name), loweredFilter),
+    );
 
     function renderRow(item) {
         const index = indexOf(selectedFiles, item.id);
 
-        return <ReadSelectorItem {...item} key={item.id} index={index} selected={index > -1} onSelect={handleSelect} />;
+        return (
+            <ReadSelectorItem
+                {...item}
+                key={item.id}
+                index={index}
+                selected={index > -1}
+                onSelect={handleSelect}
+            />
+        );
     }
 
     const noneFound = total_count === 0 && (
@@ -151,12 +176,20 @@ export default function ReadSelector({
             <ReadSelectorBox error={error}>
                 <Toolbar>
                     <div className="flex-grow">
-                        <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
+                        <InputSearch
+                            placeholder="Filename"
+                            value={term}
+                            onChange={(e) => setTerm(e.target.value)}
+                        />
                     </div>
                     <Button className="inline-flex gap-2" onClick={reset}>
                         <Icon name="undo" /> Reset
                     </Button>
-                    <Button className="inline-flex gap-2" type="button" onClick={swap}>
+                    <Button
+                        className="inline-flex gap-2"
+                        type="button"
+                        onClick={swap}
+                    >
                         <Icon name="retweet" /> Swap
                     </Button>
                 </Toolbar>

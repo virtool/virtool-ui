@@ -17,9 +17,15 @@ function createTimeString(time) {
     const serverDate = new Date(time);
     const clientDate = new Date();
 
-    const currentTime = isAfter(serverDate, clientDate) ? clientDate : serverDate;
-    const timeString = formatDistanceStrict(currentTime, now, { addSuffix: true });
-    return includes(timeString, "in a") || includes(timeString, "a few") ? "just now" : timeString;
+    const currentTime = isAfter(serverDate, clientDate)
+        ? clientDate
+        : serverDate;
+    const timeString = formatDistanceStrict(currentTime, now, {
+        addSuffix: true,
+    });
+    return includes(timeString, "in a") || includes(timeString, "a few")
+        ? "just now"
+        : timeString;
 }
 
 function useRelativeTime(time) {

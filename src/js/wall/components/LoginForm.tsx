@@ -18,7 +18,7 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
         loginMutation.mutate(
             { username, password, remember },
             {
-                onSuccess: data => {
+                onSuccess: (data) => {
                     if (data.body.reset_code) {
                         setResetCode(data.body.reset_code);
                     }
@@ -31,28 +31,44 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
 
     return (
         <>
-            <WallTitle title="Login" subtitle="Login with your Virtool account." />
+            <WallTitle
+                title="Login"
+                subtitle="Login with your Virtool account."
+            />
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputGroup>
                     <InputLabel htmlFor="username">Username</InputLabel>
-                    <InputSimple id="username" {...register("username", { required: true })} autoFocus />
+                    <InputSimple
+                        id="username"
+                        {...register("username", { required: true })}
+                        autoFocus
+                    />
                 </InputGroup>
                 <InputGroup>
                     <InputLabel htmlFor="password">Password</InputLabel>
-                    <InputSimple id="password" type="password" {...register("password", { required: true })} />
+                    <InputSimple
+                        id="password"
+                        type="password"
+                        {...register("password", { required: true })}
+                    />
                 </InputGroup>
                 <div className="flex justify-between my-4">
                     <Controller
                         name="remember"
                         control={control}
                         render={({ field: { onChange, value } }) => (
-                            <Checkbox checked={value} onClick={() => onChange(!value)} label="Remember Me" />
+                            <Checkbox
+                                checked={value}
+                                onClick={() => onChange(!value)}
+                                label="Remember Me"
+                            />
                         )}
                     />
                     {isError && (
                         <div className="flex text-red-500">
-                            {error?.response?.body?.message || "An error occurred during login"}
+                            {error?.response?.body?.message ||
+                                "An error occurred during login"}
                         </div>
                     )}
                 </div>

@@ -1,5 +1,11 @@
 import { getFontSize } from "@app/theme";
-import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+} from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -38,7 +44,7 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
     }
 
     return (
-        <Dialog open={open} onOpenChange={open => setOpen(open)}>
+        <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
             <Button as={DialogTrigger} color="red" size="small">
                 Delete
             </Button>
@@ -47,10 +53,15 @@ export function RemoveLabel({ id, name }: RemoveLabelProps) {
                 <DialogContent>
                     <DialogTitle>Delete Label</DialogTitle>
                     <RemoveLabelQuestion>
-                        Are you sure you want to delete the label <strong>{name}</strong>?
+                        Are you sure you want to delete the label{" "}
+                        <strong>{name}</strong>?
                     </RemoveLabelQuestion>
                     <RemoveLabelFooter>
-                        <Button type="button" color="red" onClick={handleSubmit}>
+                        <Button
+                            type="button"
+                            color="red"
+                            onClick={handleSubmit}
+                        >
                             Delete
                         </Button>
                     </RemoveLabelFooter>

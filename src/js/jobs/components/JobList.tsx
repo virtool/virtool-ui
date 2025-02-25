@@ -1,5 +1,13 @@
 import { getFontWeight } from "@app/theme";
-import { Box, BoxGroup, ContainerNarrow, LoadingPlaceholder, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import {
+    Box,
+    BoxGroup,
+    ContainerNarrow,
+    LoadingPlaceholder,
+    Pagination,
+    ViewHeader,
+    ViewHeaderTitle,
+} from "@base";
 import { useListSearchParam, usePageParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
@@ -10,13 +18,13 @@ import { map } from "lodash";
 
 const JobsListViewContainer = styled.div`
     display: flex;
-    gap: ${props => props.theme.gap.column};
+    gap: ${(props) => props.theme.gap.column};
     justify-content: start;
 `;
 
 const JobsListEmpty = styled(Box)`
     align-items: center;
-    color: ${props => props.theme.color.greyDark};
+    color: ${(props) => props.theme.color.greyDark};
     display: flex;
     justify-content: center;
     height: 100%;
@@ -40,7 +48,14 @@ export default function JobsList() {
         return <LoadingPlaceholder />;
     }
 
-    const { documents, page: storedPage, page_count, counts, found_count, total_count } = data;
+    const {
+        documents,
+        page: storedPage,
+        page_count,
+        counts,
+        found_count,
+        total_count,
+    } = data;
 
     let inner;
 
@@ -58,9 +73,14 @@ export default function JobsList() {
         );
     } else {
         inner = (
-            <Pagination items={documents} storedPage={storedPage} currentPage={page} pageCount={page_count}>
+            <Pagination
+                items={documents}
+                storedPage={storedPage}
+                currentPage={page}
+                pageCount={page_count}
+            >
                 <BoxGroup>
-                    {map(documents, document => (
+                    {map(documents, (document) => (
                         <Job key={document.id} {...document} />
                     ))}
                 </BoxGroup>

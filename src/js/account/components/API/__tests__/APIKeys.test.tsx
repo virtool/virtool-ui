@@ -31,14 +31,18 @@ describe("<APIKeys />", () => {
         renderWithRouter(<APIKeys />, basePath);
 
         expect(screen.getByLabelText("loading")).toBeInTheDocument();
-        expect(screen.queryByText("Manage API keys for accessing the")).not.toBeInTheDocument();
+        expect(
+            screen.queryByText("Manage API keys for accessing the"),
+        ).not.toBeInTheDocument();
     });
 
     it("should render correctly when apiKey exists", async () => {
         mockApiGetAPIKeys(apiKeys);
         renderWithRouter(<APIKeys />, basePath);
 
-        expect(await screen.findByText("Manage API keys for accessing the")).toBeInTheDocument();
+        expect(
+            await screen.findByText("Manage API keys for accessing the"),
+        ).toBeInTheDocument();
         expect(screen.getByText("Virtool API")).toBeInTheDocument();
         expect(screen.getByText("Create")).toBeInTheDocument();
         expect(screen.getByText(apiKeys[0].name)).toBeInTheDocument();
@@ -48,7 +52,9 @@ describe("<APIKeys />", () => {
         mockApiGetAPIKeys([]);
         renderWithRouter(<APIKeys />, basePath);
 
-        expect(await screen.findByText("Manage API keys for accessing the")).toBeInTheDocument();
+        expect(
+            await screen.findByText("Manage API keys for accessing the"),
+        ).toBeInTheDocument();
         expect(screen.getByText("Virtool API")).toBeInTheDocument();
         expect(screen.getByText("No API keys found.")).toBeInTheDocument();
     });
@@ -57,7 +63,11 @@ describe("<APIKeys />", () => {
         let basePath;
         let searchParams;
         beforeEach(() => {
-            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+            mockApiGetAccount(
+                createFakeAccount({
+                    administrator_role: AdministratorRoles.FULL,
+                }),
+            );
             mockApiGetAPIKeys(apiKeys);
             basePath = "/account/api";
             searchParams = { openCreateKey: true };
@@ -66,28 +76,43 @@ describe("<APIKeys />", () => {
         it("should render correctly when newKey = empty", async () => {
             renderWithRouter(<APIKeys />, basePath);
 
-            await userEvent.click(await screen.findByRole("link", { name: "Create" }));
+            await userEvent.click(
+                await screen.findByRole("link", { name: "Create" }),
+            );
 
-            expect(await screen.findByText("Create API Key")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Create API Key"),
+            ).toBeInTheDocument();
             expect(screen.getByText("Name")).toBeInTheDocument();
             expect(screen.getByText("Permissions")).toBeInTheDocument();
 
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
             expect(screen.getByText("create_ref")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "Save" }),
+            ).toBeInTheDocument();
         });
 
         it("should render correctly when newKey is set", async () => {
-            const scope = mockApiCreateAPIKey("test", createFakePermissions({ remove_job: true }));
+            const scope = mockApiCreateAPIKey(
+                "test",
+                createFakePermissions({ remove_job: true }),
+            );
             renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
 
-            expect(await screen.findByText("Create API Key")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Create API Key"),
+            ).toBeInTheDocument();
             await userEvent.type(screen.getByLabelText("Name"), "test");
             await userEvent.click(screen.getByText("remove_job"));
             await userEvent.click(screen.getByText("Save"));
 
-            expect(await screen.findByText("Here is your key.")).toBeInTheDocument();
-            expect(screen.getByText(/Make note of it now. For security purposes/)).toBeInTheDocument();
+            expect(
+                await screen.findByText("Here is your key."),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText(/Make note of it now. For security purposes/),
+            ).toBeInTheDocument();
             expect(screen.getByDisplayValue("testKey")).toBeInTheDocument();
             expect(screen.queryByText("Copied")).not.toBeInTheDocument();
 
@@ -97,29 +122,53 @@ describe("<APIKeys />", () => {
         it("should fail to submit and display errors when no name provided", async () => {
             renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
 
-            expect(await screen.findByText("Create API Key")).toBeInTheDocument();
+            expect(
+                await screen.findByText("Create API Key"),
+            ).toBeInTheDocument();
             await userEvent.click(screen.getByRole("button", { name: "Save" }));
-            expect(screen.getByText("Provide a name for the key")).toBeInTheDocument();
+            expect(
+                screen.getByText("Provide a name for the key"),
+            ).toBeInTheDocument();
         });
 
         describe("<APIKeyAdministratorInfo />", () => {
             it("should render correctly when newKey is empty and state.administratorRole = AdministratorRoles.FULL", async () => {
-                mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
-                renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
+                mockApiGetAccount(
+                    createFakeAccount({
+                        administrator_role: AdministratorRoles.FULL,
+                    }),
+                );
+                renderWithRouter(
+                    <APIKeys />,
+                    formatPath(basePath, searchParams),
+                );
 
-                expect(await screen.findByText(/You are an administrator/)).toBeInTheDocument();
                 expect(
-                    screen.getByText(/If your administrator role is reduced or removed, this API/),
+                    await screen.findByText(/You are an administrator/),
+                ).toBeInTheDocument();
+                expect(
+                    screen.getByText(
+                        /If your administrator role is reduced or removed, this API/,
+                    ),
                 ).toBeInTheDocument();
             });
 
             it("should render correctly when newKey is empty and state.administratorRole = null", () => {
-                mockApiGetAccount(createFakeAccount({ administrator_role: null }));
-                renderWithRouter(<APIKeys />, formatPath(basePath, searchParams));
+                mockApiGetAccount(
+                    createFakeAccount({ administrator_role: null }),
+                );
+                renderWithRouter(
+                    <APIKeys />,
+                    formatPath(basePath, searchParams),
+                );
 
-                expect(screen.queryByText(/You are an administrator/)).not.toBeInTheDocument();
                 expect(
-                    screen.queryByText(/If your administrator role is reduced or removed, this API/),
+                    screen.queryByText(/You are an administrator/),
+                ).not.toBeInTheDocument();
+                expect(
+                    screen.queryByText(
+                        /If your administrator role is reduced or removed, this API/,
+                    ),
                 ).not.toBeInTheDocument();
             });
         });
@@ -128,7 +177,11 @@ describe("<APIKeys />", () => {
     describe("<APIKey />", () => {
         let basePath;
         beforeEach(() => {
-            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+            mockApiGetAccount(
+                createFakeAccount({
+                    administrator_role: AdministratorRoles.FULL,
+                }),
+            );
             mockApiGetAPIKeys(apiKeys);
             basePath = "/account/api";
         });
@@ -136,7 +189,9 @@ describe("<APIKeys />", () => {
         it("should render correctly when collapsed", async () => {
             renderWithRouter(<APIKeys />, basePath);
 
-            expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
+            expect(
+                await screen.findByText(apiKeys[0].name),
+            ).toBeInTheDocument();
             expect(screen.getByText(/Created/)).toBeInTheDocument();
             expect(screen.getByText("2 permissions")).toBeInTheDocument();
         });
@@ -144,7 +199,9 @@ describe("<APIKeys />", () => {
         it("should render correctly when expanded", async () => {
             renderWithRouter(<APIKeys />, basePath);
 
-            expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
+            expect(
+                await screen.findByText(apiKeys[0].name),
+            ).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
 
             expect(screen.getByText(/Created/)).toBeInTheDocument();
@@ -160,16 +217,24 @@ describe("<APIKeys />", () => {
         it("should collapse view when close button clicked", async () => {
             renderWithRouter(<APIKeys />, basePath);
 
-            expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
+            expect(
+                await screen.findByText(apiKeys[0].name),
+            ).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
 
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
+            expect(
+                screen.getByRole("button", { name: "Delete" }),
+            ).toBeInTheDocument();
 
-            await userEvent.click(screen.getByRole("button", { name: "close" }));
+            await userEvent.click(
+                screen.getByRole("button", { name: "close" }),
+            );
 
             expect(screen.queryByText("cancel_job")).not.toBeInTheDocument();
-            expect(screen.queryByRole("button", { name: "Delete" })).not.toBeInTheDocument();
+            expect(
+                screen.queryByRole("button", { name: "Delete" }),
+            ).not.toBeInTheDocument();
         });
     });
 
@@ -181,15 +246,25 @@ describe("<APIKeys />", () => {
         });
 
         it("should render permissions correctly and check and uncheck permissions when clicked, administrator_role == full", async () => {
-            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+            mockApiGetAccount(
+                createFakeAccount({
+                    administrator_role: AdministratorRoles.FULL,
+                }),
+            );
             renderWithRouter(<APIKeys />, basePath);
 
-            expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
+            expect(
+                await screen.findByText(apiKeys[0].name),
+            ).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
 
-            const create_ref = screen.getByRole("checkbox", { name: "create_ref" });
-            const upload_file = screen.getByRole("checkbox", { name: "upload_file" });
+            const create_ref = screen.getByRole("checkbox", {
+                name: "create_ref",
+            });
+            const upload_file = screen.getByRole("checkbox", {
+                name: "upload_file",
+            });
 
             expect(create_ref).toBeChecked();
             expect(upload_file).not.toBeChecked();
@@ -202,16 +277,28 @@ describe("<APIKeys />", () => {
         });
 
         it("should not check and uncheck permissions when administrator_role = base", async () => {
-            mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.BASE }));
+            mockApiGetAccount(
+                createFakeAccount({
+                    administrator_role: AdministratorRoles.BASE,
+                }),
+            );
             renderWithRouter(<APIKeys />, basePath);
 
-            expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
+            expect(
+                await screen.findByText(apiKeys[0].name),
+            ).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
 
-            const cancel_job = screen.getByRole("checkbox", { name: "cancel_job" });
-            const create_ref = screen.getByRole("checkbox", { name: "create_ref" });
-            const upload_file = screen.getByRole("checkbox", { name: "upload_file" });
+            const cancel_job = screen.getByRole("checkbox", {
+                name: "cancel_job",
+            });
+            const create_ref = screen.getByRole("checkbox", {
+                name: "create_ref",
+            });
+            const upload_file = screen.getByRole("checkbox", {
+                name: "upload_file",
+            });
 
             expect(cancel_job).toBeChecked();
             expect(create_ref).toBeChecked();
@@ -230,12 +317,18 @@ describe("<APIKeys />", () => {
             mockApiGetAccount(createFakeAccount({ administrator_role: null }));
             renderWithRouter(<APIKeys />, basePath);
 
-            expect(await screen.findByText(apiKeys[0].name)).toBeInTheDocument();
+            expect(
+                await screen.findByText(apiKeys[0].name),
+            ).toBeInTheDocument();
             await userEvent.click(screen.getByText(apiKeys[0].name));
             expect(await screen.findByText("cancel_job")).toBeInTheDocument();
 
-            const cancel_job = screen.getByRole("checkbox", { name: "cancel_job" });
-            const upload_file = screen.getByRole("checkbox", { name: "upload_file" });
+            const cancel_job = screen.getByRole("checkbox", {
+                name: "cancel_job",
+            });
+            const upload_file = screen.getByRole("checkbox", {
+                name: "upload_file",
+            });
 
             expect(cancel_job).toBeChecked();
             expect(upload_file).not.toBeChecked();

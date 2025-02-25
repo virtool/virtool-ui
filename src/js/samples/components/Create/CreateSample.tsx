@@ -40,7 +40,7 @@ const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
  * @returns The filename without its extension
  */
 function getFileNameFromId(id: string, files: string[]): string {
-    const file = find(files, file => file.id === id);
+    const file = find(files, (file) => file.id === id);
     return file ? file.name_on_disk.match(extensionRegex)[1] : "";
 }
 
@@ -56,7 +56,7 @@ const CreateSampleButtonArea = styled(Box)`
 
     p {
         color: #1e40af;
-        font-weight: ${props => props.theme.fontWeight.thick};
+        font-weight: ${(props) => props.theme.fontWeight.thick};
         margin: 0 0 0 auto;
         padding-left: 15px;
         text-align: center;
@@ -80,7 +80,7 @@ const CreateSampleInputs = styled.div`
 const CreateSampleForm = styled.form`
     display: grid;
     grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
-    grid-column-gap: ${props => props.theme.gap.column};
+    grid-column-gap: ${(props) => props.theme.gap.column};
 `;
 
 const CreateSampleName = styled(InputGroup)`
@@ -153,7 +153,7 @@ export default function CreateSample() {
         return <LoadingPlaceholder className="mt-9" />;
     }
 
-    const reads = flatMap(readsResponse.pages, page => page.items);
+    const reads = flatMap(readsResponse.pages, (page) => page.items);
 
     function autofill(selected: string[]) {
         const fileName = getFileNameFromId(selected[0], reads);
@@ -162,7 +162,16 @@ export default function CreateSample() {
         }
     }
 
-    function onSubmit({ name, isolate, host, locale, libraryType, readFiles, group, sidebar }: FormValues) {
+    function onSubmit({
+        name,
+        isolate,
+        host,
+        locale,
+        libraryType,
+        readFiles,
+        group,
+        sidebar,
+    }: FormValues) {
         const { labels, subtractionIds } = sidebar;
 
         mutation.mutate(
@@ -196,12 +205,21 @@ export default function CreateSample() {
             </ViewHeader>
             <CreateSampleForm onSubmit={handleSubmit(onSubmit)}>
                 <AlertContainer>
-                    <RestoredAlert hasRestored={hasRestored} name="sample" resetForm={reset} />
+                    <RestoredAlert
+                        hasRestored={hasRestored}
+                        name="sample"
+                        resetForm={reset}
+                    />
                 </AlertContainer>
                 <CreateSampleName>
                     <InputLabel htmlFor="name">Name</InputLabel>
                     <InputContainer align="right">
-                        <InputSimple id="name" {...register("name", { required: "Required Field" })} />
+                        <InputSimple
+                            id="name"
+                            {...register("name", {
+                                required: "Required Field",
+                            })}
+                        />
                         {Boolean(watch("readFiles").length) && (
                             <InputIconButton
                                 name="magic"
@@ -218,7 +236,11 @@ export default function CreateSample() {
                         <Controller
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <SampleUserGroup selected={value} groups={groups} onChange={onChange} />
+                                <SampleUserGroup
+                                    selected={value}
+                                    groups={groups}
+                                    onChange={onChange}
+                                />
                             )}
                             name="group"
                         />
@@ -229,7 +251,10 @@ export default function CreateSample() {
 
                         <InputGroup>
                             <InputLabel htmlFor="isolate">Isolate</InputLabel>
-                            <InputSimple id="isolate" {...register("isolate")} />
+                            <InputSimple
+                                id="isolate"
+                                {...register("isolate")}
+                            />
                         </InputGroup>
 
                         <InputGroup>
@@ -241,7 +266,10 @@ export default function CreateSample() {
                     <Controller
                         control={control}
                         render={({ field: { onChange, value } }) => (
-                            <LibraryTypeSelector libraryType={value} onSelect={onChange} />
+                            <LibraryTypeSelector
+                                libraryType={value}
+                                onSelect={onChange}
+                            />
                         )}
                         name="libraryType"
                     />
@@ -260,7 +288,10 @@ export default function CreateSample() {
                             />
                         )}
                         name="readFiles"
-                        rules={{ required: "At least one read file must be attached to the sample" }}
+                        rules={{
+                            required:
+                                "At least one read file must be attached to the sample",
+                        }}
                     />
                 </CreateSampleFields>
 

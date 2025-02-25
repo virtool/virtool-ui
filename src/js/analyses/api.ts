@@ -7,7 +7,8 @@ import { AnalysisSearchResult, GenericAnalysis } from "./types";
  * @param AnalysisId - The unique identifier of the analysis to fetch
  * @returns A promise resolving to an analysis
  */
-export const getAnalysis = ({ analysisId }) => Request.get(`/analyses/${analysisId}`).then(res => res.body);
+export const getAnalysis = ({ analysisId }) =>
+    Request.get(`/analyses/${analysisId}`).then((res) => res.body);
 
 /**
  * Fetch a page of analyses search results
@@ -26,7 +27,7 @@ export function listAnalyses(
 ): Promise<AnalysisSearchResult> {
     return Request.get(`/samples/${sampleId}/analyses`)
         .query({ page, per_page, find: term })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -53,7 +54,7 @@ export function createAnalysis(
             subtractions: subtractionIds,
             ml: mlModel,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -63,7 +64,7 @@ export function createAnalysis(
  * @returns A promise resolving to the removal of an analysis
  */
 export function removeAnalysis(analysisId: string): Promise<null> {
-    return Request.delete(`/analyses/${analysisId}`).then(res => res.body);
+    return Request.delete(`/analyses/${analysisId}`).then((res) => res.body);
 }
 
 /**
@@ -74,5 +75,7 @@ export function removeAnalysis(analysisId: string): Promise<null> {
  * @returns A promise resolving to an installation of blast information
  */
 export function blastNuvs(analysisId: string, sequenceIndex: number) {
-    return Request.put(`/analyses/${analysisId}/${sequenceIndex}/blast`).then(res => res.body);
+    return Request.put(`/analyses/${analysisId}/${sequenceIndex}/blast`).then(
+        (res) => res.body,
+    );
 }

@@ -20,7 +20,11 @@ export type SubtractionFileItemProps = {
     size: number;
 };
 
-export function SubtractionFileItem({ downloadUrl, name, size }: SubtractionFileItemProps) {
+export function SubtractionFileItem({
+    downloadUrl,
+    name,
+    size,
+}: SubtractionFileItemProps) {
     return (
         <StyledSubtractionFile>
             <a href={`/api${downloadUrl}`}>{name}</a>

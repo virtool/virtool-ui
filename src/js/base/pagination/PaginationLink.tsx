@@ -15,7 +15,14 @@ type PaginationLinkProps = {
 /**
  * A styled pagination link navigation users to specified page number
  */
-export function PaginationLink({ active, children, className, disabled, onClick, to }: PaginationLinkProps) {
+export function PaginationLink({
+    active,
+    children,
+    className,
+    disabled,
+    onClick,
+    to,
+}: PaginationLinkProps) {
     return (
         <PaginationItem>
             <Link
@@ -23,7 +30,10 @@ export function PaginationLink({ active, children, className, disabled, onClick,
                 className={cn(
                     "text-lg",
                     "text-blue-500",
-                    { "text-blue-900": !active, "pointer-events-none": disabled },
+                    {
+                        "text-blue-900": !active,
+                        "pointer-events-none": disabled,
+                    },
 
                     className,
                 )}

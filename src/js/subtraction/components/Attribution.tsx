@@ -24,12 +24,20 @@ type SubtractionAttributionProps = {
 /**
  * Formatted attribution showing creating user's handle and time of creation
  */
-export function SubtractionAttribution({ handle, time }: SubtractionAttributionProps): JSX.Element {
+export function SubtractionAttribution({
+    handle,
+    time,
+}: SubtractionAttributionProps): JSX.Element {
     if (handle) {
         if (time) {
             return <Attribution user={handle} time={time} />;
         }
         return <AttributionWithName user={handle} />;
     }
-    return <StyledNoneFoundAttribution> Creator and timestamp unavailable</StyledNoneFoundAttribution>;
+    return (
+        <StyledNoneFoundAttribution>
+            {" "}
+            Creator and timestamp unavailable
+        </StyledNoneFoundAttribution>
+    );
 }

@@ -9,21 +9,33 @@ type GroupsSelectBoxGroupSectionProps = {
     selectable?: boolean;
 };
 
-export const GroupsSelectBoxGroupSection = styled(SelectBoxGroupSection)<GroupsSelectBoxGroupSectionProps>`
-    outline: 1px solid ${props => getColor({ color: "greyLight", theme: props.theme })};
-    background-color: ${props => getColor({ color: props.active ? "blue" : "white", theme: props.theme })};
-    cursor: ${props => (props.selectable ? "pointer" : "default")};
+export const GroupsSelectBoxGroupSection = styled(
+    SelectBoxGroupSection,
+)<GroupsSelectBoxGroupSectionProps>`
+    outline: 1px solid
+        ${(props) => getColor({ color: "greyLight", theme: props.theme })};
+    background-color: ${(props) =>
+        getColor({
+            color: props.active ? "blue" : "white",
+            theme: props.theme,
+        })};
+    cursor: ${(props) => (props.selectable ? "pointer" : "default")};
     &:hover {
-        background-color: ${props =>
-            getColor({ theme: props.theme, color: props.selectable ? "greyLightest" : "white" })};
+        background-color: ${(props) =>
+            getColor({
+                theme: props.theme,
+                color: props.selectable ? "greyLightest" : "white",
+            })};
     }
 `;
 
 export const GroupComponentsContainer = styled(BoxGroup)`
     height: 514px;
     overflow-y: auto;
-    background-color: ${props => getColor({ theme: props.theme, color: "greyLightest" })};
-    border-bottom: 1px solid ${props => getColor({ theme: props.theme, color: "greyLight" })};
+    background-color: ${(props) =>
+        getColor({ theme: props.theme, color: "greyLightest" })};
+    border-bottom: 1px solid
+        ${(props) => getColor({ theme: props.theme, color: "greyLight" })};
 `;
 
 type GroupSelectorProps = {
@@ -32,8 +44,12 @@ type GroupSelectorProps = {
     groups: Array<GroupMinimal>;
 };
 
-export const GroupSelector = ({ selectedGroup, setSelectedGroup, groups }: GroupSelectorProps) => {
-    const groupComponents = map(sortBy(groups, "name"), group => {
+export const GroupSelector = ({
+    selectedGroup,
+    setSelectedGroup,
+    groups,
+}: GroupSelectorProps) => {
+    const groupComponents = map(sortBy(groups, "name"), (group) => {
         return (
             <GroupsSelectBoxGroupSection
                 selectable
@@ -46,5 +62,7 @@ export const GroupSelector = ({ selectedGroup, setSelectedGroup, groups }: Group
         );
     });
 
-    return <GroupComponentsContainer>{groupComponents}</GroupComponentsContainer>;
+    return (
+        <GroupComponentsContainer>{groupComponents}</GroupComponentsContainer>
+    );
 };

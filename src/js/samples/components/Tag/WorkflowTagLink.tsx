@@ -4,8 +4,8 @@ import { Link } from "@base";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 
 const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`
-    background-color: ${props => props.theme.color.purple};
-    border: 1px solid ${props => props.theme.color.purple};
+    background-color: ${(props) => props.theme.color.purple};
+    border: 1px solid ${(props) => props.theme.color.purple};
     border-left: none;
 `;
 
@@ -17,7 +17,10 @@ const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`
  */
 export function WorkflowTagLink({ id }: { id: string }) {
     return (
-        <StyledSampleItemWorkflowTagLink as={Link} to={`/samples/${id}/analyses`}>
+        <StyledSampleItemWorkflowTagLink
+            as={Link}
+            to={`/samples/${id}/analyses`}
+        >
             View
         </StyledSampleItemWorkflowTagLink>
     );

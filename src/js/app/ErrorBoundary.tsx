@@ -15,7 +15,10 @@ type ErrorBoundryProps = {
 /**
  * Error handling component that refreshes the website when an old client version is detected
  */
-export class ErrorBoundary extends React.Component<ErrorBoundryProps, ErrorBoundryState> {
+export class ErrorBoundary extends React.Component<
+    ErrorBoundryProps,
+    ErrorBoundryState
+> {
     constructor(props) {
         super(props);
         this.state = { hasError: false, error: null };
@@ -29,7 +32,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundryProps, ErrorBound
         if (
             this.state.hasError &&
             this.state.error instanceof TypeError &&
-            this.state.error.message.startsWith("Failed to fetch dynamically imported module:")
+            this.state.error.message.startsWith(
+                "Failed to fetch dynamically imported module:",
+            )
         ) {
             window.location.reload();
         }

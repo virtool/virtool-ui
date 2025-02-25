@@ -9,13 +9,23 @@ describe("<JobSteps />", () => {
     it("should render", () => {
         const props = {
             status: [
-                { state: "waiting" as JobState, timestamp: "2024-04-12T21:50:19.108000Z", progress: 40 },
-                { state: "running" as JobState, timestamp: "2024-04-12T21:50:19.108000Z", progress: 40 },
+                {
+                    state: "waiting" as JobState,
+                    timestamp: "2024-04-12T21:50:19.108000Z",
+                    progress: 40,
+                },
+                {
+                    state: "running" as JobState,
+                    timestamp: "2024-04-12T21:50:19.108000Z",
+                    progress: 40,
+                },
             ],
         };
         renderWithProviders(<JobSteps {...props} />);
         expect(screen.getByText("Waiting")).toBeInTheDocument();
-        expect(screen.getByText("Waiting for resources to become available.")).toBeInTheDocument();
+        expect(
+            screen.getByText("Waiting for resources to become available."),
+        ).toBeInTheDocument();
         expect(screen.getByText("Running")).toBeInTheDocument();
     });
 });

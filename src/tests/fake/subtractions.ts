@@ -37,7 +37,9 @@ type CreateFakeSubtractionNestedProps = {
 /**
  * Create a fake subtraction nested
  */
-export function createFakeSubtractionNested(props?: CreateFakeSubtractionNestedProps) {
+export function createFakeSubtractionNested(
+    props?: CreateFakeSubtractionNestedProps,
+) {
     const defaultSubtractionNested = {
         id: faker.random.alphaNumeric(8),
         name: faker.random.word(),
@@ -59,7 +61,9 @@ type CreateFakeSubtractionMinimal = CreateFakeSubtractionNestedProps & {
 /**
  * Create a fake minimal subtraction
  */
-export function createFakeSubtractionMinimal(overrides?: CreateFakeSubtractionMinimal): SubtractionMinimal {
+export function createFakeSubtractionMinimal(
+    overrides?: CreateFakeSubtractionMinimal,
+): SubtractionMinimal {
     const defaultSubtractionMinimal = {
         ...createFakeSubtractionNested(),
         count: faker.datatype.number(),
@@ -83,7 +87,9 @@ type CreateFakeSubtraction = CreateFakeSubtractionMinimal & {
 /**
  * Create a fake subtraction
  */
-export function createFakeSubtraction(overrides?: CreateFakeSubtraction): Subtraction {
+export function createFakeSubtraction(
+    overrides?: CreateFakeSubtraction,
+): Subtraction {
     const { files, gc, linked_samples, ...props } = overrides || {};
     return {
         ...createFakeSubtractionMinimal(props),
@@ -107,15 +113,18 @@ export function createFakeShortlistSubtraction(): SubtractionShortlist {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
-    return nock("http://localhost").get("/api/subtractions").query(true).reply(200, {
-        documents: Subtractions,
-        found_count: Subtractions.length,
-        page: 1,
-        page_count: 1,
-        per_page: 25,
-        ready_count: Subtractions.length,
-        total_count: Subtractions.length,
-    });
+    return nock("http://localhost")
+        .get("/api/subtractions")
+        .query(true)
+        .reply(200, {
+            documents: Subtractions,
+            found_count: Subtractions.length,
+            page: 1,
+            page_count: 1,
+            per_page: 25,
+            ready_count: Subtractions.length,
+            total_count: Subtractions.length,
+        });
 }
 
 /**
@@ -125,7 +134,10 @@ export function mockApiGetSubtractions(Subtractions: SubtractionMinimal[]) {
  * @param statusCode - The HTTP status code to simulate in the response
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetSubtractionDetail(subtractionDetail: Subtraction, statusCode?: number) {
+export function mockApiGetSubtractionDetail(
+    subtractionDetail: Subtraction,
+    statusCode?: number,
+) {
     return nock("http://localhost")
         .get(`/api/subtractions/${subtractionDetail.id}`)
         .query(true)
@@ -140,10 +152,16 @@ export function mockApiGetSubtractionDetail(subtractionDetail: Subtraction, stat
  * @param nickname - The updated nickname
  * @returns A nock scope for the mocked API call
  */
-export function mockApiEditSubtraction(subtraction: Subtraction, name: string, nickname: string) {
+export function mockApiEditSubtraction(
+    subtraction: Subtraction,
+    name: string,
+    nickname: string,
+) {
     const subtractionDetail = { ...subtraction, name, nickname };
 
-    return nock("http://localhost").patch(`/api/subtractions/${subtraction.id}`).reply(200, subtractionDetail);
+    return nock("http://localhost")
+        .patch(`/api/subtractions/${subtraction.id}`)
+        .reply(200, subtractionDetail);
 }
 
 /**
@@ -154,7 +172,11 @@ export function mockApiEditSubtraction(subtraction: Subtraction, name: string, n
  * @param uploadId - the unique identifier of the file to be used for the subtraction
  * @returns A nock scope for the mocked API call
  */
-export function mockApiCreateSubtraction(name: string, nickname: string, uploadId: string) {
+export function mockApiCreateSubtraction(
+    name: string,
+    nickname: string,
+    uploadId: string,
+) {
     return nock("http://localhost")
         .post("/api/subtractions", { name, nickname, upload_id: uploadId })
         .reply(200, { name, nickname, id: "subtraction_id" });
@@ -167,7 +189,9 @@ export function mockApiCreateSubtraction(name: string, nickname: string, uploadI
  * @returns A nock scope for the mocked API call
  */
 export function mockApiRemoveSubtraction(subtractionId: string) {
-    return nock("http://localhost").delete(`/api/subtractions/${subtractionId}`).reply(200);
+    return nock("http://localhost")
+        .delete(`/api/subtractions/${subtractionId}`)
+        .reply(200);
 }
 
 /**
@@ -177,7 +201,10 @@ export function mockApiRemoveSubtraction(subtractionId: string) {
  * @param ready - Indicates whether to show all the ready subtractions
  * @returns A nock scope for the mocked API call
  */
-export function mockApiGetShortlistSubtractions(subtractionsShortlist: SubtractionShortlist[], ready?: boolean) {
+export function mockApiGetShortlistSubtractions(
+    subtractionsShortlist: SubtractionShortlist[],
+    ready?: boolean,
+) {
     return nock("http://localhost")
         .get("/api/subtractions")
         .query(ready ? { short: true, ready } : true)

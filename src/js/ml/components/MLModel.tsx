@@ -35,7 +35,11 @@ type MLModelProps = {
  * @returns A condensed MLModel
  */
 export function MLModel({ created_at, latest_release, name }: MLModelProps) {
-    const version = latest_release ? <a href={latest_release.github_url}> {latest_release.name} </a> : "No releases";
+    const version = latest_release ? (
+        <a href={latest_release.github_url}> {latest_release.name} </a>
+    ) : (
+        "No releases"
+    );
 
     return (
         <StyledMLModel>

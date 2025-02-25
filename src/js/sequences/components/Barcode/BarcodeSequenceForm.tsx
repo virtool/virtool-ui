@@ -30,8 +30,14 @@ type BarcodeSequenceProps = {
 /**
  * A form for creating or editing a barcode sequence
  */
-export default function BarcodeSequenceForm({ activeSequence, noun, onSubmit, targets }: BarcodeSequenceProps) {
-    const { accession, definition, host, id, sequence, target } = activeSequence || {};
+export default function BarcodeSequenceForm({
+    activeSequence,
+    noun,
+    onSubmit,
+    targets,
+}: BarcodeSequenceProps) {
+    const { accession, definition, host, id, sequence, target } =
+        activeSequence || {};
     const methods = usePersistentForm<FormValues>({
         formName: `${noun}BarcodeSequence${id}`,
         defaultValues: {
@@ -48,7 +54,11 @@ export default function BarcodeSequenceForm({ activeSequence, noun, onSubmit, ta
     return (
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <RestoredAlert hasRestored={hasRestored} name="sequence" resetForm={reset} />
+                <RestoredAlert
+                    hasRestored={hasRestored}
+                    name="sequence"
+                    resetForm={reset}
+                />
                 <TargetField targets={targets} />
                 <SequenceForm />
                 <SaveButton />

@@ -50,14 +50,21 @@ export function UploadBar({
         }
     }
 
-    const { fileRejections, getRootProps, getInputProps, isDragAccept, isDragReject, open } = useDropzone({
+    const {
+        fileRejections,
+        getRootProps,
+        getInputProps,
+        isDragAccept,
+        isDragReject,
+        open,
+    } = useDropzone({
         accept,
         onDrop: handleDrop,
         validator,
     });
 
     const rootProps = getRootProps({
-        onClick: e => e.stopPropagation(),
+        onClick: (e) => e.stopPropagation(),
     });
 
     return (
@@ -87,10 +94,18 @@ export function UploadBar({
             )}
             {...rootProps}
         >
-            <input {...getInputProps()} aria-label="Upload file" multiple={multiple} />
+            <input
+                {...getInputProps()}
+                aria-label="Upload file"
+                multiple={multiple}
+            />
             <div className="gap-2 grid grid-cols-11 place-items-stretch">
-                <div className="col-span-5 flex items-center justify-end">{message}</div>
-                <div className="col-span-1 flex font-bold items-center justify-center text-gray-600">OR</div>
+                <div className="col-span-5 flex items-center justify-end">
+                    {message}
+                </div>
+                <div className="col-span-1 flex font-bold items-center justify-center text-gray-600">
+                    OR
+                </div>
                 <div className="col-span-5 flex items-center justify-start">
                     <Button color="blue" onBlur={onBlur} onClick={open}>
                         <Icon name="upload" /> Browse Files

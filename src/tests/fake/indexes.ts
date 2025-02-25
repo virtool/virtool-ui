@@ -16,7 +16,9 @@ type CreateFakeIndexNestedProps = {
     version?: number;
 };
 
-export function createFakeIndexNested(props?: CreateFakeIndexNestedProps): IndexNested {
+export function createFakeIndexNested(
+    props?: CreateFakeIndexNestedProps,
+): IndexNested {
     const defaultIndexNested = {
         id: faker.random.alphaNumeric(8),
         version: faker.datatype.number(5),
@@ -36,7 +38,9 @@ type CreateFakeIndexMinimalProps = CreateFakeIndexNestedProps & {
     ready?: boolean;
 };
 
-export function createFakeIndexMinimal(props?: CreateFakeIndexMinimalProps): IndexMinimal {
+export function createFakeIndexMinimal(
+    props?: CreateFakeIndexMinimalProps,
+): IndexMinimal {
     const defaultIndexMinimal = {
         ...createFakeIndexNested(),
         change_count: faker.datatype.number({ min: 2, max: 10 }),
@@ -78,7 +82,11 @@ type IndexSearchResults = BaseFakeSearchResultOptions & {
     change_count?: number;
 };
 
-export function mockApiFindIndexes(refId: string, page: number, searchResults: IndexSearchResults) {
+export function mockApiFindIndexes(
+    refId: string,
+    page: number,
+    searchResults: IndexSearchResults,
+) {
     const defaultSearchResults = {
         page: 1,
         page_count: 1,
@@ -100,7 +108,10 @@ export function mockApiFindIndexes(refId: string, page: number, searchResults: I
  * @returns The nock scope for the mocked API call
  */
 export function mockApiListIndexes(indexMinimal: IndexMinimal[]) {
-    return nock("http://localhost").get("/api/indexes").query(true).reply(200, indexMinimal);
+    return nock("http://localhost")
+        .get("/api/indexes")
+        .query(true)
+        .reply(200, indexMinimal);
 }
 
 /**
@@ -110,9 +121,13 @@ export function mockApiListIndexes(indexMinimal: IndexMinimal[]) {
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetUnbuiltChanges(refId: string) {
-    return nock("http://localhost").get(`/api/refs/${refId}/history?unbuilt=true`).reply(200);
+    return nock("http://localhost")
+        .get(`/api/refs/${refId}/history?unbuilt=true`)
+        .reply(200);
 }
 
 export function mockApiBuildIndexes(refId: string) {
-    return nock("http://localhost").post(`/api/refs/${refId}/indexes`).reply(201);
+    return nock("http://localhost")
+        .post(`/api/refs/${refId}/indexes`)
+        .reply(201);
 }

@@ -12,9 +12,14 @@ import { Redirect, Route, Switch } from "wouter";
 import DevDialog from "../dev/components/DeveloperDialog";
 import UploadOverlay from "../files/components/UploadOverlay";
 import MessageBanner from "../message/components/MessageBanner";
-import WSConnection, { ABANDONED, INITIALIZING } from "./websocket/WSConnection";
+import WsConnection, {
+    ABANDONED,
+    INITIALIZING,
+} from "./websocket/WsConnection";
 
-const Administration = lazy(() => import("../administration/components/Settings"));
+const Administration = lazy(
+    () => import("../administration/components/Settings"),
+);
 const Account = lazy(() => import("@account/components/Account"));
 const HMM = lazy(() => import("../hmm/components/HMM"));
 const Jobs = lazy(() => import("../jobs/components/Jobs"));
@@ -25,7 +30,7 @@ const ML = lazy(() => import("../ml/components/ML"));
 
 function setupWebSocket(queryClient) {
     if (!window.ws) {
-        window.ws = new WSConnection(queryClient);
+        window.ws = new WsConnection(queryClient);
     }
     if (includes([ABANDONED, INITIALIZING], window.ws.connectionStatus)) {
         window.ws.establishConnection();
@@ -73,21 +78,33 @@ export default function Main() {
 
             <NavContainer>
                 <MessageBanner />
-                <NavBar administrator_role={data.administrator_role} handle={data.handle} />
+                <NavBar
+                    administrator_role={data.administrator_role}
+                    handle={data.handle}
+                />
             </NavContainer>
 
             <MainContainer>
                 <Suspense fallback={<Fallback />}>
                     <Switch>
-                        <Route path="/" component={() => <Redirect to="/samples" />} />
-                        <Route path="/administration/*?" component={Administration} />
+                        <Route
+                            path="/"
+                            component={() => <Redirect to="/samples" />}
+                        />
+                        <Route
+                            path="/administration/*?"
+                            component={Administration}
+                        />
                         <Route path="/account/*?" component={Account} />
                         <Route path="/hmm/*?" component={HMM} />
                         <Route path="/jobs/*?" component={Jobs} />
                         <Route path="/ml/*?" component={ML} />
                         <Route path="/refs/*?" component={References} />
                         <Route path="/samples/*?" component={Samples} />
-                        <Route path="/subtractions/*?" component={Subtraction} />
+                        <Route
+                            path="/subtractions/*?"
+                            component={Subtraction}
+                        />
                     </Switch>
                 </Suspense>
             </MainContainer>

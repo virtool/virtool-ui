@@ -3,7 +3,10 @@ import React from "react";
 import { useExpanded } from "../../hooks";
 import SequenceButtons from "../Sequence/SequenceButtons";
 import { SequenceHeader } from "../Sequence/SequenceHeader";
-import { SequenceAccessionValue, SequenceTitleValue } from "../Sequence/SequenceValues";
+import {
+    SequenceAccessionValue,
+    SequenceTitleValue,
+} from "../Sequence/SequenceValues";
 import BarcodeSequenceTable from "./BarcodeSequenceTable";
 
 type BarcodeSequenceProps = {
@@ -18,7 +21,14 @@ type BarcodeSequenceProps = {
 /**
  * A condensed barcode sequence item for use in a list of sequences
  */
-export default function BarcodeSequence({ accession, definition, host, id, sequence, target }: BarcodeSequenceProps) {
+export default function BarcodeSequence({
+    accession,
+    definition,
+    host,
+    id,
+    sequence,
+    target,
+}: BarcodeSequenceProps) {
     const { expanded, expand, collapse } = useExpanded();
 
     return (
@@ -30,7 +40,12 @@ export default function BarcodeSequence({ accession, definition, host, id, seque
             </SequenceHeader>
 
             {expanded && (
-                <BarcodeSequenceTable definition={definition} host={host} sequence={sequence} target={target} />
+                <BarcodeSequenceTable
+                    definition={definition}
+                    host={host}
+                    sequence={sequence}
+                    target={target}
+                />
             )}
         </BoxGroupSection>
     );

@@ -2,7 +2,14 @@ import { useCheckAdminRole } from "@administration/hooks";
 import { useFetchUser } from "@administration/queries";
 import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Alert, device, Icon, InitialIcon, Link, LoadingPlaceholder } from "@base";
+import {
+    Alert,
+    device,
+    Icon,
+    InitialIcon,
+    Link,
+    LoadingPlaceholder,
+} from "@base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
 import { useDialogParam, usePathParams } from "@utils/hooks";
@@ -23,7 +30,7 @@ const UserDetailGroups = styled.div`
     @media (min-width: ${device.tablet}) {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-column-gap: ${props => props.theme.gap.column};
+        grid-column-gap: ${(props) => props.theme.gap.column};
     }
 `;
 
@@ -55,11 +62,15 @@ export default function UserDetail() {
     const { userId } = usePathParams<{ userId: string }>();
     const { data, isPending } = useFetchUser(userId);
     const { hasPermission: canEdit } = useCheckAdminRole(
-        data?.administrator_role === null ? AdministratorRoles.USERS : AdministratorRoles.FULL,
+        data?.administrator_role === null
+            ? AdministratorRoles.USERS
+            : AdministratorRoles.FULL,
     );
 
-    const { open: openActivateUser, setOpen: setOpenActivateUser } = useDialogParam("openActivateUser");
-    const { open: openDeactivateUser, setOpen: setOpenDeactivateUser } = useDialogParam("openDeactivateUser");
+    const { open: openActivateUser, setOpen: setOpenActivateUser } =
+        useDialogParam("openActivateUser");
+    const { open: openDeactivateUser, setOpen: setOpenDeactivateUser } =
+        useDialogParam("openDeactivateUser");
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -70,15 +81,25 @@ export default function UserDetail() {
             <Alert color="orange" level>
                 <Icon name="exclamation-circle" />
                 <span>
-                    <strong>You do not have permission to manage this user.</strong>
+                    <strong>
+                        You do not have permission to manage this user.
+                    </strong>
                     <span> Contact an administrator.</span>
                 </span>
             </Alert>
         );
     }
 
-    const { handle, administrator_role, id, groups, primary_group, permissions, last_password_change, force_reset } =
-        data;
+    const {
+        handle,
+        administrator_role,
+        id,
+        groups,
+        primary_group,
+        permissions,
+        last_password_change,
+        force_reset,
+    } = data;
 
     return (
         <div>
@@ -86,17 +107,32 @@ export default function UserDetail() {
                 <UserDetailTitle>
                     <InitialIcon size="xl" handle={handle} />
                     <span>{handle}</span>
-                    {administrator_role ? <AdminIcon aria-label="admin" name="user-shield" color="blue" /> : null}
+                    {administrator_role ? (
+                        <AdminIcon
+                            aria-label="admin"
+                            name="user-shield"
+                            color="blue"
+                        />
+                    ) : null}
                     <Link to="/administration/users">Back To List</Link>
                 </UserDetailTitle>
             </UserDetailHeader>
 
-            <Password key={id} id={id} lastPasswordChange={last_password_change} forceReset={force_reset} />
+            <Password
+                key={id}
+                id={id}
+                lastPasswordChange={last_password_change}
+                forceReset={force_reset}
+            />
 
             <UserDetailGroups>
                 <div>
                     <UserGroups userId={id} memberGroups={groups} />
-                    <PrimaryGroup groups={groups} id={id} primaryGroup={primary_group} />
+                    <PrimaryGroup
+                        groups={groups}
+                        id={id}
+                        primaryGroup={primary_group}
+                    />
                 </div>
                 <UserPermissions permissions={permissions} />
             </UserDetailGroups>
@@ -108,7 +144,11 @@ export default function UserDetail() {
                     onClick={() => setOpenDeactivateUser(true)}
                 />
             ) : (
-                <UserActivationBanner buttonText="Activate" noun="activate" onClick={() => setOpenActivateUser(true)} />
+                <UserActivationBanner
+                    buttonText="Activate"
+                    noun="activate"
+                    onClick={() => setOpenActivateUser(true)}
+                />
             )}
 
             <UserActivation
