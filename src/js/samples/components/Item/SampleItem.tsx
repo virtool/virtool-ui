@@ -124,7 +124,9 @@ export default function SampleItem({
                 </SampleItemLabels>
             </SampleItemData>
             <SampleItemWorkflows>
-                <WorkflowTags id={sample.id} workflows={sample.workflows} />
+                {sample.ready && (
+                    <WorkflowTags id={sample.id} workflows={sample.workflows} />
+                )}
             </SampleItemWorkflows>
             <SampleItemIcon>
                 <EndIcon
