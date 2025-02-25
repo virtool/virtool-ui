@@ -1,3 +1,5 @@
+import tailwindcssAnimate from "tailwindcss-animate";
+
 export default {
     content: ["./src/js/**/*.{html,js,jsx,ts,tsx}"],
     prefix: "",
@@ -39,5 +41,5 @@ export default {
             },
         },
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [tailwindcssAnimate],
 };

@@ -9,123 +9,123 @@ on:
             - "main"
 
 env:
-  REGISTRY: ghcr.io
+    REGISTRY: ghcr.io
 
 jobs:
-  commitlint:
-    runs-on: ubuntu-22.04
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Lint
-        uses: wagoid/commitlint-github-action@v6
-  tsc:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install
-        run: npm i
-      - name: tsc
-        run: npx tsc --noEmit
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install
-        run: npm i
-      - name: Run ESLint
-        run: npx eslint --quiet src/js
-  prettier:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install
-        run: npm i
-      - name: Run Prettier
-        run: npx prettier -l src/js
-  test:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Test
-        run: |
-          npm i
-          npm run test
-  build:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build and Push
-        uses: docker/build-push-action@v5
-        with:
-          target: dist
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-  release:
-    runs-on: ubuntu-22.04
-    needs: [test, build]
-    if: github.event_name == 'push'
-    outputs:
-      git-tag: ${{ steps.semantic.outputs.git-tag }}
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install semantic-release
-        run: npm i semantic-release@v23.0.7 @semantic-release/exec@v6.0.3 conventional-changelog-conventionalcommits@7.0.2
-      - name: Run semantic-release
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
-  ghcr:
-    runs-on: ubuntu-22.04
-    if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag != ''
-    needs: [release]
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.release.outputs.git-tag }}
-      - name: Write VERSION file
-        run: echo ${{ needs.release.outputs.git-tag }} > VERSION
-      - name: Login
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract Metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          context: git
-          images: ${{ env.REGISTRY }}/virtool/ui
-      - name: Build & Push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          target: dist
-          labels: ${{ steps.meta.outputs.labels }}
+    build:
+        runs-on: ubuntu-22.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Build and Push
+              uses: docker/build-push-action@v5
+              with:
+                  target: dist
+              env:
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    commitlint:
+        runs-on: ubuntu-22.04
+        if: github.event_name == 'pull_request'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - name: Lint
+              uses: wagoid/commitlint-github-action@v6
+    eslint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install
+              run: npm i
+            - name: Run ESLint
+              run: npx eslint --quiet .
+    prettier:
+        runs-on: ubuntu-22.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install
+              run: npm i
+            - name: Run Prettier
+              run: npx prettier -l .
+    tsc:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Install
+              run: npm i
+            - name: tsc
+              run: npx tsc --noEmit
+    test:
+        runs-on: ubuntu-22.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Test
+              run: |
+                  npm i
+                  npm run test
+    release:
+        runs-on: ubuntu-22.04
+        needs: [test, build]
+        if: github.event_name == 'push'
+        outputs:
+            git-tag: ${{ steps.semantic.outputs.git-tag }}
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup NodeJS
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Install semantic-release
+              run: npm i semantic-release@v23.0.7 @semantic-release/exec@v6.0.3 conventional-changelog-conventionalcommits@7.0.2
+            - name: Run semantic-release
+              id: semantic
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: npx semantic-release
+    ghcr:
+        runs-on: ubuntu-22.04
+        if: github.repository_owner == 'Virtool' && github.event_name == 'push' && needs.release.outputs.git-tag != ''
+        needs: [release]
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ needs.release.outputs.git-tag }}
+            - name: Write VERSION file
+              run: echo ${{ needs.release.outputs.git-tag }} > VERSION
+            - name: Login
+              uses: docker/login-action@v3
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Extract Metadata
+              id: meta
+              uses: docker/metadata-action@v5
+              with:
+                  context: git
+                  images: ${{ env.REGISTRY }}/virtool/ui
+            - name: Build & Push
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ steps.meta.outputs.tags }}
+                  target: dist
+                  labels: ${{ steps.meta.outputs.labels }}

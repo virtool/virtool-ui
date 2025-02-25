@@ -18,7 +18,7 @@ to the server to refresh the data.
 
 A query key must be:
 
-1.  Distinct: Every API call with unique parameters must have a unique key (`page`, `per_page`, `term`, `id`, etc.)
+1. Distinct: Every API call with unique parameters must have a unique key (`page`, `per_page`, `term`, `id`, etc.)
 
 ```typescript
 /* Querys made with additional paramters */
@@ -28,7 +28,7 @@ useListSamples(5, 25)[
 ];
 ```
 
-2.  Deterministic: The same parameters must always produce the same query key
+2. Deterministic: The same parameters must always produce the same query key
 
 ```typescript
 /* Querys made with the paramters */
@@ -41,7 +41,7 @@ useListSamples(5, 25)[
 ];
 ```
 
-3.  Hierarchical: Invalidating general query keys should invalidate more specific query keys below them.
+3. Hierarchical: Invalidating general query keys should invalidate more specific query keys below them.
 
 ```typescript
     /* Invalidation key */

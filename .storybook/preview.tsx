@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
 });
 
 export const decorators = [
-    Story => (
+    (Story) => (
         <Router>
             <ThemeProvider theme={theme}>
                 <QueryClientProvider client={queryClient}>
