@@ -75,7 +75,7 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                         <strong>None</strong>
                         <p>
                             Samples are assigned no group and only
-                            <em> all users'</em> rights apply
+                            <em> all {"users'"}</em> rights apply
                         </p>
                     </SelectBox>
 
@@ -88,7 +88,7 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                         <strong>Force choice</strong>
                         <p>
                             Samples are automatically assigned the creating
-                            user's primary group
+                            {"user's"} primary group
                         </p>
                     </SelectBox>
 
@@ -100,7 +100,7 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                         }
                         active={sample_group === "users_primary_group"}
                     >
-                        <strong>User's primary group</strong>
+                        <strong>{"User's"} primary group</strong>
                         <p>
                             Samples are assigned by the user in the creation
                             form
@@ -131,7 +131,7 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                 </InputGroup>
 
                 <InputGroup>
-                    <InputLabel htmlFor="all">All Users' Rights</InputLabel>
+                    <InputLabel htmlFor="all">All {"Users'"} Rights</InputLabel>
                     <InputSelect
                         id="all"
                         value={all}

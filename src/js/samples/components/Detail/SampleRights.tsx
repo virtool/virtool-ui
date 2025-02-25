@@ -139,7 +139,7 @@ export default function SampleRights() {
 
                     <InputGroup>
                         <InputLabel htmlFor="allUsers">
-                            All Users' Rights
+                            All {"Users'"} Rights
                         </InputLabel>
                         <InputSelect
                             id="allUsers"
