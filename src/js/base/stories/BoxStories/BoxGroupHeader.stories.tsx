@@ -17,10 +17,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function Template(args) {
+    const { children, ...rest } = args;
+
     return (
         <BoxGroup>
             <BoxGroupHeader>
-                <h2 {...args} />
+                <h2 {...rest}>{children}</h2>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                     do eiusmod tempor incididunt ut labore et dolore magna
