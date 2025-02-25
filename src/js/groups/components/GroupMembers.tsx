@@ -26,7 +26,9 @@ export function GroupMembers({ members }: MemberProps) {
             {memberComponents}
             {Boolean(memberComponents.length) || (
                 <BoxGroupSection key="no-members">
-                    <div className="flex items-center justify-center py-6">No Group Members</div>
+                    <div className="flex items-center justify-center py-6">
+                        No Group Members
+                    </div>
                 </BoxGroupSection>
             )}
         </BoxGroup>

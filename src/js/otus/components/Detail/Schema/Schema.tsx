@@ -21,10 +21,8 @@ const AddButton = styled(Button)`
  */
 export default function Schema() {
     const { refId, otuId } = usePathParams<{ otuId: string; refId: string }>();
-    const { hasPermission: canModify, isPending: isPendingPermission } = useCheckReferenceRight(
-        refId,
-        ReferenceRight.modify_otu,
-    );
+    const { hasPermission: canModify, isPending: isPendingPermission } =
+        useCheckReferenceRight(refId, ReferenceRight.modify_otu);
 
     const { setOpen: setOpenAddSegment } = useDialogParam("openAddSegment");
 
@@ -39,13 +37,19 @@ export default function Schema() {
 
     function handleMoveUp(index: number) {
         const updatedSchema = data.schema.slice();
-        [updatedSchema[index], updatedSchema[index - 1]] = [updatedSchema[index - 1], updatedSchema[index]];
+        [updatedSchema[index], updatedSchema[index - 1]] = [
+            updatedSchema[index - 1],
+            updatedSchema[index],
+        ];
         handleUpdate(updatedSchema);
     }
 
     function handleMoveDown(index: number) {
         const updatedSchema = data.schema.slice();
-        [updatedSchema[index], updatedSchema[index + 1]] = [updatedSchema[index + 1], updatedSchema[index]];
+        [updatedSchema[index], updatedSchema[index + 1]] = [
+            updatedSchema[index + 1],
+            updatedSchema[index],
+        ];
         handleUpdate(updatedSchema);
     }
 
@@ -78,10 +82,25 @@ export default function Schema() {
                 <NoneFoundBox noun="segments" />
             )}
 
-            <AddSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
-            <EditSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
+            <AddSegment
+                abbreviation={abbreviation}
+                name={name}
+                otuId={otuId}
+                schema={schema}
+            />
+            <EditSegment
+                abbreviation={abbreviation}
+                name={name}
+                otuId={otuId}
+                schema={schema}
+            />
             {schema.length ? (
-                <RemoveSegment abbreviation={abbreviation} name={name} otuId={otuId} schema={schema} />
+                <RemoveSegment
+                    abbreviation={abbreviation}
+                    name={name}
+                    otuId={otuId}
+                    schema={schema}
+                />
             ) : null}
         </div>
     );

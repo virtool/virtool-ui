@@ -8,7 +8,7 @@ const StyledQualityChart = styled.div`
     .axis path,
     .axis line {
         fill: none;
-        stroke: ${props => props.theme.color.black};
+        stroke: ${(props) => props.theme.color.black};
         shape-rendering: crispEdges;
     }
 
@@ -23,19 +23,19 @@ const StyledQualityChart = styled.div`
     }
 
     .graph-line-blue {
-        stroke: ${props => props.theme.color.blue};
+        stroke: ${(props) => props.theme.color.blue};
     }
 
     .graph-line-green {
-        stroke: ${props => props.theme.color.green};
+        stroke: ${(props) => props.theme.color.green};
     }
 
     .graph-line-yellow {
-        stroke: ${props => props.theme.color.yellow};
+        stroke: ${(props) => props.theme.color.yellow};
     }
 
     .graph-line-red {
-        stroke: ${props => props.theme.color.red};
+        stroke: ${(props) => props.theme.color.red};
     }
 
     .quality-area {
@@ -43,17 +43,21 @@ const StyledQualityChart = styled.div`
     }
 
     .quality-area-yellow {
-        fill: ${props => props.theme.color.yellowLightest};
+        fill: ${(props) => props.theme.color.yellowLightest};
     }
 
     .quality-area-green {
-        fill: ${props => props.theme.color.greenLightest};
+        fill: ${(props) => props.theme.color.greenLightest};
     }
 `;
 
 type QualityChartProps = {
     /** A callback function to create the sample quality chart */
-    createChart: (current: RefObject<HTMLDivElement>, data: number[], width: number) => void;
+    createChart: (
+        current: RefObject<HTMLDivElement>,
+        data: number[],
+        width: number,
+    ) => void;
     /** The data to be used in the chart */
     data: number[];
     /** The width of the chart */

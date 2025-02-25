@@ -13,7 +13,7 @@ import { AdministratorRoles, Settings } from "./types";
  * @returns - A promise resolving to the current server settings.
  */
 export function fetchSettings(): Promise<Settings> {
-    return Request.get("/settings").then(response => {
+    return Request.get("/settings").then((response) => {
         return response.body;
     });
 }
@@ -40,7 +40,7 @@ export type SettingsUpdate = {
 export function updateSettings(update: SettingsUpdate): Promise<Settings> {
     return Request.patch("/settings")
         .send(update)
-        .then(response => response.body);
+        .then((response) => response.body);
 }
 
 /**
@@ -49,7 +49,7 @@ export function updateSettings(update: SettingsUpdate): Promise<Settings> {
  * @returns - A promise resolving to the list of known administrator roles
  */
 export function fetchAdministratorRoles(): Promise<AdministratorRoles[]> {
-    return Request.get("/admin/roles").then(response => response.body);
+    return Request.get("/admin/roles").then((response) => response.body);
 }
 
 /**
@@ -71,7 +71,7 @@ export function findUsers(
 ): Promise<UserResponse> {
     return Request.get("/admin/users")
         .query({ page, per_page, term, administrator, active })
-        .then(response => {
+        .then((response) => {
             return response.body;
         });
 }
@@ -83,7 +83,7 @@ export function findUsers(
  * @returns A promise resolving to a single user
  */
 export function getUser(userId: string): Promise<User> {
-    return Request.get(`/admin/users/${userId}`).then(res => res.body);
+    return Request.get(`/admin/users/${userId}`).then((res) => res.body);
 }
 
 /**
@@ -101,7 +101,7 @@ export function createUser({ handle, password, forceReset }): Promise<User> {
             password,
             force_reset: forceReset,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 export type UserUpdate = {
@@ -122,7 +122,7 @@ export type UserUpdate = {
 export function updateUser(userId: string, update: UserUpdate): Promise<User> {
     return Request.patch(`/admin/users/${userId}`)
         .send(update)
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -132,8 +132,11 @@ export function updateUser(userId: string, update: UserUpdate): Promise<User> {
  * @param user_id - The id of the user to update
  * @returns A promise resolving to the complete response containing the updated user
  */
-export function setAdministratorRole(role: string, user_id: string): Promise<User> {
+export function setAdministratorRole(
+    role: string,
+    user_id: string,
+): Promise<User> {
     return Request.put(`/admin/users/${user_id}/role`)
         .send({ role })
-        .then(res => res.body);
+        .then((res) => res.body);
 }

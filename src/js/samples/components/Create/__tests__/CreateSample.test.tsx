@@ -5,7 +5,10 @@ import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { mockApiListGroups } from "@tests/fake/groups";
 import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
 import { mockApiCreateSample } from "@tests/fake/samples";
-import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
+import {
+    createFakeShortlistSubtraction,
+    mockApiGetShortlistSubtractions,
+} from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
@@ -56,12 +59,20 @@ describe("<CreateSample>", () => {
 
         expect(await screen.findByText("Create Sample")).toBeInTheDocument();
         expect(screen.queryByText("Required Field")).not.toBeInTheDocument();
-        expect(screen.queryByText("At least one read file must be attached to the sample")).not.toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                "At least one read file must be attached to the sample",
+            ),
+        ).not.toBeInTheDocument();
 
         await userEvent.click(screen.getByRole("button", { name: "Create" }));
 
         expect(screen.getByText("Required Field")).toBeInTheDocument();
-        expect(screen.getByText("At least one read file must be attached to the sample")).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "At least one read file must be attached to the sample",
+            ),
+        ).toBeInTheDocument();
     });
 
     it("should submit when minimum fields are completed", async () => {
@@ -70,7 +81,17 @@ describe("<CreateSample>", () => {
         mockApiListFiles([file]);
         mockApiGetShortlistSubtractions([]);
 
-        const scope = mockApiCreateSample("Sample A", "", "", "", LibraryType.normal, [file.id], [], [], null);
+        const scope = mockApiCreateSample(
+            "Sample A",
+            "",
+            "",
+            "",
+            LibraryType.normal,
+            [file.id],
+            [],
+            [],
+            null,
+        );
 
         renderWithRouter(<CreateSample />);
 
@@ -111,7 +132,10 @@ describe("<CreateSample>", () => {
 
         // Fill out main form.
         await userEvent.type(screen.getByLabelText("Name"), "Sample T");
-        await userEvent.type(await screen.findByLabelText("Isolate"), "Clone AB");
+        await userEvent.type(
+            await screen.findByLabelText("Isolate"),
+            "Clone AB",
+        );
         await userEvent.type(screen.getByLabelText("Host"), "Apple");
         await userEvent.type(screen.getByLabelText("Locale"), "Earth");
         await userEvent.click(screen.getByText("Normal"));
@@ -121,11 +145,15 @@ describe("<CreateSample>", () => {
         await userEvent.click(screen.getByText(files[1].name));
 
         // Select Labels
-        await userEvent.click(screen.getByRole("button", { name: "select labels" }));
+        await userEvent.click(
+            screen.getByRole("button", { name: "select labels" }),
+        );
         await userEvent.click(screen.getByText(labels[0].name));
 
         // Select Subtractions
-        await userEvent.click(screen.getByRole("button", { name: "select default subtractions" }));
+        await userEvent.click(
+            screen.getByRole("button", { name: "select default subtractions" }),
+        );
         await userEvent.click(screen.getByText(subtractionShortlist.name));
 
         // Submit.
@@ -138,7 +166,9 @@ describe("<CreateSample>", () => {
         const file = createFakeFile({ name: "14T81.fq.gz" });
 
         mockApiListFiles([file]);
-        mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+        mockApiGetShortlistSubtractions([
+            { name: "foo", ready: true, id: "test" },
+        ]);
 
         renderWithRouter(<CreateSample />);
 
@@ -146,7 +176,9 @@ describe("<CreateSample>", () => {
         expect(field).toHaveValue("");
 
         await userEvent.click(screen.getByText(file.name));
-        await userEvent.click(screen.getByRole("button", { name: "Auto Fill" }));
+        await userEvent.click(
+            screen.getByRole("button", { name: "Auto Fill" }),
+        );
 
         expect(field).toHaveValue("14T81");
     });
@@ -183,14 +215,18 @@ describe("<CreateSample>", () => {
 
         expect(screen.getByText("2 of 2 selected")).toBeInTheDocument();
 
-        await userEvent.click(await screen.getByRole("button", { name: "Swap" }));
+        await userEvent.click(
+            await screen.getByRole("button", { name: "Swap" }),
+        );
     });
 
     it("should show correct read orientations", async () => {
         const files = [createFakeFile(), createFakeFile()];
 
         mockApiListFiles(files);
-        mockApiGetShortlistSubtractions([{ name: "foo", ready: true, id: "test" }]);
+        mockApiGetShortlistSubtractions([
+            { name: "foo", ready: true, id: "test" },
+        ]);
 
         renderWithRouter(<CreateSample />);
 

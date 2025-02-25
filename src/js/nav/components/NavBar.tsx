@@ -37,7 +37,7 @@ const NavDropdownButton = styled.div`
     align-items: center;
     background: transparent;
     border: none;
-    color: ${props => props.theme.color.white};
+    color: ${(props) => props.theme.color.white};
     cursor: pointer;
     display: flex;
     height: 45px;
@@ -45,7 +45,7 @@ const NavDropdownButton = styled.div`
     padding: 0 10px;
 
     &:focus {
-        color: ${props => props.theme.color.primaryDarkest};
+        color: ${(props) => props.theme.color.primaryDarkest};
     }
 
     *:not(:last-child) {
@@ -58,12 +58,12 @@ const NavDropdownButton = styled.div`
 `;
 
 const NavDivider = styled.div`
-    color: ${props => props.theme.color.greyLight};
+    color: ${(props) => props.theme.color.greyLight};
     border-top: 2px solid;
 `;
 
 const StyledNavBar = styled.div`
-    background-color: ${props => props.theme.color.primary};
+    background-color: ${(props) => props.theme.color.primary};
     color: white;
     display: flex;
     height: 45px;
@@ -84,7 +84,10 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
     const { data } = useRootQuery();
 
     function onLogout() {
-        if (window.virtool.b2c.enabled && window.msalInstance.getActiveAccount()) {
+        if (
+            window.virtool.b2c.enabled &&
+            window.msalInstance.getActiveAccount()
+        ) {
             window.msalInstance.logoutRedirect();
         } else {
             mutation.mutate();
@@ -95,7 +98,9 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
         <StyledNavBar>
             <NavBarLeft>
                 <NavBarLogo color="white" />
-                <NavBarLink to="/jobs?state=preparing&state=running">Jobs</NavBarLink>
+                <NavBarLink to="/jobs?state=preparing&state=running">
+                    Jobs
+                </NavBarLink>
                 <NavBarLink to="/samples">Samples</NavBarLink>
                 <NavBarLink to="/refs">References</NavBarLink>
                 <NavBarLink to="/hmm">HMM</NavBarLink>
@@ -104,7 +109,14 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
             </NavBarLeft>
 
             <NavBarRight>
-                {data?.dev && <IconButton onClick={() => setOpenDev(true)} name="bug" tip="dev tools" color="red" />}
+                {data?.dev && (
+                    <IconButton
+                        onClick={() => setOpenDev(true)}
+                        name="bug"
+                        tip="dev tools"
+                        color="red"
+                    />
+                )}
 
                 <Dropdown>
                     <DropdownMenuTrigger>
@@ -119,9 +131,16 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
                         </DropdownMenuLink>
 
                         <NavDivider />
-                        <DropdownMenuLink to="/account">Account</DropdownMenuLink>
-                        {hasSufficientAdminRole(AdministratorRoles.USERS, administrator_role) && (
-                            <DropdownMenuLink to="/administration">Administration </DropdownMenuLink>
+                        <DropdownMenuLink to="/account">
+                            Account
+                        </DropdownMenuLink>
+                        {hasSufficientAdminRole(
+                            AdministratorRoles.USERS,
+                            administrator_role,
+                        ) && (
+                            <DropdownMenuLink to="/administration">
+                                Administration{" "}
+                            </DropdownMenuLink>
                         )}
                         <DropdownMenuItem>
                             <a
@@ -133,7 +152,9 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
                                 Documentation
                             </a>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={onLogout}>Logout</DropdownMenuItem>
+                        <DropdownMenuItem onSelect={onLogout}>
+                            Logout
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </Dropdown>
             </NavBarRight>

@@ -12,7 +12,7 @@ import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
     display: flex;
-    color: ${props => getColor({ theme: props.theme, color: "greyDarkest" })};
+    color: ${(props) => getColor({ theme: props.theme, color: "greyDarkest" })};
     a {
         margin-left: 5px;
         font-size: ${getFontSize("md")};
@@ -26,10 +26,13 @@ const StyledSideBarSection = styled(SideBarSection)`
 `;
 
 function getSelectedLabels(document: SampleMinimal[]) {
-    const selectedLabelsCount = map(groupBy(flatMap(document, "labels"), "id"), labels => ({
-        ...labels[0],
-        count: labels.length,
-    }));
+    const selectedLabelsCount = map(
+        groupBy(flatMap(document, "labels"), "id"),
+        (labels) => ({
+            ...labels[0],
+            count: labels.length,
+        }),
+    );
 
     return map(selectedLabelsCount, ({ count, ...label }) => ({
         ...label,
@@ -45,9 +48,14 @@ type ManageLabelsProps = {
 /**
  * A sidebar to manage labels and filtering samples by labels
  */
-export default function ManageLabels({ labels, selectedSamples }: ManageLabelsProps) {
+export default function ManageLabels({
+    labels,
+    selectedSamples,
+}: ManageLabelsProps) {
     const selectedLabels = getSelectedLabels(selectedSamples);
-    const partiallySelectedLabels = filter(selectedLabels, { allLabeled: false });
+    const partiallySelectedLabels = filter(selectedLabels, {
+        allLabeled: false,
+    });
     const onUpdateLabel = useUpdateLabel(selectedLabels, selectedSamples);
 
     return (
@@ -56,11 +64,18 @@ export default function ManageLabels({ labels, selectedSamples }: ManageLabelsPr
                 Manage Labels
                 <SampleSidebarSelector
                     render={({ name, color, description }) => (
-                        <SampleLabelInner name={name} color={color} description={description} />
+                        <SampleLabelInner
+                            name={name}
+                            color={color}
+                            description={description}
+                        />
                     )}
                     sampleItems={labels}
-                    selectedItems={map(selectedLabels, label => label.id)}
-                    partiallySelectedItems={map(partiallySelectedLabels, label => label.id)}
+                    selectedItems={map(selectedLabels, (label) => label.id)}
+                    partiallySelectedItems={map(
+                        partiallySelectedLabels,
+                        (label) => label.id,
+                    )}
                     onUpdate={onUpdateLabel}
                     selectionType="labels"
                     manageLink={"/samples/labels"}
@@ -69,7 +84,8 @@ export default function ManageLabels({ labels, selectedSamples }: ManageLabelsPr
             <SampleSidebarMultiselectList items={selectedLabels} />
             {Boolean(labels.length) || (
                 <SampleLabelsFooter>
-                    No labels found. <Link to="/samples/labels">Create one</Link>.
+                    No labels found.{" "}
+                    <Link to="/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
             )}
         </StyledSideBarSection>

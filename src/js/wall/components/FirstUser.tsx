@@ -1,4 +1,11 @@
-import { Button, InputError, InputGroup, InputLabel, InputPassword, InputSimple } from "@base";
+import {
+    Button,
+    InputError,
+    InputGroup,
+    InputLabel,
+    InputPassword,
+    InputSimple,
+} from "@base";
 import { useCreateFirstUser } from "@users/queries";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -36,7 +43,11 @@ export default function FirstUser() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputGroup>
                     <InputLabel htmlFor="username">Username</InputLabel>
-                    <InputSimple aria-label="username" id="username" {...register("username", { required: true })} />
+                    <InputSimple
+                        aria-label="username"
+                        id="username"
+                        {...register("username", { required: true })}
+                    />
                 </InputGroup>
                 <InputGroup>
                     <InputLabel htmlFor="password">Password</InputLabel>
@@ -44,10 +55,12 @@ export default function FirstUser() {
                         aria-label="password"
                         id="password"
                         {...register("password", {
-                            required: "Password does not meet minimum length requirement (8)",
+                            required:
+                                "Password does not meet minimum length requirement (8)",
                             minLength: {
                                 value: 8,
-                                message: "Password does not meet minimum length requirement (8)",
+                                message:
+                                    "Password does not meet minimum length requirement (8)",
                             },
                         })}
                     />
@@ -56,7 +69,11 @@ export default function FirstUser() {
                 <Button type="submit" color="blue">
                     Create User
                 </Button>
-                {mutation.isError && <InputError>{mutation.error.response?.body.message}</InputError>}
+                {mutation.isError && (
+                    <InputError>
+                        {mutation.error.response?.body.message}
+                    </InputError>
+                )}
             </form>
         </WallContainer>
     );

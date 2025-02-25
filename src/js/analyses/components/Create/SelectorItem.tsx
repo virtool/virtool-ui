@@ -23,9 +23,18 @@ interface SelectorItemProps {
     onClick: () => void;
 }
 
-export function SelectorItem({ children, className = "", onClick, isDefault = false }: SelectorItemProps) {
+export function SelectorItem({
+    children,
+    className = "",
+    onClick,
+    isDefault = false,
+}: SelectorItemProps) {
     return (
-        <StyledSelectorItem as={onClick ? "button" : "div"} className={className} onClick={onClick}>
+        <StyledSelectorItem
+            as={onClick ? "button" : "div"}
+            className={className}
+            onClick={onClick}
+        >
             <span>{children}</span>
             {isDefault ? <Label>Default</Label> : null}
         </StyledSelectorItem>

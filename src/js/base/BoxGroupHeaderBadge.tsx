@@ -10,6 +10,9 @@ type BoxGroupHeaderBadgeProps = {
 /**
  * A styled Badge component for use in a BoxGroupHeader
  */
-export function BoxGroupHeaderBadge({ children, className }: BoxGroupHeaderBadgeProps) {
+export function BoxGroupHeaderBadge({
+    children,
+    className,
+}: BoxGroupHeaderBadgeProps) {
     return <Badge className={cn("ml-2", className)}>{children}</Badge>;
 }

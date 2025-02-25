@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { borderRadius, getBorder, getColor, getFontWeight } from "../../app/theme";
+import {
+    borderRadius,
+    getBorder,
+    getColor,
+    getFontWeight,
+} from "../../app/theme";
 import { Icon } from "../Icon";
 
 const StyledTriggerButton = styled.button`
@@ -18,7 +23,12 @@ const StyledTriggerButton = styled.button`
         margin-left: 5px;
     }
 `;
-export const ComboboxTriggerButton = ({ TriggerButtonProps, selectedItem, renderRow, id }) => {
+export const ComboboxTriggerButton = ({
+    TriggerButtonProps,
+    selectedItem,
+    renderRow,
+    id,
+}) => {
     return (
         <StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
             {selectedItem ? renderRow(selectedItem) : "Select user"}

@@ -11,7 +11,12 @@ type BarcodeSequenceTableProps = {
 /**
  * Displays information about the barcode sequence in the form of a table
  */
-export default function BarcodeSequenceTable({ definition, host, sequence, target }: BarcodeSequenceTableProps) {
+export default function BarcodeSequenceTable({
+    definition,
+    host,
+    sequence,
+    target,
+}: BarcodeSequenceTableProps) {
     return (
         <SequenceTable definition={definition} host={host} sequence={sequence}>
             <tr>

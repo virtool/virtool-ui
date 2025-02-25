@@ -10,7 +10,7 @@ const StyledNotFound = styled.div`
     justify-content: center;
 
     strong {
-        font-size: ${props => props.theme.fontSize.lg};
+        font-size: ${(props) => props.theme.fontSize.lg};
         padding-top: 15px;
     }
 `;
@@ -20,7 +20,10 @@ type NotFoundProps = {
     message?: string;
 };
 
-export function NotFound({ status = 404, message = "Not found" }: NotFoundProps) {
+export function NotFound({
+    status = 404,
+    message = "Not found",
+}: NotFoundProps) {
     return (
         <StyledNotFound>
             <Label className="text-5xl" color="red">

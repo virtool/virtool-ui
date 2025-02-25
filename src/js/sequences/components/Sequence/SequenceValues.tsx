@@ -15,8 +15,8 @@ export const SequenceValue = styled.div`
     }
 
     small {
-        color: ${props => props.theme.color.greyDark};
-        font-size: ${props => props.theme.fontSize.sm};
+        color: ${(props) => props.theme.color.greyDark};
+        font-size: ${(props) => props.theme.fontSize.sm};
         font-weight: bold;
         text-transform: uppercase;
     }

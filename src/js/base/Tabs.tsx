@@ -10,5 +10,18 @@ type TabsProps = {
  * A styled tabs component used for navigating
  */
 export function Tabs({ children, className }: TabsProps) {
-    return <nav className={cn("border-b", "border-gray-300", "flex", "mb-4", "w-full", className)}>{children}</nav>;
+    return (
+        <nav
+            className={cn(
+                "border-b",
+                "border-gray-300",
+                "flex",
+                "mb-4",
+                "w-full",
+                className,
+            )}
+        >
+            {children}
+        </nav>
+    );
 }

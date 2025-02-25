@@ -23,7 +23,8 @@ export function ImportReference() {
     const navigate = useNavigate();
 
     const importMutation = useImportReference();
-    const { uploadMutation, fileName, fileNameOnDisk, progress } = useUploadReference();
+    const { uploadMutation, fileName, fileNameOnDisk, progress } =
+        useUploadReference();
 
     const {
         control,
@@ -42,12 +43,17 @@ export function ImportReference() {
         uploadMutation.mutate(acceptedFiles[0]);
     }
 
-    const uploadBarMessage = fileName || (progress === 0 ? "Drag file here to upload" : "Uploading...");
+    const uploadBarMessage =
+        fileName ||
+        (progress === 0 ? "Drag file here to upload" : "Uploading...");
 
     return (
         <>
             <Alert>
-                <strong>Create a reference from a file previously exported from another Virtool reference.</strong>
+                <strong>
+                    Create a reference from a file previously exported from
+                    another Virtool reference.
+                </strong>
             </Alert>
 
             <Controller
@@ -59,7 +65,7 @@ export function ImportReference() {
                         <ProgressBarAffixed color="green" now={progress} />
                         <UploadBar
                             message={uploadBarMessage}
-                            onDrop={acceptedFiles => {
+                            onDrop={(acceptedFiles) => {
                                 handleDrop(acceptedFiles);
                                 onChange(acceptedFiles[0].name);
                             }}
@@ -67,14 +73,15 @@ export function ImportReference() {
                         />
 
                         <InputError>
-                            {errors.upload?.type === "required" && "A reference file must be uploaded"}
+                            {errors.upload?.type === "required" &&
+                                "A reference file must be uploaded"}
                         </InputError>
                     </ImportReferenceUpload>
                 )}
             />
 
             <form
-                onSubmit={handleSubmit(values => {
+                onSubmit={handleSubmit((values) => {
                     importMutation.mutate(
                         { ...values, importFrom: fileNameOnDisk },
                         { onSuccess: () => navigate("~/refs") },
@@ -83,16 +90,28 @@ export function ImportReference() {
             >
                 <InputGroup>
                     <InputLabel htmlFor="name">Name</InputLabel>
-                    <InputSimple id="name" {...register("name", { required: true })} />
-                    <InputError>{errors.name?.type && "A name is required."}</InputError>
+                    <InputSimple
+                        id="name"
+                        {...register("name", { required: true })}
+                    />
+                    <InputError>
+                        {errors.name?.type && "A name is required."}
+                    </InputError>
                 </InputGroup>
                 <InputGroup>
                     <InputLabel htmlFor="description">Description</InputLabel>
-                    <InputSimple as="textarea" id="description" {...register("description")} />
+                    <InputSimple
+                        as="textarea"
+                        id="description"
+                        {...register("description")}
+                    />
                 </InputGroup>
 
                 <DialogFooter>
-                    <SaveButton disabled={progress !== 100 && progress !== 0} altText="Import" />
+                    <SaveButton
+                        disabled={progress !== 100 && progress !== 0}
+                        altText="Import"
+                    />
                 </DialogFooter>
             </form>
         </>

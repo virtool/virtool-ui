@@ -30,9 +30,17 @@ const IndexDetailSubtitle = styled.div`
  * The index detailed view
  */
 export default function IndexDetail() {
-    const { indexId, refId } = usePathParams<{ indexId: string; refId: string }>();
-    const { data: index, isPending: isPendingIndex, isError } = useFetchIndex(indexId);
-    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
+    const { indexId, refId } = usePathParams<{
+        indexId: string;
+        refId: string;
+    }>();
+    const {
+        data: index,
+        isPending: isPendingIndex,
+        isError,
+    } = useFetchIndex(indexId);
+    const { data: reference, isPending: isPendingReference } =
+        useGetReference(refId);
 
     if (isError) {
         return <NotFound />;
@@ -52,7 +60,11 @@ export default function IndexDetail() {
                         {user.handle} built <RelativeTime time={created_at} />
                     </SubviewHeaderAttribution>
                     {reference.latest_build?.has_json && (
-                        <DownloadLink href={`/api/indexes/${id}/files/reference.json.gz`}>Download</DownloadLink>
+                        <DownloadLink
+                            href={`/api/indexes/${id}/files/reference.json.gz`}
+                        >
+                            Download
+                        </DownloadLink>
                     )}
                 </IndexDetailSubtitle>
             </SubviewHeader>

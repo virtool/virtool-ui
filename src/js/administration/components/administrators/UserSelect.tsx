@@ -20,7 +20,7 @@ const UserItem = styled.div`
     }
 `;
 
-const renderRow = user => {
+const renderRow = (user) => {
     return (
         <UserItem aria-label={user.handle}>
             <InitialIcon handle={user.handle} size="md" />
@@ -39,7 +39,14 @@ type UserSelectProps = {
     onTermChange: (value: string) => void;
     id: string;
 };
-export const UserSelect = ({ term, users, value, onChange, onTermChange, id }: UserSelectProps) => {
+export const UserSelect = ({
+    term,
+    users,
+    value,
+    onChange,
+    onTermChange,
+    id,
+}: UserSelectProps) => {
     return (
         <ComboBox
             items={users}

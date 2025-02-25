@@ -2,9 +2,12 @@
 
 @theme {
     --font-body:
-        -apple-system, system-ui, "Segoe UI Variable", "Segoe UI", system-ui, ui-sans-serif, Helvetica, Arial,
-        sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-    --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+        -apple-system, system-ui, "Segoe UI Variable", "Segoe UI", system-ui,
+        ui-sans-serif, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji";
+    --font-mono:
+        ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono,
+        monospace;
 }
 
 html {

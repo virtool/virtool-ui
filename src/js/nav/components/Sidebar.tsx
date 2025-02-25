@@ -25,43 +25,94 @@ type SidebarProps = {
  * Displays the sidebar with routes to manage the component
  */
 export default function Sidebar({ administratorRole }: SidebarProps) {
-    const fullAdministrator = hasSufficientAdminRole(AdministratorRoles.FULL, administratorRole);
+    const fullAdministrator = hasSufficientAdminRole(
+        AdministratorRoles.FULL,
+        administratorRole,
+    );
 
     return (
         <Switch>
             <Route path="/jobs/*?">
                 <StyledSidebar>
-                    <SidebarItem exclude={["/jobs/settings"]} title="Browse" link="/jobs" icon="th-list" />
+                    <SidebarItem
+                        exclude={["/jobs/settings"]}
+                        title="Browse"
+                        link="/jobs"
+                        icon="th-list"
+                    />
                 </StyledSidebar>
             </Route>
             <Route path="/samples/*?">
                 <StyledSidebar>
                     <SidebarItem
-                        exclude={["/samples/files", "/samples/labels", "/samples/settings"]}
+                        exclude={[
+                            "/samples/files",
+                            "/samples/labels",
+                            "/samples/settings",
+                        ]}
                         title="Browse"
                         link="/samples"
                         icon="th-list"
                     />
-                    <SidebarItem title="Files" link="/samples/files" icon="folder-open" />
-                    <SidebarItem title="Labels" link="/samples/labels" icon="fas fa-tag" />
-                    {fullAdministrator ? <SidebarItem title="Settings" link="/samples/settings" icon="cogs" /> : null}
+                    <SidebarItem
+                        title="Files"
+                        link="/samples/files"
+                        icon="folder-open"
+                    />
+                    <SidebarItem
+                        title="Labels"
+                        link="/samples/labels"
+                        icon="fas fa-tag"
+                    />
+                    {fullAdministrator ? (
+                        <SidebarItem
+                            title="Settings"
+                            link="/samples/settings"
+                            icon="cogs"
+                        />
+                    ) : null}
                 </StyledSidebar>
             </Route>
             <Route path="/refs/*?">
                 <StyledSidebar>
-                    <SidebarItem exclude={["/refs/settings"]} title="Browse" link="/refs" icon="th-list" />
-                    {fullAdministrator ? <SidebarItem title="Settings" link="/refs/settings" icon="cogs" /> : null}
+                    <SidebarItem
+                        exclude={["/refs/settings"]}
+                        title="Browse"
+                        link="/refs"
+                        icon="th-list"
+                    />
+                    {fullAdministrator ? (
+                        <SidebarItem
+                            title="Settings"
+                            link="/refs/settings"
+                            icon="cogs"
+                        />
+                    ) : null}
                 </StyledSidebar>
             </Route>
             <Route path="/subtractions/*?">
                 <StyledSidebar>
-                    <SidebarItem exclude={["/subtractions/files"]} title="Browse" link="/subtractions" icon="th-list" />
-                    <SidebarItem title="Files" link="/subtractions/files?page=1" icon="folder-open" />
+                    <SidebarItem
+                        exclude={["/subtractions/files"]}
+                        title="Browse"
+                        link="/subtractions"
+                        icon="th-list"
+                    />
+                    <SidebarItem
+                        title="Files"
+                        link="/subtractions/files?page=1"
+                        icon="folder-open"
+                    />
                 </StyledSidebar>
             </Route>
             <Route path="/hmm/*?">
                 <StyledSidebar>
-                    <SidebarItem exclude={["/hmm/settings"]} title="Browse" link="/hmm" icon="th-list" />
+                    <SidebarItem
+                        exclude={["/hmm/settings"]}
+                        title="Browse"
+                        link="/hmm"
+                        icon="th-list"
+                    />
                 </StyledSidebar>
             </Route>
             <Route path="/ml/*?">

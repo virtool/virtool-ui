@@ -41,13 +41,24 @@ const Attribution = styled.div`
 /**
  * A condensed subtraction item for use in a list of subtractions
  */
-export function SubtractionItem({ created_at, id, job, name, nickname, ready, user }: SubtractionMinimal) {
+export function SubtractionItem({
+    created_at,
+    id,
+    job,
+    name,
+    nickname,
+    ready,
+    user,
+}: SubtractionMinimal) {
     return (
         <StyledSubtractionItem>
             <SubtractionLink to={`/subtractions/${id}`}>{name}</SubtractionLink>
             <div>{nickname}</div>
             <Attribution>
-                <SubtractionAttribution handle={user.handle} time={created_at} />
+                <SubtractionAttribution
+                    handle={user.handle}
+                    time={created_at}
+                />
             </Attribution>
             {!ready && (
                 <ProgressTag>

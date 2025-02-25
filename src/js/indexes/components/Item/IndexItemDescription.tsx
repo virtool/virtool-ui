@@ -12,7 +12,10 @@ type IndexItemDescriptionProps = {
  * @param modifiedCount - The number of OTUs modified since the last index build
  * @returns The index item's description
  */
-export function IndexItemDescription({ changeCount, modifiedCount }: IndexItemDescriptionProps) {
+export function IndexItemDescription({
+    changeCount,
+    modifiedCount,
+}: IndexItemDescriptionProps) {
     if (changeCount === null) {
         return null;
     }
@@ -23,7 +26,8 @@ export function IndexItemDescription({ changeCount, modifiedCount }: IndexItemDe
 
     return (
         <span>
-            {changeCount} change{changeCount === 1 ? "" : "s"} made in {modifiedCount} OTU
+            {changeCount} change{changeCount === 1 ? "" : "s"} made in{" "}
+            {modifiedCount} OTU
             {modifiedCount === 1 ? "" : "s"}
         </span>
     );

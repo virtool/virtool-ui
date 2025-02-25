@@ -8,5 +8,5 @@ import { MLModelSearchResult } from "./types";
  */
 
 export function findModels(): Promise<MLModelSearchResult> {
-    return Request.get("/ml").then(response => response.body);
+    return Request.get("/ml").then((response) => response.body);
 }

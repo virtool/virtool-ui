@@ -6,7 +6,8 @@ const ComboBoxItem = styled.li`
     padding: 10px 10px;
 
     &:hover {
-        background-color: ${({ theme }) => getColor({ color: "greyHover", theme })};
+        background-color: ${({ theme }) =>
+            getColor({ color: "greyHover", theme })};
         border: 0;
     }
 `;

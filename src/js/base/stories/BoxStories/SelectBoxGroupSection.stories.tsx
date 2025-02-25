@@ -27,7 +27,10 @@ function Template({ children }) {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <SelectBoxGroupSection active={active} onClick={() => updateArgs({ active: !active })}>
+            <SelectBoxGroupSection
+                active={active}
+                onClick={() => updateArgs({ active: !active })}
+            >
                 {children}
             </SelectBoxGroupSection>
         </BoxGroup>
@@ -45,8 +48,13 @@ function CheckboxTemplate() {
     const [{ active }, updateArgs] = useArgs();
     return (
         <BoxGroup>
-            <SelectBoxGroupSection onClick={() => updateArgs({ active: !active })}>
-                <Checkbox checked={active} label="This is a SelectBoxGroupSection with a Checkbox!" />
+            <SelectBoxGroupSection
+                onClick={() => updateArgs({ active: !active })}
+            >
+                <Checkbox
+                    checked={active}
+                    label="This is a SelectBoxGroupSection with a Checkbox!"
+                />
             </SelectBoxGroupSection>
         </BoxGroup>
     );

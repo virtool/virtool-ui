@@ -45,11 +45,14 @@ function draw(element, data, length, meta, yMax, xMin, graphWidth, graphRatio) {
 
     if (data) {
         const areaDrawer = area()
-            .x(d => x(d[0]))
-            .y0(d => y(d[1]))
+            .x((d) => x(d[0]))
+            .y0((d) => y(d[1]))
             .y1(height);
 
-        svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
+        svg.append("path")
+            .datum(data)
+            .attr("class", "depth-area")
+            .attr("d", areaDrawer);
     }
 
     // Set up a y-axis that will appear at the top of the chart.
@@ -88,8 +91,8 @@ const StyledCoverageChart = styled.div<StyledCoverageChartProps>`
     margin-top: 5px;
 
     path.depth-area {
-        fill: ${props => props.theme.color.blue};
-        stroke: ${props => props.theme.color.blue};
+        fill: ${(props) => props.theme.color.blue};
+        stroke: ${(props) => props.theme.color.blue};
     }
 `;
 

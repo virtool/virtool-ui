@@ -5,7 +5,10 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeHMMSearchResults, mockApiGetHmms } from "../../../../tests/fake/hmm";
+import {
+    createFakeHMMSearchResults,
+    mockApiGetHmms,
+} from "../../../../tests/fake/hmm";
 import HMM from "../HMM";
 
 describe("<HMMList />", () => {
@@ -26,8 +29,12 @@ describe("<HMMList />", () => {
         expect(await screen.findByText("HMMs")).toBeInTheDocument();
         expect(screen.getByPlaceholderText("Definition")).toBeInTheDocument();
 
-        expect(screen.getByText(fakeHMMData.documents[0].cluster)).toBeInTheDocument();
-        expect(screen.getByText(fakeHMMData.documents[0].names[0])).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeHMMData.documents[0].cluster),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(fakeHMMData.documents[0].names[0]),
+        ).toBeInTheDocument();
 
         scope.done();
     });
@@ -45,27 +52,41 @@ describe("<HMMList />", () => {
 
     describe("<HMMInstaller />", () => {
         it("should render correctly when installed = false and user has permission to install", async () => {
-            const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
+            const fakeHMMData = createFakeHMMSearchResults({
+                documents: [],
+                total_count: 0,
+            });
             const scope = mockApiGetHmms(fakeHMMData);
-            const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+            const account = createFakeAccount({
+                administrator_role: AdministratorRoles.FULL,
+            });
             mockApiGetAccount(account);
             renderWithRouter(<HMM />, path);
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
-            expect(screen.getByText("No HMM data available.")).toBeInTheDocument();
             expect(
-                screen.getByText(/You can download and install the official HMM data automatically from our/),
+                screen.getByText("No HMM data available."),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    /You can download and install the official HMM data automatically from our/,
+                ),
             ).toBeInTheDocument();
             expect(screen.getByText("GitHub repository")).toBeInTheDocument();
 
-            expect(await screen.findByRole("button", { name: "Install" })).toBeInTheDocument();
+            expect(
+                await screen.findByRole("button", { name: "Install" }),
+            ).toBeInTheDocument();
 
             scope.done();
         });
 
         it("should render correctly when installed = false and user does not have permission to install", async () => {
-            const fakeHMMData = createFakeHMMSearchResults({ documents: [], total_count: 0 });
+            const fakeHMMData = createFakeHMMSearchResults({
+                documents: [],
+                total_count: 0,
+            });
             const scope = mockApiGetHmms(fakeHMMData);
             const account = createFakeAccount({ administrator_role: null });
             mockApiGetAccount(account);
@@ -73,10 +94,16 @@ describe("<HMMList />", () => {
 
             expect(await screen.findByText("HMMs")).toBeInTheDocument();
 
-            expect(screen.getByText("You do not have permission to install HMMs.")).toBeInTheDocument();
-            expect(screen.getByText("Contact an administrator.")).toBeInTheDocument();
+            expect(
+                screen.getByText("You do not have permission to install HMMs."),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Contact an administrator."),
+            ).toBeInTheDocument();
 
-            expect(screen.queryByRole("button", { name: "Install" })).not.toBeInTheDocument();
+            expect(
+                screen.queryByRole("button", { name: "Install" }),
+            ).not.toBeInTheDocument();
 
             scope.done();
         });
@@ -95,7 +122,9 @@ describe("<HMMList />", () => {
                 },
             });
             const scope = mockApiGetHmms(fakeHMMData);
-            const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+            const account = createFakeAccount({
+                administrator_role: AdministratorRoles.FULL,
+            });
             mockApiGetAccount(account);
             renderWithRouter(<HMM />, path);
 
@@ -104,8 +133,12 @@ describe("<HMMList />", () => {
             expect(screen.getByText("Installing")).toBeInTheDocument();
             expect(screen.getByText("decompress")).toBeInTheDocument();
 
-            expect(screen.queryByText("No HMM data available.")).not.toBeInTheDocument();
-            expect(screen.queryByRole("button", { name: "Install" })).not.toBeInTheDocument();
+            expect(
+                screen.queryByText("No HMM data available."),
+            ).not.toBeInTheDocument();
+            expect(
+                screen.queryByRole("button", { name: "Install" }),
+            ).not.toBeInTheDocument();
 
             scope.done();
         });

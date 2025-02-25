@@ -26,8 +26,8 @@ const StyledLoader = styled.div<StyledLoaderProps>`
     background: transparent;
     animation-fill-mode: both;
     display: inline-block;
-    height: ${props => props.size};
-    width: ${props => props.size};
+    height: ${(props) => props.size};
+    width: ${(props) => props.size};
 `;
 
 interface LoaderProps extends StyledLoaderProps {
@@ -35,9 +35,18 @@ interface LoaderProps extends StyledLoaderProps {
     color?: string;
 }
 
-export function Loader({ className, color = "greyDark", size = "22px" }: LoaderProps) {
+export function Loader({
+    className,
+    color = "greyDark",
+    size = "22px",
+}: LoaderProps) {
     return (
-        <StyledLoader aria-label="loading" className={className} color={color} size={size}>
+        <StyledLoader
+            aria-label="loading"
+            className={className}
+            color={color}
+            size={size}
+        >
             <div />
         </StyledLoader>
     );

@@ -8,7 +8,12 @@ describe("useFuseHook", () => {
     let keys: string[] = [];
 
     beforeEach(() => {
-        collection = [{ name: "nan" }, { name: "test1" }, { name: "aaaaa" }, { name: "zzzzz" }];
+        collection = [
+            { name: "nan" },
+            { name: "test1" },
+            { name: "aaaaa" },
+            { name: "zzzzz" },
+        ];
         keys = ["name"];
         deps = ["zzz"];
     });
@@ -28,7 +33,9 @@ describe("useFuseHook", () => {
         act(() => {
             setTerm("z");
         });
-        expect(result.current[0]).toEqual([{ item: { name: "zzzzz" }, refIndex: 3 }]);
+        expect(result.current[0]).toEqual([
+            { item: { name: "zzzzz" }, refIndex: 3 },
+        ]);
         expect(result.current[1]).toBe("z");
     });
 
@@ -51,7 +58,9 @@ describe("useFuseHook", () => {
             setTerm("z");
         });
         expect(result.current[1]).toBe("z");
-        expect(result.current[0]).toEqual([{ item: { name: "zzzzz" }, refIndex: 3 }]);
+        expect(result.current[0]).toEqual([
+            { item: { name: "zzzzz" }, refIndex: 3 },
+        ]);
         act(() => {
             setTerm("");
         });
@@ -60,7 +69,9 @@ describe("useFuseHook", () => {
     });
 
     it("should reset term to empty string when deps change", () => {
-        const { rerender, result } = renderHook(() => useFuse(collection, keys, deps));
+        const { rerender, result } = renderHook(() =>
+            useFuse(collection, keys, deps),
+        );
         const setTerm = result.current[2];
 
         act(() => {

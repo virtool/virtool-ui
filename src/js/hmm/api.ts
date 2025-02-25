@@ -13,7 +13,13 @@ import { HMM, HMMInstalled, HMMSearchResults } from "./types";
  * @param page - page number to return
  * @returns The promise which resolves to a page of HMM search results
  */
-export function find({ term, page }: { term: string; page: number }): Promise<any> {
+export function find({
+    term,
+    page,
+}: {
+    term: string;
+    page: number;
+}): Promise<any> {
     return Request.get("/hmms").query({ find: term, page });
 }
 
@@ -23,7 +29,7 @@ export function find({ term, page }: { term: string; page: number }): Promise<an
  * @returns The promise which resolves to the servers response
  */
 export function installHmm(): Promise<HMMInstalled> {
-    return Request.post("/hmms/status/updates").then(res => res.body);
+    return Request.post("/hmms/status/updates").then((res) => res.body);
 }
 
 /**
@@ -33,7 +39,7 @@ export function installHmm(): Promise<HMMInstalled> {
  * @returns resolves to an object containing a single HMM
  */
 export function fetchHmm(hmmId: string): Promise<HMM> {
-    return Request.get(`/hmms/${hmmId}`).then(res => res.body);
+    return Request.get(`/hmms/${hmmId}`).then((res) => res.body);
 }
 
 /**
@@ -44,8 +50,12 @@ export function fetchHmm(hmmId: string): Promise<HMM> {
  * @param term - The search term to filter the hmms by
  * @returns A promise resolving to a page of hmm search results
  */
-export function listHmms(page: number, per_page: number, term: string): Promise<HMMSearchResults> {
+export function listHmms(
+    page: number,
+    per_page: number,
+    term: string,
+): Promise<HMMSearchResults> {
     return Request.get("/hmms")
         .query({ page, per_page, find: term })
-        .then(res => res.body);
+        .then((res) => res.body);
 }

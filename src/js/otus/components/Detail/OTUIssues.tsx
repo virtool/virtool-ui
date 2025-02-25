@@ -31,13 +31,20 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
 
     // The OTU has no isolates associated with it.
     if (typeof issues === "object" && issues.empty_otu) {
-        errors.push(<li key="emptyOTU">There are no isolates associated with this OTU</li>);
+        errors.push(
+            <li key="emptyOTU">
+                There are no isolates associated with this OTU
+            </li>,
+        );
     }
 
     // The OTU has an inconsistent number of sequences between isolates.
     if (typeof issues === "object" && issues.isolate_inconsistency) {
         errors.push(
-            <li key="isolateInconsistency">Some isolates have different numbers of sequences than other isolates</li>,
+            <li key="isolateInconsistency">
+                Some isolates have different numbers of sequences than other
+                isolates
+            </li>,
         );
     }
 
@@ -62,21 +69,26 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
     // One or more sequence documents have no sequence field.
     if (typeof issues === "object" && issues.empty_sequence) {
         // Make a list of sequences that have no defined sequence field.
-        const emptySequences = map(issues.empty_sequence, (errorObject, index) => {
-            // Get the entire isolate object identified by the isolate_id.
-            const isolate = find(isolates, { id: errorObject.isolate_id });
-            return (
-                <li key={index}>
-                    <span>
-                        <em>{errorObject._id}</em> in isolate <em>{formatIsolateName(isolate)}</em>
-                    </span>
-                </li>
-            );
-        });
+        const emptySequences = map(
+            issues.empty_sequence,
+            (errorObject, index) => {
+                // Get the entire isolate object identified by the isolate_id.
+                const isolate = find(isolates, { id: errorObject.isolate_id });
+                return (
+                    <li key={index}>
+                        <span>
+                            <em>{errorObject._id}</em> in isolate{" "}
+                            <em>{formatIsolateName(isolate)}</em>
+                        </span>
+                    </li>
+                );
+            },
+        );
 
         errors.push(
             <li key="emptySequence">
-                There are sequence records with undefined <code>sequence</code> fields:
+                There are sequence records with undefined <code>sequence</code>{" "}
+                fields:
                 <ul>{emptySequences}</ul>
             </li>,
         );
@@ -84,7 +96,10 @@ export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
 
     return (
         <StyledOTUIssues color="orange" block>
-            <h5>There are some issues that must be resolved before this OTU can be included in the next index build</h5>
+            <h5>
+                There are some issues that must be resolved before this OTU can
+                be included in the next index build
+            </h5>
             <ul>{errors}</ul>
         </StyledOTUIssues>
     );

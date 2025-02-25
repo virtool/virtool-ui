@@ -10,12 +10,12 @@ import styled from "styled-components";
 import { useKeyNavigation } from "./hooks";
 
 const AnalysisViewerListHeader = styled.div`
-    background-color: ${props => props.theme.color.greyLightest};
-    border: 1px solid ${props => props.theme.color.greyLight};
+    background-color: ${(props) => props.theme.color.greyLightest};
+    border: 1px solid ${(props) => props.theme.color.greyLight};
     border-bottom: none;
-    border-top-left-radius: ${props => props.theme.borderRadius.sm};
-    border-top-right-radius: ${props => props.theme.borderRadius.sm};
-    box-shadow: 0 5px 5px -3px ${props => props.theme.color.greyLight};
+    border-top-left-radius: ${(props) => props.theme.borderRadius.sm};
+    border-top-right-radius: ${(props) => props.theme.borderRadius.sm};
+    box-shadow: 0 5px 5px -3px ${(props) => props.theme.color.greyLight};
     padding: 7px 15px;
     z-index: 20;
 `;
@@ -28,8 +28,8 @@ const AnalysisViewerListFooter = styled.div`
 
 const AnalysisViewerListWindow = styled(FixedSizeList)`
     border: ${getBorder};
-    border-bottom-left-radius: ${props => props.theme.borderRadius.sm};
-    border-bottom-right-radius: ${props => props.theme.borderRadius.sm};
+    border-bottom-left-radius: ${(props) => props.theme.borderRadius.sm};
+    border-bottom-right-radius: ${(props) => props.theme.borderRadius.sm};
     z-index: 10;
 `;
 
@@ -39,7 +39,7 @@ type StyledAnalysisViewerListProps = {
 
 const StyledAnalysisViewerList = styled.div<StyledAnalysisViewerListProps>`
     position: relative;
-    width: ${props => props.width}px;
+    width: ${(props) => props.width}px;
 `;
 
 type AnalysisViewerListProps = {
@@ -55,8 +55,15 @@ type AnalysisViewerListProps = {
 /**
  * Displays a list of hits for an analysis
  */
-export default function AnalysisViewerList({ children, itemSize, matches, total, width }: AnalysisViewerListProps) {
-    const { value: activeHit, setValue: setActiveHit } = useUrlSearchParam<string>("activeHit");
+export default function AnalysisViewerList({
+    children,
+    itemSize,
+    matches,
+    total,
+    width,
+}: AnalysisViewerListProps) {
+    const { value: activeHit, setValue: setActiveHit } =
+        useUrlSearchParam<string>("activeHit");
     const activeId = Number(activeHit);
     const active = useGetActiveHit(matches);
 
@@ -81,15 +88,31 @@ export default function AnalysisViewerList({ children, itemSize, matches, total,
         }
     }
 
-    const ref = useKeyNavigation(activeId, nextId, nextIndex, previousId, previousIndex, true, id => setActiveHit(id));
+    const ref = useKeyNavigation(
+        activeId,
+        nextId,
+        nextIndex,
+        previousId,
+        previousIndex,
+        true,
+        (id) => setActiveHit(id),
+    );
 
     return (
         <StyledAnalysisViewerList width={width}>
             <AnalysisViewerListHeader>
                 Showing {shown} of {total}
             </AnalysisViewerListHeader>
-            <AnalysisViewerListWindow ref={ref} height={500} width={width} itemCount={shown} itemSize={itemSize}>
-                {({ index, style }) => <div style={style}>{children[index]}</div>}
+            <AnalysisViewerListWindow
+                ref={ref}
+                height={500}
+                width={width}
+                itemCount={shown}
+                itemSize={itemSize}
+            >
+                {({ index, style }) => (
+                    <div style={style}>{children[index]}</div>
+                )}
             </AnalysisViewerListWindow>
             <AnalysisViewerListFooter>
                 Use <Key>w</Key> and <Key>s</Key> to move

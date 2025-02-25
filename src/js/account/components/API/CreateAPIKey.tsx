@@ -26,7 +26,7 @@ import styled from "styled-components";
 import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
 
 const CreateAPIKeyCopied = styled.p`
-    color: ${props => props.theme.color.blue};
+    color: ${(props) => props.theme.color.blue};
 `;
 
 const CreateAPIKeyInput = styled(Input)`
@@ -45,7 +45,7 @@ const StyledCreateAPIKey = styled.div`
     text-align: center;
 
     strong {
-        color: ${props => props.theme.color.greenDark};
+        color: ${(props) => props.theme.color.greenDark};
         font-size: ${getFontSize("lg")};
         margin-bottom: 5px;
     }
@@ -64,7 +64,8 @@ export default function CreateAPIKey() {
     const [copied, setCopied] = useState(false);
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
-    const { open: openCreateKey, setOpen: setOpenCreateKey } = useDialogParam("openCreateKey");
+    const { open: openCreateKey, setOpen: setOpenCreateKey } =
+        useDialogParam("openCreateKey");
 
     const {
         formState: { errors },
@@ -103,7 +104,7 @@ export default function CreateAPIKey() {
         mutation.mutate(
             { name, permissions },
             {
-                onSuccess: data => {
+                onSuccess: (data) => {
                     setNewKey(data.key);
                 },
             },
@@ -123,7 +124,10 @@ export default function CreateAPIKey() {
                     {showCreated ? (
                         <StyledCreateAPIKey>
                             <strong>Here is your key.</strong>
-                            <p>Make note of it now. For security purposes, it will not be shown again.</p>
+                            <p>
+                                Make note of it now. For security purposes, it
+                                will not be shown again.
+                            </p>
 
                             <CreateAPIKeyInputContainer align="right">
                                 <CreateAPIKeyInput value={newKey} readOnly />
@@ -149,8 +153,12 @@ export default function CreateAPIKey() {
                                 <InputLabel htmlFor="name">Name</InputLabel>
                                 <InputSimple
                                     id="name"
-                                    aria-invalid={errors.name ? "true" : "false"}
-                                    {...register("name", { required: "Provide a name for the key" })}
+                                    aria-invalid={
+                                        errors.name ? "true" : "false"
+                                    }
+                                    {...register("name", {
+                                        required: "Provide a name for the key",
+                                    })}
                                 />
                                 <InputError>{errors.name?.message}</InputError>
                             </InputGroup>
@@ -160,7 +168,10 @@ export default function CreateAPIKey() {
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <APIPermissions keyPermissions={value} onChange={onChange} />
+                                    <APIPermissions
+                                        keyPermissions={value}
+                                        onChange={onChange}
+                                    />
                                 )}
                                 name="permissions"
                             />

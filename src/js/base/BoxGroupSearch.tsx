@@ -12,7 +12,13 @@ type BoxGroupSearchProps = {
     autoFocus?: boolean;
 };
 
-export function BoxGroupSearch({ label, placeholder = "", value, onChange, autoFocus = false }: BoxGroupSearchProps) {
+export function BoxGroupSearch({
+    label,
+    placeholder = "",
+    value,
+    onChange,
+    autoFocus = false,
+}: BoxGroupSearchProps) {
     return (
         <BoxGroupSection>
             <InputContainer align="right">
@@ -20,7 +26,9 @@ export function BoxGroupSearch({ label, placeholder = "", value, onChange, autoF
                     value={value}
                     placeholder={placeholder}
                     aria-label={label}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        onChange(e.target.value)
+                    }
                     autoFocus={autoFocus}
                 />
                 <InputIconButton

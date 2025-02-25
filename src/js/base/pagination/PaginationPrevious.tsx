@@ -13,7 +13,13 @@ type PaginationPreviousProps = {
 /**
  * A styled previous button link for use in a pagination component
  */
-export function PaginationPrevious({ active, className, disabled, onClick, to }: PaginationPreviousProps) {
+export function PaginationPrevious({
+    active,
+    className,
+    disabled,
+    onClick,
+    to,
+}: PaginationPreviousProps) {
     return (
         <PaginationLink
             aria-label="Go to previous page"

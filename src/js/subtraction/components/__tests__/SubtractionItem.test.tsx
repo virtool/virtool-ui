@@ -23,14 +23,20 @@ describe("<SubtractionItem />", () => {
         renderWithRouter(<SubtractionItem {...props} />);
         expect(screen.getByText("Foo")).toBeInTheDocument();
         expect(screen.getByText("testNickname")).toBeInTheDocument();
-        expect(screen.getByRole("progressbar")).toHaveAttribute("data-value", "50");
+        expect(screen.getByRole("progressbar")).toHaveAttribute(
+            "data-value",
+            "50",
+        );
     });
 
-    it.each(["waiting", "running", "error"])("should render progress bar for ", state => {
-        props.job.state = state;
-        renderWithRouter(<SubtractionItem {...props} />);
-        expect(screen.getByRole("progressbar")).toBeInTheDocument();
-    });
+    it.each(["waiting", "running", "error"])(
+        "should render progress bar for ",
+        (state) => {
+            props.job.state = state;
+            renderWithRouter(<SubtractionItem {...props} />);
+            expect(screen.getByRole("progressbar")).toBeInTheDocument();
+        },
+    );
 
     it("should not render progress bar if job is ready", () => {
         props.ready = true;

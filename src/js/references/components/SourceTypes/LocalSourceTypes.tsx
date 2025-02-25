@@ -17,7 +17,11 @@ import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { useUpdateSourceTypes } from "../../hooks";
-import { referenceQueryKeys, useGetReference, useUpdateReference } from "../../queries";
+import {
+    referenceQueryKeys,
+    useGetReference,
+    useUpdateReference,
+} from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
 import { usePathParams } from "@utils/hooks";
 
@@ -51,7 +55,8 @@ const SourceTypeInput = styled.span`
 
 const SourceTypesUndo = styled(BoxGroupSection)`
     display: flex;
-    background: ${props => getColor({ color: "greyHover", theme: props.theme })};
+    background: ${(props) =>
+        getColor({ color: "greyHover", theme: props.theme })};
     align-items: center;
     i.fas {
         margin-left: auto;
@@ -71,7 +76,14 @@ export function LocalSourceTypes() {
     const sourceTypes = get(data, "source_types", []);
     const restrictSourceTypes = get(data, "restrict_source_types", false);
 
-    const { error, lastRemoved, handleRemove, handleSubmit, handleUndo, register } = useUpdateSourceTypes(
+    const {
+        error,
+        lastRemoved,
+        handleRemove,
+        handleSubmit,
+        handleUndo,
+        register,
+    } = useUpdateSourceTypes(
         "source_types",
         `/refs/${refId}`,
         referenceQueryKeys.detail(refId),
@@ -83,7 +95,9 @@ export function LocalSourceTypes() {
     }
 
     function handleToggle() {
-        updateReferenceMutation.mutate({ restrict_source_types: !restrictSourceTypes });
+        updateReferenceMutation.mutate({
+            restrict_source_types: !restrictSourceTypes,
+        });
     }
 
     return (
@@ -92,11 +106,15 @@ export function LocalSourceTypes() {
                 <h2>Source Types</h2>
                 <p>Configure a list of allowable source types.</p>
             </SectionHeader>
-            <SettingsCheckbox enabled={restrictSourceTypes} onToggle={handleToggle}>
+            <SettingsCheckbox
+                enabled={restrictSourceTypes}
+                onToggle={handleToggle}
+            >
                 <h2>Restrict Source Types</h2>
                 <small>
-                    Only allow users to to select from allowed source types for isolates. If disabled, users will be
-                    able to enter any string as a source type.
+                    Only allow users to to select from allowed source types for
+                    isolates. If disabled, users will be able to enter any
+                    string as a source type.
                 </small>
             </SettingsCheckbox>
             <BoxGroup>
@@ -106,13 +124,21 @@ export function LocalSourceTypes() {
                 </BoxGroupHeader>
 
                 <BoxGroupDisabled disabled={!restrictSourceTypes}>
-                    <SourceTypeList sourceTypes={sourceTypes} onRemove={handleRemove} />
+                    <SourceTypeList
+                        sourceTypes={sourceTypes}
+                        onRemove={handleRemove}
+                    />
                     {lastRemoved && (
                         <SourceTypesUndo>
                             <span>
-                                The source type <strong>{lastRemoved}</strong> was just removed.
+                                The source type <strong>{lastRemoved}</strong>{" "}
+                                was just removed.
                             </span>
-                            <IconButton name="undo" tip="undo" onClick={handleUndo} />
+                            <IconButton
+                                name="undo"
+                                tip="undo"
+                                onClick={handleUndo}
+                            />
                         </SourceTypesUndo>
                     )}
                     <SourceTypeBoxGroupSection>
@@ -120,7 +146,10 @@ export function LocalSourceTypes() {
                             <label htmlFor="sourceType">Add Source Type </label>
                             <InputContainer>
                                 <SourceTypeInput>
-                                    <InputSimple id="sourceType" {...register("sourceType")} />
+                                    <InputSimple
+                                        id="sourceType"
+                                        {...register("sourceType")}
+                                    />
                                     <InputError>{error}</InputError>
                                 </SourceTypeInput>
                                 <Button color="green" type="submit">

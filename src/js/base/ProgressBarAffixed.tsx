@@ -17,7 +17,9 @@ interface StyledProgressBarAffixedProps {
     value: number;
 }
 
-const StyledProgressBarAffixed = styled(StyledProgress)<StyledProgressBarAffixedProps>`
+const StyledProgressBarAffixed = styled(
+    StyledProgress,
+)<StyledProgressBarAffixedProps>`
     height: 5px;
     left: 0;
     margin: 0;
@@ -25,15 +27,25 @@ const StyledProgressBarAffixed = styled(StyledProgress)<StyledProgressBarAffixed
     position: absolute;
     background-color: transparent;
 
-    ${props => (props.bottom ? "bottom" : "top")}: 0;
+    ${(props) => (props.bottom ? "bottom" : "top")}: 0;
 
     &::-webkit-progress-bar {
         background-color: transparent;
     }
 `;
 
-export const ProgressBarAffixed = styled(({ className, now, color, bottom }: ProgressBarAffixedProps) => {
-    return <StyledProgressBarAffixed className={className} max="100" value={now} color={color} bottom={bottom} />;
-})``;
+export const ProgressBarAffixed = styled(
+    ({ className, now, color, bottom }: ProgressBarAffixedProps) => {
+        return (
+            <StyledProgressBarAffixed
+                className={className}
+                max="100"
+                value={now}
+                color={color}
+                bottom={bottom}
+            />
+        );
+    },
+)``;
 
 ProgressBarAffixed.displayName = "ProgressBarAffixed";

@@ -7,10 +7,17 @@ type ExternalLinkProps = {
     href: string;
 };
 
-export const ExternalLink = styled(({ children, className = "", href }: ExternalLinkProps) => (
-    <a className={className} href={href} rel="noopener noreferrer" target="_blank">
-        {children}
-    </a>
-))``;
+export const ExternalLink = styled(
+    ({ children, className = "", href }: ExternalLinkProps) => (
+        <a
+            className={className}
+            href={href}
+            rel="noopener noreferrer"
+            target="_blank"
+        >
+            {children}
+        </a>
+    ),
+)``;
 
 ExternalLink.displayName = "ExternalLink";

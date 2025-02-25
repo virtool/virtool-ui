@@ -38,7 +38,8 @@ export default function AccountProfile() {
         return <LoadingPlaceholder />;
     }
 
-    const { administrator_role, email, groups, handle, last_password_change } = data;
+    const { administrator_role, email, groups, handle, last_password_change } =
+        data;
 
     return (
         <>
@@ -48,8 +49,13 @@ export default function AccountProfile() {
                     <h3>
                         {handle}
                         {administrator_role && (
-                            <Label key="administrator" className="capitalize text-base ml-auto" color="purple">
-                                <Icon name="user-shield" /> {administrator_role} Administrator
+                            <Label
+                                key="administrator"
+                                className="capitalize text-base ml-auto"
+                                color="purple"
+                            >
+                                <Icon name="user-shield" /> {administrator_role}{" "}
+                                Administrator
                             </Label>
                         )}
                     </h3>

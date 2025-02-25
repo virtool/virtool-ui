@@ -27,11 +27,18 @@ export default function EmptyReference() {
         handleSubmit,
         register,
         control,
-    } = useForm<FormValues>({ defaultValues: { name: "", description: "", dataType: "genome", organism: "" } });
+    } = useForm<FormValues>({
+        defaultValues: {
+            name: "",
+            description: "",
+            dataType: "genome",
+            organism: "",
+        },
+    });
 
     return (
         <form
-            onSubmit={handleSubmit(values =>
+            onSubmit={handleSubmit((values) =>
                 mutation.mutate(
                     { ...values },
                     {
@@ -42,12 +49,18 @@ export default function EmptyReference() {
                 ),
             )}
         >
-            <ReferenceForm errors={errors} mode={ReferenceFormMode.empty} register={register} />
+            <ReferenceForm
+                errors={errors}
+                mode={ReferenceFormMode.empty}
+                register={register}
+            />
             <Controller
                 name="dataType"
                 control={control}
                 rules={{ required: "Required Field" }}
-                render={({ field: { onChange, value } }) => <DataTypeSelection onSelect={onChange} dataType={value} />}
+                render={({ field: { onChange, value } }) => (
+                    <DataTypeSelection onSelect={onChange} dataType={value} />
+                )}
             />
             <DialogFooter>
                 <Button type="submit" color="blue">

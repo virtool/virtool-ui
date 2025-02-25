@@ -16,7 +16,10 @@ function ComposedScrollingAccordionItem(props) {
         if (props["data-state"] === "open" && ref?.current) {
             const position = ref.current.getBoundingClientRect().top;
             const offset = window.scrollY;
-            window.scrollTo({ top: position + offset - 50, behavior: "smooth" });
+            window.scrollTo({
+                top: position + offset - 50,
+                behavior: "smooth",
+            });
         }
     }, [props["data-state"]]);
 
@@ -30,10 +33,15 @@ type AccordionItemProps = {
 };
 
 /** A radix accordion item that triggers a scroll when opened */
-export function ScrollingAccordionItem({ value, children }: AccordionItemProps) {
+export function ScrollingAccordionItem({
+    value,
+    children,
+}: AccordionItemProps) {
     return (
         <StyledAccordionItem value={value} asChild>
-            <ComposedScrollingAccordionItem>{children}</ComposedScrollingAccordionItem>
+            <ComposedScrollingAccordionItem>
+                {children}
+            </ComposedScrollingAccordionItem>
         </StyledAccordionItem>
     );
 }

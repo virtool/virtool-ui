@@ -29,7 +29,11 @@ interface SampleItemEndIconProps {
 /**
  * Icon indicating the status of sample
  */
-export function SampleItemEndIcon({ onClick, ready, job }: SampleItemEndIconProps) {
+export function SampleItemEndIcon({
+    onClick,
+    ready,
+    job,
+}: SampleItemEndIconProps) {
     if (ready || job?.state === "complete") {
         return (
             <StyledSampleItemEndIcon>
@@ -46,7 +50,10 @@ export function SampleItemEndIcon({ onClick, ready, job }: SampleItemEndIconProp
     }
     return (
         <StyledSampleItemEndIcon>
-            <ProgressCircle progress={job?.progress || 0} state={job?.state || JobState.waiting} />
+            <ProgressCircle
+                progress={job?.progress || 0}
+                state={job?.state || JobState.waiting}
+            />
             <strong>Creating</strong>
         </StyledSampleItemEndIcon>
     );

@@ -16,7 +16,7 @@ const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`
 
 const SampleSidebarSelectorItemCheck = styled.div`
     align-items: center;
-    color: ${props => props.theme.color.greyDark};
+    color: ${(props) => props.theme.color.greyDark};
     display: flex;
     justify-content: center;
     margin-right: 5px;
@@ -50,11 +50,20 @@ export function SampleSidebarSelectorItem({
     selected,
 }: SampleSidebarSelectorItemProps) {
     return (
-        <StyledSampleSidebarSelectorItem as="button" type={"button"} onClick={() => onClick(id)} aria-label={name}>
+        <StyledSampleSidebarSelectorItem
+            as="button"
+            type={"button"}
+            onClick={() => onClick(id)}
+            aria-label={name}
+        >
             <SampleSidebarSelectorItemCheck>
-                {selected && <Icon name={partiallySelected ? "minus" : "check"} />}
+                {selected && (
+                    <Icon name={partiallySelected ? "minus" : "check"} />
+                )}
             </SampleSidebarSelectorItemCheck>
-            <SampleSidebarSelectorItemContents>{children}</SampleSidebarSelectorItemContents>
+            <SampleSidebarSelectorItemContents>
+                {children}
+            </SampleSidebarSelectorItemContents>
         </StyledSampleSidebarSelectorItem>
     );
 }

@@ -26,10 +26,13 @@ function summaryPlot(element, data, length, yMax, untrustworthyRanges) {
         .attr("preserveAspectRatio", "none")
         .append("g");
 
-    const trustworthyRanges = deriveTrustworthyRegions(length, untrustworthyRanges);
+    const trustworthyRanges = deriveTrustworthyRegions(
+        length,
+        untrustworthyRanges,
+    );
 
     if (trustworthyRanges.length) {
-        trustworthyRanges.forEach(range => {
+        trustworthyRanges.forEach((range) => {
             svg.append("rect")
                 .attr("x", x(range[0]))
                 .attr("y", 0)
@@ -41,7 +44,7 @@ function summaryPlot(element, data, length, yMax, untrustworthyRanges) {
     }
 
     if (untrustworthyRanges.length) {
-        untrustworthyRanges.forEach(range => {
+        untrustworthyRanges.forEach((range) => {
             svg.append("rect")
                 .attr("x", x(range[0]))
                 .attr("y", 0)
@@ -55,10 +58,13 @@ function summaryPlot(element, data, length, yMax, untrustworthyRanges) {
     if (data) {
         const areaDrawer = area()
             .x((d, i) => x(i))
-            .y0(d => y(d))
+            .y0((d) => y(d))
             .y1(height);
 
-        svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
+        svg.append("path")
+            .datum(data)
+            .attr("class", "depth-area")
+            .attr("d", areaDrawer);
     }
 }
 
@@ -78,12 +84,12 @@ const StyledIimiCoverageChart = styled.div<StyledIimiCoverageChartProps>`
     }
 
     path.untrustworthy-range {
-        stroke: ${props => props.theme.color.red};
+        stroke: ${(props) => props.theme.color.red};
         stroke-width: 1;
     }
 
     path.depth-area {
-        fill: ${props => props.theme.color.blue};
+        fill: ${(props) => props.theme.color.blue};
     }
 `;
 
@@ -98,11 +104,22 @@ interface IimiCoverageChartProps {
     untrustworthyRanges: UntrustworthyRange[];
 }
 
-export function SummaryChart({ data, id, yMax, untrustworthyRanges }: IimiCoverageChartProps) {
+export function SummaryChart({
+    data,
+    id,
+    yMax,
+    untrustworthyRanges,
+}: IimiCoverageChartProps) {
     const chartEl = useRef(null);
 
     useEffect(() => {
-        summaryPlot(chartEl.current, data, data.length, yMax, untrustworthyRanges);
+        summaryPlot(
+            chartEl.current,
+            data,
+            data.length,
+            yMax,
+            untrustworthyRanges,
+        );
     }, [data, id, yMax]);
 
     return <StyledIimiCoverageChart ref={chartEl} />;

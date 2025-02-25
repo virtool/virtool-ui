@@ -1,12 +1,18 @@
 import { ErrorResponse } from "@/types/types";
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+} from "@tanstack/react-query";
 import { findFiles, removeFile } from "./api";
 import { FileResponse, FileType } from "./types";
 
 export const fileQueryKeys = {
     all: () => ["files"] as const,
     lists: () => ["files", "list"] as const,
-    list: (type: string, filters: Array<string | number | boolean>) => ["files", "list", type, ...filters] as const,
+    list: (type: string, filters: Array<string | number | boolean>) =>
+        ["files", "list", type, ...filters] as const,
     infiniteList: (type: string, filters: Array<string | number | boolean>) =>
         ["files", "list", "infinite", type, ...filters] as const,
 };
@@ -19,12 +25,17 @@ export function useListFiles(type: FileType, page, per_page: number) {
     });
 }
 
-export function useInfiniteFindFiles(type: FileType, per_page: number, term?: string) {
+export function useInfiniteFindFiles(
+    type: FileType,
+    per_page: number,
+    term?: string,
+) {
     return useInfiniteQuery<FileResponse>({
         queryKey: fileQueryKeys.infiniteList(type, [per_page]),
-        queryFn: ({ pageParam }) => findFiles(type, pageParam as number, per_page, term),
+        queryFn: ({ pageParam }) =>
+            findFiles(type, pageParam as number, per_page, term),
         initialPageParam: 1,
-        getNextPageParam: lastPage => {
+        getNextPageParam: (lastPage) => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;
             }
@@ -39,5 +50,7 @@ export function useInfiniteFindFiles(type: FileType, per_page: number, term?: st
  * @returns A mutator for deleting a file
  */
 export function useDeleteFile() {
-    return useMutation<null, unknown, { id: string }>({ mutationFn: ({ id }) => removeFile(id) });
+    return useMutation<null, unknown, { id: string }>({
+        mutationFn: ({ id }) => removeFile(id),
+    });
 }

@@ -13,7 +13,8 @@ type CreateOTUProps = {
  * Displays a dialog to create an OTU
  */
 export default function CreateOTU({ refId }: CreateOTUProps) {
-    const { open: openCreateOtu, setOpen: setOpenCreateOtu } = useDialogParam("openCreateOTU");
+    const { open: openCreateOtu, setOpen: setOpenCreateOtu } =
+        useDialogParam("openCreateOTU");
 
     const mutation = useCreateOTU(refId);
 
@@ -41,7 +42,10 @@ export default function CreateOTU({ refId }: CreateOTUProps) {
                     <DialogTitle>Create OTU</DialogTitle>
                     <OTUForm
                         onSubmit={handleSubmit}
-                        error={mutation.isError && mutation.error.response?.body?.message}
+                        error={
+                            mutation.isError &&
+                            mutation.error.response?.body?.message
+                        }
                     />
                 </DialogContent>
             </DialogPortal>

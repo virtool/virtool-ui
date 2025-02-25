@@ -34,7 +34,9 @@ describe("<FirstUser />", () => {
         await userEvent.type(passwordField, passwordInput);
         expect(passwordField).toHaveValue(passwordInput);
 
-        await userEvent.click(screen.getByRole("button", { name: /Create User/i }));
+        await userEvent.click(
+            screen.getByRole("button", { name: /Create User/i }),
+        );
 
         scope.isDone();
     });

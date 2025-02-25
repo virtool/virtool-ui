@@ -30,7 +30,10 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
     }
 
     function handleEdit(groupId: string | number) {
-        mutation.mutate({ userId, update: { groups: xor(map(memberGroups, "id"), [groupId]) } });
+        mutation.mutate({
+            userId,
+            update: { groups: xor(map(memberGroups, "id"), [groupId]) },
+        });
     }
 
     return (

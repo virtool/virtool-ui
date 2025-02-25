@@ -1,7 +1,13 @@
 import { getSessionStorage, setSessionStorage } from "@utils/utils";
 import { forEach, isEqual } from "lodash-es";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { FieldValues, useForm, UseFormProps, UseFormReturn, useWatch } from "react-hook-form";
+import {
+    FieldValues,
+    useForm,
+    UseFormProps,
+    UseFormReturn,
+    useWatch,
+} from "react-hook-form";
 
 /**
  * Restore form values from session storage.
@@ -24,8 +30,14 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
 
     const previousFormValues = getSessionStorage(`${name}FormValues`);
 
-    if (previousFormValues && !isEqual(previousFormValues, defaultValues) && !isDirty) {
-        const castFormData = castValues ? castValues(previousFormValues) : previousFormValues;
+    if (
+        previousFormValues &&
+        !isEqual(previousFormValues, defaultValues) &&
+        !isDirty
+    ) {
+        const castFormData = castValues
+            ? castValues(previousFormValues)
+            : previousFormValues;
         forEach(castFormData, (value, key) => {
             setValue(key, value);
         });
@@ -34,12 +46,13 @@ function restoreFormValues<TFieldValues extends FieldValues = FieldValues>(
     }
 }
 
-type usePersistentFormProps<TFieldValues extends FieldValues> = UseFormProps<TFieldValues> & {
-    /** the form name used as the key for get and setting session storage*/
-    formName: string;
-    /** modifies the form values before restoring */
-    castValues?: (value: TFieldValues) => TFieldValues;
-};
+type usePersistentFormProps<TFieldValues extends FieldValues> =
+    UseFormProps<TFieldValues> & {
+        /** the form name used as the key for get and setting session storage*/
+        formName: string;
+        /** modifies the form values before restoring */
+        castValues?: (value: TFieldValues) => TFieldValues;
+    };
 
 /** A custom hook for creating a form that persists data in session storage. */
 export function usePersistentForm<TFieldValues extends FieldValues>({

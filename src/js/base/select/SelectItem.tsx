@@ -16,7 +16,8 @@ const StyledSelectItem = styled(RadixSelect.Item)`
     text-transform: capitalize;
 
     &:hover {
-        background-color: ${({ theme }) => getColor({ color: "greyHover", theme })};
+        background-color: ${({ theme }) =>
+            getColor({ color: "greyHover", theme })};
         border: 0;
     }
 `;

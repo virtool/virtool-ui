@@ -9,9 +9,9 @@ type AlertInnerProps = {
 };
 
 export const AlertInner = styled.div<AlertInnerProps>`
-    align-items: ${props => (props.level ? "center" : "normal")};
+    align-items: ${(props) => (props.level ? "center" : "normal")};
     border-left: 10px solid ${getColor};
-    display: ${props => (props.block ? "block" : "flex")};
+    display: ${(props) => (props.block ? "block" : "flex")};
     padding: 15px;
 `;
 

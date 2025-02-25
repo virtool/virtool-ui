@@ -43,7 +43,7 @@ const Template: Story = {
         size: 94209313,
     },
 
-    render: args => (
+    render: (args) => (
         <div className="bg-white w-1/2">
             <UploaderItem {...args} />
         </div>

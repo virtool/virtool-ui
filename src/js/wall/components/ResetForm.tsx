@@ -11,7 +11,9 @@ type ResetFormProps = {
 
 /** Handles the password reset process. */
 export default function ResetForm({ resetCode }: ResetFormProps) {
-    const { register, handleSubmit } = useForm({ defaultValues: { password: "" } });
+    const { register, handleSubmit } = useForm({
+        defaultValues: { password: "" },
+    });
     const resetPasswordMutation = useResetPasswordMutation();
 
     function onSubmit({ password }) {
@@ -22,14 +24,22 @@ export default function ResetForm({ resetCode }: ResetFormProps) {
 
     return (
         <>
-            <WallTitle title="Password Reset" subtitle="You must set a new password before proceeding." />
+            <WallTitle
+                title="Password Reset"
+                subtitle="You must set a new password before proceeding."
+            />
             <form onSubmit={handleSubmit(onSubmit)}>
                 <InputGroup>
                     <InputLabel htmlFor="password">Password</InputLabel>
-                    <InputSimple id="password" type="password" {...register("password")} />
+                    <InputSimple
+                        id="password"
+                        type="password"
+                        {...register("password")}
+                    />
                     {isError && (
                         <InputError>
-                            {error?.response?.body?.message || "An error occurred during password reset"}
+                            {error?.response?.body?.message ||
+                                "An error occurred during password reset"}
                         </InputError>
                     )}
                 </InputGroup>

@@ -33,13 +33,31 @@ const WorkflowItem = styled(Box)<WorkflowItemProps>`
     border-radius: 0;
     margin-bottom: 0;
 
-    background-color: ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "white" })};
-    color: ${props => getColor({ theme: props.theme, color: props.selected ? "white" : "black" })};
-    font-weight: ${props => getFontWeight(props.selected ? "thick" : "normal")(props)};
-    border: 1px solid ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "greyLight" })};
+    background-color: ${(props) =>
+        getColor({
+            theme: props.theme,
+            color: props.selected ? "blue" : "white",
+        })};
+    color: ${(props) =>
+        getColor({
+            theme: props.theme,
+            color: props.selected ? "white" : "black",
+        })};
+    font-weight: ${(props) =>
+        getFontWeight(props.selected ? "thick" : "normal")(props)};
+    border: 1px solid
+        ${(props) =>
+            getColor({
+                theme: props.theme,
+                color: props.selected ? "blue" : "greyLight",
+            })};
 
     &:hover {
-        background-color: ${props => getColor({ theme: props.theme, color: props.selected ? "blue" : "greyHover" })};
+        background-color: ${(props) =>
+            getColor({
+                theme: props.theme,
+                color: props.selected ? "blue" : "greyHover",
+            })};
     }
 `;
 
@@ -49,12 +67,16 @@ type WorkflowSelectorProps = {
     workflows: workflow[];
 };
 
-export function WorkflowSelector({ onSelect, selected, workflows }: WorkflowSelectorProps) {
+export function WorkflowSelector({
+    onSelect,
+    selected,
+    workflows,
+}: WorkflowSelectorProps) {
     return (
         <WorkflowAnalysisField>
             <CreateAnalysisFieldTitle>Workflow </CreateAnalysisFieldTitle>{" "}
             <StyledWorkflowSelector>
-                {map(workflows, workflow => (
+                {map(workflows, (workflow) => (
                     <WorkflowItem
                         key={workflow.id}
                         selected={selected === workflow.id}

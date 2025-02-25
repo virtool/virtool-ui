@@ -24,7 +24,11 @@ const IimiAccordionTrigger = styled(AccordionTrigger)`
 `;
 
 /** Collapsible results of an Iimi analysis for a single otu */
-export function IimiOTU({ hit: { id, name, result, isolates } }: { hit: IimiHit }) {
+export function IimiOTU({
+    hit: { id, name, result, isolates },
+}: {
+    hit: IimiHit;
+}) {
     return (
         <ScrollingAccordionItem value={id}>
             <IimiAccordionTrigger>
@@ -36,7 +40,11 @@ export function IimiOTU({ hit: { id, name, result, isolates } }: { hit: IimiHit 
             </IimiAccordionTrigger>
             <AccordionContent>
                 {map(isolates, (isolate: IimiIsolateData) => (
-                    <IimiIsolate name={formatIsolateName(isolate)} sequences={isolate.sequences} key={isolate.id} />
+                    <IimiIsolate
+                        name={formatIsolateName(isolate)}
+                        sequences={isolate.sequences}
+                        key={isolate.id}
+                    />
                 ))}
             </AccordionContent>
         </ScrollingAccordionItem>

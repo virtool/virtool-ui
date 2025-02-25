@@ -11,8 +11,8 @@ const InputHeaderContainer = styled.form`
     margin-bottom: 15px;
 
     &:focus-within {
-        background-color: ${props => props.theme.color.greyHover};
-        border-color: ${props => props.theme.color.blue};
+        background-color: ${(props) => props.theme.color.greyHover};
+        border-color: ${(props) => props.theme.color.blue};
 
         > input {
             transform: translateX(15px);
@@ -82,7 +82,7 @@ export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
                         handleSubmit(onFormSubmit)();
                     }
                 }}
-                onChange={e => {
+                onChange={(e) => {
                     setValue(id, e.target.value);
                 }}
             />

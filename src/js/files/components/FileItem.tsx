@@ -14,7 +14,14 @@ export type FileItemProps = {
     user: UserNested;
 };
 
-export default function FileItem({ canDelete, id, name, size, uploaded_at, user }: FileItemProps) {
+export default function FileItem({
+    canDelete,
+    id,
+    name,
+    size,
+    uploaded_at,
+    user,
+}: FileItemProps) {
     const { mutate: handleRemove } = useDeleteFile();
 
     const handleDelete = useCallback(() => {
@@ -32,13 +39,24 @@ export default function FileItem({ canDelete, id, name, size, uploaded_at, user 
                         </span>
                     ) : (
                         <>
-                            <Attribution time={uploaded_at} user={user.handle} verb="uploaded" />
+                            <Attribution
+                                time={uploaded_at}
+                                user={user.handle}
+                                verb="uploaded"
+                            />
                         </>
                     )}
                 </div>
                 <div className="flex font-medium gap-6 justify-end text-lg">
                     <span>{byteSize(size, true)}</span>
-                    {canDelete && <IconButton color="red" name="trash" tip="remove" onClick={handleDelete} />}
+                    {canDelete && (
+                        <IconButton
+                            color="red"
+                            name="trash"
+                            tip="remove"
+                            onClick={handleDelete}
+                        />
+                    )}
                 </div>
             </div>
         </BoxGroupSection>

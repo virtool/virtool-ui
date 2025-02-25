@@ -25,7 +25,7 @@ const OTUDetailTitle = styled(ViewHeaderTitle)`
     display: flex;
 
     small {
-        color: ${props => props.theme.color.greyDark};
+        color: ${(props) => props.theme.color.greyDark};
         font-weight: 600;
         margin-left: 7px;
 
@@ -36,7 +36,7 @@ const OTUDetailTitle = styled(ViewHeaderTitle)`
 `;
 
 const OTUDetailSubtitle = styled.p`
-    font-size: ${props => props.theme.fontSize.md};
+    font-size: ${(props) => props.theme.fontSize.md};
     margin-top: 5px;
 
     strong {
@@ -50,7 +50,8 @@ const OTUDetailSubtitle = styled.p`
 export default function OTUDetail() {
     const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
     const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
-    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
+    const { data: reference, isPending: isPendingReference } =
+        useGetReference(refId);
 
     if (isError) {
         return <NotFound />;
@@ -66,12 +67,18 @@ export default function OTUDetail() {
         <>
             <ViewHeader title={name}>
                 <OTUDetailTitle>
-                    {name} <small>{abbreviation || <em>No Abbreviation</em>}</small>
+                    {name}{" "}
+                    <small>{abbreviation || <em>No Abbreviation</em>}</small>
                     <ViewHeaderIcons>
                         <a href={`/api/otus/${id}.fa`} download>
                             Download FASTA
                         </a>
-                        <OTUHeaderEndIcons id={id} refId={refId} name={name} abbreviation={abbreviation} />
+                        <OTUHeaderEndIcons
+                            id={id}
+                            refId={refId}
+                            name={name}
+                            abbreviation={abbreviation}
+                        />
                     </ViewHeaderIcons>
                 </OTUDetailTitle>
                 <OTUDetailSubtitle>
@@ -83,19 +90,37 @@ export default function OTUDetail() {
             <Tabs>
                 <TabsLink to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</TabsLink>
                 {reference.data_type !== "barcode" && (
-                    <TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>Schema</TabsLink>
+                    <TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>
+                        Schema
+                    </TabsLink>
                 )}
-                <TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>History</TabsLink>
+                <TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>
+                    History
+                </TabsLink>
             </Tabs>
 
             <Switch>
                 <Route
                     path="/refs/:refId/otus/:otuId/"
-                    component={() => <Redirect to={`/refs/${refId}/otus/${otuId}/otu`} replace />}
+                    component={() => (
+                        <Redirect
+                            to={`/refs/${refId}/otus/${otuId}/otu`}
+                            replace
+                        />
+                    )}
                 />
-                <Route path="/refs/:refId/otus/:otuId/otu" component={OTUSection} />
-                <Route path="/refs/:refId/otus/:otuId/history" component={History} />
-                <Route path="/refs/:refId/otus/:otuId/schema" component={Schema} />
+                <Route
+                    path="/refs/:refId/otus/:otuId/otu"
+                    component={OTUSection}
+                />
+                <Route
+                    path="/refs/:refId/otus/:otuId/history"
+                    component={History}
+                />
+                <Route
+                    path="/refs/:refId/otus/:otuId/schema"
+                    component={Schema}
+                />
             </Switch>
         </>
     );

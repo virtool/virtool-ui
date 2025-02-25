@@ -49,8 +49,17 @@ export const AdministratorItem = ({ user, roles }: AdministratorItemProps) => {
         <StyledAdministrator key={user.id}>
             <InitialIcon handle={user.handle} size="lg" />
             <UserHandle>{user.handle}</UserHandle>
-            <InlineRoleSelect value={user.administrator_role} roles={roles} onChange={onChange} />
-            <IconButton name="trash" color="red" tip="remove administrator role" onClick={() => onChange(null)} />
+            <InlineRoleSelect
+                value={user.administrator_role}
+                roles={roles}
+                onChange={onChange}
+            />
+            <IconButton
+                name="trash"
+                color="red"
+                tip="remove administrator role"
+                onClick={() => onChange(null)}
+            />
         </StyledAdministrator>
     );
 };

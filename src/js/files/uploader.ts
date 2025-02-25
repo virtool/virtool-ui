@@ -40,28 +40,37 @@ interface UploaderState {
  * Zustand store to track the current uploads and their progress.
  */
 export const useUploaderStore = create<UploaderState>()(
-    subscribeWithSelector(set => ({
+    subscribeWithSelector((set) => ({
         intervalId: 0,
         uploads: [],
         remaining: 0,
         samples: [],
         speed: 0,
-        addUpload: upload => set(state => ({ uploads: [...state.uploads, upload] })),
-        removeUpload: localId =>
-            set(state => {
-                const uploads = state.uploads.filter(upload => upload.localId !== localId);
-                return uploads.length === 0 ? { uploads, remaining: 0, speed: 0 } : { uploads };
+        addUpload: (upload) =>
+            set((state) => ({ uploads: [...state.uploads, upload] })),
+        removeUpload: (localId) =>
+            set((state) => {
+                const uploads = state.uploads.filter(
+                    (upload) => upload.localId !== localId,
+                );
+                return uploads.length === 0
+                    ? { uploads, remaining: 0, speed: 0 }
+                    : { uploads };
             }),
-        setFailure: localId =>
-            set(state => ({
-                uploads: state.uploads.map(upload =>
-                    upload.localId === localId ? { ...upload, failed: true } : upload,
+        setFailure: (localId) =>
+            set((state) => ({
+                uploads: state.uploads.map((upload) =>
+                    upload.localId === localId
+                        ? { ...upload, failed: true }
+                        : upload,
                 ),
             })),
         setProgress: (localId, loaded, progress) =>
-            set(state => ({
-                uploads: state.uploads.map(upload =>
-                    upload.localId === localId ? { ...upload, loaded, progress } : upload,
+            set((state) => ({
+                uploads: state.uploads.map((upload) =>
+                    upload.localId === localId
+                        ? { ...upload, loaded, progress }
+                        : upload,
                 ),
             })),
     })),
@@ -89,7 +98,9 @@ export function upload(file: File, fileType: FileType) {
     function onProgress(e: ProgressEvent) {
         if (e.lengthComputable) {
             const progress = Math.round((e.loaded / e.total) * 100);
-            useUploaderStore.getState().setProgress(localId, e.loaded, progress);
+            useUploaderStore
+                .getState()
+                .setProgress(localId, e.loaded, progress);
         }
     }
 
@@ -109,7 +120,7 @@ function watchUploadTiming(): void {
     const { getState, setState } = useUploaderStore;
     const { samples, uploads } = getState();
 
-    if (uploads.every(upload => upload.progress === 100)) {
+    if (uploads.every((upload) => upload.progress === 100)) {
         return;
     }
 
@@ -126,16 +137,22 @@ function watchUploadTiming(): void {
     let speed: number;
 
     if (newSamples.length > 1) {
-        speed = Math.abs(newSamples[newSamples.length - 1] - newSamples[0]) / newSamples.length;
+        speed =
+            Math.abs(newSamples[newSamples.length - 1] - newSamples[0]) /
+            newSamples.length;
     } else {
         speed = 0;
     }
 
-    setState({ remaining: speed > 0 ? (total - loaded) / speed : 0, samples: newSamples, speed });
+    setState({
+        remaining: speed > 0 ? (total - loaded) / speed : 0,
+        samples: newSamples,
+        speed,
+    });
 }
 
 useUploaderStore.subscribe(
-    state => state.uploads.length,
+    (state) => state.uploads.length,
     (uploadsLength, previousUploadsLength) => {
         const { getState, setState } = useUploaderStore;
 

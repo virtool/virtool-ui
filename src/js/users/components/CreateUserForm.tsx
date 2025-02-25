@@ -1,7 +1,14 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Checkbox, InputError, InputGroup, InputLabel, InputSimple, SaveButton } from "../../base";
+import {
+    Checkbox,
+    InputError,
+    InputGroup,
+    InputLabel,
+    InputSimple,
+    SaveButton,
+} from "../../base";
 
 const DialogFooter = styled.div`
     display: flex;
@@ -18,13 +25,22 @@ interface CreateUserFormProps {
     /** Error message to be displayed */
     error: string;
     /** A callback function to be called when the form is submitted */
-    onSubmit: (data: { handle: string; password: string; forceReset: boolean }) => void;
+    onSubmit: (data: {
+        handle: string;
+        password: string;
+        forceReset: boolean;
+    }) => void;
 }
 
 /**
  * A form component for creating a new user
  */
-export function CreateUserForm({ handle = "", password = "", error, onSubmit }: CreateUserFormProps) {
+export function CreateUserForm({
+    handle = "",
+    password = "",
+    error,
+    onSubmit,
+}: CreateUserFormProps) {
     const {
         formState: { errors },
         register,
@@ -33,7 +49,7 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
     } = useForm({ defaultValues: { handle, password, forceReset: false } });
 
     return (
-        <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
+        <form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
             <InputGroup>
                 <InputLabel htmlFor="handle">Username</InputLabel>
                 <InputSimple
@@ -52,10 +68,12 @@ export function CreateUserForm({ handle = "", password = "", error, onSubmit }: 
                     type="password"
                     autoComplete="new-password"
                     {...register("password", {
-                        required: "Password does not meet minimum length requirement (8)",
+                        required:
+                            "Password does not meet minimum length requirement (8)",
                         minLength: {
                             value: 8,
-                            message: "Password does not meet minimum length requirement (8)",
+                            message:
+                                "Password does not meet minimum length requirement (8)",
                         },
                     })}
                 />

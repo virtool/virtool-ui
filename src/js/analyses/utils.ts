@@ -24,7 +24,8 @@ import { cloneDeep } from "lodash-es/lodash";
 import { formatIsolateName } from "../utils/utils";
 import { PositionMappedReadDepths, UntrustworthyRange } from "./types";
 
-export const calculateAnnotatedOrfCount = orfs => filter(orfs, orf => orf.hits.length).length;
+export const calculateAnnotatedOrfCount = (orfs) =>
+    filter(orfs, (orf) => orf.hits.length).length;
 
 function calculateORFMinimumE(hits) {
     if (hits.length === 0) {
@@ -40,17 +41,19 @@ function calculateSequenceMinimumE(orfs) {
         return;
     }
 
-    const minEValues = map(orfs, orf => calculateORFMinimumE(orf.hits));
+    const minEValues = map(orfs, (orf) => calculateORFMinimumE(orf.hits));
     return min(minEValues);
 }
 
 export function extractFamilies(orfs) {
-    const families = uniq(flatMap(orfs, orf => flatMap(orf.hits, hit => keys(hit.families))));
-    return reject(families, f => f === "None");
+    const families = uniq(
+        flatMap(orfs, (orf) => flatMap(orf.hits, (hit) => keys(hit.families))),
+    );
+    return reject(families, (f) => f === "None");
 }
 
 export function extractNames(orfs) {
-    return uniq(flatMap(orfs, orf => flatMap(orf.hits, hit => hit.names)));
+    return uniq(flatMap(orfs, (orf) => flatMap(orf.hits, (hit) => hit.names)));
 }
 
 /**
@@ -83,19 +86,20 @@ export const fillAlign = ({ align, length }) => {
 };
 
 function getIdentities(data) {
-    return flatMap(data, item => item.identities);
+    return flatMap(data, (item) => item.identities);
 }
 
-const getSequenceIdentities = sequence => flatMap(sequence.hits, hit => hit.identity);
+const getSequenceIdentities = (sequence) =>
+    flatMap(sequence.hits, (hit) => hit.identity);
 
-export const formatAODPData = detail => {
+export const formatAODPData = (detail) => {
     if (detail.results === null) {
         return detail;
     }
 
-    const results = map(detail.results, result => {
-        const isolates = map(result.isolates, isolate => {
-            const sequences = map(isolate.sequences, sequence => {
+    const results = map(detail.results, (result) => {
+        const isolates = map(result.isolates, (isolate) => {
+            const sequences = map(isolate.sequences, (sequence) => {
                 return {
                     ...sequence,
                     identities: getSequenceIdentities(sequence),
@@ -122,12 +126,12 @@ export const formatAODPData = detail => {
     return { ...detail, results };
 };
 
-export const formatNuVsData = detail => {
+export const formatNuVsData = (detail) => {
     if (detail.results === null) {
         return detail;
     }
 
-    const hits = map(detail.results.hits, hit => ({
+    const hits = map(detail.results.hits, (hit) => ({
         ...hit,
         id: toNumber(hit.index),
         annotatedOrfCount: calculateAnnotatedOrfCount(hit.orfs),
@@ -136,7 +140,7 @@ export const formatNuVsData = detail => {
         names: extractNames(hit.orfs),
     }));
 
-    const longestSequence = maxBy(hits, hit => hit.sequence.length);
+    const longestSequence = maxBy(hits, (hit) => hit.sequence.length);
 
     const { cache, created_at, id, ready, user, workflow } = detail;
 
@@ -161,7 +165,7 @@ export const formatNuVsData = detail => {
  * @param values - an array of numbers
  * @returns {number|*} - the median
  */
-export const median = values => {
+export const median = (values) => {
     const sorted = values.slice().sort((a, b) => a - b);
 
     const midIndex = (sorted.length - 1) / 2;
@@ -183,10 +187,12 @@ export const median = values => {
  * @param isolates
  * @returns {Array}
  */
-export const mergeCoverage = isolates => {
-    const longest = maxBy(isolates, isolate => isolate.filled.length);
-    const coverages = map(isolates, isolate => isolate.filled);
-    return map(longest.filled, (depth, index) => max(map(coverages, coverage => coverage[index])));
+export const mergeCoverage = (isolates) => {
+    const longest = maxBy(isolates, (isolate) => isolate.filled.length);
+    const coverages = map(isolates, (isolate) => isolate.filled);
+    return map(longest.filled, (depth, index) =>
+        max(map(coverages, (coverage) => coverage[index])),
+    );
 };
 
 export const formatSequence = (sequence, readCount) => ({
@@ -195,28 +201,41 @@ export const formatSequence = (sequence, readCount) => ({
     reads: sequence.pi * readCount,
 });
 
-export const formatPathoscopeData = detail => {
+export const formatPathoscopeData = (detail) => {
     if (detail.results === null || detail.results.hits.length === 0) {
         return detail;
     }
 
-    const { cache, created_at, results, id, index, ready, reference, subtractions, user, workflow } = detail;
+    const {
+        cache,
+        created_at,
+        results,
+        id,
+        index,
+        ready,
+        reference,
+        subtractions,
+        user,
+        workflow,
+    } = detail;
 
     const readCount = results.read_count;
 
-    const hits = map(results.hits, otu => {
+    const hits = map(results.hits, (otu) => {
         const isolateNames = [];
 
         // Go through each isolate associated with the OTU, adding properties for weight, read count,
         // median depth, and coverage. These values will be calculated from the sequences owned by each isolate.
-        const isolates = map(otu.isolates, isolate => {
+        const isolates = map(otu.isolates, (isolate) => {
             // Make a name for the isolate by joining the source type and name, eg. "Isolate" + "Q47".
             const name = formatIsolateName(isolate);
 
             isolateNames.push(name);
 
             const sequences = sortBy(
-                map(isolate.sequences, sequence => formatSequence(sequence, readCount)),
+                map(isolate.sequences, (sequence) =>
+                    formatSequence(sequence, readCount),
+                ),
                 "length",
             );
 
@@ -278,7 +297,7 @@ export const fuseSearchKeys = {
     aodp: ["name"],
 };
 
-export const formatData = detail => {
+export const formatData = (detail) => {
     if (startsWith(detail?.workflow, "pathoscope")) {
         return formatPathoscopeData(detail);
     }
@@ -308,7 +327,10 @@ export function checkSupportedWorkflow(workflow) {
  *
  * @returns An array of depth values
  */
-export function convertRleToCoverage(lengths: Array<number>, rle: Array<number>) {
+export function convertRleToCoverage(
+    lengths: Array<number>,
+    rle: Array<number>,
+) {
     const coverage = [];
 
     for (let sharedIndex = 0; sharedIndex < lengths.length; sharedIndex++) {
@@ -337,12 +359,15 @@ export function maxSequences(sequences: PositionMappedReadDepths[]) {
  * @param length - The length of the sequence
  * @param untrustworthyRanges - the untrustworthy regions to infer trustworthy regions from
  */
-export function deriveTrustworthyRegions(length: number, untrustworthyRanges: [number, number][]): [number, number][] {
+export function deriveTrustworthyRegions(
+    length: number,
+    untrustworthyRanges: [number, number][],
+): [number, number][] {
     const trustworthyRanges = [];
     let start = 1;
     let end;
 
-    untrustworthyRanges.forEach(range => {
+    untrustworthyRanges.forEach((range) => {
         end = range[0];
         trustworthyRanges.push([start, end]);
         start = range[1];
@@ -358,10 +383,14 @@ export function deriveTrustworthyRegions(length: number, untrustworthyRanges: [n
  * @param untrustworthyRanges - A collection of untrustworthy regions to combine
  * @returns the combined untrustworthy regions
  */
-export function combineUntrustworthyRegions(untrustworthyRanges: UntrustworthyRange[][]): UntrustworthyRange[] {
+export function combineUntrustworthyRegions(
+    untrustworthyRanges: UntrustworthyRange[][],
+): UntrustworthyRange[] {
     untrustworthyRanges = cloneDeep(untrustworthyRanges);
 
-    const sortedUntrustworthyRanges = untrustworthyRanges.flat().sort((a, b) => a[0] - b[0]);
+    const sortedUntrustworthyRanges = untrustworthyRanges
+        .flat()
+        .sort((a, b) => a[0] - b[0]);
 
     if (sortedUntrustworthyRanges.length === 0) {
         return [];
@@ -369,7 +398,7 @@ export function combineUntrustworthyRegions(untrustworthyRanges: UntrustworthyRa
 
     const combined = [sortedUntrustworthyRanges.shift()] as [number, number][];
 
-    sortedUntrustworthyRanges.forEach(range => {
+    sortedUntrustworthyRanges.forEach((range) => {
         const last = combined[combined.length - 1];
 
         if (range[0] <= last[1]) {

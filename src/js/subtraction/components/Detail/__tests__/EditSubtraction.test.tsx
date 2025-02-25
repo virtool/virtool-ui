@@ -3,7 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeSubtraction, mockApiEditSubtraction } from "../../../../../tests/fake/subtractions";
+import {
+    createFakeSubtraction,
+    mockApiEditSubtraction,
+} from "../../../../../tests/fake/subtractions";
 import EditSubtraction from "../EditSubtraction";
 
 describe("<EditSubtraction />", () => {
@@ -57,7 +60,11 @@ describe("<EditSubtraction />", () => {
     });
 
     it("should update subtraction when form is submitted", async () => {
-        const scope = mockApiEditSubtraction(subtraction, "newName", "newNickname");
+        const scope = mockApiEditSubtraction(
+            subtraction,
+            "newName",
+            "newNickname",
+        );
         renderWithProviders(<EditSubtraction {...props} />);
 
         const nameInput = screen.getByLabelText("Name");

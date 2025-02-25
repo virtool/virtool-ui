@@ -16,11 +16,15 @@ export default function OTUHistory() {
         return <LoadingPlaceholder />;
     }
 
-    const changes = groupBy(data, change => (change.index.version === "unbuilt" ? "unbuilt" : "built"));
+    const changes = groupBy(data, (change) =>
+        change.index.version === "unbuilt" ? "unbuilt" : "built",
+    );
 
     return (
         <div>
-            {changes.unbuilt && <HistoryList history={changes.unbuilt} unbuilt />}
+            {changes.unbuilt && (
+                <HistoryList history={changes.unbuilt} unbuilt />
+            )}
             {changes.built && <HistoryList history={changes.built} />}
         </div>
     );

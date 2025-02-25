@@ -14,7 +14,10 @@ type LoadingPlaceholderProps = {
  * async action such as an API call. An example would be navigating to a sample detail view and showing a spinner while
  * the sample data is retrieved from the server.
  */
-export function LoadingPlaceholder({ className, message = "" }: LoadingPlaceholderProps) {
+export function LoadingPlaceholder({
+    className,
+    message = "",
+}: LoadingPlaceholderProps) {
     return (
         <div className={cn("text-center", "mt-56", className)}>
             {message ? <p>{message}</p> : null}

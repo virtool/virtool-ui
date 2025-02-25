@@ -34,14 +34,20 @@ const ScrollSection = styled(RadixSelect.ScrollUpButton)`
     display: flex;
     justify-content: center;
     &:hover {
-        background-color: ${props => getColor({ color: "greyHover", theme: props.theme })};
+        background-color: ${(props) =>
+            getColor({ color: "greyHover", theme: props.theme })};
     }
 `;
 
 export const SelectContent = ({ children, position, align }) => {
     return (
         <RadixSelect.Portal>
-            <StyledContent position={position} align={align} side="bottom" avoidCollisions={false}>
+            <StyledContent
+                position={position}
+                align={align}
+                side="bottom"
+                avoidCollisions={false}
+            >
                 <ScrollSection>
                     <Icon name="chevron-up" />
                 </ScrollSection>

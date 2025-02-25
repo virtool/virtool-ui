@@ -88,7 +88,9 @@ export function Tooltip({ children, position = "top", tip }: TooltipProps) {
     return (
         <TooltipPrimitive.Provider>
             <TooltipPrimitive.Root>
-                <TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
+                <TooltipPrimitive.Trigger asChild>
+                    {children}
+                </TooltipPrimitive.Trigger>
                 <TooltipPrimitive.Portal>
                     <TooltipContent side={position} sideOffset={5}>
                         {tip}

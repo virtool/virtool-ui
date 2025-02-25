@@ -13,7 +13,14 @@ type IconProps = {
     title?: string;
 };
 
-export function Icon({ color, faStyle = "fas", fixedWidth = false, style, title, ...props }: IconProps) {
+export function Icon({
+    color,
+    faStyle = "fas",
+    fixedWidth = false,
+    style,
+    title,
+    ...props
+}: IconProps) {
     const className = `${props.className ? props.className + " " : ""} ${faStyle} fa-${props.name}`;
 
     return (

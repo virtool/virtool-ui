@@ -25,7 +25,10 @@ describe("SampleUserGroup", () => {
     it("should call onChange input is changed", async () => {
         renderWithProviders(<SampleUserGroup {...props} />);
 
-        await userEvent.selectOptions(screen.getByLabelText("User Group"), "bar");
+        await userEvent.selectOptions(
+            screen.getByLabelText("User Group"),
+            "bar",
+        );
         expect(props.onChange).toHaveBeenCalled();
     });
 });

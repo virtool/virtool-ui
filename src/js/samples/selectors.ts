@@ -1,1 +1,2 @@
-export const getMaxReadLength = state => state.samples.detail.quality.length[1];
+export const getMaxReadLength = (state) =>
+    state.samples.detail.quality.length[1];

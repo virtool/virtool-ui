@@ -3,7 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createFakeReference, mockApiEditReference } from "../../../../../../tests/fake/references";
+import {
+    createFakeReference,
+    mockApiEditReference,
+} from "../../../../../../tests/fake/references";
 import EditTarget from "../EditTarget";
 
 describe("<EditTarget />", () => {
@@ -56,7 +59,10 @@ describe("<EditTarget />", () => {
         await userEvent.clear(screen.getByLabelText("Name"));
         await userEvent.type(screen.getByLabelText("Name"), "Foo");
         await userEvent.clear(screen.getByLabelText("Description"));
-        await userEvent.type(screen.getByLabelText("Description"), "Foo description");
+        await userEvent.type(
+            screen.getByLabelText("Description"),
+            "Foo description",
+        );
         await userEvent.clear(screen.getByLabelText("Length"));
         await userEvent.type(screen.getByLabelText("Length"), "10");
         await userEvent.click(screen.getByRole("button"));
@@ -69,8 +75,15 @@ describe("<EditTarget />", () => {
         renderWithProviders(<EditTarget {...props} />);
 
         expect(screen.getByLabelText("Name")).toHaveValue(props.target.name);
-        expect(screen.getByLabelText("Description")).toHaveValue(props.target.description);
-        expect(screen.getByLabelText("Length")).toHaveValue(props.target.length);
-        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "checked");
+        expect(screen.getByLabelText("Description")).toHaveValue(
+            props.target.description,
+        );
+        expect(screen.getByLabelText("Length")).toHaveValue(
+            props.target.length,
+        );
+        expect(screen.getByRole("checkbox")).toHaveAttribute(
+            "data-state",
+            "checked",
+        );
     });
 });

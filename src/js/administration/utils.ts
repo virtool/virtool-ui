@@ -20,8 +20,14 @@ enum AdministratorPermissionsLevel {
  * @param userRole - The administrator role of the user
  */
 
-export function hasSufficientAdminRole(requiredRole: AdministratorRoles, userRole: AdministratorRoles): boolean {
-    return AdministratorPermissionsLevel[userRole] <= AdministratorPermissionsLevel[requiredRole];
+export function hasSufficientAdminRole(
+    requiredRole: AdministratorRoles,
+    userRole: AdministratorRoles,
+): boolean {
+    return (
+        AdministratorPermissionsLevel[userRole] <=
+        AdministratorPermissionsLevel[requiredRole]
+    );
 }
 
 /**
@@ -45,9 +51,14 @@ export enum AdministratorPermissions {
  * @param permission - The permissions to check
  * @returns  Whether the user is allowed to perform the action
  */
-export function checkAdminRoleOrPermissionsFromAccount(account: Account, permission: Permission): boolean {
+export function checkAdminRoleOrPermissionsFromAccount(
+    account: Account,
+    permission: Permission,
+): boolean {
     return (
-        hasSufficientAdminRole(AdministratorPermissions[permission as string], account.administrator_role) ||
-        account.permissions[permission]
+        hasSufficientAdminRole(
+            AdministratorPermissions[permission as string],
+            account.administrator_role,
+        ) || account.permissions[permission]
     );
 }

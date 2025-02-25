@@ -7,7 +7,12 @@ interface SubtractionSelectorItemProps {
     name: string;
     onClick: (id: string) => void;
 }
-export function SubtractionSelectorItem({ id, isDefault, name, onClick }: SubtractionSelectorItemProps) {
+export function SubtractionSelectorItem({
+    id,
+    isDefault,
+    name,
+    onClick,
+}: SubtractionSelectorItemProps) {
     const handleClick = useCallback(() => onClick(id), [id, onClick]);
 
     return (

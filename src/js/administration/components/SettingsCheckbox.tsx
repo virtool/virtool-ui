@@ -18,14 +18,14 @@ const StyledSettingsCheckbox = styled(Box)`
     padding: 15px 20px 12px 15px;
 
     h2 {
-        font-size: ${props => props.theme.fontSize.lg};
-        font-weight: ${props => props.theme.fontWeight.thick};
+        font-size: ${(props) => props.theme.fontSize.lg};
+        font-weight: ${(props) => props.theme.fontWeight.thick};
         margin: 0 0 3px;
         padding-bottom: 5px;
     }
 
     small {
-        color: ${props => props.theme.color.greyDarkest};
+        color: ${(props) => props.theme.color.greyDarkest};
         font-size: ${getFontSize("md")};
     }
 `;
@@ -42,7 +42,11 @@ type SettingsCheckboxProps = {
 /**
  * A checkbox allowing users to toggle API access for clients
  */
-export function SettingsCheckbox({ children, enabled, onToggle }: SettingsCheckboxProps) {
+export function SettingsCheckbox({
+    children,
+    enabled,
+    onToggle,
+}: SettingsCheckboxProps) {
     const handleClick = useCallback(() => onToggle(), [enabled, onToggle]);
 
     return (

@@ -4,7 +4,10 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import BarcodeSequenceForm from "@sequences/components/Barcode/BarcodeSequenceForm";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { useGetActiveSequence, useGetSelectableTargets } from "@sequences/hooks";
+import {
+    useGetActiveSequence,
+    useGetSelectableTargets,
+} from "@sequences/hooks";
 
 type EditBarcodeSequence = {
     isolateId: string;
@@ -14,8 +17,12 @@ type EditBarcodeSequence = {
 /**
  * Displays dialog to edit a barcode sequence
  */
-export default function EditBarcodeSequence({ isolateId, otuId }: EditBarcodeSequence) {
-    const { value: editSequenceId, unsetValue: unsetEditSequenceId } = useUrlSearchParam<string>("editSequenceId");
+export default function EditBarcodeSequence({
+    isolateId,
+    otuId,
+}: EditBarcodeSequence) {
+    const { value: editSequenceId, unsetValue: unsetEditSequenceId } =
+        useUrlSearchParam<string>("editSequenceId");
     const mutation = useEditSequence(otuId);
 
     const targets = useGetSelectableTargets();
@@ -23,7 +30,15 @@ export default function EditBarcodeSequence({ isolateId, otuId }: EditBarcodeSeq
 
     function onSubmit({ accession, definition, host, sequence, target }) {
         mutation.mutate(
-            { isolateId, sequenceId: activeSequence.id, accession, definition, host, sequence, target },
+            {
+                isolateId,
+                sequenceId: activeSequence.id,
+                accession,
+                definition,
+                host,
+                sequence,
+                target,
+            },
             {
                 onSuccess: () => {
                     unsetEditSequenceId();
@@ -33,7 +48,10 @@ export default function EditBarcodeSequence({ isolateId, otuId }: EditBarcodeSeq
     }
 
     return (
-        <Dialog open={Boolean(editSequenceId)} onOpenChange={() => unsetEditSequenceId()}>
+        <Dialog
+            open={Boolean(editSequenceId)}
+            onOpenChange={() => unsetEditSequenceId()}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">

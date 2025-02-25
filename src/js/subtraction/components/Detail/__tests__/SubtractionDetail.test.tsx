@@ -1,7 +1,10 @@
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
-import { createFakeSubtraction, mockApiGetSubtractionDetail } from "@tests/fake/subtractions";
+import {
+    createFakeSubtraction,
+    mockApiGetSubtractionDetail,
+} from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
@@ -30,10 +33,18 @@ describe("<SubtractionDetail />", () => {
         renderWithRouter(<Subtraction />, path);
 
         expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
-        expect(await screen.findByText(subtraction.nickname)).toBeInTheDocument();
-        expect(await screen.findByText(subtraction.file.name)).toBeInTheDocument();
-        expect(await screen.findByText(subtraction.linked_samples.length)).toBeInTheDocument();
-        expect(await screen.findByText(subtraction.files[0].name)).toBeInTheDocument();
+        expect(
+            await screen.findByText(subtraction.nickname),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(subtraction.file.name),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(subtraction.linked_samples.length),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(subtraction.files[0].name),
+        ).toBeInTheDocument();
 
         scope.done();
     });
@@ -49,9 +60,14 @@ describe("<SubtractionDetail />", () => {
         const unreadySubtraction = createFakeSubtraction({ ready: false });
         const scope = mockApiGetSubtractionDetail(unreadySubtraction);
 
-        renderWithRouter(<Subtraction />, formatSubtractionPath(unreadySubtraction));
+        renderWithRouter(
+            <Subtraction />,
+            formatSubtractionPath(unreadySubtraction),
+        );
 
-        expect(await screen.findByText("Subtraction is still being imported")).toBeInTheDocument();
+        expect(
+            await screen.findByText("Subtraction is still being imported"),
+        ).toBeInTheDocument();
 
         scope.done();
     });
@@ -66,14 +82,20 @@ describe("<SubtractionDetail />", () => {
         renderWithRouter(<Subtraction />, path);
 
         expect(await screen.findByText(subtraction.name)).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "modify" })).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "remove" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "modify" }),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "remove" }),
+        ).toBeInTheDocument();
 
         scope.done();
     });
 
     it("should not render icons when [canModify=false]", async () => {
-        const permissions = createFakePermissions({ modify_subtraction: false });
+        const permissions = createFakePermissions({
+            modify_subtraction: false,
+        });
         const account = createFakeAccount({ permissions });
 
         mockApiGetAccount(account);
@@ -89,7 +111,9 @@ describe("<SubtractionDetail />", () => {
     });
 
     it("should render file id when name not defined", async () => {
-        const subtraction = createFakeSubtraction({ file: { id: "test", name: null } });
+        const subtraction = createFakeSubtraction({
+            file: { id: "test", name: null },
+        });
         const scope = mockApiGetSubtractionDetail(subtraction);
         renderWithRouter(<Subtraction />, formatSubtractionPath(subtraction));
 

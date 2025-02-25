@@ -6,8 +6,8 @@ import styled from "styled-components";
 const StateButtonCheckbox = styled(Checkbox.Root)`
     align-items: center;
     all: unset;
-    background-color: ${props => props.theme.color.greyLightest};
-    border: 2px solid ${props => props.theme.color.grey};
+    background-color: ${(props) => props.theme.color.greyLightest};
+    border: 2px solid ${(props) => props.theme.color.grey};
     border-radius: 4px;
     display: flex;
     justify-content: center;
@@ -16,7 +16,7 @@ const StateButtonCheckbox = styled(Checkbox.Root)`
 `;
 
 const StateButtonIndicator = styled(Checkbox.Indicator)`
-    color: ${props => props.theme.color.greyDarkest};
+    color: ${(props) => props.theme.color.greyDarkest};
 `;
 
 const StyledStateButton = styled(BoxGroupSection)`
@@ -47,7 +47,13 @@ type StateButtonProps = {
 /**
  * A condensed job state item for use in a list of job states
  */
-export function StateButton({ active, count = 0, color, label, onClick }: StateButtonProps) {
+export function StateButton({
+    active,
+    count = 0,
+    color,
+    label,
+    onClick,
+}: StateButtonProps) {
     return (
         <StyledStateButton active={active} onClick={onClick}>
             <StateButtonCheckbox checked={active}>

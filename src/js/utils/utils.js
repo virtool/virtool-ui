@@ -5,7 +5,15 @@
 import clsx from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
 import Fuse from "fuse.js";
-import { capitalize, forEach, get, replace, sampleSize, split, startCase } from "lodash-es";
+import {
+    capitalize,
+    forEach,
+    get,
+    replace,
+    sampleSize,
+    split,
+    startCase,
+} from "lodash-es";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
 
@@ -14,7 +22,8 @@ import { twMerge } from "tailwind-merge";
  *
  * @type {string}
  */
-export const alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+export const alphanumeric =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 /**
  * Converts an integer in bytes to a nicely formatted string (eg. 10.2 GB).
@@ -110,10 +119,14 @@ export function followDynamicDownload(filename, text) {
  * @returns {string}
  */
 export function formatIsolateName(isolate) {
-    const sourceType = get(isolate, "source_type") || get(isolate, "sourceType");
-    const sourceName = get(isolate, "source_name") || get(isolate, "sourceName");
+    const sourceType =
+        get(isolate, "source_type") || get(isolate, "sourceType");
+    const sourceName =
+        get(isolate, "source_name") || get(isolate, "sourceName");
 
-    return sourceType === "unknown" ? "Unnamed" : `${capitalize(sourceType)} ${sourceName}`;
+    return sourceType === "unknown"
+        ? "Unnamed"
+        : `${capitalize(sourceType)} ${sourceName}`;
 }
 
 /**
@@ -125,7 +138,15 @@ export function formatIsolateName(isolate) {
 export function formatRoundedDuration(seconds) {
     const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
 
-    const units = ["years", "months", "weeks", "days", "hours", "minutes", "seconds"];
+    const units = [
+        "years",
+        "months",
+        "weeks",
+        "days",
+        "hours",
+        "minutes",
+        "seconds",
+    ];
 
     for (const unit of units) {
         if (duration[unit]) {
@@ -207,7 +228,10 @@ export function setSessionStorage(key, data) {
     try {
         window.sessionStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
-        console.warn(`Failed to save data to sessionStorage for key "${key}":`, error);
+        console.warn(
+            `Failed to save data to sessionStorage for key "${key}":`,
+            error,
+        );
     }
 }
 

@@ -14,7 +14,9 @@ const InstallOptionAlert = styled(Alert)`
  * Displays a button to initiate the installation of HMMs or displays an alert if the user lacks permission
  */
 export default function InstallOption() {
-    const { hasPermission: canInstall } = useCheckAdminRoleOrPermission(Permission.modify_hmm);
+    const { hasPermission: canInstall } = useCheckAdminRoleOrPermission(
+        Permission.modify_hmm,
+    );
     const mutation = useInstallHmm();
 
     return canInstall ? (

@@ -28,7 +28,9 @@ export function AnalysisMappingReferenceTitle({ index, reference }) {
 export function AnalysisMappingSubtractionTitle({ subtractions }) {
     return map(subtractions, (subtraction, index) => (
         <span key={subtraction.id}>
-            <Link to={`/subtractions/${subtraction.id}`}>{subtraction.name}</Link>
+            <Link to={`/subtractions/${subtraction.id}`}>
+                {subtraction.name}
+            </Link>
             {index !== subtractions.length - 1 ? ", " : ""}
         </span>
     ));
@@ -40,14 +42,14 @@ const StyledAnalysisMapping = styled(Box)`
     h3 {
         align-items: flex-end;
         display: flex;
-        font-size: ${props => props.theme.fontSize.xl};
+        font-size: ${(props) => props.theme.fontSize.xl};
         font-weight: normal;
         margin: 15px 0 10px;
         justify-content: space-between;
 
         small {
-            color: ${props => props.theme.color.greyDark};
-            font-size: ${props => props.theme.fontSize.lg};
+            color: ${(props) => props.theme.color.greyDark};
+            font-size: ${(props) => props.theme.fontSize.lg};
             font-weight: 600;
         }
     }
@@ -64,7 +66,12 @@ export function AnalysisMapping({ totalReads, detail }) {
         {
             color: "blue",
             count: readCount,
-            title: <AnalysisMappingReferenceTitle index={index} reference={reference} />,
+            title: (
+                <AnalysisMappingReferenceTitle
+                    index={index}
+                    reference={reference}
+                />
+            ),
         },
     ];
 
@@ -72,14 +79,17 @@ export function AnalysisMapping({ totalReads, detail }) {
         legend.push({
             color: "orange",
             count: subtractedCount,
-            title: <AnalysisMappingSubtractionTitle subtractions={subtractions} />,
+            title: (
+                <AnalysisMappingSubtractionTitle subtractions={subtractions} />
+            ),
         });
     }
 
     return (
         <StyledAnalysisMapping>
             <h3>
-                {numbro(sumPercent).format({ output: "percent", mantissa: 2 })} mapped
+                {numbro(sumPercent).format({ output: "percent", mantissa: 2 })}{" "}
+                mapped
                 <small>
                     {toThousand(readCount)} of {toThousand(totalReads)} reads
                 </small>

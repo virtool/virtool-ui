@@ -14,22 +14,34 @@ interface SubtractionSelectorProps {
     subtractions: object[];
     onChange: (selected: string[]) => void;
 }
-export function SubtractionSelector({ subtractions, selected, onChange }: SubtractionSelectorProps) {
+export function SubtractionSelector({
+    subtractions,
+    selected,
+    onChange,
+}: SubtractionSelectorProps) {
     const [results, term, setTerm] = useFuse(subtractions, ["name"], [1]);
 
     const unselectedSubtractions = filter(
-        results.map(result => result.item || result),
-        subtraction => !selected.includes(subtraction.id),
+        results.map((result) => result.item || result),
+        (subtraction) => !selected.includes(subtraction.id),
     );
-    const selectedSubtractions = intersectionWith(subtractions, selected, (subtraction, id) => subtraction.id === id);
+    const selectedSubtractions = intersectionWith(
+        subtractions,
+        selected,
+        (subtraction, id) => subtraction.id === id,
+    );
 
-    const handleClick = id => onChange(xor(selected, [id]));
+    const handleClick = (id) => onChange(xor(selected, [id]));
 
     return (
         <CreateAnalysisField>
             <CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
             <CreateAnalysisSelector>
-                <CreateAnalysisSelectorSearch label="Filter subtractions" term={term} onChange={setTerm} />
+                <CreateAnalysisSelectorSearch
+                    label="Filter subtractions"
+                    term={term}
+                    onChange={setTerm}
+                />
                 <CreateAnalysisSelectorList
                     items={unselectedSubtractions}
                     render={({ id, name, isDefault }) => (
@@ -46,7 +58,13 @@ export function SubtractionSelector({ subtractions, selected, onChange }: Subtra
             <CreateAnalysisSelected
                 items={selectedSubtractions}
                 render={({ id, name, isDefault }) => (
-                    <SubtractionSelectorItem key={id} id={id} name={name} onClick={handleClick} isDefault={isDefault} />
+                    <SubtractionSelectorItem
+                        key={id}
+                        id={id}
+                        name={name}
+                        onClick={handleClick}
+                        isDefault={isDefault}
+                    />
                 )}
             />
         </CreateAnalysisField>

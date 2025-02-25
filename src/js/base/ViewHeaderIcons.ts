@@ -7,7 +7,7 @@ type ViewHeaderIconsProps = {
 export const ViewHeaderIcons = styled.div<ViewHeaderIconsProps>`
     align-items: center;
     display: flex;
-    font-size: ${props => props.theme.fontSize.lg};
+    font-size: ${(props) => props.theme.fontSize.lg};
     margin-left: auto;
 
     > *:not(:last-child) {

@@ -3,8 +3,15 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeOTU, mockApiEditOTU, mockApiGetOTU } from "../../../../../../tests/fake/otus";
-import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import {
+    createFakeOTU,
+    mockApiEditOTU,
+    mockApiGetOTU,
+} from "../../../../../../tests/fake/otus";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+} from "@tests/fake/references";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { AdministratorRoles } from "@administration/types";
@@ -25,7 +32,9 @@ describe("<RemoveSegment />", () => {
         otu = createFakeOTU();
         otuScope = mockApiGetOTU(otu);
         mockApiGetSettings(createFakeSettings());
-        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(
+            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+        );
 
         path = `/refs/${reference.id}/otus/${otu.id}/schema`;
         searchParams = { removeSegmentName: otu.schema[0].name };
@@ -42,9 +51,13 @@ describe("<RemoveSegment />", () => {
         renderWithRouter(<References />, formatPath(path, searchParams));
 
         expect(await screen.findByText("Remove Segment")).toBeInTheDocument();
-        expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
+        expect(
+            screen.getByText(/Are you sure you want to remove/),
+        ).toBeInTheDocument();
         expect(screen.getAllByText(`${otu.schema[0].name}`)).toHaveLength(2);
-        expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("button", { name: "Confirm" }),
+        ).toBeInTheDocument();
     });
 
     it("should render when [show=false]", async () => {
@@ -52,10 +65,14 @@ describe("<RemoveSegment />", () => {
 
         await waitFor(() => otuScope.done());
 
-        expect(await screen.findByText(`${otu.schema[0].name}`)).toBeInTheDocument();
+        expect(
+            await screen.findByText(`${otu.schema[0].name}`),
+        ).toBeInTheDocument();
 
         expect(screen.queryByText("Remove Segment")).toBeNull();
-        expect(screen.queryByText(/Are you sure you want to remove/)).toBeNull();
+        expect(
+            screen.queryByText(/Are you sure you want to remove/),
+        ).toBeNull();
         expect(screen.queryByRole("button", { name: "Confirm" })).toBeNull();
     });
 
@@ -68,7 +85,9 @@ describe("<RemoveSegment />", () => {
         });
         renderWithRouter(<References />, formatPath(path, searchParams));
 
-        await userEvent.click(await screen.findByRole("button", { name: "Confirm" }));
+        await userEvent.click(
+            await screen.findByRole("button", { name: "Confirm" }),
+        );
 
         scope.done();
     });
@@ -80,6 +99,8 @@ describe("<RemoveSegment />", () => {
 
         await userEvent.keyboard("{Escape}");
 
-        await waitFor(() => expect(screen.queryByText("Remove Segment")).toBeNull());
+        await waitFor(() =>
+            expect(screen.queryByText("Remove Segment")).toBeNull(),
+        );
     });
 });

@@ -1,4 +1,10 @@
-import { Box, ExternalLink, Icon, LoadingPlaceholder, ProgressBarAffixed } from "@base";
+import {
+    Box,
+    ExternalLink,
+    Icon,
+    LoadingPlaceholder,
+    ProgressBarAffixed,
+} from "@base";
 import { useQueryClient } from "@tanstack/react-query";
 import { replace } from "lodash-es";
 import React from "react";
@@ -11,7 +17,7 @@ const HMMInstalling = styled(Box)`
     justify-content: center;
 
     h3 {
-        font-size: ${props => props.theme.fontSize.xl};
+        font-size: ${(props) => props.theme.fontSize.xl};
     }
 
     p {
@@ -26,7 +32,7 @@ const StyledHMMInstaller = styled(Box)`
     padding: 35px 0;
 
     h3 {
-        font-size: ${props => props.theme.fontSize.xl};
+        font-size: ${(props) => props.theme.fontSize.xl};
         font-weight: 500;
         margin: 0 0 3px;
     }
@@ -77,8 +83,13 @@ export function HMMInstaller() {
             <div>
                 <h3>No HMM data available.</h3>
                 <p>
-                    You can download and install the official HMM data automatically from our
-                    <ExternalLink href="https://github.com/virtool/virtool-hmm"> GitHub repository</ExternalLink>.
+                    You can download and install the official HMM data
+                    automatically from our
+                    <ExternalLink href="https://github.com/virtool/virtool-hmm">
+                        {" "}
+                        GitHub repository
+                    </ExternalLink>
+                    .
                 </p>
                 <InstallOption />
             </div>

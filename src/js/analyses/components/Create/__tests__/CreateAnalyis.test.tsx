@@ -2,10 +2,16 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateAnalysis } from "@tests/fake/analyses";
 import { createFakeHMMSearchResults } from "@tests/fake/hmm";
-import { createFakeIndexMinimal, mockApiListIndexes } from "@tests/fake/indexes";
+import {
+    createFakeIndexMinimal,
+    mockApiListIndexes,
+} from "@tests/fake/indexes";
 import { createFakeMLModel, mockApiGetModels } from "@tests/fake/ml";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
-import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
+import {
+    createFakeShortlistSubtraction,
+    mockApiGetShortlistSubtractions,
+} from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
@@ -43,7 +49,10 @@ describe("getCompatibleWorkflows()", () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, searchParams));
+        renderWithRouter(
+            <CreateAnalysis {...props} />,
+            formatPath(basePath, searchParams),
+        );
 
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
@@ -56,18 +65,27 @@ describe("getCompatibleWorkflows()", () => {
         expect(screen.getByText(subtractionShortlist.name)).toBeInTheDocument();
 
         expect(screen.getByText("References")).toBeInTheDocument();
-        expect(screen.getByText(indexMinimal.reference.name)).toBeInTheDocument();
+        expect(
+            screen.getByText(indexMinimal.reference.name),
+        ).toBeInTheDocument();
     });
 
     it("should render error messages when appropriate", async () => {
         const mlModel = createFakeMLModel();
         mockApiGetModels([mlModel]);
 
-        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, searchParams));
+        renderWithRouter(
+            <CreateAnalysis {...props} />,
+            formatPath(basePath, searchParams),
+        );
         expect(await screen.findByText("Analyze")).toBeInTheDocument();
 
-        await userEvent.click(await screen.findByRole("button", { name: "Start" }));
-        expect(await screen.findByText("A reference must be selected")).toBeInTheDocument();
+        await userEvent.click(
+            await screen.findByRole("button", { name: "Start" }),
+        );
+        expect(
+            await screen.findByText("A reference must be selected"),
+        ).toBeInTheDocument();
     });
 
     it.each([
@@ -82,13 +100,22 @@ describe("getCompatibleWorkflows()", () => {
             workflow: id,
         });
 
-        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, { createAnalysisType: id }));
+        renderWithRouter(
+            <CreateAnalysis {...props} />,
+            formatPath(basePath, { createAnalysisType: id }),
+        );
 
         await userEvent.click(await screen.findByText(name));
         await userEvent.click(screen.getByText(subtractionShortlist.name));
         await userEvent.click(await screen.findByRole("combobox"));
-        await userEvent.click(await screen.findByRole("option", { name: indexMinimal.reference.name }));
-        await userEvent.click(await screen.findByRole("button", { name: "Start" }));
+        await userEvent.click(
+            await screen.findByRole("option", {
+                name: indexMinimal.reference.name,
+            }),
+        );
+        await userEvent.click(
+            await screen.findByRole("button", { name: "Start" }),
+        );
 
         await waitFor(() => {
             createAnalysisScope.done();
@@ -104,16 +131,27 @@ describe("getCompatibleWorkflows()", () => {
             workflow: "iimi",
         });
 
-        renderWithRouter(<CreateAnalysis {...props} />, formatPath(basePath, { createAnalysisType: "iimi" }));
+        renderWithRouter(
+            <CreateAnalysis {...props} />,
+            formatPath(basePath, { createAnalysisType: "iimi" }),
+        );
 
         const comboboxes = await screen.findAllByRole("combobox");
 
         await userEvent.click(await screen.findByText("Iimi"));
         await userEvent.click(comboboxes[0]);
-        await userEvent.click(await screen.findByRole("option", { name: mlModel.name }));
+        await userEvent.click(
+            await screen.findByRole("option", { name: mlModel.name }),
+        );
         await userEvent.click(comboboxes[1]);
-        await userEvent.click(await screen.findByRole("option", { name: indexMinimal.reference.name }));
-        await userEvent.click(await screen.findByRole("button", { name: "Start" }));
+        await userEvent.click(
+            await screen.findByRole("option", {
+                name: indexMinimal.reference.name,
+            }),
+        );
+        await userEvent.click(
+            await screen.findByRole("button", { name: "Start" }),
+        );
 
         await waitFor(() => {
             createAnalysisScope.done();

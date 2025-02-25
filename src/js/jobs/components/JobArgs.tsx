@@ -38,7 +38,9 @@ function AnalysisRows({ sample_id, analysis_id }: AnalysisRowsProps) {
                 <Link to={`/samples/${sample_id}`}>{sample_id}</Link>
             </JobArgsRow>
             <JobArgsRow title="Analysis">
-                <Link to={`/samples/${sample_id}/analyses/${analysis_id}`}>{analysis_id}</Link>
+                <Link to={`/samples/${sample_id}/analyses/${analysis_id}`}>
+                    {analysis_id}
+                </Link>
             </JobArgsRow>
         </>
     );
@@ -59,7 +61,9 @@ function BuildIndexRows({ index_id, ref_id }: BuildIndexRowsProps) {
                 <Link to={`/refs/${ref_id}`}>{ref_id}</Link>
             </JobArgsRow>
             <JobArgsRow title="Index">
-                <Link to={`/refs/${ref_id}/indexes/${index_id}`}>{index_id}</Link>
+                <Link to={`/refs/${ref_id}/indexes/${index_id}`}>
+                    {index_id}
+                </Link>
             </JobArgsRow>
         </>
     );
@@ -129,10 +133,16 @@ type GenericJobArgsProps<workflowType, argsType> = {
 };
 
 type JobArgsRowsProps =
-    | GenericJobArgsProps<workflows.pathoscope_bowtie | workflows.nuvs | workflows.aodp, AnalysisRowsProps>
+    | GenericJobArgsProps<
+          workflows.pathoscope_bowtie | workflows.nuvs | workflows.aodp,
+          AnalysisRowsProps
+      >
     | GenericJobArgsProps<workflows.build_index, BuildIndexRowsProps>
     | GenericJobArgsProps<workflows.create_sample, CreateSampleRowsProps>
-    | GenericJobArgsProps<workflows.create_subtraction, CreateSubtractionRowsProps>;
+    | GenericJobArgsProps<
+          workflows.create_subtraction,
+          CreateSubtractionRowsProps
+      >;
 
 /**  The table rows containing arguments used to run a job. */
 function JobArgsRows({ workflow, args }: JobArgsRowsProps) {

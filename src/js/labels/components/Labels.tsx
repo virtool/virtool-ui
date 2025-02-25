@@ -34,7 +34,9 @@ export function Labels() {
             <LabelsHeader title="Labels">
                 <div>
                     <ViewHeaderTitle>Labels</ViewHeaderTitle>
-                    <ViewHeaderSubtitle>Use labels to organize samples.</ViewHeaderSubtitle>
+                    <ViewHeaderSubtitle>
+                        Use labels to organize samples.
+                    </ViewHeaderSubtitle>
                 </div>
 
                 <CreateLabel />
@@ -42,7 +44,7 @@ export function Labels() {
 
             <BoxGroup>
                 {data.length ? (
-                    data.map(label => (
+                    data.map((label) => (
                         <LabelItem
                             key={label.id}
                             name={label.name}

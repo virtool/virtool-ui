@@ -25,15 +25,23 @@ type EditSegmentProps = {
 /**
  * Displays a dialog to edit a segment
  */
-export default function EditSegment({ abbreviation, otuId, name, schema }: EditSegmentProps) {
-    const { value: editSegmentName, unsetValue: unsetEditSegmentName } = useUrlSearchParam<string>("editSegmentName");
+export default function EditSegment({
+    abbreviation,
+    otuId,
+    name,
+    schema,
+}: EditSegmentProps) {
+    const { value: editSegmentName, unsetValue: unsetEditSegmentName } =
+        useUrlSearchParam<string>("editSegmentName");
     const mutation = useUpdateOTU(otuId);
 
     const segment = find(schema, { name: editSegmentName });
 
     function handleSubmit({ segmentName, molecule, required }: FormValues) {
-        const newArray = map(schema, item => {
-            return item.name === editSegmentName ? { name: segmentName, molecule, required } : item;
+        const newArray = map(schema, (item) => {
+            return item.name === editSegmentName
+                ? { name: segmentName, molecule, required }
+                : item;
         });
 
         mutation.mutate(
@@ -47,7 +55,10 @@ export default function EditSegment({ abbreviation, otuId, name, schema }: EditS
     }
 
     return (
-        <Dialog open={Boolean(editSegmentName)} onOpenChange={() => unsetEditSegmentName()}>
+        <Dialog
+            open={Boolean(editSegmentName)}
+            onOpenChange={() => unsetEditSegmentName()}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

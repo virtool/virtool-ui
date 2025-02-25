@@ -5,11 +5,11 @@ import React from "react";
 import styled from "styled-components";
 
 export const ExportPreviewCode = styled.div`
-    background-color: ${props => props.theme.color.greyLightest};
+    background-color: ${(props) => props.theme.color.greyLightest};
     border: ${getBorder};
-    border-radius: ${props => props.theme.borderRadius.sm};
-    box-shadow: ${props => props.theme.boxShadow.inset};
-    color: ${props => props.theme.color.greyDarkest};
+    border-radius: ${(props) => props.theme.borderRadius.sm};
+    box-shadow: ${(props) => props.theme.boxShadow.inset};
+    color: ${(props) => props.theme.color.greyDarkest};
     margin-bottom: 15px;
     min-height: 20px;
     padding: 20px;
@@ -38,7 +38,8 @@ export default function NuVsExportPreview({ mode }: NuVsExportPreviewProps) {
         barExample = "RNA Polymerase|cg30";
 
         previewHeader += "|cg30";
-        previewSequence = "CATTTTATCAATAACAATTAAAACAAACAAACAAAAAAACCTTACCAGCAGCAACAGCAAGATGGCCAAATAGGAACAGATAGGGAC";
+        previewSequence =
+            "CATTTTATCAATAACAATTAAAACAAACAAACAAAAAAACCTTACCAGCAGCAACAGCAAGATGGCCAAATAGGAACAGATAGGGAC";
     } else {
         indexName = "sequence index + orf index";
         indexExample = "orf_1_1";
@@ -47,7 +48,8 @@ export default function NuVsExportPreview({ mode }: NuVsExportPreviewProps) {
         barExample = "RNA Polymerase";
 
         previewHeader = replace(previewHeader, "sequence_1", "orf_1_1");
-        previewSequence = "ELREECRSLRSRCDQLEERVSAMEDEMNEMKREGKFREKRIKRNEQSLQEIWDYVKRPNLRLIGVPESDGENGTKLENTFREKSAME";
+        previewSequence =
+            "ELREECRSLRSRCDQLEERVSAMEDEMNEMKREGKFREKRIKRNEQSLQEIWDYVKRPNLRLIGVPESDGENGTKLENTFREKSAME";
     }
 
     return (

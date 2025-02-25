@@ -22,7 +22,11 @@ export function JobStatus({ state, progress }: JobStatusProps) {
             {state === "complete" ? (
                 <JobStateIcon state={state} />
             ) : (
-                <ProgressCircle size={sizes.md} state={state} progress={progress} />
+                <ProgressCircle
+                    size={sizes.md}
+                    state={state}
+                    progress={progress}
+                />
             )}
         </>
     );

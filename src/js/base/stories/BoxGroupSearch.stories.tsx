@@ -8,7 +8,8 @@ const meta: Meta<typeof BoxGroupSearch> = {
     parameters: {
         docs: {
             description: {
-                component: "A search bar component useful for filtering or searching for items.",
+                component:
+                    "A search bar component useful for filtering or searching for items.",
             },
         },
     },

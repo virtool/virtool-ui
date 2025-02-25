@@ -12,7 +12,11 @@ type PaginationNextProps = {
 /**
  * A styled next button link for use in a pagination component
  */
-export function PaginationNext({ className, disabled, to }: PaginationNextProps) {
+export function PaginationNext({
+    className,
+    disabled,
+    to,
+}: PaginationNextProps) {
     return (
         <PaginationItem>
             <LinkButton

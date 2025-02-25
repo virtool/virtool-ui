@@ -59,9 +59,14 @@ export default function JobDetail() {
             <ViewHeader title={workflow}>
                 <ViewHeaderTitle>
                     {workflow}
-                    <JobDetailBadge color={color}>{latest.state}</JobDetailBadge>
+                    <JobDetailBadge color={color}>
+                        {latest.state}
+                    </JobDetailBadge>
                 </ViewHeaderTitle>
-                <ViewHeaderAttribution time={data.status[0].timestamp} user={data.user.handle} />
+                <ViewHeaderAttribution
+                    time={data.status[0].timestamp}
+                    user={data.user.handle}
+                />
             </ViewHeader>
 
             <JobArgs workflow={data.workflow} args={data.args} />

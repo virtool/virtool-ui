@@ -3,11 +3,20 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
-import { createFakeIndexMinimal, mockApiListIndexes } from "@tests/fake/indexes";
+import {
+    createFakeIndexMinimal,
+    mockApiListIndexes,
+} from "@tests/fake/indexes";
 import { createFakeLabelNested, mockApiGetLabels } from "@tests/fake/labels";
 import { createFakeMLModelMinimal, mockApiGetModels } from "@tests/fake/ml";
-import { createFakeSampleMinimal, mockApiGetSamples } from "@tests/fake/samples";
-import { createFakeShortlistSubtraction, mockApiGetShortlistSubtractions } from "@tests/fake/subtractions";
+import {
+    createFakeSampleMinimal,
+    mockApiGetSamples,
+} from "@tests/fake/samples";
+import {
+    createFakeShortlistSubtraction,
+    mockApiGetShortlistSubtractions,
+} from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
@@ -24,7 +33,10 @@ describe("<SamplesList />", () => {
         mockApiListIndexes([createFakeIndexMinimal()]);
         mockApiGetLabels([createFakeLabelNested()]);
         mockApiGetModels([createFakeMLModelMinimal()]);
-        mockApiGetShortlistSubtractions([createFakeShortlistSubtraction()], true);
+        mockApiGetShortlistSubtractions(
+            [createFakeShortlistSubtraction()],
+            true,
+        );
     });
 
     it("should render correctly", async () => {
@@ -47,16 +59,22 @@ describe("<SamplesList />", () => {
     });
 
     it("should render create button when [canModify=true]", async () => {
-        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(
+            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+        );
         renderWithRouter(<SamplesList />, path);
 
-        expect(await screen.findByRole("link", { name: "Create" })).toBeInTheDocument();
+        expect(
+            await screen.findByRole("link", { name: "Create" }),
+        ).toBeInTheDocument();
     });
 
     it("should not render create button when [canModify=false]", () => {
         mockApiGetAccount(createFakeAccount({ administrator_role: null }));
         renderWithRouter(<SamplesList />, path);
 
-        expect(screen.queryByRole("link", { name: "Create" })).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("link", { name: "Create" }),
+        ).not.toBeInTheDocument();
     });
 });

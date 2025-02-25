@@ -1,7 +1,13 @@
 import React from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import styled from "styled-components";
-import { InputError, InputGroup, InputLabel, InputSimple, TextArea } from "../../base";
+import {
+    InputError,
+    InputGroup,
+    InputLabel,
+    InputSimple,
+    TextArea,
+} from "../../base";
 import { ReferenceDataType } from "../types";
 
 const StyledInputGroup = styled(InputGroup)`
@@ -48,7 +54,10 @@ export function ReferenceForm({ errors, mode, register }: ReferenceFormProps) {
         <>
             <StyledInputGroup>
                 <InputLabel htmlFor="name">Name</InputLabel>
-                <InputSimple id="name" {...register("name", { required: "Required Field" })} />
+                <InputSimple
+                    id="name"
+                    {...register("name", { required: "Required Field" })}
+                />
                 <InputError>{errors.name?.message}</InputError>
             </StyledInputGroup>
 

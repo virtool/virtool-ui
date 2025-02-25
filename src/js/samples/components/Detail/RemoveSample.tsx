@@ -14,7 +14,8 @@ type RemoveSampleProps = {
  * Displays a dialog for removing a sample
  */
 export default function RemoveSample({ id, name }: RemoveSampleProps) {
-    const { open: openRemoveSample, setOpen: setOpenRemoveSample } = useDialogParam("openRemoveSample");
+    const { open: openRemoveSample, setOpen: setOpenRemoveSample } =
+        useDialogParam("openRemoveSample");
     const mutation = useRemoveSample();
 
     return (

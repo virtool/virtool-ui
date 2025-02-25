@@ -26,17 +26,21 @@ export default function APIKeyAdministratorInfo() {
         return null;
     }
 
-    return hasSufficientAdminRole(AdministratorRoles.BASE, data.administrator_role) ? (
+    return hasSufficientAdminRole(
+        AdministratorRoles.BASE,
+        data.administrator_role,
+    ) ? (
         <StyledAPIKeyAdministratorInfo color="purple">
             <div>
                 <p>
                     <strong>
-                        You are an administrator and can create API keys with any permissions granted by that role.
+                        You are an administrator and can create API keys with
+                        any permissions granted by that role.
                     </strong>
                 </p>
                 <p>
-                    If your administrator role is reduced or removed, this API key will revert to your new limited set
-                    of permissions.
+                    If your administrator role is reduced or removed, this API
+                    key will revert to your new limited set of permissions.
                 </p>
             </div>
         </StyledAPIKeyAdministratorInfo>

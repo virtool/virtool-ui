@@ -1,4 +1,12 @@
-import { DialogFooter, InputError, InputGroup, InputLabel, InputSimple, LoadingPlaceholder, SaveButton } from "@base";
+import {
+    DialogFooter,
+    InputError,
+    InputGroup,
+    InputLabel,
+    InputSimple,
+    LoadingPlaceholder,
+    SaveButton,
+} from "@base";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
@@ -19,7 +27,9 @@ type FormValues = {
  * A form for creating a subtraction
  */
 export function CreateSubtractionForm() {
-    const { setOpen: setOpenCreateSubtraction } = useDialogParam("openCreateSubtraction");
+    const { setOpen: setOpenCreateSubtraction } = useDialogParam(
+        "openCreateSubtraction",
+    );
 
     const {
         hasRestored,
@@ -58,10 +68,17 @@ export function CreateSubtractionForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <RestoredAlert hasRestored={hasRestored} name="subtraction" resetForm={reset} />
+            <RestoredAlert
+                hasRestored={hasRestored}
+                name="subtraction"
+                resetForm={reset}
+            />
             <InputGroup>
                 <InputLabel htmlFor="name">Name</InputLabel>
-                <InputSimple id="name" {...register("name", { required: "A name is required" })} />
+                <InputSimple
+                    id="name"
+                    {...register("name", { required: "A name is required" })}
+                />
                 <InputError>{errors.name?.message}</InputError>
             </InputGroup>
 

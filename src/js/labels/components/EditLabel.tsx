@@ -1,6 +1,13 @@
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle, Icon } from "../../base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+    Icon,
+} from "../../base";
 import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 
@@ -37,7 +44,7 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
     }
 
     return (
-        <Dialog open={show} onOpenChange={show => setShow(show)}>
+        <Dialog open={show} onOpenChange={(show) => setShow(show)}>
             <Button as={DialogTrigger} size="small">
                 <Icon name="pen" />
                 <span>Edit</span>
@@ -46,7 +53,12 @@ export function EditLabel({ id, color, name, description }: EditLabelProps) {
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Edit a label</DialogTitle>
-                    <LabelForm color={color} description={description} name={name} onSubmit={handleSubmit} />
+                    <LabelForm
+                        color={color}
+                        description={description}
+                        name={name}
+                        onSubmit={handleSubmit}
+                    />
                 </DialogContent>
             </DialogPortal>
         </Dialog>

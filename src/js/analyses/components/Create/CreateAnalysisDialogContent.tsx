@@ -7,7 +7,14 @@ import React from "react";
  */
 export function CreateAnalysisDialogContent({ children }) {
     return (
-        <DialogContent className={cn("max-h-[90vh]", "overflow-auto", "top-[45%]", "w-[700px]")}>
+        <DialogContent
+            className={cn(
+                "max-h-[90vh]",
+                "overflow-auto",
+                "top-[45%]",
+                "w-[700px]",
+            )}
+        >
             <div className={cn("flex", "flex-col", "h-full")}>{children}</div>
         </DialogContent>
     );

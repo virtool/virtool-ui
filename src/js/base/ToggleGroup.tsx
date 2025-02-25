@@ -9,7 +9,12 @@ type ToggleGroupProps = {
     value: string;
 };
 
-export function ToggleGroup({ children, className, onValueChange, value }: ToggleGroupProps) {
+export function ToggleGroup({
+    children,
+    className,
+    onValueChange,
+    value,
+}: ToggleGroupProps) {
     function handleValueChange(value: string) {
         if (value) {
             onValueChange(value);

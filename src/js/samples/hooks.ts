@@ -12,14 +12,18 @@ import { useFetchSample } from "./queries";
  */
 export function useCheckCanEditSample(sampleId: string) {
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
-    const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+    const { data: sample, isPending: isPendingSample } =
+        useFetchSample(sampleId);
 
     if (isPendingSample || isPendingAccount) {
         return { hasPermission: false, isPending: true };
     }
 
     const hasPermission =
-        hasSufficientAdminRole(AdministratorRoles.FULL, account.administrator_role) ||
+        hasSufficientAdminRole(
+            AdministratorRoles.FULL,
+            account.administrator_role,
+        ) ||
         sample.all_write ||
         sample.user.id === account.id ||
         (sample.group_write && some(account.groups, { id: sample.group }));

@@ -5,9 +5,9 @@ import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 
 const StyledSampleItemWorkflowTagNone = styled(BaseWorkflowTag)`
-    background-color: ${props => props.theme.color.purpleLightest};
-    border: 1px solid ${props => props.theme.color.purple};
-    color: ${props => props.theme.color.purpleDarkest};
+    background-color: ${(props) => props.theme.color.purpleLightest};
+    border: 1px solid ${(props) => props.theme.color.purple};
+    color: ${(props) => props.theme.color.purpleDarkest};
 `;
 
 /**

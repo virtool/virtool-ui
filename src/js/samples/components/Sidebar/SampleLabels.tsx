@@ -10,7 +10,7 @@ import { SampleSidebarSelector } from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
     display: flex;
-    color: ${props => getColor({ theme: props.theme, color: "greyDarkest" })};
+    color: ${(props) => getColor({ theme: props.theme, color: "greyDarkest" })};
     a {
         margin-left: 5px;
         font-size: ${getFontSize("md")};
@@ -28,7 +28,10 @@ type SampleLabelsProps = {
 /**
  * Displays a sidebar to manage sample labels
  */
-export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsProps) {
+export default function SampleLabels({
+    sampleLabels,
+    onUpdate,
+}: SampleLabelsProps) {
     const { data, isPending } = useFetchLabels();
 
     if (isPending) {
@@ -41,7 +44,11 @@ export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsPro
                 Labels
                 <SampleSidebarSelector
                     render={({ name, color, description }) => (
-                        <SampleLabelInner name={name} color={color} description={description} />
+                        <SampleLabelInner
+                            name={name}
+                            color={color}
+                            description={description}
+                        />
                     )}
                     sampleItems={data}
                     selectedItems={sampleLabels}
@@ -52,10 +59,13 @@ export default function SampleLabels({ sampleLabels, onUpdate }: SampleLabelsPro
                     manageLink={"/samples/labels"}
                 />
             </SidebarHeader>
-            <SampleSidebarList items={data.filter(item => sampleLabels.includes(item.id))} />
+            <SampleSidebarList
+                items={data.filter((item) => sampleLabels.includes(item.id))}
+            />
             {Boolean(data.length) || (
                 <SampleLabelsFooter>
-                    No labels found. <Link to="/samples/labels">Create one</Link>.
+                    No labels found.{" "}
+                    <Link to="/samples/labels">Create one</Link>.
                 </SampleLabelsFooter>
             )}
         </SideBarSection>

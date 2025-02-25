@@ -22,7 +22,11 @@ type UploaderDialogProps = {
  * This component is used in `UploadOverlay`, which provides the upload state, controls
  * visibility, and positions the dialog.
  */
-export default function UploaderDialog({ remaining, speed, uploads }: UploaderDialogProps): JSX.Element {
+export default function UploaderDialog({
+    remaining,
+    speed,
+    uploads,
+}: UploaderDialogProps): JSX.Element {
     if (uploads.length === 0) {
         return null;
     }
@@ -44,18 +48,20 @@ export default function UploaderDialog({ remaining, speed, uploads }: UploaderDi
                     <Badge>{uploads.length}</Badge>
                 </div>
                 <div className="flex justify-between">
-                    {uploads.every(upload => upload.progress === 100) ? (
+                    {uploads.every((upload) => upload.progress === 100) ? (
                         <>Finishing uploads</>
                     ) : (
                         <>
-                            {formattedRemaining && <span>{formattedRemaining} remaining</span>}
+                            {formattedRemaining && (
+                                <span>{formattedRemaining} remaining</span>
+                            )}
                             <span>{formattedSpeed}/s</span>
                         </>
                     )}
                 </div>
             </div>
             <div className="max-h-96 overflow-y-scroll">
-                {uploads.map(upload => (
+                {uploads.map((upload) => (
                     <UploaderItem key={upload.localId} {...upload} />
                 ))}
             </div>

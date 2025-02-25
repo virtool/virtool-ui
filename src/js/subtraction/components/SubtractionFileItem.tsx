@@ -7,7 +7,9 @@ type StyledSubtractionFileItemProps = {
     error: string;
 };
 
-const StyledSubtractionFileItem = styled(SelectBoxGroupSection)<StyledSubtractionFileItemProps>`
+const StyledSubtractionFileItem = styled(
+    SelectBoxGroupSection,
+)<StyledSubtractionFileItemProps>`
     display: flex;
     justify-content: space-between;
 `;
@@ -32,9 +34,21 @@ type SubtractionFileItemProps = {
 /**
  * A condensed file for use in a list of subtraction files
  */
-export function SubtractionFileItem({ active, error, id, name, onClick, uploaded_at, user }: SubtractionFileItemProps) {
+export function SubtractionFileItem({
+    active,
+    error,
+    id,
+    name,
+    onClick,
+    uploaded_at,
+    user,
+}: SubtractionFileItemProps) {
     return (
-        <StyledSubtractionFileItem active={active} onClick={() => onClick([id])} error={error}>
+        <StyledSubtractionFileItem
+            active={active}
+            onClick={() => onClick([id])}
+            error={error}
+        >
             <strong>{name}</strong>
             <Attribution user={user.handle} time={uploaded_at} />
         </StyledSubtractionFileItem>

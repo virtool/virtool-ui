@@ -7,7 +7,7 @@ import { Label } from "@labels/types";
  * @returns A promise resolving to a list of labels
  */
 export function fetchLabels(): Promise<Label[]> {
-    return Request.get("/labels").then(res => res.body);
+    return Request.get("/labels").then((res) => res.body);
 }
 
 /**
@@ -18,14 +18,18 @@ export function fetchLabels(): Promise<Label[]> {
  * @param color - The hex encoded color for the label
  * @returns A promise resolving to creating a label
  */
-export function createLabel(name: string, description: string, color: string): Promise<Label> {
+export function createLabel(
+    name: string,
+    description: string,
+    color: string,
+): Promise<Label> {
     return Request.post("/labels")
         .send({
             name,
             description,
             color,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -37,14 +41,19 @@ export function createLabel(name: string, description: string, color: string): P
  * @param color - The updated color of the label
  * @returns A promise resolving to updating a label
  */
-export function updateLabel(labelId: number, name: string, description: string, color: string): Promise<Label> {
+export function updateLabel(
+    labelId: number,
+    name: string,
+    description: string,
+    color: string,
+): Promise<Label> {
     return Request.patch(`/labels/${labelId}`)
         .send({
             name,
             description,
             color,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -54,5 +63,5 @@ export function updateLabel(labelId: number, name: string, description: string, 
  * @returns A promise resolving to removing a label
  */
 export function removeLabel(labelId: number): Promise<null> {
-    return Request.delete(`/labels/${labelId}`).then(res => res.body);
+    return Request.delete(`/labels/${labelId}`).then((res) => res.body);
 }

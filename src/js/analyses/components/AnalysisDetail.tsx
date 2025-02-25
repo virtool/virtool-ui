@@ -30,9 +30,13 @@ const UnsupportedAnalysis = styled(Box)`
 
 /** Base component viewing all supported analysis */
 export default function AnalysisDetail() {
-    const { analysisId, sampleId } = usePathParams<{ analysisId: string; sampleId: string }>();
+    const { analysisId, sampleId } = usePathParams<{
+        analysisId: string;
+        sampleId: string;
+    }>();
     const { data: analysis, isPending, error } = useGetAnalysis(analysisId);
-    const { data: sample, isPending: isPendingSample } = useFetchSample(sampleId);
+    const { data: sample, isPending: isPendingSample } =
+        useFetchSample(sampleId);
 
     if (error?.response.status === 404) {
         return <NotFound />;
@@ -45,7 +49,10 @@ export default function AnalysisDetail() {
     if (!analysis.ready) {
         return (
             <Box>
-                <LoadingPlaceholder className="mt-5" message="Analysis in progress" />
+                <LoadingPlaceholder
+                    className="mt-5"
+                    message="Analysis in progress"
+                />
             </Box>
         );
     }
@@ -71,10 +78,12 @@ export default function AnalysisDetail() {
         <div>
             <SubviewHeader>
                 <SubviewHeaderTitle>
-                    {getWorkflowDisplayName(analysis.workflow)} for {sample.name}
+                    {getWorkflowDisplayName(analysis.workflow)} for{" "}
+                    {sample.name}
                 </SubviewHeaderTitle>
                 <SubviewHeaderAttribution>
-                    {analysis.user.handle} started <RelativeTime time={analysis.created_at} />
+                    {analysis.user.handle} started{" "}
+                    <RelativeTime time={analysis.created_at} />
                 </SubviewHeaderAttribution>
             </SubviewHeader>
 

@@ -14,8 +14,13 @@ import { UsersList } from "./UsersList";
  */
 export function ManageUsers() {
     const [term, setTerm] = React.useState("");
-    const { value: status, setValue: setStatus } = useUrlSearchParam<string>("status", "active");
-    const { hasPermission, isPending } = useCheckAdminRole(AdministratorRoles.USERS);
+    const { value: status, setValue: setStatus } = useUrlSearchParam<string>(
+        "status",
+        "active",
+    );
+    const { hasPermission, isPending } = useCheckAdminRole(
+        AdministratorRoles.USERS,
+    );
 
     if (isPending) {
         return <LoadingPlaceholder />;
@@ -30,12 +35,14 @@ export function ManageUsers() {
                             name="search"
                             aria-label="search"
                             value={term}
-                            onChange={e => setTerm(e.target.value)}
+                            onChange={(e) => setTerm(e.target.value)}
                         />
                     </div>
                     <ToggleGroup value={status} onValueChange={setStatus}>
                         <ToggleGroupItem value="active">Active</ToggleGroupItem>
-                        <ToggleGroupItem value="deactivated">Deactivated</ToggleGroupItem>
+                        <ToggleGroupItem value="deactivated">
+                            Deactivated
+                        </ToggleGroupItem>
                     </ToggleGroup>
                     <CreateUser />
                 </Toolbar>

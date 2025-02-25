@@ -1,6 +1,9 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { referenceQueryKeys, useUpdateReferenceMember } from "@references/queries";
+import {
+    referenceQueryKeys,
+    useUpdateReferenceMember,
+} from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUrlSearchParam } from "@utils/hooks";
@@ -19,8 +22,13 @@ type EditReferenceMemberProps = {
 /**
  * Displays a dialog to modify rights for a member
  */
-export default function EditReferenceMember({ noun, refId, member }: EditReferenceMemberProps) {
-    const { value: editId, unsetValue: unsetEditId } = useUrlSearchParam<string>(`edit${noun}Id`);
+export default function EditReferenceMember({
+    noun,
+    refId,
+    member,
+}: EditReferenceMemberProps) {
+    const { value: editId, unsetValue: unsetEditId } =
+        useUrlSearchParam<string>(`edit${noun}Id`);
     const mutation = useUpdateReferenceMember(noun);
     const queryClient = useQueryClient();
 
@@ -35,14 +43,21 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
             },
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: referenceQueryKeys.detail(refId) });
+                    queryClient.invalidateQueries({
+                        queryKey: referenceQueryKeys.detail(refId),
+                    });
                 },
             },
         );
     }
 
-    const rightComponents = map(rights, right => (
-        <MemberRight key={right} right={right} enabled={member?.[right]} onToggle={handleChange} />
+    const rightComponents = map(rights, (right) => (
+        <MemberRight
+            key={right}
+            right={right}
+            enabled={member?.[right]}
+            onToggle={handleChange}
+        />
     ));
 
     return (
@@ -51,7 +66,9 @@ export default function EditReferenceMember({ noun, refId, member }: EditReferen
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>
-                        Modify Rights for {(member as ReferenceUser)?.handle || (member as ReferenceGroup)?.name}
+                        Modify Rights for{" "}
+                        {(member as ReferenceUser)?.handle ||
+                            (member as ReferenceGroup)?.name}
                     </DialogTitle>
                     {rightComponents}
                 </DialogContent>

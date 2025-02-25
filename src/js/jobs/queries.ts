@@ -8,7 +8,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 export const jobQueryKeys = {
     all: () => ["job"] as const,
     lists: () => ["job", "list"] as const,
-    list: (filters: Array<string | number | boolean>) => ["job", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) =>
+        ["job", "list", ...filters] as const,
     details: () => ["job", "details"] as const,
     detail: (jobId: string) => ["job", "details", jobId] as const,
 };
@@ -36,5 +37,8 @@ export function useFindJobs(page: number, per_page: number, states: string[]) {
  * @returns Query results containing the job
  */
 export function useFetchJob(jobId: string) {
-    return useQuery<Job>({ queryKey: jobQueryKeys.detail(jobId), queryFn: () => getJob(jobId) });
+    return useQuery<Job>({
+        queryKey: jobQueryKeys.detail(jobId),
+        queryFn: () => getJob(jobId),
+    });
 }

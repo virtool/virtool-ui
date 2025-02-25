@@ -21,7 +21,9 @@ function calculateStrokeWidth({ size }: ProgressCircleBaseProps): number {
  * @param size - The total size of the progress circle in pixels
  * @returns The stroke width in pixels
  */
-function calculateProgressCircleRadius({ size }: ProgressCircleBaseProps): number {
+function calculateProgressCircleRadius({
+    size,
+}: ProgressCircleBaseProps): number {
     return size / 2 - calculateStrokeWidth({ size });
 }
 
@@ -42,7 +44,10 @@ function calculateCircumference({ size }: ProgressCircleBaseProps): number {
  * @param progress - the amount of progress from 0 to 1
  * @returns the stroke offset in pixels
  */
-function calculateStrokeDashOffset({ progress, ...props }: ProgressCircleIndicatorProps): number {
+function calculateStrokeDashOffset({
+    progress,
+    ...props
+}: ProgressCircleIndicatorProps): number {
     return (1 - progress) * calculateCircumference(props);
 }
 
@@ -68,8 +73,8 @@ type ProgressCircleBaseProps = {
  * @param size - The total size of the progress circle in pixels
  */
 const StyledProgressCircle = styled.svg<ProgressCircleBaseProps>`
-    width: ${props => props.size}px;
-    height: ${props => props.size}px;
+    width: ${(props) => props.size}px;
+    height: ${(props) => props.size}px;
     transform: rotate(-90deg);
 `;
 
@@ -81,8 +86,8 @@ const StyledProgressCircle = styled.svg<ProgressCircleBaseProps>`
  */
 
 const ProgressCircleBase = styled.circle<ProgressCircleBaseProps>`
-    cx: ${props => props.size / 2}px;
-    cy: ${props => props.size / 2}px;
+    cx: ${(props) => props.size / 2}px;
+    cy: ${(props) => props.size / 2}px;
     r: ${calculateProgressCircleRadius}px;
     fill: transparent;
     stroke-width: ${calculateStrokeWidth}px;
@@ -104,7 +109,9 @@ type ProgressCircleIndicatorProps = ProgressCircleBaseProps & {
  * @param progress - The amount of progress that has been made from 0 to 1
  * @returns The ProgressCircle indicator
  */
-const ProgressCircleIndicator = styled(ProgressCircleBase)<ProgressCircleIndicatorProps>`
+const ProgressCircleIndicator = styled(
+    ProgressCircleBase,
+)<ProgressCircleIndicatorProps>`
     stroke-dashoffset: ${calculateStrokeDashOffset}px;
 `;
 
@@ -119,13 +126,18 @@ type ProgressCircleTrackProps = ProgressCircleBaseProps & {
  * @param state - The current state of the job or task
  * @returns The progress circle track
  */
-const ProgressCircleTrack = styled(ProgressCircleBase)<ProgressCircleTrackProps>`
-    stroke-dashoffset: ${props =>
-        props.state === "waiting" ? `${calculateStrokeDashOffset({ progress: 0.75, size: props.size })}px` : "0px"};
+const ProgressCircleTrack = styled(
+    ProgressCircleBase,
+)<ProgressCircleTrackProps>`
+    stroke-dashoffset: ${(props) =>
+        props.state === "waiting"
+            ? `${calculateStrokeDashOffset({ progress: 0.75, size: props.size })}px`
+            : "0px"};
     transform-box: fill-box;
     transform-origin: center;
     animation: ${rotate} 0.75s linear infinite;
-    animation-play-state: ${props => (props.state === "waiting" ? "running" : "paused")};
+    animation-play-state: ${(props) =>
+        props.state === "waiting" ? "running" : "paused"};
 `;
 
 const fade = keyframes`
@@ -147,11 +159,11 @@ const fade = keyframes`
  * @returns An Indeterminately pulsing progress indicator
  */
 const ProgressCircleCenter = styled.circle<ProgressCircleTrackProps>`
-    cx: ${props => props.size / 2}px;
-    cy: ${props => props.size / 2}px;
-    r: ${props => calculateProgressCircleRadius(props) / 2.5}px;
-    fill: ${props => getColor({ theme: props.theme, color: "blue" })};
-    opacity: ${props => (props.state === "waiting" ? 0 : 1)};
+    cx: ${(props) => props.size / 2}px;
+    cy: ${(props) => props.size / 2}px;
+    r: ${(props) => calculateProgressCircleRadius(props) / 2.5}px;
+    fill: ${(props) => getColor({ theme: props.theme, color: "blue" })};
+    opacity: ${(props) => (props.state === "waiting" ? 0 : 1)};
     animation: ${fade} 1.25s ease-in-out infinite alternate;
     vector-effect: non-scaling-stroke;
     transform-box: fill-box;
@@ -201,7 +213,11 @@ type ProgressCircleProps = {
  * @returns A determinate or indeterminate progress circle
  */
 
-export function ProgressCircle({ progress, size = sizes.md, state = JobState.waiting }: ProgressCircleProps) {
+export function ProgressCircle({
+    progress,
+    size = sizes.md,
+    state = JobState.waiting,
+}: ProgressCircleProps) {
     const circleSize = progressCircleSizes[size];
     const color = determineProgressColour(state);
 
@@ -209,15 +225,25 @@ export function ProgressCircle({ progress, size = sizes.md, state = JobState.wai
         <Root value={progress} asChild>
             <StyledProgressCircle size={circleSize}>
                 <ProgressCircleTrack
-                    color={color === "grey" ? `${color}Light` : `${color}Lightest`}
+                    color={
+                        color === "grey" ? `${color}Light` : `${color}Lightest`
+                    }
                     size={circleSize}
                     state={state}
                 />
                 {(state === "preparing" || state === "running") && (
-                    <ProgressCircleCenter color={color} size={circleSize} state={state} />
+                    <ProgressCircleCenter
+                        color={color}
+                        size={circleSize}
+                        state={state}
+                    />
                 )}
                 <Indicator asChild>
-                    <ProgressCircleIndicator color={color} size={circleSize} progress={progress / 100} />
+                    <ProgressCircleIndicator
+                        color={color}
+                        size={circleSize}
+                        progress={progress / 100}
+                    />
                 </Indicator>
             </StyledProgressCircle>
         </Root>

@@ -45,7 +45,10 @@ export function CreatePathoscopeForm({
         formState: { errors },
         watch,
     } = useForm<createPathoscopeFormValues>({
-        defaultValues: { workflow: Workflows.pathoscope_bowtie, subtractions: defaultSubtractions },
+        defaultValues: {
+            workflow: Workflows.pathoscope_bowtie,
+            subtractions: defaultSubtractions,
+        },
     });
 
     return (
@@ -53,7 +56,11 @@ export function CreatePathoscopeForm({
             <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <SubtractionSelector subtractions={subtractions} selected={value} onChange={onChange} />
+                    <SubtractionSelector
+                        subtractions={subtractions}
+                        selected={value}
+                        onChange={onChange}
+                    />
                 )}
                 name="subtractions"
             />
@@ -61,15 +68,24 @@ export function CreatePathoscopeForm({
             <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <IndexSelector indexes={compatibleIndexes} selected={value} onChange={onChange} />
+                    <IndexSelector
+                        indexes={compatibleIndexes}
+                        selected={value}
+                        onChange={onChange}
+                    />
                 )}
                 name="index"
                 rules={{ required: true }}
             />
-            <CreateAnalysisInputError>{errors.index && "A reference must be selected"}</CreateAnalysisInputError>
+            <CreateAnalysisInputError>
+                {errors.index && "A reference must be selected"}
+            </CreateAnalysisInputError>
 
             <CreateAnalysisFooter>
-                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("index") ? 1 : 0} />
+                <CreateAnalysisSummary
+                    sampleCount={sampleCount}
+                    indexCount={watch("index") ? 1 : 0}
+                />
                 <Button type="submit" color="blue">
                     Start
                 </Button>

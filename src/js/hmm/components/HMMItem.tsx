@@ -36,9 +36,14 @@ type HMMItemProps = {
  * A condensed hmm item for use in a list of hmms
  */
 export default function HMMItem({ hmm }: HMMItemProps) {
-    const filteredFamilies = reject(keys(hmm.families), family => family === "None");
+    const filteredFamilies = reject(
+        keys(hmm.families),
+        (family) => family === "None",
+    );
 
-    const labelComponents = map(filteredFamilies.slice(0, 3), (family, i) => <Label key={i}>{family}</Label>);
+    const labelComponents = map(filteredFamilies.slice(0, 3), (family, i) => (
+        <Label key={i}>{family}</Label>
+    ));
 
     return (
         <StyledHMMItem>

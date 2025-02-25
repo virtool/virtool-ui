@@ -39,7 +39,7 @@ const Template: Story = {
         },
     },
 
-    render: args => <FileItem {...args} />,
+    render: (args) => <FileItem {...args} />,
 };
 
 export const Default: Story = Template;

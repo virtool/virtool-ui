@@ -1,11 +1,21 @@
 import { useListHmms } from "@/hmm/queries";
-import { LoadingPlaceholder, NoneFoundBox, Pagination, ViewHeader, ViewHeaderTitle } from "@base";
+import {
+    LoadingPlaceholder,
+    NoneFoundBox,
+    Pagination,
+    ViewHeader,
+    ViewHeaderTitle,
+} from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
 import { useFindModels } from "@ml/queries";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
-import { useListSearchParam, usePageParam, useUrlSearchParam } from "@utils/hooks";
+import {
+    useListSearchParam,
+    usePageParam,
+    useUrlSearchParam,
+} from "@utils/hooks";
 import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
 import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
@@ -29,7 +39,7 @@ const SamplesListContent = styled.div`
 
 const StyledSamplesList = styled.div`
     display: grid;
-    grid-column-gap: ${props => props.theme.gap.column};
+    grid-column-gap: ${(props) => props.theme.gap.column};
     grid-template-columns: minmax(auto, 1150px) max(320px, 10%);
 `;
 
@@ -38,9 +48,12 @@ const StyledSamplesList = styled.div`
  */
 export default function SamplesList() {
     const { page: urlPage } = usePageParam();
-    const { value: term, setValue: setTerm } = useUrlSearchParam<string>("term");
-    const { values: filterLabels, setValues: setFilterLabels } = useListSearchParam<string>("labels");
-    const { values: filterWorkflows, setValues: setFilterWorkflows } = useListSearchParam<string>("workflows");
+    const { value: term, setValue: setTerm } =
+        useUrlSearchParam<string>("term");
+    const { values: filterLabels, setValues: setFilterLabels } =
+        useListSearchParam<string>("labels");
+    const { values: filterWorkflows, setValues: setFilterWorkflows } =
+        useListSearchParam<string>("workflows");
 
     const { data: samples, isPending: isPendingSamples } = useListSamples(
         urlPage,
@@ -52,8 +65,10 @@ export default function SamplesList() {
     const { data: labels, isPending: isPendingLabels } = useFetchLabels();
     const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
     const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
-    const { data: subtractionShortlist, isPending: isPendingSubtractionShortlist } =
-        useFetchSubtractionsShortlist(true);
+    const {
+        data: subtractionShortlist,
+        isPending: isPendingSubtractionShortlist,
+    } = useFetchSubtractionsShortlist(true);
     const { data: mlModels, isPending: isPendingMLModels } = useFindModels();
 
     const [selected, setSelected] = useState([]);
@@ -69,7 +84,9 @@ export default function SamplesList() {
         return <LoadingPlaceholder />;
     }
 
-    const filteredIndexes = map(groupBy(indexes, "reference.id"), group => maxBy(group, "version"));
+    const filteredIndexes = map(groupBy(indexes, "reference.id"), (group) =>
+        maxBy(group, "version"),
+    );
 
     const { documents, page, page_count, total_count } = samples;
 
@@ -102,21 +119,28 @@ export default function SamplesList() {
                 indexes={filteredIndexes}
                 mlModels={mlModels}
                 onClear={() => setSelected([])}
-                samples={intersectionWith(documents, selected, (document, id) => document.id === id)}
+                samples={intersectionWith(
+                    documents,
+                    selected,
+                    (document, id) => document.id === id,
+                )}
                 subtractionOptions={subtractionShortlist}
             />
             <StyledSamplesList>
                 <SamplesListHeader>
                     <ViewHeader title="Samples">
                         <ViewHeaderTitle>
-                            Samples <ViewHeaderTitleBadge>{total_count}</ViewHeaderTitleBadge>
+                            Samples{" "}
+                            <ViewHeaderTitleBadge>
+                                {total_count}
+                            </ViewHeaderTitleBadge>
                         </ViewHeaderTitle>
                     </ViewHeader>
                     <SampleToolbar
                         selected={selected}
                         onClear={() => setSelected([])}
                         term={term}
-                        onChange={e => setTerm(e.target.value)}
+                        onChange={(e) => setTerm(e.target.value)}
                     />
                 </SamplesListHeader>
                 <SamplesListContent>
@@ -135,12 +159,18 @@ export default function SamplesList() {
                 {selected.length ? (
                     <SampleLabels
                         labels={labels}
-                        selectedSamples={intersectionWith(documents, selected, (document, id) => document.id === id)}
+                        selectedSamples={intersectionWith(
+                            documents,
+                            selected,
+                            (document, id) => document.id === id,
+                        )}
                     />
                 ) : (
                     <SampleFilters
                         labels={labels}
-                        onClickLabels={e => setFilterLabels(xor(filterLabels, [e.toString()]))}
+                        onClickLabels={(e) =>
+                            setFilterLabels(xor(filterLabels, [e.toString()]))
+                        }
                         selectedLabels={filterLabels}
                         selectedWorkflows={filterWorkflows}
                         onClickWorkflows={setFilterWorkflows}

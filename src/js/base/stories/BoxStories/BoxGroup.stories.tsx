@@ -1,4 +1,10 @@
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Button, Input } from "@base";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    BoxGroupSection,
+    Button,
+    Input,
+} from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -33,7 +39,9 @@ function Template(args) {
                     type="text"
                     placeholder="Enter a valid email here!"
                     value={term}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTerm(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setTerm(e.target.value)
+                    }
                 />
                 <StyledButton type="submit" color="blue">
                     Submit

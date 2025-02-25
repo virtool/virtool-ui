@@ -25,7 +25,14 @@ type RemoveDialogProps = {
 /**
  * A dialog that requests confirmation from the user for deleting a document or other sensitive information
  */
-export function RemoveDialog({ message, name, noun, show, onConfirm, onHide }: RemoveDialogProps) {
+export function RemoveDialog({
+    message,
+    name,
+    noun,
+    show,
+    onConfirm,
+    onHide,
+}: RemoveDialogProps) {
     return (
         <Dialog open={show} onOpenChange={onHide}>
             <DialogPortal>
@@ -34,7 +41,8 @@ export function RemoveDialog({ message, name, noun, show, onConfirm, onHide }: R
                     <DialogTitle>{`Remove ${noun}`}</DialogTitle>
                     {message || (
                         <span>
-                            Are you sure you want to remove <strong>{name}</strong>?
+                            Are you sure you want to remove{" "}
+                            <strong>{name}</strong>?
                         </span>
                     )}
 

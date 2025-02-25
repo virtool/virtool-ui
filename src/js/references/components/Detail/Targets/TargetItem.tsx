@@ -25,7 +25,7 @@ type TargetItemDescriptionProps = {
 };
 
 const TargetItemDescription = styled.p<TargetItemDescriptionProps>`
-    font-style: ${props => (props.description ? "normal" : "italic")};
+    font-style: ${(props) => (props.description ? "normal" : "italic")};
     margin: 0;
 `;
 
@@ -45,7 +45,13 @@ type TargetItemProps = {
 /**
  * A condensed target item for use in a list of targets
  */
-export function TargetItem({ canModify, description, name, onEdit, onRemove }: TargetItemProps) {
+export function TargetItem({
+    canModify,
+    description,
+    name,
+    onEdit,
+    onRemove,
+}: TargetItemProps) {
     const handleEdit = useCallback(() => onEdit(name), [name]);
     const handleRemove = useCallback(() => onRemove(name), [name]);
 
@@ -55,12 +61,24 @@ export function TargetItem({ canModify, description, name, onEdit, onRemove }: T
                 {name}
                 {canModify && (
                     <span>
-                        <IconButton name="edit" color="orange" tip="modify" onClick={handleEdit} />
-                        <IconButton name="trash" color="red" tip="remove" onClick={handleRemove} />
+                        <IconButton
+                            name="edit"
+                            color="orange"
+                            tip="modify"
+                            onClick={handleEdit}
+                        />
+                        <IconButton
+                            name="trash"
+                            color="red"
+                            tip="remove"
+                            onClick={handleRemove}
+                        />
                     </span>
                 )}
             </TargetItemHeader>
-            <TargetItemDescription description={description}>{description || "No description"}</TargetItemDescription>
+            <TargetItemDescription description={description}>
+                {description || "No description"}
+            </TargetItemDescription>
         </BoxGroupSection>
     );
 }

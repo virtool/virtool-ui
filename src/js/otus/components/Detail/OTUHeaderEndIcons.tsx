@@ -15,10 +15,18 @@ type OTUHeaderEndIconsProps = {
 /**
  * Displays end icons to edit or remove an OTU
  */
-export function OTUHeaderEndIcons({ id, name, refId, abbreviation }: OTUHeaderEndIconsProps) {
+export function OTUHeaderEndIcons({
+    id,
+    name,
+    refId,
+    abbreviation,
+}: OTUHeaderEndIconsProps) {
     const { setOpen: setOpenEditOTU } = useDialogParam("openEditOTU");
     const { setOpen: setOpenRemoveOTU } = useDialogParam("openRemoveOTU");
-    const { hasPermission: canModify } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+    const { hasPermission: canModify } = useCheckReferenceRight(
+        refId,
+        ReferenceRight.modify_otu,
+    );
 
     return canModify ? (
         <>

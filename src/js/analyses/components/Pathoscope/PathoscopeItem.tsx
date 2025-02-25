@@ -14,7 +14,7 @@ const PathoscopeItemHeader = styled.h3`
     display: flex;
     justify-content: space-between;
     width: 100%;
-    font-size: ${props => props.theme.fontSize.md};
+    font-size: ${(props) => props.theme.fontSize.md};
     margin: 5px 0 10px;
 `;
 
@@ -30,8 +30,8 @@ const StyledPathoscopeItemValue = styled.div`
     }
 
     small {
-        color: ${props => props.theme.color.greyDark};
-        font-size: ${props => props.theme.fontSize.sm};
+        color: ${(props) => props.theme.color.greyDark};
+        font-size: ${(props) => props.theme.fontSize.sm};
         font-weight: bold;
         padding-top: 5px;
     }
@@ -56,7 +56,7 @@ const PathoscopeItemTitle = styled.div`
     align-items: flex-start;
 
     span:not(:first-child) {
-        color: ${props => props.theme.color.greyDark};
+        color: ${(props) => props.theme.color.greyDark};
         padding-top: 5px;
     }
 `;
@@ -86,7 +86,9 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
     const { abbreviation, coverage, depth, filled, name, pi, id } = hit;
     const { value: showReads } = useUrlSearchParam<boolean>("reads");
 
-    const piValue = showReads ? Math.round(pi * mappedCount) : toScientificNotation(pi);
+    const piValue = showReads
+        ? Math.round(pi * mappedCount)
+        : toScientificNotation(pi);
 
     return (
         <ScrollingAccordionItem value={id}>
@@ -97,9 +99,21 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
                         <span>{abbreviation || "No Abbreviation"}</span>
                     </PathoscopeItemTitle>
                     <PathoscopeItemValues>
-                        <PathoscopeItemValue color="green" label={showReads ? "READS" : "WEIGHT"} value={piValue} />
-                        <PathoscopeItemValue color="red" label="DEPTH" value={depth} />
-                        <PathoscopeItemValue color="blue" label="COVERAGE" value={coverage.toFixed(3)} />
+                        <PathoscopeItemValue
+                            color="green"
+                            label={showReads ? "READS" : "WEIGHT"}
+                            value={piValue}
+                        />
+                        <PathoscopeItemValue
+                            color="red"
+                            label="DEPTH"
+                            value={depth}
+                        />
+                        <PathoscopeItemValue
+                            color="blue"
+                            label="COVERAGE"
+                            value={coverage.toFixed(3)}
+                        />
                     </PathoscopeItemValues>
                 </PathoscopeItemHeader>
 

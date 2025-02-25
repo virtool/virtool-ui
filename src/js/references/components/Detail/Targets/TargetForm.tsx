@@ -31,7 +31,14 @@ type TargetFormProps = {
 /**
  * Form for creating/editing a reference target
  */
-export function TargetForm({ description, error, length, name, onSubmit, required }: TargetFormProps) {
+export function TargetForm({
+    description,
+    error,
+    length,
+    name,
+    onSubmit,
+    required,
+}: TargetFormProps) {
     const {
         formState: { errors },
         register,
@@ -47,10 +54,13 @@ export function TargetForm({ description, error, length, name, onSubmit, require
     });
 
     return (
-        <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
+        <form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
             <InputGroup>
                 <InputLabel htmlFor="name">Name</InputLabel>
-                <InputSimple id="name" {...register("name", { required: "Required Field" })} />
+                <InputSimple
+                    id="name"
+                    {...register("name", { required: "Required Field" })}
+                />
                 <InputError>{errors.name?.message || error}</InputError>
             </InputGroup>
 
@@ -61,13 +71,21 @@ export function TargetForm({ description, error, length, name, onSubmit, require
 
             <InputGroup>
                 <InputLabel htmlFor="length">Length</InputLabel>
-                <InputSimple type="number" id="length" {...register("length")} />
+                <InputSimple
+                    type="number"
+                    id="length"
+                    {...register("length")}
+                />
             </InputGroup>
             <Controller
                 name="required"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <Checkbox label="Required" checked={value} onClick={() => onChange(!value)} />
+                    <Checkbox
+                        label="Required"
+                        checked={value}
+                        onClick={() => onChange(!value)}
+                    />
                 )}
             />
 

@@ -1,5 +1,13 @@
 import { FormattedNuvsHit, FormattedNuvsResults } from "@/analyses/types";
-import { Button, Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, Icon } from "@base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
+    Icon,
+} from "@base";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
@@ -24,7 +32,7 @@ function getBestHit(items) {
 }
 
 function exportContigData(hits: FormattedNuvsHit[], sampleName: string) {
-    return map(hits, result => {
+    return map(hits, (result) => {
         const orfNames = reduce(
             result.orfs,
             (names, orf) => {
@@ -49,13 +57,15 @@ function exportORFData(hits: FormattedNuvsHit[], sampleName: string) {
     return reduce(
         hits,
         (lines, result) => {
-            forEach(result.orfs, orf => {
+            forEach(result.orfs, (orf) => {
                 // Get the best hit for the current ORF.
                 if (orf.hits.length) {
                     const bestHit = getBestHit(orf.hits);
 
                     if (bestHit.name) {
-                        lines.push(`>orf_${result.index}_${orf.index}|${sampleName}|${bestHit.name}\n${orf.pro}`);
+                        lines.push(
+                            `>orf_${result.index}_${orf.index}|${sampleName}|${bestHit.name}\n${orf.pro}`,
+                        );
                     }
                 }
             });
@@ -66,7 +76,12 @@ function exportORFData(hits: FormattedNuvsHit[], sampleName: string) {
     );
 }
 
-function downloadData(analysisId: string, content: string[], sampleName: string, suffix: string) {
+function downloadData(
+    analysisId: string,
+    content: string[],
+    sampleName: string,
+    suffix: string,
+) {
     return followDynamicDownload(
         `nuvs.${replace(sampleName, " ", "_")}.${analysisId}.${suffix}.fa`,
         content.join("\n"),
@@ -83,7 +98,11 @@ export type NuVsExportProps = {
 /**
  * Displays a dialog for exporting NuVs
  */
-export default function NuVsExport({ analysisId, results, sampleName }: NuVsExportProps) {
+export default function NuVsExport({
+    analysisId,
+    results,
+    sampleName,
+}: NuVsExportProps) {
     const [mode, setMode] = useState("contigs");
     const [open, setOpen] = useState(false);
 
@@ -91,9 +110,19 @@ export default function NuVsExport({ analysisId, results, sampleName }: NuVsExpo
         e.preventDefault();
 
         if (mode === "contigs") {
-            downloadData(analysisId, exportContigData(results.hits, sampleName), sampleName, "configs");
+            downloadData(
+                analysisId,
+                exportContigData(results.hits, sampleName),
+                sampleName,
+                "configs",
+            );
         } else {
-            downloadData(analysisId, exportORFData(results.hits, sampleName), sampleName, "orfs");
+            downloadData(
+                analysisId,
+                exportORFData(results.hits, sampleName),
+                sampleName,
+                "orfs",
+            );
         }
     }
 
@@ -109,15 +138,24 @@ export default function NuVsExport({ analysisId, results, sampleName }: NuVsExpo
                     <form onSubmit={onSubmit}>
                         <label>Scope</label>
 
-                        <ToggleGroup className="flex mb-3" value={mode} onValueChange={setMode}>
-                            <ToggleGroupItem value="contigs">Contigs</ToggleGroupItem>
+                        <ToggleGroup
+                            className="flex mb-3"
+                            value={mode}
+                            onValueChange={setMode}
+                        >
+                            <ToggleGroupItem value="contigs">
+                                Contigs
+                            </ToggleGroupItem>
                             <ToggleGroupItem value="orfs">ORFs</ToggleGroupItem>
                         </ToggleGroup>
 
                         <NuVsExportPreview mode={mode} />
 
                         <DialogFooter>
-                            <Button type="submit" className="inline-flex gap-1.5">
+                            <Button
+                                type="submit"
+                                className="inline-flex gap-1.5"
+                            >
                                 <Icon name="download" /> Download
                             </Button>
                         </DialogFooter>

@@ -29,13 +29,13 @@ const StyledJobStepDescription = styled.div`
     flex-direction: column;
 
     > h4 {
-        font-size: ${props => props.theme.fontSize.lg};
+        font-size: ${(props) => props.theme.fontSize.lg};
         font-weight: bold;
         margin: 0 0 4px;
     }
 
     > p {
-        color: ${props => props.theme.color.greyDarkest};
+        color: ${(props) => props.theme.color.greyDarkest};
         margin: 0 0 3px;
     }
 `;
@@ -69,7 +69,12 @@ export function JobStep({ complete, step }: JobStepProps) {
         <StyledJobStep>
             <JobStepIconContainer>
                 {complete ? (
-                    <Icon name="arrow-circle-down" color="blue" title={step.state} fixedWidth />
+                    <Icon
+                        name="arrow-circle-down"
+                        color="blue"
+                        title={step.state}
+                        fixedWidth
+                    />
                 ) : step.state === "running" ? (
                     <JobStepLoader size="12px" color="blue" />
                 ) : (
@@ -85,7 +90,9 @@ export function JobStep({ complete, step }: JobStepProps) {
                     <Icon name="clock" />
                     <span>{format(new Date(step.timestamp), "HH:mm:ss")}</span>
                     <Icon name="calendar" />
-                    <span>{format(new Date(step.timestamp), "yyyy-MM-dd")}</span>
+                    <span>
+                        {format(new Date(step.timestamp), "yyyy-MM-dd")}
+                    </span>
                 </StyledJobStepTimestamp>
             </StyledJobStepDescription>
         </StyledJobStep>

@@ -46,13 +46,30 @@ export default function ReferenceDetail() {
 
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/refs/:refId/" component={() => <Redirect to={`/refs/${refId}/manage`} replace />} />
-                    <Route path="/refs/:refId/manage" component={ReferenceManager} />
-                    <Route path="/refs/:refId/otus/:otuId/*?" component={OTUDetail} />
+                    <Route
+                        path="/refs/:refId/"
+                        component={() => (
+                            <Redirect to={`/refs/${refId}/manage`} replace />
+                        )}
+                    />
+                    <Route
+                        path="/refs/:refId/manage"
+                        component={ReferenceManager}
+                    />
+                    <Route
+                        path="/refs/:refId/otus/:otuId/*?"
+                        component={OTUDetail}
+                    />
                     <Route path="/refs/:refId/otus" component={OTUList} />
-                    <Route path="/refs/:refId/indexes/:indexId" component={IndexDetail} />
+                    <Route
+                        path="/refs/:refId/indexes/:indexId"
+                        component={IndexDetail}
+                    />
                     <Route path="/refs/:refId/indexes" component={Indexes} />
-                    <Route path="/refs/:refId/settings" component={ReferenceSettings} />
+                    <Route
+                        path="/refs/:refId/settings"
+                        component={ReferenceSettings}
+                    />
                 </Switch>
             </ContainerNarrow>
 

@@ -1,6 +1,11 @@
 import { ErrorResponse } from "@/types/types";
 import { Label } from "@labels/types";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    keepPreviousData,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { forEach, map, reject, union } from "lodash-es/lodash";
 import {
     createSample,
@@ -26,7 +31,8 @@ export type SampleLabel = Label & {
 export const samplesQueryKeys = {
     all: () => ["samples"] as const,
     lists: () => ["samples", "list"] as const,
-    list: (filters: Array<string | number | boolean | string[]>) => ["samples", "list", ...filters] as const,
+    list: (filters: Array<string | number | boolean | string[]>) =>
+        ["samples", "list", ...filters] as const,
     details: () => ["samples", "details"] as const,
     detail: (sampleId: string) => ["samples", "details", sampleId] as const,
 };
@@ -40,9 +46,21 @@ export const samplesQueryKeys = {
  * @param labels - The labels to filter the samples by
  * @param workflows - The workflows to filter the samples by
  */
-export function useListSamples(page: number, per_page: number, term?: string, labels?: string[], workflows?: string[]) {
+export function useListSamples(
+    page: number,
+    per_page: number,
+    term?: string,
+    labels?: string[],
+    workflows?: string[],
+) {
     return useQuery<SampleSearchResult, ErrorResponse>({
-        queryKey: samplesQueryKeys.list([page, per_page, term, labels, workflows]),
+        queryKey: samplesQueryKeys.list([
+            page,
+            per_page,
+            term,
+            labels,
+            workflows,
+        ]),
         queryFn: () => listSamples(page, per_page, term, labels, workflows),
         placeholderData: keepPreviousData,
     });
@@ -82,8 +100,28 @@ export function useCreateSample() {
             group: string;
         }
     >({
-        mutationFn: ({ name, isolate, host, locale, libraryType, subtractions, files, labels, group }) =>
-            createSample(name, isolate, host, locale, libraryType, subtractions, files, labels, group),
+        mutationFn: ({
+            name,
+            isolate,
+            host,
+            locale,
+            libraryType,
+            subtractions,
+            files,
+            labels,
+            group,
+        }) =>
+            createSample(
+                name,
+                isolate,
+                host,
+                locale,
+                libraryType,
+                subtractions,
+                files,
+                labels,
+                group,
+            ),
     });
 }
 
@@ -98,7 +136,9 @@ export function useUpdateSample(sampleId: string) {
     return useMutation<Sample, ErrorResponse, { update: SampleUpdate }>({
         mutationFn: ({ update }) => updateSample(sampleId, update),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: samplesQueryKeys.detail(sampleId) });
+            queryClient.invalidateQueries({
+                queryKey: samplesQueryKeys.detail(sampleId),
+            });
         },
     });
 }
@@ -109,7 +149,9 @@ export function useUpdateSample(sampleId: string) {
  * @returns A mutator for removing a sample
  */
 export function useRemoveSample() {
-    return useMutation<null, unknown, { sampleId: string }>({ mutationFn: ({ sampleId }) => removeSample(sampleId) });
+    return useMutation<null, unknown, { sampleId: string }>({
+        mutationFn: ({ sampleId }) => removeSample(sampleId),
+    });
 }
 
 /**
@@ -118,7 +160,11 @@ export function useRemoveSample() {
  * @returns A mutator for updating a samples rights
  */
 export function useUpdateSampleRights(sampleId: string) {
-    return useMutation<SampleRightsUpdateReturn, unknown, { update: SampleRightsUpdate }>({
+    return useMutation<
+        SampleRightsUpdateReturn,
+        unknown,
+        { update: SampleRightsUpdate }
+    >({
         mutationFn: ({ update }) => updateSampleRights(sampleId, update),
     });
 }
@@ -129,20 +175,33 @@ export function useUpdateSampleRights(sampleId: string) {
  * @param selectedLabels - The initial labels associated with the sample
  * @param selectedSamples - The selected samples
  */
-export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: SampleMinimal[]) {
+export function useUpdateLabel(
+    selectedLabels: SampleLabel[],
+    selectedSamples: SampleMinimal[],
+) {
     const queryClient = useQueryClient();
-    const mutation = useMutation<Sample, ErrorResponse, { sampleId: string; update: SampleUpdate }>({
+    const mutation = useMutation<
+        Sample,
+        ErrorResponse,
+        { sampleId: string; update: SampleUpdate }
+    >({
         mutationFn: ({ sampleId, update }) => updateSample(sampleId, update),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: samplesQueryKeys.lists() });
+            queryClient.invalidateQueries({
+                queryKey: samplesQueryKeys.lists(),
+            });
         },
     });
 
     function onUpdate(label: number) {
-        forEach(selectedSamples, sample => {
-            const sampleLabelIds = map(sample.labels, label => label.id);
-            const labelExists = selectedLabels.some(item => item.id === label);
-            const allLabeled = selectedLabels.every(item => item.allLabeled === true);
+        forEach(selectedSamples, (sample) => {
+            const sampleLabelIds = map(sample.labels, (label) => label.id);
+            const labelExists = selectedLabels.some(
+                (item) => item.id === label,
+            );
+            const allLabeled = selectedLabels.every(
+                (item) => item.allLabeled === true,
+            );
 
             if (!labelExists || !allLabeled) {
                 mutation.mutate({
@@ -153,7 +212,7 @@ export function useUpdateLabel(selectedLabels: SampleLabel[], selectedSamples: S
                 mutation.mutate({
                     sampleId: sample.id,
                     update: {
-                        labels: reject(sampleLabelIds, id => label === id),
+                        labels: reject(sampleLabelIds, (id) => label === id),
                     },
                 });
             }

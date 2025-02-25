@@ -3,7 +3,10 @@ import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeAnalysisMinimal, mockApiGetAnalyses } from "@tests/fake/analyses";
+import {
+    createFakeAnalysisMinimal,
+    mockApiGetAnalyses,
+} from "@tests/fake/analyses";
 import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
@@ -23,7 +26,10 @@ describe("<AnalysesList />", () => {
 
         analyses = [
             createFakeAnalysisMinimal({ sample: { id: sample.id } }),
-            createFakeAnalysisMinimal({ sample: { id: sample.id }, workflow: "nuvs" }),
+            createFakeAnalysisMinimal({
+                sample: { id: sample.id },
+                workflow: "nuvs",
+            }),
         ];
         mockApiGetAnalyses(analyses);
         mockApiGetHmms(createFakeHMMSearchResults());
@@ -38,15 +44,21 @@ describe("<AnalysesList />", () => {
             renderWithRouter(<Analyses />, basePath);
 
             expect(await screen.findByText("Pathoscope")).toBeInTheDocument();
-            expect(screen.getByText(`${analyses[0].user.handle} created`)).toBeInTheDocument();
+            expect(
+                screen.getByText(`${analyses[0].user.handle} created`),
+            ).toBeInTheDocument();
             expect(screen.getByText("NuVs")).toBeInTheDocument();
-            expect(screen.getByText(`${analyses[1].user.handle} created`)).toBeInTheDocument();
+            expect(
+                screen.getByText(`${analyses[1].user.handle} created`),
+            ).toBeInTheDocument();
         });
     });
 
     describe("<AnalysesToolbar />", () => {
         it("should show analysis creation when user is full admin", async () => {
-            const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+            const account = createFakeAccount({
+                administrator_role: AdministratorRoles.FULL,
+            });
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
             renderWithRouter(<Analyses />, basePath);
@@ -97,11 +109,16 @@ describe("<AnalysesList />", () => {
         });
 
         it("should change state once create analysis is clicked", async () => {
-            const account = createFakeAccount({ administrator_role: AdministratorRoles.FULL });
+            const account = createFakeAccount({
+                administrator_role: AdministratorRoles.FULL,
+            });
 
             mockApiGetAccount(account);
             mockApiGetSampleDetail(sample);
-            const { history } = renderWithRouter(<Analyses />, `/samples/${sample.id}/analyses/`);
+            const { history } = renderWithRouter(
+                <Analyses />,
+                `/samples/${sample.id}/analyses/`,
+            );
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
             expect(history[0]).toEqual(`/samples/${sample.id}/analyses/`);

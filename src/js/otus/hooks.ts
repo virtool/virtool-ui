@@ -12,7 +12,9 @@ export function useGetActiveIsolate(otu: OTU) {
     const { value: activeIsolate } = useNaiveUrlSearchParam("activeIsolate");
 
     const activeIsolateId = activeIsolate || otu.isolates[0]?.id;
-    return otu.isolates.length ? find(otu.isolates, { id: activeIsolateId }) : null;
+    return otu.isolates.length
+        ? find(otu.isolates, { id: activeIsolateId })
+        : null;
 }
 
 /**

@@ -6,7 +6,8 @@ import { createLabel, fetchLabels, removeLabel, updateLabel } from "./api";
 export const labelQueryKeys = {
     all: () => ["label"] as const,
     lists: () => ["label", "list"] as const,
-    list: (filters: Array<string | number | boolean>) => ["label", "list", "single", ...filters] as const,
+    list: (filters: Array<string | number | boolean>) =>
+        ["label", "list", "single", ...filters] as const,
 };
 
 /**
@@ -15,7 +16,10 @@ export const labelQueryKeys = {
  * @returns A list of labels
  */
 export function useFetchLabels() {
-    return useQuery<Label[]>({ queryKey: labelQueryKeys.list([]), queryFn: fetchLabels });
+    return useQuery<Label[]>({
+        queryKey: labelQueryKeys.list([]),
+        queryFn: fetchLabels,
+    });
 }
 
 /**
@@ -26,8 +30,13 @@ export function useFetchLabels() {
 export function useCreateLabel() {
     const queryClient = useQueryClient();
 
-    return useMutation<Label, ErrorResponse, { name: string; description: string; color: string }>({
-        mutationFn: ({ name, description, color }) => createLabel(name, description, color),
+    return useMutation<
+        Label,
+        ErrorResponse,
+        { name: string; description: string; color: string }
+    >({
+        mutationFn: ({ name, description, color }) =>
+            createLabel(name, description, color),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: labelQueryKeys.lists() });
         },
@@ -42,8 +51,13 @@ export function useCreateLabel() {
 export function useUpdateLabel() {
     const queryClient = useQueryClient();
 
-    return useMutation<Label, unknown, { labelId: number; name: string; description: string; color: string }>({
-        mutationFn: ({ labelId, name, description, color }) => updateLabel(labelId, name, description, color),
+    return useMutation<
+        Label,
+        unknown,
+        { labelId: number; name: string; description: string; color: string }
+    >({
+        mutationFn: ({ labelId, name, description, color }) =>
+            updateLabel(labelId, name, description, color),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: labelQueryKeys.lists() });
         },

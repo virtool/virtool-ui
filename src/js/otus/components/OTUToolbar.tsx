@@ -18,17 +18,32 @@ type OtuToolbarProps = {
 /**
  * A toolbar which allows the OTUs to be filtered by their names
  */
-export default function OTUToolbar({ term, onChange, refId, remotesFrom }: OtuToolbarProps) {
-    const { hasPermission: canCreate } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
+export default function OTUToolbar({
+    term,
+    onChange,
+    refId,
+    remotesFrom,
+}: OtuToolbarProps) {
+    const { hasPermission: canCreate } = useCheckReferenceRight(
+        refId,
+        ReferenceRight.modify_otu,
+    );
 
     return (
         <Toolbar>
             <div className="flex-grow">
-                <InputSearch placeholder="Name or abbreviation" value={term} onChange={onChange} />
+                <InputSearch
+                    placeholder="Name or abbreviation"
+                    value={term}
+                    onChange={onChange}
+                />
             </div>
 
             {canCreate && !remotesFrom && (
-                <LinkButton to={formatSearchParams({ openCreateOTU: true })} color="blue">
+                <LinkButton
+                    to={formatSearchParams({ openCreateOTU: true })}
+                    color="blue"
+                >
                     Create
                 </LinkButton>
             )}

@@ -13,13 +13,20 @@ type AlertProps = {
     level?: boolean;
 };
 
-export const Alert = styled(({ block, children, className, color, icon, level }: AlertProps) => (
-    <AlertOuter color={color}>
-        <AlertInner className={className} block={block} color={color} level={level}>
-            {icon ? <Icon name={icon} /> : null}
-            {children}
-        </AlertInner>
-    </AlertOuter>
-))``;
+export const Alert = styled(
+    ({ block, children, className, color, icon, level }: AlertProps) => (
+        <AlertOuter color={color}>
+            <AlertInner
+                className={className}
+                block={block}
+                color={color}
+                level={level}
+            >
+                {icon ? <Icon name={icon} /> : null}
+                {children}
+            </AlertInner>
+        </AlertOuter>
+    ),
+)``;
 
 Alert.displayName = "Alert";

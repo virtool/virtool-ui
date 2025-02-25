@@ -8,7 +8,7 @@ type BoxGroupProps = {
 };
 
 export const BoxGroup = styled(Box)<BoxGroupProps>`
-    border-radius: ${props => props.theme.borderRadius.sm};
+    border-radius: ${(props) => props.theme.borderRadius.sm};
     padding: 0;
     position: relative;
 `;

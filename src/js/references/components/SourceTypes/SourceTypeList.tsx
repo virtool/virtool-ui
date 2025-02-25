@@ -9,8 +9,12 @@ interface SourceTypeListProps {
 export function SourceTypeList({ sourceTypes, onRemove }: SourceTypeListProps) {
     return (
         <>
-            {sourceTypes.map(sourceType => (
-                <SourceTypeItem key={sourceType} onRemove={onRemove} sourceType={sourceType} />
+            {sourceTypes.map((sourceType) => (
+                <SourceTypeItem
+                    key={sourceType}
+                    onRemove={onRemove}
+                    sourceType={sourceType}
+                />
             ))}
         </>
     );

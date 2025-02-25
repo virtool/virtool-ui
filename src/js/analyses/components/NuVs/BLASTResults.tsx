@@ -1,5 +1,12 @@
 import { BlastHit } from "@/analyses/types";
-import { BoxGroup, BoxGroupHeader, BoxGroupTable, Button, ExternalLink, Icon } from "@base";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    BoxGroupTable,
+    Button,
+    ExternalLink,
+    Icon,
+} from "@base";
 import { map } from "lodash";
 import numbro from "numbro";
 import React from "react";
@@ -31,7 +38,9 @@ export function BLASTResults({ hits, onBlast }: BLASTResultsProps) {
     const components = map(hits, (hit, index) => (
         <tr key={index}>
             <td>
-                <ExternalLink href={`https://www.ncbi.nlm.nih.gov/nuccore/${hit.accession}`}>
+                <ExternalLink
+                    href={`https://www.ncbi.nlm.nih.gov/nuccore/${hit.accession}`}
+                >
                     {hit.accession}
                 </ExternalLink>
             </td>

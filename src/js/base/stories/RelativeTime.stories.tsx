@@ -21,12 +21,24 @@ export const CurrentRelativeTime: Story = {
 
 export const FutureRelativeTime: Story = {
     args: {
-        time: toString(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 8)),
+        time: toString(
+            new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                currentDate.getDate() + 8,
+            ),
+        ),
     },
 };
 
 export const PastRelativeTime: Story = {
     args: {
-        time: toString(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 6)),
+        time: toString(
+            new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                currentDate.getDate() - 6,
+            ),
+        ),
     },
 };

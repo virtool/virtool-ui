@@ -1,7 +1,24 @@
 import { ErrorResponse } from "@/types/types";
-import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createGroup, findGroups, getGroup, removeGroup, updateGroup } from "./api";
-import { Group, GroupMinimal, GroupSearchResults, PermissionsUpdate } from "./types";
+import {
+    keepPreviousData,
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
+import {
+    createGroup,
+    findGroups,
+    getGroup,
+    removeGroup,
+    updateGroup,
+} from "./api";
+import {
+    Group,
+    GroupMinimal,
+    GroupSearchResults,
+    PermissionsUpdate,
+} from "./types";
 
 /**
  * Factory for generating react-query keys for group-related queries.
@@ -9,11 +26,12 @@ import { Group, GroupMinimal, GroupSearchResults, PermissionsUpdate } from "./ty
 export const groupQueryKeys = {
     all: () => ["groups"] as const,
     lists: () => ["groups", "list"] as const,
-    list: filters => ["groups", "list", ...filters] as const,
+    list: (filters) => ["groups", "list", ...filters] as const,
     infiniteLists: () => ["groups", "list", "infinite"] as const,
-    infiniteList: (filters: Array<string | number | boolean>) => ["groups", "list", "infinite", ...filters] as const,
+    infiniteList: (filters: Array<string | number | boolean>) =>
+        ["groups", "list", "infinite", ...filters] as const,
     details: () => ["groups", "details"] as const,
-    detail: id => ["groups", "detail", id] as const,
+    detail: (id) => ["groups", "detail", id] as const,
 };
 
 /**
@@ -27,9 +45,14 @@ export function useInfiniteFindGroups(per_page: number, term: string) {
     return useInfiniteQuery<GroupSearchResults>({
         queryKey: groupQueryKeys.infiniteList([per_page, term]),
         queryFn: ({ pageParam }) =>
-            findGroups(pageParam as number, per_page, term, true) as Promise<GroupSearchResults>,
+            findGroups(
+                pageParam as number,
+                per_page,
+                term,
+                true,
+            ) as Promise<GroupSearchResults>,
         initialPageParam: 1,
-        getNextPageParam: lastPage => {
+        getNextPageParam: (lastPage) => {
             if (lastPage.page >= lastPage.page_count) {
                 return undefined;
             }
@@ -82,8 +105,9 @@ export function useUpdateGroup() {
             permissions?: PermissionsUpdate;
         }
     >({
-        mutationFn: ({ id, name, permissions }) => updateGroup(id, name, permissions),
-        onSuccess: data => {
+        mutationFn: ({ id, name, permissions }) =>
+            updateGroup(id, name, permissions),
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: groupQueryKeys.lists() });
             queryClient.setQueryData(groupQueryKeys.detail(data.id), data);
         },

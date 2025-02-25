@@ -31,8 +31,16 @@ describe("<OTUGeneral />", () => {
                 "There are some issues that must be resolved before this OTU can be included in the next index build",
             ),
         ).toBeInTheDocument();
-        expect(screen.getByText("There are no sequences associated with the following isolates:")).toBeInTheDocument();
-        expect(screen.getByText(`${isolate.source_type} ${isolate.source_name}`, { exact: false })).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                "There are no sequences associated with the following isolates:",
+            ),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(`${isolate.source_type} ${isolate.source_name}`, {
+                exact: false,
+            }),
+        ).toBeInTheDocument();
     });
 
     it("should render without issues", () => {

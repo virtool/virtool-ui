@@ -10,7 +10,13 @@ interface LinkButtonProps {
     to: string;
 }
 
-export function LinkButton({ children, className, color = "gray", replace = false, to }: LinkButtonProps) {
+export function LinkButton({
+    children,
+    className,
+    color = "gray",
+    replace = false,
+    to,
+}: LinkButtonProps) {
     return (
         <Link
             className={cn(
@@ -32,7 +38,10 @@ export function LinkButton({ children, className, color = "gray", replace = fals
                 },
                 "text-lg",
                 "hover:shadow-lg",
-                { "hover:text-black": ["gray"].includes(color), "hover:text-white": ["blue", "red"].includes(color) },
+                {
+                    "hover:text-black": ["gray"].includes(color),
+                    "hover:text-white": ["blue", "red"].includes(color),
+                },
             )}
             replace={replace}
             to={to}

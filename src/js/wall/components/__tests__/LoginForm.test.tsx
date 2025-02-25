@@ -36,9 +36,15 @@ describe("<LoginForm />", () => {
         await userEvent.type(passwordField, password);
         expect(passwordField).toHaveValue(password);
 
-        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "unchecked");
+        expect(screen.getByLabelText("Remember Me")).toHaveAttribute(
+            "data-state",
+            "unchecked",
+        );
         await userEvent.click(screen.getByLabelText("Remember Me"));
-        expect(screen.getByLabelText("Remember Me")).toHaveAttribute("data-state", "checked");
+        expect(screen.getByLabelText("Remember Me")).toHaveAttribute(
+            "data-state",
+            "checked",
+        );
 
         await userEvent.click(screen.getByRole("button", { name: "Login" }));
 

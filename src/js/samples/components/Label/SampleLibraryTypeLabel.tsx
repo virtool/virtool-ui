@@ -25,7 +25,9 @@ type SampleLibraryTypeLabelProps = {
 /**
  * Displays the library type associated with the sample
  */
-export function SampleLibraryTypeLabel({ libraryType }: SampleLibraryTypeLabelProps) {
+export function SampleLibraryTypeLabel({
+    libraryType,
+}: SampleLibraryTypeLabelProps) {
     return (
         <StyledSampleLibraryTypeLabel>
             <Icon name={libraryType === "amplicon" ? "barcode" : "dna"} />

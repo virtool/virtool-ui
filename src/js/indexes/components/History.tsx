@@ -1,4 +1,9 @@
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, LoadingPlaceholder } from "@base";
+import {
+    BoxGroup,
+    BoxGroupHeader,
+    BoxGroupSection,
+    LoadingPlaceholder,
+} from "@base";
 import { map, sortBy } from "lodash-es";
 import React, { ReactNode } from "react";
 import styled from "styled-components";
@@ -43,9 +48,16 @@ export default function RebuildHistory({ unbuilt }) {
     if (unbuilt === null) {
         content = <LoadingPlaceholder className="mt-5" />;
     } else {
-        const historyComponents = map(sortBy(unbuilt.documents, "otu.name"), change => (
-            <RebuildHistoryItem key={change.id} description={change.description} otuName={change.otu.name} />
-        ));
+        const historyComponents = map(
+            sortBy(unbuilt.documents, "otu.name"),
+            (change) => (
+                <RebuildHistoryItem
+                    key={change.id}
+                    description={change.description}
+                    otuName={change.otu.name}
+                />
+            ),
+        );
 
         content = (
             <RebuildHistoryContent>

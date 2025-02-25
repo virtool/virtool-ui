@@ -12,10 +12,10 @@ const StyledRemoveBanner = styled(Alert)<StyledRemoveBannerProps>`
     justify-content: space-between;
 
     span:first-child {
-        font-weight: ${props => props.theme.fontWeight.thick};
+        font-weight: ${(props) => props.theme.fontWeight.thick};
 
         strong {
-            font-weight: ${props => props.theme.fontWeight.bold};
+            font-weight: ${(props) => props.theme.fontWeight.bold};
         }
     }
 `;
@@ -26,7 +26,11 @@ interface RemoveBannerProps {
     onClick: () => void;
 }
 
-export function RemoveBanner({ message, buttonText, onClick }: RemoveBannerProps) {
+export function RemoveBanner({
+    message,
+    buttonText,
+    onClick,
+}: RemoveBannerProps) {
     return (
         <StyledRemoveBanner color="red">
             <strong>{message}</strong>

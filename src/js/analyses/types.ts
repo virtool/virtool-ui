@@ -65,7 +65,11 @@ export type GenericAnalysis = AnalysisMinimal & {
     workflow: Workflows.aodp;
 };
 
-export type Analysis = FormattedPathoscopeAnalysis | FormattedNuvsAnalysis | IimiAnalysis | GenericAnalysis;
+export type Analysis =
+    | FormattedPathoscopeAnalysis
+    | FormattedNuvsAnalysis
+    | IimiAnalysis
+    | GenericAnalysis;
 
 export type FormattedPathoscopeAnalysis = AnalysisMinimal & {
     files: Array<AnalysisFile>;

@@ -25,10 +25,15 @@ type DividerHorizontalProps = {
     text?: string;
 };
 
-export const DividerHorizontal = ({ text, className }: DividerHorizontalProps) => (
+export const DividerHorizontal = ({
+    text,
+    className,
+}: DividerHorizontalProps) => (
     <StyledDividerHorizontal className={className}>
         <DividerHorizontalBorder color="greyLight" />
-        {text && <DividerHorizontalText color="grey">{text}</DividerHorizontalText>}
+        {text && (
+            <DividerHorizontalText color="grey">{text}</DividerHorizontalText>
+        )}
         <DividerHorizontalBorder color="greyLight" />
     </StyledDividerHorizontal>
 );

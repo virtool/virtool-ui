@@ -17,7 +17,7 @@ export const StyledCheckbox = styled(RadixCheckbox.Root)`
     align-items: center;
     background-color: ${getBackgroundColor};
     border: ${getCheckboxBorder};
-    border-radius: ${props => props.theme.borderRadius.sm};
+    border-radius: ${(props) => props.theme.borderRadius.sm};
     color: ${getCheckboxColor};
     cursor: pointer;
     display: inline-flex;
@@ -25,7 +25,7 @@ export const StyledCheckbox = styled(RadixCheckbox.Root)`
     height: 20px;
     justify-content: center;
     margin-right: 0;
-    opacity: ${props => (props.checked ? 1 : 0.5)};
+    opacity: ${(props) => (props.checked ? 1 : 0.5)};
     transition: opacity 100ms ease;
     width: 20px;
 `;

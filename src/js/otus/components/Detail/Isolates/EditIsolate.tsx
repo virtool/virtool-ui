@@ -1,7 +1,12 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { capitalize } from "lodash-es";
 import React from "react";
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "../../../../base";
+import {
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+} from "../../../../base";
 import { useUpdateIsolate } from "../../../queries";
 import IsolateForm from "./IsolateForm";
 

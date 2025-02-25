@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { StateButton } from "./StateButton";
 
 const StyledStateCategory = styled(BoxGroup)`
-    background-color: ${props => props.theme.color.white};
+    background-color: ${(props) => props.theme.color.white};
     position: relative;
     width: 100%;
     z-index: 1;
@@ -41,7 +41,7 @@ const StateCategoryButton = styled.button`
     z-index: 2;
 
     &:hover {
-        background-color: ${props => props.theme.color.greyHover};
+        background-color: ${(props) => props.theme.color.greyHover};
     }
 `;
 
@@ -60,7 +60,10 @@ type StateCategoryProps = {
 export function StateCategory({ states, label, onClick }: StateCategoryProps) {
     return (
         <StyledStateCategory>
-            <StateCategoryButton tabIndex={0} onClick={() => onClick(label.toLowerCase())}>
+            <StateCategoryButton
+                tabIndex={0}
+                onClick={() => onClick(label.toLowerCase())}
+            >
                 {label}
             </StateCategoryButton>
             <BoxGroup>

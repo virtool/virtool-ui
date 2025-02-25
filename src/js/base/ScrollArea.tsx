@@ -26,7 +26,9 @@ export function ScrollArea({ children, className }: ScrollAreaProps) {
                 className,
             )}
         >
-            <ScrollAreaPrimitive.Viewport className={cn("w-full", "h-full rounded")}>
+            <ScrollAreaPrimitive.Viewport
+                className={cn("w-full", "h-full rounded")}
+            >
                 {children}
             </ScrollAreaPrimitive.Viewport>
             <ScrollAreaPrimitive.Scrollbar

@@ -23,17 +23,31 @@ export function Quality({ bases, composition, sequences }) {
                     <QualityTitle>
                         <strong>Quality Distribution at Read Positions</strong>
                     </QualityTitle>
-                    <QualityChart createChart={drawBasesChart} data={bases} width={width} />
+                    <QualityChart
+                        createChart={drawBasesChart}
+                        data={bases}
+                        width={width}
+                    />
 
                     <QualityTitle>
-                        <strong>Nucleotide Composition at Read Positions</strong>
+                        <strong>
+                            Nucleotide Composition at Read Positions
+                        </strong>
                     </QualityTitle>
-                    <QualityChart createChart={drawNucleotidesChart} data={composition} width={width} />
+                    <QualityChart
+                        createChart={drawNucleotidesChart}
+                        data={composition}
+                        width={width}
+                    />
 
                     <QualityTitle>
                         <strong>Read-wise Quality Occurrence</strong>
                     </QualityTitle>
-                    <QualityChart createChart={drawSequencesChart} data={sequences} width={width} />
+                    <QualityChart
+                        createChart={drawSequencesChart}
+                        data={sequences}
+                        width={width}
+                    />
                 </>
             )}
         </div>

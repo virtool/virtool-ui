@@ -23,13 +23,24 @@ type AddSegmentProps = {
 /**
  * Displays a dialog for adding a segment
  */
-export default function AddSegment({ otuId, name, abbreviation, schema }: AddSegmentProps) {
-    const { open: openAddSegment, setOpen: setOpenAddSegment } = useDialogParam("openAddSegment");
+export default function AddSegment({
+    otuId,
+    name,
+    abbreviation,
+    schema,
+}: AddSegmentProps) {
+    const { open: openAddSegment, setOpen: setOpenAddSegment } =
+        useDialogParam("openAddSegment");
     const mutation = useUpdateOTU(otuId);
 
     function handleSubmit({ segmentName, molecule, required }: FormValues) {
         mutation.mutate(
-            { otuId, name, abbreviation, schema: [...schema, { name: segmentName, molecule, required }] },
+            {
+                otuId,
+                name,
+                abbreviation,
+                schema: [...schema, { name: segmentName, molecule, required }],
+            },
             {
                 onSuccess: () => {
                     setOpenAddSegment(false);
@@ -39,7 +50,10 @@ export default function AddSegment({ otuId, name, abbreviation, schema }: AddSeg
     }
 
     return (
-        <Dialog open={openAddSegment} onOpenChange={() => setOpenAddSegment(false)}>
+        <Dialog
+            open={openAddSegment}
+            onOpenChange={() => setOpenAddSegment(false)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>

@@ -14,7 +14,7 @@ import { NuVsSequence } from "./Sequence";
 
 const StyledNuVsFamilies = styled.div`
     border: ${getBorder};
-    border-radius: ${props => props.theme.borderRadius.sm};
+    border-radius: ${(props) => props.theme.borderRadius.sm};
     display: flex;
     margin: 10px 0 5px;
     overflow: hidden;
@@ -24,7 +24,7 @@ const StyledNuVsFamilies = styled.div`
     }
 
     div:first-child {
-        background-color: ${props => props.theme.color.greyLightest};
+        background-color: ${(props) => props.theme.color.greyLightest};
         border-right: ${getBorder};
     }
 `;
@@ -41,7 +41,7 @@ const NuVsLayout = styled.div`
     margin-bottom: 15px;
 
     & > div:nth-child(even) {
-        background-color: ${props => props.theme.color.greyLightest};
+        background-color: ${(props) => props.theme.color.greyLightest};
     }
 `;
 
@@ -51,14 +51,14 @@ const NuVsDetailTitle = styled.div`
     h3 {
         align-items: center;
         display: flex;
-        font-size: ${props => props.theme.fontSize.lg};
+        font-size: ${(props) => props.theme.fontSize.lg};
         font-weight: bold;
         justify-content: space-between;
         margin: 0;
     }
 
     span {
-        font-size: ${props => props.theme.fontSize.md};
+        font-size: ${(props) => props.theme.fontSize.md};
         font-weight: bold;
     }
 `;
@@ -82,7 +82,11 @@ type NuVsDetailProps = {
 /**
  * The detailed view of a NuVs sequence
  */
-export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: NuVsDetailProps) {
+export default function NuVsDetail({
+    analysisId,
+    matches,
+    maxSequenceLength,
+}: NuVsDetailProps) {
     const { value: filterORFs } = useUrlSearchParam<boolean>("filterOrfs");
     const hit = useGetActiveHit(matches);
 
@@ -95,13 +99,18 @@ export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: N
     let filtered;
 
     if (filterORFs) {
-        filtered = filter(orfs, orf => orf.hits.length);
+        filtered = filter(orfs, (orf) => orf.hits.length);
     }
 
-    filtered = sortBy(filtered || orfs, orf => orf.hits.length).reverse();
+    filtered = sortBy(filtered || orfs, (orf) => orf.hits.length).reverse();
 
     const orfComponents = map(filtered, (orf, index) => (
-        <NuVsORF key={index} index={index} {...orf} maxSequenceLength={maxSequenceLength} />
+        <NuVsORF
+            key={index}
+            index={index}
+            {...orf}
+            maxSequenceLength={maxSequenceLength}
+        />
     ));
 
     return (
@@ -109,13 +118,19 @@ export default function NuVsDetail({ analysisId, matches, maxSequenceLength }: N
             <NuVsDetailTitle>
                 <h3>
                     Sequence {index}
-                    <Badge className="text-base py-2 px-3">{sequence.length} bp</Badge>
+                    <Badge className="text-base py-2 px-3">
+                        {sequence.length} bp
+                    </Badge>
                 </h3>
                 <NuVsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
                 <NuVsFamilies families={families} />
             </NuVsDetailTitle>
             <NuVsLayout>
-                <NuVsSequence key="sequence" maxSequenceLength={maxSequenceLength} sequence={sequence} />
+                <NuVsSequence
+                    key="sequence"
+                    maxSequenceLength={maxSequenceLength}
+                    sequence={sequence}
+                />
                 {orfComponents}
             </NuVsLayout>
             <NuVsBLAST hit={hit} analysisId={analysisId} />

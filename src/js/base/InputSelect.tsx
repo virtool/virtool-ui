@@ -12,7 +12,14 @@ type InputSelectProps = {
 export const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>(
     ({ children, id, name, value, onChange }: InputSelectProps, ref) => {
         return (
-            <Input as="select" id={id} name={name} value={value} onChange={onChange} ref={ref}>
+            <Input
+                as="select"
+                id={id}
+                name={name}
+                value={value}
+                onChange={onChange}
+                ref={ref}
+            >
                 {children}
             </Input>
         );

@@ -86,8 +86,14 @@ type SampleItemProps = {
 /**
  * A condensed sample item for use in a list of samples
  */
-export default function SampleItem({ sample, checked, handleSelect, selectOnQuickAnalyze }: SampleItemProps) {
-    const { setValue: setQuickAnalysisType } = useUrlSearchParam<string>("quickAnalysisType");
+export default function SampleItem({
+    sample,
+    checked,
+    handleSelect,
+    selectOnQuickAnalyze,
+}: SampleItemProps) {
+    const { setValue: setQuickAnalysisType } =
+        useUrlSearchParam<string>("quickAnalysisType");
 
     function onQuickAnalyze() {
         setQuickAnalysisType(Workflows.pathoscope_bowtie);
@@ -104,12 +110,15 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
                 <SampleItemMain>
                     <SampleItemTitle>
                         <Link to={`/samples/${sample.id}`}>{sample.name}</Link>
-                        <Attribution time={sample.created_at} user={sample.user.handle} />
+                        <Attribution
+                            time={sample.created_at}
+                            user={sample.user.handle}
+                        />
                     </SampleItemTitle>
                 </SampleItemMain>
                 <SampleItemLabels>
                     <SampleLibraryTypeLabel libraryType={sample.library_type} />
-                    {sample.labels.map(label => (
+                    {sample.labels.map((label) => (
                         <SmallSampleLabel {...label} key={label.id} />
                     ))}
                 </SampleItemLabels>
@@ -118,7 +127,11 @@ export default function SampleItem({ sample, checked, handleSelect, selectOnQuic
                 <WorkflowTags id={sample.id} workflows={sample.workflows} />
             </SampleItemWorkflows>
             <SampleItemIcon>
-                <EndIcon ready={sample.ready} onClick={onQuickAnalyze} job={sample.job} />
+                <EndIcon
+                    ready={sample.ready}
+                    onClick={onQuickAnalyze}
+                    job={sample.job}
+                />
             </SampleItemIcon>
         </StyledSampleItem>
     );

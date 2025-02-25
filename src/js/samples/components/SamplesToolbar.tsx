@@ -6,12 +6,18 @@ import { Permission } from "@groups/types";
 import { SampleSelectionToolbar } from "./SampleSelectionToolbar";
 
 function SampleSearchToolbar({ onChange, term }) {
-    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_sample);
+    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(
+        Permission.create_sample,
+    );
 
     return (
         <Toolbar>
             <div className="flex-grow">
-                <InputSearch value={term || ""} onChange={onChange} placeholder="Sample name" />
+                <InputSearch
+                    value={term || ""}
+                    onChange={onChange}
+                    placeholder="Sample name"
+                />
             </div>
             {canCreate && (
                 <LinkButton color="blue" to="/samples/create">

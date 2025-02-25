@@ -12,7 +12,11 @@ describe("<ImportReference />", () => {
 
         scope
             .post("/api/uploads?name=external.json.gz&type=reference")
-            .reply(200, { id: 12, name: "external.json.gz", name_on_disk: "12-external.json.gz" });
+            .reply(200, {
+                id: 12,
+                name: "external.json.gz",
+                name_on_disk: "12-external.json.gz",
+            });
 
         scope
             .post("/api/refs", {
@@ -20,16 +24,25 @@ describe("<ImportReference />", () => {
                 description: "External reference",
                 import_from: "12-external.json.gz",
             })
-            .reply(201, { id: "foo", name: "External", description: "External reference" });
+            .reply(201, {
+                id: "foo",
+                name: "External",
+                description: "External reference",
+            });
 
         renderWithProviders(<ImportReference />);
 
         await userEvent.upload(
             screen.getByLabelText("Upload file"),
-            new File(['{"test": true}'], "external.json.gz", { type: "application/gzip" }),
+            new File(['{"test": true}'], "external.json.gz", {
+                type: "application/gzip",
+            }),
         );
         await userEvent.type(screen.getByLabelText("Name"), "External");
-        await userEvent.type(screen.getByLabelText("Description"), "External reference");
+        await userEvent.type(
+            screen.getByLabelText("Description"),
+            "External reference",
+        );
         await userEvent.click(screen.getByRole("button", { name: "Import" }));
 
         expect(scope.isDone()).toBeTruthy();
@@ -38,12 +51,18 @@ describe("<ImportReference />", () => {
     it("should display errors when file or name missing", async () => {
         renderWithProviders(<ImportReference />);
 
-        expect(screen.queryByText("A reference file must be uploaded")).not.toBeInTheDocument();
-        expect(screen.queryByText("A name is required.")).not.toBeInTheDocument();
+        expect(
+            screen.queryByText("A reference file must be uploaded"),
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText("A name is required."),
+        ).not.toBeInTheDocument();
 
         await userEvent.click(screen.getByRole("button", { name: "Import" }));
 
-        expect(screen.getByText("A reference file must be uploaded")).toBeInTheDocument();
+        expect(
+            screen.getByText("A reference file must be uploaded"),
+        ).toBeInTheDocument();
         expect(screen.getByText("A name is required.")).toBeInTheDocument();
     });
 

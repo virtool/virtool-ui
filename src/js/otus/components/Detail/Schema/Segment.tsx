@@ -32,15 +32,28 @@ type SegmentProps = {
 /**
  * A condensed segment item for use in a list of segments
  */
-export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, segment }: SegmentProps) {
-    const { setValue: setRemoveSegmentName } = useUrlSearchParam<string>("removeSegmentName");
-    const { setValue: setEditSegmentName } = useUrlSearchParam<string>("editSegmentName");
+export default function Segment({
+    canModify,
+    first,
+    last,
+    onMoveUp,
+    onMoveDown,
+    segment,
+}: SegmentProps) {
+    const { setValue: setRemoveSegmentName } =
+        useUrlSearchParam<string>("removeSegmentName");
+    const { setValue: setEditSegmentName } =
+        useUrlSearchParam<string>("editSegmentName");
 
     return (
         <StyledSegment>
             <strong>{segment.name}</strong>
 
-            {segment.required ? <Label color="purple">Required</Label> : <Label>Optional</Label>}
+            {segment.required ? (
+                <Label color="purple">Required</Label>
+            ) : (
+                <Label>Optional</Label>
+            )}
             {canModify && (
                 <div className={cn("text-lg", "m-2")}>
                     <IconButton
@@ -58,15 +71,29 @@ export default function Segment({ canModify, first, last, onMoveUp, onMoveDown, 
                 </div>
             )}
 
-            <div className={cn("flex", "justify-center", "ml-auto", "font-bold", "text-2xl")}>
+            <div
+                className={cn(
+                    "flex",
+                    "justify-center",
+                    "ml-auto",
+                    "font-bold",
+                    "text-2xl",
+                )}
+            >
                 <IconButton
-                    className={cn("leading-none", { hidden: first, flex: !first })}
+                    className={cn("leading-none", {
+                        hidden: first,
+                        flex: !first,
+                    })}
                     name="caret-up"
                     tip="move up"
                     onClick={onMoveUp}
                 />
                 <IconButton
-                    className={cn("leading-none", { hidden: last, flex: !last })}
+                    className={cn("leading-none", {
+                        hidden: last,
+                        flex: !last,
+                    })}
                     name="caret-down"
                     tip="move down"
                     onClick={onMoveDown}

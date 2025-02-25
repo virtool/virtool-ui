@@ -17,13 +17,13 @@ function getArea(name, areaX, y, a, b) {
         name,
         func: area()
             .x(areaX)
-            .y0(d => y(d[a]))
-            .y1(d => y(d[b])),
+            .y0((d) => y(d[a]))
+            .y1((d) => y(d[b])),
     };
 }
 
 function getMinQuality(data) {
-    return min(map(data, document => min(values(document))));
+    return min(map(data, (document) => min(values(document))));
 }
 
 /**
@@ -43,7 +43,7 @@ function lineDrawer(data, key, x, y) {
 
     const generator = line()
         .x((d, i) => x(i))
-        .y(d => y(d[column]));
+        .y((d) => y(d[column]));
 
     return generator(data);
 }
@@ -72,11 +72,14 @@ export function drawBasesChart(element, data, baseWidth) {
     ];
 
     // Append the areas to the chart.
-    forEach(areas, area => {
+    forEach(areas, (area) => {
         svg.append("path")
             .attr("d", area.func(data))
             .attr("class", "graph-line")
-            .attr("class", `quality-area quality-area-${area.name === "quartile" ? "green" : "yellow"}`);
+            .attr(
+                "class",
+                `quality-area quality-area-${area.name === "quartile" ? "green" : "yellow"}`,
+            );
     });
 
     // Append the median line to the chart. Color is blue.

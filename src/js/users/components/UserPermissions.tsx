@@ -11,7 +11,7 @@ const UserPermissionsHeader = styled.div`
     display: flex;
 
     small {
-        color: ${props => props.theme.color.greyDarkest};
+        color: ${(props) => props.theme.color.greyDarkest};
         font-size: ${getFontSize("sm")};
         margin-left: auto;
     }
@@ -36,7 +36,13 @@ export default function UserPermissions({ permissions }: UserPermissionsProps) {
                 {transform(
                     permissions,
                     (acc, value, permission) =>
-                        acc.push(<PermissionItem key={permission} permission={permission} value={value} />),
+                        acc.push(
+                            <PermissionItem
+                                key={permission}
+                                permission={permission}
+                                value={value}
+                            />,
+                        ),
                     [],
                 )}
             </BoxGroup>

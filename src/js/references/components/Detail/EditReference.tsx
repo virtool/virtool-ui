@@ -1,4 +1,11 @@
-import { Dialog, DialogContent, DialogFooter, DialogOverlay, DialogTitle, SaveButton } from "@base";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogOverlay,
+    DialogTitle,
+    SaveButton,
+} from "@base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
 import { useDialogParam } from "@utils/hooks";
@@ -23,13 +30,18 @@ type EditReferenceProps = {
  * A dialog for editing a reference
  */
 export default function EditReference({ detail }: EditReferenceProps) {
-    const { open: openEditReference, setOpen: setOpenEditReference } = useDialogParam("openEditReference");
+    const { open: openEditReference, setOpen: setOpenEditReference } =
+        useDialogParam("openEditReference");
     const {
         formState: { errors },
         handleSubmit,
         register,
     } = useForm<FormValues>({
-        defaultValues: { name: detail.name, description: detail.description, organism: detail.organism },
+        defaultValues: {
+            name: detail.name,
+            description: detail.description,
+            organism: detail.organism,
+        },
     });
     const { mutation } = useUpdateReference(detail.id);
 
@@ -39,13 +51,24 @@ export default function EditReference({ detail }: EditReferenceProps) {
     }
 
     return (
-        <Dialog open={openEditReference} onOpenChange={() => setOpenEditReference(false)}>
+        <Dialog
+            open={openEditReference}
+            onOpenChange={() => setOpenEditReference(false)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Edit Reference</DialogTitle>
-                    <form onSubmit={handleSubmit(values => handleEdit({ ...values }))}>
-                        <ReferenceForm errors={errors} mode={ReferenceFormMode.edit} register={register} />
+                    <form
+                        onSubmit={handleSubmit((values) =>
+                            handleEdit({ ...values }),
+                        )}
+                    >
+                        <ReferenceForm
+                            errors={errors}
+                            mode={ReferenceFormMode.edit}
+                            register={register}
+                        />
                         <DialogFooter>
                             <SaveButton />
                         </DialogFooter>

@@ -15,11 +15,20 @@ type ClusterMemberProps = {
 /**
  * A condensed cluster member for use in a list of cluster members
  */
-export function ClusterMember({ index, accession, name, organism }: ClusterMemberProps) {
+export function ClusterMember({
+    index,
+    accession,
+    name,
+    organism,
+}: ClusterMemberProps) {
     return (
         <tr key={index}>
             <td>
-                <ExternalLink href={`http://www.ncbi.nlm.nih.gov/protein/${accession}`}>{accession}</ExternalLink>
+                <ExternalLink
+                    href={`http://www.ncbi.nlm.nih.gov/protein/${accession}`}
+                >
+                    {accession}
+                </ExternalLink>
             </td>
             <td>{name}</td>
             <td>{organism}</td>

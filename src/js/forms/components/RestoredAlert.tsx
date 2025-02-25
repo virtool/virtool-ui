@@ -27,7 +27,11 @@ export type RestoredAlertProps = {
 };
 
 /** Alert informing users of form data restoration */
-export function RestoredAlert({ hasRestored, name, resetForm }: RestoredAlertProps) {
+export function RestoredAlert({
+    hasRestored,
+    name,
+    resetForm,
+}: RestoredAlertProps) {
     const [dismissed, setDismissed] = useState(false);
 
     function onUndoRestore() {
@@ -41,8 +45,18 @@ export function RestoredAlert({ hasRestored, name, resetForm }: RestoredAlertPro
         show && (
             <StyledRestoredAlert>
                 <span>Resumed editing draft {name}.</span>
-                <IconButton name="undo" color="gray" tip="undo restore" onClick={onUndoRestore} />
-                <IconButton name="times" color="gray" tip="close" onClick={() => setDismissed(true)} />
+                <IconButton
+                    name="undo"
+                    color="gray"
+                    tip="undo restore"
+                    onClick={onUndoRestore}
+                />
+                <IconButton
+                    name="times"
+                    color="gray"
+                    tip="close"
+                    onClick={() => setDismissed(true)}
+                />
             </StyledRestoredAlert>
         )
     );

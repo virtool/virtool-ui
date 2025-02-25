@@ -8,10 +8,14 @@ import React from "react";
  * Displays a dialog for creating a subtraction
  */
 export default function CreateSubtraction() {
-    const { open: openCreateSubtraction, setOpen: setOpenCreateSubtraction } = useDialogParam("openCreateSubtraction");
+    const { open: openCreateSubtraction, setOpen: setOpenCreateSubtraction } =
+        useDialogParam("openCreateSubtraction");
 
     return (
-        <Dialog open={openCreateSubtraction} onOpenChange={() => setOpenCreateSubtraction(false)}>
+        <Dialog
+            open={openCreateSubtraction}
+            onOpenChange={() => setOpenCreateSubtraction(false)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent size="lg">

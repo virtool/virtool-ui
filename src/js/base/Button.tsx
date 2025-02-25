@@ -53,7 +53,9 @@ export function Button({
                 "select-none",
                 {
                     "text-black": ["gray"].includes(color),
-                    "text-white": ["blue", "green", "purple", "red"].includes(color),
+                    "text-white": ["blue", "green", "purple", "red"].includes(
+                        color,
+                    ),
                 },
                 {
                     "text-lg": size === "large",

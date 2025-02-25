@@ -15,8 +15,14 @@ type RemoveSequenceProps = {
 /**
  * Displays a dialog for removing a sequence
  */
-export default function RemoveSequence({ isolateName, isolateId, otuId, sequences }: RemoveSequenceProps) {
-    const { value: removeSequenceId, unsetValue: unsetRemoveSequence } = useUrlSearchParam<string>("removeSequenceId");
+export default function RemoveSequence({
+    isolateName,
+    isolateId,
+    otuId,
+    sequences,
+}: RemoveSequenceProps) {
+    const { value: removeSequenceId, unsetValue: unsetRemoveSequence } =
+        useUrlSearchParam<string>("removeSequenceId");
     const mutation = useRemoveSequence(otuId);
     const sequence = find(sequences, { id: removeSequenceId });
 

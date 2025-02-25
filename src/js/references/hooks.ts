@@ -14,7 +14,11 @@ export function getValidationSchema(sourceTypes: string[]) {
         sourceType: Yup.string()
             .lowercase()
             .notOneOf(sourceTypes, "Source type already exists")
-            .test("containsNoSpaces", "Source types may not contain spaces", value => !value.includes(" "))
+            .test(
+                "containsNoSpaces",
+                "Source types may not contain spaces",
+                (value) => !value.includes(" "),
+            )
             .trim(),
     });
 }
@@ -60,7 +64,8 @@ export function useUpdateSourceTypes(
         },
     });
 
-    const { errors, handleSubmit, register, reset } = useSourceTypesForm(sourceTypes);
+    const { errors, handleSubmit, register, reset } =
+        useSourceTypesForm(sourceTypes);
 
     function handleAdd({ sourceType }) {
         if (sourceType) {
@@ -75,7 +80,7 @@ export function useUpdateSourceTypes(
 
     function handleRemove(sourceType) {
         mutation.mutate(
-            sourceTypes.filter(s => s !== sourceType),
+            sourceTypes.filter((s) => s !== sourceType),
             {
                 onSuccess: () => {
                     setLastRemoved(sourceType);
@@ -122,9 +127,13 @@ export enum ReferenceRight {
  * @param right - The right to check for (eg. modify_otu)
  * @returns Whether the right is possessed by the account
  */
-export function useCheckReferenceRight(referenceId: string, right: ReferenceRight) {
+export function useCheckReferenceRight(
+    referenceId: string,
+    right: ReferenceRight,
+) {
     const { data: account, isPending: isPendingAccount } = useFetchAccount();
-    const { data: reference, isPending: isPendingReference } = useGetReference(referenceId);
+    const { data: reference, isPending: isPendingReference } =
+        useGetReference(referenceId);
 
     if (isPendingAccount || isPendingReference) {
         return { hasPermission: false, isPending: true };
@@ -141,7 +150,12 @@ export function useCheckReferenceRight(referenceId: string, right: ReferenceRigh
     }
 
     // Groups in common between the user and the registered ref groups.
-    const groups = filter(reference.groups, group => includes(account.groups, group.id));
+    const groups = filter(reference.groups, (group) =>
+        includes(account.groups, group.id),
+    );
 
-    return { hasPermission: groups && some(groups, { [right]: true }), isPending: false };
+    return {
+        hasPermission: groups && some(groups, { [right]: true }),
+        isPending: false,
+    };
 }

@@ -9,16 +9,20 @@ type SampleFilesMessageProps = {
 /**
  * Displays an alert message regarding legacy sample files
  */
-export default function SampleFilesMessage({ showLegacy }: SampleFilesMessageProps) {
+export default function SampleFilesMessage({
+    showLegacy,
+}: SampleFilesMessageProps) {
     return showLegacy ? (
         <Alert color="orange" block>
             <p>
                 <strong>
-                    Virtool now retains raw data for newly created samples instead of trimming during sample creation.
+                    Virtool now retains raw data for newly created samples
+                    instead of trimming during sample creation.
                 </strong>
                 <p>
-                    Because this is an older sample, only trimmed data is available. Recreate the sample to run analysis
-                    with untrimmed reads.
+                    Because this is an older sample, only trimmed data is
+                    available. Recreate the sample to run analysis with
+                    untrimmed reads.
                 </p>
             </p>
         </Alert>

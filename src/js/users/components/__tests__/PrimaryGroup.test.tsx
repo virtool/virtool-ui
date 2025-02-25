@@ -27,7 +27,9 @@ describe("<PrimaryGroup />", () => {
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toHaveValue("2");
         expect(screen.getByRole("combobox")).not.toHaveValue("3");
-        expect(screen.getByRole("option", { name: "None" })).toBeInTheDocument();
+        expect(
+            screen.getByRole("option", { name: "None" }),
+        ).toBeInTheDocument();
         expect(screen.getByRole("option", { name: "Foo" })).toBeInTheDocument();
         expect(screen.getByRole("option", { name: "Baz" })).toBeInTheDocument();
         expect(screen.getByRole("option", { name: "Bar" })).toBeInTheDocument();
@@ -51,13 +53,24 @@ describe("<PrimaryGroup />", () => {
 
         expect(screen.getByText("Primary Group")).toBeInTheDocument();
         expect(screen.getByRole("combobox")).toHaveValue("none");
-        expect(screen.queryByRole("option", { name: "Foo" })).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("option", { name: "Foo" }),
+        ).not.toBeInTheDocument();
     });
 
     it("should call onSetPrimaryGroup() when selection changes", async () => {
-        const userDetails = createFakeUser({ id: props.id, groups: props.groups, primary_group: props.primaryGroup });
+        const userDetails = createFakeUser({
+            id: props.id,
+            groups: props.groups,
+            primary_group: props.primaryGroup,
+        });
 
-        const scope = mockApiEditUser(props.id, 200, { primary_group: { id: "1", name: "foo" } }, userDetails);
+        const scope = mockApiEditUser(
+            props.id,
+            200,
+            { primary_group: { id: "1", name: "foo" } },
+            userDetails,
+        );
         renderWithProviders(<PrimaryGroup {...props} />);
 
         expect(screen.getByText("Primary Group")).toBeInTheDocument();

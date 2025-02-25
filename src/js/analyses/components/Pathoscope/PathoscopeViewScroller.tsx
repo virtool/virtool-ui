@@ -6,9 +6,9 @@ import styled from "styled-components";
 const StyledPathoscopeViewerScroller = styled.div`
     align-items: center;
     border: ${getBorder};
-    border-radius: ${props => props.theme.borderRadius.lg};
+    border-radius: ${(props) => props.theme.borderRadius.lg};
     bottom: 30px;
-    color: ${props => props.theme.color.greyDark};
+    color: ${(props) => props.theme.color.greyDark};
     cursor: pointer;
     display: flex;
     height: 40px;
@@ -19,8 +19,8 @@ const StyledPathoscopeViewerScroller = styled.div`
     z-index: 1;
 
     &:hover {
-        background-color: ${props => props.theme.color.greyLightest};
-        color: ${props => props.theme.color.greyDarkest};
+        background-color: ${(props) => props.theme.color.greyLightest};
+        color: ${(props) => props.theme.color.greyDarkest};
     }
 `;
 

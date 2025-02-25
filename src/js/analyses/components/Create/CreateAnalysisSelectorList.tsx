@@ -5,7 +5,7 @@ import { BoxGroup, BoxGroupSection } from "@base";
 
 const StyledCreateAnalysisSelectorList = styled(BoxGroup)`
     border: none;
-    background-color: ${props => props.theme.color.greyLightest};
+    background-color: ${(props) => props.theme.color.greyLightest};
     margin: 0;
     overflow-y: auto;
     height: 160px;
@@ -21,10 +21,14 @@ interface CreateAnalysisSelectorListProps {
     render: (item: any) => JSX.Element;
 }
 
-export function CreateAnalysisSelectorList({ className = "", items, render }: CreateAnalysisSelectorListProps) {
+export function CreateAnalysisSelectorList({
+    className = "",
+    items,
+    render,
+}: CreateAnalysisSelectorListProps) {
     return (
         <StyledCreateAnalysisSelectorList className={className}>
-            {items.map(item => render(item))}
+            {items.map((item) => render(item))}
         </StyledCreateAnalysisSelectorList>
     );
 }

@@ -37,17 +37,20 @@ const draw = (element, data, width) => {
 
     const areaDrawer = area()
         .x((d, i) => x(i))
-        .y0(d => y(d))
+        .y0((d) => y(d))
         .y1(height);
 
-    svg.append("path").datum(data).attr("class", "depth-area").attr("d", areaDrawer);
+    svg.append("path")
+        .datum(data)
+        .attr("class", "depth-area")
+        .attr("d", areaDrawer);
 };
 
 const StyledOTUCoverage = styled.div`
     width: 100%;
     path.depth-area {
-        fill: ${props => props.theme.color.blue};
-        stroke: ${props => props.theme.color.blue};
+        fill: ${(props) => props.theme.color.blue};
+        stroke: ${(props) => props.theme.color.blue};
     }
 `;
 

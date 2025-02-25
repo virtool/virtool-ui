@@ -15,7 +15,7 @@ const AccountProfileGroups = styled.div`
 const StyledGroupItem = styled.span`
     align-items: center;
     background-color: ${getBadgeOrLabelColor};
-    color: ${props => props.theme.color.white};
+    color: ${(props) => props.theme.color.white};
     border-radius: ${borderRadius.md};
     display: inline-flex;
     padding: 4px 8px;
@@ -40,7 +40,9 @@ export default function AccountGroups({ groups }: AccountGroupsProps) {
             </BoxGroupHeader>
             <AccountProfileGroups>
                 {groups.length ? (
-                    map(groups, ({ id, name }) => <StyledGroupItem key={id}>{name}</StyledGroupItem>)
+                    map(groups, ({ id, name }) => (
+                        <StyledGroupItem key={id}>{name}</StyledGroupItem>
+                    ))
                 ) : (
                     <NoneFound noun="groups" />
                 )}

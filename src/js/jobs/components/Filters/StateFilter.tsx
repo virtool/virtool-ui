@@ -14,7 +14,10 @@ function filterStatesByCategory(category, selected) {
     const options = category === "active" ? active : inactive;
     const diff = difference(selected, options);
 
-    if (selected.length - difference(selected, options).length === options.length) {
+    if (
+        selected.length - difference(selected, options).length ===
+        options.length
+    ) {
         return diff;
     }
 
@@ -37,14 +40,17 @@ type StateFilterProps = {
  * Displays the categories of state filtering for jobs
  */
 export default function StateFilter({ counts }: StateFilterProps) {
-    const { values: states, setValues: setStates } = useListSearchParam("state");
-    const availableCounts = mapValues(counts, workflowCounts =>
+    const { values: states, setValues: setStates } =
+        useListSearchParam("state");
+    const availableCounts = mapValues(counts, (workflowCounts) =>
         reduce(workflowCounts, (result, value) => (result += value), 0),
     );
 
     function handleClick(value) {
         setStates(
-            value === "active" || value === "inactive" ? filterStatesByCategory(value, states) : xor(states, [value]),
+            value === "active" || value === "inactive"
+                ? filterStatesByCategory(value, states)
+                : xor(states, [value]),
         );
     }
 

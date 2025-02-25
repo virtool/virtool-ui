@@ -8,16 +8,24 @@ type InputPasswordProps = {
     name: string;
 };
 
-export const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>((props, ref) => {
+export const InputPassword = React.forwardRef<
+    HTMLInputElement,
+    InputPasswordProps
+>((props, ref) => {
     const [show, setShow] = useState(false);
 
     return (
         <InputContainer>
-            <Input as="input" {...props} ref={ref} type={show ? "" : "password"} />
+            <Input
+                as="input"
+                {...props}
+                ref={ref}
+                type={show ? "" : "password"}
+            />
             <InputIconButton
                 tip={show ? "Hide" : "Show"}
                 name={show ? "eye-slash" : "eye"}
-                onClick={() => setShow(prevShow => !prevShow)}
+                onClick={() => setShow((prevShow) => !prevShow)}
             />
         </InputContainer>
     );

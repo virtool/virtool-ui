@@ -10,11 +10,11 @@ export const InputContainer = styled.div<InputContainerProps>`
   position: relative;
 
   ${Input} {
-    padding-${props => props.align}: 40px;
+    padding-${(props) => props.align}: 40px;
   }
 
   ${InputIconButton} {
-    ${props => props.align}: 0;
+    ${(props) => props.align}: 0;
   }
 `;
 

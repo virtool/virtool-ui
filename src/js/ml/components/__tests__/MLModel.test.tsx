@@ -2,7 +2,10 @@ import { screen } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, it } from "vitest";
-import { createFakeMLModelMinimal, mockApiGetModels } from "../../../../tests/fake/ml";
+import {
+    createFakeMLModelMinimal,
+    mockApiGetModels,
+} from "../../../../tests/fake/ml";
 import ML from "../ML";
 
 describe("<MLModels/>", () => {
@@ -20,10 +23,11 @@ describe("<MLModels/>", () => {
         renderWithRouter(<ML />, path);
 
         expect(await screen.findByText(mlModel.name)).toBeInTheDocument();
-        expect(await screen.findByRole("link", { name: `${mlModel.latest_release.name}` })).toHaveAttribute(
-            "href",
-            mlModel.latest_release.github_url,
-        );
+        expect(
+            await screen.findByRole("link", {
+                name: `${mlModel.latest_release.name}`,
+            }),
+        ).toHaveAttribute("href", mlModel.latest_release.github_url);
         expect(await screen.findByText("1 year ago")).toBeInTheDocument();
 
         model_scope.done();
@@ -33,7 +37,9 @@ describe("<MLModels/>", () => {
         const model_scope = mockApiGetModels([]);
         renderWithRouter(<ML />, path);
 
-        expect(await screen.findByText("No machine learning models found.")).toBeInTheDocument();
+        expect(
+            await screen.findByText("No machine learning models found."),
+        ).toBeInTheDocument();
         model_scope.done();
     });
 });

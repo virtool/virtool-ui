@@ -1,5 +1,11 @@
 import { useCreateUser } from "@administration/queries";
-import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+} from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
 import { CreateUserForm } from "./CreateUserForm";
@@ -19,7 +25,8 @@ type NewUser = {
  */
 export default function CreateUser() {
     const mutation = useCreateUser();
-    const { open: openCreateUser, setOpen: setOpenCreateUser } = useDialogParam("openCreateUser");
+    const { open: openCreateUser, setOpen: setOpenCreateUser } =
+        useDialogParam("openCreateUser");
 
     function handleSubmit({ handle, password, forceReset }: NewUser) {
         mutation.mutate(
@@ -48,7 +55,10 @@ export default function CreateUser() {
                     <DialogTitle>Create User</DialogTitle>
                     <CreateUserForm
                         onSubmit={handleSubmit}
-                        error={mutation.isError && mutation.error.response?.body.message}
+                        error={
+                            mutation.isError &&
+                            mutation.error.response?.body.message
+                        }
                     />
                 </DialogContent>
             </DialogPortal>

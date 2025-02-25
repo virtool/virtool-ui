@@ -1,7 +1,10 @@
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+} from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -15,7 +18,9 @@ describe("<ReferenceDetailHeaderIcon />", () => {
     beforeEach(() => {
         reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
-        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(
+            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+        );
         props = {
             createdAt: reference.created_at,
             isRemote: false,
@@ -30,7 +35,9 @@ describe("<ReferenceDetailHeaderIcon />", () => {
         renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
         expect(screen.getByText(reference.name)).toBeInTheDocument();
-        expect(screen.getByText(`${reference.user.handle} created`)).toBeInTheDocument();
+        expect(
+            screen.getByText(`${reference.user.handle} created`),
+        ).toBeInTheDocument();
     });
 
     it("should render when [showIcons=false]", () => {
@@ -54,14 +61,18 @@ describe("<ReferenceDetailHeaderIcon />", () => {
 
     it("should render when [isRemote=true]", async () => {
         props.isRemote = true;
-        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(
+            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+        );
         renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
         expect(await screen.findByLabelText("lock")).toBeInTheDocument();
     });
 
     it("should render when [isRemote=false]", () => {
-        mockApiGetAccount(createFakeAccount({ administrator_role: AdministratorRoles.FULL }));
+        mockApiGetAccount(
+            createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
+        );
         renderWithRouter(<ReferenceDetailHeader {...props} />, path);
 
         expect(screen.queryByLabelText("lock")).toBeNull();

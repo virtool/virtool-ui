@@ -16,8 +16,12 @@ describe("<BLASTError />", () => {
 
     it("should render error", () => {
         renderWithProviders(<BLASTError {...props} />);
-        expect(screen.getByText("Error during BLAST request.")).toBeInTheDocument();
-        expect(screen.getByText("Failure. BLAST did not work.")).toBeInTheDocument();
+        expect(
+            screen.getByText("Error during BLAST request."),
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText("Failure. BLAST did not work."),
+        ).toBeInTheDocument();
     });
 
     it("should call onBlast when retry button clicked", async () => {

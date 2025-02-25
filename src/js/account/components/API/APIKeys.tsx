@@ -1,6 +1,13 @@
 import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Box, BoxGroup, ExternalLink, Link, LoadingPlaceholder, NoneFoundBox } from "@base";
+import {
+    Box,
+    BoxGroup,
+    ExternalLink,
+    Link,
+    LoadingPlaceholder,
+    NoneFoundBox,
+} from "@base";
 import { updateSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
@@ -32,22 +39,32 @@ export default function APIKeys() {
         return <LoadingPlaceholder className="mt-36" />;
     }
 
-    const keyComponents = data.length && map(data, key => <APIKey key={key.id} apiKey={key} />);
+    const keyComponents =
+        data.length && map(data, (key) => <APIKey key={key.id} apiKey={key} />);
 
     return (
         <div>
             <APIKeysHeader>
                 <div>
                     <span>Manage API keys for accessing the </span>
-                    <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">Virtool API</ExternalLink>
+                    <ExternalLink href="https://www.virtool.ca/docs/developer/api_account/">
+                        Virtool API
+                    </ExternalLink>
                     <span>.</span>
                 </div>
-                <Link to={`/account/api/${updateSearchParam("openCreateKey", "true", search)}`} replace>
+                <Link
+                    to={`/account/api/${updateSearchParam("openCreateKey", "true", search)}`}
+                    replace
+                >
                     Create
                 </Link>
             </APIKeysHeader>
 
-            {keyComponents.length ? <BoxGroup>{keyComponents}</BoxGroup> : <NoneFoundBox noun="API keys" />}
+            {keyComponents.length ? (
+                <BoxGroup>{keyComponents}</BoxGroup>
+            ) : (
+                <NoneFoundBox noun="API keys" />
+            )}
 
             <CreateAPIKey />
         </div>

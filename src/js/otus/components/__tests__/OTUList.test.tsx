@@ -5,7 +5,10 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import { createFakeOTUMinimal, mockApiGetOTUs } from "@tests/fake/otus";
-import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+} from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
@@ -35,7 +38,10 @@ describe("<OTUsList />", () => {
             expect(screen.getByText(OTUs[0].abbreviation)).toBeInTheDocument();
             expect(screen.getByText(OTUs[1].name)).toBeInTheDocument();
             expect(screen.getByText(OTUs[1].abbreviation)).toBeInTheDocument();
-            expect(screen.getByRole("textbox")).toHaveAttribute("placeholder", "Name or abbreviation");
+            expect(screen.getByRole("textbox")).toHaveAttribute(
+                "placeholder",
+                "Name or abbreviation",
+            );
 
             scope.done();
         });
@@ -44,7 +50,9 @@ describe("<OTUsList />", () => {
             const scope = mockApiGetOTUs([], reference.id);
             renderWithRouter(<References />, path);
 
-            expect(await screen.findByText("No OTUs found.")).toBeInTheDocument();
+            expect(
+                await screen.findByText("No OTUs found."),
+            ).toBeInTheDocument();
             expect(screen.queryByText(OTUs[0].name)).toBeNull();
             expect(screen.queryByText(OTUs[0].abbreviation)).toBeNull();
 
@@ -94,14 +102,18 @@ describe("<OTUsList />", () => {
             const { history } = renderWithRouter(<References />, path);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
-            const inputElement = screen.getByPlaceholderText("Name or abbreviation");
+            const inputElement = screen.getByPlaceholderText(
+                "Name or abbreviation",
+            );
             expect(inputElement).toHaveValue("");
 
             await userEvent.type(inputElement, "Foobar");
 
             expect(inputElement).toHaveValue("Foobar");
 
-            expect(history[0]).toEqual(`/refs/${reference.id}/otus?find=Foobar`);
+            expect(history[0]).toEqual(
+                `/refs/${reference.id}/otus?find=Foobar`,
+            );
 
             scope.done();
         });
@@ -119,7 +131,10 @@ describe("<OTUsList />", () => {
         });
 
         it("should render when [verified=false]", async () => {
-            const scope = mockApiGetOTUs([createFakeOTUMinimal({ verified: false })], reference.id);
+            const scope = mockApiGetOTUs(
+                [createFakeOTUMinimal({ verified: false })],
+                reference.id,
+            );
             renderWithRouter(<References />, path);
 
             expect(await screen.findByText("Unverified")).toBeInTheDocument();

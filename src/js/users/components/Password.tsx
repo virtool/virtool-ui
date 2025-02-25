@@ -36,7 +36,11 @@ type PasswordProps = {
 /**
  * The password view to handle password change
  */
-export default function Password({ id, forceReset, lastPasswordChange }: PasswordProps) {
+export default function Password({
+    id,
+    forceReset,
+    lastPasswordChange,
+}: PasswordProps) {
     const mutation = useUpdateUser();
     const {
         formState: { errors },
@@ -64,8 +68,11 @@ export default function Password({ id, forceReset, lastPasswordChange }: Passwor
 
             <BoxGroupSection>
                 <form
-                    onSubmit={handleSubmit(values =>
-                        mutation.mutate({ userId: id, update: { password: values.password } }),
+                    onSubmit={handleSubmit((values) =>
+                        mutation.mutate({
+                            userId: id,
+                            update: { password: values.password },
+                        }),
                     )}
                 >
                     <InputGroup>
@@ -75,10 +82,12 @@ export default function Password({ id, forceReset, lastPasswordChange }: Passwor
                                 id="password"
                                 type="password"
                                 {...register("password", {
-                                    required: "Password does not meet minimum length requirement (8)",
+                                    required:
+                                        "Password does not meet minimum length requirement (8)",
                                     minLength: {
                                         value: 8,
-                                        message: "Password does not meet minimum length requirement (8)",
+                                        message:
+                                            "Password does not meet minimum length requirement (8)",
                                     },
                                 })}
                             />

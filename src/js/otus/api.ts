@@ -18,7 +18,7 @@ export function get({ otuId }: { otuId: string }) {
  * @returns A Promise resolving to the API response containing the OTU data
  */
 export function getOTU(otuId: string): Promise<OTU> {
-    return Request.get(`/otus/${otuId}`).then(res => res.body);
+    return Request.get(`/otus/${otuId}`).then((res) => res.body);
 }
 
 /**
@@ -28,7 +28,7 @@ export function getOTU(otuId: string): Promise<OTU> {
  * @return A Promise resolving to the API response containing the OTU history
  */
 export function getOTUHistory(otuId: string): Promise<OTUHistory[]> {
-    return Request.get(`/otus/${otuId}/history`).then(res => res.body);
+    return Request.get(`/otus/${otuId}/history`).then((res) => res.body);
 }
 
 /**
@@ -38,7 +38,7 @@ export function getOTUHistory(otuId: string): Promise<OTUHistory[]> {
  * @returns A Promise resolving to the API response containing the genebank sequence data
  */
 export function getGenbank(accession: string) {
-    return Request.get(`/genbank/${accession}`).then(res => res.body);
+    return Request.get(`/genbank/${accession}`).then((res) => res.body);
 }
 
 /**
@@ -49,13 +49,17 @@ export function getGenbank(accession: string) {
  * @param abbreviation - The shorthand name for the new otu
  * @returns A Promise resolving to the API response containing the new OTU data
  */
-export function createOTU(refId: string, name: string, abbreviation: string): Promise<OTU> {
+export function createOTU(
+    refId: string,
+    name: string,
+    abbreviation: string,
+): Promise<OTU> {
     return Request.post(`/refs/${refId}/otus`)
         .send({
             name,
             abbreviation,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -67,14 +71,19 @@ export function createOTU(refId: string, name: string, abbreviation: string): Pr
  * @param schema - The update schema for the otu
  * @returns A Promise resolving to the API response containing the updated OTU data
  */
-export function editOTU(otuId: string, name: string, abbreviation: string, schema: OTUSegment[]): Promise<OTU> {
+export function editOTU(
+    otuId: string,
+    name: string,
+    abbreviation: string,
+    schema: OTUSegment[],
+): Promise<OTU> {
     return Request.patch(`/otus/${otuId}`)
         .send({
             name,
             abbreviation,
             schema,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -84,7 +93,7 @@ export function editOTU(otuId: string, name: string, abbreviation: string, schem
  * @returns A promise resolving to the API response indicating if removal was successful
  */
 export function removeOTU(otuId: string): Promise<null> {
-    return Request.delete(`/otus/${otuId}`).then(res => res.body);
+    return Request.delete(`/otus/${otuId}`).then((res) => res.body);
 }
 
 /**
@@ -95,13 +104,17 @@ export function removeOTU(otuId: string): Promise<null> {
  * @param sourceName - The name of the source
  * @returns A promise resolving to the API response containing the new isolate
  */
-export function addIsolate(otuId: string, sourceType: string, sourceName: string): Promise<OTUIsolate> {
+export function addIsolate(
+    otuId: string,
+    sourceType: string,
+    sourceName: string,
+): Promise<OTUIsolate> {
     return Request.post(`/otus/${otuId}/isolates`)
         .send({
             source_type: sourceType,
             source_name: sourceName,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -124,7 +137,7 @@ export function editIsolate(
             source_type: sourceType,
             source_name: sourceName,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -134,8 +147,13 @@ export function editIsolate(
  * @param isolateId - The unique identifier of the isolate to set as default
  * @returns A Promise resolving to the API response containing the updated isolate
  */
-export function setIsolateAsDefault(otuId: string, isolateId: string): Promise<OTUIsolate> {
-    return Request.put(`/otus/${otuId}/isolates/${isolateId}/default`).then(res => res.body);
+export function setIsolateAsDefault(
+    otuId: string,
+    isolateId: string,
+): Promise<OTUIsolate> {
+    return Request.put(`/otus/${otuId}/isolates/${isolateId}/default`).then(
+        (res) => res.body,
+    );
 }
 
 /**
@@ -146,7 +164,9 @@ export function setIsolateAsDefault(otuId: string, isolateId: string): Promise<O
  * @returns A Promise resolving to the API response indicating if removal was successful
  */
 export function removeIsolate(otuId: string, isolateId: string): Promise<null> {
-    return Request.delete(`/otus/${otuId}/isolates/${isolateId}`).then(res => res.body);
+    return Request.delete(`/otus/${otuId}/isolates/${isolateId}`).then(
+        (res) => res.body,
+    );
 }
 
 /**
@@ -181,7 +201,7 @@ export function addSequence(
             segment,
             target,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -209,7 +229,9 @@ export function editSequence(
     segment: string,
     target: string,
 ): Promise<OTUSequence> {
-    return Request.patch(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`)
+    return Request.patch(
+        `/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`,
+    )
         .send({
             accession,
             definition,
@@ -218,7 +240,7 @@ export function editSequence(
             segment,
             target,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -229,8 +251,14 @@ export function editSequence(
  * @param sequenceId - The unique identifier of the sequence to remove
  * @returns A Promise resolving to the API response indicating if removal was successful
  */
-export function removeSequence(otuId: string, isolateId: string, sequenceId: string): Promise<null> {
-    return Request.delete(`/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`).then(res => res.body);
+export function removeSequence(
+    otuId: string,
+    isolateId: string,
+    sequenceId: string,
+): Promise<null> {
+    return Request.delete(
+        `/otus/${otuId}/isolates/${isolateId}/sequences/${sequenceId}`,
+    ).then((res) => res.body);
 }
 
 /**
@@ -240,7 +268,7 @@ export function removeSequence(otuId: string, isolateId: string, sequenceId: str
  * @returns A Promise resolving to the API response indicating if the revert was successful
  */
 export function revertOTU(change_id: string): Promise<null> {
-    return Request.delete(`/history/${change_id}`).then(res => res.body);
+    return Request.delete(`/history/${change_id}`).then((res) => res.body);
 }
 
 /**
@@ -253,10 +281,16 @@ export function revertOTU(change_id: string): Promise<null> {
  * @param verified - Whether OTUs should be filtered by verified status
  * @returns A Promise resolving to a page of OTUs
  */
-export function listOTUs(refId: string, page: number, per_page: number, term: string, verified: boolean) {
+export function listOTUs(
+    refId: string,
+    page: number,
+    per_page: number,
+    term: string,
+    verified: boolean,
+) {
     return Request.get(`/refs/${refId}/otus`)
         .query({ find: term, page, per_page, verified: verified || undefined })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -279,5 +313,9 @@ export function find({
     verified: boolean;
     page: number;
 }) {
-    return Request.get(`/refs/${refId}/otus`).query({ find: term, page, verified: verified || undefined });
+    return Request.get(`/refs/${refId}/otus`).query({
+        find: term,
+        page,
+        verified: verified || undefined,
+    });
 }

@@ -1,10 +1,16 @@
 import { forEach } from "lodash-es/lodash";
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 import { map } from "lodash";
 import { split, trimEnd } from "lodash-es";
 
-const getSize = ref => ({
+const getSize = (ref) => ({
     height: ref.current ? ref.current.offsetHeight : 0,
     width: ref.current ? ref.current.offsetWidth : 0,
 });
@@ -14,10 +20,15 @@ type Size = {
     width: number;
 };
 
-export function useElementSize<T extends HTMLElement>(): [React.MutableRefObject<T>, Size] {
+export function useElementSize<T extends HTMLElement>(): [
+    React.MutableRefObject<T>,
+    Size,
+] {
     const ref = useRef(null);
 
-    const [size, setSize] = useState<{ height: number; width: number }>(getSize(ref));
+    const [size, setSize] = useState<{ height: number; width: number }>(
+        getSize(ref),
+    );
 
     const handleResize = () => {
         setSize(getSize(ref));
@@ -45,7 +56,10 @@ export function useNavigate() {
 
     return navigate;
 }
-export function formatPath(basePath: string, searchParams: Record<string, string | number | boolean | null>) {
+export function formatPath(
+    basePath: string,
+    searchParams: Record<string, string | number | boolean | null>,
+) {
     return basePath + formatSearchParams(searchParams);
 }
 
@@ -54,12 +68,16 @@ export function formatPath(basePath: string, searchParams: Record<string, string
  *
  * @param params - the collection of values to be written to the URL
  */
-export function formatSearchParams(params: Record<string, string | number | boolean | null>) {
+export function formatSearchParams(
+    params: Record<string, string | number | boolean | null>,
+) {
     const searchParams = new URLSearchParams();
 
     forEach(params, (value, key) => {
         if (Array.isArray(value)) {
-            forEach(value, arrayValue => searchParams.append(key, arrayValue));
+            forEach(value, (arrayValue) =>
+                searchParams.append(key, arrayValue),
+            );
         } else {
             searchParams.set(key, value);
         }
@@ -96,7 +114,13 @@ export function updateSearchParam(key: string, value: string, search: string) {
  * @param search - URL search string containing the search params
  * @param location - the base URL
  */
-function updateUrlSearchParams(value: string, key: string, navigate: navigate, search: string, location: string) {
+function updateUrlSearchParams(
+    value: string,
+    key: string,
+    navigate: navigate,
+    search: string,
+    location: string,
+) {
     const params = new URLSearchParams(search);
 
     params.set(key, String(value));
@@ -121,11 +145,16 @@ function updateUrlSearchParams(value: string, key: string, navigate: navigate, s
  * @param search - URL search string containing the search params
  * @param values - The values to be used in the search parameter
  */
-function updateUrlSearchParamsList(key: string, navigate: navigate, search: string, values: SearchParam[]) {
+function updateUrlSearchParamsList(
+    key: string,
+    navigate: navigate,
+    search: string,
+    values: SearchParam[],
+) {
     const params = new URLSearchParams(search);
 
     params.delete(key);
-    forEach(values, value => params.append(key, value));
+    forEach(values, (value) => params.append(key, value));
 
     search = `?${params.toString()}`;
     navigate(search);
@@ -157,7 +186,10 @@ function unsetUrlSearchParam(key, navigate, search, location) {
 
 type SearchParam = string | boolean | number | null;
 
-type navigate = <S>(to: string | URL, options?: { replace?: boolean; state?: S }) => void;
+type navigate = <S>(
+    to: string | URL,
+    options?: { replace?: boolean; state?: S },
+) => void;
 
 /**
  * Attempt to cast a search param value into the correct type
@@ -198,7 +230,10 @@ function createUseUrlSearchParam(): [
         setValue: (value: SearchParam) => void;
         unsetValue: () => void;
     },
-    <T extends SearchParam>(key: string, defaultValues?: T[]) => { values: T[]; setValues: (newValue: T[]) => void },
+    <T extends SearchParam>(
+        key: string,
+        defaultValues?: T[],
+    ) => { values: T[]; setValues: (newValue: T[]) => void },
 ] {
     const cache = { search: "" };
 
@@ -212,7 +247,11 @@ function createUseUrlSearchParam(): [
     function useNaiveUrlSearchParam(
         key: string,
         defaultValue?: SearchParam,
-    ): { value: string; setValue: (value: SearchParam) => void; unsetValue: () => void } {
+    ): {
+        value: string;
+        setValue: (value: SearchParam) => void;
+        unsetValue: () => void;
+    } {
         cache.search = useSearch();
         const [location] = useLocation();
 
@@ -224,17 +263,34 @@ function createUseUrlSearchParam(): [
         if (firstRender.current && defaultValue && !value) {
             firstRender.current = false;
             value = String(defaultValue);
-            cache.search = updateUrlSearchParams(String(defaultValue), key, navigate, cache.search, location);
+            cache.search = updateUrlSearchParams(
+                String(defaultValue),
+                key,
+                navigate,
+                cache.search,
+                location,
+            );
         }
 
         firstRender.current = false;
 
         function setURLSearchParam(value) {
-            cache.search = updateUrlSearchParams(value, key, navigate, cache.search, location);
+            cache.search = updateUrlSearchParams(
+                value,
+                key,
+                navigate,
+                cache.search,
+                location,
+            );
         }
 
         function unsetValue() {
-            cache.search = unsetUrlSearchParam(key, navigate, cache.search, location);
+            cache.search = unsetUrlSearchParam(
+                key,
+                navigate,
+                cache.search,
+                location,
+            );
         }
 
         return {
@@ -263,13 +319,23 @@ function createUseUrlSearchParam(): [
 
         if (firstRender.current && defaultValues && !values.length) {
             values = defaultValues as string[];
-            cache.search = updateUrlSearchParamsList(key, navigate, cache.search, values);
+            cache.search = updateUrlSearchParamsList(
+                key,
+                navigate,
+                cache.search,
+                values,
+            );
         }
 
         firstRender.current = false;
 
         function setValues(values: T[]) {
-            cache.search = updateUrlSearchParamsList(key, navigate, cache.search, values);
+            cache.search = updateUrlSearchParamsList(
+                key,
+                navigate,
+                cache.search,
+                values,
+            );
         }
 
         return {
@@ -281,7 +347,8 @@ function createUseUrlSearchParam(): [
     return [useNaiveUrlSearchParam, useListSearchParam];
 }
 
-export const [useNaiveUrlSearchParam, useListSearchParam] = createUseUrlSearchParam();
+export const [useNaiveUrlSearchParam, useListSearchParam] =
+    createUseUrlSearchParam();
 
 /**
  * Store and retrieve component state in a URL search parameter
@@ -290,7 +357,10 @@ export const [useNaiveUrlSearchParam, useListSearchParam] = createUseUrlSearchPa
  * @param defaultValue - The default value to use when the search parameter key is not present in the URL
  * @returns The current value and a functions for setting the URL search parameter
  */
-export function useUrlSearchParam<T extends SearchParam>(key: string, defaultValue?: T) {
+export function useUrlSearchParam<T extends SearchParam>(
+    key: string,
+    defaultValue?: T,
+) {
     const { value, ...rest } = useNaiveUrlSearchParam(key, defaultValue);
 
     return { value: castSearchParamValue(value) as T, ...rest };
@@ -303,7 +373,11 @@ export function useUrlSearchParam<T extends SearchParam>(key: string, defaultVal
  * @returns Whether the dialog is open and a callback to set the dialog state
  */
 export function useDialogParam(key: string) {
-    const { value: open, setValue, unsetValue } = useUrlSearchParam<boolean | undefined>(key);
+    const {
+        value: open,
+        setValue,
+        unsetValue,
+    } = useUrlSearchParam<boolean | undefined>(key);
 
     function setDialogValue(value: boolean) {
         if (value) {
@@ -321,7 +395,11 @@ export function useDialogParam(key: string) {
  * @returns The current page and a function to change the page
  */
 export function usePageParam() {
-    const { value: page, setValue: setPage, unsetValue: unsetPage } = useUrlSearchParam<number>("page");
+    const {
+        value: page,
+        setValue: setPage,
+        unsetValue: unsetPage,
+    } = useUrlSearchParam<number>("page");
     return { page: page || 1, setPage, unsetPage };
 }
 
@@ -362,7 +440,11 @@ export function ScrollSyncContext({ children }: ScrollSyncProps) {
         setScrollPercentage(percentage);
     }
 
-    return <ScrollContext.Provider value={[scrollPercentage, handleScroll]}>{children}</ScrollContext.Provider>;
+    return (
+        <ScrollContext.Provider value={[scrollPercentage, handleScroll]}>
+            {children}
+        </ScrollContext.Provider>
+    );
 }
 
 /**

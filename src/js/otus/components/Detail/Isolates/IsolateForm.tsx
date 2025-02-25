@@ -1,14 +1,21 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { DialogFooter, Input, InputGroup, InputLabel, InputSimple, SaveButton } from "../../../../base";
+import {
+    DialogFooter,
+    Input,
+    InputGroup,
+    InputLabel,
+    InputSimple,
+    SaveButton,
+} from "../../../../base";
 import { formatIsolateName } from "../../../../utils/utils";
 import { SourceType } from "./SourceType";
 
 const IsolateFormFields = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-column-gap: ${props => props.theme.gap.column};
+    grid-column-gap: ${(props) => props.theme.gap.column};
 `;
 
 type IsolateFormValues = {
@@ -44,7 +51,7 @@ export default function IsolateForm({
     });
 
     return (
-        <form onSubmit={handleSubmit(values => onSubmit({ ...values }))}>
+        <form onSubmit={handleSubmit((values) => onSubmit({ ...values }))}>
             <IsolateFormFields>
                 <SourceType
                     restrictSourceTypes={restrictSourceTypes}
@@ -58,7 +65,9 @@ export default function IsolateForm({
                     <InputSimple
                         id="sourceName"
                         {...register("sourceName")}
-                        disabled={watch("sourceType").toLowerCase() === "unknown"}
+                        disabled={
+                            watch("sourceType").toLowerCase() === "unknown"
+                        }
                     />
                 </InputGroup>
             </IsolateFormFields>
@@ -67,7 +76,10 @@ export default function IsolateForm({
                 <InputLabel htmlFor="isolateName">Isolate Name</InputLabel>
                 <Input
                     id="isolateName"
-                    value={formatIsolateName({ sourceName: watch("sourceName"), sourceType: watch("sourceType") })}
+                    value={formatIsolateName({
+                        sourceName: watch("sourceName"),
+                        sourceType: watch("sourceType"),
+                    })}
                     readOnly
                 />
             </InputGroup>

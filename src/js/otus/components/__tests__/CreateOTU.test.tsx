@@ -3,8 +3,15 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeOTUMinimal, mockApiCreateOTU, mockApiGetOTUs } from "../../../../tests/fake/otus";
-import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import {
+    createFakeOTUMinimal,
+    mockApiCreateOTU,
+    mockApiGetOTUs,
+} from "../../../../tests/fake/otus";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+} from "@tests/fake/references";
 import { formatPath } from "@utils/hooks";
 import References from "@references/components/References";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
@@ -19,7 +26,9 @@ describe("<OTUForm />", () => {
         mockApiGetOTUs([createFakeOTUMinimal()], reference.id);
         mockApiGetSettings(createFakeSettings());
 
-        path = formatPath(`/refs/${reference.id}/otus`, { openCreateOTU: true });
+        path = formatPath(`/refs/${reference.id}/otus`, {
+            openCreateOTU: true,
+        });
     });
 
     it("should render", async () => {
@@ -49,11 +58,18 @@ describe("<OTUForm />", () => {
     });
 
     it("should create OTU with abbreviation", async () => {
-        const scope = mockApiCreateOTU(reference.id, "TestName", "TestAbbreviation");
+        const scope = mockApiCreateOTU(
+            reference.id,
+            "TestName",
+            "TestAbbreviation",
+        );
         renderWithRouter(<References />, path);
 
         await userEvent.type(await screen.findByLabelText("Name"), "TestName");
-        await userEvent.type(screen.getByLabelText("Abbreviation"), "TestAbbreviation");
+        await userEvent.type(
+            screen.getByLabelText("Abbreviation"),
+            "TestAbbreviation",
+        );
         await userEvent.click(screen.getByRole("button"));
 
         scope.done();

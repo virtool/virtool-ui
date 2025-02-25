@@ -19,7 +19,7 @@ export function listSamples(
 ): Promise<SampleSearchResult> {
     return Request.get("/samples")
         .query({ page, per_page, find: term, label: labels, workflows })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -29,7 +29,7 @@ export function listSamples(
  * @returns A promise resolving to a single sample
  */
 export function getSample(sampleId: string): Promise<Sample> {
-    return Request.get(`/samples/${sampleId}`).then(res => res.body);
+    return Request.get(`/samples/${sampleId}`).then((res) => res.body);
 }
 
 /**
@@ -69,7 +69,7 @@ export function createSample(
             labels,
             group,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 export type SampleUpdate = {
@@ -88,10 +88,13 @@ export type SampleUpdate = {
  * @param update - The update to apply to the sample
  * @returns A promise resolving to a response containing the updated sample's data
  */
-export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sample> {
+export function updateSample(
+    sampleId: string,
+    update: SampleUpdate,
+): Promise<Sample> {
     return Request.patch(`/samples/${sampleId}`)
         .send(update)
-        .then(response => response.body);
+        .then((response) => response.body);
 }
 
 /**
@@ -101,7 +104,9 @@ export function updateSample(sampleId: string, update: SampleUpdate): Promise<Sa
  * @returns A promise that resolves to null upon the removal of a sample
  */
 export function removeSample(sampleId: string): Promise<null> {
-    return Request.delete(`/samples/${sampleId}`).then(response => response.body);
+    return Request.delete(`/samples/${sampleId}`).then(
+        (response) => response.body,
+    );
 }
 
 /** Data returned from API on sample rights update */
@@ -129,8 +134,11 @@ export type SampleRightsUpdate = {
  * @param update - The update to apply to the sample
  * @returns A promise resolving to a response containing the updated sample's data
  */
-export function updateSampleRights(sampleId: string, update: SampleRightsUpdate): Promise<SampleRightsUpdateReturn> {
+export function updateSampleRights(
+    sampleId: string,
+    update: SampleRightsUpdate,
+): Promise<SampleRightsUpdateReturn> {
     return Request.patch(`/samples/${sampleId}/rights`)
         .send(update)
-        .then(response => response.body);
+        .then((response) => response.body);
 }

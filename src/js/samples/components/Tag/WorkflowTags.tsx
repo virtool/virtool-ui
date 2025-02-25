@@ -37,8 +37,17 @@ export function WorkflowTags({ id, workflows }: SampleItemWorkflowTagsProps) {
     const workflowTags = reduce(
         workflows,
         (tags, value, key) => {
-            if (value === WorkflowState.COMPLETE || value === WorkflowState.PENDING) {
-                tags.push(<WorkflowTag key={key} displayName={getWorkflowDisplayName(key)} workflowState={value} />);
+            if (
+                value === WorkflowState.COMPLETE ||
+                value === WorkflowState.PENDING
+            ) {
+                tags.push(
+                    <WorkflowTag
+                        key={key}
+                        displayName={getWorkflowDisplayName(key)}
+                        workflowState={value}
+                    />,
+                );
             }
             return tags;
         },

@@ -15,7 +15,10 @@ export const messageQueryKeys = {
  * @returns The instance message
  */
 export function useFetchMessage() {
-    return useQuery<Message>({ queryKey: messageQueryKeys.all(), queryFn: getMessage });
+    return useQuery<Message>({
+        queryKey: messageQueryKeys.all(),
+        queryFn: getMessage,
+    });
 }
 
 /**

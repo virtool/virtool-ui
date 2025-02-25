@@ -12,9 +12,11 @@ import General from "./OTUGeneral";
  */
 export default function OTUSection() {
     const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
-    const { open: openAddIsolate, setOpen: setOpenAddIsolate } = useDialogParam("openAddIsolate");
+    const { open: openAddIsolate, setOpen: setOpenAddIsolate } =
+        useDialogParam("openAddIsolate");
 
-    const { data: reference, isPending: isPendingReference } = useGetReference(refId);
+    const { data: reference, isPending: isPendingReference } =
+        useGetReference(refId);
     const { data: otu, isPending: isPendingOTU } = useFetchOTU(otuId);
 
     if (isPendingReference || isPendingOTU) {

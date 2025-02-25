@@ -3,7 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeSettings, mockApiUpdateSettings } from "../../../../tests/fake/admin";
+import {
+    createFakeSettings,
+    mockApiUpdateSettings,
+} from "../../../../tests/fake/admin";
 import Api from "../Api";
 
 describe("<Api />", () => {
@@ -11,9 +14,15 @@ describe("<Api />", () => {
         const settings = createFakeSettings();
         renderWithProviders(<Api settings={settings} />);
 
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
+        );
         expect(screen.getByText("JSON API")).toBeInTheDocument();
-        expect(screen.getByText(/Enable API access for clients other than Virtool./)).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                /Enable API access for clients other than Virtool./,
+            ),
+        ).toBeInTheDocument();
         expect(screen.getByRole("checkbox")).toBeInTheDocument();
     });
 
@@ -22,7 +31,9 @@ describe("<Api />", () => {
         const scope = mockApiUpdateSettings(settings);
         renderWithProviders(<Api settings={settings} />);
 
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
+        );
         await userEvent.click(screen.getByRole("checkbox"));
         expect(screen.getByRole("checkbox")).toBeChecked();
 
@@ -34,9 +45,14 @@ describe("<Api />", () => {
         const scope = mockApiUpdateSettings(settings);
         renderWithProviders(<Api settings={settings} />);
 
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
+        );
         await userEvent.click(screen.getByRole("checkbox"));
-        expect(screen.getByRole("checkbox")).toHaveAttribute("data-state", "unchecked");
+        expect(screen.getByRole("checkbox")).toHaveAttribute(
+            "data-state",
+            "unchecked",
+        );
 
         scope.done();
     });

@@ -9,12 +9,21 @@ type SidebarProps = {
     onUpdate: (key: string, value: string[] | number[]) => void;
 };
 
-export function Sidebar({ sampleLabels, defaultSubtractions, onUpdate }: SidebarProps) {
+export function Sidebar({
+    sampleLabels,
+    defaultSubtractions,
+    onUpdate,
+}: SidebarProps) {
     return (
         <ContainerSide className="flex items-stretch flex-col z-10">
-            <SampleLabels onUpdate={selection => onUpdate("sidebar.labels", selection)} sampleLabels={sampleLabels} />
+            <SampleLabels
+                onUpdate={(selection) => onUpdate("sidebar.labels", selection)}
+                sampleLabels={sampleLabels}
+            />
             <DefaultSubtractions
-                onUpdate={selection => onUpdate("sidebar.subtractionIds", selection)}
+                onUpdate={(selection) =>
+                    onUpdate("sidebar.subtractionIds", selection)
+                }
                 defaultSubtractions={defaultSubtractions}
             />
         </ContainerSide>

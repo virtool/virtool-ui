@@ -12,16 +12,24 @@ const WorkflowFilterLabel = styled.div`
 
 const StyledWorkflowFilterControlButton = styled.button`
     align-items: center;
-    background-color: ${props => props.theme.color[props["aria-pressed"] === true ? "purple" : "purpleLightest"]};
-    color: ${props => props.theme.color[props["aria-pressed"] === true ? "white" : "purpleDark"]};
+    background-color: ${(props) =>
+        props.theme.color[
+            props["aria-pressed"] === true ? "purple" : "purpleLightest"
+        ]};
+    color: ${(props) =>
+        props.theme.color[
+            props["aria-pressed"] === true ? "white" : "purpleDark"
+        ]};
 
-    border: 2px solid ${props => props.theme.color.purple};
+    border: 2px solid ${(props) => props.theme.color.purple};
     border-radius: 20px;
     cursor: pointer;
     justify-content: center;
     display: flex;
     height: 30px;
-    transform: scale(${props => (props["aria-pressed"] === "true" ? 1 : 0.95)});
+    transform: scale(
+        ${(props) => (props["aria-pressed"] === "true" ? 1 : 0.95)}
+    );
     width: 30px;
 
     i {
@@ -30,8 +38,8 @@ const StyledWorkflowFilterControlButton = styled.button`
 
     &[aria-pressed="false"]:hover,
     &[aria-pressed="false"]:focus {
-        background-color: ${props => props.theme.color.purpleLight};
-        color: ${props => props.theme.color.purpleDarkest};
+        background-color: ${(props) => props.theme.color.purpleLight};
+        color: ${(props) => props.theme.color.purpleDarkest};
         outline: none;
     }
 `;
@@ -47,9 +55,17 @@ type WorkflowFilterControlButtonProps = {
     onClick: (value: string) => void;
 };
 
-function WorkflowFilterControlButton({ active, icon, value, onClick }: WorkflowFilterControlButtonProps) {
+function WorkflowFilterControlButton({
+    active,
+    icon,
+    value,
+    onClick,
+}: WorkflowFilterControlButtonProps) {
     return (
-        <StyledWorkflowFilterControlButton aria-pressed={active} onClick={() => onClick(value)}>
+        <StyledWorkflowFilterControlButton
+            aria-pressed={active}
+            onClick={() => onClick(value)}
+        >
             <Icon name={icon} />
         </StyledWorkflowFilterControlButton>
     );
@@ -69,7 +85,7 @@ const WorkflowFilterControlButtons = styled.div`
 `;
 
 const StyledWorkflowFilterControl = styled(Box)`
-    background: ${props => props.theme.color.white};
+    background: ${(props) => props.theme.color.white};
     padding: 0;
 `;
 
@@ -82,14 +98,20 @@ type WorkflowFilterControlProps = {
     onChange: (workflow: string, state: string) => void;
 };
 
-function WorkflowFilterControl({ workflow, states, onChange }: WorkflowFilterControlProps) {
+function WorkflowFilterControl({
+    workflow,
+    states,
+    onChange,
+}: WorkflowFilterControlProps) {
     function handleClick(state) {
         onChange(workflow, state);
     }
 
     return (
         <StyledWorkflowFilterControl>
-            <WorkflowFilterLabel>{getWorkflowDisplayName(workflow)}</WorkflowFilterLabel>
+            <WorkflowFilterLabel>
+                {getWorkflowDisplayName(workflow)}
+            </WorkflowFilterLabel>
             <WorkflowFilterControlButtons>
                 <WorkflowFilterControlButton
                     active={states.includes(workflowStates.NONE)}
@@ -137,7 +159,10 @@ type WorkflowFilterProps = {
     onClick: (selected: string[]) => void;
 };
 
-export default function WorkflowFilter({ selected, onClick }: WorkflowFilterProps) {
+export default function WorkflowFilter({
+    selected,
+    onClick,
+}: WorkflowFilterProps) {
     function handleClick(workflow, state) {
         onClick(xor(selected, [`${workflow}:${state}`]));
     }
@@ -149,9 +174,21 @@ export default function WorkflowFilter({ selected, onClick }: WorkflowFilterProp
     return (
         <SideBarSection>
             <SidebarHeader>Workflows</SidebarHeader>
-            <WorkflowFilterControl workflow="pathoscope" states={pathoscope} onChange={handleClick} />
-            <WorkflowFilterControl workflow="nuvs" states={nuvs} onChange={handleClick} />
-            <WorkflowFilterControl workflow="aodp" states={aodp} onChange={handleClick} />
+            <WorkflowFilterControl
+                workflow="pathoscope"
+                states={pathoscope}
+                onChange={handleClick}
+            />
+            <WorkflowFilterControl
+                workflow="nuvs"
+                states={nuvs}
+                onChange={handleClick}
+            />
+            <WorkflowFilterControl
+                workflow="aodp"
+                states={aodp}
+                onChange={handleClick}
+            />
         </SideBarSection>
     );
 }

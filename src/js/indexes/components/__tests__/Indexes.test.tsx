@@ -6,8 +6,15 @@ import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeIndexMinimal, mockApiFindIndexes, mockApiGetUnbuiltChanges } from "@tests/fake/indexes";
-import { createFakeReference, mockApiGetReferenceDetail } from "@tests/fake/references";
+import {
+    createFakeIndexMinimal,
+    mockApiFindIndexes,
+    mockApiGetUnbuiltChanges,
+} from "@tests/fake/indexes";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+} from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 
@@ -40,13 +47,23 @@ describe("<Indexes />", () => {
         renderWithRouter(<References />, path);
 
         await waitFor(() => findIndexesScope.done());
-        expect(await screen.findByText(`Version ${index.version}`)).toBeInTheDocument();
-        expect(await screen.findByText(new RegExp(index.user.handle))).toBeInTheDocument();
         expect(
-            await screen.findByText(`${index.change_count} changes made in ${index.modified_otu_count} OTUs`),
+            await screen.findByText(`Version ${index.version}`),
         ).toBeInTheDocument();
-        expect(await screen.findByText("There are unbuilt changes.")).toBeInTheDocument();
-        expect(await screen.findByRole("link", { name: "Rebuild the index" })).toHaveAttribute(
+        expect(
+            await screen.findByText(new RegExp(index.user.handle)),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText(
+                `${index.change_count} changes made in ${index.modified_otu_count} OTUs`,
+            ),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByText("There are unbuilt changes."),
+        ).toBeInTheDocument();
+        expect(
+            await screen.findByRole("link", { name: "Rebuild the index" }),
+        ).toHaveAttribute(
             "href",
             `/refs/${reference.id}/indexes?openRebuild=true`,
         );
@@ -65,8 +82,12 @@ describe("<Indexes />", () => {
 
         await waitFor(() => scope.done());
 
-        await userEvent.click(await screen.findByRole("link", { name: "Rebuild the index" }));
+        await userEvent.click(
+            await screen.findByRole("link", { name: "Rebuild the index" }),
+        );
 
-        expect(await screen.findByRole("button", { name: "Start" })).toBeInTheDocument();
+        expect(
+            await screen.findByRole("button", { name: "Start" }),
+        ).toBeInTheDocument();
     });
 });

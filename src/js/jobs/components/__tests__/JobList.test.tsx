@@ -20,7 +20,9 @@ describe("<JobsList />", () => {
         const scope = mockApiGetJobs([jobs]);
         renderWithRouter(<JobsList />);
 
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
+        );
         expect(screen.getByText("Create Sample")).toBeInTheDocument();
 
         scope.done();
@@ -36,7 +38,9 @@ describe("<JobsList />", () => {
         const scope = mockApiGetJobs([]);
         renderWithRouter(<JobsList />);
 
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
+        );
         expect(screen.getByText("No jobs found")).toBeInTheDocument();
 
         scope.done();
@@ -51,8 +55,12 @@ describe("<JobsList />", () => {
         const scope = mockApiGetJobs([jobs], 0);
         renderWithRouter(<JobsList />);
 
-        await waitFor(() => expect(screen.queryByLabelText("loading")).not.toBeInTheDocument());
-        expect(await screen.findByText("No jobs matching filters")).toBeInTheDocument();
+        await waitFor(() =>
+            expect(screen.queryByLabelText("loading")).not.toBeInTheDocument(),
+        );
+        expect(
+            await screen.findByText("No jobs matching filters"),
+        ).toBeInTheDocument();
 
         scope.done();
     });

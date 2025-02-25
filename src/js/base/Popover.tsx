@@ -14,7 +14,9 @@ type PopoverProps = {
 export function Popover({ align = "end", children, trigger }: PopoverProps) {
     return (
         <PopoverPrimitive.Root>
-            <PopoverPrimitive.Trigger asChild>{trigger}</PopoverPrimitive.Trigger>
+            <PopoverPrimitive.Trigger asChild>
+                {trigger}
+            </PopoverPrimitive.Trigger>
             <PopoverPrimitive.Portal>
                 <PopoverPrimitive.Content
                     className={cn(

@@ -51,12 +51,20 @@ type ReferenceItemProps = {
  * A condensed reference item for use in a list of references
  */
 export function ReferenceItem({ reference }: ReferenceItemProps) {
-    const { setValue: setCloneReferenceId } = useUrlSearchParam<string>("cloneReferenceId");
+    const { setValue: setCloneReferenceId } =
+        useUrlSearchParam<string>("cloneReferenceId");
     const { id, data_type, name, organism, user, created_at, task } = reference;
-    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(Permission.create_ref);
+    const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(
+        Permission.create_ref,
+    );
 
     const cloneButton = canCreate ? (
-        <IconButton name="clone" tip="clone" color="blue" onClick={() => setCloneReferenceId(id)} />
+        <IconButton
+            name="clone"
+            tip="clone"
+            color="blue"
+            onClick={() => setCloneReferenceId(id)}
+        />
     ) : null;
 
     return (
@@ -73,7 +81,9 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
                 {task && !task.complete ? (
                     <ProgressCircle
                         progress={task.progress || 0}
-                        state={task.complete ? JobState.complete : JobState.running}
+                        state={
+                            task.complete ? JobState.complete : JobState.running
+                        }
                     />
                 ) : (
                     cloneButton

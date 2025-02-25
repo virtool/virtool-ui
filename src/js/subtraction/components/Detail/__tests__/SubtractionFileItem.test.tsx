@@ -3,7 +3,10 @@ import { renderWithProviders } from "@tests/setup";
 import { byteSize } from "@utils/utils";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { SubtractionFileItem, SubtractionFileItemProps } from "../SubtractionFileItem";
+import {
+    SubtractionFileItem,
+    SubtractionFileItemProps,
+} from "../SubtractionFileItem";
 
 describe("<SubtractionFile />", () => {
     let props: SubtractionFileItemProps;
@@ -17,7 +20,9 @@ describe("<SubtractionFile />", () => {
     });
 
     it("should render", () => {
-        const { getByText } = renderWithProviders(<SubtractionFileItem {...props} />);
+        const { getByText } = renderWithProviders(
+            <SubtractionFileItem {...props} />,
+        );
 
         expect(getByText(props.name)).toBeInTheDocument();
         expect(getByText(byteSize(props.size))).toBeInTheDocument();

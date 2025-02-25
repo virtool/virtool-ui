@@ -22,7 +22,12 @@ export default function IndexFiles({ files }: IndexFilesProps) {
                 Data files available to workflows using this index.
             </BoxGroupHeader>
             {files.map((file: IndexFile) => (
-                <SubtractionFileItem key={file.id} downloadUrl={file.download_url} name={file.name} size={file.size} />
+                <SubtractionFileItem
+                    key={file.id}
+                    downloadUrl={file.download_url}
+                    name={file.name}
+                    size={file.size}
+                />
             ))}
         </BoxGroup>
     );

@@ -32,7 +32,10 @@ export function useRootQuery() {
 export function useAuthentication() {
     const queryClient = useQueryClient();
 
-    const { data, isPending, isError, error, refetch, ...queryInfo } = useQuery<Account, ErrorResponse>({
+    const { data, isPending, isError, error, refetch, ...queryInfo } = useQuery<
+        Account,
+        ErrorResponse
+    >({
         queryKey: accountKeys.all(),
         queryFn: fetchAccount,
         retry: false,
@@ -58,9 +61,14 @@ export function useAuthentication() {
 export function useLoginMutation() {
     const queryClient = useQueryClient();
 
-    return useMutation<Response, ErrorResponse, { username: string; password: string; remember: boolean }>({
-        mutationFn: ({ username, password, remember }) => login({ username, password, remember }),
-        onSuccess: data => {
+    return useMutation<
+        Response,
+        ErrorResponse,
+        { username: string; password: string; remember: boolean }
+    >({
+        mutationFn: ({ username, password, remember }) =>
+            login({ username, password, remember }),
+        onSuccess: (data) => {
             if (!data.body.reset) {
                 queryClient.invalidateQueries({ queryKey: accountKeys.all() });
             }
@@ -76,8 +84,13 @@ export function useLoginMutation() {
 export function useResetPasswordMutation() {
     const queryClient = useQueryClient();
 
-    return useMutation<Response, ErrorResponse, { password: string; resetCode: string }>({
-        mutationFn: ({ password, resetCode }) => resetPassword({ password, resetCode }),
+    return useMutation<
+        Response,
+        ErrorResponse,
+        { password: string; resetCode: string }
+    >({
+        mutationFn: ({ password, resetCode }) =>
+            resetPassword({ password, resetCode }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: accountKeys.all() });
         },

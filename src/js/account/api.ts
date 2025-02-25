@@ -34,7 +34,7 @@ export type AccountUpdate = {
 export function updateAccount(update: AccountUpdate): Promise<User> {
     return Request.patch("/account")
         .send({ update })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -66,13 +66,16 @@ export function updateSettings({ update }): Promise<Response> {
  * @returns A promise resolving to a response indicating if the
  * password was successfully changed.
  */
-export function changePassword(old_password: string, password: string): Promise<User> {
+export function changePassword(
+    old_password: string,
+    password: string,
+): Promise<User> {
     return Request.patch("/account")
         .send({
             old_password,
             password,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -82,7 +85,7 @@ export function changePassword(old_password: string, password: string): Promise<
  * current user's API keys.
  */
 export function getAPIKeys(): Promise<APIKeyMinimal[]> {
-    return Request.get("/account/keys").then(res => res.body);
+    return Request.get("/account/keys").then((res) => res.body);
 }
 
 /**
@@ -92,13 +95,16 @@ export function getAPIKeys(): Promise<APIKeyMinimal[]> {
  * @param permissions - Complete list of permissions for the API key
  * @returns A promise resolving to a response containing the newly created API key
  */
-export function createAPIKey(name: string, permissions: Permissions): Promise<APIKeyMinimal> {
+export function createAPIKey(
+    name: string,
+    permissions: Permissions,
+): Promise<APIKeyMinimal> {
     return Request.post("/account/keys")
         .send({
             name,
             permissions,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -108,12 +114,15 @@ export function createAPIKey(name: string, permissions: Permissions): Promise<AP
  * @param permissions - The new permissions for the API key
  * @returns A promise resolving to a response containing the updated API key
  */
-export function updateAPIKey(keyId: string, permissions: Permissions): Promise<APIKeyMinimal> {
+export function updateAPIKey(
+    keyId: string,
+    permissions: Permissions,
+): Promise<APIKeyMinimal> {
     return Request.patch(`/account/keys/${keyId}`)
         .send({
             permissions,
         })
-        .then(res => res.body);
+        .then((res) => res.body);
 }
 
 /**
@@ -123,7 +132,7 @@ export function updateAPIKey(keyId: string, permissions: Permissions): Promise<A
  * @returns A promise which resolves to a response indicating if the API key was successfully removed
  */
 export function removeAPIKey(keyId: string): Promise<null> {
-    return Request.delete(`/account/keys/${keyId}`).then(res => res.body);
+    return Request.delete(`/account/keys/${keyId}`).then((res) => res.body);
 }
 
 /**
@@ -145,7 +154,11 @@ export function login({
     password: string;
     remember: boolean;
 }): Promise<Response> {
-    return Request.post("/account/login").send({ username, password, remember });
+    return Request.post("/account/login").send({
+        username,
+        password,
+        remember,
+    });
 }
 
 /**
@@ -155,7 +168,7 @@ export function login({
  * logout was successful.
  */
 export function logout(): Promise<null> {
-    return Request.get("/account/logout").then(res => res.body);
+    return Request.get("/account/logout").then((res) => res.body);
 }
 
 /**
@@ -166,8 +179,17 @@ export function logout(): Promise<null> {
  * @returns A promise which resolves to a response indicating if the
  * password was successfully reset.
  */
-export function resetPassword({ password, resetCode }: { password: string; resetCode: string }): Promise<Response> {
-    return Request.post("/account/reset").send({ password, reset_code: resetCode });
+export function resetPassword({
+    password,
+    resetCode,
+}: {
+    password: string;
+    resetCode: string;
+}): Promise<Response> {
+    return Request.post("/account/reset").send({
+        password,
+        reset_code: resetCode,
+    });
 }
 
 /**
@@ -178,5 +200,5 @@ export function resetPassword({ password, resetCode }: { password: string; reset
 export function fetchAccount(): Promise<Account> {
     return Request.get("/account")
         .query()
-        .then(response => response.body);
+        .then((response) => response.body);
 }

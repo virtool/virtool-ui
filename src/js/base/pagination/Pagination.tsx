@@ -8,7 +8,12 @@ import { map, max, min, range } from "lodash-es";
 import React, { useEffect } from "react";
 import { useSearch } from "wouter";
 
-function getPageRange(pageCount, storedPage, leftButtons = 1, rightButtons = 2) {
+function getPageRange(
+    pageCount,
+    storedPage,
+    leftButtons = 1,
+    rightButtons = 2,
+) {
     const totalButtons = leftButtons + rightButtons;
     let maxVal = min([pageCount, storedPage + rightButtons]);
     const minVal = max([1, maxVal - totalButtons]);
@@ -49,19 +54,22 @@ export function Pagination({
         }
     }, [currentPage, pageCount]);
 
-    const entries = renderRow && map(items, item => renderRow(item));
+    const entries = renderRow && map(items, (item) => renderRow(item));
 
-    const pageButtons = map(getPageRange(pageCount, storedPage), pageNumber => (
-        <PaginationLink
-            key={pageNumber}
-            to={updateSearchParam("page", pageNumber, search)}
-            active={storedPage !== pageNumber}
-            disabled={storedPage === pageNumber}
-            onClick={() => onLoadNextPage(pageNumber)}
-        >
-            {pageNumber}
-        </PaginationLink>
-    ));
+    const pageButtons = map(
+        getPageRange(pageCount, storedPage),
+        (pageNumber) => (
+            <PaginationLink
+                key={pageNumber}
+                to={updateSearchParam("page", pageNumber, search)}
+                active={storedPage !== pageNumber}
+                disabled={storedPage === pageNumber}
+                onClick={() => onLoadNextPage(pageNumber)}
+            >
+                {pageNumber}
+            </PaginationLink>
+        ),
+    );
 
     return (
         <div>
@@ -73,14 +81,22 @@ export function Pagination({
                 <PaginationRoot>
                     <PaginationContent>
                         <PaginationPrevious
-                            to={updateSearchParam("page", String(currentPage - 1), search)}
+                            to={updateSearchParam(
+                                "page",
+                                String(currentPage - 1),
+                                search,
+                            )}
                             disabled={currentPage === 1}
                             active={currentPage !== 1}
                             onClick={() => onLoadNextPage(currentPage - 1)}
                         />
                         {pageButtons}
                         <PaginationNext
-                            to={updateSearchParam("page", String(currentPage + 1), search)}
+                            to={updateSearchParam(
+                                "page",
+                                String(currentPage + 1),
+                                search,
+                            )}
                             disabled={currentPage === pageCount}
                         />
                     </PaginationContent>

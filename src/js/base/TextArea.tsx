@@ -22,6 +22,8 @@ interface InputProps {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const TextArea = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-    return <StyledTextArea as="textarea" {...props} ref={ref} />;
-});
+export const TextArea = React.forwardRef<HTMLInputElement, InputProps>(
+    (props, ref) => {
+        return <StyledTextArea as="textarea" {...props} ref={ref} />;
+    },
+);

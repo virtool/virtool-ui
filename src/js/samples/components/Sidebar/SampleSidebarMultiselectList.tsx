@@ -10,7 +10,7 @@ const StyledSampleSidebarList = styled.div`
 `;
 
 const SampleSidebarMultiSelectListItem = styled(SampleMultiSelectLabel)`
-    background-color: ${props => props.theme.color.white};
+    background-color: ${(props) => props.theme.color.white};
     display: inline;
     margin: 4px 0;
 
@@ -27,10 +27,24 @@ type SampleSidebarMultiselectList = {
 /**
  * Displays a list of labels to filter samples by
  */
-export default function SampleSidebarMultiselectList({ items }: SampleSidebarMultiselectList) {
-    const sampleItemComponents = map(items, ({ id, color, name, allLabeled }) => (
-        <SampleSidebarMultiSelectListItem key={id} color={color} name={name} partiallySelected={!allLabeled} />
-    ));
+export default function SampleSidebarMultiselectList({
+    items,
+}: SampleSidebarMultiselectList) {
+    const sampleItemComponents = map(
+        items,
+        ({ id, color, name, allLabeled }) => (
+            <SampleSidebarMultiSelectListItem
+                key={id}
+                color={color}
+                name={name}
+                partiallySelected={!allLabeled}
+            />
+        ),
+    );
 
-    return <StyledSampleSidebarList>{sampleItemComponents}</StyledSampleSidebarList>;
+    return (
+        <StyledSampleSidebarList>
+            {sampleItemComponents}
+        </StyledSampleSidebarList>
+    );
 }

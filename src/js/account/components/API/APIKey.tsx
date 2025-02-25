@@ -48,23 +48,37 @@ export default function APIKey({ apiKey }: APIKeyProps) {
         },
     });
 
-    const permissionCount = reduce(apiKey.permissions, (result, value) => result + (value ? 1 : 0), 0);
+    const permissionCount = reduce(
+        apiKey.permissions,
+        (result, value) => result + (value ? 1 : 0),
+        0,
+    );
 
     function onSubmit({ permissions }) {
         updateMutation.mutate({ keyId: apiKey.id, permissions });
     }
 
     return (
-        <BoxGroupSection key={apiKey.id} onClick={show ? null : () => setShow(!show)}>
+        <BoxGroupSection
+            key={apiKey.id}
+            onClick={show ? null : () => setShow(!show)}
+        >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <APIKeyHeader>
                     <strong>{apiKey.name}</strong>
                     <Attribution time={apiKey.created_at} />
                     <APIKeyPermissionCount>
-                        {permissionCount} permission{permissionCount === 1 ? null : "s"}
+                        {permissionCount} permission
+                        {permissionCount === 1 ? null : "s"}
                     </APIKeyPermissionCount>
                     <APIKeyCloseContainer>
-                        {show && <IconButton name="times" tip="close" onClick={() => setShow(!show)} />}
+                        {show && (
+                            <IconButton
+                                name="times"
+                                tip="close"
+                                onClick={() => setShow(!show)}
+                            />
+                        )}
                     </APIKeyCloseContainer>
                 </APIKeyHeader>
                 {show && (
@@ -72,18 +86,29 @@ export default function APIKey({ apiKey }: APIKeyProps) {
                         <Controller
                             control={control}
                             render={({ field: { onChange, value } }) => (
-                                <APIKeyPermissions keyPermissions={value} onChange={onChange} />
+                                <APIKeyPermissions
+                                    keyPermissions={value}
+                                    onChange={onChange}
+                                />
                             )}
                             name="permissions"
                         />
 
                         <div className="flex items-center justify-end mb-2.5 gap-1.5">
-                            <Button color="red" onClick={() => removeMutation.mutate({ keyId: apiKey.id })}>
+                            <Button
+                                color="red"
+                                onClick={() =>
+                                    removeMutation.mutate({ keyId: apiKey.id })
+                                }
+                            >
                                 Delete
                             </Button>
                             <Button
                                 color="blue"
-                                disabled={isEqual(watch("permissions"), apiKey.permissions)}
+                                disabled={isEqual(
+                                    watch("permissions"),
+                                    apiKey.permissions,
+                                )}
                                 type="submit"
                             >
                                 Update

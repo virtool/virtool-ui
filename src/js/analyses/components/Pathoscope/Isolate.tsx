@@ -22,26 +22,28 @@ const PathoscopeIsolateHeader = styled.div`
 `;
 
 const PathoscopeIsolateCoverage = styled.strong`
-    color: ${props => props.theme.color.blue};
-    font-size: ${props => props.theme.fontSize.sm};
+    color: ${(props) => props.theme.color.blue};
+    font-size: ${(props) => props.theme.fontSize.sm};
     padding-left: 5px;
 `;
 
 const PathoscopeIsolateDepth = styled.strong`
-    color: ${props => props.theme.color.red};
-    font-size: ${props => props.theme.fontSize.sm};
+    color: ${(props) => props.theme.color.red};
+    font-size: ${(props) => props.theme.fontSize.sm};
     padding-left: 5px;
 `;
 
 const StyledPathoscopeIsolateWeight = styled.strong`
-    color: ${props => props.theme.color.green};
-    font-size: ${props => props.theme.fontSize.sm};
+    color: ${(props) => props.theme.color.green};
+    font-size: ${(props) => props.theme.fontSize.sm};
 `;
 
 export function PathoscopeIsolateWeight({ pi, reads }) {
     const { value: showReads } = useUrlSearchParam<boolean>("showReads");
     return (
-        <StyledPathoscopeIsolateWeight>{showReads ? reads : toScientificNotation(pi)}</StyledPathoscopeIsolateWeight>
+        <StyledPathoscopeIsolateWeight>
+            {showReads ? reads : toScientificNotation(pi)}
+        </StyledPathoscopeIsolateWeight>
     );
 }
 
@@ -49,7 +51,17 @@ const StyledPathoscopeIsolate = styled.div`
     position: relative;
 `;
 
-export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, sequences, graphWidth, graphRatios }) {
+export function PathoscopeIsolate({
+    coverage,
+    depth,
+    maxDepth,
+    name,
+    pi,
+    reads,
+    sequences,
+    graphWidth,
+    graphRatios,
+}) {
     const hitComponents = map(sequences, (hit, i) => (
         <Coverage
             key={i}
@@ -69,8 +81,12 @@ export function PathoscopeIsolate({ coverage, depth, maxDepth, name, pi, reads, 
             <PathoscopeIsolateHeader>
                 {name}
                 <PathoscopeIsolateWeight pi={pi} reads={reads} />
-                <PathoscopeIsolateDepth>{depth.toFixed(0)}</PathoscopeIsolateDepth>
-                <PathoscopeIsolateCoverage>{toScientificNotation(parseFloat(coverage))}</PathoscopeIsolateCoverage>
+                <PathoscopeIsolateDepth>
+                    {depth.toFixed(0)}
+                </PathoscopeIsolateDepth>
+                <PathoscopeIsolateCoverage>
+                    {toScientificNotation(parseFloat(coverage))}
+                </PathoscopeIsolateCoverage>
             </PathoscopeIsolateHeader>
             <PathoscopeChartRibbon>
                 <ScrollSync>{hitComponents}</ScrollSync>

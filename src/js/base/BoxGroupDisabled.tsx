@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const BoxGroupDisabledOverlay = styled.div`
-    background-color: ${props => props.theme.color.greyLightest};
+    background-color: ${(props) => props.theme.color.greyLightest};
     opacity: 0.5;
     position: absolute;
     z-index: 10;
@@ -22,7 +22,10 @@ interface BoxGroupDisabledProps {
     disabled?: boolean;
 }
 
-export function BoxGroupDisabled({ children, disabled = false }: BoxGroupDisabledProps) {
+export function BoxGroupDisabled({
+    children,
+    disabled = false,
+}: BoxGroupDisabledProps) {
     return (
         <StyledBoxGroupDisabled>
             {disabled && <BoxGroupDisabledOverlay />}

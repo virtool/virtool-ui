@@ -16,8 +16,13 @@ type AddBarcodeSequenceProps = {
 /**
  * Displays dialog to add a barcode sequence
  */
-export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBarcodeSequenceProps) {
-    const { open: openAddSequence, setOpen: setOpenAddSequence } = useDialogParam("openAddSequence");
+export default function AddBarcodeSequence({
+    isolateId,
+    otuId,
+    targets,
+}: AddBarcodeSequenceProps) {
+    const { open: openAddSequence, setOpen: setOpenAddSequence } =
+        useDialogParam("openAddSequence");
     const mutation = useAddSequence(otuId);
 
     function onSubmit({ accession, definition, host, sequence, target }) {
@@ -39,12 +44,20 @@ export default function AddBarcodeSequence({ isolateId, otuId, targets }: AddBar
     }
 
     return (
-        <Dialog open={openAddSequence} onOpenChange={() => setOpenAddSequence(false)}>
+        <Dialog
+            open={openAddSequence}
+            onOpenChange={() => setOpenAddSequence(false)}
+        >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">
                     <DialogTitle>Add Sequence</DialogTitle>
-                    <BarcodeSequenceForm noun="add" onSubmit={onSubmit} otuId={otuId} targets={targets} />
+                    <BarcodeSequenceForm
+                        noun="add"
+                        onSubmit={onSubmit}
+                        otuId={otuId}
+                        targets={targets}
+                    />
                 </DialogContent>
             </DialogPortal>
         </Dialog>

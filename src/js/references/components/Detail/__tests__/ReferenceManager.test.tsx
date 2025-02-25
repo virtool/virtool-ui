@@ -3,7 +3,10 @@ import { screen } from "@testing-library/react";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeReference, mockApiGetReferenceDetail } from "../../../../../tests/fake/references";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+} from "../../../../../tests/fake/references";
 import { renderWithRouter } from "../../../../../tests/setup";
 
 describe("<ReferenceManager />", () => {
@@ -42,6 +45,8 @@ describe("<ReferenceManager />", () => {
 
         expect(await screen.findByText("Clone Reference")).toBeInTheDocument();
         expect(screen.getByText("Source Reference"));
-        expect(screen.getByText(reference.cloned_from.name)).toBeInTheDocument();
+        expect(
+            screen.getByText(reference.cloned_from.name),
+        ).toBeInTheDocument();
     });
 });

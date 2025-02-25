@@ -1,4 +1,10 @@
-import { Button, Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogTitle,
+} from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import { useCreateLabel } from "../queries";
@@ -29,7 +35,7 @@ export function CreateLabel() {
     }
 
     return (
-        <Dialog open={open} onOpenChange={open => setOpen(open)}>
+        <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
             <Button as={DialogTrigger} color="blue">
                 Create
             </Button>
@@ -38,7 +44,10 @@ export function CreateLabel() {
                 <DialogContent>
                     <DialogTitle>Create a Label</DialogTitle>
                     <LabelForm
-                        error={mutation.isError && mutation.error.response.body.message}
+                        error={
+                            mutation.isError &&
+                            mutation.error.response.body.message
+                        }
                         onSubmit={handleSubmit}
                     />
                 </DialogContent>

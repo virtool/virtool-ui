@@ -30,7 +30,12 @@ type createIimiFormProps = {
 /**
  * Form for creating a new IIMI analysis.
  */
-export function CreateIimiForm({ compatibleIndexes, mlModels, onSubmit, sampleCount }: createIimiFormProps) {
+export function CreateIimiForm({
+    compatibleIndexes,
+    mlModels,
+    onSubmit,
+    sampleCount,
+}: createIimiFormProps) {
     const {
         control,
         handleSubmit,
@@ -45,25 +50,40 @@ export function CreateIimiForm({ compatibleIndexes, mlModels, onSubmit, sampleCo
             <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <MLModelSelector models={mlModels} selected={value} onChange={onChange} />
+                    <MLModelSelector
+                        models={mlModels}
+                        selected={value}
+                        onChange={onChange}
+                    />
                 )}
                 name="mlModel"
                 rules={{ required: true }}
             />
-            <CreateAnalysisInputError>{errors.mlModel && "An ml model must be selected"}</CreateAnalysisInputError>
+            <CreateAnalysisInputError>
+                {errors.mlModel && "An ml model must be selected"}
+            </CreateAnalysisInputError>
 
             <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <IndexSelector indexes={compatibleIndexes} selected={value} onChange={onChange} />
+                    <IndexSelector
+                        indexes={compatibleIndexes}
+                        selected={value}
+                        onChange={onChange}
+                    />
                 )}
                 name="index"
                 rules={{ required: true }}
             />
-            <CreateAnalysisInputError>{errors.index && "A reference must be selected"}</CreateAnalysisInputError>
+            <CreateAnalysisInputError>
+                {errors.index && "A reference must be selected"}
+            </CreateAnalysisInputError>
 
             <CreateAnalysisFooter>
-                <CreateAnalysisSummary sampleCount={sampleCount} indexCount={watch("index") ? 1 : 0} />
+                <CreateAnalysisSummary
+                    sampleCount={sampleCount}
+                    indexCount={watch("index") ? 1 : 0}
+                />
                 <Button type="submit" color="blue">
                     Start
                 </Button>
