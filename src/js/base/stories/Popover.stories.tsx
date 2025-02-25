@@ -21,11 +21,7 @@ function Template(args) {
         <div className="flex justify-center">
             <Popover
                 align={args.align}
-                trigger={
-                    <a>
-                        <Button color="blue">Click Here</Button>
-                    </a>
-                }
+                trigger={<Button color="blue">Click Here</Button>}
             >
                 <BoxGroupSearch
                     placeholder="Filter items"
