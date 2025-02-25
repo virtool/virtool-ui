@@ -12,5 +12,8 @@ export function createFakeLabelNested(): LabelNested {
 }
 
 export function mockApiGetLabels(labels: LabelNested[]) {
-    return nock("http://localhost").get("/api/labels").query(true).reply(200, labels);
+    return nock("http://localhost")
+        .get("/api/labels")
+        .query(true)
+        .reply(200, labels);
 }

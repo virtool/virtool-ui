@@ -32,7 +32,9 @@ type CreateFakeMLModelOverrides = {
  *
  * @param overrides - optional properties for creating a fake ML models with specific values
  */
-export function createFakeMLModelMinimal(overrides?: CreateFakeMLModelOverrides): MLModelMinimal {
+export function createFakeMLModelMinimal(
+    overrides?: CreateFakeMLModelOverrides,
+): MLModelMinimal {
     return {
         id: faker.datatype.number(100),
         created_at: overrides?.created_at ?? faker.date.past().toISOString(),
@@ -48,7 +50,9 @@ export function createFakeMLModelMinimal(overrides?: CreateFakeMLModelOverrides)
  *
  * @param overrides - optional properties for creating a fake ML models with specific values
  */
-export function createFakeMLModel(overrides?: CreateFakeMLModelOverrides): MLModel {
+export function createFakeMLModel(
+    overrides?: CreateFakeMLModelOverrides,
+): MLModel {
     const releases = [createFakeMLModelRelease()];
 
     const defaultModel = {
@@ -68,7 +72,8 @@ export function createFakeMLModel(overrides?: CreateFakeMLModelOverrides): MLMod
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetModels(MLModels: MLModelMinimal[]) {
-    return nock("http://localhost")
-        .get("/api/ml")
-        .reply(200, { items: MLModels, last_synced_at: faker.date.recent().toISOString() });
+    return nock("http://localhost").get("/api/ml").reply(200, {
+        items: MLModels,
+        last_synced_at: faker.date.recent().toISOString(),
+    });
 }

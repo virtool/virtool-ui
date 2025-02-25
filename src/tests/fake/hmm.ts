@@ -41,7 +41,11 @@ export function createFakeHMM() {
         },
         length: faker.datatype.number(),
         mean_entropy: faker.datatype.float({ min: 0, max: 1, precision: 0.01 }),
-        total_entropy: faker.datatype.float({ min: 100, max: 200, precision: 0.01 }),
+        total_entropy: faker.datatype.float({
+            min: 100,
+            max: 200,
+            precision: 0.01,
+        }),
     };
 }
 
@@ -56,7 +60,9 @@ type CreateFakeHMMSearchResults = {
  *
  * @param overrides - optional properties for creating a fake HHM search result with specific values
  */
-export function createFakeHMMSearchResults(overrides?: CreateFakeHMMSearchResults): HMMSearchResults {
+export function createFakeHMMSearchResults(
+    overrides?: CreateFakeHMMSearchResults,
+): HMMSearchResults {
     const defaultStatus = {
         errors: [toString(faker.internet.httpStatusCode())],
         installed: {
@@ -87,7 +93,10 @@ export function createFakeHMMSearchResults(overrides?: CreateFakeHMMSearchResult
  * @returns The nock scope for the mocked API call
  */
 export function mockApiGetHmms(hmmSearchResults: HMMSearchResults) {
-    return nock("http://localhost").get("/api/hmms").query(true).reply(200, hmmSearchResults);
+    return nock("http://localhost")
+        .get("/api/hmms")
+        .query(true)
+        .reply(200, hmmSearchResults);
 }
 
 /**

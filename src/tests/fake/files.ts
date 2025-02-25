@@ -28,8 +28,12 @@ type CreateFakeFileProps = {
  */
 export function createFakeFile(props?: CreateFakeFileProps): File {
     let { name, name_on_disk } = props || {};
-    name = name === undefined ? `sample${faker.datatype.number()}.fastq.gz` : name;
-    name_on_disk = name_on_disk === undefined ? `${faker.datatype.number()}-${name}` : name_on_disk;
+    name =
+        name === undefined ? `sample${faker.datatype.number()}.fastq.gz` : name;
+    name_on_disk =
+        name_on_disk === undefined
+            ? `${faker.datatype.number()}-${name}`
+            : name_on_disk;
 
     const defaultFile = {
         id: faker.datatype.number(),

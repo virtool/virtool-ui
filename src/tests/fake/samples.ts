@@ -2,7 +2,14 @@ import { faker } from "@faker-js/faker";
 import { workflows } from "@jobs/types";
 import { LabelNested } from "@labels/types";
 import { SampleRightsUpdate } from "@samples/api";
-import { LibraryType, Quality, Read, Sample, SampleMinimal, WorkflowState } from "@samples/types";
+import {
+    LibraryType,
+    Quality,
+    Read,
+    Sample,
+    SampleMinimal,
+    WorkflowState,
+} from "@samples/types";
 import { SubtractionNested } from "@subtraction/types";
 import { assign, times } from "lodash";
 import nock from "nock";
@@ -25,7 +32,9 @@ export type CreateFakeSampleMinimal = {
  *
  * @param overrides - optional properties for creating a sample minimal with specific values
  */
-export function createFakeSampleMinimal(overrides?: CreateFakeSampleMinimal): SampleMinimal {
+export function createFakeSampleMinimal(
+    overrides?: CreateFakeSampleMinimal,
+): SampleMinimal {
     const defaultSampleMinimal = {
         id: faker.random.alphaNumeric(8),
         name: faker.random.word(),
@@ -57,7 +66,9 @@ type CreateFakeSampleReadProps = {
 /**
  * Create a fake sample read object
  */
-export function createFakeSampleRead(overrides?: CreateFakeSampleReadProps): Read {
+export function createFakeSampleRead(
+    overrides?: CreateFakeSampleReadProps,
+): Read {
     const defaultRead = {
         download_url: faker.random.word(),
         id: faker.datatype.number(),
@@ -144,7 +155,10 @@ export function mockApiGetSamples(samples: SampleMinimal[]) {
  * @param statusCode - The HTTP status code to simulate in the response
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetSampleDetail(sampleDetail: Sample, statusCode?: number) {
+export function mockApiGetSampleDetail(
+    sampleDetail: Sample,
+    statusCode?: number,
+) {
     return nock("http://localhost")
         .get(`/api/samples/${sampleDetail.id}`)
         .query(true)
@@ -172,7 +186,9 @@ export function mockApiEditSample(
 ) {
     const sampleDetail = { ...sample, name, isolate, host, locale, notes };
 
-    return nock("http://localhost").patch(`/api/samples/${sample.id}`).reply(200, sampleDetail);
+    return nock("http://localhost")
+        .patch(`/api/samples/${sample.id}`)
+        .reply(200, sampleDetail);
 }
 
 /**
@@ -182,7 +198,10 @@ export function mockApiEditSample(
  * @param update - The update to be applied
  * @returns A nock scope for the mocked API call
  */
-export function mockApiUpdateSampleRights(sample: Sample, update: SampleRightsUpdate) {
+export function mockApiUpdateSampleRights(
+    sample: Sample,
+    update: SampleRightsUpdate,
+) {
     const sampleRightsUpdate = {
         all_read: faker.datatype.boolean(),
         all_write: faker.datatype.boolean(),
@@ -193,7 +212,9 @@ export function mockApiUpdateSampleRights(sample: Sample, update: SampleRightsUp
         ...update,
     };
 
-    return nock("http://localhost").patch(`/api/samples/${sample.id}/rights`).reply(200, sampleRightsUpdate);
+    return nock("http://localhost")
+        .patch(`/api/samples/${sample.id}/rights`)
+        .reply(200, sampleRightsUpdate);
 }
 
 /**
@@ -254,5 +275,7 @@ export function mockApiCreateSample(
  * @returns The nock scope for the mocked API call
  */
 export function mockApiRemoveSample(sampleId: string) {
-    return nock("http://localhost").delete(`/api/samples/${sampleId}`).reply(200);
+    return nock("http://localhost")
+        .delete(`/api/samples/${sampleId}`)
+        .reply(200);
 }
