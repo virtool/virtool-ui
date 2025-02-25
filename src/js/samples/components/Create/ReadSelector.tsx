@@ -1,5 +1,6 @@
 import { getBorder, getFontWeight, theme } from "@app/theme";
-import { Box, BoxGroup, Button, Icon, InputError, InputSearch, Link, NoneFoundSection, Toolbar } from "@base";
+import { Box, BoxGroup, Button, Icon, InputError, InputSearch, Link, NoneFoundSection } from "@base";
+import Toolbar from "@base/Toolbar";
 import { CompactScrollList } from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { FileResponse, FileType } from "@files/types";
@@ -149,7 +150,9 @@ export default function ReadSelector({
 
             <ReadSelectorBox error={error}>
                 <Toolbar>
-                    <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
+                    <div className="flex-grow">
+                        <InputSearch placeholder="Filename" value={term} onChange={e => setTerm(e.target.value)} />
+                    </div>
                     <Button className="inline-flex gap-2" onClick={reset}>
                         <Icon name="undo" /> Reset
                     </Button>

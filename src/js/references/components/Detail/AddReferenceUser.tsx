@@ -9,8 +9,8 @@ import {
     InputSearch,
     NoneFoundSection,
     SelectBoxGroupSection,
-    Toolbar,
 } from "@base";
+import Toolbar from "@base/Toolbar";
 import { CompactScrollList } from "@base/CompactScrollList";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useInfiniteFindUsers } from "@users/queries";
@@ -86,7 +86,9 @@ export default function AddReferenceUser({ users, onHide, refId, show }: AddRefe
                 <DialogContent>
                     <AddReferenceUserHeader>Add User</AddReferenceUserHeader>
                     <Toolbar>
-                        <InputSearch name="search" value={term} onChange={e => setTerm(e.target.value)} />
+                        <div className="flex-grow">
+                            <InputSearch name="search" value={term} onChange={e => setTerm(e.target.value)} />
+                        </div>
                     </Toolbar>
                     {filteredItems.length ? (
                         <StyledScrollList

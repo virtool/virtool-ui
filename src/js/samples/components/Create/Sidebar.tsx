@@ -3,15 +3,15 @@ import React from "react";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";
 
-type sidebarProps = {
+type SidebarProps = {
     sampleLabels: number[];
     defaultSubtractions: string[];
     onUpdate: (key: string, value: string[] | number[]) => void;
 };
 
-export function Sidebar({ sampleLabels, defaultSubtractions, onUpdate }: sidebarProps) {
+export function Sidebar({ sampleLabels, defaultSubtractions, onUpdate }: SidebarProps) {
     return (
-        <ContainerSide className="flex items-stretch flex-col w-80 z-10">
+        <ContainerSide className="flex items-stretch flex-col z-10">
             <SampleLabels onUpdate={selection => onUpdate("sidebar.labels", selection)} sampleLabels={sampleLabels} />
             <DefaultSubtractions
                 onUpdate={selection => onUpdate("sidebar.subtractionIds", selection)}

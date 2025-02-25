@@ -1,10 +1,10 @@
 import * as Sentry from "@sentry/react";
 import { withProfiler } from "@sentry/react";
-import "normalize.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./app/App";
 import "./nonce";
+import "./style.css";
 
 if (window.virtool.sentryDsn !== "SENTRY_DSN") {
     window.captureException = error => Sentry.captureException(error);

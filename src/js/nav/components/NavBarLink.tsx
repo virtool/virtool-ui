@@ -1,31 +1,27 @@
 import { cn } from "@utils/utils";
 import React from "react";
-import { Link } from "@base";
+import { Link } from "wouter";
 import { useMatchPartialPath } from "@utils/hooks";
 
-const navBarLinkClassName = cn(
-    "text-white",
-    "cursor-pointer",
+const className = cn(
     "flex",
-    "text-lg",
+    "font-medium",
     "h-full",
-    "justify-center",
-    "items-center",
-    "px-5",
     "hover:text-primary-darkest",
+    "items-center",
+    "justify-center",
+    "px-5",
+    "text-lg",
+    "text-white",
 );
 
+const activeClassName = cn(className, "bg-teal-800", "hover:text-white");
+
 export function NavBarLink({ children, to }) {
-    const isActive = useMatchPartialPath(to);
+    const active = useMatchPartialPath(to);
+
     return (
-        <Link
-            to={to}
-            className={active =>
-                isActive || active
-                    ? cn(navBarLinkClassName, "text-white", "bg-primary-dark", "hover:text-white", "focus:text-white")
-                    : navBarLinkClassName
-            }
-        >
+        <Link to={to} className={() => (active ? activeClassName : className)}>
             {children}
         </Link>
     );

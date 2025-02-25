@@ -9,8 +9,8 @@ import {
     InputSearch,
     NoneFoundSection,
     SelectBoxGroupSection,
-    Toolbar,
 } from "@base";
+import Toolbar from "@base/Toolbar";
 import { CompactScrollList } from "@base/CompactScrollList";
 import { useInfiniteFindGroups } from "@groups/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";

@@ -1,5 +1,6 @@
 import NuVsExport, { NuVsExportProps } from "@/analyses/components/NuVs/NuVsExport";
-import { InputSearch, Toolbar } from "@base";
+import { InputSearch } from "@base";
+import Toolbar from "@base/Toolbar";
 import { ButtonToggle } from "@base/ButtonToggle";
 import { Tooltip } from "@base/Tooltip";
 import { useUrlSearchParam } from "@utils/hooks";
@@ -20,7 +21,9 @@ export default function NuVsToolbar({ analysisId, results, sampleName }: NuVsExp
 
     return (
         <Toolbar>
-            <InputSearch value={find} onChange={e => setFind(e.target.value)} placeholder="Name or family" />
+            <div className="flex-grow">
+                <InputSearch value={find} onChange={e => setFind(e.target.value)} placeholder="Name or family" />
+            </div>
             <AnalysisViewerSort workflow="nuvs" sortKey={sortKey} onSelect={setSortKey} />
             <Tooltip tip="Hide sequences that have no HMM hits">
                 <ButtonToggle onPressedChange={active => setFilterSequences(active)} pressed={filterSequences}>

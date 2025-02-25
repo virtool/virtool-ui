@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import { Router } from "wouter";
-import { GlobalStyles } from "../src/js/app/GlobalStyles";
 import { theme } from "../src/js/app/theme";
 
 const queryClient = new QueryClient({
@@ -19,7 +18,6 @@ export const decorators = [
         <Router>
             <ThemeProvider theme={theme}>
                 <QueryClientProvider client={queryClient}>
-                    <GlobalStyles />
                     <Story />
                 </QueryClientProvider>
             </ThemeProvider>

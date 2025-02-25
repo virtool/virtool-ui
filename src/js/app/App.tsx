@@ -5,7 +5,6 @@ import React, { Suspense } from "react";
 import { ThemeProvider } from "styled-components";
 import { Router } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
-import { GlobalStyles } from "./GlobalStyles";
 import Main from "./Main";
 import { theme } from "./theme";
 import { resetClient } from "@utils/utils";
@@ -68,7 +67,6 @@ export default function App(): React.ReactElement {
             <ErrorBoundary>
                 <QueryClientProvider client={queryClient}>
                     <Router hook={useBrowserLocation}>
-                        <GlobalStyles />
                         <ConnectedApp />
                     </Router>
                 </QueryClientProvider>

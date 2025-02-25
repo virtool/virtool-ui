@@ -2,9 +2,10 @@ import CreateSubtraction from "@subtraction/components/CreateSubtraction";
 import { updateSearchParam } from "@utils/hooks";
 import React from "react";
 import { useSearch } from "wouter";
-import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
-import { InputSearch, LinkButton, Toolbar } from "../../base";
-import { Permission } from "../../groups/types";
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+import { InputSearch, LinkButton } from "@base";
+import Toolbar from "@base/Toolbar";
+import { Permission } from "@groups/types";
 
 type SubtractionToolbarProps = {
     /** Current search term used for filtering */
@@ -23,7 +24,9 @@ export default function SubtractionToolbar({ term, handleChange }: SubtractionTo
 
     return (
         <Toolbar>
-            <InputSearch value={term} onChange={handleChange} placeholder="Name" />
+            <div className="flex-grow">
+                <InputSearch value={term} onChange={handleChange} placeholder="Name" />
+            </div>
             {hasPermission && (
                 <LinkButton color="blue" to={updateSearchParam("openCreateSubtraction", "true", search)}>
                     Create

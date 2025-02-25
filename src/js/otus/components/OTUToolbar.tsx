@@ -1,10 +1,11 @@
 import React, { ChangeEvent } from "react";
-import { InputSearch, LinkButton, Toolbar } from "../../base";
-import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
-import { ReferenceRemotesFrom } from "../../references/types";
+import { InputSearch, LinkButton } from "@base";
+import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
+import { ReferenceRemotesFrom } from "@references/types";
 import { formatSearchParams } from "@utils/hooks";
+import Toolbar from "@base/Toolbar";
 
-type OTUToolbarProps = {
+type OtuToolbarProps = {
     /** Current search term used for filtering */
     term: string;
     /** A callback function to handle changes in search input */
@@ -17,12 +18,14 @@ type OTUToolbarProps = {
 /**
  * A toolbar which allows the OTUs to be filtered by their names
  */
-export default function OTUToolbar({ term, onChange, refId, remotesFrom }: OTUToolbarProps) {
+export default function OTUToolbar({ term, onChange, refId, remotesFrom }: OtuToolbarProps) {
     const { hasPermission: canCreate } = useCheckReferenceRight(refId, ReferenceRight.modify_otu);
 
     return (
         <Toolbar>
-            <InputSearch placeholder="Name or abbreviation" value={term} onChange={onChange} />
+            <div className="flex-grow">
+                <InputSearch placeholder="Name or abbreviation" value={term} onChange={onChange} />
+            </div>
 
             {canCreate && !remotesFrom && (
                 <LinkButton to={formatSearchParams({ openCreateOTU: true })} color="blue">

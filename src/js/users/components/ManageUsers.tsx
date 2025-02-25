@@ -1,6 +1,7 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { Alert, Icon, InputSearch, LoadingPlaceholder } from "@base";
+import Toolbar from "@base/Toolbar";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
 import { useUrlSearchParam } from "@utils/hooks";
@@ -23,7 +24,7 @@ export function ManageUsers() {
     if (hasPermission) {
         return (
             <>
-                <div className="flex gap-2 mb-3">
+                <Toolbar>
                     <div className="flex-grow">
                         <InputSearch
                             name="search"
@@ -37,7 +38,7 @@ export function ManageUsers() {
                         <ToggleGroupItem value="deactivated">Deactivated</ToggleGroupItem>
                     </ToggleGroup>
                     <CreateUser />
-                </div>
+                </Toolbar>
 
                 <UsersList term={term} />
             </>
