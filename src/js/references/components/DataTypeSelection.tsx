@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { SelectBox } from "../../base";
 import { ReferenceDataType } from "../types";
+import PseudoLabel from "@base/PseudoLabel";
 
 const SelectBoxContainer = styled.div`
     display: grid;
@@ -25,7 +26,7 @@ export function DataTypeSelection({
 }: DataTypeSelectionProps) {
     return (
         <div>
-            <label>Data Type</label>
+            <PseudoLabel>Data Type</PseudoLabel>
             <SelectBoxContainer>
                 <SelectBox
                     onClick={() => onSelect("genome")}

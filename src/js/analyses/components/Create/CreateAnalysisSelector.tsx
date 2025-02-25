@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import { BoxGroup, InputError } from "../../../base";
+import { BoxGroup, InputError } from "@base";
+import PseudoLabel from "@base/PseudoLabel";
 
 const StyledCreateAnalysisSelector = styled.div`
     min-width: 0;
@@ -21,7 +22,7 @@ export function CreateAnalysisSelector({
 }: CreateAnalysisSelectorProps) {
     return (
         <StyledCreateAnalysisSelector>
-            <label>Available</label>
+            <PseudoLabel>Available</PseudoLabel>
             <BoxGroup>
                 {children}
                 {error && <InputError>{error}</InputError>}

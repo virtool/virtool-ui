@@ -22,6 +22,7 @@ import { flatMap, includes, indexOf, toLower } from "lodash-es";
 import React, { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
 import ReadSelectorItem from "./ReadSelectorItem";
+import PseudoLabel from "@base/PseudoLabel";
 
 type ReadSelectorBoxProps = {
     error: string;
@@ -166,7 +167,7 @@ export default function ReadSelector({
     return (
         <div>
             <ReadSelectorHeader>
-                <label>Read files</label>
+                <PseudoLabel>Read files</PseudoLabel>
                 <span>
                     {pairedness}
                     {selected.length} of {total_count} selected

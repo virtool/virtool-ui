@@ -1,6 +1,7 @@
 import { SelectBox } from "@base";
 import React from "react";
 import styled from "styled-components";
+import PseudoLabel from "@base/PseudoLabel";
 
 const LibraryTypeSelectBoxContainer = styled.div`
     display: grid;
@@ -23,7 +24,7 @@ export function LibraryTypeSelector({
 }: LibraryTypeSelectorProps) {
     return (
         <>
-            <label>Library Type</label>
+            <PseudoLabel>Library Type</PseudoLabel>
             <LibraryTypeSelectBoxContainer>
                 <SelectBox
                     onClick={() => onSelect("normal")}

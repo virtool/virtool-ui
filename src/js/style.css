@@ -37,7 +37,7 @@ body {
     label {
         display: inline-block;
         font-weight: var(--font-weight-medium);
-        margin-bottom: 5px;
+        margin-bottom: calc(var(--spacing) * 2);
     }
 
     p {
@@ -52,5 +52,8 @@ body {
         &:focus {
             color: var(--color-blue-900);
         }
+    }
+    small {
+        font-size: var(--text-sm);
     }
 }

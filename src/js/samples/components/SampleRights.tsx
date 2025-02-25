@@ -12,6 +12,7 @@ import {
     InputSelect,
     SelectBox,
 } from "../../base";
+import PseudoLabel from "@base/PseudoLabel";
 
 const rights = [
     { label: "None", value: "" },
@@ -64,7 +65,7 @@ export default function SampleRights({ settings }: SampleRightsProps) {
                 </p>
             </BoxGroupHeader>
             <BoxGroupSection>
-                <label>Sample Group</label>
+                <PseudoLabel>Sample Group</PseudoLabel>
                 <SampleRightsGroup>
                     <SelectBox
                         onClick={() =>
