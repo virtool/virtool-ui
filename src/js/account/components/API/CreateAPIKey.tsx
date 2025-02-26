@@ -24,6 +24,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
+import PseudoLabel from "@base/PseudoLabel";
 
 const CreateAPIKeyCopied = styled.p`
     color: ${(props) => props.theme.color.blue};
@@ -163,8 +164,7 @@ export default function CreateAPIKey() {
                                 <InputError>{errors.name?.message}</InputError>
                             </InputGroup>
 
-                            <label>Permissions</label>
-
+                            <PseudoLabel>Permissions</PseudoLabel>
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (

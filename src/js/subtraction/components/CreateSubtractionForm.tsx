@@ -16,6 +16,7 @@ import { useCreateSubtraction } from "@subtraction/queries";
 import { useDialogParam } from "@utils/hooks";
 import React from "react";
 import { Controller } from "react-hook-form";
+import PseudoLabel from "@base/PseudoLabel";
 
 type FormValues = {
     name: string;
@@ -42,12 +43,14 @@ export function CreateSubtractionForm() {
         formName: "createSubtraction",
         defaultValues: { name: "", nickname: "", uploadId: [] },
     });
+
     const {
         data: files,
         isPending,
         isFetchingNextPage,
         fetchNextPage,
     } = useInfiniteFindFiles(FileType.subtraction, 25);
+
     const mutation = useCreateSubtraction();
 
     if (isPending) {
@@ -87,8 +90,7 @@ export function CreateSubtractionForm() {
                 <InputSimple id="nickname" {...register("nickname")} />
             </InputGroup>
 
-            <label>Files</label>
-
+            <PseudoLabel>Files</PseudoLabel>
             <Controller
                 name="uploadId"
                 control={control}

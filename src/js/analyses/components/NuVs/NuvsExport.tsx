@@ -15,6 +15,7 @@ import { followDynamicDownload } from "@utils/utils";
 import { forEach, map, reduce, replace } from "lodash-es";
 import React, { useState } from "react";
 import NuVsExportPreview from "./ExportPreview";
+import PseudoLabel from "@base/PseudoLabel";
 
 function getBestHit(items) {
     return reduce(
@@ -53,7 +54,7 @@ function exportContigData(hits: FormattedNuvsHit[], sampleName: string) {
     });
 }
 
-function exportORFData(hits: FormattedNuvsHit[], sampleName: string) {
+function exportOrfData(hits: FormattedNuvsHit[], sampleName: string) {
     return reduce(
         hits,
         (lines, result) => {
@@ -88,7 +89,7 @@ function downloadData(
     );
 }
 
-export type NuVsExportProps = {
+export type NuvsExportProps = {
     analysisId: string;
     /** All results for a NuVs analysis */
     results: FormattedNuvsResults;
@@ -98,11 +99,11 @@ export type NuVsExportProps = {
 /**
  * Displays a dialog for exporting NuVs
  */
-export default function NuVsExport({
+export default function NuvsExport({
     analysisId,
     results,
     sampleName,
-}: NuVsExportProps) {
+}: NuvsExportProps) {
     const [mode, setMode] = useState("contigs");
     const [open, setOpen] = useState(false);
 
@@ -119,7 +120,7 @@ export default function NuVsExport({
         } else {
             downloadData(
                 analysisId,
-                exportORFData(results.hits, sampleName),
+                exportOrfData(results.hits, sampleName),
                 sampleName,
                 "orfs",
             );
@@ -136,8 +137,7 @@ export default function NuVsExport({
                 <DialogContent>
                     <DialogTitle>Export Analysis</DialogTitle>
                     <form onSubmit={onSubmit}>
-                        <label>Scope</label>
-
+                        <PseudoLabel>Scope</PseudoLabel>
                         <ToggleGroup
                             className="flex mb-3"
                             value={mode}

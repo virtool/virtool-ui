@@ -6,6 +6,7 @@ import { map, some, xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { UserGroup } from "./UserGroup";
+import PseudoLabel from "@base/PseudoLabel";
 
 const UserGroupsList = styled(BoxGroup)`
     margin-bottom: 15px;
@@ -38,7 +39,7 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
 
     return (
         <div>
-            <label>Groups</label>
+            <PseudoLabel>Groups</PseudoLabel>
             <UserGroupsList>
                 {data.length ? (
                     map(data, ({ id, name }) => (

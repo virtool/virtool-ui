@@ -1,7 +1,7 @@
 import express from "express";
 import path from "node:path";
 import { createCspMiddleware } from "./csp";
-import { loggingMiddleware } from "./logging.js";
+import { logger, loggingMiddleware } from "./logging.js";
 import { parseOptions } from "./options";
 import { createDefaultRouteHandler } from "./routes";
 import { verifyApiVersion } from "./version";
@@ -28,7 +28,10 @@ async function main() {
     app.get("*", createDefaultRouteHandler(options));
 
     app.listen(options.port, options.host, () => {
-        console.log(`Listening at http://${options.host}:${options.port}`);
+        logger.log("info", "listening for requests", {
+            host: options.host,
+            port: options.port,
+        });
     });
 }
 

@@ -1,21 +1,8 @@
 import { transform } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
-import { getFontSize } from "../../app/theme";
-import { BoxGroup } from "../../base";
-import { Permissions } from "../../groups/types";
+import { BoxGroup } from "@base";
+import { Permissions } from "@groups/types";
 import { PermissionItem } from "./Permission";
-
-const UserPermissionsHeader = styled.div`
-    align-items: center;
-    display: flex;
-
-    small {
-        color: ${(props) => props.theme.color.greyDarkest};
-        font-size: ${getFontSize("sm")};
-        margin-left: auto;
-    }
-`;
 
 type UserPermissionsProps = {
     /** The users permissions */
@@ -28,10 +15,12 @@ type UserPermissionsProps = {
 export default function UserPermissions({ permissions }: UserPermissionsProps) {
     return (
         <div>
-            <UserPermissionsHeader>
-                <label>Permissions</label>
-                <small>Change group membership to modify permissions</small>
-            </UserPermissionsHeader>
+            <div className="flex items-center justify-between mb-1">
+                <span className="font-medium">Permissions</span>
+                <small className="font-medium text-gray-500">
+                    Change group membership to modify permissions
+                </small>
+            </div>
             <BoxGroup>
                 {transform(
                     permissions,

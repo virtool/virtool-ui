@@ -1,19 +1,14 @@
 import React from "react";
-import styled from "styled-components";
-import { ExternalLink } from "../../../base";
+import { ExternalLink } from "@base";
 
-const StyledNuVsORFLabel = styled.span`
-    text-transform: capitalize;
-`;
-
-export const NuVsORFLabel = ({ hmm }) => {
+export function NuVsORFLabel({ hmm }) {
     if (hmm) {
         return (
-            <StyledNuVsORFLabel as={ExternalLink} href={`/hmm/${hmm.hit}`}>
+            <ExternalLink className="capitalize" href={`/hmm/${hmm.hit}`}>
                 {hmm.names[0]}
-            </StyledNuVsORFLabel>
+            </ExternalLink>
         );
     }
 
-    return <StyledNuVsORFLabel>Unannotated</StyledNuVsORFLabel>;
-};
+    return <span>Unannotated</span>;
+}

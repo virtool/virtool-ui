@@ -50,6 +50,7 @@
         "tailwind-merge": "^2.5.2",
         "tailwindcss-animate": "^1.0.7",
         "tsx": "^4.19.1",
+        "winston": "^3.17.0",
         "wouter": "^3.3.5",
         "yup": "^0.32.11",
         "zustand": "^4.5.5"

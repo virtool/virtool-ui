@@ -1,6 +1,6 @@
-import NuVsExport, {
-    NuVsExportProps,
-} from "@/analyses/components/NuVs/NuVsExport";
+import NuvsExport, {
+    NuvsExportProps,
+} from "@/analyses/components/NuVs/NuvsExport";
 import { InputSearch } from "@base";
 import Toolbar from "@base/Toolbar";
 import { ButtonToggle } from "@base/ButtonToggle";
@@ -16,7 +16,7 @@ export default function NuVsToolbar({
     analysisId,
     results,
     sampleName,
-}: NuVsExportProps) {
+}: NuvsExportProps) {
     const { value: filterORFs, setValue: setFilterORFs } =
         useUrlSearchParam<boolean>("filterOrfs", true);
     const { value: filterSequences, setValue: setFilterSequences } =
@@ -60,7 +60,7 @@ export default function NuVsToolbar({
                     Filter ORFs
                 </ButtonToggle>
             </Tooltip>
-            <NuVsExport
+            <NuvsExport
                 analysisId={analysisId}
                 results={results}
                 sampleName={sampleName}

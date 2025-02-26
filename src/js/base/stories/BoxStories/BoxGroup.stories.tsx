@@ -29,10 +29,13 @@ const meta: Meta<typeof BoxGroup> = {
 
 function Template(args) {
     const [term, setTerm] = useState("");
+
+    const { children, ...rest } = args;
+
     return (
         <BoxGroup>
             <BoxGroupHeader>
-                <h2 {...args} />
+                <h2 {...rest}>{children}</h2>
             </BoxGroupHeader>
             <BoxGroupSection>
                 <Input

@@ -4,9 +4,8 @@ import {
     useInfiniteQuery,
     useMutation,
 } from "@tanstack/react-query";
-import { User } from "@users/types";
 import { createFirst, findUsers } from "./api";
-import { UserResponse } from "./types";
+import { User, UserResponse } from "./types";
 
 /**
  * Factory object for generating user query keys

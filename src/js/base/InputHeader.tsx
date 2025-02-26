@@ -2,6 +2,7 @@ import { borderRadius, getFontSize, getFontWeight } from "@app/theme";
 import React, { MutableRefObject, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { objectHasProperty } from "@utils/common";
 
 const InputHeaderContainer = styled.form`
     border: 2px solid transparent;
@@ -59,7 +60,10 @@ export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
     function onFormSubmit(data) {
         onSubmit(data[id]);
 
-        if (inputElement.current?.hasOwnProperty("blur")) {
+        if (
+            inputElement.current &&
+            objectHasProperty(inputElement.current, "blur")
+        ) {
             inputElement.current.blur();
         }
     }

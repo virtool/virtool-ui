@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Box, Button, Icon } from "../../../base";
+import { Box, Button, Icon } from "@base";
 
 const StyledBLASTError = styled(Box)`
     align-items: center;
@@ -12,14 +12,16 @@ const StyledBLASTError = styled(Box)`
     }
 `;
 
-export const BLASTError = ({ error, onBlast }) => (
-    <StyledBLASTError>
-        <span>
-            <strong>Error during BLAST request.</strong>
-            <span> {error}</span>
-        </span>
-        <Button onClick={onBlast} color="blue">
-            <Icon name="redo" /> Retry
-        </Button>
-    </StyledBLASTError>
-);
+export function BLASTError({ error, onBlast }) {
+    return (
+        <StyledBLASTError>
+            <span>
+                <strong>Error during BLAST request.</strong>
+                <span> {error}</span>
+            </span>
+            <Button onClick={onBlast} color="blue">
+                <Icon name="redo" /> Retry
+            </Button>
+        </StyledBLASTError>
+    );
+}
