@@ -1,17 +1,15 @@
 <!---
-Describe your changes in a bulleted list.
-
-Be sure to identify and justify breaking changes.
+* Describe your changes in a bulleted list.
+* Identify and justify breaking changes.
 --->
 
-## Pre-Review Checklist
+## Checklist
+
+Think before checking the following items:
 
 - [ ] I have considered backwards and forwards compatibility.
 - [ ] All changes are tested.
 - [ ] All touched code documentation is updated.
-- [ ] All tests pass in my local environment
-- [ ] Deepsource issues have been reviewed and addressed.
-- [ ] Commented code and `console` usages have been removed.
 
 ## Screenshots
 
