@@ -1,10 +1,10 @@
-import NuVsToolbar from "@/analyses/components/NuVs/NuVsToolbar";
+import NuvsToolbar from "@/analyses/components/NuVs/NuvsToolbar";
 import { FormattedNuvsResults } from "@/analyses/types";
 import type { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof NuVsToolbar> = {
+const meta: Meta<typeof NuvsToolbar> = {
     title: "analyses/NuvsToolbar",
-    component: NuVsToolbar,
+    component: NuvsToolbar,
     tags: ["autodocs"],
 };
 const fakeFormattedNuvsResults: FormattedNuvsResults = {

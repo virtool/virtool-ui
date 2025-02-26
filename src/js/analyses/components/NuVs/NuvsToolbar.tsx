@@ -1,9 +1,9 @@
 import NuvsExport, {
     NuvsExportProps,
-} from "@/analyses/components/NuVs/NuvsExport";
+} from "@analyses/components/NuVs/NuvsExport";
 import { InputSearch } from "@base";
-import Toolbar from "@base/Toolbar";
 import { ButtonToggle } from "@base/ButtonToggle";
+import Toolbar from "@base/Toolbar";
 import { Tooltip } from "@base/Tooltip";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
@@ -12,19 +12,22 @@ import { AnalysisViewerSort } from "../Viewer/Sort";
 /**
  * Displays a toolbar for managing and filtering NuVs
  */
-export default function NuVsToolbar({
+export default function NuvsToolbar({
     analysisId,
     results,
     sampleName,
 }: NuvsExportProps) {
     const { value: filterORFs, setValue: setFilterORFs } =
         useUrlSearchParam<boolean>("filterOrfs", true);
+
     const { value: filterSequences, setValue: setFilterSequences } =
         useUrlSearchParam<boolean>("filterSequences", true);
+
     const { value: find, setValue: setFind } = useUrlSearchParam<string>(
         "find",
         "",
     );
+
     const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>(
         "sort",
         "length",

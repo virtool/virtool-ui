@@ -1,7 +1,5 @@
 import { useElementSize } from "@utils/hooks";
-import { scaleLinear } from "d3-scale";
-import { select } from "d3-selection";
-import { area } from "d3-shape";
+import { area, scaleLinear, select } from "d3";
 import { max } from "lodash-es";
 import React, { useLayoutEffect } from "react";
 import styled from "styled-components";

@@ -1,8 +1,8 @@
-import NuVsDetail from "@/analyses/components/NuVs/NuVsDetail";
-import NuVsItem from "@/analyses/components/NuVs/NuVsItem";
+import NuvsItem from "@/analyses/components/NuVs/NuvsItem";
 import AnalysisViewerList from "@/analyses/components/Viewer/AnalysisViewerList";
 import { useSortAndFilterNuVsHits } from "@/analyses/hooks";
 import { FormattedNuvsAnalysis } from "@/analyses/types";
+import NuvsDetail from "@analyses/components/NuVs/NuvsDetail";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
@@ -20,11 +20,11 @@ type NuVsListProps = {
 /**
  * Displays a list of NuVs hits with a detailed view
  */
-export function NuVsList({ detail }: NuVsListProps) {
+export function NuvsList({ detail }: NuVsListProps) {
     const sortedHits = useSortAndFilterNuVsHits(detail);
 
     return (
-        <NuVsPanes>
+        <div className="flex gap-4">
             <AnalysisViewerList
                 matches={sortedHits}
                 total={detail.results.hits.length}
@@ -32,14 +32,14 @@ export function NuVsList({ detail }: NuVsListProps) {
                 width={230}
             >
                 {map(sortedHits, (hit) => (
-                    <NuVsItem key={hit.id} hit={hit} />
+                    <NuvsItem key={hit.id} hit={hit} />
                 ))}
             </AnalysisViewerList>
-            <NuVsDetail
+            <NuvsDetail
                 analysisId={detail.id}
                 matches={sortedHits}
                 maxSequenceLength={detail.maxSequenceLength}
             />
-        </NuVsPanes>
+        </div>
     );
 }

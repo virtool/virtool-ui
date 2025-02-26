@@ -1,7 +1,7 @@
 import React from "react";
 import { ExternalLink } from "@base";
 
-export function NuVsORFLabel({ hmm }) {
+export default function NuvsOrfLabel({ hmm }) {
     if (hmm) {
         return (
             <ExternalLink className="capitalize" href={`/hmm/${hmm.hit}`}>

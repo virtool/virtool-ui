@@ -2,13 +2,13 @@
  * General utility constants and functions.
  *
  */
-import clsx from "clsx";
+import { capitalize } from "@utils/common";
+import clsx, { ClassValue } from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
 import Fuse from "fuse.js";
 import { get, sampleSize, startCase } from "lodash-es";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
-import { capitalize } from "@utils/common";
 
 /**
  * A string containing all alphanumeric digits in both cases.
@@ -195,6 +195,6 @@ export function getSessionStorage(key: string): object {
  * @param args - the styles from the classnames being merged
  * @returns a combined class string
  */
-export function cn(...args: string[]): string {
+export function cn(...args: ClassValue[]): string {
     return twMerge(clsx(args));
 }

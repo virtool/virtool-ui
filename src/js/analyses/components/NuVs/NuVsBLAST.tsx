@@ -1,10 +1,10 @@
-import { BLASTResults } from "@/analyses/components/NuVs/BLASTResults";
 import { useBlastNuVs } from "@/analyses/queries";
 import { FormattedNuvsHit } from "@/analyses/types";
+import { NuvsBlastResults } from "@analyses/components/NuVs/NuvsBlastResults";
 import { Alert, Box, BoxTitle, Button, Icon } from "@base";
 import React from "react";
-import { BLASTError } from "./BLASTError";
-import { BLASTInProgress } from "./BLASTInProgress";
+import BlastInProgress from "./BlastInProgress";
+import { NuvsBlastError } from "./NuvsBlastError";
 
 type NuVsBLASTProps = {
     analysisId: string;
@@ -25,13 +25,13 @@ export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
 
     if (blast) {
         if (blast.error) {
-            return <BLASTError error={blast.error} onBlast={handleBlast} />;
+            return <NuvsBlastError error={blast.error} onBlast={handleBlast} />;
         }
 
         if (blast.ready) {
             if (blast.result.hits.length) {
                 return (
-                    <BLASTResults
+                    <NuvsBlastResults
                         hits={blast.result.hits}
                         onBlast={handleBlast}
                     />
@@ -47,7 +47,7 @@ export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
         }
 
         return (
-            <BLASTInProgress
+            <BlastInProgress
                 interval={blast.interval}
                 lastCheckedAt={blast.last_checked_at}
                 rid={blast.rid}
@@ -59,7 +59,7 @@ export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
         <Alert color="purple" level>
             <Icon name="info-circle" />
             <span>This sequence has no BLAST information attached to it.</span>
-            <Button color="purple" onClick={handleBlast}>
+            <Button className="ml-auto" color="purple" onClick={handleBlast}>
                 BLAST at NCBI
             </Button>
         </Alert>

@@ -1,10 +1,7 @@
-import { axisBottom, axisLeft } from "d3-axis";
-import { scaleLinear } from "d3-scale";
-import { line } from "d3-shape";
+import { theme } from "@app/theme";
+import { appendLegend, createSVG } from "@samples/chartUtils";
+import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { forEach, unzip } from "lodash-es";
-import { theme } from "../../app/theme";
-
-import { appendLegend, createSVG } from "../../samples/chartUtils";
 
 const series = [
     { label: "Guanine", color: theme.color.blue },

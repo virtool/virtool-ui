@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup.tsx";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { BLASTError } from "../BLASTError";
+import { NuvsBlastError } from "../NuvsBlastError.tsx";
 
 describe("<BLASTError />", () => {
     let props;
@@ -15,7 +15,7 @@ describe("<BLASTError />", () => {
     });
 
     it("should render error", () => {
-        renderWithProviders(<BLASTError {...props} />);
+        renderWithProviders(<NuvsBlastError {...props} />);
         expect(
             screen.getByText("Error during BLAST request."),
         ).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe("<BLASTError />", () => {
     });
 
     it("should call onBlast when retry button clicked", async () => {
-        renderWithProviders(<BLASTError {...props} />);
+        renderWithProviders(<NuvsBlastError {...props} />);
         await userEvent.click(screen.getByText("Retry"));
         expect(props.onBlast).toHaveBeenCalled();
     });
