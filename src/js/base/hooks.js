@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { createFuse } from "../utils/utils";
+import { createFuse } from "@utils/utils.js";
 
 export const useClickOutside = (popperElement, referenceElement, callback) => {
     useEffect(() => {

@@ -1,4 +1,4 @@
-import { cn } from "@/utils/utils";
+import { cn } from "@utils/utils";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { map } from "lodash-es";
 import React from "react";

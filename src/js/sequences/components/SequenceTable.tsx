@@ -1,4 +1,4 @@
-import { cn } from "@/utils/utils";
+import { cn } from "@utils/utils";
 import { Badge, Table } from "@base";
 import React from "react";
 import styled from "styled-components";

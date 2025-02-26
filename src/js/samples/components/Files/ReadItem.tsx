@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { fontWeight } from "../../../app/theme";
 import { BoxGroupSection } from "../../../base";
-import { byteSize } from "../../../utils/utils";
+import { byteSize } from "@utils/utils";
 
 const ReadItemMain = styled.div`
     align-items: center;

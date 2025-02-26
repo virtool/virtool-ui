@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { getBorder, getFontSize } from "../../../app/theme";
 import { Box, Icon, SidebarHeader, SideBarSection } from "../../../base";
-import { getWorkflowDisplayName } from "../../../utils/utils";
+import { getWorkflowDisplayName } from "@utils/utils";
 import { workflowStates } from "../../utils";
 
 const WorkflowFilterLabel = styled.div`

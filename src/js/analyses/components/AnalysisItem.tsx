@@ -6,7 +6,7 @@ import { AdministratorRoles } from "../../administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { Attribution, Box, Icon, Link, SlashList } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";
-import { getWorkflowDisplayName } from "../../utils/utils";
+import { getWorkflowDisplayName } from "@utils/utils";
 import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";
