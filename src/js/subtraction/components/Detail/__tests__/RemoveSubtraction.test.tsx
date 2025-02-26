@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
     createFakeSubtraction,
     mockApiRemoveSubtraction,
-} from "../../../../../tests/fake/subtractions";
+} from "@tests/fake/subtractions";
 import RemoveSubtraction from "../RemoveSubtraction";
 
 describe("<RemoveSubtraction />", () => {
@@ -43,7 +43,7 @@ describe("<RemoveSubtraction />", () => {
         scope.done();
     });
 
-    it("should call onHide() when onHide() on <RemoveModal /> is called", async () => {
+    it("should call onHide() when onHide() on <RemoveModal /> is called", () => {
         renderWithRouter(<RemoveSubtraction {...props} />);
 
         fireEvent.keyDown(document, { key: "Escape" });
