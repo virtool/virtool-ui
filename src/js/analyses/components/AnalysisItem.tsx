@@ -1,9 +1,9 @@
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoles } from "@administration/types";
 import { JobState } from "@jobs/types";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { useCheckAdminRole } from "../../administration/hooks";
-import { AdministratorRoles } from "../../administration/types";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
 import { Attribution, Box, Icon, Link, SlashList } from "../../base";
 import { ProgressCircle } from "../../base/ProgressCircle";

@@ -4,8 +4,8 @@ import { Alert } from "@base";
 import { Sample } from "@samples/types";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import { AnalysisMapping } from "./AnalysisMapping";
 import { PathoscopeList } from "./PathoscopeList";
+import { AnalysisMapping } from "./PathoscopeMapping";
 import { PathoscopeToolbar } from "./PathoscopeToolbar";
 
 type PathoscopeViewerProps = {

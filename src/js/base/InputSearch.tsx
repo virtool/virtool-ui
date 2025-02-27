@@ -31,7 +31,7 @@ interface InputProps {
 
 export const InputSearch = React.forwardRef<InputHandle, InputProps>(
     (props, ref) => (
-        <InputContainer align="left">
+        <InputContainer align="left" className="flex-grow">
             <Input {...props} ref={ref} />
             <InputIcon name="search" />
         </InputContainer>

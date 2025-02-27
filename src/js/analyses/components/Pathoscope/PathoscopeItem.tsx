@@ -1,65 +1,34 @@
-import { FormattedPathoscopeHit } from "@/analyses/types";
-import { getColor } from "@app/theme";
+import { FormattedPathoscopeHit } from "@analyses/types";
 import { AccordionTrigger } from "@base";
 import { AccordionContent } from "@base/accordion/AccordionContent";
 import { ScrollingAccordionItem } from "@base/accordion/ScrollingAccordionItem";
 import { useUrlSearchParam } from "@utils/hooks";
-import { toScientificNotation } from "@utils/utils";
+import { cn, toScientificNotation } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
-import { OTUCoverage } from "./OTUCoverage";
-import { PathoscopeDetail } from "./PathoscopeDetail";
+import PathoscopeDetail from "./PathoscopeDetail";
+import PathoscopeOtuCoverage from "./PathoscopeOtuCoverage";
 
-const PathoscopeItemHeader = styled.h3`
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    font-size: ${(props) => props.theme.fontSize.md};
-    margin: 5px 0 10px;
-`;
+function PathoscopeItemValue({ color, label, value }) {
+    return (
+        <div className="flex flex-col w-22" color={color}>
+            <span
+                className={cn(
+                    {
+                        "text-blue-700": color === "blue",
+                        "text-green-700": color === "green",
+                        "text-red-700": color === "red",
+                    },
+                    "font-bold",
+                )}
+            >
+                {value}
+            </span>
+            <small className="font-medium mt-1.5 text-gray-500">{label}</small>
+        </div>
+    );
+}
 
-const StyledPathoscopeItemValue = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding-left: 10px;
-    width: 100px;
-
-    span {
-        color: ${getColor};
-        font-weight: bold;
-    }
-
-    small {
-        color: ${(props) => props.theme.color.greyDark};
-        font-size: ${(props) => props.theme.fontSize.sm};
-        font-weight: bold;
-        padding-top: 5px;
-    }
-`;
-
-const PathoscopeItemValue = ({ color, label, value }) => (
-    <StyledPathoscopeItemValue color={color}>
-        <span>{value}</span>
-        <small>{label}</small>
-    </StyledPathoscopeItemValue>
-);
-
-const PathoscopeItemValues = styled.div`
-    display: flex;
-    margin-left: auto;
-`;
-
-const PathoscopeItemTitle = styled.div`
-    display: flex;
-    flex-direction: column;
-    font-weight: bold;
-    align-items: flex-start;
-
-    span:not(:first-child) {
-        color: ${(props) => props.theme.color.greyDark};
-        padding-top: 5px;
-    }
-`;
 const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
     display: flex;
     flex-direction: column;
@@ -77,6 +46,7 @@ const PathoscopeAccordionTrigger = styled(AccordionTrigger)`
 type PathoscopeItemProps = {
     /** Complete information for a pathoscope hit */
     hit: FormattedPathoscopeHit;
+
     /** The total number of reads mapped to any OTU during the analysis*/
     mappedCount: number;
 };
@@ -93,12 +63,14 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
     return (
         <ScrollingAccordionItem value={id}>
             <PathoscopeAccordionTrigger>
-                <PathoscopeItemHeader>
-                    <PathoscopeItemTitle>
-                        <span>{name}</span>
-                        <span>{abbreviation || "No Abbreviation"}</span>
-                    </PathoscopeItemTitle>
-                    <PathoscopeItemValues>
+                <div className="flex justify-between mb-4">
+                    <header className="flex flex-col font-medium items-start text-lg">
+                        <span className="mb-0.5">{name}</span>
+                        <span className="text-gray-500">
+                            {abbreviation || "No Abbreviation"}
+                        </span>
+                    </header>
+                    <div className="flex gap-4">
                         <PathoscopeItemValue
                             color="green"
                             label={showReads ? "READS" : "WEIGHT"}
@@ -114,10 +86,10 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
                             label="COVERAGE"
                             value={coverage.toFixed(3)}
                         />
-                    </PathoscopeItemValues>
-                </PathoscopeItemHeader>
+                    </div>
+                </div>
 
-                <OTUCoverage filled={filled} />
+                <PathoscopeOtuCoverage filled={filled} />
             </PathoscopeAccordionTrigger>
             <AccordionContent>
                 <PathoscopeDetail hit={hit} mappedCount={mappedCount} />
