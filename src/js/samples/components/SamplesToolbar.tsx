@@ -1,8 +1,8 @@
-import React from "react";
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import { InputSearch, LinkButton } from "@base";
 import Toolbar from "@base/Toolbar";
 import { Permission } from "@groups/types";
+import React from "react";
 import { SampleSelectionToolbar } from "./SampleSelectionToolbar";
 
 function SampleSearchToolbar({ onChange, term }) {

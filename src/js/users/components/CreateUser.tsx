@@ -7,9 +7,9 @@ import {
     DialogTitle,
 } from "@base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import { useDialogParam } from "@utils/hooks";
 import React from "react";
 import { CreateUserForm } from "./CreateUserForm";
-import { useDialogParam } from "@utils/hooks";
 
 type NewUser = {
     /** The user's handle or username */

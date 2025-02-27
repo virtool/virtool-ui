@@ -1,6 +1,6 @@
+import { Link } from "@base";
 import { DropdownMenuItem } from "@base/DropdownMenuItem";
 import React from "react";
-import { Link } from "@base";
 
 type DropdownMenuLinkProps = {
     children: React.ReactNode;

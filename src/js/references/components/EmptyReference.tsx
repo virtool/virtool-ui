@@ -1,11 +1,11 @@
 import { Button, DialogFooter } from "@base";
+import { useNavigate } from "@utils/hooks";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateReference } from "../queries";
 import { ReferenceDataType } from "../types";
 import { DataTypeSelection } from "./DataTypeSelection";
 import { ReferenceForm, ReferenceFormMode } from "./ReferenceForm";
-import { useNavigate } from "@utils/hooks";
 
 type FormValues = {
     name: string;

@@ -1,3 +1,4 @@
+import { Workflows } from "@/analyses/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateAnalysis } from "@tests/fake/analyses";
@@ -13,12 +14,11 @@ import {
     mockApiGetShortlistSubtractions,
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
+import { formatPath } from "@utils/hooks";
 import nock from "nock";
 import React from "react";
 import { describe, it } from "vitest";
 import CreateAnalysis from "../CreateAnalysis";
-import { Workflows } from "@/analyses/types";
-import { formatPath } from "@utils/hooks";
 
 describe("getCompatibleWorkflows()", () => {
     let sample;

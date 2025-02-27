@@ -8,13 +8,13 @@ import {
 } from "@base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";
+import { usePathParams } from "@utils/hooks";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 import { JobArgs } from "./JobArgs";
 import JobError from "./JobError";
 import JobSteps from "./JobSteps";
-import { usePathParams } from "@utils/hooks";
 
 const JobDetailBadge = styled(ViewHeaderTitleBadge)`
     text-transform: capitalize;

@@ -1,6 +1,4 @@
 import { settingsQueryKeys } from "@administration/queries";
-import { IconButton } from "@base/IconButton";
-import React from "react";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -11,9 +9,11 @@ import {
     InputSimple,
     SectionHeader,
 } from "@base";
+import { IconButton } from "@base/IconButton";
+import Toolbar from "@base/Toolbar";
+import React from "react";
 import { useUpdateSourceTypes } from "../../hooks";
 import { SourceTypeList } from "./SourceTypeList";
-import Toolbar from "@base/Toolbar";
 
 type GlobalSourceTypesProps = {
     sourceTypes: string[];

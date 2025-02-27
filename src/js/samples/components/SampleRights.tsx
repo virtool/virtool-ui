@@ -1,3 +1,4 @@
+import PseudoLabel from "@base/PseudoLabel";
 import { includes, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -12,7 +13,6 @@ import {
     InputSelect,
     SelectBox,
 } from "../../base";
-import PseudoLabel from "@base/PseudoLabel";
 
 const rights = [
     { label: "None", value: "" },

@@ -1,3 +1,5 @@
+import { map } from "lodash";
+import { split, trimEnd } from "lodash-es";
 import { forEach } from "lodash-es/lodash";
 import React, {
     createContext,
@@ -7,8 +9,6 @@ import React, {
     useState,
 } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
-import { map } from "lodash";
-import { split, trimEnd } from "lodash-es";
 
 const getSize = (ref) => ({
     height: ref.current ? ref.current.offsetHeight : 0,

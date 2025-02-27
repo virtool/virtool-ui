@@ -1,10 +1,10 @@
 import { LoadingPlaceholder } from "@base";
 import { Quality } from "@quality/components/Quality";
+import { usePathParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
-import { usePathParams } from "@utils/hooks";
 
 const SampleQualityLegacyAlert = styled(LegacyAlert)`
     margin-bottom: 20px;

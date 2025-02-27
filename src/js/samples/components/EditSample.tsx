@@ -1,4 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useDialogParam } from "@utils/hooks";
 import { pick } from "lodash";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -16,7 +17,6 @@ import {
 } from "../../base";
 import { useUpdateSample } from "../queries";
 import { Sample } from "../types";
-import { useDialogParam } from "@utils/hooks";
 
 type EditSampleProps = {
     /** The sample data */

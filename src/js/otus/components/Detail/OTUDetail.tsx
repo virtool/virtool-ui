@@ -11,6 +11,7 @@ import {
 } from "@base";
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
+import { usePathParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";
@@ -18,7 +19,6 @@ import History from "./History/OTUHistory";
 import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
 import OTUSection from "./OTUSection";
 import Schema from "./Schema/Schema";
-import { usePathParams } from "@utils/hooks";
 
 const OTUDetailTitle = styled(ViewHeaderTitle)`
     align-items: baseline;

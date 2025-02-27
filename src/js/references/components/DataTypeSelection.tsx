@@ -1,8 +1,8 @@
+import PseudoLabel from "@base/PseudoLabel";
 import React from "react";
 import styled from "styled-components";
 import { SelectBox } from "../../base";
 import { ReferenceDataType } from "../types";
-import PseudoLabel from "@base/PseudoLabel";
 
 const SelectBoxContainer = styled.div`
     display: grid;

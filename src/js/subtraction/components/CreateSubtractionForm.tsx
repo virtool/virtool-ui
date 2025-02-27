@@ -7,6 +7,7 @@ import {
     LoadingPlaceholder,
     SaveButton,
 } from "@base";
+import PseudoLabel from "@base/PseudoLabel";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
@@ -16,7 +17,6 @@ import { useCreateSubtraction } from "@subtraction/queries";
 import { useDialogParam } from "@utils/hooks";
 import React from "react";
 import { Controller } from "react-hook-form";
-import PseudoLabel from "@base/PseudoLabel";
 
 type FormValues = {
     name: string;

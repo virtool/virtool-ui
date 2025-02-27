@@ -1,5 +1,5 @@
-import React from "react";
 import { ExternalLink } from "@base";
+import React from "react";
 
 export default function NuvsOrfLabel({ hmm }) {
     if (hmm) {

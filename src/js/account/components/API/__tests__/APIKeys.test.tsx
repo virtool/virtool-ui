@@ -10,11 +10,11 @@ import {
 } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithRouter } from "@tests/setup";
+import { formatPath } from "@utils/hooks";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import APIKeys from "../APIKeys";
-import { formatPath } from "@utils/hooks";
 
 describe("<APIKeys />", () => {
     let apiKeys;

@@ -1,4 +1,5 @@
 import Analyses from "@/analyses/components/Analyses";
+import { Workflows } from "@/analyses/types";
 import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -10,11 +11,10 @@ import {
 import { createFakeHMMSearchResults, mockApiGetHmms } from "@tests/fake/hmm";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
+import { formatPath } from "@utils/hooks";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { Workflows } from "@/analyses/types";
-import { formatPath } from "@utils/hooks";
 
 describe("<AnalysesList />", () => {
     let analyses;

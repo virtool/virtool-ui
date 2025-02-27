@@ -10,13 +10,13 @@ import {
     SubviewHeaderTitle,
 } from "@base";
 import { useFetchSample } from "@samples/queries";
+import { usePathParams } from "@utils/hooks";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/NuVsViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
-import { usePathParams } from "@utils/hooks";
 
 const UnsupportedAnalysis = styled(Box)`
     display: flex;

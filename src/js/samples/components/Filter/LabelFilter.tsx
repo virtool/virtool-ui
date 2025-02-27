@@ -1,6 +1,6 @@
-import React from "react";
 import { Link, SidebarHeader, SideBarSection } from "@base";
 import { Label } from "@labels/types";
+import React from "react";
 import { LabelFilterItem } from "./LabelFilterItem";
 
 type LabelFilterProps = {

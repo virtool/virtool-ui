@@ -1,6 +1,15 @@
+import { AdministratorRoles } from "@administration/types";
+import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import {
+    createFakeReference,
+    mockApiGetReferenceDetail,
+} from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
+import { formatPath } from "@utils/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
@@ -8,15 +17,6 @@ import {
     mockApiEditSequence,
     mockApiGetOTU,
 } from "../../../../../tests/fake/otus";
-import {
-    createFakeReference,
-    mockApiGetReferenceDetail,
-} from "@tests/fake/references";
-import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { AdministratorRoles } from "@administration/types";
-import { formatPath } from "@utils/hooks";
-import References from "@references/components/References";
 
 describe("<EditBarcodeSequence>", () => {
     let props;

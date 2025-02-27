@@ -1,9 +1,9 @@
 import { LoadingPlaceholder } from "@base";
 import HistoryList from "@otus/components/Detail/History/HistoryList";
 import { useFetchOTUHistory } from "@otus/queries";
+import { usePathParams } from "@utils/hooks";
 import { groupBy } from "lodash-es";
 import React from "react";
-import { usePathParams } from "@utils/hooks";
 
 /**
  * Display and manage the history for the OTU

@@ -4,10 +4,10 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
+import { formatPath } from "@utils/hooks";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { SubtractionFileManager } from "../SubtractionFileManager";
-import { formatPath } from "@utils/hooks";
 
 function createFiles(fileNames) {
     return fileNames.map(

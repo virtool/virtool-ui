@@ -1,9 +1,9 @@
-import React, { ChangeEvent } from "react";
 import { InputSearch, LinkButton } from "@base";
+import Toolbar from "@base/Toolbar";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceRemotesFrom } from "@references/types";
 import { formatSearchParams } from "@utils/hooks";
-import Toolbar from "@base/Toolbar";
+import React, { ChangeEvent } from "react";
 
 type OtuToolbarProps = {
     /** Current search term used for filtering */

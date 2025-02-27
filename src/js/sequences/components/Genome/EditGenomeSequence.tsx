@@ -2,12 +2,12 @@ import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
 import { useEditSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
-import { useUrlSearchParam } from "@utils/hooks";
-import React from "react";
 import {
     useGetActiveSequence,
     useGetUnreferencedSegments,
 } from "@sequences/hooks";
+import { useUrlSearchParam } from "@utils/hooks";
+import React from "react";
 
 type EditGenomeSequenceProps = {
     hasSchema: boolean;

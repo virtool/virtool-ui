@@ -2,10 +2,6 @@ import Settings from "@administration/components/Settings";
 import { AdministratorRoles } from "@administration/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { times } from "lodash-es";
-import nock from "nock";
-import React from "react";
-import { describe, expect, it } from "vitest";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeGroupMinimal, mockApiListGroups } from "@tests/fake/groups";
 import {
@@ -15,6 +11,10 @@ import {
 } from "@tests/fake/user";
 import { renderWithRouter } from "@tests/setup";
 import { User } from "@users/types";
+import { times } from "lodash-es";
+import nock from "nock";
+import React from "react";
+import { describe, expect, it } from "vitest";
 
 function formatUserPath(user: User) {
     return `/administration/users/${user.id}`;
