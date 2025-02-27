@@ -1,10 +1,10 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
-import { createHtmlPlugin } from "vite-plugin-html";
 import EntryShakingPlugin from "vite-plugin-entry-shaking";
+import { createHtmlPlugin } from "vite-plugin-html";
 
 export default defineConfig({
     build: {
@@ -16,6 +16,7 @@ export default defineConfig({
             "@": path.resolve("src/js"),
             "@account": path.resolve("src/js/account"),
             "@administration": path.resolve("src/js/administration"),
+            "@analyses": path.resolve("src/js/analyses"),
             "@app": path.resolve("src/js/app"),
             "@base": path.resolve("src/js/base"),
             "@files": path.resolve("src/js/files"),

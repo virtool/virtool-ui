@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Box, Label, Link } from "@base";
-import { toThousand } from "../../../utils/utils";
+import { toThousand } from "@utils/utils";
 import { Bars } from "../Viewer/Bars";
 
 const StyledAnalysisMappingReferenceTitle = styled.div`

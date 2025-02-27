@@ -1,11 +1,11 @@
 import { LoadingPlaceholder, SectionHeader } from "@base";
+import { usePathParams } from "@utils/hooks";
 import { sortBy } from "lodash-es";
 import React from "react";
 import { useGetReference } from "../../queries";
 import { LocalSourceTypes } from "../SourceTypes/LocalSourceTypes";
 import ReferenceMembers from "./ReferenceMembers";
 import RemoveReference from "./RemoveReference";
-import { usePathParams } from "@utils/hooks";
 
 /**
  * The reference settings view allowing users to manage the reference

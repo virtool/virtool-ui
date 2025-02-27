@@ -1,10 +1,10 @@
 import { ContainerNarrow, LoadingPlaceholder } from "@base";
+import { usePathParams } from "@utils/hooks";
 import React from "react";
 import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";
 import SampleFilesMessage from "../SampleFilesMessage";
 import SampleReads from "./SampleReads";
-import { usePathParams } from "@utils/hooks";
 
 /**
  * The files view in sample details

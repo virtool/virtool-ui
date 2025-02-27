@@ -1,13 +1,13 @@
+import { Box, ExternalLink, Icon, Loader, RelativeTime } from "@base";
 import { addSeconds, formatDistanceStrict } from "date-fns";
 import React from "react";
 import styled from "styled-components";
-import { Box, ExternalLink, Icon, Loader, RelativeTime } from "../../../base";
 
 const ridRoot =
     "https://blast.ncbi.nlm.nih.gov/Blast.cgi?\
     CMD=Web&PAGE_TYPE=BlastFormatting&OLD_BLAST=false&GET_RID_INFO=on&RID=";
 
-export const RIDLink = ({ rid }) => {
+function RidLink({ rid }) {
     if (rid) {
         return (
             <span>
@@ -23,14 +23,9 @@ export const RIDLink = ({ rid }) => {
     }
 
     return null;
-};
+}
 
-const StyledRIDTiming = styled.div`
-    font-size: ${(props) => props.theme.fontSize.sm};
-    margin-left: auto;
-`;
-
-export const RIDTiming = ({ interval, lastCheckedAt }) => {
+function RidTiming({ interval, lastCheckedAt }) {
     if (lastCheckedAt) {
         const nextCheckAt = addSeconds(new Date(lastCheckedAt), interval);
         const relativeNext = formatDistanceStrict(
@@ -39,15 +34,15 @@ export const RIDTiming = ({ interval, lastCheckedAt }) => {
         );
 
         return (
-            <StyledRIDTiming>
+            <div className="ml-auto text-gray-700">
                 Last checked <RelativeTime time={lastCheckedAt} />. Checking
                 again in {relativeNext}
-            </StyledRIDTiming>
+            </div>
         );
     }
 
     return null;
-};
+}
 
 const StyledBLASTInProgress = styled(Box)`
     align-items: flex-start;
@@ -58,17 +53,17 @@ const StyledBLASTInProgress = styled(Box)`
     }
 `;
 
-export const BLASTInProgress = ({ interval, lastCheckedAt, rid }) => {
+export default function BlastInProgress({ interval, lastCheckedAt, rid }) {
     return (
         <StyledBLASTInProgress>
             <Loader size="16px" color="primary" />
             <div>
                 <div>
-                    <span>BLAST in progress</span>
-                    <RIDLink rid={rid} />
+                    <span className="font-medium">BLAST in progress</span>
+                    <RidLink rid={rid} />
                 </div>
-                <RIDTiming interval={interval} lastCheckedAt={lastCheckedAt} />
+                <RidTiming interval={interval} lastCheckedAt={lastCheckedAt} />
             </div>
         </StyledBLASTInProgress>
     );
-};
+}

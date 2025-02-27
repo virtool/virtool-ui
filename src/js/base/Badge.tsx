@@ -14,17 +14,16 @@ export function Badge({ children, className, color = "gray" }: BadgeProps) {
     return (
         <span
             className={cn(
-                "text-white",
-                "text-sm",
-                "rounded-xl",
-                "inline-block",
-                "min-w-3",
-                "py-1",
-                "px-2",
-                "font-bold",
-                "leading-none",
-                "text-center",
                 "align-middle",
+                "font-bold",
+                "inline-block",
+                "min-w-8",
+                "px-2",
+                "py-1",
+                "rounded-xl",
+                "text-center",
+                "text-sm",
+                "text-white",
                 "whitespace-nowrap",
                 {
                     "bg-blue-600": color === "blue",

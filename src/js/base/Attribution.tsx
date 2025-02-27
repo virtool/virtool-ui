@@ -1,8 +1,8 @@
+import { cn } from "@utils/utils";
 import { capitalize } from "lodash-es";
 import React from "react";
 import { InitialIcon } from "./InitialIcon";
 import { RelativeTime } from "./RelativeTime";
-import { cn } from "@utils/utils";
 
 type AttributionProps = {
     className?: string;

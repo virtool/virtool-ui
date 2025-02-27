@@ -8,6 +8,7 @@ import {
     Markdown,
 } from "@base";
 import JobItem from "@jobs/components/Item/JobItem";
+import { usePathParams } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";
@@ -16,7 +17,6 @@ import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";
 import SampleFileSizeWarning from "./SampleFileSizeWarning";
 import Sidebar from "./Sidebar";
-import { usePathParams } from "@utils/hooks";
 
 const StyledSampleDetailGeneral = styled.div`
     align-items: stretch;

@@ -10,10 +10,10 @@ import {
 } from "@base";
 import { UploadBar } from "@files/components/UploadBar";
 import { useImportReference, useUploadReference } from "@references/queries";
+import { useNavigate } from "@utils/hooks";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useNavigate } from "@utils/hooks";
 
 const ImportReferenceUpload = styled.div`
     margin-bottom: 15px;

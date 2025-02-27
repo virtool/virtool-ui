@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { byteSize, createRandomString, formatIsolateName } from "../utils";
+import { byteSize, createRandomString, formatIsolateName } from "../utils.js";
 
 describe("Utility constants and functions module", () => {
     let result;

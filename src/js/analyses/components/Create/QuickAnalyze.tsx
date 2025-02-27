@@ -18,6 +18,7 @@ import { filter, forEach } from "lodash-es";
 import React, { useEffect } from "react";
 
 import { Workflows } from "@/analyses/types";
+import { includes } from "lodash-es/lodash";
 import styled from "styled-components";
 import { useSearch } from "wouter";
 import { useCreateAnalysis } from "../../queries";
@@ -30,7 +31,6 @@ import {
 import { SelectedSamples } from "./SelectedSamples";
 import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
-import { includes } from "lodash-es/lodash";
 
 const QuickAnalyzeSelected = styled.span`
     align-self: center;

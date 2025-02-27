@@ -1,5 +1,7 @@
 import { LoadingPlaceholder } from "@/base";
+import { ErrorBoundary } from "@app/ErrorBoundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { resetClient } from "@utils/utils";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
 import { ThemeProvider } from "styled-components";
@@ -7,8 +9,6 @@ import { Router } from "wouter";
 import { useBrowserLocation } from "wouter/use-browser-location";
 import Main from "./Main";
 import { theme } from "./theme";
-import { resetClient } from "@utils/utils";
-import { ErrorBoundary } from "@app/ErrorBoundary";
 
 // Lazy load components
 const LazyFirstUser = React.lazy(() => import("@wall/components/FirstUser"));

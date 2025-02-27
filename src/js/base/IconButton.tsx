@@ -28,23 +28,19 @@ export function IconButton({
     const icon = (
         <button
             className={cn(
-                `${faStyle} fa-${name}`,
+                faStyle,
+                `fa-${name}`,
                 "bg-inherit",
                 "border-none",
-                "items-center",
-                "rounded-full",
-                "text-md",
-                "justify-center",
-                "justify-items-center",
                 "cursor-pointer",
-                "w-8",
-                "h-8",
-                "hover:shadow-sm",
-                "focus:shadow-sm",
+                "items-center",
+                "outline-none",
+                "p-2.5",
+                "rounded-full",
+                "text-inherit",
                 "hover:text-white",
                 "focus:text-white",
-                "hover:outline-none",
-                "focus:outline-none",
+
                 {
                     "text-blue-500 hover:bg-blue-500 focus:bg-blue-400":
                         color === "blue",

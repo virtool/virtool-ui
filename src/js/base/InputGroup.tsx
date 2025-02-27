@@ -1,6 +1,6 @@
+import { cn } from "@utils/utils";
 import React from "react";
 import { InputContext } from "./InputContext";
-import { cn } from "@utils/utils";
 
 type InputGroupProps = {
     children: React.ReactNode;

@@ -1,7 +1,7 @@
+import { useMatchPartialPath } from "@utils/hooks";
 import { cn } from "@utils/utils";
 import React from "react";
 import { Link } from "wouter";
-import { useMatchPartialPath } from "@utils/hooks";
 
 const className = cn(
     "flex",

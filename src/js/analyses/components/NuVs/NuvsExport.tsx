@@ -8,6 +8,7 @@ import {
     DialogTitle,
     Icon,
 } from "@base";
+import PseudoLabel from "@base/PseudoLabel";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
@@ -15,7 +16,6 @@ import { followDynamicDownload } from "@utils/utils";
 import { forEach, map, reduce, replace } from "lodash-es";
 import React, { useState } from "react";
 import NuVsExportPreview from "./ExportPreview";
-import PseudoLabel from "@base/PseudoLabel";
 
 function getBestHit(items) {
     return reduce(

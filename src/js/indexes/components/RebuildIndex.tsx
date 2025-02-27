@@ -8,10 +8,10 @@ import {
 } from "@base";
 import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
+import { useDialogParam } from "@utils/hooks";
 import React from "react";
 import RebuildHistory from "./History";
 import RebuildIndexError from "./RebuildIndexError";
-import { useDialogParam } from "@utils/hooks";
 
 type RebuildIndexProps = {
     refId: string;

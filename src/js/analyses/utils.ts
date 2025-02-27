@@ -1,3 +1,4 @@
+import { formatIsolateName } from "@utils/utils";
 import {
     compact,
     fill,
@@ -21,7 +22,6 @@ import {
     zipWith,
 } from "lodash-es";
 import { cloneDeep } from "lodash-es/lodash";
-import { formatIsolateName } from "../utils/utils";
 import { PositionMappedReadDepths, UntrustworthyRange } from "./types";
 
 export const calculateAnnotatedOrfCount = (orfs) =>

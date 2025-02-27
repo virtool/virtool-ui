@@ -1,7 +1,7 @@
-import React, { ReactNode } from "react";
-import styled from "styled-components";
 import { BoxGroup, InputError } from "@base";
 import PseudoLabel from "@base/PseudoLabel";
+import React, { ReactNode } from "react";
+import styled from "styled-components";
 
 const StyledCreateAnalysisSelector = styled.div`
     min-width: 0;

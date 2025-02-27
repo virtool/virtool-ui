@@ -1,10 +1,8 @@
-import { axisBottom, axisLeft } from "d3-axis";
-import { scaleLinear } from "d3-scale";
-import { line } from "d3-shape";
+import { theme } from "@app/theme";
+import { createSVG } from "@samples/chartUtils";
+import { toScientificNotation } from "@utils/utils.js";
+import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { max } from "lodash-es";
-import { theme } from "../../app/theme";
-import { createSVG } from "../../samples/chartUtils";
-import { toScientificNotation } from "../../utils/utils";
 
 export const drawSequencesChart = (element, data, baseWidth) => {
     const svg = createSVG(element, baseWidth);

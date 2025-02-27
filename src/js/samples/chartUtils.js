@@ -1,4 +1,4 @@
-import { select } from "d3-selection";
+import { select } from "d3";
 import { keysIn, map } from "lodash-es";
 
 const height = 300;

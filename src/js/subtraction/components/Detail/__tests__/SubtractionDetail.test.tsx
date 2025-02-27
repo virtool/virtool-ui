@@ -1,3 +1,4 @@
+import { SubtractionMinimal } from "@subtraction/types";
 import { screen } from "@testing-library/react";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
@@ -10,7 +11,6 @@ import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import Subtraction from "../../Subtraction";
-import { SubtractionMinimal } from "@subtraction/types";
 
 function formatSubtractionPath(subtraction: SubtractionMinimal) {
     return `/subtractions/${subtraction.id}`;

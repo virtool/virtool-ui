@@ -1,8 +1,8 @@
 import { borderRadius, getFontSize, getFontWeight } from "@app/theme";
+import { objectHasProperty } from "@utils/common";
 import React, { MutableRefObject, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { objectHasProperty } from "@utils/common";
 
 const InputHeaderContainer = styled.form`
     border: 2px solid transparent;

@@ -34,7 +34,7 @@ type BLASTResultsProps = {
 /**
  * Displays the results of the blast installed for the sequence
  */
-export function BLASTResults({ hits, onBlast }: BLASTResultsProps) {
+export function NuvsBlastResults({ hits, onBlast }: BLASTResultsProps) {
     const components = map(hits, (hit, index) => (
         <tr key={index}>
             <td>
@@ -55,7 +55,7 @@ export function BLASTResults({ hits, onBlast }: BLASTResultsProps) {
         <BoxGroup>
             <StyledBLASTResultsHeader>
                 <strong>NCBI BLAST</strong>
-                <Button onClick={onBlast} color="blue">
+                <Button onClick={onBlast}>
                     <Icon name="redo" />
                     Retry
                 </Button>

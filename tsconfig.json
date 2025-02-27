@@ -5,6 +5,7 @@
             "@/*": ["./js/*"],
             "@account/*": ["./js/account/*"],
             "@administration/*": ["./js/administration/*"],
+            "@analyses/*": ["./js/analyses/*"],
             "@app/*": ["./js/app/*"],
             "@base": ["./js/base/index.js"],
             "@base/*": ["./js/base/*"],

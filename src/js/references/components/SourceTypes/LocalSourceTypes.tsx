@@ -13,6 +13,7 @@ import {
     SectionHeader,
 } from "@base";
 import { IconButton } from "@base/IconButton";
+import { usePathParams } from "@utils/hooks";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -23,7 +24,6 @@ import {
     useUpdateReference,
 } from "../../queries";
 import { SourceTypeList } from "./SourceTypeList";
-import { usePathParams } from "@utils/hooks";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
     button {

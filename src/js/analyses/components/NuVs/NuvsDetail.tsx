@@ -1,16 +1,16 @@
-import { NuVsValues } from "@/analyses/components/NuVs/NuVsValues";
-import { useGetActiveHit } from "@/analyses/hooks";
-import { FormattedNuvsHit } from "@/analyses/types";
-import { calculateAnnotatedOrfCount } from "@/analyses/utils";
+import NuvsValues from "@analyses/components/NuVs/NuVsValues";
+import { useGetActiveHit } from "@analyses/hooks";
+import { FormattedNuvsHit } from "@analyses/types";
+import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import { getBorder } from "@app/theme";
-import { Badge, Box } from "@base";
+import { Badge } from "@base";
 import { useUrlSearchParam } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import NuVsBLAST from "./NuVsBLAST";
-import { NuVsORF } from "./ORF";
-import { NuVsSequence } from "./Sequence";
+import NuvsOrf from "./NuvsOrf";
+import NuvsSequence from "./NuvsSequence";
 
 const StyledNuVsFamilies = styled.div`
     border: ${getBorder};
@@ -63,14 +63,11 @@ const NuVsDetailTitle = styled.div`
     }
 `;
 
-const StyledNuVsDetail = styled(Box)`
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    min-height: 500px;
-    min-width: 0;
-    margin-left: 10px;
-`;
+function NuvsDetailContainer({ children }) {
+    return (
+        <div className="flex flex-col flex-grow items-stretch">{children}</div>
+    );
+}
 
 type NuVsDetailProps = {
     analysisId: string;
@@ -82,7 +79,7 @@ type NuVsDetailProps = {
 /**
  * The detailed view of a NuVs sequence
  */
-export default function NuVsDetail({
+export default function NuvsDetail({
     analysisId,
     matches,
     maxSequenceLength,
@@ -91,7 +88,7 @@ export default function NuVsDetail({
     const hit = useGetActiveHit(matches);
 
     if (!hit) {
-        return <StyledNuVsDetail>No Hits</StyledNuVsDetail>;
+        return <NuvsDetailContainer>No Hits</NuvsDetailContainer>;
     }
 
     const { e, families, orfs, sequence, index } = hit;
@@ -105,7 +102,7 @@ export default function NuVsDetail({
     filtered = sortBy(filtered || orfs, (orf) => orf.hits.length).reverse();
 
     const orfComponents = map(filtered, (orf, index) => (
-        <NuVsORF
+        <NuvsOrf
             key={index}
             index={index}
             {...orf}
@@ -114,7 +111,7 @@ export default function NuVsDetail({
     ));
 
     return (
-        <StyledNuVsDetail>
+        <NuvsDetailContainer>
             <NuVsDetailTitle>
                 <h3>
                     Sequence {index}
@@ -122,11 +119,11 @@ export default function NuVsDetail({
                         {sequence.length} bp
                     </Badge>
                 </h3>
-                <NuVsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
+                <NuvsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
                 <NuVsFamilies families={families} />
             </NuVsDetailTitle>
             <NuVsLayout>
-                <NuVsSequence
+                <NuvsSequence
                     key="sequence"
                     maxSequenceLength={maxSequenceLength}
                     sequence={sequence}
@@ -134,6 +131,6 @@ export default function NuVsDetail({
                 {orfComponents}
             </NuVsLayout>
             <NuVsBLAST hit={hit} analysisId={analysisId} />
-        </StyledNuVsDetail>
+        </NuvsDetailContainer>
     );
 }

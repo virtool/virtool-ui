@@ -1,4 +1,5 @@
 import { theme } from "@app/theme";
+import { faker } from "@faker-js/faker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@testing-library/jest-dom";
 import { fireEvent, render as rtlRender } from "@testing-library/react";
@@ -9,7 +10,6 @@ import { vi } from "vitest";
 import { BaseLocationHook, Router } from "wouter";
 import { memoryLocation } from "wouter/memory-location";
 import { Path } from "wouter/types/location-hook";
-import { faker } from "@faker-js/faker";
 
 process.env.TZ = "UTC";
 

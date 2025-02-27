@@ -2,37 +2,27 @@
  * General utility constants and functions.
  *
  */
-import clsx from "clsx";
+import { capitalize } from "@utils/common";
+import clsx, { ClassValue } from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
 import Fuse from "fuse.js";
-import {
-    capitalize,
-    forEach,
-    get,
-    replace,
-    sampleSize,
-    split,
-    startCase,
-} from "lodash-es";
+import { get, sampleSize, startCase } from "lodash-es";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
 
 /**
  * A string containing all alphanumeric digits in both cases.
- *
- * @type {string}
  */
 export const alphanumeric =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 /**
- * Converts an integer in bytes to a nicely formatted string (eg. 10.2 GB).
- *
- * @func
- * @param bytes {number}
- * @returns {string}
+ * Convert an integer in bytes to a nicely formatted string (eg. 10.2 GB).
  */
-export function byteSize(bytes, spaceSeparated = false) {
+export function byteSize(
+    bytes: number,
+    spaceSeparated: boolean = false,
+): string {
     if (bytes) {
         return numbro(bytes).format({
             output: "byte",
@@ -46,45 +36,21 @@ export function byteSize(bytes, spaceSeparated = false) {
 }
 
 /**
- * Create a URL object given a find term or a page number. Both parameters are optional.
- *
- * @func
- * @param term {string} a search string to place in the URL
- * @returns {URL}
- */
-export function createFindURL(term) {
-    const url = new window.URL(window.location);
-
-    if (term !== undefined) {
-        if (term) {
-            url.searchParams.set("find", term);
-        } else {
-            url.searchParams.delete("find");
-        }
-    }
-
-    return url;
-}
-
-/**
  * Create a Fuse object.
- *
  */
-export function createFuse(collection, keys, id) {
+export function createFuse(collection: object[], keys: string[]) {
     return new Fuse(collection, {
         keys,
-        id,
         minMatchCharLength: 1,
         threshold: 0.3,
-        tokenize: true,
+        useExtendedSearch: true,
     });
 }
 
 /**
- * Create a random string of {@link length} from [alphanumeric]{@link module:utils.alphanumeric}.
+ * Create a random string with the given length.
  *
- * @func
- * @param length {number} the length of string to return
+ * @param length the length of string to return
  */
 export function createRandomString(length = 8) {
     return sampleSize(alphanumeric, length).join("");
@@ -93,12 +59,8 @@ export function createRandomString(length = 8) {
 /**
  * Download a file with the given ``filename`` with the given ``text`` content. This allows downloads of
  * dynamically generated files.
- *
- * @func
- * @param filename
- * @param text
  */
-export function followDynamicDownload(filename, text) {
+export function followDynamicDownload(filename: string, text: string) {
     const a = document.createElement("a");
     a.href = `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`;
     a.download = filename;
@@ -113,12 +75,8 @@ export function followDynamicDownload(filename, text) {
 
 /**
  * Return a formatted isolate name given an ``isolate`` object.
- *
- * @func
- * @param isolate {object}
- * @returns {string}
  */
-export function formatIsolateName(isolate) {
+export function formatIsolateName(isolate: object): string {
     const sourceType =
         get(isolate, "source_type") || get(isolate, "sourceType");
     const sourceName =
@@ -131,11 +89,8 @@ export function formatIsolateName(isolate) {
 
 /**
  * Return an English string describing a duration given a number of seconds.
- *
- * @param seconds
- * @returns {string}
  */
-export function formatRoundedDuration(seconds) {
+export function formatRoundedDuration(seconds: number) {
     const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
 
     const units = [
@@ -158,20 +113,7 @@ export function formatRoundedDuration(seconds) {
 }
 
 /**
- * Transforms a plain workflow ID (eg. pathoscope_bowtie) to a human-readable name (eg. PathoscopeBowtie).
- *
- * @func
- * @param workflow {string} plain workflow ID
- * @returns {string} human-readable workflow name
- */
-export function getWorkflowDisplayName(workflow) {
-    return get(workflowDisplayNames, workflow, startCase(workflow));
-}
-
-/**
  * Object that maps workflow IDs to human-readable names.
- *
- * @type {object}
  */
 export const workflowDisplayNames = {
     aodp: "AODP",
@@ -183,33 +125,37 @@ export const workflowDisplayNames = {
     build_index: "Build Index",
 };
 
-export function toThousand(number) {
-    return numbro(number).format({ thousandSeparated: true });
+/**
+ * Transforms a plain workflow ID (eg. pathoscope_bowtie) to a human-readable name (eg. PathoscopeBowtie).
+ *
+ * @func
+ * @param workflow plain workflow ID
+ * @returns human-readable workflow name
+ */
+export function getWorkflowDisplayName(workflow: string): string {
+    return get(workflowDisplayNames, workflow, startCase(workflow));
+}
+
+export function toThousand(num: number): string {
+    return numbro(num).format({ thousandSeparated: true });
 }
 
 /**
  * Converts a ``number`` to a scientific notation string.
- *
- * @func
- * @param {number} number
- * @returns {string}
  */
-export function toScientificNotation(number) {
-    if (number < 0.01 || number > 1000) {
-        const [coefficient, exponent] = split(number.toExponential(), "e");
-        return `${numbro(coefficient).format("0.00")}E${replace(exponent, "+", "")}`;
+export function toScientificNotation(num: number): string {
+    if (num < 0.01 || num > 1000) {
+        const [coefficient, exponent] = num.toExponential().split("e");
+        return `${numbro(coefficient).format("0.00")}E${exponent.replace("+", "")}`;
     }
 
-    return numbro(number).format("0.000");
+    return numbro(num).format("0.000");
 }
 
 /**
  *  Clears session storage and reloads the page.
  *
  *  This is used to clear the session storage when the user logs out or the token expires.
- *
- *  @func
- *  @returns {undefined}
  */
 export function resetClient() {
     window.sessionStorage.clear();
@@ -218,13 +164,8 @@ export function resetClient() {
 
 /**
  * Stores the passed object in local storage at key given
- *
- * @func
- * @param {string} key
- * @param {data} object
- * @returns {undefined}
  */
-export function setSessionStorage(key, data) {
+export function setSessionStorage(key: string, data: object) {
     try {
         window.sessionStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
@@ -237,12 +178,8 @@ export function setSessionStorage(key, data) {
 
 /**
  * Return the object stored in session storage at the given key
- *
- * @func
- * @param {string} key
- * @returns {object}
  */
-export function getSessionStorage(key) {
+export function getSessionStorage(key: string): object {
     const item = window.sessionStorage.getItem(key);
 
     if (item === null) {
@@ -253,29 +190,11 @@ export function getSessionStorage(key) {
 }
 
 /**
- * Return a search string with specified passed parameters updated
- *
- * @func
- * @param {string} search URL ready search string to be updated
- * @param {object} params
- * @returns {string}
- */
-export function updateSearchString(search, params) {
-    const searchParams = new URLSearchParams(search);
-
-    forEach(params, (value, key) => {
-        searchParams.set(key, value);
-    });
-
-    return searchParams.toString();
-}
-
-/**
  * Return a string with the tailwind classnames merged
  *
- * @param args - The styles from the classnames being merged
- * @returns {string}
+ * @param args - the styles from the classnames being merged
+ * @returns a combined class string
  */
-export function cn(...args) {
+export function cn(...args: ClassValue[]): string {
     return twMerge(clsx(args));
 }

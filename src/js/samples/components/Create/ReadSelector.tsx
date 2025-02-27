@@ -9,8 +9,9 @@ import {
     Link,
     NoneFoundSection,
 } from "@base";
-import Toolbar from "@base/Toolbar";
 import { CompactScrollList } from "@base/CompactScrollList";
+import PseudoLabel from "@base/PseudoLabel";
+import Toolbar from "@base/Toolbar";
 import { useValidateFiles } from "@files/hooks";
 import { FileResponse, FileType } from "@files/types";
 import {
@@ -22,7 +23,6 @@ import { flatMap, includes, indexOf, toLower } from "lodash-es";
 import React, { ReactNode, useEffect, useState } from "react";
 import styled from "styled-components";
 import ReadSelectorItem from "./ReadSelectorItem";
-import PseudoLabel from "@base/PseudoLabel";
 
 type ReadSelectorBoxProps = {
     error: string;

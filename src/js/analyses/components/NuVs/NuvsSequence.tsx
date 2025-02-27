@@ -1,15 +1,11 @@
-import { axisTop } from "d3-axis";
-import { scaleLinear } from "d3-scale";
-import { select } from "d3-selection";
+import { axisTop, scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
 
-function draw(element, maxLength, sequenceLength) {
+function draw(element: HTMLElement, maxLength: number, sequenceLength: number) {
     element.innerHTML = "";
 
     const width = element.offsetWidth;
 
-    // Set-up a y-axis that will appear at the top of the chart.
     const x = scaleLinear()
         .range([0, width - 30])
         .domain([0, maxLength]);
@@ -37,22 +33,17 @@ function draw(element, maxLength, sequenceLength) {
         .call(axisTop(x));
 }
 
-const StyledNuVsSequence = styled.div`
-    height: 32px;
-    margin: 10px 0;
-`;
-
-export const NuVsSequence = ({ maxSequenceLength, sequence }) => {
+export default function NuvsSequence({ maxSequenceLength, sequence }) {
     const chartEl = useRef(null);
 
     useEffect(
         () => draw(chartEl.current, maxSequenceLength, sequence.length),
-        [sequence],
+        [maxSequenceLength, sequence],
     );
 
     return (
-        <div style={{ overflow: "hidden" }}>
-            <StyledNuVsSequence ref={chartEl} />
+        <div className="overflow-hidden">
+            <div className="my-4" ref={chartEl} />
         </div>
     );
-};
+}

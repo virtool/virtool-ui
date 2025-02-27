@@ -1,11 +1,7 @@
-import { axisBottom, axisLeft } from "d3-axis";
-import { format } from "d3-format";
-import { scaleLinear } from "d3-scale";
-import { select } from "d3-selection";
-import { area } from "d3-shape";
+import { theme } from "@app/theme";
+import { area, axisBottom, axisLeft, format, scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
-import { theme } from "../../../app/theme";
 import { UntrustworthyRange } from "../../types";
 import { deriveTrustworthyRegions } from "../../utils";
 
@@ -57,7 +53,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
     }
 
     if (untrustworthyRanges.length) {
-        untrustworthyRanges.forEach((range) => {
+        untrustworthyRanges.forEach((range: [number, number]) => {
             svg.append("rect")
                 .attr("x", x(range[0]))
                 .attr("y", 0)
@@ -69,8 +65,8 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
     }
 
     if (data) {
-        const areaDrawer = area()
-            .x((d, i) => x(i))
+        const areaDrawer = area<number>()
+            .x((_, i) => x(i))
             .y0((d) => y(d))
             .y1(height);
 

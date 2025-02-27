@@ -1,6 +1,7 @@
 import { ContainerNarrow, LoadingPlaceholder, NotFound } from "@base";
 import IndexDetail from "@indexes/components/IndexDetail";
 import { useGetReference } from "@references/queries";
+import { usePathParams } from "@utils/hooks";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import Indexes from "../../../indexes/components/Indexes";
@@ -11,7 +12,6 @@ import ReferenceDetailHeader from "./ReferenceDetailHeader";
 import ReferenceDetailTabs from "./ReferenceDetailTabs";
 import ReferenceManager from "./ReferenceManager";
 import ReferenceSettings from "./ReferenceSettings";
-import { usePathParams } from "@utils/hooks";
 
 /**
  * The detailed view for a reference

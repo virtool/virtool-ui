@@ -1,13 +1,13 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Attribution, BoxGroupSection, Icon, Link } from "@base";
 import { IconButton } from "@base/IconButton";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "@app/theme";
-import { Attribution, BoxGroupSection, Icon, Link } from "@base";
-import { ProgressCircle } from "@base/ProgressCircle";
 import { ReferenceMinimal } from "../../types";
 
 const StyledReferenceItem = styled(BoxGroupSection)`

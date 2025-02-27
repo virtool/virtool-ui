@@ -17,6 +17,7 @@ import {
     InputSimple,
     SaveButton,
 } from "@base";
+import PseudoLabel from "@base/PseudoLabel";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useDialogParam } from "@utils/hooks";
@@ -24,7 +25,6 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
-import PseudoLabel from "@base/PseudoLabel";
 
 const CreateAPIKeyCopied = styled.p`
     color: ${(props) => props.theme.color.blue};

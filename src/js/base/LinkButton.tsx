@@ -1,6 +1,6 @@
+import { Link } from "@base";
 import { cn } from "@utils/utils";
 import React from "react";
-import { Link } from "@base";
 
 interface LinkButtonProps {
     children?: React.ReactNode;

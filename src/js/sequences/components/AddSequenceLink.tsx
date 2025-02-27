@@ -3,10 +3,10 @@ import { useCurrentOTUContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceDataType } from "@references/types";
 import { useGetUnreferencedTargets } from "@sequences/hooks";
-import React from "react";
 import { formatSearchParams } from "@utils/hooks";
-import { Link } from "wouter";
 import { cn } from "@utils/utils";
+import React from "react";
+import { Link } from "wouter";
 
 type AddSequenceLinkProps = {
     dataType: ReferenceDataType;

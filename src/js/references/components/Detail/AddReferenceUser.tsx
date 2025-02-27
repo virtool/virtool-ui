@@ -10,8 +10,8 @@ import {
     NoneFoundSection,
     SelectBoxGroupSection,
 } from "@base";
-import Toolbar from "@base/Toolbar";
 import { CompactScrollList } from "@base/CompactScrollList";
+import Toolbar from "@base/Toolbar";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useInfiniteFindUsers } from "@users/queries";
 import { filter, flatMap, includes, map } from "lodash-es";

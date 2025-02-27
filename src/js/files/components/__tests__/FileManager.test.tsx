@@ -6,10 +6,10 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
+import { formatPath } from "@utils/hooks";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FileManager, FileManagerProps } from "../FileManager";
-import { formatPath } from "@utils/hooks";
 
 describe("<FileManager>", () => {
     let props: FileManagerProps;

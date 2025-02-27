@@ -1,4 +1,3 @@
-import { cn } from "@/utils/utils";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -7,13 +6,14 @@ import {
     LoadingPlaceholder,
 } from "@base";
 import Contributors from "@indexes/components/Contributors";
+import { usePathParams } from "@utils/hooks";
+import { cn } from "@utils/utils";
 import React from "react";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
 import Targets from "./Targets/Targets";
-import { usePathParams } from "@utils/hooks";
 
 /**
  * Display and edit information for a reference

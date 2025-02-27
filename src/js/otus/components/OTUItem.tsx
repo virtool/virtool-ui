@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { BoxGroupSection, Link } from "@base";
+import React from "react";
+import styled from "styled-components";
 
 const OTUItemName = styled(Link)`
     font-size: ${getFontSize("lg")};

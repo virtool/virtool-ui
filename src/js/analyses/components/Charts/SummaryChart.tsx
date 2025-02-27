@@ -1,13 +1,17 @@
-import { scaleLinear } from "d3-scale";
-import { select } from "d3-selection";
-import { area } from "d3-shape";
+import { theme } from "@app/theme";
+import { area, scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
-import { theme } from "../../../app/theme";
 import { UntrustworthyRange } from "../../types";
 import { deriveTrustworthyRegions } from "../../utils";
 
-function summaryPlot(element, data, length, yMax, untrustworthyRanges) {
+function draw(
+    element: HTMLElement,
+    data,
+    length: number,
+    yMax: number,
+    untrustworthyRanges,
+) {
     select(element).append("svg");
 
     const height = 100;
@@ -56,7 +60,7 @@ function summaryPlot(element, data, length, yMax, untrustworthyRanges) {
     }
 
     if (data) {
-        const areaDrawer = area()
+        const areaDrawer = area<number>()
             .x((d, i) => x(i))
             .y0((d) => y(d))
             .y1(height);
@@ -113,13 +117,7 @@ export function SummaryChart({
     const chartEl = useRef(null);
 
     useEffect(() => {
-        summaryPlot(
-            chartEl.current,
-            data,
-            data.length,
-            yMax,
-            untrustworthyRanges,
-        );
+        draw(chartEl.current, data, data.length, yMax, untrustworthyRanges);
     }, [data, id, yMax]);
 
     return <StyledIimiCoverageChart ref={chartEl} />;

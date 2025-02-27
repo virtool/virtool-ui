@@ -1,5 +1,5 @@
-import React from "react";
 import { Alert, Icon, Link } from "@base";
+import React from "react";
 
 interface AnalysisHMMAlertProps {
     installed: boolean;

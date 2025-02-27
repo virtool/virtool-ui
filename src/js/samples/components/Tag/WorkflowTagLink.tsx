@@ -1,6 +1,6 @@
+import { Link } from "@base";
 import React from "react";
 import styled from "styled-components";
-import { Link } from "@base";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 
 const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`

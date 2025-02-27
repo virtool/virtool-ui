@@ -1,12 +1,12 @@
-import { scaleLinear } from "d3-scale";
-import { select } from "d3-selection";
+import { Badge } from "@base";
+import { scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
-import { NuVsORFLabel } from "./ORFLabel";
+import "./NuvsOrf.css";
+import NuvsOrfLabel from "./NuvsOrfLabel";
 
 const HEIGHT = 8;
 
-const draw = (element, maxLength, pos, strand) => {
+function draw(element, maxLength, pos, strand) {
     element.innerHTML = "";
 
     const width = element.offsetWidth - 30;
@@ -20,7 +20,7 @@ const draw = (element, maxLength, pos, strand) => {
     // Create a mother group that will hold all chart elements.
     const group = svg.append("g").attr("transform", "translate(15,0)");
 
-    // Set-up a y-axis that will appear at the top of the chart.
+    // Set up a y-axis that will appear at the top of the chart.
     const x = scaleLinear().range([0, width]).domain([0, maxLength]);
 
     const x0 = x(Math.abs(pos[strand === 1 ? 0 : 1]));
@@ -38,35 +38,15 @@ const draw = (element, maxLength, pos, strand) => {
     ].join(" ");
 
     group.append("path").attr("d", d).attr("stroke-width", 1);
-};
+}
 
-const NuVsORFHeader = styled.div`
-    align-items: center;
-    display: flex;
-    padding: 10px 15px 0;
-
-    small {
-        margin-left: 5px;
-    }
-`;
-
-const NuVsORFValues = styled.span`
-    font-weight: bold;
-
-    span {
-        margin-left: 8px;
-    }
-
-    span:first-child {
-        color: ${(props) => props.theme.color.blue};
-    }
-
-    span:last-child {
-        color: ${(props) => props.theme.color.red};
-    }
-`;
-
-export const NuVsORF = ({ hits, index, maxSequenceLength, pos, strand }) => {
+export default function NuvsOrf({
+    hits,
+    index,
+    maxSequenceLength,
+    pos,
+    strand,
+}) {
     const chartEl = useRef(null);
 
     useEffect(
@@ -77,16 +57,18 @@ export const NuVsORF = ({ hits, index, maxSequenceLength, pos, strand }) => {
     const hmm = hits[0];
 
     return (
-        <div>
-            <NuVsORFHeader>
-                <NuVsORFLabel hmm={hmm} />
-                <NuVsORFValues>
-                    <span>{pos[1] - pos[0]}</span>
-                    <span>{hmm ? hmm.full_e : null}</span>
-                </NuVsORFValues>
-            </NuVsORFHeader>
+        <div className="pb-3">
+            <div className="flex font-medium items-center gap-4 nuvs-orf py-3">
+                <NuvsOrfLabel hmm={hmm} />
+                <span className="flex gap-2">
+                    <Badge>{pos[1] - pos[0]}</Badge>
+                    <span className="text-emerald-700">
+                        {hmm ? hmm.full_e : null}
+                    </span>
+                </span>
+            </div>
 
             <div ref={chartEl} />
         </div>
     );
-};
+}

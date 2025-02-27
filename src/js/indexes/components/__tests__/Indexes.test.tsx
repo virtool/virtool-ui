@@ -2,10 +2,8 @@ import { AdministratorRoles } from "@administration/types";
 import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
-import nock from "nock";
-import React from "react";
-import { beforeEach, describe, expect, it } from "vitest";
 import {
     createFakeIndexMinimal,
     mockApiFindIndexes,
@@ -16,7 +14,9 @@ import {
     mockApiGetReferenceDetail,
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
-import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import nock from "nock";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<Indexes />", () => {
     let reference;

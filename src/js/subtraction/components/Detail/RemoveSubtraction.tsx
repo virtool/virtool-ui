@@ -1,8 +1,8 @@
 import { RemoveDialog } from "@base/RemoveDialog";
+import { useNavigate } from "@utils/hooks";
 import React from "react";
 import { useRemoveSubtraction } from "../../queries";
 import { Subtraction } from "../../types";
-import { useNavigate } from "@utils/hooks";
 
 type RemoveSubtractionProps = {
     /** The subtraction data */

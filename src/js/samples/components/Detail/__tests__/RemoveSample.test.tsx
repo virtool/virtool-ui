@@ -2,10 +2,10 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiRemoveSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
+import { formatPath } from "@utils/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import RemoveSample from "../RemoveSample";
-import { formatPath } from "@utils/hooks";
 
 describe("<RemoveSample />", () => {
     let props;

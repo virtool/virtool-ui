@@ -8,13 +8,13 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "@base";
+import { useFindJobs } from "@jobs/queries";
 import { useListSearchParam, usePageParam } from "@utils/hooks";
+import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
 import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";
-import { useFindJobs } from "@jobs/queries";
-import { map } from "lodash";
 
 const JobsListViewContainer = styled.div`
     display: flex;

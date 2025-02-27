@@ -1,8 +1,9 @@
 import InputGroup from "@base/InputGroup.js";
 import InputLabel from "@base/InputLabel.js";
 
-export { InputLabel, InputGroup };
+export { InputGroup, InputLabel };
 
+export { Link } from "wouter";
 export { Accordion } from "./accordion/Accordion";
 export { AccordionContent } from "./accordion/AccordionContent";
 export { AccordionTrigger } from "./accordion/AccordionTrigger";
@@ -69,7 +70,6 @@ export { InputSimple } from "./InputSimple";
 export { Key } from "./Key";
 export { Label } from "./Label";
 export { LinkButton } from "./LinkButton";
-export { Link } from "wouter";
 export { Loader } from "./Loader";
 export { LoadingPlaceholder } from "./LoadingPlaceholder";
 export { Logo } from "./Logo";

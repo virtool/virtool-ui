@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
 import { getBorder } from "@app/theme";
 import { BoxGroup, BoxGroupSection } from "@base";
+import React from "react";
+import styled from "styled-components";
 
 const StyledCreateAnalysisSelectorList = styled(BoxGroup)`
     border: none;

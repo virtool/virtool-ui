@@ -1,8 +1,6 @@
 import { theme } from "@app/theme";
 import { appendLegend, createSVG } from "@samples/chartUtils";
-import { axisBottom, axisLeft } from "d3-axis";
-import { scaleLinear } from "d3-scale";
-import { area, line } from "d3-shape";
+import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { forEach, map, min, values } from "lodash-es";
 
 const series = [

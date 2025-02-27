@@ -1,5 +1,6 @@
-import { cn } from "@/utils/utils";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
+import { usePathParams } from "@utils/hooks";
+import { cn } from "@utils/utils";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -17,7 +18,6 @@ import {
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";
-import { usePathParams } from "@utils/hooks";
 
 const TaxonomyGrid = styled.div`
     display: grid;

@@ -19,7 +19,7 @@
         "process": true,
         "window": true
     },
-    "ignorePatterns": ["**/tests/setup.tsx"],
+    "ignorePatterns": ["**/tests/setup.tsx", "dist/**"],
     "overrides": [
         // Only warn about missing props validation.
         // TODO: Remove this override once all components are in TS.
