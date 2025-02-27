@@ -4,7 +4,7 @@ import { max } from "lodash-es";
 import React, { useLayoutEffect } from "react";
 import styled from "styled-components";
 
-const draw = (element, data, width) => {
+function draw(element: HTMLElement, data: number[], width: number) {
     const margin = {
         top: 10,
         left: 0,
@@ -25,15 +25,24 @@ const draw = (element, data, width) => {
 
     select(element).selectAll("*").remove();
 
-    // Construct the SVG canvas.
     const svg = select(element)
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
+    //
+    // const areaDrawer = area()
+    //     .x((d) => x(d[0]))
+    //     .y0((d) => y(d[1]))
+    //     .y1(height);
+    //
+    // svg.append("path")
+    //     .datum(data)
+    //     .attr("class", "depth-area")
+    //     .attr("d", areaDrawer);
 
-    const areaDrawer = area()
+    const areaDrawer = area<number>()
         .x((d, i) => x(i))
         .y0((d) => y(d))
         .y1(height);
@@ -42,7 +51,7 @@ const draw = (element, data, width) => {
         .datum(data)
         .attr("class", "depth-area")
         .attr("d", areaDrawer);
-};
+}
 
 const StyledOTUCoverage = styled.div`
     width: 100%;

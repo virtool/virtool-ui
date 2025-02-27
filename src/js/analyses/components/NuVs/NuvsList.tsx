@@ -5,12 +5,6 @@ import { FormattedNuvsAnalysis } from "@/analyses/types";
 import NuvsDetail from "@analyses/components/NuVs/NuvsDetail";
 import { map } from "lodash";
 import React from "react";
-import styled from "styled-components";
-
-const NuVsPanes = styled.div`
-    display: grid;
-    grid-template-columns: 230px 1fr;
-`;
 
 type NuVsListProps = {
     /** Complete NuVs analysis details */

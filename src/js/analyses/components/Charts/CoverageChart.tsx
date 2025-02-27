@@ -53,7 +53,7 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
     }
 
     if (untrustworthyRanges.length) {
-        untrustworthyRanges.forEach((range) => {
+        untrustworthyRanges.forEach((range: [number, number]) => {
             svg.append("rect")
                 .attr("x", x(range[0]))
                 .attr("y", 0)
@@ -65,8 +65,8 @@ function draw(element, data, length, yMax, untrustworthyRanges) {
     }
 
     if (data) {
-        const areaDrawer = area()
-            .x((d, i) => x(i))
+        const areaDrawer = area<number>()
+            .x((_, i) => x(i))
             .y0((d) => y(d))
             .y1(height);
 

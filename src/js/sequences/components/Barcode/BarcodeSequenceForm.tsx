@@ -38,6 +38,7 @@ export default function BarcodeSequenceForm({
 }: BarcodeSequenceProps) {
     const { accession, definition, host, id, sequence, target } =
         activeSequence || {};
+
     const methods = usePersistentForm<FormValues>({
         formName: `${noun}BarcodeSequence${id}`,
         defaultValues: {
