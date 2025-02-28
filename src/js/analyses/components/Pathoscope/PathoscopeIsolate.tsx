@@ -21,7 +21,7 @@ export default function PathoscopeIsolate({
         0,
     );
 
-    const sequenceComponents = sequences.map((hit, i) => {
+    const sequenceComponents = sequences.map((hit) => {
         let ratio = 1;
 
         if (sequences.length > 1) {
