@@ -1,13 +1,7 @@
 import { map } from "lodash";
 import { split, trimEnd } from "lodash-es";
 import { forEach } from "lodash-es/lodash";
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 
 const getSize = (ref) => ({
@@ -420,60 +414,4 @@ export function useMatchPartialPath(path: string, exclude?: string[]) {
     }
 
     return location.startsWith(trimEnd(split(path, "?")[0], "/"));
-}
-
-type ScrollSyncProps = {
-    children: React.ReactNode;
-};
-
-const ScrollContext = createContext(null);
-
-/**
- * Manages the context and synchronises scroll between subscribed components
- *
- * @param children - The component to synchronise scroll within
- */
-export function ScrollSyncContext({ children }: ScrollSyncProps) {
-    const [scrollPercentage, setScrollPercentage] = useState(0);
-
-    function handleScroll(percentage) {
-        setScrollPercentage(percentage);
-    }
-
-    return (
-        <ScrollContext.Provider value={[scrollPercentage, handleScroll]}>
-            {children}
-        </ScrollContext.Provider>
-    );
-}
-
-/**
- * Subscribes components to the context and handles scroll functionality
- *
- * @param children - The components to subscribe to the context
- */
-export function ScrollSync({ children }: ScrollSyncProps) {
-    const [scrollPercentage, handleScroll] = useContext(ScrollContext);
-    const ref = useRef(null);
-
-    useEffect(() => {
-        function handleScrollEvent(e) {
-            const { scrollLeft } = e.target;
-            handleScroll(scrollLeft);
-        }
-
-        ref.current.addEventListener("scroll", handleScrollEvent);
-    }, []);
-
-    useEffect(() => {
-        if (scrollPercentage !== undefined) {
-            ref.current.scrollLeft = scrollPercentage;
-        }
-    }, [scrollPercentage]);
-
-    return (
-        <div ref={ref} style={{ overflowX: "auto" }}>
-            {children}
-        </div>
-    );
 }

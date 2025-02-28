@@ -11,13 +11,7 @@ import Toolbar from "@base/Toolbar";
 import { Tooltip } from "@base/Tooltip";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import styled from "styled-components";
 import { AnalysisViewerSort } from "../Viewer/Sort";
-
-const StyledPathoscopeToolbar = styled(Toolbar)`
-    display: flex;
-    margin-bottom: 10px !important;
-`;
 
 type PathoscopeToolbarProps = {
     /** The unique identifier the analysis being viewed */
@@ -28,21 +22,26 @@ type PathoscopeToolbarProps = {
 export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
     const { value: filterOTUs, setValue: setFilterOtus } =
         useUrlSearchParam<boolean>("filterOtus", true);
+
     const { value: filterIsolates, setValue: setFilterIsolates } =
         useUrlSearchParam<boolean>("filterIsolates", true);
+
     const { value: find, setValue: setFind } =
         useUrlSearchParam<string>("find");
+
     const { value: showReads, setValue: setShowReads } =
         useUrlSearchParam<boolean>("reads", false);
+
     const { value: sortKey, setValue: setSortKey } = useUrlSearchParam<string>(
         "sort",
         "coverage",
     );
+
     const { value: sortDesc, setValue: setSortDesc } =
         useUrlSearchParam<boolean>("sortDesc", true);
 
     return (
-        <StyledPathoscopeToolbar>
+        <Toolbar>
             <InputSearch
                 value={find}
                 onChange={(e) => setFind(e.target.value)}
@@ -102,6 +101,6 @@ export function PathoscopeToolbar({ analysisId }: PathoscopeToolbarProps) {
                     </DropdownMenuDownload>
                 </DropdownMenuContent>
             </Dropdown>
-        </StyledPathoscopeToolbar>
+        </Toolbar>
     );
 }
