@@ -18,6 +18,13 @@ if (window.virtool.sentryDsn !== "SENTRY_DSN") {
     window.captureException = (error) => console.error(error);
 }
 
+// Reload the page if a preload error occurs.
+// These errors occur when a new version of the app bundle is deployed and a
+// requested chunk no longer exists on the server.
+window.addEventListener("vite:preloadError", () => {
+    window.location.reload();
+});
+
 window.virtool.b2c = { use: false };
 
 const AppWithProfiler = withProfiler(App);
