@@ -1,14 +1,14 @@
-import { SampleMinimal } from "../../types";
-import { SampleLibraryTypeLabel } from "../Label/SampleLibraryTypeLabel";
-import { SmallSampleLabel } from "../Label/SmallSampleLabel";
-import { WorkflowTags } from "../Tag/WorkflowTags";
-import EndIcon from "./EndIcon";
 import { Workflows } from "@/analyses/types";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { Attribution, Box, Checkbox, Link } from "@base";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
+import { SampleMinimal } from "../../types";
+import { SampleLibraryTypeLabel } from "../Label/SampleLibraryTypeLabel";
+import { SmallSampleLabel } from "../Label/SmallSampleLabel";
+import { WorkflowTags } from "../Tag/WorkflowTags";
+import EndIcon from "./EndIcon";
 
 const SampleItemCheckboxContainer = styled.div`
     grid-column-start: 1;

@@ -18,8 +18,8 @@ import {
     CreateAnalysisFormValues,
 } from "./CreateAnalysisForm";
 import { SelectedSamples } from "./SelectedSamples";
-import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
+import { getCompatibleWorkflows } from "./workflows";
 
 const QuickAnalyzeSelected = styled.span`
     align-self: center;

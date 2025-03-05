@@ -13,9 +13,9 @@ import { Redirect, Route, Switch } from "wouter";
 import Groups from "../../groups/components/Groups";
 import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";
-import { ManageAdministrators } from "./administrators/Administrators";
 import { AdministratorTabs } from "./AdministratorTabs";
 import { ServerSettings } from "./ServerSettings";
+import { ManageAdministrators } from "./administrators/Administrators";
 
 export default function Settings() {
     const { data: account, isPending } = useFetchAccount();

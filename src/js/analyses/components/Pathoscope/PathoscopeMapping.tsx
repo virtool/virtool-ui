@@ -1,10 +1,9 @@
+import { Box, Label, Link } from "@base";
+import { toThousand } from "@utils/utils";
 import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";
-
-import { Box, Label, Link } from "@base";
-import { toThousand } from "@utils/utils";
 import { Bars } from "../Viewer/Bars";
 
 const StyledAnalysisMappingReferenceTitle = styled.div`

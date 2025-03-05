@@ -17,8 +17,8 @@ import {
     CreateAnalysisForm,
     CreateAnalysisFormValues,
 } from "./CreateAnalysisForm";
-import { getCompatibleWorkflows } from "./workflows";
 import { WorkflowSelector } from "./WorkflowSelector";
+import { getCompatibleWorkflows } from "./workflows";
 
 type CreateAnalysisProps = {
     /** The HMM search results */

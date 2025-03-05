@@ -1,3 +1,7 @@
+import { useUpdateUser } from "@administration/queries";
+import React from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -10,10 +14,6 @@ import {
     RelativeTime,
     SaveButton,
 } from "../../base";
-import { useUpdateUser } from "@administration/queries";
-import React from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
 
 const PasswordFooter = styled.div`
     align-items: center;

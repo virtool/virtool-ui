@@ -3,7 +3,6 @@
  *
  * @module app/theme
  */
-
 import { get } from "lodash-es";
 import { DefaultTheme } from "styled-components";
 

@@ -1,8 +1,8 @@
-import { useUpdateGroup } from "../queries";
-import { Group } from "../types";
 import { BoxGroup, BoxGroupHeader, Checkbox } from "@base";
 import { map } from "lodash-es";
 import React from "react";
+import { useUpdateGroup } from "../queries";
+import { Group } from "../types";
 
 export function GroupPermissions({ selectedGroup }: { selectedGroup: Group }) {
     const updateGroupMutator = useUpdateGroup();

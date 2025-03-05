@@ -1,7 +1,7 @@
 import { fontWeight, getFontSize } from "@app/theme";
 import { BoxGroupSearch, Icon, Link, SidebarHeaderButton } from "@base";
-import { useFuse } from "@base/hooks";
 import { Popover } from "@base/Popover";
+import { useFuse } from "@base/hooks";
 import { Label } from "@labels/types";
 import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
