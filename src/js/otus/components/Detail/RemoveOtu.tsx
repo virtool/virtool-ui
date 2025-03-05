@@ -15,8 +15,6 @@ type RemoveOtuProps = {
 export default function RemoveOtu({ id, name, refId }: RemoveOtuProps) {
     const navigate = useNavigate();
 
-    console.log("name", name);
-
     const { open: openRemoveOTU, setOpen: setOpenRemoveOTU } =
         useDialogParam("openRemoveOTU");
 

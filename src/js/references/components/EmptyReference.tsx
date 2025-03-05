@@ -38,9 +38,6 @@ export default function EmptyReference() {
                     onSuccess: () => {
                         navigate("/refs");
                     },
-                    onError: (err) => {
-                        console.log(err);
-                    },
                 }),
             )}
         >

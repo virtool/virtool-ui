@@ -40,7 +40,6 @@ describe("<RemoveOTU />", () => {
     });
 
     it("should render when [show=true]", async () => {
-        console.log("fakename", otu.name);
         renderWithRouter(<References />, formatPath(path, searchParams));
 
         expect(await screen.findByText("Remove OTU")).toBeInTheDocument();
