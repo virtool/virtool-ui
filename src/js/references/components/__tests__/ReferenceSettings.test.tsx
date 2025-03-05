@@ -4,7 +4,7 @@ import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { expect, test } from "vitest";
-import { ReferenceSettings } from "../ReferenceSettings";
+import ReferenceSettings from "../ReferenceSettings";
 
 const settings = {
     default_source_types: ["Clone", "Genotype"],

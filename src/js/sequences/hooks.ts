@@ -1,8 +1,8 @@
 import { useGetActiveIsolate } from "@otus/hooks";
-import { useCurrentOTUContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/queries";
 import sortSequencesBySegment from "@otus/utils";
 import { useUrlSearchParam } from "@utils/hooks";
-import { compact, filter, find, map, reject } from "lodash-es";
+import { compact, find, map, reject } from "lodash-es";
 import { useCallback, useState } from "react";
 
 /**
@@ -24,7 +24,7 @@ export function useExpanded() {
 
     const collapse = useCallback(() => {
         setExpanded(false);
-    }, [expanded]);
+    }, []);
 
     return { expanded, expand, collapse };
 }
@@ -36,7 +36,7 @@ export function useExpanded() {
  */
 export function useGetActiveSequence() {
     const { value: editSequenceId } = useUrlSearchParam("editSequenceId");
-    const { otu } = useCurrentOTUContext();
+    const { otu } = useCurrentOtuContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
     const sequences = sortSequencesBySegment(
@@ -63,7 +63,7 @@ export function useGetActiveSequence() {
 export function useGetInactiveSequences() {
     const { value: editSequenceId } = useUrlSearchParam("editSequenceId");
 
-    const { otu } = useCurrentOTUContext();
+    const { otu } = useCurrentOtuContext();
 
     const activeIsolate = useGetActiveIsolate(otu);
     const activeSequenceId = editSequenceId || undefined;
@@ -76,53 +76,12 @@ export function useGetInactiveSequences() {
 }
 
 /**
- * A hook to get unreferenced targets for a barcode sequence
- *
- * @returns A list of unreferenced targets
- */
-export function useGetUnreferencedTargets() {
-    const {
-        otu,
-        reference: { targets },
-    } = useCurrentOTUContext();
-
-    const { sequences } = useGetActiveIsolate(otu);
-    const referencedTargetNames = map(sequences, (sequence) => sequence.target);
-
-    return filter(
-        targets,
-        (target) => !referencedTargetNames.includes(target.name),
-    );
-}
-
-/**
- * Get a list of targets that are valid selections for the active sequence
- *
- * @returns A list of unreferenced targets
- */
-export function useGetSelectableTargets() {
-    const { reference } = useCurrentOTUContext();
-    const { targets } = reference;
-
-    const inactiveSequences = useGetInactiveSequences();
-    const referencedTargetNames = map(
-        inactiveSequences,
-        (sequence) => sequence.target,
-    );
-
-    return filter(
-        targets,
-        (target) => !referencedTargetNames.includes(target.name),
-    );
-}
-
-/**
  * A hook to get unreferenced segments for a genome sequence
  *
  * @returns A list of unreferenced segments
  */
 export function useGetUnreferencedSegments() {
-    const { otu } = useCurrentOTUContext();
+    const { otu } = useCurrentOtuContext();
 
     const inactiveSequences = useGetInactiveSequences();
     const referencedSegmentNames = compact(map(inactiveSequences, "segment"));

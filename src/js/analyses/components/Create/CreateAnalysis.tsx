@@ -46,13 +46,16 @@ export default function CreateAnalysis({
         data: subtractionShortlist,
         isPending: isPendingSubtractionShortlist,
     } = useFetchSubtractionsShortlist(true);
+
     const { data: sample, isPending: isPendingSample } =
         useFetchSample(sampleId);
+
     const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
-    const { data: mlModels, isPending: isPendingMLModels } = useFindModels();
+
+    const { data: mlModels, isPending: isPendingMlModels } = useFindModels();
 
     if (
-        isPendingMLModels ||
+        isPendingMlModels ||
         isPendingSubtractionShortlist ||
         isPendingSample ||
         isPendingIndexes
@@ -60,10 +63,10 @@ export default function CreateAnalysis({
         return null;
     }
 
-    const dataType = sample.library_type === "amplicon" ? "barcode" : "genome";
     const defaultSubtractions = sample.subtractions.map(
         (subtraction) => subtraction.id,
     );
+
     const subtractionOptions = map(keysIn(subtractionShortlist), (key) => {
         return {
             ...subtractionShortlist[key],
@@ -73,11 +76,12 @@ export default function CreateAnalysis({
             ),
         };
     });
+
     const compatibleIndexes = map(groupBy(indexes, "reference.id"), (group) =>
         maxBy(group, "version"),
     );
+
     const compatibleWorkflows = getCompatibleWorkflows(
-        dataType,
         Boolean(hmms.total_count),
     );
 

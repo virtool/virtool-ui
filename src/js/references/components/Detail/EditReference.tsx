@@ -11,13 +11,12 @@ import { useUpdateReference } from "@references/queries";
 import { useDialogParam } from "@utils/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Reference, ReferenceDataType } from "../../types";
+import { Reference } from "../../types";
 import { ReferenceForm, ReferenceFormMode } from "../ReferenceForm";
 
 export type FormValues = {
     name: string;
     description: string;
-    dataType: ReferenceDataType;
     organism: string;
 };
 

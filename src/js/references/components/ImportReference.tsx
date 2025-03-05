@@ -19,7 +19,7 @@ const ImportReferenceUpload = styled.div`
     margin-bottom: 15px;
 `;
 
-export function ImportReference() {
+export default function ImportReference() {
     const navigate = useNavigate();
 
     const importMutation = useImportReference();

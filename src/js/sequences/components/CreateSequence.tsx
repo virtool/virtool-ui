@@ -1,13 +1,13 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
-import { useAddSequence } from "@otus/queries";
+import { useCreateSequence } from "@otus/queries";
 import { OTUSegment, OTUSequence } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import GenomeSequenceForm from "@sequences/components/Genome/GenomeSequenceForm";
 import { useDialogParam } from "@utils/hooks";
-import { compact, map } from "lodash-es/lodash";
+import { compact, map } from "lodash-es";
 import React from "react";
+import SequenceForm from "./SequenceForm";
 
-type AddGenomeSequenceProps = {
+type CreateSequenceProps = {
     isolateId: string;
     otuId: string;
     refId: string;
@@ -18,35 +18,35 @@ type AddGenomeSequenceProps = {
 /**
  * Displays dialog to add a genome sequence
  */
-export default function AddGenomeSequence({
+export default function CreateSequence({
     isolateId,
     otuId,
     refId,
     schema,
     sequences,
-}: AddGenomeSequenceProps) {
-    const { open: openAddSequence, setOpen: setOpenAddSequence } =
-        useDialogParam("openAddSequence");
-    const mutation = useAddSequence(otuId);
+}: CreateSequenceProps) {
+    const { open: openCreateSequence, setOpen: setOpenCreateSequence } =
+        useDialogParam("openCreateSequence");
 
-    const referencedSegmentNames = compact(map(sequences, "segment"));
+    const mutation = useCreateSequence(otuId);
+
     const segments = schema.filter(
-        (segment) => !referencedSegmentNames.includes(segment.name),
+        (segment) => !compact(map(sequences, "segment")).includes(segment.name),
     );
 
     function onSubmit({ accession, definition, host, sequence, segment }) {
         mutation.mutate(
             {
-                isolateId,
                 accession,
                 definition,
                 host,
+                isolateId,
                 segment,
                 sequence: sequence.toUpperCase(),
             },
             {
                 onSuccess: () => {
-                    setOpenAddSequence(false);
+                    setOpenCreateSequence(false);
                 },
             },
         );
@@ -54,16 +54,16 @@ export default function AddGenomeSequence({
 
     return (
         <Dialog
-            open={openAddSequence}
-            onOpenChange={() => setOpenAddSequence(false)}
+            open={openCreateSequence}
+            onOpenChange={() => setOpenCreateSequence(false)}
         >
             <DialogPortal>
                 <DialogOverlay />
                 <DialogContent className="top-1/2">
-                    <DialogTitle>Add Sequence</DialogTitle>
-                    <GenomeSequenceForm
+                    <DialogTitle>Create Sequence</DialogTitle>
+                    <SequenceForm
                         hasSchema={schema.length > 0}
-                        noun="add"
+                        noun="create"
                         onSubmit={onSubmit}
                         otuId={otuId}
                         refId={refId}

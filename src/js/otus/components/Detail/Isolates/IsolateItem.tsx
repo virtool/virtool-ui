@@ -1,7 +1,6 @@
 import { BoxGroupSection, Icon } from "@/base";
 import { getActiveShadow } from "@app/theme";
 import { OTUIsolate } from "@otus/types";
-import { ReferenceDataType } from "@references/types";
 import { useUrlSearchParam } from "@utils/hooks";
 import { formatIsolateName } from "@utils/utils";
 import React from "react";
@@ -27,18 +26,13 @@ const StyledIsolateItem = styled(BoxGroupSection)`
 type IsolateItemProps = {
     /** Whether the Isolate is selected */
     active: boolean;
-    dataType: ReferenceDataType;
     isolate: OTUIsolate;
 };
 
 /**
  * A condensed isolate item for use in a list of isolates
  */
-export default function IsolateItem({
-    active,
-    dataType,
-    isolate,
-}: IsolateItemProps) {
+export default function IsolateItem({ active, isolate }: IsolateItemProps) {
     const { setValue: setActiveIsolate } =
         useUrlSearchParam<string>("activeIsolate");
 
@@ -48,7 +42,7 @@ export default function IsolateItem({
             onClick={() => setActiveIsolate(isolate.id)}
         >
             <span>{formatIsolateName(isolate)}</span>
-            {isolate.default && dataType !== "barcode" && <Icon name="star" />}
+            {isolate.default && <Icon name="star" />}
         </StyledIsolateItem>
     );
 }

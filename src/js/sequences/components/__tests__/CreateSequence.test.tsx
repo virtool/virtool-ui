@@ -5,9 +5,9 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import {
-    createFakeOTU,
+    createFakeOtu,
     mockApiAddSequence,
-    mockApiGetOTU,
+    mockApiGetOtu,
 } from "@tests/fake/otus";
 import {
     createFakeReference,
@@ -18,23 +18,23 @@ import { formatPath } from "@utils/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 
-describe("<AddGenomeSequence>", () => {
+describe("<CreateSequence>", () => {
     let otu;
     let path;
     let reference;
 
     beforeEach(() => {
-        reference = createFakeReference({ data_type: "genome" });
+        reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
-        otu = createFakeOTU();
-        mockApiGetOTU(otu);
+        otu = createFakeOtu();
+        mockApiGetOtu(otu);
         mockApiGetSettings(createFakeSettings());
         mockApiGetAccount(
             createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
         );
 
         path = formatPath(`/refs/${reference.id}/otus/${otu.id}/otu`, {
-            openAddSequence: true,
+            openCreateSequence: true,
         });
     });
 

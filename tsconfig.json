@@ -12,7 +12,7 @@
             "@files/*": ["./js/files/*"],
             "@forms/*": ["./js/forms/*"],
             "@groups/*": ["./js/groups/*"],
-            "@hmms/*": ["./js/hmms/*"],
+            "@hmm/*": ["./js/hmm/*"],
             "@indexes/*": ["./js/indexes/*"],
             "@jobs/*": ["./js/jobs/*"],
             "@labels/*": ["./js/labels/*"],

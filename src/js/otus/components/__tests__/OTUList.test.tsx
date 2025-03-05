@@ -4,7 +4,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
-import { createFakeOTUMinimal, mockApiGetOTUs } from "@tests/fake/otus";
+import { createFakeOTUMinimal, mockApiFindOtus } from "@tests/fake/otus";
 import {
     createFakeReference,
     mockApiGetReferenceDetail,
@@ -31,7 +31,7 @@ describe("<OTUsList />", () => {
 
     describe("<OTUList />", () => {
         it("should render correctly", async () => {
-            const scope = mockApiGetOTUs(OTUs, reference.id);
+            const scope = mockApiFindOtus(OTUs, reference.id);
             renderWithRouter(<References />, path);
 
             expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
@@ -47,7 +47,7 @@ describe("<OTUsList />", () => {
         });
 
         it("should render when no documents are found", async () => {
-            const scope = mockApiGetOTUs([], reference.id);
+            const scope = mockApiFindOtus([], reference.id);
             renderWithRouter(<References />, path);
 
             expect(
@@ -62,7 +62,7 @@ describe("<OTUsList />", () => {
 
     describe("<OTUToolbar />", () => {
         it("should render properly", async () => {
-            const scope = mockApiGetOTUs(OTUs, reference.id);
+            const scope = mockApiFindOtus(OTUs, reference.id);
             renderWithRouter(<References />, path);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
@@ -71,7 +71,7 @@ describe("<OTUsList />", () => {
         });
 
         it("should not render creation button when [canCreate=true]", async () => {
-            const scope = mockApiGetOTUs(OTUs, reference.id);
+            const scope = mockApiFindOtus(OTUs, reference.id);
             const account = createFakeAccount({
                 administrator_role: AdministratorRoles.FULL,
             });
@@ -84,7 +84,7 @@ describe("<OTUsList />", () => {
         });
 
         it("should not render creation button when [canCreate=false]", async () => {
-            const scope = mockApiGetOTUs(OTUs, reference.id);
+            const scope = mockApiFindOtus(OTUs, reference.id);
             const account = createFakeAccount({
                 administrator_role: null,
             });
@@ -98,7 +98,7 @@ describe("<OTUsList />", () => {
         });
 
         it("should handle toolbar updates correctly", async () => {
-            const scope = mockApiGetOTUs(OTUs, reference.id);
+            const scope = mockApiFindOtus(OTUs, reference.id);
             const { history } = renderWithRouter(<References />, path);
 
             expect(await screen.findByRole("textbox")).toBeInTheDocument();
@@ -121,7 +121,7 @@ describe("<OTUsList />", () => {
 
     describe("<OTUItem />", () => {
         it("should render when [verified=true]", async () => {
-            const scope = mockApiGetOTUs(OTUs, reference.id);
+            const scope = mockApiFindOtus(OTUs, reference.id);
             renderWithRouter(<References />, path);
 
             expect(await screen.findByText(OTUs[0].name)).toBeInTheDocument();
@@ -131,7 +131,7 @@ describe("<OTUsList />", () => {
         });
 
         it("should render when [verified=false]", async () => {
-            const scope = mockApiGetOTUs(
+            const scope = mockApiFindOtus(
                 [createFakeOTUMinimal({ verified: false })],
                 reference.id,
             );

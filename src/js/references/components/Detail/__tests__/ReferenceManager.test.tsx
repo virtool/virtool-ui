@@ -1,13 +1,13 @@
 import References from "@references/components/References";
 import { screen } from "@testing-library/react";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
-import React from "react";
-import { beforeEach, describe, expect, it } from "vitest";
 import {
     createFakeReference,
     mockApiGetReferenceDetail,
-} from "../../../../../tests/fake/references";
-import { renderWithRouter } from "../../../../../tests/setup";
+} from "@tests/fake/references";
+import { renderWithRouter } from "@tests/setup";
+import React from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("<ReferenceManager />", () => {
     let reference;
@@ -15,9 +15,9 @@ describe("<ReferenceManager />", () => {
 
     beforeEach(() => {
         reference = createFakeReference();
+        path = `/refs/${reference.id}/manage`;
         mockApiGetReferenceDetail(reference);
         mockApiGetSettings(createFakeSettings());
-        path = `/refs/${reference.id}/manage`;
     });
 
     it("should render properly", async () => {
@@ -26,7 +26,6 @@ describe("<ReferenceManager />", () => {
         expect(await screen.findByText("General")).toBeInTheDocument();
         expect(screen.getByText("Description")).toBeInTheDocument();
         expect(screen.getByText("Organism")).toBeInTheDocument();
-        expect(screen.getByText("Data Type")).toBeInTheDocument();
         expect(screen.getByText("Latest Index Build")).toBeInTheDocument();
         expect(screen.getByText("No index builds found")).toBeInTheDocument();
         expect(screen.getByText("Contributors")).toBeInTheDocument();

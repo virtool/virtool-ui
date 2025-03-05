@@ -9,7 +9,7 @@ const SequenceFieldTextArea = styled(TextArea)`
 `;
 
 /**
- * Displays the sequence field of a form for a sequence
+ * Displays the sequence field of a form.
  */
 export default function SequenceField() {
     const {

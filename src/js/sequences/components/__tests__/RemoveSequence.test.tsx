@@ -5,6 +5,11 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import {
+    createFakeOtu,
+    mockApiGetOtu,
+    mockApiRemoveSequence,
+} from "@tests/fake/otus";
+import {
     createFakeReference,
     mockApiGetReferenceDetail,
 } from "@tests/fake/references";
@@ -12,11 +17,6 @@ import { renderWithRouter } from "@tests/setup";
 import { formatPath } from "@utils/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-    createFakeOTU,
-    mockApiGetOTU,
-    mockApiRemoveSequence,
-} from "../../../../tests/fake/otus";
 
 describe("<RemoveSequence />", () => {
     let path;
@@ -29,8 +29,8 @@ describe("<RemoveSequence />", () => {
     beforeEach(() => {
         reference = createFakeReference({ name: "Foo" });
         mockApiGetReferenceDetail(reference);
-        otu = createFakeOTU();
-        otuScope = mockApiGetOTU(otu);
+        otu = createFakeOtu();
+        otuScope = mockApiGetOtu(otu);
         mockApiGetSettings(createFakeSettings());
         mockApiGetAccount(
             createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
@@ -67,9 +67,7 @@ describe("<RemoveSequence />", () => {
 
         expect(screen.queryByText("Remove Sequence")).toBeNull();
         expect(
-            screen.queryByText(
-                /Are you sure you want to remove the sequence from/,
-            ),
+            screen.queryByText(/Are you sure you want to remove the sequence/),
         ).toBeNull();
         expect(
             screen.getAllByText(`${otu.isolates[0].sequences[0].accession}`),

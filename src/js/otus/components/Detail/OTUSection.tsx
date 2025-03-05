@@ -2,7 +2,7 @@ import { LoadingPlaceholder } from "@base";
 import { useGetReference } from "@references/queries";
 import { useDialogParam, usePathParams } from "@utils/hooks";
 import React from "react";
-import { CurrentOTUContextProvider, useFetchOTU } from "../../queries";
+import { CurrentOtuContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
 import General from "./OTUGeneral";
@@ -24,7 +24,7 @@ export default function OTUSection() {
     }
 
     return (
-        <CurrentOTUContextProvider otuId={otuId} refId={refId}>
+        <CurrentOtuContextProvider otuId={otuId} refId={refId}>
             <General issues={otu.issues} isolates={otu.isolates} />
             <IsolateEditor />
             <AddIsolate
@@ -34,6 +34,6 @@ export default function OTUSection() {
                 show={openAddIsolate}
                 onHide={() => setOpenAddIsolate(false)}
             />
-        </CurrentOTUContextProvider>
+        </CurrentOtuContextProvider>
     );
 }

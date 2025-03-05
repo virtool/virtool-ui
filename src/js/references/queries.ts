@@ -26,7 +26,6 @@ import {
 } from "./api";
 import {
     Reference,
-    ReferenceDataType,
     ReferenceGroup,
     ReferenceInstalled,
     ReferenceMinimal,
@@ -163,12 +162,11 @@ export function useCreateReference() {
         {
             name: string;
             description: string;
-            dataType: ReferenceDataType;
             organism: string;
         }
     >({
-        mutationFn: ({ name, description, dataType, organism }) =>
-            createReference(name, description, dataType, organism),
+        mutationFn: ({ name, description, organism }) =>
+            createReference(name, description, organism),
     });
 }
 

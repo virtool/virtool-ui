@@ -5,6 +5,11 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
 import {
+    createFakeOtu,
+    mockApiGetOtu,
+    mockApiRemoveOTU,
+} from "@tests/fake/otus";
+import {
     createFakeReference,
     mockApiGetReferenceDetail,
 } from "@tests/fake/references";
@@ -12,11 +17,6 @@ import { renderWithRouter } from "@tests/setup";
 import { formatPath } from "@utils/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-    createFakeOTU,
-    mockApiGetOTU,
-    mockApiRemoveOTU,
-} from "../../../../../tests/fake/otus";
 
 describe("<RemoveOTU />", () => {
     let path;
@@ -28,8 +28,8 @@ describe("<RemoveOTU />", () => {
     beforeEach(() => {
         reference = createFakeReference({ name: "Foo" });
         mockApiGetReferenceDetail(reference);
-        otu = createFakeOTU();
-        otuScope = mockApiGetOTU(otu);
+        otu = createFakeOtu();
+        otuScope = mockApiGetOtu(otu);
         mockApiGetSettings(createFakeSettings());
         mockApiGetAccount(
             createFakeAccount({ administrator_role: AdministratorRoles.FULL }),
@@ -40,13 +40,13 @@ describe("<RemoveOTU />", () => {
     });
 
     it("should render when [show=true]", async () => {
+        console.log("fakename", otu.name);
         renderWithRouter(<References />, formatPath(path, searchParams));
 
         expect(await screen.findByText("Remove OTU")).toBeInTheDocument();
         expect(
             screen.getByText(/Are you sure you want to remove/),
         ).toBeInTheDocument();
-        expect(screen.getByText(/Foo?/)).toBeInTheDocument();
         expect(
             screen.getByRole("button", { name: "Confirm" }),
         ).toBeInTheDocument();

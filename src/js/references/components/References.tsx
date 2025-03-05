@@ -4,7 +4,7 @@ import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import ReferenceDetail from "./Detail/ReferenceDetail";
 import ReferenceList from "./ReferenceList";
-import { ReferenceSettings } from "./ReferenceSettings";
+import ReferenceSettings from "./ReferenceSettings";
 
 /**
  * The references view with routes to reference-related components

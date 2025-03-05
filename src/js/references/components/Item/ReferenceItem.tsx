@@ -1,7 +1,7 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Attribution, BoxGroupSection, Icon, Link } from "@base";
+import { Attribution, BoxGroupSection, Link } from "@base";
 import { IconButton } from "@base/IconButton";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
@@ -29,10 +29,6 @@ const ReferenceLink = styled(Link)`
     font-weight: ${getFontWeight("thick")};
 `;
 
-const ReferenceItemDataDescriptor = styled.strong`
-    text-transform: capitalize;
-`;
-
 const ReferenceItemUser = styled.div`
     display: flex;
     justify-content: flex-start;
@@ -53,7 +49,7 @@ type ReferenceItemProps = {
 export function ReferenceItem({ reference }: ReferenceItemProps) {
     const { setValue: setCloneReferenceId } =
         useUrlSearchParam<string>("cloneReferenceId");
-    const { id, data_type, name, organism, user, created_at, task } = reference;
+    const { created_at, id, name, task, user } = reference;
     const { hasPermission: canCreate } = useCheckAdminRoleOrPermission(
         Permission.create_ref,
     );
@@ -70,10 +66,6 @@ export function ReferenceItem({ reference }: ReferenceItemProps) {
     return (
         <StyledReferenceItem>
             <ReferenceLink to={`/refs/${id}`}>{name}</ReferenceLink>
-            <ReferenceItemDataDescriptor>
-                <Icon name={data_type === "genome" ? "dna" : "barcode"} />
-                {organism || "unknown"} {data_type || "genome"}s
-            </ReferenceItemDataDescriptor>
             <ReferenceItemUser>
                 <Attribution time={created_at} user={user.handle} />
             </ReferenceItemUser>

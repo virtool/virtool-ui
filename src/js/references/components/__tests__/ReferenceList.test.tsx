@@ -34,9 +34,6 @@ describe("<ReferenceList />", () => {
         expect(
             screen.getByText(`${references.user.handle} created`),
         ).toBeInTheDocument();
-        expect(
-            screen.getByText(`${references.organism} ${references.data_type}s`),
-        ).toBeInTheDocument();
 
         expect(
             await screen.findByRole("button", { name: "clone" }),

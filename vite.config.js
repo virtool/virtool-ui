@@ -22,7 +22,7 @@ export default defineConfig({
             "@files": path.resolve("src/js/files"),
             "@forms": path.resolve("src/js/forms"),
             "@groups": path.resolve("src/js/groups"),
-            "@hmms": path.resolve("src/js/hmms"),
+            "@hmm": path.resolve("src/js/hmm"),
             "@indexes": path.resolve("src/js/indexes"),
             "@jobs": path.resolve("src/js/jobs"),
             "@labels": path.resolve("src/js/labels"),

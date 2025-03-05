@@ -13,9 +13,9 @@ import { formatPath } from "@utils/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
-    createFakeOTU,
+    createFakeOtu,
     mockApiEditOTU,
-    mockApiGetOTU,
+    mockApiGetOtu,
 } from "../../../../../../tests/fake/otus";
 
 describe("<RemoveSegment />", () => {
@@ -29,8 +29,8 @@ describe("<RemoveSegment />", () => {
     beforeEach(() => {
         reference = createFakeReference({ name: "Foo" });
         mockApiGetReferenceDetail(reference);
-        otu = createFakeOTU();
-        otuScope = mockApiGetOTU(otu);
+        otu = createFakeOtu();
+        otuScope = mockApiGetOtu(otu);
         mockApiGetSettings(createFakeSettings());
         mockApiGetAccount(
             createFakeAccount({ administrator_role: AdministratorRoles.FULL }),

@@ -13,7 +13,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
     createFakeOTUMinimal,
     mockApiCreateOTU,
-    mockApiGetOTUs,
+    mockApiFindOtus,
 } from "../../../../tests/fake/otus";
 
 describe("<OTUForm />", () => {
@@ -23,7 +23,7 @@ describe("<OTUForm />", () => {
     beforeEach(() => {
         reference = createFakeReference();
         mockApiGetReferenceDetail(reference);
-        mockApiGetOTUs([createFakeOTUMinimal()], reference.id);
+        mockApiFindOtus([createFakeOTUMinimal()], reference.id);
         mockApiGetSettings(createFakeSettings());
 
         path = formatPath(`/refs/${reference.id}/otus`, {

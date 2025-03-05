@@ -13,7 +13,6 @@ import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";
 import RemoteReference from "./Remote";
-import Targets from "./Targets/Targets";
 
 /**
  * Display and edit information for a reference
@@ -29,7 +28,6 @@ export default function ReferenceManager() {
     const {
         cloned_from,
         contributors,
-        data_type,
         description,
         latest_build,
         organism,
@@ -57,10 +55,6 @@ export default function ReferenceManager() {
                             <th>Organism</th>
                             <td>{organism}</td>
                         </tr>
-                        <tr>
-                            <th>Data Type</th>
-                            <td>{data_type}</td>
-                        </tr>
                     </tbody>
                 </BoxGroupTable>
             </BoxGroup>
@@ -76,7 +70,6 @@ export default function ReferenceManager() {
             </BoxGroup>
 
             <Contributors contributors={contributors} />
-            <Targets reference={reference} />
         </ContainerNarrow>
     );
 }

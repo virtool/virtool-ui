@@ -4,7 +4,7 @@ import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { ImportReference } from "../ImportReference";
+import ImportReference from "../ImportReference";
 
 describe("<ImportReference />", () => {
     it("should upload file and import reference", async () => {
@@ -65,35 +65,4 @@ describe("<ImportReference />", () => {
         ).toBeInTheDocument();
         expect(screen.getByText("A name is required.")).toBeInTheDocument();
     });
-
-    /**
-
-    it("should render 'Uploading...' in upload bar when upload is incomplete", () => {
-        props.file = { name: null, progress: 50, ready: false };
-        renderWithProviders(<ImportReference {...props} />);
-        expect(screen.getByText("Uploading...")).toBeInTheDocument();
-    });
-
-    it("should call onSubmit when a reference is uploaded and name textbox is populated", async () => {
-        const { rerender } = renderWithProviders(<ImportReference {...props} />);
-
-        const file = new File(["test"], "external.json.gz", { type: "application/gzip" });
-        await userEvent.upload(screen.getByLabelText("Upload file"), file);
-        expect(props.onDrop).toHaveBeenCalledWith(expect.stringMatching(/^.{8}$/), file, "reference");
-
-        props.file = { id: 1, name: "external.json.gz", progress: 100, ready: true };
-        rerender(<ImportReference {...props} />);
-        expect(screen.getByText("external.json.gz")).toBeInTheDocument();
-
-        const name = "External";
-        const description = "An externally sourced reference.";
-
-        await userEvent.type(screen.getByRole("textbox", { name: "Name" }), name);
-        await userEvent.type(screen.getByRole("textbox", { name: "Description" }), description);
-        await userEvent.click(screen.getByRole("button", { name: "Import" }));
-
-        await waitFor(() => expect(props.onSubmit).toHaveBeenCalledWith(name, description, "1-external.json.gz"));
-    });
-
-     **/
 });

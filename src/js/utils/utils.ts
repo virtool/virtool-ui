@@ -116,10 +116,11 @@ export function formatRoundedDuration(seconds: number) {
  * Object that maps workflow IDs to human-readable names.
  */
 export const workflowDisplayNames = {
-    aodp: "AODP",
     create_sample: "Create Sample",
     create_subtraction: "Create Subtraction",
+    iimi: "Iimi",
     nuvs: "NuVs",
+    pathoscope: "Pathoscope",
     pathoscope_bowtie: "Pathoscope",
     pathoscope_snap: "Pathoscope",
     build_index: "Build Index",

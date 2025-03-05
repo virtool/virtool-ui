@@ -9,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
-import { MemberRight } from "./MemberRight";
+import { ReferenceRight } from "./ReferenceRight";
 
 const rights = ["modify_otu", "build", "modify", "remove"];
 
@@ -52,7 +52,7 @@ export default function EditReferenceMember({
     }
 
     const rightComponents = map(rights, (right) => (
-        <MemberRight
+        <ReferenceRight
             key={right}
             right={right}
             enabled={member?.[right]}

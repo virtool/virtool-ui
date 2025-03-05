@@ -1,16 +1,15 @@
-import { map } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
 import {
     Dropdown,
     DropdownButton,
     DropdownMenuContent,
     DropdownMenuItem,
     Icon,
-} from "../../../base";
+} from "@base";
+import { map } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
 
 const sortKeys = {
-    aodp: ["identity"],
     pathoscope: ["coverage", "depth", "weight"],
     nuvs: ["length", "e", "orfs"],
 };
@@ -26,9 +25,8 @@ const sortTitles = {
 };
 
 const sortWidths = {
-    aodp: "110px",
-    pathoscope: "122px",
     nuvs: "110px",
+    pathoscope: "122px",
 };
 
 type SortDropdownButtonProps = {
