@@ -108,6 +108,7 @@ export function LocalSourceTypes() {
             </SectionHeader>
             <SettingsCheckbox
                 enabled={restrictSourceTypes}
+                id="RestrictSourceTypes"
                 onToggle={handleToggle}
             >
                 <h2>Restrict Source Types</h2>

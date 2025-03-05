@@ -69,7 +69,7 @@ const SampleItemTitle = styled.div`
 const StyledSampleItem = styled(Box)`
     align-items: stretch;
     display: flex;
-    flex-basis: 0px;
+    flex-basis: 0;
 `;
 
 type SampleItemProps = {
@@ -103,7 +103,7 @@ export default function SampleItem({
     return (
         <StyledSampleItem>
             <SampleItemCheckboxContainer onClick={handleSelect}>
-                <Checkbox checked={checked} />
+                <Checkbox checked={checked} id={`SampleCheckbox${sample.id}`} />
             </SampleItemCheckboxContainer>
 
             <SampleItemData>
@@ -130,9 +130,9 @@ export default function SampleItem({
             </SampleItemWorkflows>
             <SampleItemIcon>
                 <EndIcon
-                    ready={sample.ready}
-                    onClick={onQuickAnalyze}
                     job={sample.job}
+                    onClick={onQuickAnalyze}
+                    ready={sample.ready}
                 />
             </SampleItemIcon>
         </StyledSampleItem>

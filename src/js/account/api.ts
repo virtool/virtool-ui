@@ -3,7 +3,6 @@
  *
  * @module account/api
  */
-
 import { Request } from "@app/request";
 import { Permissions } from "@groups/types";
 import { User } from "@users/types";

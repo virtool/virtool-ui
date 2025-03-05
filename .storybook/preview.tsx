@@ -4,6 +4,7 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { Router } from "wouter";
 import { theme } from "../src/js/app/theme";
+import "../src/js/style.css";
 
 const queryClient = new QueryClient({
     defaultOptions: {

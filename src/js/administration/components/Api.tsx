@@ -1,5 +1,5 @@
+import { ExternalLink } from "@base";
 import React from "react";
-import { ExternalLink } from "../../base";
 import { useUpdateSettings } from "../queries";
 import { Settings } from "../types";
 import { SettingsCheckbox } from "./SettingsCheckbox";
@@ -18,6 +18,7 @@ export default function Api({ settings: { enable_api } }: ApiProps) {
     return (
         <SettingsCheckbox
             enabled={enable_api}
+            id="EnableApi"
             onToggle={() => mutation.mutate({ enable_api: !enable_api })}
         >
             <h2>JSON API</h2>

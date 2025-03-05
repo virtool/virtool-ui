@@ -8,8 +8,8 @@ import {
 } from "@base";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
-import AccountProfile from "./AccountProfile";
 import APIKeys from "./API/APIKeys";
+import AccountProfile from "./AccountProfile";
 
 /**
  * Displays the account page containing the profile and API subpages.

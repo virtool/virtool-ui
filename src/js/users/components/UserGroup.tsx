@@ -10,10 +10,13 @@ const StyledUserGroup = styled(SelectBoxGroupSection)`
 type UserGroupTypes = {
     /** The group unique id */
     id: string | number;
+
     /** The group name */
     name: string;
+
     /** Whether the group is selected */
     toggled: boolean;
+
     /** A callback function to handle the selection of a group */
     onClick: (id: string | number) => void;
 };
@@ -24,7 +27,11 @@ type UserGroupTypes = {
 export function UserGroup({ id, name, toggled, onClick }: UserGroupTypes) {
     return (
         <StyledUserGroup active={toggled} onClick={() => onClick(id)}>
-            <Checkbox checked={toggled} label={name} />
+            <Checkbox
+                checked={toggled}
+                id={`UserGroupCheckbox-${id}`}
+                label={name}
+            />
         </StyledUserGroup>
     );
 }

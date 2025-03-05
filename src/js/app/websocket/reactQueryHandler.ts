@@ -1,5 +1,3 @@
-import { forEach, get } from "lodash-es";
-
 import { analysesQueryKeys } from "@/analyses/queries";
 import { accountKeys } from "@account/queries";
 import { roleQueryKeys, userQueryKeys } from "@administration/queries";
@@ -11,6 +9,7 @@ import { modelQueryKeys } from "@ml/queries";
 import { referenceQueryKeys } from "@references/queries";
 import { samplesQueryKeys } from "@samples/queries";
 import { QueryClient } from "@tanstack/react-query";
+import { forEach, get } from "lodash-es";
 import { taskUpdaters } from "./updaters";
 
 /** Get affected resource query keys by workflow name  */

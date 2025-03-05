@@ -1,6 +1,7 @@
 import { Checkbox } from "@base";
+import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
-import React, { useState } from "react";
+import React from "react";
 
 const meta: Meta<typeof Checkbox> = {
     title: "base/Checkbox",
@@ -17,11 +18,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function Template(args) {
-    const [checked, setChecked] = useState(false);
+    const [{ checked }, updateArgs] = useArgs();
+
     return (
         <Checkbox
             checked={checked}
-            onClick={() => setChecked(!checked)}
+            id="example-cb1"
+            onClick={() => updateArgs({ checked: !checked })}
             {...args}
         />
     );

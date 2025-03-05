@@ -1,4 +1,4 @@
-import { BoxGroup, Checkbox, SelectBoxGroupSection } from "@base";
+import { BoxGroup, SelectBoxGroupSection } from "@base";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
@@ -37,29 +37,9 @@ function Template({ children }) {
     );
 }
 
-export const TestSelectBoxGroupSection: Story = {
+export const Example: Story = {
     args: {
         children: "This is a SelectBoxGroupSection!",
     },
     render: Template,
-};
-
-function CheckboxTemplate() {
-    const [{ active }, updateArgs] = useArgs();
-    return (
-        <BoxGroup>
-            <SelectBoxGroupSection
-                onClick={() => updateArgs({ active: !active })}
-            >
-                <Checkbox
-                    checked={active}
-                    label="This is a SelectBoxGroupSection with a Checkbox!"
-                />
-            </SelectBoxGroupSection>
-        </BoxGroup>
-    );
-}
-
-export const SelectBoxGroupSectionWithCheckbox: Story = {
-    render: CheckboxTemplate,
 };

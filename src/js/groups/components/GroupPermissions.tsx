@@ -13,6 +13,7 @@ export function GroupPermissions({ selectedGroup }: { selectedGroup: Group }) {
             <div key={permission} className="py-2 px-4">
                 <Checkbox
                     checked={active}
+                    id={`GroupPermissionCheckbox-${permission}`}
                     label={permission}
                     onClick={() =>
                         updateGroupMutator.mutate({

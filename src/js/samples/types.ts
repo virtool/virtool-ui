@@ -5,7 +5,6 @@
  * Types in this file represent the data returned from the API, or are useful for working
  * with sample data.
  */
-
 import { JobMinimal } from "../jobs/types";
 import { LabelNested } from "../labels/types";
 import { SubtractionNested } from "../subtraction/types";

@@ -60,8 +60,9 @@ export default function LoginForm({ setResetCode }: LoginFormProps) {
                         render={({ field: { onChange, value } }) => (
                             <Checkbox
                                 checked={value}
-                                onClick={() => onChange(!value)}
+                                id="RememberMe"
                                 label="Remember Me"
+                                onClick={() => onChange(!value)}
                             />
                         )}
                     />

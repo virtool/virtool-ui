@@ -104,8 +104,9 @@ export default function SegmentForm({
                     control={control}
                     render={({ field: { onChange, value } }) => (
                         <Checkbox
-                            label="Segment Required"
                             checked={value}
+                            id={`SegmentCheckbox-${segmentName}`}
+                            label="Segment Required"
                             onClick={() => onChange(!value)}
                         />
                     )}
