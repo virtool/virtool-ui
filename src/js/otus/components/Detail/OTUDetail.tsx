@@ -89,11 +89,9 @@ export default function OTUDetail() {
 
             <Tabs>
                 <TabsLink to={`/refs/${refId}/otus/${otuId}/otu`}>OTU</TabsLink>
-                {reference.data_type !== "barcode" && (
-                    <TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>
-                        Schema
-                    </TabsLink>
-                )}
+                <TabsLink to={`/refs/${refId}/otus/${otuId}/schema`}>
+                    Schema
+                </TabsLink>
                 <TabsLink to={`/refs/${refId}/otus/${otuId}/history`}>
                     History
                 </TabsLink>

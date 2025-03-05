@@ -1,9 +1,9 @@
+import { RemoveDialog } from "@base/RemoveDialog";
 import { useDialogParam, useNavigate } from "@utils/hooks";
 import React from "react";
-import { RemoveDialog } from "../../../base/RemoveDialog";
 import { useRemoveOTU } from "../../queries";
 
-type RemoveOTUProps = {
+type RemoveOtuProps = {
     id: string;
     name: string;
     refId: string;
@@ -12,10 +12,12 @@ type RemoveOTUProps = {
 /**
  * Displays a dialog for removing an OTU
  */
-export default function RemoveOTU({ id, name, refId }: RemoveOTUProps) {
+export default function RemoveOtu({ id, name, refId }: RemoveOtuProps) {
     const navigate = useNavigate();
+
     const { open: openRemoveOTU, setOpen: setOpenRemoveOTU } =
         useDialogParam("openRemoveOTU");
+
     const mutation = useRemoveOTU();
 
     function handleConfirm() {

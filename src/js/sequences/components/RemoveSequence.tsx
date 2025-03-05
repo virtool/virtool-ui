@@ -23,7 +23,9 @@ export default function RemoveSequence({
 }: RemoveSequenceProps) {
     const { value: removeSequenceId, unsetValue: unsetRemoveSequence } =
         useUrlSearchParam<string>("removeSequenceId");
+
     const mutation = useRemoveSequence(otuId);
+
     const sequence = find(sequences, { id: removeSequenceId });
 
     function handleConfirm() {

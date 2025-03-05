@@ -10,7 +10,7 @@ import { DialogPortal } from "@radix-ui/react-dialog";
 import { formatSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import EmptyReference from "./EmptyReference";
-import { ImportReference } from "./ImportReference";
+import ImportReference from "./ImportReference";
 
 /**
  * The create reference view with options to create an empty reference or import a reference

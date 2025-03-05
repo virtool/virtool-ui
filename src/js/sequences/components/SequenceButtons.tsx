@@ -1,7 +1,7 @@
 import { CloseButton } from "@base";
 import { IconButton } from "@base/IconButton";
 import { useGetActiveIsolateId } from "@otus/hooks";
-import { useCurrentOTUContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useUrlSearchParam } from "@utils/hooks";
@@ -34,9 +34,12 @@ const SequenceHeaderButtons = styled.span`
 export default function SequenceButtons({ id, onCollapse }) {
     const { setValue: setOpenEditSequence } =
         useUrlSearchParam<string>("editSequenceId");
+
     const { setValue: setOpenRemoveSequence } =
         useUrlSearchParam<string>("removeSequenceId");
-    const { otu, reference } = useCurrentOTUContext();
+
+    const { otu, reference } = useCurrentOtuContext();
+
     const { hasPermission: canModify } = useCheckReferenceRight(
         reference.id,
         ReferenceRight.modify_otu,
@@ -48,20 +51,20 @@ export default function SequenceButtons({ id, onCollapse }) {
     return (
         <SequenceHeaderButtons>
             {canModify && (
-                <IconButton
-                    name="pen"
-                    color="grayDark"
-                    tip="edit sequence"
-                    onClick={() => setOpenEditSequence(id)}
-                />
-            )}
-            {canModify && (
-                <IconButton
-                    name="trash"
-                    color="red"
-                    tip="remove sequence"
-                    onClick={() => setOpenRemoveSequence(id)}
-                />
+                <>
+                    <IconButton
+                        name="pen"
+                        color="grayDark"
+                        tip="Edit"
+                        onClick={() => setOpenEditSequence(id)}
+                    />
+                    <IconButton
+                        name="trash"
+                        color="red"
+                        tip="Remove"
+                        onClick={() => setOpenRemoveSequence(id)}
+                    />
+                </>
             )}
             <DownloadLink href={href}>FASTA</DownloadLink>
             <CloseButton onClick={onCollapse} />

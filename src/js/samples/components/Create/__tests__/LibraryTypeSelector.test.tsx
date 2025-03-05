@@ -35,15 +35,4 @@ describe("<LibraryTypeSelector>", () => {
         );
         expect(props.onSelect).toHaveBeenCalledWith("srna");
     });
-
-    it("should have Amplicon selected when [libraryType='amplicon']", async () => {
-        renderWithProviders(<LibraryTypeSelector {...props} />);
-
-        await userEvent.click(
-            screen.getByRole("button", {
-                name: "Amplicon Search against barcode references using amplicon reads.",
-            }),
-        );
-        expect(props.onSelect).toHaveBeenCalledWith("amplicon");
-    });
 });

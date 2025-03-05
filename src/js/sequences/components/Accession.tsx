@@ -9,13 +9,13 @@ import {
 } from "@base";
 import { getGenbank } from "@otus/api";
 import { forEach } from "lodash-es";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 /**
  * Displays the accession field of a form for a sequence
  */
-export function Accession() {
+export default function Accession() {
     const [pending, setPending] = useState(false);
     const [sent, setSent] = useState(false);
     const [notFound, setNotFound] = useState(false);
@@ -29,11 +29,14 @@ export function Accession() {
 
     const accession = getValues("accession");
 
-    function onAutofill(sequenceValues) {
-        forEach(sequenceValues, (value, key) => {
-            setValue(key, value);
-        });
-    }
+    const onAutofill = useCallback(
+        (sequenceValues) => {
+            forEach(sequenceValues, (value, key) => {
+                setValue(key, value);
+            });
+        },
+        [setValue],
+    );
 
     useEffect(() => {
         if (pending && !sent) {
@@ -63,7 +66,7 @@ export function Accession() {
                 },
             );
         }
-    }, [accession, pending, notFound, onAutofill]);
+    }, [accession, notFound, onAutofill, pending, sent]);
 
     return (
         <InputGroup>

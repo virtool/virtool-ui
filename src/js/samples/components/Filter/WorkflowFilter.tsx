@@ -148,7 +148,7 @@ function getWorkflowsFromURL(workflows) {
             acc[workflow].push(state);
             return acc;
         },
-        { pathoscope: [], nuvs: [], aodp: [] },
+        { pathoscope: [], nuvs: [] },
     );
 }
 
@@ -169,7 +169,7 @@ export default function WorkflowFilter({
 
     const workflows = getWorkflowsFromURL(selected);
 
-    const { aodp, nuvs, pathoscope } = workflows;
+    const { nuvs, pathoscope } = workflows;
 
     return (
         <SideBarSection>
@@ -182,11 +182,6 @@ export default function WorkflowFilter({
             <WorkflowFilterControl
                 workflow="nuvs"
                 states={nuvs}
-                onChange={handleClick}
-            />
-            <WorkflowFilterControl
-                workflow="aodp"
-                states={aodp}
                 onChange={handleClick}
             />
         </SideBarSection>

@@ -1,8 +1,8 @@
+import { Alert } from "@base";
 import { formatIsolateName } from "@utils/utils";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Alert } from "../../../base";
 import { OTUIsolate } from "../../types";
 
 const StyledOTUIssues = styled(Alert)`

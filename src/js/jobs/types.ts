@@ -31,7 +31,6 @@ export type JobNested = {
 export enum workflows {
     pathoscope_bowtie = "pathoscope_bowtie",
     nuvs = "nuvs",
-    aodp = "aodp",
     build_index = "build_index",
     create_sample = "create_sample",
     create_subtraction = "create_subtraction",

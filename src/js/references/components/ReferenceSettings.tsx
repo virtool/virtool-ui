@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { GlobalSourceTypes } from "./SourceTypes/GlobalSourceTypes";
 
-export function ReferenceSettings() {
+export default function ReferenceSettings() {
     const { data, isPending } = useFetchSettings();
 
     if (isPending) {

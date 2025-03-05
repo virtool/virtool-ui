@@ -3,9 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { MemberRight } from "../MemberRight";
+import { ReferenceRight } from "../ReferenceRight";
 
-describe("<MemberRight />", () => {
+describe("<ReferenceRight />", () => {
     let props;
 
     beforeEach(() => {
@@ -17,7 +17,7 @@ describe("<MemberRight />", () => {
     });
 
     it("should render", () => {
-        renderWithProviders(<MemberRight {...props} />);
+        renderWithProviders(<ReferenceRight {...props} />);
 
         expect(screen.getByText("build")).toBeInTheDocument();
         expect(
@@ -31,14 +31,14 @@ describe("<MemberRight />", () => {
 
     it("should render when right is modify_otu", () => {
         props.right = "modify_otu";
-        renderWithProviders(<MemberRight {...props} />);
+        renderWithProviders(<ReferenceRight {...props} />);
 
         expect(screen.getByText("modify_otu")).toBeInTheDocument();
     });
 
     it("should render when right is not enabled", () => {
         props.enabled = false;
-        renderWithProviders(<MemberRight {...props} />);
+        renderWithProviders(<ReferenceRight {...props} />);
 
         expect(screen.getByRole("checkbox")).toHaveAttribute(
             "data-state",
@@ -50,7 +50,7 @@ describe("<MemberRight />", () => {
         "should have onToggle called on Checkbox click when [enabled=%p]",
         async (enabled) => {
             props.enabled = enabled;
-            renderWithProviders(<MemberRight {...props} />);
+            renderWithProviders(<ReferenceRight {...props} />);
 
             await userEvent.click(screen.getByRole("checkbox"));
             expect(props.onToggle).toHaveBeenCalledWith(props.right, !enabled);

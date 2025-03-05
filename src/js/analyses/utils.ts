@@ -1,5 +1,6 @@
 import { formatIsolateName } from "@utils/utils";
 import {
+    cloneDeep,
     compact,
     fill,
     filter,
@@ -21,11 +22,11 @@ import {
     uniq,
     zipWith,
 } from "lodash-es";
-import { cloneDeep } from "lodash-es/lodash";
 import { PositionMappedReadDepths, UntrustworthyRange } from "./types";
 
-export const calculateAnnotatedOrfCount = (orfs) =>
-    filter(orfs, (orf) => orf.hits.length).length;
+export function calculateAnnotatedOrfCount(orfs) {
+    return filter(orfs, (orf) => orf.hits.length).length;
+}
 
 function calculateORFMinimumE(hits) {
     if (hits.length === 0) {
@@ -61,11 +62,9 @@ export function extractNames(orfs) {
  * coordinate.
  *
  * @param {Array} align - the coordinates
- * @param {Number} length - the length of the generated flat array
- * @returns {Array} - the flat array
- *
+ * @param length - the length of the generated flat array
  */
-export const fillAlign = ({ align, length }) => {
+export function fillAlign({ align, length }) {
     const filled = Array(length);
 
     if (!align) {
@@ -83,50 +82,9 @@ export const fillAlign = ({ align, length }) => {
 
         return prev;
     });
-};
-
-function getIdentities(data) {
-    return flatMap(data, (item) => item.identities);
 }
 
-const getSequenceIdentities = (sequence) =>
-    flatMap(sequence.hits, (hit) => hit.identity);
-
-export const formatAODPData = (detail) => {
-    if (detail.results === null) {
-        return detail;
-    }
-
-    const results = map(detail.results, (result) => {
-        const isolates = map(result.isolates, (isolate) => {
-            const sequences = map(isolate.sequences, (sequence) => {
-                return {
-                    ...sequence,
-                    identities: getSequenceIdentities(sequence),
-                };
-            });
-
-            return {
-                ...isolate,
-                sequences,
-                identities: getIdentities(sequences),
-            };
-        });
-
-        const identities = getIdentities(isolates);
-
-        return {
-            ...result,
-            isolates,
-            identities,
-            identity: max(identities),
-        };
-    });
-
-    return { ...detail, results };
-};
-
-export const formatNuVsData = (detail) => {
+export function formatNuvsData(detail) {
     if (detail.results === null) {
         return detail;
     }
@@ -157,15 +115,14 @@ export const formatNuVsData = (detail) => {
         workflow,
         maxSequenceLength: longestSequence.sequence.length,
     };
-};
+}
 
 /**
  * Calculate the median of an Array of numbers.
  *
  * @param values - an array of numbers
- * @returns {number|*} - the median
  */
-export const median = (values) => {
+export function median(values: number[]): number {
     const sorted = values.slice().sort((a, b) => a - b);
 
     const midIndex = (sorted.length - 1) / 2;
@@ -178,7 +135,7 @@ export const median = (values) => {
     const upperIndex = Math.ceil(midIndex);
 
     return Math.round((sorted[lowerIndex] + sorted[upperIndex]) / 2);
-};
+}
 
 /**
  * Merge the coverage arrays for the given isolates. This is used to render a representative coverage chart for the
@@ -187,19 +144,21 @@ export const median = (values) => {
  * @param isolates
  * @returns {Array}
  */
-export const mergeCoverage = (isolates) => {
+export function mergeCoverage(isolates): number[] {
     const longest = maxBy(isolates, (isolate) => isolate.filled.length);
     const coverages = map(isolates, (isolate) => isolate.filled);
     return map(longest.filled, (depth, index) =>
         max(map(coverages, (coverage) => coverage[index])),
     );
-};
+}
 
-export const formatSequence = (sequence, readCount) => ({
-    ...sequence,
-    filled: fillAlign(sequence),
-    reads: sequence.pi * readCount,
-});
+export function formatSequence(sequence, readCount) {
+    return {
+        ...sequence,
+        filled: fillAlign(sequence),
+        reads: sequence.pi * readCount,
+    };
+}
 
 export const formatPathoscopeData = (detail) => {
     if (detail.results === null || detail.results.hits.length === 0) {
@@ -291,29 +250,19 @@ export const formatPathoscopeData = (detail) => {
     };
 };
 
-export const fuseSearchKeys = {
-    pathoscope_bowtie: ["name", "abbreviation"],
-    nuvs: ["families", "names"],
-    aodp: ["name"],
-};
-
 export const formatData = (detail) => {
     if (startsWith(detail?.workflow, "pathoscope")) {
         return formatPathoscopeData(detail);
     }
 
     if (detail?.workflow === "nuvs") {
-        return formatNuVsData(detail);
-    }
-
-    if (detail?.workflow === "aodp") {
-        return formatAODPData(detail);
+        return formatNuvsData(detail);
     }
 
     return detail;
 };
 
-const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "aodp", "iimi"];
+const supportedWorkflows = ["pathoscope_bowtie", "nuvs", "iimi"];
 
 export function checkSupportedWorkflow(workflow) {
     return includes(supportedWorkflows, workflow);

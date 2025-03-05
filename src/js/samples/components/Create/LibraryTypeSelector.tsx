@@ -36,7 +36,6 @@ export function LibraryTypeSelector({
                         reads.
                     </span>
                 </SelectBox>
-
                 <SelectBox
                     onClick={() => onSelect("srna")}
                     active={libraryType === "srna"}
@@ -44,16 +43,6 @@ export function LibraryTypeSelector({
                     <div>sRNA</div>
                     <span>
                         Search against whole genome references using sRNA reads
-                    </span>
-                </SelectBox>
-
-                <SelectBox
-                    onClick={() => onSelect("amplicon")}
-                    active={libraryType === "amplicon"}
-                >
-                    <div>Amplicon</div>
-                    <span>
-                        Search against barcode references using amplicon reads.
                     </span>
                 </SelectBox>
             </LibraryTypeSelectBoxContainer>

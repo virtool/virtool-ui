@@ -2,7 +2,7 @@ import { NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { ScrollArea } from "@base/ScrollArea";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
-import { useCurrentOTUContext } from "@otus/queries";
+import { useCurrentOtuContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useDialogParam, useNaiveUrlSearchParam } from "@utils/hooks";
 import { find, map } from "lodash-es";
@@ -40,14 +40,14 @@ const AddIsolateLink = styled.a`
  * Displays a component for managing the isolates
  */
 export default function IsolateEditor() {
-    const { otu, reference } = useCurrentOTUContext();
+    const { otu, reference } = useCurrentOtuContext();
     const { isolates } = otu;
     const { value: activeIsolateId } = useNaiveUrlSearchParam(
         "activeIsolate",
         isolates[0]?.id,
     );
     const { setOpen: setOpenAddIsolate } = useDialogParam("openAddIsolate");
-    const { data_type, restrict_source_types, source_types } = reference;
+    const { restrict_source_types, source_types } = reference;
 
     const { hasPermission: canModify } = useCheckReferenceRight(
         reference.id,
@@ -63,7 +63,6 @@ export default function IsolateEditor() {
             key={index}
             isolate={isolate}
             active={isolate.id === activeIsolate.id}
-            dataType={data_type}
         />
     ));
 
@@ -80,7 +79,6 @@ export default function IsolateEditor() {
                 canModify={canModify}
                 otuId={otu.id}
                 activeIsolate={activeIsolate}
-                dataType={data_type}
                 allowedSourceTypes={source_types}
                 restrictSourceTypes={restrict_source_types}
             />

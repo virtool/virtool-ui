@@ -1,17 +1,16 @@
-import React from "react";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
-import styled from "styled-components";
 import {
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
     TextArea,
-} from "../../base";
-import { ReferenceDataType } from "../types";
+} from "@base";
+import React from "react";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import styled from "styled-components";
 
 const StyledInputGroup = styled(InputGroup)`
-    padding-bottom: 0px;
+    padding-bottom: 0;
 `;
 
 export enum ReferenceFormMode {
@@ -22,7 +21,6 @@ export enum ReferenceFormMode {
 type FormValues = {
     name: string;
     description: string;
-    dataType: ReferenceDataType;
     organism: string;
 };
 

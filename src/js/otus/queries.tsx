@@ -262,7 +262,7 @@ export function useRemoveIsolate() {
  *
  * @returns A mutator for adding a sequence
  */
-export function useAddSequence(otuId: string) {
+export function useCreateSequence(otuId: string) {
     const queryClient = useQueryClient();
 
     return useMutation<
@@ -387,7 +387,7 @@ const CurrentOTUContext = createContext(null);
  *
  * @returns The current OTU context
  */
-export function useCurrentOTUContext() {
+export function useCurrentOtuContext() {
     return useContext(CurrentOTUContext);
 }
 
@@ -402,7 +402,7 @@ type CurrentOtuContextProviderProps = {
  *
  * @returns Element wrapping children components with the current OTU context
  */
-export function CurrentOTUContextProvider({
+export function CurrentOtuContextProvider({
     children,
     otuId,
     refId,

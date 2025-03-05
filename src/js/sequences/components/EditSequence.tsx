@@ -1,25 +1,70 @@
-import { useCurrentOTUContext } from "@otus/queries";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
+import { DialogPortal } from "@radix-ui/react-dialog";
+import {
+    useGetActiveSequence,
+    useGetUnreferencedSegments,
+} from "@sequences/hooks";
 import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
-import EditBarcodeSequence from "./Barcode/EditBarcodeSequence";
-import EditGenomeSequence from "./Genome/EditGenomeSequence";
+import SequenceForm from "./SequenceForm";
 
 /**
- * A component to manage the editing of sequences
+ * Displays dialog to edit a genome sequence
  */
 export default function EditSequence() {
-    const { value: activeIsolate } = useUrlSearchParam<string>("activeIsolate");
-    const { otu, reference } = useCurrentOTUContext();
-    const { data_type } = reference;
+    const { value: isolateId } = useUrlSearchParam<string>("activeIsolate");
+    const { otu, reference } = useCurrentOtuContext();
 
-    return data_type === "barcode" ? (
-        <EditBarcodeSequence isolateId={activeIsolate} otuId={otu.id} />
-    ) : (
-        <EditGenomeSequence
-            hasSchema={Boolean(otu.schema.length)}
-            isolateId={activeIsolate}
-            otuId={otu.id}
-            refId={reference.id}
-        />
+    const hasSchema = Boolean(otu.schema.length);
+
+    const { value: editSequenceId, unsetValue: unsetEditSequenceId } =
+        useUrlSearchParam("editSequenceId");
+
+    const mutation = useEditSequence(otu.id);
+
+    const segments = useGetUnreferencedSegments();
+    const activeSequence = useGetActiveSequence();
+
+    function onSubmit({ accession, definition, host, sequence, segment }) {
+        mutation.mutate(
+            {
+                isolateId,
+                sequenceId: activeSequence.id,
+                accession,
+                definition,
+                host,
+                segment,
+                sequence,
+            },
+            {
+                onSuccess: () => {
+                    unsetEditSequenceId();
+                },
+            },
+        );
+    }
+
+    return (
+        <Dialog
+            open={Boolean(editSequenceId)}
+            onOpenChange={() => unsetEditSequenceId()}
+        >
+            <DialogPortal>
+                <DialogOverlay />
+                <DialogContent className="top-1/2">
+                    <DialogTitle>Edit Sequence</DialogTitle>
+                    <SequenceForm
+                        activeSequence={activeSequence}
+                        hasSchema={hasSchema}
+                        noun="edit"
+                        onSubmit={onSubmit}
+                        otuId={otu.id}
+                        refId={reference.id}
+                        segments={segments}
+                    />
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }

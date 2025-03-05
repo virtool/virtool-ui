@@ -30,10 +30,9 @@ export enum LibraryType {
 
 /* All workflow states for a sample */
 export type SampleWorkflows = {
-    /** The state of AODP workflows */
-    aodp: WorkflowState;
     /** The state of NuVs workflows */
     nuvs: WorkflowState;
+
     /** The state of Pathoscope workflows */
     pathoscope: WorkflowState;
 };

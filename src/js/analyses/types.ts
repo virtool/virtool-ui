@@ -60,9 +60,11 @@ export type AnalysisFile = {
 export type GenericAnalysis = AnalysisMinimal & {
     /** Files generated during the analysis that are available for download */
     files: Array<AnalysisFile>;
+
     /** The results of the analysis that will be presented to the user */
     results?: { [key: string]: any };
-    workflow: Workflows.aodp;
+
+    workflow: Workflows;
 };
 
 export type Analysis =
@@ -158,7 +160,7 @@ export type FormattedNuvsHit = {
     id: number;
     index: number;
     name: string[];
-    orfs: NuVsORFs[];
+    orfs: NuvsOrf[];
     sequence: string;
 };
 
@@ -205,7 +207,7 @@ export type BlastMask = {
     to: number;
 };
 
-export type NuVsORFs = {
+export type NuvsOrf = {
     frame: number;
     hits: { [key: string]: string | object };
     index: number;
@@ -220,10 +222,9 @@ export type AnalysisSearchResult = SearchResult & {
 };
 
 export enum Workflows {
+    iimi = "iimi",
     pathoscope_bowtie = "pathoscope_bowtie",
     nuvs = "nuvs",
-    iimi = "iimi",
-    aodp = "aodp",
 }
 
 /** Read depths of a sequence mapped by position to an array */

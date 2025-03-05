@@ -50,7 +50,6 @@ export function createFakeSampleMinimal(
         ready: true,
         user: createFakeUserNested(),
         workflows: {
-            aodp: WorkflowState.INCOMPATIBLE,
             nuvs: WorkflowState.NONE,
             pathoscope: WorkflowState.NONE,
         },

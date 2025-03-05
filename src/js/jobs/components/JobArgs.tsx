@@ -134,7 +134,7 @@ type GenericJobArgsProps<workflowType, argsType> = {
 
 type JobArgsRowsProps =
     | GenericJobArgsProps<
-          workflows.pathoscope_bowtie | workflows.nuvs | workflows.aodp,
+          workflows.pathoscope_bowtie | workflows.nuvs,
           AnalysisRowsProps
       >
     | GenericJobArgsProps<workflows.build_index, BuildIndexRowsProps>
@@ -156,7 +156,6 @@ function JobArgsRows({ workflow, args }: JobArgsRowsProps) {
         case workflows.create_subtraction:
             return <CreateSubtractionRows {...args} />;
 
-        case workflows.aodp:
         case workflows.nuvs:
         case workflows.pathoscope_bowtie:
             return <AnalysisRows {...args} />;

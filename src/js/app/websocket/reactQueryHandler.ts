@@ -17,10 +17,9 @@ import { taskUpdaters } from "./updaters";
 const workflowQueries = {
     build_index: [indexQueryKeys.lists()],
     create_sample: [samplesQueryKeys.lists()],
-    pathoscope_bowtie: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
-    nuvs: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
     iimi: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
-    aodp: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
+    nuvs: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
+    pathoscope_bowtie: [samplesQueryKeys.lists(), analysesQueryKeys.lists()],
 };
 
 /**

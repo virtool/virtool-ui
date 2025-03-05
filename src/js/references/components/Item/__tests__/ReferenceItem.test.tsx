@@ -1,8 +1,8 @@
 import { screen } from "@testing-library/react";
+import { createFakeReferenceMinimal } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFakeReferenceMinimal } from "../../../../../tests/fake/references";
 import { ReferenceItem } from "../ReferenceItem";
 
 describe("<ReferenceItem />", () => {
@@ -30,29 +30,10 @@ describe("<ReferenceItem />", () => {
         });
         renderWithRouter(<ReferenceItem {...props} />);
 
-        expect(screen.getByText(/virus/)).toBeInTheDocument();
         expect(screen.getByRole("progressbar")).toHaveAttribute(
             "data-value",
             "32",
         );
-    });
-
-    it("should render when [organism=null]", () => {
-        props.reference = createFakeReferenceMinimal({
-            task: {
-                complete: false,
-                created_at: null,
-                error: null,
-                id: 1,
-                progress: 32,
-                step: "test step",
-                type: "remote_reference",
-            },
-            organism: null,
-        });
-        renderWithRouter(<ReferenceItem {...props} />);
-
-        expect(screen.getByText(/unknown/)).toBeInTheDocument();
     });
 
     it("should render when [progress=100]", () => {

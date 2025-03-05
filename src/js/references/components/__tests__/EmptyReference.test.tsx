@@ -1,13 +1,13 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mockApiCreateReference } from "@tests/fake/references";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { mockApiCreateReference } from "../../../../tests/fake/references";
 import EmptyReference from "../EmptyReference";
 
 describe("<EmptyReference />", () => {
-    it("should display error and block submission when name textbox is empty", async () => {
+    it("should display error and block submission when name is empty", async () => {
         renderWithProviders(<EmptyReference />);
 
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
@@ -15,49 +15,26 @@ describe("<EmptyReference />", () => {
         expect(screen.getByText("Required Field")).toBeInTheDocument();
     });
 
-    it("handleSubmit should call onSubmit when [name.length!=0] and [dataType.length!=0]", async () => {
-        const scope = mockApiCreateReference("test_name", "", "genome", "");
+    it("should submit when name length is non-zero", async () => {
+        const scope = mockApiCreateReference("Test Reference", "", "");
+
         renderWithProviders(<EmptyReference />);
 
         await userEvent.type(
             screen.getByRole("textbox", { name: "Name" }),
-            "test_name",
+            "Test Reference",
         );
         await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
         scope.done();
     });
 
-    it("handleSubmit should submit correct dataType when changed", async () => {
-        const scope = mockApiCreateReference("test_name", "", "barcode", "");
-        renderWithProviders(<EmptyReference />);
+    it("should submit all filled fields", async () => {
+        const name = "Test Reference";
+        const organism = "Virus";
+        const description = "A collection of pathogenic virus genomes.";
 
-        await userEvent.type(
-            screen.getByRole("textbox", { name: "Name" }),
-            "test_name",
-        );
-        await userEvent.click(
-            screen.getByRole("button", {
-                name: "Barcode Target sequences for barcode analysis",
-            }),
-        );
-        await userEvent.click(screen.getByRole("button", { name: "Save" }));
-
-        scope.done();
-    });
-
-    it("handleSubmit should call onSubmit when [name.length!=0] and [dataType.length!=0]", async () => {
-        const name = "test_name";
-        const organism = "test_organism";
-        const dataType = "genome";
-        const description = "test_description";
-
-        const scope = mockApiCreateReference(
-            name,
-            description,
-            dataType,
-            organism,
-        );
+        const scope = mockApiCreateReference(name, description, organism);
         renderWithProviders(<EmptyReference />);
 
         await userEvent.type(

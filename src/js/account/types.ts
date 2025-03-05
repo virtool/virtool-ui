@@ -2,7 +2,6 @@ import { GroupMinimal, Permissions } from "@groups/types";
 import { User } from "@users/types";
 
 export enum QuickAnalyzeWorkflow {
-    aodp = "aodp",
     nuvs = "nuvs",
     pathoscope_bowtie = "pathoscope_bowtie",
 }

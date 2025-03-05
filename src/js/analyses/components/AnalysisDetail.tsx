@@ -1,5 +1,10 @@
 import { useGetAnalysis } from "@/analyses/queries";
 import {
+    FormattedNuvsAnalysis,
+    FormattedPathoscopeAnalysis,
+    IimiAnalysis,
+} from "@analyses/types";
+import {
     Box,
     Icon,
     LoadingPlaceholder,
@@ -60,11 +65,21 @@ export default function AnalysisDetail() {
     let content;
 
     if (analysis.workflow === "pathoscope_bowtie") {
-        content = <PathoscopeViewer detail={analysis} sample={sample} />;
+        content = (
+            <PathoscopeViewer
+                detail={analysis as FormattedPathoscopeAnalysis}
+                sample={sample}
+            />
+        );
     } else if (analysis.workflow === "nuvs") {
-        content = <NuVsViewer detail={analysis} sample={sample} />;
+        content = (
+            <NuVsViewer
+                detail={analysis as FormattedNuvsAnalysis}
+                sample={sample}
+            />
+        );
     } else if (analysis.workflow === "iimi") {
-        content = <IimiViewer detail={analysis} />;
+        content = <IimiViewer detail={analysis as IimiAnalysis} />;
     } else {
         return (
             <UnsupportedAnalysis>

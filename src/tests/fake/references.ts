@@ -1,15 +1,13 @@
+import { Task } from "@/types";
 import { faker } from "@faker-js/faker";
-import { merge } from "lodash";
-import { assign } from "lodash-es";
-import nock from "nock";
 import {
     Reference,
     ReferenceClonedFrom,
-    ReferenceDataType,
     ReferenceMinimal,
     ReferenceTarget,
-} from "../../js/references/types";
-import { Task } from "../../js/types";
+} from "@references/types";
+import { assign } from "lodash-es";
+import nock from "nock";
 import { createFakeUserNested } from "./user";
 
 /**
@@ -24,9 +22,8 @@ export function createFakeReferenceTarget(): ReferenceTarget {
     };
 }
 
-type CreateFakeReferenceNestedProps = {
+type CreateFakeReferenceNestedParams = {
     id?: string;
-    data_type?: ReferenceDataType;
     name?: string;
 };
 
@@ -34,18 +31,17 @@ type CreateFakeReferenceNestedProps = {
  * Create a fake reference nested
  */
 export function createFakeReferenceNested(
-    props?: CreateFakeReferenceNestedProps,
+    params?: CreateFakeReferenceNestedParams,
 ) {
-    const defaultReferenceNested = {
+    return {
         id: faker.random.alphaNumeric(8),
-        data_type: faker.helpers.arrayElement(["barcode", "genome"]),
+        data_type: "genome",
         name: faker.random.word(),
+        ...params,
     };
-
-    return merge(defaultReferenceNested, props);
 }
 
-type CreateFakeReferenceMinimal = CreateFakeReferenceNestedProps & {
+type CreateFakeReferenceMinimalParams = CreateFakeReferenceNestedParams & {
     cloned_from?: ReferenceClonedFrom | null;
     organism?: string;
     task?: Task;
@@ -55,10 +51,10 @@ type CreateFakeReferenceMinimal = CreateFakeReferenceNestedProps & {
  * Create a fake reference minimal
  */
 export function createFakeReferenceMinimal(
-    props?: CreateFakeReferenceMinimal,
+    params?: CreateFakeReferenceMinimalParams,
 ): ReferenceMinimal {
     const defaultReferenceMinimal = {
-        ...createFakeReferenceNested(),
+        ...createFakeReferenceNested(params),
         cloned_from: {
             id: faker.random.alphaNumeric(8),
             name: faker.random.word(),
@@ -80,10 +76,10 @@ export function createFakeReferenceMinimal(
         user: createFakeUserNested(),
     };
 
-    return assign(defaultReferenceMinimal, props);
+    return assign(defaultReferenceMinimal, params);
 }
 
-type CreateFakeReference = CreateFakeReferenceMinimal & {
+type CreateFakeReferenceParams = CreateFakeReferenceMinimalParams & {
     description?: string;
     targets?: ReferenceTarget[];
 };
@@ -92,7 +88,7 @@ type CreateFakeReference = CreateFakeReferenceMinimal & {
  * Create a fake reference
  */
 export function createFakeReference(
-    overrides?: CreateFakeReference,
+    overrides?: CreateFakeReferenceParams,
 ): Reference {
     const { description, ...props } = overrides || {};
 
@@ -186,41 +182,23 @@ export function mockApiCloneReference(
  *
  * @param name - The name of the reference
  * @param description - The description of the reference
- * @param data_type - The data type of the reference
  * @param organism - The organism of the reference
  * @returns The nock scope for the mocked API call
  */
 export function mockApiCreateReference(
     name: string,
     description: string,
-    data_type: ReferenceDataType,
     organism: string,
 ) {
     const reference = createFakeReference({
         name,
         description,
-        data_type,
         organism,
     });
 
     return nock("http://localhost")
-        .post("/api/refs", { name, description, data_type, organism })
+        .post("/api/refs", { data_type: "genome", description, name, organism })
         .reply(201, reference);
-}
-
-/**
- * Mocks an API call for updating the reference details
- *
- * @param reference - The reference details
- * @param update - The update to apply to the reference
- * @returns A nock scope for the mocked API call
- */
-export function mockApiEditReference(reference: Reference, update: any) {
-    const referenceDetail = { reference, ...update };
-
-    return nock("http://localhost")
-        .patch(`/api/refs/${reference.id}`)
-        .reply(200, referenceDetail);
 }
 
 /**

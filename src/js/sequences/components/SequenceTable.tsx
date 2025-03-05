@@ -15,19 +15,19 @@ const SequenceCell = styled.td`
 `;
 
 type SequenceTableProps = {
-    children: React.ReactNode;
     definition: string;
     host: string;
+    segment: string;
     sequence: string;
 };
 
 /**
- * Displays the styled table components for sequence items
+ * Displays information about the genome sequence in the form of a table
  */
-export function SequenceTable({
-    children,
+export default function SequenceTable({
     definition,
     host,
+    segment,
     sequence,
 }: SequenceTableProps) {
     return (
@@ -37,12 +37,14 @@ export function SequenceTable({
                     <th>Definition</th>
                     <td>{definition}</td>
                 </tr>
-                {children}
                 <tr>
                     <th>Host</th>
                     <td>{host}</td>
                 </tr>
-
+                <tr>
+                    <th>Segment</th>
+                    <td>{segment || <em>Not configured</em>}</td>
+                </tr>
                 <tr>
                     <th>
                         Sequence <Badge>{sequence.length}</Badge>

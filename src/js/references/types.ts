@@ -11,8 +11,6 @@ export type ReferenceContributor = UserNested & {
     count: number;
 };
 
-export type ReferenceDataType = "barcode" | "genome";
-
 export type ReferenceRights = {
     build: boolean;
     modify: boolean;
@@ -75,8 +73,10 @@ export type ReferenceTarget = {
 export type ReferenceNested = {
     /** The unique identifier */
     id: string;
+
     /** The build style dictating workflow compatibility */
-    data_type: ReferenceDataType;
+    data_type: string;
+
     /** The user defined name */
     name: string;
 };

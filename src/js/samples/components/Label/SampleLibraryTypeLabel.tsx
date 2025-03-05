@@ -30,7 +30,7 @@ export function SampleLibraryTypeLabel({
 }: SampleLibraryTypeLabelProps) {
     return (
         <StyledSampleLibraryTypeLabel>
-            <Icon name={libraryType === "amplicon" ? "barcode" : "dna"} />
+            <Icon name="dna" />
             <span>{getLibraryTypeDisplayName(libraryType)}</span>
         </StyledSampleLibraryTypeLabel>
     );

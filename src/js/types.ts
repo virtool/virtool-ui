@@ -14,7 +14,7 @@ export class Settings {
     sample_unique_names: boolean;
 }
 
-export type virtoolState = {
+export type VirtoolState = {
     b2c: B2CSettings;
     sentryDsn: string;
 };

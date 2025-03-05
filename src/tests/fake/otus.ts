@@ -1,7 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { UpdateOTUProps } from "@otus/queries";
-import { assign, merge, times } from "lodash";
-import nock from "nock";
 import {
     HistoryMethod,
     HistoryNested,
@@ -10,7 +8,9 @@ import {
     OTUMinimal,
     OTURemote,
     OTUSegment,
-} from "../../js/otus/types";
+} from "@otus/types";
+import { assign, merge, times } from "lodash";
+import nock from "nock";
 import { createFakeReferenceNested } from "./references";
 import { createFakeUserNested } from "./user";
 
@@ -70,7 +70,7 @@ export function createFakeOTUIsolate(): OTUIsolate {
 /**
  * Create a fake OTU segment
  */
-export function createFakeOTUSegment(): OTUSegment {
+export function createFakeOtuSegment(): OTUSegment {
     return {
         molecule: null,
         name: faker.random.word(),
@@ -78,7 +78,7 @@ export function createFakeOTUSegment(): OTUSegment {
     };
 }
 
-type CreateFakeOTUMinimalProps = {
+type CreateFakeOtuMinimalParams = {
     abbreviation?: string;
     name?: string;
     verified?: boolean;
@@ -86,11 +86,9 @@ type CreateFakeOTUMinimalProps = {
 
 /**
  * Create a fake minimal OTU
- *
- * @param overrides - optional properties for creating a minimal OTU with specific values
  */
 export function createFakeOTUMinimal(
-    overrides?: CreateFakeOTUMinimalProps,
+    overrides?: CreateFakeOtuMinimalParams,
 ): OTUMinimal {
     const defaultOTUMinimal = {
         abbreviation: faker.random.word(),
@@ -104,16 +102,16 @@ export function createFakeOTUMinimal(
     return assign(defaultOTUMinimal, overrides);
 }
 
-type CreateFakeOTU = CreateFakeOTUMinimalProps & {
+type CreateFakeOTU = CreateFakeOtuMinimalParams & {
     isolates?: Array<OTUIsolate>;
     issues?: { [key: string]: any };
     remote?: OTURemote;
 };
 
 /**
- * Create a fake OTU
+ * Create a fake OTU object.
  */
-export function createFakeOTU(overrides?: CreateFakeOTU): OTU {
+export function createFakeOtu(overrides?: CreateFakeOTU): OTU {
     const { isolates, issues, remote, ...props } = overrides || {};
     return {
         ...createFakeOTUMinimal(props),
@@ -121,7 +119,7 @@ export function createFakeOTU(overrides?: CreateFakeOTU): OTU {
         issues: issues || null,
         last_indexed_version: null,
         most_recent_change: createFakeHistoryNested(),
-        schema: times(2, createFakeOTUSegment),
+        schema: times(2, createFakeOtuSegment),
         remote: remote || null,
     };
 }
@@ -132,7 +130,7 @@ export function createFakeOTU(overrides?: CreateFakeOTU): OTU {
  * @param otu - The complete otu
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetOTU(otu: OTU) {
+export function mockApiGetOtu(otu: OTU) {
     return nock("http://localhost")
         .get(`/api/otus/${otu.id}`)
         .query(true)
@@ -146,7 +144,7 @@ export function mockApiGetOTU(otu: OTU) {
  * @param refId - The id of the reference which the OTUs belong to
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetOTUs(OTUMinimal: OTUMinimal[], refId: string) {
+export function mockApiFindOtus(OTUMinimal: OTUMinimal[], refId: string) {
     return nock("http://localhost")
         .get(`/api/refs/${refId}/otus`)
         .query(true)
@@ -174,7 +172,7 @@ export function mockApiCreateOTU(
     name: string,
     abbreviation: string,
 ) {
-    const OTU = createFakeOTU({
+    const OTU = createFakeOtu({
         name,
         abbreviation,
     });

@@ -25,11 +25,6 @@ const subtraction_url = {
 
 const workflowTests = [
     {
-        workflow: "aodp",
-        args: { sample_id, analysis_id },
-        urls: [sample_url, analysis_url],
-    },
-    {
         workflow: "build_index",
         args: { index_id, ref_id },
         urls: [index_url, reference_url],

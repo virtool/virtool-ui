@@ -101,8 +101,6 @@ export default function PathoscopeSequence({
     ratio,
     yMax,
 }: CoverageChartProps) {
-    console.log(maxGenomeLength);
-
     const chartEl = useRef(null);
 
     useEffect(() => {

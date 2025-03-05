@@ -3,7 +3,7 @@ import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { useDialogParam } from "@utils/hooks";
 import React from "react";
 import EditOTU from "./EditOTU";
-import RemoveOTU from "./RemoveOTU";
+import RemoveOtu from "./RemoveOtu";
 
 type OTUHeaderEndIconsProps = {
     id: string;
@@ -46,7 +46,7 @@ export function OTUHeaderEndIcons({
             />
 
             <EditOTU otuId={id} name={name} abbreviation={abbreviation} />
-            <RemoveOTU id={id} name={name} refId={refId} />
+            <RemoveOtu id={id} name={name} refId={refId} />
         </>
     ) : null;
 }
