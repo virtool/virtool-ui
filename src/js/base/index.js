@@ -26,7 +26,6 @@ export { BoxTitle } from "./BoxTitle";
 export { device } from "./Breakpoints";
 export { Button } from "./Button";
 export { Checkbox } from "./Checkbox";
-export { CheckboxLabel } from "./CheckboxLabel";
 export { Circle } from "./Circle";
 export { CloseButton } from "./CloseButton";
 export { Color } from "./Color";

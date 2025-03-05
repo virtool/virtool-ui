@@ -1,6 +1,3 @@
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
 import {
     Checkbox,
     InputError,
@@ -8,7 +5,10 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "../../base";
+} from "@base";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import styled from "styled-components";
 
 const DialogFooter = styled.div`
     display: flex;
@@ -86,8 +86,9 @@ export function CreateUserForm({
                     control={control}
                     render={({ field: { onChange, value } }) => (
                         <Checkbox
-                            label="Force user to reset password on login"
                             checked={value}
+                            id="ForceReset"
+                            label="Force user to reset password on login"
                             onClick={() => onChange(!value)}
                         />
                     )}

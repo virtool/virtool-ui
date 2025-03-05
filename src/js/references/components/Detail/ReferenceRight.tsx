@@ -1,6 +1,6 @@
+import { Checkbox } from "@base";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { Checkbox } from "../../../base";
 
 const descriptions = {
     build: "Can build new indexes for the reference.",
@@ -50,8 +50,9 @@ export function ReferenceRight({ right, enabled, onToggle }: MemberRightProps) {
     return (
         <StyledMemberRight>
             <MemberRightCheckbox
-                key={right}
                 checked={enabled}
+                id={`ReferenceRightCheckbox-${right}`}
+                key={right}
                 onClick={handleClick}
             />
             <MemberRightDescription>

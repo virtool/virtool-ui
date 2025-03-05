@@ -1,7 +1,3 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
-import { useUpdateUser } from "../../administration/queries";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -14,6 +10,10 @@ import {
     RelativeTime,
     SaveButton,
 } from "../../base";
+import { useUpdateUser } from "@administration/queries";
+import React from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
 const PasswordFooter = styled.div`
     align-items: center;
@@ -97,8 +97,9 @@ export default function Password({
 
                     <PasswordFooter>
                         <Checkbox
-                            label="Force user to reset password on next login"
                             checked={forceReset}
+                            id="ForceReset"
+                            label="Force user to reset password on next login"
                             onClick={handleSetForceReset}
                         />
                         <SaveButton />

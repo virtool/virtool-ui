@@ -46,6 +46,8 @@ export default function APIPermissions({
             <BoxGroupSection key={permission.name} disabled={disabled}>
                 <Checkbox
                     checked={permission.allowed}
+                    id={`ApiPermission-${permission.name}`}
+                    label={permission.name}
                     onClick={
                         disabled
                             ? null
@@ -55,7 +57,6 @@ export default function APIPermissions({
                                       [permission.name]: !permission.allowed,
                                   })
                     }
-                    label={permission.name}
                 />
             </BoxGroupSection>
         );

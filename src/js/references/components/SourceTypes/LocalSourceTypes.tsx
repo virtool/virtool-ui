@@ -1,3 +1,10 @@
+import { useUpdateSourceTypes } from "../../hooks";
+import {
+    referenceQueryKeys,
+    useGetReference,
+    useUpdateReference,
+} from "../../queries";
+import { SourceTypeList } from "./SourceTypeList";
 import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
 import { getColor } from "@app/theme";
 import {
@@ -17,13 +24,6 @@ import { usePathParams } from "@utils/hooks";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useUpdateSourceTypes } from "../../hooks";
-import {
-    referenceQueryKeys,
-    useGetReference,
-    useUpdateReference,
-} from "../../queries";
-import { SourceTypeList } from "./SourceTypeList";
 
 const SourceTypeBoxGroupSection = styled(BoxGroupSection)`
     button {
@@ -108,6 +108,7 @@ export function LocalSourceTypes() {
             </SectionHeader>
             <SettingsCheckbox
                 enabled={restrictSourceTypes}
+                id="RestrictSourceTypes"
                 onToggle={handleToggle}
             >
                 <h2>Restrict Source Types</h2>
