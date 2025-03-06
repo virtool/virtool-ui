@@ -9,7 +9,7 @@ import {
     InputSearch,
     NoneFoundSection,
     SelectBoxGroupSection,
-} from "@base";
+} from "@/base";
 import { CompactScrollList } from "@base/CompactScrollList";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";

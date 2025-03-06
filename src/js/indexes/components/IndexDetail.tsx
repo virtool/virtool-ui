@@ -6,7 +6,7 @@ import {
     SubviewHeader,
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
-} from "@base";
+} from "@/base";
 import Contributors from "@indexes/components/Contributors";
 import Files from "@indexes/components/IndexFiles";
 import IndexOTUs from "@indexes/components/IndexOTUs";

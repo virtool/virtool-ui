@@ -9,7 +9,7 @@ import {
     InitialIcon,
     Link,
     LoadingPlaceholder,
-} from "@base";
+} from "@/base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
 import { useDialogParam, usePathParams } from "@utils/hooks";

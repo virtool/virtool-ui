@@ -1,5 +1,5 @@
 import React from "react";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection } from "../../../base";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection } from "@base/index";
 
 interface CloneProps {
     source: { id: string; name: string };

@@ -6,7 +6,7 @@ import {
     InputSimple,
     LoadingPlaceholder,
     SaveButton,
-} from "@base";
+} from "@/base";
 import PseudoLabel from "@base/PseudoLabel";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";

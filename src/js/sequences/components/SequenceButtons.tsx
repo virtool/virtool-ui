@@ -1,4 +1,4 @@
-import { CloseButton } from "@base";
+import { CloseButton } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";

@@ -1,6 +1,6 @@
 import { map } from "lodash-es";
 import React from "react";
-import { Select, SelectButton, SelectContent, SelectItem } from "../../../base";
+import { Select, SelectButton, SelectContent, SelectItem } from "@base/index";
 import { AdministratorRoles } from "../../types";
 
 type RoleSelectProps = {

@@ -1,4 +1,4 @@
-import { Box, Icon, Label } from "@base";
+import { Box, Icon, Label } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { useSetIsolateAsDefault } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";

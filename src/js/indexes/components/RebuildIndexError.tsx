@@ -1,4 +1,4 @@
-import { Alert } from "@base";
+import { Alert } from "@/base";
 import React from "react";
 
 type RebuildIndexErrorProps = {

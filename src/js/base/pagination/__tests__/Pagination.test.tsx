@@ -1,4 +1,4 @@
-import { Pagination } from "@base";
+import { Pagination } from "@/base";
 import { screen } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup.jsx";
 import { formatPath } from "@utils/hooks";

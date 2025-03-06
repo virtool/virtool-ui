@@ -1,4 +1,4 @@
-import { BoxGroup, BoxGroupHeader } from "@base";
+import { BoxGroup, BoxGroupHeader } from "@/base";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 

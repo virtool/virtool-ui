@@ -1,5 +1,5 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { Box, Button, ExternalLink, Icon } from "@base";
+import { Box, Button, ExternalLink, Icon } from "@/base";
 import { Permission } from "@groups/types";
 import { useRemoteReference } from "@references/queries";
 import React from "react";

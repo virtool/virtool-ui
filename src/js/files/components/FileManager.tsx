@@ -9,7 +9,7 @@ import {
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { UploadBar } from "@files/components/UploadBar";
 import { upload } from "@files/uploader";

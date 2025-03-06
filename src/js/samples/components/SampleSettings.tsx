@@ -4,7 +4,7 @@ import {
     LoadingPlaceholder,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import React from "react";
 import SampleRights from "./SampleRights";
 

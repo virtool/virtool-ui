@@ -7,7 +7,7 @@ import {
     InputSimple,
     ProgressBarAffixed,
     SaveButton,
-} from "@base";
+} from "@/base";
 import { UploadBar } from "@files/components/UploadBar";
 import { useImportReference, useUploadReference } from "@references/queries";
 import { useNavigate } from "@utils/hooks";

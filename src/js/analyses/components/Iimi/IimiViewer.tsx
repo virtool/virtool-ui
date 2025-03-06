@@ -2,7 +2,7 @@ import { IimiAnalysis } from "@/analyses/types";
 import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Box, BoxTitle } from "../../../base";
+import { Box, BoxTitle } from "@base/index";
 import { Accordion } from "../../../base/accordion/Accordion";
 import { IimiOTU } from "./IimiOTU";
 

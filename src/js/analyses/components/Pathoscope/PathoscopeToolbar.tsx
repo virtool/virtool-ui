@@ -5,7 +5,7 @@ import {
     DropdownMenuDownload,
     Icon,
     InputSearch,
-} from "@base";
+} from "@/base";
 import { ButtonToggle } from "@base/ButtonToggle";
 import Toolbar from "@base/Toolbar";
 import { Tooltip } from "@base/Tooltip";

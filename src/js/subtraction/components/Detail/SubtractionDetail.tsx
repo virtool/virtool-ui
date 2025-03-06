@@ -6,7 +6,7 @@ import {
     ViewHeader,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
 import { useDialogParam, usePathParams } from "@utils/hooks";

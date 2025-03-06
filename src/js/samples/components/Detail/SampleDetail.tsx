@@ -8,7 +8,7 @@ import {
     ViewHeaderAttribution,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { IconButton } from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";

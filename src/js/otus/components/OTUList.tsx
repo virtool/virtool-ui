@@ -4,7 +4,7 @@ import {
     LoadingPlaceholder,
     NoneFoundBox,
     Pagination,
-} from "@base";
+} from "@/base";
 import { useGetReference } from "@references/queries";
 import { usePageParam, usePathParams, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";

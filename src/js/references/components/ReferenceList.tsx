@@ -5,7 +5,7 @@ import {
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
 import { ReferenceItem } from "@references/components/Item/ReferenceItem";

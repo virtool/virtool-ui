@@ -1,5 +1,5 @@
 import React from "react";
-import { ExternalLink } from "../../base";
+import { ExternalLink } from "@base/index";
 
 type ClusterMemberProps = {
     /** The index of the cluster member */

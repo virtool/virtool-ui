@@ -5,7 +5,7 @@ import {
     DialogTitle,
     Tabs,
     TabsLink,
-} from "@base";
+} from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { formatSearchParams, useUrlSearchParam } from "@utils/hooks";
 import React from "react";

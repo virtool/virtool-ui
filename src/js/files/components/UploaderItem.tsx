@@ -1,4 +1,4 @@
-import { Loader, ProgressBarAffixed } from "@base";
+import { Loader, ProgressBarAffixed } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { useUploaderStore } from "@files/uploader";
 import { byteSize, cn } from "@utils/utils";

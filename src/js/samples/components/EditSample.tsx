@@ -14,7 +14,7 @@ import {
     InputSimple,
     SaveButton,
     TextArea,
-} from "../../base";
+} from "@base/index";
 import { useUpdateSample } from "../queries";
 import { Sample } from "../types";
 

@@ -1,4 +1,4 @@
-import { Alert } from "@base";
+import { Alert } from "@/base";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Alert> = {

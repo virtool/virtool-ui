@@ -4,7 +4,7 @@ import {
     NoneFoundBox,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";
 import React from "react";

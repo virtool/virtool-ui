@@ -1,4 +1,4 @@
-import { LoadingPlaceholder } from "@base";
+import { LoadingPlaceholder } from "@/base";
 import HistoryList from "@otus/components/Detail/History/HistoryList";
 import { useFetchOTUHistory } from "@otus/queries";
 import { usePathParams } from "@utils/hooks";

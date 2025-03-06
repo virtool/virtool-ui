@@ -3,7 +3,7 @@ import { useGetActiveHit } from "@analyses/hooks";
 import { FormattedNuvsHit } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import { getBorder } from "@app/theme";
-import { Badge } from "@base";
+import { Badge } from "@/base";
 import { useUrlSearchParam } from "@utils/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";

@@ -1,4 +1,4 @@
-import { Link } from "@base";
+import { Link } from "@base/index";
 import { cn } from "@utils/utils";
 import React from "react";
 

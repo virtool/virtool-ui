@@ -10,7 +10,7 @@ import {
     IconButton,
     InitialIcon,
     Logo,
-} from "@base";
+} from "@/base";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
 import { useDialogParam } from "@utils/hooks";
 import { useRootQuery } from "@wall/queries";

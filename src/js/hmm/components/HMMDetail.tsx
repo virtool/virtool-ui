@@ -14,7 +14,7 @@ import {
     NotFound,
     ViewHeader,
     ViewHeaderTitle,
-} from "../../base";
+} from "@base/index";
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";

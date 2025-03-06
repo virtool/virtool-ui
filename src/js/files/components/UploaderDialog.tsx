@@ -1,4 +1,4 @@
-import { Badge } from "@base";
+import { Badge } from "@/base";
 import { Upload } from "@files/types";
 import { formatRoundedDuration } from "@utils/utils";
 import numbro from "numbro";

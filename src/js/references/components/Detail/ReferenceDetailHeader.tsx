@@ -9,7 +9,7 @@ import {
     ViewHeaderAttribution,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "../../../base";
+} from "@base/index";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 
 type ReferenceDetailHeaderProps = {

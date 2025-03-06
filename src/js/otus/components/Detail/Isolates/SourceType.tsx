@@ -6,7 +6,7 @@ import {
     InputLabel,
     InputSelect,
     InputSimple,
-} from "../../../../base";
+} from "@base/index";
 
 type IsolateFormValues = {
     sourceName: string;

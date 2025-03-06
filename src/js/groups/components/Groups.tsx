@@ -1,5 +1,5 @@
 import { getColor } from "@app/theme";
-import { BoxGroup, Button, LoadingPlaceholder, RemoveBanner } from "@base";
+import { BoxGroup, Button, LoadingPlaceholder, RemoveBanner } from "@/base";
 import { InputHeader } from "@base/InputHeader";
 import { useDialogParam } from "@utils/hooks";
 import { find, sortBy } from "lodash-es";

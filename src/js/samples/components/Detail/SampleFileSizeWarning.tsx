@@ -1,4 +1,4 @@
-import { Alert, Icon, Link } from "@base";
+import { Alert, Icon, Link } from "@/base";
 import { endsWith, some } from "lodash-es";
 import React from "react";
 import { Route, useLocation } from "wouter";

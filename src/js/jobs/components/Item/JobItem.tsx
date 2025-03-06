@@ -1,5 +1,5 @@
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Attribution, BoxGroupSection, Link } from "@base";
+import { Attribution, BoxGroupSection, Link } from "@/base";
 import { UserNested } from "@users/types";
 import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";

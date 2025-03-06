@@ -1,4 +1,4 @@
-import { RemoveBanner } from "@base";
+import { RemoveBanner } from "@/base";
 import { RemoveDialog } from "@base/RemoveDialog";
 import { useDialogParam, useNavigate } from "@utils/hooks";
 import React, { useCallback } from "react";

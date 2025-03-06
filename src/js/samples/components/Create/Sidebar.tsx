@@ -1,4 +1,4 @@
-import { ContainerSide } from "@base";
+import { ContainerSide } from "@/base";
 import React from "react";
 import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
 import SampleLabels from "../Sidebar/SampleLabels";

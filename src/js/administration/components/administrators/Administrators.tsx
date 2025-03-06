@@ -4,7 +4,7 @@ import {
     LoadingPlaceholder,
     NoneFoundBox,
     Pagination,
-} from "@base";
+} from "@/base";
 import Toolbar from "@base/Toolbar";
 import { usePageParam } from "@utils/hooks";
 import { filter } from "lodash-es";

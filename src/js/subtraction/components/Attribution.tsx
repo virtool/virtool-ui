@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { getColor, getFontSize, theme } from "../../app/theme";
-import { Attribution, AttributionWithName } from "../../base";
+import { Attribution, AttributionWithName } from "@base/index";
 
 /**
  * Default attribution used when creation details are unknown

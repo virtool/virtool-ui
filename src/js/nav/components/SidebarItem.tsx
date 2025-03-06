@@ -1,4 +1,4 @@
-import { Icon, Link } from "@base";
+import { Icon, Link } from "@/base";
 import { useMatchPartialPath } from "@utils/hooks";
 import { cn } from "@utils/utils";
 import React from "react";

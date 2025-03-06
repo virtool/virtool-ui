@@ -2,7 +2,7 @@ import { IconButton } from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { BoxSpaced, InitialIcon } from "../../../base";
+import { BoxSpaced, InitialIcon } from "@base/index";
 import { User } from "../../../users/types";
 import { useSetAdministratorRole } from "../../queries";
 import { AdministratorRoles } from "../../types";

@@ -1,5 +1,5 @@
 import { getBorder } from "@app/theme";
-import { Icon } from "@base";
+import { Icon } from "@/base";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 

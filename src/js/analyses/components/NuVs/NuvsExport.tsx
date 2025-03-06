@@ -7,7 +7,7 @@ import {
     DialogOverlay,
     DialogTitle,
     Icon,
-} from "@base";
+} from "@/base";
 import PseudoLabel from "@base/PseudoLabel";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";

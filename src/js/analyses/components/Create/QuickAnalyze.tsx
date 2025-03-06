@@ -1,5 +1,5 @@
 import { Workflows } from "@analyses/types";
-import { Dialog, DialogOverlay, DialogTitle } from "@base";
+import { Dialog, DialogOverlay, DialogTitle } from "@/base";
 import { HMMSearchResults } from "@hmm/types";
 import { IndexMinimal } from "@indexes/types";
 import { MLModelSearchResult } from "@ml/types";

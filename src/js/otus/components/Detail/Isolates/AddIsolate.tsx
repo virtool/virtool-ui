@@ -5,7 +5,7 @@ import {
     DialogContent,
     DialogOverlay,
     DialogTitle,
-} from "../../../../base";
+} from "@base/index";
 import { useCreateIsolate } from "../../../queries";
 import IsolateForm from "./IsolateForm";
 

@@ -2,7 +2,7 @@ import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";
-import { Button, Icon } from "../../base";
+import { Button, Icon } from "@base/index";
 
 const SampleSelectionToolbarTop = styled.div`
     align-items: center;

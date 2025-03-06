@@ -5,7 +5,7 @@ import {
     InputLabel,
     InputPassword,
     InputSimple,
-} from "@base";
+} from "@/base";
 import { useCreateFirstUser } from "@users/queries";
 import React from "react";
 import { useForm } from "react-hook-form";

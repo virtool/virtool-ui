@@ -1,4 +1,4 @@
-import { LoadingPlaceholder } from "@base";
+import { LoadingPlaceholder } from "@/base";
 import { useGetReference } from "@references/queries";
 import { useDialogParam, usePathParams } from "@utils/hooks";
 import React from "react";

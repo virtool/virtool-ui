@@ -1,5 +1,5 @@
 import { getBorder } from "@app/theme";
-import { Table } from "@base";
+import { Table } from "@/base";
 import { replace } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

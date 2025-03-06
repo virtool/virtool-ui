@@ -5,7 +5,7 @@ import {
     DialogOverlay,
     DialogTitle,
     SaveButton,
-} from "@base";
+} from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUpdateReference } from "@references/queries";
 import { useDialogParam } from "@utils/hooks";

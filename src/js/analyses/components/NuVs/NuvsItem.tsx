@@ -1,7 +1,7 @@
 import { AnalysisViewerItem } from "@/analyses/components/Viewer/Item";
 import { FormattedNuvsHit } from "@/analyses/types";
 import NuvsValues from "@analyses/components/NuVs/NuVsValues";
-import { Badge } from "@base";
+import { Badge } from "@/base";
 import { useUrlSearchParam } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";

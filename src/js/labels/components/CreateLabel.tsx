@@ -4,7 +4,7 @@ import {
     DialogContent,
     DialogOverlay,
     DialogTitle,
-} from "@base";
+} from "@/base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import { useCreateLabel } from "../queries";

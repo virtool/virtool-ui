@@ -9,7 +9,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "../../../../base";
+} from "@base/index";
 import { SourceType } from "./SourceType";
 
 const IsolateFormFields = styled.div`

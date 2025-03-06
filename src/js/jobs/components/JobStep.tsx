@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Icon, Loader } from "../../base";
+import { BoxGroupSection, Icon, Loader } from "@base/index";
 import { JobStatus } from "../types";
 import { getStepDescription } from "../utils";
 import { JobStateIcon } from "./JobStateIcon";

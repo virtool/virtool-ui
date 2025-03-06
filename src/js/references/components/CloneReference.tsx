@@ -12,7 +12,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@base";
+} from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useUrlSearchParam } from "@utils/hooks";
 import { find } from "lodash-es";

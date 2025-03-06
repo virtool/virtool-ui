@@ -11,7 +11,7 @@ import {
     InputLabel,
     InputSelect,
     LoadingPlaceholder,
-} from "@base";
+} from "@/base";
 import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePathParams } from "@utils/hooks";

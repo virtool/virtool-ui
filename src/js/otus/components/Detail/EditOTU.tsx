@@ -7,7 +7,7 @@ import {
     DialogContent,
     DialogOverlay,
     DialogTitle,
-} from "../../../base";
+} from "@base/index";
 import { OTUForm } from "../OTUForm";
 
 type EditOTUProps = {

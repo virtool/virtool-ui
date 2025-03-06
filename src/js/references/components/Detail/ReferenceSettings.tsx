@@ -1,4 +1,4 @@
-import { LoadingPlaceholder, SectionHeader } from "@base";
+import { LoadingPlaceholder, SectionHeader } from "@/base";
 import { usePathParams } from "@utils/hooks";
 import { sortBy } from "lodash-es";
 import React from "react";

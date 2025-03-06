@@ -1,5 +1,5 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { Alert, Button } from "@base";
+import { Alert, Button } from "@/base";
 import { Permission } from "@groups/types";
 import React from "react";
 import styled from "styled-components";

@@ -5,7 +5,7 @@ import {
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";

@@ -4,7 +4,7 @@ import {
     LoadingPlaceholder,
     NoneFoundBox,
     Pagination,
-} from "@base";
+} from "@/base";
 import { useFetchSample } from "@samples/queries";
 import { usePageParam, usePathParams } from "@utils/hooks";
 import React from "react";

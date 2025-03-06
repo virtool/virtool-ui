@@ -8,7 +8,7 @@ import {
     InputGroup,
     InputLabel,
     InputSimple,
-} from "@base";
+} from "@/base";
 import { SampleLabel } from "@samples/components/Label/SampleLabel";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";

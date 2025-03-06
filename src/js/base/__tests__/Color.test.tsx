@@ -1,4 +1,4 @@
-import { Color } from "@base";
+import { Color } from "@/base";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";

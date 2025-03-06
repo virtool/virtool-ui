@@ -4,7 +4,7 @@ import {
     BoxGroupTable,
     ContainerNarrow,
     LoadingPlaceholder,
-} from "@base";
+} from "@/base";
 import Contributors from "@indexes/components/Contributors";
 import { usePathParams } from "@utils/hooks";
 import { cn } from "@utils/utils";

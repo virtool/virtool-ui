@@ -7,7 +7,7 @@ import {
     DialogOverlay,
     DialogTitle,
     Icon,
-} from "../../base";
+} from "@base/index";
 import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 

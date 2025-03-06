@@ -1,4 +1,4 @@
-import { SidebarHeader, SideBarSection } from "@base";
+import { SidebarHeader, SideBarSection } from "@/base";
 import { JobCounts } from "@jobs/types";
 import { useListSearchParam } from "@utils/hooks";
 import { difference, union, xor } from "lodash-es";

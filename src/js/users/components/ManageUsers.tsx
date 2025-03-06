@@ -1,6 +1,6 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
-import { Alert, Icon, InputSearch, LoadingPlaceholder } from "@base";
+import { Alert, Icon, InputSearch, LoadingPlaceholder } from "@/base";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
 import Toolbar from "@base/Toolbar";

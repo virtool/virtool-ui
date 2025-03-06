@@ -12,7 +12,7 @@ import {
     InputLabel,
     InputSelect,
     SelectBox,
-} from "../../base";
+} from "@base/index";
 
 const rights = [
     { label: "None", value: "" },

@@ -5,7 +5,7 @@ import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { Attribution, Box, Icon, Link, SlashList } from "../../base";
+import { Attribution, Box, Icon, Link, SlashList } from "@base/index";
 import { ProgressCircle } from "../../base/ProgressCircle";
 import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";

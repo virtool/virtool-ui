@@ -7,7 +7,7 @@ import {
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { useFindJobs } from "@jobs/queries";
 import { useListSearchParam, usePageParam } from "@utils/hooks";
 import { map } from "lodash";

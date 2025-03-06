@@ -5,7 +5,7 @@ import {
     TabsLink,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import APIKeys from "./API/APIKeys";

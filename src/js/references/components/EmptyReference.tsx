@@ -1,4 +1,4 @@
-import { Button, DialogFooter } from "@base";
+import { Button, DialogFooter } from "@/base";
 import { useNavigate } from "@utils/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";

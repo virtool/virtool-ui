@@ -1,5 +1,5 @@
 import { fontWeight, getFontSize } from "@app/theme";
-import { BoxGroupSearch, Icon, Link, SidebarHeaderButton } from "@base";
+import { BoxGroupSearch, Icon, Link, SidebarHeaderButton } from "@/base";
 import { Popover } from "@base/Popover";
 import { useFuse } from "@base/hooks";
 import { Label } from "@labels/types";

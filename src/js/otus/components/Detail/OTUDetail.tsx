@@ -8,7 +8,7 @@ import {
     ViewHeader,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
 import { usePathParams } from "@utils/hooks";

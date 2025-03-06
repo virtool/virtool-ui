@@ -4,7 +4,7 @@ import {
     BoxGroupSection,
     Button,
     Input,
-} from "@base";
+} from "@/base";
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 import styled from "styled-components";

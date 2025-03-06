@@ -8,7 +8,7 @@ import {
     InputSearch,
     Link,
     NoneFoundSection,
-} from "@base";
+} from "@/base";
 import { CompactScrollList } from "@base/CompactScrollList";
 import PseudoLabel from "@base/PseudoLabel";
 import Toolbar from "@base/Toolbar";

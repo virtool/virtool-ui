@@ -16,7 +16,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@base";
+} from "@/base";
 import PseudoLabel from "@base/PseudoLabel";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";

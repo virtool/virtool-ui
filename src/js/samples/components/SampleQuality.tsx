@@ -1,4 +1,4 @@
-import { LoadingPlaceholder } from "@base";
+import { LoadingPlaceholder } from "@/base";
 import { Quality } from "@quality/components/Quality";
 import { usePathParams } from "@utils/hooks";
 import React from "react";

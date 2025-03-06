@@ -6,7 +6,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@base";
+} from "@/base";
 import { useSetMessage } from "@message/queries";
 import { Message } from "@message/types";
 import React from "react";

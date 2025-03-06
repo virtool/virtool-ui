@@ -5,7 +5,7 @@ import {
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { usePageParam, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";

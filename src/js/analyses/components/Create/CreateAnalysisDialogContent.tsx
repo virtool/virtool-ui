@@ -1,4 +1,4 @@
-import { DialogContent } from "@base";
+import { DialogContent } from "@/base";
 import { cn } from "@utils/utils";
 import React from "react";
 

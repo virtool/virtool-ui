@@ -9,7 +9,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@base";
+} from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useDialogParam } from "@utils/hooks";
 import React from "react";

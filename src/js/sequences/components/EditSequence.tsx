@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import {

@@ -1,7 +1,7 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { Permission } from "@/groups/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Attribution, BoxGroupSection, Link } from "@base";
+import { Attribution, BoxGroupSection, Link } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";

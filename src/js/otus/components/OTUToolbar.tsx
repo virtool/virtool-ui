@@ -1,4 +1,4 @@
-import { InputSearch, LinkButton } from "@base";
+import { InputSearch, LinkButton } from "@/base";
 import Toolbar from "@base/Toolbar";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceRemotesFrom } from "@references/types";

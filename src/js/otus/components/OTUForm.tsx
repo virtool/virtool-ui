@@ -8,7 +8,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "../../base";
+} from "@base/index";
 
 const OTUFormBody = styled.div`
     display: grid;

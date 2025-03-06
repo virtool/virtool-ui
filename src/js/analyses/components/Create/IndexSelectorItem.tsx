@@ -1,4 +1,4 @@
-import { Label } from "@base";
+import { Label } from "@/base";
 import * as RadixSelect from "@radix-ui/react-select";
 import { cn } from "@utils/utils";
 import React from "react";

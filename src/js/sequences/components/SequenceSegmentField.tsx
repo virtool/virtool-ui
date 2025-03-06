@@ -9,7 +9,7 @@ import {
     SelectButton,
     SelectContent,
     SelectItem,
-} from "@base";
+} from "@/base";
 import { OTUSegment } from "@otus/types";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";

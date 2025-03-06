@@ -1,4 +1,4 @@
-import { ContainerNarrow, LoadingPlaceholder, NotFound } from "@base";
+import { ContainerNarrow, LoadingPlaceholder, NotFound } from "@/base";
 import IndexDetail from "@indexes/components/IndexDetail";
 import { useGetReference } from "@references/queries";
 import { usePathParams } from "@utils/hooks";

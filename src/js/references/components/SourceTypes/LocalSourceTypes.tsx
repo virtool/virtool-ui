@@ -11,7 +11,7 @@ import {
     InputSimple,
     LoadingPlaceholder,
     SectionHeader,
-} from "@base";
+} from "@/base";
 import { IconButton } from "@base/IconButton";
 import { usePathParams } from "@utils/hooks";
 import { get } from "lodash-es";

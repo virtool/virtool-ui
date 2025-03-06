@@ -2,7 +2,7 @@ import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
 import { getColor, getFontWeight } from "../../../app/theme";
-import { Box } from "../../../base";
+import { Box } from "@base/index";
 import { CreateAnalysisField } from "./CreateAnalysisField";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 import { workflow } from "./workflows";

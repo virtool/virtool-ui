@@ -1,5 +1,5 @@
 import { FormattedPathoscopeHit } from "@analyses/types";
-import { AccordionTrigger } from "@base";
+import { AccordionTrigger } from "@/base";
 import { AccordionContent } from "@base/accordion/AccordionContent";
 import { ScrollingAccordionItem } from "@base/accordion/ScrollingAccordionItem";
 import { useUrlSearchParam } from "@utils/hooks";

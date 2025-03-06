@@ -1,7 +1,7 @@
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { Select, SelectButton, SelectContent, SelectItem } from "../../../base";
+import { Select, SelectButton, SelectContent, SelectItem } from "@base/index";
 import { MLModel } from "../../../ml/types";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 

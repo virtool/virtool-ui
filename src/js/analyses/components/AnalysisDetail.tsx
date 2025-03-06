@@ -13,7 +13,7 @@ import {
     SubviewHeader,
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { useFetchSample } from "@samples/queries";
 import { usePathParams } from "@utils/hooks";
 import { getWorkflowDisplayName } from "@utils/utils";

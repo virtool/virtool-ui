@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "../../base";
+import { Icon } from "@base/index";
 import { IconColor, JobState } from "../types";
 
 function getIconName(state: JobState): string {

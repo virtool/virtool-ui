@@ -1,5 +1,5 @@
 import { IndexSelectorItem } from "@/analyses/components/Create/IndexSelectorItem";
-import { Select, SelectButton, SelectContent } from "@base";
+import { Select, SelectButton, SelectContent } from "@/base";
 import { cn } from "@utils/utils";
 import { map } from "lodash";
 import { sortBy } from "lodash-es";

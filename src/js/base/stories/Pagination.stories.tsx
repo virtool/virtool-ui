@@ -1,4 +1,4 @@
-import { Box, Pagination } from "@base";
+import { Box, Pagination } from "@/base";
 import { faker } from "@faker-js/faker";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";

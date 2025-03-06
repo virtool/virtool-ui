@@ -1,4 +1,4 @@
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, InitialIcon } from "@base";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, InitialIcon } from "@/base";
 import { UserNested } from "@users/types";
 import { map } from "lodash-es";
 import React from "react";

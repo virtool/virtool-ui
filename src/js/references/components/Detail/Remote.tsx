@@ -8,7 +8,7 @@ import {
     Loader,
     ProgressCircle,
     RelativeTime,
-} from "@base";
+} from "@/base";
 import { JobState } from "@jobs/types";
 import { cn } from "@utils/utils";
 import React from "react";

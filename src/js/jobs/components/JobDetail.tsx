@@ -5,7 +5,7 @@ import {
     ViewHeader,
     ViewHeaderAttribution,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";
 import { usePathParams } from "@utils/hooks";

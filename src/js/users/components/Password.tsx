@@ -13,7 +13,7 @@ import {
     InputSimple,
     RelativeTime,
     SaveButton,
-} from "../../base";
+} from "@base/index";
 
 const PasswordFooter = styled.div`
     align-items: center;

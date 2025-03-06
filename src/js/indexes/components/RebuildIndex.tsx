@@ -5,7 +5,7 @@ import {
     DialogFooter,
     DialogOverlay,
     DialogTitle,
-} from "@base";
+} from "@/base";
 import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useDialogParam } from "@utils/hooks";

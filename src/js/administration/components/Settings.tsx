@@ -5,7 +5,7 @@ import {
     LoadingPlaceholder,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import { ManageUsers } from "@users/components/ManageUsers";
 import UserDetail from "@users/components/UserDetail";
 import React from "react";

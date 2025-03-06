@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "wouter";
-import { Container, ContainerNarrow } from "../../base";
+import { Container, ContainerNarrow } from "@base/index";
 import HMMDetail from "./HMMDetail";
 import HMMList from "./HMMList";
 

@@ -7,7 +7,7 @@ import {
     Link,
     LoadingPlaceholder,
     NoneFoundBox,
-} from "@base";
+} from "@/base";
 import { updateSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";

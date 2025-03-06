@@ -4,7 +4,7 @@ import { useUrlSearchParam } from "@utils/hooks";
 import { groupBy, map, maxBy } from "lodash-es";
 import { includes, keysIn } from "lodash-es/lodash";
 import React from "react";
-import { Dialog, DialogOverlay, DialogTitle } from "../../../base";
+import { Dialog, DialogOverlay, DialogTitle } from "@base/index";
 import { HMMSearchResults } from "../../../hmm/types";
 import { useListIndexes } from "../../../indexes/queries";
 import { useFindModels } from "../../../ml/queries";

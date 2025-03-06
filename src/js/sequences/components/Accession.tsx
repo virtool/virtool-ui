@@ -6,7 +6,7 @@ import {
     InputLabel,
     InputLoading,
     InputSimple,
-} from "@base";
+} from "@/base";
 import { getGenbank } from "@otus/api";
 import { forEach } from "lodash-es";
 import React, { useCallback, useEffect, useState } from "react";

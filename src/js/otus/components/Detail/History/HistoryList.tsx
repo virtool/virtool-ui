@@ -1,4 +1,4 @@
-import { BoxGroup, BoxGroupHeader } from "@base";
+import { BoxGroup, BoxGroupHeader } from "@/base";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import Change from "@otus/components/Detail/History/Change";
 import { OTUHistory } from "@otus/types";
