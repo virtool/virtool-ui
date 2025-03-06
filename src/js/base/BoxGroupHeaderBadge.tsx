@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { Badge } from "@base/Badge";
+import Badge from "@base/Badge";
 import React from "react";
 
 type BoxGroupHeaderBadgeProps = {

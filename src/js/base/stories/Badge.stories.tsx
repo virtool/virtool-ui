@@ -1,4 +1,4 @@
-import { Badge } from "@/base";
+import Badge from "@base/Badge";
 import { Meta, type StoryObj } from "@storybook/react";
 import React from "react";
 import styled from "styled-components";

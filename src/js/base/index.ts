@@ -4,7 +4,6 @@ import InputLabel from "@base/InputLabel.js";
 export { InputGroup, InputLabel };
 
 export { Link } from "wouter";
-export { Badge } from "./Badge";
 export { Box } from "./Box";
 export { BoxGroup } from "./BoxGroup";
 export { BoxGroupDisabled } from "./BoxGroupDisabled";
