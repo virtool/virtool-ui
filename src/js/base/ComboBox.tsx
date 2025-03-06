@@ -1,7 +1,7 @@
+import { borderRadius, boxShadow, getBorder } from "@app/theme";
 import { useCombobox } from "downshift";
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { borderRadius, boxShadow, getBorder } from "../../app/theme";
 import { WrapRow } from "./ComboBoxItem";
 import { ComboBoxSearch } from "./ComboBoxSearch";
 import { ComboboxTriggerButton } from "./ComboboxTrigger";

@@ -1,12 +1,7 @@
+import { borderRadius, getBorder, getColor, getFontWeight } from "@app/theme";
 import React from "react";
 import styled from "styled-components";
-import {
-    borderRadius,
-    getBorder,
-    getColor,
-    getFontWeight,
-} from "../../app/theme";
-import { Icon } from "../Icon";
+import { Icon } from "./Icon";
 
 const StyledTriggerButton = styled.button`
     display: flex;

@@ -1,9 +1,9 @@
 import { updateSearchParam, usePageParam } from "@/hooks";
-import { PaginationContent } from "@base/pagination/PaginationContent";
-import { PaginationLink } from "@base/pagination/PaginationLink";
-import { PaginationNext } from "@base/pagination/PaginationNext";
-import { PaginationPrevious } from "@base/pagination/PaginationPrevious";
-import { PaginationRoot } from "@base/pagination/PaginationRoot";
+import { PaginationContent } from "@base/PaginationContent";
+import { PaginationLink } from "@base/PaginationLink";
+import { PaginationNext } from "@base/PaginationNext";
+import { PaginationPrevious } from "@base/PaginationPrevious";
+import { PaginationRoot } from "@base/PaginationRoot";
 import { map, max, min, range } from "lodash-es";
 import React, { useEffect } from "react";
 import { useSearch } from "wouter";

@@ -1,6 +1,6 @@
+import { getColor } from "@app/theme";
 import React from "react";
 import styled from "styled-components";
-import { getColor } from "../../app/theme";
 
 const ComboBoxItem = styled.li`
     padding: 10px 10px;
