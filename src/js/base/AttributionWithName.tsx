@@ -32,3 +32,5 @@ export const AttributionWithName = styled(UnstyledAttributionWithName)`
         margin-left: 6px;
     }
 `;
+
+export default AttributionWithName;
