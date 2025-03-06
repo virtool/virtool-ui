@@ -17,7 +17,7 @@ import React from "react";
 import styled from "styled-components";
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
-import { HMMTaxonomy } from "./HMMTaxonomy";
+import { HmmTaxonomy } from "./HmmTaxonomy";
 
 const TaxonomyGrid = styled.div`
     display: grid;
@@ -148,8 +148,8 @@ export default function HMMDetail() {
             </BoxGroup>
 
             <TaxonomyGrid>
-                <HMMTaxonomy title="Families" counts={data.families} />
-                <HMMTaxonomy title="Genera" counts={data.genera} />
+                <HmmTaxonomy title="Families" counts={data.families} />
+                <HmmTaxonomy title="Genera" counts={data.genera} />
             </TaxonomyGrid>
         </div>
     );

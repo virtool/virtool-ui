@@ -1,4 +1,5 @@
-import { Badge, InputError, InputGroup, InputLabel, TextArea } from "@/base";
+import { InputError, InputGroup, InputLabel, TextArea } from "@base";
+import Badge from "@base/Badge";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import styled from "styled-components";

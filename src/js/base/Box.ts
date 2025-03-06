@@ -6,7 +6,7 @@ type BoxProps = {
     onClick?: () => void;
 };
 
-export const Box = styled.div<BoxProps>`
+const Box = styled.div<BoxProps>`
     border: ${getBorder};
     border-radius: ${(props) => props.theme.borderRadius.sm};
     box-sizing: border-box;

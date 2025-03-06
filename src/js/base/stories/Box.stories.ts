@@ -1,4 +1,4 @@
-import { Box } from "@/base";
+import Box from "@base/Box";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 

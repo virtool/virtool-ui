@@ -1,5 +1,6 @@
-import { Badge, BoxGroup, NoneFoundSection } from "@/base";
 import { getFontSize } from "@app/theme";
+import { BoxGroup, NoneFoundSection } from "@base";
+import Badge from "@base/Badge";
 import { useCurrentOtuContext } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";
 import sortSequencesBySegment from "@otus/utils";

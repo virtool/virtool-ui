@@ -1,20 +1,21 @@
-import { Badge, BoxGroup, BoxGroupHeader, BoxGroupSection } from "@/base";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection } from "@base";
+import Badge from "@base/Badge";
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
-const HMMTaxonomyItem = styled(BoxGroupSection)`
+const HmmTaxonomyItem = styled(BoxGroupSection)`
     display: flex;
     justify-content: space-between;
 `;
 
-const StyledHMMTaxonomy = styled(BoxGroupSection)`
+const StyledHmmTaxonomy = styled(BoxGroupSection)`
     max-height: 210px;
     overflow-y: auto;
     padding: 0;
 `;
 
-type HMMTaxonomyProps = {
+type HmmTaxonomyProps = {
     /** The names and corresponding counts of the taxonomy items */
     counts: { [key: string]: number };
     /** The title to be displayed */
@@ -24,16 +25,16 @@ type HMMTaxonomyProps = {
 /**
  * Displays a list of taxonomy items
  */
-export function HMMTaxonomy({ counts, title }: HMMTaxonomyProps) {
+export function HmmTaxonomy({ counts, title }: HmmTaxonomyProps) {
     const sorted = sortBy(
         map(counts, (count, name) => ({ name, count })),
         "name",
     );
 
     const components = map(sorted, ({ name, count }) => (
-        <HMMTaxonomyItem key={name}>
+        <HmmTaxonomyItem key={name}>
             {name} <Badge>{count}</Badge>
-        </HMMTaxonomyItem>
+        </HmmTaxonomyItem>
     ));
 
     return (
@@ -42,7 +43,7 @@ export function HMMTaxonomy({ counts, title }: HMMTaxonomyProps) {
                 <BoxGroupHeader>
                     <h2>{title}</h2>
                 </BoxGroupHeader>
-                <StyledHMMTaxonomy>{components}</StyledHMMTaxonomy>
+                <StyledHmmTaxonomy>{components}</StyledHmmTaxonomy>
             </BoxGroup>
         </div>
     );

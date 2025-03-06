@@ -1,16 +1,11 @@
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Box } from "@base";
 import Attribution from "@base/Attribution";
+import Box from "@base/Box";
 import React from "react";
 import styled from "styled-components";
 import { MLModelRelease } from "../types";
 
-const StyledMLModel = styled(Box)`
-    display: flex;
-    flex-direction: column;
-`;
-
-const MLModelHeader = styled.div`
+const MlModelHeader = styled.div`
     font-size: ${getFontSize("lg")};
     font-weight: ${getFontWeight("thick")};
     display: flex;
@@ -21,7 +16,7 @@ const MLModelHeader = styled.div`
     }
 `;
 
-type MLModelProps = {
+type MlModelProps = {
     created_at: string;
     latest_release: MLModelRelease;
     name: string;
@@ -35,7 +30,7 @@ type MLModelProps = {
  * @param name - The name of the MLModel
  * @returns A condensed MLModel
  */
-export function MLModel({ created_at, latest_release, name }: MLModelProps) {
+export function MlModel({ created_at, latest_release, name }: MlModelProps) {
     const version = latest_release ? (
         <a href={latest_release.github_url}> {latest_release.name} </a>
     ) : (
@@ -43,12 +38,12 @@ export function MLModel({ created_at, latest_release, name }: MLModelProps) {
     );
 
     return (
-        <StyledMLModel>
-            <MLModelHeader>
+        <Box className="flex flex-col">
+            <MlModelHeader>
                 <span>{name}</span>
                 {version}
-            </MLModelHeader>
+            </MlModelHeader>
             <Attribution time={created_at} />
-        </StyledMLModel>
+        </Box>
     );
 }

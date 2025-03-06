@@ -10,11 +10,11 @@ import { map } from "lodash";
 import React from "react";
 import { useFindModels } from "../queries";
 import { MLModelMinimal } from "../types";
-import { MLModel } from "./MLModel";
+import { MlModel } from "./MlModel";
 
 function renderRow({ created_at, name, latest_release, id }: MLModelMinimal) {
     return (
-        <MLModel
+        <MlModel
             created_at={created_at}
             name={name}
             latest_release={latest_release}

@@ -1,4 +1,5 @@
-import { Badge, Tabs, TabsLink } from "@/base";
+import { Tabs, TabsLink } from "@base";
+import Badge from "@base/Badge";
 import React from "react";
 
 type ReferenceDetailTabsProps = {
