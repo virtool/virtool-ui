@@ -1,4 +1,4 @@
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import { Index, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
 
 /**
@@ -9,7 +9,7 @@ import { Index, IndexSearchResult, UnbuiltChangesSearchResults } from "./types";
  */
 
 export function getIndex(indexId: string) {
-    return Request.get(`/indexes/${indexId}`).then((res) => res.body);
+    return apiClient.get(`/indexes/${indexId}`).then((res) => res.body);
 }
 
 /**
@@ -27,7 +27,8 @@ export function findIndexes(
     refId: string,
     term: string,
 ): Promise<IndexSearchResult> {
-    return Request.get(`/refs/${refId}/indexes`)
+    return apiClient
+        .get(`/refs/${refId}/indexes`)
         .query({ find: term, page, per_page })
         .then((res) => res.body);
 }
@@ -40,7 +41,8 @@ export function findIndexes(
  * @returns A promise resolving to a list of indexes
  */
 export function listIndexes({ ready, term }: { ready: boolean; term: string }) {
-    return Request.get("/indexes")
+    return apiClient
+        .get("/indexes")
         .query({ ready, find: term })
         .then((res) => res.body);
 }
@@ -54,9 +56,9 @@ export function listIndexes({ ready, term }: { ready: boolean; term: string }) {
 export function getUnbuiltChanges(
     refId: string,
 ): Promise<UnbuiltChangesSearchResults> {
-    return Request.get(`/refs/${refId}/history?unbuilt=true`).then(
-        (res) => res.body,
-    );
+    return apiClient
+        .get(`/refs/${refId}/history?unbuilt=true`)
+        .then((res) => res.body);
 }
 
 /**
@@ -66,5 +68,5 @@ export function getUnbuiltChanges(
  * @returns A promise resolving to the API response from creating the index
  */
 export function createIndex(refId: string): Promise<Index> {
-    return Request.post(`/refs/${refId}/indexes`).then((res) => res.body);
+    return apiClient.post(`/refs/${refId}/indexes`).then((res) => res.body);
 }

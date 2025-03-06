@@ -1,4 +1,4 @@
-import { Request } from "../app/request";
+import { apiClient } from "@app/apiClient";
 import { UserResponse } from "./types";
 
 /**
@@ -14,7 +14,7 @@ export function createFirst(
     password: string,
     forceReset: boolean,
 ) {
-    return Request.put("/users/first").send({
+    return apiClient.put("/users/first").send({
         handle,
         password,
         force_reset: forceReset,
@@ -34,7 +34,8 @@ export function findUsers(
     per_page: number,
     term: string,
 ): Promise<UserResponse> {
-    return Request.get("/users")
+    return apiClient
+        .get("/users")
         .query({ page, per_page, term })
         .then((res) => res.body);
 }

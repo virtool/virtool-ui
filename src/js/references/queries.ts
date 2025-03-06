@@ -1,5 +1,5 @@
 import { ErrorResponse } from "@/types/types";
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import {
     keepPreviousData,
     useMutation,
@@ -134,7 +134,8 @@ export function useUploadReference() {
             const formData = new FormData();
             formData.append("file", file);
 
-            return Request.post("/uploads")
+            return apiClient
+                .post("/uploads")
                 .query({ name: file.name, type: "reference" })
                 .send(formData)
                 .on("progress", (event) => {
@@ -194,7 +195,8 @@ export function useUpdateReference(refId: string, onSuccess?: () => void) {
             restrict_source_types?: boolean;
             targets?: ReferenceTarget[];
         }) => {
-            return Request.patch(`/refs/${refId}`)
+            return apiClient
+                .patch(`/refs/${refId}`)
                 .send(data)
                 .then((res) => res.body);
         },

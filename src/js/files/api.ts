@@ -3,7 +3,7 @@
  *
  * @module files/api
  */
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import { FileResponse, FileType } from "./types";
 
 export function findFiles(
@@ -12,7 +12,8 @@ export function findFiles(
     per_page: number,
     term?: string,
 ): Promise<FileResponse> {
-    return Request.get("/uploads")
+    return apiClient
+        .get("/uploads")
         .query({
             upload_type: type,
             page,
@@ -25,5 +26,5 @@ export function findFiles(
 }
 
 export function removeFile(id: string): Promise<null> {
-    return Request.delete(`/uploads/${id}`).then((res) => res.body);
+    return apiClient.delete(`/uploads/${id}`).then((res) => res.body);
 }

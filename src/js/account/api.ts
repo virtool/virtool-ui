@@ -3,7 +3,7 @@
  *
  * @module account/api
  */
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import { Permissions } from "@groups/types";
 import { User } from "@users/types";
 import { Response } from "superagent";
@@ -16,7 +16,7 @@ import { Account, APIKeyMinimal } from "./types";
  * current user's account data.
  */
 export function get(): Promise<Response> {
-    return Request.get("/account");
+    return apiClient.get("/account");
 }
 
 export type AccountUpdate = {
@@ -31,7 +31,8 @@ export type AccountUpdate = {
  * user's account data
  */
 export function updateAccount(update: AccountUpdate): Promise<User> {
-    return Request.patch("/account")
+    return apiClient
+        .patch("/account")
         .send({ update })
         .then((res) => res.body);
 }
@@ -43,7 +44,7 @@ export function updateAccount(update: AccountUpdate): Promise<User> {
  * current user's personal settings.
  */
 export function getSettings(): Promise<Response> {
-    return Request.get("/account/settings");
+    return apiClient.get("/account/settings");
 }
 
 /**
@@ -54,7 +55,7 @@ export function getSettings(): Promise<Response> {
  * user's updated personal settings.
  */
 export function updateSettings({ update }): Promise<Response> {
-    return Request.patch("/account/settings").send(update);
+    return apiClient.patch("/account/settings").send(update);
 }
 
 /**
@@ -69,7 +70,8 @@ export function changePassword(
     old_password: string,
     password: string,
 ): Promise<User> {
-    return Request.patch("/account")
+    return apiClient
+        .patch("/account")
         .send({
             old_password,
             password,
@@ -84,7 +86,7 @@ export function changePassword(
  * current user's API keys.
  */
 export function getAPIKeys(): Promise<APIKeyMinimal[]> {
-    return Request.get("/account/keys").then((res) => res.body);
+    return apiClient.get("/account/keys").then((res) => res.body);
 }
 
 /**
@@ -98,7 +100,8 @@ export function createAPIKey(
     name: string,
     permissions: Permissions,
 ): Promise<APIKeyMinimal> {
-    return Request.post("/account/keys")
+    return apiClient
+        .post("/account/keys")
         .send({
             name,
             permissions,
@@ -117,7 +120,8 @@ export function updateAPIKey(
     keyId: string,
     permissions: Permissions,
 ): Promise<APIKeyMinimal> {
-    return Request.patch(`/account/keys/${keyId}`)
+    return apiClient
+        .patch(`/account/keys/${keyId}`)
         .send({
             permissions,
         })
@@ -131,7 +135,7 @@ export function updateAPIKey(
  * @returns A promise which resolves to a response indicating if the API key was successfully removed
  */
 export function removeAPIKey(keyId: string): Promise<null> {
-    return Request.delete(`/account/keys/${keyId}`).then((res) => res.body);
+    return apiClient.delete(`/account/keys/${keyId}`).then((res) => res.body);
 }
 
 /**
@@ -153,7 +157,7 @@ export function login({
     password: string;
     remember: boolean;
 }): Promise<Response> {
-    return Request.post("/account/login").send({
+    return apiClient.post("/account/login").send({
         username,
         password,
         remember,
@@ -167,7 +171,7 @@ export function login({
  * logout was successful.
  */
 export function logout(): Promise<null> {
-    return Request.get("/account/logout").then((res) => res.body);
+    return apiClient.get("/account/logout").then((res) => res.body);
 }
 
 /**
@@ -185,7 +189,7 @@ export function resetPassword({
     password: string;
     resetCode: string;
 }): Promise<Response> {
-    return Request.post("/account/reset").send({
+    return apiClient.post("/account/reset").send({
         password,
         reset_code: resetCode,
     });
@@ -197,7 +201,8 @@ export function resetPassword({
  * @returns A Promise resolving to the current user's account data
  */
 export function fetchAccount(): Promise<Account> {
-    return Request.get("/account")
+    return apiClient
+        .get("/account")
         .query()
         .then((response) => response.body);
 }

@@ -1,4 +1,4 @@
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import { AnalysisSearchResult, GenericAnalysis } from "./types";
 
 /**
@@ -8,7 +8,7 @@ import { AnalysisSearchResult, GenericAnalysis } from "./types";
  * @returns A promise resolving to an analysis
  */
 export const getAnalysis = ({ analysisId }) =>
-    Request.get(`/analyses/${analysisId}`).then((res) => res.body);
+    apiClient.get(`/analyses/${analysisId}`).then((res) => res.body);
 
 /**
  * Fetch a page of analyses search results
@@ -25,7 +25,8 @@ export function listAnalyses(
     per_page: number,
     term: string,
 ): Promise<AnalysisSearchResult> {
-    return Request.get(`/samples/${sampleId}/analyses`)
+    return apiClient
+        .get(`/samples/${sampleId}/analyses`)
         .query({ page, per_page, find: term })
         .then((res) => res.body);
 }
@@ -47,7 +48,8 @@ export function createAnalysis(
     subtractionIds: string[],
     workflow: string,
 ): Promise<GenericAnalysis> {
-    return Request.post(`/samples/${sampleId}/analyses`)
+    return apiClient
+        .post(`/samples/${sampleId}/analyses`)
         .send({
             workflow,
             ref_id: refId,
@@ -64,7 +66,7 @@ export function createAnalysis(
  * @returns A promise resolving to the removal of an analysis
  */
 export function removeAnalysis(analysisId: string): Promise<null> {
-    return Request.delete(`/analyses/${analysisId}`).then((res) => res.body);
+    return apiClient.delete(`/analyses/${analysisId}`).then((res) => res.body);
 }
 
 /**
@@ -75,7 +77,7 @@ export function removeAnalysis(analysisId: string): Promise<null> {
  * @returns A promise resolving to an installation of blast information
  */
 export function blastNuvs(analysisId: string, sequenceIndex: number) {
-    return Request.put(`/analyses/${analysisId}/${sequenceIndex}/blast`).then(
-        (res) => res.body,
-    );
+    return apiClient
+        .put(`/analyses/${analysisId}/${sequenceIndex}/blast`)
+        .then((res) => res.body);
 }

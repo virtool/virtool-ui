@@ -1,4 +1,4 @@
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import {
     Group,
     GroupMinimal,
@@ -21,13 +21,14 @@ export function findGroups(
     term?: string,
     paginate?: boolean,
 ): Promise<GroupSearchResults | GroupMinimal[]> {
-    return Request.get("/groups")
+    return apiClient
+        .get("/groups")
         .query({ page, per_page, term, paginate })
         .then((response) => response.body);
 }
 
 export function getGroup(id) {
-    return Request.get(`/groups/${id}`).then((response) => response.body);
+    return apiClient.get(`/groups/${id}`).then((response) => response.body);
 }
 
 export function updateGroup(
@@ -35,17 +36,19 @@ export function updateGroup(
     name?: string,
     permissions?: PermissionsUpdate,
 ): Promise<Group> {
-    return Request.patch(`/groups/${id}`)
+    return apiClient
+        .patch(`/groups/${id}`)
         .send({ name, permissions })
         .then((res) => res.body);
 }
 
 export function removeGroup(id: string | number): Promise<null> {
-    return Request.delete(`/groups/${id}`).then((res) => res.body);
+    return apiClient.delete(`/groups/${id}`).then((res) => res.body);
 }
 
 export function createGroup(name: string): Promise<Group> {
-    return Request.post("/groups")
+    return apiClient
+        .post("/groups")
         .send({
             name,
         })

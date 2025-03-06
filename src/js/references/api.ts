@@ -1,4 +1,4 @@
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import {
     Reference,
     ReferenceGroup,
@@ -8,7 +8,7 @@ import {
 } from "./types";
 
 export function get({ refId }) {
-    return Request.get(`/refs/${refId}`);
+    return apiClient.get(`/refs/${refId}`);
 }
 
 /**
@@ -24,7 +24,8 @@ export function cloneReference({
     description,
     refId,
 }): Promise<ReferenceMinimal> {
-    return Request.post("/refs")
+    return apiClient
+        .post("/refs")
         .send({
             name,
             description,
@@ -40,7 +41,8 @@ export function cloneReference({
  * @returns A promise resolving to the installing remote reference
  */
 export function remoteReference(remote_from: string): Promise<Reference> {
-    return Request.post("/refs")
+    return apiClient
+        .post("/refs")
         .send({ remote_from })
         .then((res) => res.body);
 }
@@ -58,7 +60,8 @@ export function findReferences({
     page,
     per_page,
 }): Promise<ReferenceSearchResult> {
-    return Request.get("/refs")
+    return apiClient
+        .get("/refs")
         .query({ find: term, page, per_page })
         .then((response) => response.body);
 }
@@ -70,7 +73,7 @@ export function findReferences({
  * @returns A promise resolving to a single reference
  */
 export function getReference(refId: string): Promise<Reference> {
-    return Request.get(`/refs/${refId}`).then((response) => response.body);
+    return apiClient.get(`/refs/${refId}`).then((response) => response.body);
 }
 
 /**
@@ -86,7 +89,8 @@ export function createReference(
     description: string,
     organism: string,
 ): Promise<Reference> {
-    return Request.post("/refs")
+    return apiClient
+        .post("/refs")
         .send({
             name,
             description,
@@ -109,7 +113,8 @@ export function importReference(
     description: string,
     importFrom: string,
 ) {
-    return Request.post("/refs")
+    return apiClient
+        .post("/refs")
         .send({
             name,
             description,
@@ -125,7 +130,7 @@ export function importReference(
  * @returns A promise resolving to the removal of a reference
  */
 export function removeReference(refId: string): Promise<null> {
-    return Request.delete(`/refs/${refId}`).then((res) => res.body);
+    return apiClient.delete(`/refs/${refId}`).then((res) => res.body);
 }
 
 /**
@@ -139,7 +144,8 @@ export function addReferenceUser(
     refId: string,
     userId: string | number,
 ): Promise<ReferenceUser> {
-    return Request.post(`/refs/${refId}/users`)
+    return apiClient
+        .post(`/refs/${refId}/users`)
         .send({ user_id: userId })
         .then((response) => response.body);
 }
@@ -155,7 +161,8 @@ export function addReferenceGroup(
     refId: string,
     groupId: string | number,
 ): Promise<ReferenceGroup> {
-    return Request.post(`/refs/${refId}/groups`)
+    return apiClient
+        .post(`/refs/${refId}/groups`)
         .send({ group_id: groupId })
         .then((response) => response.body);
 }
@@ -173,7 +180,8 @@ export function editReferenceUser(
     userId: string | number,
     update: { [key: string]: boolean },
 ) {
-    return Request.patch(`/refs/${refId}/users/${userId}`)
+    return apiClient
+        .patch(`/refs/${refId}/users/${userId}`)
         .send(update)
         .then((res) => res.body);
 }
@@ -191,7 +199,8 @@ export function editReferenceGroup(
     groupId: string | number,
     update: { [key: string]: boolean },
 ) {
-    return Request.patch(`/refs/${refId}/groups/${groupId}`)
+    return apiClient
+        .patch(`/refs/${refId}/groups/${groupId}`)
         .send(update)
         .then((res) => res.body);
 }
@@ -207,9 +216,9 @@ export function removeReferenceUser(
     refId: string,
     userId: string | number,
 ): Promise<Response> {
-    return Request.delete(`/refs/${refId}/users/${userId}`).then(
-        (response) => response.body,
-    );
+    return apiClient
+        .delete(`/refs/${refId}/users/${userId}`)
+        .then((response) => response.body);
 }
 
 /**
@@ -223,9 +232,9 @@ export function removeReferenceGroup(
     refId: string,
     groupId: string | number,
 ): Promise<Response> {
-    return Request.delete(`/refs/${refId}/groups/${groupId}`).then(
-        (response) => response.body,
-    );
+    return apiClient
+        .delete(`/refs/${refId}/groups/${groupId}`)
+        .then((response) => response.body);
 }
 
 /**
@@ -234,9 +243,9 @@ export function removeReferenceGroup(
  * @param refId - The unique identifier of the reference
  */
 export function checkRemoteReferenceUpdates(refId: string) {
-    return Request.get(`/refs/${refId}/release`).then(
-        (response) => response.body,
-    );
+    return apiClient
+        .get(`/refs/${refId}/release`)
+        .then((response) => response.body);
 }
 
 /**
@@ -245,7 +254,8 @@ export function checkRemoteReferenceUpdates(refId: string) {
  * @param refId - The unique identifier of the reference
  */
 export function updateRemoteReference(refId: string) {
-    return Request.post(`/refs/${refId}/updates`)
+    return apiClient
+        .post(`/refs/${refId}/updates`)
         .send({})
         .then((response) => response.body);
 }

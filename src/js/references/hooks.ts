@@ -1,6 +1,6 @@
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, filter, find, includes, some, union } from "lodash-es";
@@ -49,7 +49,7 @@ export function useUpdateSourceTypes(
 
     const mutation = useMutation({
         mutationFn: (sourceTypes: string[]) => {
-            return Request.patch(path).send({ [key]: sourceTypes });
+            return apiClient.patch(path).send({ [key]: sourceTypes });
         },
         onSuccess: (data: Response) => {
             const updatedSourceTypes = data.body[key];

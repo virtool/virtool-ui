@@ -1,8 +1,8 @@
-import Superagent from "superagent";
+import Superagent, { Request } from "superagent";
 
 const agent = Superagent.agent();
 
-function prefixRequestUrl(request) {
+function prefixRequestUrl(request: Request) {
     if (request.url[0] !== "/") {
         request.url = `/${request.url}`;
     }
@@ -17,4 +17,4 @@ function prefixRequestUrl(request) {
 agent.accept("application/json");
 agent.use(prefixRequestUrl);
 
-export const Request = agent;
+export const apiClient = agent;

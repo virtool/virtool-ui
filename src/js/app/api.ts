@@ -1,5 +1,5 @@
 import { Root } from "@app/types";
-import { Request } from "./request";
+import { apiClient } from "./apiClient";
 
 /**
  * Get the root data information
@@ -7,5 +7,5 @@ import { Request } from "./request";
  * @returns The root data information
  */
 export function rootData(): Promise<Root> {
-    return Request.get("/").then((res) => res.body);
+    return apiClient.get("/").then((res) => res.body);
 }

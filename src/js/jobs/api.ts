@@ -1,4 +1,4 @@
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import { Job, JobSearchResult } from "@jobs/types";
 
 /**
@@ -14,7 +14,8 @@ export function findJobs(
     per_page: number,
     states: string[],
 ): Promise<JobSearchResult> {
-    return Request.get("/jobs")
+    return apiClient
+        .get("/jobs")
         .query({ page, per_page, state: states })
         .then((res) => res.body);
 }
@@ -26,5 +27,5 @@ export function findJobs(
  * @returns A promise resolving to a single job
  */
 export function getJob(jobId: string): Promise<Job> {
-    return Request.get(`/jobs/${jobId}`).then((res) => res.body);
+    return apiClient.get(`/jobs/${jobId}`).then((res) => res.body);
 }

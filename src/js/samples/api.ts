@@ -1,4 +1,4 @@
-import { Request } from "@app/request";
+import { apiClient } from "@app/apiClient";
 import { Sample, SampleSearchResult } from "./types";
 
 /**
@@ -17,7 +17,8 @@ export function listSamples(
     labels: string[],
     workflows: string[],
 ): Promise<SampleSearchResult> {
-    return Request.get("/samples")
+    return apiClient
+        .get("/samples")
         .query({ page, per_page, find: term, label: labels, workflows })
         .then((res) => res.body);
 }
@@ -29,7 +30,7 @@ export function listSamples(
  * @returns A promise resolving to a single sample
  */
 export function getSample(sampleId: string): Promise<Sample> {
-    return Request.get(`/samples/${sampleId}`).then((res) => res.body);
+    return apiClient.get(`/samples/${sampleId}`).then((res) => res.body);
 }
 
 /**
@@ -57,7 +58,8 @@ export function createSample(
     labels: number[],
     group: string,
 ): Promise<Sample> {
-    return Request.post("/samples")
+    return apiClient
+        .post("/samples")
         .send({
             name,
             isolate,
@@ -92,7 +94,8 @@ export function updateSample(
     sampleId: string,
     update: SampleUpdate,
 ): Promise<Sample> {
-    return Request.patch(`/samples/${sampleId}`)
+    return apiClient
+        .patch(`/samples/${sampleId}`)
         .send(update)
         .then((response) => response.body);
 }
@@ -104,9 +107,9 @@ export function updateSample(
  * @returns A promise that resolves to null upon the removal of a sample
  */
 export function removeSample(sampleId: string): Promise<null> {
-    return Request.delete(`/samples/${sampleId}`).then(
-        (response) => response.body,
-    );
+    return apiClient
+        .delete(`/samples/${sampleId}`)
+        .then((response) => response.body);
 }
 
 /** Data returned from API on sample rights update */
@@ -138,7 +141,8 @@ export function updateSampleRights(
     sampleId: string,
     update: SampleRightsUpdate,
 ): Promise<SampleRightsUpdateReturn> {
-    return Request.patch(`/samples/${sampleId}/rights`)
+    return apiClient
+        .patch(`/samples/${sampleId}/rights`)
         .send(update)
         .then((response) => response.body);
 }
