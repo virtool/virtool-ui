@@ -1,6 +1,6 @@
-import ScrollSync from "@base/ScrollSync";
 import { useUrlSearchParam } from "@/hooks";
 import { toScientificNotation } from "@/utils";
+import ScrollSync from "@base/ScrollSync";
 import React from "react";
 import PathoscopeSequence from "./PathoscopeSequence";
 

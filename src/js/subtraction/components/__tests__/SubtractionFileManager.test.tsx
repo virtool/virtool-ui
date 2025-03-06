@@ -1,10 +1,10 @@
+import { formatPath } from "@/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
-import { formatPath } from "@/hooks";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { SubtractionFileManager } from "../SubtractionFileManager";

@@ -1,9 +1,9 @@
 import { AccordionTrigger } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
+import { cn, toScientificNotation } from "@/utils";
 import { FormattedPathoscopeHit } from "@analyses/types";
 import { AccordionContent } from "@base/AccordionContent";
 import { AccordionScrollingItem } from "@base/AccordionScrollingItem";
-import { useUrlSearchParam } from "@/hooks";
-import { cn, toScientificNotation } from "@/utils";
 import React from "react";
 import styled from "styled-components";
 import PathoscopeDetail from "./PathoscopeDetail";

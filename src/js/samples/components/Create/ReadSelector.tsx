@@ -1,4 +1,3 @@
-import { getBorder, getFontWeight, theme } from "@app/theme";
 import {
     Box,
     BoxGroup,
@@ -9,6 +8,7 @@ import {
     Link,
     NoneFoundSection,
 } from "@/base";
+import { getBorder, getFontWeight, theme } from "@app/theme";
 import { CompactScrollList } from "@base/CompactScrollList";
 import PseudoLabel from "@base/PseudoLabel";
 import Toolbar from "@base/Toolbar";

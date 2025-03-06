@@ -1,7 +1,7 @@
+import { BoxGroupSection, Icon } from "@base/index";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize } from "../../../app/theme";
-import { BoxGroupSection, Icon } from "@base/index";
 
 const StyledSampleSidebarSelectorItem = styled(BoxGroupSection)`
     align-items: stretch;

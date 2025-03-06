@@ -1,4 +1,3 @@
-import { useCreateUser } from "@administration/queries";
 import {
     Button,
     Dialog,
@@ -6,8 +5,9 @@ import {
     DialogOverlay,
     DialogTitle,
 } from "@/base";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { useDialogParam } from "@/hooks";
+import { useCreateUser } from "@administration/queries";
+import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React from "react";
 import { CreateUserForm } from "./CreateUserForm";
 

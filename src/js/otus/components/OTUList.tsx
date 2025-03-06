@@ -5,8 +5,8 @@ import {
     NoneFoundBox,
     Pagination,
 } from "@/base";
-import { useGetReference } from "@references/queries";
 import { usePageParam, usePathParams, useUrlSearchParam } from "@/hooks";
+import { useGetReference } from "@references/queries";
 import { map } from "lodash";
 import React from "react";
 import RebuildAlert from "../../indexes/components/RebuildAlert";

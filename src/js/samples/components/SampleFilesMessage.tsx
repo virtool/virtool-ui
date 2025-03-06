@@ -1,5 +1,5 @@
-import React from "react";
 import { Alert } from "@base/index";
+import React from "react";
 
 type SampleFilesMessageProps = {
     /** Indicates whether to show the alert for legacy sample files */

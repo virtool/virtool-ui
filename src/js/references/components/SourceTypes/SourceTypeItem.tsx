@@ -1,7 +1,7 @@
 import { IconButton } from "@base/IconButton";
+import { BoxGroupSection } from "@base/index";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection } from "@base/index";
 
 interface StyledSourceTypeItemProps {
     disabled: boolean;

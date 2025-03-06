@@ -1,10 +1,5 @@
 import { useGetAnalysis } from "@/analyses/queries";
 import {
-    FormattedNuvsAnalysis,
-    FormattedPathoscopeAnalysis,
-    IimiAnalysis,
-} from "@analyses/types";
-import {
     Box,
     Icon,
     LoadingPlaceholder,
@@ -14,9 +9,14 @@ import {
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
 } from "@/base";
-import { useFetchSample } from "@samples/queries";
 import { usePathParams } from "@/hooks";
 import { getWorkflowDisplayName } from "@/utils";
+import {
+    FormattedNuvsAnalysis,
+    FormattedPathoscopeAnalysis,
+    IimiAnalysis,
+} from "@analyses/types";
+import { useFetchSample } from "@samples/queries";
 import React from "react";
 import styled from "styled-components";
 import { IimiViewer } from "./Iimi/IimiViewer";

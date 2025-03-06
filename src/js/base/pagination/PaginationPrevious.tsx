@@ -1,5 +1,5 @@
-import { PaginationLink } from "@base/pagination/PaginationLink";
 import { cn } from "@/utils";
+import { PaginationLink } from "@base/pagination/PaginationLink";
 import * as React from "react";
 
 type PaginationPreviousProps = {

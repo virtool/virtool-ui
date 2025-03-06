@@ -2,7 +2,6 @@ import { IndexNested } from "@indexes/types";
 import { ReferenceNested } from "../references/types";
 import { UserNested } from "../users/types";
 
-
 import { SearchResult } from "@/types";
 
 export enum Molecule {

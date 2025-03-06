@@ -1,4 +1,3 @@
-import { useChangePassword } from "@account/queries";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -11,6 +10,7 @@ import {
     RelativeTime,
     SaveButton,
 } from "@/base";
+import { useChangePassword } from "@account/queries";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

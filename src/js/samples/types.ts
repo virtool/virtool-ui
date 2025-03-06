@@ -10,7 +10,6 @@ import { LabelNested } from "../labels/types";
 import { SubtractionNested } from "../subtraction/types";
 import { UserNested } from "../users/types";
 
-
 import { SearchResult } from "@/types";
 
 /* All workflow states */

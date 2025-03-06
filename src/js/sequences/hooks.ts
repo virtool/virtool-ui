@@ -1,7 +1,7 @@
+import { useUrlSearchParam } from "@/hooks";
 import { useGetActiveIsolate } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";
 import sortSequencesBySegment from "@otus/utils";
-import { useUrlSearchParam } from "@/hooks";
 import { compact, find, map, reject } from "lodash-es";
 import { useCallback, useState } from "react";
 

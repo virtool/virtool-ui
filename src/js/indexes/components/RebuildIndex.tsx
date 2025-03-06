@@ -6,9 +6,9 @@ import {
     DialogOverlay,
     DialogTitle,
 } from "@/base";
+import { useDialogParam } from "@/hooks";
 import { useCreateIndex, useFetchUnbuiltChanges } from "@indexes/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@/hooks";
 import React from "react";
 import RebuildHistory from "./History";
 import RebuildIndexError from "./RebuildIndexError";

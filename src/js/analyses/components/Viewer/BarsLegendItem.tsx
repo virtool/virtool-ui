@@ -1,7 +1,7 @@
 import { toThousand } from "@/utils";
+import { Icon } from "@base/index";
 import React from "react";
 import styled from "styled-components";
-import { Icon } from "@base/index";
 import { IconColor } from "../../../jobs/types";
 
 const StyledBarsLegendItem = styled.div`

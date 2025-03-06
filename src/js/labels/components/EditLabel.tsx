@@ -1,5 +1,3 @@
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import React, { useState } from "react";
 import {
     Button,
     Dialog,
@@ -8,6 +6,8 @@ import {
     DialogTitle,
     Icon,
 } from "@base/index";
+import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import React, { useState } from "react";
 import { useUpdateLabel } from "../queries";
 import { LabelForm } from "./LabelForm";
 

@@ -1,12 +1,7 @@
+import { InputGroup, InputLabel, InputSelect, InputSimple } from "@base/index";
 import { capitalize, map } from "lodash-es";
 import React from "react";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
-import {
-    InputGroup,
-    InputLabel,
-    InputSelect,
-    InputSimple,
-} from "@base/index";
 
 type IsolateFormValues = {
     sourceName: string;

@@ -1,9 +1,9 @@
 import { BoxGroup, Button, LoadingPlaceholder, NoneFoundBox } from "@/base";
+import { useDialogParam, usePathParams } from "@/hooks";
 import EditSegment from "@otus/components/Detail/Schema/EditSegment";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useDialogParam, usePathParams } from "@/hooks";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";

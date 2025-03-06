@@ -1,10 +1,10 @@
+import { toScientificNotation } from "@/utils.js";
 import { theme } from "@app/theme";
 import {
     createSvg,
     QUALITY_CHART_HEIGHT,
     QUALITY_CHART_MARGIN,
 } from "@samples/charting.js";
-import { toScientificNotation } from "@/utils.js";
 import { axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { max } from "lodash-es";
 

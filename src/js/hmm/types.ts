@@ -1,6 +1,5 @@
 import { UserNested } from "@users/types";
 
-
 import { SearchResult } from "@/types";
 
 /** Minimal HMM used for websocket messages and resource listings */

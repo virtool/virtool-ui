@@ -1,7 +1,7 @@
+import { BoxGroup } from "@base/index";
 import PseudoLabel from "@base/PseudoLabel";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroup } from "@base/index";
 
 const NoneSelected = styled.span`
     color: ${(props) => props.theme.color.greyDarkest};

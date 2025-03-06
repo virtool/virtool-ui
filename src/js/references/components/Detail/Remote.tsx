@@ -9,8 +9,8 @@ import {
     ProgressCircle,
     RelativeTime,
 } from "@/base";
-import { JobState } from "@jobs/types";
 import { cn } from "@/utils";
+import { JobState } from "@jobs/types";
 import React from "react";
 import {
     useCheckReferenceUpdates,

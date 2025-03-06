@@ -1,5 +1,5 @@
-import { sizes } from "@app/theme";
 import { Icon } from "@/base";
+import { sizes } from "@app/theme";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobMinimal, JobState } from "@jobs/types";
 import React from "react";

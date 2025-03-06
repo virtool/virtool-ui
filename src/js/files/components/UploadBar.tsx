@@ -1,6 +1,6 @@
+import { cn } from "@/utils";
 import { Button } from "@base/Button";
 import { Icon } from "@base/Icon";
-import { cn } from "@/utils";
 import React, { useCallback } from "react";
 import { Accept, FileError, useDropzone } from "react-dropzone";
 

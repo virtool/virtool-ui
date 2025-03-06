@@ -1,5 +1,5 @@
-import { Badge } from "@base/Badge";
 import { cn } from "@/utils";
+import { Badge } from "@base/Badge";
 import React from "react";
 
 type ViewHeaderTitleBadge = {

@@ -1,11 +1,6 @@
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base/index";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
-} from "@base/index";
 import { useCreateIsolate } from "../../../queries";
 import IsolateForm from "./IsolateForm";
 

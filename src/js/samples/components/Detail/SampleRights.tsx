@@ -1,6 +1,3 @@
-import { useFetchAccount } from "@account/queries";
-import { useCheckAdminRole } from "@administration/hooks";
-import { AdministratorRoles } from "@administration/types";
 import {
     Box,
     BoxGroup,
@@ -12,9 +9,12 @@ import {
     InputSelect,
     LoadingPlaceholder,
 } from "@/base";
+import { usePathParams } from "@/hooks";
+import { useFetchAccount } from "@account/queries";
+import { useCheckAdminRole } from "@administration/hooks";
+import { AdministratorRoles } from "@administration/types";
 import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
-import { usePathParams } from "@/hooks";
 import { find, includes, map } from "lodash-es";
 import React from "react";
 import {

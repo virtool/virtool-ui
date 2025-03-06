@@ -1,4 +1,3 @@
-import { useUpdateAccount } from "@account/queries";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -10,6 +9,7 @@ import {
     InputSimple,
     SaveButton,
 } from "@/base";
+import { useUpdateAccount } from "@account/queries";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

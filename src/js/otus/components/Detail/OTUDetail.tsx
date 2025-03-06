@@ -1,4 +1,3 @@
-import { getFontWeight } from "@app/theme";
 import {
     Link,
     LoadingPlaceholder,
@@ -9,9 +8,10 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "@/base";
+import { usePathParams } from "@/hooks";
+import { getFontWeight } from "@app/theme";
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
-import { usePathParams } from "@/hooks";
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";

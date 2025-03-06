@@ -1,5 +1,5 @@
-import { RemoveDialog } from "@base/RemoveDialog";
 import { useDialogParam, useNavigate } from "@/hooks";
+import { RemoveDialog } from "@base/RemoveDialog";
 import React from "react";
 import { useRemoveOTU } from "../../queries";
 

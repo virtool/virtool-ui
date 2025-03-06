@@ -1,5 +1,5 @@
-import React from "react";
 import { Icon, Loader } from "@base/index";
+import React from "react";
 import { WorkflowState } from "../../types";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import { WorkflowLabelIcon } from "./WorkflowLabelIcon";

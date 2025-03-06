@@ -1,9 +1,3 @@
-import PseudoLabel from "@base/PseudoLabel";
-import { includes, map } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
-import { useUpdateSettings } from "../../administration/queries";
-import { Settings } from "../../administration/types";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -13,6 +7,12 @@ import {
     InputSelect,
     SelectBox,
 } from "@base/index";
+import PseudoLabel from "@base/PseudoLabel";
+import { includes, map } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
+import { useUpdateSettings } from "../../administration/queries";
+import { Settings } from "../../administration/types";
 
 const rights = [
     { label: "None", value: "" },

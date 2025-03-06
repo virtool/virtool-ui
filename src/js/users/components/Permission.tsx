@@ -1,6 +1,6 @@
+import { BoxGroupSection, Icon } from "@base/index";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Icon } from "@base/index";
 
 const StyledPermissionIcon = styled(Icon)`
     margin-right: 15px;

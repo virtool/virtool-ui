@@ -1,6 +1,6 @@
+import { BoxGroupSection, Label } from "@base/index";
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Label } from "@base/index";
 
 const StyledSelectorItem = styled(BoxGroupSection)`
     align-items: center;

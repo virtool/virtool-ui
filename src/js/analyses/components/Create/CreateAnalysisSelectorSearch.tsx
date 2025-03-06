@@ -1,5 +1,5 @@
-import React from "react";
 import { BoxGroupSearch } from "@base/index";
+import React from "react";
 
 interface CreateAnalysisSelectorSearchProps {
     label: string;

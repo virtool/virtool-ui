@@ -1,7 +1,4 @@
 import { formatIsolateName } from "@/utils";
-import React from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import {
     DialogFooter,
     Input,
@@ -10,6 +7,9 @@ import {
     InputSimple,
     SaveButton,
 } from "@base/index";
+import React from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 import { SourceType } from "./SourceType";
 
 const IsolateFormFields = styled.div`

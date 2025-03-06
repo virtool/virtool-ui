@@ -1,6 +1,5 @@
 import { UserNested } from "../users/types";
 
-
 import { SearchResult } from "@/types";
 
 export type GroupMinimal = { id: string | number; name?: string };

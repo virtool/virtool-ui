@@ -1,5 +1,5 @@
-import { Link } from "@base/index";
 import { DropdownMenuItem } from "@base/DropdownMenuItem";
+import { Link } from "@base/index";
 import React from "react";
 
 type DropdownMenuLinkProps = {

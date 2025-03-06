@@ -1,3 +1,4 @@
+import { formatPath } from "@/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { FileType } from "@files/types";
 import { upload } from "@files/uploader";
@@ -6,7 +7,6 @@ import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
 import { renderWithRouter } from "@tests/setup";
-import { formatPath } from "@/hooks";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FileManager, FileManagerProps } from "../FileManager";

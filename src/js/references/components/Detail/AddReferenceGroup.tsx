@@ -1,4 +1,3 @@
-import { getBorder } from "@app/theme";
 import {
     BoxGroup,
     Dialog,
@@ -10,6 +9,7 @@ import {
     NoneFoundSection,
     SelectBoxGroupSection,
 } from "@/base";
+import { getBorder } from "@app/theme";
 import { CompactScrollList } from "@base/CompactScrollList";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";

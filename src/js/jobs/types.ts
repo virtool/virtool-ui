@@ -1,6 +1,5 @@
 import { UserNested } from "@users/types";
 
-
 import { SearchResult } from "@/types";
 
 export enum JobState {

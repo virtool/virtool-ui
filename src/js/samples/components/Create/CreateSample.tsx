@@ -12,6 +12,7 @@ import {
     ViewHeader,
     ViewHeaderTitle,
 } from "@/base";
+import { useNavigate } from "@/hooks";
 import { useFetchAccount } from "@account/queries";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
@@ -21,7 +22,6 @@ import { useListGroups } from "@groups/queries";
 import ReadSelector from "@samples/components/Create/ReadSelector";
 import { Sidebar } from "@samples/components/Create/Sidebar";
 import { useCreateSample } from "@samples/queries";
-import { useNavigate } from "@/hooks";
 import { find, flatMap, toString } from "lodash-es";
 import React, { useEffect } from "react";
 import { Controller } from "react-hook-form";

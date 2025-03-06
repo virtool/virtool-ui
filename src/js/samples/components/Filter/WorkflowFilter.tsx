@@ -1,9 +1,9 @@
 import { getWorkflowDisplayName } from "@/utils";
+import { Box, Icon, SidebarHeader, SideBarSection } from "@base/index";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { getBorder, getFontSize } from "../../../app/theme";
-import { Box, Icon, SidebarHeader, SideBarSection } from "@base/index";
 import { workflowStates } from "../../utils";
 
 const WorkflowFilterLabel = styled.div`

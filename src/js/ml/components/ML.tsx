@@ -1,6 +1,6 @@
+import { Container } from "@base/index";
 import React from "react";
 import { Route, Switch } from "wouter";
-import { Container } from "@base/index";
 import { MLModels } from "./MLModels";
 
 /**

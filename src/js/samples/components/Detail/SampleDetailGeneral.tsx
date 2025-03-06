@@ -7,8 +7,8 @@ import {
     LoadingPlaceholder,
     Markdown,
 } from "@/base";
-import JobItem from "@jobs/components/Item/JobItem";
 import { usePathParams } from "@/hooks";
+import JobItem from "@jobs/components/Item/JobItem";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";

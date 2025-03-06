@@ -1,3 +1,4 @@
+import { formatPath } from "@/hooks";
 import { AdministratorRoles } from "@administration/types";
 import References from "@references/components/References";
 import { screen, waitFor } from "@testing-library/react";
@@ -9,7 +10,6 @@ import {
     mockApiGetReferenceDetail,
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
-import { formatPath } from "@/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import {

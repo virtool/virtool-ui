@@ -1,7 +1,7 @@
+import { formatIsolateName } from "@/utils";
 import { AccordionContent } from "@base/AccordionContent";
 import { AccordionScrollingItem } from "@base/AccordionScrollingItem";
 import { AccordionTrigger } from "@base/AccordionTrigger";
-import { formatIsolateName } from "@/utils";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

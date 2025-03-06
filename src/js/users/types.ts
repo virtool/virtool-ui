@@ -1,7 +1,6 @@
 import { AdministratorRoles } from "../administration/types";
 import { GroupMinimal, Permissions } from "../groups/types";
 
-
 import { SearchResult } from "@/types";
 
 /** Business to consumer provided user details */

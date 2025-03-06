@@ -1,8 +1,8 @@
 import { PathoscopeViewerScroller } from "@/analyses/components/Pathoscope/PathoscopeViewScroller";
 import { FormattedPathoscopeAnalysis } from "@/analyses/types";
 import { Alert } from "@/base";
-import { Sample } from "@samples/types";
 import { useUrlSearchParam } from "@/hooks";
+import { Sample } from "@samples/types";
 import React from "react";
 import { PathoscopeList } from "./PathoscopeList";
 import { AnalysisMapping } from "./PathoscopeMapping";

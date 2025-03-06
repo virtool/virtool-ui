@@ -1,5 +1,5 @@
-import React from "react";
 import { Icon } from "@base/index";
+import React from "react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleLabelProps = {
