@@ -10,7 +10,7 @@ import {
 } from "@/base";
 import { UploadBar } from "@files/components/UploadBar";
 import { useImportReference, useUploadReference } from "@references/queries";
-import { useNavigate } from "@utils/hooks";
+import { useNavigate } from "@/hooks";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";

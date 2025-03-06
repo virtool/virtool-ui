@@ -14,7 +14,7 @@ import {
     SaveButton,
 } from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import { find } from "lodash-es";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";

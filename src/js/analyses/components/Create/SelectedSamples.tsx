@@ -1,6 +1,6 @@
 import { Badge, BoxGroupSection } from "@/base";
 import { SampleMinimal } from "@samples/types";
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React from "react";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 

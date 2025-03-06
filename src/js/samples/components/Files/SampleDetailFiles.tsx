@@ -1,5 +1,5 @@
 import { ContainerNarrow, LoadingPlaceholder } from "@/base";
-import { usePathParams } from "@utils/hooks";
+import { usePathParams } from "@/hooks";
 import React from "react";
 import { useFetchSample } from "../../queries";
 import SampleFileSizeWarning from "../Detail/SampleFileSizeWarning";

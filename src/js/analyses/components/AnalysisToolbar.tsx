@@ -1,7 +1,7 @@
 import { Workflows } from "@/analyses/types";
 import { Button } from "@/base";
 import { useCheckCanEditSample } from "@samples/hooks";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import React from "react";
 
 type AnalysesToolbarProps = {

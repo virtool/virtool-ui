@@ -1,5 +1,5 @@
 import { RemoveDialog } from "@base/RemoveDialog";
-import { useNavigate } from "@utils/hooks";
+import { useNavigate } from "@/hooks";
 import React from "react";
 import { useRemoveSubtraction } from "../../queries";
 import { Subtraction } from "../../types";

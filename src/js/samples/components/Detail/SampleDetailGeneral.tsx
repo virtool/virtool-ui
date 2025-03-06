@@ -8,7 +8,7 @@ import {
     Markdown,
 } from "@/base";
 import JobItem from "@jobs/components/Item/JobItem";
-import { usePathParams } from "@utils/hooks";
+import { usePathParams } from "@/hooks";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";

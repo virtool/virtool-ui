@@ -1,5 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React from "react";
 
 type DialogContentProps = {

@@ -1,4 +1,4 @@
-import { apiClient } from "@app/apiClient";
+import { apiClient } from "@/api";
 import { Label } from "@labels/types";
 
 /**

@@ -4,7 +4,7 @@ import { FormattedNuvsHit } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
 import { getBorder } from "@app/theme";
 import { Badge } from "@/base";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

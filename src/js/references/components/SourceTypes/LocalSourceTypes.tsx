@@ -13,7 +13,7 @@ import {
     SectionHeader,
 } from "@/base";
 import { IconButton } from "@base/IconButton";
-import { usePathParams } from "@utils/hooks";
+import { usePathParams } from "@/hooks";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

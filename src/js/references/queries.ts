@@ -1,5 +1,5 @@
+import { apiClient } from "@/api";
 import { ErrorResponse } from "@/types/types";
-import { apiClient } from "@app/apiClient";
 import {
     keepPreviousData,
     useMutation,

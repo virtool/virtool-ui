@@ -1,5 +1,5 @@
 import { Alert } from "@/base";
-import { formatIsolateName } from "@utils/utils";
+import { formatIsolateName } from "@/utils";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

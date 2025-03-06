@@ -6,8 +6,8 @@ import {
     LoadingPlaceholder,
 } from "@/base";
 import Contributors from "@indexes/components/Contributors";
-import { usePathParams } from "@utils/hooks";
-import { cn } from "@utils/utils";
+import { usePathParams } from "@/hooks";
+import { cn } from "@/utils";
 import React from "react";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";

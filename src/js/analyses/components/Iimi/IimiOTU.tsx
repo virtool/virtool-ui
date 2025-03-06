@@ -1,10 +1,10 @@
-import { formatIsolateName } from "@utils/utils";
+import { AccordionContent } from "@base/AccordionContent";
+import { AccordionScrollingItem } from "@base/AccordionScrollingItem";
+import { AccordionTrigger } from "@base/AccordionTrigger";
+import { formatIsolateName } from "@/utils";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { AccordionContent } from "../../../base/accordion/AccordionContent";
-import { AccordionTrigger } from "../../../base/accordion/AccordionTrigger";
-import { ScrollingAccordionItem } from "../../../base/accordion/ScrollingAccordionItem";
 import { IimiHit, IimiIsolate as IimiIsolateData } from "../../types";
 import { CondensedIimiCoverage } from "./CondensedIimiCoverage";
 import { IimiDetectionTag } from "./IimiDetectionTag";
@@ -30,7 +30,7 @@ export function IimiOTU({
     hit: IimiHit;
 }) {
     return (
-        <ScrollingAccordionItem value={id}>
+        <AccordionScrollingItem value={id}>
             <IimiAccordionTrigger>
                 <div>
                     <h3>{name}</h3>
@@ -47,6 +47,6 @@ export function IimiOTU({
                     />
                 ))}
             </AccordionContent>
-        </ScrollingAccordionItem>
+        </AccordionScrollingItem>
     );
 }

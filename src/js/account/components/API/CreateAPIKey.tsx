@@ -20,7 +20,7 @@ import {
 import PseudoLabel from "@base/PseudoLabel";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";

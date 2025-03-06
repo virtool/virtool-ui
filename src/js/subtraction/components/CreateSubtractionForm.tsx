@@ -14,7 +14,7 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { SubtractionFileSelector } from "@subtraction/components/SubtractionFileSelector";
 import { useCreateSubtraction } from "@subtraction/queries";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import React from "react";
 import { Controller } from "react-hook-form";
 

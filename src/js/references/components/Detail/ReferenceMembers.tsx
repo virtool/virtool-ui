@@ -1,4 +1,4 @@
-import { useDialogParam, useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, useUrlSearchParam } from "@/hooks";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

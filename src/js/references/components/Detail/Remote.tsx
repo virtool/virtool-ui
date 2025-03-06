@@ -10,7 +10,7 @@ import {
     RelativeTime,
 } from "@/base";
 import { JobState } from "@jobs/types";
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React from "react";
 import {
     useCheckReferenceUpdates,

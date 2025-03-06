@@ -14,7 +14,7 @@ import {
     mockApiGetShortlistSubtractions,
 } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
-import { formatPath } from "@utils/hooks";
+import { formatPath } from "@/hooks";
 import nock from "nock";
 import React from "react";
 import { describe, it } from "vitest";

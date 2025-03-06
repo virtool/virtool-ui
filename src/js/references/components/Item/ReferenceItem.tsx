@@ -5,7 +5,7 @@ import { Attribution, BoxGroupSection, Link } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import React from "react";
 import styled from "styled-components";
 import { ReferenceMinimal } from "../../types";

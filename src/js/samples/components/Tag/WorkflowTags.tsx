@@ -1,4 +1,4 @@
-import { getWorkflowDisplayName } from "@utils/utils";
+import { getWorkflowDisplayName } from "@/utils";
 import { reduce } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

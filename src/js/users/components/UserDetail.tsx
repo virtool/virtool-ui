@@ -12,7 +12,7 @@ import {
 } from "@/base";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
-import { useDialogParam, usePathParams } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@/hooks";
 import React from "react";
 import styled from "styled-components";
 import Password from "./Password";

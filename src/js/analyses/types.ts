@@ -3,7 +3,9 @@ import { JobMinimal } from "@jobs/types";
 import { ReferenceNested } from "@references/types";
 import { SubtractionNested } from "@subtraction/types";
 import { UserNested } from "@users/types";
-import { SearchResult } from "@utils/types";
+
+
+import { SearchResult } from "@/types";
 
 /** The sample associated with the analysis */
 export type AnalysisSample = {

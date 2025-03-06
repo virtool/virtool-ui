@@ -5,7 +5,7 @@ import {
     useMutation,
 } from "@tanstack/react-query";
 import { createFirst, findUsers } from "./api";
-import { User, UserResponse } from "./types";
+import { UserResponse } from "./types";
 
 /**
  * Factory object for generating user query keys
@@ -46,18 +46,20 @@ export function useInfiniteFindUsers(per_page: number, term: string) {
 }
 
 /**
- * Initializes a mutator for creating the first instance user
+ * Hook for creating the first user in an instance.
+ * This is typically used for instance initialization.
  *
- * @returns A mutator for creating the first instance user
+ * @returns A mutation function for user creation.
  */
 export function useCreateFirstUser() {
     return useMutation<
-        User,
+        unknown,
         ErrorResponse,
         { handle: string; password: string; forceReset: boolean }
     >({
-        mutationFn: ({ handle, password, forceReset }) =>
-            createFirst(handle, password, forceReset),
+        mutationFn: ({ handle, password, forceReset }) => {
+            return createFirst(handle, password, forceReset);
+        },
         onSuccess: () => {
             window.location.reload();
         },

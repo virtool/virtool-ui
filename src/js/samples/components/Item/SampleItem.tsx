@@ -1,7 +1,7 @@
 import { Workflows } from "@/analyses/types";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { Attribution, Box, Checkbox, Link } from "@/base";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import React from "react";
 import styled from "styled-components";
 import { SampleMinimal } from "../../types";

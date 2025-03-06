@@ -1,4 +1,4 @@
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import { marked } from "marked";
 import React from "react";
 import { NoneFound } from "./NoneFound";

@@ -1,18 +1,17 @@
 import { Workflows } from "@/analyses/types";
+import { useUrlSearchParam } from "@/hooks";
+import { Dialog, DialogOverlay, DialogTitle } from "@base";
+import { HMMSearchResults } from "@hmm/types";
+import { useListIndexes } from "@indexes/queries";
+import { useFindModels } from "@ml/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useUrlSearchParam } from "@utils/hooks";
-import { groupBy, map, maxBy } from "lodash-es";
-import { includes, keysIn } from "lodash-es/lodash";
+import { useFetchSample } from "@samples/queries";
+import { useFetchSubtractionsShortlist } from "@subtraction/queries";
+import { groupBy, includes, keysIn, map, maxBy } from "lodash-es";
 import React from "react";
-import { Dialog, DialogOverlay, DialogTitle } from "@base/index";
-import { HMMSearchResults } from "../../../hmm/types";
-import { useListIndexes } from "../../../indexes/queries";
-import { useFindModels } from "../../../ml/queries";
-import { useFetchSample } from "../../../samples/queries";
-import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
 import { useCreateAnalysis } from "../../queries";
 import HMMAlert from "../HMMAlert";
-import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
+import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import {
     CreateAnalysisForm,
     CreateAnalysisFormValues,

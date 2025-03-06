@@ -10,11 +10,6 @@ const SampleSidebarListItem = styled(SampleLabel)`
     margin: 0 5px 5px 0;
 `;
 
-const StyledSampleSidebarList = styled.div`
-    display: flex;
-    flex-flow: wrap;
-`;
-
 type SampleSidebarListProps = {
     /** List of labels or subtractions associated with the sample */
     items: Label[] | SubtractionShortlist[];
@@ -32,9 +27,5 @@ export default function SampleSidebarList({ items }: SampleSidebarListProps) {
         />
     ));
 
-    return (
-        <StyledSampleSidebarList>
-            {sampleItemComponents}
-        </StyledSampleSidebarList>
-    );
+    return <div className="flex flex-wrap">{sampleItemComponents}</div>;
 }

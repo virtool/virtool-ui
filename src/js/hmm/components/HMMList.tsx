@@ -7,7 +7,7 @@ import {
     ViewHeaderTitle,
 } from "@/base";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
-import { usePageParam, useUrlSearchParam } from "@utils/hooks";
+import { usePageParam, useUrlSearchParam } from "@/hooks";
 import { map } from "lodash";
 import React from "react";
 import { useListHmms } from "../queries";

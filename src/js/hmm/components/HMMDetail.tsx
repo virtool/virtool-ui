@@ -1,6 +1,6 @@
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
-import { usePathParams } from "@utils/hooks";
-import { cn } from "@utils/utils";
+import { usePathParams } from "@/hooks";
+import { cn } from "@/utils";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

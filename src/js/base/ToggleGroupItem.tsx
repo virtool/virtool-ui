@@ -1,5 +1,5 @@
 import * as RadixToggleGroup from "@radix-ui/react-toggle-group";
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React, { ReactNode } from "react";
 
 type ToggleGroupItemProps = {

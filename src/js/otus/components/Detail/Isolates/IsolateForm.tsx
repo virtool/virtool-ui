@@ -1,4 +1,4 @@
-import { formatIsolateName } from "@utils/utils";
+import { formatIsolateName } from "@/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

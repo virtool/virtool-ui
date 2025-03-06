@@ -1,7 +1,7 @@
+import { getBorder } from "@app/theme";
 import * as RadixAccordion from "@radix-ui/react-accordion";
 import React, { createRef, useEffect } from "react";
 import styled from "styled-components";
-import { getBorder } from "../../app/theme";
 
 export const StyledAccordionItem = styled(RadixAccordion.Item)`
     border: ${getBorder};
@@ -33,7 +33,7 @@ type AccordionItemProps = {
 };
 
 /** A radix accordion item that triggers a scroll when opened */
-export function ScrollingAccordionItem({
+export function AccordionScrollingItem({
     value,
     children,
 }: AccordionItemProps) {

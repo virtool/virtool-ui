@@ -6,7 +6,7 @@ import {
     Pagination,
 } from "@/base";
 import { useFetchSample } from "@samples/queries";
-import { usePageParam, usePathParams } from "@utils/hooks";
+import { usePageParam, usePathParams } from "@/hooks";
 import React from "react";
 import { useListAnalyses } from "../queries";
 import { AnalysisMinimal } from "../types";

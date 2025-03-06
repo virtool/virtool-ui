@@ -1,5 +1,5 @@
 import { useSortAndFilterPathoscopeHits } from "@/analyses/hooks";
-import { Accordion } from "@base/accordion/Accordion";
+import { Accordion } from "@base/Accordion";
 import { map } from "lodash-es";
 import React from "react";
 import { PathoscopeItem } from "./PathoscopeItem";

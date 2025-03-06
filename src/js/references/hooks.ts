@@ -1,11 +1,12 @@
+import { apiClient } from "@/api";
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
-import { apiClient } from "@app/apiClient";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, filter, find, includes, some, union } from "lodash-es";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Response } from "superagent";
 import * as Yup from "yup";
 import { useGetReference } from "./queries";
 
@@ -48,7 +49,7 @@ export function useUpdateSourceTypes(
     const [lastRemoved, setLastRemoved] = useState("");
 
     const mutation = useMutation({
-        mutationFn: (sourceTypes: string[]) => {
+        mutationFn: async (sourceTypes: string[]): Promise<Response> => {
             return apiClient.patch(path).send({ [key]: sourceTypes });
         },
         onSuccess: (data: Response) => {

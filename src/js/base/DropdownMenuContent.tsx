@@ -1,5 +1,5 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React from "react";
 
 type DropdownMenuContentProps = {

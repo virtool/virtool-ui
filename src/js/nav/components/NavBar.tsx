@@ -12,7 +12,7 @@ import {
     Logo,
 } from "@/base";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import { useRootQuery } from "@wall/queries";
 import React from "react";
 import styled from "styled-components";

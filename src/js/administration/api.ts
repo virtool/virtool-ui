@@ -3,7 +3,7 @@
  *
  * @module account/api
  */
-import { apiClient } from "@app/apiClient";
+import { apiClient } from "@/api";
 import { User, UserResponse } from "@users/types";
 import { AdministratorRoles, Settings } from "./types";
 

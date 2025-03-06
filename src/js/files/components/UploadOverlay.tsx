@@ -1,6 +1,6 @@
 import UploaderDialog from "@files/components/UploaderDialog";
 import { useUploaderStore } from "@files/uploader";
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React from "react";
 
 /**

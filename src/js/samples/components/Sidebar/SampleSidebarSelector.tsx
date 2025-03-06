@@ -1,7 +1,7 @@
-import { fontWeight, getFontSize } from "@app/theme";
 import { BoxGroupSearch, Icon, Link, SidebarHeaderButton } from "@/base";
+import { useFuse } from "@/fuse";
+import { fontWeight, getFontSize } from "@app/theme";
 import { Popover } from "@base/Popover";
-import { useFuse } from "@base/hooks";
 import { Label } from "@labels/types";
 import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
@@ -19,7 +19,7 @@ const SampleSidebarSelectorButton = styled.div`
         margin-left: auto;
         font-size: ${getFontSize("md")};
         font-weight: ${fontWeight.thick};
-        padding: 10px 10px 10px 0px;
+        padding: 10px 10px 10px 0;
     }
 `;
 
@@ -31,20 +31,26 @@ const SampleItemComponentsContainer = styled.div`
 type SampleSidebarSelectorProps = {
     /** The link to manage labels or subtractions */
     manageLink: string;
+
     /** A callback function to handle sidebar item selection */
     onUpdate: (id: string | number) => void;
+
     /** List of label ids applied to some, but not all selected samples */
     partiallySelectedItems?: number[];
+
     /** The styled component for the list items */
     render: (result: {
         color?: string;
         description?: string;
         name: string;
     }) => React.ReactNode;
+
     /** A list of labels or default subtractions */
-    sampleItems: Label[] | SubtractionShortlist[];
+    items: Label[] | SubtractionShortlist[];
+
     /** A list of selected items by their ids */
-    selectedItems: Array<string | number>;
+    selectedIds: Array<string | number>;
+
     /** Whether the sidebar is labels or subtractions */
     selectionType: string;
 };
@@ -52,36 +58,38 @@ type SampleSidebarSelectorProps = {
 /**
  * Displays a dropdown list of labels or subtractions
  */
-export function SampleSidebarSelector({
+export default function SampleSidebarSelector({
     render,
-    sampleItems,
-    selectedItems,
+    items,
+    selectedIds,
     partiallySelectedItems = [],
     onUpdate,
     selectionType,
     manageLink,
 }: SampleSidebarSelectorProps) {
-    const [results, term, setTerm] = useFuse(sampleItems, ["name"], []);
-    const sampleItemComponents = results.map(
-        (item: Label | SubtractionShortlist) => (
-            <SampleSidebarSelectorItem
-                key={item.id}
-                selected={selectedItems.includes(item.id)}
-                partiallySelected={partiallySelectedItems.includes(
-                    item.id as number,
-                )}
-                {...item}
-                onClick={onUpdate}
-            >
-                {render(item)}
-            </SampleSidebarSelectorItem>
-        ),
+    const [results, term, setTerm] = useFuse<Label | SubtractionShortlist>(
+        items,
+        ["name"],
     );
+
+    const itemComponents = results.map((item: Label | SubtractionShortlist) => (
+        <SampleSidebarSelectorItem
+            key={item.id}
+            selected={selectedIds.includes(item.id)}
+            partiallySelected={partiallySelectedItems.includes(
+                item.id as number,
+            )}
+            {...item}
+            onClick={onUpdate}
+        >
+            {render(item)}
+        </SampleSidebarSelectorItem>
+    ));
 
     return (
         <Popover
             trigger={
-                !sampleItems.length || (
+                !items.length || (
                     <SidebarHeaderButton
                         aria-label={`select ${selectionType}`}
                         type="button"
@@ -98,7 +106,7 @@ export function SampleSidebarSelector({
                 onChange={setTerm}
             />
             <SampleItemComponentsContainer>
-                {sampleItemComponents}
+                {itemComponents}
             </SampleItemComponentsContainer>
             <SampleSidebarSelectorButton>
                 <Link to={manageLink}> Manage</Link>

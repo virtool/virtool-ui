@@ -1,4 +1,4 @@
-import { toThousand } from "@utils/utils";
+import { toThousand } from "@/utils";
 import React from "react";
 import styled from "styled-components";
 import { Icon } from "@base/index";

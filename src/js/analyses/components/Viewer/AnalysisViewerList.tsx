@@ -2,7 +2,7 @@ import { useGetActiveHit } from "@/analyses/hooks";
 import { FormattedNuvsHit } from "@/analyses/types";
 import { getBorder, getFontSize } from "@app/theme";
 import { Key } from "@/base";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import { findIndex } from "lodash-es";
 import React from "react";
 import { FixedSizeList } from "react-window";

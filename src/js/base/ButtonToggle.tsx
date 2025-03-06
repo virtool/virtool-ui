@@ -1,5 +1,5 @@
 import * as Toggle from "@radix-ui/react-toggle";
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React, { forwardRef } from "react";
 
 type ButtonToggleProps = {

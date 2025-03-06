@@ -2,7 +2,9 @@ import { JobMinimal } from "@jobs/types";
 import { HistoryNested, OTUNested } from "@otus/types";
 import { ReferenceNested } from "@references/types";
 import { UserNested } from "@users/types";
-import { SearchResult } from "@utils/types";
+
+
+import { SearchResult } from "@/types";
 
 /** Basic data for nested representations */
 export type IndexNested = {

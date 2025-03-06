@@ -1,10 +1,10 @@
 import { getFontSize } from "@app/theme";
-import { useElementSize } from "@utils/hooks";
+import { useElementSize } from "@/hooks";
 import React, { RefObject } from "react";
 import styled from "styled-components";
 import { drawBasesChart } from "./Bases";
 import { drawNucleotidesChart } from "./Nucleotides";
-import { QualityChart } from "./QualityChart";
+import { SampleChart } from "./SampleChart";
 import { drawSequencesChart } from "./Sequences";
 
 const QualityTitle = styled.h5`
@@ -23,7 +23,7 @@ export function Quality({ bases, composition, sequences }) {
                     <QualityTitle>
                         <strong>Quality Distribution at Read Positions</strong>
                     </QualityTitle>
-                    <QualityChart
+                    <SampleChart
                         createChart={drawBasesChart}
                         data={bases}
                         width={width}
@@ -34,7 +34,7 @@ export function Quality({ bases, composition, sequences }) {
                             Nucleotide Composition at Read Positions
                         </strong>
                     </QualityTitle>
-                    <QualityChart
+                    <SampleChart
                         createChart={drawNucleotidesChart}
                         data={composition}
                         width={width}
@@ -43,7 +43,7 @@ export function Quality({ bases, composition, sequences }) {
                     <QualityTitle>
                         <strong>Read-wise Quality Occurrence</strong>
                     </QualityTitle>
-                    <QualityChart
+                    <SampleChart
                         createChart={drawSequencesChart}
                         data={sequences}
                         width={width}

@@ -11,7 +11,7 @@ import {
 } from "@/base";
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
-import { usePathParams } from "@utils/hooks";
+import { usePathParams } from "@/hooks";
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";

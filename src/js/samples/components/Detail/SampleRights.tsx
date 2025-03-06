@@ -14,7 +14,7 @@ import {
 } from "@/base";
 import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
-import { usePathParams } from "@utils/hooks";
+import { usePathParams } from "@/hooks";
 import { find, includes, map } from "lodash-es";
 import React from "react";
 import {

@@ -1,6 +1,6 @@
 import { FormattedPathoscopeHit } from "@/analyses/types";
 import ScrollSyncContainer from "@base/ScrollSyncContainer";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import { filter, maxBy } from "lodash-es";
 import React from "react";
 import PathoscopeIsolate from "./PathoscopeIsolate";

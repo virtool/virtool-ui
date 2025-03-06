@@ -7,7 +7,7 @@ import {
     DialogTitle,
 } from "@/base";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import React from "react";
 import { CreateUserForm } from "./CreateUserForm";
 

@@ -16,7 +16,7 @@ const series = [
 ];
 
 export function drawNucleotidesChart(
-    element: SVGElement,
+    element: HTMLElement,
     data: number[],
     baseWidth: number,
 ) {

@@ -9,7 +9,7 @@ import {
 } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
-import { useDialogParam, usePathParams } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@/hooks";
 import numbro from "numbro";
 import React from "react";
 import { useFetchSubtraction } from "../../queries";

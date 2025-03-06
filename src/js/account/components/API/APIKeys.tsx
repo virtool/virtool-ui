@@ -8,7 +8,7 @@ import {
     LoadingPlaceholder,
     NoneFoundBox,
 } from "@/base";
-import { updateSearchParam } from "@utils/hooks";
+import { updateSearchParam } from "@/hooks";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

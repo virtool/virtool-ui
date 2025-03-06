@@ -1,10 +1,9 @@
+import { useFuse } from "@/fuse";
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { useFuse } from "../hooks";
 
-describe("useFuseHook", () => {
+describe("useFuse()", () => {
     let collection: { name: string }[];
-    let deps: string[] = [];
     let keys: string[] = [];
 
     beforeEach(() => {
@@ -15,32 +14,21 @@ describe("useFuseHook", () => {
             { name: "zzzzz" },
         ];
         keys = ["name"];
-        deps = ["zzz"];
-    });
-
-    it("should render hook correctly and return collection when term = empty string", () => {
-        const { result } = renderHook(() => useFuse(collection, keys, deps));
-        const length = result.current.length;
-        expect(length).toBe(3);
-        expect(result.current[0]).toBe(collection);
-        expect(result.current[1]).toBe("");
     });
 
     it("should change returnObj to match useFuse result when term is changed to non empty single character", () => {
-        const { result } = renderHook(() => useFuse(collection, keys, deps));
+        const { result } = renderHook(() => useFuse(collection, keys));
         const setTerm = result.current[2];
 
         act(() => {
             setTerm("z");
         });
-        expect(result.current[0]).toEqual([
-            { item: { name: "zzzzz" }, refIndex: 3 },
-        ]);
+        expect(result.current[0]).toEqual([{ name: "zzzzz" }]);
         expect(result.current[1]).toBe("z");
     });
 
     it("should return empty array when searchFuse yields no matches", () => {
-        const { result } = renderHook(() => useFuse(collection, keys, deps));
+        const { result } = renderHook(() => useFuse(collection, keys));
         const setTerm = result.current[2];
 
         act(() => {
@@ -50,28 +38,40 @@ describe("useFuseHook", () => {
         expect(result.current[0]).toEqual([]);
     });
 
-    it("should return collection when term changed from non empty string to empty string", () => {
-        const { result } = renderHook(() => useFuse(collection, keys, deps));
+    it("should return everything when term changes to empty string", () => {
+        const { result } = renderHook(() => useFuse(collection, keys));
         const setTerm = result.current[2];
 
         act(() => {
             setTerm("z");
         });
+
         expect(result.current[1]).toBe("z");
-        expect(result.current[0]).toEqual([
-            { item: { name: "zzzzz" }, refIndex: 3 },
-        ]);
+        expect(result.current[0]).toEqual([{ name: "zzzzz" }]);
+
         act(() => {
             setTerm("");
         });
+
         expect(result.current[1]).toBe("");
         expect(result.current[0]).toBe(collection);
     });
 
-    it("should reset term to empty string when deps change", () => {
-        const { rerender, result } = renderHook(() =>
-            useFuse(collection, keys, deps),
-        );
+    it("should reset term to empty string when collection changes", async () => {
+        const { rerender, result } = renderHook(({ c, k }) => useFuse(c, k), {
+            initialProps: {
+                c: [
+                    { name: "nan" },
+                    { name: "test1" },
+                    { name: "aaaaa" },
+                    { name: "zzzzz" },
+                ],
+                k: ["name"],
+            },
+        });
+
+        expect(result.current[1]).toBe("");
+
         const setTerm = result.current[2];
 
         act(() => {
@@ -79,8 +79,12 @@ describe("useFuseHook", () => {
         });
 
         expect(result.current[1]).toBe("z");
-        deps = ["aaa"];
-        rerender();
+
+        rerender({
+            c: [...collection, { name: "a_new_item" }],
+            k: ["name"],
+        });
+
         expect(result.current[1]).toBe("");
     });
 });

@@ -11,7 +11,7 @@ import {
     SaveButton,
 } from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useCreateGroup } from "../queries";

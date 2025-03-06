@@ -7,7 +7,7 @@ import {
     mockApiGetReferenceDetail,
 } from "@tests/fake/references";
 import { renderWithRouter } from "@tests/setup";
-import { formatPath } from "@utils/hooks";
+import { formatPath } from "@/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import {

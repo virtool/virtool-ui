@@ -1,7 +1,7 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { JobState } from "@jobs/types";
-import { getWorkflowDisplayName } from "@utils/utils";
+import { getWorkflowDisplayName } from "@/utils";
 import React from "react";
 import styled from "styled-components";
 import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";

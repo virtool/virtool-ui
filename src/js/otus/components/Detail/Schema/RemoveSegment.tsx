@@ -1,7 +1,7 @@
 import { RemoveDialog } from "@base/RemoveDialog";
 import { useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import { reject } from "lodash-es";
 import React from "react";
 

@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { CreateSubtractionForm } from "@subtraction/components/CreateSubtractionForm";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import React from "react";
 
 /**

@@ -6,7 +6,7 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { User, UserResponse } from "@users/types";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import {
     createUser,
     fetchAdministratorRoles,

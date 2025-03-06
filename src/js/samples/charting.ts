@@ -32,7 +32,7 @@ export function appendLegend(
     });
 }
 
-export function createSvg(element: SVGElement, width: number) {
+export function createSvg(element: HTMLElement, width: number) {
     select(element).selectAll("*").remove();
 
     return select(element)

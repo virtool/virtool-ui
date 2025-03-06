@@ -1,5 +1,5 @@
 import { OTU } from "@otus/types";
-import { useNaiveUrlSearchParam, useUrlSearchParam } from "@utils/hooks";
+import { useNaiveUrlSearchParam, useUrlSearchParam } from "@/hooks";
 import { find } from "lodash-es";
 
 /**

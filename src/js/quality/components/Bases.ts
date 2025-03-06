@@ -45,7 +45,7 @@ function lineDrawer(data, key, x, y) {
     return generator(data);
 }
 
-export function drawBasesChart(element: SVGElement, data, baseWidth) {
+export function drawBasesChart(element: HTMLElement, data, baseWidth: number) {
     const svg = createSvg(element, baseWidth);
 
     const width =

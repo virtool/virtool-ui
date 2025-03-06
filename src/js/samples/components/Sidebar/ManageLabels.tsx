@@ -1,5 +1,5 @@
-import { fontWeight, getColor, getFontSize } from "@app/theme";
 import { Link, SidebarHeader, SideBarSection } from "@/base";
+import { fontWeight, getColor, getFontSize } from "@app/theme";
 import { Label } from "@labels/types";
 import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import { SampleMinimal } from "@samples/types";
@@ -8,11 +8,12 @@ import React from "react";
 import styled from "styled-components";
 import { useUpdateLabel } from "../../queries";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
-import { SampleSidebarSelector } from "./SampleSidebarSelector";
+import SampleSidebarSelector from "./SampleSidebarSelector";
 
 const SampleLabelsFooter = styled.div`
     display: flex;
     color: ${(props) => getColor({ theme: props.theme, color: "greyDarkest" })};
+
     a {
         margin-left: 5px;
         font-size: ${getFontSize("md")};
@@ -63,22 +64,21 @@ export default function ManageLabels({
             <SidebarHeader>
                 Manage Labels
                 <SampleSidebarSelector
-                    render={({ name, color, description }) => (
-                        <SampleLabelInner
-                            name={name}
-                            color={color}
-                            description={description}
-                        />
-                    )}
-                    sampleItems={labels}
-                    selectedItems={map(selectedLabels, (label) => label.id)}
+                    items={labels}
+                    manageLink={"/samples/labels"}
+                    onUpdate={onUpdateLabel}
                     partiallySelectedItems={map(
                         partiallySelectedLabels,
-                        (label) => label.id,
+                        (label: Label) => label.id,
                     )}
-                    onUpdate={onUpdateLabel}
+                    selectedIds={map(
+                        selectedLabels,
+                        (label: Label) => label.id,
+                    )}
                     selectionType="labels"
-                    manageLink={"/samples/labels"}
+                    render={({ name, color }) => (
+                        <SampleLabelInner color={color} name={name} />
+                    )}
                 />
             </SidebarHeader>
             <SampleSidebarMultiselectList items={selectedLabels} />

@@ -9,7 +9,7 @@ import {
     ViewHeaderTitle,
 } from "@/base";
 import { useFindJobs } from "@jobs/queries";
-import { useListSearchParam, usePageParam } from "@utils/hooks";
+import { useListSearchParam, usePageParam } from "@/hooks";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";

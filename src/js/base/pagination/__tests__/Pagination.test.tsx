@@ -1,7 +1,7 @@
 import { Pagination } from "@/base";
 import { screen } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup.jsx";
-import { formatPath } from "@utils/hooks";
+import { formatPath } from "@/hooks";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

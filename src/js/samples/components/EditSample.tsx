@@ -1,5 +1,5 @@
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import { pick } from "lodash";
 import React from "react";
 import { useForm } from "react-hook-form";

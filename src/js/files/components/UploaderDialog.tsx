@@ -1,6 +1,6 @@
 import { Badge } from "@/base";
 import { Upload } from "@files/types";
-import { formatRoundedDuration } from "@utils/utils";
+import { formatRoundedDuration } from "@/utils";
 import numbro from "numbro";
 import React from "react";
 import { UploaderItem } from "./UploaderItem";

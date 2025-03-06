@@ -4,7 +4,7 @@ import { ScrollArea } from "@base/ScrollArea";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
-import { useDialogParam, useNaiveUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, useNaiveUrlSearchParam } from "@/hooks";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

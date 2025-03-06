@@ -6,7 +6,7 @@ import {
     Pagination,
 } from "@/base";
 import Toolbar from "@base/Toolbar";
-import { usePageParam } from "@utils/hooks";
+import { usePageParam } from "@/hooks";
 import { filter } from "lodash-es";
 import React, { useState } from "react";
 import { useFindUsers, useGetAdministratorRoles } from "../../queries";

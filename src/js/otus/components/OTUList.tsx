@@ -6,7 +6,7 @@ import {
     Pagination,
 } from "@/base";
 import { useGetReference } from "@references/queries";
-import { usePageParam, usePathParams, useUrlSearchParam } from "@utils/hooks";
+import { usePageParam, usePathParams, useUrlSearchParam } from "@/hooks";
 import { map } from "lodash";
 import React from "react";
 import RebuildAlert from "../../indexes/components/RebuildAlert";

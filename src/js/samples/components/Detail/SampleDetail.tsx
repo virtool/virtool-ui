@@ -12,7 +12,7 @@ import {
 import { IconButton } from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
-import { useDialogParam, usePathParams } from "@utils/hooks";
+import { useDialogParam, usePathParams } from "@/hooks";
 import React from "react";
 import { Redirect, Route, Switch, useLocation } from "wouter";
 import Analyses from "../../../analyses/components/Analyses";

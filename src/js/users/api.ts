@@ -1,4 +1,4 @@
-import { apiClient } from "@app/apiClient";
+import { apiClient } from "@/api";
 import { UserResponse } from "./types";
 
 /**
@@ -9,12 +9,12 @@ import { UserResponse } from "./types";
  * @param forceReset - Whether the user should be forced to reset their password on next login
  * @returns A promise resolving to creating the first user
  */
-export function createFirst(
+export async function createFirst(
     handle: string,
     password: string,
     forceReset: boolean,
 ) {
-    return apiClient.put("/users/first").send({
+    return await apiClient.put("/users/first").send({
         handle,
         password,
         force_reset: forceReset,
@@ -29,7 +29,7 @@ export function createFirst(
  * @param term - The search term to filter users by
  * @returns A promise resolving to a page of user search results
  */
-export function findUsers(
+export async function findUsers(
     page: number,
     per_page: number,
     term: string,

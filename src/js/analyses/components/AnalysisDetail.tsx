@@ -15,8 +15,8 @@ import {
     SubviewHeaderTitle,
 } from "@/base";
 import { useFetchSample } from "@samples/queries";
-import { usePathParams } from "@utils/hooks";
-import { getWorkflowDisplayName } from "@utils/utils";
+import { usePathParams } from "@/hooks";
+import { getWorkflowDisplayName } from "@/utils";
 import React from "react";
 import styled from "styled-components";
 import { IimiViewer } from "./Iimi/IimiViewer";

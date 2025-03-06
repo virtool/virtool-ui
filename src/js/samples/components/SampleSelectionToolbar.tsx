@@ -1,4 +1,4 @@
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import React from "react";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";

@@ -14,7 +14,7 @@ import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { UploadBar } from "@files/components/UploadBar";
 import { upload } from "@files/uploader";
 import { Permission } from "@groups/types";
-import { usePageParam } from "@utils/hooks";
+import { usePageParam } from "@/hooks";
 import { map } from "lodash";
 import { capitalize } from "lodash-es";
 import React from "react";

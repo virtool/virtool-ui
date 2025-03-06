@@ -7,7 +7,7 @@ import {
     TabsLink,
 } from "@/base";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { formatSearchParams, useUrlSearchParam } from "@utils/hooks";
+import { formatSearchParams, useUrlSearchParam } from "@/hooks";
 import React from "react";
 import EmptyReference from "./EmptyReference";
 import ImportReference from "./ImportReference";

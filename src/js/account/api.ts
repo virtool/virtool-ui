@@ -3,7 +3,7 @@
  *
  * @module account/api
  */
-import { apiClient } from "@app/apiClient";
+import { apiClient } from "@/api";
 import { Permissions } from "@groups/types";
 import { User } from "@users/types";
 import { Response } from "superagent";

@@ -1,4 +1,4 @@
-import { byteSize } from "@utils/utils";
+import { byteSize } from "@/utils";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";

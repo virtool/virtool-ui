@@ -5,7 +5,7 @@ import {
     useGetActiveSequence,
     useGetUnreferencedSegments,
 } from "@sequences/hooks";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import React from "react";
 import SequenceForm from "./SequenceForm";
 

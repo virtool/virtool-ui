@@ -9,7 +9,7 @@ import {
 import { ButtonToggle } from "@base/ButtonToggle";
 import Toolbar from "@base/Toolbar";
 import { Tooltip } from "@base/Tooltip";
-import { useUrlSearchParam } from "@utils/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import React from "react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 

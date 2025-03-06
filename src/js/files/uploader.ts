@@ -1,9 +1,9 @@
 /**
  * Initiate and track uploads using Zustand.
  */
-import { apiClient } from "@app/apiClient";
+import { apiClient } from "@/api";
+import { createRandomString } from "@/utils";
 import { FileType, Upload } from "@files/types";
-import { createRandomString } from "@utils/utils";
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
