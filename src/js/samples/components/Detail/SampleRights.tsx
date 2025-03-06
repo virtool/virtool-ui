@@ -1,5 +1,4 @@
 import {
-    Box,
     BoxGroup,
     BoxGroupHeader,
     BoxGroupSection,
@@ -13,6 +12,7 @@ import { usePathParams } from "@/hooks";
 import { useFetchAccount } from "@account/queries";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
+import Box from "@base/Box";
 import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { find, includes, map } from "lodash-es";

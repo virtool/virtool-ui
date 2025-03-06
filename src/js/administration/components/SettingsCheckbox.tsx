@@ -1,7 +1,8 @@
-import { Box, Checkbox } from "@base/index";
+import { getFontSize } from "@app/theme";
+import { Checkbox } from "@base";
+import Box from "@base/Box";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { getFontSize } from "../../app/theme";
 
 const SettingsCheckboxContainer = styled.div`
     padding: 10px;

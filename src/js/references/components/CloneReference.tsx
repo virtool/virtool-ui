@@ -1,6 +1,5 @@
 import {
     Badge,
-    Box,
     Dialog,
     DialogContent,
     DialogFooter,
@@ -14,6 +13,7 @@ import {
 } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
 import Attribution from "@base/Attribution";
+import Box from "@base/Box";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { find } from "lodash-es";
 import React, { useEffect } from "react";

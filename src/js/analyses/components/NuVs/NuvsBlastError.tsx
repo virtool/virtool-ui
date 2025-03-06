@@ -1,4 +1,5 @@
-import { Box, Button, Icon } from "@/base";
+import { Button, Icon } from "@/base";
+import Box from "@base/Box";
 import React from "react";
 
 export function NuvsBlastError({ error, onBlast }) {

@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import styled, { DefaultTheme } from "styled-components";
-import { Box } from "./Box";
+import Box from "./Box";
 
 type BoxGroupProps = {
     children: ReactNode;

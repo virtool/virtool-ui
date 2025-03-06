@@ -1,6 +1,5 @@
 import { useGetAnalysis } from "@/analyses/queries";
 import {
-    Box,
     Icon,
     LoadingPlaceholder,
     NotFound,
@@ -16,6 +15,7 @@ import {
     FormattedPathoscopeAnalysis,
     IimiAnalysis,
 } from "@analyses/types";
+import Box from "@base/Box";
 import { useFetchSample } from "@samples/queries";
 import React from "react";
 import styled from "styled-components";

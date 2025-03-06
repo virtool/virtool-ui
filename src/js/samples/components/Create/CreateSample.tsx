@@ -1,5 +1,4 @@
 import {
-    Box,
     Icon,
     InputContainer,
     InputError,
@@ -14,6 +13,7 @@ import {
 } from "@/base";
 import { useNavigate } from "@/hooks";
 import { useFetchAccount } from "@account/queries";
+import Box from "@base/Box";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
 import { RestoredAlert } from "@forms/components/RestoredAlert";

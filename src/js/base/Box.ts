@@ -1,5 +1,5 @@
+import { getBorder } from "@app/theme";
 import styled from "styled-components";
-import { getBorder } from "../app/theme";
 
 type BoxProps = {
     active?: boolean;
@@ -24,3 +24,5 @@ export const Box = styled.div<BoxProps>`
 `;
 
 Box.displayName = "Box";
+
+export default Box;
