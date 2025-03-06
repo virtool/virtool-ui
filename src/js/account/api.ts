@@ -201,8 +201,5 @@ export function resetPassword({
  * @returns A Promise resolving to the current user's account data
  */
 export function fetchAccount(): Promise<Account> {
-    return apiClient
-        .get("/account")
-        .query()
-        .then((response) => response.body);
+    return apiClient.get("/account").then((response) => response.body);
 }
