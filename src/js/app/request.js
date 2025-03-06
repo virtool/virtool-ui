@@ -17,14 +17,4 @@ function prefixRequestUrl(request) {
 agent.accept("application/json");
 agent.use(prefixRequestUrl);
 
-function createRequest(method) {
-    return (slug) => agent[method](slug);
-}
-
-export const Request = {
-    get: createRequest("get"),
-    post: createRequest("post"),
-    patch: createRequest("patch"),
-    put: createRequest("put"),
-    delete: createRequest("delete"),
-};
+export const Request = agent;
