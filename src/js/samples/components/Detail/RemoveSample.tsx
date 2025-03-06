@@ -1,4 +1,4 @@
-import { useDialogParam } from "@utils/hooks";
+import { useDialogParam } from "@/hooks";
 import React from "react";
 import { RemoveDialog } from "../../../base/RemoveDialog";
 import { useRemoveSample } from "../../queries";

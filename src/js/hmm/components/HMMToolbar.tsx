@@ -1,4 +1,4 @@
-import { InputSearch } from "@base";
+import { InputSearch } from "@/base";
 import Toolbar from "@base/Toolbar";
 import React from "react";
 

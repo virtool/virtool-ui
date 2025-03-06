@@ -1,8 +1,8 @@
-import { byteSize } from "@utils/utils";
+import { byteSize } from "@/utils";
+import { BoxGroupSection } from "@base/index";
 import React from "react";
 import styled from "styled-components";
 import { fontWeight } from "../../../app/theme";
-import { BoxGroupSection } from "../../../base";
 
 const ReadItemMain = styled.div`
     align-items: center;

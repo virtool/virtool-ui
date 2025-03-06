@@ -3,7 +3,7 @@
  *
  * @module account/api
  */
-import { Request } from "@app/request";
+import { apiClient } from "@/api";
 import { User, UserResponse } from "@users/types";
 import { AdministratorRoles, Settings } from "./types";
 
@@ -13,7 +13,7 @@ import { AdministratorRoles, Settings } from "./types";
  * @returns - A promise resolving to the current server settings.
  */
 export function fetchSettings(): Promise<Settings> {
-    return Request.get("/settings").then((response) => {
+    return apiClient.get("/settings").then((response) => {
         return response.body;
     });
 }
@@ -38,7 +38,8 @@ export type SettingsUpdate = {
  * @returns - A promise resolving to the complete response containing the updated settings.
  */
 export function updateSettings(update: SettingsUpdate): Promise<Settings> {
-    return Request.patch("/settings")
+    return apiClient
+        .patch("/settings")
         .send(update)
         .then((response) => response.body);
 }
@@ -49,7 +50,7 @@ export function updateSettings(update: SettingsUpdate): Promise<Settings> {
  * @returns - A promise resolving to the list of known administrator roles
  */
 export function fetchAdministratorRoles(): Promise<AdministratorRoles[]> {
-    return Request.get("/admin/roles").then((response) => response.body);
+    return apiClient.get("/admin/roles").then((response) => response.body);
 }
 
 /**
@@ -69,7 +70,8 @@ export function findUsers(
     administrator: boolean,
     active: boolean,
 ): Promise<UserResponse> {
-    return Request.get("/admin/users")
+    return apiClient
+        .get("/admin/users")
         .query({ page, per_page, term, administrator, active })
         .then((response) => {
             return response.body;
@@ -83,7 +85,7 @@ export function findUsers(
  * @returns A promise resolving to a single user
  */
 export function getUser(userId: string): Promise<User> {
-    return Request.get(`/admin/users/${userId}`).then((res) => res.body);
+    return apiClient.get(`/admin/users/${userId}`).then((res) => res.body);
 }
 
 /**
@@ -95,7 +97,8 @@ export function getUser(userId: string): Promise<User> {
  * @returns A promise resolving to creating a user
  */
 export function createUser({ handle, password, forceReset }): Promise<User> {
-    return Request.post("/admin/users")
+    return apiClient
+        .post("/admin/users")
         .send({
             handle,
             password,
@@ -120,7 +123,8 @@ export type UserUpdate = {
  * @returns A promise resolving to a response containing the updated user's data
  */
 export function updateUser(userId: string, update: UserUpdate): Promise<User> {
-    return Request.patch(`/admin/users/${userId}`)
+    return apiClient
+        .patch(`/admin/users/${userId}`)
         .send(update)
         .then((res) => res.body);
 }
@@ -136,7 +140,8 @@ export function setAdministratorRole(
     role: string,
     user_id: string,
 ): Promise<User> {
-    return Request.put(`/admin/users/${user_id}/role`)
+    return apiClient
+        .put(`/admin/users/${user_id}/role`)
         .send({ role })
         .then((res) => res.body);
 }

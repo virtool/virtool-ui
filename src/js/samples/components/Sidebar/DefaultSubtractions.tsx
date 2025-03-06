@@ -1,13 +1,20 @@
+import {
+    Link,
+    LoadingPlaceholder,
+    SidebarHeader,
+    SideBarSection,
+} from "@/base";
 import { fontWeight, getColor, getFontSize } from "@app/theme";
-import { Link, LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { SampleSidebarSelector } from "./SampleSidebarSelector";
+import SampleSidebarSelector from "./SampleSidebarSelector";
 
-const SubtractionInner = ({ name }) => name;
+function SubtractionInner({ name }) {
+    return name;
+}
 
 const SampleSubtractionFooter = styled.div`
     display: flex;
@@ -20,9 +27,10 @@ const SampleSubtractionFooter = styled.div`
 `;
 
 type DefaultSubtractionsProps = {
-    /** List of subtraction ids associated with the sample */
+    /** List of subtraction ids associated with the sample. */
     defaultSubtractions: string[];
-    /** Callback function to handle subtraction selection */
+
+    /** Callback to handle subtraction selection. */
     onUpdate: (subtractions: string[]) => void;
 };
 
@@ -46,8 +54,8 @@ export default function DefaultSubtractions({
                 Default Subtractions
                 <SampleSidebarSelector
                     render={({ name }) => <SubtractionInner name={name} />}
-                    sampleItems={subtractionOptions}
-                    selectedItems={defaultSubtractions}
+                    items={subtractionOptions}
+                    selectedIds={defaultSubtractions}
                     onUpdate={(subtractionId) => {
                         onUpdate(xor(defaultSubtractions, [subtractionId]));
                     }}

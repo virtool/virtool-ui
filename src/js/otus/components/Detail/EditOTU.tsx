@@ -1,13 +1,8 @@
+import { useDialogParam } from "@/hooks";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base/index";
 import { useUpdateOTU } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
 import React from "react";
-import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
-} from "../../../base";
 import { OTUForm } from "../OTUForm";
 
 type EditOTUProps = {

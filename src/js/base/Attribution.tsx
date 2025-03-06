@@ -1,4 +1,4 @@
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import { capitalize } from "lodash-es";
 import React from "react";
 import { InitialIcon } from "./InitialIcon";

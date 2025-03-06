@@ -1,4 +1,4 @@
-import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "@base";
+import { BoxGroup, BoxGroupHeader, NoneFoundSection } from "@/base";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import Contributor from "@indexes/components/Contributor";
 import { IndexContributor } from "@indexes/types";

@@ -1,4 +1,4 @@
-import { BoxGroup, BoxGroupHeader } from "@base";
+import { BoxGroup, BoxGroupHeader } from "@/base";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { IndexFile } from "@indexes/types";
 import { SubtractionFileItem } from "@subtraction/components/Detail/SubtractionFileItem";

@@ -1,4 +1,4 @@
-import { Request } from "../app/request";
+import { apiClient } from "@/api";
 import { MLModelSearchResult } from "./types";
 
 /**
@@ -8,5 +8,5 @@ import { MLModelSearchResult } from "./types";
  */
 
 export function findModels(): Promise<MLModelSearchResult> {
-    return Request.get("/ml").then((response) => response.body);
+    return apiClient.get("/ml").then((response) => response.body);
 }

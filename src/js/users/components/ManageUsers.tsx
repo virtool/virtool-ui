@@ -1,10 +1,10 @@
+import { Alert, Icon, InputSearch, LoadingPlaceholder } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
-import { Alert, Icon, InputSearch, LoadingPlaceholder } from "@base";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";
 import Toolbar from "@base/Toolbar";
-import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import CreateUser from "./CreateUser";
 import { UsersList } from "./UsersList";

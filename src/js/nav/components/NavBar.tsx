@@ -1,6 +1,3 @@
-import { useLogout } from "@account/queries";
-import { AdministratorRoles } from "@administration/types";
-import { hasSufficientAdminRole } from "@administration/utils";
 import {
     Dropdown,
     DropdownMenuContent,
@@ -10,9 +7,12 @@ import {
     IconButton,
     InitialIcon,
     Logo,
-} from "@base";
+} from "@/base";
+import { useDialogParam } from "@/hooks";
+import { useLogout } from "@account/queries";
+import { AdministratorRoles } from "@administration/types";
+import { hasSufficientAdminRole } from "@administration/utils";
 import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
-import { useDialogParam } from "@utils/hooks";
 import { useRootQuery } from "@wall/queries";
 import React from "react";
 import styled from "styled-components";

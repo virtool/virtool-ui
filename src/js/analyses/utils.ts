@@ -1,4 +1,4 @@
-import { formatIsolateName } from "@utils/utils";
+import { formatIsolateName } from "@/utils";
 import {
     cloneDeep,
     compact,
@@ -57,6 +57,11 @@ export function extractNames(orfs) {
     return uniq(flatMap(orfs, (orf) => flatMap(orf.hits, (hit) => hit.names)));
 }
 
+type FillAlignParams = {
+    align?: number[][];
+    length: number;
+};
+
 /**
  * Transform an array of coordinate pairs into an flat array where the index is the x coordinate and the value is the y
  * coordinate.
@@ -64,7 +69,7 @@ export function extractNames(orfs) {
  * @param {Array} align - the coordinates
  * @param length - the length of the generated flat array
  */
-export function fillAlign({ align, length }) {
+export function fillAlign({ align, length }: FillAlignParams) {
     const filled = Array(length);
 
     if (!align) {

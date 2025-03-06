@@ -1,8 +1,8 @@
+import { InputGroup, InputLabel, InputSelect } from "@base/index";
 import { capitalize, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { useUpdateUser } from "../../administration/queries";
-import { InputGroup, InputLabel, InputSelect } from "../../base";
 import { GroupMinimal } from "../../groups/types";
 
 export const PrimaryGroupOption = styled.option`

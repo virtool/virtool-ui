@@ -1,9 +1,9 @@
 import { IimiAnalysis } from "@/analyses/types";
+import { Accordion } from "@base/Accordion";
+import { Box, BoxTitle } from "@base/index";
 import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { Box, BoxTitle } from "../../../base";
-import { Accordion } from "../../../base/accordion/Accordion";
 import { IimiOTU } from "./IimiOTU";
 
 const ImportantList = styled.ul`

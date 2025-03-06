@@ -4,7 +4,7 @@ import {
     Icon,
     LoadingPlaceholder,
     ProgressBarAffixed,
-} from "@base";
+} from "@/base";
 import { useQueryClient } from "@tanstack/react-query";
 import { replace } from "lodash-es";
 import React from "react";

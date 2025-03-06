@@ -1,5 +1,5 @@
-import { useMatchPartialPath } from "@utils/hooks";
-import { cn } from "@utils/utils";
+import { useMatchPartialPath } from "@/hooks";
+import { cn } from "@/utils";
 import React from "react";
 import { Link } from "wouter";
 

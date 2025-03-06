@@ -1,5 +1,3 @@
-import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
-import { getColor } from "@app/theme";
 import {
     BoxGroup,
     BoxGroupDisabled,
@@ -11,9 +9,11 @@ import {
     InputSimple,
     LoadingPlaceholder,
     SectionHeader,
-} from "@base";
+} from "@/base";
+import { usePathParams } from "@/hooks";
+import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
+import { getColor } from "@app/theme";
 import { IconButton } from "@base/IconButton";
-import { usePathParams } from "@utils/hooks";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

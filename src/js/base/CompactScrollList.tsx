@@ -1,8 +1,8 @@
+import { cn } from "@/utils";
 import {
     FetchNextPageOptions,
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
-import { cn } from "@utils/utils";
 import { map } from "lodash-es";
 import React from "react";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";

@@ -1,9 +1,9 @@
 /**
  * Initiate and track uploads using Zustand.
  */
-import { Request } from "@app/request";
+import { apiClient } from "@/api";
+import { createRandomString } from "@/utils";
 import { FileType, Upload } from "@files/types";
-import { createRandomString } from "@utils/utils";
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
@@ -104,9 +104,10 @@ export function upload(file: File, fileType: FileType) {
         }
     }
 
-    Request.post("/uploads")
+    apiClient
+        .post("/uploads")
         .query({ name: file.name, type: fileType })
-        .attach("file", file)
+        .attach("file", file as any)
         .on("progress", onProgress)
         .then(() => useUploaderStore.getState().removeUpload(localId))
         .catch(() => useUploaderStore.getState().setFailure(localId));

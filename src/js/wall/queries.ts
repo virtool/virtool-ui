@@ -1,8 +1,8 @@
 import { fetchAccount, login, resetPassword } from "@/account/api";
 import { accountKeys } from "@/account/queries";
 import { Account } from "@/account/types";
+import { apiClient } from "@/api";
 import { ErrorResponse } from "@/types/types";
-import { rootData } from "@app/api";
 import { Root } from "@app/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Response } from "superagent";
@@ -20,7 +20,7 @@ export const rootKeys = {
 export function useRootQuery() {
     return useQuery<Root, ErrorResponse>({
         queryKey: rootKeys.all(),
-        queryFn: rootData,
+        queryFn: () => apiClient.get("/").then((res) => res.body),
     });
 }
 

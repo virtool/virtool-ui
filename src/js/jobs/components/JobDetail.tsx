@@ -5,11 +5,11 @@ import {
     ViewHeader,
     ViewHeaderAttribution,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
+import { usePathParams } from "@/hooks";
+import { getWorkflowDisplayName } from "@/utils";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";
-import { usePathParams } from "@utils/hooks";
-import { getWorkflowDisplayName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 import { JobArgs } from "./JobArgs";

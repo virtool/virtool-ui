@@ -1,8 +1,4 @@
-import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
-import { pick } from "lodash";
-import React from "react";
-import { useForm } from "react-hook-form";
+import { useDialogParam } from "@/hooks";
 import {
     Dialog,
     DialogContent,
@@ -14,7 +10,11 @@ import {
     InputSimple,
     SaveButton,
     TextArea,
-} from "../../base";
+} from "@base/index";
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { pick } from "lodash";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { useUpdateSample } from "../queries";
 import { Sample } from "../types";
 

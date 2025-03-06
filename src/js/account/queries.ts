@@ -1,8 +1,8 @@
 import { ErrorResponse } from "@/types/types";
+import { resetClient } from "@/utils";
 import { Permissions } from "@groups/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "@users/types";
-import { resetClient } from "@utils/utils";
 import {
     AccountUpdate,
     changePassword,

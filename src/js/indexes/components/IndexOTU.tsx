@@ -1,4 +1,4 @@
-import { Badge, BoxGroupSection, Link } from "@base";
+import { Badge, BoxGroupSection, Link } from "@/base";
 import React from "react";
 import styled from "styled-components";
 

@@ -1,4 +1,4 @@
-import { Container } from "@base";
+import { Container } from "@/base";
 import React from "react";
 import { Route, Switch } from "wouter";
 import JobDetail from "./JobDetail";

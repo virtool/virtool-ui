@@ -1,11 +1,11 @@
-import { DialogContent } from "@base";
-import { cn } from "@utils/utils";
+import { DialogContent } from "@/base";
+import { cn } from "@/utils";
 import React from "react";
 
 /**
  * A styled dialog content for use in an analysis creation dialog
  */
-export function CreateAnalysisDialogContent({ children }) {
+export default function CreateAnalysisDialogContent({ children }) {
     return (
         <DialogContent
             className={cn(

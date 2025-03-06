@@ -1,11 +1,11 @@
-import { useFetchAccount } from "@account/queries";
 import {
     ContainerNarrow,
     ContainerWide,
     LoadingPlaceholder,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
+import { useFetchAccount } from "@account/queries";
 import { ManageUsers } from "@users/components/ManageUsers";
 import UserDetail from "@users/components/UserDetail";
 import React from "react";

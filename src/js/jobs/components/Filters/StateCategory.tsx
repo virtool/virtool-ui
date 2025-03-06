@@ -1,5 +1,5 @@
+import { BoxGroup, BoxGroupSection } from "@/base";
 import { getFontWeight } from "@app/theme";
-import { BoxGroup, BoxGroupSection } from "@base";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

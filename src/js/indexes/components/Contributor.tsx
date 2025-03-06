@@ -1,4 +1,4 @@
-import { Badge, BoxGroupSection, InitialIcon } from "@base";
+import { Badge, BoxGroupSection, InitialIcon } from "@/base";
 import React from "react";
 import styled from "styled-components";
 

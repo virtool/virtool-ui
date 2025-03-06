@@ -1,4 +1,4 @@
-import { Attribution, BoxGroupSection, Icon, Label } from "@base";
+import { Attribution, BoxGroupSection, Icon, Label } from "@/base";
 import { IconButton } from "@base/IconButton";
 import { useRevertOTU } from "@otus/queries";
 import { OTUNested } from "@otus/types";

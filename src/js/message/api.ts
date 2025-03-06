@@ -1,4 +1,4 @@
-import { Request } from "../app/request";
+import { apiClient } from "@/api";
 import { Message } from "./types";
 
 /**
@@ -7,7 +7,7 @@ import { Message } from "./types";
  * @returns A promise resolving to an instance message
  */
 export function getMessage(): Promise<Message> {
-    return Request.get("/instance_message").then((res) => res.body);
+    return apiClient.get("/instance_message").then((res) => res.body);
 }
 
 /**
@@ -17,7 +17,8 @@ export function getMessage(): Promise<Message> {
  * @returns A promise resolving to an updated instance message
  */
 export function setMessage(message: string): Promise<Message> {
-    return Request.put("/instance_message")
+    return apiClient
+        .put("/instance_message")
         .send({ color: "red", message })
         .then((res) => res.body);
 }

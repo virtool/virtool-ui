@@ -6,9 +6,9 @@ import {
     ContainerSide,
     LoadingPlaceholder,
     Markdown,
-} from "@base";
+} from "@/base";
+import { usePathParams } from "@/hooks";
 import JobItem from "@jobs/components/Item/JobItem";
-import { usePathParams } from "@utils/hooks";
 import numbro from "numbro";
 import React from "react";
 import styled from "styled-components";

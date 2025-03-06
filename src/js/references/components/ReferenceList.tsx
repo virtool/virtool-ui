@@ -5,11 +5,11 @@ import {
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
+import { usePageParam, useUrlSearchParam } from "@/hooks";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
 import { ReferenceItem } from "@references/components/Item/ReferenceItem";
-import { usePageParam, useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import { useFindReferences } from "../queries";

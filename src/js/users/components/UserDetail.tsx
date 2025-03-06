@@ -1,7 +1,3 @@
-import { useCheckAdminRole } from "@administration/hooks";
-import { useFetchUser } from "@administration/queries";
-import { AdministratorRoles } from "@administration/types";
-import { getFontSize, getFontWeight } from "@app/theme";
 import {
     Alert,
     device,
@@ -9,10 +5,14 @@ import {
     InitialIcon,
     Link,
     LoadingPlaceholder,
-} from "@base";
+} from "@/base";
+import { useDialogParam, usePathParams } from "@/hooks";
+import { useCheckAdminRole } from "@administration/hooks";
+import { useFetchUser } from "@administration/queries";
+import { AdministratorRoles } from "@administration/types";
+import { getFontSize, getFontWeight } from "@app/theme";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
-import { useDialogParam, usePathParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import Password from "./Password";

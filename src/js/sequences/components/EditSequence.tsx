@@ -1,11 +1,11 @@
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
 import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import {
     useGetActiveSequence,
     useGetUnreferencedSegments,
 } from "@sequences/hooks";
-import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import SequenceForm from "./SequenceForm";
 

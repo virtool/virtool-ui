@@ -9,7 +9,8 @@ import { JobMinimal } from "../jobs/types";
 import { LabelNested } from "../labels/types";
 import { SubtractionNested } from "../subtraction/types";
 import { UserNested } from "../users/types";
-import { SearchResult } from "../utils/types";
+
+import { SearchResult } from "@/types";
 
 /* All workflow states */
 export enum WorkflowState {

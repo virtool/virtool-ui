@@ -1,4 +1,4 @@
-import { Checkbox } from "@base";
+import { Checkbox } from "@/base";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";

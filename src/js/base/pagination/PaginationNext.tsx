@@ -1,6 +1,6 @@
-import { LinkButton } from "@base";
+import { LinkButton } from "@/base";
+import { cn } from "@/utils";
 import { PaginationItem } from "@base/pagination/PaginationItem";
-import { cn } from "@utils/utils";
 import * as React from "react";
 
 type PaginationNextProps = {

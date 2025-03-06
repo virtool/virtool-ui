@@ -1,6 +1,6 @@
-import { Icon, Link } from "@base";
-import { useMatchPartialPath } from "@utils/hooks";
-import { cn } from "@utils/utils";
+import { Icon, Link } from "@/base";
+import { useMatchPartialPath } from "@/hooks";
+import { cn } from "@/utils";
 import React from "react";
 
 type SidebarItemProps = {

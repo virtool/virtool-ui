@@ -1,7 +1,7 @@
+import { ComboBox, InitialIcon } from "@base/index";
 import React from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { ComboBox, InitialIcon } from "../../../base";
 import { User } from "../../../users/types";
 
 const UserItem = styled.div`

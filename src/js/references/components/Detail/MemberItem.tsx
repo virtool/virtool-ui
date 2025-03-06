@@ -1,6 +1,6 @@
+import { BoxGroupSection, Button, InitialIcon } from "@base/index";
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { BoxGroupSection, Button, InitialIcon } from "../../../base";
 
 const StyledMemberItemIcon = styled.div`
     align-items: center;

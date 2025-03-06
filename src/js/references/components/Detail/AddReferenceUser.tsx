@@ -1,4 +1,3 @@
-import { getBorder } from "@app/theme";
 import {
     BoxGroup,
     Dialog,
@@ -9,7 +8,8 @@ import {
     InputSearch,
     NoneFoundSection,
     SelectBoxGroupSection,
-} from "@base";
+} from "@/base";
+import { getBorder } from "@app/theme";
 import { CompactScrollList } from "@base/CompactScrollList";
 import Toolbar from "@base/Toolbar";
 import { DialogPortal } from "@radix-ui/react-dialog";

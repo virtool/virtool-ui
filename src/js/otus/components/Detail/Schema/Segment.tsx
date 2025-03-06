@@ -1,8 +1,8 @@
 import { BoxGroupSection, Label } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
+import { cn } from "@/utils";
 import { IconButton } from "@base/IconButton";
 import { OTUSegment } from "@otus/types";
-import { useUrlSearchParam } from "@utils/hooks";
-import { cn } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 

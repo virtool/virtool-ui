@@ -1,4 +1,4 @@
-import { Attribution } from "@base";
+import { Attribution } from "@/base";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Attribution> = {

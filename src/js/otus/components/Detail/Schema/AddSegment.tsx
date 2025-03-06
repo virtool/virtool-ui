@@ -1,8 +1,8 @@
 import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
+import { useDialogParam } from "@/hooks";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
 import React from "react";
 import SegmentForm from "./SegmentForm";
 

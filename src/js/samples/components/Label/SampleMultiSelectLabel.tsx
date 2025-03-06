@@ -1,5 +1,5 @@
+import { Icon } from "@base/index";
 import React from "react";
-import { Icon } from "../../../base";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 
 type SampleMultiSelectLabel = {

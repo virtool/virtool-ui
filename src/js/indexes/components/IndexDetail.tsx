@@ -6,14 +6,14 @@ import {
     SubviewHeader,
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
-} from "@base";
+} from "@/base";
+import { usePathParams } from "@/hooks";
 import Contributors from "@indexes/components/Contributors";
 import Files from "@indexes/components/IndexFiles";
 import IndexOTUs from "@indexes/components/IndexOTUs";
 import { useFetchIndex } from "@indexes/queries";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import { useGetReference } from "@references/queries";
-import { usePathParams } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 

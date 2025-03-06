@@ -1,4 +1,4 @@
-import { ExternalLink } from "@base";
+import { ExternalLink } from "@/base";
 import React from "react";
 
 export default function NuvsOrfLabel({ hmm }) {

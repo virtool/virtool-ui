@@ -1,6 +1,6 @@
-import { RemoveBanner } from "@base";
+import { RemoveBanner } from "@/base";
+import { useDialogParam, useNavigate } from "@/hooks";
 import { RemoveDialog } from "@base/RemoveDialog";
-import { useDialogParam, useNavigate } from "@utils/hooks";
 import React, { useCallback } from "react";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReference } from "../../queries";

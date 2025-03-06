@@ -1,12 +1,12 @@
-import { useListHmms } from "@/hmm/queries";
 import {
     ContainerNarrow,
     LoadingPlaceholder,
     NoneFoundBox,
     Pagination,
-} from "@base";
+} from "@/base";
+import { useListHmms } from "@/hmm/queries";
+import { usePageParam, usePathParams } from "@/hooks";
 import { useFetchSample } from "@samples/queries";
-import { usePageParam, usePathParams } from "@utils/hooks";
 import React from "react";
 import { useListAnalyses } from "../queries";
 import { AnalysisMinimal } from "../types";

@@ -1,5 +1,5 @@
+import { cn } from "@/utils";
 import * as RadixCheckbox from "@radix-ui/react-checkbox";
-import { cn } from "@utils/utils";
 import React from "react";
 import { Icon } from "./Icon";
 

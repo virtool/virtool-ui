@@ -1,5 +1,5 @@
-import { Button, DialogFooter } from "@base";
-import { useNavigate } from "@utils/hooks";
+import { Button, DialogFooter } from "@/base";
+import { useNavigate } from "@/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useCreateReference } from "../queries";

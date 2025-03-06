@@ -1,4 +1,4 @@
-import { Button, Checkbox, InputGroup, InputLabel, InputSimple } from "@base";
+import { Button, Checkbox, InputGroup, InputLabel, InputSimple } from "@/base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useLoginMutation } from "../queries";

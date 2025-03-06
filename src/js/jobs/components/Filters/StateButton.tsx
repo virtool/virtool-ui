@@ -1,4 +1,4 @@
-import { Badge, BoxGroupSection, Circle } from "@base";
+import { Badge, BoxGroupSection, Circle } from "@/base";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import React from "react";
 import styled from "styled-components";

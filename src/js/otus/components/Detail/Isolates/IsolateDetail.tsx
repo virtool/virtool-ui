@@ -1,11 +1,11 @@
-import { Box, Icon, Label } from "@base";
+import { Box, Icon, Label } from "@/base";
+import { useDialogParam } from "@/hooks";
+import { formatIsolateName } from "@/utils";
 import { IconButton } from "@base/IconButton";
 import { useSetIsolateAsDefault } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";
 import Sequences from "@sequences/components/Sequences";
-import { useDialogParam } from "@utils/hooks";
-import { formatIsolateName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 import EditIsolate from "./EditIsolate";

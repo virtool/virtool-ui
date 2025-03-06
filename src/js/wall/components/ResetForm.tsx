@@ -1,4 +1,10 @@
-import { Button, InputError, InputGroup, InputLabel, InputSimple } from "@base";
+import {
+    Button,
+    InputError,
+    InputGroup,
+    InputLabel,
+    InputSimple,
+} from "@/base";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useResetPasswordMutation } from "../queries";

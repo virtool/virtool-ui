@@ -5,11 +5,11 @@ import {
     DropdownMenuDownload,
     Icon,
     InputSearch,
-} from "@base";
+} from "@/base";
+import { useUrlSearchParam } from "@/hooks";
 import { ButtonToggle } from "@base/ButtonToggle";
 import Toolbar from "@base/Toolbar";
 import { Tooltip } from "@base/Tooltip";
-import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 

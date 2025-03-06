@@ -3,7 +3,7 @@
  *
  * @module hmm/api
  */
-import { Request } from "@app/request";
+import { apiClient } from "@/api";
 import { HMM, HMMInstalled, HMMSearchResults } from "./types";
 
 /**
@@ -20,7 +20,7 @@ export function find({
     term: string;
     page: number;
 }): Promise<any> {
-    return Request.get("/hmms").query({ find: term, page });
+    return apiClient.get("/hmms").query({ find: term, page });
 }
 
 /**
@@ -29,7 +29,7 @@ export function find({
  * @returns The promise which resolves to the servers response
  */
 export function installHmm(): Promise<HMMInstalled> {
-    return Request.post("/hmms/status/updates").then((res) => res.body);
+    return apiClient.post("/hmms/status/updates").then((res) => res.body);
 }
 
 /**
@@ -39,7 +39,7 @@ export function installHmm(): Promise<HMMInstalled> {
  * @returns resolves to an object containing a single HMM
  */
 export function fetchHmm(hmmId: string): Promise<HMM> {
-    return Request.get(`/hmms/${hmmId}`).then((res) => res.body);
+    return apiClient.get(`/hmms/${hmmId}`).then((res) => res.body);
 }
 
 /**
@@ -55,7 +55,8 @@ export function listHmms(
     per_page: number,
     term: string,
 ): Promise<HMMSearchResults> {
-    return Request.get("/hmms")
+    return apiClient
+        .get("/hmms")
         .query({ page, per_page, find: term })
         .then((res) => res.body);
 }

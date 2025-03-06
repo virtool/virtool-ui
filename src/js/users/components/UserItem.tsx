@@ -1,7 +1,7 @@
+import { BoxGroupSection, Icon, InitialIcon, Label, Link } from "@/base";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { BoxGroupSection, Icon, InitialIcon, Label, Link } from "@base";
 import { GroupMinimal } from "@groups/types";
 import React from "react";
 import styled from "styled-components";

@@ -6,7 +6,7 @@ import {
     ViewHeader,
     ViewHeaderSubtitle,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
 import React from "react";
 import styled from "styled-components";
 import { useFetchLabels } from "../queries";

@@ -1,4 +1,4 @@
-import { BoxGroup, BoxGroupHeader } from "@base";
+import { BoxGroup, BoxGroupHeader } from "@/base";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { IndexOTU as OTU } from "@indexes/types";
 import { map } from "lodash-es";

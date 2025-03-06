@@ -1,5 +1,5 @@
-import { useUrlSearchParam } from "@utils/hooks";
-import { createFuse } from "@utils/utils";
+import { createFuse } from "@/fuse";
+import { useUrlSearchParam } from "@/hooks";
 import { find, map, reject, sortBy } from "lodash-es/lodash";
 import { useMemo } from "react";
 import { useSearch } from "wouter";

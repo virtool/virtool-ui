@@ -1,4 +1,5 @@
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@base";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import {
     referenceQueryKeys,
@@ -6,7 +7,6 @@ import {
 } from "@references/queries";
 import { ReferenceGroup, ReferenceUser } from "@references/types";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUrlSearchParam } from "@utils/hooks";
 import { map } from "lodash-es";
 import React from "react";
 import { ReferenceRight } from "./ReferenceRight";

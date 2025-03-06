@@ -6,7 +6,7 @@ import {
     Button,
     ExternalLink,
     Icon,
-} from "@base";
+} from "@/base";
 import { map } from "lodash";
 import numbro from "numbro";
 import React from "react";

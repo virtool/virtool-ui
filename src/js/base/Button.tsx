@@ -1,4 +1,4 @@
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import React, { ComponentType, ReactNode } from "react";
 
 export type ButtonProps = {

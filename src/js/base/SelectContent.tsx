@@ -1,8 +1,8 @@
+import { borderRadius, boxShadow, getColor } from "@app/theme";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { borderRadius, boxShadow, getColor } from "../../app/theme";
-import { Icon } from "../Icon";
+import { Icon } from "./Icon";
 
 const ContentOpen = keyframes`  
   from {

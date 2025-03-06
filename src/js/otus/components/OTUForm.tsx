@@ -1,6 +1,3 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import {
     DialogFooter,
     InputError,
@@ -8,7 +5,10 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "../../base";
+} from "@base/index";
+import React from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
 const OTUFormBody = styled.div`
     display: grid;

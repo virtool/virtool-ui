@@ -1,4 +1,4 @@
-import { useElementSize } from "@utils/hooks";
+import { useElementSize } from "@/hooks";
 import { area, max, scaleLinear, select } from "d3";
 import React, { useLayoutEffect } from "react";
 import "./area.css";

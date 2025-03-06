@@ -1,9 +1,9 @@
+import { getColor, getFontWeight } from "@app/theme";
+import { Box } from "@base";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { getColor, getFontWeight } from "../../../app/theme";
-import { Box } from "../../../base";
-import { CreateAnalysisField } from "./CreateAnalysisField";
+import CreateAnalysisField from "./CreateAnalysisField";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 import { workflow } from "./workflows";
 

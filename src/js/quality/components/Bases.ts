@@ -1,5 +1,10 @@
 import { theme } from "@app/theme";
-import { appendLegend, createSVG } from "@samples/chartUtils";
+import {
+    appendLegend,
+    createSvg,
+    QUALITY_CHART_HEIGHT,
+    QUALITY_CHART_MARGIN,
+} from "@samples/charting.js";
 import { area, axisBottom, axisLeft, line, scaleLinear } from "d3";
 import { forEach, map, min, values } from "lodash-es";
 
@@ -10,7 +15,7 @@ const series = [
     { label: "Decile", color: theme.color.yellow },
 ];
 
-function getArea(name, areaX, y, a, b) {
+function getArea(name: string, areaX, y, a, b) {
     return {
         name,
         func: area()
@@ -26,12 +31,6 @@ function getMinQuality(data) {
 
 /**
  * Generates the lines representing mean and median base quality.
- *
- * @func
- * @param data
- * @param key
- * @param x
- * @param y
  */
 function lineDrawer(data, key, x, y) {
     const column = {
@@ -40,20 +39,21 @@ function lineDrawer(data, key, x, y) {
     }[key];
 
     const generator = line()
-        .x((d, i) => x(i))
+        .x((_, i) => x(i))
         .y((d) => y(d[column]));
 
     return generator(data);
 }
 
-export function drawBasesChart(element, data, baseWidth) {
-    const svg = createSVG(element, baseWidth);
+export function drawBasesChart(element: HTMLElement, data, baseWidth: number) {
+    const svg = createSvg(element, baseWidth);
 
-    const width = baseWidth - svg.margin.left - svg.margin.right;
+    const width =
+        baseWidth - QUALITY_CHART_MARGIN.left - QUALITY_CHART_MARGIN.right;
 
     // Set up scales and axes.
     const y = scaleLinear()
-        .range([svg.height, 0])
+        .range([QUALITY_CHART_HEIGHT, 0])
         .domain([getMinQuality(data) - 5, 48]);
 
     const x = scaleLinear().range([0, width]).domain([0, data.length]);
@@ -62,7 +62,8 @@ export function drawBasesChart(element, data, baseWidth) {
         return x(i);
     }
 
-    // Define the d3 area functions to render the inter-quartile and upper and lower decile plot areas.
+    // Define the d3 area functions to render the inter-quartile and upper and
+    // lower decile plot areas.
     const areas = [
         getArea("upper", areaX, y, 3, 5),
         getArea("lower", areaX, y, 2, 4),
@@ -92,7 +93,7 @@ export function drawBasesChart(element, data, baseWidth) {
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", `translate(0, ${svg.height})`)
+        .attr("transform", `translate(0, ${QUALITY_CHART_HEIGHT})`)
         .call(axisBottom(x))
         .append("text")
         .attr("x", width / 2)

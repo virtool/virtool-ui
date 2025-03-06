@@ -1,18 +1,18 @@
+import { Dialog, DialogOverlay, DialogTitle } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
 import { Workflows } from "@analyses/types";
-import { Dialog, DialogOverlay, DialogTitle } from "@base";
 import { HMMSearchResults } from "@hmm/types";
 import { IndexMinimal } from "@indexes/types";
 import { MLModelSearchResult } from "@ml/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
 import { SubtractionShortlist } from "@subtraction/types";
-import { useUrlSearchParam } from "@utils/hooks";
 import { forEach, includes } from "lodash-es";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useCreateAnalysis } from "../../queries";
 import HMMAlert from "../HMMAlert";
-import { CreateAnalysisDialogContent } from "./CreateAnalysisDialogContent";
+import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
 import {
     CreateAnalysisForm,
     CreateAnalysisFormValues,

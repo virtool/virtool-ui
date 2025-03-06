@@ -1,3 +1,4 @@
+import { formatPath } from "@/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -10,7 +11,6 @@ import {
 } from "@tests/fake/account";
 import { createFakePermissions } from "@tests/fake/permissions";
 import { renderWithRouter } from "@tests/setup";
-import { formatPath } from "@utils/hooks";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";

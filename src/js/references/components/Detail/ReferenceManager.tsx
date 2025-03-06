@@ -4,10 +4,10 @@ import {
     BoxGroupTable,
     ContainerNarrow,
     LoadingPlaceholder,
-} from "@base";
+} from "@/base";
+import { usePathParams } from "@/hooks";
+import { cn } from "@/utils";
 import Contributors from "@indexes/components/Contributors";
-import { usePathParams } from "@utils/hooks";
-import { cn } from "@utils/utils";
 import React from "react";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";

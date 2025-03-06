@@ -1,4 +1,4 @@
-import { Request } from "@app/request";
+import { apiClient } from "@/api";
 import { Label } from "@labels/types";
 
 /**
@@ -7,7 +7,7 @@ import { Label } from "@labels/types";
  * @returns A promise resolving to a list of labels
  */
 export function fetchLabels(): Promise<Label[]> {
-    return Request.get("/labels").then((res) => res.body);
+    return apiClient.get("/labels").then((res) => res.body);
 }
 
 /**
@@ -23,7 +23,8 @@ export function createLabel(
     description: string,
     color: string,
 ): Promise<Label> {
-    return Request.post("/labels")
+    return apiClient
+        .post("/labels")
         .send({
             name,
             description,
@@ -47,7 +48,8 @@ export function updateLabel(
     description: string,
     color: string,
 ): Promise<Label> {
-    return Request.patch(`/labels/${labelId}`)
+    return apiClient
+        .patch(`/labels/${labelId}`)
         .send({
             name,
             description,
@@ -63,5 +65,5 @@ export function updateLabel(
  * @returns A promise resolving to removing a label
  */
 export function removeLabel(labelId: number): Promise<null> {
-    return Request.delete(`/labels/${labelId}`).then((res) => res.body);
+    return apiClient.delete(`/labels/${labelId}`).then((res) => res.body);
 }

@@ -1,8 +1,8 @@
-import { useDialogParam, useUrlSearchParam } from "@utils/hooks";
+import { useDialogParam, useUrlSearchParam } from "@/hooks";
+import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "@base/index";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "../../../base";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 import { useRemoveReferenceUser } from "../../queries";
 import { ReferenceGroup, ReferenceUser } from "../../types";

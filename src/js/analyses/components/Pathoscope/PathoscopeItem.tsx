@@ -1,9 +1,9 @@
+import { AccordionTrigger } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
+import { cn, toScientificNotation } from "@/utils";
 import { FormattedPathoscopeHit } from "@analyses/types";
-import { AccordionTrigger } from "@base";
-import { AccordionContent } from "@base/accordion/AccordionContent";
-import { ScrollingAccordionItem } from "@base/accordion/ScrollingAccordionItem";
-import { useUrlSearchParam } from "@utils/hooks";
-import { cn, toScientificNotation } from "@utils/utils";
+import { AccordionContent } from "@base/AccordionContent";
+import { AccordionScrollingItem } from "@base/AccordionScrollingItem";
 import React from "react";
 import styled from "styled-components";
 import PathoscopeDetail from "./PathoscopeDetail";
@@ -61,7 +61,7 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
         : toScientificNotation(pi);
 
     return (
-        <ScrollingAccordionItem value={id}>
+        <AccordionScrollingItem value={id}>
             <PathoscopeAccordionTrigger>
                 <div className="flex justify-between mb-4">
                     <header className="flex flex-col font-medium items-start text-lg">
@@ -94,6 +94,6 @@ export function PathoscopeItem({ mappedCount, hit }: PathoscopeItemProps) {
             <AccordionContent>
                 <PathoscopeDetail hit={hit} mappedCount={mappedCount} />
             </AccordionContent>
-        </ScrollingAccordionItem>
+        </AccordionScrollingItem>
     );
 }

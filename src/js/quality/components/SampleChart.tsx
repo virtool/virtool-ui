@@ -1,5 +1,5 @@
 import "d3-transition";
-import React, { RefObject, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const StyledQualityChart = styled.div`
@@ -54,12 +54,14 @@ const StyledQualityChart = styled.div`
 type QualityChartProps = {
     /** A callback function to create the sample quality chart */
     createChart: (
-        current: RefObject<HTMLDivElement>,
+        current: HTMLDivElement,
         data: number[],
         width: number,
     ) => void;
+
     /** The data to be used in the chart */
     data: number[];
+
     /** The width of the chart */
     width: number;
 };
@@ -67,10 +69,14 @@ type QualityChartProps = {
 /**
  * Creates and displays charts for sample quality
  */
-export function QualityChart({ createChart, data, width }: QualityChartProps) {
+export function SampleChart({ createChart, data, width }: QualityChartProps) {
     const ref = useRef(null);
 
-    useEffect(() => createChart(ref.current, data, width), [width]);
+    useEffect(() => {
+        if (ref.current) {
+            createChart(ref.current, data, width);
+        }
+    }, [createChart, data, width]);
 
     return <StyledQualityChart ref={ref} />;
 }

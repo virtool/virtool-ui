@@ -1,4 +1,4 @@
-import { Logo } from "@base";
+import { Logo } from "@/base";
 import React from "react";
 
 type WallTitleProps = {

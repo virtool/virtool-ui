@@ -1,9 +1,6 @@
+import { usePathParams } from "@/hooks";
+import { cn } from "@/utils";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
-import { usePathParams } from "@utils/hooks";
-import { cn } from "@utils/utils";
-import { map } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -14,7 +11,10 @@ import {
     NotFound,
     ViewHeader,
     ViewHeaderTitle,
-} from "../../base";
+} from "@base/index";
+import { map } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HMMTaxonomy } from "./HMMTaxonomy";

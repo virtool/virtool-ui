@@ -1,11 +1,11 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
+import { Attribution, BoxGroupSection, Link } from "@/base";
 import { Permission } from "@/groups/types";
+import { useUrlSearchParam } from "@/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Attribution, BoxGroupSection, Link } from "@base";
 import { IconButton } from "@base/IconButton";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
-import { useUrlSearchParam } from "@utils/hooks";
 import React from "react";
 import styled from "styled-components";
 import { ReferenceMinimal } from "../../types";

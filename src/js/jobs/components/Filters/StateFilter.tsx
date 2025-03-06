@@ -1,6 +1,6 @@
-import { SidebarHeader, SideBarSection } from "@base";
+import { SidebarHeader, SideBarSection } from "@/base";
+import { useListSearchParam } from "@/hooks";
 import { JobCounts } from "@jobs/types";
-import { useListSearchParam } from "@utils/hooks";
 import { difference, union, xor } from "lodash-es";
 import { mapValues, reduce } from "lodash-es/lodash";
 import React from "react";

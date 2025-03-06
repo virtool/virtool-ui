@@ -1,7 +1,8 @@
 import { JobMinimal } from "@jobs/types";
 import { SampleNested } from "@samples/types";
 import { UserNested } from "@users/types";
-import { SearchResult } from "@utils/types";
+
+import { SearchResult } from "@/types";
 
 /** The measurements of individual nucleotides (percentage) */
 export type NucleotideComposition = {

@@ -4,10 +4,12 @@ import { forEach } from "lodash-es/lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useParams, useSearch } from "wouter";
 
-const getSize = (ref) => ({
-    height: ref.current ? ref.current.offsetHeight : 0,
-    width: ref.current ? ref.current.offsetWidth : 0,
-});
+function getSize(ref) {
+    return {
+        height: ref.current ? ref.current.offsetHeight : 0,
+        width: ref.current ? ref.current.offsetWidth : 0,
+    };
+}
 
 type Size = {
     height: number;

@@ -1,4 +1,4 @@
-import { Button } from "@base";
+import { Button } from "@/base";
 import { IndexMinimal } from "@indexes/types";
 import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";

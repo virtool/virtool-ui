@@ -1,5 +1,5 @@
-import { Box, Label, Link } from "@base";
-import { toThousand } from "@utils/utils";
+import { Box, Label, Link } from "@/base";
+import { toThousand } from "@/utils";
 import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";

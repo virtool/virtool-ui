@@ -1,8 +1,8 @@
-import { byteSize } from "@utils/utils";
+import { byteSize } from "@/utils";
+import { Icon, SelectBoxGroupSection } from "@base/index";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
-import { Icon, SelectBoxGroupSection } from "../../../base";
 
 const ReadIcon = styled.span`
     font-size: 24px;

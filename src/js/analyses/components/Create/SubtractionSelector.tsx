@@ -1,7 +1,8 @@
+import { useFuse } from "@/fuse";
+import { Subtraction } from "@subtraction/types";
 import { filter, intersectionWith, xor } from "lodash-es";
 import React from "react";
-import { useFuse } from "../../../base/hooks";
-import { CreateAnalysisField } from "./CreateAnalysisField";
+import CreateAnalysisField from "./CreateAnalysisField";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelected } from "./CreateAnalysisSelected";
 import { CreateAnalysisSelector } from "./CreateAnalysisSelector";
@@ -14,24 +15,28 @@ interface SubtractionSelectorProps {
     subtractions: object[];
     onChange: (selected: string[]) => void;
 }
+
 export function SubtractionSelector({
     subtractions,
     selected,
     onChange,
 }: SubtractionSelectorProps) {
-    const [results, term, setTerm] = useFuse(subtractions, ["name"], [1]);
+    const [results, term, setTerm] = useFuse<object>(subtractions, ["name"]);
 
     const unselectedSubtractions = filter(
-        results.map((result) => result.item || result),
-        (subtraction) => !selected.includes(subtraction.id),
+        results,
+        (subtraction: Subtraction) => !selected.includes(subtraction.id),
     );
+
     const selectedSubtractions = intersectionWith(
         subtractions,
         selected,
-        (subtraction, id) => subtraction.id === id,
+        (subtraction: Subtraction, id: string) => subtraction.id === id,
     );
 
-    const handleClick = (id) => onChange(xor(selected, [id]));
+    function handleClick(id) {
+        return onChange(xor(selected, [id]));
+    }
 
     return (
         <CreateAnalysisField>

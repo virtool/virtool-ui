@@ -1,4 +1,4 @@
-import { Container, ContainerNarrow } from "@base";
+import { Container, ContainerNarrow } from "@/base";
 import { FileManager } from "@files/components/FileManager";
 import { FileType } from "@files/types";
 import { Labels } from "@labels/components/Labels";

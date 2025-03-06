@@ -1,4 +1,3 @@
-import { getFontWeight } from "@app/theme";
 import {
     Box,
     BoxGroup,
@@ -7,9 +6,10 @@ import {
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base";
+} from "@/base";
+import { useListSearchParam, usePageParam } from "@/hooks";
+import { getFontWeight } from "@app/theme";
 import { useFindJobs } from "@jobs/queries";
-import { useListSearchParam, usePageParam } from "@utils/hooks";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";

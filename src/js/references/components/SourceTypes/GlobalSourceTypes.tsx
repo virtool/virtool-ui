@@ -1,4 +1,3 @@
-import { settingsQueryKeys } from "@administration/queries";
 import {
     BoxGroup,
     BoxGroupHeader,
@@ -8,7 +7,8 @@ import {
     InputLabel,
     InputSimple,
     SectionHeader,
-} from "@base";
+} from "@/base";
+import { settingsQueryKeys } from "@administration/queries";
 import { IconButton } from "@base/IconButton";
 import Toolbar from "@base/Toolbar";
 import React from "react";

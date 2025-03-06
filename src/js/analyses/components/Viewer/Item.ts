@@ -1,6 +1,6 @@
+import { Box } from "@base/index";
 import styled from "styled-components";
 import { getActiveShadow } from "../../../app/theme";
-import { Box } from "../../../base";
 
 export const AnalysisViewerItem = styled(Box)`
     border-bottom: none;

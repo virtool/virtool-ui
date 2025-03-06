@@ -1,11 +1,11 @@
-import { Request } from "../app/request";
+import { apiClient } from "@/api";
 import {
     Subtraction,
     SubtractionSearchResult,
     SubtractionShortlist,
 } from "./types";
 
-export const shortlist = () => Request.get("/subtractions?short=true");
+export const shortlist = () => apiClient.get("/subtractions?short=true");
 
 /**
  * Creates a subtraction
@@ -20,7 +20,8 @@ export function createSubtraction(
     nickname: string,
     uploadId: string,
 ): Promise<Subtraction> {
-    return Request.post("/subtractions")
+    return apiClient
+        .post("/subtractions")
         .send({
             name,
             nickname,
@@ -42,7 +43,8 @@ export function findSubtractions(
     per_page: number,
     term: string,
 ): Promise<SubtractionSearchResult> {
-    return Request.get("/subtractions")
+    return apiClient
+        .get("/subtractions")
         .query({ page, per_page, find: term })
         .then((response) => response.body);
 }
@@ -54,9 +56,9 @@ export function findSubtractions(
  * @returns A promise resolving to a single subtraction
  */
 export function getSubtraction(subtractionId: string): Promise<Subtraction> {
-    return Request.get(`/subtractions/${subtractionId}`).then(
-        (response) => response.body,
-    );
+    return apiClient
+        .get(`/subtractions/${subtractionId}`)
+        .then((response) => response.body);
 }
 
 /**
@@ -72,7 +74,8 @@ export function updateSubtraction(
     name: string,
     nickname: string,
 ): Promise<Subtraction> {
-    return Request.patch(`/subtractions/${subtractionId}`)
+    return apiClient
+        .patch(`/subtractions/${subtractionId}`)
         .send({ name, nickname })
         .then((response) => response.body);
 }
@@ -84,9 +87,9 @@ export function updateSubtraction(
  * @returns A promise resolving to removing a subtraction
  */
 export function removeSubtraction(subtractionId: string): Promise<Response> {
-    return Request.delete(`/subtractions/${subtractionId}`).then(
-        (response) => response.body,
-    );
+    return apiClient
+        .delete(`/subtractions/${subtractionId}`)
+        .then((response) => response.body);
 }
 
 /**
@@ -97,7 +100,8 @@ export function removeSubtraction(subtractionId: string): Promise<Response> {
 export function fetchSubtractionShortlist(
     ready: boolean,
 ): Promise<SubtractionShortlist[]> {
-    return Request.get("/subtractions")
+    return apiClient
+        .get("/subtractions")
         .query({ short: true, ready })
         .then((response) => response.body);
 }

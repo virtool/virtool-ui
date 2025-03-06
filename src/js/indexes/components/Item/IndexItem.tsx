@@ -1,4 +1,4 @@
-import { Attribution, BoxGroupSection, Link } from "@base";
+import { Attribution, BoxGroupSection, Link } from "@/base";
 import React from "react";
 import { IndexMinimal } from "../../types";
 import { IndexItemDescription } from "./IndexItemDescription";

@@ -3,7 +3,6 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
-import EntryShakingPlugin from "vite-plugin-entry-shaking";
 import { createHtmlPlugin } from "vite-plugin-html";
 
 export default defineConfig({
@@ -43,11 +42,8 @@ export default defineConfig({
     },
     plugins: [
         createHtmlPlugin({}),
-        EntryShakingPlugin({
-            targets: [{ glob: "src/base/index.ts" }],
-        }),
         react({
-            include: "**/*.{jsx,tsx}",
+            include: "**/*.{tsx}",
         }),
         sentryVitePlugin({
             org: "cfia-virtool",

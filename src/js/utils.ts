@@ -1,11 +1,9 @@
 /**
  * General utility constants and functions.
- *
  */
-import { capitalize } from "@utils/common";
+import { capitalize } from "@/common";
 import clsx, { ClassValue } from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
-import Fuse from "fuse.js";
 import { get, sampleSize, startCase } from "lodash-es";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
@@ -13,7 +11,7 @@ import { twMerge } from "tailwind-merge";
 /**
  * A string containing all alphanumeric digits in both cases.
  */
-export const alphanumeric =
+const alphanumeric =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 /**
@@ -33,18 +31,6 @@ export function byteSize(
     }
 
     return "0.0B";
-}
-
-/**
- * Create a Fuse object.
- */
-export function createFuse(collection: object[], keys: string[]) {
-    return new Fuse(collection, {
-        keys,
-        minMatchCharLength: 1,
-        threshold: 0.3,
-        useExtendedSearch: true,
-    });
 }
 
 /**

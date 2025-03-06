@@ -1,8 +1,8 @@
 import { BoxGroupSection, Icon } from "@/base";
+import { useUrlSearchParam } from "@/hooks";
+import { formatIsolateName } from "@/utils";
 import { getActiveShadow } from "@app/theme";
 import { OTUIsolate } from "@otus/types";
-import { useUrlSearchParam } from "@utils/hooks";
-import { formatIsolateName } from "@utils/utils";
 import React from "react";
 import styled from "styled-components";
 

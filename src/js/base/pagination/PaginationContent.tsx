@@ -1,4 +1,4 @@
-import { cn } from "@utils/utils";
+import { cn } from "@/utils";
 import * as React from "react";
 
 export const PaginationContent = React.forwardRef<

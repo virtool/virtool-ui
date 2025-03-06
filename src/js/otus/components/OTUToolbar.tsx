@@ -1,8 +1,8 @@
-import { InputSearch, LinkButton } from "@base";
+import { InputSearch, LinkButton } from "@/base";
+import { formatSearchParams } from "@/hooks";
 import Toolbar from "@base/Toolbar";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceRemotesFrom } from "@references/types";
-import { formatSearchParams } from "@utils/hooks";
 import React, { ChangeEvent } from "react";
 
 type OtuToolbarProps = {

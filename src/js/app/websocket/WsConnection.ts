@@ -1,4 +1,4 @@
-import { resetClient } from "@utils/utils";
+import { resetClient } from "@/utils";
 import { reactQueryHandler } from "./reactQueryHandler";
 
 export const INITIALIZING = "initializing";

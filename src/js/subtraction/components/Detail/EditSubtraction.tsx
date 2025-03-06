@@ -1,6 +1,3 @@
-import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
-import { useForm } from "react-hook-form";
 import {
     Dialog,
     DialogContent,
@@ -12,7 +9,10 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "../../../base";
+} from "@base/index";
+import { DialogPortal } from "@radix-ui/react-dialog";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { useUpdateSubtraction } from "../../queries";
 import { Subtraction } from "../../types";
 

@@ -1,5 +1,5 @@
+import { BoxGroupSection, Link } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { BoxGroupSection, Link } from "@base";
 import React from "react";
 import styled from "styled-components";
 

@@ -1,4 +1,4 @@
-import { BoxGroup, BoxGroupHeader, Checkbox } from "@base";
+import { BoxGroup, BoxGroupHeader, Checkbox } from "@/base";
 import { map } from "lodash-es";
 import React from "react";
 import { useUpdateGroup } from "../queries";

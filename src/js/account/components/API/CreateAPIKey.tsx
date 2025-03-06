@@ -1,6 +1,3 @@
-import APIPermissions from "@account/components/API/APIPermissions";
-import { useCreateAPIKey } from "@account/queries";
-import { getFontSize } from "@app/theme";
 import {
     Dialog,
     DialogContent,
@@ -16,11 +13,14 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@base";
+} from "@/base";
+import { useDialogParam } from "@/hooks";
+import APIPermissions from "@account/components/API/APIPermissions";
+import { useCreateAPIKey } from "@account/queries";
+import { getFontSize } from "@app/theme";
 import PseudoLabel from "@base/PseudoLabel";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useDialogParam } from "@utils/hooks";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";

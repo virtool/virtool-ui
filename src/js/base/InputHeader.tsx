@@ -1,5 +1,5 @@
+import { objectHasProperty } from "@/common";
 import { borderRadius, getFontSize, getFontWeight } from "@app/theme";
-import { objectHasProperty } from "@utils/common";
 import React, { MutableRefObject, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

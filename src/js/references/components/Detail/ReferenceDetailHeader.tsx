@@ -1,15 +1,15 @@
+import { useDialogParam } from "@/hooks";
 import { IconButton } from "@base/IconButton";
-import { useDialogParam } from "@utils/hooks";
-import { endsWith } from "lodash-es";
-import React from "react";
-import { useLocation } from "wouter";
 import {
     Icon,
     ViewHeader,
     ViewHeaderAttribution,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "../../../base";
+} from "@base/index";
+import { endsWith } from "lodash-es";
+import React from "react";
+import { useLocation } from "wouter";
 import { ReferenceRight, useCheckReferenceRight } from "../../hooks";
 
 type ReferenceDetailHeaderProps = {
