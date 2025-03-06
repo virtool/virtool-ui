@@ -1,5 +1,4 @@
 import {
-    Attribution,
     Badge,
     Box,
     Dialog,
@@ -14,6 +13,7 @@ import {
     SaveButton,
 } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
+import Attribution from "@base/Attribution";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { find } from "lodash-es";
 import React, { useEffect } from "react";

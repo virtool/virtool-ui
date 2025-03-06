@@ -1,12 +1,13 @@
 import { getWorkflowDisplayName } from "@/utils";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
-import { Attribution, Box, Icon, Link, SlashList } from "@base/index";
+import { getColor, getFontSize, getFontWeight, sizes } from "@app/theme";
+import { Box, Icon, Link, SlashList } from "@base";
+import Attribution from "@base/Attribution";
+import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
 import React from "react";
 import styled from "styled-components";
-import { getColor, getFontSize, getFontWeight, sizes } from "../../app/theme";
-import { ProgressCircle } from "../../base/ProgressCircle";
 import { useRemoveAnalysis } from "../queries";
 import { AnalysisMinimal } from "../types";
 import { checkSupportedWorkflow } from "../utils";

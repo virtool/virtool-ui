@@ -1,6 +1,7 @@
-import { Attribution, BoxGroupSection, Button } from "@/base";
 import { useRemoveAPIKey, useUpdateAPIKey } from "@account/queries";
 import { APIKeyMinimal } from "@account/types";
+import { BoxGroupSection, Button } from "@base";
+import Attribution from "@base/Attribution";
 import { IconButton } from "@base/IconButton";
 import { Permissions } from "@groups/types";
 import { isEqual, reduce } from "lodash-es";

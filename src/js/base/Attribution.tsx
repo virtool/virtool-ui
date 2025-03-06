@@ -11,7 +11,7 @@ type AttributionProps = {
     verb?: string;
 };
 
-export function Attribution({
+export default function Attribution({
     className = "",
     time,
     user,

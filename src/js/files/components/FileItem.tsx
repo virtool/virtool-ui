@@ -1,5 +1,6 @@
-import { Attribution, BoxGroupSection, RelativeTime } from "@/base";
+import { BoxGroupSection, RelativeTime } from "@/base";
 import { byteSize } from "@/utils";
+import Attribution from "@base/Attribution";
 import { IconButton } from "@base/IconButton";
 import { UserNested } from "@users/types";
 import React, { useCallback } from "react";

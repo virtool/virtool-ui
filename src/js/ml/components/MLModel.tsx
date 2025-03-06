@@ -1,7 +1,8 @@
-import { Attribution, Box } from "@base/index";
+import { getFontSize, getFontWeight } from "@app/theme";
+import { Box } from "@base";
+import Attribution from "@base/Attribution";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../app/theme";
 import { MLModelRelease } from "../types";
 
 const StyledMLModel = styled(Box)`

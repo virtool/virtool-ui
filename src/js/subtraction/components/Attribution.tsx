@@ -1,7 +1,8 @@
-import { Attribution, AttributionWithName } from "@base/index";
+import { getColor, getFontSize, theme } from "@app/theme";
+import { AttributionWithName } from "@base";
+import Attribution from "@base/Attribution";
 import React from "react";
 import styled from "styled-components";
-import { getColor, getFontSize, theme } from "../../app/theme";
 
 /**
  * Default attribution used when creation details are unknown
