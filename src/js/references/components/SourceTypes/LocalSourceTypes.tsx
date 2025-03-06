@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     BoxGroupDisabled,
     BoxGroupHeader,
     BoxGroupSection,
@@ -13,6 +12,7 @@ import {
 import { usePathParams } from "@/hooks";
 import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
 import { getColor } from "@app/theme";
+import BoxGroup from "@base/BoxGroup";
 import { IconButton } from "@base/IconButton";
 import { get } from "lodash-es";
 import React from "react";

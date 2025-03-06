@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     ContainerNarrow,
     LoadingPlaceholder,
     Pagination,
@@ -7,6 +6,7 @@ import {
     ViewHeaderTitle,
 } from "@/base";
 import { usePageParam, useUrlSearchParam } from "@/hooks";
+import BoxGroup from "@base/BoxGroup";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
 import { ReferenceItem } from "@references/components/Item/ReferenceItem";

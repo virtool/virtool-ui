@@ -1,4 +1,4 @@
-import { BoxGroup } from "@base/index";
+import BoxGroup from "@base/BoxGroup";
 import PseudoLabel from "@base/PseudoLabel";
 import React from "react";
 import styled from "styled-components";

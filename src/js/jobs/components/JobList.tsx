@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     ContainerNarrow,
     LoadingPlaceholder,
     Pagination,
@@ -9,6 +8,7 @@ import {
 import { useListSearchParam, usePageParam } from "@/hooks";
 import { getFontWeight } from "@app/theme";
 import Box from "@base/Box";
+import BoxGroup from "@base/BoxGroup";
 import { useFindJobs } from "@jobs/queries";
 import { map } from "lodash";
 import React from "react";

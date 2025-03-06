@@ -1,5 +1,6 @@
 import { useDialogParam, useUrlSearchParam } from "@/hooks";
-import { BoxGroup, BoxGroupHeader, BoxGroupSection, Icon } from "@base/index";
+import { BoxGroupHeader, BoxGroupSection, Icon } from "@base";
+import BoxGroup from "@base/BoxGroup";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

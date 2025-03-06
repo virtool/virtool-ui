@@ -1,4 +1,4 @@
-import { BoxGroupSection, Label } from "@base/index";
+import { BoxGroupSection, Label } from "@base";
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 

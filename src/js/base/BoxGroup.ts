@@ -7,10 +7,12 @@ type BoxGroupProps = {
     theme: DefaultTheme;
 };
 
-export const BoxGroup = styled(Box)<BoxGroupProps>`
+const BoxGroup = styled(Box)<BoxGroupProps>`
     border-radius: ${(props) => props.theme.borderRadius.sm};
     padding: 0;
     position: relative;
 `;
+
+export default BoxGroup;
 
 BoxGroup.displayName = "BoxGroup";

@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     Icon,
     LoadingPlaceholder,
     NoneFoundBox,
@@ -11,6 +10,7 @@ import { usePageParam } from "@/hooks";
 import { useFetchAccount } from "@account/queries";
 import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import Alert from "@base/Alert";
+import BoxGroup from "@base/BoxGroup";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { UploadBar } from "@files/components/UploadBar";
 import { upload } from "@files/uploader";

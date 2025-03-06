@@ -1,4 +1,4 @@
-import { BoxGroupSection, Icon } from "@base/index";
+import { BoxGroupSection, Icon } from "@base";
 import React from "react";
 import styled from "styled-components";
 

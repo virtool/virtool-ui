@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     BoxGroupHeader,
     BoxGroupSection,
     InputGroup,
@@ -7,6 +6,7 @@ import {
     InputSimple,
     SaveButton,
 } from "@/base";
+import BoxGroup from "@base/BoxGroup";
 import { useSetMessage } from "@message/queries";
 import { Message } from "@message/types";
 import React from "react";

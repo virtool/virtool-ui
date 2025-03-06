@@ -1,5 +1,6 @@
-import { BoxGroup, BoxGroupSection } from "@/base";
+import { BoxGroupSection } from "@/base";
 import { getBorder } from "@app/theme";
+import BoxGroup from "@base/BoxGroup";
 import React from "react";
 import styled from "styled-components";
 

@@ -1,4 +1,5 @@
-import { BoxGroup, BoxGroupHeader, BoxGroupSection } from "@base/index";
+import { BoxGroupHeader, BoxGroupSection } from "@base";
+import BoxGroup from "@base/BoxGroup";
 import React from "react";
 
 interface CloneProps {

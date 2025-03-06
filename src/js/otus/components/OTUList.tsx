@@ -1,11 +1,11 @@
 import {
-    BoxGroup,
     ContainerNarrow,
     LoadingPlaceholder,
     NoneFoundBox,
     Pagination,
 } from "@/base";
 import { usePageParam, usePathParams, useUrlSearchParam } from "@/hooks";
+import BoxGroup from "@base/BoxGroup";
 import { useGetReference } from "@references/queries";
 import { map } from "lodash";
 import React from "react";

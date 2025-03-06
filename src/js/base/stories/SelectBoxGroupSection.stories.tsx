@@ -1,4 +1,5 @@
-import { BoxGroup, SelectBoxGroupSection } from "@/base";
+import { SelectBoxGroupSection } from "@base";
+import BoxGroup from "@base/BoxGroup";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";

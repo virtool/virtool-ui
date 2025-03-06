@@ -1,4 +1,5 @@
-import { BoxGroup, InputError } from "@/base";
+import { InputError } from "@/base";
+import BoxGroup from "@base/BoxGroup";
 import PseudoLabel from "@base/PseudoLabel";
 import React, { ReactNode } from "react";
 import styled from "styled-components";

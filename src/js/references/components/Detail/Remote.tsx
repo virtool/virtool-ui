@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     BoxGroupHeader,
     BoxGroupSection,
     Button,
@@ -10,6 +9,7 @@ import {
     RelativeTime,
 } from "@/base";
 import { cn } from "@/utils";
+import BoxGroup from "@base/BoxGroup";
 import { JobState } from "@jobs/types";
 import React from "react";
 import {

@@ -1,5 +1,6 @@
-import { BoxGroup, SelectBoxGroupSection } from "@/base";
+import { SelectBoxGroupSection } from "@/base";
 import { getColor } from "@app/theme";
+import BoxGroup from "@base/BoxGroup";
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

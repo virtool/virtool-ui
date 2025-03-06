@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     Button,
     Icon,
     InputError,
@@ -9,6 +8,7 @@ import {
 } from "@/base";
 import { getBorder, getFontWeight, theme } from "@app/theme";
 import Box from "@base/Box";
+import BoxGroup from "@base/BoxGroup";
 import { CompactScrollList } from "@base/CompactScrollList";
 import PseudoLabel from "@base/PseudoLabel";
 import Toolbar from "@base/Toolbar";

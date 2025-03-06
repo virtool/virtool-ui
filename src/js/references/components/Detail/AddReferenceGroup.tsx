@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     Dialog,
     DialogContent,
     DialogOverlay,
@@ -10,6 +9,7 @@ import {
     SelectBoxGroupSection,
 } from "@/base";
 import { getBorder } from "@app/theme";
+import BoxGroup from "@base/BoxGroup";
 import { CompactScrollList } from "@base/CompactScrollList";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";

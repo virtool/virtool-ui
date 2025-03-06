@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     BoxGroupHeader,
     BoxGroupTable,
     ContainerNarrow,
@@ -7,6 +6,7 @@ import {
 } from "@/base";
 import { usePathParams } from "@/hooks";
 import { cn } from "@/utils";
+import BoxGroup from "@base/BoxGroup";
 import Contributors from "@indexes/components/Contributors";
 import React from "react";
 import { useGetReference } from "../../queries";

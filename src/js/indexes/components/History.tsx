@@ -1,9 +1,5 @@
-import {
-    BoxGroup,
-    BoxGroupHeader,
-    BoxGroupSection,
-    LoadingPlaceholder,
-} from "@/base";
+import { BoxGroupHeader, BoxGroupSection, LoadingPlaceholder } from "@/base";
+import BoxGroup from "@base/BoxGroup";
 import { map, sortBy } from "lodash-es";
 import React, { ReactNode } from "react";
 import styled from "styled-components";

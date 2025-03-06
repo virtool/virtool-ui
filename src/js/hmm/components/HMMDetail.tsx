@@ -1,8 +1,8 @@
 import { usePathParams } from "@/hooks";
 import { cn } from "@/utils";
+import BoxGroup from "@base/BoxGroup";
 import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import {
-    BoxGroup,
     BoxGroupHeader,
     BoxGroupTable,
     device,

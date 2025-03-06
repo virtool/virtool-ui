@@ -1,4 +1,4 @@
-import { BoxGroup } from "@/base";
+import BoxGroup from "@base/BoxGroup";
 import { Permissions } from "@groups/types";
 import { transform } from "lodash-es";
 import React from "react";

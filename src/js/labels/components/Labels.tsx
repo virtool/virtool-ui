@@ -1,5 +1,4 @@
 import {
-    BoxGroup,
     ContainerNarrow,
     LoadingPlaceholder,
     NoneFoundSection,
@@ -7,6 +6,7 @@ import {
     ViewHeaderSubtitle,
     ViewHeaderTitle,
 } from "@/base";
+import BoxGroup from "@base/BoxGroup";
 import React from "react";
 import styled from "styled-components";
 import { useFetchLabels } from "../queries";

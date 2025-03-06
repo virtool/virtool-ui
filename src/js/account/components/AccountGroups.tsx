@@ -1,8 +1,9 @@
-import { BoxGroup, BoxGroupHeader, NoneFound } from "@/base";
+import { BoxGroupHeader, NoneFound } from "@/base";
 import { borderRadius } from "@app/theme";
+import BoxGroup from "@base/BoxGroup";
 import { getBadgeOrLabelColor } from "@base/utils";
 import { GroupMinimal } from "@groups/types";
-import { map } from "lodash-es/lodash";
+import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
