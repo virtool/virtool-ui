@@ -35,8 +35,6 @@ export { DialogOverlay } from "./DialogOverlay";
 export { DialogTabs } from "./DialogTabs";
 export { DialogTitle } from "./DialogTitle";
 export { DialogTrigger } from "./DialogTrigger";
-export { DividerHorizontal } from "./DividerHorizontal";
-export { DividerVertical } from "./DividerVertical";
 export { Dropdown } from "./Dropdown";
 export { DropdownButton } from "./DropdownButton";
 export { DropdownMenuContent } from "./DropdownMenuContent";
