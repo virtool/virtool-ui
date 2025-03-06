@@ -4,13 +4,6 @@ import InputLabel from "@base/InputLabel.js";
 export { InputGroup, InputLabel };
 
 export { Link } from "wouter";
-export { Accordion } from "./Accordion";
-export { AccordionContent } from "./AccordionContent";
-export { AccordionScrollingItem } from "./AccordionScrollingItem";
-export { AccordionTrigger } from "./AccordionTrigger";
-export { Alert } from "./Alert";
-export { AlertInner } from "./AlertInner";
-export { AlertOuter } from "./AlertOuter";
 export { Attribution } from "./Attribution";
 export { AttributionWithName } from "./AttributionWithName";
 export { Badge } from "./Badge";

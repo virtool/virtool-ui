@@ -1,6 +1,6 @@
 import React from "react";
 import { OTUIsolate } from "../../types";
-import OTUIssues from "./OTUIssues";
+import OtuIssues from "./OtuIssues";
 
 type OTUGeneralProps = {
     /** The isolates associated with the OTU */
@@ -13,5 +13,5 @@ type OTUGeneralProps = {
  * Displays a banner with related issues if any exist
  */
 export default function OTUGeneral({ issues, isolates }: OTUGeneralProps) {
-    return issues ? <OTUIssues issues={issues} isolates={isolates} /> : null;
+    return issues ? <OtuIssues issues={issues} isolates={isolates} /> : null;
 }

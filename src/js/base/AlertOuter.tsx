@@ -25,3 +25,5 @@ export const AlertOuter = styled.div`
         padding-right: 5px;
     }
 `;
+
+export default AlertOuter;

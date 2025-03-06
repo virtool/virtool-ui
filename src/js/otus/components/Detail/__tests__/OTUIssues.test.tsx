@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import OTUIssues from "../OTUIssues";
+import OtuIssues from "../OtuIssues";
 
 describe("<OTUIssues />", () => {
     let props;
@@ -17,7 +17,7 @@ describe("<OTUIssues />", () => {
             },
             isolates: [],
         };
-        renderWithProviders(<OTUIssues {...props} />);
+        renderWithProviders(<OtuIssues {...props} />);
 
         expect(
             screen.getByText(
@@ -47,7 +47,7 @@ describe("<OTUIssues />", () => {
                 },
             ],
         };
-        renderWithProviders(<OTUIssues {...props} />);
+        renderWithProviders(<OtuIssues {...props} />);
 
         expect(
             screen.getByText(

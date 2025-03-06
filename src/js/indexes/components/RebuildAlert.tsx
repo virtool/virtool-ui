@@ -1,5 +1,6 @@
-import { Alert, Icon, Link } from "@/base";
+import { Icon, Link } from "@/base";
 import { usePageParam } from "@/hooks";
+import Alert from "@base/Alert";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import React from "react";
 import { useFindIndexes } from "../queries";

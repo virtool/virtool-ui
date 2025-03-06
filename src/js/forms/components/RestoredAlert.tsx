@@ -1,4 +1,4 @@
-import { Alert } from "@/base";
+import Alert from "@base/Alert";
 import { IconButton } from "@base/IconButton";
 import React, { useState } from "react";
 import styled from "styled-components";

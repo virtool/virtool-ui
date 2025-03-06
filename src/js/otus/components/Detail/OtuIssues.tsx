@@ -1,5 +1,5 @@
-import { Alert } from "@/base";
 import { formatIsolateName } from "@/utils";
+import Alert from "@base/Alert";
 import { find, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -16,7 +16,7 @@ const StyledOTUIssues = styled(Alert)`
     }
 `;
 
-type OTUIssuesProps = {
+type OtuIssuesProps = {
     /** The isolates associated with the OTU */
     isolates: OTUIsolate[];
     /** The issues that occurred */
@@ -26,7 +26,7 @@ type OTUIssuesProps = {
 /**
  * Displays a message of any issues that occurred for the OTU
  */
-export default function OTUIssues({ isolates, issues }: OTUIssuesProps) {
+export default function OtuIssues({ isolates, issues }: OtuIssuesProps) {
     const errors = [];
 
     // The OTU has no isolates associated with it.

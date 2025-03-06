@@ -1,4 +1,5 @@
-import { Alert, Icon, Link } from "@/base";
+import { Icon, Link } from "@/base";
+import Alert from "@base/Alert";
 import React from "react";
 
 interface AnalysisHMMAlertProps {

@@ -3,7 +3,7 @@ import * as RadixAccordion from "@radix-ui/react-accordion";
 import React, { createRef, useEffect } from "react";
 import styled from "styled-components";
 
-export const StyledAccordionItem = styled(RadixAccordion.Item)`
+const StyledAccordionItem = styled(RadixAccordion.Item)`
     border: ${getBorder};
     margin-bottom: 10px;
     scroll-margin-top: 50px;
@@ -26,17 +26,18 @@ function ComposedScrollingAccordionItem(props) {
     return <div {...props} ref={ref} />;
 }
 
-type AccordionItemProps = {
+type AccordionScrollingItemProps = {
     children: React.ReactNode;
+
     /** The identifying value associated with the item */
     value: string;
 };
 
 /** A radix accordion item that triggers a scroll when opened */
-export function AccordionScrollingItem({
+export default function AccordionScrollingItem({
     value,
     children,
-}: AccordionItemProps) {
+}: AccordionScrollingItemProps) {
     return (
         <StyledAccordionItem value={value} asChild>
             <ComposedScrollingAccordionItem>

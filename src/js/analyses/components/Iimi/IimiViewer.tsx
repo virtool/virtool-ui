@@ -1,6 +1,6 @@
 import { IimiAnalysis } from "@/analyses/types";
-import { Accordion } from "@base/Accordion";
-import { Box, BoxTitle } from "@base/index";
+import { Box, BoxTitle } from "@base";
+import Accordion from "@base/Accordion";
 import { sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

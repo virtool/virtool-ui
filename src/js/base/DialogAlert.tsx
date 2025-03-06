@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Alert } from "./Alert";
+import Alert from "./Alert";
 
 export const DialogAlert = styled(Alert)`
     border-left: none;

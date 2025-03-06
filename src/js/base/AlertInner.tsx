@@ -16,3 +16,5 @@ export const AlertInner = styled.div<AlertInnerProps>`
 `;
 
 AlertInner.displayName = "AlertInner";
+
+export default AlertInner;

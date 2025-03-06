@@ -1,4 +1,5 @@
-import { Alert, Button } from "@/base";
+import { Button } from "@/base";
+import Alert from "@base/Alert";
 import React from "react";
 import styled from "styled-components";
 

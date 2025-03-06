@@ -1,4 +1,4 @@
-import { Alert } from "@base/index";
+import Alert from "@base/Alert";
 import React from "react";
 
 type SampleFilesMessageProps = {

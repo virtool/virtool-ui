@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { AlertInner } from "./AlertInner";
-import { AlertOuter } from "./AlertOuter";
+import AlertInner from "./AlertInner";
+import AlertOuter from "./AlertOuter";
 import { Icon } from "./Icon";
 
 type AlertProps = {
@@ -30,3 +30,5 @@ export const Alert = styled(
 )``;
 
 Alert.displayName = "Alert";
+
+export default Alert;
