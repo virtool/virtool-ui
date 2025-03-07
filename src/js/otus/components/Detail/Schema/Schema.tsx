@@ -1,6 +1,7 @@
-import { Button, LoadingPlaceholder, NoneFoundBox } from "@/base";
+import { LoadingPlaceholder, NoneFoundBox } from "@/base";
 import { useDialogParam, usePathParams } from "@/hooks";
 import BoxGroup from "@base/BoxGroup";
+import Button from "@base/Button";
 import EditSegment from "@otus/components/Detail/Schema/EditSegment";
 import { useFetchOTU, useUpdateOTU } from "@otus/queries";
 import { OTUSegment } from "@otus/types";

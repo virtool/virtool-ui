@@ -1,5 +1,4 @@
 import {
-    Button,
     Dialog,
     DialogContent,
     DialogFooter,
@@ -7,6 +6,7 @@ import {
     DialogTitle,
 } from "@/base";
 import { useUpdateUser } from "@administration/queries";
+import Button from "@base/Button";
 import { DialogClose, DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import styled from "styled-components";

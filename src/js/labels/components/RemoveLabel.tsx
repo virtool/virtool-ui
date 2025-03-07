@@ -1,11 +1,6 @@
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
-} from "@/base";
+import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { getFontSize } from "@app/theme";
+import Button from "@base/Button";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import styled from "styled-components";

@@ -1,6 +1,6 @@
+import Button from "@base/Button";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { Button } from "./Button";
 import { Dialog } from "./Dialog";
 import { DialogContent } from "./DialogContent";
 import { DialogFooter } from "./DialogFooter";

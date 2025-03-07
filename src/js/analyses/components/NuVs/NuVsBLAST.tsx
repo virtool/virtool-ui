@@ -1,10 +1,11 @@
 import { useBlastNuVs } from "@/analyses/queries";
 import { FormattedNuvsHit } from "@/analyses/types";
-import { Button, Icon } from "@/base";
+import { Icon } from "@/base";
 import { NuvsBlastResults } from "@analyses/components/NuVs/NuvsBlastResults";
 import Alert from "@base/Alert";
 import Box from "@base/Box";
 import BoxTitle from "@base/BoxTitle";
+import Button from "@base/Button";
 import React from "react";
 import BlastInProgress from "./BlastInProgress";
 import { NuvsBlastError } from "./NuvsBlastError";

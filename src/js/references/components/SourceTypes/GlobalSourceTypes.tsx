@@ -1,14 +1,9 @@
 import { settingsQueryKeys } from "@administration/queries";
-import {
-    Button,
-    InputError,
-    InputLabel,
-    InputSimple,
-    SectionHeader,
-} from "@base";
+import { InputError, InputLabel, InputSimple, SectionHeader } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
+import Button from "@base/Button";
 import { IconButton } from "@base/IconButton";
 import Toolbar from "@base/Toolbar";
 import React from "react";

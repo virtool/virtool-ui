@@ -72,3 +72,5 @@ export function Button({
         </As>
     );
 }
+
+export default Button;

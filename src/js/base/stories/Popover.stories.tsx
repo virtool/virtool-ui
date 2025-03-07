@@ -1,6 +1,6 @@
-import { Button } from "@/base";
 import BoxGroupSearch from "@base/BoxGroupSearch";
 import BoxGroupSection from "@base/BoxGroupSection";
+import Button from "@base/Button";
 import { Popover } from "@base/Popover";
 import type { Meta, StoryObj } from "@storybook/react";
 import { map } from "lodash";

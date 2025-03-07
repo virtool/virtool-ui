@@ -1,6 +1,6 @@
 import { Workflows } from "@/analyses/types";
-import { Button } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
+import Button from "@base/Button";
 import { useCheckCanEditSample } from "@samples/hooks";
 import React from "react";
 

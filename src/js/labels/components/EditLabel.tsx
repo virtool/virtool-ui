@@ -1,5 +1,5 @@
+import Button from "@base/Button";
 import {
-    Button,
     Dialog,
     DialogContent,
     DialogOverlay,

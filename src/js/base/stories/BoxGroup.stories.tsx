@@ -1,7 +1,8 @@
-import { Button, Input } from "@/base";
+import { Input } from "@/base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
+import Button from "@base/Button";
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 import styled from "styled-components";

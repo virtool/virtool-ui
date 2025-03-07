@@ -1,5 +1,5 @@
+import Button from "@base/Button";
 import React from "react";
-import { Button } from "./Button";
 
 interface SaveButtonProps {
     altText?: string;

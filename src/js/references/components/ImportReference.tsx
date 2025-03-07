@@ -1,3 +1,4 @@
+import { useNavigate } from "@/hooks";
 import {
     DialogFooter,
     InputError,
@@ -6,8 +7,7 @@ import {
     InputSimple,
     ProgressBarAffixed,
     SaveButton,
-} from "@/base";
-import { useNavigate } from "@/hooks";
+} from "@base";
 import Alert from "@base/Alert";
 import { UploadBar } from "@files/components/UploadBar";
 import { useImportReference, useUploadReference } from "@references/queries";

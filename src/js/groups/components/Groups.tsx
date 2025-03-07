@@ -1,7 +1,8 @@
-import { Button, LoadingPlaceholder, RemoveBanner } from "@/base";
+import { LoadingPlaceholder, RemoveBanner } from "@/base";
 import { useDialogParam } from "@/hooks";
 import { getColor } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
+import Button from "@base/Button";
 import { InputHeader } from "@base/InputHeader";
 import { find, sortBy } from "lodash-es";
 import React, { useEffect, useState } from "react";

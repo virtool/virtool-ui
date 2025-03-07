@@ -1,6 +1,5 @@
 import { FormattedNuvsHit, FormattedNuvsResults } from "@/analyses/types";
 import {
-    Button,
     Dialog,
     DialogContent,
     DialogFooter,
@@ -9,6 +8,7 @@ import {
     Icon,
 } from "@/base";
 import { followDynamicDownload } from "@/utils";
+import Button from "@base/Button";
 import PseudoLabel from "@base/PseudoLabel";
 import { ToggleGroup } from "@base/ToggleGroup";
 import { ToggleGroupItem } from "@base/ToggleGroupItem";

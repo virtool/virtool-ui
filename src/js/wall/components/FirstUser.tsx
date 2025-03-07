@@ -1,11 +1,11 @@
 import {
-    Button,
     InputError,
     InputGroup,
     InputLabel,
     InputPassword,
     InputSimple,
 } from "@/base";
+import Button from "@base/Button";
 import { useCreateFirstUser } from "@users/queries";
 import React from "react";
 import { useForm } from "react-hook-form";

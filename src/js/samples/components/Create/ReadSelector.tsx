@@ -1,14 +1,8 @@
-import {
-    Button,
-    Icon,
-    InputError,
-    InputSearch,
-    Link,
-    NoneFoundSection,
-} from "@/base";
+import { Icon, InputError, InputSearch, Link, NoneFoundSection } from "@/base";
 import { getBorder, getFontWeight, theme } from "@app/theme";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import Button from "@base/Button";
 import { CompactScrollList } from "@base/CompactScrollList";
 import PseudoLabel from "@base/PseudoLabel";
 import Toolbar from "@base/Toolbar";
