@@ -1,6 +1,6 @@
+import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";
 import styled, { DefaultTheme } from "styled-components";
-import { BoxGroupSection } from "./BoxGroupSection";
 
 type SelectBoxGroupSectionProps = {
     active?: boolean;
@@ -29,26 +29,18 @@ type BoxGroupSectionSelectProps = {
     onClick?: () => void;
 };
 
-export function SelectBoxGroupSection({
+export default function SelectBoxGroupSection({
     active,
     children,
     className,
     onClick,
 }: BoxGroupSectionSelectProps) {
-    function handleKeyDown(e) {
-        if (e.key === "Enter") {
-            onClick();
-        }
-    }
-
     return (
         <StyledSelectBoxGroupSection
             active={active}
+            aria-role="option"
             className={className}
-            tabIndex={0}
-            role="option"
             onClick={onClick}
-            onKeyDown={handleKeyDown}
         >
             {children}
         </StyledSelectBoxGroupSection>

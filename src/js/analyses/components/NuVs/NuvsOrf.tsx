@@ -1,4 +1,4 @@
-import { Badge } from "@/base";
+import Badge from "@base/Badge";
 import { scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
 import "./NuvsOrf.css";

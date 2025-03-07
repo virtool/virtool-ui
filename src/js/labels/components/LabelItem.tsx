@@ -1,4 +1,4 @@
-import { BoxGroupSection } from "@/base";
+import BoxGroupSection from "@base/BoxGroupSection";
 import { SampleLabel } from "@samples/components/Label/SampleLabel";
 import React from "react";
 import styled from "styled-components";

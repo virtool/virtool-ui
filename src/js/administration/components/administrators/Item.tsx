@@ -1,16 +1,18 @@
-import { IconButton } from "@base/IconButton";
-import { BoxSpaced, InitialIcon } from "@base/index";
+import { getFontSize, getFontWeight } from "@app/theme";
+import IconButton from "@base/IconButton";
+import InitialIcon from "@base/InitialIcon";
+import { User } from "@users/types";
 import React from "react";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../../../app/theme";
-import { User } from "../../../users/types";
 import { useSetAdministratorRole } from "../../queries";
 import { AdministratorRoles } from "../../types";
 import { RoleSelect } from "./RoleSelect";
 
-const StyledAdministrator = styled(BoxSpaced)`
-    display: flex;
+const StyledAdministrator = styled.div`
     align-items: center;
+    box-shadow: ${(props) => props.theme.boxShadow.md};
+    display: flex;
+    margin-bottom: 10px;
 
     svg {
         margin-right: 10px;

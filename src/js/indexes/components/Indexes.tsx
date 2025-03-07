@@ -1,5 +1,8 @@
-import { BoxGroup, LoadingPlaceholder, NoneFoundBox, Pagination } from "@/base";
 import { usePageParam, usePathParams } from "@/hooks";
+import BoxGroup from "@base/BoxGroup";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NoneFoundBox from "@base/NoneFoundBox";
+import Pagination from "@base/Pagination";
 import { IndexItem } from "@indexes/components/Item/IndexItem";
 import { map } from "lodash";
 import { find, get } from "lodash-es/lodash";

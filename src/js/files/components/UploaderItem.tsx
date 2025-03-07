@@ -1,6 +1,7 @@
-import { Loader, ProgressBarAffixed } from "@/base";
 import { byteSize, cn } from "@/utils";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
+import Loader from "@base/Loader";
+import ProgressBarAffixed from "@base/ProgressBarAffixed";
 import { useUploaderStore } from "@files/uploader";
 import React from "react";
 

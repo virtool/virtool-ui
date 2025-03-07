@@ -1,6 +1,8 @@
-import { IndexSelectorItem } from "@/analyses/components/Create/IndexSelectorItem";
-import { Select, SelectButton, SelectContent } from "@/base";
 import { cn } from "@/utils";
+import IndexSelectorItem from "@analyses/components/Create/IndexSelectorItem";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
 import { map } from "lodash";
 import { sortBy } from "lodash-es";
 import React, { useMemo } from "react";

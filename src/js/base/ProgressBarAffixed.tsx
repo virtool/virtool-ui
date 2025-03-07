@@ -34,7 +34,7 @@ const StyledProgressBarAffixed = styled(
     }
 `;
 
-export const ProgressBarAffixed = styled(
+const ProgressBarAffixed = styled(
     ({ className, now, color, bottom }: ProgressBarAffixedProps) => {
         return (
             <StyledProgressBarAffixed
@@ -49,3 +49,5 @@ export const ProgressBarAffixed = styled(
 )``;
 
 ProgressBarAffixed.displayName = "ProgressBarAffixed";
+
+export default ProgressBarAffixed;

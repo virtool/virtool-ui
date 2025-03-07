@@ -1,6 +1,6 @@
-import { NuvsList } from "@/analyses/components/NuVs/NuvsList";
-import NuvsToolbar from "@/analyses/components/NuVs/NuvsToolbar";
-import { FormattedNuvsAnalysis } from "@/analyses/types";
+import { NuvsList } from "@analyses/components/NuVs/NuvsList";
+import NuvsToolbar from "@analyses/components/NuVs/NuvsToolbar";
+import { FormattedNuvsAnalysis } from "@analyses/types";
 import { Sample } from "@samples/types";
 import React from "react";
 

@@ -1,7 +1,7 @@
-import { AlertOuter } from "@/base";
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
+import AlertOuter from "@base/AlertOuter";
 import React from "react";
 import styled from "styled-components";
 

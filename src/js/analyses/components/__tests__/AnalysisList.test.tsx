@@ -1,7 +1,7 @@
-import Analyses from "@/analyses/components/Analyses";
-import { Workflows } from "@/analyses/types";
 import { formatPath } from "@/hooks";
 import { AdministratorRoles } from "@administration/types";
+import Analyses from "@analyses/components/Analyses";
+import { Workflows } from "@analyses/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";

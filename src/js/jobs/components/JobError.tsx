@@ -1,4 +1,4 @@
-import { Alert } from "@base/index";
+import Alert from "@base/Alert";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

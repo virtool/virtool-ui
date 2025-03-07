@@ -95,7 +95,7 @@ const UnstyledInput = React.forwardRef<InputHandle, InputProps>(
 
 UnstyledInput.displayName = "UnstyledInput";
 
-export const Input = styled(UnstyledInput)<InputProps>`
+const Input = styled(UnstyledInput)<InputProps>`
     background-color: ${(props) => props.theme.color.white};
     border: 1px solid
         ${(props) =>
@@ -125,3 +125,5 @@ export const Input = styled(UnstyledInput)<InputProps>`
 `;
 
 Input.displayName = "Input";
+
+export default Input;

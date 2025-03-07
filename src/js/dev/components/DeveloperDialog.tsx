@@ -1,12 +1,10 @@
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
-} from "@/base";
 import { usePostDevCommand } from "@/dev/queries";
 import { useDialogParam } from "@/hooks";
+import Button from "@base/Button";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import styled from "styled-components";

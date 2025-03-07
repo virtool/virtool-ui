@@ -84,7 +84,11 @@ type TooltipProps = {
     tip: React.ReactNode;
 };
 
-export function Tooltip({ children, position = "top", tip }: TooltipProps) {
+export default function Tooltip({
+    children,
+    position = "top",
+    tip,
+}: TooltipProps) {
     return (
         <TooltipPrimitive.Provider>
             <TooltipPrimitive.Root>

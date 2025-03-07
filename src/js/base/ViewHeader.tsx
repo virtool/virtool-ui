@@ -15,7 +15,11 @@ type ViewHeaderProps = {
     title: string;
 };
 
-export function ViewHeader({ className, title, children }: ViewHeaderProps) {
+export default function ViewHeader({
+    className,
+    title,
+    children,
+}: ViewHeaderProps) {
     return (
         <StyledViewHeader className={className}>
             <HelmetProvider>

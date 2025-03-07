@@ -1,13 +1,16 @@
+import { cn } from "@/utils";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Label from "@base/Label";
 import React, { useCallback } from "react";
-import { SelectorItem } from "./SelectorItem";
 
-interface SubtractionSelectorItemProps {
+type SubtractionSelectorItemProps = {
     id: string;
     isDefault: boolean;
     name: string;
     onClick: (id: string) => void;
-}
-export function SubtractionSelectorItem({
+};
+
+export default function SubtractionSelectorItem({
     id,
     isDefault,
     name,
@@ -16,8 +19,21 @@ export function SubtractionSelectorItem({
     const handleClick = useCallback(() => onClick(id), [id, onClick]);
 
     return (
-        <SelectorItem onClick={handleClick} isDefault={isDefault}>
-            {name}
-        </SelectorItem>
+        <BoxGroupSection
+            as="button"
+            className={cn(
+                "bg-white",
+                "flex",
+                "justify-between",
+                "items-center",
+                "select-none",
+                "text-ellipsis",
+                "text-nowrap",
+            )}
+            onClick={handleClick}
+        >
+            <span className="overflow-hidden">{name}</span>
+            {isDefault ? <Label>Default</Label> : null}
+        </BoxGroupSection>
     );
 }

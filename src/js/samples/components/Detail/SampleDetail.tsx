@@ -1,16 +1,14 @@
-import {
-    Icon,
-    LoadingPlaceholder,
-    NotFound,
-    Tabs,
-    TabsLink,
-    ViewHeader,
-    ViewHeaderAttribution,
-    ViewHeaderIcons,
-    ViewHeaderTitle,
-} from "@/base";
 import { useDialogParam, usePathParams } from "@/hooks";
-import { IconButton } from "@base/IconButton";
+import Icon from "@base/Icon";
+import IconButton from "@base/IconButton";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
+import Tabs from "@base/Tabs";
+import TabsLink from "@base/TabsLink";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
+import ViewHeaderIcons from "@base/ViewHeaderIcons";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
 import React from "react";

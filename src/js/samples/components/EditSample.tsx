@@ -1,16 +1,14 @@
 import { useDialogParam } from "@/hooks";
-import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    SaveButton,
-    TextArea,
-} from "@base/index";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import SaveButton from "@base/SaveButton";
+import TextArea from "@base/TextArea";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { pick } from "lodash";
 import React from "react";

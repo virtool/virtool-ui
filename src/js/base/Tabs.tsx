@@ -9,7 +9,7 @@ type TabsProps = {
 /**
  * A styled tabs component used for navigating
  */
-export function Tabs({ children, className }: TabsProps) {
+export default function Tabs({ children, className }: TabsProps) {
     return (
         <nav
             className={cn(

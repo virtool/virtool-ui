@@ -10,7 +10,7 @@ type ScrollAreaProps = {
 /**
  * A styled scrollable area compatible with horizontal and vertical scrolling
  */
-export function ScrollArea({ children, className }: ScrollAreaProps) {
+export default function ScrollArea({ children, className }: ScrollAreaProps) {
     return (
         <ScrollAreaPrimitive.Root
             className={cn(

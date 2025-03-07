@@ -14,7 +14,7 @@ export type ButtonProps = {
     type?: "button" | "submit";
 };
 
-export function Button({
+function Button({
     as = "button",
     children,
     className,
@@ -72,3 +72,5 @@ export function Button({
         </As>
     );
 }
+
+export default Button;

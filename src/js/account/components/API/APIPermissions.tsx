@@ -1,10 +1,12 @@
-import { BoxGroup, BoxGroupSection, Checkbox } from "@/base";
 import { useFetchAccount } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
 import {
     AdministratorPermissions,
     hasSufficientAdminRole,
 } from "@administration/utils";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Checkbox from "@base/Checkbox";
 import { Permissions } from "@groups/types";
 import { map, sortBy } from "lodash-es";
 import React from "react";

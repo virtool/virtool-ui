@@ -1,5 +1,7 @@
-import { InputError, Link, NoneFoundBox } from "@/base";
-import { CompactScrollList } from "@base/CompactScrollList";
+import CompactScrollList from "@base/CompactScrollList";
+import InputError from "@base/InputError";
+import Link from "@base/Link";
+import NoneFoundBox from "@base/NoneFoundBox";
 import { useValidateFiles } from "@files/hooks";
 import { File, FileResponse, FileType } from "@files/types";
 import { InfiniteData } from "@tanstack/react-query";

@@ -1,7 +1,7 @@
 import { capitalize } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { InitialIcon } from "./InitialIcon";
+import InitialIcon from "./InitialIcon";
 
 type UnstyledAttributionWithNameProps = {
     className?: string;
@@ -22,7 +22,7 @@ function UnstyledAttributionWithName({
     );
 }
 
-export const AttributionWithName = styled(UnstyledAttributionWithName)`
+const AttributionWithName = styled(UnstyledAttributionWithName)`
     align-items: center;
     display: inline-flex;
     font-size: inherit;
@@ -32,3 +32,5 @@ export const AttributionWithName = styled(UnstyledAttributionWithName)`
         margin-left: 6px;
     }
 `;
+
+export default AttributionWithName;

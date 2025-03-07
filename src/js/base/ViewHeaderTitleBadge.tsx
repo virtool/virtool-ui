@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { Badge } from "@base/Badge";
+import Badge from "@base/Badge";
 import React from "react";
 
 type ViewHeaderTitleBadge = {
@@ -11,7 +11,7 @@ type ViewHeaderTitleBadge = {
 /**
  * A styled Badge component for use in view headers
  */
-export function ViewHeaderTitleBadge({
+export default function ViewHeaderTitleBadge({
     children,
     className,
     color,

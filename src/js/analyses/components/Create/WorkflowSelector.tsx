@@ -1,5 +1,5 @@
 import { getColor, getFontWeight } from "@app/theme";
-import { Box } from "@base";
+import Box from "@base/Box";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";

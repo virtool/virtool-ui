@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
-import { InputHeader } from "../InputHeader";
+import InputHeader from "../InputHeader";
 
 const meta: Meta<typeof InputHeader> = {
     title: "base/InputHeader",

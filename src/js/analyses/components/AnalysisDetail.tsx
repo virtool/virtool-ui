@@ -1,21 +1,19 @@
-import { useGetAnalysis } from "@/analyses/queries";
-import {
-    Box,
-    Icon,
-    LoadingPlaceholder,
-    NotFound,
-    RelativeTime,
-    SubviewHeader,
-    SubviewHeaderAttribution,
-    SubviewHeaderTitle,
-} from "@/base";
 import { usePathParams } from "@/hooks";
 import { getWorkflowDisplayName } from "@/utils";
+import { useGetAnalysis } from "@analyses/queries";
 import {
     FormattedNuvsAnalysis,
     FormattedPathoscopeAnalysis,
     IimiAnalysis,
 } from "@analyses/types";
+import Box from "@base/Box";
+import Icon from "@base/Icon";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
+import RelativeTime from "@base/RelativeTime";
+import SubviewHeader from "@base/SubviewHeader";
+import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
+import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import { useFetchSample } from "@samples/queries";
 import React from "react";
 import styled from "styled-components";

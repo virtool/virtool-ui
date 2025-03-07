@@ -1,12 +1,12 @@
 import styled, { DefaultTheme } from "styled-components";
-import { Box } from "./Box";
+import Box from "./Box";
 
 type SelectBoxProps = {
     active: boolean;
     theme: DefaultTheme;
 };
 
-export const SelectBox = styled(Box).attrs(() => ({
+const SelectBox = styled(Box).attrs(() => ({
     type: "button",
     as: "button",
 }))<SelectBoxProps>`
@@ -31,3 +31,5 @@ export const SelectBox = styled(Box).attrs(() => ({
 `;
 
 SelectBox.displayName = "SelectBox";
+
+export default SelectBox;

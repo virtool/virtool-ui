@@ -13,8 +13,8 @@ function generateCspStyleSrc(nonce) {
     return `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com ${fontAwesomeUrl}`;
 }
 
-function generateCspConnectSrc(tenant) {
-    return `connect-src 'self' *.sentry.io ${tenant ? `https://${tenant}.b2clogin.com` : ""} `;
+function generateCspConnectSrc() {
+    return `connect-src 'self' *.sentry.io : ""} `;
 }
 
 /**
@@ -31,9 +31,8 @@ type CspMiddleware = (req: any, res: any, next: any) => void;
  * Applies CSP header to response object
  *
  * @func
- * @param {string} tenant - The tenant name to use in the CSP header.
  */
-export function createCspMiddleware(tenant: string): CspMiddleware {
+export function createCspMiddleware(): CspMiddleware {
     return (req, res, next) => {
         const nonce = crypto.randomBytes(32).toString("base64");
         res.locals.nonce = nonce;
@@ -42,7 +41,7 @@ export function createCspMiddleware(tenant: string): CspMiddleware {
             defaultSrc,
             fontSrc,
             imgSrc,
-            generateCspConnectSrc(tenant),
+            generateCspConnectSrc(),
             generateCspScriptSrc(nonce),
             generateCspStyleSrc(nonce),
         ];

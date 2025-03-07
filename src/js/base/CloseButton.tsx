@@ -1,4 +1,4 @@
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import React from "react";
 import styled from "styled-components";
 
@@ -10,6 +10,6 @@ type CloseButtonProps = {
     onClick: () => void;
 };
 
-export function CloseButton({ onClick }: CloseButtonProps) {
+export default function CloseButton({ onClick }: CloseButtonProps) {
     return <StyledCloseButton name="times" tip="close" onClick={onClick} />;
 }

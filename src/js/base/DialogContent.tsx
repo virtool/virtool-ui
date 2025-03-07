@@ -11,7 +11,7 @@ type DialogContentProps = {
 /**
  * A styled dialog content container with customizable sizes
  */
-export function DialogContent({
+export default function DialogContent({
     children,
     className,
     size,

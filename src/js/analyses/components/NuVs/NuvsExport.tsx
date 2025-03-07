@@ -1,17 +1,15 @@
-import { FormattedNuvsHit, FormattedNuvsResults } from "@/analyses/types";
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogOverlay,
-    DialogTitle,
-    Icon,
-} from "@/base";
 import { followDynamicDownload } from "@/utils";
+import { FormattedNuvsHit, FormattedNuvsResults } from "@analyses/types";
+import Button from "@base/Button";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogFooter from "@base/DialogFooter";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
+import Icon from "@base/Icon";
 import PseudoLabel from "@base/PseudoLabel";
-import { ToggleGroup } from "@base/ToggleGroup";
-import { ToggleGroupItem } from "@base/ToggleGroupItem";
+import ToggleGroup from "@base/ToggleGroup";
+import ToggleGroupItem from "@base/ToggleGroupItem";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { forEach, map, reduce, replace } from "lodash-es";
 import React, { useState } from "react";

@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { Input } from "./Input";
-import { InputIconButton } from "./InputIconButton";
+import Input from "./Input";
+import InputIconButton from "./InputIconButton";
 
 type InputContainerProps = {
     align?: "left" | "right";
 };
 
-export const InputContainer = styled.div<InputContainerProps>`
+const InputContainer = styled.div<InputContainerProps>`
   position: relative;
 
   ${Input} {
@@ -21,3 +21,7 @@ export const InputContainer = styled.div<InputContainerProps>`
 InputContainer.defaultProps = {
     align: "left",
 };
+
+InputContainer.displayName = "InputContainer";
+
+export default InputContainer;

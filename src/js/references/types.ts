@@ -1,4 +1,4 @@
-import { SearchResult, Task } from "@/types";
+import { SearchResult, Task } from "@/types/api";
 import { UserNested } from "@users/types";
 
 export type ReferenceClonedFrom = {

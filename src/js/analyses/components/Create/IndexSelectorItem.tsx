@@ -1,5 +1,5 @@
-import { Label } from "@/base";
 import { cn } from "@/utils";
+import Label from "@base/Label";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 
@@ -12,7 +12,7 @@ type IndexSelectorItemProps = {
 /**
  * A condensed index selector item for use in a list of indexes
  */
-export function IndexSelectorItem({
+export default function IndexSelectorItem({
     id,
     name,
     version,

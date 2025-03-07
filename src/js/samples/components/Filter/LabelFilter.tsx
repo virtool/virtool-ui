@@ -1,4 +1,6 @@
-import { Link, SidebarHeader, SideBarSection } from "@/base";
+import Link from "@base/Link";
+import SidebarHeader from "@base/SidebarHeader";
+import SideBarSection from "@base/SideBarSection";
 import { Label } from "@labels/types";
 import React from "react";
 import { LabelFilterItem } from "./LabelFilterItem";

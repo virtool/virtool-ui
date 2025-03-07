@@ -1,10 +1,13 @@
-import { Badge, BoxGroupSection, InitialIcon } from "@/base";
+import Badge from "@base/Badge";
+import BoxGroupSection from "@base/BoxGroupSection";
+import InitialIcon from "@base/InitialIcon";
 import React from "react";
 import styled from "styled-components";
 
 const StyledContributor = styled(BoxGroupSection)`
     display: flex;
     align-items: center;
+
     .InitialIcon {
         margin-right: 5px;
     }

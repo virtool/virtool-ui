@@ -3,7 +3,7 @@ import * as RadixAccordion from "@radix-ui/react-accordion";
 import styled from "styled-components";
 
 /** button for toggling the display of accordion contents  */
-export const AccordionTrigger = styled(RadixAccordion.Trigger)`
+const AccordionTrigger = styled(RadixAccordion.Trigger)`
     align-items: center;
     background-color: ${(props) => props.theme.color.white};
     border: none;
@@ -17,3 +17,5 @@ export const AccordionTrigger = styled(RadixAccordion.Trigger)`
             getColor({ color: "greyHover", theme: props.theme })};
     }
 `;
+
+export default AccordionTrigger;

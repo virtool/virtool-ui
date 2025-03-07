@@ -1,4 +1,4 @@
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import React from "react";
 
 type AnalysisItemRightIconProps = {

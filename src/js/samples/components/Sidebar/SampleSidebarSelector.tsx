@@ -1,7 +1,10 @@
-import { BoxGroupSearch, Icon, Link, SidebarHeaderButton } from "@/base";
 import { useFuse } from "@/fuse";
 import { fontWeight, getFontSize } from "@app/theme";
-import { Popover } from "@base/Popover";
+import BoxGroupSearch from "@base/BoxGroupSearch";
+import Icon from "@base/Icon";
+import Link from "@base/Link";
+import Popover from "@base/Popover";
+import SidebarHeaderButton from "@base/SidebarHeaderButton";
 import { Label } from "@labels/types";
 import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";

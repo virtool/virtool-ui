@@ -1,7 +1,7 @@
+import Button from "@base/Button";
 import React from "react";
 import styled, { DefaultTheme } from "styled-components";
-import { Alert } from "./Alert";
-import { Button } from "./Button";
+import Alert from "./Alert";
 
 interface StyledRemoveBannerProps {
     theme: DefaultTheme;
@@ -20,13 +20,13 @@ const StyledRemoveBanner = styled(Alert)<StyledRemoveBannerProps>`
     }
 `;
 
-interface RemoveBannerProps {
+type RemoveBannerProps = {
     message: string;
     buttonText: string;
     onClick: () => void;
-}
+};
 
-export function RemoveBanner({
+export default function RemoveBanner({
     message,
     buttonText,
     onClick,

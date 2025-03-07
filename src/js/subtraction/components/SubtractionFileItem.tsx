@@ -1,4 +1,5 @@
-import { Attribution, SelectBoxGroupSection } from "@/base";
+import Attribution from "@/base/Attribution";
+import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import { UserNested } from "@users/types";
 import React from "react";
 import styled from "styled-components";

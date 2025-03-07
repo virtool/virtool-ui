@@ -17,12 +17,12 @@ const StyledBoxGroupDisabled = styled.div`
     position: relative;
 `;
 
-interface BoxGroupDisabledProps {
+type BoxGroupDisabledProps = {
     children: React.ReactNode;
     disabled?: boolean;
-}
+};
 
-export function BoxGroupDisabled({
+export default function BoxGroupDisabled({
     children,
     disabled = false,
 }: BoxGroupDisabledProps) {

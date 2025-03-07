@@ -1,5 +1,6 @@
-import { BoxGroup, BoxGroupHeader } from "@/base";
-import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
+import Badge from "@base/Badge";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import Change from "@otus/components/Detail/History/Change";
 import { OTUHistory } from "@otus/types";
 import { map, reverse, sortBy } from "lodash-es";
@@ -34,9 +35,9 @@ export default function HistoryList({ history, unbuilt }: HistoryListProps) {
     return (
         <BoxGroup>
             <BoxGroupHeader>
-                <h2>
+                <h2 className="flex gap-2 items-center">
                     <span>{unbuilt ? "Unb" : "B"}uilt Changes</span>
-                    <BoxGroupHeaderBadge>{changes.length}</BoxGroupHeaderBadge>
+                    <Badge>{changes.length}</Badge>
                 </h2>
             </BoxGroupHeader>
             {changeComponents}

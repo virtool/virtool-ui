@@ -6,7 +6,7 @@ type InputErrorProps = {
     children: ReactNode;
 };
 
-export const InputError = styled.p<InputErrorProps>`
+const InputError = styled.p<InputErrorProps>`
     color: ${(props) => props.theme.color.red};
     font-size: ${(props) => props.theme.fontSize.sm};
     font-weight: ${getFontWeight("thick")};
@@ -16,3 +16,5 @@ export const InputError = styled.p<InputErrorProps>`
 `;
 
 InputError.displayName = "InputError";
+
+export default InputError;

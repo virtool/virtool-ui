@@ -8,7 +8,7 @@ type AlertInnerProps = {
     theme?: DefaultTheme;
 };
 
-export const AlertInner = styled.div<AlertInnerProps>`
+const AlertInner = styled.div<AlertInnerProps>`
     align-items: ${(props) => (props.level ? "center" : "normal")};
     border-left: 10px solid ${getColor};
     display: ${(props) => (props.block ? "block" : "flex")};
@@ -16,3 +16,5 @@ export const AlertInner = styled.div<AlertInnerProps>`
 `;
 
 AlertInner.displayName = "AlertInner";
+
+export default AlertInner;

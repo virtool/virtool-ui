@@ -10,7 +10,7 @@ function getAlertTextColor({ color, theme }: getColorProps) {
     return get(theme, ["color", `${color}Dark`], theme.color.greyDarkest);
 }
 
-export const AlertOuter = styled.div`
+const AlertOuter = styled.div`
     background-color: ${getAlertBackgroundColor};
     border-radius: ${(props) => props.theme.borderRadius.md};
     border: none;
@@ -25,3 +25,5 @@ export const AlertOuter = styled.div`
         padding-right: 5px;
     }
 `;
+
+export default AlertOuter;

@@ -1,4 +1,4 @@
-import { Markdown } from "@/base";
+import Markdown from "@base/Markdown";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 

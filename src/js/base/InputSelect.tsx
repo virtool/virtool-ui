@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Input } from "./Input";
+import Input from "./Input";
 
 type InputSelectProps = {
     children: React.ReactNode;
@@ -9,7 +9,7 @@ type InputSelectProps = {
     onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-export const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>(
+const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>(
     ({ children, id, name, value, onChange }: InputSelectProps, ref) => {
         return (
             <Input
@@ -25,3 +25,7 @@ export const InputSelect = forwardRef<HTMLSelectElement, InputSelectProps>(
         );
     },
 );
+
+InputSelect.displayName = "InputSelect";
+
+export default InputSelect;

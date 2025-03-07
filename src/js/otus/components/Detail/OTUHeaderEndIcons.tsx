@@ -1,5 +1,5 @@
 import { useDialogParam } from "@/hooks";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import React from "react";
 import EditOTU from "./EditOTU";

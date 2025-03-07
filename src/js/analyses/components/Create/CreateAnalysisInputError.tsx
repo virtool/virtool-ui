@@ -1,4 +1,4 @@
-import { InputError } from "@base/index";
+import InputError from "@base/InputError";
 import styled from "styled-components";
 
 export const CreateAnalysisInputError = styled(InputError)`

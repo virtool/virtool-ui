@@ -1,10 +1,8 @@
-import {
-    Link,
-    LoadingPlaceholder,
-    SidebarHeader,
-    SideBarSection,
-} from "@/base";
 import { fontWeight, getColor, getFontSize } from "@app/theme";
+import Link from "@base/Link";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SidebarHeader from "@base/SidebarHeader";
+import SideBarSection from "@base/SideBarSection";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";
 import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { xor } from "lodash-es";

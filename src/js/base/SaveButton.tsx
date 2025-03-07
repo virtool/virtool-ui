@@ -1,12 +1,12 @@
+import Button from "@base/Button";
 import React from "react";
-import { Button } from "./Button";
 
 interface SaveButtonProps {
     altText?: string;
     disabled?: boolean;
 }
 
-export function SaveButton({
+export default function SaveButton({
     altText = "Save",
     disabled = false,
 }: SaveButtonProps) {
@@ -16,5 +16,3 @@ export function SaveButton({
         </Button>
     );
 }
-
-SaveButton.displayName = "SaveButton";

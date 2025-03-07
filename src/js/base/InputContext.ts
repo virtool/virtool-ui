@@ -1,3 +1,7 @@
 import React from "react";
 
-export const InputContext = React.createContext("");
+const InputContext = React.createContext("");
+
+InputContext.displayName = "InputContext";
+
+export default InputContext;

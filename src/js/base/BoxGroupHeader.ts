@@ -1,12 +1,12 @@
 import { getFontSize, getFontWeight } from "@app/theme";
+import BoxGroupSection from "@base/BoxGroupSection";
 import styled, { DefaultTheme } from "styled-components";
-import { BoxGroupSection } from "./BoxGroupSection";
 
 type BoxGroupHeaderProps = {
     theme: DefaultTheme;
 };
 
-export const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
+const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
     align-items: stretch;
     background-color: ${(props) => props.theme.color.greyLightest};
     display: flex;
@@ -29,3 +29,5 @@ export const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
 `;
 
 BoxGroupHeader.displayName = "BoxGroupHeader";
+
+export default BoxGroupHeader;

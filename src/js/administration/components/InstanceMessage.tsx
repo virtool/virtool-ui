@@ -1,12 +1,10 @@
-import {
-    BoxGroup,
-    BoxGroupHeader,
-    BoxGroupSection,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    SaveButton,
-} from "@/base";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import SaveButton from "@base/SaveButton";
 import { useSetMessage } from "@message/queries";
 import { Message } from "@message/types";
 import React from "react";

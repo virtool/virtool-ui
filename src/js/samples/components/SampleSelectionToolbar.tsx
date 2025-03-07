@@ -1,5 +1,6 @@
 import { useUrlSearchParam } from "@/hooks";
-import { Button, Icon } from "@base/index";
+import Button from "@base/Button";
+import Icon from "@base/Icon";
 import React from "react";
 import styled from "styled-components";
 import { Workflows } from "../../analyses/types";

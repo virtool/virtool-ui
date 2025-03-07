@@ -1,15 +1,13 @@
-import {
-    BoxGroup,
-    BoxGroupHeader,
-    BoxGroupSection,
-    InputContainer,
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    SaveButton,
-} from "@/base";
 import { useUpdateAccount } from "@account/queries";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import InputContainer from "@base/InputContainer";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import SaveButton from "@base/SaveButton";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

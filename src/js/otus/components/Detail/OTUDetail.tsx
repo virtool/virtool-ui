@@ -1,15 +1,13 @@
-import {
-    Link,
-    LoadingPlaceholder,
-    NotFound,
-    Tabs,
-    TabsLink,
-    ViewHeader,
-    ViewHeaderIcons,
-    ViewHeaderTitle,
-} from "@/base";
 import { usePathParams } from "@/hooks";
 import { getFontWeight } from "@app/theme";
+import Link from "@base/Link";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
+import Tabs from "@base/Tabs";
+import TabsLink from "@base/TabsLink";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderIcons from "@base/ViewHeaderIcons";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
 import React from "react";

@@ -6,6 +6,6 @@ interface ProgressBarProps {
     color?: string;
 }
 
-export function ProgressBar({ now, color }: ProgressBarProps) {
+export default function ProgressBar({ now, color }: ProgressBarProps) {
     return <StyledProgress max="100" value={now} color={color} />;
 }

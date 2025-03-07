@@ -7,7 +7,7 @@ type ExternalLinkProps = {
     href: string;
 };
 
-export const ExternalLink = styled(
+const ExternalLink = styled(
     ({ children, className = "", href }: ExternalLinkProps) => (
         <a
             className={className}
@@ -21,3 +21,5 @@ export const ExternalLink = styled(
 )``;
 
 ExternalLink.displayName = "ExternalLink";
+
+export default ExternalLink;

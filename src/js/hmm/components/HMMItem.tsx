@@ -1,5 +1,7 @@
-import { BoxGroupSection, Label, Link } from "@/base";
 import { getFontSize, getFontWeight } from "@app/theme";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Label from "@base/Label";
+import Link from "@base/Link";
 import { keys, map, reject } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

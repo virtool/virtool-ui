@@ -6,7 +6,10 @@ type DialogFooterProps = {
     className?: string;
 };
 
-export function DialogFooter({ children, className }: DialogFooterProps) {
+export default function DialogFooter({
+    children,
+    className,
+}: DialogFooterProps) {
     return (
         <div className={cn("flex", "justify-end", "pt-4 pb-1", className)}>
             {children}

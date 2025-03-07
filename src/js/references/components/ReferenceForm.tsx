@@ -1,10 +1,8 @@
-import {
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    TextArea,
-} from "@/base";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import TextArea from "@base/TextArea";
 import React from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import styled from "styled-components";

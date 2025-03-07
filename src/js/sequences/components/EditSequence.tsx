@@ -1,5 +1,8 @@
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { useCurrentOtuContext, useEditSequence } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import {

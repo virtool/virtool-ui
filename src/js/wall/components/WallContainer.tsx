@@ -1,4 +1,4 @@
-import { OnlyChildrenProps } from "@/types";
+import { OnlyChildrenProps } from "@/types/dom";
 import React from "react";
 
 /**

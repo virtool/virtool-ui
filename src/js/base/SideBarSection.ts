@@ -1,8 +1,8 @@
+import { borderRadius, boxShadow } from "@app/theme";
 import styled from "styled-components";
-import { borderRadius, boxShadow } from "../app/theme";
-import { Box } from "./Box";
+import Box from "./Box";
 
-export const SideBarSection = styled(Box)`
+const SideBarSection = styled(Box)`
     background-color: ${(props) => props.theme.color.greyLightest};
     border: none;
     border-radius: ${borderRadius.md};
@@ -12,3 +12,5 @@ export const SideBarSection = styled(Box)`
 `;
 
 SideBarSection.displayName = "SideBarSection";
+
+export default SideBarSection;

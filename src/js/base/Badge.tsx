@@ -10,7 +10,11 @@ type BadgeProps = {
 /**
  * A styled Badge component
  */
-export function Badge({ children, className, color = "gray" }: BadgeProps) {
+export default function Badge({
+    children,
+    className,
+    color = "gray",
+}: BadgeProps) {
     return (
         <span
             className={cn(

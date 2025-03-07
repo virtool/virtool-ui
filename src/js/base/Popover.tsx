@@ -11,7 +11,11 @@ type PopoverProps = {
 /**
  * A styled popover component
  */
-export function Popover({ align = "end", children, trigger }: PopoverProps) {
+export default function Popover({
+    align = "end",
+    children,
+    trigger,
+}: PopoverProps) {
     return (
         <PopoverPrimitive.Root>
             <PopoverPrimitive.Trigger asChild>

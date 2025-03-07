@@ -1,18 +1,16 @@
-import {
-    BoxGroup,
-    BoxGroupHeader,
-    BoxGroupSection,
-    InputGroup,
-    InputLabel,
-    InputSelect,
-    SelectBox,
-} from "@base/index";
+import { useUpdateSettings } from "@administration/queries";
+import { Settings } from "@administration/types";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSelect from "@base/InputSelect";
 import PseudoLabel from "@base/PseudoLabel";
+import SelectBox from "@base/SelectBox";
 import { includes, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import { useUpdateSettings } from "../../administration/queries";
-import { Settings } from "../../administration/types";
 
 const rights = [
     { label: "None", value: "" },

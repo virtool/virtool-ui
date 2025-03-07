@@ -1,4 +1,4 @@
-import { Icon } from "@base/index";
+import Icon from "@base/Icon";
 import { LibraryType } from "@samples/types";
 import React from "react";
 import styled from "styled-components";

@@ -1,10 +1,8 @@
-import {
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    SaveButton,
-} from "@/base";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import SaveButton from "@base/SaveButton";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { OTUSegment, OTUSequence } from "@otus/types";

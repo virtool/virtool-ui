@@ -1,3 +1,5 @@
 import { createContext } from "react";
 
-export const ScrollSyncContext = createContext(null);
+const ScrollSyncContext = createContext(null);
+
+export default ScrollSyncContext;

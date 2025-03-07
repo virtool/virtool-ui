@@ -1,6 +1,8 @@
-import { Attribution, BoxGroupSection, RelativeTime } from "@/base";
 import { byteSize } from "@/utils";
-import { IconButton } from "@base/IconButton";
+import Attribution from "@base/Attribution";
+import BoxGroupSection from "@base/BoxGroupSection";
+import IconButton from "@base/IconButton";
+import RelativeTime from "@base/RelativeTime";
 import { UserNested } from "@users/types";
 import React, { useCallback } from "react";
 import { useDeleteFile } from "../queries";

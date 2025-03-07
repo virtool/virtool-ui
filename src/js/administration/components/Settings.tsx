@@ -1,11 +1,9 @@
-import {
-    ContainerNarrow,
-    ContainerWide,
-    LoadingPlaceholder,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "@/base";
 import { useFetchAccount } from "@account/queries";
+import ContainerNarrow from "@base/ContainerNarrow";
+import ContainerWide from "@base/ContainerWide";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { ManageUsers } from "@users/components/ManageUsers";
 import UserDetail from "@users/components/UserDetail";
 import React from "react";

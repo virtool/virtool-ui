@@ -1,7 +1,16 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import styled from "styled-components";
-import { DropdownItemMixin } from "./DropdownItemMixin";
 
-export const DropdownMenuItem = styled(DropdownMenu.Item)`
-    ${DropdownItemMixin}
+const DropdownMenuItem = styled(DropdownMenu.Item)`
+    color: ${(props) => props.theme.color.black};
+    cursor: pointer;
+    min-width: 160px;
+    padding: 10px 15px;
+
+    &:hover {
+        background-color: ${(props) => props.theme.color.greyHover};
+        color: ${(props) => props.theme.color.black};
+    }
 `;
+
+export default DropdownMenuItem;

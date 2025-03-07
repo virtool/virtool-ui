@@ -1,4 +1,4 @@
-import { Button } from "@/base";
+import Button from "@base/Button";
 import { IndexMinimal } from "@indexes/types";
 import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
@@ -8,7 +8,7 @@ import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
-import { SubtractionSelector } from "./SubtractionSelector";
+import SubtractionSelector from "./SubtractionSelector";
 
 type createPathoscopeFormValues = {
     workflow: Workflows;

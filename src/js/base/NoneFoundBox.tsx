@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Box } from "./Box";
-import { Icon } from "./Icon";
+import Box from "./Box";
+import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 interface NoneFoundBoxProps {
@@ -15,7 +15,11 @@ const StyledNoneFoundBox = styled(Box)`
     min-height: 30px;
 `;
 
-export function NoneFoundBox({ className, noun, children }: NoneFoundBoxProps) {
+export default function NoneFoundBox({
+    className,
+    noun,
+    children,
+}: NoneFoundBoxProps) {
     return (
         <StyledNoneFoundBox as={Box} className={className}>
             <Icon name="info-circle" /> No {noun} found. &nbsp; {children}

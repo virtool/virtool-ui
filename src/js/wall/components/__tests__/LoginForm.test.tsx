@@ -3,18 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import nock from "nock";
 import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import LoginForm from "../LoginForm";
 
 describe("<LoginForm />", () => {
-    beforeEach(() => {
-        window.virtool = {
-            b2c: {
-                use: false,
-            },
-        };
-    });
-
     afterEach(() => nock.cleanAll());
 
     it("should call mutate() with correct values when submitted", async () => {

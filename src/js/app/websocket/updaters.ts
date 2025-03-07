@@ -1,6 +1,6 @@
 import { hmmQueryKeys } from "@/hmm/queries";
 import { HMMSearchResults } from "@/hmm/types";
-import { Task } from "@/types";
+import { Task } from "@/types/api";
 import { referenceQueryKeys } from "@references/queries";
 import { ReferenceSearchResult } from "@references/types";
 import { InfiniteData, QueryClient } from "@tanstack/react-query";

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const InputSimple = styled.input`
+const InputSimple = styled.input`
     background-color: ${(props) => props.theme.color.white};
     border: 1px solid ${(props) => props.theme.color.greyLight};
     border-radius: ${(props) => props.theme.borderRadius.sm};
@@ -27,3 +27,5 @@ export const InputSimple = styled.input`
 `;
 
 InputSimple.displayName = "InputSimple";
+
+export default InputSimple;

@@ -1,7 +1,10 @@
-import { Icon, InitialIcon, Label, LoadingPlaceholder } from "@/base";
 import AccountGroups from "@account/components/AccountGroups";
 import { useFetchAccount } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
+import Icon from "@base/Icon";
+import InitialIcon from "@base/InitialIcon";
+import Label from "@base/Label";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import React from "react";
 import styled from "styled-components";
 import ChangePassword from "./ChangePassword";

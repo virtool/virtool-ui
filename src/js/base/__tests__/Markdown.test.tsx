@@ -1,4 +1,4 @@
-import { Markdown } from "@/base";
+import Markdown from "@base/Markdown";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";

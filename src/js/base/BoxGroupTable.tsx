@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
 import React from "react";
-import { Table } from "./Table";
+import Table from "./Table";
 
 type BoxGroupTableProps = {
     children: React.ReactNode;
@@ -10,7 +10,10 @@ type BoxGroupTableProps = {
 /**
  * Replacement for the HTML table element within a BoxGroup
  */
-export function BoxGroupTable({ children, className }: BoxGroupTableProps) {
+export default function BoxGroupTable({
+    children,
+    className,
+}: BoxGroupTableProps) {
     return (
         <Table
             className={cn(

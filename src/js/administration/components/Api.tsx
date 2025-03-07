@@ -1,4 +1,4 @@
-import { ExternalLink } from "@/base";
+import ExternalLink from "@base/ExternalLink";
 import React from "react";
 import { useUpdateSettings } from "../queries";
 import { Settings } from "../types";

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { AlertInner } from "./AlertInner";
-import { AlertOuter } from "./AlertOuter";
-import { Icon } from "./Icon";
+import AlertInner from "./AlertInner";
+import AlertOuter from "./AlertOuter";
+import Icon from "./Icon";
 
 type AlertProps = {
     block?: boolean;
@@ -13,7 +13,7 @@ type AlertProps = {
     level?: boolean;
 };
 
-export const Alert = styled(
+const Alert = styled(
     ({ block, children, className, color, icon, level }: AlertProps) => (
         <AlertOuter color={color}>
             <AlertInner
@@ -30,3 +30,5 @@ export const Alert = styled(
 )``;
 
 Alert.displayName = "Alert";
+
+export default Alert;

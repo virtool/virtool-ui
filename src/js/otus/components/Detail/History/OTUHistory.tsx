@@ -1,5 +1,5 @@
-import { LoadingPlaceholder } from "@/base";
 import { usePathParams } from "@/hooks";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import HistoryList from "@otus/components/Detail/History/HistoryList";
 import { useFetchOTUHistory } from "@otus/queries";
 import { groupBy } from "lodash-es";

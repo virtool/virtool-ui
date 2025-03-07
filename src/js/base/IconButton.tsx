@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import { IconColor } from "@jobs/types";
 import React from "react";
-import { Tooltip } from "./Tooltip";
+import Tooltip from "./Tooltip";
 
 type IconButtonProps = {
     className?: string;
@@ -16,7 +16,7 @@ type IconButtonProps = {
 /**
  * A styled clickable icon with tooltip describing its action
  */
-export function IconButton({
+export default function IconButton({
     className,
     color = "black",
     faStyle = "fas",

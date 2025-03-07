@@ -1,19 +1,17 @@
-import {
-    Box,
-    Icon,
-    InputContainer,
-    InputError,
-    InputGroup,
-    InputIconButton,
-    InputLabel,
-    InputSimple,
-    LoadingPlaceholder,
-    SaveButton,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "@/base";
 import { useNavigate } from "@/hooks";
 import { useFetchAccount } from "@account/queries";
+import Box from "@base/Box";
+import Icon from "@base/Icon";
+import InputContainer from "@base/InputContainer";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputIconButton from "@base/InputIconButton";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SaveButton from "@base/SaveButton";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
 import { RestoredAlert } from "@forms/components/RestoredAlert";

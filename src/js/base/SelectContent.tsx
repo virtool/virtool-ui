@@ -2,7 +2,7 @@ import { borderRadius, boxShadow, getColor } from "@app/theme";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 
 const ContentOpen = keyframes`  
   from {
@@ -39,7 +39,7 @@ const ScrollSection = styled(RadixSelect.ScrollUpButton)`
     }
 `;
 
-export const SelectContent = ({ children, position, align }) => {
+export default function SelectContent({ children, position, align }) {
     return (
         <RadixSelect.Portal>
             <StyledContent
@@ -58,4 +58,4 @@ export const SelectContent = ({ children, position, align }) => {
             </StyledContent>
         </RadixSelect.Portal>
     );
-};
+}

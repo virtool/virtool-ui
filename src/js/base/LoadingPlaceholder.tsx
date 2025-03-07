@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
 import React from "react";
-import { Loader } from "./Loader";
+import Loader from "./Loader";
 
 type LoadingPlaceholderProps = {
     /* Tailwind CSS classes */
@@ -14,7 +14,7 @@ type LoadingPlaceholderProps = {
  * async action such as an API call. An example would be navigating to a sample detail view and showing a spinner while
  * the sample data is retrieved from the server.
  */
-export function LoadingPlaceholder({
+export default function LoadingPlaceholder({
     className,
     message = "",
 }: LoadingPlaceholderProps) {

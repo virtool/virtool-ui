@@ -9,6 +9,9 @@ type ContainerSideProps = {
 /**
  * Sidebar content container
  */
-export function ContainerSide({ children, className }: ContainerSideProps) {
+export default function ContainerSide({
+    children,
+    className,
+}: ContainerSideProps) {
     return <div className={cn("flex-none", className)}>{children}</div>;
 }

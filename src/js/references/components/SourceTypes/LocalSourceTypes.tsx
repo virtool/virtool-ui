@@ -1,19 +1,17 @@
-import {
-    BoxGroup,
-    BoxGroupDisabled,
-    BoxGroupHeader,
-    BoxGroupSection,
-    Button,
-    InputContainer,
-    InputError,
-    InputSimple,
-    LoadingPlaceholder,
-    SectionHeader,
-} from "@/base";
 import { usePathParams } from "@/hooks";
 import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
 import { getColor } from "@app/theme";
-import { IconButton } from "@base/IconButton";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupDisabled from "@base/BoxGroupDisabled";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Button from "@base/Button";
+import IconButton from "@base/IconButton";
+import InputContainer from "@base/InputContainer";
+import InputError from "@base/InputError";
+import InputSimple from "@base/InputSimple";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SectionHeader from "@base/SectionHeader";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

@@ -1,15 +1,13 @@
-import {
-    Box,
-    Icon,
-    InputGroup,
-    InputLabel,
-    Link,
-    Select,
-    SelectButton,
-    SelectContent,
-    SelectItem,
-} from "@/base";
 import { fontWeight, getColor, getFontSize, getFontWeight } from "@app/theme";
+import Box from "@base/Box";
+import Icon from "@base/Icon";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import Link from "@base/Link";
+import Select from "@base/Select";
+import SelectButton from "@base/SelectButton";
+import SelectContent from "@base/SelectContent";
+import SelectItem from "@base/SelectItem";
 import { OTUSegment } from "@otus/types";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";

@@ -1,7 +1,7 @@
+import { getFontSize, getFontWeight } from "@app/theme";
 import styled from "styled-components";
-import { getFontSize, getFontWeight } from "../app/theme";
 
-export const SectionHeader = styled.header`
+const SectionHeader = styled.header`
     margin-bottom: 1.2rem;
 
     h2 {
@@ -15,3 +15,7 @@ export const SectionHeader = styled.header`
         font-weight: ${getFontWeight("thick")};
     }
 `;
+
+SectionHeader.displayName = "SectionHeader";
+
+export default SectionHeader;

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 /**
@@ -22,10 +22,10 @@ interface NoneFoundProps {
     noun: string;
 }
 
-export const NoneFound = ({ noun }: NoneFoundProps) => {
+export default function NoneFound({ noun }: NoneFoundProps) {
     return (
         <StyledNoneFound>
             <Icon name="info-circle" /> No {noun} found
         </StyledNoneFound>
     );
-};
+}

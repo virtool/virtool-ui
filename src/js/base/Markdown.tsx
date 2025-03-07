@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import { marked } from "marked";
 import React from "react";
-import { NoneFound } from "./NoneFound";
+import NoneFound from "./NoneFound";
 
 type MarkdownProps = {
     markdown?: string;
@@ -10,7 +10,7 @@ type MarkdownProps = {
 /**
  * A styled component that parses, formats, and displays markdown content
  */
-export function Markdown({ markdown = "" }: MarkdownProps) {
+export default function Markdown({ markdown = "" }: MarkdownProps) {
     marked.use({
         gfm: true,
         async: false,

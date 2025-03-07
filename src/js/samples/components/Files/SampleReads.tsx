@@ -1,4 +1,5 @@
-import { BoxGroup, BoxGroupHeader } from "@base/index";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

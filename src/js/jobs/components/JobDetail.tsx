@@ -1,14 +1,12 @@
-import {
-    ContainerNarrow,
-    LoadingPlaceholder,
-    NotFound,
-    ViewHeader,
-    ViewHeaderAttribution,
-    ViewHeaderTitle,
-} from "@/base";
 import { usePathParams } from "@/hooks";
 import { getWorkflowDisplayName } from "@/utils";
-import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderAttribution from "@base/ViewHeaderAttribution";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
+import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";
 import React from "react";
 import styled from "styled-components";

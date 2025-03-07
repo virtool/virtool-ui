@@ -1,16 +1,14 @@
-import {
-    BoxGroup,
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
-    InitialIcon,
-    InputSearch,
-    NoneFoundSection,
-    SelectBoxGroupSection,
-} from "@/base";
 import { getBorder } from "@app/theme";
-import { CompactScrollList } from "@base/CompactScrollList";
+import BoxGroup from "@base/BoxGroup";
+import CompactScrollList from "@base/CompactScrollList";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
+import InitialIcon from "@base/InitialIcon";
+import InputSearch from "@base/InputSearch";
+import NoneFoundSection from "@base/NoneFoundSection";
+import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import Toolbar from "@base/Toolbar";
 import { useInfiniteFindGroups } from "@groups/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";

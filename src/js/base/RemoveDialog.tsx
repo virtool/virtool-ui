@@ -1,11 +1,11 @@
+import Button from "@base/Button";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogFooter from "@base/DialogFooter";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { Button } from "./Button";
-import { Dialog } from "./Dialog";
-import { DialogContent } from "./DialogContent";
-import { DialogFooter } from "./DialogFooter";
-import { DialogOverlay } from "./DialogOverlay";
-import { DialogTitle } from "./DialogTitle";
 
 type RemoveDialogProps = {
     /** A message to override the default one displayed in the dialog body */
@@ -25,7 +25,7 @@ type RemoveDialogProps = {
 /**
  * A dialog that requests confirmation from the user for deleting a document or other sensitive information
  */
-export function RemoveDialog({
+export default function RemoveDialog({
     message,
     name,
     noun,

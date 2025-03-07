@@ -1,5 +1,7 @@
-import { ContainerNarrow, LoadingPlaceholder, NotFound } from "@/base";
 import { usePathParams } from "@/hooks";
+import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
 import IndexDetail from "@indexes/components/IndexDetail";
 import { useGetReference } from "@references/queries";
 import React from "react";

@@ -213,7 +213,7 @@ type ProgressCircleProps = {
  * @returns A determinate or indeterminate progress circle
  */
 
-export function ProgressCircle({
+export default function ProgressCircle({
     progress,
     size = sizes.md,
     state = JobState.waiting,

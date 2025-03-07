@@ -1,14 +1,12 @@
-import {
-    LoadingPlaceholder,
-    NotFound,
-    Table,
-    ViewHeader,
-    ViewHeaderIcons,
-    ViewHeaderTitle,
-} from "@/base";
 import { useDialogParam, usePathParams } from "@/hooks";
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
+import Table from "@base/Table";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderIcons from "@base/ViewHeaderIcons";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import { Permission } from "@groups/types";
 import numbro from "numbro";
 import React from "react";
