@@ -4,7 +4,6 @@ import InputLabel from "@base/InputLabel.js";
 export { InputGroup, InputLabel };
 
 export { Link } from "wouter";
-export { device } from "./Breakpoints";
 export { Button } from "./Button";
 export { Checkbox } from "./Checkbox";
 export { CloseButton } from "./CloseButton";
