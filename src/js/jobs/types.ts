@@ -1,6 +1,6 @@
 import { UserNested } from "@users/types";
 
-import { SearchResult } from "@/types";
+import { SearchResult } from "@/types/api";
 
 export enum JobState {
     complete = "complete",

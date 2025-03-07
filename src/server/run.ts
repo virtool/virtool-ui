@@ -14,7 +14,7 @@ async function main() {
     const app = express();
 
     app.disable("x-powered-by");
-    app.use([createCspMiddleware(options.b2cTenant), loggingMiddleware]);
+    app.use([createCspMiddleware(), loggingMiddleware]);
     app.set("views", path.join("dist"));
     app.locals.delimiter = "#";
 

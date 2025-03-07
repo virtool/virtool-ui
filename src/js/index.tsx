@@ -25,8 +25,6 @@ window.addEventListener("vite:preloadError", () => {
     window.location.reload();
 });
 
-window.virtool.b2c = { use: false };
-
 const AppWithProfiler = withProfiler(App);
 
 const container = document.getElementById("app-container");

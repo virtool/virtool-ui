@@ -1,4 +1,4 @@
-import { Task } from "@/types";
+import { Task } from "@/types/api";
 import { faker } from "@faker-js/faker";
 import {
     Reference,

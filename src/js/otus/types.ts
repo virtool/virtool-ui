@@ -2,7 +2,7 @@ import { IndexNested } from "@indexes/types";
 import { ReferenceNested } from "../references/types";
 import { UserNested } from "../users/types";
 
-import { SearchResult } from "@/types";
+import { SearchResult } from "@/types/api";
 
 export enum Molecule {
     ds_dna = "dsDNA",
