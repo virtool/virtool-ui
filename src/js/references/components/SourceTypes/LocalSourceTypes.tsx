@@ -1,13 +1,10 @@
 import { usePathParams } from "@/hooks";
 import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
 import { getColor } from "@app/theme";
-import {
-    InputContainer,
-    InputError,
-    InputSimple,
-    LoadingPlaceholder,
-    SectionHeader,
-} from "@base";
+import InputContainer from '@base/InputContainer';
+import InputError from '@base/InputError';
+import InputSimple from '@base/InputSimple';
+import { LoadingPlaceholder, SectionHeader } from '@base';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupDisabled from "@base/BoxGroupDisabled";
 import BoxGroupHeader from "@base/BoxGroupHeader";

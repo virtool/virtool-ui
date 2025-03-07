@@ -1,5 +1,5 @@
 import { useUrlSearchParam } from "@/hooks";
-import { InputSearch } from "@base";
+import InputSearch from '@base/InputSearch';
 import Icon from "@base/Icon";
 import ButtonToggle from "@base/ButtonToggle";
 import Dropdown from "@base/Dropdown";

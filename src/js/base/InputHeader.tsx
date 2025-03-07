@@ -45,7 +45,11 @@ type InputHeaderProps = {
 /**
  * A styled input header field that handles form submission
  */
-export function InputHeader({ id, value = "", onSubmit }: InputHeaderProps) {
+export default function InputHeader({
+    id,
+    value = "",
+    onSubmit,
+}: InputHeaderProps) {
     const inputElement = useRef<HTMLInputElement>();
 
     const {

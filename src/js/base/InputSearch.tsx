@@ -1,7 +1,7 @@
-import { InputIcon } from "@base/InputIcon";
+import InputIcon from "@base/InputIcon";
 import React from "react";
-import { Input } from "./Input";
-import { InputContainer } from "./InputContainer";
+import Input from "./Input";
+import InputContainer from "./InputContainer";
 
 type InputHandle = {
     blur: () => void;
@@ -29,13 +29,13 @@ interface InputProps {
     onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-export const InputSearch = React.forwardRef<InputHandle, InputProps>(
-    (props, ref) => (
-        <InputContainer align="left" className="flex-grow">
-            <Input {...props} ref={ref} />
-            <InputIcon name="search" />
-        </InputContainer>
-    ),
-);
+const InputSearch = React.forwardRef<InputHandle, InputProps>((props, ref) => (
+    <InputContainer align="left" className="flex-grow">
+        <Input {...props} ref={ref} />
+        <InputIcon name="search" />
+    </InputContainer>
+));
 
 InputSearch.displayName = "InputSearch";
+
+export default InputSearch;

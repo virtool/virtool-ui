@@ -1,4 +1,7 @@
-import { InputError, InputGroup, InputLabel, InputSimple } from "@base";
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
 import Button from "@base/Button";
 import React from "react";
 import { useForm } from "react-hook-form";

@@ -1,12 +1,10 @@
-import {
-    InputContainer,
-    InputError,
-    InputGroup,
-    InputIconButton,
-    InputLabel,
-    InputLoading,
-    InputSimple,
-} from "@base";
+import InputContainer from '@base/InputContainer';
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputIconButton from '@base/InputIconButton';
+import InputLabel from '@base/InputLabel';
+import InputLoading from '@base/InputLoading';
+import InputSimple from '@base/InputSimple';
 import { getGenbank } from "@otus/api";
 import { forEach } from "lodash-es";
 import React, { useCallback, useEffect, useState } from "react";

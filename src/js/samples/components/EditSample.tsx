@@ -1,12 +1,9 @@
 import { useDialogParam } from "@/hooks";
-import {
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    SaveButton,
-    TextArea,
-} from "@base";
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
+import { SaveButton, TextArea } from '@base';
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogOverlay from "@base/DialogOverlay";

@@ -1,12 +1,9 @@
 import { useUpdateUser } from "@administration/queries";
-import {
-    InputContainer,
-    InputError,
-    InputGroup,
-    InputSimple,
-    RelativeTime,
-    SaveButton,
-} from "@base";
+import InputContainer from '@base/InputContainer';
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputSimple from '@base/InputSimple';
+import { RelativeTime, SaveButton } from '@base';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

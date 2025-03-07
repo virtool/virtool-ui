@@ -3,7 +3,7 @@ import { getColor } from "@app/theme";
 import { LoadingPlaceholder, RemoveBanner } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
-import { InputHeader } from "@base/InputHeader";
+import InputHeader from "@base/InputHeader";
 import { find, sortBy } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";

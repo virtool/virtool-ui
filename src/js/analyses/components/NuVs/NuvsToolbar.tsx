@@ -2,7 +2,7 @@ import { useUrlSearchParam } from "@/hooks";
 import NuvsExport, {
     NuvsExportProps,
 } from "@analyses/components/NuVs/NuvsExport";
-import { InputSearch } from "@base";
+import InputSearch from '@base/InputSearch';
 import ButtonToggle from "@base/ButtonToggle";
 import Toolbar from "@base/Toolbar";
 import { Tooltip } from "@base/Tooltip";

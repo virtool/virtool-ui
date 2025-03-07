@@ -1,7 +1,8 @@
 import { useUrlSearchParam } from "@/hooks";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
-import { InputSearch, LoadingPlaceholder } from "@base";
+import InputSearch from '@base/InputSearch';
+import { LoadingPlaceholder } from '@base';
 import Alert from "@base/Alert";
 import Icon from "@base/Icon";
 import { ToggleGroup } from "@base/ToggleGroup";

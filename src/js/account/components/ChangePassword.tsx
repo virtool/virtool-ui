@@ -1,13 +1,10 @@
 import { useChangePassword } from "@account/queries";
-import {
-    InputContainer,
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputPassword,
-    RelativeTime,
-    SaveButton,
-} from "@base";
+import InputContainer from '@base/InputContainer';
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputPassword from '@base/InputPassword';
+import { RelativeTime, SaveButton } from '@base';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

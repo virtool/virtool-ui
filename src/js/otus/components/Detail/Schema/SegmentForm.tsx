@@ -1,11 +1,9 @@
-import {
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSelect,
-    InputSimple,
-    SaveButton,
-} from "@base";
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSelect from '@base/InputSelect';
+import InputSimple from '@base/InputSimple';
+import { SaveButton } from '@base';
 import Checkbox from "@base/Checkbox";
 import DialogFooter from "@base/DialogFooter";
 import { Molecule, OTUSegment } from "@otus/types";

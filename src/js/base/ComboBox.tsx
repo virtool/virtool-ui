@@ -6,7 +6,7 @@ import {
     getFontWeight,
 } from "@app/theme";
 import Icon from "@base/Icon";
-import { InputSearch } from "@base/InputSearch";
+import InputSearch from "@base/InputSearch";
 import { useCombobox } from "downshift";
 import React from "react";
 import styled, { keyframes } from "styled-components";

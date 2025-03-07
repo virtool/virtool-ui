@@ -1,12 +1,9 @@
 import { useDialogParam } from "@/hooks";
-import {
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    LoadingPlaceholder,
-    SaveButton,
-} from "@base";
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
+import { LoadingPlaceholder, SaveButton } from '@base';
 import DialogFooter from "@base/DialogFooter";
 import PseudoLabel from "@base/PseudoLabel";
 import { useInfiniteFindFiles } from "@files/queries";

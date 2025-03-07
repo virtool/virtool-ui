@@ -1,12 +1,9 @@
 import { useNavigate } from "@/hooks";
-import {
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    ProgressBarAffixed,
-    SaveButton,
-} from "@base";
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
+import { ProgressBarAffixed, SaveButton } from '@base';
 import Alert from "@base/Alert";
 import DialogFooter from "@base/DialogFooter";
 import { UploadBar } from "@files/components/UploadBar";

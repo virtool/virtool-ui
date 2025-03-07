@@ -1,5 +1,9 @@
 import { formatIsolateName } from "@/utils";
-import { Input, InputGroup, InputLabel, InputSimple, SaveButton } from "@base";
+import Input from '@base/Input';
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
+import { SaveButton } from '@base';
 import DialogFooter from "@base/DialogFooter";
 import React from "react";
 import { useForm } from "react-hook-form";

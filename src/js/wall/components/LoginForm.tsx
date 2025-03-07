@@ -1,4 +1,6 @@
-import { InputGroup, InputLabel, InputSimple } from "@base";
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
 import Button from "@base/Button";
 import Checkbox from "@base/Checkbox";
 import React from "react";

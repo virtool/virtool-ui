@@ -1,6 +1,9 @@
 import { useUpdateSettings } from "@administration/queries";
 import { Settings } from "@administration/types";
-import { InputGroup, InputLabel, InputSelect, SelectBox } from "@base";
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import InputSelect from '@base/InputSelect';
+import { SelectBox } from '@base';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

@@ -1,7 +1,7 @@
 import Icon from "@base/Icon";
 import styled from "styled-components";
 
-export const InputIcon = styled(Icon)`
+const InputIcon = styled(Icon)`
     align-items: center;
     display: flex;
     justify-content: center;
@@ -10,3 +10,7 @@ export const InputIcon = styled(Icon)`
     bottom: 0;
     width: 40px;
 `;
+
+InputIcon.displayName = "InputIcon";
+
+export default InputIcon;

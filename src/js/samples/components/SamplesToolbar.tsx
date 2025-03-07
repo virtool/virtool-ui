@@ -1,5 +1,6 @@
 import { useCheckAdminRoleOrPermission } from "@administration/hooks";
-import { InputSearch, LinkButton } from "@base";
+import InputSearch from '@base/InputSearch';
+import { LinkButton } from '@base';
 import Toolbar from "@base/Toolbar";
 import { Permission } from "@groups/types";
 import React from "react";

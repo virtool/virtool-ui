@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Input } from "./Input";
+import Input from "./Input";
 
 const StyledTextArea = styled(Input)`
     height: 220px;

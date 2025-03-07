@@ -2,16 +2,16 @@ import { useDialogParam } from "@/hooks";
 import APIPermissions from "@account/components/API/APIPermissions";
 import { useCreateAPIKey } from "@account/queries";
 import { getFontSize } from "@app/theme";
-import {
-    Input,
-    InputContainer,
-    InputError,
-    InputGroup,
-    InputIconButton,
-    InputLabel,
-    InputSimple,
-    SaveButton,
-} from "@base";
+import Input from '@base/Input';
+
+import InputContainer from '@base/InputContainer';
+import InputError from '@base/InputError';
+import InputGroup from '@base/InputGroup';
+import InputIconButton from '@base/InputIconButton';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
+import { SaveButton } from '@base';
+
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogFooter from "@base/DialogFooter";

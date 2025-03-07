@@ -1,4 +1,4 @@
-import { Input } from "@base";
+import Input from '@base/Input';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

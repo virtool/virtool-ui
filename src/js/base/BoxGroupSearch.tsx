@@ -1,8 +1,8 @@
 import BoxGroupSection from "@base/BoxGroupSection";
-import { InputContainer } from "@base/InputContainer";
-import { InputIconButton } from "@base/InputIconButton";
+import InputContainer from "@base/InputContainer";
+import InputIconButton from "@base/InputIconButton";
 import React from "react";
-import { Input } from "./Input";
+import Input from "./Input";
 
 type BoxGroupSearchProps = {
     label: string;

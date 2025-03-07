@@ -2,17 +2,6 @@ import InputGroup from "@base/InputGroup.js";
 import InputLabel from "@base/InputLabel.js";
 
 export { Link } from "wouter";
-export { Input } from "./Input";
-export { InputContainer } from "./InputContainer";
-export { InputContext } from "./InputContext";
-export { InputError } from "./InputError";
-export { InputIcon } from "./InputIcon";
-export { InputIconButton } from "./InputIconButton";
-export { InputLoading } from "./InputLoading";
-export { InputPassword } from "./InputPassword";
-export { InputSearch } from "./InputSearch";
-export { InputSelect } from "./InputSelect";
-export { InputSimple } from "./InputSimple";
 export { Key } from "./Key";
 export { Label } from "./Label";
 export { LinkButton } from "./LinkButton";

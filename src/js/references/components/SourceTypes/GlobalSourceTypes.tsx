@@ -1,5 +1,8 @@
 import { settingsQueryKeys } from "@administration/queries";
-import { InputError, InputLabel, InputSimple, SectionHeader } from "@base";
+import InputError from '@base/InputError';
+import InputLabel from '@base/InputLabel';
+import InputSimple from '@base/InputSimple';
+import { SectionHeader } from '@base';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

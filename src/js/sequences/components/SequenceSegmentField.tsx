@@ -1,13 +1,7 @@
 import { fontWeight, getColor, getFontSize, getFontWeight } from "@app/theme";
-import {
-    InputGroup,
-    InputLabel,
-    Link,
-    Select,
-    SelectButton,
-    SelectContent,
-    SelectItem,
-} from "@base";
+import InputGroup from '@base/InputGroup';
+import InputLabel from '@base/InputLabel';
+import { Link, Select, SelectButton, SelectContent, SelectItem } from '@base';
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import { OTUSegment } from "@otus/types";
