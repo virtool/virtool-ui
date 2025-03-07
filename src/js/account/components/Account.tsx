@@ -1,11 +1,6 @@
-import {
-    ContainerNarrow,
-    ContainerWide,
-    Tabs,
-    TabsLink,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "@/base";
+import { Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@/base";
+import ContainerNarrow from "@base/ContainerNarrow";
+import ContainerWide from "@base/ContainerWide";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import APIKeys from "./API/APIKeys";

@@ -1,11 +1,11 @@
 import {
-    Checkbox,
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
     SaveButton,
 } from "@/base";
+import Checkbox from "@base/Checkbox";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";

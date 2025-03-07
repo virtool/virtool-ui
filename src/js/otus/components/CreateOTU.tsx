@@ -1,5 +1,6 @@
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from "@/base";
+import { DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { useDialogParam } from "@/hooks";
+import Dialog from "@base/Dialog";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { useCreateOTU } from "../queries";

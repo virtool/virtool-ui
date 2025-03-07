@@ -9,7 +9,10 @@ type ContainerNarrowProps = {
 /**
  * Smaller page content container such as for file managers and settings
  */
-export function ContainerNarrow({ children, className }: ContainerNarrowProps) {
+export default function ContainerNarrow({
+    children,
+    className,
+}: ContainerNarrowProps) {
     return (
         <div
             className={cn("flex-grow", "flex-shrink-0", "max-w-6xl", className)}

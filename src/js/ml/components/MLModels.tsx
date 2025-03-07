@@ -1,10 +1,10 @@
 import {
-    ContainerNarrow,
     LoadingPlaceholder,
     NoneFoundBox,
     ViewHeader,
     ViewHeaderTitle,
 } from "@/base";
+import ContainerNarrow from "@base/ContainerNarrow";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";
 import React from "react";

@@ -11,16 +11,19 @@ const ComboBoxItem = styled.li`
         border: 0;
     }
 `;
-export const WrapRow = (renderRow, getItemProps) => (item, index) => {
-    return (
-        <ComboBoxItem
-            key={item.id}
-            {...getItemProps({
-                item: item.id,
-                index,
-            })}
-        >
-            {renderRow(item)}
-        </ComboBoxItem>
-    );
-};
+
+export default function WrapRow(renderRow, getItemProps) {
+    return (item, index) => {
+        return (
+            <ComboBoxItem
+                key={item.id}
+                {...getItemProps({
+                    item: item.id,
+                    index,
+                })}
+            >
+                {renderRow(item)}
+            </ComboBoxItem>
+        );
+    };
+}

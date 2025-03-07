@@ -4,15 +4,6 @@ import InputLabel from "@base/InputLabel.js";
 export { InputGroup, InputLabel };
 
 export { Link } from "wouter";
-export { Checkbox } from "./Checkbox";
-export { CloseButton } from "./CloseButton";
-export { Color } from "./Color";
-export { ComboBox } from "./ComboBox";
-export { Container } from "./Container";
-export { ContainerNarrow } from "./ContainerNarrow";
-export { ContainerSide } from "./ContainerSide";
-export { ContainerWide } from "./ContainerWide";
-export { Dialog } from "./Dialog";
 export { DialogAlert } from "./DialogAlert";
 export { DialogContent } from "./DialogContent";
 export { DialogContext } from "./DialogContext";

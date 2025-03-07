@@ -34,7 +34,7 @@ type CompactScrollListProps = {
 /**
  * An infinitely scrolling list of items.
  */
-export function CompactScrollList({
+export default function CompactScrollList({
     className,
     fetchNextPage,
     isFetchingNextPage,

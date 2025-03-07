@@ -1,5 +1,5 @@
+import Dialog from "@base/Dialog";
 import {
-    Dialog,
     DialogContent,
     DialogFooter,
     DialogOverlay,

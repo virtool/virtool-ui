@@ -1,6 +1,6 @@
 import { getFontSize } from "@app/theme";
-import { Checkbox } from "@base";
 import Box from "@base/Box";
+import Checkbox from "@base/Checkbox";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 

@@ -12,3 +12,5 @@ type ContainerSideProps = {
 export function ContainerSide({ children, className }: ContainerSideProps) {
     return <div className={cn("flex-none", className)}>{children}</div>;
 }
+
+export default ContainerSide;

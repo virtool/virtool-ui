@@ -93,7 +93,7 @@ type ColorProps = {
 /**
  * A color text input with a color picker below it
  */
-export function Color({ id, value, onChange }: ColorProps) {
+export default function Color({ id, value, onChange }: ColorProps) {
     return (
         <div>
             <Input

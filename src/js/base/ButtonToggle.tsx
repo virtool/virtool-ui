@@ -38,3 +38,5 @@ export const ButtonToggle = forwardRef<HTMLButtonElement, ButtonToggleProps>(
 );
 
 ButtonToggle.displayName = "ButtonToggle";
+
+export default ButtonToggle;

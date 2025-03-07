@@ -1,9 +1,10 @@
-import { ContainerNarrow, LoadingPlaceholder } from "@/base";
+import { LoadingPlaceholder } from "@/base";
 import { usePathParams } from "@/hooks";
 import { cn } from "@/utils";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
+import ContainerNarrow from "@base/ContainerNarrow";
 import Contributors from "@indexes/components/Contributors";
 import React from "react";
 import { useGetReference } from "../../queries";

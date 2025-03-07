@@ -1,10 +1,6 @@
-import {
-    ContainerNarrow,
-    LoadingPlaceholder,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "@/base";
+import { LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@/base";
 import { useFetchSettings } from "@administration/queries";
+import ContainerNarrow from "@base/ContainerNarrow";
 import React from "react";
 import SampleRights from "./SampleRights";
 

@@ -12,7 +12,7 @@ type CheckboxProps = {
     onClick?: () => void;
 };
 
-export function Checkbox({
+function Checkbox({
     checked = false,
     id,
     label,

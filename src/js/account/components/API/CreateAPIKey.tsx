@@ -1,5 +1,4 @@
 import {
-    Dialog,
     DialogContent,
     DialogFooter,
     DialogOverlay,
@@ -18,6 +17,7 @@ import { useDialogParam } from "@/hooks";
 import APIPermissions from "@account/components/API/APIPermissions";
 import { useCreateAPIKey } from "@account/queries";
 import { getFontSize } from "@app/theme";
+import Dialog from "@base/Dialog";
 import PseudoLabel from "@base/PseudoLabel";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";

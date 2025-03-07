@@ -1,5 +1,6 @@
-import { Container, LoadingPlaceholder } from "@/base";
+import { LoadingPlaceholder } from "@/base";
 import { useFetchAccount } from "@account/queries";
+import Container from "@base/Container";
 import NavBar from "@nav/components/NavBar";
 import { NavContainer } from "@nav/components/NavContainer";
 import Sidebar from "@nav/components/Sidebar";

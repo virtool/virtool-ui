@@ -1,5 +1,4 @@
 import {
-    ContainerNarrow,
     LoadingPlaceholder,
     NotFound,
     ViewHeader,
@@ -8,6 +7,7 @@ import {
 } from "@/base";
 import { usePathParams } from "@/hooks";
 import { getWorkflowDisplayName } from "@/utils";
+import ContainerNarrow from "@base/ContainerNarrow";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";
 import React from "react";

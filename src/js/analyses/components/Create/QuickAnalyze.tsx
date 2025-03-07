@@ -1,6 +1,7 @@
-import { Dialog, DialogOverlay, DialogTitle } from "@/base";
+import { DialogOverlay, DialogTitle } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
 import { Workflows } from "@analyses/types";
+import Dialog from "@base/Dialog";
 import { HMMSearchResults } from "@hmm/types";
 import { IndexMinimal } from "@indexes/types";
 import { MLModelSearchResult } from "@ml/types";

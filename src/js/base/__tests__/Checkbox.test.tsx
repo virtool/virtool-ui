@@ -1,4 +1,4 @@
-import { Checkbox } from "@base/Checkbox";
+import Checkbox from "@base/Checkbox";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";

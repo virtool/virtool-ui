@@ -3,7 +3,7 @@ import { getBorder, getFontWeight, theme } from "@app/theme";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
-import { CompactScrollList } from "@base/CompactScrollList";
+import CompactScrollList from "@base/CompactScrollList";
 import PseudoLabel from "@base/PseudoLabel";
 import Toolbar from "@base/Toolbar";
 import { useValidateFiles } from "@files/hooks";

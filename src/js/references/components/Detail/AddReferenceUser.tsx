@@ -1,5 +1,4 @@
 import {
-    Dialog,
     DialogContent,
     DialogOverlay,
     DialogTitle,
@@ -10,7 +9,8 @@ import {
 } from "@/base";
 import { getBorder } from "@app/theme";
 import BoxGroup from "@base/BoxGroup";
-import { CompactScrollList } from "@base/CompactScrollList";
+import CompactScrollList from "@base/CompactScrollList";
+import Dialog from "@base/Dialog";
 import Toolbar from "@base/Toolbar";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { useInfiniteFindUsers } from "@users/queries";

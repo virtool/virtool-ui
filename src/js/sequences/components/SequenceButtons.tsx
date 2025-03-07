@@ -1,5 +1,5 @@
-import { CloseButton } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
+import CloseButton from "@base/CloseButton";
 import { IconButton } from "@base/IconButton";
 import { useGetActiveIsolateId } from "@otus/hooks";
 import { useCurrentOtuContext } from "@otus/queries";

@@ -1,4 +1,5 @@
-import { Container, ContainerNarrow } from "@/base";
+import Container from "@base/Container";
+import ContainerNarrow from "@base/ContainerNarrow";
 import React from "react";
 import { Route, Switch } from "wouter";
 import SubtractionDetail from "./Detail/SubtractionDetail";

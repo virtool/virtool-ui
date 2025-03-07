@@ -1,5 +1,6 @@
-import { Container, LoadingPlaceholder } from "@/base";
+import { LoadingPlaceholder } from "@/base";
 import { useFetchSettings } from "@administration/queries";
+import Container from "@base/Container";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import ReferenceDetail from "./Detail/ReferenceDetail";

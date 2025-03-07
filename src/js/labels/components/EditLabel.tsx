@@ -1,11 +1,6 @@
+import { DialogContent, DialogOverlay, DialogTitle, Icon } from "@base";
 import Button from "@base/Button";
-import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
-    Icon,
-} from "@base/index";
+import Dialog from "@base/Dialog";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import { useUpdateLabel } from "../queries";

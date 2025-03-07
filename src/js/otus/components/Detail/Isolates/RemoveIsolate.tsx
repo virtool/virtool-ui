@@ -1,5 +1,5 @@
+import { RemoveDialog } from "@base/RemoveDialog";
 import React, { useCallback } from "react";
-import { RemoveDialog } from "../../../../base/RemoveDialog";
 import { useRemoveIsolate } from "../../../queries";
 
 type RemoveIsolateProps = {

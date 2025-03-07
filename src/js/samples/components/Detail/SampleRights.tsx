@@ -1,5 +1,4 @@
 import {
-    ContainerNarrow,
     InputGroup,
     InputLabel,
     InputSelect,
@@ -13,6 +12,7 @@ import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
+import ContainerNarrow from "@base/ContainerNarrow";
 import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";
 import { find, includes, map } from "lodash-es";

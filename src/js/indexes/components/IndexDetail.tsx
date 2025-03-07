@@ -1,5 +1,4 @@
 import {
-    ContainerNarrow,
     LoadingPlaceholder,
     NotFound,
     RelativeTime,
@@ -8,6 +7,7 @@ import {
     SubviewHeaderTitle,
 } from "@/base";
 import { usePathParams } from "@/hooks";
+import ContainerNarrow from "@base/ContainerNarrow";
 import Contributors from "@indexes/components/Contributors";
 import Files from "@indexes/components/IndexFiles";
 import IndexOTUs from "@indexes/components/IndexOTUs";

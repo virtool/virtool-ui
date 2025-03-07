@@ -1,16 +1,52 @@
-import { borderRadius, boxShadow, getBorder } from "@app/theme";
+import {
+    borderRadius,
+    boxShadow,
+    getBorder,
+    getColor,
+    getFontWeight,
+} from "@app/theme";
+import { Icon } from "@base/Icon";
+import { InputSearch } from "@base/InputSearch";
 import { useCombobox } from "downshift";
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { WrapRow } from "./ComboBoxItem";
-import { ComboBoxSearch } from "./ComboBoxSearch";
-import { ComboboxTriggerButton } from "./ComboboxTrigger";
+import WrapRow from "./ComboBoxItem";
+
+const StyledTriggerButton = styled.button`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: ${({ theme }) => getColor({ color: "white", theme })};
+    border: ${getBorder};
+    border-radius: ${borderRadius.sm};
+    font-weight: ${getFontWeight("thick")};
+    text-transform: capitalize;
+    width: 100%;
+    i.fas {
+        margin-left: 5px;
+    }
+`;
+
+function ComboboxTriggerButton({
+    TriggerButtonProps,
+    selectedItem,
+    renderRow,
+    id,
+}) {
+    return (
+        <StyledTriggerButton {...TriggerButtonProps} id={id} type="button">
+            {selectedItem ? renderRow(selectedItem) : "Select user"}
+            <Icon name="chevron-down" />
+        </StyledTriggerButton>
+    );
+}
 
 const ComboBoxContentOpen = keyframes`  
   from {
     opacity: 0;
   }
-  to {
+  to {  
     opacity: 1;
   }
 `;
@@ -47,6 +83,18 @@ const ComboBoxContainer = styled.div`
     width: 100%;
 `;
 
+const InputSearchContainer = styled.div`
+    margin: 10px 5px;
+`;
+
+function ComboBoxSearch({ getInputProps }) {
+    return (
+        <InputSearchContainer>
+            <InputSearch {...getInputProps()} />
+        </InputSearchContainer>
+    );
+}
+
 type ComboBoxProps = {
     items: unknown[];
     selectedItem?: unknown;
@@ -58,9 +106,11 @@ type ComboBoxProps = {
     id?: string;
 };
 
-const defaultToString = (item: string) => item;
+function defaultToString(item: string) {
+    return item;
+}
 
-export const ComboBox = ({
+export default function ComboBox({
     items,
     selectedItem,
     term,
@@ -69,7 +119,7 @@ export const ComboBox = ({
     onChange,
     itemToString,
     id,
-}: ComboBoxProps) => {
+}: ComboBoxProps) {
     itemToString = itemToString || defaultToString;
 
     const {
@@ -101,11 +151,10 @@ export const ComboBox = ({
                 renderRow={renderRow}
                 id={id}
             />
-
             <Content {...getMenuProps()} $isOpen={isOpen}>
                 <ComboBoxSearch getInputProps={getInputProps} />
                 {isOpen && rows}
             </Content>
         </ComboBoxContainer>
     );
-};
+}

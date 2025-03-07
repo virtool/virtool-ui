@@ -18,3 +18,5 @@ export const DialogAlert = styled(Alert)`
 `;
 
 DialogAlert.displayName = "DialogAlert";
+
+export default DialogAlert;
