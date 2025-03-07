@@ -1,4 +1,4 @@
-import { Link } from "@base";
+import Link from '@base/Link';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";

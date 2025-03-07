@@ -1,6 +1,6 @@
 import { formatSearchParams } from "@/hooks";
 import InputSearch from '@base/InputSearch';
-import { LinkButton } from '@base';
+import LinkButton from '@base/LinkButton';
 import Toolbar from "@base/Toolbar";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { ReferenceRemotesFrom } from "@references/types";

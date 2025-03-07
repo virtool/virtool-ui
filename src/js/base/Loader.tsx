@@ -35,7 +35,7 @@ interface LoaderProps extends StyledLoaderProps {
     color?: string;
 }
 
-export function Loader({
+export default function Loader({
     className,
     color = "greyDark",
     size = "22px",

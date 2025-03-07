@@ -1,6 +1,6 @@
 import { getWorkflowDisplayName } from "@/utils";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Link } from "@base";
+import Link from '@base/Link';
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { UserNested } from "@users/types";

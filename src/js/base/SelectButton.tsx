@@ -27,14 +27,16 @@ type SelectButtonProps = {
     id?: string;
 };
 
-export const SelectButton = ({
+export default function SelectButton({
     placeholder,
     icon,
     className,
     id,
-}: SelectButtonProps) => (
-    <SelectTrigger className={className} id={id}>
-        <RadixSelect.Value placeholder={placeholder} />
-        {icon ? <Icon name={icon} /> : null}
-    </SelectTrigger>
-);
+}: SelectButtonProps) {
+    return (
+        <SelectTrigger className={className} id={id}>
+            <RadixSelect.Value placeholder={placeholder} />
+            {icon ? <Icon name={icon} /> : null}
+        </SelectTrigger>
+    );
+}

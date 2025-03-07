@@ -1,5 +1,7 @@
 import { useFetchAccount } from "@account/queries";
-import { LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import ContainerNarrow from "@base/ContainerNarrow";
 import ContainerWide from "@base/ContainerWide";
 import { ManageUsers } from "@users/components/ManageUsers";

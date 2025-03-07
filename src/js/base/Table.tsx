@@ -9,7 +9,7 @@ type TableProps = {
 /**
  * Replacement for the HTML table element
  */
-export function Table({ children, className }: TableProps) {
+export default function Table({ children, className }: TableProps) {
     return (
         <table
             className={cn(

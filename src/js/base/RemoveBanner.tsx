@@ -20,13 +20,13 @@ const StyledRemoveBanner = styled(Alert)<StyledRemoveBannerProps>`
     }
 `;
 
-interface RemoveBannerProps {
+type RemoveBannerProps = {
     message: string;
     buttonText: string;
     onClick: () => void;
-}
+};
 
-export function RemoveBanner({
+export default function RemoveBanner({
     message,
     buttonText,
     onClick,

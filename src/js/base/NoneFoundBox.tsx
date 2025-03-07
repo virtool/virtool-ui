@@ -15,7 +15,11 @@ const StyledNoneFoundBox = styled(Box)`
     min-height: 30px;
 `;
 
-export function NoneFoundBox({ className, noun, children }: NoneFoundBoxProps) {
+export default function NoneFoundBox({
+    className,
+    noun,
+    children,
+}: NoneFoundBoxProps) {
     return (
         <StyledNoneFoundBox as={Box} className={className}>
             <Icon name="info-circle" /> No {noun} found. &nbsp; {children}

@@ -10,7 +10,11 @@ type LabelProps = {
 /**
  * A styled Label component
  */
-export function Label({ children, className, color = "gray" }: LabelProps) {
+export default function Label({
+    children,
+    className,
+    color = "gray",
+}: LabelProps) {
     return (
         <span
             className={cn(

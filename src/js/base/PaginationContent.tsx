@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import * as React from "react";
 
-export const PaginationContent = React.forwardRef<
+const PaginationContent = React.forwardRef<
     HTMLUListElement,
     React.ComponentProps<"ul">
 >(({ className, ...props }, ref) => (
@@ -11,3 +11,7 @@ export const PaginationContent = React.forwardRef<
         {...props}
     />
 ));
+
+PaginationContent.displayName = "PaginationContent";
+
+export default PaginationContent;

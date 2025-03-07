@@ -1,5 +1,6 @@
 import InputError from '@base/InputError';
-import { Link, NoneFoundBox } from '@base';
+import NoneFoundBox from '@base/NoneFoundBox';
+import Link from '@base/Link';
 import CompactScrollList from "@base/CompactScrollList";
 import { useValidateFiles } from "@files/hooks";
 import { File, FileResponse, FileType } from "@files/types";

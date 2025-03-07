@@ -7,7 +7,7 @@ import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuDownload from "@base/DropdownMenuDownload";
 import Toolbar from "@base/Toolbar";
-import { Tooltip } from "@base/Tooltip";
+import Tooltip from '@base/Tooltip';
 import React from "react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 

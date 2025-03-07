@@ -13,7 +13,12 @@ type TabsLinkProps = {
 /**
  * A navigation link with active state styling
  */
-export function TabsLink({ children, className, isActive, to }: TabsLinkProps) {
+export default function TabsLink({
+    children,
+    className,
+    isActive,
+    to,
+}: TabsLinkProps) {
     isActive = useMatchPartialPath(to) || isActive;
 
     const classname = cn(

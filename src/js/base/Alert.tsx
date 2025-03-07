@@ -13,7 +13,7 @@ type AlertProps = {
     level?: boolean;
 };
 
-export const Alert = styled(
+const Alert = styled(
     ({ block, children, className, color, icon, level }: AlertProps) => (
         <AlertOuter color={color}>
             <AlertInner

@@ -1,4 +1,4 @@
-import { Loader } from "@base";
+import Loader from '@base/Loader';
 import Icon from "@base/Icon";
 import React from "react";
 import { WorkflowState } from "../../types";

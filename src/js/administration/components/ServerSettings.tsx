@@ -1,4 +1,4 @@
-import { LoadingPlaceholder } from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
 import ContainerNarrow from "@base/ContainerNarrow";
 import { useFetchMessage } from "@message/queries";
 import React from "react";

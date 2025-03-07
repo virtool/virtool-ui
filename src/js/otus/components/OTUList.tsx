@@ -1,5 +1,7 @@
 import { usePageParam, usePathParams, useUrlSearchParam } from "@/hooks";
-import { LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NoneFoundBox from '@base/NoneFoundBox';
+import Pagination from '@base/Pagination';
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { useGetReference } from "@references/queries";

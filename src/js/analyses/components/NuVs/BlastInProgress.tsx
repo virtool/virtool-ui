@@ -1,4 +1,5 @@
-import { Loader, RelativeTime } from "@base";
+import Loader from '@base/Loader';
+import RelativeTime from '@base/RelativeTime';
 import Box from "@base/Box";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";

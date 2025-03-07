@@ -1,6 +1,8 @@
 import { cn } from "@/utils";
 import IconButton from '@base/IconButton';
-import { Loader, ProgressCircle, RelativeTime } from '@base';
+import Loader from '@base/Loader';
+import ProgressCircle from '@base/ProgressCircle';
+import RelativeTime from '@base/RelativeTime';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

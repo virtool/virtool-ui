@@ -8,7 +8,7 @@ type ButtonToggleProps = {
     pressed: boolean;
 };
 
-export const ButtonToggle = forwardRef<HTMLButtonElement, ButtonToggleProps>(
+const ButtonToggle = forwardRef<HTMLButtonElement, ButtonToggleProps>(
     ({ children, onPressedChange, pressed }, ref) => {
         return (
             <Toggle.Root

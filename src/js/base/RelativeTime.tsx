@@ -50,15 +50,15 @@ function useRelativeTime(time) {
     return timeString;
 }
 
-interface RelativeTimeProps {
+type RelativeTimeProps = {
     time: string;
-}
+};
 
 /**
  * Shows the passed time prop relative to the current time (eg. 3 days ago). The relative time string is updated
  * automatically as time passes.
  */
-export function RelativeTime({ time }: RelativeTimeProps) {
+export default function RelativeTime({ time }: RelativeTimeProps) {
     const timeString = useRelativeTime(time);
     return <span>{timeString}</span>;
 }

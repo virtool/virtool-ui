@@ -1,4 +1,4 @@
-import { Link } from "@base";
+import Link from '@base/Link';
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";

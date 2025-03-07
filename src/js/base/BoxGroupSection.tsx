@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import React from "react";
 
-export type BoxGroupSectionProps = {
+type BoxGroupSectionProps = {
     active?: boolean;
     as?: React.ElementType;
     children?: React.ReactNode;

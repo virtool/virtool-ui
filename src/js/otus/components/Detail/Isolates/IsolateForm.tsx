@@ -3,7 +3,7 @@ import Input from '@base/Input';
 import InputGroup from '@base/InputGroup';
 import InputLabel from '@base/InputLabel';
 import InputSimple from '@base/InputSimple';
-import { SaveButton } from '@base';
+import SaveButton from '@base/SaveButton';
 import DialogFooter from "@base/DialogFooter";
 import React from "react";
 import { useForm } from "react-hook-form";

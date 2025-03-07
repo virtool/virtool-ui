@@ -5,7 +5,7 @@ import NuvsExport, {
 import InputSearch from '@base/InputSearch';
 import ButtonToggle from "@base/ButtonToggle";
 import Toolbar from "@base/Toolbar";
-import { Tooltip } from "@base/Tooltip";
+import Tooltip from '@base/Tooltip';
 import React from "react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
 

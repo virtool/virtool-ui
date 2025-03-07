@@ -11,7 +11,7 @@ type ViewHeaderTitleBadge = {
 /**
  * A styled Badge component for use in view headers
  */
-export function ViewHeaderTitleBadge({
+export default function ViewHeaderTitleBadge({
     children,
     className,
     color,

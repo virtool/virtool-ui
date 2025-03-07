@@ -1,4 +1,4 @@
-import { RemoveDialog } from "@base/RemoveDialog";
+import RemoveDialog from '@base/RemoveDialog';
 import React, { useCallback } from "react";
 import { useRemoveIsolate } from "../../../queries";
 

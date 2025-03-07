@@ -1,13 +1,11 @@
 import { usePageParam, useUrlSearchParam } from "@/hooks";
-import {
-    LoadingPlaceholder,
-    NoneFoundBox,
-    Pagination,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NoneFoundBox from '@base/NoneFoundBox';
+import Pagination from '@base/Pagination';
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import BoxGroup from "@base/BoxGroup";
-import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
+import ViewHeaderTitleBadge from '@base/ViewHeaderTitleBadge';
 import { map } from "lodash";
 import React from "react";
 import { useListHmms } from "../queries";

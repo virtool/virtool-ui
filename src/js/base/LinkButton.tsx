@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { Link } from "@base";
+import Link from '@base/Link';
 import React from "react";
 
 interface LinkButtonProps {
@@ -10,7 +10,7 @@ interface LinkButtonProps {
     to: string;
 }
 
-export function LinkButton({
+export default function LinkButton({
     children,
     className,
     color = "gray",

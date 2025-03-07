@@ -6,7 +6,7 @@ type BoxGroupHeaderProps = {
     theme: DefaultTheme;
 };
 
-export const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
+const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
     align-items: stretch;
     background-color: ${(props) => props.theme.color.greyLightest};
     display: flex;

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Label } from "./Label";
+import Label from "./Label";
 
 const StyledNotFound = styled.div`
     align-items: center;
@@ -20,7 +20,7 @@ type NotFoundProps = {
     message?: string;
 };
 
-export function NotFound({
+export default function NotFound({
     status = 404,
     message = "Not found",
 }: NotFoundProps) {

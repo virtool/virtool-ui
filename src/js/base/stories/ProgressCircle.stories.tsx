@@ -1,6 +1,6 @@
+import ProgressCircle from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
 import type { Meta, StoryObj } from "@storybook/react";
-import { ProgressCircle } from "../ProgressCircle";
 
 const meta: Meta<typeof ProgressCircle> = {
     title: "base/ProgressCircle",

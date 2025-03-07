@@ -1,13 +1,11 @@
 import { usePageParam, useUrlSearchParam } from "@/hooks";
-import {
-    LoadingPlaceholder,
-    Pagination,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import Pagination from '@base/Pagination';
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
-import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
+import ViewHeaderTitleBadge from '@base/ViewHeaderTitleBadge';
 import { CreateReference } from "@references/components/CreateReference";
 import { ReferenceItem } from "@references/components/Item/ReferenceItem";
 import { map } from "lodash";

@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import { IconColor } from "@jobs/types";
 import React from "react";
-import { Tooltip } from "./Tooltip";
+import Tooltip from "./Tooltip";
 
 type IconButtonProps = {
     className?: string;

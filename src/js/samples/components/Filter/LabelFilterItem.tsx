@@ -1,5 +1,4 @@
 import { getRing } from "@app/theme";
-import {} from "@base";
 import Icon from "@base/Icon";
 import React from "react";
 import styled from "styled-components";

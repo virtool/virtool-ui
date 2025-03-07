@@ -1,7 +1,7 @@
 import { useUrlSearchParam } from "@/hooks";
 import { Workflows } from "@analyses/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Link } from "@base";
+import Link from '@base/Link';
 import Attribution from "@base/Attribution";
 import Box from "@base/Box";
 import Checkbox from "@base/Checkbox";

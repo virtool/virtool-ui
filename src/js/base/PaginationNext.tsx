@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
-import { LinkButton } from "@base";
-import { PaginationItem } from "@base/PaginationItem";
+import LinkButton from "@base/LinkButton";
+import PaginationItem from "@base/PaginationItem";
 import * as React from "react";
 
 type PaginationNextProps = {
@@ -12,7 +12,7 @@ type PaginationNextProps = {
 /**
  * A styled next button link for use in a pagination component
  */
-export function PaginationNext({
+export default function PaginationNext({
     className,
     disabled,
     to,

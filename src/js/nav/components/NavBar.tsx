@@ -4,7 +4,7 @@ import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
 import IconButton from '@base/IconButton';
 import InitialIcon from '@base/InitialIcon';
-import { Logo } from '@base';
+import Logo from '@base/Logo';
 import Dropdown from "@base/Dropdown";
 import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";

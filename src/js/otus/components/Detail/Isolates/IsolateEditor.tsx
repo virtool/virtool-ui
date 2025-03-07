@@ -1,8 +1,10 @@
 import { useDialogParam, useNaiveUrlSearchParam } from "@/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@base";
-import { ScrollArea } from "@base/ScrollArea";
-import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
+import NoneFoundBox from '@base/NoneFoundBox';
+import SubviewHeader from '@base/SubviewHeader';
+import SubviewHeaderTitle from '@base/SubviewHeaderTitle';
+import ScrollArea from '@base/ScrollArea';
+import ViewHeaderTitleBadge from '@base/ViewHeaderTitleBadge';
 import { useCurrentOtuContext } from "@otus/queries";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import { find, map } from "lodash-es";

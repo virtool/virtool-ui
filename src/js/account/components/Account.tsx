@@ -1,4 +1,7 @@
-import { Tabs, TabsLink, ViewHeader, ViewHeaderTitle } from "@base";
+import Tabs from '@base/Tabs';
+import TabsLink from '@base/TabsLink';
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import ContainerNarrow from "@base/ContainerNarrow";
 import ContainerWide from "@base/ContainerWide";
 import React from "react";

@@ -8,7 +8,7 @@ const StyledTextArea = styled(Input)`
     overflow-y: scroll;
 `;
 
-interface InputProps {
+type InputProps = {
     "aria-label"?: string;
     as?: React.ElementType;
     children?: React.ReactNode;
@@ -20,10 +20,14 @@ interface InputProps {
     value?: string | number;
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+};
 
-export const TextArea = React.forwardRef<HTMLInputElement, InputProps>(
+const TextArea = React.forwardRef<HTMLInputElement, InputProps>(
     (props, ref) => {
         return <StyledTextArea as="textarea" {...props} ref={ref} />;
     },
 );
+
+TextArea.displayName = "TextArea";
+
+export default TextArea;

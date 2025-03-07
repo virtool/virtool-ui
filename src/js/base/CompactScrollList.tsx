@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query/";
 import { map } from "lodash-es";
 import React from "react";
-import { LoadingPlaceholder } from "./LoadingPlaceholder";
+import LoadingPlaceholder from "./LoadingPlaceholder";
 
 function getScrollRatio(scrollListElement: HTMLElement): number {
     return Math.round(
@@ -17,16 +17,21 @@ function getScrollRatio(scrollListElement: HTMLElement): number {
 type CompactScrollListProps = {
     /** The class name of the scroll list */
     className?: string;
+
     /** A function which initiates fetching the next page */
     fetchNextPage: (
         options?: FetchNextPageOptions,
     ) => Promise<InfiniteQueryObserverResult>;
+
     /** Whether a new page is being fetched */
     isFetchingNextPage: boolean;
+
     /** Whether the first page is being fetched */
     isPending: boolean;
+
     /** The list of items */
     items: unknown[];
+
     /** A function which accepts an item and returns a React element */
     renderRow: (item: unknown) => void;
 };

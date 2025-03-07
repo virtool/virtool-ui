@@ -1,7 +1,9 @@
 import { usePageParam } from "@/hooks";
 import { useFetchAccount } from "@account/queries";
 import InputSearch from '@base/InputSearch';
-import { LoadingPlaceholder, NoneFoundBox, Pagination } from '@base';
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NoneFoundBox from '@base/NoneFoundBox';
+import Pagination from '@base/Pagination';
 import Toolbar from "@base/Toolbar";
 import { filter } from "lodash-es";
 import React, { useState } from "react";

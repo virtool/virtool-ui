@@ -14,7 +14,10 @@ type NoneFoundSectionProps = {
     noun: string;
 };
 
-export function NoneFoundSection({ children, noun }: NoneFoundSectionProps) {
+export default function NoneFoundSection({
+    children,
+    noun,
+}: NoneFoundSectionProps) {
     let childrenContainer;
 
     if (children) {

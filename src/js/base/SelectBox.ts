@@ -6,7 +6,7 @@ type SelectBoxProps = {
     theme: DefaultTheme;
 };
 
-export const SelectBox = styled(Box).attrs(() => ({
+const SelectBox = styled(Box).attrs(() => ({
     type: "button",
     as: "button",
 }))<SelectBoxProps>`
@@ -31,3 +31,5 @@ export const SelectBox = styled(Box).attrs(() => ({
 `;
 
 SelectBox.displayName = "SelectBox";
+
+export default SelectBox;

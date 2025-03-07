@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SlashList = styled.ul`
+const SlashList = styled.ul`
     align-items: center;
     display: flex;
     list-style-type: none;
@@ -13,3 +13,5 @@ export const SlashList = styled.ul`
 `;
 
 SlashList.displayName = "SlashList";
+
+export default SlashList;

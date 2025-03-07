@@ -1,10 +1,8 @@
-import {
-    LoadingPlaceholder,
-    NoneFoundSection,
-    ViewHeader,
-    ViewHeaderSubtitle,
-    ViewHeaderTitle,
-} from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NoneFoundSection from '@base/NoneFoundSection';
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderSubtitle from '@base/ViewHeaderSubtitle';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import React from "react";

@@ -6,14 +6,12 @@ import {
     FormattedPathoscopeAnalysis,
     IimiAnalysis,
 } from "@analyses/types";
-import {
-    LoadingPlaceholder,
-    NotFound,
-    RelativeTime,
-    SubviewHeader,
-    SubviewHeaderAttribution,
-    SubviewHeaderTitle,
-} from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NotFound from '@base/NotFound';
+import RelativeTime from '@base/RelativeTime';
+import SubviewHeader from '@base/SubviewHeader';
+import SubviewHeaderAttribution from '@base/SubviewHeaderAttribution';
+import SubviewHeaderTitle from '@base/SubviewHeaderTitle';
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import { useFetchSample } from "@samples/queries";

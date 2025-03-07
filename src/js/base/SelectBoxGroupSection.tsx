@@ -29,7 +29,7 @@ type BoxGroupSectionSelectProps = {
     onClick?: () => void;
 };
 
-export function SelectBoxGroupSection({
+export default function SelectBoxGroupSection({
     active,
     children,
     className,
@@ -45,10 +45,9 @@ export function SelectBoxGroupSection({
         <StyledSelectBoxGroupSection
             active={active}
             className={className}
-            tabIndex={0}
-            role="option"
             onClick={onClick}
             onKeyDown={handleKeyDown}
+            role="option"
         >
             {children}
         </StyledSelectBoxGroupSection>

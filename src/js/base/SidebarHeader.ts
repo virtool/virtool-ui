@@ -1,12 +1,12 @@
+import { fontWeight, getFontSize } from "@app/theme";
 import styled, { DefaultTheme } from "styled-components";
-import { fontWeight, getFontSize } from "../app/theme";
-import { SidebarHeaderButton } from "./SidebarHeaderButton";
+import SidebarHeaderButton from "./SidebarHeaderButton";
 
 type SidebarHeaderProps = {
     theme: DefaultTheme;
 };
 
-export const SidebarHeader = styled.h3<SidebarHeaderProps>`
+const SidebarHeader = styled.h3<SidebarHeaderProps>`
     align-items: center;
     display: flex;
     font-size: ${getFontSize("lg")};
@@ -24,3 +24,5 @@ export const SidebarHeader = styled.h3<SidebarHeaderProps>`
 `;
 
 SidebarHeader.displayName = "SidebarHeader";
+
+export default SidebarHeader;

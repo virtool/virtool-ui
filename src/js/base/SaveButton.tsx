@@ -6,7 +6,7 @@ interface SaveButtonProps {
     disabled?: boolean;
 }
 
-export function SaveButton({
+export default function SaveButton({
     altText = "Save",
     disabled = false,
 }: SaveButtonProps) {
@@ -16,5 +16,3 @@ export function SaveButton({
         </Button>
     );
 }
-
-SaveButton.displayName = "SaveButton";

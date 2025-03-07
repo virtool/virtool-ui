@@ -1,7 +1,8 @@
 import { getBorder, getFontWeight, theme } from "@app/theme";
 import InputError from '@base/InputError';
 import InputSearch from '@base/InputSearch';
-import { Link, NoneFoundSection } from '@base';
+import NoneFoundSection from '@base/NoneFoundSection';
+import Link from '@base/Link';
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";

@@ -1,4 +1,4 @@
-import { Label } from "@base";
+import Label from '@base/Label';
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";

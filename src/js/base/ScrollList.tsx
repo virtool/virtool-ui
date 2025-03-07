@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { map } from "lodash-es";
 import React, { useEffect } from "react";
-import { LoadingPlaceholder } from "./LoadingPlaceholder";
+import LoadingPlaceholder from "./LoadingPlaceholder";
 
 function getScrollRatio(): number {
     return (
@@ -36,7 +36,7 @@ type ScrollListProps = {
 /**
  * An infinitely scrolling list of items.
  */
-export function ScrollList({
+export default function ScrollList({
     className,
     fetchNextPage,
     isFetchingNextPage,

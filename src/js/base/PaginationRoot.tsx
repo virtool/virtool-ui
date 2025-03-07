@@ -9,7 +9,10 @@ type PaginationRootProps = {
 /**
  * A styled pagination root component
  */
-export function PaginationRoot({ children, className }: PaginationRootProps) {
+export default function PaginationRoot({
+    children,
+    className,
+}: PaginationRootProps) {
     return (
         <nav
             role="navigation"

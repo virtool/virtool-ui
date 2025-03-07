@@ -9,7 +9,7 @@ type ToggleGroupProps = {
     value: string;
 };
 
-export function ToggleGroup({
+export default function ToggleGroup({
     children,
     className,
     onValueChange,

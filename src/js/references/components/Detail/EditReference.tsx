@@ -1,5 +1,5 @@
 import { useDialogParam } from "@/hooks";
-import { SaveButton } from "@base";
+import SaveButton from '@base/SaveButton';
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogFooter from "@base/DialogFooter";

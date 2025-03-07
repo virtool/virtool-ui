@@ -25,7 +25,7 @@ type RemoveDialogProps = {
 /**
  * A dialog that requests confirmation from the user for deleting a document or other sensitive information
  */
-export function RemoveDialog({
+export default function RemoveDialog({
     message,
     name,
     noun,

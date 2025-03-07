@@ -1,4 +1,4 @@
-import { SelectBoxGroupSection } from "@base";
+import SelectBoxGroupSection from '@base/SelectBoxGroupSection';
 import Checkbox from "@base/Checkbox";
 import React from "react";
 import styled from "styled-components";

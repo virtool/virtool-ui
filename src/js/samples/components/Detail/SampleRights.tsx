@@ -5,7 +5,7 @@ import { AdministratorRoles } from "@administration/types";
 import InputGroup from '@base/InputGroup';
 import InputLabel from '@base/InputLabel';
 import InputSelect from '@base/InputSelect';
-import { LoadingPlaceholder } from '@base';
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";

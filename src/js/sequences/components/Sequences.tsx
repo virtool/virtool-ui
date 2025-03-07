@@ -1,5 +1,5 @@
 import { getFontSize } from "@app/theme";
-import { NoneFoundSection } from "@base";
+import NoneFoundSection from '@base/NoneFoundSection';
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import { useCurrentOtuContext } from "@otus/queries";

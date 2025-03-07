@@ -1,14 +1,12 @@
 import { useDialogParam, usePathParams } from "@/hooks";
-import {
-    LoadingPlaceholder,
-    NotFound,
-    Tabs,
-    TabsLink,
-    ViewHeader,
-    ViewHeaderAttribution,
-    ViewHeaderIcons,
-    ViewHeaderTitle,
-} from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NotFound from '@base/NotFound';
+import Tabs from '@base/Tabs';
+import TabsLink from '@base/TabsLink';
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderAttribution from '@base/ViewHeaderAttribution';
+import ViewHeaderIcons from '@base/ViewHeaderIcons';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";

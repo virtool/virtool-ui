@@ -1,4 +1,4 @@
-import { NoneFound } from "@base";
+import NoneFound from '@base/NoneFound';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import { SubtractionFile } from "@subtraction/types";

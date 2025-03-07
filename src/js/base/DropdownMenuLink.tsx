@@ -1,4 +1,4 @@
-import { Link } from "@base";
+import Link from '@base/Link';
 import DropdownMenuItem from "@base/DropdownMenuItem";
 import React from "react";
 

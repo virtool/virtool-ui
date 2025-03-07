@@ -1,6 +1,6 @@
 import InputIcon from "@base/InputIcon";
 import React from "react";
-import { Loader } from "./Loader";
+import Loader from "./Loader";
 
 export default function InputLoading() {
     return (

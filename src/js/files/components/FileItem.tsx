@@ -1,5 +1,5 @@
 import { byteSize } from "@/utils";
-import { RelativeTime } from "@base";
+import RelativeTime from '@base/RelativeTime';
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";

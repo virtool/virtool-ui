@@ -1,5 +1,6 @@
 import { getFontSize, getFontWeight } from "@app/theme";
-import { Label, Link } from "@base";
+import Label from '@base/Label';
+import Link from '@base/Link';
 import BoxGroupSection from "@base/BoxGroupSection";
 import { keys, map, reject } from "lodash-es";
 import React from "react";

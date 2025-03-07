@@ -1,4 +1,4 @@
-import { Pagination } from "@base";
+import Pagination from '@base/Pagination';
 import Box from "@base/Box";
 import { faker } from "@faker-js/faker";
 import { useArgs } from "@storybook/preview-api";

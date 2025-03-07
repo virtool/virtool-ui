@@ -1,4 +1,5 @@
-import { LoadingPlaceholder, ProgressBarAffixed } from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import ProgressBarAffixed from '@base/ProgressBarAffixed';
 import Box from "@base/Box";
 import ExternalLink from "@base/ExternalLink";
 import Icon from "@base/Icon";

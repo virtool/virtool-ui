@@ -1,12 +1,10 @@
 import { usePathParams } from "@/hooks";
 import { cn } from "@/utils";
-import {
-    Label,
-    LoadingPlaceholder,
-    NotFound,
-    ViewHeader,
-    ViewHeaderTitle,
-} from "@base";
+import Label from '@base/Label';
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NotFound from '@base/NotFound';
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";

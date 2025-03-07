@@ -3,7 +3,7 @@ import InputError from '@base/InputError';
 import InputGroup from '@base/InputGroup';
 import InputLabel from '@base/InputLabel';
 import InputSimple from '@base/InputSimple';
-import { SaveButton } from '@base';
+import SaveButton from '@base/SaveButton';
 import Attribution from "@base/Attribution";
 import Badge from "@base/Badge";
 import Box from "@base/Box";

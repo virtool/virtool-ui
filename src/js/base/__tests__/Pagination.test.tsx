@@ -1,5 +1,5 @@
 import { formatPath } from "@/hooks";
-import { Pagination } from "@base";
+import Pagination from '@base/Pagination';
 import { screen } from "@testing-library/react";
 import { renderWithRouter } from "@tests/setup.js";
 import React from "react";

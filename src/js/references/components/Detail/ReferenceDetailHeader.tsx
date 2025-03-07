@@ -1,10 +1,8 @@
 import { useDialogParam } from "@/hooks";
-import {
-    ViewHeader,
-    ViewHeaderAttribution,
-    ViewHeaderIcons,
-    ViewHeaderTitle,
-} from "@base";
+import ViewHeader from '@base/ViewHeader';
+import ViewHeaderAttribution from '@base/ViewHeaderAttribution';
+import ViewHeaderIcons from '@base/ViewHeaderIcons';
+import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import { endsWith } from "lodash-es";

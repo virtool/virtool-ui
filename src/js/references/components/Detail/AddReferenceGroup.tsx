@@ -1,7 +1,8 @@
 import { getBorder } from "@app/theme";
 import InitialIcon from '@base/InitialIcon';
 import InputSearch from '@base/InputSearch';
-import { NoneFoundSection, SelectBoxGroupSection } from '@base';
+import NoneFoundSection from '@base/NoneFoundSection';
+import SelectBoxGroupSection from '@base/SelectBoxGroupSection';
 import BoxGroup from "@base/BoxGroup";
 import CompactScrollList from "@base/CompactScrollList";
 import Dialog from "@base/Dialog";

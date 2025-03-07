@@ -3,7 +3,7 @@ import InputError from '@base/InputError';
 import InputGroup from '@base/InputGroup';
 import InputLabel from '@base/InputLabel';
 import InputSimple from '@base/InputSimple';
-import { SaveButton } from '@base';
+import SaveButton from '@base/SaveButton';
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogFooter from "@base/DialogFooter";

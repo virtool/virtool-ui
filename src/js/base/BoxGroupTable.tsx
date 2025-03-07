@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
 import React from "react";
-import { Table } from "./Table";
+import Table from "./Table";
 
 type BoxGroupTableProps = {
     children: React.ReactNode;

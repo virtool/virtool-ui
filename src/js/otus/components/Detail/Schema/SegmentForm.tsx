@@ -3,7 +3,7 @@ import InputGroup from '@base/InputGroup';
 import InputLabel from '@base/InputLabel';
 import InputSelect from '@base/InputSelect';
 import InputSimple from '@base/InputSimple';
-import { SaveButton } from '@base';
+import SaveButton from '@base/SaveButton';
 import Checkbox from "@base/Checkbox";
 import DialogFooter from "@base/DialogFooter";
 import { Molecule, OTUSegment } from "@otus/types";

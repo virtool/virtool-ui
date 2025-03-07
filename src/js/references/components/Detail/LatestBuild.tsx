@@ -1,4 +1,6 @@
-import { Link, NoneFoundSection, RelativeTime } from "@base";
+import NoneFoundSection from '@base/NoneFoundSection';
+import RelativeTime from '@base/RelativeTime';
+import Link from '@base/Link';
 import BoxGroupSection from "@base/BoxGroupSection";
 import { ReferenceBuild } from "@references/types";
 import React from "react";

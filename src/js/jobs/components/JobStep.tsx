@@ -1,4 +1,4 @@
-import { Loader } from "@base";
+import Loader from '@base/Loader';
 import Icon from "@base/Icon";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { format } from "date-fns";

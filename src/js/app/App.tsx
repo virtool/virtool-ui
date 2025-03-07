@@ -1,6 +1,5 @@
 import { resetClient } from "@/utils";
-import { ErrorBoundary } from "@app/ErrorBoundary";
-import { LoadingPlaceholder } from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";
@@ -64,13 +63,11 @@ const queryClient = new QueryClient({
 export default function App(): React.ReactElement {
     return (
         <ThemeProvider theme={theme}>
-            <ErrorBoundary>
-                <QueryClientProvider client={queryClient}>
-                    <Router hook={useBrowserLocation}>
-                        <ConnectedApp />
-                    </Router>
-                </QueryClientProvider>
-            </ErrorBoundary>
+            <QueryClientProvider client={queryClient}>
+                <Router hook={useBrowserLocation}>
+                    <ConnectedApp />
+                </Router>
+            </QueryClientProvider>
         </ThemeProvider>
     );
 }

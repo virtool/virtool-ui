@@ -1,4 +1,5 @@
-import { Tabs, TabsLink } from "@base";
+import Tabs from '@base/Tabs';
+import TabsLink from '@base/TabsLink';
 import Badge from "@base/Badge";
 import React from "react";
 

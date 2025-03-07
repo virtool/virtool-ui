@@ -10,7 +10,7 @@ import InputGroup from '@base/InputGroup';
 import InputIconButton from '@base/InputIconButton';
 import InputLabel from '@base/InputLabel';
 import InputSimple from '@base/InputSimple';
-import { SaveButton } from '@base';
+import SaveButton from '@base/SaveButton';
 
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";

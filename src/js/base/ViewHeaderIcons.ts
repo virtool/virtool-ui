@@ -4,7 +4,7 @@ type ViewHeaderIconsProps = {
     theme: DefaultTheme;
 };
 
-export const ViewHeaderIcons = styled.div<ViewHeaderIconsProps>`
+const ViewHeaderIcons = styled.div<ViewHeaderIconsProps>`
     align-items: center;
     display: flex;
     font-size: ${(props) => props.theme.fontSize.lg};
@@ -16,3 +16,5 @@ export const ViewHeaderIcons = styled.div<ViewHeaderIconsProps>`
 `;
 
 ViewHeaderIcons.displayName = "ViewHeaderIcons";
+
+export default ViewHeaderIcons;

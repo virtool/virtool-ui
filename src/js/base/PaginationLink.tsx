@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
-import { Link } from "@base";
-import { PaginationItem } from "@base/PaginationItem";
+import Link from '@base/Link';
+import PaginationItem from "@base/PaginationItem";
 import * as React from "react";
 
 type PaginationLinkProps = {
@@ -15,7 +15,7 @@ type PaginationLinkProps = {
 /**
  * A styled pagination link navigation users to specified page number
  */
-export function PaginationLink({
+export default function PaginationLink({
     active,
     children,
     className,

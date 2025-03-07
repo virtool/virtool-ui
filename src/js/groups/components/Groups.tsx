@@ -1,6 +1,7 @@
 import { useDialogParam } from "@/hooks";
 import { getColor } from "@app/theme";
-import { LoadingPlaceholder, RemoveBanner } from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import RemoveBanner from '@base/RemoveBanner';
 import BoxGroup from "@base/BoxGroup";
 import Button from "@base/Button";
 import InputHeader from "@base/InputHeader";

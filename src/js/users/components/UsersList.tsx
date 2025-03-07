@@ -1,6 +1,8 @@
 import { usePageParam, useUrlSearchParam } from "@/hooks";
 import { useFindUsers } from "@administration/queries";
-import { LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
+import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import NoneFoundBox from '@base/NoneFoundBox';
+import Pagination from '@base/Pagination';
 import BoxGroup from "@base/BoxGroup";
 import { map } from "lodash";
 import React from "react";

@@ -7,7 +7,10 @@ type ToggleGroupItemProps = {
     value: string;
 };
 
-export function ToggleGroupItem({ children, value }: ToggleGroupItemProps) {
+export default function ToggleGroupItem({
+    children,
+    value,
+}: ToggleGroupItemProps) {
     return (
         <RadixToggleGroup.Item
             className={cn(

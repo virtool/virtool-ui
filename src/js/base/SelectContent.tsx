@@ -39,7 +39,7 @@ const ScrollSection = styled(RadixSelect.ScrollUpButton)`
     }
 `;
 
-export const SelectContent = ({ children, position, align }) => {
+export default function SelectContent({ children, position, align }) {
     return (
         <RadixSelect.Portal>
             <StyledContent
@@ -58,4 +58,4 @@ export const SelectContent = ({ children, position, align }) => {
             </StyledContent>
         </RadixSelect.Portal>
     );
-};
+}

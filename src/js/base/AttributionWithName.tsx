@@ -22,7 +22,7 @@ function UnstyledAttributionWithName({
     );
 }
 
-export const AttributionWithName = styled(UnstyledAttributionWithName)`
+const AttributionWithName = styled(UnstyledAttributionWithName)`
     align-items: center;
     display: inline-flex;
     font-size: inherit;

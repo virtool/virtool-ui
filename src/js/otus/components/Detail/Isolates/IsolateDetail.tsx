@@ -1,6 +1,6 @@
 import { useDialogParam } from "@/hooks";
 import { formatIsolateName } from "@/utils";
-import { Label } from "@base";
+import Label from '@base/Label';
 import Box from "@base/Box";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";

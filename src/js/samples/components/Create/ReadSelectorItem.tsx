@@ -1,5 +1,5 @@
 import { byteSize } from "@/utils";
-import { SelectBoxGroupSection } from "@base";
+import SelectBoxGroupSection from '@base/SelectBoxGroupSection';
 import Icon from "@base/Icon";
 import React, { useCallback } from "react";
 import styled from "styled-components";

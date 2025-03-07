@@ -1,7 +1,7 @@
+import { boxShadow, getFontSize } from "@app/theme";
 import styled from "styled-components";
-import { boxShadow, getFontSize } from "../app/theme";
 
-export const SidebarHeaderButton = styled.button`
+const SidebarHeaderButton = styled.button`
     align-items: center;
     background-color: ${(props) => props.theme.color.greyLightest};
     border: none;
@@ -28,3 +28,5 @@ export const SidebarHeaderButton = styled.button`
 `;
 
 SidebarHeaderButton.displayName = "SidebarHeaderButton";
+
+export default SidebarHeaderButton;
