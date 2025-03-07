@@ -1,18 +1,18 @@
+import { usePathParams } from "@/hooks";
+import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
+import { getColor } from "@app/theme";
 import {
-    BoxGroupDisabled,
     BoxGroupHeader,
-    BoxGroupSection,
     Button,
     InputContainer,
     InputError,
     InputSimple,
     LoadingPlaceholder,
     SectionHeader,
-} from "@/base";
-import { usePathParams } from "@/hooks";
-import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
-import { getColor } from "@app/theme";
+} from "@base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupDisabled from "@base/BoxGroupDisabled";
+import BoxGroupSection from "@base/BoxGroupSection";
 import { IconButton } from "@base/IconButton";
 import { get } from "lodash-es";
 import React from "react";

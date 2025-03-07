@@ -1,6 +1,6 @@
 import { BoxGroupHeader, NoneFoundSection } from "@/base";
+import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
-import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import Contributor from "@indexes/components/Contributor";
 import { IndexContributor } from "@indexes/types";
 import { map, sortBy } from "lodash-es";
@@ -27,11 +27,9 @@ export default function Contributors({ contributors }: ContributorsProps) {
     return (
         <BoxGroup>
             <BoxGroupHeader>
-                <h2>
-                    Contributors{" "}
-                    <BoxGroupHeaderBadge>
-                        {contributors.length}
-                    </BoxGroupHeaderBadge>
+                <h2 className="flex gap-2">
+                    <span>Contributors</span>
+                    <Badge>{contributors.length}</Badge>
                 </h2>
             </BoxGroupHeader>
             {contributorComponents}

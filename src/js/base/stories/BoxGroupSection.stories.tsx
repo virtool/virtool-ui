@@ -1,5 +1,6 @@
-import { BoxGroupHeader, BoxGroupSection } from "@/base";
+import { BoxGroupHeader } from "@/base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 import React from "react";

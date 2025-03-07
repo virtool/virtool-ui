@@ -1,4 +1,5 @@
-import { BoxGroupSection, Icon, Loader } from "@base/index";
+import BoxGroupSection from "@base/BoxGroupSection";
+import { Icon, Loader } from "@base/index";
 import { format } from "date-fns";
 import React from "react";
 import styled from "styled-components";

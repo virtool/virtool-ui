@@ -1,6 +1,6 @@
 import { BoxGroupHeader } from "@/base";
+import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
-import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { IndexFile } from "@indexes/types";
 import { SubtractionFileItem } from "@subtraction/components/Detail/SubtractionFileItem";
 import React from "react";
@@ -16,9 +16,9 @@ export default function IndexFiles({ files }: IndexFilesProps) {
     return (
         <BoxGroup>
             <BoxGroupHeader>
-                <h2>
-                    Files
-                    <BoxGroupHeaderBadge>{files.length}</BoxGroupHeaderBadge>
+                <h2 className="flex items-center gap-2">
+                    <span>Files</span>
+                    <Badge>{files.length}</Badge>
                 </h2>
                 Data files available to workflows using this index.
             </BoxGroupHeader>

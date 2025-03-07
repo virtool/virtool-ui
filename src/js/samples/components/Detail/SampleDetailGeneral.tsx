@@ -1,6 +1,5 @@
 import {
     BoxGroupHeader,
-    BoxGroupTable,
     ContainerNarrow,
     ContainerSide,
     LoadingPlaceholder,
@@ -8,6 +7,7 @@ import {
 } from "@/base";
 import { usePathParams } from "@/hooks";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupTable from "@base/BoxGroupTable";
 import JobItem from "@jobs/components/Item/JobItem";
 import numbro from "numbro";
 import React from "react";

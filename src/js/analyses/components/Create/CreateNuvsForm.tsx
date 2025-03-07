@@ -8,7 +8,7 @@ import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
-import { SubtractionSelector } from "./SubtractionSelector";
+import SubtractionSelector from "./SubtractionSelector";
 
 type createNuvsFormValues = {
     workflow: Workflows;

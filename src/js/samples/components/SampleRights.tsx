@@ -1,9 +1,9 @@
 import { useUpdateSettings } from "@administration/queries";
 import { Settings } from "@administration/types";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import {
     BoxGroupHeader,
-    BoxGroupSection,
     InputGroup,
     InputLabel,
     InputSelect,

@@ -4,11 +4,7 @@ import InputLabel from "@base/InputLabel.js";
 export { InputGroup, InputLabel };
 
 export { Link } from "wouter";
-export { BoxGroupDisabled } from "./BoxGroupDisabled";
 export { BoxGroupHeader } from "./BoxGroupHeader";
-export { BoxGroupSearch } from "./BoxGroupSearch";
-export { BoxGroupSection } from "./BoxGroupSection";
-export { BoxGroupTable } from "./BoxGroupTable";
 export { BoxSpaced } from "./BoxSpaced";
 export { BoxTitle } from "./BoxTitle";
 export { device } from "./Breakpoints";

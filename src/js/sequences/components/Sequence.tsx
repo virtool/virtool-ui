@@ -1,4 +1,4 @@
-import { BoxGroupSection } from "@/base";
+import BoxGroupSection from "@base/BoxGroupSection";
 import SequenceTable from "@sequences/components/SequenceTable";
 import React from "react";
 import { useExpanded } from "../hooks";

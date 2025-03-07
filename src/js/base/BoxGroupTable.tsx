@@ -10,7 +10,10 @@ type BoxGroupTableProps = {
 /**
  * Replacement for the HTML table element within a BoxGroup
  */
-export function BoxGroupTable({ children, className }: BoxGroupTableProps) {
+export default function BoxGroupTable({
+    children,
+    className,
+}: BoxGroupTableProps) {
     return (
         <Table
             className={cn(

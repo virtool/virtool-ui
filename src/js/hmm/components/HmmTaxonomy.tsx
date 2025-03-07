@@ -1,6 +1,7 @@
-import { BoxGroupHeader, BoxGroupSection } from "@base";
+import { BoxGroupHeader } from "@base";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import { map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

@@ -1,7 +1,7 @@
+import BoxGroupSection from "@base/BoxGroupSection";
 import { InputContainer } from "@base/InputContainer";
 import { InputIconButton } from "@base/InputIconButton";
 import React from "react";
-import { BoxGroupSection } from "./BoxGroupSection";
 import { Input } from "./Input";
 
 type BoxGroupSearchProps = {
@@ -12,7 +12,7 @@ type BoxGroupSearchProps = {
     autoFocus?: boolean;
 };
 
-export function BoxGroupSearch({
+export default function BoxGroupSearch({
     label,
     placeholder = "",
     value,

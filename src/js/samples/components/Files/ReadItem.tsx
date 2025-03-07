@@ -1,6 +1,6 @@
 import { byteSize } from "@/utils";
 import { fontWeight } from "@app/theme";
-import { BoxGroupSection } from "@base";
+import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";
 import styled from "styled-components";
 

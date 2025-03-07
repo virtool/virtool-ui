@@ -1,22 +1,22 @@
 import { useFuse } from "@/fuse";
+import { cn } from "@/utils";
+import BoxGroup from "@base/BoxGroup";
+import PseudoLabel from "@base/PseudoLabel";
 import { Subtraction } from "@subtraction/types";
 import { filter, intersectionWith, xor } from "lodash-es";
 import React from "react";
 import CreateAnalysisField from "./CreateAnalysisField";
 import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
-import { CreateAnalysisSelected } from "./CreateAnalysisSelected";
-import { CreateAnalysisSelector } from "./CreateAnalysisSelector";
-import { CreateAnalysisSelectorList } from "./CreateAnalysisSelectorList";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
-import { SubtractionSelectorItem } from "./SubtractionSelectorItem";
+import SubtractionSelectorItem from "./SubtractionSelectorItem";
 
-interface SubtractionSelectorProps {
+type SubtractionSelectorProps = {
     selected: string[];
     subtractions: object[];
     onChange: (selected: string[]) => void;
-}
+};
 
-export function SubtractionSelector({
+export default function SubtractionSelector({
     subtractions,
     selected,
     onChange,
@@ -38,40 +38,64 @@ export function SubtractionSelector({
         return onChange(xor(selected, [id]));
     }
 
+    const selectedComponents = selectedSubtractions.map(
+        ({ id, name, isDefault }) => (
+            <SubtractionSelectorItem
+                key={id}
+                id={id}
+                name={name}
+                onClick={handleClick}
+                isDefault={isDefault}
+            />
+        ),
+    );
+
     return (
         <CreateAnalysisField>
             <CreateAnalysisFieldTitle>Subtractions</CreateAnalysisFieldTitle>
-            <CreateAnalysisSelector>
-                <CreateAnalysisSelectorSearch
-                    label="Filter subtractions"
-                    term={term}
-                    onChange={setTerm}
-                />
-                <CreateAnalysisSelectorList
-                    items={unselectedSubtractions}
-                    render={({ id, name, isDefault }) => (
-                        <SubtractionSelectorItem
-                            key={id}
-                            id={id}
-                            name={name}
-                            onClick={handleClick}
-                            isDefault={isDefault}
-                        />
-                    )}
-                />
-            </CreateAnalysisSelector>
-            <CreateAnalysisSelected
-                items={selectedSubtractions}
-                render={({ id, name, isDefault }) => (
-                    <SubtractionSelectorItem
-                        key={id}
-                        id={id}
-                        name={name}
-                        onClick={handleClick}
-                        isDefault={isDefault}
+            <div>
+                <PseudoLabel>Available</PseudoLabel>
+                <BoxGroup className="h-72">
+                    <CreateAnalysisSelectorSearch
+                        label="Filter subtractions"
+                        term={term}
+                        onChange={setTerm}
                     />
-                )}
-            />
+                    <BoxGroup
+                        className={cn(
+                            "border-none",
+                            "bg-slate-100",
+                            "m-0",
+                            "h-52",
+                            "overflow-y-auto",
+                        )}
+                    >
+                        {unselectedSubtractions.map(
+                            ({ id, name, isDefault }) => (
+                                <SubtractionSelectorItem
+                                    key={id}
+                                    id={id}
+                                    name={name}
+                                    onClick={handleClick}
+                                    isDefault={isDefault}
+                                />
+                            ),
+                        )}
+                    </BoxGroup>
+                </BoxGroup>
+            </div>
+            <div className={cn("flex", "flex-col")}>
+                <PseudoLabel>Selected</PseudoLabel>
+                <BoxGroup className="overflow-y-auto h-72">
+                    {selectedSubtractions.length ? (
+                        selectedComponents
+                    ) : (
+                        <div className="absolute inset-0 bg-slate-100">
+                            <span>Nothing selected</span>
+                        </div>
+                    )}
+                </BoxGroup>
+            </div>
         </CreateAnalysisField>
     );
 }

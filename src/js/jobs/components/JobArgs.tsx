@@ -1,5 +1,6 @@
-import { BoxGroupHeader, BoxGroupTable, Link } from "@/base";
+import { BoxGroupHeader, Link } from "@/base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupTable from "@base/BoxGroupTable";
 import { map } from "lodash";
 import React, { ReactNode } from "react";
 import styled from "styled-components";

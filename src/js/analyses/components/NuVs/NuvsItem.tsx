@@ -20,10 +20,7 @@ export default function NuvsItem({ hit }: NuVsItemProps) {
     const { annotatedOrfCount, e, id, index, sequence } = hit;
 
     return (
-        <AnalysisViewerItem
-            active={activeHit === String(id)}
-            onClick={() => setActiveHit(String(id))}
-        >
+        <AnalysisViewerItem onClick={() => setActiveHit(String(id))}>
             <div className="flex items-center justify-between">
                 <span className="font-medium">Sequence {index}</span>
                 <Badge>{sequence.length}</Badge>

@@ -1,17 +1,17 @@
 import { usePathParams } from "@/hooks";
 import { cn } from "@/utils";
-import BoxGroup from "@base/BoxGroup";
-import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import {
     BoxGroupHeader,
-    BoxGroupTable,
     device,
     Label,
     LoadingPlaceholder,
     NotFound,
     ViewHeader,
     ViewHeaderTitle,
-} from "@base/index";
+} from "@base";
+import Badge from "@base/Badge";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupTable from "@base/BoxGroupTable";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
@@ -32,7 +32,7 @@ const TaxonomyGrid = styled.div`
 /**
  * The HMM detailed view
  */
-export default function HMMDetail() {
+export default function HmmDetail() {
     const { hmmId } = usePathParams<{ hmmId: string }>();
     const { data, isPending, isError } = useFetchHmm(hmmId);
 
@@ -108,11 +108,9 @@ export default function HMMDetail() {
 
             <BoxGroup>
                 <BoxGroupHeader>
-                    <h2>
-                        Cluster Members{" "}
-                        <BoxGroupHeaderBadge>
-                            {data.entries.length}
-                        </BoxGroupHeaderBadge>
+                    <h2 className="flex items-center gap-2">
+                        Cluster Members
+                        <Badge>{data.entries.length}</Badge>
                     </h2>
                 </BoxGroupHeader>
                 <BoxGroupTable

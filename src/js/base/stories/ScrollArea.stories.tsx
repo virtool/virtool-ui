@@ -1,4 +1,4 @@
-import { BoxGroupSection } from "@/base";
+import BoxGroupSection from "@base/BoxGroupSection";
 import { ScrollArea } from "@base/ScrollArea";
 import type { Meta, StoryObj } from "@storybook/react";
 import { map } from "lodash";

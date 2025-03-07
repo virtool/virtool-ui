@@ -3,11 +3,11 @@ import React from "react";
 
 type BoxProps = {
     children: React.ReactNode;
-    className: string;
+    className?: string;
     onClick?: () => void;
 };
 
-function Box({ children, className = "", onClick }: BoxProps) {
+function Box({ children, className = "", onClick, ...rest }: BoxProps) {
     return (
         <div
             className={cn(
@@ -22,6 +22,7 @@ function Box({ children, className = "", onClick }: BoxProps) {
                 "rounded-sm",
                 className,
             )}
+            {...rest}
         >
             {children}
         </div>

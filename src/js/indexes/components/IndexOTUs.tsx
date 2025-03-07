@@ -1,6 +1,6 @@
 import { BoxGroupHeader } from "@/base";
+import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
-import { BoxGroupHeaderBadge } from "@base/BoxGroupHeaderBadge";
 import { IndexOTU as OTU } from "@indexes/types";
 import { map } from "lodash-es";
 import React from "react";
@@ -28,9 +28,9 @@ export default function IndexOTUs({ otus, refId }: IndexOTUsProps) {
     return (
         <BoxGroup>
             <BoxGroupHeader>
-                <h2>
-                    OTUs{" "}
-                    <BoxGroupHeaderBadge>{otus.length}</BoxGroupHeaderBadge>
+                <h2 className="flex items-center gap-2">
+                    OTUs
+                    <Badge>{otus.length}</Badge>
                 </h2>
             </BoxGroupHeader>
             {otuComponents}

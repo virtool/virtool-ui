@@ -24,7 +24,7 @@ export type MLModelSelectorProps = {
     onChange: (value: string) => void;
 };
 
-export function MLModelSelector({ models, selected, onChange }) {
+export function MlModelSelector({ models, selected, onChange }) {
     const mlModelItems = map(
         models,
         ({ latest_release, name, description }) => (

@@ -1,5 +1,6 @@
-import { BoxGroupSection, Link } from "@/base";
+import { Link } from "@/base";
 import { getFontSize, getFontWeight, sizes } from "@app/theme";
+import BoxGroupSection from "@base/BoxGroupSection";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
 import React from "react";

@@ -1,6 +1,7 @@
-import { BoxGroupSection, Label } from "@/base";
+import { Label } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
 import { cn } from "@/utils";
+import BoxGroupSection from "@base/BoxGroupSection";
 import { IconButton } from "@base/IconButton";
 import { OTUSegment } from "@otus/types";
 import React from "react";

@@ -1,8 +1,8 @@
 import { useUpdateUser } from "@administration/queries";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupSection from "@base/BoxGroupSection";
 import {
     BoxGroupHeader,
-    BoxGroupSection,
     Checkbox,
     InputContainer,
     InputError,

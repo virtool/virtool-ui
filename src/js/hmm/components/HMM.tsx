@@ -1,7 +1,7 @@
 import { Container, ContainerNarrow } from "@base/index";
 import React from "react";
 import { Route, Switch } from "wouter";
-import HMMDetail from "./HMMDetail";
+import HmmDetail from "./HmmDetail";
 import HMMList from "./HMMList";
 
 /**
@@ -12,7 +12,7 @@ export default function HMM() {
         <Container>
             <ContainerNarrow>
                 <Switch>
-                    <Route path="/hmm/:hmmId" component={HMMDetail} />
+                    <Route path="/hmm/:hmmId" component={HmmDetail} />
                     <Route path="/hmm/" component={HMMList} />
                 </Switch>
             </ContainerNarrow>

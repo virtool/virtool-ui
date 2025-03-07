@@ -8,7 +8,7 @@ import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import { IndexSelector } from "./IndexSelector";
-import { MLModelSelector } from "./MLModelSelector";
+import { MlModelSelector } from "./MlModelSelector";
 
 type createIimiFormValues = {
     index: string;
@@ -50,7 +50,7 @@ export function CreateIimiForm({
             <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <MLModelSelector
+                    <MlModelSelector
                         models={mlModels}
                         selected={value}
                         onChange={onChange}
