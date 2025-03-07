@@ -77,6 +77,11 @@ export function useGetActiveHit(matches) {
         }
     }
 
+    if (matches.length === 0) {
+        setActiveHit(null);
+        return null;
+    }
+
     setActiveHit(matches[0].id);
     return matches[0] || null;
 }

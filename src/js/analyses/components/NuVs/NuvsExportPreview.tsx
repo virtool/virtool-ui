@@ -4,7 +4,7 @@ import { replace } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 
-export const ExportPreviewCode = styled.div`
+const ExportPreviewCode = styled.div`
     background-color: ${(props) => props.theme.color.greyLightest};
     border: ${getBorder};
     border-radius: ${(props) => props.theme.borderRadius.sm};
@@ -22,7 +22,7 @@ type NuVsExportPreviewProps = {
 /**
  * Displays a preview of the NuVs being exported
  */
-export default function NuVsExportPreview({ mode }: NuVsExportPreviewProps) {
+export default function NuvsExportPreview({ mode }: NuVsExportPreviewProps) {
     let previewHeader = ">sequence_1|17SP002|RNA Polymerase";
     let previewSequence;
     let indexName;

@@ -1,5 +1,5 @@
 import { useUrlSearchParam } from "@/hooks";
-import NuvsValues from "@analyses/components/NuVs/NuVsValues";
+import NuvsValues from "@analyses/components/NuVs/NuvsValues";
 import { useGetActiveHit } from "@analyses/hooks";
 import { FormattedNuvsHit } from "@analyses/types";
 import { calculateAnnotatedOrfCount } from "@analyses/utils";
@@ -8,7 +8,7 @@ import Badge from "@base/Badge";
 import { filter, map, sortBy } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
-import NuVsBLAST from "./NuVsBLAST";
+import NuvsBLAST from "./NuvsBLAST";
 import NuvsOrf from "./NuvsOrf";
 import NuvsSequence from "./NuvsSequence";
 
@@ -29,12 +29,14 @@ const StyledNuVsFamilies = styled.div`
     }
 `;
 
-const NuVsFamilies = ({ families }) => (
-    <StyledNuVsFamilies>
-        <div>Families</div>
-        <div>{families.length ? families.join(", ") : "None"}</div>
-    </StyledNuVsFamilies>
-);
+function NuvsFamilies({ families }) {
+    return (
+        <StyledNuVsFamilies>
+            <div>Families</div>
+            <div>{families.length ? families.join(", ") : "None"}</div>
+        </StyledNuVsFamilies>
+    );
+}
 
 const NuVsLayout = styled.div`
     border: ${getBorder};
@@ -72,6 +74,7 @@ function NuvsDetailContainer({ children }) {
 type NuVsDetailProps = {
     analysisId: string;
     /** A list of sorted and filtered NuVs hits */
+
     matches: FormattedNuvsHit[];
     maxSequenceLength: number;
 };
@@ -120,7 +123,7 @@ export default function NuvsDetail({
                     </Badge>
                 </h3>
                 <NuvsValues e={e} orfCount={calculateAnnotatedOrfCount(orfs)} />
-                <NuVsFamilies families={families} />
+                <NuvsFamilies families={families} />
             </NuVsDetailTitle>
             <NuVsLayout>
                 <NuvsSequence
@@ -130,7 +133,7 @@ export default function NuvsDetail({
                 />
                 {orfComponents}
             </NuVsLayout>
-            <NuVsBLAST hit={hit} analysisId={analysisId} />
+            <NuvsBLAST hit={hit} analysisId={analysisId} />
         </NuvsDetailContainer>
     );
 }

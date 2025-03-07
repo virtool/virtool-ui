@@ -1,4 +1,4 @@
-import { NuvsBlastResults } from "@analyses/components/NuVs/NuvsBlastResults";
+import NuvsBlastResults from "@analyses/components/NuVs/NuvsBlastResults";
 import { useBlastNuVs } from "@analyses/queries";
 import { FormattedNuvsHit } from "@analyses/types";
 import Alert from "@base/Alert";
@@ -7,8 +7,8 @@ import BoxTitle from "@base/BoxTitle";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
 import React from "react";
-import BlastInProgress from "./BlastInProgress";
-import { NuvsBlastError } from "./NuvsBlastError";
+import NuvsBlastError from "./NuvsBlastError";
+import NuvsBlastPending from "./NuvsBlastPending";
 
 type NuVsBLASTProps = {
     analysisId: string;
@@ -19,7 +19,7 @@ type NuVsBLASTProps = {
 /**
  * Displays option to install NuVs blast information
  */
-export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
+export default function NuvsBLAST({ analysisId, hit }: NuVsBLASTProps) {
     const { blast, index } = hit;
     const mutation = useBlastNuVs(analysisId);
 
@@ -51,7 +51,7 @@ export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
         }
 
         return (
-            <BlastInProgress
+            <NuvsBlastPending
                 interval={blast.interval}
                 lastCheckedAt={blast.last_checked_at}
                 rid={blast.rid}

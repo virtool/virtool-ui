@@ -57,7 +57,7 @@ const StyledBLASTInProgress = styled(Box)`
     }
 `;
 
-export default function BlastInProgress({ interval, lastCheckedAt, rid }) {
+export default function NuvsBlastPending({ interval, lastCheckedAt, rid }) {
     return (
         <StyledBLASTInProgress>
             <Loader size="16px" color="primary" />

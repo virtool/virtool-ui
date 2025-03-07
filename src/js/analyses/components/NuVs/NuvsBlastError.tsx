@@ -3,7 +3,7 @@ import Button from "@base/Button";
 import Icon from "@base/Icon";
 import React from "react";
 
-export function NuvsBlastError({ error, onBlast }) {
+export default function NuvsBlastError({ error, onBlast }) {
     return (
         <Box className="flex items-center justify-between">
             <span>

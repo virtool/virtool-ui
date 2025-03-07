@@ -1,4 +1,4 @@
-import NuVsViewer from "@analyses/components/NuVs/NuVsViewer";
+import NuvsViewer from "@analyses/components/NuVs/NuvsViewer";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample } from "@tests/fake/samples";
@@ -11,7 +11,7 @@ import {
     mockApiBlastNuVs,
 } from "../../../../../tests/fake/analyses";
 
-describe("<NuVsViewer />", () => {
+describe("<NuvsViewer />", () => {
     let props;
     let sample;
     let nuvs;
@@ -29,7 +29,7 @@ describe("<NuVsViewer />", () => {
 
     describe("<NuVsDetail />", () => {
         it("should render correctly", () => {
-            renderWithRouter(<NuVsViewer {...props} />);
+            renderWithRouter(<NuvsViewer {...props} />);
 
             expect(
                 screen.getByText(
@@ -44,7 +44,7 @@ describe("<NuVsViewer />", () => {
 
         it("should render blast when clicked", async () => {
             const scope = mockApiBlastNuVs(nuvs.id, nuvs.results.hits[0].index);
-            renderWithRouter(<NuVsViewer {...props} />);
+            renderWithRouter(<NuvsViewer {...props} />);
 
             await userEvent.click(
                 screen.getByRole("button", { name: "BLAST at NCBI" }),
@@ -55,7 +55,7 @@ describe("<NuVsViewer />", () => {
 
     describe("<NuVsExport />", () => {
         it("should render export dialog when exporting", async () => {
-            renderWithRouter(<NuVsViewer {...props} />);
+            renderWithRouter(<NuvsViewer {...props} />);
 
             await userEvent.click(
                 screen.getByRole("button", { name: "Export" }),

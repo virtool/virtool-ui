@@ -18,7 +18,7 @@ import { useFetchSample } from "@samples/queries";
 import React from "react";
 import styled from "styled-components";
 import { IimiViewer } from "./Iimi/IimiViewer";
-import NuVsViewer from "./NuVs/NuVsViewer";
+import NuvsViewer from "./NuVs/NuvsViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";
 
 const UnsupportedAnalysis = styled(Box)`
@@ -71,7 +71,7 @@ export default function AnalysisDetail() {
         );
     } else if (analysis.workflow === "nuvs") {
         content = (
-            <NuVsViewer
+            <NuvsViewer
                 detail={analysis as FormattedNuvsAnalysis}
                 sample={sample}
             />

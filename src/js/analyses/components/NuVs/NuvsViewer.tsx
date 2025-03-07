@@ -1,4 +1,4 @@
-import { NuvsList } from "@analyses/components/NuVs/NuvsList";
+import NuvsList from "@analyses/components/NuVs/NuvsList";
 import NuvsToolbar from "@analyses/components/NuVs/NuvsToolbar";
 import { FormattedNuvsAnalysis } from "@analyses/types";
 import { Sample } from "@samples/types";
@@ -14,7 +14,7 @@ type NuVsViewerProps = {
 /**
  * Detailed breakdown of the results of a NuVs analysis
  */
-export default function NuVsViewer({ detail, sample }: NuVsViewerProps) {
+export default function NuvsViewer({ detail, sample }: NuVsViewerProps) {
     return (
         <div>
             <NuvsToolbar

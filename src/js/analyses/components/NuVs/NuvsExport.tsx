@@ -13,7 +13,7 @@ import ToggleGroupItem from "@base/ToggleGroupItem";
 import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
 import { forEach, map, reduce, replace } from "lodash-es";
 import React, { useState } from "react";
-import NuVsExportPreview from "./ExportPreview";
+import NuvsExportPreview from "./NuvsExportPreview";
 
 function getBestHit(items) {
     return reduce(
@@ -147,7 +147,7 @@ export default function NuvsExport({
                             <ToggleGroupItem value="orfs">ORFs</ToggleGroupItem>
                         </ToggleGroup>
 
-                        <NuVsExportPreview mode={mode} />
+                        <NuvsExportPreview mode={mode} />
 
                         <DialogFooter>
                             <Button

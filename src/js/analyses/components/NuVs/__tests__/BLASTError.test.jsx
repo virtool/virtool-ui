@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup.tsx";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { NuvsBlastError } from "../NuvsBlastError.tsx";
+import  NuvsBlastError from "../NuvsBlastError.tsx";
 
 describe("<BLASTError />", () => {
     let props;

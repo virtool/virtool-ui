@@ -32,7 +32,7 @@ type BLASTResultsProps = {
 /**
  * Displays the results of the blast installed for the sequence
  */
-export function NuvsBlastResults({ hits, onBlast }: BLASTResultsProps) {
+export default function NuvsBlastResults({ hits, onBlast }: BLASTResultsProps) {
     const components = map(hits, (hit, index) => (
         <tr key={index}>
             <td>
