@@ -1,8 +1,4 @@
 import {
-    DialogContent,
-    DialogFooter,
-    DialogOverlay,
-    DialogTitle,
     InputError,
     InputGroup,
     InputLabel,
@@ -14,6 +10,10 @@ import Attribution from "@base/Attribution";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
 import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogFooter from "@base/DialogFooter";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { find } from "lodash-es";
 import React, { useEffect } from "react";

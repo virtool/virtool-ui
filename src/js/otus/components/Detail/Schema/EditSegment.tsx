@@ -1,6 +1,8 @@
-import { DialogContent, DialogOverlay, DialogTitle } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
 import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import SegmentForm from "@otus/components/Detail/Schema/SegmentForm";
 import { useUpdateOTU } from "@otus/queries";
 import { Molecule, OTUSegment } from "@otus/types";

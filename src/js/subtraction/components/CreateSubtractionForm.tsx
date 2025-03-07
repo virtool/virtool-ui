@@ -1,13 +1,13 @@
+import { useDialogParam } from "@/hooks";
 import {
-    DialogFooter,
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
     LoadingPlaceholder,
     SaveButton,
-} from "@/base";
-import { useDialogParam } from "@/hooks";
+} from "@base";
+import DialogFooter from "@base/DialogFooter";
 import PseudoLabel from "@base/PseudoLabel";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";

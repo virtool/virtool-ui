@@ -1,8 +1,4 @@
 import {
-    DialogContent,
-    DialogFooter,
-    DialogOverlay,
-    DialogTitle,
     InputError,
     InputGroup,
     InputLabel,
@@ -11,6 +7,10 @@ import {
 } from "@/base";
 import { useDialogParam } from "@/hooks";
 import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogFooter from "@base/DialogFooter";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
 import { useForm } from "react-hook-form";

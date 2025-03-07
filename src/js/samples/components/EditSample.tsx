@@ -1,9 +1,9 @@
 import { useDialogParam } from "@/hooks";
 import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import {
-    DialogContent,
-    DialogOverlay,
-    DialogTitle,
     InputError,
     InputGroup,
     InputLabel,

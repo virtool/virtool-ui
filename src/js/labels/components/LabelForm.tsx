@@ -1,14 +1,9 @@
 import { getFontWeight } from "@app/theme";
-import {
-    DialogFooter,
-    InputError,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-} from "@base";
+import { InputError, InputGroup, InputLabel, InputSimple } from "@base";
 import Box from "@base/Box";
 import Button from "@base/Button";
 import Color from "@base/Color";
+import DialogFooter from "@base/DialogFooter";
 import { SampleLabel } from "@samples/components/Label/SampleLabel";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";

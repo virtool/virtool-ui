@@ -1,5 +1,7 @@
 import Dialog from "@base/Dialog";
-import { DialogContent, DialogOverlay, DialogTitle } from "@base/index";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { capitalize } from "lodash-es";
 import React from "react";

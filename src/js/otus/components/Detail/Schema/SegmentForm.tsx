@@ -1,5 +1,4 @@
 import {
-    DialogFooter,
     InputError,
     InputGroup,
     InputLabel,
@@ -8,6 +7,7 @@ import {
     SaveButton,
 } from "@/base";
 import Checkbox from "@base/Checkbox";
+import DialogFooter from "@base/DialogFooter";
 import { Molecule, OTUSegment } from "@otus/types";
 import { find, map } from "lodash-es";
 import React from "react";

@@ -1,6 +1,6 @@
 import { formatIsolateName } from "@/utils";
+import DialogFooter from "@base/DialogFooter";
 import {
-    DialogFooter,
     Input,
     InputGroup,
     InputLabel,

@@ -1,9 +1,9 @@
 import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogFooter from "@base/DialogFooter";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import {
-    DialogContent,
-    DialogFooter,
-    DialogOverlay,
-    DialogTitle,
     InputError,
     InputGroup,
     InputLabel,

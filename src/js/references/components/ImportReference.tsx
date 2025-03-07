@@ -1,6 +1,5 @@
 import { useNavigate } from "@/hooks";
 import {
-    DialogFooter,
     InputError,
     InputGroup,
     InputLabel,
@@ -9,6 +8,7 @@ import {
     SaveButton,
 } from "@base";
 import Alert from "@base/Alert";
+import DialogFooter from "@base/DialogFooter";
 import { UploadBar } from "@files/components/UploadBar";
 import { useImportReference, useUploadReference } from "@references/queries";
 import React from "react";

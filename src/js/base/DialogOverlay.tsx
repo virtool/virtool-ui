@@ -5,7 +5,7 @@ import React from "react";
 /**
  * A styled semi-transparent overlay for a dialog
  */
-export function DialogOverlay() {
+export default function DialogOverlay() {
     return (
         <DialogPrimitive.Overlay
             className={cn(

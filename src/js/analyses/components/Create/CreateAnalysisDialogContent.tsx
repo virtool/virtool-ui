@@ -1,5 +1,5 @@
-import { DialogContent } from "@/base";
 import { cn } from "@/utils";
+import DialogContent from "@base/DialogContent";
 import React from "react";
 
 /**

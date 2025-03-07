@@ -1,4 +1,4 @@
-import { DialogFooter } from "@base/index";
+import DialogFooter from "@base/DialogFooter";
 import styled from "styled-components";
 
 export const CreateAnalysisFooter = styled(DialogFooter)`

@@ -1,5 +1,5 @@
+import DialogFooter from "@base/DialogFooter";
 import {
-    DialogFooter,
     InputError,
     InputGroup,
     InputLabel,

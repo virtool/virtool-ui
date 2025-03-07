@@ -1,7 +1,8 @@
 import { Workflows } from "@/analyses/types";
 import { useUrlSearchParam } from "@/hooks";
-import { DialogOverlay, DialogTitle } from "@base";
 import Dialog from "@base/Dialog";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { HMMSearchResults } from "@hmm/types";
 import { useListIndexes } from "@indexes/queries";
 import { useFindModels } from "@ml/queries";

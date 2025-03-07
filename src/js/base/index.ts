@@ -1,17 +1,7 @@
 import InputGroup from "@base/InputGroup.js";
 import InputLabel from "@base/InputLabel.js";
 
-export { InputGroup, InputLabel };
-
 export { Link } from "wouter";
-export { DialogAlert } from "./DialogAlert";
-export { DialogContent } from "./DialogContent";
-export { DialogContext } from "./DialogContext";
-export { DialogFooter } from "./DialogFooter";
-export { DialogOverlay } from "./DialogOverlay";
-export { DialogTabs } from "./DialogTabs";
-export { DialogTitle } from "./DialogTitle";
-export { DialogTrigger } from "./DialogTrigger";
 export { Dropdown } from "./Dropdown";
 export { DropdownButton } from "./DropdownButton";
 export { DropdownMenuContent } from "./DropdownMenuContent";
@@ -74,3 +64,4 @@ export { ViewHeaderAttribution } from "./ViewHeaderAttribution";
 export { ViewHeaderIcons } from "./ViewHeaderIcons";
 export { ViewHeaderSubtitle } from "./ViewHeaderSubtitle";
 export { ViewHeaderTitle } from "./ViewHeaderTitle";
+export { InputGroup, InputLabel };
