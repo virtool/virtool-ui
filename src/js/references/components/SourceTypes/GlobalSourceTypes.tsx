@@ -4,7 +4,7 @@ import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import Toolbar from "@base/Toolbar";
 import React from "react";
 import { useUpdateSourceTypes } from "../../hooks";

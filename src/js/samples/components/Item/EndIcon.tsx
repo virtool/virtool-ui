@@ -1,4 +1,4 @@
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobMinimal, JobState } from "@jobs/types";
 import React from "react";

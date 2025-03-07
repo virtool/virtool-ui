@@ -1,4 +1,4 @@
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 

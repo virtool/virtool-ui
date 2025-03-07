@@ -6,7 +6,7 @@ import {
     ViewHeaderTitle,
 } from "@base";
 import Icon from "@base/Icon";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { endsWith } from "lodash-es";
 import React from "react";
 import { useLocation } from "wouter";

@@ -1,5 +1,5 @@
 import Alert from "@base/Alert";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import React, { useState } from "react";
 import styled from "styled-components";
 

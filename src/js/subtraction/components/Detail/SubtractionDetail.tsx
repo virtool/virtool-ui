@@ -8,7 +8,7 @@ import {
     ViewHeaderIcons,
     ViewHeaderTitle,
 } from "@base";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { Permission } from "@groups/types";
 import numbro from "numbro";
 import React from "react";

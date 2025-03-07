@@ -5,12 +5,12 @@ export type WebSocket = {
     connectionStatus: string;
     establishConnection: () => void;
 };
-//
-// export declare global {
-//     interface Window {
-//         virtool: virtoolState;
-//         captureException?: (error: Error) => void;
-//         msalInstance: IPublicClientApplication;
-//         ws: WebSocket;
-//     }
-// }
+
+declare global {
+    interface Window {
+        captureException?: (error: Error) => void;
+        msalInstance: IPublicClientApplication;
+        virtool: virtoolState;
+        ws: WebSocket;
+    }
+}

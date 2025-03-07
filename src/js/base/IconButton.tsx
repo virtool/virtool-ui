@@ -16,7 +16,7 @@ type IconButtonProps = {
 /**
  * A styled clickable icon with tooltip describing its action
  */
-export function IconButton({
+export default function IconButton({
     className,
     color = "black",
     faStyle = "fas",

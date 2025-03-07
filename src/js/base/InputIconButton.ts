@@ -1,4 +1,4 @@
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import styled from "styled-components";
 
 export const InputIconButton = styled(IconButton)`

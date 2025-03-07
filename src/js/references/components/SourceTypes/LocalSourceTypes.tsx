@@ -13,7 +13,7 @@ import BoxGroupDisabled from "@base/BoxGroupDisabled";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { get } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

@@ -3,7 +3,7 @@ import { formatIsolateName } from "@/utils";
 import { Label } from "@base";
 import Box from "@base/Box";
 import Icon from "@base/Icon";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { useSetIsolateAsDefault } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";
 import { DownloadLink } from "@references/components/Detail/DownloadLink";

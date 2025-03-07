@@ -10,7 +10,7 @@ import {
     ViewHeaderTitle,
 } from "@base";
 import Icon from "@base/Icon";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";
 import React from "react";

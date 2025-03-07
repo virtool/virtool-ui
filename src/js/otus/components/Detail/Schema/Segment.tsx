@@ -2,7 +2,7 @@ import { useUrlSearchParam } from "@/hooks";
 import { cn } from "@/utils";
 import { Label } from "@base";
 import BoxGroupSection from "@base/BoxGroupSection";
-import { IconButton } from "@base/IconButton";
+import IconButton from "@base/IconButton";
 import { OTUSegment } from "@otus/types";
 import React from "react";
 import styled from "styled-components";
