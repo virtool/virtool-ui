@@ -1,7 +1,7 @@
 import { borderRadius } from "@app/theme";
-import NoneFound from '@base/NoneFound';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
+import NoneFound from "@base/NoneFound";
 import { getBadgeOrLabelColor } from "@base/utils";
 import { GroupMinimal } from "@groups/types";
 import { map } from "lodash-es";

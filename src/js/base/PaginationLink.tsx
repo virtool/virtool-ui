@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import Link from '@base/Link';
+import Link from "@base/Link";
 import PaginationItem from "@base/PaginationItem";
 import * as React from "react";
 

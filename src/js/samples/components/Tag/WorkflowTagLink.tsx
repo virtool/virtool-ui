@@ -1,4 +1,4 @@
-import Link from '@base/Link';
+import Link from "@base/Link";
 import React from "react";
 import styled from "styled-components";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";

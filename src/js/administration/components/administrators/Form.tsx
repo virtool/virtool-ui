@@ -1,7 +1,7 @@
-import InputError from '@base/InputError';
-import InputGroup from '@base/InputGroup';
-import InputLabel from '@base/InputLabel';
-import SaveButton from '@base/SaveButton';
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import SaveButton from "@base/SaveButton";
 import { User } from "@users/types";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";

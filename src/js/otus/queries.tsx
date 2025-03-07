@@ -1,5 +1,5 @@
 import { ErrorResponse } from "@/types/types";
-import LoadingPlaceholder from '@base/LoadingPlaceholder';
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { useGetReference } from "@references/queries";
 import {
     keepPreviousData,

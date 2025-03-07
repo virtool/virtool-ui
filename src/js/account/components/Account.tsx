@@ -1,9 +1,9 @@
-import Tabs from '@base/Tabs';
-import TabsLink from '@base/TabsLink';
-import ViewHeader from '@base/ViewHeader';
-import ViewHeaderTitle from '@base/ViewHeaderTitle';
 import ContainerNarrow from "@base/ContainerNarrow";
 import ContainerWide from "@base/ContainerWide";
+import Tabs from "@base/Tabs";
+import TabsLink from "@base/TabsLink";
+import ViewHeader from "@base/ViewHeader";
+import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import APIKeys from "./API/APIKeys";

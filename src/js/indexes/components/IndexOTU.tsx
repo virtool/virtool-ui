@@ -1,6 +1,6 @@
-import Link from '@base/Link';
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
+import Link from "@base/Link";
 import React from "react";
 import styled from "styled-components";
 

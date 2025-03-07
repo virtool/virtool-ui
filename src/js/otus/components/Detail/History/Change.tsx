@@ -1,8 +1,8 @@
-import Label from '@base/Label';
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
+import Label from "@base/Label";
 import { useRevertOTU } from "@otus/queries";
 import { OTUNested } from "@otus/types";
 import { UserNested } from "@users/types";

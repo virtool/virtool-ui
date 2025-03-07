@@ -1,5 +1,5 @@
-import Pagination from '@base/Pagination';
 import Box from "@base/Box";
+import Pagination from "@base/Pagination";
 import { faker } from "@faker-js/faker";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";

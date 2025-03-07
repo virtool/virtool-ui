@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import Label from '@base/Label';
+import Label from "@base/Label";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 

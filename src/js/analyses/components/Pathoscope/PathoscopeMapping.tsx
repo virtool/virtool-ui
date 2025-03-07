@@ -1,7 +1,7 @@
 import { toThousand } from "@/utils";
-import Label from '@base/Label';
-import Link from '@base/Link';
 import Box from "@base/Box";
+import Label from "@base/Label";
+import Link from "@base/Link";
 import { map } from "lodash-es";
 import numbro from "numbro";
 import React from "react";

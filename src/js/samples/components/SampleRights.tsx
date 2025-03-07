@@ -1,13 +1,13 @@
 import { useUpdateSettings } from "@administration/queries";
 import { Settings } from "@administration/types";
-import InputGroup from '@base/InputGroup';
-import InputLabel from '@base/InputLabel';
-import InputSelect from '@base/InputSelect';
-import SelectBox from '@base/SelectBox';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSelect from "@base/InputSelect";
 import PseudoLabel from "@base/PseudoLabel";
+import SelectBox from "@base/SelectBox";
 import { includes, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

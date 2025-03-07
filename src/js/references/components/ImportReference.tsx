@@ -1,12 +1,12 @@
 import { useNavigate } from "@/hooks";
-import InputError from '@base/InputError';
-import InputGroup from '@base/InputGroup';
-import InputLabel from '@base/InputLabel';
-import InputSimple from '@base/InputSimple';
-import ProgressBarAffixed from '@base/ProgressBarAffixed';
-import SaveButton from '@base/SaveButton';
 import Alert from "@base/Alert";
 import DialogFooter from "@base/DialogFooter";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import ProgressBarAffixed from "@base/ProgressBarAffixed";
+import SaveButton from "@base/SaveButton";
 import { UploadBar } from "@files/components/UploadBar";
 import { useImportReference, useUploadReference } from "@references/queries";
 import React from "react";

@@ -1,8 +1,8 @@
 import { useUrlSearchParam } from "@/hooks";
 import { formatIsolateName } from "@/utils";
 import { getActiveShadow } from "@app/theme";
-import Icon from "@base/Icon";
 import BoxGroupSection from "@base/BoxGroupSection";
+import Icon from "@base/Icon";
 import { OTUIsolate } from "@otus/types";
 import React from "react";
 import styled from "styled-components";

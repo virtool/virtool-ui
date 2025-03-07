@@ -1,4 +1,4 @@
-import Label from '@base/Label';
+import Label from "@base/Label";
 import React from "react";
 
 export function IimiDetectionTag({ result }) {

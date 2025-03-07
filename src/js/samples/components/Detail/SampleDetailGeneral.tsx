@@ -1,11 +1,11 @@
 import { usePathParams } from "@/hooks";
-import LoadingPlaceholder from '@base/LoadingPlaceholder';
-import Markdown from '@base/Markdown';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import ContainerNarrow from "@base/ContainerNarrow";
 import ContainerSide from "@base/ContainerSide";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import Markdown from "@base/Markdown";
 import JobItem from "@jobs/components/Item/JobItem";
 import numbro from "numbro";
 import React from "react";

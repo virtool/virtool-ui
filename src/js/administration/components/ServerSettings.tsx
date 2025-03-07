@@ -1,5 +1,5 @@
-import LoadingPlaceholder from '@base/LoadingPlaceholder';
 import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { useFetchMessage } from "@message/queries";
 import React from "react";
 import { useFetchSettings } from "../queries";

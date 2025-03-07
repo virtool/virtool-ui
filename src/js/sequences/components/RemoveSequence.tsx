@@ -1,5 +1,5 @@
 import { useUrlSearchParam } from "@/hooks";
-import RemoveDialog from '@base/RemoveDialog';
+import RemoveDialog from "@base/RemoveDialog";
 import { useRemoveSequence } from "@otus/queries";
 import { OTUSequence } from "@otus/types";
 import { find } from "lodash-es";

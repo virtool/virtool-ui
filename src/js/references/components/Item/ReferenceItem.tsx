@@ -1,11 +1,11 @@
 import { useCheckAdminRoleOrPermission } from "@/administration/hooks";
 import { useUrlSearchParam } from "@/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
-import Link from '@base/Link';
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import IconButton from "@base/IconButton";
-import ProgressCircle from '@base/ProgressCircle';
+import Link from "@base/Link";
+import ProgressCircle from "@base/ProgressCircle";
 import { Permission } from "@groups/types";
 import { JobState } from "@jobs/types";
 import React from "react";

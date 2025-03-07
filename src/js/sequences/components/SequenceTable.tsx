@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
-import Table from '@base/Table';
 import Badge from "@base/Badge";
+import Table from "@base/Table";
 import React from "react";
 import styled from "styled-components";
 

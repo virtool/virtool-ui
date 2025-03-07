@@ -1,7 +1,7 @@
 import { getFontSize, getFontWeight, sizes } from "@app/theme";
-import Link from '@base/Link';
 import BoxGroupSection from "@base/BoxGroupSection";
-import ProgressCircle from '@base/ProgressCircle';
+import Link from "@base/Link";
+import ProgressCircle from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";
 import React from "react";
 import styled from "styled-components";

@@ -1,6 +1,6 @@
 import { cn } from "@/utils";
-import Label from '@base/Label';
 import BoxGroupSection from "@base/BoxGroupSection";
+import Label from "@base/Label";
 import React, { useCallback } from "react";
 
 type SubtractionSelectorItemProps = {

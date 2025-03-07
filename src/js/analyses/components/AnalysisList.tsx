@@ -1,9 +1,9 @@
 import { useListHmms } from "@/hmm/queries";
 import { usePageParam, usePathParams } from "@/hooks";
-import LoadingPlaceholder from '@base/LoadingPlaceholder';
-import NoneFoundBox from '@base/NoneFoundBox';
-import Pagination from '@base/Pagination';
 import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NoneFoundBox from "@base/NoneFoundBox";
+import Pagination from "@base/Pagination";
 import { useFetchSample } from "@samples/queries";
 import React from "react";
 import { useListAnalyses } from "../queries";

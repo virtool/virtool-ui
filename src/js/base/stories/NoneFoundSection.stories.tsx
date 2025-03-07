@@ -1,5 +1,5 @@
-import NoneFoundSection from '@base/NoneFoundSection';
-import Link from '@base/Link';
+import Link from "@base/Link";
+import NoneFoundSection from "@base/NoneFoundSection";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 

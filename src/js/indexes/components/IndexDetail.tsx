@@ -1,11 +1,11 @@
 import { usePathParams } from "@/hooks";
-import LoadingPlaceholder from '@base/LoadingPlaceholder';
-import NotFound from '@base/NotFound';
-import RelativeTime from '@base/RelativeTime';
-import SubviewHeader from '@base/SubviewHeader';
-import SubviewHeaderAttribution from '@base/SubviewHeaderAttribution';
-import SubviewHeaderTitle from '@base/SubviewHeaderTitle';
 import ContainerNarrow from "@base/ContainerNarrow";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import NotFound from "@base/NotFound";
+import RelativeTime from "@base/RelativeTime";
+import SubviewHeader from "@base/SubviewHeader";
+import SubviewHeaderAttribution from "@base/SubviewHeaderAttribution";
+import SubviewHeaderTitle from "@base/SubviewHeaderTitle";
 import Contributors from "@indexes/components/Contributors";
 import Files from "@indexes/components/IndexFiles";
 import IndexOTUs from "@indexes/components/IndexOTUs";

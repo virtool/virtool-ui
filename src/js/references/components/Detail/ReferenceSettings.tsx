@@ -1,6 +1,6 @@
 import { usePathParams } from "@/hooks";
-import LoadingPlaceholder from '@base/LoadingPlaceholder';
-import SectionHeader from '@base/SectionHeader';
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import SectionHeader from "@base/SectionHeader";
 import { sortBy } from "lodash-es";
 import React from "react";
 import { useGetReference } from "../../queries";

@@ -1,6 +1,6 @@
-import InputGroup from '@base/InputGroup';
-import InputLabel from '@base/InputLabel';
-import InputSelect from '@base/InputSelect';
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSelect from "@base/InputSelect";
 import { capitalize, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

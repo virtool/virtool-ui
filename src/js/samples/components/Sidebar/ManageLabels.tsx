@@ -1,7 +1,7 @@
 import { fontWeight, getColor, getFontSize } from "@app/theme";
-import SidebarHeader from '@base/SidebarHeader';
-import SideBarSection from '@base/SideBarSection';
-import Link from '@base/Link';
+import Link from "@base/Link";
+import SidebarHeader from "@base/SidebarHeader";
+import SideBarSection from "@base/SideBarSection";
 import { Label } from "@labels/types";
 import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import { SampleMinimal } from "@samples/types";

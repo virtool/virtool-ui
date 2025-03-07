@@ -1,6 +1,6 @@
 import { byteSize } from "@/utils";
-import SelectBoxGroupSection from '@base/SelectBoxGroupSection';
 import Icon from "@base/Icon";
+import SelectBoxGroupSection from "@base/SelectBoxGroupSection";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../../app/theme";
