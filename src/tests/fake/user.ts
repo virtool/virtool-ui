@@ -59,7 +59,7 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
         force_reset: false,
         groups,
         primary_group,
-        last_password_change: faker.date.past(),
+        last_password_change: faker.date.past().toISOString(),
         permissions: createFakePermissions(permissions),
         administrator_role: null,
     };
@@ -130,7 +130,7 @@ export function mockApiGetUser(userId: string, user: User) {
 export function mockApiEditUser(
     userId: string,
     statusCode: number,
-    update: any,
+    update: object,
     user?: User,
 ) {
     return nock("http://localhost")
