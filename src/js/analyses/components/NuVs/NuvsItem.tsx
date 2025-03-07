@@ -14,8 +14,7 @@ type NuVsItemProps = {
  * A condensed NuVs item for use in a list of NuVs
  */
 export default function NuvsItem({ hit }: NuVsItemProps) {
-    const { value: activeHit, setValue: setActiveHit } =
-        useUrlSearchParam<string>("activeHit");
+    const { setValue: setActiveHit } = useUrlSearchParam<string>("activeHit");
 
     const { annotatedOrfCount, e, id, index, sequence } = hit;
 
