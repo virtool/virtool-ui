@@ -4,7 +4,7 @@ import {
     ViewHeader,
     ViewHeaderSubtitle,
     ViewHeaderTitle,
-} from "@/base";
+} from "@base";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import React from "react";

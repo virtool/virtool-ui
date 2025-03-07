@@ -1,7 +1,7 @@
-import { Link, LoadingPlaceholder, NoneFoundBox } from "@/base";
 import { updateSearchParam } from "@/hooks";
 import { useFetchAPIKeys } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
+import { Link, LoadingPlaceholder, NoneFoundBox } from "@base";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ExternalLink from "@base/ExternalLink";

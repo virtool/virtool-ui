@@ -1,6 +1,6 @@
-import { Label } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
 import { cn } from "@/utils";
+import { Label } from "@base";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { IconButton } from "@base/IconButton";
 import { OTUSegment } from "@otus/types";

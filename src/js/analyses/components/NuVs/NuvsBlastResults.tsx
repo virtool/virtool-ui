@@ -1,5 +1,5 @@
 import { BlastHit } from "@/analyses/types";
-import { Icon } from "@/base";
+import Icon from "@base/Icon";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";

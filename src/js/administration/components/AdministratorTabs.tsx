@@ -1,4 +1,4 @@
-import { Tabs, TabsLink } from "@/base";
+import { Tabs, TabsLink } from "@base";
 import React from "react";
 import { AdministratorRoles } from "../types";
 import { hasSufficientAdminRole } from "../utils";

@@ -1,4 +1,4 @@
-import { InputGroup, InputLabel, InputSelect } from "@/base";
+import { InputGroup, InputLabel, InputSelect } from "@base";
 import { GroupMinimal } from "@groups/types";
 import { map } from "lodash-es";
 import React from "react";

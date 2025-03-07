@@ -1,11 +1,12 @@
-import { Icon, InitialIcon, Link, LoadingPlaceholder } from "@/base";
 import { useDialogParam, usePathParams } from "@/hooks";
 import { useCheckAdminRole } from "@administration/hooks";
 import { useFetchUser } from "@administration/queries";
 import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
+import { InitialIcon, Link, LoadingPlaceholder } from "@base";
 import Alert from "@base/Alert";
 import { device } from "@base/device";
+import Icon from "@base/Icon";
 import { UserActivation } from "@users/components/UserActivation";
 import { UserActivationBanner } from "@users/components/UserActivationBanner";
 import React from "react";

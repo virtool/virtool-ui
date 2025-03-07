@@ -1,5 +1,5 @@
-import { LoadingPlaceholder, Markdown } from "@/base";
 import { usePathParams } from "@/hooks";
+import { LoadingPlaceholder, Markdown } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";

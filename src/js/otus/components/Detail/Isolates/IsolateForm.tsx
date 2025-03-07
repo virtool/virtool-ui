@@ -1,12 +1,6 @@
 import { formatIsolateName } from "@/utils";
+import { Input, InputGroup, InputLabel, InputSimple, SaveButton } from "@base";
 import DialogFooter from "@base/DialogFooter";
-import {
-    Input,
-    InputGroup,
-    InputLabel,
-    InputSimple,
-    SaveButton,
-} from "@base/index";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

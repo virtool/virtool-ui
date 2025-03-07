@@ -1,12 +1,12 @@
 import { useDialogParam } from "@/hooks";
-import { IconButton } from "@base/IconButton";
 import {
-    Icon,
     ViewHeader,
     ViewHeaderAttribution,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "@base/index";
+} from "@base";
+import Icon from "@base/Icon";
+import { IconButton } from "@base/IconButton";
 import { endsWith } from "lodash-es";
 import React from "react";
 import { useLocation } from "wouter";

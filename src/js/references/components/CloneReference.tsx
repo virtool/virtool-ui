@@ -1,11 +1,11 @@
+import { useUrlSearchParam } from "@/hooks";
 import {
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@/base";
-import { useUrlSearchParam } from "@/hooks";
+} from "@base";
 import Attribution from "@base/Attribution";
 import Badge from "@base/Badge";
 import Box from "@base/Box";

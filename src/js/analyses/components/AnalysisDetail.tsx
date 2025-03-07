@@ -1,13 +1,4 @@
 import { useGetAnalysis } from "@/analyses/queries";
-import {
-    Icon,
-    LoadingPlaceholder,
-    NotFound,
-    RelativeTime,
-    SubviewHeader,
-    SubviewHeaderAttribution,
-    SubviewHeaderTitle,
-} from "@/base";
 import { usePathParams } from "@/hooks";
 import { getWorkflowDisplayName } from "@/utils";
 import {
@@ -15,7 +6,16 @@ import {
     FormattedPathoscopeAnalysis,
     IimiAnalysis,
 } from "@analyses/types";
+import {
+    LoadingPlaceholder,
+    NotFound,
+    RelativeTime,
+    SubviewHeader,
+    SubviewHeaderAttribution,
+    SubviewHeaderTitle,
+} from "@base";
 import Box from "@base/Box";
+import Icon from "@base/Icon";
 import { useFetchSample } from "@samples/queries";
 import React from "react";
 import styled from "styled-components";

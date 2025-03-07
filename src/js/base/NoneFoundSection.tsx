@@ -1,7 +1,7 @@
 import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";
 import styled from "styled-components";
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 const StyledNoneFoundSection = styled(BoxGroupSection)`

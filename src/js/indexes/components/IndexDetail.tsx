@@ -1,3 +1,4 @@
+import { usePathParams } from "@/hooks";
 import {
     LoadingPlaceholder,
     NotFound,
@@ -5,8 +6,7 @@ import {
     SubviewHeader,
     SubviewHeaderAttribution,
     SubviewHeaderTitle,
-} from "@/base";
-import { usePathParams } from "@/hooks";
+} from "@base";
 import ContainerNarrow from "@base/ContainerNarrow";
 import Contributors from "@indexes/components/Contributors";
 import Files from "@indexes/components/IndexFiles";

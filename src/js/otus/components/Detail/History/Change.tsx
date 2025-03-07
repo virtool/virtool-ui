@@ -1,4 +1,5 @@
-import { Icon, Label } from "@/base";
+import { Label } from "@base";
+import Icon from "@base/Icon";
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { IconButton } from "@base/IconButton";

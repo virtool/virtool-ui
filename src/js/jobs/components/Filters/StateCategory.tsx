@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { IconButton } from "@base";
+import IconButton from '@base/IconButton';
 import BoxGroup from "@base/BoxGroup";
 import { map } from "lodash-es";
 import React from "react";

@@ -1,5 +1,5 @@
-import { NoneFound } from "@/base";
 import { borderRadius } from "@app/theme";
+import { NoneFound } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import { getBadgeOrLabelColor } from "@base/utils";

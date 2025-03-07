@@ -1,7 +1,7 @@
 import { cn } from "@/utils";
 import * as RadixCheckbox from "@radix-ui/react-checkbox";
 import React from "react";
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 
 type CheckboxProps = {
     checked?: boolean;

@@ -1,4 +1,4 @@
-import { Link } from "@/base";
+import { Link } from "@base";
 import Attribution from "@base/Attribution";
 import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";

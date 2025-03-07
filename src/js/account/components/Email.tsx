@@ -1,3 +1,4 @@
+import { useUpdateAccount } from "@account/queries";
 import {
     InputContainer,
     InputError,
@@ -5,8 +6,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@/base";
-import { useUpdateAccount } from "@account/queries";
+} from "@base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

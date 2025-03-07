@@ -13,7 +13,7 @@ type IconProps = {
     title?: string;
 };
 
-export function Icon({
+export default function Icon({
     color,
     faStyle = "fas",
     fixedWidth = false,

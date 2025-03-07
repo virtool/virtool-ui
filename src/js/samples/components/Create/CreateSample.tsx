@@ -1,5 +1,6 @@
+import { useNavigate } from "@/hooks";
+import { useFetchAccount } from "@account/queries";
 import {
-    Icon,
     InputContainer,
     InputError,
     InputGroup,
@@ -10,10 +11,9 @@ import {
     SaveButton,
     ViewHeader,
     ViewHeaderTitle,
-} from "@/base";
-import { useNavigate } from "@/hooks";
-import { useFetchAccount } from "@account/queries";
+} from "@base";
 import Box from "@base/Box";
+import Icon from "@base/Icon";
 import { useInfiniteFindFiles } from "@files/queries";
 import { FileType } from "@files/types";
 import { RestoredAlert } from "@forms/components/RestoredAlert";

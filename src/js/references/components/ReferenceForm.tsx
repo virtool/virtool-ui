@@ -4,7 +4,7 @@ import {
     InputLabel,
     InputSimple,
     TextArea,
-} from "@/base";
+} from "@base";
 import React from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import styled from "styled-components";

@@ -1,11 +1,11 @@
+import { usePageParam, useUrlSearchParam } from "@/hooks";
 import {
     LoadingPlaceholder,
     NoneFoundBox,
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@/base";
-import { usePageParam, useUrlSearchParam } from "@/hooks";
+} from "@base";
 import BoxGroup from "@base/BoxGroup";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";

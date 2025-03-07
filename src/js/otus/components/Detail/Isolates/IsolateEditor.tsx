@@ -1,6 +1,6 @@
-import { NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@/base";
 import { useDialogParam, useNaiveUrlSearchParam } from "@/hooks";
 import { getFontSize, getFontWeight } from "@app/theme";
+import { NoneFoundBox, SubviewHeader, SubviewHeaderTitle } from "@base";
 import { ScrollArea } from "@base/ScrollArea";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useCurrentOtuContext } from "@otus/queries";

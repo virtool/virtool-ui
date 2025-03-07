@@ -1,4 +1,4 @@
-import { Icon } from "@base";
+import Icon from "@base/Icon";
 import React from "react";
 import { BaseSampleLabel } from "./BaseSampleLabel";
 

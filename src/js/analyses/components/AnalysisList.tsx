@@ -1,6 +1,6 @@
-import { LoadingPlaceholder, NoneFoundBox, Pagination } from "@/base";
 import { useListHmms } from "@/hmm/queries";
 import { usePageParam, usePathParams } from "@/hooks";
+import { LoadingPlaceholder, NoneFoundBox, Pagination } from "@base";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { useFetchSample } from "@samples/queries";
 import React from "react";

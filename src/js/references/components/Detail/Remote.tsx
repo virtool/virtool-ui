@@ -1,9 +1,11 @@
 import { cn } from "@/utils";
-import { Icon, IconButton, Loader, ProgressCircle, RelativeTime } from "@base";
+import IconButton from '@base/IconButton';
+import { Loader, ProgressCircle, RelativeTime } from '@base';
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
+import Icon from "@base/Icon";
 import { JobState } from "@jobs/types";
 import React from "react";
 import {

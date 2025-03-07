@@ -1,10 +1,10 @@
+import { getBorder } from "@app/theme";
 import {
     InitialIcon,
     InputSearch,
     NoneFoundSection,
     SelectBoxGroupSection,
-} from "@/base";
-import { getBorder } from "@app/theme";
+} from "@base";
 import BoxGroup from "@base/BoxGroup";
 import CompactScrollList from "@base/CompactScrollList";
 import Dialog from "@base/Dialog";

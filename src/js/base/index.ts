@@ -2,7 +2,6 @@ import InputGroup from "@base/InputGroup.js";
 import InputLabel from "@base/InputLabel.js";
 
 export { Link } from "wouter";
-export { Icon } from "./Icon";
 export { IconButton } from "./IconButton";
 export { InitialIcon } from "./InitialIcon";
 export { Input } from "./Input";

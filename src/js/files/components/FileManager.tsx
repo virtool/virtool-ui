@@ -1,16 +1,16 @@
+import { usePageParam } from "@/hooks";
+import { useFetchAccount } from "@account/queries";
+import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
 import {
-    Icon,
     LoadingPlaceholder,
     NoneFoundBox,
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@/base";
-import { usePageParam } from "@/hooks";
-import { useFetchAccount } from "@account/queries";
-import { checkAdminRoleOrPermissionsFromAccount } from "@administration/utils";
+} from "@base";
 import Alert from "@base/Alert";
 import BoxGroup from "@base/BoxGroup";
+import Icon from "@base/Icon";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { UploadBar } from "@files/components/UploadBar";
 import { upload } from "@files/uploader";

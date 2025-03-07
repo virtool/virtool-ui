@@ -1,5 +1,5 @@
-import { LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@/base";
 import { useFetchSettings } from "@administration/queries";
+import { LoadingPlaceholder, ViewHeader, ViewHeaderTitle } from "@base";
 import ContainerNarrow from "@base/ContainerNarrow";
 import React from "react";
 import { GlobalSourceTypes } from "./SourceTypes/GlobalSourceTypes";

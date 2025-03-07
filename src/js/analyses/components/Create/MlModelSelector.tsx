@@ -1,4 +1,4 @@
-import { Select, SelectButton, SelectContent, SelectItem } from "@base/index";
+import { Select, SelectButton, SelectContent, SelectItem } from "@base";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";

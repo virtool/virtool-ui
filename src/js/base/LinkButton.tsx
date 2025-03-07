@@ -1,5 +1,5 @@
 import { cn } from "@/utils";
-import { Link } from "@base/index";
+import { Link } from "@base";
 import React from "react";
 
 interface LinkButtonProps {

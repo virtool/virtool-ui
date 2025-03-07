@@ -1,4 +1,4 @@
-import { Icon } from "@/base";
+import Icon from "@base/Icon";
 import Dropdown from "@base/Dropdown";
 import DropdownButton from "@base/DropdownButton";
 import DropdownMenuContent from "@base/DropdownMenuContent";

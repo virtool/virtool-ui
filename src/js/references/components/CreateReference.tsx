@@ -1,5 +1,5 @@
-import { Tabs, TabsLink } from "@/base";
 import { formatSearchParams, useUrlSearchParam } from "@/hooks";
+import { Tabs, TabsLink } from "@base";
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogOverlay from "@base/DialogOverlay";

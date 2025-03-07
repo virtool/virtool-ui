@@ -1,7 +1,7 @@
 import { useBlastNuVs } from "@/analyses/queries";
 import { FormattedNuvsHit } from "@/analyses/types";
-import { Icon } from "@/base";
 import { NuvsBlastResults } from "@analyses/components/NuVs/NuvsBlastResults";
+import Icon from "@base/Icon";
 import Alert from "@base/Alert";
 import Box from "@base/Box";
 import BoxTitle from "@base/BoxTitle";

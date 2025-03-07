@@ -5,7 +5,7 @@ import {
     InputSelect,
     InputSimple,
     SaveButton,
-} from "@/base";
+} from "@base";
 import Checkbox from "@base/Checkbox";
 import DialogFooter from "@base/DialogFooter";
 import { Molecule, OTUSegment } from "@otus/types";

@@ -1,11 +1,11 @@
-import DialogFooter from "@base/DialogFooter";
 import {
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@base/index";
+} from "@base";
+import DialogFooter from "@base/DialogFooter";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

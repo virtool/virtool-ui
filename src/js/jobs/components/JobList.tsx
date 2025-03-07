@@ -1,11 +1,11 @@
+import { useListSearchParam, usePageParam } from "@/hooks";
+import { getFontWeight } from "@app/theme";
 import {
     LoadingPlaceholder,
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@/base";
-import { useListSearchParam, usePageParam } from "@/hooks";
-import { getFontWeight } from "@app/theme";
+} from "@base";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";

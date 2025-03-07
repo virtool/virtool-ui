@@ -1,4 +1,4 @@
-import { InitialIcon } from "@/base";
+import { InitialIcon } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";

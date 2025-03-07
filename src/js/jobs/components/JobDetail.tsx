@@ -1,12 +1,12 @@
+import { usePathParams } from "@/hooks";
+import { getWorkflowDisplayName } from "@/utils";
 import {
     LoadingPlaceholder,
     NotFound,
     ViewHeader,
     ViewHeaderAttribution,
     ViewHeaderTitle,
-} from "@/base";
-import { usePathParams } from "@/hooks";
-import { getWorkflowDisplayName } from "@/utils";
+} from "@base";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { useFetchJob } from "@jobs/queries";

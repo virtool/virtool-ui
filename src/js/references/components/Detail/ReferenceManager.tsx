@@ -1,6 +1,6 @@
-import { LoadingPlaceholder } from "@/base";
 import { usePathParams } from "@/hooks";
 import { cn } from "@/utils";
+import { LoadingPlaceholder } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";

@@ -4,7 +4,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@/base";
+} from "@base";
 import Checkbox from "@base/Checkbox";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";

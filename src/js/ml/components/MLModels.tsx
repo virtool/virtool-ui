@@ -3,7 +3,7 @@ import {
     NoneFoundBox,
     ViewHeader,
     ViewHeaderTitle,
-} from "@/base";
+} from "@base";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";
 import { map } from "lodash";

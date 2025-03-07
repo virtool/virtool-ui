@@ -1,8 +1,4 @@
 import { useUpdateUser } from "@administration/queries";
-import BoxGroup from "@base/BoxGroup";
-import BoxGroupHeader from "@base/BoxGroupHeader";
-import BoxGroupSection from "@base/BoxGroupSection";
-import Checkbox from "@base/Checkbox";
 import {
     InputContainer,
     InputError,
@@ -10,7 +6,11 @@ import {
     InputSimple,
     RelativeTime,
     SaveButton,
-} from "@base/index";
+} from "@base";
+import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
+import Checkbox from "@base/Checkbox";
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";

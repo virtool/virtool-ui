@@ -1,5 +1,5 @@
-import { LoadingPlaceholder } from "@/base";
 import { usePathParams } from "@/hooks";
+import { LoadingPlaceholder } from "@base";
 import { Quality } from "@quality/components/Quality";
 import React from "react";
 import styled from "styled-components";

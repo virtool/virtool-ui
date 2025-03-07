@@ -1,4 +1,4 @@
-import { RelativeTime } from "@/base";
+import { RelativeTime } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
 import { toString } from "lodash-es";
 

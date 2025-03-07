@@ -1,6 +1,6 @@
-import { LoadingPlaceholder } from "@/base";
 import { resetClient } from "@/utils";
 import { ErrorBoundary } from "@app/ErrorBoundary";
+import { LoadingPlaceholder } from "@base";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthentication, useRootQuery } from "@wall/queries";
 import React, { Suspense } from "react";

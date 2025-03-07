@@ -1,5 +1,5 @@
+import { fontWeight, getColor, getFontSize, getFontWeight } from "@app/theme";
 import {
-    Icon,
     InputGroup,
     InputLabel,
     Link,
@@ -7,9 +7,9 @@ import {
     SelectButton,
     SelectContent,
     SelectItem,
-} from "@/base";
-import { fontWeight, getColor, getFontSize, getFontWeight } from "@app/theme";
+} from "@base";
 import Box from "@base/Box";
+import Icon from "@base/Icon";
 import { OTUSegment } from "@otus/types";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";

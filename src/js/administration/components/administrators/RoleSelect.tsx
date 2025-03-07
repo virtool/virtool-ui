@@ -1,4 +1,4 @@
-import { Select, SelectButton, SelectContent, SelectItem } from "@base/index";
+import { Select, SelectButton, SelectContent, SelectItem } from "@base";
 import { map } from "lodash-es";
 import React from "react";
 import { AdministratorRoles } from "../../types";

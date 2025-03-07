@@ -1,5 +1,5 @@
-import { Link } from "@/base";
 import { getFontSize, getFontWeight, sizes } from "@app/theme";
+import { Link } from "@base";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { ProgressCircle } from "@base/ProgressCircle";
 import { JobState } from "@jobs/types";

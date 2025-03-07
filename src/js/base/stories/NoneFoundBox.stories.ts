@@ -1,4 +1,4 @@
-import { NoneFoundBox } from "@/base";
+import { NoneFoundBox } from "@base";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof NoneFoundBox> = {

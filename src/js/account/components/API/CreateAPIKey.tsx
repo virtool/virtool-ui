@@ -1,5 +1,8 @@
+import { useDialogParam } from "@/hooks";
+import APIPermissions from "@account/components/API/APIPermissions";
+import { useCreateAPIKey } from "@account/queries";
+import { getFontSize } from "@app/theme";
 import {
-    Icon,
     Input,
     InputContainer,
     InputError,
@@ -8,16 +11,13 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@/base";
-import { useDialogParam } from "@/hooks";
-import APIPermissions from "@account/components/API/APIPermissions";
-import { useCreateAPIKey } from "@account/queries";
-import { getFontSize } from "@app/theme";
+} from "@base";
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogFooter from "@base/DialogFooter";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
+import Icon from "@base/Icon";
 import PseudoLabel from "@base/PseudoLabel";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";

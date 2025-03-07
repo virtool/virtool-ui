@@ -1,7 +1,8 @@
-import { Icon, Link, SidebarHeaderButton } from "@/base";
 import { useFuse } from "@/fuse";
 import { fontWeight, getFontSize } from "@app/theme";
+import { Link, SidebarHeaderButton } from "@base";
 import BoxGroupSearch from "@base/BoxGroupSearch";
+import Icon from "@base/Icon";
 import { Popover } from "@base/Popover";
 import { Label } from "@labels/types";
 import { SubtractionShortlist } from "@subtraction/types";

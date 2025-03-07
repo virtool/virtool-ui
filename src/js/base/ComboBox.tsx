@@ -5,7 +5,7 @@ import {
     getColor,
     getFontWeight,
 } from "@app/theme";
-import { Icon } from "@base/Icon";
+import Icon from "@base/Icon";
 import { InputSearch } from "@base/InputSearch";
 import { useCombobox } from "downshift";
 import React from "react";

@@ -1,5 +1,5 @@
-import { Label } from "@/base";
 import { cn } from "@/utils";
+import { Label } from "@base";
 import BoxGroupSection from "@base/BoxGroupSection";
 import React, { useCallback } from "react";
 

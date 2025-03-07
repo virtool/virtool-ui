@@ -1,5 +1,5 @@
+import { useDialogParam, usePathParams } from "@/hooks";
 import {
-    Icon,
     LoadingPlaceholder,
     NotFound,
     Tabs,
@@ -8,8 +8,8 @@ import {
     ViewHeaderAttribution,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "@/base";
-import { useDialogParam, usePathParams } from "@/hooks";
+} from "@base";
+import Icon from "@base/Icon";
 import { IconButton } from "@base/IconButton";
 import { useCheckCanEditSample } from "@samples/hooks";
 import { useFetchSample } from "@samples/queries";

@@ -1,4 +1,4 @@
-import { InputGroup, InputLabel, InputSelect } from "@base/index";
+import { InputGroup, InputLabel, InputSelect } from "@base";
 import { capitalize, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

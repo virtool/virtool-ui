@@ -1,8 +1,4 @@
 import { useDialogParam } from "@/hooks";
-import Dialog from "@base/Dialog";
-import DialogContent from "@base/DialogContent";
-import DialogOverlay from "@base/DialogOverlay";
-import DialogTitle from "@base/DialogTitle";
 import {
     InputError,
     InputGroup,
@@ -10,7 +6,11 @@ import {
     InputSimple,
     SaveButton,
     TextArea,
-} from "@base/index";
+} from "@base";
+import Dialog from "@base/Dialog";
+import DialogContent from "@base/DialogContent";
+import DialogOverlay from "@base/DialogOverlay";
+import DialogTitle from "@base/DialogTitle";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { pick } from "lodash";
 import React from "react";

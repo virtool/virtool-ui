@@ -1,3 +1,5 @@
+import { usePathParams } from "@/hooks";
+import { getFontWeight } from "@app/theme";
 import {
     Link,
     LoadingPlaceholder,
@@ -7,9 +9,7 @@ import {
     ViewHeader,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "@/base";
-import { usePathParams } from "@/hooks";
-import { getFontWeight } from "@app/theme";
+} from "@base";
 import { useFetchOTU } from "@otus/queries";
 import { useGetReference } from "@references/queries";
 import React from "react";

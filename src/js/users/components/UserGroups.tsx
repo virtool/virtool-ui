@@ -1,5 +1,5 @@
-import { LoadingPlaceholder, NoneFoundSection } from "@/base";
 import { useUpdateUser } from "@administration/queries";
+import { LoadingPlaceholder, NoneFoundSection } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import PseudoLabel from "@base/PseudoLabel";
 import { useListGroups } from "@groups/queries";

@@ -1,7 +1,8 @@
 import { useDialogParam } from "@/hooks";
 import { formatIsolateName } from "@/utils";
-import { Icon, Label } from "@base";
+import { Label } from "@base";
 import Box from "@base/Box";
+import Icon from "@base/Icon";
 import { IconButton } from "@base/IconButton";
 import { useSetIsolateAsDefault } from "@otus/queries";
 import { OTUIsolate } from "@otus/types";

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Box from "./Box";
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 
 interface NoneFoundBoxProps {

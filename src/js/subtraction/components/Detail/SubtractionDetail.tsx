@@ -1,3 +1,5 @@
+import { useDialogParam, usePathParams } from "@/hooks";
+import { useCheckAdminRoleOrPermission } from "@administration/hooks";
 import {
     LoadingPlaceholder,
     NotFound,
@@ -5,9 +7,7 @@ import {
     ViewHeader,
     ViewHeaderIcons,
     ViewHeaderTitle,
-} from "@/base";
-import { useDialogParam, usePathParams } from "@/hooks";
-import { useCheckAdminRoleOrPermission } from "@administration/hooks";
+} from "@base";
 import { IconButton } from "@base/IconButton";
 import { Permission } from "@groups/types";
 import numbro from "numbro";

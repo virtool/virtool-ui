@@ -1,4 +1,5 @@
-import { Icon, Link } from "@/base";
+import { Link } from "@base";
+import Icon from "@base/Icon";
 import Alert from "@base/Alert";
 import React from "react";
 

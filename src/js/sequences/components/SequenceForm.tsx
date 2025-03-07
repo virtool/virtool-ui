@@ -4,7 +4,7 @@ import {
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@/base";
+} from "@base";
 import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { OTUSegment, OTUSequence } from "@otus/types";

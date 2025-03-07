@@ -1,7 +1,7 @@
-import { Icon } from "@/base";
 import { useUrlSearchParam } from "@/hooks";
 import { formatIsolateName } from "@/utils";
 import { getActiveShadow } from "@app/theme";
+import Icon from "@base/Icon";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { OTUIsolate } from "@otus/types";
 import React from "react";

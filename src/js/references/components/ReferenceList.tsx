@@ -1,10 +1,10 @@
+import { usePageParam, useUrlSearchParam } from "@/hooks";
 import {
     LoadingPlaceholder,
     Pagination,
     ViewHeader,
     ViewHeaderTitle,
-} from "@/base";
-import { usePageParam, useUrlSearchParam } from "@/hooks";
+} from "@base";
 import BoxGroup from "@base/BoxGroup";
 import ContainerNarrow from "@base/ContainerNarrow";
 import { ViewHeaderTitleBadge } from "@base/ViewHeaderTitleBadge";

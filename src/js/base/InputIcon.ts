@@ -1,4 +1,4 @@
-import { Icon } from "@base/Icon";
+import Icon from "@base/Icon";
 import styled from "styled-components";
 
 export const InputIcon = styled(Icon)`

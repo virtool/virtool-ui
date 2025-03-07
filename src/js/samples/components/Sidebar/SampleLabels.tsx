@@ -1,10 +1,5 @@
-import {
-    Link,
-    LoadingPlaceholder,
-    SidebarHeader,
-    SideBarSection,
-} from "@/base";
 import { fontWeight, getColor, getFontSize } from "@app/theme";
+import { Link, LoadingPlaceholder, SidebarHeader, SideBarSection } from "@base";
 import { useFetchLabels } from "@labels/queries";
 import SampleLabelInner from "@samples/components/Sidebar/SampleLabelInner";
 import SampleSidebarList from "@samples/components/Sidebar/SampleSidebarList";

@@ -1,6 +1,7 @@
 import { getWorkflowDisplayName } from "@/utils";
+import { SidebarHeader, SideBarSection } from "@base";
 import Box from "@base/Box";
-import { Icon, SidebarHeader, SideBarSection } from "@base/index";
+import Icon from "@base/Icon";
 import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

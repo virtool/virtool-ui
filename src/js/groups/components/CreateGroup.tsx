@@ -1,11 +1,11 @@
+import { useDialogParam } from "@/hooks";
 import {
     InputError,
     InputGroup,
     InputLabel,
     InputSimple,
     SaveButton,
-} from "@/base";
-import { useDialogParam } from "@/hooks";
+} from "@base";
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogFooter from "@base/DialogFooter";

@@ -1,4 +1,4 @@
-import { InputError, InputGroup, InputLabel, SaveButton } from "@base/index";
+import { InputError, InputGroup, InputLabel, SaveButton } from "@base";
 import { User } from "@users/types";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";

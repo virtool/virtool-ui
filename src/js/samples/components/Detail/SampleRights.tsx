@@ -1,13 +1,8 @@
-import {
-    InputGroup,
-    InputLabel,
-    InputSelect,
-    LoadingPlaceholder,
-} from "@/base";
 import { usePathParams } from "@/hooks";
 import { useFetchAccount } from "@account/queries";
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
+import { InputGroup, InputLabel, InputSelect, LoadingPlaceholder } from "@base";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
