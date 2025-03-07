@@ -1,9 +1,4 @@
 import { useUrlSearchParam } from "@/hooks";
-import InputError from '@base/InputError';
-import InputGroup from '@base/InputGroup';
-import InputLabel from '@base/InputLabel';
-import InputSimple from '@base/InputSimple';
-import SaveButton from '@base/SaveButton';
 import Attribution from "@base/Attribution";
 import Badge from "@base/Badge";
 import Box from "@base/Box";
@@ -12,6 +7,12 @@ import DialogContent from "@base/DialogContent";
 import DialogFooter from "@base/DialogFooter";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
+import InputError from "@base/InputError";
+import InputGroup from "@base/InputGroup";
+import InputLabel from "@base/InputLabel";
+import InputSimple from "@base/InputSimple";
+import PseudoLabel from "@base/PseudoLabel";
+import SaveButton from "@base/SaveButton";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { find } from "lodash-es";
 import React, { useEffect } from "react";
@@ -84,11 +85,9 @@ export default function CloneReference({ references }: CloneReferenceProps) {
                 <DialogContent>
                     <DialogTitle>Clone Reference</DialogTitle>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <InputLabel htmlFor="selectedReference">
-                            Selected reference
-                        </InputLabel>
+                        <PseudoLabel>Selected reference</PseudoLabel>
                         {reference && (
-                            <ReferenceBox id="selectedReference">
+                            <ReferenceBox>
                                 <strong>{reference.name}</strong>
                                 <Badge className="ml-1.5">
                                     {reference.otu_count} OTUs

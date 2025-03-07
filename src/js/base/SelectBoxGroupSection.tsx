@@ -35,19 +35,12 @@ export default function SelectBoxGroupSection({
     className,
     onClick,
 }: BoxGroupSectionSelectProps) {
-    function handleKeyDown(e) {
-        if (e.key === "Enter") {
-            onClick();
-        }
-    }
-
     return (
         <StyledSelectBoxGroupSection
             active={active}
+            aria-role="option"
             className={className}
             onClick={onClick}
-            onKeyDown={handleKeyDown}
-            role="option"
         >
             {children}
         </StyledSelectBoxGroupSection>
