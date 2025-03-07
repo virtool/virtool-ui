@@ -29,3 +29,5 @@ export const BoxGroupHeader = styled(BoxGroupSection)<BoxGroupHeaderProps>`
 `;
 
 BoxGroupHeader.displayName = "BoxGroupHeader";
+
+export default BoxGroupHeader;

@@ -1,7 +1,6 @@
 import { usePathParams } from "@/hooks";
 import { cn } from "@/utils";
 import {
-    BoxGroupHeader,
     device,
     Label,
     LoadingPlaceholder,
@@ -11,6 +10,7 @@ import {
 } from "@base";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import { map } from "lodash-es";
 import React from "react";

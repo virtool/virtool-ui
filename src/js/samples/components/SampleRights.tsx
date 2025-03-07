@@ -1,14 +1,9 @@
 import { useUpdateSettings } from "@administration/queries";
 import { Settings } from "@administration/types";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
-import {
-    BoxGroupHeader,
-    InputGroup,
-    InputLabel,
-    InputSelect,
-    SelectBox,
-} from "@base/index";
+import { InputGroup, InputLabel, InputSelect, SelectBox } from "@base/index";
 import PseudoLabel from "@base/PseudoLabel";
 import { includes, map } from "lodash-es";
 import React from "react";

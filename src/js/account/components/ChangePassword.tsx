@@ -1,5 +1,4 @@
 import {
-    BoxGroupHeader,
     InputContainer,
     InputError,
     InputGroup,
@@ -10,6 +9,7 @@ import {
 } from "@/base";
 import { useChangePassword } from "@account/queries";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";
 import { useForm } from "react-hook-form";

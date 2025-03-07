@@ -4,13 +4,10 @@ import InputLabel from "@base/InputLabel.js";
 export { InputGroup, InputLabel };
 
 export { Link } from "wouter";
-export { BoxGroupHeader } from "./BoxGroupHeader";
-export { BoxSpaced } from "./BoxSpaced";
 export { BoxTitle } from "./BoxTitle";
 export { device } from "./Breakpoints";
 export { Button } from "./Button";
 export { Checkbox } from "./Checkbox";
-export { Circle } from "./Circle";
 export { CloseButton } from "./CloseButton";
 export { Color } from "./Color";
 export { ComboBox } from "./ComboBox";

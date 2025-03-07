@@ -1,6 +1,7 @@
-import { BoxGroupHeader, NoneFoundSection } from "@/base";
+import { NoneFoundSection } from "@/base";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import Contributor from "@indexes/components/Contributor";
 import { IndexContributor } from "@indexes/types";
 import { map, sortBy } from "lodash-es";

@@ -1,5 +1,4 @@
 import {
-    BoxGroupHeader,
     Button,
     Icon,
     IconButton,
@@ -9,6 +8,7 @@ import {
 } from "@/base";
 import { cn } from "@/utils";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { JobState } from "@jobs/types";
 import React from "react";

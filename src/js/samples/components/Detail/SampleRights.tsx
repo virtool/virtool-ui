@@ -1,5 +1,4 @@
 import {
-    BoxGroupHeader,
     ContainerNarrow,
     InputGroup,
     InputLabel,
@@ -12,6 +11,7 @@ import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
 import Box from "@base/Box";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { useListGroups } from "@groups/queries";
 import { useQueryClient } from "@tanstack/react-query";

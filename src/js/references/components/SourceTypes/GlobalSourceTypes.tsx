@@ -1,6 +1,5 @@
 import { settingsQueryKeys } from "@administration/queries";
 import {
-    BoxGroupHeader,
     Button,
     InputError,
     InputLabel,
@@ -8,6 +7,7 @@ import {
     SectionHeader,
 } from "@base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { IconButton } from "@base/IconButton";
 import Toolbar from "@base/Toolbar";

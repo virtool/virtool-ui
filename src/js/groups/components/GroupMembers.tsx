@@ -1,5 +1,6 @@
-import { BoxGroupHeader, InitialIcon } from "@/base";
+import { InitialIcon } from "@/base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { UserNested } from "@users/types";
 import { map } from "lodash-es";

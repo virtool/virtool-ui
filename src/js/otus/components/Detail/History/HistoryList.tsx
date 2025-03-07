@@ -1,6 +1,6 @@
-import { BoxGroupHeader } from "@/base";
 import Badge from "@base/Badge";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import Change from "@otus/components/Detail/History/Change";
 import { OTUHistory } from "@otus/types";
 import { map, reverse, sortBy } from "lodash-es";

@@ -1,6 +1,7 @@
 import { BlastHit } from "@/analyses/types";
-import { BoxGroupHeader, Button, ExternalLink, Icon } from "@/base";
+import { Button, ExternalLink, Icon } from "@/base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupTable from "@base/BoxGroupTable";
 import { map } from "lodash";
 import numbro from "numbro";

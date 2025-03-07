@@ -1,5 +1,6 @@
-import { BoxGroupHeader, NoneFound } from "@base";
+import { NoneFound } from "@base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import { SubtractionFile } from "@subtraction/types";
 import { sortBy } from "lodash-es";
 import React from "react";

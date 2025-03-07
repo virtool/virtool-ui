@@ -2,7 +2,6 @@ import { usePathParams } from "@/hooks";
 import { SettingsCheckbox } from "@administration/components/SettingsCheckbox";
 import { getColor } from "@app/theme";
 import {
-    BoxGroupHeader,
     Button,
     InputContainer,
     InputError,
@@ -12,6 +11,7 @@ import {
 } from "@base";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupDisabled from "@base/BoxGroupDisabled";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { IconButton } from "@base/IconButton";
 import { get } from "lodash-es";

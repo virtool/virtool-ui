@@ -1,5 +1,5 @@
-import { BoxGroupHeader } from "@/base";
 import BoxGroup from "@base/BoxGroup";
+import BoxGroupHeader from "@base/BoxGroupHeader";
 import BoxGroupSearch from "@base/BoxGroupSearch";
 import type { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";

@@ -1,8 +1,8 @@
 import { cn } from "@/utils";
-import { Circle } from "@base";
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
+import Dot from "@base/Dot";
 import React from "react";
 
 type StateButtonProps = {
@@ -34,7 +34,7 @@ export function StateButton({
 }: StateButtonProps) {
     const labelComponent = (
         <>
-            <Circle color={color} />
+            <Dot color={color} />
             {label}
         </>
     );
