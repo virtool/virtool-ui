@@ -1,8 +1,8 @@
 import styled, { DefaultTheme } from "styled-components";
 
-interface BoxTitleProps {
+type BoxTitleProps = {
     theme: DefaultTheme;
-}
+};
 
 export const BoxTitle = styled.h1<BoxTitleProps>`
     font-size: ${(props) => props.theme.fontSize.md};
@@ -11,3 +11,5 @@ export const BoxTitle = styled.h1<BoxTitleProps>`
 `;
 
 BoxTitle.displayName = "BoxTitle";
+
+export default BoxTitle;

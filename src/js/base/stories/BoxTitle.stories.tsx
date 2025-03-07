@@ -1,5 +1,5 @@
-import { BoxTitle } from "@/base";
 import Box from "@base/Box";
+import BoxTitle from "@base/BoxTitle";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
