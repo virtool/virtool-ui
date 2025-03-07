@@ -2,7 +2,6 @@ import InputGroup from "@base/InputGroup.js";
 import InputLabel from "@base/InputLabel.js";
 
 export { Link } from "wouter";
-export { Key } from "./Key";
 export { Label } from "./Label";
 export { LinkButton } from "./LinkButton";
 export { Loader } from "./Loader";

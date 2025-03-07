@@ -1,6 +1,6 @@
-import { useGetAnalysis } from "@/analyses/queries";
 import { usePathParams } from "@/hooks";
 import { getWorkflowDisplayName } from "@/utils";
+import { useGetAnalysis } from "@analyses/queries";
 import {
     FormattedNuvsAnalysis,
     FormattedPathoscopeAnalysis,

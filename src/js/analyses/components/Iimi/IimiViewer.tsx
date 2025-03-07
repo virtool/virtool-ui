@@ -1,4 +1,4 @@
-import { IimiAnalysis } from "@/analyses/types";
+import { IimiAnalysis } from "@analyses/types";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
 import BoxTitle from "@base/BoxTitle";

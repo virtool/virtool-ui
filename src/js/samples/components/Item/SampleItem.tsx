@@ -1,5 +1,5 @@
-import { Workflows } from "@/analyses/types";
 import { useUrlSearchParam } from "@/hooks";
+import { Workflows } from "@analyses/types";
 import { getFontSize, getFontWeight } from "@app/theme";
 import { Link } from "@base";
 import Attribution from "@base/Attribution";

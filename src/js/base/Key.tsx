@@ -7,7 +7,7 @@ type KeyProps = {
 };
 
 /** A keyboard key */
-export function Key({ className, children }: KeyProps) {
+export default function Key({ className, children }: KeyProps) {
     return (
         <kbd
             className={cn(

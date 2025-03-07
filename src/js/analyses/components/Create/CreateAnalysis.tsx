@@ -1,5 +1,5 @@
-import { Workflows } from "@/analyses/types";
 import { useUrlSearchParam } from "@/hooks";
+import { Workflows } from "@analyses/types";
 import Dialog from "@base/Dialog";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";

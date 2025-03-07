@@ -1,4 +1,4 @@
-import { useSortAndFilterPathoscopeHits } from "@/analyses/hooks";
+import { useSortAndFilterPathoscopeHits } from "@analyses/hooks";
 import Accordion from "@base/Accordion";
 import { map } from "lodash-es";
 import React from "react";

@@ -1,8 +1,8 @@
-import NuvsItem from "@/analyses/components/NuVs/NuvsItem";
-import AnalysisViewerList from "@/analyses/components/Viewer/AnalysisViewerList";
-import { useSortAndFilterNuVsHits } from "@/analyses/hooks";
-import { FormattedNuvsAnalysis } from "@/analyses/types";
 import NuvsDetail from "@analyses/components/NuVs/NuvsDetail";
+import NuvsItem from "@analyses/components/NuVs/NuvsItem";
+import AnalysisViewerList from "@analyses/components/Viewer/AnalysisViewerList";
+import { useSortAndFilterNuVsHits } from "@analyses/hooks";
+import { FormattedNuvsAnalysis } from "@analyses/types";
 import { map } from "lodash";
 import React from "react";
 

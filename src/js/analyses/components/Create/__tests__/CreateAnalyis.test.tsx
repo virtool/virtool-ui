@@ -1,5 +1,5 @@
-import { Workflows } from "@/analyses/types";
 import { formatPath } from "@/hooks";
+import { Workflows } from "@analyses/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockApiCreateAnalysis } from "@tests/fake/analyses";

@@ -1,4 +1,4 @@
-import NuVsViewer from "@/analyses/components/NuVs/NuVsViewer";
+import NuVsViewer from "@analyses/components/NuVs/NuVsViewer";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample } from "@tests/fake/samples";

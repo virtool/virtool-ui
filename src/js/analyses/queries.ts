@@ -1,5 +1,5 @@
-import { formatData } from "@/analyses/utils";
 import { ErrorResponse } from "@/types/types";
+import { formatData } from "@analyses/utils";
 import { samplesQueryKeys } from "@samples/queries";
 import {
     keepPreviousData,
