@@ -1,7 +1,8 @@
 import { useCheckAdminRole } from "@administration/hooks";
 import { AdministratorRoles } from "@administration/types";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { InitialIcon, Label, Link } from "@base";
+import InitialIcon from '@base/InitialIcon';
+import { Label, Link } from '@base';
 import BoxGroupSection from "@base/BoxGroupSection";
 import Icon from "@base/Icon";
 import { GroupMinimal } from "@groups/types";

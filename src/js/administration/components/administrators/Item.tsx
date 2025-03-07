@@ -1,5 +1,5 @@
 import { getFontSize, getFontWeight } from "@app/theme";
-import { InitialIcon } from "@base";
+import InitialIcon from '@base/InitialIcon';
 import IconButton from "@base/IconButton";
 import { User } from "@users/types";
 import React from "react";

@@ -1,4 +1,4 @@
-import { InitialIcon } from "@base";
+import InitialIcon from '@base/InitialIcon';
 import BoxGroupSection from "@base/BoxGroupSection";
 import Button from "@base/Button";
 import React, { useCallback } from "react";

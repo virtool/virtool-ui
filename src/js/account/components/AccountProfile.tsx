@@ -1,7 +1,8 @@
 import AccountGroups from "@account/components/AccountGroups";
 import { useFetchAccount } from "@account/queries";
 import { getFontSize, getFontWeight } from "@app/theme";
-import { InitialIcon, Label, LoadingPlaceholder } from "@base";
+import InitialIcon from '@base/InitialIcon';
+import { Label, LoadingPlaceholder } from '@base';
 import Icon from "@base/Icon";
 import React from "react";
 import styled from "styled-components";

@@ -62,7 +62,7 @@ type InitialIconProps = {
     size: string;
 };
 
-export function InitialIcon({ handle, size }: InitialIconProps) {
+export default function InitialIcon({ handle, size }: InitialIconProps) {
     const hash = useMemo(
         () => reduce(handle.split(""), hashColor, 0) % 360,
         [handle],

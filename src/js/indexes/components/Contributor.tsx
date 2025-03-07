@@ -1,4 +1,4 @@
-import { InitialIcon } from "@base";
+import InitialIcon from '@base/InitialIcon';
 import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import React from "react";
