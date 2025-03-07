@@ -1,18 +1,13 @@
-import {
-    Dropdown,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLink,
-    Icon,
-    IconButton,
-    InitialIcon,
-    Logo,
-} from "@/base";
+import { Icon, IconButton, InitialIcon, Logo } from "@/base";
 import { useDialogParam } from "@/hooks";
 import { useLogout } from "@account/queries";
 import { AdministratorRoles } from "@administration/types";
 import { hasSufficientAdminRole } from "@administration/utils";
-import { DropdownMenuTrigger } from "@base/DropdownMenuTrigger";
+import Dropdown from "@base/Dropdown";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
+import DropdownMenuLink from "@base/DropdownMenuLink";
+import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
 import { useRootQuery } from "@wall/queries";
 import React from "react";
 import styled from "styled-components";

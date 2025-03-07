@@ -1,10 +1,6 @@
-import {
-    ExternalLink,
-    Icon,
-    LoadingPlaceholder,
-    ProgressBarAffixed,
-} from "@base";
+import { Icon, LoadingPlaceholder, ProgressBarAffixed } from "@base";
 import Box from "@base/Box";
+import ExternalLink from "@base/ExternalLink";
 import { useQueryClient } from "@tanstack/react-query";
 import { replace } from "lodash-es";
 import React from "react";

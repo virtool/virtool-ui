@@ -1,5 +1,5 @@
-import { DropdownMenuItem } from "@base/DropdownMenuItem";
-import { Link } from "@base/index";
+import { Link } from "@base";
+import DropdownMenuItem from "@base/DropdownMenuItem";
 import React from "react";
 
 type DropdownMenuLinkProps = {
@@ -10,7 +10,7 @@ type DropdownMenuLinkProps = {
     rel?: string;
 };
 
-export function DropdownMenuLink({
+export default function DropdownMenuLink({
     children,
     className,
     to,

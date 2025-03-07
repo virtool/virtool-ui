@@ -1,3 +1,5 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-export const Dropdown = DropdownMenu.Root;
+const Dropdown = DropdownMenu.Root;
+
+export default Dropdown;

@@ -1,10 +1,8 @@
-import {
-    Dropdown,
-    DropdownButton,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    Icon,
-} from "@/base";
+import { Icon } from "@/base";
+import Dropdown from "@base/Dropdown";
+import DropdownButton from "@base/DropdownButton";
+import DropdownMenuContent from "@base/DropdownMenuContent";
+import DropdownMenuItem from "@base/DropdownMenuItem";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";

@@ -21,3 +21,5 @@ export const ExternalLink = styled(
 )``;
 
 ExternalLink.displayName = "ExternalLink";
+
+export default ExternalLink;

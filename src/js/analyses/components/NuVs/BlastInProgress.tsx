@@ -1,5 +1,6 @@
-import { ExternalLink, Icon, Loader, RelativeTime } from "@/base";
+import { Icon, Loader, RelativeTime } from "@/base";
 import Box from "@base/Box";
+import ExternalLink from "@base/ExternalLink";
 import { addSeconds, formatDistanceStrict } from "date-fns";
 import React from "react";
 import styled from "styled-components";

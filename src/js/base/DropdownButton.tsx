@@ -6,6 +6,6 @@ type DropdownButtonProps = {
     children: React.ReactNode;
 };
 
-export function DropdownButton({ children }: DropdownButtonProps) {
+export default function DropdownButton({ children }: DropdownButtonProps) {
     return <Button as={DropdownMenu.Trigger}>{children}</Button>;
 }

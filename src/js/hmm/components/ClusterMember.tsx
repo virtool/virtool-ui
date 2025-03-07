@@ -1,4 +1,4 @@
-import { ExternalLink } from "@base/index";
+import ExternalLink from "@base/ExternalLink";
 import React from "react";
 
 type ClusterMemberProps = {
