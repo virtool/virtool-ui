@@ -6,7 +6,7 @@ import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { IimiHit, IimiIsolate as IimiIsolateData } from "../../types";
-import { CondensedIimiCoverage } from "./CondensedIimiCoverage";
+import { IimiCondensedCoverage } from "./IimiCondensedCoverage";
 import { IimiDetectionTag } from "./IimiDetectionTag";
 import { IimiIsolate } from "./IimiIsolate";
 
@@ -24,7 +24,7 @@ const IimiAccordionTrigger = styled(AccordionTrigger)`
 `;
 
 /** Collapsible results of an Iimi analysis for a single otu */
-export function IimiOTU({
+export function IimiOtu({
     hit: { id, name, result, isolates },
 }: {
     hit: IimiHit;
@@ -36,7 +36,7 @@ export function IimiOTU({
                     <h3>{name}</h3>
                     <IimiDetectionTag result={result} />
                 </div>
-                <CondensedIimiCoverage isolates={isolates} />
+                <IimiCondensedCoverage isolates={isolates} />
             </IimiAccordionTrigger>
             <AccordionContent>
                 {map(isolates, (isolate: IimiIsolateData) => (

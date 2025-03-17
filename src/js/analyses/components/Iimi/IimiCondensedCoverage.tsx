@@ -9,7 +9,7 @@ import {
 import { SummaryChart } from "../Charts/SummaryChart";
 
 /** A graph of averaged Iimi analysis sequence coverage */
-export function CondensedIimiCoverage({
+export function IimiCondensedCoverage({
     isolates,
 }: {
     isolates: IimiIsolate[];

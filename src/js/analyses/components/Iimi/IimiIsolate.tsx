@@ -23,7 +23,10 @@ export function IimiIsolate({ name, sequences }) {
                 {sorted.map((sequence) => (
                     <Box key={sequence.id}>
                         <p>
-                            <IimiDetectionTag result={sequence.result} />
+                            <IimiDetectionTag
+                                probability={sequence.probability}
+                                result={sequence.result}
+                            />
                         </p>
                         <CoverageChart
                             data={convertRleToCoverage(
