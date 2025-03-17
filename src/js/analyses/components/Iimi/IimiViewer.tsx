@@ -14,6 +14,8 @@ export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
 
     const [minimumProbability, setMinimumProbability] = React.useState(0.98);
 
+    console.log(minimumProbability);
+
     const itemsWithProbabilities = React.useMemo(() => {
         return items.map((item) => {
             const maxProbability = Math.max(
@@ -60,7 +62,11 @@ export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
             />
             <Accordion type="single" collapsible>
                 {hits.map((hit) => (
-                    <IimiOtu hit={hit} key={hit.id} />
+                    <IimiOtu
+                        hit={hit}
+                        key={hit.id}
+                        probability={hit.probability}
+                    />
                 ))}
             </Accordion>
         </>

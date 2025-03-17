@@ -23,18 +23,25 @@ const IimiAccordionTrigger = styled(AccordionTrigger)`
     }
 `;
 
+type IimiOtuProps = {
+    hit: IimiHit;
+    probability: number;
+};
+
 /** Collapsible results of an Iimi analysis for a single otu */
 export function IimiOtu({
-    hit: { id, name, result, isolates },
-}: {
-    hit: IimiHit;
-}) {
+    hit: { id, isolates, name, result },
+    probability,
+}: IimiOtuProps) {
     return (
         <AccordionScrollingItem value={id}>
             <IimiAccordionTrigger>
                 <div>
                     <h3>{name}</h3>
-                    <IimiDetectionTag result={result} />
+                    <IimiDetectionTag
+                        probability={probability}
+                        result={result}
+                    />
                 </div>
                 <IimiCondensedCoverage isolates={isolates} />
             </IimiAccordionTrigger>

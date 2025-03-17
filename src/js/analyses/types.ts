@@ -255,7 +255,7 @@ export type IimiSequence = {
     probability?: number;
 
     /** Whether the ML workflow determined this sequence was present in the sample*/
-    result: false;
+    result: boolean;
 
     /** regions of the sequence with high similarity between references */
     untrustworthy_ranges: UntrustworthyRange[];
@@ -283,5 +283,5 @@ export type IimiAnalysis = AnalysisMinimal & {
     results: {
         hits: IimiHit[];
     };
-    workflow: Workflows.iimi;
+    workflow: Workflows;
 };

@@ -1,4 +1,5 @@
 import { IimiViewer } from "@analyses/components/Iimi/IimiViewer";
+import { Workflows } from "@analyses/types";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof IimiViewer> = {
@@ -9,15 +10,24 @@ const meta: Meta<typeof IimiViewer> = {
 
 const detail = {
     id: "foo12345",
+    created_at: "2021-01-01T00:00:00.000000Z",
+    files: [],
+    index: {
+        id: "bar12345",
+        version: 1,
+    },
+    ready: true,
     results: {
         hits: [
             {
                 id: "cbb7c8d4",
+                abbreviation: "GFLV",
                 name: "Grapevine fanleaf virus",
                 result: true,
                 isolates: [
                     {
                         id: "igq7izqh",
+                        result: true,
                         sequences: [
                             {
                                 id: "cvuwr3r0",
@@ -1167,6 +1177,22 @@ const detail = {
                 ],
             },
         ],
+    },
+    reference: {
+        id: "789020ab",
+        data_type: "genome",
+        name: "Reference 1",
+    },
+    sample: {
+        id: "123456",
+        name: "Sample 1",
+    },
+    subtractions: null,
+    updated_at: "2021-09-29T14:00:00Z",
+    workflow: Workflows.iimi,
+    user: {
+        handle: "bob",
+        id: "200",
     },
 };
 
