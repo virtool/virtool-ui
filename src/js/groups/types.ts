@@ -1,8 +1,7 @@
-import { UserNested } from "../users/types";
-
 import { SearchResult } from "@/types/api";
+import { UserNested } from "@users/types";
 
-export type GroupMinimal = { id: string | number; name?: string };
+export type GroupMinimal = { id: number; name?: string };
 
 export type Group = GroupMinimal & {
     permissions: Permissions;

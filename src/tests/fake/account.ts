@@ -57,8 +57,8 @@ export function createFakeApiKey(props?: CreateFakeApiKeysArgs): APIKeyMinimal {
         {
             created_at: faker.date.past().toISOString(),
             groups: [createFakeGroupMinimal()],
-            id: faker.random.alphaNumeric(8),
-            name: faker.random.word(),
+            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+            name: faker.word.noun(),
             permissions: createFakePermissions({
                 cancel_job: true,
                 create_ref: true,
@@ -100,7 +100,7 @@ export function mockApiGetAPIKeys(apiKeys: APIKeyMinimal[]) {
 export function mockApiCreateAPIKey(name: string, permissions: Permissions) {
     const createApiKeyResponse = {
         groups: [],
-        id: faker.random.alphaNumeric(8),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         key: "testKey",
         name,
         permissions,

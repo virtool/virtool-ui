@@ -17,6 +17,7 @@ const UserGroupsList = styled(BoxGroup)`
 type UserGroupsType = {
     /** The groups associated with the user */
     memberGroups: GroupMinimal[];
+
     /** The unique user id */
     userId: string;
 };
@@ -32,7 +33,7 @@ export default function UserGroups({ memberGroups, userId }: UserGroupsType) {
         return <LoadingPlaceholder />;
     }
 
-    function handleEdit(groupId: string | number) {
+    function handleEdit(groupId: number) {
         mutation.mutate({
             userId,
             update: { groups: xor(map(memberGroups, "id"), [groupId]) },

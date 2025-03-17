@@ -36,15 +36,15 @@ export function createFakeSampleMinimal(
     overrides?: CreateFakeSampleMinimal,
 ): SampleMinimal {
     const defaultSampleMinimal = {
-        id: faker.random.alphaNumeric(8),
-        name: faker.random.word(),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        name: `${faker.word.noun()} ${faker.number.int()}`,
         created_at: faker.date.past().toISOString(),
-        host: faker.random.word(),
-        isolate: faker.random.word(),
+        host: faker.word.noun(),
+        isolate: faker.word.noun(),
         job: createFakeJobMinimal({ workflow: workflows.create_sample }),
         labels: [createFakeLabelNested()],
         library_type: LibraryType.normal,
-        notes: faker.random.word(),
+        notes: faker.lorem.lines(5),
         nuvs: faker.datatype.boolean(),
         pathoscope: faker.datatype.boolean(),
         ready: true,
@@ -69,12 +69,12 @@ export function createFakeSampleRead(
     overrides?: CreateFakeSampleReadProps,
 ): Read {
     const defaultRead = {
-        download_url: faker.random.word(),
-        id: faker.datatype.number(),
-        name: faker.random.word(),
-        name_on_disk: faker.random.word(),
-        sample: faker.random.word(),
-        size: faker.datatype.number(),
+        download_url: faker.word.noun(),
+        id: faker.number.int(),
+        name: faker.word.noun(),
+        name_on_disk: faker.word.noun(),
+        sample: faker.word.noun(),
+        size: faker.number.int(),
         upload: null,
         uploaded_at: faker.date.past().toISOString(),
     };
@@ -84,13 +84,13 @@ export function createFakeSampleRead(
 
 export function createFakeSampleQuality(): Quality {
     return {
-        bases: [times(6, () => faker.datatype.number())],
-        composition: [times(4, () => faker.datatype.number())],
-        count: faker.datatype.number(),
+        bases: [times(6, () => faker.number.int())],
+        composition: [times(4, () => faker.number.int())],
+        count: faker.number.int(),
         encoding: "Sanger / Illumina 1.9",
-        gc: faker.datatype.number(),
-        length: [faker.datatype.number(), faker.datatype.number()],
-        sequences: times(10, () => faker.datatype.number()),
+        gc: faker.number.int(),
+        length: [faker.number.int(), faker.number.int()],
+        sequences: times(10, () => faker.number.int()),
     };
 }
 
@@ -120,7 +120,7 @@ export function createFakeSample(overrides?: CreateFakeSample): Sample {
         group_write: faker.datatype.boolean(),
         hold: faker.datatype.boolean(),
         is_legacy: faker.datatype.boolean(),
-        locale: faker.random.word(),
+        locale: faker.location.country(),
         paired: faker.datatype.boolean(),
         quality: createFakeSampleQuality(),
         reads: [createFakeSampleRead()],

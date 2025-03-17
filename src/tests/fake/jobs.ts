@@ -21,7 +21,9 @@ type CreateJobNestedProps = {
 };
 
 export function createFakeJobNested(props?: CreateJobNestedProps) {
-    const defaultJobNested = { id: faker.random.alphaNumeric(8) };
+    const defaultJobNested = {
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+    };
 
     return merge(defaultJobNested, props);
 }
@@ -43,7 +45,7 @@ export function createFakeJobMinimal(
         ...createFakeJobNested(),
         archived: false,
         created_at: faker.date.past().toISOString(),
-        progress: faker.datatype.number(100),
+        progress: faker.number.int({ min: 0, max: 100 }),
         stage: "waiting",
         state: faker.helpers.arrayElement(jobStates) as JobState,
         user: createFakeUserNested(),

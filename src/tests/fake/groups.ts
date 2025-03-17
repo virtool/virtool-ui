@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
+import { Group, GroupMinimal, Permissions } from "@groups/types";
+import { UserNested } from "@users/types";
 import { merge } from "lodash-es";
 import nock from "nock";
-import { Group, GroupMinimal, Permissions } from "../../js/groups/types";
-import { UserNested } from "../../js/users/types";
 import { createFakePermissions } from "./permissions";
 
 type CreateFakeGroupMinimalProps = {
@@ -13,15 +13,15 @@ type CreateFakeGroupMinimalProps = {
 /**
  * Create a GroupMinimal object with fake data.
  *
- * @param {CreateFakeGroupMinimalProps} props values to override the default automatically generated values
+ * @param  props values to override the default automatically generated values
  * @returns {GroupMinimal} GroupMinimal object with fake data
  */
 export function createFakeGroupMinimal(
     props?: CreateFakeGroupMinimalProps,
 ): GroupMinimal {
     const defaultGroupMinimal = {
-        id: faker.random.alphaNumeric(8),
-        name: `${faker.random.word()}_group`,
+        id: faker.number.int(),
+        name: `${faker.person.jobType()}s`,
     };
 
     return merge(defaultGroupMinimal, props);

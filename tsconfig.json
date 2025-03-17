@@ -32,7 +32,6 @@
         },
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
-        "checkJs": false,
         "esModuleInterop": false,
         "isolatedModules": true,
         "jsx": "react",

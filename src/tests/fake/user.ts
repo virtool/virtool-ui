@@ -21,10 +21,10 @@ type CreateFakeUserNestedProps = {
 export function createFakeUserNested(
     props?: CreateFakeUserNestedProps,
 ): UserNested {
-    let { handle, id } = props || {};
+    const { handle, id } = props || {};
 
     return {
-        id: id || faker.random.alphaNumeric(8),
+        id: id || faker.string.alphanumeric({ casing: "lower", length: 8 }),
         handle: handle || faker.internet.userName(),
     };
 }
@@ -53,7 +53,7 @@ export function createFakeUser(props?: CreateFakeUserProps): User {
     primary_group = primary_group === undefined ? groups[0] : primary_group;
 
     const user = {
-        id: faker.random.alphaNumeric(8),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         handle: faker.internet.userName(),
         active: true,
         force_reset: false,

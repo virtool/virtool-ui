@@ -21,7 +21,7 @@ export function createFakeHistoryNested(): HistoryNested {
     return {
         created_at: faker.date.past().toISOString(),
         description: faker.lorem.lines(1),
-        id: faker.random.alphaNumeric(8),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         method_name: HistoryMethod.create,
         user: createFakeUserNested(),
     };
@@ -41,13 +41,13 @@ type CreateFakeOTUSequenceProps = {
  */
 export function createFakeOTUSequence(overrides?: CreateFakeOTUSequenceProps) {
     const sequence = {
-        accession: faker.random.word(),
-        definition: faker.random.word(),
-        host: faker.random.word(),
-        id: faker.random.alphaNumeric(8),
+        accession: faker.word.noun(),
+        definition: faker.word.noun(),
+        host: faker.word.noun(),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         remote: null,
         segment: null,
-        sequence: faker.random.word(),
+        sequence: faker.word.noun(),
         target: null,
     };
 
@@ -60,10 +60,10 @@ export function createFakeOTUSequence(overrides?: CreateFakeOTUSequenceProps) {
 export function createFakeOTUIsolate(): OTUIsolate {
     return {
         default: false,
-        id: faker.random.alphaNumeric(8),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         sequences: [createFakeOTUSequence()],
-        source_name: faker.random.word(),
-        source_type: faker.random.word(),
+        source_name: faker.word.noun(),
+        source_type: faker.word.noun(),
     };
 }
 
@@ -73,7 +73,7 @@ export function createFakeOTUIsolate(): OTUIsolate {
 export function createFakeOtuSegment(): OTUSegment {
     return {
         molecule: null,
-        name: faker.random.word(),
+        name: faker.word.noun(),
         required: false,
     };
 }
@@ -91,12 +91,12 @@ export function createFakeOTUMinimal(
     overrides?: CreateFakeOtuMinimalParams,
 ): OTUMinimal {
     const defaultOTUMinimal = {
-        abbreviation: faker.random.word(),
-        id: faker.random.alphaNumeric(8),
-        name: faker.random.word(),
+        abbreviation: `${faker.string.fromCharacters("AHJKYUIQWE", { min: 2, max: 4 })}V`,
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        name: faker.word.noun(),
         reference: createFakeReferenceNested(),
         verified: true,
-        version: faker.datatype.number(),
+        version: faker.number.int({ max: 10 }),
     };
 
     return assign(defaultOTUMinimal, overrides);
@@ -150,12 +150,12 @@ export function mockApiFindOtus(OTUMinimal: OTUMinimal[], refId: string) {
         .query(true)
         .reply(200, {
             documents: OTUMinimal,
-            modified_count: faker.datatype.number(),
-            found_count: faker.datatype.number(),
-            page: faker.datatype.number(),
-            page_count: faker.datatype.number(),
-            per_page: faker.datatype.number(),
-            total_count: faker.datatype.number(),
+            modified_count: faker.number.int(),
+            found_count: faker.number.int(),
+            page: faker.number.int(),
+            page_count: faker.number.int(),
+            per_page: faker.number.int(),
+            total_count: faker.number.int(),
         });
 }
 
@@ -227,7 +227,7 @@ export function mockApiCreateIsolate(
         })
         .reply(201, {
             default: faker.datatype.boolean(),
-            id: faker.random.alphaNumeric(8),
+            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
             sequences: [],
             source_name: sourceName,
             source_type: sourceType,

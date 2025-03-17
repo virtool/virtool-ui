@@ -1,9 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { merge, pick } from "lodash";
-import { assign } from "lodash-es";
-import nock from "nock";
-import { JobMinimal } from "../../js/jobs/types";
-import { SampleNested } from "../../js/samples/types";
+import { JobMinimal } from "@jobs/types";
+import { SampleNested } from "@samples/types";
 import {
     NucleotideComposition,
     Subtraction,
@@ -11,8 +8,11 @@ import {
     SubtractionMinimal,
     SubtractionShortlist,
     SubtractionUpload,
-} from "../../js/subtraction/types";
-import { UserNested } from "../../js/users/types";
+} from "@subtraction/types";
+import { UserNested } from "@users/types";
+import { merge, pick } from "lodash";
+import { assign } from "lodash-es";
+import nock from "nock";
 import { createFakeUserNested } from "./user";
 
 /**
@@ -20,11 +20,11 @@ import { createFakeUserNested } from "./user";
  */
 export function createFakeSubtractionFile(): SubtractionFile {
     return {
-        download_url: faker.random.word(),
-        id: faker.datatype.number(),
-        name: faker.random.word(),
-        size: faker.datatype.number(),
-        subtraction: faker.random.alphaNumeric(8),
+        download_url: faker.internet.url(),
+        id: faker.number.int(),
+        name: `${faker.word.noun()}s.fa`,
+        size: faker.number.int({ min: 20000 }),
+        subtraction: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         type: "fasta",
     };
 }
@@ -41,8 +41,8 @@ export function createFakeSubtractionNested(
     props?: CreateFakeSubtractionNestedProps,
 ) {
     const defaultSubtractionNested = {
-        id: faker.random.alphaNumeric(8),
-        name: faker.random.word(),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+        name: faker.word.noun(),
     };
 
     return merge(defaultSubtractionNested, props);
@@ -66,11 +66,14 @@ export function createFakeSubtractionMinimal(
 ): SubtractionMinimal {
     const defaultSubtractionMinimal = {
         ...createFakeSubtractionNested(),
-        count: faker.datatype.number(),
+        count: faker.number.int({ max: 15 }),
         created_at: faker.date.past().toISOString(),
-        file: { id: faker.random.alphaNumeric(8), name: faker.random.word() },
-        job: {},
-        nickname: faker.random.word(),
+        file: {
+            id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
+            name: `${faker.word.noun()}s.fa`,
+        },
+        job: null,
+        nickname: faker.word.noun(),
         ready: true,
         user: createFakeUserNested(),
     };

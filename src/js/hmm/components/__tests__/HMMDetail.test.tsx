@@ -3,11 +3,11 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import { createFakeHMM, mockApiGetHmmDetail } from "../../../../tests/fake/hmm";
+import { createFakeHmm, mockApiGetHmmDetail } from "../../../../tests/fake/hmm";
 import HMM from "../HMM";
 
 describe("<HMMDetail />", () => {
-    const hmmDetail = createFakeHMM();
+    const hmmDetail = createFakeHmm();
     let path;
 
     beforeEach(() => {

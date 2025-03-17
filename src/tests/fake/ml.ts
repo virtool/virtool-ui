@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
+import { MLModel, MLModelMinimal, MLModelRelease } from "@ml/types";
 import { merge } from "lodash";
 import nock from "nock";
-import { MLModel, MLModelMinimal, MLModelRelease } from "../../js/ml/types";
 
 /**
  * Create a fake ML model release object
@@ -9,7 +9,7 @@ import { MLModel, MLModelMinimal, MLModelRelease } from "../../js/ml/types";
  * @param overrides - optional properties for creating a fake ML models with specific values
  */
 export function createFakeMLModelRelease(): MLModelRelease {
-    const id = faker.datatype.number(100);
+    const id = faker.number.int(100);
 
     return {
         id,
@@ -67,13 +67,12 @@ export function createFakeMLModel(
 /**
  * Sets up a mocked API route for fetching a list of ML models
  *
- * @param MLModels - The list of ML models to be returned from the mocked API call
- * @param last_synced_at - The date the models were last synced with virtool.ca
+ * @param mlModels - The list of ML models to be returned from the mocked API call
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetModels(MLModels: MLModelMinimal[]) {
+export function mockApiGetModels(mlModels: MLModelMinimal[]) {
     return nock("http://localhost").get("/api/ml").reply(200, {
-        items: MLModels,
+        items: mlModels,
         last_synced_at: faker.date.recent().toISOString(),
     });
 }

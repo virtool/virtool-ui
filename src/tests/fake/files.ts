@@ -21,32 +21,29 @@ type CreateFakeFileProps = {
 };
 
 /**
- * Create a File object with fake data
- *
- * @param {CreateFakeFileProps} props values to override the default automatically generated values
- * @returns {File} a File object with fake data
+ * Create a File object with fake data.
  */
 export function createFakeFile(props?: CreateFakeFileProps): File {
     let { name, name_on_disk } = props || {};
-    name =
-        name === undefined ? `sample${faker.datatype.number()}.fastq.gz` : name;
+
+    name = name === undefined ? `sample_${faker.number.int()}.fastq.gz` : name;
     name_on_disk =
         name_on_disk === undefined
-            ? `${faker.datatype.number()}-${name}`
+            ? `${faker.number.int()}-${name}`
             : name_on_disk;
 
     const defaultFile = {
-        id: faker.datatype.number(),
-        created_at: faker.date.past(),
+        id: faker.number.int(),
+        created_at: faker.date.past().toISOString(),
         name,
         name_on_disk: name_on_disk,
         ready: true,
         removed: false,
         removed_at: undefined,
         reserved: false,
-        size: faker.datatype.number(),
+        size: faker.number.int(),
         type: FileType.reads,
-        uploaded_at: faker.date.past(),
+        uploaded_at: faker.date.past().toISOString(),
         user: createFakeUserNested(),
     };
 
@@ -60,7 +57,7 @@ export function createFakeFile(props?: CreateFakeFileProps): File {
  * @param {boolean} query whether to include query parameters in the request
  * @returns {File} a File object with fake data
  */
-export function mockApiListFiles(files: Array<File>, query?: boolean) {
+export function mockApiListFiles(files: File[], query?: boolean) {
     return nock("http://localhost")
         .get("/api/uploads")
         .query(query || true)

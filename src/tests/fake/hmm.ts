@@ -1,20 +1,20 @@
 import { faker } from "@faker-js/faker";
+import { HMM, HMMSearchResults } from "@hmm/types";
 import { assign, times, toString } from "lodash-es";
 import nock from "nock";
-import { HMM, HMMSearchResults } from "../../js/hmm/types";
 
 /**
  * Create a fake HMM minimal
  */
-export function createFakeHMMMinimal() {
+export function createFakeHmmMinimal() {
     return {
-        cluster: faker.datatype.number(),
-        count: faker.datatype.number(),
+        cluster: faker.number.int(),
+        count: faker.number.int(),
         families: {
-            None: faker.datatype.number(),
-            Papillomaviridae: faker.datatype.number(),
+            None: faker.number.int(),
+            Papillomaviridae: faker.number.int(),
         },
-        id: faker.random.alphaNumeric(9, { casing: "lower" }),
+        id: faker.string.alphanumeric({ casing: "lower", length: 8 }),
         names: [faker.name.lastName()],
     };
 }
@@ -22,29 +22,28 @@ export function createFakeHMMMinimal() {
 /**
  * Create a fake HMM
  */
-export function createFakeHMM() {
+export function createFakeHmm() {
     function entries() {
         return {
-            accession: faker.random.word(),
-            gi: faker.random.word(),
-            name: faker.random.word(),
-            organism: faker.random.word(),
+            accession: `${faker.word.noun()}.1`,
+            gi: faker.number.int({ min: 10000, max: 100000 }).toString(),
+            name: faker.word.noun(),
+            organism: faker.animal.type(),
         };
     }
 
     return {
-        ...createFakeHMMMinimal(),
+        ...createFakeHmmMinimal(),
         entries: times(2, () => entries()),
         genera: {
-            Curtovirus: faker.datatype.number(),
-            Begomovirus: faker.datatype.number(),
+            Curtovirus: faker.number.int(),
+            Begomovirus: faker.number.int(),
         },
-        length: faker.datatype.number(),
-        mean_entropy: faker.datatype.float({ min: 0, max: 1, precision: 0.01 }),
-        total_entropy: faker.datatype.float({
+        length: faker.number.int(),
+        mean_entropy: faker.number.float({ min: 0, max: 1 }),
+        total_entropy: faker.number.float({
             min: 100,
             max: 200,
-            precision: 0.01,
         }),
     };
 }
@@ -74,13 +73,13 @@ export function createFakeHMMSearchResults(
     };
 
     const defaultHMMSearchResult = {
-        documents: times(5, () => createFakeHMMMinimal()),
+        documents: times(5, () => createFakeHmmMinimal()),
         status: defaultStatus,
-        found_count: faker.datatype.number(),
-        page: faker.datatype.number(),
-        page_count: faker.datatype.number(),
-        per_page: faker.datatype.number(),
-        total_count: faker.datatype.number(),
+        found_count: faker.number.int(),
+        page: faker.number.int(),
+        page_count: faker.number.int(),
+        per_page: faker.number.int(),
+        total_count: faker.number.int(),
     };
 
     return assign(defaultHMMSearchResult, overrides);

@@ -38,6 +38,7 @@ export type SubtractionFile = {
 export type SubtractionNested = {
     /** The unique identifier for the subtraction */
     id: string;
+
     /** The name of the subtraction */
     name: string;
 };
@@ -52,16 +53,22 @@ export type SubtractionUpload = {
 export type SubtractionMinimal = SubtractionNested & {
     /** The count associated with the subtraction */
     count?: number;
+
     /** When the subtraction was created */
     created_at: string;
+
     /** The uploaded file */
     file: SubtractionUpload;
+
     /** The job associated with the subtraction */
     job?: JobMinimal;
+
     /** The subtraction nickname */
     nickname: string;
+
     /**  Whether the subtraction is complete and ready to view */
     ready: boolean;
+
     /** The user who created the subtraction */
     user?: UserNested;
 };
@@ -70,13 +77,22 @@ export type SubtractionMinimal = SubtractionNested & {
 export type Subtraction = SubtractionMinimal & {
     /** Data files available to workflows */
     files: Array<SubtractionFile>;
+
+    /** The ATGC ratios in the subtraction genome */
     gc?: NucleotideComposition;
+
     /** Samples linked to subtraction */
     linked_samples: Array<SampleNested>;
 };
 
 /** A subtraction with reduced information */
 export type SubtractionShortlist = SubtractionNested & {
+    ready: boolean;
+    isDefault?: boolean;
+};
+
+/** A subtraction as an option for an analysis. */
+export type SubtractionOption = SubtractionNested & {
     ready: boolean;
     isDefault?: boolean;
 };
