@@ -238,6 +238,7 @@ export type UntrustworthyRange = [number, number];
 export type IimiCoverage = {
     /** The length in base-pairs of the corresponding coverage depth*/
     lengths: number[];
+
     /** The coverage depths */
     values: number[];
 };
@@ -246,10 +247,16 @@ export type IimiCoverage = {
 export type IimiSequence = {
     id: string;
     coverage: IimiCoverage;
+
     /** The total base pairs of the sequence*/
     length: number;
+
+    /** The probability that the sequence is present in the sample */
+    probability?: number;
+
     /** Whether the ML workflow determined this sequence was present in the sample*/
-    result: false;
+    result: boolean;
+
     /** regions of the sequence with high similarity between references */
     untrustworthy_ranges: UntrustworthyRange[];
 };
@@ -276,5 +283,5 @@ export type IimiAnalysis = AnalysisMinimal & {
     results: {
         hits: IimiHit[];
     };
-    workflow: Workflows.iimi;
+    workflow: Workflows;
 };

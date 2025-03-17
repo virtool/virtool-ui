@@ -1,40 +1,72 @@
-import { IimiAnalysis } from "@analyses/types";
+import { useFuse } from "@/fuse";
+import IimiToolbar from "@analyses/components/Iimi/IimiToolbar";
+import { IimiAnalysis, IimiHit } from "@analyses/types";
 import Accordion from "@base/Accordion";
 import Box from "@base/Box";
-import BoxTitle from "@base/BoxTitle";
-import { sortBy } from "lodash-es";
+import Icon from "@base/Icon";
 import React from "react";
-import styled from "styled-components";
-import { IimiOTU } from "./IimiOTU";
-
-const ImportantList = styled.ul`
-    max-width: 600px;
-`;
+import { IimiOtu } from "./IimiOtu";
 
 export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
-    const hits = sortBy(detail.results.hits, (hit) => !hit.result);
+    const [items, term, setTerm] = useFuse<IimiHit>(detail.results.hits, [
+        "name",
+    ]);
+
+    const [minimumProbability, setMinimumProbability] = React.useState(0.98);
+
+    console.log(minimumProbability);
+
+    const itemsWithProbabilities = React.useMemo(() => {
+        return items.map((item) => {
+            const maxProbability = Math.max(
+                ...item.isolates.flatMap((isolate) =>
+                    isolate.sequences.map(
+                        (sequence) => sequence.probability || 0,
+                    ),
+                ),
+            );
+
+            return {
+                ...item,
+                probability: maxProbability > 0 ? maxProbability : null,
+            };
+        });
+    }, [items]);
+
+    const hits = itemsWithProbabilities.filter(
+        (item) => item.probability && item.probability >= minimumProbability,
+    );
 
     return (
         <>
-            <Box>
-                <BoxTitle>Important</BoxTitle>
-                <ImportantList>
-                    <li>Iimi is an experimental workflow.</li>
+            <Box className="bg-amber-100 border-amber-300 text-amber-900">
+                <header>
+                    <h5 className="flex items-center gap-2 text-lg">
+                        <Icon name="exclamation-circle" />
+                        Iimi is an experimental workflow.
+                    </h5>
+                </header>
+                <ul className="list-disc list-inside pl-4">
                     <li>We do not guarantee the accuracy of the results.</li>
                     <li>
                         This analysis could become inaccessbile at any time as
                         the workflow changes.
                     </li>
-                    <li>
-                        This analysis viewer is a work in progress. Some
-                        features may not be present as we continue to improve
-                        the viewer.
-                    </li>
-                </ImportantList>
+                </ul>
             </Box>
+            <IimiToolbar
+                minimumProbability={minimumProbability}
+                term={term}
+                setMinimumProbability={setMinimumProbability}
+                setTerm={setTerm}
+            />
             <Accordion type="single" collapsible>
                 {hits.map((hit) => (
-                    <IimiOTU hit={hit} key={hit.id} />
+                    <IimiOtu
+                        hit={hit}
+                        key={hit.id}
+                        probability={hit.probability}
+                    />
                 ))}
             </Accordion>
         </>
