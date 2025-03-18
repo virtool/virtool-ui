@@ -1,32 +1,37 @@
-import { useUrlSearchParam } from "@/hooks";
-import { Workflows } from "@analyses/types";
+import { useDialogParam } from "@/hooks";
+import { cn } from "@/utils";
+import CreateIimi from "@analyses/components/Create/CreateIimi";
+import CreateNuvs from "@analyses/components/Create/CreateNuvs";
+import CreatePathoscope from "@analyses/components/Create/CreatePathoscope";
 import Dialog from "@base/Dialog";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
-import { HMMSearchResults } from "@hmm/types";
-import { useListIndexes } from "@indexes/queries";
-import { useFindModels } from "@ml/queries";
+import { HmmSearchResults } from "@hmm/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
-import { useFetchSample } from "@samples/queries";
-import { useFetchSubtractionsShortlist } from "@subtraction/queries";
-import { groupBy, includes, keysIn, map, maxBy } from "lodash-es";
+import { Tabs } from "radix-ui";
 import React from "react";
-import { useCreateAnalysis } from "../../queries";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
-import {
-    CreateAnalysisForm,
-    CreateAnalysisFormValues,
-} from "./CreateAnalysisForm";
-import { WorkflowSelector } from "./WorkflowSelector";
 import { getCompatibleWorkflows } from "./workflows";
 
 type CreateAnalysisProps = {
     /** The HMM search results */
-    hmms: HMMSearchResults;
+    hmms: HmmSearchResults;
+
     /** The id of the sample being used */
     sampleId: string;
 };
+
+function Content({ children, value }) {
+    return (
+        <Tabs.Content
+            className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            value={value}
+        >
+            {children}
+        </Tabs.Content>
+    );
+}
 
 /**
  * Dialog for creating an analysis
@@ -35,102 +40,84 @@ export default function CreateAnalysis({
     hmms,
     sampleId,
 }: CreateAnalysisProps) {
-    const {
-        value: createAnalysisType,
-        setValue: setCreateAnalysisType,
-        unsetValue: unsetCreateAnalysisType,
-    } = useUrlSearchParam<string>("createAnalysisType");
-
-    const createAnalysis = useCreateAnalysis();
-
-    const {
-        data: subtractionShortlist,
-        isPending: isPendingSubtractionShortlist,
-    } = useFetchSubtractionsShortlist(true);
-
-    const { data: sample, isPending: isPendingSample } =
-        useFetchSample(sampleId);
-
-    const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
-
-    const { data: mlModels, isPending: isPendingMlModels } = useFindModels();
-
-    if (
-        isPendingMlModels ||
-        isPendingSubtractionShortlist ||
-        isPendingSample ||
-        isPendingIndexes
-    ) {
-        return null;
-    }
-
-    const defaultSubtractions = sample.subtractions.map(
-        (subtraction) => subtraction.id,
-    );
-
-    const subtractionOptions = map(keysIn(subtractionShortlist), (key) => {
-        return {
-            ...subtractionShortlist[key],
-            isDefault: includes(
-                defaultSubtractions,
-                subtractionShortlist[key].id,
-            ),
-        };
-    });
-
-    const compatibleIndexes = map(groupBy(indexes, "reference.id"), (group) =>
-        maxBy(group, "version"),
-    );
+    const { open, setOpen } = useDialogParam("openCreateAnalysis");
 
     const compatibleWorkflows = getCompatibleWorkflows(
         Boolean(hmms.total_count),
     );
 
-    function onSubmit(props: CreateAnalysisFormValues) {
-        const { index, subtractions, workflow, mlModel } = props;
-        const refId = compatibleIndexes.find(
-            (compatibleIndex) => compatibleIndex.reference.name === index,
-        )?.reference.id;
-
-        createAnalysis.mutate({
-            refId,
-            subtractionIds: subtractions,
-            sampleId,
-            workflow,
-            mlModel,
-        });
-    }
-
     function onOpenChange(open) {
         if (!open) {
-            unsetCreateAnalysisType();
+            setOpen(false);
         }
     }
 
     return (
-        <Dialog
-            open={includes(Workflows, createAnalysisType)}
-            onOpenChange={onOpenChange}
-        >
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
                     <DialogTitle>Analyze</DialogTitle>
                     <HMMAlert installed={hmms.status.task?.complete} />
-                    <WorkflowSelector
-                        onSelect={setCreateAnalysisType}
-                        selected={createAnalysisType}
-                        workflows={compatibleWorkflows}
-                    />
-                    <CreateAnalysisForm
-                        compatibleIndexes={compatibleIndexes}
-                        defaultSubtractions={defaultSubtractions}
-                        mlModels={mlModels.items}
-                        onSubmit={onSubmit}
-                        sampleCount={1}
-                        subtractions={subtractionOptions}
-                        workflow={Workflows[createAnalysisType]}
-                    />
+                    <Tabs.Root defaultValue="pathoscope_bowtie">
+                        <Tabs.List
+                            className={cn(
+                                "bg-gray-100",
+                                "flex",
+                                "h-12",
+                                "items-center",
+                                "justify-center",
+                                "p-1",
+                                "rounded-lg",
+                                "inset-1",
+                                "text-lg",
+                                "text-muted-foreground",
+                            )}
+                        >
+                            {compatibleWorkflows.map((workflow) => (
+                                <Tabs.Trigger
+                                    className={cn(
+                                        "font-medium",
+                                        "inline-flex",
+                                        "items-center",
+                                        "justify-center",
+
+                                        "px-3",
+                                        "py-1",
+                                        "rounded-md",
+                                        "ring-offset-background",
+                                        "transition-all",
+                                        "focus-visible:outline-none",
+                                        "focus-visible:ring-2",
+                                        "focus-visible:ring-ring",
+                                        "focus-visible:ring-offset-2",
+                                        "disabled:pointer-events-none",
+                                        "disabled:opacity-50",
+                                        "data-[state=active]:bg-white",
+                                        "data-[state=active]:text-foreground",
+                                        "data-[state=active]:shadow",
+                                        "whitespace-nowrap",
+                                    )}
+                                    key={workflow.id}
+                                    value={workflow.id}
+                                >
+                                    {workflow.name}
+                                </Tabs.Trigger>
+                            ))}
+                        </Tabs.List>
+                        <Content value="iimi">
+                            <CreateIimi sampleCount={1} sampleId={sampleId} />
+                        </Content>
+                        <Content value="nuvs">
+                            <CreateNuvs sampleCount={1} sampleId={sampleId} />
+                        </Content>
+                        <Content value="pathoscope_bowtie">
+                            <CreatePathoscope
+                                sampleCount={1}
+                                sampleId={sampleId}
+                            />
+                        </Content>
+                    </Tabs.Root>
                 </CreateAnalysisDialogContent>
             </DialogPortal>
         </Dialog>

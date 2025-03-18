@@ -1,4 +1,3 @@
-import { useListHmms } from "@/hmm/queries";
 import { useListSearchParam, usePageParam, useUrlSearchParam } from "@/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
@@ -8,13 +7,13 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
-import { useFindModels } from "@ml/queries";
-import { useFetchSubtractionsShortlist } from "@subtraction/queries";
 import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
 import { map } from "lodash-es/lodash";
 import React, { useState } from "react";
 import styled from "styled-components";
-import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
+// import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
+import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
+import SelectionContext from "@samples/components/SelectionContext";
 import { useListSamples } from "../queries";
 import { SampleMinimal } from "../types";
 import { SampleFilters } from "./Filter/SampleFilters";
@@ -57,24 +56,11 @@ export default function SamplesList() {
         filterWorkflows,
     );
     const { data: labels, isPending: isPendingLabels } = useFetchLabels();
-    const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
     const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
-    const {
-        data: subtractionShortlist,
-        isPending: isPendingSubtractionShortlist,
-    } = useFetchSubtractionsShortlist(true);
-    const { data: mlModels, isPending: isPendingMLModels } = useFindModels();
 
     const [selected, setSelected] = useState([]);
 
-    if (
-        isPendingSamples ||
-        isPendingLabels ||
-        isPendingHmms ||
-        isPendingIndexes ||
-        isPendingSubtractionShortlist ||
-        isPendingMLModels
-    ) {
+    if (isPendingSamples || isPendingLabels || isPendingIndexes) {
         return <LoadingPlaceholder />;
     }
 
@@ -107,18 +93,14 @@ export default function SamplesList() {
     }
 
     return (
-        <>
-            <QuickAnalysis
-                hmms={hmms}
-                indexes={filteredIndexes}
-                mlModels={mlModels}
+        <SelectionContext.Provider>
+            <QuickAnalyze
                 onClear={() => setSelected([])}
                 samples={intersectionWith(
                     documents,
                     selected,
                     (document, id) => document.id === id,
                 )}
-                subtractionOptions={subtractionShortlist}
             />
             <StyledSamplesList>
                 <SamplesListHeader>
@@ -171,6 +153,6 @@ export default function SamplesList() {
                     />
                 )}
             </StyledSamplesList>
-        </>
+        </SelectionContext.Provider>
     );
 }

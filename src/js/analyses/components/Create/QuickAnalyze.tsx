@@ -1,27 +1,33 @@
-import { useUrlSearchParam } from "@/hooks";
-import { Workflows } from "@analyses/types";
+import { useDialogParam } from "@/hooks";
+import { cn } from "@/utils";
+import CreateIimi from "@analyses/components/Create/CreateIimi";
+import CreateNuvs from "@analyses/components/Create/CreateNuvs";
+import CreatePathoscope from "@analyses/components/Create/CreatePathoscope";
 import Dialog from "@base/Dialog";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
-import { HMMSearchResults } from "@hmm/types";
-import { IndexMinimal } from "@indexes/types";
-import { MLModelSearchResult } from "@ml/types";
+import { HmmSearchResults } from "@hmm/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
-import { SubtractionShortlist } from "@subtraction/types";
-import { forEach, includes } from "lodash-es";
+import { SubtractionOption } from "@subtraction/types";
+import { Tabs } from "radix-ui";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useCreateAnalysis } from "../../queries";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
-import {
-    CreateAnalysisForm,
-    CreateAnalysisFormValues,
-} from "./CreateAnalysisForm";
 import { SelectedSamples } from "./SelectedSamples";
-import { WorkflowSelector } from "./WorkflowSelector";
 import { getCompatibleWorkflows } from "./workflows";
+
+function Content({ children, value }) {
+    return (
+        <Tabs.Content
+            className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            value={value}
+        >
+            {children}
+        </Tabs.Content>
+    );
+}
 
 const QuickAnalyzeSelected = styled.span`
     align-self: center;
@@ -30,13 +36,7 @@ const QuickAnalyzeSelected = styled.span`
 
 type QuickAnalyzeProps = {
     /** The HMM search results */
-    hmms: HMMSearchResults;
-
-    /** A list of indexes with the minimal data */
-    indexes: IndexMinimal[];
-
-    /** The ML Model search results */
-    mlModels: MLModelSearchResult;
+    hmms: HmmSearchResults;
 
     /** A callback function to clear selected samples */
     onClear: () => void;
@@ -45,74 +45,26 @@ type QuickAnalyzeProps = {
     samples: SampleMinimal[];
 
     /** A shortlist of ready subtractions */
-    subtractionOptions: SubtractionShortlist[];
+    subtractionOptions: SubtractionOption[];
 };
 
 /**
  * A form for triggering quick analyses on selected samples
  */
-export default function QuickAnalyze({
-    hmms,
-    indexes,
-    mlModels,
-    onClear,
-    samples,
-    subtractionOptions,
-}: QuickAnalyzeProps) {
-    const {
-        value: quickAnalysisType,
-        setValue: setQuickAnalysisType,
-        unsetValue: unsetQuickAnalysisType,
-    } = useUrlSearchParam<string>("quickAnalysisType");
-
-    const createAnalysis = useCreateAnalysis();
-
-    function onHide() {
-        unsetQuickAnalysisType();
-    }
+export default function QuickAnalyze({ hmms, samples }: QuickAnalyzeProps) {
+    const { open, setOpen } = useDialogParam("openQuickAnalysis");
 
     // The dialog should close when all selected samples have been analyzed and deselected.
     useEffect(() => {
-        if (quickAnalysisType && samples.length === 0) {
-            onHide();
+        if (samples.length === 0) {
+            setOpen(false);
         }
-    }, [samples.length, quickAnalysisType]);
+    }, [samples, setOpen]);
 
-    function getReferenceId(selectedIndex: string) {
-        return indexes.find((index) => index.reference.name === selectedIndex)
-            ?.reference.id;
-    }
-
-    function handleSubmit({
-        index,
-        subtractions,
-        workflow,
-        mlModel,
-    }: CreateAnalysisFormValues) {
-        const refId = getReferenceId(index);
-
-        forEach(samples, ({ id }) => {
-            createAnalysis.mutate({
-                refId,
-                sampleId: id,
-                subtractionIds: subtractions,
-                mlModel,
-                workflow,
-            });
-        });
-        onClear();
-        onHide();
-    }
-
-    const compatibleWorkflows = getCompatibleWorkflows(
-        Boolean(hmms.total_count),
-    );
+    const compatibleWorkflows = getCompatibleWorkflows(hmms.total_count > 0);
 
     return (
-        <Dialog
-            open={includes(Workflows, quickAnalysisType)}
-            onOpenChange={() => onHide()}
-        >
+        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
             <DialogPortal>
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
@@ -123,20 +75,65 @@ export default function QuickAnalyze({
                     </QuickAnalyzeSelected>
                     <SelectedSamples samples={samples} />
                     <HMMAlert installed={hmms.status.task?.complete} />
-                    <WorkflowSelector
-                        onSelect={setQuickAnalysisType}
-                        selected={quickAnalysisType}
-                        workflows={compatibleWorkflows}
-                    />
-                    <CreateAnalysisForm
-                        compatibleIndexes={indexes}
-                        defaultSubtractions={[]}
-                        mlModels={mlModels.items}
-                        onSubmit={handleSubmit}
-                        sampleCount={samples.length}
-                        subtractions={subtractionOptions}
-                        workflow={Workflows[quickAnalysisType]}
-                    />
+                    <Tabs.Root defaultValue="pathoscope_bowtie">
+                        <Tabs.List
+                            className={cn(
+                                "bg-gray-100",
+                                "flex",
+                                "h-12",
+                                "items-center",
+                                "justify-center",
+                                "p-1",
+                                "rounded-lg",
+                                "inset-1",
+                                "text-lg",
+                                "text-muted-foreground",
+                            )}
+                        >
+                            {compatibleWorkflows.map((workflow) => (
+                                <Tabs.Trigger
+                                    className={cn(
+                                        "font-medium",
+                                        "inline-flex",
+                                        "items-center",
+                                        "justify-center",
+
+                                        "px-3",
+                                        "py-1",
+                                        "rounded-md",
+                                        "ring-offset-background",
+                                        "transition-all",
+                                        "focus-visible:outline-none",
+                                        "focus-visible:ring-2",
+                                        "focus-visible:ring-ring",
+                                        "focus-visible:ring-offset-2",
+                                        "disabled:pointer-events-none",
+                                        "disabled:opacity-50",
+                                        "data-[state=active]:bg-white",
+                                        "data-[state=active]:text-foreground",
+                                        "data-[state=active]:shadow",
+                                        "whitespace-nowrap",
+                                    )}
+                                    key={workflow.id}
+                                    value={workflow.id}
+                                >
+                                    {workflow.name}
+                                </Tabs.Trigger>
+                            ))}
+                        </Tabs.List>{" "}
+                        <Content value="iimi">
+                            <CreateIimi sampleCount={1} sampleId={sampleId} />
+                        </Content>
+                        <Content value="nuvs">
+                            <CreateNuvs sampleCount={1} sampleId={sampleId} />
+                        </Content>
+                        <Content value="pathoscope_bowtie">
+                            <CreatePathoscope
+                                sampleCount={1}
+                                sampleId={sampleId}
+                            />
+                        </Content>
+                    </Tabs.Root>
                 </CreateAnalysisDialogContent>
             </DialogPortal>
         </Dialog>

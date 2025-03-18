@@ -96,7 +96,7 @@ export function useGetAnalysis(analysisId: string) {
 
 export type CreateAnalysisParams = {
     mlModel?: string;
-    refId: string;
+    refId?: string;
     sampleId: string;
     subtractionIds?: string[];
     workflow: string;
@@ -121,33 +121,12 @@ export function useCreateAnalysis() {
 }
 
 /**
- * Initializes a mutator for removing an analysis
- *
- * @param analysisId - The id of the analysis to remove
- * @returns A mutator for removing an analysis
- */
-export function useSetAnalysis(analysisId: string) {
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation<null, unknown, { analysisId: string }>({
-        mutationFn: ({ analysisId }) => removeAnalysis(analysisId),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: analysesQueryKeys.lists(),
-            });
-        },
-    });
-
-    return () => mutation.mutate({ analysisId });
-}
-
-/**
  * Initializes a mutator for installing blast information for a sequence
  *
  * @param analysisId - The id of the analysis the sequence belongs to
  * @returns A mutator for installing the blast information
  */
-export function useBlastNuVs(analysisId: string) {
+export function useBlastNuvs(analysisId: string) {
     const queryClient = useQueryClient();
 
     return useMutation<null, unknown, { sequenceIndex: number }>({

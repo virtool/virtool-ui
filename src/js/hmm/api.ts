@@ -4,7 +4,7 @@
  * @module hmm/api
  */
 import { apiClient } from "@/api";
-import { HMM, HMMInstalled, HMMSearchResults } from "./types";
+import { HMM, HMMInstalled, HmmSearchResults } from "./types";
 
 /**
  * Fetch a page of HMM search results from the API.
@@ -54,7 +54,7 @@ export function listHmms(
     page: number,
     per_page: number,
     term: string,
-): Promise<HMMSearchResults> {
+): Promise<HmmSearchResults> {
     return apiClient
         .get("/hmms")
         .query({ page, per_page, find: term })

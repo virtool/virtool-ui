@@ -1,5 +1,5 @@
 import { NuvsBlastResults } from "@analyses/components/NuVs/NuvsBlastResults";
-import { useBlastNuVs } from "@analyses/queries";
+import { useBlastNuvs } from "@analyses/queries";
 import { FormattedNuvsHit } from "@analyses/types";
 import Alert from "@base/Alert";
 import Box from "@base/Box";
@@ -21,7 +21,7 @@ type NuVsBLASTProps = {
  */
 export default function NuVsBLAST({ analysisId, hit }: NuVsBLASTProps) {
     const { blast, index } = hit;
-    const mutation = useBlastNuVs(analysisId);
+    const mutation = useBlastNuvs(analysisId);
 
     function handleBlast() {
         mutation.mutate({ sequenceIndex: index });

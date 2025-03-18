@@ -83,8 +83,8 @@ export function useFetchIndex(indexId: string) {
  */
 export function useFetchUnbuiltChanges(refId: string) {
     return useQuery<UnbuiltChangesSearchResults>({
-        queryKey: indexQueryKeys.detail(refId),
         queryFn: () => getUnbuiltChanges(refId),
+        queryKey: indexQueryKeys.detail(refId),
     });
 }
 

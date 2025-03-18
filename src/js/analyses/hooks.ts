@@ -1,6 +1,11 @@
 import { createFuse } from "@/fuse";
 import { useUrlSearchParam } from "@/hooks";
-import { find, map, reject, sortBy } from "lodash-es/lodash";
+import { useListIndexes } from "@indexes/queries";
+import { IndexMinimal } from "@indexes/types";
+import { useFetchSample } from "@samples/queries";
+import { useFetchSubtractionsShortlist } from "@subtraction/queries";
+import { SubtractionOption } from "@subtraction/types";
+import { find, groupBy, map, maxBy, reject, sortBy } from "lodash-es/lodash";
 import { useMemo } from "react";
 import { useSearch } from "wouter";
 
@@ -79,4 +84,68 @@ export function useGetActiveHit(matches) {
 
     setActiveHit(matches[0].id);
     return matches[0] || null;
+}
+
+type UseCompatibleIndexesResult = {
+    indexes: IndexMinimal[];
+    isPending: boolean;
+};
+
+export function useCompatibleIndexes(): UseCompatibleIndexesResult {
+    const { data, isPending } = useListIndexes(true);
+
+    const indexes = map(groupBy(data, "reference.id"), (group) =>
+        maxBy(group, "version"),
+    );
+
+    return { indexes, isPending };
+}
+
+type UseSubtractionOptionsResult = {
+    defaultSubtractions: SubtractionOption[];
+    subtractions: SubtractionOption[];
+    isPending: boolean;
+};
+
+export function useSubtractionOptions(
+    sampleId: string,
+): UseSubtractionOptionsResult {
+    const {
+        data: subtractionShortlist,
+        isPending: isPendingSubtractionShortlist,
+    } = useFetchSubtractionsShortlist(true);
+
+    const { data: sample, isPending: isPendingSample } =
+        useFetchSample(sampleId);
+
+    if (isPendingSample || isPendingSubtractionShortlist) {
+        return {
+            defaultSubtractions: [],
+            subtractions: [],
+            isPending: true,
+        };
+    }
+
+    const defaultSubtractionIds = sample.subtractions.map(
+        (subtraction) => subtraction.id,
+    );
+
+    const subtractions = subtractionShortlist
+        .map((subtraction) => {
+            return {
+                ...subtraction,
+                isDefault: defaultSubtractionIds.includes(subtraction.id),
+            };
+        })
+        .filter((subtraction) => subtraction.ready);
+
+    const defaultSubtractions = subtractions.filter(
+        (subtraction) => subtraction.isDefault,
+    );
+
+    return {
+        defaultSubtractions,
+        subtractions,
+        isPending: false,
+    };
 }

@@ -7,7 +7,7 @@ import { xor } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { getBorder, getFontSize } from "../../../app/theme";
-import { workflowStates } from "../../utils";
+import { WorkflowStates } from "../../utils";
 
 const WorkflowFilterLabel = styled.div`
     padding: 4px 8px;
@@ -117,23 +117,23 @@ function WorkflowFilterControl({
             </WorkflowFilterLabel>
             <WorkflowFilterControlButtons>
                 <WorkflowFilterControlButton
-                    active={states.includes(workflowStates.NONE)}
+                    active={states.includes(WorkflowStates.NONE)}
                     icon="times"
-                    value={workflowStates.NONE}
+                    value={WorkflowStates.NONE}
                     onClick={handleClick}
                 />
                 <WorkflowFilterControlPath />
                 <WorkflowFilterControlButton
-                    active={states.includes(workflowStates.PENDING)}
+                    active={states.includes(WorkflowStates.PENDING)}
                     icon="running"
-                    value={workflowStates.PENDING}
+                    value={WorkflowStates.PENDING}
                     onClick={handleClick}
                 />
                 <WorkflowFilterControlPath />
                 <WorkflowFilterControlButton
-                    active={states.includes(workflowStates.READY)}
+                    active={states.includes(WorkflowStates.READY)}
                     icon="check"
-                    value={workflowStates.READY}
+                    value={WorkflowStates.READY}
                     onClick={handleClick}
                 />
             </WorkflowFilterControlButtons>

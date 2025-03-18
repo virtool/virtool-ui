@@ -20,41 +20,23 @@ export default function IndexSelectorItem({
     return (
         <RadixSelect.Item
             className={cn(
-                "flex",
-                "justify-between",
-                "items-center",
-                "text-base",
-                "cursor-pointer",
                 "capitalize",
-                "select-none",
-                "mb-1",
+                "flex",
+                "items-center",
+                "justify-between",
                 "py-1.5",
                 "px-6",
-                "hover:bg-blue-50",
-                "hover:border-0",
+                "select-none",
+                "text-base",
+                "hover:bg-gray-100",
             )}
-            value={name}
             key={id}
+            value={id}
         >
-            <RadixSelect.ItemText>
-                <span
-                    className={cn(
-                        "font-medium",
-                        "overflow-hidden",
-                        "text-ellipsis",
-                        "whitespace-nowrap",
-                    )}
-                >
-                    {name}
-                </span>
+            <RadixSelect.ItemText className="whitespace-nowrap">
+                {name}
             </RadixSelect.ItemText>
-            <span
-                className={cn(
-                    "flex-[0_1_auto]",
-                    "whitespace-nowrap",
-                    "font-normal",
-                )}
-            >
+            <span className={cn()}>
                 Index Version <Label>{version}</Label>
             </span>
         </RadixSelect.Item>

@@ -9,6 +9,7 @@ export default function CreateAnalysisDialogContent({ children }) {
     return (
         <DialogContent
             className={cn(
+                "min-h-1/2",
                 "max-h-[90vh]",
                 "overflow-auto",
                 "top-[45%]",

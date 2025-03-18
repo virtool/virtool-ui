@@ -1,6 +1,6 @@
 import { Label } from "@labels/types";
 import { SampleLabel } from "@samples/components/Label/SampleLabel";
-import { SubtractionShortlist } from "@subtraction/types";
+import { SubtractionOption } from "@subtraction/types";
 import React from "react";
 import styled from "styled-components";
 
@@ -12,7 +12,7 @@ const SampleSidebarListItem = styled(SampleLabel)`
 
 type SampleSidebarListProps = {
     /** List of labels or subtractions associated with the sample */
-    items: Label[] | SubtractionShortlist[];
+    items: Label[] | SubtractionOption[];
 };
 
 /**

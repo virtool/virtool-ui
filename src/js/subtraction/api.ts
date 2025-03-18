@@ -1,8 +1,8 @@
 import { apiClient } from "@/api";
 import {
     Subtraction,
+    SubtractionOption,
     SubtractionSearchResult,
-    SubtractionShortlist,
 } from "./types";
 
 export const shortlist = () => apiClient.get("/subtractions?short=true");
@@ -99,7 +99,7 @@ export function removeSubtraction(subtractionId: string): Promise<Response> {
  */
 export function fetchSubtractionShortlist(
     ready: boolean,
-): Promise<SubtractionShortlist[]> {
+): Promise<SubtractionOption[]> {
     return apiClient
         .get("/subtractions")
         .query({ short: true, ready })

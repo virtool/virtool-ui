@@ -1,55 +1,72 @@
+import { useCompatibleIndexes, useSubtractionOptions } from "@analyses/hooks";
+import { useCreateAnalysis } from "@analyses/queries";
+import { Workflows } from "@analyses/types";
 import Button from "@base/Button";
-import { IndexMinimal } from "@indexes/types";
-import { SubtractionShortlist } from "@subtraction/types";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Workflows } from "../../types";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
-import { IndexSelector } from "./IndexSelector";
+import IndexSelector from "./IndexSelector";
 import SubtractionSelector from "./SubtractionSelector";
 
-type createNuvsFormValues = {
-    workflow: Workflows;
-    index: string;
-    subtractions: string[];
+type CreateNuvsFormValues = {
+    indexId: string;
+    subtractionIds: string[];
 };
 
-type createNuvsFormProps = {
-    /** The indexes that are compatible with the selected sample */
-    compatibleIndexes: IndexMinimal[];
-    /** The default subtractions to use */
-    defaultSubtractions: string[];
-    /** The callback to call when the form is submitted */
-    onSubmit: (values: createNuvsFormValues) => void;
+type CreateNuvsProps = {
     /** The number of samples selected */
     sampleCount: number;
-    /** The available subtractions */
-    subtractions: SubtractionShortlist[];
+
+    /** The id of the sample being used */
+    sampleId: string;
 };
 
 /**
  * Form for creating a new NuVs analysis.
  */
-export function CreateNuvsForm({
-    compatibleIndexes,
-    defaultSubtractions,
-    onSubmit,
-    sampleCount,
-    subtractions,
-}: createNuvsFormProps) {
+export default function CreateNuvs({ sampleCount, sampleId }: CreateNuvsProps) {
+    const { indexes, isPending: isPendingIndexes } = useCompatibleIndexes();
+
+    const {
+        defaultSubtractions,
+        subtractions,
+        isPending: isPendingSubtractions,
+    } = useSubtractionOptions(sampleId);
+
+    const createAnalysis = useCreateAnalysis();
+
     const {
         control,
         handleSubmit,
         formState: { errors },
         watch,
-    } = useForm<createNuvsFormValues>({
+    } = useForm<CreateNuvsFormValues>({
         defaultValues: {
-            workflow: Workflows.nuvs,
-            subtractions: defaultSubtractions,
+            subtractionIds: defaultSubtractions.map(
+                (subtraction) => subtraction.id,
+            ),
         },
     });
+
+    if (isPendingIndexes || isPendingSubtractions) {
+        return null;
+    }
+
+    function onSubmit(values: CreateNuvsFormValues) {
+        const { indexId, subtractionIds } = values;
+
+        const refId = indexes.find((index) => index.id === indexId).reference
+            .id;
+
+        createAnalysis.mutate({
+            refId,
+            subtractionIds,
+            sampleId,
+            workflow: Workflows.nuvs,
+        });
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -62,29 +79,30 @@ export function CreateNuvsForm({
                         onChange={onChange}
                     />
                 )}
-                name="subtractions"
+                name="subtractionIds"
             />
 
             <Controller
                 control={control}
                 render={({ field: { onChange, value } }) => (
                     <IndexSelector
-                        indexes={compatibleIndexes}
+                        indexes={indexes}
                         selected={value}
                         onChange={onChange}
                     />
                 )}
-                name="index"
+                name="indexId"
                 rules={{ required: true }}
             />
+
             <CreateAnalysisInputError>
-                {errors.index && "A reference must be selected"}
+                {errors.indexId && "A reference must be selected"}
             </CreateAnalysisInputError>
 
             <CreateAnalysisFooter>
                 <CreateAnalysisSummary
                     sampleCount={sampleCount}
-                    indexCount={watch("index") ? 1 : 0}
+                    indexCount={watch("indexId") ? 1 : 0}
                 />
                 <Button type="submit" color="blue">
                     Start
