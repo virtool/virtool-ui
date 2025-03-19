@@ -4,7 +4,7 @@ import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { Read } from "../../types";
-import { ReadItem } from "./ReadItem";
+import ReadItem from "./ReadItem";
 
 const SampleReadsTitle = styled.h2`
     display: flex;

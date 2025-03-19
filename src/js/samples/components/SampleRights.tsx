@@ -18,7 +18,7 @@ const rights = [
     { label: "Read & write", value: "rw" },
 ];
 
-export const SampleRightsGroup = styled.div`
+const SampleRightsGroup = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-column-gap: ${(props) => props.theme.gap.column};

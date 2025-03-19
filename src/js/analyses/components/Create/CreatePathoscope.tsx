@@ -20,7 +20,7 @@ type CreatePathoscopeProps = {
     sampleCount: number;
 
     /** The id of the sample being used */
-    sampleId: string;
+    sampleIds: string[];
 };
 
 /**
@@ -28,7 +28,7 @@ type CreatePathoscopeProps = {
  */
 export default function CreatePathoscope({
     sampleCount,
-    sampleId,
+    sampleIds,
 }: CreatePathoscopeProps) {
     const { indexes, isPending: isPendingIndexes } = useCompatibleIndexes();
 
@@ -36,7 +36,7 @@ export default function CreatePathoscope({
         defaultSubtractions,
         subtractions,
         isPending: isPendingSubtractions,
-    } = useSubtractionOptions(sampleId);
+    } = useSubtractionOptions(sampleIds);
 
     const createAnalysis = useCreateAnalysis();
 
@@ -63,12 +63,14 @@ export default function CreatePathoscope({
         const refId = indexes.find((index) => index.id === indexId).reference
             .id;
 
-        createAnalysis.mutate({
-            refId,
-            sampleId,
-            subtractionIds,
-            workflow: Workflows.pathoscope_bowtie,
-        });
+        sampleIds.forEach((sampleId) =>
+            createAnalysis.mutate({
+                refId,
+                sampleId,
+                subtractionIds,
+                workflow: Workflows.pathoscope_bowtie,
+            }),
+        );
     }
 
     return (

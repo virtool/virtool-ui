@@ -9,7 +9,7 @@ type SidebarProps = {
     onUpdate: (key: string, value: string[] | number[]) => void;
 };
 
-export function Sidebar({
+export default function Sidebar({
     sampleLabels,
     defaultSubtractions,
     onUpdate,

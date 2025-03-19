@@ -6,7 +6,7 @@ import { MLModelMinimal } from "@ml/types";
 import { map } from "lodash";
 import React from "react";
 import styled from "styled-components";
-import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
+import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 const MLModelSelectButton = styled(SelectButton)`
     display: flex;

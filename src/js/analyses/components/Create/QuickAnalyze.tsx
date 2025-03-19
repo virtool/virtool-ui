@@ -1,21 +1,21 @@
 import { useDialogParam } from "@/hooks";
 import { cn } from "@/utils";
+import CreateAnalysisFieldTitle from "@analyses/components/Create/CreateAnalysisFieldTitle";
 import CreateIimi from "@analyses/components/Create/CreateIimi";
 import CreateNuvs from "@analyses/components/Create/CreateNuvs";
 import CreatePathoscope from "@analyses/components/Create/CreatePathoscope";
+import Badge from "@base/Badge";
+import BoxGroupSection from "@base/BoxGroupSection";
 import Dialog from "@base/Dialog";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
-import { HmmSearchResults } from "@hmm/types";
+import { useListHmms } from "@hmm/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "@samples/types";
-import { SubtractionOption } from "@subtraction/types";
 import { Tabs } from "radix-ui";
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
-import { SelectedSamples } from "./SelectedSamples";
 import { getCompatibleWorkflows } from "./workflows";
 
 function Content({ children, value }) {
@@ -29,30 +29,21 @@ function Content({ children, value }) {
     );
 }
 
-const QuickAnalyzeSelected = styled.span`
-    align-self: center;
-    margin: 0 15px 0 auto;
-`;
-
 type QuickAnalyzeProps = {
-    /** The HMM search results */
-    hmms: HmmSearchResults;
-
     /** A callback function to clear selected samples */
     onClear: () => void;
 
     /** The selected samples */
     samples: SampleMinimal[];
-
-    /** A shortlist of ready subtractions */
-    subtractionOptions: SubtractionOption[];
 };
 
 /**
  * A form for triggering quick analyses on selected samples
  */
-export default function QuickAnalyze({ hmms, samples }: QuickAnalyzeProps) {
-    const { open, setOpen } = useDialogParam("openQuickAnalysis");
+export default function QuickAnalyze({ samples }: QuickAnalyzeProps) {
+    const { open, setOpen } = useDialogParam("openQuickAnalyze");
+
+    const { data: hmms, isPending } = useListHmms(1, 1, "");
 
     // The dialog should close when all selected samples have been analyzed and deselected.
     useEffect(() => {
@@ -61,7 +52,13 @@ export default function QuickAnalyze({ hmms, samples }: QuickAnalyzeProps) {
         }
     }, [samples, setOpen]);
 
+    if (isPending) {
+        return null;
+    }
+
     const compatibleWorkflows = getCompatibleWorkflows(hmms.total_count > 0);
+
+    const sampleIds = samples.map((sample) => sample.id);
 
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -69,12 +66,8 @@ export default function QuickAnalyze({ hmms, samples }: QuickAnalyzeProps) {
                 <DialogOverlay />
                 <CreateAnalysisDialogContent>
                     <DialogTitle>Quick Analyze</DialogTitle>
-                    <QuickAnalyzeSelected>
-                        {samples.length} sample
-                        {samples.length > 1 ? "s" : ""} selected
-                    </QuickAnalyzeSelected>
-                    <SelectedSamples samples={samples} />
                     <HMMAlert installed={hmms.status.task?.complete} />
+
                     <Tabs.Root defaultValue="pathoscope_bowtie">
                         <Tabs.List
                             className={cn(
@@ -83,6 +76,7 @@ export default function QuickAnalyze({ hmms, samples }: QuickAnalyzeProps) {
                                 "h-12",
                                 "items-center",
                                 "justify-center",
+                                "mb-4",
                                 "p-1",
                                 "rounded-lg",
                                 "inset-1",
@@ -97,7 +91,6 @@ export default function QuickAnalyze({ hmms, samples }: QuickAnalyzeProps) {
                                         "inline-flex",
                                         "items-center",
                                         "justify-center",
-
                                         "px-3",
                                         "py-1",
                                         "rounded-md",
@@ -120,17 +113,42 @@ export default function QuickAnalyze({ hmms, samples }: QuickAnalyzeProps) {
                                     {workflow.name}
                                 </Tabs.Trigger>
                             ))}
-                        </Tabs.List>{" "}
+                        </Tabs.List>
+                        <CreateAnalysisFieldTitle>
+                            Compatible Samples <Badge>{samples.length}</Badge>
+                        </CreateAnalysisFieldTitle>
+                        <div
+                            className={cn(
+                                "border",
+                                "border-gray-300",
+                                "mb-4",
+                                "max-h-32",
+                                "overflow-y-scroll",
+                                "rounded-sm",
+                            )}
+                        >
+                            {samples.map(({ id, name }) => (
+                                <BoxGroupSection key={id} disabled>
+                                    {name}
+                                </BoxGroupSection>
+                            ))}
+                        </div>
                         <Content value="iimi">
-                            <CreateIimi sampleCount={1} sampleId={sampleId} />
+                            <CreateIimi
+                                sampleCount={sampleIds.length}
+                                sampleIds={sampleIds}
+                            />
                         </Content>
                         <Content value="nuvs">
-                            <CreateNuvs sampleCount={1} sampleId={sampleId} />
+                            <CreateNuvs
+                                sampleCount={sampleIds.length}
+                                sampleIds={sampleIds}
+                            />
                         </Content>
                         <Content value="pathoscope_bowtie">
                             <CreatePathoscope
-                                sampleCount={1}
-                                sampleId={sampleId}
+                                sampleCount={sampleIds.length}
+                                sampleIds={sampleIds}
                             />
                         </Content>
                     </Tabs.Root>

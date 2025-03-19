@@ -6,7 +6,7 @@ import { Subtraction } from "@subtraction/types";
 import { filter, intersectionWith, xor } from "lodash-es";
 import React from "react";
 import CreateAnalysisField from "./CreateAnalysisField";
-import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
+import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";
 import SubtractionSelectorItem from "./SubtractionSelectorItem";
 

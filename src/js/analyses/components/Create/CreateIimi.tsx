@@ -1,3 +1,5 @@
+import IndexSelector from "@analyses/components/Create/IndexSelector";
+import { useCompatibleIndexes } from "@analyses/hooks";
 import { useCreateAnalysis } from "@analyses/queries";
 import Button from "@base/Button";
 import { useFindModels } from "@ml/queries";
@@ -10,6 +12,7 @@ import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
 import MlModelSelector from "./MlModelSelector";
 
 type CreateIimiFormValues = {
+    indexId: string;
     mlModel: string;
 };
 
@@ -18,14 +21,19 @@ type CreateIimiProps = {
     sampleCount: number;
 
     /** The id of the sample being used */
-    sampleId: string;
+    sampleIds: string[];
 };
 
 /**
  * Form for creating a new Iimi analysis.
  */
-export default function CreateIimi({ sampleCount, sampleId }: CreateIimiProps) {
+export default function CreateIimi({
+    sampleCount,
+    sampleIds,
+}: CreateIimiProps) {
+    const { indexes, isPending: isPendingIndexes } = useCompatibleIndexes();
     const { data: mlModels, isPending: isPendingMlModels } = useFindModels();
+
     const createAnalysis = useCreateAnalysis();
 
     const {
@@ -34,18 +42,24 @@ export default function CreateIimi({ sampleCount, sampleId }: CreateIimiProps) {
         formState: { errors },
     } = useForm<CreateIimiFormValues>();
 
-    if (isPendingMlModels) {
+    if (isPendingIndexes || isPendingMlModels) {
         return null;
     }
 
     function onSubmit(values: CreateIimiFormValues) {
-        const { mlModel } = values;
+        const { indexId, mlModel } = values;
 
-        createAnalysis.mutate({
-            mlModel,
-            sampleId,
-            workflow: Workflows.iimi,
-        });
+        const refId = indexes.find((index) => index.id === indexId).reference
+            .id;
+
+        sampleIds.forEach((sampleId) =>
+            createAnalysis.mutate({
+                mlModel,
+                refId,
+                sampleId,
+                workflow: Workflows.iimi,
+            }),
+        );
     }
 
     return (
@@ -65,6 +79,19 @@ export default function CreateIimi({ sampleCount, sampleId }: CreateIimiProps) {
             <CreateAnalysisInputError>
                 {errors.mlModel && "An ML model must be selected."}
             </CreateAnalysisInputError>
+
+            <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                    <IndexSelector
+                        indexes={indexes}
+                        selected={value}
+                        onChange={onChange}
+                    />
+                )}
+                name="indexId"
+                rules={{ required: true }}
+            />
 
             <CreateAnalysisFooter>
                 <CreateAnalysisSummary

@@ -1,5 +1,5 @@
 import { Label } from "@labels/types";
-import { SampleLabel } from "@samples/components/Label/SampleLabel";
+import SampleLabel from "@samples/components/Label/SampleLabel";
 import { SubtractionOption } from "@subtraction/types";
 import React from "react";
 import styled from "styled-components";

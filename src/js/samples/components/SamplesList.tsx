@@ -1,4 +1,5 @@
 import { useListSearchParam, usePageParam, useUrlSearchParam } from "@/hooks";
+import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
@@ -7,16 +8,12 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
-import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
-import { map } from "lodash-es/lodash";
+import { intersectionWith, union, xor } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-// import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
-import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
-import SelectionContext from "@samples/components/SelectionContext";
 import { useListSamples } from "../queries";
 import { SampleMinimal } from "../types";
-import { SampleFilters } from "./Filter/SampleFilters";
+import SampleFilters from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
@@ -41,10 +38,13 @@ const StyledSamplesList = styled.div`
  */
 export default function SamplesList() {
     const { page: urlPage } = usePageParam();
+
     const { value: term, setValue: setTerm } =
         useUrlSearchParam<string>("term");
+
     const { values: filterLabels, setValues: setFilterLabels } =
         useListSearchParam<string>("labels");
+
     const { values: filterWorkflows, setValues: setFilterWorkflows } =
         useListSearchParam<string>("workflows");
 
@@ -56,17 +56,13 @@ export default function SamplesList() {
         filterWorkflows,
     );
     const { data: labels, isPending: isPendingLabels } = useFetchLabels();
-    const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
+    const { isPending: isPendingIndexes } = useListIndexes(true);
 
     const [selected, setSelected] = useState([]);
 
     if (isPendingSamples || isPendingLabels || isPendingIndexes) {
         return <LoadingPlaceholder />;
     }
-
-    const filteredIndexes = map(groupBy(indexes, "reference.id"), (group) =>
-        maxBy(group, "version"),
-    );
 
     const { documents, page, page_count, total_count } = samples;
 
@@ -93,7 +89,7 @@ export default function SamplesList() {
     }
 
     return (
-        <SelectionContext.Provider>
+        <>
             <QuickAnalyze
                 onClear={() => setSelected([])}
                 samples={intersectionWith(
@@ -153,6 +149,6 @@ export default function SamplesList() {
                     />
                 )}
             </StyledSamplesList>
-        </SelectionContext.Provider>
+        </>
     );
 }

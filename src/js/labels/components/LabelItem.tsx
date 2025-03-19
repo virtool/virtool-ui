@@ -1,5 +1,5 @@
 import BoxGroupSection from "@base/BoxGroupSection";
-import { SampleLabel } from "@samples/components/Label/SampleLabel";
+import SampleLabel from "@samples/components/Label/SampleLabel";
 import React from "react";
 import styled from "styled-components";
 import { EditLabel } from "./EditLabel";

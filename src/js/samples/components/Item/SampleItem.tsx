@@ -8,9 +8,9 @@ import Link from "@base/Link";
 import React from "react";
 import styled from "styled-components";
 import { SampleMinimal } from "../../types";
-import { SampleLibraryTypeLabel } from "../Label/SampleLibraryTypeLabel";
-import { SmallSampleLabel } from "../Label/SmallSampleLabel";
-import { WorkflowTags } from "../Tag/WorkflowTags";
+import SampleLibraryTypeLabel from "../Label/SampleLibraryTypeLabel";
+import SmallSampleLabel from "../Label/SmallSampleLabel";
+import WorkflowTags from "../Tag/WorkflowTags";
 import EndIcon from "./EndIcon";
 
 const SampleItemCheckboxContainer = styled.div`

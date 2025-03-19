@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { LibraryTypeSelector } from "../LibraryTypeSelector";
+import LibraryTypeSelector from "../LibraryTypeSelector";
 
 describe("<LibraryTypeSelector>", () => {
     let props;

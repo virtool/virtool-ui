@@ -18,7 +18,7 @@ type LibraryTypeSelectorProps = {
 /**
  * Displays selections for library type in sample creation
  */
-export function LibraryTypeSelector({
+export default function LibraryTypeSelector({
     libraryType,
     onSelect,
 }: LibraryTypeSelectorProps) {

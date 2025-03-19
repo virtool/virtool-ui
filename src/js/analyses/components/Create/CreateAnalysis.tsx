@@ -52,6 +52,8 @@ export default function CreateAnalysis({
         }
     }
 
+    const sampleIds = [sampleId];
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogPortal>
@@ -81,7 +83,6 @@ export default function CreateAnalysis({
                                         "inline-flex",
                                         "items-center",
                                         "justify-center",
-
                                         "px-3",
                                         "py-1",
                                         "rounded-md",
@@ -106,15 +107,15 @@ export default function CreateAnalysis({
                             ))}
                         </Tabs.List>
                         <Content value="iimi">
-                            <CreateIimi sampleCount={1} sampleId={sampleId} />
+                            <CreateIimi sampleCount={1} sampleIds={sampleIds} />
                         </Content>
                         <Content value="nuvs">
-                            <CreateNuvs sampleCount={1} sampleId={sampleId} />
+                            <CreateNuvs sampleCount={1} sampleIds={sampleIds} />
                         </Content>
                         <Content value="pathoscope_bowtie">
                             <CreatePathoscope
                                 sampleCount={1}
-                                sampleId={sampleId}
+                                sampleIds={sampleIds}
                             />
                         </Content>
                     </Tabs.Root>

@@ -4,10 +4,10 @@ import React from "react";
 import styled from "styled-components";
 import { BaseSampleLabel } from "../Label/BaseSampleLabel";
 
-interface StyledLabelFilterItemProps {
+type StyledLabelFilterItemProps = {
     pressed?: boolean;
     theme: object;
-}
+};
 
 const StyledLabelFilterItem = styled(
     BaseSampleLabel,
@@ -27,7 +27,7 @@ const StyledLabelFilterItem = styled(
     }
 `;
 
-export function LabelFilterItem({ color, id, name, pressed, onClick }) {
+export default function LabelFilterItem({ color, id, name, pressed, onClick }) {
     return (
         <StyledLabelFilterItem
             as="button"

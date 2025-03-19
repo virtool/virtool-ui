@@ -1,7 +1,6 @@
 import { formatPath } from "@/hooks";
 import { AdministratorRoles } from "@administration/types";
 import Analyses from "@analyses/components/Analyses";
-import { Workflows } from "@analyses/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -109,26 +108,27 @@ describe("<AnalysesList />", () => {
         });
 
         it("should change state once create analysis is clicked", async () => {
-            const account = createFakeAccount({
-                administrator_role: AdministratorRoles.FULL,
-            });
-
-            mockApiGetAccount(account);
+            mockApiGetAccount(
+                createFakeAccount({
+                    administrator_role: AdministratorRoles.FULL,
+                }),
+            );
             mockApiGetSampleDetail(sample);
+
             const { history } = renderWithRouter(
                 <Analyses />,
-                `/samples/${sample.id}/analyses/`,
+                `/samples/${sample.id}/analyses`,
             );
 
             expect(await screen.findByText("Create")).toBeInTheDocument();
-            expect(history[0]).toEqual(`/samples/${sample.id}/analyses/`);
+            expect(history[0]).toEqual(`/samples/${sample.id}/analyses`);
 
             await userEvent.click(screen.getByText("Create"));
 
             await waitFor(() =>
-                expect(history[0]).toEqual(
-                    formatPath(basePath, {
-                        createAnalysisType: Workflows.pathoscope_bowtie,
+                expect(history[1]).toEqual(
+                    formatPath("", {
+                        openCreateAnalysis: true,
                     }),
                 ),
             );

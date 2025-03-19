@@ -14,7 +14,11 @@ type SampleLabelProps = {
 /**
  * Displays the label and the color associated with it
  */
-export function SampleLabel({ className, color, name }: SampleLabelProps) {
+export default function SampleLabel({
+    className,
+    color,
+    name,
+}: SampleLabelProps) {
     return (
         <BaseSampleLabel className={className} color={color}>
             {color && <Icon name="circle" />}

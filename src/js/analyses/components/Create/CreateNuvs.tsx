@@ -20,20 +20,23 @@ type CreateNuvsProps = {
     sampleCount: number;
 
     /** The id of the sample being used */
-    sampleId: string;
+    sampleIds: string[];
 };
 
 /**
  * Form for creating a new NuVs analysis.
  */
-export default function CreateNuvs({ sampleCount, sampleId }: CreateNuvsProps) {
+export default function CreateNuvs({
+    sampleCount,
+    sampleIds,
+}: CreateNuvsProps) {
     const { indexes, isPending: isPendingIndexes } = useCompatibleIndexes();
 
     const {
         defaultSubtractions,
         subtractions,
         isPending: isPendingSubtractions,
-    } = useSubtractionOptions(sampleId);
+    } = useSubtractionOptions(sampleIds);
 
     const createAnalysis = useCreateAnalysis();
 
@@ -60,12 +63,14 @@ export default function CreateNuvs({ sampleCount, sampleId }: CreateNuvsProps) {
         const refId = indexes.find((index) => index.id === indexId).reference
             .id;
 
-        createAnalysis.mutate({
-            refId,
-            subtractionIds,
-            sampleId,
-            workflow: Workflows.nuvs,
-        });
+        sampleIds.forEach((sampleId) =>
+            createAnalysis.mutate({
+                refId,
+                subtractionIds,
+                sampleId,
+                workflow: Workflows.nuvs,
+            }),
+        );
     }
 
     return (

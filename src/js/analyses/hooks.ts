@@ -107,13 +107,26 @@ type UseSubtractionOptionsResult = {
     isPending: boolean;
 };
 
+/**
+ * Get the available subtraction options for a list of sample ids.
+ *
+ * Subtractions that are not ready are filtered out.
+ *
+ * If more than one sample id is passed, the default subtractions list will be
+ * empty. Default subtractions aggregated for multiple samples are confusing and
+ * costly to request.
+ *
+ * @param sampleIds
+ */
 export function useSubtractionOptions(
-    sampleId: string,
+    sampleIds: string[],
 ): UseSubtractionOptionsResult {
     const {
         data: subtractionShortlist,
         isPending: isPendingSubtractionShortlist,
     } = useFetchSubtractionsShortlist(true);
+
+    const sampleId = sampleIds[0];
 
     const { data: sample, isPending: isPendingSample } =
         useFetchSample(sampleId);
@@ -126,9 +139,10 @@ export function useSubtractionOptions(
         };
     }
 
-    const defaultSubtractionIds = sample.subtractions.map(
-        (subtraction) => subtraction.id,
-    );
+    const defaultSubtractionIds =
+        sampleIds.length === 1
+            ? sample.subtractions.map((subtraction) => subtraction.id)
+            : [];
 
     const subtractions = subtractionShortlist
         .map((subtraction) => {

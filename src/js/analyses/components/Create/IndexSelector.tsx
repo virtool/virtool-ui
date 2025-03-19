@@ -7,7 +7,7 @@ import * as RadixSelect from "@radix-ui/react-select";
 import { map } from "lodash";
 import { sortBy } from "lodash-es";
 import React, { useMemo } from "react";
-import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
+import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type IndexSelectorItemProps = {
     id: string;
@@ -25,7 +25,6 @@ function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
                 "justify-between",
                 "py-1.5",
                 "px-6",
-                "select-none",
                 "text-base",
                 "hover:bg-gray-100",
             )}
@@ -35,7 +34,7 @@ function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
             <RadixSelect.ItemText className="whitespace-nowrap">
                 {name}
             </RadixSelect.ItemText>
-            <span className={cn()}>
+            <span>
                 Index Version <Label>{version}</Label>
             </span>
         </RadixSelect.Item>
@@ -72,7 +71,7 @@ export default function IndexSelector({
 
     return (
         <div className="mb-8">
-            <CreateAnalysisFieldTitle>References</CreateAnalysisFieldTitle>
+            <CreateAnalysisFieldTitle>Reference</CreateAnalysisFieldTitle>
             <Select value={selected} onValueChange={onChange}>
                 <SelectButton
                     className={cn("flex", "w-full")}

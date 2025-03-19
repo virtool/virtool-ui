@@ -1,4 +1,4 @@
-import { SmallSampleLabel } from "@samples/components/Label/SmallSampleLabel";
+import SmallSampleLabel from "@samples/components/Label/SmallSampleLabel";
 import React from "react";
 
 type SampleLabelInnerProps = {

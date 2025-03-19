@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { SampleUserGroup } from "../SampleUserGroup";
+import SampleUserGroup from "../SampleUserGroup";
 
 describe("SampleUserGroup", () => {
     let props;
@@ -29,6 +29,7 @@ describe("SampleUserGroup", () => {
             screen.getByLabelText("User Group"),
             "bar",
         );
+
         expect(props.onChange).toHaveBeenCalled();
     });
 });
