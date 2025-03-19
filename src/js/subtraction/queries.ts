@@ -15,8 +15,8 @@ import {
 } from "./api";
 import {
     Subtraction,
+    SubtractionOption,
     SubtractionSearchResult,
-    SubtractionShortlist,
 } from "./types";
 
 /**
@@ -130,7 +130,7 @@ export function useRemoveSubtraction() {
  * @returns A list of subtractions
  */
 export function useFetchSubtractionsShortlist(ready?: boolean) {
-    return useQuery<SubtractionShortlist[]>({
+    return useQuery<SubtractionOption[]>({
         queryKey: subtractionQueryKeys.shortlist(),
         queryFn: () => fetchSubtractionShortlist(ready),
     });

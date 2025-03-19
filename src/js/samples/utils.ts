@@ -1,6 +1,6 @@
 import { LibraryType } from "@samples/types";
 
-export const workflowStates = {
+export const WorkflowStates = {
     NONE: "none",
     PENDING: "pending",
     READY: "ready",

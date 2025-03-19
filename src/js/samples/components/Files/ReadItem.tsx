@@ -26,7 +26,7 @@ type ReadItemProps = {
 /**
  * A condensed read item for use in a list of reads
  */
-export function ReadItem({ name, download_url, size }: ReadItemProps) {
+export default function ReadItem({ name, download_url, size }: ReadItemProps) {
     return (
         <StyledReadItem>
             <ReadItemMain>

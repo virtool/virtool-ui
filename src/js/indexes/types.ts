@@ -17,18 +17,25 @@ export type IndexNested = {
 export type IndexMinimal = IndexNested & {
     /** Total changes included in building the new index */
     change_count: number;
+
     /** The iso formatted date of creation */
     created_at: string;
+
     /** Whether there are downloadable files */
     has_files: boolean;
+
     /** The job responsible for creation */
     job?: JobMinimal;
+
     /** A count of individual OTUs changed */
     modified_otu_count: number;
+
     /** The reference the index is based on */
     reference: ReferenceNested;
+
     /** Who initiated index creation */
     user: UserNested;
+
     /** Whether it is ready to view and be used */
     ready: boolean;
 };

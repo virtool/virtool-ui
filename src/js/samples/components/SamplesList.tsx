@@ -1,5 +1,5 @@
-import { useListHmms } from "@/hmm/queries";
 import { useListSearchParam, usePageParam, useUrlSearchParam } from "@/hooks";
+import QuickAnalyze from "@analyses/components/Create/QuickAnalyze";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NoneFoundBox from "@base/NoneFoundBox";
 import Pagination from "@base/Pagination";
@@ -8,16 +8,12 @@ import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { useListIndexes } from "@indexes/queries";
 import { useFetchLabels } from "@labels/queries";
-import { useFindModels } from "@ml/queries";
-import { useFetchSubtractionsShortlist } from "@subtraction/queries";
-import { groupBy, intersectionWith, maxBy, union, xor } from "lodash-es";
-import { map } from "lodash-es/lodash";
+import { intersectionWith, union, xor } from "lodash-es";
 import React, { useState } from "react";
 import styled from "styled-components";
-import QuickAnalysis from "../../analyses/components/Create/QuickAnalyze";
 import { useListSamples } from "../queries";
 import { SampleMinimal } from "../types";
-import { SampleFilters } from "./Filter/SampleFilters";
+import SampleFilters from "./Filter/SampleFilters";
 import SampleItem from "./Item/SampleItem";
 import SampleToolbar from "./SamplesToolbar";
 import SampleLabels from "./Sidebar/ManageLabels";
@@ -42,10 +38,13 @@ const StyledSamplesList = styled.div`
  */
 export default function SamplesList() {
     const { page: urlPage } = usePageParam();
+
     const { value: term, setValue: setTerm } =
         useUrlSearchParam<string>("term");
+
     const { values: filterLabels, setValues: setFilterLabels } =
         useListSearchParam<string>("labels");
+
     const { values: filterWorkflows, setValues: setFilterWorkflows } =
         useListSearchParam<string>("workflows");
 
@@ -57,30 +56,13 @@ export default function SamplesList() {
         filterWorkflows,
     );
     const { data: labels, isPending: isPendingLabels } = useFetchLabels();
-    const { data: hmms, isPending: isPendingHmms } = useListHmms(1, 25);
-    const { data: indexes, isPending: isPendingIndexes } = useListIndexes(true);
-    const {
-        data: subtractionShortlist,
-        isPending: isPendingSubtractionShortlist,
-    } = useFetchSubtractionsShortlist(true);
-    const { data: mlModels, isPending: isPendingMLModels } = useFindModels();
+    const { isPending: isPendingIndexes } = useListIndexes(true);
 
     const [selected, setSelected] = useState([]);
 
-    if (
-        isPendingSamples ||
-        isPendingLabels ||
-        isPendingHmms ||
-        isPendingIndexes ||
-        isPendingSubtractionShortlist ||
-        isPendingMLModels
-    ) {
+    if (isPendingSamples || isPendingLabels || isPendingIndexes) {
         return <LoadingPlaceholder />;
     }
-
-    const filteredIndexes = map(groupBy(indexes, "reference.id"), (group) =>
-        maxBy(group, "version"),
-    );
 
     const { documents, page, page_count, total_count } = samples;
 
@@ -108,17 +90,13 @@ export default function SamplesList() {
 
     return (
         <>
-            <QuickAnalysis
-                hmms={hmms}
-                indexes={filteredIndexes}
-                mlModels={mlModels}
+            <QuickAnalyze
                 onClear={() => setSelected([])}
                 samples={intersectionWith(
                     documents,
                     selected,
                     (document, id) => document.id === id,
                 )}
-                subtractionOptions={subtractionShortlist}
             />
             <StyledSamplesList>
                 <SamplesListHeader>

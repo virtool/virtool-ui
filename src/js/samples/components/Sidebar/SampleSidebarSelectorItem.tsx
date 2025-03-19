@@ -42,7 +42,7 @@ type SampleSidebarSelectorItemProps = {
 /**
  * A condensed sidebar item for use in a list of sidebar items
  */
-export function SampleSidebarSelectorItem({
+export default function SampleSidebarSelectorItem({
     children,
     id,
     name,

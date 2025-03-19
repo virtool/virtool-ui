@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { merge } from "lodash";
 import nock from "nock";
-import { MLModel, MLModelMinimal, MLModelRelease } from "../../js/ml/types";
+import { MlModel, MLModelMinimal, MLModelRelease } from "../../js/ml/types";
 
 /**
  * Create a fake ML model release object
@@ -52,7 +52,7 @@ export function createFakeMLModelMinimal(
  */
 export function createFakeMLModel(
     overrides?: CreateFakeMLModelOverrides,
-): MLModel {
+): MlModel {
     const releases = [createFakeMLModelRelease()];
 
     const defaultModel = {

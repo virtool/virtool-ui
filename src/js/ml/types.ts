@@ -28,7 +28,7 @@ export type MLModelMinimal = {
 };
 
 /** A machine learning model*/
-export type MLModel = MLModelMinimal & {
+export type MlModel = MLModelMinimal & {
     releases: MLModelRelease[];
 };
 

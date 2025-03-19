@@ -29,7 +29,7 @@ interface SampleItemEndIconProps {
 /**
  * Icon indicating the status of sample
  */
-export function SampleItemEndIcon({
+export default function SampleItemEndIcon({
     onClick,
     ready,
     job,
@@ -58,5 +58,3 @@ export function SampleItemEndIcon({
         </StyledSampleItemEndIcon>
     );
 }
-
-export default SampleItemEndIcon;

@@ -6,7 +6,7 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { fetchHmm, installHmm, listHmms } from "./api";
-import { HMM, HMMInstalled, HMMSearchResults } from "./types";
+import { HMM, HMMInstalled, HmmSearchResults } from "./types";
 
 /**
  * Factory object for generating hmm query keys
@@ -29,7 +29,7 @@ export const hmmQueryKeys = {
  * @returns A page of hmms search results
  */
 export function useListHmms(page: number, per_page: number, term?: string) {
-    return useQuery<HMMSearchResults>({
+    return useQuery<HmmSearchResults>({
         queryKey: hmmQueryKeys.list([page, per_page, term]),
         queryFn: () => listHmms(page, per_page, term),
         placeholderData: keepPreviousData,

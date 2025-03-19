@@ -12,12 +12,16 @@ const StyledSampleFilters = styled.div`
 type SampleFilterProps = {
     /** A list of labels */
     labels: Label[];
+
     /** Handles click event when label is clicked */
     onClickLabels: (value: string) => void;
+
     /** A list of selected labels */
     selectedLabels: string[];
+
     /** Handles click event when workflow is clicked */
     onClickWorkflows: (value: string[]) => void;
+
     /** A list of selected workflows */
     selectedWorkflows: string[];
 };
@@ -25,7 +29,7 @@ type SampleFilterProps = {
 /**
  * Filter samples by labels and workflows
  */
-export function SampleFilters({
+export default function SampleFilters({
     labels,
     onClickLabels,
     onClickWorkflows,

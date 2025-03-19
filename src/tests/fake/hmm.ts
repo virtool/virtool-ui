@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { assign, times, toString } from "lodash-es";
 import nock from "nock";
-import { HMM, HMMSearchResults } from "../../js/hmm/types";
+import { HMM, HmmSearchResults } from "../../js/hmm/types";
 
 /**
  * Create a fake HMM minimal
@@ -62,7 +62,7 @@ type CreateFakeHMMSearchResults = {
  */
 export function createFakeHMMSearchResults(
     overrides?: CreateFakeHMMSearchResults,
-): HMMSearchResults {
+): HmmSearchResults {
     const defaultStatus = {
         errors: [toString(faker.internet.httpStatusCode())],
         installed: {
@@ -92,7 +92,7 @@ export function createFakeHMMSearchResults(
  * @param hmmSearchResults - The hmm search results to be returned from the mocked API call
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetHmms(hmmSearchResults: HMMSearchResults) {
+export function mockApiGetHmms(hmmSearchResults: HmmSearchResults) {
     return nock("http://localhost")
         .get("/api/hmms")
         .query(true)

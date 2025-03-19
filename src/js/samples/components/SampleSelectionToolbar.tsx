@@ -1,9 +1,8 @@
-import { useUrlSearchParam } from "@/hooks";
 import Button from "@base/Button";
 import Icon from "@base/Icon";
+import LinkButton from "@base/LinkButton";
 import React from "react";
 import styled from "styled-components";
-import { Workflows } from "../../analyses/types";
 
 const SampleSelectionToolbarTop = styled.div`
     align-items: center;
@@ -33,25 +32,18 @@ type SampleSelectionToolbarProps = {
 /**
  * A toolbar allowing users to create an analysis for selected samples
  */
-export function SampleSelectionToolbar({
+export default function SampleSelectionToolbar({
     onClear,
     selected,
 }: SampleSelectionToolbarProps) {
-    const { setValue: setQuickAnalysisType } =
-        useUrlSearchParam<string>("quickAnalysisType");
-
-    function onQuickAnalyze() {
-        setQuickAnalysisType(Workflows.pathoscope_bowtie);
-    }
-
     return (
         <SampleSelectionToolbarTop>
             <Button onClick={onClear}>
                 Clear selection of {selected.length} samples
             </Button>
-            <Button color="green" onClick={() => onQuickAnalyze()}>
+            <LinkButton color="green" to="?openQuickAnalyze=true">
                 <Icon name="chart-area" /> Quick Analyze
-            </Button>
+            </LinkButton>
         </SampleSelectionToolbarTop>
     );
 }

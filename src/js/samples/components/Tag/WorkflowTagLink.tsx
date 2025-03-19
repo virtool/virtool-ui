@@ -15,7 +15,7 @@ const StyledSampleItemWorkflowTagLink = styled(BaseWorkflowTag)`
  * @param id - the sample id
  * @returns A stylized link to the analyses page for a sample.
  */
-export function WorkflowTagLink({ id }: { id: string }) {
+export default function WorkflowTagLink({ id }: { id: string }) {
     return (
         <StyledSampleItemWorkflowTagLink
             as={Link}

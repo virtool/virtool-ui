@@ -20,7 +20,7 @@ type SampleUserGroupProps = {
 /**
  * A dropdown showing the user groups and its options
  */
-export function SampleUserGroup({
+export default function SampleUserGroup({
     selected,
     groups,
     onChange,

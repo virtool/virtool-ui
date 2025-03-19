@@ -17,7 +17,7 @@ type SampleItemWorkflowTagProps = {
  * @param workflowState - current state of the workflow
  * @returns A tag displaying the state of a workflow
  */
-export function WorkflowTag({
+export default function WorkflowTag({
     displayName,
     workflowState,
 }: SampleItemWorkflowTagProps) {

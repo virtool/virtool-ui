@@ -3,9 +3,9 @@ import { reduce } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { SampleWorkflows, WorkflowState } from "../../types";
-import { WorkflowTag } from "./WorkflowTag";
-import { WorkflowTagLink } from "./WorkflowTagLink";
-import { WorkflowTagNone } from "./WorkflowTagNone";
+import WorkflowTag from "./WorkflowTag";
+import WorkflowTagLink from "./WorkflowTagLink";
+import WorkflowTagNone from "./WorkflowTagNone";
 
 const StyledSampleWorkflowTags = styled.div`
     align-items: center;
@@ -33,7 +33,10 @@ type SampleItemWorkflowTagsProps = {
  * @param workflows - the workflows object for the sample
  * @returns The workflow tags for a sample.
  */
-export function WorkflowTags({ id, workflows }: SampleItemWorkflowTagsProps) {
+export default function WorkflowTags({
+    id,
+    workflows,
+}: SampleItemWorkflowTagsProps) {
     const workflowTags = reduce(
         workflows,
         (tags, value, key) => {

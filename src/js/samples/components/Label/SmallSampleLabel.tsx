@@ -1,11 +1,11 @@
+import { getFontSize } from "@app/theme";
 import styled from "styled-components";
-import { getFontSize } from "../../../app/theme";
-import { SampleLabel } from "./SampleLabel";
+import SampleLabel from "./SampleLabel";
 
 /**
  * Displays a smaller version of the sample label
  */
-export const SmallSampleLabel = styled(SampleLabel)`
+const SmallSampleLabel = styled(SampleLabel)`
     font-size: ${getFontSize("sm")};
     padding: 2px 7px 2px 5px;
 
@@ -13,3 +13,7 @@ export const SmallSampleLabel = styled(SampleLabel)`
         margin-right: 3px;
     }
 `;
+
+SmallSampleLabel.displayName = "SmallSampleLabel";
+
+export default SmallSampleLabel;

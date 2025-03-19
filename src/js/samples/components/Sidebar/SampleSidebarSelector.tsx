@@ -6,10 +6,10 @@ import Link from "@base/Link";
 import Popover from "@base/Popover";
 import SidebarHeaderButton from "@base/SidebarHeaderButton";
 import { Label } from "@labels/types";
-import { SubtractionShortlist } from "@subtraction/types";
+import { SubtractionOption } from "@subtraction/types";
 import React from "react";
 import styled from "styled-components";
-import { SampleSidebarSelectorItem } from "./SampleSidebarSelectorItem";
+import SampleSidebarSelectorItem from "./SampleSidebarSelectorItem";
 
 const SampleSidebarSelectorButton = styled.div`
     display: flex;
@@ -49,7 +49,7 @@ type SampleSidebarSelectorProps = {
     }) => React.ReactNode;
 
     /** A list of labels or default subtractions */
-    items: Label[] | SubtractionShortlist[];
+    items: Label[] | SubtractionOption[];
 
     /** A list of selected items by their ids */
     selectedIds: Array<string | number>;
@@ -70,12 +70,11 @@ export default function SampleSidebarSelector({
     selectionType,
     manageLink,
 }: SampleSidebarSelectorProps) {
-    const [results, term, setTerm] = useFuse<Label | SubtractionShortlist>(
-        items,
-        ["name"],
-    );
+    const [results, term, setTerm] = useFuse<Label | SubtractionOption>(items, [
+        "name",
+    ]);
 
-    const itemComponents = results.map((item: Label | SubtractionShortlist) => (
+    const itemComponents = results.map((item: Label | SubtractionOption) => (
         <SampleSidebarSelectorItem
             key={item.id}
             selected={selectedIds.includes(item.id)}

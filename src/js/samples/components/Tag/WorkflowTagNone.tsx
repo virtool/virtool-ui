@@ -15,7 +15,7 @@ const StyledSampleItemWorkflowTagNone = styled(BaseWorkflowTag)`
  *
  * @returns A workflow tag for a sample item with no analyses.
  */
-export function WorkflowTagNone() {
+export default function WorkflowTagNone() {
     return (
         <StyledSampleItemWorkflowTagNone>
             <WorkflowLabelIcon>

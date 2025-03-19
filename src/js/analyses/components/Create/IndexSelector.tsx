@@ -1,12 +1,45 @@
 import { cn } from "@/utils";
-import IndexSelectorItem from "@analyses/components/Create/IndexSelectorItem";
+import Label from "@base/Label";
 import Select from "@base/Select";
 import SelectButton from "@base/SelectButton";
 import SelectContent from "@base/SelectContent";
+import * as RadixSelect from "@radix-ui/react-select";
 import { map } from "lodash";
 import { sortBy } from "lodash-es";
 import React, { useMemo } from "react";
-import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
+import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
+
+type IndexSelectorItemProps = {
+    id: string;
+    name: string;
+    version: number;
+};
+
+function IndexSelectorItem({ id, name, version }: IndexSelectorItemProps) {
+    return (
+        <RadixSelect.Item
+            className={cn(
+                "capitalize",
+                "flex",
+                "items-center",
+                "justify-between",
+                "py-1.5",
+                "px-6",
+                "text-base",
+                "hover:bg-gray-100",
+            )}
+            key={id}
+            value={id}
+        >
+            <RadixSelect.ItemText className="whitespace-nowrap">
+                {name}
+            </RadixSelect.ItemText>
+            <span>
+                Index Version <Label>{version}</Label>
+            </span>
+        </RadixSelect.Item>
+    );
+}
 
 type IndexSelectorProps = {
     indexes: object[];
@@ -17,7 +50,7 @@ type IndexSelectorProps = {
 /**
  * A list of indexes available for analysis creation
  */
-export function IndexSelector({
+export default function IndexSelector({
     indexes,
     selected,
     onChange,
@@ -38,7 +71,7 @@ export function IndexSelector({
 
     return (
         <div className="mb-8">
-            <CreateAnalysisFieldTitle>References</CreateAnalysisFieldTitle>
+            <CreateAnalysisFieldTitle>Reference</CreateAnalysisFieldTitle>
             <Select value={selected} onValueChange={onChange}>
                 <SelectButton
                     className={cn("flex", "w-full")}

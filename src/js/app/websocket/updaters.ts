@@ -1,5 +1,5 @@
 import { hmmQueryKeys } from "@/hmm/queries";
-import { HMMSearchResults } from "@/hmm/types";
+import { HmmSearchResults } from "@/hmm/types";
 import { Task } from "@/types/api";
 import { referenceQueryKeys } from "@references/queries";
 import { ReferenceSearchResult } from "@references/types";
@@ -103,6 +103,6 @@ function referenceUpdater(queryClient: QueryClient, task: Task) {
 function HMMStatusUpdater(queryClient: QueryClient, task: Task) {
     queryClient.setQueriesData(
         { queryKey: hmmQueryKeys.lists() },
-        updater<HMMSearchResults>(task, (item) => get(item, "status.task")),
+        updater<HmmSearchResults>(task, (item) => get(item, "status.task")),
     );
 }

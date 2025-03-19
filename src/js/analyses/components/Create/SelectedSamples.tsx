@@ -3,7 +3,7 @@ import Badge from "@base/Badge";
 import BoxGroupSection from "@base/BoxGroupSection";
 import { SampleMinimal } from "@samples/types";
 import React from "react";
-import { CreateAnalysisFieldTitle } from "./CreateAnalysisFieldTitle";
+import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type SelectedSamplesProps = {
     /** The samples selected for the open quick analysis dialog. */

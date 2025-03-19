@@ -25,7 +25,7 @@ type SampleLibraryTypeLabelProps = {
 /**
  * Displays the library type associated with the sample
  */
-export function SampleLibraryTypeLabel({
+export default function SampleLibraryTypeLabel({
     libraryType,
 }: SampleLibraryTypeLabelProps) {
     return (

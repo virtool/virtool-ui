@@ -43,7 +43,7 @@ export type HMMInstalled = {
 };
 
 /** HMM search results from the API */
-export type HMMSearchResults = SearchResult & {
+export type HmmSearchResults = SearchResult & {
     /** Gives information about each HMM */
     documents: HMMMinimal[];
     /** The status of the HMMs */

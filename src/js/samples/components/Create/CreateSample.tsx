@@ -18,14 +18,14 @@ import { RestoredAlert } from "@forms/components/RestoredAlert";
 import { usePersistentForm } from "@forms/hooks";
 import { useListGroups } from "@groups/queries";
 import ReadSelector from "@samples/components/Create/ReadSelector";
-import { Sidebar } from "@samples/components/Create/Sidebar";
+import Sidebar from "@samples/components/Create/Sidebar";
 import { useCreateSample } from "@samples/queries";
 import { find, flatMap, toString } from "lodash-es";
 import React, { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import styled from "styled-components";
-import { LibraryTypeSelector } from "./LibraryTypeSelector";
-import { SampleUserGroup } from "./SampleUserGroup";
+import LibraryTypeSelector from "./LibraryTypeSelector";
+import SampleUserGroup from "./SampleUserGroup";
 
 const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
 
