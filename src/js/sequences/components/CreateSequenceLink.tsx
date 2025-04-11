@@ -1,8 +1,7 @@
-import { formatSearchParams } from "@/hooks";
+import { useUrlSearchParam } from "@/hooks";
 import { cn } from "@/utils";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import React from "react";
-import { Link } from "wouter";
 
 type CreateSequenceLinkProps = {
     refId: string;
@@ -16,15 +15,17 @@ export default function CreateSequenceLink({ refId }: CreateSequenceLinkProps) {
         refId,
         ReferenceRight.modify_otu,
     );
+    const { setValue: setOpenCreateSequence } =
+        useUrlSearchParam("openCreateSequence");
 
     if (canModify) {
         return (
-            <Link
+            <a
                 className={cn("ml-auto", "cursor-pointer")}
-                to={formatSearchParams({ openCreateSequence: true })}
+                onClick={() => setOpenCreateSequence(true)}
             >
                 Create Sequence
-            </Link>
+            </a>
         );
     }
 
