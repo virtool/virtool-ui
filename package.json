@@ -95,7 +95,8 @@
         "eslint": "eslint src/js",
         "server": "npx tsx  src/server/run.ts",
         "storybook": "storybook dev -p 6006",
-        "test": "TZ=UTC vitest"
+        "test": "TZ=UTC vitest",
+        "tsc": "tsc --noEmit"
     },
     "optionalDependencies": {
         "fsevents": "^2.3.3"

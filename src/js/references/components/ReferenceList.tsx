@@ -7,7 +7,7 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "@base/ViewHeaderTitleBadge";
 import { CreateReference } from "@references/components/CreateReference";
-import { ReferenceItem } from "@references/components/Item/ReferenceItem";
+import { ReferenceItem } from "@references/components/ReferenceItem";
 import { map } from "lodash";
 import React from "react";
 import { useFindReferences } from "../queries";
