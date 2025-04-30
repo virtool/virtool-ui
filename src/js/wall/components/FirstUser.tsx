@@ -49,9 +49,10 @@ export default function FirstUser() {
                 </InputGroup>
                 <InputGroup>
                     <InputLabel htmlFor="password">Password</InputLabel>
-                    <InputPassword
+                    <InputSimple
                         aria-label="password"
                         id="password"
+                        type="password"
                         {...register("password", {
                             required:
                                 "Password does not meet minimum length requirement (8)",
