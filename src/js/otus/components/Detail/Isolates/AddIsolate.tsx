@@ -2,9 +2,9 @@ import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
+import { useCreateIsolate } from "@otus/queries";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React from "react";
-import { useCreateIsolate } from "../../../queries";
 import IsolateForm from "./IsolateForm";
 
 type AddIsolateProps = {
