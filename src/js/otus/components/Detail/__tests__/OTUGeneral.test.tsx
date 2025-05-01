@@ -3,9 +3,9 @@ import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFakeOTUIsolate } from "../../../../../tests/fake/otus";
-import OTUGeneral from "../OTUGeneral";
+import OtuGeneral from "../OtuGeneral";
 
-describe("<OTUGeneral />", () => {
+describe("<OtuGeneral />", () => {
     let props;
     let isolate;
 
@@ -24,7 +24,7 @@ describe("<OTUGeneral />", () => {
     });
 
     it("should render with issues", () => {
-        renderWithProviders(<OTUGeneral {...props} />);
+        renderWithProviders(<OtuGeneral {...props} />);
 
         expect(
             screen.getByText(
@@ -45,7 +45,7 @@ describe("<OTUGeneral />", () => {
 
     it("should render without issues", () => {
         props.issues = null;
-        renderWithProviders(<OTUGeneral {...props} />);
+        renderWithProviders(<OtuGeneral {...props} />);
 
         expect(
             screen.queryByText(

@@ -2,8 +2,8 @@ import { useDialogParam } from "@/hooks";
 import IconButton from "@base/IconButton";
 import { ReferenceRight, useCheckReferenceRight } from "@references/hooks";
 import React from "react";
-import EditOTU from "./EditOTU";
-import RemoveOtu from "./RemoveOtu";
+import OtuEdit from "./OtuEdit";
+import OtuRemove from "./OtuRemove";
 
 type OTUHeaderEndIconsProps = {
     id: string;
@@ -15,7 +15,7 @@ type OTUHeaderEndIconsProps = {
 /**
  * Displays end icons to edit or remove an OTU
  */
-export function OTUHeaderEndIcons({
+export function OtuHeaderIcons({
     id,
     name,
     refId,
@@ -45,8 +45,8 @@ export function OTUHeaderEndIcons({
                 onClick={() => setOpenRemoveOTU(true)}
             />
 
-            <EditOTU otuId={id} name={name} abbreviation={abbreviation} />
-            <RemoveOtu id={id} name={name} refId={refId} />
+            <OtuEdit otuId={id} name={name} abbreviation={abbreviation} />
+            <OtuRemove id={id} name={name} refId={refId} />
         </>
     ) : null;
 }

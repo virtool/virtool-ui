@@ -3,11 +3,11 @@ import ContainerNarrow from "@base/ContainerNarrow";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
 import IndexDetail from "@indexes/components/IndexDetail";
+import OtuDetail from "@otus/components/Detail/OtuDetail";
 import { useGetReference } from "@references/queries";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
 import Indexes from "../../../indexes/components/Indexes";
-import OTUDetail from "../../../otus/components/Detail/OTUDetail";
 import OTUList from "../../../otus/components/OTUList";
 import EditReference from "./EditReference";
 import ReferenceDetailHeader from "./ReferenceDetailHeader";
@@ -60,7 +60,7 @@ export default function ReferenceDetail() {
                     />
                     <Route
                         path="/refs/:refId/otus/:otuId/*?"
-                        component={OTUDetail}
+                        component={OtuDetail}
                     />
                     <Route path="/refs/:refId/otus" component={OTUList} />
                     <Route

@@ -1,16 +1,16 @@
 import { useDialogParam, usePathParams } from "@/hooks";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
+import OtuIssues from "@otus/components/Detail/OtuIssues";
 import { useGetReference } from "@references/queries";
 import React from "react";
 import { CurrentOtuContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
-import General from "./OTUGeneral";
 
 /**
  * Displays a component for managing the OTU
  */
-export default function OTUSection() {
+export default function OtuSection() {
     const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
     const { open: openAddIsolate, setOpen: setOpenAddIsolate } =
         useDialogParam("openAddIsolate");
@@ -25,7 +25,9 @@ export default function OTUSection() {
 
     return (
         <CurrentOtuContextProvider otuId={otuId} refId={refId}>
-            <General issues={otu.issues} isolates={otu.isolates} />
+            {otu.issues && (
+                <OtuIssues issues={otu.issues} isolates={otu.isolates} />
+            )}
             <IsolateEditor />
             <AddIsolate
                 allowedSourceTypes={reference.source_types}
