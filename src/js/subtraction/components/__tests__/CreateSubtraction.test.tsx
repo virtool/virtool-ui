@@ -8,9 +8,9 @@ import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
 import { mockApiCreateSubtraction } from "../../../../tests/fake/subtractions";
-import CreateSubtraction from "../CreateSubtraction";
+import SubtractionCreate from "../SubtractionCreate";
 
-describe("<CreateSubtraction />", () => {
+describe("<SubtractionCreate />", () => {
     let path;
     afterEach(() => {
         sessionStorage.clear();
@@ -22,7 +22,7 @@ describe("<CreateSubtraction />", () => {
 
     it("should render when no files available", async () => {
         mockApiListFiles([]);
-        renderWithRouter(<CreateSubtraction />, path);
+        renderWithRouter(<SubtractionCreate />, path);
 
         expect(await screen.findByText(/no files found/i)).toBeInTheDocument();
     });
@@ -33,7 +33,7 @@ describe("<CreateSubtraction />", () => {
             type: FileType.subtraction,
         });
         mockApiListFiles([file]);
-        renderWithRouter(<CreateSubtraction />, path);
+        renderWithRouter(<SubtractionCreate />, path);
 
         expect(await screen.findByText(file.name)).toBeInTheDocument();
         await userEvent.click(await screen.findByText(/save/i));
@@ -57,7 +57,7 @@ describe("<CreateSubtraction />", () => {
             file.id,
         );
 
-        renderWithRouter(<CreateSubtraction />, path);
+        renderWithRouter(<SubtractionCreate />, path);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
@@ -88,7 +88,7 @@ describe("<CreateSubtraction />", () => {
         );
         mockApiListFiles([file]);
 
-        renderWithRouter(<CreateSubtraction />, path);
+        renderWithRouter(<SubtractionCreate />, path);
 
         expect(await screen.findByDisplayValue(name)).toBeInTheDocument();
         expect(await screen.findByDisplayValue(nickname)).toBeInTheDocument();
@@ -113,7 +113,7 @@ describe("<CreateSubtraction />", () => {
             file.id,
         );
 
-        renderWithRouter(<CreateSubtraction />, path);
+        renderWithRouter(<SubtractionCreate />, path);
 
         await userEvent.type(await screen.findByLabelText("Name"), name);
         await userEvent.type(screen.getByLabelText("Nickname"), nickname);
