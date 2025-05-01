@@ -4,7 +4,7 @@ import InputSearch from "@base/InputSearch";
 import LinkButton from "@base/LinkButton";
 import Toolbar from "@base/Toolbar";
 import { Permission } from "@groups/types";
-import CreateSubtraction from "@subtraction/components/CreateSubtraction";
+import SubtractionCreate from "@subtraction/components/SubtractionCreate";
 import React from "react";
 import { useSearch } from "wouter";
 
@@ -49,7 +49,7 @@ export default function SubtractionToolbar({
                     Create
                 </LinkButton>
             )}
-            <CreateSubtraction />
+            <SubtractionCreate />
         </Toolbar>
     );
 }
