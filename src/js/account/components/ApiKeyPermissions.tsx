@@ -7,6 +7,7 @@ import {
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupSection from "@base/BoxGroupSection";
 import Checkbox from "@base/Checkbox";
+import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import { Permissions } from "@groups/types";
 import { map, sortBy } from "lodash-es";
 import React from "react";
@@ -21,15 +22,15 @@ type APIPermissionsProps = {
 /**
  * Manages permissions for creating/updating an API
  */
-export default function APIPermissions({
+export default function ApiKeyPermissions({
     className,
     keyPermissions,
     onChange,
 }: APIPermissionsProps) {
-    const { data, isPending } = useFetchAccount();
+    const { data: account, isPending } = useFetchAccount();
 
     if (isPending) {
-        return null;
+        return <LoadingPlaceholder />;
     }
 
     const permissions = map(keyPermissions, (value, key) => ({
@@ -41,8 +42,8 @@ export default function APIPermissions({
         const disabled =
             !hasSufficientAdminRole(
                 AdministratorPermissions[permission.name] as AdministratorRoles,
-                data.administrator_role,
-            ) && !data.permissions[permission.name];
+                account.administrator_role,
+            ) && !account.permissions[permission.name];
 
         return (
             <BoxGroupSection key={permission.name} disabled={disabled}>

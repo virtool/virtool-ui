@@ -8,7 +8,7 @@ type IconButtonProps = {
     color?: IconColor;
     faStyle?: "fas" | "far" | "fal" | "fab";
     name: string;
-    onClick: () => void;
+    onClick?: () => void;
     tip: string;
     tipPlacement?: "top" | "right" | "bottom" | "left";
 };

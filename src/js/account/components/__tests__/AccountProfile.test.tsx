@@ -12,6 +12,7 @@ describe("<AccountProfile />", () => {
         const account = createFakeAccount({
             administrator_role: AdministratorRoles.FULL,
         });
+
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
@@ -21,6 +22,7 @@ describe("<AccountProfile />", () => {
 
     it("should render when not administrator", async () => {
         const account = createFakeAccount({ administrator_role: null });
+
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
@@ -32,38 +34,42 @@ describe("<AccountProfile />", () => {
             administrator_role: AdministratorRoles.FULL,
             email: "virtool.devs@gmail.com",
         });
+
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
         expect(await screen.findByText("Email Address")).toBeInTheDocument();
 
-        const emailInput = screen.getByLabelText("Email Address");
-        expect(emailInput).toHaveValue("virtool.devs@gmail.com");
+        expect(screen.getByLabelText("Email Address")).toHaveValue(
+            "virtool.devs@gmail.com",
+        );
     });
 
     it("should handle email changes", async () => {
         const account = createFakeAccount({
             administrator_role: AdministratorRoles.FULL,
         });
+
         mockApiGetAccount(account);
         renderWithProviders(<AccountProfile />);
 
-        expect(await screen.findByText("Email Address")).toBeInTheDocument();
+        await screen.findByText("Email Address");
+        const input = screen.getByLabelText("Email Address");
+        expect(input).toHaveValue("");
 
-        const emailInput = screen.getByLabelText("Email Address");
-        expect(emailInput).toHaveValue("");
+        const button = screen.getAllByRole("button", { name: "Change" })[1];
 
-        await userEvent.type(emailInput, "invalid");
-        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+        await userEvent.type(input, "invalid");
+        await userEvent.click(button);
 
-        expect(emailInput).toHaveValue("invalid");
+        expect(input).toHaveValue("invalid");
         expect(
             screen.getByText("Please provide a valid email address"),
         ).toBeInTheDocument();
 
-        await userEvent.clear(emailInput);
-        await userEvent.type(emailInput, "virtool.devs@gmail.com");
-        await userEvent.click(screen.getByRole("button", { name: "Save" }));
+        await userEvent.clear(input);
+        await userEvent.type(input, "virtool.devs@gmail.com");
+        await userEvent.click(button);
     });
 
     it("should handle password changes", async () => {
@@ -75,12 +81,14 @@ describe("<AccountProfile />", () => {
 
         expect(await screen.findByText("Password")).toBeInTheDocument();
 
+        const button = screen.getAllByRole("button", { name: "Change" })[0];
+
         const oldPasswordInput = screen.getByLabelText("Old Password");
         const newPasswordInput = screen.getByLabelText("New Password");
 
         // Try without providing old password.
         await userEvent.type(newPasswordInput, "long_enough_password");
-        await userEvent.click(screen.getByRole("button", { name: "Change" }));
+        await userEvent.click(button);
 
         expect(
             screen.getByText("Please provide your old password"),
@@ -92,7 +100,7 @@ describe("<AccountProfile />", () => {
 
         expect(screen.getByLabelText("New Password")).toHaveValue("short");
 
-        await userEvent.click(screen.getByRole("button", { name: "Change" }));
+        await userEvent.click(button);
 
         expect(
             screen.getByText(

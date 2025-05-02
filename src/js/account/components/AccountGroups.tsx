@@ -1,30 +1,11 @@
-import { borderRadius } from "@app/theme";
+import { cn } from "@/utils";
 import BoxGroup from "@base/BoxGroup";
 import BoxGroupHeader from "@base/BoxGroupHeader";
+import BoxGroupSection from "@base/BoxGroupSection";
 import NoneFound from "@base/NoneFound";
-import { getBadgeOrLabelColor } from "@base/utils";
 import { GroupMinimal } from "@groups/types";
 import { map } from "lodash-es";
 import React from "react";
-import styled from "styled-components";
-
-const AccountProfileGroups = styled.div`
-    padding: 10px 10px 5px;
-    overflow-y: auto;
-    max-height: 157px;
-`;
-
-const StyledGroupItem = styled.span`
-    align-items: center;
-    background-color: ${getBadgeOrLabelColor};
-    color: ${(props) => props.theme.color.white};
-    border-radius: ${borderRadius.md};
-    display: inline-flex;
-    padding: 4px 8px;
-    font-weight: bold;
-    margin-right: 5px;
-    margin-bottom: 5px;
-`;
 
 type AccountGroupsProps = {
     /** A list of groups associated with the account */
@@ -40,15 +21,28 @@ export default function AccountGroups({ groups }: AccountGroupsProps) {
             <BoxGroupHeader>
                 <h2>Groups</h2>
             </BoxGroupHeader>
-            <AccountProfileGroups>
+            <BoxGroupSection className="flex gap-2">
                 {groups.length ? (
                     map(groups, ({ id, name }) => (
-                        <StyledGroupItem key={id}>{name}</StyledGroupItem>
+                        <span
+                            className={cn(
+                                "bg-slate-500",
+                                "flex",
+                                "font-medium",
+                                "items-center",
+                                "text-white",
+                                "px-2 py-1",
+                                "rounded",
+                            )}
+                            key={id}
+                        >
+                            {name}
+                        </span>
                     ))
                 ) : (
                     <NoneFound noun="groups" />
                 )}
-            </AccountProfileGroups>
+            </BoxGroupSection>
         </BoxGroup>
     );
 }

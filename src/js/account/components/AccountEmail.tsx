@@ -10,16 +10,6 @@ import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 import React from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
-
-const EmailFooter = styled.div`
-    align-items: start;
-    display: flex;
-
-    button {
-        margin-left: auto;
-    }
-`;
 
 type FormValues = {
     email: string;
@@ -33,7 +23,7 @@ type EmailProps = {
 /**
  * A component to update the accounts email address
  */
-export default function Email({ email }: EmailProps) {
+export default function AccountEmail({ email }: EmailProps) {
     const {
         formState: { errors },
         handleSubmit,
@@ -68,9 +58,9 @@ export default function Email({ email }: EmailProps) {
                             <InputError>{errors.email?.message}</InputError>
                         </InputContainer>
                     </InputGroup>
-                    <EmailFooter>
-                        <SaveButton />
-                    </EmailFooter>
+                    <footer className="flex items-center justify-end mb-4">
+                        <SaveButton altText="Change" />
+                    </footer>
                 </BoxGroupSection>
             </form>
         </BoxGroup>

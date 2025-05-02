@@ -11,21 +11,6 @@ import RelativeTime from "@base/RelativeTime";
 import SaveButton from "@base/SaveButton";
 import React from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
-
-const ChangePasswordFooter = styled.div`
-    align-items: start;
-    display: flex;
-    margin-top: 15px;
-
-    > span {
-        color: ${(props) => props.theme.color.greyDark};
-    }
-
-    button {
-        margin-left: auto;
-    }
-`;
 
 type FormValues = {
     oldPassword: string;
@@ -40,7 +25,7 @@ type ChangePasswordProps = {
 /**
  * A component to update the accounts password
  */
-export default function ChangePassword({
+export default function AccountPassword({
     lastPasswordChange,
 }: ChangePasswordProps) {
     const {
@@ -108,13 +93,13 @@ export default function ChangePassword({
                             </InputError>
                         </InputContainer>
                     </InputGroup>
-                    <ChangePasswordFooter>
+                    <div className="flex items-center justify-between mb-4">
                         <span>
                             Last changed{" "}
                             <RelativeTime time={lastPasswordChange} />
                         </span>
                         <SaveButton altText="Change" />
-                    </ChangePasswordFooter>
+                    </div>
                 </BoxGroupSection>
             </form>
         </BoxGroup>

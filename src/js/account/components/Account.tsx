@@ -6,8 +6,8 @@ import ViewHeader from "@base/ViewHeader";
 import ViewHeaderTitle from "@base/ViewHeaderTitle";
 import React from "react";
 import { Redirect, Route, Switch } from "wouter";
-import APIKeys from "./API/APIKeys";
 import AccountProfile from "./AccountProfile";
+import ApiKeys from "./ApiKeys";
 
 /**
  * Displays the account page containing the profile and API subpages.
@@ -33,7 +33,7 @@ export default function Account() {
                         )}
                     />
                     <Route path="/account/profile" component={AccountProfile} />
-                    <Route path="/account/api" component={APIKeys} />
+                    <Route path="/account/api" component={ApiKeys} />
                 </Switch>
             </ContainerNarrow>
         </ContainerWide>
