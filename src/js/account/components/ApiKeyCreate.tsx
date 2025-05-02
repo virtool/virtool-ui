@@ -1,56 +1,27 @@
 import { useDialogParam } from "@/hooks";
-import APIPermissions from "@account/components/API/APIPermissions";
+import ApiKeyPermissions from "@account/components/ApiKeyPermissions";
 import { useCreateAPIKey } from "@account/queries";
-import { getFontSize } from "@app/theme";
-import Input from "@base/Input";
 
-import InputContainer from "@base/InputContainer";
 import InputError from "@base/InputError";
 import InputGroup from "@base/InputGroup";
-import InputIconButton from "@base/InputIconButton";
 import InputLabel from "@base/InputLabel";
 import InputSimple from "@base/InputSimple";
 import SaveButton from "@base/SaveButton";
 
+import { cn } from "@/utils";
+import Button from "@base/Button";
 import Dialog from "@base/Dialog";
 import DialogContent from "@base/DialogContent";
+import DialogDescription from "@base/DialogDescription";
 import DialogFooter from "@base/DialogFooter";
 import DialogOverlay from "@base/DialogOverlay";
 import DialogTitle from "@base/DialogTitle";
-import Icon from "@base/Icon";
 import PseudoLabel from "@base/PseudoLabel";
 import { Permissions } from "@groups/types";
 import { DialogPortal } from "@radix-ui/react-dialog";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
-import CreateAPIKeyInfo from "./APIKeyAdministratorInfo";
-
-const CreateAPIKeyCopied = styled.p`
-    color: ${(props) => props.theme.color.blue};
-`;
-
-const CreateAPIKeyInput = styled(Input)`
-    text-align: center;
-`;
-
-const CreateAPIKeyInputContainer = styled(InputContainer)`
-    margin-top: 15px;
-    margin-bottom: 10px;
-`;
-
-const StyledCreateAPIKey = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-
-    strong {
-        color: ${(props) => props.theme.color.greenDark};
-        font-size: ${getFontSize("lg")};
-        margin-bottom: 5px;
-    }
-`;
+import CreateAPIKeyInfo from "./ApiKeyAdministratorInfo";
 
 type FormValues = {
     name: string;
@@ -60,9 +31,9 @@ type FormValues = {
 /**
  * Displays a dialog to create an API key
  */
-export default function CreateAPIKey() {
-    const [newKey, setNewKey] = useState("");
+export default function ApiKeyCreate() {
     const [copied, setCopied] = useState(false);
+    const [newKey, setNewKey] = useState("");
     const [showCreated, setShowCreated] = useState(false);
     const mutation = useCreateAPIKey();
     const { open: openCreateKey, setOpen: setOpenCreateKey } =
@@ -93,12 +64,12 @@ export default function CreateAPIKey() {
         if (!showCreated && newKey) {
             setShowCreated(true);
         }
-    }, [newKey]);
+    }, [newKey, showCreated]);
 
     function handleHide() {
         setCopied(false);
-        setShowCreated(false);
         setOpenCreateKey(false);
+        setShowCreated(false);
     }
 
     function onSubmit({ name, permissions }: FormValues) {
@@ -122,31 +93,46 @@ export default function CreateAPIKey() {
                 <DialogOverlay />
                 <DialogContent>
                     <DialogTitle>Create API Key</DialogTitle>
+                    <DialogDescription>
+                        Create a new key for accessing the Virtool API.
+                    </DialogDescription>
                     {showCreated ? (
-                        <StyledCreateAPIKey>
-                            <strong>Here is your key.</strong>
-                            <p>
+                        <div className="flex flex-col items-center mt-10 mb-4">
+                            <p className="font-medium text-lg">
+                                Here is your key.
+                            </p>
+                            <p className="font-medium mb-4 text-slate-600">
                                 Make note of it now. For security purposes, it
                                 will not be shown again.
                             </p>
 
-                            <CreateAPIKeyInputContainer align="right">
-                                <CreateAPIKeyInput value={newKey} readOnly />
+                            <div className="flex items-stretch mb-2 w-full">
+                                <InputSimple
+                                    className="w-full"
+                                    value={newKey}
+                                    readOnly
+                                />
                                 {window.isSecureContext && (
-                                    <InputIconButton
-                                        aria-label="copy"
-                                        name="copy"
-                                        tip="Copy"
+                                    <Button
+                                        className="ml-2"
+                                        color="blue"
                                         onClick={copyToClipboard}
-                                    />
+                                    >
+                                        Copy
+                                    </Button>
                                 )}
-                            </CreateAPIKeyInputContainer>
-                            {copied && (
-                                <CreateAPIKeyCopied>
-                                    <Icon name="check" /> Copied
-                                </CreateAPIKeyCopied>
-                            )}
-                        </StyledCreateAPIKey>
+                            </div>
+                            <p
+                                className={cn(
+                                    "font-medium text-sm text-cyan-700",
+                                    {
+                                        invisible: !copied,
+                                    },
+                                )}
+                            >
+                                Copied
+                            </p>
+                        </div>
                     ) : (
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <CreateAPIKeyInfo />
@@ -168,7 +154,7 @@ export default function CreateAPIKey() {
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <APIPermissions
+                                    <ApiKeyPermissions
                                         keyPermissions={value}
                                         onChange={onChange}
                                     />

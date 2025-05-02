@@ -84,7 +84,7 @@ export function mockApiGetAccount(account: Account) {
  * @param apiKeys - The array of API keys to return
  * @returns A nock scope for the mocked API call
  */
-export function mockApiGetAPIKeys(apiKeys: APIKeyMinimal[]) {
+export function mockApiGetApiKeys(apiKeys: APIKeyMinimal[]) {
     return nock("http://localhost")
         .get("/api/account/keys")
         .reply(200, apiKeys);
@@ -97,7 +97,7 @@ export function mockApiGetAPIKeys(apiKeys: APIKeyMinimal[]) {
  * @param permissions - The permissions for the API key
  * @returns A nock scope for the mocked API call
  */
-export function mockApiCreateAPIKey(name: string, permissions: Permissions) {
+export function mockApiCreateApiKey(name: string, permissions: Permissions) {
     const createApiKeyResponse = {
         groups: [],
         id: faker.random.alphaNumeric(8),

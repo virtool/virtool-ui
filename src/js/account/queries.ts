@@ -110,7 +110,7 @@ export function useCreateAPIKey() {
  *
  * @returns A mutator for updating an API key
  */
-export function useUpdateAPIKey() {
+export function useUpdateApiKey() {
     const queryClient = useQueryClient();
 
     return useMutation<
