@@ -1,5 +1,5 @@
 import { usePathParams } from "@/hooks";
-import { getFontWeight } from "@app/theme";
+import { cn } from "@/utils";
 import Link from "@base/Link";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
 import NotFound from "@base/NotFound";
@@ -14,8 +14,8 @@ import React from "react";
 import styled from "styled-components";
 import { Redirect, Route, Switch } from "wouter";
 import History from "./History/OTUHistory";
-import { OTUHeaderEndIcons } from "./OTUHeaderEndIcons";
-import OTUSection from "./OTUSection";
+import { OtuHeaderIcons } from "./OtuHeaderIcons";
+import OtuSection from "./OtuSection";
 import Schema from "./Schema/Schema";
 
 const OTUDetailTitle = styled(ViewHeaderTitle)`
@@ -33,21 +33,12 @@ const OTUDetailTitle = styled(ViewHeaderTitle)`
     }
 `;
 
-const OTUDetailSubtitle = styled.p`
-    font-size: ${(props) => props.theme.fontSize.md};
-    margin-top: 5px;
-
-    strong {
-        font-weight: ${getFontWeight("thick")};
-    }
-`;
-
 /**
- * Displays detailed otu view allowing users to manage otus
+ * Displays the details of an OTU.
  */
-export default function OTUDetail() {
+export default function OtuDetail() {
     const { otuId, refId } = usePathParams<{ otuId: string; refId: string }>();
-    const { data: otu, isPending: isPendingOTU, isError } = useFetchOTU(otuId);
+    const { data: otu, isPending: isPendingOtu, isError } = useFetchOTU(otuId);
     const { data: reference, isPending: isPendingReference } =
         useGetReference(refId);
 
@@ -55,7 +46,7 @@ export default function OTUDetail() {
         return <NotFound />;
     }
 
-    if (isPendingOTU || isPendingReference) {
+    if (isPendingOtu || isPendingReference) {
         return <LoadingPlaceholder />;
     }
 
@@ -71,7 +62,7 @@ export default function OTUDetail() {
                         <a href={`/api/otus/${id}.fa`} download>
                             Download FASTA
                         </a>
-                        <OTUHeaderEndIcons
+                        <OtuHeaderIcons
                             id={id}
                             refId={refId}
                             name={name}
@@ -79,10 +70,22 @@ export default function OTUDetail() {
                         />
                     </ViewHeaderIcons>
                 </OTUDetailTitle>
-                <OTUDetailSubtitle>
-                    <strong>From Reference / </strong>
+                <p
+                    className={cn(
+                        "flex",
+                        "font-medium",
+                        "items-center",
+                        "gap-2",
+                        "py-2",
+                        "text-lg",
+                    )}
+                >
                     <Link to={`/refs/${refId}`}>{reference.name}</Link>
-                </OTUDetailSubtitle>
+                    <span className="text-slate-600">/</span>
+                    <Link to={`/refs/${refId}/otus`}>OTUs</Link>
+                    <span className="text-slate-600">/</span>
+                    <Link to={`/refs/${refId}/otus/${otuId}`}>{name}</Link>
+                </p>
             </ViewHeader>
 
             <Tabs>
@@ -107,7 +110,7 @@ export default function OTUDetail() {
                 />
                 <Route
                     path="/refs/:refId/otus/:otuId/otu"
-                    component={OTUSection}
+                    component={OtuSection}
                 />
                 <Route
                     path="/refs/:refId/otus/:otuId/history"

@@ -12,7 +12,7 @@ type RemoveOtuProps = {
 /**
  * Displays a dialog for removing an OTU
  */
-export default function RemoveOtu({ id, name, refId }: RemoveOtuProps) {
+export default function OtuRemove({ id, name, refId }: RemoveOtuProps) {
     const navigate = useNavigate();
 
     const { open: openRemoveOTU, setOpen: setOpenRemoveOTU } =

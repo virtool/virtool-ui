@@ -17,7 +17,7 @@ type EditOTUProps = {
 /**
  * Displays a dialog for editing an OTU
  */
-export default function EditOTU({ abbreviation, name, otuId }: EditOTUProps) {
+export default function OtuEdit({ abbreviation, name, otuId }: EditOTUProps) {
     const { open: openEditOTU, setOpen: setOpenEditOTU } =
         useDialogParam("openEditOTU");
 
