@@ -55,11 +55,11 @@ const StyledLogo = styled.div`
     }
 `;
 
-interface LogoProps {
+type LogoProps = {
     className?: string;
     height?: number;
     color?: string;
-}
+};
 
 /**
  * Virtool's logo

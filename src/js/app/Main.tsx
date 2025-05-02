@@ -1,8 +1,7 @@
 import { useFetchAccount } from "@account/queries";
 import Container from "@base/Container";
 import LoadingPlaceholder from "@base/LoadingPlaceholder";
-import NavBar from "@nav/components/NavBar";
-import { NavContainer } from "@nav/components/NavContainer";
+import Nav from "@nav/components/Nav";
 import Sidebar from "@nav/components/Sidebar";
 import { useQueryClient } from "@tanstack/react-query";
 import { includes } from "lodash-es";
@@ -77,13 +76,13 @@ export default function Main() {
                 </Helmet>
             </HelmetProvider>
 
-            <NavContainer>
+            <div className="bg-transparent fixed top-0 w-full z-50">
                 <MessageBanner />
-                <NavBar
+                <Nav
                     administrator_role={data.administrator_role}
                     handle={data.handle}
                 />
-            </NavContainer>
+            </div>
 
             <MainContainer>
                 <Suspense fallback={<Fallback />}>

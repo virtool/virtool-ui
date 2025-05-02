@@ -8,6 +8,7 @@
     --font-mono:
         ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono,
         monospace;
+    --color-virtool: #3C8786;
 }
 
 html {
