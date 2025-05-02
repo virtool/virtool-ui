@@ -4,9 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import NavBar from "../NavBar";
+import Nav from "../Nav";
 
-describe("<NavBar />", () => {
+describe("<Nav />", () => {
     const props = {
         administrator_role: AdministratorRoles.FULL,
         dev: false,
@@ -14,7 +14,7 @@ describe("<NavBar />", () => {
     };
 
     it("should render", async () => {
-        renderWithRouter(<NavBar {...props} />);
+        renderWithRouter(<Nav {...props} />);
         expect(screen.getByRole("link", { name: "Jobs" })).toBeInTheDocument();
         expect(
             screen.getByRole("link", { name: "Samples" }),

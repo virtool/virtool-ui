@@ -7,66 +7,12 @@ import DropdownMenuContent from "@base/DropdownMenuContent";
 import DropdownMenuItem from "@base/DropdownMenuItem";
 import DropdownMenuLink from "@base/DropdownMenuLink";
 import DropdownMenuTrigger from "@base/DropdownMenuTrigger";
-import Icon from "@base/Icon";
 import IconButton from "@base/IconButton";
 import InitialIcon from "@base/InitialIcon";
 import Logo from "@base/Logo";
 import { useRootQuery } from "@wall/queries";
 import React from "react";
-import styled from "styled-components";
-import { NavBarLink } from "./NavBarLink";
-
-const NavBarLeft = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const NavBarRight = styled.div`
-    display: flex;
-    align-items: center;
-    margin-right: calc(100% - 100vw + 20px);
-`;
-
-const NavBarLogo = styled(Logo)`
-    margin: 0 30px 0 35px;
-`;
-
-const NavDropdownButton = styled.div`
-    align-items: center;
-    background: transparent;
-    border: none;
-    color: ${(props) => props.theme.color.white};
-    cursor: pointer;
-    display: flex;
-    height: 45px;
-    outline: none;
-    padding: 0 10px;
-
-    &:focus {
-        color: ${(props) => props.theme.color.primaryDarkest};
-    }
-
-    *:not(:last-child) {
-        margin-right: 3px;
-    }
-
-    i {
-        padding-left: 5px;
-    }
-`;
-
-const NavDivider = styled.div`
-    color: ${(props) => props.theme.color.greyLight};
-    border-top: 2px solid;
-`;
-
-const StyledNavBar = styled.div`
-    background-color: ${(props) => props.theme.color.primary};
-    color: white;
-    display: flex;
-    height: 45px;
-    justify-content: space-between;
-`;
+import { NavLink } from "./NavLink";
 
 type NavBarProps = {
     administrator_role: AdministratorRoles;
@@ -74,9 +20,9 @@ type NavBarProps = {
 };
 
 /**
- * Displays the navigation bar with routes to available components
+ * Display the main navigation bar with links too root level views.
  */
-export default function NavBar({ administrator_role, handle }: NavBarProps) {
+export default function Nav({ administrator_role, handle }: NavBarProps) {
     const { setOpen: setOpenDev } = useDialogParam("openDev");
     const mutation = useLogout();
     const { data } = useRootQuery();
@@ -86,20 +32,18 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
     }
 
     return (
-        <StyledNavBar>
-            <NavBarLeft>
-                <NavBarLogo color="white" />
-                <NavBarLink to="/jobs?state=preparing&state=running">
-                    Jobs
-                </NavBarLink>
-                <NavBarLink to="/samples">Samples</NavBarLink>
-                <NavBarLink to="/refs">References</NavBarLink>
-                <NavBarLink to="/hmm">HMM</NavBarLink>
-                <NavBarLink to="/subtractions">Subtractions</NavBarLink>
-                <NavBarLink to="/ml">ML</NavBarLink>
-            </NavBarLeft>
+        <nav className="bg-virtool flex justify-between text-white">
+            <div className="flex items-center">
+                <Logo className="pb-2.5 pl-10 pr-4" color="white" />
+                <NavLink to="/jobs?state=preparing&state=running">Jobs</NavLink>
+                <NavLink to="/samples">Samples</NavLink>
+                <NavLink to="/refs">References</NavLink>
+                <NavLink to="/hmm">HMM</NavLink>
+                <NavLink to="/subtractions">Subtractions</NavLink>
+                <NavLink to="/ml">ML</NavLink>
+            </div>
 
-            <NavBarRight>
+            <div className="flex gap-2 pr-4">
                 {data?.dev && (
                     <IconButton
                         onClick={() => setOpenDev(true)}
@@ -111,17 +55,17 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
 
                 <Dropdown>
                     <DropdownMenuTrigger>
-                        <NavDropdownButton>
+                        <div className="bg-transparent flex items-center">
                             <InitialIcon handle={handle} size="md" />
-                            <Icon name="caret-down" />
-                        </NavDropdownButton>
+                        </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuLink to="/account">
                             Signed in as <strong>{handle}</strong>
                         </DropdownMenuLink>
 
-                        <NavDivider />
+                        <div />
+
                         <DropdownMenuLink to="/account">
                             Account
                         </DropdownMenuLink>
@@ -148,7 +92,7 @@ export default function NavBar({ administrator_role, handle }: NavBarProps) {
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </Dropdown>
-            </NavBarRight>
-        </StyledNavBar>
+            </div>
+        </nav>
     );
 }

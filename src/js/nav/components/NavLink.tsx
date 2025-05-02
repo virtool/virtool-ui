@@ -3,7 +3,7 @@ import { cn } from "@/utils";
 import React from "react";
 import { Link } from "wouter";
 
-const className = cn(
+const baseClassName = cn(
     "flex",
     "font-medium",
     "h-full",
@@ -15,13 +15,16 @@ const className = cn(
     "text-white",
 );
 
-const activeClassName = cn(className, "bg-teal-800", "hover:text-white");
+const activeClassName = cn(baseClassName, "bg-teal-800", "hover:text-white");
 
-export function NavBarLink({ children, to }) {
+export function NavLink({ children, to }) {
     const active = useMatchPartialPath(to);
 
     return (
-        <Link to={to} className={() => (active ? activeClassName : className)}>
+        <Link
+            to={to}
+            className={() => (active ? activeClassName : baseClassName)}
+        >
             {children}
         </Link>
     );

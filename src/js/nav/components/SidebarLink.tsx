@@ -21,24 +21,24 @@ const baseClassName = cn(
     "hover:text-gray-700",
 );
 
+const activeClassName = cn(
+    baseClassName,
+    "text-primary",
+    "font-medium",
+    "hover:text-primary",
+    "focus:text-primary",
+);
+
 /**
  * Displays a styled sidebar item for use in the sidebar component
  */
-export default function SidebarItem({
+export default function SidebarLink({
     icon,
     link,
     title,
     exclude,
 }: SidebarItemProps) {
     const isActive = useMatchPartialPath(link, exclude);
-
-    const activeClassName = cn(
-        baseClassName,
-        "text-primary",
-        "font-medium",
-        "hover:text-primary",
-        "focus:text-primary",
-    );
 
     return (
         <Link
