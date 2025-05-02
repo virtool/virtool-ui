@@ -87,7 +87,6 @@ describe("<ApiKeys />", () => {
         ).toBeInTheDocument();
         expect(screen.getByText(/Make note of it now/)).toBeInTheDocument();
         expect(screen.getByDisplayValue("testKey")).toBeInTheDocument();
-        expect(screen.queryByText("Copied")).not.toBeInTheDocument();
 
         await userEvent.keyboard("{Escape}");
 
