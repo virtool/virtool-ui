@@ -4,9 +4,9 @@ import {
     Blast,
     FormattedNuvsResults,
     Workflows,
-} from "@analyses/types";
+} from "../../analyses/types";
 import { faker } from "@faker-js/faker";
-import { JobMinimal } from "@jobs/types";
+import { JobMinimal } from "../../jobs/types";
 import { assign, merge } from "lodash";
 import nock from "nock";
 import { createFakeIndexNested } from "./indexes";

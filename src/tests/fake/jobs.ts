@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { JobMinimal, JobState, workflows } from "@jobs/types";
-import { UserNested } from "@users/types";
+import { JobMinimal, JobState, workflows } from "../../jobs/types";
+import { UserNested } from "../../users/types";
 import { merge } from "lodash";
 import nock from "nock";
 import { createFakeUserNested } from "./user";

@@ -1,7 +1,7 @@
-import { AdministratorRoles } from "@administration/types";
+import { AdministratorRoles } from "../../administration/types";
 import { faker } from "@faker-js/faker";
-import { GroupMinimal, Permissions } from "@groups/types";
-import { User, UserNested } from "@users/types";
+import { GroupMinimal, Permissions } from "../../groups/types";
+import { User, UserNested } from "../../users/types";
 import { merge, times } from "lodash-es";
 import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";

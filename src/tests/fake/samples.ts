@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import { workflows } from "@jobs/types";
-import { LabelNested } from "@labels/types";
-import { SampleRightsUpdate } from "@samples/api";
+import { workflows } from "../../jobs/types";
+import { LabelNested } from "../../labels/types";
+import { SampleRightsUpdate } from "../../samples/api";
 import {
     LibraryType,
     Quality,
@@ -9,8 +9,8 @@ import {
     Sample,
     SampleMinimal,
     WorkflowState,
-} from "@samples/types";
-import { SubtractionNested } from "@subtraction/types";
+} from "../../samples/types";
+import { SubtractionNested } from "../../subtraction/types";
 import { assign, times } from "lodash";
 import nock from "nock";
 import { createFakeJobMinimal } from "./jobs";

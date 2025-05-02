@@ -1,11 +1,11 @@
-import { Task } from "@/types/api";
+import { Task } from "../../types/api";
 import { faker } from "@faker-js/faker";
 import {
     Reference,
     ReferenceClonedFrom,
     ReferenceMinimal,
     ReferenceTarget,
-} from "@references/types";
+} from "../../references/types";
 import { assign } from "lodash-es";
 import nock from "nock";
 import { createFakeUserNested } from "./user";

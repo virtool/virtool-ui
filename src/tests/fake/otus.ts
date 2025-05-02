@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { UpdateOTUProps } from "@otus/queries";
+import { UpdateOTUProps } from "../../otus/queries";
 import {
     HistoryMethod,
     HistoryNested,
@@ -8,7 +8,7 @@ import {
     OTUMinimal,
     OTURemote,
     OTUSegment,
-} from "@otus/types";
+} from "../../otus/types";
 import { assign, merge, times } from "lodash";
 import nock from "nock";
 import { createFakeReferenceNested } from "./references";

@@ -3,10 +3,10 @@ import {
     AccountSettings,
     APIKeyMinimal,
     QuickAnalyzeWorkflow,
-} from "@account/types";
-import { AdministratorRoles } from "@administration/types";
+} from "../../account/types";
+import { AdministratorRoles } from "../../administration/types";
 import { faker } from "@faker-js/faker";
-import { GroupMinimal, Permissions } from "@groups/types";
+import { GroupMinimal, Permissions } from "../../groups/types";
 import { merge } from "lodash";
 import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";

@@ -1,7 +1,7 @@
 import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
-    content: ["./src/js/**/*.{html,js,jsx,ts,tsx}"],
+    content: ["./src/**/*.{css,html,js,jsx,ts,tsx}"],
     prefix: "",
     theme: {
         extend: {

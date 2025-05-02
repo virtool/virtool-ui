@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { File, FileType } from "@files/types";
-import { UserNested } from "@users/types";
+import { File, FileType } from "../../files/types";
+import { UserNested } from "../../users/types";
 import { merge } from "lodash-es";
 import nock from "nock";
 import { createFakeUserNested } from "./user";

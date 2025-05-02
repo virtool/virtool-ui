@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { assign, times, toString } from "lodash-es";
 import nock from "nock";
-import { HMM, HmmSearchResults } from "../../js/hmm/types";
+import { HMM, HmmSearchResults } from "../../hmm/types";
 
 /**
  * Create a fake HMM minimal
