@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { merge } from "lodash";
 import nock from "nock";
-import { MlModel, MLModelMinimal, MLModelRelease } from "../../js/ml/types";
+import { MlModel, MLModelMinimal, MLModelRelease } from "../../ml/types";
 
 /**
  * Create a fake ML model release object

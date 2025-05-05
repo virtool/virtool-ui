@@ -1,14 +1,14 @@
+import { faker } from "@faker-js/faker";
+import { assign, merge } from "lodash";
+import nock from "nock";
 import {
     AnalysisMinimal,
     AnalysisSample,
     Blast,
     FormattedNuvsResults,
     Workflows,
-} from "@analyses/types";
-import { faker } from "@faker-js/faker";
-import { JobMinimal } from "@jobs/types";
-import { assign, merge } from "lodash";
-import nock from "nock";
+} from "../../analyses/types";
+import { JobMinimal } from "../../jobs/types";
 import { createFakeIndexNested } from "./indexes";
 import { createFakeJobMinimal } from "./jobs";
 import { createFakeReferenceNested } from "./references";

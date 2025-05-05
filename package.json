@@ -92,7 +92,7 @@
         "build": "vite build",
         "build-storybook": "storybook build",
         "develop": "vite serve",
-        "eslint": "eslint src/js",
+        "eslint": "eslint src",
         "server": "npx tsx  src/server/run.ts",
         "storybook": "storybook dev -p 6006",
         "test": "TZ=UTC vitest",

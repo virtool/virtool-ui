@@ -2,8 +2,8 @@ import { faker } from "@faker-js/faker";
 import { merge, pick } from "lodash";
 import { assign } from "lodash-es";
 import nock from "nock";
-import { JobMinimal } from "../../js/jobs/types";
-import { SampleNested } from "../../js/samples/types";
+import { JobMinimal } from "../../jobs/types";
+import { SampleNested } from "../../samples/types";
 import {
     NucleotideComposition,
     Subtraction,
@@ -11,8 +11,8 @@ import {
     SubtractionMinimal,
     SubtractionOption,
     SubtractionUpload,
-} from "../../js/subtraction/types";
-import { UserNested } from "../../js/users/types";
+} from "../../subtraction/types";
+import { UserNested } from "../../users/types";
 import { createFakeUserNested } from "./user";
 
 /**
