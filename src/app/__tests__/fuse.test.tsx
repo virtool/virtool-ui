@@ -1,6 +1,6 @@
-import { useFuse } from "../fuse";
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
+import { useFuse } from "../fuse";
 
 describe("useFuse()", () => {
     let collection: { name: string }[];

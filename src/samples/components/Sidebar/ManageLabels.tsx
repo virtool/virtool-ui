@@ -1,14 +1,14 @@
+import { filter, flatMap, groupBy, map } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import Link from "../../../base/Link";
 import SidebarHeader from "../../../base/SidebarHeader";
 import SideBarSection from "../../../base/SideBarSection";
 import { Label } from "../../../labels/types";
-import SampleLabelInner from "./SampleLabelInner";
-import { SampleMinimal } from "../../types";
-import { filter, flatMap, groupBy, map } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
 import { useUpdateLabel } from "../../queries";
+import { SampleMinimal } from "../../types";
+import SampleLabelInner from "./SampleLabelInner";
 import SampleSidebarMultiselectList from "./SampleSidebarMultiselectList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
 

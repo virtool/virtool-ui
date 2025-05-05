@@ -1,6 +1,6 @@
+import { find } from "lodash-es";
 import { useNaiveUrlSearchParam, useUrlSearchParam } from "../app/hooks";
 import { OTU } from "./types";
-import { find } from "lodash-es";
 
 /**
  * A hook to get the active isolate

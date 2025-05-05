@@ -1,6 +1,6 @@
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { findJobs, getJob } from "./api";
 import { Job, JobSearchResult } from "./types";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 /**
  * Factory object for generating job query keys

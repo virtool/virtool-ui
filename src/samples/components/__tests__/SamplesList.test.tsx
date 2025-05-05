@@ -1,4 +1,3 @@
-import { AdministratorRoles } from "../../../administration/types";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
@@ -20,6 +19,7 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, expect, it } from "vitest";
+import { AdministratorRoles } from "../../../administration/types";
 import SamplesList from "../SamplesList";
 
 describe("<SamplesList />", () => {

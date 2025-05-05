@@ -1,8 +1,8 @@
-import { Settings } from "../../types/api";
 import { faker } from "@faker-js/faker";
 import { assign } from "lodash";
 import nock from "nock";
 import { AdministratorRoles } from "../../administration/types";
+import { Settings } from "../../types/api";
 import { User } from "../../users/types";
 
 export const administratorRoles = [

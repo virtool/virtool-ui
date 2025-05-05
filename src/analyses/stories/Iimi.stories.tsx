@@ -1,6 +1,6 @@
+import type { Meta, StoryObj } from "@storybook/react";
 import { IimiViewer } from "../components/Iimi/IimiViewer";
 import { Workflows } from "../types";
-import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof IimiViewer> = {
     title: "analyses/IimiViewer",

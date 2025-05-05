@@ -1,3 +1,6 @@
+import { map } from "lodash";
+import React from "react";
+import styled from "styled-components";
 import { useListSearchParam, usePageParam } from "../../app/hooks";
 import { getFontWeight } from "../../app/theme";
 import Box from "../../base/Box";
@@ -8,9 +11,6 @@ import Pagination from "../../base/Pagination";
 import ViewHeader from "../../base/ViewHeader";
 import ViewHeaderTitle from "../../base/ViewHeaderTitle";
 import { useFindJobs } from "../queries";
-import { map } from "lodash";
-import React from "react";
-import styled from "styled-components";
 import { JobFilters } from "./Filters/JobFilters";
 import Job from "./Item/JobItem";
 

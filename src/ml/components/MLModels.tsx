@@ -1,11 +1,11 @@
+import { map } from "lodash";
+import React from "react";
 import ContainerNarrow from "../../base/ContainerNarrow";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import NoneFoundBox from "../../base/NoneFoundBox";
 import ViewHeader from "../../base/ViewHeader";
 import ViewHeaderTitle from "../../base/ViewHeaderTitle";
 import ViewHeaderTitleBadge from "../../base/ViewHeaderTitleBadge";
-import { map } from "lodash";
-import React from "react";
 import { useFindModels } from "../queries";
 import { MLModelMinimal } from "../types";
 import { MlModel } from "./MlModel";

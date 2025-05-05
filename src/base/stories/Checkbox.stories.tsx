@@ -1,7 +1,7 @@
-import Checkbox from "../Checkbox";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import Checkbox from "../Checkbox";
 
 const meta: Meta<typeof Checkbox> = {
     title: "base/Checkbox",

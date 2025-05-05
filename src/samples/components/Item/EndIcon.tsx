@@ -1,8 +1,8 @@
+import React from "react";
+import styled from "styled-components";
 import IconButton from "../../../base/IconButton";
 import ProgressCircle from "../../../base/ProgressCircle";
 import { JobMinimal, JobState } from "../../../jobs/types";
-import React from "react";
-import styled from "styled-components";
 
 const StyledSampleItemEndIcon = styled.div`
     align-items: center;

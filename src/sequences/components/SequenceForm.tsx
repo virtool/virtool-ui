@@ -1,3 +1,5 @@
+import React from "react";
+import { FormProvider } from "react-hook-form";
 import InputError from "../../base/InputError";
 import InputGroup from "../../base/InputGroup";
 import InputLabel from "../../base/InputLabel";
@@ -6,11 +8,9 @@ import SaveButton from "../../base/SaveButton";
 import { RestoredAlert } from "../../forms/components/RestoredAlert";
 import { usePersistentForm } from "../../forms/hooks";
 import { OTUSegment, OTUSequence } from "../../otus/types";
+import Accession from "./Accession";
 import SequenceField from "./SequenceField";
 import SequenceSegmentField from "./SequenceSegmentField";
-import React from "react";
-import { FormProvider } from "react-hook-form";
-import Accession from "./Accession";
 
 type SequenceFormValues = {
     accession: string;

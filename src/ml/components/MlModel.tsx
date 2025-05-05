@@ -1,8 +1,8 @@
+import React from "react";
+import styled from "styled-components";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import Attribution from "../../base/Attribution";
 import Box from "../../base/Box";
-import React from "react";
-import styled from "styled-components";
 import { MLModelRelease } from "../types";
 
 const MlModelHeader = styled.div`

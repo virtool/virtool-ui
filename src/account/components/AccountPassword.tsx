@@ -1,4 +1,5 @@
-import { useChangePassword } from "../queries";
+import React from "react";
+import { useForm } from "react-hook-form";
 import BoxGroup from "../../base/BoxGroup";
 import BoxGroupHeader from "../../base/BoxGroupHeader";
 import BoxGroupSection from "../../base/BoxGroupSection";
@@ -9,8 +10,7 @@ import InputLabel from "../../base/InputLabel";
 import InputPassword from "../../base/InputPassword";
 import RelativeTime from "../../base/RelativeTime";
 import SaveButton from "../../base/SaveButton";
-import React from "react";
-import { useForm } from "react-hook-form";
+import { useChangePassword } from "../queries";
 
 type FormValues = {
     oldPassword: string;

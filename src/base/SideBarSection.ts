@@ -1,5 +1,5 @@
-import { borderRadius, boxShadow } from "../app/theme";
 import styled from "styled-components";
+import { borderRadius, boxShadow } from "../app/theme";
 import Box from "./Box";
 
 const SideBarSection = styled(Box)`

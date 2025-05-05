@@ -1,10 +1,10 @@
-import InputGroup from "../../base/InputGroup";
-import InputLabel from "../../base/InputLabel";
-import InputSelect from "../../base/InputSelect";
 import { capitalize, map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
 import { useUpdateUser } from "../../administration/queries";
+import InputGroup from "../../base/InputGroup";
+import InputLabel from "../../base/InputLabel";
+import InputSelect from "../../base/InputSelect";
 import { GroupMinimal } from "../../groups/types";
 
 export const PrimaryGroupOption = styled.option`

@@ -1,3 +1,6 @@
+import { forEach } from "lodash-es";
+import React, { useCallback, useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import InputContainer from "../../base/InputContainer";
 import InputError from "../../base/InputError";
 import InputGroup from "../../base/InputGroup";
@@ -6,9 +9,6 @@ import InputLabel from "../../base/InputLabel";
 import InputLoading from "../../base/InputLoading";
 import InputSimple from "../../base/InputSimple";
 import { getGenbank } from "../../otus/api";
-import { forEach } from "lodash-es";
-import React, { useCallback, useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
 
 /**
  * Displays the accession field of a form for a sequence

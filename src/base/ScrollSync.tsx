@@ -1,6 +1,6 @@
+import React, { useContext, useEffect, useRef } from "react";
 import { cn } from "../app/utils";
 import ScrollSyncContext from "./ScrollSyncContext";
-import React, { useContext, useEffect, useRef } from "react";
 
 type ScrollSyncProps = {
     children: React.ReactNode;

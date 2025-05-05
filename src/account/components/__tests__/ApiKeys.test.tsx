@@ -1,4 +1,3 @@
-import { AdministratorRoles } from "../../../administration/types";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -13,6 +12,7 @@ import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
+import { AdministratorRoles } from "../../../administration/types";
 import ApiKeys from "../ApiKeys";
 
 describe("<ApiKeys />", () => {

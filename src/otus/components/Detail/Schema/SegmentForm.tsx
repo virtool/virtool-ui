@@ -1,3 +1,7 @@
+import { find, map } from "lodash-es";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import styled from "styled-components";
 import Checkbox from "../../../../base/Checkbox";
 import DialogFooter from "../../../../base/DialogFooter";
 import InputError from "../../../../base/InputError";
@@ -7,10 +11,6 @@ import InputSelect from "../../../../base/InputSelect";
 import InputSimple from "../../../../base/InputSimple";
 import SaveButton from "../../../../base/SaveButton";
 import { Molecule, OTUSegment } from "../../../types";
-import { find, map } from "lodash-es";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
 
 const moleculeTypes = [
     "",

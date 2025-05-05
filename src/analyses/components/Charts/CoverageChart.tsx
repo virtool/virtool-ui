@@ -1,7 +1,7 @@
-import { theme } from "../../../app/theme";
 import { area, axisBottom, axisLeft, format, scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
 import styled, { DefaultTheme } from "styled-components";
+import { theme } from "../../../app/theme";
 import { UntrustworthyRange } from "../../types";
 import { deriveTrustworthyRegions } from "../../utils";
 

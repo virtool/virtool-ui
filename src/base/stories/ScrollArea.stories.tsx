@@ -1,8 +1,8 @@
-import BoxGroupSection from "../BoxGroupSection";
-import ScrollArea from "../ScrollArea";
 import type { Meta, StoryObj } from "@storybook/react";
 import { map } from "lodash";
 import React from "react";
+import BoxGroupSection from "../BoxGroupSection";
+import ScrollArea from "../ScrollArea";
 
 const meta: Meta<typeof ScrollArea> = {
     title: "base/ScrollArea",

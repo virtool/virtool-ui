@@ -1,3 +1,5 @@
+import React from "react";
+import styled from "styled-components";
 import { usePathParams } from "../../app/hooks";
 import ContainerNarrow from "../../base/ContainerNarrow";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
@@ -6,14 +8,12 @@ import RelativeTime from "../../base/RelativeTime";
 import SubviewHeader from "../../base/SubviewHeader";
 import SubviewHeaderAttribution from "../../base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "../../base/SubviewHeaderTitle";
+import { DownloadLink } from "../../references/components/Detail/DownloadLink";
+import { useGetReference } from "../../references/queries";
+import { useFetchIndex } from "../queries";
 import Contributors from "./Contributors";
 import Files from "./IndexFiles";
 import IndexOTUs from "./IndexOTUs";
-import { useFetchIndex } from "../queries";
-import { DownloadLink } from "../../references/components/Detail/DownloadLink";
-import { useGetReference } from "../../references/queries";
-import React from "react";
-import styled from "styled-components";
 
 const IndexDetailSubtitle = styled.div`
     align-items: center;

@@ -1,3 +1,5 @@
+import { axisBottom, axisLeft, line, scaleLinear } from "d3";
+import { forEach, unzip } from "lodash-es";
 import { theme } from "../../app/theme";
 import {
     appendLegend,
@@ -5,8 +7,6 @@ import {
     QUALITY_CHART_HEIGHT,
     QUALITY_CHART_MARGIN,
 } from "../../samples/charting.js";
-import { axisBottom, axisLeft, line, scaleLinear } from "d3";
-import { forEach, unzip } from "lodash-es";
 
 const series = [
     { label: "Guanine", color: theme.color.blue },

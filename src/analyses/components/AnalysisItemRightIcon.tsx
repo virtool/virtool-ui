@@ -1,5 +1,5 @@
-import IconButton from "../../base/IconButton";
 import React from "react";
+import IconButton from "../../base/IconButton";
 
 type AnalysisItemRightIconProps = {
     /** Whether the user has permission to remove an analysis */

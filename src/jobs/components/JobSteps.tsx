@@ -1,6 +1,6 @@
-import BoxGroup from "../../base/BoxGroup";
 import { map } from "lodash-es";
 import React from "react";
+import BoxGroup from "../../base/BoxGroup";
 import { JobStatus } from "../types";
 import { JobStep } from "./JobStep";
 

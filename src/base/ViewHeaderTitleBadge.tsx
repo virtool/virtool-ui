@@ -1,6 +1,6 @@
+import React from "react";
 import { cn } from "../app/utils";
 import Badge from "./Badge";
-import React from "react";
 
 type ViewHeaderTitleBadge = {
     children?: React.ReactNode;

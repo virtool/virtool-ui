@@ -1,9 +1,3 @@
-import CompactScrollList from "../../base/CompactScrollList";
-import InputError from "../../base/InputError";
-import Link from "../../base/Link";
-import NoneFoundBox from "../../base/NoneFoundBox";
-import { useValidateFiles } from "../../files/hooks";
-import { File, FileResponse, FileType } from "../../files/types";
 import { InfiniteData } from "@tanstack/react-query";
 import {
     FetchNextPageOptions,
@@ -12,6 +6,12 @@ import {
 import { flatMap } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
+import CompactScrollList from "../../base/CompactScrollList";
+import InputError from "../../base/InputError";
+import Link from "../../base/Link";
+import NoneFoundBox from "../../base/NoneFoundBox";
+import { useValidateFiles } from "../../files/hooks";
+import { File, FileResponse, FileType } from "../../files/types";
 import { SubtractionFileItem } from "./SubtractionFileItem";
 
 const SubtractionFileSelectorError = styled(InputError)`

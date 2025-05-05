@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 import { getFontWeight } from "../../app/theme";
 import Box from "../../base/Box";
 import Button from "../../base/Button";
@@ -8,9 +11,6 @@ import InputGroup from "../../base/InputGroup";
 import InputLabel from "../../base/InputLabel";
 import InputSimple from "../../base/InputSimple";
 import SampleLabel from "../../samples/components/Label/SampleLabel";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
 
 const LabelFormPreview = styled(Box)`
     padding: 10px;

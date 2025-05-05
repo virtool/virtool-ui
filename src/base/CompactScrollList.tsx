@@ -1,10 +1,10 @@
-import { cn } from "../app/utils";
 import {
     FetchNextPageOptions,
     InfiniteQueryObserverResult,
 } from "@tanstack/react-query/";
 import { map } from "lodash-es";
 import React from "react";
+import { cn } from "../app/utils";
 import LoadingPlaceholder from "./LoadingPlaceholder";
 
 function getScrollRatio(scrollListElement: HTMLElement): number {

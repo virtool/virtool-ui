@@ -1,21 +1,21 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { Tabs } from "radix-ui";
+import React, { useEffect } from "react";
 import { useDialogParam } from "../../../app/hooks";
 import { cn } from "../../../app/utils";
-import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
-import CreateIimi from "./CreateIimi";
-import CreateNuvs from "./CreateNuvs";
-import CreatePathoscope from "./CreatePathoscope";
 import Badge from "../../../base/Badge";
 import BoxGroupSection from "../../../base/BoxGroupSection";
 import Dialog from "../../../base/Dialog";
 import DialogOverlay from "../../../base/DialogOverlay";
 import DialogTitle from "../../../base/DialogTitle";
 import { useListHmms } from "../../../hmm/queries";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { SampleMinimal } from "../../../samples/types";
-import { Tabs } from "radix-ui";
-import React, { useEffect } from "react";
 import HMMAlert from "../HMMAlert";
 import CreateAnalysisDialogContent from "./CreateAnalysisDialogContent";
+import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
+import CreateIimi from "./CreateIimi";
+import CreateNuvs from "./CreateNuvs";
+import CreatePathoscope from "./CreatePathoscope";
 import { getCompatibleWorkflows } from "./workflows";
 
 function Content({ children, value }) {

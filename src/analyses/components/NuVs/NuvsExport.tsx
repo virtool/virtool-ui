@@ -1,5 +1,7 @@
+import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
+import { forEach, map, reduce, replace } from "lodash-es";
+import React, { useState } from "react";
 import { followDynamicDownload } from "../../../app/utils";
-import { FormattedNuvsHit, FormattedNuvsResults } from "../../types";
 import Button from "../../../base/Button";
 import Dialog from "../../../base/Dialog";
 import DialogContent from "../../../base/DialogContent";
@@ -10,9 +12,7 @@ import Icon from "../../../base/Icon";
 import PseudoLabel from "../../../base/PseudoLabel";
 import ToggleGroup from "../../../base/ToggleGroup";
 import ToggleGroupItem from "../../../base/ToggleGroupItem";
-import { DialogPortal, DialogTrigger } from "@radix-ui/react-dialog";
-import { forEach, map, reduce, replace } from "lodash-es";
-import React, { useState } from "react";
+import { FormattedNuvsHit, FormattedNuvsResults } from "../../types";
 import NuVsExportPreview from "./ExportPreview";
 
 function getBestHit(items) {

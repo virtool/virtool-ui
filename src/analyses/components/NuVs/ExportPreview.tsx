@@ -1,8 +1,8 @@
-import { getBorder } from "../../../app/theme";
-import Table from "../../../base/Table";
 import { replace } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
+import { getBorder } from "../../../app/theme";
+import Table from "../../../base/Table";
 
 export const ExportPreviewCode = styled.div`
     background-color: ${(props) => props.theme.color.greyLightest};

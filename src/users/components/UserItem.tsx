@@ -1,3 +1,5 @@
+import React from "react";
+import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { AdministratorRoles } from "../../administration/types";
 import { getFontSize, getFontWeight } from "../../app/theme";
@@ -7,8 +9,6 @@ import InitialIcon from "../../base/InitialIcon";
 import Label from "../../base/Label";
 import Link from "../../base/Link";
 import { GroupMinimal } from "../../groups/types";
-import React from "react";
-import styled from "styled-components";
 
 const StyledUserItem = styled(BoxGroupSection)`
     display: grid;

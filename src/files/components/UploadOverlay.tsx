@@ -1,7 +1,7 @@
-import { cn } from "../../app/utils";
-import UploaderDialog from "./UploaderDialog";
-import { useUploaderStore } from "../uploader";
 import React from "react";
+import { cn } from "../../app/utils";
+import { useUploaderStore } from "../uploader";
+import UploaderDialog from "./UploaderDialog";
 
 /**
  * Overlay uploads with their progress and speeds.

@@ -1,6 +1,6 @@
-import Icon from "../../../base/Icon";
 import React from "react";
 import styled from "styled-components";
+import Icon from "../../../base/Icon";
 import { BaseWorkflowTag } from "./BaseWorkflowTag";
 import { WorkflowLabelIcon } from "./WorkflowLabelIcon";
 

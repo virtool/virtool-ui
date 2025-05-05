@@ -1,11 +1,7 @@
+import React from "react";
+import styled from "styled-components";
 import { usePathParams } from "../../app/hooks";
 import { getWorkflowDisplayName } from "../../app/utils";
-import { useGetAnalysis } from "../queries";
-import {
-    FormattedNuvsAnalysis,
-    FormattedPathoscopeAnalysis,
-    IimiAnalysis,
-} from "../types";
 import Box from "../../base/Box";
 import Icon from "../../base/Icon";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
@@ -15,8 +11,12 @@ import SubviewHeader from "../../base/SubviewHeader";
 import SubviewHeaderAttribution from "../../base/SubviewHeaderAttribution";
 import SubviewHeaderTitle from "../../base/SubviewHeaderTitle";
 import { useFetchSample } from "../../samples/queries";
-import React from "react";
-import styled from "styled-components";
+import { useGetAnalysis } from "../queries";
+import {
+    FormattedNuvsAnalysis,
+    FormattedPathoscopeAnalysis,
+    IimiAnalysis,
+} from "../types";
 import { IimiViewer } from "./Iimi/IimiViewer";
 import NuVsViewer from "./NuVs/NuVsViewer";
 import { PathoscopeViewer } from "./Pathoscope/PathoscopeViewer";

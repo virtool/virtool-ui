@@ -1,8 +1,8 @@
-import Markdown from "../Markdown";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { describe, it } from "vitest";
+import Markdown from "../Markdown";
 
 const markdown = `
 # Heading 1

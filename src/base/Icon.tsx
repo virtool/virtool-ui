@@ -1,6 +1,6 @@
+import React from "react";
 import { cn } from "../app/utils";
 import { IconColor } from "../jobs/types";
-import React from "react";
 
 type IconProps = {
     "aria-label"?: string;

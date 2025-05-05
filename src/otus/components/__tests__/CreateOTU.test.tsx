@@ -1,8 +1,11 @@
-import { formatPath } from "../../../app/hooks";
-import References from "../../../references/components/References";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSettings, mockApiGetSettings } from "@tests/fake/admin";
+import {
+    createFakeOTUMinimal,
+    mockApiCreateOTU,
+    mockApiFindOtus,
+} from "@tests/fake/otus";
 import {
     createFakeReference,
     mockApiGetReferenceDetail,
@@ -10,11 +13,8 @@ import {
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-    createFakeOTUMinimal,
-    mockApiCreateOTU,
-    mockApiFindOtus,
-} from "@tests/fake/otus";
+import { formatPath } from "../../../app/hooks";
+import References from "../../../references/components/References";
 
 describe("<OTUForm />", () => {
     let path;

@@ -1,11 +1,11 @@
+import { map, sortBy } from "lodash-es";
+import React from "react";
 import Badge from "../../base/Badge";
 import BoxGroup from "../../base/BoxGroup";
 import BoxGroupHeader from "../../base/BoxGroupHeader";
 import NoneFoundSection from "../../base/NoneFoundSection";
-import Contributor from "./Contributor";
 import { IndexContributor } from "../types";
-import { map, sortBy } from "lodash-es";
-import React from "react";
+import Contributor from "./Contributor";
 
 type ContributorsProps = {
     contributors: IndexContributor[];

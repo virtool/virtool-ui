@@ -1,3 +1,5 @@
+import React from "react";
+import styled from "styled-components";
 import { useFuse } from "../../../app/fuse";
 import { fontWeight, getFontSize } from "../../../app/theme";
 import BoxGroupSearch from "../../../base/BoxGroupSearch";
@@ -7,8 +9,6 @@ import Popover from "../../../base/Popover";
 import SidebarHeaderButton from "../../../base/SidebarHeaderButton";
 import { Label } from "../../../labels/types";
 import { SubtractionOption } from "../../../subtraction/types";
-import React from "react";
-import styled from "styled-components";
 import SampleSidebarSelectorItem from "./SampleSidebarSelectorItem";
 
 const SampleSidebarSelectorButton = styled.div`

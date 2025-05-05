@@ -1,6 +1,6 @@
+import React from "react";
 import { cn } from "../../../app/utils";
 import DialogContent from "../../../base/DialogContent";
-import React from "react";
 
 /**
  * A styled dialog content for use in an analysis creation dialog

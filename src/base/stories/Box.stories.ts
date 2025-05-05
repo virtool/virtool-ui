@@ -1,6 +1,6 @@
-import Box from "../Box";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
+import Box from "../Box";
 
 const meta: Meta<typeof Box> = {
     title: "base/Box/Box",

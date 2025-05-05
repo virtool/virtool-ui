@@ -1,9 +1,9 @@
+import { map } from "lodash-es";
+import React from "react";
 import Badge from "../../base/Badge";
 import BoxGroup from "../../base/BoxGroup";
 import BoxGroupHeader from "../../base/BoxGroupHeader";
 import { IndexOTU as OTU } from "../types";
-import { map } from "lodash-es";
-import React from "react";
 import IndexOTU from "./IndexOTU";
 
 type IndexOTUsProps = {

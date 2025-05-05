@@ -1,5 +1,9 @@
-import { useNavigate } from "../../../app/hooks";
+import { find, flatMap, toString } from "lodash-es";
+import React, { useEffect } from "react";
+import { Controller } from "react-hook-form";
+import styled from "styled-components";
 import { useFetchAccount } from "../../../account/queries";
+import { useNavigate } from "../../../app/hooks";
 import Box from "../../../base/Box";
 import Icon from "../../../base/Icon";
 import InputContainer from "../../../base/InputContainer";
@@ -17,15 +21,11 @@ import { FileType } from "../../../files/types";
 import { RestoredAlert } from "../../../forms/components/RestoredAlert";
 import { usePersistentForm } from "../../../forms/hooks";
 import { useListGroups } from "../../../groups/queries";
-import ReadSelector from "./ReadSelector";
-import Sidebar from "./Sidebar";
 import { useCreateSample } from "../../queries";
-import { find, flatMap, toString } from "lodash-es";
-import React, { useEffect } from "react";
-import { Controller } from "react-hook-form";
-import styled from "styled-components";
 import LibraryTypeSelector from "./LibraryTypeSelector";
+import ReadSelector from "./ReadSelector";
 import SampleUserGroup from "./SampleUserGroup";
+import Sidebar from "./Sidebar";
 
 const extensionRegex = /^[a-z0-9]+-(.*)\.f[aq](st)?[aq]?(\.gz)?$/;
 

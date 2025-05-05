@@ -1,6 +1,3 @@
-import { ErrorResponse } from "../types/types";
-import { formatData } from "./utils";
-import { samplesQueryKeys } from "../samples/queries";
 import {
     keepPreviousData,
     useMutation,
@@ -8,6 +5,8 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { useMemo } from "react";
+import { samplesQueryKeys } from "../samples/queries";
+import { ErrorResponse } from "../types/types";
 import {
     blastNuvs,
     createAnalysis,
@@ -16,6 +15,7 @@ import {
     removeAnalysis,
 } from "./api";
 import { Analysis, AnalysisSearchResult, GenericAnalysis } from "./types";
+import { formatData } from "./utils";
 
 /**
  * Factory object for generating analyses query keys

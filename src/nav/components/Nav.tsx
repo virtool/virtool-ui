@@ -1,7 +1,8 @@
-import { useDialogParam } from "../../app/hooks";
+import React from "react";
 import { useLogout } from "../../account/queries";
 import { AdministratorRoles } from "../../administration/types";
 import { hasSufficientAdminRole } from "../../administration/utils";
+import { useDialogParam } from "../../app/hooks";
 import Dropdown from "../../base/Dropdown";
 import DropdownMenuContent from "../../base/DropdownMenuContent";
 import DropdownMenuItem from "../../base/DropdownMenuItem";
@@ -11,7 +12,6 @@ import IconButton from "../../base/IconButton";
 import InitialIcon from "../../base/InitialIcon";
 import Logo from "../../base/Logo";
 import { useRootQuery } from "../../wall/queries";
-import React from "react";
 import { NavLink } from "./NavLink";
 
 type NavBarProps = {

@@ -1,8 +1,8 @@
+import React from "react";
+import styled from "styled-components";
 import { cn } from "../../app/utils";
 import Badge from "../../base/Badge";
 import Table from "../../base/Table";
-import React from "react";
-import styled from "styled-components";
 
 const SequenceCell = styled.td`
     padding: 0 !important;

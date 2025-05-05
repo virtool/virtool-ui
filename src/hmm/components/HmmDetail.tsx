@@ -1,3 +1,6 @@
+import { map } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
 import { usePathParams } from "../../app/hooks";
 import { cn } from "../../app/utils";
 import Badge from "../../base/Badge";
@@ -10,9 +13,6 @@ import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import NotFound from "../../base/NotFound";
 import ViewHeader from "../../base/ViewHeader";
 import ViewHeaderTitle from "../../base/ViewHeaderTitle";
-import { map } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
 import { useFetchHmm } from "../queries";
 import { ClusterMember } from "./ClusterMember";
 import { HmmTaxonomy } from "./HmmTaxonomy";

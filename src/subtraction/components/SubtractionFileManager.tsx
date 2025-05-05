@@ -1,6 +1,6 @@
+import React from "react";
 import { FileManager } from "../../files/components/FileManager";
 import { FileType } from "../../files/types";
-import React from "react";
 
 /**
  * Displays a list of subtraction files with functionality to upload/delete files

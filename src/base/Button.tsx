@@ -1,5 +1,5 @@
-import { cn } from "../app/utils";
 import React, { ComponentType, ReactNode } from "react";
+import { cn } from "../app/utils";
 
 export type ButtonProps = {
     active?: boolean;

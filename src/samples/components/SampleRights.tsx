@@ -1,3 +1,6 @@
+import { includes, map } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
 import { useUpdateSettings } from "../../administration/queries";
 import { Settings } from "../../administration/types";
 import BoxGroup from "../../base/BoxGroup";
@@ -8,9 +11,6 @@ import InputLabel from "../../base/InputLabel";
 import InputSelect from "../../base/InputSelect";
 import PseudoLabel from "../../base/PseudoLabel";
 import SelectBox from "../../base/SelectBox";
-import { includes, map } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
 
 const rights = [
     { label: "None", value: "" },

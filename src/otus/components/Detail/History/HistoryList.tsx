@@ -1,10 +1,10 @@
+import { map, reverse, sortBy } from "lodash-es";
+import React from "react";
 import Badge from "../../../../base/Badge";
 import BoxGroup from "../../../../base/BoxGroup";
 import BoxGroupHeader from "../../../../base/BoxGroupHeader";
-import Change from "./Change";
 import { OTUHistory } from "../../../types";
-import { map, reverse, sortBy } from "lodash-es";
-import React from "react";
+import Change from "./Change";
 
 type HistoryListProps = {
     /** The history of built or unbuilt changes */

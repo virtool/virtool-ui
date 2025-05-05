@@ -1,12 +1,12 @@
+import { map, max, min, range } from "lodash-es";
+import React, { useEffect } from "react";
+import { useSearch } from "wouter";
 import { updateSearchParam, usePageParam } from "../app/hooks";
 import PaginationContent from "./PaginationContent";
 import PaginationLink from "./PaginationLink";
 import PaginationNext from "./PaginationNext";
 import PaginationPrevious from "./PaginationPrevious";
 import PaginationRoot from "./PaginationRoot";
-import { map, max, min, range } from "lodash-es";
-import React, { useEffect } from "react";
-import { useSearch } from "wouter";
 
 function getPageRange(
     pageCount,

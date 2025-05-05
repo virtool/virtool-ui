@@ -1,9 +1,9 @@
-import { ErrorResponse } from "../types/types";
 import {
     keepPreviousData,
     useInfiniteQuery,
     useMutation,
 } from "@tanstack/react-query";
+import { ErrorResponse } from "../types/types";
 import { createFirst, findUsers } from "./api";
 import { UserResponse } from "./types";
 

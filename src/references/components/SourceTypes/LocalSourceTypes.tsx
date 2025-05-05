@@ -1,5 +1,8 @@
-import { usePathParams } from "../../../app/hooks";
+import { get } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
 import { SettingsCheckbox } from "../../../administration/components/SettingsCheckbox";
+import { usePathParams } from "../../../app/hooks";
 import { getColor } from "../../../app/theme";
 import BoxGroup from "../../../base/BoxGroup";
 import BoxGroupDisabled from "../../../base/BoxGroupDisabled";
@@ -12,9 +15,6 @@ import InputError from "../../../base/InputError";
 import InputSimple from "../../../base/InputSimple";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import SectionHeader from "../../../base/SectionHeader";
-import { get } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
 import { useUpdateSourceTypes } from "../../hooks";
 import {
     referenceQueryKeys,

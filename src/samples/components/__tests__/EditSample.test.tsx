@@ -1,10 +1,10 @@
-import { formatPath } from "../../../app/hooks";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeSample, mockApiEditSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { formatPath } from "../../../app/hooks";
 import EditSample from "../EditSample";
 
 describe("<Editsample />", () => {

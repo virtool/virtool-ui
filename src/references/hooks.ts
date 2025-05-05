@@ -1,6 +1,3 @@
-import { apiClient } from "../app/api";
-import { useFetchAccount } from "../account/queries";
-import { AdministratorRoles } from "../administration/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { difference, filter, find, includes, some, union } from "lodash-es";
@@ -8,6 +5,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Response } from "superagent";
 import * as Yup from "yup";
+import { useFetchAccount } from "../account/queries";
+import { AdministratorRoles } from "../administration/types";
+import { apiClient } from "../app/api";
 import { useGetReference } from "./queries";
 
 export function getValidationSchema(sourceTypes: string[]) {

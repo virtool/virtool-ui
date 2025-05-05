@@ -1,3 +1,5 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import React from "react";
 import { formatSearchParams, useUrlSearchParam } from "../../app/hooks";
 import Dialog from "../../base/Dialog";
 import DialogContent from "../../base/DialogContent";
@@ -5,8 +7,6 @@ import DialogOverlay from "../../base/DialogOverlay";
 import DialogTitle from "../../base/DialogTitle";
 import Tabs from "../../base/Tabs";
 import TabsLink from "../../base/TabsLink";
-import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import EmptyReference from "./EmptyReference";
 import ImportReference from "./ImportReference";
 

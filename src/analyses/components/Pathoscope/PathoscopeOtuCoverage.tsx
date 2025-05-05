@@ -1,6 +1,6 @@
-import { useElementSize } from "../../../app/hooks";
 import { area, max, scaleLinear, select } from "d3";
 import React, { useLayoutEffect } from "react";
+import { useElementSize } from "../../../app/hooks";
 import "./area.css";
 
 function draw(element: HTMLElement, data: number[], width: number) {

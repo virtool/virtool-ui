@@ -1,13 +1,11 @@
+import React from "react";
 import { useUrlSearchParam } from "../../../app/hooks";
-import NuvsExport, {
-    NuvsExportProps,
-} from "./NuvsExport";
 import ButtonToggle from "../../../base/ButtonToggle";
 import InputSearch from "../../../base/InputSearch";
 import Toolbar from "../../../base/Toolbar";
 import Tooltip from "../../../base/Tooltip";
-import React from "react";
 import { AnalysisViewerSort } from "../Viewer/Sort";
+import NuvsExport, { NuvsExportProps } from "./NuvsExport";
 
 /**
  * Displays a toolbar for managing and filtering NuVs

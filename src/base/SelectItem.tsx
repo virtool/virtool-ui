@@ -1,7 +1,7 @@
-import { getColor, getFontSize, getFontWeight } from "../app/theme";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
 import styled from "styled-components";
+import { getColor, getFontSize, getFontWeight } from "../app/theme";
 
 const StyledSelectItem = styled(RadixSelect.Item)`
     font-size: ${getFontSize("md")};

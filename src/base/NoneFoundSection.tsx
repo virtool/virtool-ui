@@ -1,6 +1,6 @@
-import BoxGroupSection from "./BoxGroupSection";
 import React from "react";
 import styled from "styled-components";
+import BoxGroupSection from "./BoxGroupSection";
 import Icon from "./Icon";
 import { noneFoundStyle } from "./noneFoundStyle";
 

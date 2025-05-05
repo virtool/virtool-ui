@@ -1,6 +1,6 @@
+import type { Meta, StoryObj } from "@storybook/react";
 import NuvsToolbar from "../components/NuVs/NuvsToolbar";
 import { FormattedNuvsResults } from "../types";
-import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof NuvsToolbar> = {
     title: "analyses/NuvsToolbar",

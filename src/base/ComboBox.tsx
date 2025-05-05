@@ -1,3 +1,6 @@
+import { useCombobox } from "downshift";
+import React from "react";
+import styled, { keyframes } from "styled-components";
 import {
     borderRadius,
     boxShadow,
@@ -5,12 +8,9 @@ import {
     getColor,
     getFontWeight,
 } from "../app/theme";
+import WrapRow from "./ComboBoxItem";
 import Icon from "./Icon";
 import InputSearch from "./InputSearch";
-import { useCombobox } from "downshift";
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import WrapRow from "./ComboBoxItem";
 
 const StyledTriggerButton = styled.button`
     display: flex;

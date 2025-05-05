@@ -1,15 +1,15 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { map } from "lodash";
+import { find } from "lodash-es";
+import React from "react";
 import { useUrlSearchParam } from "../../../../app/hooks";
 import Dialog from "../../../../base/Dialog";
 import DialogContent from "../../../../base/DialogContent";
 import DialogOverlay from "../../../../base/DialogOverlay";
 import DialogTitle from "../../../../base/DialogTitle";
-import SegmentForm from "./SegmentForm";
 import { useUpdateOTU } from "../../../queries";
 import { Molecule, OTUSegment } from "../../../types";
-import { DialogPortal } from "@radix-ui/react-dialog";
-import { map } from "lodash";
-import { find } from "lodash-es";
-import React from "react";
+import SegmentForm from "./SegmentForm";
 
 type FormValues = {
     segmentName: string;

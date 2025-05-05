@@ -1,14 +1,14 @@
+import React from "react";
+import { Redirect, Route, Switch } from "wouter";
 import { usePathParams } from "../../../app/hooks";
 import ContainerNarrow from "../../../base/ContainerNarrow";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import NotFound from "../../../base/NotFound";
 import IndexDetail from "../../../indexes/components/IndexDetail";
-import OtuDetail from "../../../otus/components/Detail/OtuDetail";
-import { useGetReference } from "../../queries";
-import React from "react";
-import { Redirect, Route, Switch } from "wouter";
 import Indexes from "../../../indexes/components/Indexes";
+import OtuDetail from "../../../otus/components/Detail/OtuDetail";
 import OTUList from "../../../otus/components/OTUList";
+import { useGetReference } from "../../queries";
 import EditReference from "./EditReference";
 import ReferenceDetailHeader from "./ReferenceDetailHeader";
 import ReferenceDetailTabs from "./ReferenceDetailTabs";

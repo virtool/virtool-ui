@@ -1,3 +1,6 @@
+import { faker } from "@faker-js/faker";
+import { merge } from "lodash";
+import nock from "nock";
 import {
     Account,
     AccountSettings,
@@ -5,10 +8,7 @@ import {
     QuickAnalyzeWorkflow,
 } from "../../account/types";
 import { AdministratorRoles } from "../../administration/types";
-import { faker } from "@faker-js/faker";
 import { GroupMinimal, Permissions } from "../../groups/types";
-import { merge } from "lodash";
-import nock from "nock";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";

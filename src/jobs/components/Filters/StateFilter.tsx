@@ -1,11 +1,11 @@
-import { useListSearchParam } from "../../../app/hooks";
-import SidebarHeader from "../../../base/SidebarHeader";
-import SideBarSection from "../../../base/SideBarSection";
-import { JobCounts } from "../../types";
 import { difference, union, xor } from "lodash-es";
 import { mapValues, reduce } from "lodash-es/lodash";
 import React from "react";
 import styled from "styled-components";
+import { useListSearchParam } from "../../../app/hooks";
+import SidebarHeader from "../../../base/SidebarHeader";
+import SideBarSection from "../../../base/SideBarSection";
+import { JobCounts } from "../../types";
 import { StateCategory } from "./StateCategory";
 
 const active = ["waiting", "preparing", "running"];

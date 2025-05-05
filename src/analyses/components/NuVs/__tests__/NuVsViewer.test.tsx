@@ -1,15 +1,15 @@
-import NuVsViewer from "../NuVsViewer";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {
+    createFakeFormattedNuVsAnalysis,
+    mockApiBlastNuVs,
+} from "@tests/fake/analyses";
 import { createFakeSample } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import {
-    createFakeFormattedNuVsAnalysis,
-    mockApiBlastNuVs,
-} from "@tests/fake/analyses";
+import NuVsViewer from "../NuVsViewer";
 
 describe("<NuVsViewer />", () => {
     let props;

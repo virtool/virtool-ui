@@ -1,8 +1,8 @@
-import BoxGroupSection from "../../base/BoxGroupSection";
-import SequenceTable from "./SequenceTable";
 import React from "react";
+import BoxGroupSection from "../../base/BoxGroupSection";
 import { useExpanded } from "../hooks";
 import SequenceButtons from "./SequenceButtons";
+import SequenceTable from "./SequenceTable";
 import { SequenceAccessionValue, SequenceTitleValue } from "./SequenceValues";
 
 type GenomeSequenceProps = {

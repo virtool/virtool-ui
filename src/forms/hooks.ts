@@ -1,4 +1,3 @@
-import { getSessionStorage, setSessionStorage } from "../app/utils";
 import { forEach, isEqual } from "lodash-es";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import {
@@ -8,6 +7,7 @@ import {
     UseFormReturn,
     useWatch,
 } from "react-hook-form";
+import { getSessionStorage, setSessionStorage } from "../app/utils";
 
 /**
  * Restore form values from session storage.

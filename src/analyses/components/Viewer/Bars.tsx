@@ -1,7 +1,7 @@
-import { getBorder, getColor } from "../../../app/theme";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
+import { getBorder, getColor } from "../../../app/theme";
 import { BarsLegendItem } from "./BarsLegendItem";
 
 const Bar = styled.div`

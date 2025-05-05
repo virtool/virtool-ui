@@ -1,10 +1,10 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import { map } from "lodash";
+import React, { useState } from "react";
 import BoxGroupSearch from "../BoxGroupSearch";
 import BoxGroupSection from "../BoxGroupSection";
 import Button from "../Button";
 import Popover from "../Popover";
-import type { Meta, StoryObj } from "@storybook/react";
-import { map } from "lodash";
-import React, { useState } from "react";
 
 const meta: Meta<typeof Popover> = {
     title: "base/Popover",

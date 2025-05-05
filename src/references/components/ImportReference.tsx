@@ -1,3 +1,6 @@
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import styled from "styled-components";
 import { useNavigate } from "../../app/hooks";
 import Alert from "../../base/Alert";
 import DialogFooter from "../../base/DialogFooter";
@@ -9,9 +12,6 @@ import ProgressBarAffixed from "../../base/ProgressBarAffixed";
 import SaveButton from "../../base/SaveButton";
 import { UploadBar } from "../../files/components/UploadBar";
 import { useImportReference, useUploadReference } from "../queries";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import styled from "styled-components";
 
 const ImportReferenceUpload = styled.div`
     margin-bottom: 15px;

@@ -1,7 +1,7 @@
-import { cn } from "../../../app/utils";
-import Label from "../../../base/Label";
 import * as RadixSelect from "@radix-ui/react-select";
 import React from "react";
+import { cn } from "../../../app/utils";
+import Label from "../../../base/Label";
 
 type IndexSelectorItemProps = {
     id: string;

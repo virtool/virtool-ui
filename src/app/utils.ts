@@ -1,12 +1,12 @@
 /**
  * General utility constants and functions.
  */
-import { capitalize } from "./common";
 import clsx, { ClassValue } from "clsx";
 import { formatDuration, intervalToDuration } from "date-fns";
 import { get, sampleSize, startCase } from "lodash-es";
 import numbro from "numbro";
 import { twMerge } from "tailwind-merge";
+import { capitalize } from "./common";
 
 /**
  * A string containing all alphanumeric digits in both cases.

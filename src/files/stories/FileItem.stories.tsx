@@ -1,6 +1,6 @@
-import FileItem from "../components/FileItem";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import FileItem from "../components/FileItem";
 
 const meta: Meta<typeof FileItem> = {
     title: "Files/FileItem",

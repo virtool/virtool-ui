@@ -1,6 +1,6 @@
+import React from "react";
 import { cn } from "../app/utils";
 import Link from "./Link";
-import React from "react";
 
 interface LinkButtonProps {
     children?: React.ReactNode;

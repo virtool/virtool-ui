@@ -1,8 +1,8 @@
-import RelativeTime from "../RelativeTime";
 import { act, screen } from "@testing-library/react";
 import { renderWithProviders } from "@tests/setup";
 import React from "react";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import RelativeTime from "../RelativeTime";
 
 const fakeTime = "2019-02-10T17:11:00.000000Z";
 const RealDate = Date;

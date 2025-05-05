@@ -1,10 +1,10 @@
+import { filter, intersectionWith, xor } from "lodash-es";
+import React from "react";
 import { useFuse } from "../../../app/fuse";
 import { cn } from "../../../app/utils";
 import BoxGroup from "../../../base/BoxGroup";
 import PseudoLabel from "../../../base/PseudoLabel";
 import { Subtraction } from "../../../subtraction/types";
-import { filter, intersectionWith, xor } from "lodash-es";
-import React from "react";
 import CreateAnalysisField from "./CreateAnalysisField";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 import { CreateAnalysisSelectorSearch } from "./CreateAnalysisSelectorSearch";

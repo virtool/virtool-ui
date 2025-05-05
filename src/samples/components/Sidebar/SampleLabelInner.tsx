@@ -1,5 +1,5 @@
-import SmallSampleLabel from "../Label/SmallSampleLabel";
 import React from "react";
+import SmallSampleLabel from "../Label/SmallSampleLabel";
 
 type SampleLabelInnerProps = {
     color: string;

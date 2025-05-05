@@ -1,10 +1,10 @@
-import { useUrlSearchParam } from "../../../app/hooks";
-import NuvsValues from "./NuVsValues";
-import { AnalysisViewerItem } from "../Viewer/Item";
-import { FormattedNuvsHit } from "../../types";
-import Badge from "../../../base/Badge";
 import numbro from "numbro";
 import React from "react";
+import { useUrlSearchParam } from "../../../app/hooks";
+import Badge from "../../../base/Badge";
+import { FormattedNuvsHit } from "../../types";
+import { AnalysisViewerItem } from "../Viewer/Item";
+import NuvsValues from "./NuVsValues";
 
 type NuVsItemProps = {
     hit: FormattedNuvsHit;

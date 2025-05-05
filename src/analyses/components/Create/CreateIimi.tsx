@@ -1,14 +1,14 @@
-import IndexSelector from "./IndexSelector";
-import { useCompatibleIndexes } from "../../hooks";
-import { useCreateAnalysis } from "../../queries";
-import Button from "../../../base/Button";
-import { useFindModels } from "../../../ml/queries";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import Button from "../../../base/Button";
+import { useFindModels } from "../../../ml/queries";
+import { useCompatibleIndexes } from "../../hooks";
+import { useCreateAnalysis } from "../../queries";
 import { Workflows } from "../../types";
 import { CreateAnalysisFooter } from "./CreateAnalysisFooter";
 import { CreateAnalysisInputError } from "./CreateAnalysisInputError";
 import { CreateAnalysisSummary } from "./CreateAnalysisSummary";
+import IndexSelector from "./IndexSelector";
 import MlModelSelector from "./MlModelSelector";
 
 type CreateIimiFormValues = {

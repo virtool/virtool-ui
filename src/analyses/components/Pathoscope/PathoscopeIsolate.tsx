@@ -1,7 +1,7 @@
+import React from "react";
 import { useUrlSearchParam } from "../../../app/hooks";
 import { toScientificNotation } from "../../../app/utils";
 import ScrollSync from "../../../base/ScrollSync";
-import React from "react";
 import PathoscopeSequence from "./PathoscopeSequence";
 
 export default function PathoscopeIsolate({

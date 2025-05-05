@@ -1,8 +1,8 @@
+import numbro from "numbro";
+import React from "react";
 import { formatRoundedDuration } from "../../app/utils";
 import Badge from "../../base/Badge";
 import { Upload } from "../types";
-import numbro from "numbro";
-import React from "react";
 import { UploaderItem } from "./UploaderItem";
 
 type UploaderDialogProps = {

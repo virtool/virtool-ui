@@ -1,7 +1,7 @@
-import { boxShadow } from "../app/theme";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { boxShadow } from "../app/theme";
 
 const slideUpAndFade = keyframes`
   from {

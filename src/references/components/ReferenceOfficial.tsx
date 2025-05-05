@@ -1,3 +1,5 @@
+import React from "react";
+import styled from "styled-components";
 import { useCheckAdminRoleOrPermission } from "../../administration/hooks";
 import Box from "../../base/Box";
 import Button from "../../base/Button";
@@ -5,8 +7,6 @@ import ExternalLink from "../../base/ExternalLink";
 import Icon from "../../base/Icon";
 import { Permission } from "../../groups/types";
 import { useRemoteReference } from "../queries";
-import React from "react";
-import styled from "styled-components";
 
 const StyledReferenceOfficial = styled(Box)`
     align-items: center;

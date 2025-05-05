@@ -1,3 +1,6 @@
+import numbro from "numbro";
+import React from "react";
+import styled from "styled-components";
 import { usePathParams } from "../../../app/hooks";
 import BoxGroup from "../../../base/BoxGroup";
 import BoxGroupHeader from "../../../base/BoxGroupHeader";
@@ -7,9 +10,6 @@ import ContainerSide from "../../../base/ContainerSide";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import Markdown from "../../../base/Markdown";
 import JobItem from "../../../jobs/components/Item/JobItem";
-import numbro from "numbro";
-import React from "react";
-import styled from "styled-components";
 import { useFetchSample } from "../../queries";
 import { getLibraryTypeDisplayName } from "../../utils";
 import EditSample from "../EditSample";

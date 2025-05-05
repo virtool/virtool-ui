@@ -1,6 +1,6 @@
-import RelativeTime from "../RelativeTime";
 import type { Meta, StoryObj } from "@storybook/react";
 import { toString } from "lodash-es";
+import RelativeTime from "../RelativeTime";
 
 const currentDate = new Date();
 

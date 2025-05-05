@@ -1,10 +1,10 @@
-import { LabelNested } from "../../../labels/types";
-import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
-import SampleLabels from "../Sidebar/SampleLabels";
-import { useUpdateSample } from "../../queries";
-import { SubtractionNested } from "../../../subtraction/types";
 import React from "react";
 import styled from "styled-components";
+import { LabelNested } from "../../../labels/types";
+import { SubtractionNested } from "../../../subtraction/types";
+import { useUpdateSample } from "../../queries";
+import DefaultSubtractions from "../Sidebar/DefaultSubtractions";
+import SampleLabels from "../Sidebar/SampleLabels";
 
 const StyledSidebar = styled.div`
     align-items: stretch;

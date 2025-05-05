@@ -1,15 +1,12 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
+import { createFakeGroup, mockApiListGroups } from "@tests/fake/groups";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import nock from "nock";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-    createFakeGroup,
-    mockApiListGroups,
-} from "@tests/fake/groups";
 import { AdministratorRoles } from "../../../../administration/types";
 import Samples from "../../Samples";
 

@@ -1,7 +1,7 @@
-import { useElementSize } from "../../app/hooks";
-import { getFontSize } from "../../app/theme";
 import React, { RefObject } from "react";
 import styled from "styled-components";
+import { useElementSize } from "../../app/hooks";
+import { getFontSize } from "../../app/theme";
 import { drawBasesChart } from "./Bases";
 import { drawNucleotidesChart } from "./Nucleotides";
 import { SampleChart } from "./SampleChart";

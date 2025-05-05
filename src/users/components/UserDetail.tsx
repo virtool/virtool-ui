@@ -1,7 +1,9 @@
-import { useDialogParam, usePathParams } from "../../app/hooks";
+import React from "react";
+import styled from "styled-components";
 import { useCheckAdminRole } from "../../administration/hooks";
 import { useFetchUser } from "../../administration/queries";
 import { AdministratorRoles } from "../../administration/types";
+import { useDialogParam, usePathParams } from "../../app/hooks";
 import { getFontSize, getFontWeight } from "../../app/theme";
 import Alert from "../../base/Alert";
 import { device } from "../../base/device";
@@ -9,12 +11,10 @@ import Icon from "../../base/Icon";
 import InitialIcon from "../../base/InitialIcon";
 import Link from "../../base/Link";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
-import { UserActivation } from "./UserActivation";
-import { UserActivationBanner } from "./UserActivationBanner";
-import React from "react";
-import styled from "styled-components";
 import Password from "./Password";
 import PrimaryGroup from "./PrimaryGroup";
+import { UserActivation } from "./UserActivation";
+import { UserActivationBanner } from "./UserActivationBanner";
 import UserGroups from "./UserGroups";
 import UserPermissions from "./UserPermissions";
 

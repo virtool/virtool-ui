@@ -1,7 +1,7 @@
+import * as React from "react";
 import { cn } from "../app/utils";
 import Link from "./Link";
 import PaginationItem from "./PaginationItem";
-import * as React from "react";
 
 type PaginationLinkProps = {
     active?: boolean;

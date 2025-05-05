@@ -1,6 +1,6 @@
-import Markdown from "../Markdown";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import Markdown from "../Markdown";
 
 const meta: Meta<typeof Markdown> = {
     title: "base/Markdown",

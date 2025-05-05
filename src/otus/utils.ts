@@ -1,6 +1,6 @@
-import { OTUSegment, OTUSequence } from "./types";
 import { map } from "lodash";
 import { indexOf, sortBy } from "lodash-es";
+import { OTUSegment, OTUSequence } from "./types";
 
 /**
  * A hook for sorting the sequences for the active isolate

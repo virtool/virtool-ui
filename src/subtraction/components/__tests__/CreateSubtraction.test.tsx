@@ -1,13 +1,13 @@
-import { formatPath } from "../../../app/hooks";
-import { getSessionStorage, setSessionStorage } from "../../../app/utils";
-import { FileType } from "../../../files/types";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeFile, mockApiListFiles } from "@tests/fake/files";
+import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { mockApiCreateSubtraction } from "@tests/fake/subtractions";
+import { formatPath } from "../../../app/hooks";
+import { getSessionStorage, setSessionStorage } from "../../../app/utils";
+import { FileType } from "../../../files/types";
 import SubtractionCreate from "../SubtractionCreate";
 
 describe("<SubtractionCreate />", () => {

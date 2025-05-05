@@ -1,8 +1,8 @@
+import React, { useCallback } from "react";
+import { Accept, FileError, useDropzone } from "react-dropzone";
 import { cn } from "../../app/utils";
 import Button from "../../base/Button";
 import Icon from "../../base/Icon";
-import React, { useCallback } from "react";
-import { Accept, FileError, useDropzone } from "react-dropzone";
 
 type UploadBarProps = {
     accept?: Accept;

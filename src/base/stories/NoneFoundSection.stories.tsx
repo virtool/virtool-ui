@@ -1,7 +1,7 @@
-import Link from "../Link";
-import NoneFoundSection from "../NoneFoundSection";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import Link from "../Link";
+import NoneFoundSection from "../NoneFoundSection";
 
 const meta: Meta<typeof NoneFoundSection> = {
     title: "base/NoneFound/NoneFoundSection",

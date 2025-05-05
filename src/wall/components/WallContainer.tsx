@@ -1,5 +1,5 @@
-import { OnlyChildrenProps } from "../../types/dom";
 import React from "react";
+import { OnlyChildrenProps } from "../../types/dom";
 
 /**
  * A container for wall components that applies a max width to its children with

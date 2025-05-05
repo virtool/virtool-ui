@@ -1,9 +1,9 @@
-import { usePathParams } from "../../../../app/hooks";
-import LoadingPlaceholder from "../../../../base/LoadingPlaceholder";
-import HistoryList from "./HistoryList";
-import { useFetchOTUHistory } from "../../../queries";
 import { groupBy } from "lodash-es";
 import React from "react";
+import { usePathParams } from "../../../../app/hooks";
+import LoadingPlaceholder from "../../../../base/LoadingPlaceholder";
+import { useFetchOTUHistory } from "../../../queries";
+import HistoryList from "./HistoryList";
 
 /**
  * Display and manage the history for the OTU

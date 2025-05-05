@@ -1,5 +1,7 @@
-import { useDialogParam, usePathParams } from "../../../app/hooks";
+import React from "react";
+import { Redirect, Route, Switch, useLocation } from "wouter";
 import Analyses from "../../../analyses/components/Analyses";
+import { useDialogParam, usePathParams } from "../../../app/hooks";
 import Icon from "../../../base/Icon";
 import IconButton from "../../../base/IconButton";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
@@ -12,8 +14,6 @@ import ViewHeaderIcons from "../../../base/ViewHeaderIcons";
 import ViewHeaderTitle from "../../../base/ViewHeaderTitle";
 import { useCheckCanEditSample } from "../../hooks";
 import { useFetchSample } from "../../queries";
-import React from "react";
-import { Redirect, Route, Switch, useLocation } from "wouter";
 import SampleDetailFiles from "../Files/SampleDetailFiles";
 import Quality from "../SampleQuality";
 import RemoveSample from "./RemoveSample";

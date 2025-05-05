@@ -1,14 +1,14 @@
-import { NuvsBlastResults } from "./NuvsBlastResults";
-import { useBlastNuvs } from "../../queries";
-import { FormattedNuvsHit } from "../../types";
+import React from "react";
 import Alert from "../../../base/Alert";
 import Box from "../../../base/Box";
 import BoxTitle from "../../../base/BoxTitle";
 import Button from "../../../base/Button";
 import Icon from "../../../base/Icon";
-import React from "react";
+import { useBlastNuvs } from "../../queries";
+import { FormattedNuvsHit } from "../../types";
 import BlastInProgress from "./BlastInProgress";
 import { NuvsBlastError } from "./NuvsBlastError";
+import { NuvsBlastResults } from "./NuvsBlastResults";
 
 type NuVsBLASTProps = {
     analysisId: string;

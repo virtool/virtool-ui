@@ -1,11 +1,11 @@
-import AccountGroups from "./AccountGroups";
-import { useFetchAccount } from "../queries";
+import React from "react";
 import Icon from "../../base/Icon";
 import InitialIcon from "../../base/InitialIcon";
 import Label from "../../base/Label";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
-import React from "react";
+import { useFetchAccount } from "../queries";
 import AccountEmail from "./AccountEmail";
+import AccountGroups from "./AccountGroups";
 import AccountPassword from "./AccountPassword";
 
 /**

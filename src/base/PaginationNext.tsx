@@ -1,7 +1,7 @@
+import * as React from "react";
 import { cn } from "../app/utils";
 import LinkButton from "./LinkButton";
 import PaginationItem from "./PaginationItem";
-import * as React from "react";
 
 type PaginationNextProps = {
     className?: string;

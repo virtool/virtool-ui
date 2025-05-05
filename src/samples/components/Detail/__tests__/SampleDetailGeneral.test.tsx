@@ -1,10 +1,10 @@
-import Samples from "../../Samples";
 import { screen, waitFor } from "@testing-library/react";
 import { createFakeSample, mockApiGetSampleDetail } from "@tests/fake/samples";
 import { renderWithRouter } from "@tests/setup";
 import numbro from "numbro";
 import React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
+import Samples from "../../Samples";
 
 describe("<SampleDetailGeneral />", () => {
     let sample;

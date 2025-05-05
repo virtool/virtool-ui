@@ -1,8 +1,8 @@
-import { useFetchAccount } from "../queries";
+import React from "react";
 import { AdministratorRoles } from "../../administration/types";
 import { hasSufficientAdminRole } from "../../administration/utils";
 import Alert from "../../base/Alert";
-import React from "react";
+import { useFetchAccount } from "../queries";
 
 /**
  * Displays a banner with information for an admin user

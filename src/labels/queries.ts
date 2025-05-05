@@ -1,7 +1,7 @@
-import { ErrorResponse } from "../types/types";
-import { Label } from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { ErrorResponse } from "../types/types";
 import { createLabel, fetchLabels, removeLabel, updateLabel } from "./api";
+import { Label } from "./types";
 
 export const labelQueryKeys = {
     all: () => ["label"] as const,

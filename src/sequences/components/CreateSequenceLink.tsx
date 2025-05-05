@@ -1,7 +1,7 @@
+import React from "react";
 import { useUrlSearchParam } from "../../app/hooks";
 import { cn } from "../../app/utils";
 import { ReferenceRight, useCheckReferenceRight } from "../../references/hooks";
-import React from "react";
 
 type CreateSequenceLinkProps = {
     refId: string;

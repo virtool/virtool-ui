@@ -1,11 +1,11 @@
+import React from "react";
 import { useFuse } from "../../../app/fuse";
-import IimiToolbar from "./IimiToolbar";
-import { IimiAnalysis, IimiHit } from "../../types";
 import Accordion from "../../../base/Accordion";
 import Box from "../../../base/Box";
 import Icon from "../../../base/Icon";
-import React from "react";
+import { IimiAnalysis, IimiHit } from "../../types";
 import { IimiOtu } from "./IimiOtu";
+import IimiToolbar from "./IimiToolbar";
 
 export function IimiViewer({ detail }: { detail: IimiAnalysis }) {
     const [items, term, setTerm] = useFuse<IimiHit>(detail.results.hits, [

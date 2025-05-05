@@ -1,5 +1,5 @@
-import { getFontSize, getFontWeight } from "../app/theme";
 import styled from "styled-components";
+import { getFontSize, getFontWeight } from "../app/theme";
 
 const SectionHeader = styled.header`
     margin-bottom: 1.2rem;

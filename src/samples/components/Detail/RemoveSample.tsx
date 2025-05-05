@@ -1,6 +1,6 @@
+import React from "react";
 import { useDialogParam } from "../../../app/hooks";
 import RemoveDialog from "../../../base/RemoveDialog";
-import React from "react";
 import { useRemoveSample } from "../../queries";
 
 type RemoveSampleProps = {

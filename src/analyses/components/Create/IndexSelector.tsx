@@ -1,12 +1,12 @@
+import * as RadixSelect from "@radix-ui/react-select";
+import { map } from "lodash";
+import { sortBy } from "lodash-es";
+import React, { useMemo } from "react";
 import { cn } from "../../../app/utils";
 import Label from "../../../base/Label";
 import Select from "../../../base/Select";
 import SelectButton from "../../../base/SelectButton";
 import SelectContent from "../../../base/SelectContent";
-import * as RadixSelect from "@radix-ui/react-select";
-import { map } from "lodash";
-import { sortBy } from "lodash-es";
-import React, { useMemo } from "react";
 import CreateAnalysisFieldTitle from "./CreateAnalysisFieldTitle";
 
 type IndexSelectorItemProps = {

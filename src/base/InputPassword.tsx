@@ -1,7 +1,7 @@
-import InputContainer from "./InputContainer";
-import InputIconButton from "./InputIconButton";
 import React, { useState } from "react";
 import Input from "./Input";
+import InputContainer from "./InputContainer";
+import InputIconButton from "./InputIconButton";
 
 type InputPasswordProps = {
     id: string;

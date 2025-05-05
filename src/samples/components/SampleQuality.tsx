@@ -1,8 +1,8 @@
+import React from "react";
+import styled from "styled-components";
 import { usePathParams } from "../../app/hooks";
 import LoadingPlaceholder from "../../base/LoadingPlaceholder";
 import { Quality } from "../../quality/components/Quality";
-import React from "react";
-import styled from "styled-components";
 import { useFetchSample } from "../queries";
 import LegacyAlert from "./SampleFilesMessage";
 

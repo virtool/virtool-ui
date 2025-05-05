@@ -1,3 +1,8 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { find } from "lodash-es";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 import { useUrlSearchParam } from "../../app/hooks";
 import Attribution from "../../base/Attribution";
 import Badge from "../../base/Badge";
@@ -13,11 +18,6 @@ import InputLabel from "../../base/InputLabel";
 import InputSimple from "../../base/InputSimple";
 import PseudoLabel from "../../base/PseudoLabel";
 import SaveButton from "../../base/SaveButton";
-import { DialogPortal } from "@radix-ui/react-dialog";
-import { find } from "lodash-es";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import { useCloneReference } from "../queries";
 import { ReferenceMinimal } from "../types";
 

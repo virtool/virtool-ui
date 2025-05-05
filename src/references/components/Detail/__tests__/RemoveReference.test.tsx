@@ -1,14 +1,14 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createFakeAccount, mockApiGetAccount } from "@tests/fake/account";
-import { renderWithRouter } from "@tests/setup";
-import React from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
     createFakeReference,
     mockApiGetReferenceDetail,
     mockApiRemoveReference,
 } from "@tests/fake/references";
+import { renderWithRouter } from "@tests/setup";
+import React from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AdministratorRoles } from "../../../../administration/types";
 import RemoveReference from "../RemoveReference";
 

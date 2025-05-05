@@ -1,7 +1,7 @@
-import { getBorder } from "../app/theme";
 import * as RadixAccordion from "@radix-ui/react-accordion";
 import React, { createRef, useEffect } from "react";
 import styled from "styled-components";
+import { getBorder } from "../app/theme";
 
 const StyledAccordionItem = styled(RadixAccordion.Item)`
     border: ${getBorder};

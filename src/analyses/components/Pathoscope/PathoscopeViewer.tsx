@@ -1,12 +1,12 @@
+import React from "react";
 import { useUrlSearchParam } from "../../../app/hooks";
-import { PathoscopeViewerScroller } from "./PathoscopeViewScroller";
-import { FormattedPathoscopeAnalysis } from "../../types";
 import Alert from "../../../base/Alert";
 import { Sample } from "../../../samples/types";
-import React from "react";
+import { FormattedPathoscopeAnalysis } from "../../types";
 import { PathoscopeList } from "./PathoscopeList";
 import { AnalysisMapping } from "./PathoscopeMapping";
 import { PathoscopeToolbar } from "./PathoscopeToolbar";
+import { PathoscopeViewerScroller } from "./PathoscopeViewScroller";
 
 type PathoscopeViewerProps = {
     /** Complete pathoscope analysis details */

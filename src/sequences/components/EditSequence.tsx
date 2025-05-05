@@ -1,15 +1,12 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import React from "react";
 import { useUrlSearchParam } from "../../app/hooks";
 import Dialog from "../../base/Dialog";
 import DialogContent from "../../base/DialogContent";
 import DialogOverlay from "../../base/DialogOverlay";
 import DialogTitle from "../../base/DialogTitle";
 import { useCurrentOtuContext, useEditSequence } from "../../otus/queries";
-import { DialogPortal } from "@radix-ui/react-dialog";
-import {
-    useGetActiveSequence,
-    useGetUnreferencedSegments,
-} from "../hooks";
-import React from "react";
+import { useGetActiveSequence, useGetUnreferencedSegments } from "../hooks";
 import SequenceForm from "./SequenceForm";
 
 /**

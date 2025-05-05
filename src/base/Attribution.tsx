@@ -1,6 +1,6 @@
-import { cn } from "../app/utils";
 import { capitalize } from "lodash-es";
 import React from "react";
+import { cn } from "../app/utils";
 import InitialIcon from "./InitialIcon";
 import RelativeTime from "./RelativeTime";
 

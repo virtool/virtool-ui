@@ -1,12 +1,12 @@
-import Box from "../Box";
-import Pagination from "../Pagination";
 import { faker } from "@faker-js/faker";
 import { useArgs } from "@storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { UserItem } from "../../users/components/UserItem";
 import { map } from "lodash-es";
 import React, { useMemo } from "react";
+import { UserItem } from "../../users/components/UserItem";
+import Box from "../Box";
+import Pagination from "../Pagination";
 
 const queryClient = new QueryClient();
 

@@ -1,11 +1,11 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import React from "react";
 import Button from "./Button";
 import Dialog from "./Dialog";
 import DialogContent from "./DialogContent";
 import DialogFooter from "./DialogFooter";
 import DialogOverlay from "./DialogOverlay";
 import DialogTitle from "./DialogTitle";
-import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 
 type RemoveDialogProps = {
     /** A message to override the default one displayed in the dialog body */

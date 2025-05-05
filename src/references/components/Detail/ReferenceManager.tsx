@@ -1,3 +1,4 @@
+import React from "react";
 import { usePathParams } from "../../../app/hooks";
 import { cn } from "../../../app/utils";
 import BoxGroup from "../../../base/BoxGroup";
@@ -6,7 +7,6 @@ import BoxGroupTable from "../../../base/BoxGroupTable";
 import ContainerNarrow from "../../../base/ContainerNarrow";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import Contributors from "../../../indexes/components/Contributors";
-import React from "react";
 import { useGetReference } from "../../queries";
 import { Clone } from "./Clone";
 import { LatestBuild } from "./LatestBuild";

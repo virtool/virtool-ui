@@ -1,16 +1,19 @@
+import { map } from "lodash";
+import React from "react";
+import styled from "styled-components";
 import { useDialogParam, usePathParams } from "../../../../app/hooks";
 import BoxGroup from "../../../../base/BoxGroup";
 import Button from "../../../../base/Button";
 import LoadingPlaceholder from "../../../../base/LoadingPlaceholder";
 import NoneFoundBox from "../../../../base/NoneFoundBox";
-import EditSegment from "./EditSegment";
+import {
+    ReferenceRight,
+    useCheckReferenceRight,
+} from "../../../../references/hooks";
 import { useFetchOTU, useUpdateOTU } from "../../../queries";
 import { OTUSegment } from "../../../types";
-import { ReferenceRight, useCheckReferenceRight } from "../../../../references/hooks";
-import { map } from "lodash";
-import React from "react";
-import styled from "styled-components";
 import AddSegment from "./AddSegment";
+import EditSegment from "./EditSegment";
 import RemoveSegment from "./RemoveSegment";
 import Segment from "./Segment";
 

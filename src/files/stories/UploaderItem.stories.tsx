@@ -1,6 +1,6 @@
-import { UploaderItem } from "../components/UploaderItem";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import { UploaderItem } from "../components/UploaderItem";
 
 const meta: Meta<typeof UploaderItem> = {
     title: "Files/UploaderItem",

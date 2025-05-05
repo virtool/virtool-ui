@@ -1,9 +1,9 @@
+import React from "react";
 import Badge from "../../base/Badge";
 import BoxGroup from "../../base/BoxGroup";
 import BoxGroupHeader from "../../base/BoxGroupHeader";
-import { IndexFile } from "../types";
 import { SubtractionFileItem } from "../../subtraction/components/Detail/SubtractionFileItem";
-import React from "react";
+import { IndexFile } from "../types";
 
 type IndexFilesProps = {
     files: IndexFile[];

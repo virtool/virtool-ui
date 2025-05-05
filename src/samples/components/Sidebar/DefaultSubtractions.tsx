@@ -1,13 +1,13 @@
+import { xor } from "lodash-es";
+import React from "react";
+import styled from "styled-components";
 import { fontWeight, getColor, getFontSize } from "../../../app/theme";
 import Link from "../../../base/Link";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import SidebarHeader from "../../../base/SidebarHeader";
 import SideBarSection from "../../../base/SideBarSection";
-import SampleSidebarList from "./SampleSidebarList";
 import { useFetchSubtractionsShortlist } from "../../../subtraction/queries";
-import { xor } from "lodash-es";
-import React from "react";
-import styled from "styled-components";
+import SampleSidebarList from "./SampleSidebarList";
 import SampleSidebarSelector from "./SampleSidebarSelector";
 
 function SubtractionInner({ name }) {

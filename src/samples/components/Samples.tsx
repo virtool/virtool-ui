@@ -1,10 +1,10 @@
+import React from "react";
+import { Route, Switch } from "wouter";
 import Container from "../../base/Container";
 import ContainerNarrow from "../../base/ContainerNarrow";
 import { FileManager } from "../../files/components/FileManager";
 import { FileType } from "../../files/types";
 import { Labels } from "../../labels/components/Labels";
-import React from "react";
-import { Route, Switch } from "wouter";
 import CreateSample from "./Create/CreateSample";
 import SampleDetail from "./Detail/SampleDetail";
 import SamplesSettings from "./SampleSettings";

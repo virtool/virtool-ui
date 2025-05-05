@@ -1,10 +1,10 @@
-import NuvsDetail from "./NuvsDetail";
-import NuvsItem from "./NuvsItem";
-import AnalysisViewerList from "../Viewer/AnalysisViewerList";
-import { useSortAndFilterNuVsHits } from "../../hooks";
-import { FormattedNuvsAnalysis } from "../../types";
 import { map } from "lodash";
 import React from "react";
+import { useSortAndFilterNuVsHits } from "../../hooks";
+import { FormattedNuvsAnalysis } from "../../types";
+import AnalysisViewerList from "../Viewer/AnalysisViewerList";
+import NuvsDetail from "./NuvsDetail";
+import NuvsItem from "./NuvsItem";
 
 type NuVsListProps = {
     /** Complete NuVs analysis details */

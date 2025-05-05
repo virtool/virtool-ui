@@ -1,7 +1,7 @@
-import Alert from "../../base/Alert";
-import Button from "../../base/Button";
 import React from "react";
 import styled from "styled-components";
+import Alert from "../../base/Alert";
+import Button from "../../base/Button";
 
 const ActivationBanner = styled(Alert)`
     align-items: center;

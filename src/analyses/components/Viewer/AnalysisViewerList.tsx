@@ -1,12 +1,12 @@
-import { useUrlSearchParam } from "../../../app/hooks";
-import { useGetActiveHit } from "../../hooks";
-import { FormattedNuvsHit } from "../../types";
-import { getBorder, getFontSize } from "../../../app/theme";
-import Key from "../../../base/Key";
 import { findIndex } from "lodash-es";
 import React from "react";
 import { FixedSizeList } from "react-window";
 import styled from "styled-components";
+import { useUrlSearchParam } from "../../../app/hooks";
+import { getBorder, getFontSize } from "../../../app/theme";
+import Key from "../../../base/Key";
+import { useGetActiveHit } from "../../hooks";
+import { FormattedNuvsHit } from "../../types";
 import { useKeyNavigation } from "./hooks";
 
 const AnalysisViewerListHeader = styled.div`

@@ -1,11 +1,11 @@
+import React from "react";
+import styled from "styled-components";
 import { useUrlSearchParam } from "../../../../app/hooks";
 import { cn } from "../../../../app/utils";
 import BoxGroupSection from "../../../../base/BoxGroupSection";
 import IconButton from "../../../../base/IconButton";
 import Label from "../../../../base/Label";
 import { OTUSegment } from "../../../types";
-import React from "react";
-import styled from "styled-components";
 
 const StyledSegment = styled(BoxGroupSection)`
     display: grid;

@@ -1,7 +1,7 @@
-import Box from "../Box";
-import BoxTitle from "../BoxTitle";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import Box from "../Box";
+import BoxTitle from "../BoxTitle";
 
 const meta: Meta<typeof BoxTitle> = {
     title: "base/Box/BoxTitle",

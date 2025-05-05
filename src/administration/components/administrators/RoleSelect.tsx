@@ -1,9 +1,9 @@
+import { map } from "lodash-es";
+import React from "react";
 import Select from "../../../base/Select";
 import SelectButton from "../../../base/SelectButton";
 import SelectContent from "../../../base/SelectContent";
 import SelectItem from "../../../base/SelectItem";
-import { map } from "lodash-es";
-import React from "react";
 import { AdministratorRoles } from "../../types";
 
 type RoleSelectProps = {

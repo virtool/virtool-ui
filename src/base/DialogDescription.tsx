@@ -1,6 +1,6 @@
-import { cn } from "../app/utils";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import React from "react";
+import { cn } from "../app/utils";
 
 type DialogDescriptionProps = {
     children: React.ReactNode;

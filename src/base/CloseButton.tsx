@@ -1,6 +1,6 @@
-import IconButton from "./IconButton";
 import React from "react";
 import styled from "styled-components";
+import IconButton from "./IconButton";
 
 const StyledCloseButton = styled(IconButton)`
     color: inherit;

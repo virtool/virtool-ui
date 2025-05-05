@@ -1,8 +1,8 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import React, { useState } from "react";
 import BoxGroup from "../BoxGroup";
 import BoxGroupHeader from "../BoxGroupHeader";
 import BoxGroupSearch from "../BoxGroupSearch";
-import type { Meta, StoryObj } from "@storybook/react";
-import React, { useState } from "react";
 
 const meta: Meta<typeof BoxGroupSearch> = {
     title: "base/BoxGroupSearch",

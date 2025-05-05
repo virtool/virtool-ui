@@ -1,6 +1,6 @@
-import { getColor } from "../app/theme";
 import React from "react";
 import styled from "styled-components";
+import { getColor } from "../app/theme";
 
 const clipPath = `M 235.00977 45.240234 L 224.64258 66.671875 L 186.9375 70.472656 L 175.11914 51.697266 L 148.99219 58.945312 
     L 151.82031 81.373047 L 120.04102 98.623047 L 102.16602 82.363281 L 79.050781 101.22656 L 92.351562 121.46875 

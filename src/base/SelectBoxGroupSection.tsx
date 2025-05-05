@@ -1,6 +1,6 @@
-import BoxGroupSection from "./BoxGroupSection";
 import React from "react";
 import styled, { DefaultTheme } from "styled-components";
+import BoxGroupSection from "./BoxGroupSection";
 
 type SelectBoxGroupSectionProps = {
     active?: boolean;

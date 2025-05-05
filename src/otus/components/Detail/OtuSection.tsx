@@ -1,11 +1,11 @@
+import React from "react";
 import { useDialogParam, usePathParams } from "../../../app/hooks";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
-import OtuIssues from "./OtuIssues";
 import { useGetReference } from "../../../references/queries";
-import React from "react";
 import { CurrentOtuContextProvider, useFetchOTU } from "../../queries";
 import AddIsolate from "./Isolates/AddIsolate";
 import IsolateEditor from "./Isolates/IsolateEditor";
+import OtuIssues from "./OtuIssues";
 
 /**
  * Displays a component for managing the OTU

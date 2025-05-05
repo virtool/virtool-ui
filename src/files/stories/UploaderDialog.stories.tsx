@@ -1,7 +1,7 @@
-import UploaderDialog from "../components/UploaderDialog";
-import { FileType } from "../types";
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import UploaderDialog from "../components/UploaderDialog";
+import { FileType } from "../types";
 
 const meta: Meta<typeof UploaderDialog> = {
     title: "Files/UploaderDialog",

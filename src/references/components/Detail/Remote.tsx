@@ -1,3 +1,4 @@
+import React from "react";
 import { cn } from "../../../app/utils";
 import BoxGroup from "../../../base/BoxGroup";
 import BoxGroupHeader from "../../../base/BoxGroupHeader";
@@ -9,7 +10,6 @@ import Loader from "../../../base/Loader";
 import ProgressCircle from "../../../base/ProgressCircle";
 import RelativeTime from "../../../base/RelativeTime";
 import { JobState } from "../../../jobs/types";
-import React from "react";
 import {
     useCheckReferenceUpdates,
     useUpdateRemoteReference,

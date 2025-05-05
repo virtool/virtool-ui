@@ -1,3 +1,6 @@
+import { map } from "lodash";
+import React from "react";
+import styled from "styled-components";
 import { getFontSize } from "../../app/theme";
 import Badge from "../../base/Badge";
 import BoxGroup from "../../base/BoxGroup";
@@ -5,14 +8,11 @@ import NoneFoundSection from "../../base/NoneFoundSection";
 import { useCurrentOtuContext } from "../../otus/queries";
 import { OTUIsolate } from "../../otus/types";
 import sortSequencesBySegment from "../../otus/utils";
-import RemoveSequence from "./RemoveSequence";
-import Sequence from "./Sequence";
-import { map } from "lodash";
-import React from "react";
-import styled from "styled-components";
 import CreateSequence from "./CreateSequence";
 import CreateSequenceLink from "./CreateSequenceLink";
 import EditSequence from "./EditSequence";
+import RemoveSequence from "./RemoveSequence";
+import Sequence from "./Sequence";
 
 const IsolateSequencesHeader = styled.label`
     align-items: center;

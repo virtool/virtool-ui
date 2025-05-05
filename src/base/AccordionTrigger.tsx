@@ -1,6 +1,6 @@
-import { getColor } from "../app/theme";
 import * as RadixAccordion from "@radix-ui/react-accordion";
 import styled from "styled-components";
+import { getColor } from "../app/theme";
 
 /** button for toggling the display of accordion contents  */
 const AccordionTrigger = styled(RadixAccordion.Trigger)`

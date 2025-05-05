@@ -1,3 +1,7 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import { filter, flatMap, includes, map } from "lodash-es";
+import React, { useState } from "react";
+import styled from "styled-components";
 import { getBorder } from "../../../app/theme";
 import BoxGroup from "../../../base/BoxGroup";
 import CompactScrollList from "../../../base/CompactScrollList";
@@ -10,11 +14,7 @@ import InputSearch from "../../../base/InputSearch";
 import NoneFoundSection from "../../../base/NoneFoundSection";
 import SelectBoxGroupSection from "../../../base/SelectBoxGroupSection";
 import Toolbar from "../../../base/Toolbar";
-import { DialogPortal } from "@radix-ui/react-dialog";
 import { useInfiniteFindUsers } from "../../../users/queries";
-import { filter, flatMap, includes, map } from "lodash-es";
-import React, { useState } from "react";
-import styled from "styled-components";
 import { useAddReferenceMember } from "../../queries";
 import { ReferenceUser } from "../../types";
 

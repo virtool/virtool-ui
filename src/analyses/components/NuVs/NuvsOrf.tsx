@@ -1,6 +1,6 @@
-import Badge from "../../../base/Badge";
 import { scaleLinear, select } from "d3";
 import React, { useEffect, useRef } from "react";
+import Badge from "../../../base/Badge";
 import "./NuvsOrf.css";
 import NuvsOrfLabel from "./NuvsOrfLabel";
 

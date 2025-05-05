@@ -1,7 +1,7 @@
-import { SampleLabel } from "../../queries";
 import { map } from "lodash-es";
 import React from "react";
 import styled from "styled-components";
+import { SampleLabel } from "../../queries";
 import SampleMultiSelectLabel from "../Label/SampleMultiSelectLabel";
 
 const StyledSampleSidebarList = styled.div`

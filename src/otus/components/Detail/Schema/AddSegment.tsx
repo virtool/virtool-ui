@@ -1,3 +1,5 @@
+import { DialogPortal } from "@radix-ui/react-dialog";
+import React from "react";
 import { useDialogParam } from "../../../../app/hooks";
 import Dialog from "../../../../base/Dialog";
 import DialogContent from "../../../../base/DialogContent";
@@ -5,8 +7,6 @@ import DialogOverlay from "../../../../base/DialogOverlay";
 import DialogTitle from "../../../../base/DialogTitle";
 import { useUpdateOTU } from "../../../queries";
 import { Molecule, OTUSegment } from "../../../types";
-import { DialogPortal } from "@radix-ui/react-dialog";
-import React from "react";
 import SegmentForm from "./SegmentForm";
 
 type FormValues = {

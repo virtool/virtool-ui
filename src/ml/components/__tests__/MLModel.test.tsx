@@ -1,11 +1,8 @@
 import { screen } from "@testing-library/react";
+import { createFakeMLModelMinimal, mockApiGetModels } from "@tests/fake/ml";
 import { renderWithRouter } from "@tests/setup";
 import React from "react";
 import { describe, it } from "vitest";
-import {
-    createFakeMLModelMinimal,
-    mockApiGetModels,
-} from "@tests/fake/ml";
 import ML from "../ML";
 
 describe("<MLModels/>", () => {

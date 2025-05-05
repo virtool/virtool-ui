@@ -1,5 +1,5 @@
-import Box from "../../../base/Box";
 import styled from "styled-components";
+import Box from "../../../base/Box";
 
 export const AnalysisViewerItem = styled(Box)`
     border-bottom: none;

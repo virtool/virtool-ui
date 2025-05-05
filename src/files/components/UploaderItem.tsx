@@ -1,9 +1,9 @@
+import React from "react";
 import { byteSize, cn } from "../../app/utils";
 import IconButton from "../../base/IconButton";
 import Loader from "../../base/Loader";
 import ProgressBarAffixed from "../../base/ProgressBarAffixed";
 import { useUploaderStore } from "../uploader";
-import React from "react";
 
 type UploadItemProps = {
     /* Whether the upload failed */

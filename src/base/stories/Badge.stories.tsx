@@ -1,7 +1,7 @@
-import Badge from "../Badge";
 import { Meta, type StoryObj } from "@storybook/react";
 import React from "react";
 import styled from "styled-components";
+import Badge from "../Badge";
 
 const StyledBadgeHeader = styled.div`
     align-items: center;

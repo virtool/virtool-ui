@@ -1,8 +1,8 @@
-import { useUrlSearchParam } from "../../../app/hooks";
-import { FormattedPathoscopeHit } from "../../types";
-import ScrollSyncContainer from "../../../base/ScrollSyncContainer";
 import { filter, maxBy } from "lodash-es";
 import React from "react";
+import { useUrlSearchParam } from "../../../app/hooks";
+import ScrollSyncContainer from "../../../base/ScrollSyncContainer";
+import { FormattedPathoscopeHit } from "../../types";
 import PathoscopeIsolate from "./PathoscopeIsolate";
 
 type PathoscopeDetailProps = {

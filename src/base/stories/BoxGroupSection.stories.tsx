@@ -1,9 +1,9 @@
-import BoxGroup from "../BoxGroup";
-import BoxGroupHeader from "../BoxGroupHeader";
-import BoxGroupSection from "../BoxGroupSection";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 import React from "react";
+import BoxGroup from "../BoxGroup";
+import BoxGroupHeader from "../BoxGroupHeader";
+import BoxGroupSection from "../BoxGroupSection";
 
 const meta: Meta<typeof BoxGroupSection> = {
     title: "base/Box/BoxGroupSection",

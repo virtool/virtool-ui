@@ -1,8 +1,8 @@
+import React from "react";
+import { Sample } from "../../../samples/types";
+import { FormattedNuvsAnalysis } from "../../types";
 import { NuvsList } from "./NuvsList";
 import NuvsToolbar from "./NuvsToolbar";
-import { FormattedNuvsAnalysis } from "../../types";
-import { Sample } from "../../../samples/types";
-import React from "react";
 
 type NuVsViewerProps = {
     /** Complete NuVs analysis details */

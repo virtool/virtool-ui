@@ -1,5 +1,5 @@
-import NoneFoundBox from "../NoneFoundBox";
 import type { Meta, StoryObj } from "@storybook/react";
+import NoneFoundBox from "../NoneFoundBox";
 
 const meta: Meta<typeof NoneFoundBox> = {
     title: "base/NoneFound/NoneFoundBox",

@@ -1,5 +1,7 @@
-import { useDialogParam, usePathParams } from "../../../app/hooks";
+import numbro from "numbro";
+import React from "react";
 import { useCheckAdminRoleOrPermission } from "../../../administration/hooks";
+import { useDialogParam, usePathParams } from "../../../app/hooks";
 import IconButton from "../../../base/IconButton";
 import LoadingPlaceholder from "../../../base/LoadingPlaceholder";
 import NotFound from "../../../base/NotFound";
@@ -8,8 +10,6 @@ import ViewHeader from "../../../base/ViewHeader";
 import ViewHeaderIcons from "../../../base/ViewHeaderIcons";
 import ViewHeaderTitle from "../../../base/ViewHeaderTitle";
 import { Permission } from "../../../groups/types";
-import numbro from "numbro";
-import React from "react";
 import { useFetchSubtraction } from "../../queries";
 import { NucleotideComposition } from "../../types";
 import { SubtractionAttribution } from "../Attribution";

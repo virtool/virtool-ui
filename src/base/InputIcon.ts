@@ -1,5 +1,5 @@
-import Icon from "./Icon";
 import styled from "styled-components";
+import Icon from "./Icon";
 
 const InputIcon = styled(Icon)`
     align-items: center;

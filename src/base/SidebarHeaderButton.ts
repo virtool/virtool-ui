@@ -1,5 +1,5 @@
-import { boxShadow, getFontSize } from "../app/theme";
 import styled from "styled-components";
+import { boxShadow, getFontSize } from "../app/theme";
 
 const SidebarHeaderButton = styled.button`
     align-items: center;
