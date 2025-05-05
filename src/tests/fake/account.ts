@@ -1,14 +1,14 @@
+import { faker } from "@faker-js/faker";
+import { merge } from "lodash";
+import nock from "nock";
 import {
     Account,
     AccountSettings,
     APIKeyMinimal,
     QuickAnalyzeWorkflow,
-} from "@account/types";
-import { AdministratorRoles } from "@administration/types";
-import { faker } from "@faker-js/faker";
-import { GroupMinimal, Permissions } from "@groups/types";
-import { merge } from "lodash";
-import nock from "nock";
+} from "../../account/types";
+import { AdministratorRoles } from "../../administration/types";
+import { GroupMinimal, Permissions } from "../../groups/types";
 import { createFakeGroupMinimal } from "./groups";
 import { createFakePermissions } from "./permissions";
 import { createFakeUser } from "./user";
@@ -84,7 +84,7 @@ export function mockApiGetAccount(account: Account) {
  * @param apiKeys - The array of API keys to return
  * @returns A nock scope for the mocked API call
  */
-export function mockApiGetAPIKeys(apiKeys: APIKeyMinimal[]) {
+export function mockApiGetApiKeys(apiKeys: APIKeyMinimal[]) {
     return nock("http://localhost")
         .get("/api/account/keys")
         .reply(200, apiKeys);
@@ -97,7 +97,7 @@ export function mockApiGetAPIKeys(apiKeys: APIKeyMinimal[]) {
  * @param permissions - The permissions for the API key
  * @returns A nock scope for the mocked API call
  */
-export function mockApiCreateAPIKey(name: string, permissions: Permissions) {
+export function mockApiCreateApiKey(name: string, permissions: Permissions) {
     const createApiKeyResponse = {
         groups: [],
         id: faker.string.alphanumeric({ casing: "lower", length: 8 }),

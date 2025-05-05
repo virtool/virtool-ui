@@ -24,7 +24,7 @@
         // Only warn about missing props validation.
         // TODO: Remove this override once all components are in TS.
         {
-            "files": ["*.jsx", "*.tsx"],
+            "files": ["*.tsx"],
             "rules": {
                 "react/prop-types": "off"
             }

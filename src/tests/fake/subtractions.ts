@@ -6,7 +6,7 @@ import {
     Subtraction,
     SubtractionFile,
     SubtractionMinimal,
-    SubtractionShortlist,
+    SubtractionOption,
     SubtractionUpload,
 } from "@subtraction/types";
 import { UserNested } from "@users/types";
@@ -105,7 +105,7 @@ export function createFakeSubtraction(
 /**
  * Create a fake subtraction shortlist
  */
-export function createFakeShortlistSubtraction(): SubtractionShortlist {
+export function createFakeShortlistSubtraction(): SubtractionOption {
     return pick(createFakeSubtractionMinimal(), ["id", "name", "ready"]);
 }
 
@@ -205,7 +205,7 @@ export function mockApiRemoveSubtraction(subtractionId: string) {
  * @returns A nock scope for the mocked API call
  */
 export function mockApiGetShortlistSubtractions(
-    subtractionsShortlist: SubtractionShortlist[],
+    subtractionsShortlist: SubtractionOption[],
     ready?: boolean,
 ) {
     return nock("http://localhost")

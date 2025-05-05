@@ -52,7 +52,7 @@ export function createFakeMLModelMinimal(
  */
 export function createFakeMLModel(
     overrides?: CreateFakeMLModelOverrides,
-): MLModel {
+): MlModel {
     const releases = [createFakeMLModelRelease()];
 
     const defaultModel = {

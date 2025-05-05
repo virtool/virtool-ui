@@ -61,7 +61,7 @@ type CreateFakeHMMSearchResults = {
  */
 export function createFakeHMMSearchResults(
     overrides?: CreateFakeHMMSearchResults,
-): HMMSearchResults {
+): HmmSearchResults {
     const defaultStatus = {
         errors: [toString(faker.internet.httpStatusCode())],
         installed: {
@@ -91,7 +91,7 @@ export function createFakeHMMSearchResults(
  * @param hmmSearchResults - The hmm search results to be returned from the mocked API call
  * @returns The nock scope for the mocked API call
  */
-export function mockApiGetHmms(hmmSearchResults: HMMSearchResults) {
+export function mockApiGetHmms(hmmSearchResults: HmmSearchResults) {
     return nock("http://localhost")
         .get("/api/hmms")
         .query(true)

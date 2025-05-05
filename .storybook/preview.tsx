@@ -3,8 +3,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import { Router } from "wouter";
-import { theme } from "../src/js/app/theme";
-import "../src/js/style.css";
+import "../src/app/style.css";
+import { theme } from "../src/app/theme";
 
 const queryClient = new QueryClient({
     defaultOptions: {
